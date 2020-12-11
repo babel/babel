@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "proposal-object-rest-spread"
+  ],
+  "assumptions": {
+    "ignoreFunctionLength": true
+  }
+}

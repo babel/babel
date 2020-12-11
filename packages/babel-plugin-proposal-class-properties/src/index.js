@@ -12,6 +12,7 @@ export default declare((api, options) => {
   return createClassFeaturePlugin({
     name: "proposal-class-properties",
 
+    api,
     feature: FEATURES.fields,
     loose: options.loose,
 

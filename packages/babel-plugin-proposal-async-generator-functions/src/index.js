@@ -70,6 +70,8 @@ export default declare(api => {
 
       path.traverse(yieldStarVisitor, state);
 
+      // We don't need to pass the noNewArrows assumption, since
+      // async generators are never arrow functions.
       remapAsyncToGenerator(path, {
         wrapAsync: state.addHelper("wrapAsyncGenerator"),
         wrapAwait: state.addHelper("awaitAsyncGenerator"),

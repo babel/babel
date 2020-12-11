@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.100.0" }],
+    "transform-for-of"
+  ],
+  "assumptions": {
+    "skipForOfIteratorClosing": true
+  }
+}

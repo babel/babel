@@ -86,7 +86,7 @@ export default function normalizeModuleAndLoadMetadata(
   exportName?: string,
   {
     noInterop = false,
-    loose = false,
+    initializeReexports = false,
     lazy = false,
     esNamespaceOnly = false,
   } = {},
@@ -100,10 +100,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   const { local, source, hasExports } = getModuleMetadata(
     programPath,
-    {
-      loose,
-      lazy,
-    },
+    { initializeReexports, lazy },
     stringSpecifiers,
   );
 
@@ -170,12 +167,15 @@ function getExportSpecifierName(
  */
 function getModuleMetadata(
   programPath: NodePath,
-  { loose, lazy }: { loose: boolean, lazy: boolean },
+  {
+    lazy,
+    initializeReexports,
+  }: { lazy: boolean, initializeReexports: boolean },
   stringSpecifiers: Set<string>,
 ) {
   const localData = getLocalExportMetadata(
     programPath,
-    loose,
+    initializeReexports,
     stringSpecifiers,
   );
 
@@ -361,7 +361,7 @@ function getModuleMetadata(
  */
 function getLocalExportMetadata(
   programPath: NodePath,
-  loose: boolean,
+  initializeReexports: boolean,
   stringSpecifiers: Set<string>,
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
@@ -376,7 +376,7 @@ function getLocalExportMetadata(
         if (child.node.declaration) {
           child = child.get("declaration");
         } else if (
-          loose &&
+          initializeReexports &&
           child.node.source &&
           child.get("source").isStringLiteral()
         ) {
@@ -429,7 +429,10 @@ function getLocalExportMetadata(
   };
 
   programPath.get("body").forEach(child => {
-    if (child.isExportNamedDeclaration() && (loose || !child.node.source)) {
+    if (
+      child.isExportNamedDeclaration() &&
+      (initializeReexports || !child.node.source)
+    ) {
       if (child.node.declaration) {
         const declaration = child.get("declaration");
         const ids = declaration.getOuterBindingIdentifierPaths();

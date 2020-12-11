@@ -23,6 +23,11 @@ export default declare((api, opts) => {
     throw new Error(".loose must be a boolean, or undefined");
   }
 
+  const ignoreFunctionLength = api.assumption("ignoreFunctionLength") ?? loose;
+  const objectRestNoSymbols = api.assumption("objectRestNoSymbols") ?? loose;
+  const pureGetters = api.assumption("pureGetters") ?? loose;
+  const setSpreadProperties = api.assumption("setSpreadProperties") ?? loose;
+
   function getExtendsHelper(file) {
     return useBuiltIns
       ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
@@ -133,7 +138,7 @@ export default declare((api, opts) => {
   }
 
   //expects path to an object pattern
-  function createObjectSpread(path, file, objRef) {
+  function createObjectRest(path, file, objRef) {
     const props = path.get("properties");
     const last = props[props.length - 1];
     t.assertRestElement(last.node);
@@ -172,7 +177,9 @@ export default declare((api, opts) => {
       impureComputedPropertyDeclarators,
       restElement.argument,
       t.callExpression(
-        file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+        file.addHelper(
+          `objectWithoutProperties${objectRestNoSymbols ? "Loose" : ""}`,
+        ),
         [t.cloneNode(objRef), keyExpression],
       ),
     ];
@@ -275,7 +282,7 @@ export default declare((api, opts) => {
             idx >= i - 1 || paramsWithRestElement.has(idx);
           convertFunctionParams(
             path,
-            loose,
+            ignoreFunctionLength,
             shouldTransformParam,
             replaceRestElement,
           );
@@ -361,9 +368,9 @@ export default declare((api, opts) => {
             impureComputedPropertyDeclarators,
             argument,
             callExpression,
-          ] = createObjectSpread(objectPatternPath, file, ref);
+          ] = createObjectRest(objectPatternPath, file, ref);
 
-          if (loose) {
+          if (pureGetters) {
             removeUnusedExcludedKeys(objectPatternPath);
           }
 
@@ -444,7 +451,7 @@ export default declare((api, opts) => {
             impureComputedPropertyDeclarators,
             argument,
             callExpression,
-          ] = createObjectSpread(leftPath, file, t.identifier(refName));
+          ] = createObjectRest(leftPath, file, t.identifier(refName));
 
           if (impureComputedPropertyDeclarators.length > 0) {
             nodes.push(
@@ -553,7 +560,7 @@ export default declare((api, opts) => {
         if (!hasSpread(path.node)) return;
 
         let helper;
-        if (loose) {
+        if (setSpreadProperties) {
           helper = getExtendsHelper(file);
         } else {
           try {
@@ -583,10 +590,9 @@ export default declare((api, opts) => {
             return;
           }
 
-          // In loose mode, we don't want to make multiple calls. We're assuming
-          // that the spread objects either don't use getters, or that the
-          // getters are pure and don't depend on the order of evaluation.
-          if (loose) {
+          // When we can assume that getters are pure and don't depend on
+          // the order of evaluation, we can avoid making multiple calls.
+          if (pureGetters) {
             if (hadProps) {
               exp.arguments.push(obj);
             }

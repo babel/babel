@@ -76,6 +76,7 @@ export function ensureBlock(
 /**
  * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
  */
+// TODO(Babel 8): Remove this
 export function arrowFunctionToShadowed(this: NodePath) {
   if (!this.isArrowFunctionExpression()) return;
 
@@ -107,7 +108,13 @@ export function unwrapFunctionEnvironment(this: NodePath) {
  */
 export function arrowFunctionToExpression(
   this: NodePath,
-  { allowInsertArrow = true, specCompliant = false } = {},
+  {
+    allowInsertArrow = true,
+    /** @deprecated Use `noNewArrows` instead */
+    specCompliant = false,
+    // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+    noNewArrows = !specCompliant,
+  } = {},
 ) {
   if (!this.isArrowFunctionExpression()) {
     throw this.buildCodeFrameError(
@@ -117,14 +124,14 @@ export function arrowFunctionToExpression(
 
   const thisBinding = hoistFunctionEnvironment(
     this,
-    specCompliant,
+    noNewArrows,
     allowInsertArrow,
   );
 
   this.ensureBlock();
   // @ts-expect-error todo(flow->ts): avoid mutating nodes
   this.node.type = "FunctionExpression";
-  if (specCompliant) {
+  if (!noNewArrows) {
     const checkBinding = thisBinding
       ? null
       : this.parentPath.scope.generateUidIdentifier("arrowCheckId");
@@ -165,7 +172,8 @@ export function arrowFunctionToExpression(
  */
 function hoistFunctionEnvironment(
   fnPath,
-  specCompliant = false,
+  // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+  noNewArrows = true,
   allowInsertArrow = true,
 ) {
   const thisEnvFn = fnPath.findParent(p => {
@@ -303,11 +311,11 @@ function hoistFunctionEnvironment(
 
   // Convert all "this" references in the arrow to point at the alias.
   let thisBinding;
-  if (thisPaths.length > 0 || specCompliant) {
+  if (thisPaths.length > 0 || !noNewArrows) {
     thisBinding = getThisBinding(thisEnvFn, inConstructor);
 
     if (
-      !specCompliant ||
+      noNewArrows ||
       // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
       // because it might not have been initialized yet.
       (inConstructor && hasSuperClass(thisEnvFn))
@@ -321,7 +329,7 @@ function hoistFunctionEnvironment(
         thisChild.replaceWith(thisRef);
       });
 
-      if (specCompliant) thisBinding = null;
+      if (!noNewArrows) thisBinding = null;
     }
   }
 

@@ -35,11 +35,16 @@ export function buildPrivateNamesMap(props) {
   return privateNamesMap;
 }
 
-export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
+export function buildPrivateNamesNodes(
+  privateNamesMap,
+  privateFieldsAsProperties,
+  state,
+) {
   const initNodes = [];
 
   for (const [name, value] of privateNamesMap) {
-    // In loose mode, both static and instance fields are transpiled using a
+    // When the privateFieldsAsProperties assumption is enabled,
+    // both static and instance fields are transpiled using a
     // secret non-enumerable property. Hence, we also need to generate that
     // key (using the classPrivateFieldLooseKey helper).
     // In spec mode, only instance fields need a "private name" initializer
@@ -48,7 +53,7 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     const { static: isStatic, method: isMethod, getId, setId } = value;
     const isAccessor = getId || setId;
     const id = t.cloneNode(value.id);
-    if (loose) {
+    if (privateFieldsAsProperties) {
       initNodes.push(
         template.statement.ast`
           var ${id} = ${state.addHelper("classPrivateFieldLooseKey")}("${name}")
@@ -149,13 +154,13 @@ const privateInVisitor = privateNameVisitorFactory({
     if (operator !== "in") return;
     if (!path.get("left").isPrivateName()) return;
 
-    const { loose, privateNamesMap, redeclared } = this;
+    const { privateFieldsAsProperties, privateNamesMap, redeclared } = this;
     const { name } = left.id;
 
     if (!privateNamesMap.has(name)) return;
     if (redeclared && redeclared.includes(name)) return;
 
-    if (loose) {
+    if (privateFieldsAsProperties) {
       const { id } = privateNamesMap.get(name);
       path.replaceWith(template.expression.ast`
         Object.prototype.hasOwnProperty.call(${right}, ${t.cloneNode(id)})
@@ -373,13 +378,15 @@ export function transformPrivateNamesUsage(
   ref,
   path,
   privateNamesMap,
-  loose,
+  { privateFieldsAsProperties },
   state,
 ) {
   if (!privateNamesMap.size) return;
 
   const body = path.get("body");
-  const handler = loose ? privateNameHandlerLoose : privateNameHandlerSpec;
+  const handler = privateFieldsAsProperties
+    ? privateNameHandlerLoose
+    : privateNameHandlerSpec;
 
   memberExpressionToFunctions(body, privateNameVisitor, {
     privateNamesMap,
@@ -391,7 +398,7 @@ export function transformPrivateNamesUsage(
     privateNamesMap,
     classRef: ref,
     file: state,
-    loose,
+    privateFieldsAsProperties,
   });
 }
 
@@ -573,7 +580,11 @@ function buildPrivateStaticMethodInitLoose(ref, prop, state, privateNamesMap) {
   `;
 }
 
-function buildPrivateMethodDeclaration(prop, privateNamesMap, loose = false) {
+function buildPrivateMethodDeclaration(
+  prop,
+  privateNamesMap,
+  privateFieldsAsProperties = false,
+) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const {
     id,
@@ -613,7 +624,7 @@ function buildPrivateMethodDeclaration(prop, privateNamesMap, loose = false) {
       t.variableDeclarator(setId, methodValue),
     ]);
   }
-  if (isStatic && !loose) {
+  if (isStatic && !privateFieldsAsProperties) {
     return t.variableDeclaration("var", [
       t.variableDeclarator(
         t.cloneNode(id),
@@ -637,12 +648,12 @@ const thisContextVisitor = traverse.visitors.merge([
   environmentVisitor,
 ]);
 
-function replaceThisContext(path, ref, superRef, file, loose) {
+function replaceThisContext(path, ref, superRef, file, constantSuper) {
   const state = { classRef: ref, needsClassRef: false };
 
   const replacer = new ReplaceSupers({
     methodPath: path,
-    isLoose: loose,
+    constantSuper,
     superRef,
     file,
     refToPreserve: ref,
@@ -666,7 +677,9 @@ export function buildFieldsInitNodes(
   props,
   privateNamesMap,
   state,
-  loose,
+  setPublicClassFields,
+  privateFieldsAsProperties,
+  constantSuper,
 ) {
   const staticNodes = [];
   const instanceNodes = [];
@@ -683,39 +696,45 @@ export function buildFieldsInitNodes(
     const isMethod = !isField;
 
     if (isStatic || (isMethod && isPrivate)) {
-      const replaced = replaceThisContext(prop, ref, superRef, state, loose);
+      const replaced = replaceThisContext(
+        prop,
+        ref,
+        superRef,
+        state,
+        constantSuper,
+      );
       needsClassRef = needsClassRef || replaced;
     }
 
     switch (true) {
-      case isStatic && isPrivate && isField && loose:
+      case isStatic && isPrivate && isField && privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(
           buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
         );
         break;
-      case isStatic && isPrivate && isField && !loose:
+      case isStatic && isPrivate && isField && !privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
         break;
-      case isStatic && isPublic && isField && loose:
+      case isStatic && isPublic && isField && setPublicClassFields:
         needsClassRef = true;
         staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
         break;
-      case isStatic && isPublic && isField && !loose:
+      case isStatic && isPublic && isField && !setPublicClassFields:
         needsClassRef = true;
         staticNodes.push(
           buildPublicFieldInitSpec(t.cloneNode(ref), prop, state),
         );
         break;
-      case isInstance && isPrivate && isField && loose:
+      case isInstance && isPrivate && isField && privateFieldsAsProperties:
         instanceNodes.push(
           buildPrivateFieldInitLoose(t.thisExpression(), prop, privateNamesMap),
         );
         break;
-      case isInstance && isPrivate && isField && !loose:
+      case isInstance && isPrivate && isField && !privateFieldsAsProperties:
         instanceNodes.push(
           buildPrivateInstanceFieldInitSpec(
             t.thisExpression(),
@@ -724,7 +743,7 @@ export function buildFieldsInitNodes(
           ),
         );
         break;
-      case isInstance && isPrivate && isMethod && loose:
+      case isInstance && isPrivate && isMethod && privateFieldsAsProperties:
         instanceNodes.unshift(
           buildPrivateMethodInitLoose(
             t.thisExpression(),
@@ -733,10 +752,14 @@ export function buildFieldsInitNodes(
           ),
         );
         staticNodes.push(
-          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+          buildPrivateMethodDeclaration(
+            prop,
+            privateNamesMap,
+            privateFieldsAsProperties,
+          ),
         );
         break;
-      case isInstance && isPrivate && isMethod && !loose:
+      case isInstance && isPrivate && isMethod && !privateFieldsAsProperties:
         instanceNodes.unshift(
           buildPrivateInstanceMethodInitSpec(
             t.thisExpression(),
@@ -745,19 +768,27 @@ export function buildFieldsInitNodes(
           ),
         );
         staticNodes.push(
-          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+          buildPrivateMethodDeclaration(
+            prop,
+            privateNamesMap,
+            privateFieldsAsProperties,
+          ),
         );
         break;
-      case isStatic && isPrivate && isMethod && !loose:
+      case isStatic && isPrivate && isMethod && !privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
         staticNodes.unshift(
-          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+          buildPrivateMethodDeclaration(
+            prop,
+            privateNamesMap,
+            privateFieldsAsProperties,
+          ),
         );
         break;
-      case isStatic && isPrivate && isMethod && loose:
+      case isStatic && isPrivate && isMethod && privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(
           buildPrivateStaticMethodInitLoose(
@@ -768,13 +799,17 @@ export function buildFieldsInitNodes(
           ),
         );
         staticNodes.unshift(
-          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+          buildPrivateMethodDeclaration(
+            prop,
+            privateNamesMap,
+            privateFieldsAsProperties,
+          ),
         );
         break;
-      case isInstance && isPublic && isField && loose:
+      case isInstance && isPublic && isField && setPublicClassFields:
         instanceNodes.push(buildPublicFieldInitLoose(t.thisExpression(), prop));
         break;
-      case isInstance && isPublic && isField && !loose:
+      case isInstance && isPublic && isField && !setPublicClassFields:
         instanceNodes.push(
           buildPublicFieldInitSpec(t.thisExpression(), prop, state),
         );

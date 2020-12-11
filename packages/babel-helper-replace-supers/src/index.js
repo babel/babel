@@ -255,7 +255,7 @@ const looseHandlers = {
 type ReplaceSupersOptionsBase = {|
   methodPath: NodePath,
   superRef: Object,
-  isLoose: boolean,
+  constantSuper: boolean,
   file: any,
   // objectRef might have been shadowed in child scopes,
   // in that case, we need to rename related variables.
@@ -284,13 +284,16 @@ export default class ReplaceSupers {
 
     this.file = opts.file;
     this.superRef = opts.superRef;
-    this.isLoose = opts.isLoose;
+    this.constantSuper = process.env.BABEL_8_BREAKING
+      ? opts.constantSuper
+      : // Fallback to isLoose for backward compatibility
+        opts.constantSuper ?? (opts: any).isLoose;
     this.opts = opts;
   }
 
   declare file: HubInterface;
   declare isDerivedConstructor: boolean;
-  declare isLoose: boolean;
+  declare constantSuper: boolean;
   declare isPrivateMethod: boolean;
   declare isStatic: boolean;
   declare methodPath: NodePath;
@@ -309,7 +312,7 @@ export default class ReplaceSupers {
       });
     }
 
-    const handler = this.isLoose ? looseHandlers : specHandlers;
+    const handler = this.constantSuper ? looseHandlers : specHandlers;
 
     memberExpressionToFunctions(this.methodPath, visitor, {
       file: this.file,

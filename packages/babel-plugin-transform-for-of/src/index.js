@@ -6,28 +6,48 @@ import transformWithoutHelper from "./no-helper-implementation";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose, assumeArray, allowArrayLike } = options;
+  {
+    const { assumeArray, allowArrayLike, loose } = options;
 
-  if (loose === true && assumeArray === true) {
+    if (loose === true && assumeArray === true) {
+      throw new Error(
+        `The loose and assumeArray options cannot be used together in @babel/plugin-transform-for-of`,
+      );
+    }
+
+    if (assumeArray === true && allowArrayLike === true) {
+      throw new Error(
+        `The assumeArray and allowArrayLike options cannot be used together in @babel/plugin-transform-for-of`,
+      );
+    }
+
+    // TODO: Remove in Babel 8
+    if (allowArrayLike && /^7\.\d\./.test(api.version)) {
+      throw new Error(
+        `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
+      );
+    }
+  }
+
+  const iterableIsArray =
+    options.assumeArray ??
+    // Loose mode is not compatible with 'assumeArray', so we shouldn't read
+    // 'iterableIsArray' if 'loose' is true.
+    (!options.loose && api.assumption("iterableIsArray"));
+
+  const arrayLikeIsIterable =
+    options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
+
+  const skipteratorClosing =
+    api.assumption("skipForOfIteratorClosing") ?? options.loose;
+
+  if (iterableIsArray && arrayLikeIsIterable) {
     throw new Error(
-      `The loose and assumeArray options cannot be used together in @babel/plugin-transform-for-of`,
+      `The "iterableIsArray" and "arrayLikeIsIterable" assumptions are not compatible.`,
     );
   }
 
-  if (assumeArray === true && allowArrayLike === true) {
-    throw new Error(
-      `The assumeArray and allowArrayLike options cannot be used together in @babel/plugin-transform-for-of`,
-    );
-  }
-
-  // TODO: Remove in Babel 8
-  if (allowArrayLike && /^7\.\d\./.test(api.version)) {
-    throw new Error(
-      `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
-    );
-  }
-
-  if (assumeArray) {
+  if (iterableIsArray) {
     return {
       name: "transform-for-of",
 
@@ -94,17 +114,17 @@ export default declare((api, options) => {
     };
   }
 
-  const buildForOfArray = template(`
+  const buildForOfArray = template`
     for (var KEY = 0, NAME = ARR; KEY < NAME.length; KEY++) BODY;
-  `);
+  `;
 
-  const buildForOfLoose = template.statements(`
-    for (var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ALLOW_ARRAY_LIKE), STEP_KEY;
+  const buildForOfNoIteratorClosing = template.statements`
+    for (var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ARRAY_LIKE_IS_ITERABLE), STEP_KEY;
         !(STEP_KEY = ITERATOR_HELPER()).done;) BODY;
-  `);
+  `;
 
-  const buildForOf = template.statements(`
-    var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ALLOW_ARRAY_LIKE), STEP_KEY;
+  const buildForOf = template.statements`
+    var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ARRAY_LIKE_IS_ITERABLE), STEP_KEY;
     try {
       for (ITERATOR_HELPER.s(); !(STEP_KEY = ITERATOR_HELPER.n()).done;) BODY;
     } catch (err) {
@@ -112,11 +132,11 @@ export default declare((api, options) => {
     } finally {
       ITERATOR_HELPER.f();
     }
-  `);
+  `;
 
-  const builder = loose
+  const builder = skipteratorClosing
     ? {
-        build: buildForOfLoose,
+        build: buildForOfNoIteratorClosing,
         helper: "createForOfIteratorHelperLoose",
         getContainer: nodes => nodes,
       }
@@ -179,7 +199,7 @@ export default declare((api, options) => {
 
         if (!state.availableHelper(builder.helper)) {
           // Babel <7.9.0 doesn't support this helper
-          transformWithoutHelper(loose, path, state);
+          transformWithoutHelper(skipteratorClosing, path, state);
           return;
         }
 
@@ -213,7 +233,9 @@ export default declare((api, options) => {
         const nodes = builder.build({
           CREATE_ITERATOR_HELPER: state.addHelper(builder.helper),
           ITERATOR_HELPER: scope.generateUidIdentifier("iterator"),
-          ALLOW_ARRAY_LIKE: allowArrayLike ? t.booleanLiteral(true) : null,
+          ARRAY_LIKE_IS_ITERABLE: arrayLikeIsIterable
+            ? t.booleanLiteral(true)
+            : null,
           STEP_KEY: t.identifier(stepKey),
           OBJECT: node.right,
           BODY: node.body,

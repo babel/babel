@@ -3,10 +3,14 @@ import { template, types as t } from "@babel/core";
 
 export default declare((api, options) => {
   api.assertVersion(7);
-  const { loose } = options;
+
+  const ignoreToPrimitiveHint =
+    api.assumption("ignoreToPrimitiveHint") ?? options.loose;
+  const mutableTemplateObject =
+    api.assumption("mutableTemplateObject") ?? options.loose;
 
   let helperName = "taggedTemplateLiteral";
-  if (loose) helperName += "Loose";
+  if (mutableTemplateObject) helperName += "Loose";
 
   /**
    * This function groups the objects into multiple calls to `.concat()` in
@@ -115,13 +119,15 @@ export default declare((api, options) => {
 
         // since `+` is left-to-right associative
         // ensure the first node is a string if first/second isn't
-        const considerSecondNode = !loose || !t.isStringLiteral(nodes[1]);
-        if (!t.isStringLiteral(nodes[0]) && considerSecondNode) {
+        if (
+          !t.isStringLiteral(nodes[0]) &&
+          !(ignoreToPrimitiveHint && t.isStringLiteral(nodes[1]))
+        ) {
           nodes.unshift(t.stringLiteral(""));
         }
         let root = nodes[0];
 
-        if (loose) {
+        if (ignoreToPrimitiveHint) {
           for (let i = 1; i < nodes.length; i++) {
             root = t.binaryExpression("+", root, nodes[i]);
           }

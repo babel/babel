@@ -4,17 +4,13 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const {
-    loose = false,
-    useBuiltIns = false,
-    allowArrayLike = false,
-  } = options;
+  const { useBuiltIns = false } = options;
 
-  if (typeof loose !== "boolean") {
-    throw new Error(`.loose must be a boolean or undefined`);
-  }
-
-  const arrayOnlySpread = loose;
+  const iterableIsArray = api.assumption("iterableIsArray") ?? options.loose;
+  const arrayLikeIsIterable =
+    options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
+  const objectRestNoSymbols =
+    api.assumption("objectRestNoSymbols") ?? options.loose;
 
   function getExtendsHelper(file) {
     return useBuiltIns
@@ -88,8 +84,8 @@ export default declare((api, options) => {
       this.nodes = opts.nodes || [];
       this.scope = opts.scope;
       this.kind = opts.kind;
-      this.arrayOnlySpread = opts.arrayOnlySpread;
-      this.allowArrayLike = opts.allowArrayLike;
+      this.iterableIsArray = opts.iterableIsArray;
+      this.arrayLikeIsIterable = opts.arrayLikeIsIterable;
       this.addHelper = opts.addHelper;
     }
 
@@ -141,12 +137,12 @@ export default declare((api, options) => {
 
     toArray(node, count) {
       if (
-        this.arrayOnlySpread ||
+        this.iterableIsArray ||
         (t.isIdentifier(node) && this.arrays[node.name])
       ) {
         return node;
       } else {
-        return this.scope.toArray(node, count, this.allowArrayLike);
+        return this.scope.toArray(node, count, this.arrayLikeIsIterable);
       }
     }
 
@@ -235,7 +231,9 @@ export default declare((api, options) => {
         }
 
         value = t.callExpression(
-          this.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+          this.addHelper(
+            `objectWithoutProperties${objectRestNoSymbols ? "Loose" : ""}`,
+          ),
           [t.cloneNode(objRef), keyExpression],
         );
       }
@@ -527,8 +525,8 @@ export default declare((api, options) => {
           kind: left.kind,
           scope: scope,
           nodes: nodes,
-          arrayOnlySpread,
-          allowArrayLike,
+          iterableIsArray,
+          arrayLikeIsIterable,
           addHelper: name => this.addHelper(name),
         });
 
@@ -553,8 +551,8 @@ export default declare((api, options) => {
           kind: "let",
           scope: scope,
           nodes: nodes,
-          arrayOnlySpread,
-          allowArrayLike,
+          iterableIsArray,
+          arrayLikeIsIterable,
           addHelper: name => this.addHelper(name),
         });
         destructuring.init(pattern, ref);
@@ -572,8 +570,8 @@ export default declare((api, options) => {
           operator: node.operator,
           scope: scope,
           nodes: nodes,
-          arrayOnlySpread,
-          allowArrayLike,
+          iterableIsArray,
+          arrayLikeIsIterable,
           addHelper: name => this.addHelper(name),
         });
 
@@ -631,8 +629,8 @@ export default declare((api, options) => {
             nodes: nodes,
             scope: scope,
             kind: node.kind,
-            arrayOnlySpread,
-            allowArrayLike,
+            iterableIsArray,
+            arrayLikeIsIterable,
             addHelper: name => this.addHelper(name),
           });
 

@@ -332,8 +332,26 @@ type EnvPath = $ReadOnly<{
 export type NestingPath = RootPath | OverridesPath | EnvPath;
 
 export const assumptionsNames = new Set<string>([
+  "arrayLikeIsIterable",
+  "constantReexports",
+  "constantSuper",
+  "enumerableModuleMeta",
+  "ignoreFunctionLength",
+  "ignoreToPrimitiveHint",
+  "iterableIsArray",
   "mutableTemplateObject",
+  "noClassCalls",
+  "noDocumentAll",
+  "noNewArrows",
+  "objectRestNoSymbols",
+  "privateFieldsAsProperties",
+  "pureGetters",
+  "setClassMethods",
+  "setComputedProperties",
   "setPublicClassFields",
+  "setSpreadProperties",
+  "skipForOfIteratorClosing",
+  "superIsCallableConstructor",
 ]);
 
 function getSource(loc: NestingPath): OptionsSource {

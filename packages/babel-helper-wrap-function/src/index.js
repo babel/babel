@@ -57,7 +57,7 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
     .unwrapFunctionEnvironment();
 }
 
-function plainFunction(path: NodePath, callId: Object) {
+function plainFunction(path: NodePath, callId: Object, noNewArrows: boolean) {
   const node = path.node;
   const isDeclaration = path.isFunctionDeclaration();
   const functionId = node.id;
@@ -68,7 +68,7 @@ function plainFunction(path: NodePath, callId: Object) {
     : buildAnonymousExpressionWrapper;
 
   if (path.isArrowFunctionExpression()) {
-    path.arrowFunctionToExpression();
+    path.arrowFunctionToExpression({ noNewArrows });
   }
 
   node.id = null;
@@ -123,10 +123,15 @@ function plainFunction(path: NodePath, callId: Object) {
   }
 }
 
-export default function wrapFunction(path: NodePath, callId: Object) {
+export default function wrapFunction(
+  path: NodePath,
+  callId: Object,
+  // TODO(Babel 8): Consider defaulting to false for spec compliancy
+  noNewArrows: boolean = true,
+) {
   if (path.isMethod()) {
     classOrObjectMethod(path, callId);
   } else {
-    plainFunction(path, callId);
+    plainFunction(path, callId, noNewArrows);
   }
 }

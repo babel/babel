@@ -11,6 +11,13 @@ import addCreateSuperHelper from "./inline-createSuper-helpers";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
+type ClassAssumptions = {
+  setClassMethods: boolean,
+  constantSuper: boolean,
+  superIsCallableConstructor: boolean,
+  noClassCalls: boolean,
+};
+
 function buildConstructor(classRef, constructorBody, node) {
   const func = t.functionDeclaration(
     t.cloneNode(classRef),
@@ -26,6 +33,7 @@ export default function transformClass(
   file: any,
   builtinClasses: ReadonlySet<string>,
   isLoose: boolean,
+  assumptions: ClassAssumptions,
 ) {
   const classState = {
     parent: undefined,
@@ -161,7 +169,7 @@ export default function transformClass(
           methodPath: path,
           objectRef: classState.classRef,
           superRef: classState.superName,
-          isLoose: classState.isLoose,
+          constantSuper: assumptions.constantSuper,
           file: classState.file,
           refToPreserve: classState.classRef,
         });
@@ -246,7 +254,7 @@ export default function transformClass(
     const bareSuperNode = bareSuper.node;
     let call;
 
-    if (classState.isLoose) {
+    if (assumptions.superIsCallableConstructor) {
       bareSuperNode.arguments.unshift(t.thisExpression());
       if (
         bareSuperNode.arguments.length === 2 &&
@@ -452,7 +460,7 @@ export default function transformClass(
   }
 
   function processMethod(node, scope) {
-    if (classState.isLoose && !node.decorators) {
+    if (assumptions.setClassMethods && !node.decorators) {
       // use assignments instead of define properties for loose classes
       let { classRef } = classState;
       if (!node.static) {
@@ -563,7 +571,7 @@ export default function transformClass(
     // Unshift to ensure that the constructor inheritance is set up before
     // any properties can be assigned to the prototype.
 
-    if (!classState.isLoose) {
+    if (!assumptions.superIsCallableConstructor) {
       classState.body.unshift(
         t.variableDeclaration("var", [
           t.variableDeclarator(
@@ -663,7 +671,7 @@ export default function transformClass(
     buildBody();
 
     // make sure this class isn't directly called (with A() instead new A())
-    if (!classState.isLoose) {
+    if (!assumptions.noClassCalls) {
       constructorBody.body.unshift(
         t.expressionStatement(
           t.callExpression(classState.file.addHelper("classCallCheck"), [

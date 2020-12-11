@@ -12,6 +12,7 @@ export default declare((api, options) => {
   return createClassFeaturePlugin({
     name: "proposal-private-methods",
 
+    api,
     feature: FEATURES.privateMethods,
     loose: options.loose,
 

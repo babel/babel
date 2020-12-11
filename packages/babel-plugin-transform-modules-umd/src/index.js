@@ -44,12 +44,16 @@ export default declare((api, options) => {
   const {
     globals,
     exactGlobals,
-    loose,
     allowTopLevelThis,
     strict,
     strictMode,
     noInterop,
   } = options;
+
+  const constantReexports =
+    api.assumption("constantReexports") ?? options.loose;
+  const enumerableModuleMeta =
+    api.assumption("enumerableModuleMeta") ?? options.loose;
 
   /**
    * Build the assignment statements that initialize the UMD global.
@@ -147,7 +151,8 @@ export default declare((api, options) => {
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
             path,
             {
-              loose,
+              constantReexports,
+              enumerableModuleMeta,
               strict,
               strictMode,
               allowTopLevelThis,
@@ -201,7 +206,11 @@ export default declare((api, options) => {
             }
 
             headers.push(
-              ...buildNamespaceInitStatements(meta, metadata, loose),
+              ...buildNamespaceInitStatements(
+                meta,
+                metadata,
+                constantReexports,
+              ),
             );
           }
 

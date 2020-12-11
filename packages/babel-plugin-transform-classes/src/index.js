@@ -21,6 +21,12 @@ export default declare((api, options) => {
 
   const { loose } = options;
 
+  const setClassMethods = api.assumption("setClassMethods") ?? options.loose;
+  const constantSuper = api.assumption("constantSuper") ?? options.loose;
+  const superIsCallableConstructor =
+    api.assumption("superIsCallableConstructor") ?? options.loose;
+  const noClassCalls = api.assumption("noClassCalls") ?? options.loose;
+
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
 
@@ -58,12 +64,18 @@ export default declare((api, options) => {
         node[VISITED] = true;
 
         path.replaceWith(
-          transformClass(path, state.file, builtinClasses, loose),
+          transformClass(path, state.file, builtinClasses, loose, {
+            setClassMethods,
+            constantSuper,
+            superIsCallableConstructor,
+            noClassCalls,
+          }),
         );
 
         if (path.isCallExpression()) {
           annotateAsPure(path);
           if (path.get("callee").isArrowFunctionExpression()) {
+            // This is an IIFE, so we don't need to worry about the noNewArrows assumption
             path.get("callee").arrowFunctionToExpression();
           }
         }
