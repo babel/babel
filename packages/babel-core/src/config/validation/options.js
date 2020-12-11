@@ -29,6 +29,7 @@ import {
   type ValidatorSet,
   type Validator,
   type OptionPath,
+  assertAssumptions,
 } from "./option-assertions";
 import type { UnloadedDescriptor } from "../config-descriptors";
 
@@ -107,6 +108,9 @@ const COMMON_VALIDATORS: ValidatorSet = {
   >),
   passPerPreset: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "passPerPreset">,
+  >),
+  assumptions: (assertAssumptions: Validator<
+    $PropertyType<ValidatedOptions, "assumptions">,
   >),
 
   env: (assertEnvSet: Validator<$PropertyType<ValidatedOptions, "env">>),
@@ -221,6 +225,8 @@ export type ValidatedOptions = {
   plugins?: PluginList,
   passPerPreset?: boolean,
 
+  assumptions?: { [name: string]: boolean },
+
   // browserslists-related options
   targets?: TargetsListOrObject,
   browserslistConfigFile?: ConfigFileSearch,
@@ -324,6 +330,11 @@ type EnvPath = $ReadOnly<{
   parent: RootPath | OverridesPath,
 }>;
 export type NestingPath = RootPath | OverridesPath | EnvPath;
+
+export const assumptionsNames = new Set<string>([
+  "mutableTemplateObject",
+  "setPublicClassFields",
+]);
 
 function getSource(loc: NestingPath): OptionsSource {
   return loc.type === "root" ? loc.source : getSource(loc.parent);

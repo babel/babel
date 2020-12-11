@@ -244,7 +244,7 @@ export default function normalizeOptions(opts: Options) {
       opts.ignoreBrowserslistConfig,
       false,
     ),
-    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose, false),
+    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose),
     modules: validateModulesOption(opts.modules),
     shippedProposals: v.validateBooleanOption(
       TopLevelOptions.shippedProposals,
