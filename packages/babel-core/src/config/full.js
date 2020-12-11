@@ -14,7 +14,6 @@ import {
   type PresetInstance,
 } from "./config-chain";
 import type { UnloadedDescriptor } from "./config-descriptors";
-import type { Targets } from "@babel/helper-compilation-targets";
 import traverse from "@babel/traverse";
 import {
   makeWeakCache,
@@ -23,26 +22,22 @@ import {
 } from "./caching";
 import {
   validate,
-  type CallerMetadata,
   checkNoUnwrappedItemOptionPairs,
   type PluginItem,
 } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
-import { makePluginAPI } from "./helpers/config-api";
+import { makePluginAPI, makePresetAPI } from "./helpers/config-api";
 
 import loadPrivatePartialConfig from "./partial";
 import type { ValidatedOptions } from "./validation/options";
+
+import * as Context from "./cache-contexts";
 
 type LoadedDescriptor = {
   value: {},
   options: {},
   dirname: string,
   alias: string,
-};
-
-type PluginContext = {
-  ...ConfigContext,
-  targets: Targets,
 };
 
 export type { InputOptions } from "./validation/options";
@@ -55,14 +50,6 @@ export type ResolvedConfig = {
 export type { Plugin };
 export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
-
-// Context not including filename since it is used in places that cannot
-// process 'ignore'/'only' and other filename-based logic.
-type SimpleContext = {
-  envName: string,
-  caller: CallerMetadata | void,
-  targets: Targets,
-};
 
 export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   inputOpts: mixed,
@@ -85,9 +72,10 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
     throw new Error("Assertion failure - plugins and presets exist");
   }
 
-  const pluginContext: PluginContext = {
+  const pluginContext: Context.FullPlugin = {
     ...context,
     targets: options.targets,
+    assumptions: options.assumptions ?? {},
   };
 
   const toDescriptor = (item: PluginItem) => {
@@ -229,62 +217,72 @@ function enhanceError<T: Function>(context, fn: T): T {
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-const loadDescriptor = makeWeakCache(function* (
-  { value, options, dirname, alias }: UnloadedDescriptor,
-  cache: CacheConfigurator<SimpleContext>,
-): Handler<LoadedDescriptor> {
-  // Disabled presets should already have been filtered out
-  if (options === false) throw new Error("Assertion failure");
+const makeDescriptorLoader = <Context, API>(
+  apiFactory: (cache: CacheConfigurator<Context>) => API,
+): ((d: UnloadedDescriptor, c: Context) => Handler<LoadedDescriptor>) =>
+  makeWeakCache(function* (
+    { value, options, dirname, alias }: UnloadedDescriptor,
+    cache: CacheConfigurator<Context>,
+  ): Handler<LoadedDescriptor> {
+    // Disabled presets should already have been filtered out
+    if (options === false) throw new Error("Assertion failure");
 
-  options = options || {};
+    options = options || {};
 
-  let item = value;
-  if (typeof value === "function") {
-    const factory = maybeAsync(
-      value,
-      `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
-    );
+    let item = value;
+    if (typeof value === "function") {
+      const factory = maybeAsync(
+        value,
+        `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
+      );
 
-    const api = {
-      ...context,
-      ...makePluginAPI(cache),
-    };
-    try {
-      item = yield* factory(api, options, dirname);
-    } catch (e) {
-      if (alias) {
-        e.message += ` (While processing: ${JSON.stringify(alias)})`;
+      const api = {
+        ...context,
+        ...apiFactory(cache),
+      };
+      try {
+        item = yield* factory(api, options, dirname);
+      } catch (e) {
+        if (alias) {
+          e.message += ` (While processing: ${JSON.stringify(alias)})`;
+        }
+        throw e;
       }
-      throw e;
     }
-  }
 
-  if (!item || typeof item !== "object") {
-    throw new Error("Plugin/Preset did not return an object.");
-  }
+    if (!item || typeof item !== "object") {
+      throw new Error("Plugin/Preset did not return an object.");
+    }
 
-  if (isThenable(item)) {
-    yield* []; // if we want to support async plugins
+    if (isThenable(item)) {
+      yield* []; // if we want to support async plugins
 
-    throw new Error(
-      `You appear to be using a promise as a plugin, ` +
-        `which your current version of Babel does not support. ` +
-        `If you're using a published plugin, ` +
-        `you may need to upgrade your @babel/core version. ` +
-        `As an alternative, you can prefix the promise with "await". ` +
-        `(While processing: ${JSON.stringify(alias)})`,
-    );
-  }
+      throw new Error(
+        `You appear to be using a promise as a plugin, ` +
+          `which your current version of Babel does not support. ` +
+          `If you're using a published plugin, ` +
+          `you may need to upgrade your @babel/core version. ` +
+          `As an alternative, you can prefix the promise with "await". ` +
+          `(While processing: ${JSON.stringify(alias)})`,
+      );
+    }
 
-  return { value: item, options, dirname, alias };
-});
+    return { value: item, options, dirname, alias };
+  });
+
+const pluginDescriptorLoader = makeDescriptorLoader<Context.SimplePlugin, *>(
+  makePluginAPI,
+);
+const presetDescriptorLoader = makeDescriptorLoader<Context.SimplePreset, *>(
+  makePresetAPI,
+);
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
 function* loadPluginDescriptor(
   descriptor: UnloadedDescriptor,
-  context: SimpleContext,
+  context: Context.SimplePlugin,
 ): Handler<Plugin> {
   if (descriptor.value instanceof Plugin) {
     if (descriptor.options) {
@@ -297,14 +295,14 @@ function* loadPluginDescriptor(
   }
 
   return yield* instantiatePlugin(
-    yield* loadDescriptor(descriptor, context),
+    yield* pluginDescriptorLoader(descriptor, context),
     context,
   );
 }
 
 const instantiatePlugin = makeWeakCache(function* (
   { value, options, dirname, alias }: LoadedDescriptor,
-  cache: CacheConfigurator<SimpleContext>,
+  cache: CacheConfigurator<Context.SimplePlugin>,
 ): Handler<Plugin> {
   const pluginObj = validatePluginObject(value);
 
@@ -387,9 +385,11 @@ const validatePreset = (
  */
 function* loadPresetDescriptor(
   descriptor: UnloadedDescriptor,
-  context: PluginContext,
+  context: Context.FullPreset,
 ): Handler<ConfigChain | null> {
-  const preset = instantiatePreset(yield* loadDescriptor(descriptor, context));
+  const preset = instantiatePreset(
+    yield* presetDescriptorLoader(descriptor, context),
+  );
   validatePreset(preset, context, descriptor);
   return yield* buildPresetChain(preset, context);
 }
