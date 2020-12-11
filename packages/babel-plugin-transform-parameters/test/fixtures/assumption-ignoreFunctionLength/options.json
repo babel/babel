@@ -3,12 +3,14 @@
     "proposal-class-properties",
     "external-helpers",
     "syntax-flow",
-    ["transform-parameters", { "loose": true }],
+    "transform-parameters",
     "transform-block-scoping",
     "transform-spread",
     "transform-classes",
     "transform-destructuring",
-    "transform-arrow-functions",
-    "transform-for-of"
-  ]
+    "transform-arrow-functions"
+  ],
+  "assumptions": {
+    "ignoreFunctionLength": true
+  }
 }
