@@ -1,5 +1,3 @@
-// @flow
-
 const reservedWords = {
   keyword: [
     "break",

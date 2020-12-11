@@ -522,7 +522,7 @@ defineType("Identifier", {
       // Ideally we should call isStrictReservedWord if this node is a descendant
       // of a block in strict mode. Also, we should pass the inModule option so
       // we can disable "await" in module.
-      (isKeyword(node.name) || isReservedWord(node.name)) &&
+      (isKeyword(node.name) || isReservedWord(node.name, false)) &&
       // Even if "this" is a keyword, we are using the Identifier
       // node to represent it.
       node.name !== "this"

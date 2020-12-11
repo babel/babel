@@ -1,5 +1,3 @@
-// @flow
-
 import * as charCodes from "charcodes";
 
 // ## Character categories
@@ -38,7 +36,7 @@ const astralIdentifierCodes = [509,0,227,0,150,4,294,9,1368,2,2,1,6,3,41,2,5,0,1
 // This has a complexity linear to the value of the code. The
 // assumption is that looking up astral identifier characters is
 // rare.
-function isInAstralSet(code: number, set: $ReadOnlyArray<number>): boolean {
+function isInAstralSet(code: number, set: readonly number[]): boolean {
   let pos = 0x10000;
   for (let i = 0, length = set.length; i < length; i += 2) {
     pos += set[i];

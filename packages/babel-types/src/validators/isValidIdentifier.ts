@@ -15,10 +15,8 @@ export default function isValidIdentifier(
   if (typeof name !== "string") return false;
 
   if (reserved) {
-    if (isKeyword(name) || isStrictReservedWord(name)) {
-      return false;
-    } else if (name === "await") {
-      // invalid in module, valid in script; better be safe (see #4952)
+    // "await" is invalid in module, valid in script; better be safe (see #4952)
+    if (isKeyword(name) || isStrictReservedWord(name, true)) {
       return false;
     }
   }

@@ -116,3 +116,20 @@ declare module "@babel/code-frame" {
     opts?: Options
   ): string;
 }
+
+declare module "@babel/helper-validator-identifier" {
+  declare function isReservedWord(word: string, inModule: boolean): boolean;
+  declare function isStrictReservedWord(
+    word: string,
+    inModule: boolean
+  ): boolean;
+  declare function isStrictBindOnlyReservedWord(word: string): boolean;
+  declare function isStrictBindReservedWord(
+    word: string,
+    inModule: boolean
+  ): boolean;
+  declare function isKeyword(word: string): boolean;
+  declare function isIdentifierStart(code: number): boolean;
+  declare function isIdentifierChar(code: number): boolean;
+  declare function isIdentifierName(name: string): boolean;
+}
