@@ -23,6 +23,9 @@ export default declare((api, opts) => {
     throw new Error(".loose must be a boolean, or undefined");
   }
 
+  const ignoreFunctionLength =
+    api.assumption("ignoreFunctionLength") ?? opts.loose;
+
   function getExtendsHelper(file) {
     return useBuiltIns
       ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
@@ -275,7 +278,7 @@ export default declare((api, opts) => {
             idx >= i - 1 || paramsWithRestElement.has(idx);
           convertFunctionParams(
             path,
-            loose,
+            ignoreFunctionLength,
             shouldTransformParam,
             replaceRestElement,
           );
