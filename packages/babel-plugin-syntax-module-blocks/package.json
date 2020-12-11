@@ -1,11 +1,11 @@
 {
-  "name": "@babel/plugin-syntax-js-module-blocks",
+  "name": "@babel/plugin-syntax-module-blocks",
   "version": "7.11.0",
   "description": "Allow parsing of JS Module Blocks",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-syntax-js-module-blocks"
+    "directory": "packages/babel-plugin-syntax-module-blocks"
   },
   "license": "MIT",
   "publishConfig": {

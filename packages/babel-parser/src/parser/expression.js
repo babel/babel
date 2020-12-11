@@ -2649,7 +2649,7 @@ export default class ExpressionParser extends LValParser {
 
   // https://github.com/tc39/proposal-js-module-blocks
   parseModuleExpression(): N.ModuleExpression {
-    this.expectPlugin("jsModuleBlocks");
+    this.expectPlugin("moduleBlocks");
     const node = this.startNode<N.ModuleExpression>();
     node.body = [];
     this.next(); // eat "module"

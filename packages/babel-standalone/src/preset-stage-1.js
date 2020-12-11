@@ -22,7 +22,7 @@ export default (_: any, opts: Object = {}) => {
     plugins: [
       babelPlugins.syntaxDecimal,
       [babelPlugins.syntaxRecordAndTuple, { syntaxType: recordAndTupleSyntax }],
-      babelPlugins.syntaxJsModuleBlocks,
+      babelPlugins.syntaxModuleBlocks,
       babelPlugins.proposalExportDefaultFrom,
       [babelPlugins.proposalPipelineOperator, { proposal: pipelineProposal }],
       babelPlugins.proposalDoExpressions,

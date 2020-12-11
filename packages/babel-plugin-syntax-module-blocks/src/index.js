@@ -4,10 +4,10 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
-    name: "syntax-js-module-blocks",
+    name: "syntax-module-blocks",
 
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("jsModuleBlocks");
+      parserOpts.plugins.push("moduleBlocks");
     },
   };
 });

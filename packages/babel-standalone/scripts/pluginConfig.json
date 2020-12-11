@@ -10,7 +10,7 @@
   "syntax-flow",
   "syntax-function-bind",
   "syntax-function-sent",
-  "syntax-js-module-blocks",
+  "syntax-module-blocks",
   "syntax-import-meta",
   "syntax-jsx",
   "syntax-import-assertions",

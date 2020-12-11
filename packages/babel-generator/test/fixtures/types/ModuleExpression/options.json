@@ -1,4 +1,4 @@
 {
-  "plugins": ["jsModuleBlocks"],
+  "plugins": ["moduleBlocks"],
   "sourceType": "module"
 }
