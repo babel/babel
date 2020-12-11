@@ -117,7 +117,9 @@ export default function* loadPrivatePartialConfig(
   const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
-  const merged: ValidatedOptions = {};
+  const merged: ValidatedOptions = {
+    assumptions: {},
+  };
   configChain.options.forEach(opts => {
     mergeOptions((merged: any), opts);
   });
