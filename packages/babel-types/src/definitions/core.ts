@@ -1399,6 +1399,7 @@ defineType("ExportAllDeclaration", {
     source: {
       validate: assertNodeType("StringLiteral"),
     },
+    exportKind: validateOptional(assertOneOf("type", "value")),
     assertions: {
       optional: true,
       validate: chain(

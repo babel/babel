@@ -821,6 +821,7 @@ export interface ExportAllDeclaration extends BaseNode {
   type: "ExportAllDeclaration";
   source: StringLiteral;
   assertions?: ImportAttribute | null;
+  exportKind?: "type" | "value" | null;
 }
 
 export interface ExportDefaultDeclaration extends BaseNode {
@@ -1542,7 +1543,7 @@ export interface ClassPrivateProperty extends BaseNode {
   value?: Expression | null;
   decorators?: Array<Decorator> | null;
   static: any;
-  typeAnnotation: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
 export interface ClassPrivateMethod extends BaseNode {
