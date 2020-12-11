@@ -338,6 +338,7 @@ export const assumptionsNames = new Set<string>([
   "setClassMethods",
   "setComputedProperties",
   "setPublicClassFields",
+  "noDocumentAll",
 ]);
 
 function getSource(loc: NestingPath): OptionsSource {
