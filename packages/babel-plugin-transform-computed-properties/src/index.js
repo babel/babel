@@ -5,7 +5,7 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const setComputedProperties =
-    options.loose || api.assumption?.("setComputedProperties");
+    api.assumption("setComputedProperties") ?? options.loose;
 
   const pushComputedProps = setComputedProperties
     ? pushComputedPropsLoose
