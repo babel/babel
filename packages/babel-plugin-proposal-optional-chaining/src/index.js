@@ -13,6 +13,7 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const { loose = false } = options;
+  const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
 
   function isSimpleMemberExpression(expression) {
     expression = skipTransparentExprWrappers(expression);
@@ -210,7 +211,7 @@ export default declare((api, options) => {
             // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
             // we don't need to return `void 0` because the returned value will
             // eveutally cast to boolean.
-            const nonNullishCheck = loose
+            const nonNullishCheck = noDocumentAll
               ? ast`${t.cloneNode(check)} != null`
               : ast`
             ${t.cloneNode(check)} !== null && ${t.cloneNode(ref)} !== void 0`;
@@ -221,7 +222,7 @@ export default declare((api, options) => {
               replacementPath.get("right"),
             );
           } else {
-            const nullishCheck = loose
+            const nullishCheck = noDocumentAll
               ? ast`${t.cloneNode(check)} == null`
               : ast`
             ${t.cloneNode(check)} === null || ${t.cloneNode(ref)} === void 0`;
