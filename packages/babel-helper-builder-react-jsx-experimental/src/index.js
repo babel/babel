@@ -209,52 +209,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             );
           }
 
-          type Name = t.MemberExpression | t.Identifier;
-          // eslint-disable-next-line no-inner-declarations
-          function createImportLazily(
-            pass,
-            path,
-            importName,
-            source,
-          ): () => Name {
-            return () => {
-              const actualSource = getSource(source, importName);
-              if (isModule(path)) {
-                let reference = pass.get(
-                  `@babel/plugin-react-jsx/imports/${importName}`,
-                );
-                if (reference) return t.cloneNode(reference);
-
-                reference = addNamed(path, importName, actualSource, {
-                  importedInterop: "uncompiled",
-                });
-                pass.set(
-                  `@babel/plugin-react-jsx/imports/${importName}`,
-                  reference,
-                );
-
-                return reference;
-              } else {
-                let reference = pass.get(
-                  `@babel/plugin-react-jsx/requires/${actualSource}`,
-                );
-                if (reference) {
-                  reference = t.cloneNode(reference);
-                } else {
-                  reference = addNamespace(path, actualSource, {
-                    importedInterop: "uncompiled",
-                  });
-                  pass.set(
-                    `@babel/plugin-react-jsx/requires/${actualSource}`,
-                    reference,
-                  );
-                }
-
-                return t.memberExpression(reference, t.identifier(importName));
-              }
-            };
-          }
-
           state.set(
             "@babel/plugin-react-jsx/jsxIdentifier",
             createImportLazily(
@@ -357,6 +311,42 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       case "createElement":
         return source;
     }
+  }
+
+  function createImportLazily(pass, path, importName, source) {
+    return () => {
+      const actualSource = getSource(source, importName);
+      if (isModule(path)) {
+        let reference = pass.get(
+          `@babel/plugin-react-jsx/imports/${importName}`,
+        );
+        if (reference) return t.cloneNode(reference);
+
+        reference = addNamed(path, importName, actualSource, {
+          importedInterop: "uncompiled",
+        });
+        pass.set(`@babel/plugin-react-jsx/imports/${importName}`, reference);
+
+        return reference;
+      } else {
+        let reference = pass.get(
+          `@babel/plugin-react-jsx/requires/${actualSource}`,
+        );
+        if (reference) {
+          reference = t.cloneNode(reference);
+        } else {
+          reference = addNamespace(path, actualSource, {
+            importedInterop: "uncompiled",
+          });
+          pass.set(
+            `@babel/plugin-react-jsx/requires/${actualSource}`,
+            reference,
+          );
+        }
+
+        return t.memberExpression(reference, t.identifier(importName));
+      }
+    };
   }
 
   function createIdentifierParser(id) {
