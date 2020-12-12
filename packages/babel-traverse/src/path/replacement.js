@@ -260,6 +260,8 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   }
 
   const callee = this.get("callee");
+
+  // This is an IIFE, so we don't need to worry about the newableArrowFunctions assumption
   callee.arrowFunctionToExpression();
 
   // (() => await xxx)() -> await (async () => await xxx)();
