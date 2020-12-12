@@ -837,7 +837,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         if (name === "__source" || name === "__self") {
           if (found[name]) throw sourceSelfError(path, name);
           found[name] = true;
-          if (!options.development) continue;
         }
 
         props.push(convertAttribute(attr));
@@ -850,15 +849,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     const objs = [];
 
     for (const attr of attribs) {
-      const name =
-        t.isJSXAttribute(attr) &&
-        t.isJSXIdentifier(attr.name) &&
-        attr.name.name;
-
-      if (!options.development && (name === "__source" || name === "__self")) {
-        continue;
-      }
-
       if (useSpread || !t.isJSXSpreadAttribute(attr)) {
         props.push(convertAttribute(attr));
       } else {
