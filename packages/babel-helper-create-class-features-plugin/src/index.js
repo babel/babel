@@ -42,6 +42,31 @@ export function createClassFeaturePlugin({
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
 
+  if (loose) {
+    const explicit = [];
+
+    if (setPublicClassFields !== undefined) {
+      explicit.push(`"setPublicClassFields"`);
+    }
+    if (privateFieldsAsProperties !== undefined) {
+      explicit.push(`"privateFieldsAsProperties"`);
+    }
+    if (explicit.length !== 0) {
+      console.warn(
+        `[${name}]: You are using the "loose: true" option and you are` +
+          ` explicitly setting a value for the ${explicit.join(" and ")}` +
+          ` assumption${explicit.length > 1 ? "s" : ""}. The "loose" option` +
+          ` can cause incompatibilities with the other class features` +
+          ` plugins, so it's recommended that you replace it with the` +
+          ` following top-level option:\n` +
+          `\t"assumptions": {\n` +
+          `\t\t"setPublicClassFields": true,\n` +
+          `\t\t"privateFieldsAsProperties": true\n` +
+          `\t}`,
+      );
+    }
+  }
+
   return {
     name,
     manipulateOptions,
