@@ -28,7 +28,7 @@ describe("assumptions", () => {
     ).not.toThrow();
   });
 
-  it("can be set by presets", () => {
+  it("can be enabled by presets", () => {
     expect(
       loadOptions({
         assumptions: {
@@ -40,6 +40,14 @@ describe("assumptions", () => {
       setPublicClassFields: true,
       mutableTemplateObject: true,
     });
+  });
+
+  it("cannot be disabled by presets", () => {
+    expect(() =>
+      loadOptions({
+        presets: [() => ({ assumptions: { mutableTemplateObject: false } })],
+      }),
+    ).toThrow();
   });
 
   it("can be queried from plugins", () => {
