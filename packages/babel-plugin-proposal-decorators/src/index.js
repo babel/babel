@@ -50,6 +50,7 @@ export default declare((api, options) => {
   return createClassFeaturePlugin({
     name: "proposal-decorators",
 
+    api,
     feature: FEATURES.decorators,
     // loose: options.loose, Not supported
 
