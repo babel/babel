@@ -6,10 +6,8 @@ import transformWithoutHelper from "./no-helper-implementation";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose } = options;
-
   {
-    const { assumeArray, allowArrayLike } = options;
+    const { assumeArray, allowArrayLike, loose } = options;
 
     if (loose === true && assumeArray === true) {
       throw new Error(
@@ -35,10 +33,13 @@ export default declare((api, options) => {
     options.assumeArray ??
     // Loose mode is not compatible with 'assumeArray', so we shouldn't read
     // 'iterableIsArray' if 'loose' is true.
-    (!loose && api.assumption("iterableIsArray"));
+    (!options.loose && api.assumption("iterableIsArray"));
 
   const arrayLikeIsIterable =
     options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
+
+  const skipteratorClosing =
+    api.assumption("skipForOfIteratorClosing") ?? options.loose;
 
   if (iterableIsArray && arrayLikeIsIterable) {
     throw new Error(
@@ -113,16 +114,16 @@ export default declare((api, options) => {
     };
   }
 
-  const buildForOfArray = template(`
+  const buildForOfArray = template`
     for (var KEY = 0, NAME = ARR; KEY < NAME.length; KEY++) BODY;
-  `);
+  `;
 
-  const buildForOfLoose = template.statements(`
+  const buildForOfNoIteratorClosing = template.statements`
     for (var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ARRAY_LIKE_IS_ITERABLE), STEP_KEY;
         !(STEP_KEY = ITERATOR_HELPER()).done;) BODY;
-  `);
+  `;
 
-  const buildForOf = template.statements(`
+  const buildForOf = template.statements`
     var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ARRAY_LIKE_IS_ITERABLE), STEP_KEY;
     try {
       for (ITERATOR_HELPER.s(); !(STEP_KEY = ITERATOR_HELPER.n()).done;) BODY;
@@ -131,11 +132,11 @@ export default declare((api, options) => {
     } finally {
       ITERATOR_HELPER.f();
     }
-  `);
+  `;
 
-  const builder = loose
+  const builder = skipteratorClosing
     ? {
-        build: buildForOfLoose,
+        build: buildForOfNoIteratorClosing,
         helper: "createForOfIteratorHelperLoose",
         getContainer: nodes => nodes,
       }
@@ -198,7 +199,7 @@ export default declare((api, options) => {
 
         if (!state.availableHelper(builder.helper)) {
           // Babel <7.9.0 doesn't support this helper
-          transformWithoutHelper(loose, path, state);
+          transformWithoutHelper(skipteratorClosing, path, state);
           return;
         }
 
