@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    ["external-helpers",{ "helperVersion": "7.1000.0" }],
+    "proposal-private-property-in-object",
+    "proposal-private-methods",
+    "proposal-class-properties"
+  ],
+  "assumptions": {
+    "privateFieldsAsProperties": true
+  }
+}

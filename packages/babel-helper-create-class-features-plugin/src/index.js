@@ -40,6 +40,7 @@ export function createClassFeaturePlugin({
   api = { assumption: () => {} },
 }) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
+  const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
 
   return {
     name,
@@ -155,11 +156,17 @@ export function createClassFeaturePlugin({
         const privateNamesMap = buildPrivateNamesMap(props);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
-          loose,
+          privateFieldsAsProperties ?? loose,
           state,
         );
 
-        transformPrivateNamesUsage(ref, path, privateNamesMap, loose, state);
+        transformPrivateNamesUsage(
+          ref,
+          path,
+          privateNamesMap,
+          privateFieldsAsProperties ?? loose,
+          state,
+        );
 
         let keysNodes, staticNodes, instanceNodes, wrapClass;
 
@@ -180,6 +187,7 @@ export function createClassFeaturePlugin({
             privateNamesMap,
             state,
             setPublicClassFields ?? loose,
+            privateFieldsAsProperties ?? loose,
           ));
         }
 

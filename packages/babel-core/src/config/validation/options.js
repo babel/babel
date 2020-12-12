@@ -340,6 +340,7 @@ export const assumptionsNames = new Set<string>([
   "newableArrowFunctions",
   "noDocumentAll",
   "objectRestNoSymbols",
+  "privateFieldsAsProperties",
   "pureGetters",
   "setClassMethods",
   "setComputedProperties",
