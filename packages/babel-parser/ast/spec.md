@@ -1092,7 +1092,7 @@ interface DoExpression <: Expression {
 ```js
 interface ModuleExpression <: Expression {
   type: "ModuleExpression";
-  body: [ Statement ];
+  body: Program
 }
 ```
 

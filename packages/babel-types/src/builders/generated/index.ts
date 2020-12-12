@@ -1066,7 +1066,7 @@ export function decimalLiteral(value: string): t.DecimalLiteral {
 export function staticBlock(body: Array<t.Statement>): t.StaticBlock {
   return builder("StaticBlock", ...arguments);
 }
-export function moduleExpression(body: Array<t.Statement>): t.ModuleExpression {
+export function moduleExpression(body: t.Program): t.ModuleExpression {
   return builder("ModuleExpression", ...arguments);
 }
 export function tsParameterProperty(

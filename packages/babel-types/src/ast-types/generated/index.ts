@@ -1619,7 +1619,7 @@ export interface StaticBlock extends BaseNode {
 
 export interface ModuleExpression extends BaseNode {
   type: "ModuleExpression";
-  body: Array<Statement>;
+  body: Program;
 }
 
 export interface TSParameterProperty extends BaseNode {

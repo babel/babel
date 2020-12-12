@@ -47,33 +47,40 @@
             "init": {
               "type": "ModuleExpression",
               "start":29,"end":60,"loc":{"start":{"line":2,"column":10},"end":{"line":4,"column":1}},
-              "body": [
-                {
-                  "type": "VariableDeclaration",
-                  "start":40,"end":58,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":20}},
-                  "declarations": [
-                    {
-                      "type": "VariableDeclarator",
-                      "start":46,"end":57,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":19}},
-                      "id": {
-                        "type": "Identifier",
-                        "start":46,"end":49,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":11},"identifierName":"foo"},
-                        "name": "foo"
-                      },
-                      "init": {
-                        "type": "StringLiteral",
-                        "start":52,"end":57,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":19}},
-                        "extra": {
-                          "rawValue": "foo",
-                          "raw": "\"foo\""
+              "body": {
+                "type": "Program",
+                "start":40,"end":60,"loc":{"start":{"line":3,"column":2},"end":{"line":4,"column":1}},
+                "sourceType": "module",
+                "interpreter": null,
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "start":40,"end":58,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":20}},
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "start":46,"end":57,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":19}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":46,"end":49,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":11},"identifierName":"foo"},
+                          "name": "foo"
                         },
-                        "value": "foo"
+                        "init": {
+                          "type": "StringLiteral",
+                          "start":52,"end":57,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":19}},
+                          "extra": {
+                            "rawValue": "foo",
+                            "raw": "\"foo\""
+                          },
+                          "value": "foo"
+                        }
                       }
-                    }
-                  ],
-                  "kind": "const"
-                }
-              ]
+                    ],
+                    "kind": "const"
+                  }
+                ],
+                "directives": []
+              }
             }
           }
         ],

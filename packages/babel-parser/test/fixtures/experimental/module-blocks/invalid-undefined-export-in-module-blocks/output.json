@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Export 'foo' is not defined (2:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "expression": {
+          "type": "ModuleExpression",
+          "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+          "body": {
+            "type": "Program",
+            "start":11,"end":27,"loc":{"start":{"line":2,"column":2},"end":{"line":3,"column":1}},
+            "sourceType": "module",
+            "interpreter": null,
+            "body": [
+              {
+                "type": "ExportNamedDeclaration",
+                "start":11,"end":25,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":16}},
+                "specifiers": [
+                  {
+                    "type": "ExportSpecifier",
+                    "start":20,"end":23,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":14}},
+                    "local": {
+                      "type": "Identifier",
+                      "start":20,"end":23,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":14},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "exported": {
+                      "type": "Identifier",
+                      "start":20,"end":23,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":14},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "source": null,
+                "declaration": null
+              }
+            ],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

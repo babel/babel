@@ -40,7 +40,6 @@ import {
   SCOPE_FUNCTION,
   SCOPE_SUPER,
   SCOPE_PROGRAM,
-  SCOPE_OTHER,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import {
@@ -56,6 +55,10 @@ import {
   newExpressionScope,
 } from "../util/expression-scope";
 import { Errors } from "./error";
+
+/*::
+import type { SourceType } from "../options";
+*/
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -86,6 +89,9 @@ export default class ExpressionParser extends LValParser {
     end: TokenType,
     afterBlockParse?: (hasStrictModeDirective: boolean) => void
   ) => void
+  +parseProgram: (
+    program: N.Program, end: TokenType, sourceType?: SourceType
+  ) => N.Program
   */
 
   // For object literal, check if property __proto__ has been used more than once.
@@ -2651,14 +2657,15 @@ export default class ExpressionParser extends LValParser {
   parseModuleExpression(): N.ModuleExpression {
     this.expectPlugin("moduleBlocks");
     const node = this.startNode<N.ModuleExpression>();
-    node.body = [];
     this.next(); // eat "module"
     const oldLabels = this.state.labels;
     this.state.labels = [];
     const oldExportedIdentifiers = this.state.exportedIdentifiers;
     this.state.exportedIdentifiers = [];
     this.eat(tt.braceL);
-    this.scope.enter(SCOPE_OTHER);
+    this.scope.enter(SCOPE_PROGRAM);
+    const oldUndefinedExports = this.scope.undefinedExports;
+    this.scope.undefinedExports = new Map();
     let paramFlags = PARAM;
     if (this.hasPlugin("topLevelAwait")) {
       paramFlags |= PARAM_AWAIT;
@@ -2666,8 +2673,10 @@ export default class ExpressionParser extends LValParser {
     this.prodParam.enter(paramFlags);
     const oldInModule = this.inModule;
     this.inModule = true;
-    this.parseBlockOrModuleBlockBody(node.body, undefined, true, tt.braceR);
+    const program = this.startNode<N.Program>();
+    node.body = this.parseProgram(program, tt.braceR, "module");
     this.scope.exit();
+    this.scope.undefinedExports = oldUndefinedExports;
     this.prodParam.exit();
     this.inModule = oldInModule;
     this.eat(tt.braceR);

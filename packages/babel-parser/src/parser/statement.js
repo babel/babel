@@ -35,6 +35,7 @@ import {
   newExpressionScope,
   newParameterDeclarationScope,
 } from "../util/expression-scope";
+import type { SourceType } from "../options";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -55,12 +56,22 @@ export default class StatementParser extends ExpressionParser {
   // to its body instead of creating a new node.
 
   parseTopLevel(file: N.File, program: N.Program): N.File {
-    program.sourceType = this.options.sourceType;
+    file.program = this.parseProgram(program);
+    file.comments = this.state.comments;
 
+    if (this.options.tokens) file.tokens = this.tokens;
+
+    return this.finishNode(file, "File");
+  }
+
+  parseProgram(
+    program: N.Program,
+    end: TokenType = tt.eof,
+    sourceType: SourceType = this.options.sourceType,
+  ): N.Program {
+    program.sourceType = sourceType;
     program.interpreter = this.parseInterpreterDirective();
-
-    this.parseBlockBody(program, true, true, tt.eof);
-
+    this.parseBlockBody(program, true, true, end);
     if (
       this.inModule &&
       !this.options.allowUndeclaredExports &&
@@ -72,13 +83,7 @@ export default class StatementParser extends ExpressionParser {
         this.raise(pos, Errors.ModuleExportUndefined, name);
       }
     }
-
-    file.program = this.finishNode(program, "Program");
-    file.comments = this.state.comments;
-
-    if (this.options.tokens) file.tokens = this.tokens;
-
-    return this.finishNode(file, "File");
+    return this.finishNode<N.Program>(program, "Program");
   }
 
   // TODO

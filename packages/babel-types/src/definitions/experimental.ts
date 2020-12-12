@@ -268,10 +268,7 @@ defineType("ModuleExpression", {
   visitor: ["body"],
   fields: {
     body: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Statement")),
-      ),
+      validate: assertNodeType("Program"),
     },
   },
   aliases: ["Expression"],
