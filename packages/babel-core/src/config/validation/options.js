@@ -337,6 +337,7 @@ export const assumptionsNames = new Set<string>([
   "ignoreToPrimitiveHint",
   "iterableIsArray",
   "mutableTemplateObject",
+  "pureGetters",
   "setClassMethods",
   "setComputedProperties",
   "setPublicClassFields",
