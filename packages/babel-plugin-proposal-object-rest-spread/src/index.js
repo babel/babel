@@ -27,6 +27,7 @@ export default declare((api, opts) => {
     api.assumption("ignoreFunctionLength") ?? opts.loose;
   const objectRestNoSymbols =
     api.assumption("objectRestNoSymbols") ?? opts.loose;
+  const pureGetters = api.assumption("pureGetters") ?? opts.loose;
 
   function getExtendsHelper(file) {
     return useBuiltIns
@@ -370,7 +371,7 @@ export default declare((api, opts) => {
             callExpression,
           ] = createObjectRest(objectPatternPath, file, ref);
 
-          if (loose) {
+          if (pureGetters) {
             removeUnusedExcludedKeys(objectPatternPath);
           }
 
@@ -590,10 +591,9 @@ export default declare((api, opts) => {
             return;
           }
 
-          // In loose mode, we don't want to make multiple calls. We're assuming
-          // that the spread objects either don't use getters, or that the
-          // getters are pure and don't depend on the order of evaluation.
-          if (loose) {
+          // When we can assume that getters are pure and don't depend on
+          // the order of evaluation, we can avoid making multiple calls.
+          if (pureGetters) {
             if (hadProps) {
               exp.arguments.push(obj);
             }
