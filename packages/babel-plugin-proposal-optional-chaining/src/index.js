@@ -17,6 +17,7 @@ export default declare((api, options) => {
 
   const { loose = false } = options;
   const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
+  const pureGetters = api.assumption("pureGetters") ?? loose;
 
   function isSimpleMemberExpression(expression) {
     expression = skipTransparentExprWrappers(expression);
@@ -131,8 +132,8 @@ export default declare((api, options) => {
             check = ref = chain;
             // `eval?.()` is an indirect eval call transformed to `(0,eval)()`
             node[replaceKey] = t.sequenceExpression([t.numericLiteral(0), ref]);
-          } else if (loose && isCall && isSimpleMemberExpression(chain)) {
-            // If we are using a loose transform (avoiding a Function#call) and we are at the call,
+          } else if (pureGetters && isCall && isSimpleMemberExpression(chain)) {
+            // If we assume getters are pure (avoiding a Function#call) and we are at the call,
             // we can avoid a needless memoize. We only do this if the callee is a simple member
             // expression, to avoid multiple calls to nested call expressions.
             check = ref = chainWithTypes;
@@ -157,7 +158,7 @@ export default declare((api, options) => {
           // Ensure call expressions have the proper `this`
           // `foo.bar()` has context `foo`.
           if (isCall && t.isMemberExpression(chain)) {
-            if (loose && isSimpleMemberExpression(chain)) {
+            if (pureGetters && isSimpleMemberExpression(chain)) {
               // To avoid a Function#call, we can instead re-grab the property from the context object.
               // `a.?b.?()` translates roughly to `_a.b != null && _a.b()`
               node.callee = chainWithTypes;
@@ -192,8 +193,9 @@ export default declare((api, options) => {
               replacementPath.get("object"),
             ).node;
             let baseRef;
-            if (!loose || !isSimpleMemberExpression(object)) {
-              // memoize the context object in non-loose mode
+            if (!pureGetters || !isSimpleMemberExpression(object)) {
+              // memoize the context object when getters are not always pure
+              // or the object is not a simple member expression
               // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
               baseRef = scope.maybeGenerateMemoised(object);
               if (baseRef) {
