@@ -343,6 +343,7 @@ export const assumptionsNames = new Set<string>([
   "setClassMethods",
   "setComputedProperties",
   "setPublicClassFields",
+  "setSpreadProperties",
   "skipForOfIteratorClosing",
 ]);
 
