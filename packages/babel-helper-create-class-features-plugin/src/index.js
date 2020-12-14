@@ -213,6 +213,7 @@ export function createClassFeaturePlugin({
             state,
             setPublicClassFields ?? loose,
             privateFieldsAsProperties ?? loose,
+            loose,
           ));
         }
 

@@ -25,7 +25,7 @@ var _getB2 = function _getB2() {
 };
 
 var _getA2 = function _getA2() {
-  return A.a;
+  return babelHelpers.get(babelHelpers.getPrototypeOf(B), "a", this);
 };
 
 Object.defineProperty(B, _getA, {

@@ -1,0 +1,11 @@
+{
+  "validateLogs": true,
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.100.0" }],
+    ["proposal-class-properties", { "loose": true }],
+    "syntax-class-properties"
+  ],
+  "assumptions": {
+    "setPublicClassFields": true
+  }
+}

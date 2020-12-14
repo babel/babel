@@ -5,6 +5,6 @@ A.prop = 1;
 class B extends A {}
 
 B.prop = 2;
-B.propA = A.prop;
+B.propA = babelHelpers.get(babelHelpers.getPrototypeOf(B), "prop", B);
 
-B.getPropA = () => A.prop;
+B.getPropA = () => babelHelpers.get(babelHelpers.getPrototypeOf(B), "prop", B);
