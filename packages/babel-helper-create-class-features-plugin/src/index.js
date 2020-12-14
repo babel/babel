@@ -189,7 +189,7 @@ export function createClassFeaturePlugin({
           ref,
           path,
           privateNamesMap,
-          privateFieldsAsProperties ?? loose,
+          { privateFieldsAsProperties: privateFieldsAsProperties ?? loose },
           state,
         );
 

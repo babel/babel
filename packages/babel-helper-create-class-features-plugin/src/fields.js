@@ -366,7 +366,7 @@ export function transformPrivateNamesUsage(
   ref,
   path,
   privateNamesMap,
-  privateFieldsAsProperties,
+  { privateFieldsAsProperties },
   state,
 ) {
   if (!privateNamesMap.size) return;
