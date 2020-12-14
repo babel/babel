@@ -47,7 +47,9 @@ describe("assumptions", () => {
       loadOptions({
         presets: [() => ({ assumptions: { mutableTemplateObject: false } })],
       }),
-    ).toThrow();
+    ).toThrow(
+      ` .assumptions["mutableTemplateObject"] cannot be set to 'false' inside presets."`,
+    );
   });
 
   it("can be queried from plugins", () => {
