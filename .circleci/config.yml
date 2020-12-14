@@ -243,11 +243,30 @@ workflows:
 
   e2e-breaking:
     jobs:
+      - publish-verdaccio-babel-8-breaking:
+          filters:
+            branches:
+              only: [main, next-8-dev, next-8-rebased]
+      - e2e-babel:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-create-react-app:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-jest:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+
+  e2e-breaking-pr:
+    jobs:
       - approve-e2e-breaking-run:
           type: approval
           filters:
             branches:
-              ignore: [main]
+              ignore: [main, next-8-dev, next-8-rebased]
       - publish-verdaccio-babel-8-breaking:
           requires:
             - approve-e2e-breaking-run
@@ -263,3 +282,4 @@ workflows:
       - e2e-jest:
           requires:
             - publish-verdaccio-babel-8-breaking
+
