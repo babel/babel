@@ -219,9 +219,9 @@ publish:
 	$(MAKE) clean
 
 check-yarn-bug-1882:
-ifneq ("$(shell grep 3155328e5 .yarn/releases/yarn-*.cjs -c)", "0")
+ifneq ("$(shell grep 3155328 .yarn/releases/yarn-*.cjs -c)", "0")
 	@echo "Your version of yarn is affected by https://github.com/yarnpkg/berry/issues/1882"
-	@echo "Please run \`sed -i -e "s/3155328e5/4567890e5/g" .yarn/releases/yarn-*.cjs\`"
+	@echo "Please run \`sed -i -e "s/3155328/4567890/g" .yarn/releases/yarn-*.cjs\`"
 	@exit 1
 endif
 
