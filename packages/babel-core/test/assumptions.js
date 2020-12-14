@@ -48,7 +48,7 @@ describe("assumptions", () => {
         presets: [() => ({ assumptions: { mutableTemplateObject: false } })],
       }),
     ).toThrow(
-      ` .assumptions["mutableTemplateObject"] cannot be set to 'false' inside presets."`,
+      ` .assumptions["mutableTemplateObject"] cannot be set to 'false' inside presets.`,
     );
   });
 
