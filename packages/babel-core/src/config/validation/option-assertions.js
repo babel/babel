@@ -444,6 +444,12 @@ export function assertAssumptions(
     throw new Error(`${msg(loc)} must be an object or undefined.`);
   }
 
+  let root = loc;
+  do {
+    root = root.parent;
+  } while (root.type !== "root");
+  const inPreset = root.source === "preset";
+
   for (const name of Object.keys(value)) {
     const subLoc = access(loc, name);
     if (!assumptionsNames.has(name)) {
@@ -451,6 +457,11 @@ export function assertAssumptions(
     }
     if (typeof value[name] !== "boolean") {
       throw new Error(`${msg(subLoc)} must be a boolean.`);
+    }
+    if (inPreset && value[name] === false) {
+      throw new Error(
+        `${msg(subLoc)} cannot be set to 'false' inside presets.`,
+      );
     }
   }
 
