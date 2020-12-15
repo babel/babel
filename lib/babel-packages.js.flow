@@ -166,7 +166,5 @@ declare module "@babel/helper-function-name" {
 }
 
 declare module "@babel/helper-split-export-declaration" {
-  declare function splitExportDeclaration(exportDeclaration: any): any;
-
-  declare export default typeof splitExportDeclaration;
+  declare export default function splitExportDeclaration(exportDeclaration: any): any;
 }
