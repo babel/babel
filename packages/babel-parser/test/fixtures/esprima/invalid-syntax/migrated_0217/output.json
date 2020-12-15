@@ -32,11 +32,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":19,"end":31,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":31}},
-                "value": "use strict",
                 "extra": {
                   "raw": "'use strict'",
                   "rawValue": "use strict"
-                }
+                },
+                "value": "use strict"
               }
             },
             {
@@ -45,11 +45,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":33,"end":37,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":37}},
-                "value": "\\1",
                 "extra": {
                   "raw": "\"\\1\"",
                   "rawValue": "\\1"
-                }
+                },
+                "value": "\\1"
               }
             }
           ]

@@ -210,14 +210,17 @@ export default class Tokenizer extends ParserErrors {
 
   setStrict(strict: boolean): void {
     this.state.strict = strict;
-    if (!this.match(tt.num) && !this.match(tt.string)) return;
-    this.state.pos = this.state.start;
-    while (this.state.pos < this.state.lineStart) {
-      this.state.lineStart =
-        this.input.lastIndexOf("\n", this.state.lineStart - 2) + 1;
-      --this.state.curLine;
+    if (strict) {
+      // Throw an error for any string decimal escape found before/immediately
+      // after a "use strict" directive. Strict mode will be set at parse
+      // time for any literals that occur after the next node of the strict
+      // directive.
+      this.state.strictErrors.forEach((message, pos) =>
+        /* eslint-disable @babel/development-internal/dry-error-messages */
+        this.raise(pos, message),
+      );
+      this.state.strictErrors.clear();
     }
-    this.nextToken();
   }
 
   curContext(): TokContext {
@@ -230,8 +233,6 @@ export default class Tokenizer extends ParserErrors {
   nextToken(): void {
     const curContext = this.curContext();
     if (!curContext?.preserveSpace) this.skipSpace();
-
-    this.state.octalPositions = [];
     this.state.start = this.state.pos;
     this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
@@ -1121,9 +1122,8 @@ export default class Tokenizer extends ParserErrors {
 
     if (hasLeadingZero) {
       const integer = this.input.slice(start, this.state.pos);
-      if (this.state.strict) {
-        this.raise(start, Errors.StrictOctalLiteral);
-      } else {
+      this.recordStrictModeErrors(start, Errors.StrictOctalLiteral);
+      if (!this.state.strict) {
         // disallow numeric separators in non octal decimals and legacy octal likes
         const underscorePos = integer.indexOf("_");
         if (underscorePos > 0) {
@@ -1321,8 +1321,15 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  // Used to read escaped characters
+  recordStrictModeErrors(pos: number, message: string) {
+    if (this.state.strict && !this.state.strictErrors.has(pos)) {
+      this.raise(pos, message);
+    } else {
+      this.state.strictErrors.set(pos, message);
+    }
+  }
 
+  // Used to read escaped characters
   readEscapedChar(inTemplate: boolean): string | null {
     const throwOnInvalid = !inTemplate;
     const ch = this.input.charCodeAt(++this.state.pos);
@@ -1364,8 +1371,11 @@ export default class Tokenizer extends ParserErrors {
       case charCodes.digit9:
         if (inTemplate) {
           return null;
-        } else if (this.state.strict) {
-          this.raise(this.state.pos - 1, Errors.StrictNumericEscape);
+        } else {
+          this.recordStrictModeErrors(
+            this.state.pos - 1,
+            Errors.StrictNumericEscape,
+          );
         }
       // fall through
       default:
@@ -1393,13 +1403,8 @@ export default class Tokenizer extends ParserErrors {
           ) {
             if (inTemplate) {
               return null;
-            } else if (this.state.strict) {
-              this.raise(codePos, Errors.StrictNumericEscape);
             } else {
-              // This property is used to throw an error for
-              // an octal literal in a directive that occurs prior
-              // to a "use strict" directive.
-              this.state.octalPositions.push(codePos);
+              this.recordStrictModeErrors(codePos, Errors.StrictNumericEscape);
             }
           }
 

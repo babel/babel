@@ -810,6 +810,9 @@ export default class StatementParser extends ExpressionParser {
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): N.BlockStatement {
     const node = this.startNode();
+    if (allowDirectives) {
+      this.state.strictErrors.clear();
+    }
     this.expect(tt.braceL);
     if (createNewLexicalScope) {
       this.scope.enter(SCOPE_OTHER);
@@ -863,42 +866,33 @@ export default class StatementParser extends ExpressionParser {
     end: TokenType,
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
-    const octalPositions = [];
     const oldStrict = this.state.strict;
     let hasStrictModeDirective = false;
     let parsedNonDirective = false;
 
     while (!this.match(end)) {
-      // Track octal literals that occur before a "use strict" directive.
-      if (!parsedNonDirective && this.state.octalPositions.length) {
-        octalPositions.push(...this.state.octalPositions);
-      }
-
       const stmt = this.parseStatement(null, topLevel);
 
-      if (directives && !parsedNonDirective && this.isValidDirective(stmt)) {
-        const directive = this.stmtToDirective(stmt);
-        directives.push(directive);
+      if (directives && !parsedNonDirective) {
+        if (this.isValidDirective(stmt)) {
+          const directive = this.stmtToDirective(stmt);
+          directives.push(directive);
 
-        if (!hasStrictModeDirective && directive.value.value === "use strict") {
-          hasStrictModeDirective = true;
-          this.setStrict(true);
+          if (
+            !hasStrictModeDirective &&
+            directive.value.value === "use strict"
+          ) {
+            hasStrictModeDirective = true;
+            this.setStrict(true);
+          }
+
+          continue;
         }
-
-        continue;
+        parsedNonDirective = true;
+        // clear strict errors since the strict mode will not change within the block
+        this.state.strictErrors.clear();
       }
-
-      parsedNonDirective = true;
       body.push(stmt);
-    }
-
-    // Throw an error for any octal literals found before a
-    // "use strict" directive. Strict mode will be set at parse
-    // time for any literals that occur after the directive.
-    if (this.state.strict && octalPositions.length) {
-      for (const pos of octalPositions) {
-        this.raise(pos, Errors.StrictOctalLiteral);
-      }
     }
 
     if (afterBlockParse) {
