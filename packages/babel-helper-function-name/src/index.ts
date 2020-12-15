@@ -79,15 +79,18 @@ function wrap(state, method, id, scope) {
       if (method.generator) {
         build = buildGeneratorPropertyMethodAssignmentWrapper;
       }
-      const template = build({
+
+      const template = (build({
         FUNCTION: method,
         FUNCTION_ID: id,
         FUNCTION_KEY: scope.generateUidIdentifier(id.name),
-      }).expression;
+      }) as t.ExpressionStatement).expression as t.CallExpression;
 
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
-      const params = template.callee.body.body[0].params;
+      const params = (((template.callee as t.FunctionExpression).body
+        .body[0] as any) as t.FunctionExpression).params;
+
       for (let i = 0, len = getFunctionArity(method); i < len; i++) {
         params.push(scope.generateUidIdentifier("x"));
       }
@@ -150,7 +153,10 @@ function visit(node, name, scope) {
  * @param {NodePath} param0
  * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
  */
-export default function ({ node, parent, scope, id }, localBinding = false) {
+export default function (
+  { node, parent, scope, id }: { node: any; parent: any; scope: any; id: any },
+  localBinding = false,
+) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
