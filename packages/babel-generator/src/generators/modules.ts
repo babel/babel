@@ -8,6 +8,7 @@ export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   }
 
   this.print(node.imported, node);
+  // @ts-expect-error todo(flow-ts) maybe check node type instead of relying on name to be undefined on t.StringLiteral
   if (node.local && node.local.name !== node.imported.name) {
     this.space();
     this.word("as");
@@ -32,6 +33,7 @@ export function ExportDefaultSpecifier(
 
 export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
   this.print(node.local, node);
+  // @ts-expect-error todo(flow-ts) maybe check node type instead of relying on name to be undefined on t.StringLiteral
   if (node.exported && node.local.name !== node.exported.name) {
     this.space();
     this.word("as");
@@ -204,10 +206,12 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   this.printAssertions(node);
   // todo(Babel 8): remove this if branch
   // `module-attributes` support is discontinued, use `import-assertions` instead.
+  // @ts-expect-error
   if (node.attributes?.length) {
     this.space();
     this.word("with");
     this.space();
+    // @ts-expect-error
     this.printList(node.attributes, node);
   }
 

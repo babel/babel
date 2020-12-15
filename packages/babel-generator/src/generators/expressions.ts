@@ -120,6 +120,7 @@ export function OptionalMemberExpression(
   }
 
   let computed = node.computed;
+  // @ts-expect-error todo(flow->ts) maybe instead of typeof check specific literal types?
   if (t.isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
@@ -204,7 +205,9 @@ export function ExpressionStatement(
 
 export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
   this.print(node.left, node);
+  // @ts-expect-error todo(flow->ts) property present on some of the types in union but not all
   if (node.left.optional) this.token("?");
+  // @ts-expect-error todo(flow->ts) property present on some of the types in union but not all
   this.print(node.left.typeAnnotation, node);
   this.space();
   this.token("=");
@@ -264,6 +267,7 @@ export function MemberExpression(this: Printer, node: t.MemberExpression) {
   }
 
   let computed = node.computed;
+  // @ts-expect-error todo(flow->ts) maybe use specific literal types
   if (t.isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }

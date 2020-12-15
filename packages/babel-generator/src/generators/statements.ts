@@ -155,7 +155,9 @@ export function TryStatement(this: Printer, node: t.TryStatement) {
   // Esprima bug puts the catch clause in a `handlers` array.
   // see https://code.google.com/p/esprima/issues/detail?id=433
   // We run into this from regenerator generated ast.
+  // @ts-expect-error todo(flow->ts) should ast node type be updated to support this?
   if (node.handlers) {
+    // @ts-expect-error todo(flow->ts) should ast node type be updated to support this?
     this.print(node.handlers[0], node);
   } else {
     this.print(node.handler, node);
@@ -301,6 +303,7 @@ export function VariableDeclaration(
 export function VariableDeclarator(this: Printer, node: t.VariableDeclarator) {
   this.print(node.id, node);
   if (node.definite) this.token("!"); // TS
+  // @ts-expect-error todo(flow-ts) Property 'typeAnnotation' does not exist on type 'MemberExpression'.
   this.print(node.id.typeAnnotation, node);
   if (node.init) {
     this.space();

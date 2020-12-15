@@ -55,6 +55,7 @@ export function ObjectProperty(this: Printer, node: t.ObjectProperty) {
     if (
       t.isAssignmentPattern(node.value) &&
       t.isIdentifier(node.key) &&
+      // @ts-expect-error todo(flow->ts) `.name` does not exist on some types in union
       node.key.name === node.value.left.name
     ) {
       this.print(node.value, node);

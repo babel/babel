@@ -56,6 +56,7 @@ export function DeclareFunction(
   this.word("function");
   this.space();
   this.print(node.id, node);
+  // @ts-expect-error todo(flow->ts) typeAnnotation does not exist on Noop
   this.print(node.id.typeAnnotation.typeAnnotation, node);
 
   if (node.predicate) {
@@ -481,6 +482,7 @@ export function TypeAlias(
 export function TypeAnnotation(this: Printer, node: t.TypeAnnotation) {
   this.token(":");
   this.space();
+  // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
   if (node.optional) this.token("?");
   this.print(node.typeAnnotation, node);
 }
@@ -528,10 +530,13 @@ export function OpaqueType(
     this.space();
     this.print(node.supertype, node);
   }
+
+  // @ts-expect-error todo(flow->ts) `.impltype` does not exist on t.DeclareOpaqueType
   if (node.impltype) {
     this.space();
     this.token("=");
     this.space();
+    // @ts-expect-error todo(flow->ts) `.impltype` does not exist on t.DeclareOpaqueType
     this.print(node.impltype, node);
   }
   this.semicolon();
@@ -548,11 +553,12 @@ export function ObjectTypeAnnotation(
   }
 
   // TODO: remove the array fallbacks and instead enforce the types to require an array
-  const props = node.properties.concat(
-    node.callProperties || [],
-    node.indexers || [],
-    node.internalSlots || [],
-  );
+  const props = [
+    ...node.properties,
+    ...(node.callProperties || []),
+    ...(node.indexers || []),
+    ...(node.internalSlots || []),
+  ];
 
   if (props.length) {
     this.space();

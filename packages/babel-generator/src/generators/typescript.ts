@@ -4,6 +4,7 @@ import * as t from "@babel/types";
 export function TSTypeAnnotation(this: Printer, node: t.TSTypeAnnotation) {
   this.token(":");
   this.space();
+  // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
   if (node.optional) this.token("?");
   this.print(node.typeAnnotation, node);
 }
