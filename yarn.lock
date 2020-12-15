@@ -251,6 +251,9 @@ __metadata:
     "@babel/helper-fixtures": "workspace:*"
     "@babel/parser": "workspace:*"
     "@babel/types": "workspace:^7.12.11"
+    "@types/jsesc": ^2.5.0
+    "@types/lodash": ^4.14.150
+    "@types/source-map": ^0.5.0
     jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
     source-map: ^0.5.0
   languageName: unknown
@@ -3906,6 +3909,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jsesc@npm:^2.5.0":
+  version: 2.5.1
+  resolution: "@types/jsesc@npm:2.5.1"
+  checksum: c4df356ce6b1f2af847f9b059075b879c15a7834ce4387c8d5e5cebc24d1173abae5d19c07160d24f74c6e7413ee312a66ce3ce965d0544278d2c16b218306e1
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.3":
   version: 7.0.4
   resolution: "@types/json-schema@npm:7.0.4"
@@ -3920,10 +3930,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.162":
-  version: 4.14.165
-  resolution: "@types/lodash@npm:4.14.165"
-  checksum: 525bfc34b0b591cc957125a961c70e63e5ad8b23cbd89b7594a5ea74823285b6d96993a7eec506e26b379ee52dc9dcd3a894ff210be4c97bccb536e62361dbc8
+"@types/lodash@npm:^4.14.150, @types/lodash@npm:^4.14.162":
+  version: 4.14.168
+  resolution: "@types/lodash@npm:4.14.168"
+  checksum: 9a4e25f89fc035b9f0388f1f7be85e5eff49f9e6db0d93432c9a89fce0916f8a89db4e8290415f7ea02de6b00d3573826378dcb655b7b2d20530a6e8d6dd6fd0
   languageName: node
   linkType: hard
 
@@ -3961,6 +3971,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 8e72a73574f9489760662498c1ad512a8d4084a5db15f327e0d785cb277bb0a3146cd049241a8e3268bd0ed204ad3ee7b4a6b4622ef681e70547be9af258ca6a
+  languageName: node
+  linkType: hard
+
+"@types/source-map@npm:^0.5.0":
+  version: 0.5.2
+  resolution: "@types/source-map@npm:0.5.2"
+  checksum: 228e1ef7c7f9c126cf38afdef2c3ccfb1224523c3692da6148abb9bb81095269645495773e94477e8512e1f652419b471cc8c30997f6bd222185e931f6d97acc
   languageName: node
   linkType: hard
 
