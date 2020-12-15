@@ -481,10 +481,18 @@ class BlockScoping {
 
       // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
-        // The same identifier might have been bound separately in the block scope and
-        // the enclosing scope (e.g. loop or catch statement), so we should handle both
-        // individually
-        if (scope.hasOwnBinding(key)) {
+        const binding = scope.getOwnBinding(key);
+        if (binding) {
+          const parentBinding = scope.parent.getOwnBinding(key);
+          if (
+            binding.kind === "hoisted" &&
+            (!parentBinding || isVar(parentBinding.path.parent))
+          ) {
+            continue;
+          }
+          // The same identifier might have been bound separately in the block scope and
+          // the enclosing scope (e.g. loop or catch statement), so we should handle both
+          // individually
           scope.rename(ref.name);
         }
 
