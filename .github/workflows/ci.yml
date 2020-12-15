@@ -239,6 +239,8 @@ jobs:
     name: Third-party Parser Tests
     needs: build
     runs-on: ubuntu-latest
+    env:
+      YARN_NODE_LINKER: pnp
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
