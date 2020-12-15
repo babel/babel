@@ -1,5 +1,3 @@
-// @flow
-
 const { min } = Math;
 
 // a minimal leven distance implementation
@@ -9,7 +7,7 @@ const { min } = Math;
 // that have less than 20 ASCII characters
 
 // https://rosettacode.org/wiki/Levenshtein_distance#ES5
-function levenshtein(a, b) {
+function levenshtein(a: string, b: string): number {
   let t = [],
     u = [],
     i,
@@ -44,7 +42,7 @@ function levenshtein(a, b) {
  * @param {string[]} arr
  * @returns {string}
  */
-export function findSuggestion(str: string, arr: string[]): string {
+export function findSuggestion(str: string, arr: readonly string[]): string {
   const distances = arr.map<number>(el => levenshtein(el, str));
   return arr[distances.indexOf(min(...distances))];
 }

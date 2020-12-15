@@ -1,4 +1,3 @@
-// @flow
 import { findSuggestion } from "./find-suggestion.js";
 
 export class OptionValidator {
@@ -30,13 +29,13 @@ export class OptionValidator {
 
   // note: we do not consider rewrite them to high order functions
   // until we have to support `validateNumberOption`.
-  validateBooleanOption(
+  validateBooleanOption<T>(
     name: string,
     value?: boolean,
-    defaultValue?: boolean,
-  ): boolean | void {
+    defaultValue?: T,
+  ): boolean | T {
     if (value === undefined) {
-      value = defaultValue;
+      return defaultValue;
     } else {
       this.invariant(
         typeof value === "boolean",
@@ -46,13 +45,13 @@ export class OptionValidator {
     return value;
   }
 
-  validateStringOption(
+  validateStringOption<T>(
     name: string,
     value?: string,
-    defaultValue?: string,
-  ): string | void {
+    defaultValue?: T,
+  ): string | T {
     if (value === undefined) {
-      value = defaultValue;
+      return defaultValue;
     } else {
       this.invariant(
         typeof value === "string",
