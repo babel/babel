@@ -338,6 +338,18 @@ const loopVisitor = {
   },
 };
 
+function isStrict(path) {
+  return !!path.find(({ node }) => {
+    if (t.isProgram(node)) {
+      if (node.sourceType === "module") return true;
+    } else if (!t.isBlockStatement(node)) return false;
+
+    return node.directives.some(
+      directive => directive.value.value === "use strict",
+    );
+  });
+}
+
 class BlockScoping {
   constructor(
     loopPath?: NodePath,
@@ -486,7 +498,10 @@ class BlockScoping {
           const parentBinding = scope.parent.getOwnBinding(key);
           if (
             binding.kind === "hoisted" &&
-            (!parentBinding || isVar(parentBinding.path.parent))
+            !binding.path.node.async &&
+            !binding.path.node.generator &&
+            (!parentBinding || isVar(parentBinding.path.parent)) &&
+            !isStrict(binding.path.parentPath)
           ) {
             continue;
           }
