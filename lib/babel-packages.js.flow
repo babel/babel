@@ -177,3 +177,25 @@ declare module "@babel/generator" {
   declare module.exports: any;
 }
 
+declare module "@babel/highlight" {
+  import typeof { Chalk } from "chalk";
+  declare type Options = {
+    forceColor?: boolean,
+  };
+
+  /**
+   * Whether the code should be highlighted given the passed options.
+   */
+  declare function shouldHighlight(options: Options): boolean;
+
+  /**
+   * The Chalk instance that should be used given the passed options.
+   */
+  declare function getChalk(options: Options): Chalk;
+
+  /**
+   * Highlight `code`.
+   */
+  declare export default function highlight(code: string, options?: Options): string;
+    declare export { getChalk, shouldHighlight };
+}
