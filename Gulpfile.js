@@ -240,10 +240,9 @@ function buildRollup(packages, targetBrowsers) {
         input,
         external,
         onwarn(warning, warn) {
-          warn(warning);
-          // todo: remove this when we figure out how to deal with
-          // circular dependency
           if (warning.code !== "CIRCULAR_DEPENDENCY") {
+            warn(warning);
+            // https://github.com/babel/babel/pull/12011#discussion_r540434534
             throw new Error("Rollup aborted due to warnings above");
           }
         },
