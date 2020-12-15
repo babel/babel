@@ -337,11 +337,12 @@ export const assumptionsNames = new Set<string>([
   "ignoreToPrimitiveHint",
   "iterableIsArray",
   "mutableTemplateObject",
+  "noDocumentAll",
   "pureGetters",
   "setClassMethods",
   "setComputedProperties",
   "setPublicClassFields",
-  "noDocumentAll",
+  "skipForOfIteratorClosing",
 ]);
 
 function getSource(loc: NestingPath): OptionsSource {
