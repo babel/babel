@@ -2,7 +2,7 @@ import getFunctionArity from "@babel/helper-get-function-arity";
 import template from "@babel/template";
 import * as t from "@babel/types";
 
-const buildPropertyMethodAssignmentWrapper = template.statement(`
+const buildPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {
     function FUNCTION_ID() {
       return FUNCTION_KEY.apply(this, arguments);
@@ -16,7 +16,7 @@ const buildPropertyMethodAssignmentWrapper = template.statement(`
   })(FUNCTION)
 `);
 
-const buildGeneratorPropertyMethodAssignmentWrapper = template.statement(`
+const buildGeneratorPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {
     function* FUNCTION_ID() {
       return yield* FUNCTION_KEY.apply(this, arguments);
