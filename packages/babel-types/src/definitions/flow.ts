@@ -328,6 +328,7 @@ defineType("ObjectTypeProperty", {
     proto: validate(assertValueType("boolean")),
     optional: validate(assertValueType("boolean")),
     variance: validateOptionalType("Variance"),
+    method: validate(assertValueType("boolean")),
   },
 });
 
@@ -488,7 +489,7 @@ defineType("EnumBooleanBody", {
   aliases: ["EnumBody"],
   visitor: ["members"],
   fields: {
-    explicit: validate(assertValueType("boolean")),
+    explicitType: validate(assertValueType("boolean")),
     members: validateArrayOfType("EnumBooleanMember"),
   },
 });
@@ -497,7 +498,7 @@ defineType("EnumNumberBody", {
   aliases: ["EnumBody"],
   visitor: ["members"],
   fields: {
-    explicit: validate(assertValueType("boolean")),
+    explicitType: validate(assertValueType("boolean")),
     members: validateArrayOfType("EnumNumberMember"),
   },
 });
@@ -506,7 +507,7 @@ defineType("EnumStringBody", {
   aliases: ["EnumBody"],
   visitor: ["members"],
   fields: {
-    explicit: validate(assertValueType("boolean")),
+    explicitType: validate(assertValueType("boolean")),
     members: validateArrayOfType(["EnumStringMember", "EnumDefaultedMember"]),
   },
 });
