@@ -1226,6 +1226,7 @@ export interface ObjectTypeProperty extends BaseNode {
   value: FlowType;
   variance?: Variance | null;
   kind: "init" | "get" | "set";
+  method: boolean;
   optional: boolean;
   proto: boolean;
   static: boolean;

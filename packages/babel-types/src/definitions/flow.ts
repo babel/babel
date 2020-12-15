@@ -328,6 +328,7 @@ defineType("ObjectTypeProperty", {
     proto: validate(assertValueType("boolean")),
     optional: validate(assertValueType("boolean")),
     variance: validateOptionalType("Variance"),
+    method: validate(assertValueType("boolean")),
   },
 });
 
