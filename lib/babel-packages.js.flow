@@ -164,3 +164,7 @@ declare module "@babel/helper-function-name" {
     localBinding?: boolean
   ): any;
 }
+
+declare module "@babel/helper-split-export-declaration" {
+  declare export default function splitExportDeclaration(exportDeclaration: any): any;
+}
