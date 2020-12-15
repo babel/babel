@@ -1,5 +1,4 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
-TEST262_COMMIT = 36d2d2d348d83e9d6554af59a672fbcd9413914b
 TYPESCRIPT_COMMIT = da8633212023517630de5f3620a23736b63234b1
 
 FORCE_PUBLISH = -f @babel/runtime -f @babel/runtime-corejs2 -f @babel/runtime-corejs3 -f @babel/standalone
@@ -172,8 +171,8 @@ test-typescript-update-allowlist:
 bootstrap-test262:
 	rm -rf build/test262
 	mkdir -p build
-	git clone --single-branch --shallow-since=2019-12-01 https://github.com/tc39/test262.git build/test262
-	cd build/test262 && git checkout -q $(TEST262_COMMIT)
+	git clone --depth 1 https://github.com/tc39/test262.git build/test262
+	cd build/test262
 
 test-test262:
 	$(NODE) scripts/parser-tests/test262
