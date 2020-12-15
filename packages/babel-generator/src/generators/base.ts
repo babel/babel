@@ -1,6 +1,7 @@
 import type Printer from "../printer";
+import * as t from "@babel/types";
 
-export function File(this: Printer, node: any) {
+export function File(this: Printer, node: t.File) {
   if (node.program) {
     // Print this here to ensure that Program node 'leadingComments' still
     // get printed after the hashbang.
@@ -10,7 +11,7 @@ export function File(this: Printer, node: any) {
   this.print(node.program, node);
 }
 
-export function Program(this: Printer, node: any) {
+export function Program(this: Printer, node: t.Program) {
   this.printInnerComments(node, false);
 
   this.printSequence(node.directives, node);
@@ -19,7 +20,7 @@ export function Program(this: Printer, node: any) {
   this.printSequence(node.body, node);
 }
 
-export function BlockStatement(this: Printer, node: any) {
+export function BlockStatement(this: Printer, node: t.BlockStatement) {
   this.token("{");
   this.printInnerComments(node);
 
@@ -47,7 +48,7 @@ export function BlockStatement(this: Printer, node: any) {
 
 export function Noop(this: Printer) {}
 
-export function Directive(this: Printer, node: any) {
+export function Directive(this: Printer, node: t.Directive) {
   this.print(node.value, node);
   this.semicolon();
 }
@@ -56,7 +57,7 @@ export function Directive(this: Printer, node: any) {
 const unescapedSingleQuoteRE = /(?:^|[^\\])(?:\\\\)*'/;
 const unescapedDoubleQuoteRE = /(?:^|[^\\])(?:\\\\)*"/;
 
-export function DirectiveLiteral(this: Printer, node: any) {
+export function DirectiveLiteral(this: Printer, node: t.DirectiveLiteral) {
   const raw = this.getPossibleRaw(node);
   if (raw != null) {
     this.token(raw);
@@ -81,11 +82,14 @@ export function DirectiveLiteral(this: Printer, node: any) {
   }
 }
 
-export function InterpreterDirective(this: Printer, node: any) {
+export function InterpreterDirective(
+  this: Printer,
+  node: t.InterpreterDirective,
+) {
   this.token(`#!${node.value}\n`);
 }
 
-export function Placeholder(this: Printer, node: any) {
+export function Placeholder(this: Printer, node: t.Placeholder) {
   this.token("%%");
   this.print(node.name);
   this.token("%%");

@@ -1,7 +1,11 @@
 import type Printer from "../printer";
 import * as t from "@babel/types";
 
-export function ClassDeclaration(this: Printer, node: any, parent: any) {
+export function ClassDeclaration(
+  this: Printer,
+  node: t.ClassDeclaration,
+  parent: any,
+) {
   if (
     !this.format.decoratorsBeforeExport ||
     (!t.isExportDefaultDeclaration(parent) &&
@@ -52,7 +56,7 @@ export function ClassDeclaration(this: Printer, node: any, parent: any) {
 
 export { ClassDeclaration as ClassExpression };
 
-export function ClassBody(this: Printer, node: any) {
+export function ClassBody(this: Printer, node: t.ClassBody) {
   this.token("{");
   this.printInnerComments(node);
   if (node.body.length === 0) {
@@ -70,7 +74,7 @@ export function ClassBody(this: Printer, node: any) {
   }
 }
 
-export function ClassProperty(this: Printer, node: any) {
+export function ClassProperty(this: Printer, node: t.ClassProperty) {
   this.printJoin(node.decorators, node);
 
   // catch up to property key, avoid line break
@@ -106,7 +110,10 @@ export function ClassProperty(this: Printer, node: any) {
   this.semicolon();
 }
 
-export function ClassPrivateProperty(this: Printer, node: any) {
+export function ClassPrivateProperty(
+  this: Printer,
+  node: t.ClassPrivateProperty,
+) {
   this.printJoin(node.decorators, node);
   if (node.static) {
     this.word("static");
@@ -123,13 +130,13 @@ export function ClassPrivateProperty(this: Printer, node: any) {
   this.semicolon();
 }
 
-export function ClassMethod(this: Printer, node: any) {
+export function ClassMethod(this: Printer, node: t.ClassMethod) {
   this._classMethodHead(node);
   this.space();
   this.print(node.body, node);
 }
 
-export function ClassPrivateMethod(this: Printer, node: any) {
+export function ClassPrivateMethod(this: Printer, node: t.ClassPrivateMethod) {
   this._classMethodHead(node);
   this.space();
   this.print(node.body, node);
@@ -144,7 +151,7 @@ export function _classMethodHead(this: Printer, node) {
   this._methodHead(node);
 }
 
-export function StaticBlock(node) {
+export function StaticBlock(node: t.StaticBlock) {
   this.word("static");
   this.space();
   this.token("{");

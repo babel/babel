@@ -2,7 +2,7 @@ import type Printer from "../printer";
 import * as t from "@babel/types";
 import jsesc from "jsesc";
 
-export function Identifier(this: Printer, node: any) {
+export function Identifier(this: Printer, node: t.Identifier) {
   this.exactSource(node.loc, () => {
     this.word(node.name);
   });
@@ -12,14 +12,14 @@ export function ArgumentPlaceholder(this: Printer) {
   this.token("?");
 }
 
-export function RestElement(this: Printer, node: any) {
+export function RestElement(this: Printer, node: t.RestElement) {
   this.token("...");
   this.print(node.argument, node);
 }
 
 export { RestElement as SpreadElement };
 
-export function ObjectExpression(this: Printer, node: any) {
+export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   const props = node.properties;
 
   this.token("{");
@@ -36,14 +36,14 @@ export function ObjectExpression(this: Printer, node: any) {
 
 export { ObjectExpression as ObjectPattern };
 
-export function ObjectMethod(this: Printer, node: any) {
+export function ObjectMethod(this: Printer, node: t.ObjectMethod) {
   this.printJoin(node.decorators, node);
   this._methodHead(node);
   this.space();
   this.print(node.body, node);
 }
 
-export function ObjectProperty(this: Printer, node: any) {
+export function ObjectProperty(this: Printer, node: t.ObjectProperty) {
   this.printJoin(node.decorators, node);
 
   if (node.computed) {
@@ -79,7 +79,7 @@ export function ObjectProperty(this: Printer, node: any) {
   this.print(node.value, node);
 }
 
-export function ArrayExpression(this: Printer, node: any) {
+export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
   const elems = node.elements;
   const len = elems.length;
 
@@ -107,7 +107,7 @@ export function ArrayExpression(this: Printer, node: any) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function RecordExpression(this: Printer, node: any) {
+export function RecordExpression(this: Printer, node: t.RecordExpression) {
   const props = node.properties;
 
   let startToken;
@@ -137,7 +137,7 @@ export function RecordExpression(this: Printer, node: any) {
   this.token(endToken);
 }
 
-export function TupleExpression(this: Printer, node: any) {
+export function TupleExpression(this: Printer, node: t.TupleExpression) {
   const elems = node.elements;
   const len = elems.length;
 
@@ -170,11 +170,11 @@ export function TupleExpression(this: Printer, node: any) {
   this.token(endToken);
 }
 
-export function RegExpLiteral(this: Printer, node: any) {
+export function RegExpLiteral(this: Printer, node: t.RegExpLiteral) {
   this.word(`/${node.pattern}/${node.flags}`);
 }
 
-export function BooleanLiteral(this: Printer, node: any) {
+export function BooleanLiteral(this: Printer, node: t.BooleanLiteral) {
   this.word(node.value ? "true" : "false");
 }
 
@@ -182,7 +182,7 @@ export function NullLiteral(this: Printer) {
   this.word("null");
 }
 
-export function NumericLiteral(this: Printer, node: any) {
+export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value + "";
@@ -197,7 +197,7 @@ export function NumericLiteral(this: Printer, node: any) {
   }
 }
 
-export function StringLiteral(this: Printer, node: any) {
+export function StringLiteral(this: Printer, node: t.StringLiteral) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.token(raw);
@@ -217,7 +217,7 @@ export function StringLiteral(this: Printer, node: any) {
   return this.token(val);
 }
 
-export function BigIntLiteral(this: Printer, node: any) {
+export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.word(raw);
@@ -226,7 +226,7 @@ export function BigIntLiteral(this: Printer, node: any) {
   this.word(node.value + "n");
 }
 
-export function DecimalLiteral(this: Printer, node: any) {
+export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.word(raw);
@@ -235,11 +235,17 @@ export function DecimalLiteral(this: Printer, node: any) {
   this.word(node.value + "m");
 }
 
-export function PipelineTopicExpression(this: Printer, node: any) {
+export function PipelineTopicExpression(
+  this: Printer,
+  node: t.PipelineTopicExpression,
+) {
   this.print(node.expression, node);
 }
 
-export function PipelineBareFunction(this: Printer, node: any) {
+export function PipelineBareFunction(
+  this: Printer,
+  node: t.PipelineBareFunction,
+) {
   this.print(node.callee, node);
 }
 

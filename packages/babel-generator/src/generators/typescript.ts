@@ -1,12 +1,17 @@
 import type Printer from "../printer";
-export function TSTypeAnnotation(this: Printer, node) {
+import * as t from "@babel/types";
+
+export function TSTypeAnnotation(this: Printer, node: t.TSTypeAnnotation) {
   this.token(":");
   this.space();
   if (node.optional) this.token("?");
   this.print(node.typeAnnotation, node);
 }
 
-export function TSTypeParameterInstantiation(this: Printer, node): void {
+export function TSTypeParameterInstantiation(
+  this: Printer,
+  node: t.TSTypeParameterInstantiation,
+): void {
   this.token("<");
   this.printList(node.params, node, {});
   this.token(">");
@@ -14,7 +19,7 @@ export function TSTypeParameterInstantiation(this: Printer, node): void {
 
 export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
 
-export function TSTypeParameter(this: Printer, node) {
+export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
   this.word(node.name);
 
   if (node.constraint) {
@@ -32,7 +37,10 @@ export function TSTypeParameter(this: Printer, node) {
   }
 }
 
-export function TSParameterProperty(this: Printer, node) {
+export function TSParameterProperty(
+  this: Printer,
+  node: t.TSParameterProperty,
+) {
   if (node.accessibility) {
     this.word(node.accessibility);
     this.space();
@@ -46,7 +54,7 @@ export function TSParameterProperty(this: Printer, node) {
   this._param(node.parameter);
 }
 
-export function TSDeclareFunction(this: Printer, node) {
+export function TSDeclareFunction(this: Printer, node: t.TSDeclareFunction) {
   if (node.declare) {
     this.word("declare");
     this.space();
@@ -55,30 +63,39 @@ export function TSDeclareFunction(this: Printer, node) {
   this.token(";");
 }
 
-export function TSDeclareMethod(this: Printer, node) {
+export function TSDeclareMethod(this: Printer, node: t.TSDeclareMethod) {
   this._classMethodHead(node);
   this.token(";");
 }
 
-export function TSQualifiedName(this: Printer, node) {
+export function TSQualifiedName(this: Printer, node: t.TSQualifiedName) {
   this.print(node.left, node);
   this.token(".");
   this.print(node.right, node);
 }
 
-export function TSCallSignatureDeclaration(this: Printer, node) {
+export function TSCallSignatureDeclaration(
+  this: Printer,
+  node: t.TSCallSignatureDeclaration,
+) {
   this.tsPrintSignatureDeclarationBase(node);
   this.token(";");
 }
 
-export function TSConstructSignatureDeclaration(this: Printer, node) {
+export function TSConstructSignatureDeclaration(
+  this: Printer,
+  node: t.TSConstructSignatureDeclaration,
+) {
   this.word("new");
   this.space();
   this.tsPrintSignatureDeclarationBase(node);
   this.token(";");
 }
 
-export function TSPropertySignature(this: Printer, node) {
+export function TSPropertySignature(
+  this: Printer,
+  node: t.TSPropertySignature,
+) {
   const { readonly, initializer } = node;
   if (readonly) {
     this.word("readonly");
@@ -108,13 +125,13 @@ export function tsPrintPropertyOrMethodName(this: Printer, node) {
   }
 }
 
-export function TSMethodSignature(this: Printer, node) {
+export function TSMethodSignature(this: Printer, node: t.TSMethodSignature) {
   this.tsPrintPropertyOrMethodName(node);
   this.tsPrintSignatureDeclarationBase(node);
   this.token(";");
 }
 
-export function TSIndexSignature(this: Printer, node) {
+export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
   const { readonly } = node;
   if (readonly) {
     this.word("readonly");
@@ -171,11 +188,11 @@ export function TSThisType(this: Printer) {
   this.word("this");
 }
 
-export function TSFunctionType(this: Printer, node) {
+export function TSFunctionType(this: Printer, node: t.TSFunctionType) {
   this.tsPrintFunctionOrConstructorType(node);
 }
 
-export function TSConstructorType(this: Printer, node) {
+export function TSConstructorType(this: Printer, node: t.TSConstructorType) {
   this.word("new");
   this.space();
   this.tsPrintFunctionOrConstructorType(node);
@@ -197,12 +214,12 @@ export function tsPrintFunctionOrConstructorType(
   this.print(node.typeAnnotation.typeAnnotation, node);
 }
 
-export function TSTypeReference(this: Printer, node) {
+export function TSTypeReference(this: Printer, node: t.TSTypeReference) {
   this.print(node.typeName, node);
   this.print(node.typeParameters, node);
 }
 
-export function TSTypePredicate(this: Printer, node) {
+export function TSTypePredicate(this: Printer, node: t.TSTypePredicate) {
   if (node.asserts) {
     this.word("asserts");
     this.space();
@@ -216,13 +233,13 @@ export function TSTypePredicate(this: Printer, node) {
   }
 }
 
-export function TSTypeQuery(this: Printer, node) {
+export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
   this.word("typeof");
   this.space();
   this.print(node.exprName);
 }
 
-export function TSTypeLiteral(this: Printer, node) {
+export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
   this.tsPrintTypeLiteralOrInterfaceBody(node.members, node);
 }
 
@@ -251,28 +268,28 @@ export function tsPrintBraced(this: Printer, members, node) {
   }
 }
 
-export function TSArrayType(this: Printer, node) {
+export function TSArrayType(this: Printer, node: t.TSArrayType) {
   this.print(node.elementType, node);
   this.token("[]");
 }
 
-export function TSTupleType(this: Printer, node) {
+export function TSTupleType(this: Printer, node: t.TSTupleType) {
   this.token("[");
   this.printList(node.elementTypes, node);
   this.token("]");
 }
 
-export function TSOptionalType(this: Printer, node) {
+export function TSOptionalType(this: Printer, node: t.TSOptionalType) {
   this.print(node.typeAnnotation, node);
   this.token("?");
 }
 
-export function TSRestType(this: Printer, node) {
+export function TSRestType(this: Printer, node: t.TSRestType) {
   this.token("...");
   this.print(node.typeAnnotation, node);
 }
 
-export function TSNamedTupleMember(this: Printer, node) {
+export function TSNamedTupleMember(this: Printer, node: t.TSNamedTupleMember) {
   this.print(node.label, node);
   if (node.optional) this.token("?");
   this.token(":");
@@ -280,15 +297,15 @@ export function TSNamedTupleMember(this: Printer, node) {
   this.print(node.elementType, node);
 }
 
-export function TSUnionType(this: Printer, node) {
+export function TSUnionType(this: Printer, node: t.TSUnionType) {
   this.tsPrintUnionOrIntersectionType(node, "|");
 }
 
-export function TSIntersectionType(this: Printer, node) {
+export function TSIntersectionType(this: Printer, node: t.TSIntersectionType) {
   this.tsPrintUnionOrIntersectionType(node, "&");
 }
 
-export function tsPrintUnionOrIntersectionType(this: Printer, node, sep) {
+export function tsPrintUnionOrIntersectionType(this: Printer, node: any, sep) {
   this.printJoin(node.types, node, {
     separator() {
       this.space();
@@ -298,7 +315,7 @@ export function tsPrintUnionOrIntersectionType(this: Printer, node, sep) {
   });
 }
 
-export function TSConditionalType(this: Printer, node) {
+export function TSConditionalType(this: Printer, node: t.TSConditionalType) {
   this.print(node.checkType);
   this.space();
   this.word("extends");
@@ -314,32 +331,38 @@ export function TSConditionalType(this: Printer, node) {
   this.print(node.falseType);
 }
 
-export function TSInferType(this: Printer, node) {
+export function TSInferType(this: Printer, node: t.TSInferType) {
   this.token("infer");
   this.space();
   this.print(node.typeParameter);
 }
 
-export function TSParenthesizedType(this: Printer, node) {
+export function TSParenthesizedType(
+  this: Printer,
+  node: t.TSParenthesizedType,
+) {
   this.token("(");
   this.print(node.typeAnnotation, node);
   this.token(")");
 }
 
-export function TSTypeOperator(this: Printer, node) {
+export function TSTypeOperator(this: Printer, node: t.TSTypeOperator) {
   this.word(node.operator);
   this.space();
   this.print(node.typeAnnotation, node);
 }
 
-export function TSIndexedAccessType(this: Printer, node) {
+export function TSIndexedAccessType(
+  this: Printer,
+  node: t.TSIndexedAccessType,
+) {
   this.print(node.objectType, node);
   this.token("[");
   this.print(node.indexType, node);
   this.token("]");
 }
 
-export function TSMappedType(this: Printer, node) {
+export function TSMappedType(this: Printer, node: t.TSMappedType) {
   const { nameType, optional, readonly, typeParameter } = node;
   this.token("{");
   this.space();
@@ -382,16 +405,22 @@ function tokenIfPlusMinus(self, tok) {
   }
 }
 
-export function TSLiteralType(this: Printer, node) {
+export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
   this.print(node.literal, node);
 }
 
-export function TSExpressionWithTypeArguments(this: Printer, node) {
+export function TSExpressionWithTypeArguments(
+  this: Printer,
+  node: t.TSExpressionWithTypeArguments,
+) {
   this.print(node.expression, node);
   this.print(node.typeParameters, node);
 }
 
-export function TSInterfaceDeclaration(this: Printer, node) {
+export function TSInterfaceDeclaration(
+  this: Printer,
+  node: t.TSInterfaceDeclaration,
+) {
   const { declare, id, typeParameters, extends: extendz, body } = node;
   if (declare) {
     this.word("declare");
@@ -411,11 +440,14 @@ export function TSInterfaceDeclaration(this: Printer, node) {
   this.print(body, node);
 }
 
-export function TSInterfaceBody(this: Printer, node) {
+export function TSInterfaceBody(this: Printer, node: t.TSInterfaceBody) {
   this.tsPrintTypeLiteralOrInterfaceBody(node.body, node);
 }
 
-export function TSTypeAliasDeclaration(this: Printer, node) {
+export function TSTypeAliasDeclaration(
+  this: Printer,
+  node: t.TSTypeAliasDeclaration,
+) {
   const { declare, id, typeParameters, typeAnnotation } = node;
   if (declare) {
     this.word("declare");
@@ -432,7 +464,7 @@ export function TSTypeAliasDeclaration(this: Printer, node) {
   this.token(";");
 }
 
-export function TSAsExpression(this: Printer, node) {
+export function TSAsExpression(this: Printer, node: t.TSAsExpression) {
   const { expression, typeAnnotation } = node;
   this.print(expression, node);
   this.space();
@@ -441,7 +473,7 @@ export function TSAsExpression(this: Printer, node) {
   this.print(typeAnnotation, node);
 }
 
-export function TSTypeAssertion(this: Printer, node) {
+export function TSTypeAssertion(this: Printer, node: t.TSTypeAssertion) {
   const { typeAnnotation, expression } = node;
   this.token("<");
   this.print(typeAnnotation, node);
@@ -450,7 +482,7 @@ export function TSTypeAssertion(this: Printer, node) {
   this.print(expression, node);
 }
 
-export function TSEnumDeclaration(this: Printer, node) {
+export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   const { declare, const: isConst, id, members } = node;
   if (declare) {
     this.word("declare");
@@ -467,7 +499,7 @@ export function TSEnumDeclaration(this: Printer, node) {
   this.tsPrintBraced(members, node);
 }
 
-export function TSEnumMember(this: Printer, node) {
+export function TSEnumMember(this: Printer, node: t.TSEnumMember) {
   const { id, initializer } = node;
   this.print(id, node);
   if (initializer) {
@@ -479,7 +511,10 @@ export function TSEnumMember(this: Printer, node) {
   this.token(",");
 }
 
-export function TSModuleDeclaration(this: Printer, node) {
+export function TSModuleDeclaration(
+  this: Printer,
+  node: t.TSModuleDeclaration,
+) {
   const { declare, id } = node;
 
   if (declare) {
@@ -509,11 +544,11 @@ export function TSModuleDeclaration(this: Printer, node) {
   this.print(body, node);
 }
 
-export function TSModuleBlock(this: Printer, node) {
+export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
   this.tsPrintBraced(node.body, node);
 }
 
-export function TSImportType(this: Printer, node) {
+export function TSImportType(this: Printer, node: t.TSImportType) {
   const { argument, qualifier, typeParameters } = node;
   this.word("import");
   this.token("(");
@@ -528,7 +563,10 @@ export function TSImportType(this: Printer, node) {
   }
 }
 
-export function TSImportEqualsDeclaration(this: Printer, node) {
+export function TSImportEqualsDeclaration(
+  this: Printer,
+  node: t.TSImportEqualsDeclaration,
+) {
   const { isExport, id, moduleReference } = node;
   if (isExport) {
     this.word("export");
@@ -544,18 +582,24 @@ export function TSImportEqualsDeclaration(this: Printer, node) {
   this.token(";");
 }
 
-export function TSExternalModuleReference(this: Printer, node) {
+export function TSExternalModuleReference(
+  this: Printer,
+  node: t.TSExternalModuleReference,
+) {
   this.token("require(");
   this.print(node.expression, node);
   this.token(")");
 }
 
-export function TSNonNullExpression(this: Printer, node) {
+export function TSNonNullExpression(
+  this: Printer,
+  node: t.TSNonNullExpression,
+) {
   this.print(node.expression, node);
   this.token("!");
 }
 
-export function TSExportAssignment(this: Printer, node) {
+export function TSExportAssignment(this: Printer, node: t.TSExportAssignment) {
   this.word("export");
   this.space();
   this.token("=");
@@ -564,7 +608,10 @@ export function TSExportAssignment(this: Printer, node) {
   this.token(";");
 }
 
-export function TSNamespaceExportDeclaration(this: Printer, node) {
+export function TSNamespaceExportDeclaration(
+  this: Printer,
+  node: t.TSNamespaceExportDeclaration,
+) {
   this.word("export");
   this.space();
   this.word("as");
@@ -574,7 +621,7 @@ export function TSNamespaceExportDeclaration(this: Printer, node) {
   this.print(node.id, node);
 }
 
-export function tsPrintSignatureDeclarationBase(this: Printer, node) {
+export function tsPrintSignatureDeclarationBase(this: Printer, node: any) {
   const { typeParameters, parameters } = node;
   this.print(typeParameters, node);
   this.token("(");
@@ -583,7 +630,7 @@ export function tsPrintSignatureDeclarationBase(this: Printer, node) {
   this.print(node.typeAnnotation, node);
 }
 
-export function tsPrintClassMemberModifiers(this: Printer, node, isField) {
+export function tsPrintClassMemberModifiers(this: Printer, node: any, isField) {
   if (isField && node.declare) {
     this.word("declare");
     this.space();

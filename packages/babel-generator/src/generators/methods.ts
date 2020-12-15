@@ -93,7 +93,7 @@ export function _functionHead(this: Printer, node: any) {
   this._predicate(node);
 }
 
-export function FunctionExpression(this: Printer, node: any) {
+export function FunctionExpression(this: Printer, node: t.FunctionExpression) {
   this._functionHead(node);
   this.space();
   this.print(node.body, node);
@@ -101,7 +101,10 @@ export function FunctionExpression(this: Printer, node: any) {
 
 export { FunctionExpression as FunctionDeclaration };
 
-export function ArrowFunctionExpression(this: Printer, node: any) {
+export function ArrowFunctionExpression(
+  this: Printer,
+  node: t.ArrowFunctionExpression,
+) {
   if (node.async) {
     this.word("async");
     this.space();
