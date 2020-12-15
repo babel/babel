@@ -27,13 +27,20 @@ export default declare((api, options) => {
         state.pure =
           PURE_ANNOTATION ?? !pass.get("@babel/plugin-react-jsx/pragmaSet");
       } else {
-        state.jsxCallee = pass.get("@babel/plugin-react-jsx/jsxIdentifier")();
-        state.jsxStaticCallee = pass.get(
-          "@babel/plugin-react-jsx/jsxStaticIdentifier",
-        )();
-        state.createElementCallee = pass.get(
-          "@babel/plugin-react-jsx/createElementIdentifier",
-        )();
+        const getter = get => ({ enumerable: true, configurable: true, get });
+
+        // TODO(Babel 8): helper-builder-react-jsx expects those properties to be AST nodes, but we want to
+        // generate them lazily so that we only inject imports when needed.
+        // These should actually be functions.
+        Object.defineProperties(state, {
+          jsxCallee: getter(pass.get("@babel/plugin-react-jsx/jsxIdentifier")),
+          jsxStaticCallee: getter(
+            pass.get("@babel/plugin-react-jsx/jsxStaticIdentifier"),
+          ),
+          createElementCallee: getter(
+            pass.get("@babel/plugin-react-jsx/createElementIdentifier"),
+          ),
+        });
 
         state.pure =
           PURE_ANNOTATION ??

@@ -43,11 +43,6 @@ export function helper(babel, options) {
   const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
   const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
 
-  // This is the number of possible import names
-  // development: jsxDEV, Fragment, createElement
-  // production: jsx, jsxs, Fragment, createElement
-  const IMPORT_NAME_SIZE = options.development ? 3 : 4;
-
   const {
     importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
     runtime: RUNTIME_DEFAULT = DEFAULT.runtime,
@@ -214,44 +209,33 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             );
           }
 
-          const importName = addAutoImports(path, {
-            ...state.opts,
-            source,
-          });
-
           state.set(
             "@babel/plugin-react-jsx/jsxIdentifier",
-            createIdentifierParser(
-              createIdentifierName(
-                path,
-                options.development ? "jsxDEV" : "jsx",
-                importName,
-              ),
+            createImportLazily(
+              state,
+              path,
+              options.development ? "jsxDEV" : "jsx",
+              source,
             ),
           );
           state.set(
             "@babel/plugin-react-jsx/jsxStaticIdentifier",
-            createIdentifierParser(
-              createIdentifierName(
-                path,
-                options.development ? "jsxDEV" : "jsxs",
-                importName,
-              ),
+            createImportLazily(
+              state,
+              path,
+              options.development ? "jsxDEV" : "jsxs",
+              source,
             ),
           );
 
           state.set(
             "@babel/plugin-react-jsx/createElementIdentifier",
-            createIdentifierParser(
-              createIdentifierName(path, "createElement", importName),
-            ),
+            createImportLazily(state, path, "createElement", source),
           );
 
           state.set(
             "@babel/plugin-react-jsx/jsxFragIdentifier",
-            createIdentifierParser(
-              createIdentifierName(path, "Fragment", importName),
-            ),
+            createImportLazily(state, path, "Fragment", source),
           );
 
           state.set(
@@ -313,44 +297,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     return false;
   }
 
-  function createIdentifierName(path, name, importName) {
-    if (isModule(path)) {
-      const identifierName = `${importName[name]}`;
-      return identifierName;
-    } else {
-      return `${importName[name]}.${name}`;
-    }
-  }
-
-  function getImportNames(parentPath) {
-    const imports = new Set();
-
-    parentPath.traverse({
-      "JSXElement|JSXFragment"(path) {
-        if (path.type === "JSXFragment") imports.add("Fragment");
-        const openingPath = path.get("openingElement");
-
-        const validChildren = t.react.buildChildren(openingPath.parent);
-        let importName;
-        if (path.type === "JSXElement" && shouldUseCreateElement(path)) {
-          importName = "createElement";
-        } else if (options.development) {
-          importName = "jsxDEV";
-        } else if (validChildren.length > 1) {
-          importName = "jsxs";
-        } else {
-          importName = "jsx";
-        }
-        imports.add(importName);
-
-        if (imports.size === IMPORT_NAME_SIZE) {
-          path.stop();
-        }
-      },
-    });
-    return imports;
-  }
-
   function getSource(source, importName) {
     switch (importName) {
       case "Fragment":
@@ -367,47 +313,40 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
   }
 
-  function addAutoImports(path, state) {
-    const imports = getImportNames(path, state);
-    if (isModule(path)) {
-      // import {jsx} from "react";
-      // import {createElement} from "react";
-      const importMap = {};
+  function createImportLazily(pass, path, importName, source) {
+    return () => {
+      const actualSource = getSource(source, importName);
+      if (isModule(path)) {
+        let reference = pass.get(
+          `@babel/plugin-react-jsx/imports/${importName}`,
+        );
+        if (reference) return t.cloneNode(reference);
 
-      imports.forEach(importName => {
-        if (!importMap[importName]) {
-          importMap[importName] = addNamed(
-            path,
-            importName,
-            getSource(state.source, importName),
-            {
-              importedInterop: "uncompiled",
-              ensureLiveReference: true,
-            },
-          ).name;
+        reference = addNamed(path, importName, actualSource, {
+          importedInterop: "uncompiled",
+        });
+        pass.set(`@babel/plugin-react-jsx/imports/${importName}`, reference);
+
+        return reference;
+      } else {
+        let reference = pass.get(
+          `@babel/plugin-react-jsx/requires/${actualSource}`,
+        );
+        if (reference) {
+          reference = t.cloneNode(reference);
+        } else {
+          reference = addNamespace(path, actualSource, {
+            importedInterop: "uncompiled",
+          });
+          pass.set(
+            `@babel/plugin-react-jsx/requires/${actualSource}`,
+            reference,
+          );
         }
-      });
 
-      return importMap;
-    } else {
-      const importMap = {};
-      const sourceMap = {};
-      imports.forEach(importName => {
-        const source = getSource(state.source, importName);
-        if (!importMap[importName]) {
-          if (!sourceMap[source]) {
-            // var _react = require("react")
-            sourceMap[source] = addNamespace(path, source, {
-              importedInterop: "uncompiled",
-              ensureLiveReference: true,
-            }).name;
-          }
-
-          importMap[importName] = sourceMap[source];
-        }
-      });
-      return importMap;
-    }
+        return t.memberExpression(reference, t.identifier(importName));
+      }
+    };
   }
 
   function createIdentifierParser(id) {
