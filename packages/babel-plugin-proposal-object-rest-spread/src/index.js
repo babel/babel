@@ -17,15 +17,16 @@ const ZERO_REFS = (() => {
 export default declare((api, opts) => {
   api.assertVersion(7);
 
-  const { useBuiltIns = false } = opts;
+  const { useBuiltIns = false, loose = false } = opts;
 
-  const ignoreFunctionLength =
-    api.assumption("ignoreFunctionLength") ?? opts.loose;
-  const objectRestNoSymbols =
-    api.assumption("objectRestNoSymbols") ?? opts.loose;
-  const pureGetters = api.assumption("pureGetters") ?? opts.loose;
-  const setSpreadProperties =
-    api.assumption("setSpreadProperties") ?? opts.loose;
+  if (typeof loose !== "boolean") {
+    throw new Error(".loose must be a boolean, or undefined");
+  }
+
+  const ignoreFunctionLength = api.assumption("ignoreFunctionLength") ?? loose;
+  const objectRestNoSymbols = api.assumption("objectRestNoSymbols") ?? loose;
+  const pureGetters = api.assumption("pureGetters") ?? loose;
+  const setSpreadProperties = api.assumption("setSpreadProperties") ?? loose;
 
   function getExtendsHelper(file) {
     return useBuiltIns
