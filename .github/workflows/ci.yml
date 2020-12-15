@@ -256,8 +256,13 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: babel-artifact
+      - name: Download Test262
+        uses: actions/checkout@v2
+        with:
+          repository: tc39/test262
+          path: build/test262
       - name: Download tests
-        run: make -j bootstrap-flow bootstrap-typescript bootstrap-test262
+        run: make -j bootstrap-flow bootstrap-typescript
       - name: Run Test262 Tests
         run: make test-test262
       - name: Run Flow Tests
