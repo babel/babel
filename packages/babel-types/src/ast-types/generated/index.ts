@@ -1336,19 +1336,19 @@ export interface EnumDeclaration extends BaseNode {
 export interface EnumBooleanBody extends BaseNode {
   type: "EnumBooleanBody";
   members: Array<EnumBooleanMember>;
-  explicit: boolean;
+  explicitType: boolean;
 }
 
 export interface EnumNumberBody extends BaseNode {
   type: "EnumNumberBody";
   members: Array<EnumNumberMember>;
-  explicit: boolean;
+  explicitType: boolean;
 }
 
 export interface EnumStringBody extends BaseNode {
   type: "EnumStringBody";
   members: Array<EnumStringMember | EnumDefaultedMember>;
-  explicit: boolean;
+  explicitType: boolean;
 }
 
 export interface EnumSymbolBody extends BaseNode {
