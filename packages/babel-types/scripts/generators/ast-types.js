@@ -77,11 +77,12 @@ export type Node = ${t.TYPES.sort().join(" | ")};\n\n`;
       }
 
       const alphaNumeric = /^\w+$/;
+      const optional = field.optional ? "?" : "";
 
       if (t.isValidIdentifier(fieldName) || alphaNumeric.test(fieldName)) {
-        struct.push(`${fieldName}: ${typeAnnotation};`);
+        struct.push(`${fieldName}${optional}: ${typeAnnotation};`);
       } else {
-        struct.push(`"${fieldName}": ${typeAnnotation};`);
+        struct.push(`"${fieldName}"${optional}: ${typeAnnotation};`);
       }
     });
 
