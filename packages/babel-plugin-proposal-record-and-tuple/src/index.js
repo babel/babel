@@ -46,10 +46,8 @@ export default declare((api, options) => {
     return value;
   }
 
-  function getBuiltIn(name, path) {
+  function getBuiltIn(name, path, programPath) {
     if (!shouldImportPolyfill) return t.identifier(name);
-
-    const programPath = path.find(p => p.isProgram());
     if (!programPath) {
       throw new Error("Internal error: unable to find the Program node.");
     }
@@ -70,15 +68,18 @@ export default declare((api, options) => {
     name: "@bloomberg/babel-plugin-proposal-record-and-tuple",
     inherits: syntaxRecordAndTuple,
     visitor: {
-      RecordExpression(path) {
-        const record = getBuiltIn("Record", path);
+      Program(path, state) {
+        state.programPath = path;
+      },
+      RecordExpression(path, state) {
+        const record = getBuiltIn("Record", path, state.programPath);
 
         const object = t.objectExpression(path.node.properties);
         const wrapped = t.callExpression(record, [object]);
         path.replaceWith(wrapped);
       },
-      TupleExpression(path) {
-        const tuple = getBuiltIn("Tuple", path);
+      TupleExpression(path, state) {
+        const tuple = getBuiltIn("Tuple", path, state.programPath);
 
         const wrapped = t.callExpression(tuple, path.node.elements);
         path.replaceWith(wrapped);
