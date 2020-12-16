@@ -1393,7 +1393,7 @@ __metadata:
     "@babel/helper-validator-option": "workspace:^7.12.17"
     "@babel/plugin-syntax-record-and-tuple": "workspace:^7.12.1"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": ^7.12.0
   languageName: unknown
   linkType: soft
 
