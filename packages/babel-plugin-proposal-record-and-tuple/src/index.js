@@ -18,61 +18,71 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import { types as t } from "@babel/core";
 import { addNamed, isModule } from "@babel/helper-module-imports";
+import { OptionValidator } from "@babel/helper-validator-option";
+import { name as packageName } from "../package.json";
+
+const v = new OptionValidator(packageName);
 
 export default declare((api, options) => {
-    api.assertVersion(7);
+  api.assertVersion(7);
 
-    const {
-        importPolyfill: shouldImportPolyfill = !!options.polyfillModuleName,
-        polyfillModuleName = "@bloomberg/record-tuple-polyfill",
-    } = options;
+  const polyfillModuleName = v.validateStringOption(
+    "polyfillModuleName",
+    options.polyfillModuleName,
+    "@bloomberg/record-tuple-polyfill",
+  );
+  const shouldImportPolyfill = v.validateBooleanOption(
+    "importPolyfill",
+    options.importPolyfill,
+    !!options.polyfillModuleName,
+  );
 
-    // program -> cacheKey -> localBindingName
-    const importCaches = new WeakMap();
+  // program -> cacheKey -> localBindingName
+  const importCaches = new WeakMap();
 
-    function getOr(map, key, getDefault) {
-        let value = map.get(key);
-        if (!value) map.set(key, (value = getDefault()));
-        return value;
+  function getOr(map, key, getDefault) {
+    let value = map.get(key);
+    if (!value) map.set(key, (value = getDefault()));
+    return value;
+  }
+
+  function getBuiltIn(name, path) {
+    if (!shouldImportPolyfill) return t.identifier(name);
+
+    const programPath = path.find(p => p.isProgram());
+    if (!programPath) {
+      throw new Error("Internal error: unable to find the Program node.");
     }
 
-    function getBuiltIn(name, path) {
-        if (!shouldImportPolyfill) return t.identifier(name);
+    const cacheKey = `${name}:${isModule(programPath)}`;
 
-        const programPath = path.find(p => p.isProgram());
-        if (!programPath) {
-            throw new Error("Internal error: unable to find the Program node.");
-        }
+    const cache = getOr(importCaches, programPath.node, () => new Map());
+    const localBindingName = getOr(cache, cacheKey, () => {
+      return addNamed(programPath, name, polyfillModuleName, {
+        importedInterop: "uncompiled",
+      }).name;
+    });
 
-        const cacheKey = `${name}:${isModule(programPath)}`;
+    return t.identifier(localBindingName);
+  }
 
-        const cache = getOr(importCaches, programPath.node, () => new Map());
-        const localBindingName = getOr(cache, cacheKey, () => {
-            return addNamed(programPath, name, polyfillModuleName, {
-                importedInterop: "uncompiled",
-            }).name;
-        });
+  return {
+    name: "@bloomberg/babel-plugin-proposal-record-and-tuple",
+    inherits: syntaxRecordAndTuple,
+    visitor: {
+      RecordExpression(path) {
+        const record = getBuiltIn("Record", path);
 
-        return t.identifier(localBindingName);
-    }
+        const object = t.objectExpression(path.node.properties);
+        const wrapped = t.callExpression(record, [object]);
+        path.replaceWith(wrapped);
+      },
+      TupleExpression(path) {
+        const tuple = getBuiltIn("Tuple", path);
 
-    return {
-        name: "@bloomberg/babel-plugin-proposal-record-and-tuple",
-        inherits: syntaxRecordAndTuple,
-        visitor: {
-            RecordExpression(path) {
-                const record = getBuiltIn("Record", path);
-
-                const object = t.objectExpression(path.node.properties);
-                const wrapped = t.callExpression(record, [object]);
-                path.replaceWith(wrapped);
-            },
-            TupleExpression(path) {
-                const tuple = getBuiltIn("Tuple", path);
-
-                const wrapped = t.callExpression(tuple, path.node.elements);
-                path.replaceWith(wrapped);
-            },
-        },
-    };
+        const wrapped = t.callExpression(tuple, path.node.elements);
+        path.replaceWith(wrapped);
+      },
+    },
+  };
 });
