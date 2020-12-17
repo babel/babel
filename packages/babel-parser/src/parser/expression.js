@@ -55,6 +55,7 @@ import {
   newExpressionScope,
 } from "../util/expression-scope.js";
 import { Errors } from "./error";
+import type State from "../tokenizer/state";
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -492,8 +493,18 @@ export default class ExpressionParser extends LValParser {
   // Parse unary operators, both prefix and postfix.
   // https://tc39.es/ecma262/#prod-UnaryExpression
   parseMaybeUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
-    if (this.isContextual("await") && this.isAwaitAllowed()) {
-      return this.parseAwait();
+    if (this.isContextual("await")) {
+      if (this.isAwaitAllowed()) {
+        return this.parseAwait();
+      } else {
+        if (this.scope.inFunction) {
+          const lookahead = this.lookahead();
+          if (lookahead.type.startsExpr && !this.isAmbiguousAwait(lookahead)) {
+            this.raise(this.state.start, Errors.AwaitNotInAsyncContext);
+            return this.parseAwait();
+          }
+        }
+      }
     }
     const update = this.match(tt.incDec);
     const node = this.startNode();
@@ -2363,22 +2374,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
-      if (
-        this.hasPrecedingLineBreak() ||
-        // All the following expressions are ambiguous:
-        //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
-        this.match(tt.plusMin) ||
-        this.match(tt.parenL) ||
-        this.match(tt.bracketL) ||
-        this.match(tt.backQuote) ||
-        // Sometimes the tokenizer generates tt.slash for regexps, and this is
-        // handler by parseExprAtom
-        this.match(tt.regexp) ||
-        this.match(tt.slash) ||
-        // This code could be parsed both as a modulo operator or as an intrinsic:
-        //   await %x(0)
-        (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
-      ) {
+      if (this.isAmbiguousAwait()) {
         this.ambiguousScriptDifferentAst = true;
       } else {
         this.sawUnambiguousESM = true;
@@ -2390,6 +2386,25 @@ export default class ExpressionParser extends LValParser {
     }
 
     return this.finishNode(node, "AwaitExpression");
+  }
+
+  isAmbiguousAwait(state: State = this.state): boolean {
+    return (
+      this.hasPrecedingLineBreak(state) ||
+      // All the following expressions are ambiguous:
+      //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
+      state.type === tt.plusMin ||
+      state.type === tt.parenL ||
+      state.type === tt.bracketL ||
+      state.type === tt.backQuote ||
+      // Sometimes the tokenizer generates tt.slash for regexps, and this is
+      // handler by parseExprAtom
+      state.type === tt.regexp ||
+      state.type === tt.slash ||
+      // This code could be parsed both as a modulo operator or as an intrinsic:
+      //   await %x(0)
+      (this.hasPlugin("v8intrinsic") && state.type === tt.modulo)
+    );
   }
 
   // Parses yield expression inside generator.
