@@ -42,8 +42,9 @@ generate-type-helpers:
 build-flow-typings:
 	$(NODE) packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
 
-build-typescript-3.7-typings:
-	$(NODE) packages/babel-types/scripts/generators/typescript-3.7.js > packages/babel-types/lib/index-ts3.7.d.ts
+# For TypeScript older than 3.7
+build-typescript-legacy-typings:
+	$(NODE) packages/babel-types/scripts/generators/typescript-legacy.js > packages/babel-types/lib/index-legacy.d.ts
 
 build-standalone: build-babel-standalone
 
@@ -194,7 +195,7 @@ prepublish-prepare-dts:
 	$(MAKE) tscheck
 	$(YARN) gulp bundle-dts
 	$(YARN) gulp clean-dts
-	$(MAKE) build-typescript-3.7-typings
+	$(MAKE) build-typescript-legacy-typings
 	$(MAKE) clean-tsconfig
 
 prepublish:
