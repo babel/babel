@@ -42,8 +42,9 @@ generate-type-helpers:
 build-flow-typings:
 	$(NODE) packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
 
+# For TypeScript older than 3.7
 build-typescript-legacy-typings:
-	$(NODE) packages/babel-types/scripts/generators/typescript-legacy.js > packages/babel-types/lib/index.d.ts
+	$(NODE) packages/babel-types/scripts/generators/typescript-legacy.js > packages/babel-types/lib/index-legacy.d.ts
 
 build-standalone: build-babel-standalone
 
@@ -82,12 +83,6 @@ flowcheck-ci:
 code-quality: tscheck flow lint
 
 tscheck: generate-tsconfig
-	@# For backward compatibility with older TS versions, @babel/types/lib/index.d.ts
-	@# cannot use modern TS features. We can use them in a index-ts3.7.d.ts file which
-	@# is generated while publishing.
-	@# However, during developement, we don't bundle .d.ts files so we can just inject
-	@# an alias from index-ts3.7.d.ts to index.d.ts
-	echo "export * from './index';" > packages/babel-types/lib/index-ts3.7.d.ts
 	$(YARN) tsc -b .
 
 flow: build-flow-typings

@@ -323,18 +323,20 @@ function buildRollup(packages, targetBrowsers) {
 function buildRollupDts(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
-    packages.map(async ({ src, out = "index.d.ts" }) => {
-      const input = `${src}/lib/index.d.ts`;
+    packages.map(async packageName => {
+      const input = `${packageName}/lib/index.d.ts`;
       fancyLog(`Bundling '${chalk.cyan(input)}' with rollup ...`);
       const bundle = await rollup.rollup({
         input,
         plugins: [rollupDts()],
       });
 
-      await finish(gulp.src(`${src}/lib/**/*.d.ts{,.map}`).pipe(unlink()));
+      await finish(
+        gulp.src(`${packageName}/lib/**/*.d.ts{,.map}`).pipe(unlink())
+      );
 
       await bundle.write({
-        file: `${src}/lib/${out}`,
+        file: `${packageName}/lib/index.d.ts`,
         format: "es",
         sourcemap: sourcemap,
         exports: "named",
@@ -363,12 +365,7 @@ const libBundles = [
   dest: "lib",
 }));
 
-const dtsBundles = [
-  {
-    src: "packages/babel-types",
-    out: "index-ts3.7.d.ts",
-  },
-];
+const dtsBundles = ["packages/babel-types"];
 
 const standaloneBundle = [
   {
@@ -403,14 +400,12 @@ gulp.task(
   gulp.series("generate-standalone", "rollup-babel-standalone")
 );
 
-gulp.task("copy-dts", () => copyDts(dtsBundles.map(pkg => pkg.src)));
+gulp.task("copy-dts", () => copyDts(dtsBundles));
 gulp.task(
   "bundle-dts",
   gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
 );
-gulp.task("clean-dts", () =>
-  removeDts(/* exclude */ dtsBundles.map(pkg => pkg.src))
-);
+gulp.task("clean-dts", () => removeDts(/* exclude */ dtsBundles));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 
