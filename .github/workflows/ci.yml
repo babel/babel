@@ -147,7 +147,7 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install
         run: |
-          make -j bootstrap-only
+          yarn install
       - name: Downgrade Jest for node <= 8
         if: matrix.node-version == '6' || matrix.node-version == '8'
         run: |
