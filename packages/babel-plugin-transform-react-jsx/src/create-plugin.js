@@ -169,8 +169,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               set(state, "id/createElement", () => t.cloneNode(createElement));
               set(state, "id/fragment", () => t.cloneNode(fragment));
 
-              set(state, "pragmaSet", pragma !== DEFAULT.pragma);
-              set(state, "pragmaFragSet", pragmaFrag !== DEFAULT.pragmaFrag);
+              set(state, "defaultPure", pragma === DEFAULT.pragma);
             } else if (runtime === "automatic") {
               if (pragmaSet || pragmaFragSet) {
                 throw path.buildCodeFrameError(
@@ -186,7 +185,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               define("id/createElement", "createElement");
               define("id/fragment", "Fragment");
 
-              set(state, "importSourceSet", source !== DEFAULT.importSource);
+              set(state, "defaultPure", source === DEFAULT.importSource);
             } else {
               throw path.buildCodeFrameError(
                 `Runtime must be either "classic" or "automatic".`,
@@ -255,13 +254,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     function call(pass, name, args) {
       const node = t.callExpression(get(pass, `id/${name}`)(), args);
-
-      const classic = get(pass, "runtime") === "classic" && !development;
-      const pure =
-        PURE_ANNOTATION ??
-        !get(pass, classic ? "pragmaSet" : "importSourceSet");
-      if (pure) annotateAsPure(node);
-
+      if (PURE_ANNOTATION ?? get(pass, "defaultPure")) annotateAsPure(node);
       return node;
     }
 
@@ -334,9 +327,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         value.value = value.value.replace(/\n\s+/g, " ");
 
         // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
-        if (value.extra && value.extra.raw) {
-          delete value.extra.raw;
-        }
+        delete value.extra?.raw;
       }
 
       if (t.isJSXNamespacedName(node.name)) {
@@ -350,6 +341,19 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
 
       return t.inherits(t.objectProperty(node.name, value), node);
+    }
+
+    function buildChildrenProperty(children) {
+      let childrenNode;
+      if (children.length === 1) {
+        childrenNode = children[0];
+      } else if (children.length > 1) {
+        childrenNode = t.arrayExpression(children);
+      } else {
+        return undefined;
+      }
+
+      return t.objectProperty(t.identifier("children"), childrenNode);
     }
 
     // Builds JSX into:
@@ -396,11 +400,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
       args.push(attribs);
 
-      if (!development) {
-        if (extracted.key !== undefined) {
-          args.push(extracted.key);
-        }
-      } else {
+      if (development) {
         // isStaticChildren, __source, and __self are only used in development
         // automatically include __source and __self in this plugin
         // so we can eliminate the need for separate Babel plugins in Babel 8
@@ -410,6 +410,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           extracted.__source ?? path.scope.buildUndefinedNode(),
           extracted.__self ?? t.thisExpression(),
         );
+      } else if (extracted.key !== undefined) {
+        args.push(extracted.key);
       }
 
       return call(file, children.length > 1 ? "jsxs" : "jsx", args);
@@ -422,17 +424,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
       // In React.jsx, children is no longer a separate argument, but passed in
       // through the argument object
-      if (children && children.length > 0) {
-        if (children.length === 1) {
-          props.push(t.objectProperty(t.identifier("children"), children[0]));
-        } else {
-          props.push(
-            t.objectProperty(
-              t.identifier("children"),
-              t.arrayExpression(children),
-            ),
-          );
-        }
+      if (children?.length > 0) {
+        props.push(buildChildrenProperty(children));
       }
 
       return t.objectExpression(props);
@@ -446,18 +439,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
       const children = t.react.buildChildren(path.node);
 
-      let childrenNode;
-      if (children.length === 1) {
-        childrenNode = children[0];
-      } else if (children.length > 1) {
-        childrenNode = t.arrayExpression(children);
-      }
-
       args.push(
         t.objectExpression(
-          childrenNode !== undefined
-            ? [t.objectProperty(t.identifier("children"), childrenNode)]
-            : [],
+          children.length > 0 ? [buildChildrenProperty(children)] : [],
         ),
       );
 
@@ -596,14 +580,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       // spread it
       return t.callExpression(helper, objs);
     }
-
-    function sourceSelfError(path, name) {
-      const pluginName = `transform-react-jsx-${name.slice(2)}`;
-
-      return path.buildCodeFrameError(
-        `Duplicate ${name} prop found. You are most likely using the deprecated ${pluginName} Babel plugin. Both __source and __self are automatically set when using the automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config.`,
-      );
-    }
   });
 
   function getSource(source, importName) {
@@ -709,4 +685,12 @@ function makeTrace(fileNameIdentifier, lineNumber, column0Based) {
     lineNumberProperty,
     columnNumberProperty,
   ]);
+}
+
+function sourceSelfError(path, name) {
+  const pluginName = `transform-react-jsx-${name.slice(2)}`;
+
+  return path.buildCodeFrameError(
+    `Duplicate ${name} prop found. You are most likely using the deprecated ${pluginName} Babel plugin. Both __source and __self are automatically set when using the automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config.`,
+  );
 }
