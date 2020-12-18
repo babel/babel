@@ -11,7 +11,6 @@ export function helper(options) {
     useSpread,
     useBuiltIns,
 
-    pre,
     post,
   } = options;
 
@@ -150,7 +149,6 @@ export function helper(options) {
       openingPath.node.name,
       openingPath.node,
     );
-    const args = [];
 
     let tagName;
     if (t.isIdentifier(tagExpr)) {
@@ -159,16 +157,7 @@ export function helper(options) {
       tagName = tagExpr.value;
     }
 
-    const state = {
-      tagExpr: tagExpr,
-      tagName: tagName,
-      args: args,
-      pure: false,
-    };
-
-    if (pre) {
-      pre(state, file);
-    }
+    const args = [getTag(tagName, tagExpr)];
 
     let attribs = [];
     const extracted = Object.create(null);
@@ -225,9 +214,8 @@ export function helper(options) {
       );
     }
 
-    if (post) {
-      post(state, file);
-    }
+    const state = { pure: false };
+    post(state, file);
 
     const call =
       state.call ||
@@ -270,20 +258,10 @@ export function helper(options) {
     const openingPath = path.get("openingElement");
     openingPath.parent.children = t.react.buildChildren(openingPath.parent);
 
-    const args = [];
     const tagName = null;
     const tagExpr = file.get("@babel/plugin-react-jsx/jsxFragIdentifier")();
 
-    const state = {
-      tagExpr: tagExpr,
-      tagName: tagName,
-      args: args,
-      pure: false,
-    };
-
-    if (pre) {
-      pre(state, file);
-    }
+    const args = [getTag(tagName, tagExpr)];
 
     let childrenNode;
     if (path.node.children.length > 0) {
@@ -309,6 +287,7 @@ export function helper(options) {
       );
     }
 
+    const state = { pure: false };
     if (post) {
       post(state, file);
     }
@@ -332,7 +311,6 @@ export function helper(options) {
     const openingPath = path.get("openingElement");
     openingPath.parent.children = t.react.buildChildren(openingPath.parent);
 
-    const args = [];
     const tagName = null;
     const tagExpr = file.get("@babel/plugin-react-jsx/jsxFragIdentifier")();
 
@@ -343,9 +321,7 @@ export function helper(options) {
       pure: false,
     };
 
-    if (pre) {
-      pre(state, file);
-    }
+    const args = [getTag(tagName, tagExpr)];
 
     // no attributes are allowed with <> syntax
     args.push(t.nullLiteral(), ...path.node.children);
@@ -374,7 +350,6 @@ export function helper(options) {
       openingPath.node.name,
       openingPath.node,
     );
-    const args = [];
 
     let tagName;
     if (t.isIdentifier(tagExpr)) {
@@ -383,16 +358,7 @@ export function helper(options) {
       tagName = tagExpr.value;
     }
 
-    const state = {
-      tagExpr: tagExpr,
-      tagName: tagName,
-      args: args,
-      pure: false,
-    };
-
-    if (pre) {
-      pre(state, file);
-    }
+    const args = [getTag(tagName, tagExpr)];
 
     const attribs = buildCreateElementOpeningElementAttributes(
       file,
@@ -402,6 +368,7 @@ export function helper(options) {
 
     args.push(attribs, ...path.node.children);
 
+    const state = { pure: false };
     if (post) {
       post(state, file);
     }
@@ -496,5 +463,13 @@ export function helper(options) {
     return path.buildCodeFrameError(
       `Duplicate ${name} prop found. You are most likely using the deprecated ${pluginName} Babel plugin. Both __source and __self are automatically set when using the automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config.`,
     );
+  }
+}
+
+function getTag(tagName, tagExpr) {
+  if (t.react.isCompatTag(tagName)) {
+    return t.stringLiteral(tagName);
+  } else {
+    return tagExpr;
   }
 }

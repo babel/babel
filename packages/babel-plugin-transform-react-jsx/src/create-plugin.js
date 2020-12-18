@@ -73,16 +73,6 @@ export default function createPlugin({ name, development }) {
 
       RUNTIME_DEFAULT,
 
-      pre(state) {
-        const tagName = state.tagName;
-        const args = state.args;
-        if (t.react.isCompatTag(tagName)) {
-          args.push(t.stringLiteral(tagName));
-        } else {
-          args.push(state.tagExpr);
-        }
-      },
-
       post(state, pass) {
         if (get(pass, "runtime") === "classic" && !development) {
           // TODO(Babel 8): We should throw if we are using the classic runtime in dev
