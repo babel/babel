@@ -143,21 +143,7 @@ export function helper(options) {
   // Development: React.jsxDEV(type, arguments, key, isStaticChildren, source, self)
   function buildJSXElementCall(path, file) {
     const openingPath = path.get("openingElement");
-    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
-
-    const tagExpr = convertJSXIdentifier(
-      openingPath.node.name,
-      openingPath.node,
-    );
-
-    let tagName;
-    if (t.isIdentifier(tagExpr)) {
-      tagName = tagExpr.name;
-    } else if (t.isLiteral(tagExpr)) {
-      tagName = tagExpr.value;
-    }
-
-    const args = [getTag(tagName, tagExpr)];
+    const args = initBuilderArgs(openingPath);
 
     let attribs = [];
     const extracted = Object.create(null);
@@ -344,21 +330,7 @@ export function helper(options) {
   // Development: React.createElement(type, arguments, children, source, self)
   function buildCreateElementCall(path, file) {
     const openingPath = path.get("openingElement");
-    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
-
-    const tagExpr = convertJSXIdentifier(
-      openingPath.node.name,
-      openingPath.node,
-    );
-
-    let tagName;
-    if (t.isIdentifier(tagExpr)) {
-      tagName = tagExpr.name;
-    } else if (t.isLiteral(tagExpr)) {
-      tagName = tagExpr.value;
-    }
-
-    const args = [getTag(tagName, tagExpr)];
+    const args = initBuilderArgs(openingPath);
 
     const attribs = buildCreateElementOpeningElementAttributes(
       file,
@@ -378,6 +350,24 @@ export function helper(options) {
     if (state.pure) annotateAsPure(call);
 
     return call;
+  }
+
+  function initBuilderArgs(openingPath) {
+    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
+
+    const tagExpr = convertJSXIdentifier(
+      openingPath.node.name,
+      openingPath.node,
+    );
+
+    let tagName;
+    if (t.isIdentifier(tagExpr)) {
+      tagName = tagExpr.name;
+    } else if (t.isLiteral(tagExpr)) {
+      tagName = tagExpr.value;
+    }
+
+    return [getTag(tagName, tagExpr)];
   }
 
   /**
