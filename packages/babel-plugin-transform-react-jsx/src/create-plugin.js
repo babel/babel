@@ -18,6 +18,9 @@ const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
 const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
 
+const get = (pass, name) => pass.get(`@babel/plugin-react-jsx/${name}`);
+const set = (pass, name, v) => pass.set(`@babel/plugin-react-jsx/${name}`, v);
+
 export default function createPlugin({ name, development }) {
   return declare((api, options) => {
     const {
@@ -81,17 +84,11 @@ export default function createPlugin({ name, development }) {
       },
 
       post(state, pass) {
-        if (
-          pass.get("@babel/plugin-react-jsx/runtime") === "classic" &&
+        if (get(pass, "runtime") === "classic" && !development) {
           // TODO(Babel 8): We should throw if we are using the classic runtime in dev
-          !development
-        ) {
-          state.createElementCallee = pass.get(
-            "@babel/plugin-react-jsx/createElementIdentifier",
-          )();
 
-          state.pure =
-            PURE_ANNOTATION ?? !pass.get("@babel/plugin-react-jsx/pragmaSet");
+          state.createElementCallee = get(pass, "createElementIdentifier")();
+          state.pure = PURE_ANNOTATION ?? !get(pass, "pragmaSet");
         } else {
           const getter = get => ({ enumerable: true, configurable: true, get });
 
@@ -99,20 +96,12 @@ export default function createPlugin({ name, development }) {
           // generate them lazily so that we only inject imports when needed.
           // These should actually be functions.
           Object.defineProperties(state, {
-            jsxCallee: getter(
-              pass.get("@babel/plugin-react-jsx/jsxIdentifier"),
-            ),
-            jsxStaticCallee: getter(
-              pass.get("@babel/plugin-react-jsx/jsxStaticIdentifier"),
-            ),
-            createElementCallee: getter(
-              pass.get("@babel/plugin-react-jsx/createElementIdentifier"),
-            ),
+            jsxCallee: getter(get(pass, "jsxIdentifier")),
+            jsxStaticCallee: getter(get(pass, "jsxStaticIdentifier")),
+            createElementCallee: getter(get(pass, "createElementIdentifier")),
           });
 
-          state.pure =
-            PURE_ANNOTATION ??
-            !pass.get("@babel/plugin-react-jsx/importSourceSet");
+          state.pure = PURE_ANNOTATION ?? !get(pass, "importSourceSet");
         }
       },
     });
@@ -207,30 +196,26 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               }
             }
 
-            state.set("@babel/plugin-react-jsx/runtime", runtime);
+            set(state, "runtime", runtime);
             if (runtime === "classic") {
               if (sourceSet) {
                 throw path.buildCodeFrameError(
                   `importSource cannot be set when runtime is classic.`,
                 );
               }
-              state.set(
-                "@babel/plugin-react-jsx/createElementIdentifier",
+              set(
+                state,
+                "createElementIdentifier",
                 createIdentifierParser(pragma),
               );
-              state.set(
-                "@babel/plugin-react-jsx/jsxFragIdentifier",
+              set(
+                state,
+                "jsxFragIdentifier",
                 createIdentifierParser(pragmaFrag),
               );
-              state.set("@babel/plugin-react-jsx/usedFragment", false);
-              state.set(
-                "@babel/plugin-react-jsx/pragmaSet",
-                pragma !== DEFAULT.pragma,
-              );
-              state.set(
-                "@babel/plugin-react-jsx/pragmaFragSet",
-                pragmaFrag !== DEFAULT.pragmaFrag,
-              );
+              set(state, "usedFragment", false);
+              set(state, "pragmaSet", pragma !== DEFAULT.pragma);
+              set(state, "pragmaFragSet", pragmaFrag !== DEFAULT.pragmaFrag);
             } else if (runtime === "automatic") {
               if (pragmaSet || pragmaFragSet) {
                 throw path.buildCodeFrameError(
@@ -238,8 +223,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                 );
               }
 
-              state.set(
-                "@babel/plugin-react-jsx/jsxIdentifier",
+              set(
+                state,
+                "jsxIdentifier",
                 createImportLazily(
                   state,
                   path,
@@ -247,8 +233,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                   source,
                 ),
               );
-              state.set(
-                "@babel/plugin-react-jsx/jsxStaticIdentifier",
+              set(
+                state,
+                "jsxStaticIdentifier",
                 createImportLazily(
                   state,
                   path,
@@ -257,20 +244,19 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                 ),
               );
 
-              state.set(
-                "@babel/plugin-react-jsx/createElementIdentifier",
+              set(
+                state,
+                "createElementIdentifier",
                 createImportLazily(state, path, "createElement", source),
               );
 
-              state.set(
-                "@babel/plugin-react-jsx/jsxFragIdentifier",
+              set(
+                state,
+                "jsxFragIdentifier",
                 createImportLazily(state, path, "Fragment", source),
               );
 
-              state.set(
-                "@babel/plugin-react-jsx/importSourceSet",
-                source !== DEFAULT.importSource,
-              );
+              set(state, "importSourceSet", source !== DEFAULT.importSource);
             } else {
               throw path.buildCodeFrameError(
                 `Runtime must be either "classic" or "automatic".`,
@@ -287,10 +273,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           //
           // exit(path, state) {
           //   if (
-          //     state.get("@babel/plugin-react-jsx/runtime") === "classic" &&
-          //     state.get("@babel/plugin-react-jsx/pragmaSet") &&
-          //     state.get("@babel/plugin-react-jsx/usedFragment") &&
-          //     !state.get("@babel/plugin-react-jsx/pragmaFragSet")
+          //     get(state, "runtime") === "classic" &&
+          //     get(state, "pragmaSet") &&
+          //     get(state, "usedFragment") &&
+          //     !get(state, "pragmaFragSet")
           //   ) {
           //     throw new Error(
           //       "transform-react-jsx: pragma has been set but " +
@@ -323,31 +309,24 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     return () => {
       const actualSource = getSource(source, importName);
       if (isModule(path)) {
-        let reference = pass.get(
-          `@babel/plugin-react-jsx/imports/${importName}`,
-        );
+        let reference = get(pass, `imports/${importName}`);
         if (reference) return t.cloneNode(reference);
 
         reference = addNamed(path, importName, actualSource, {
           importedInterop: "uncompiled",
         });
-        pass.set(`@babel/plugin-react-jsx/imports/${importName}`, reference);
+        set(pass, `imports/${importName}`, reference);
 
         return reference;
       } else {
-        let reference = pass.get(
-          `@babel/plugin-react-jsx/requires/${actualSource}`,
-        );
+        let reference = get(pass, `requires/${actualSource}`);
         if (reference) {
           reference = t.cloneNode(reference);
         } else {
           reference = addNamespace(path, actualSource, {
             importedInterop: "uncompiled",
           });
-          pass.set(
-            `@babel/plugin-react-jsx/requires/${actualSource}`,
-            reference,
-          );
+          set(pass, `requires/${actualSource}`, reference);
         }
 
         return t.memberExpression(reference, t.identifier(importName));
