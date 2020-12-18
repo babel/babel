@@ -50,6 +50,7 @@ jobs:
           commit-message: Update test262
           branch: update-test262-parser
           delete-branch: true
+          token: ${{ secrets.BOT_TOKEN }}
           author: "Babel Bot <babel-bot@users.noreply.github.com>"
           committer: "Babel Bot <babel-bot@users.noreply.github.com>"
           title: "Update test262 parser tests"
