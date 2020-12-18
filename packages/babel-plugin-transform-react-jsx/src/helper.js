@@ -1,5 +1,4 @@
 import * as t from "@babel/types";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 export function helper(options) {
   const {
@@ -11,7 +10,7 @@ export function helper(options) {
     useSpread,
     useBuiltIns,
 
-    getState,
+    call,
   } = options;
 
   return {
@@ -143,7 +142,7 @@ export function helper(options) {
   // Development: React.jsxDEV(type, arguments, key, isStaticChildren, source, self)
   function buildJSXElementCall(path, file) {
     const openingPath = path.get("openingElement");
-    const args = initBuilderArgs(openingPath);
+    const args = [getTag(openingPath)];
 
     let attribs = [];
     const extracted = Object.create(null);
@@ -171,12 +170,10 @@ export function helper(options) {
       }
     }
 
-    if (attribs.length || path.node.children.length) {
-      attribs = buildJSXOpeningElementAttributes(
-        attribs,
-        file,
-        path.node.children,
-      );
+    const children = t.react.buildChildren(path.node);
+
+    if (attribs.length || children.length) {
+      attribs = buildJSXOpeningElementAttributes(attribs, file, children);
     } else {
       // attributes should never be null
       attribs = t.objectExpression([]);
@@ -194,23 +191,13 @@ export function helper(options) {
       // so we can eliminate the need for separate Babel plugins in Babel 8
       args.push(
         extracted.key ?? path.scope.buildUndefinedNode(),
-        t.booleanLiteral(path.node.children.length > 1),
+        t.booleanLiteral(children.length > 1),
         extracted.__source ?? path.scope.buildUndefinedNode(),
         extracted.__self ?? t.thisExpression(),
       );
     }
 
-    const state = getState(file);
-
-    const call = t.callExpression(
-      path.node.children.length > 1
-        ? state.jsxStaticCallee()
-        : state.jsxCallee(),
-      args,
-    );
-    if (state.pure) annotateAsPure(call);
-
-    return call;
+    return call(file, children.length > 1 ? "jsxs" : "jsx", args);
   }
 
   // Builds props for React.jsx. This function adds children into the props
@@ -238,23 +225,17 @@ export function helper(options) {
 
   // Builds JSX Fragment <></> into
   // Production: React.jsx(type, arguments)
-  // Development: React.jsxDEV(type, { children})
+  // Development: React.jsxDEV(type, { children })
   function buildJSXFragmentCall(path, file) {
-    const openingPath = path.get("openingElement");
-    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
+    const args = [file.get("@babel/plugin-react-jsx/id/fragment")()];
 
-    const tagName = null;
-    const tagExpr = file.get("@babel/plugin-react-jsx/jsxFragIdentifier")();
-
-    const args = [getTag(tagName, tagExpr)];
+    const children = t.react.buildChildren(path.node);
 
     let childrenNode;
-    if (path.node.children.length > 0) {
-      if (path.node.children.length === 1) {
-        childrenNode = path.node.children[0];
-      } else {
-        childrenNode = t.arrayExpression(path.node.children);
-      }
+    if (children.length === 1) {
+      childrenNode = children[0];
+    } else if (children.length > 1) {
+      childrenNode = t.arrayExpression(children);
     }
 
     args.push(
@@ -268,46 +249,23 @@ export function helper(options) {
     if (development) {
       args.push(
         path.scope.buildUndefinedNode(),
-        t.booleanLiteral(path.node.children.length > 1),
+        t.booleanLiteral(children.length > 1),
       );
     }
 
-    const state = getState(file);
-
-    const call = t.callExpression(
-      path.node.children.length > 1
-        ? state.jsxStaticCallee()
-        : state.jsxCallee(),
-      args,
-    );
-    if (state.pure) annotateAsPure(call);
-
-    return call;
+    return call(file, children.length > 1 ? "jsxs" : "jsx", args);
   }
 
+  // Builds JSX Fragment <></> into
+  // React.createElement(React.Fragment, null, ...children)
   function buildCreateElementFragmentCall(path, file) {
-    if (filter && !filter(path.node, file)) {
-      return;
-    }
+    if (filter && !filter(path.node, file)) return;
 
-    const openingPath = path.get("openingElement");
-    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
-
-    const tagExpr = file.get("@babel/plugin-react-jsx/jsxFragIdentifier")();
-
-    const args = [getTag(null, tagExpr)];
-
-    // no attributes are allowed with <> syntax
-    args.push(t.nullLiteral(), ...path.node.children);
-
-    const state = getState(file);
-
-    file.set("@babel/plugin-react-jsx/usedFragment", true);
-
-    const call = t.callExpression(state.createElementCallee(), args);
-    if (state.pure) annotateAsPure(call);
-
-    return call;
+    return call(file, "createElement", [
+      file.get("@babel/plugin-react-jsx/id/fragment")(),
+      t.nullLiteral(),
+      ...t.react.buildChildren(path.node),
+    ]);
   }
 
   // Builds JSX into:
@@ -315,27 +273,19 @@ export function helper(options) {
   // Development: React.createElement(type, arguments, children, source, self)
   function buildCreateElementCall(path, file) {
     const openingPath = path.get("openingElement");
-    const args = initBuilderArgs(openingPath);
 
-    const attribs = buildCreateElementOpeningElementAttributes(
-      file,
-      path,
-      openingPath.node.attributes,
-    );
-
-    args.push(attribs, ...path.node.children);
-
-    const state = getState(file);
-
-    const call = t.callExpression(state.createElementCallee(), args);
-    if (state.pure) annotateAsPure(call);
-
-    return call;
+    return call(file, "createElement", [
+      getTag(openingPath),
+      buildCreateElementOpeningElementAttributes(
+        file,
+        path,
+        openingPath.node.attributes,
+      ),
+      ...t.react.buildChildren(path.node),
+    ]);
   }
 
-  function initBuilderArgs(openingPath) {
-    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
-
+  function getTag(openingPath) {
     const tagExpr = convertJSXIdentifier(
       openingPath.node.name,
       openingPath.node,
@@ -348,7 +298,11 @@ export function helper(options) {
       tagName = tagExpr.value;
     }
 
-    return [getTag(tagName, tagExpr)];
+    if (t.react.isCompatTag(tagName)) {
+      return t.stringLiteral(tagName);
+    } else {
+      return tagExpr;
+    }
   }
 
   /**
@@ -434,13 +388,5 @@ export function helper(options) {
     return path.buildCodeFrameError(
       `Duplicate ${name} prop found. You are most likely using the deprecated ${pluginName} Babel plugin. Both __source and __self are automatically set when using the automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config.`,
     );
-  }
-}
-
-function getTag(tagName, tagExpr) {
-  if (t.react.isCompatTag(tagName)) {
-    return t.stringLiteral(tagName);
-  } else {
-    return tagExpr;
   }
 }

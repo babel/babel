@@ -2,6 +2,7 @@ import jsx from "@babel/plugin-syntax-jsx";
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import { helper } from "./helper";
 
@@ -73,18 +74,16 @@ export default function createPlugin({ name, development }) {
 
       RUNTIME_DEFAULT,
 
-      getState(pass) {
-        // TODO(Babel 8): We should throw if we are using the classic runtime in dev
-        const classic = get(pass, "runtime") === "classic" && !development;
-        return {
-          pure:
-            PURE_ANNOTATION ??
-            !get(pass, classic ? "pragmaSet" : "importSourceSet"),
+      call(pass, name, args) {
+        const node = t.callExpression(get(pass, `id/${name}`)(), args);
 
-          jsxCallee: get(pass, "jsxIdentifier"),
-          jsxStaticCallee: get(pass, "jsxStaticIdentifier"),
-          createElementCallee: get(pass, "createElementIdentifier"),
-        };
+        const classic = get(pass, "runtime") === "classic" && !development;
+        const pure =
+          PURE_ANNOTATION ??
+          !get(pass, classic ? "pragmaSet" : "importSourceSet");
+        if (pure) annotateAsPure(node);
+
+        return node;
       },
     });
 
@@ -185,17 +184,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                   `importSource cannot be set when runtime is classic.`,
                 );
               }
-              set(
-                state,
-                "createElementIdentifier",
-                createIdentifierParser(pragma),
-              );
-              set(
-                state,
-                "jsxFragIdentifier",
-                createIdentifierParser(pragmaFrag),
-              );
-              set(state, "usedFragment", false);
+
+              const createElement = toMemberExpression(pragma);
+              const fragment = toMemberExpression(pragmaFrag);
+
+              set(state, "id/createElement", () => t.cloneNode(createElement));
+              set(state, "id/fragment", () => t.cloneNode(fragment));
+
               set(state, "pragmaSet", pragma !== DEFAULT.pragma);
               set(state, "pragmaFragSet", pragmaFrag !== DEFAULT.pragmaFrag);
             } else if (runtime === "automatic") {
@@ -205,38 +200,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                 );
               }
 
-              set(
-                state,
-                "jsxIdentifier",
-                createImportLazily(
-                  state,
-                  path,
-                  development ? "jsxDEV" : "jsx",
-                  source,
-                ),
-              );
-              set(
-                state,
-                "jsxStaticIdentifier",
-                createImportLazily(
-                  state,
-                  path,
-                  development ? "jsxDEV" : "jsxs",
-                  source,
-                ),
-              );
+              const define = (name, id) =>
+                set(state, name, createImportLazily(state, path, id, source));
 
-              set(
-                state,
-                "createElementIdentifier",
-                createImportLazily(state, path, "createElement", source),
-              );
-
-              set(
-                state,
-                "jsxFragIdentifier",
-                createImportLazily(state, path, "Fragment", source),
-              );
+              define("id/jsx", development ? "jsxDEV" : "jsx");
+              define("id/jsxs", development ? "jsxDEV" : "jsxs");
+              define("id/createElement", "createElement");
+              define("id/fragment", "Fragment");
 
               set(state, "importSourceSet", source !== DEFAULT.importSource);
             } else {
@@ -317,13 +287,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   }
 }
 
-function createIdentifierParser(id) {
-  return () => {
-    return id
-      .split(".")
-      .map(name => t.identifier(name))
-      .reduce((object, property) => t.memberExpression(object, property));
-  };
+function toMemberExpression(id) {
+  return id
+    .split(".")
+    .map(name => t.identifier(name))
+    .reduce((object, property) => t.memberExpression(object, property));
 }
 
 function makeSource(path, state) {
