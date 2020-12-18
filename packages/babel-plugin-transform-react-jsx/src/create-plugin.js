@@ -1,20 +1,77 @@
 import jsx from "@babel/plugin-syntax-jsx";
-import { helper } from "@babel/helper-builder-react-jsx-experimental";
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
+import { helper } from "./helper";
+
+const DEFAULT = {
+  importSource: "react",
+  runtime: "automatic",
+  pragma: "React.createElement",
+  pragmaFrag: "React.Fragment",
+};
+
 export default function createPlugin({ name, development }) {
-  const DEFAULT_RUNTIME = development ? "automatic" : "classic";
-
   return declare((api, options) => {
-    const { runtime = DEFAULT_RUNTIME, pure: PURE_ANNOTATION } = options;
+    const {
+      pure: PURE_ANNOTATION,
 
-    // TODO(Babel 8): This should throw
-    if (development && runtime !== "automatic") {
-      //throw new Error("JSX development mode only supports the 'automatic' runtime.");
+      throwIfNamespace = true,
+      filter,
+
+      // TODO (Babel 8): Remove `useBuiltIns` & `useSpread`
+      useSpread = false,
+      useBuiltIns = false,
+
+      runtime: RUNTIME_DEFAULT = development ? "automatic" : "classic",
+
+      importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
+      pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
+      pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
+    } = options;
+
+    // TOOD(Babel 8): If the runtime is 'automatic', we should throw when useSpread/useBuiltIns are set
+    if (RUNTIME_DEFAULT === "classic") {
+      if (typeof useSpread !== "boolean") {
+        throw new Error(
+          "transform-react-jsx currently only accepts a boolean option for " +
+            "useSpread (defaults to false)",
+        );
+      }
+
+      if (typeof useBuiltIns !== "boolean") {
+        throw new Error(
+          "transform-react-jsx currently only accepts a boolean option for " +
+            "useBuiltIns (defaults to false)",
+        );
+      }
+
+      if (useSpread && useBuiltIns) {
+        throw new Error(
+          "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
+            "but not both",
+        );
+      }
     }
 
-    const visitor = helper(api, {
+    const visitor = helper({
+      development,
+
+      throwIfNamespace,
+      filter,
+      useSpread,
+      useBuiltIns,
+
+      RUNTIME_DEFAULT,
+      IMPORT_SOURCE_DEFAULT,
+      PRAGMA_DEFAULT,
+      PRAGMA_FRAG_DEFAULT,
+
+      runtimeSet: !!options.runtime,
+      sourceSet: !!options.importSource,
+      pragmaSet: !!options.pragma,
+      pragmaFragSet: !!options.pragmaFrag,
+
       pre(state) {
         const tagName = state.tagName;
         const args = state.args;
@@ -60,10 +117,6 @@ export default function createPlugin({ name, development }) {
             !pass.get("@babel/plugin-react-jsx/importSourceSet");
         }
       },
-
-      ...options,
-      development,
-      runtime,
     });
 
     return { name, visitor, inherits: jsx };

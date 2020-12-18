@@ -9,45 +9,30 @@ const DEFAULT = {
   pragmaFrag: "React.Fragment",
 };
 
-export function helper(babel, options) {
-  // TODO (Babel 8): Remove `useBuiltIns` & `useSpread`
-  const { useSpread = false, useBuiltIns = false } = options;
-  if (options.runtime === "classic") {
-    if (typeof useSpread !== "boolean") {
-      throw new Error(
-        "transform-react-jsx currently only accepts a boolean option for " +
-          "useSpread (defaults to false)",
-      );
-    }
+const FILE_NAME_VAR = "_jsxFileName";
 
-    if (typeof useBuiltIns !== "boolean") {
-      throw new Error(
-        "transform-react-jsx currently only accepts a boolean option for " +
-          "useBuiltIns (defaults to false)",
-      );
-    }
+const JSX_SOURCE_ANNOTATION_REGEX = /\*?\s*@jsxImportSource\s+([^\s]+)/;
+const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
 
-    if (useSpread && useBuiltIns) {
-      throw new Error(
-        "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
-          "but not both",
-      );
-    }
-  }
+const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
+const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
 
-  const FILE_NAME_VAR = "_jsxFileName";
-
-  const JSX_SOURCE_ANNOTATION_REGEX = /\*?\s*@jsxImportSource\s+([^\s]+)/;
-  const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
-
-  const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
-  const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
-
+export function helper(options) {
   const {
-    importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
-    runtime: RUNTIME_DEFAULT = DEFAULT.runtime,
-    pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
-    pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
+    development,
+
+    IMPORT_SOURCE_DEFAULT,
+    RUNTIME_DEFAULT,
+    PRAGMA_DEFAULT,
+    PRAGMA_FRAG_DEFAULT,
+
+    throwIfNamespace,
+    filter,
+    useSpread,
+    useBuiltIns,
+
+    pre,
+    post,
   } = options;
 
   const injectMetaPropertiesVisitor = {
@@ -77,11 +62,7 @@ export function helper(babel, options) {
   };
 
   return {
-    JSXNamespacedName(path, state) {
-      const throwIfNamespace =
-        state.opts.throwIfNamespace === undefined
-          ? true
-          : !!state.opts.throwIfNamespace;
+    JSXNamespacedName(path) {
       if (throwIfNamespace) {
         throw path.buildCodeFrameError(
           `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
@@ -136,15 +117,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         const { file } = state;
         let runtime = RUNTIME_DEFAULT;
 
-        // For jsx mode
         let source = IMPORT_SOURCE_DEFAULT;
-        let sourceSet = !!options.importSource;
-
-        // For createElement mode
         let pragma = PRAGMA_DEFAULT;
         let pragmaFrag = PRAGMA_FRAG_DEFAULT;
-        let pragmaSet = !!options.pragma;
-        let pragmaFragSet = !!options.pragmaFrag;
+
+        let { sourceSet, pragmaSet, pragmaFragSet } = options;
 
         if (file.ast.comments) {
           for (const comment of (file.ast.comments: Array<Object>)) {
@@ -214,7 +191,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             createImportLazily(
               state,
               path,
-              options.development ? "jsxDEV" : "jsx",
+              development ? "jsxDEV" : "jsx",
               source,
             ),
           );
@@ -223,7 +200,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             createImportLazily(
               state,
               path,
-              options.development ? "jsxDEV" : "jsxs",
+              development ? "jsxDEV" : "jsxs",
               source,
             ),
           );
@@ -248,7 +225,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           );
         }
 
-        if (options.development) {
+        if (development) {
           path.traverse(injectMetaPropertiesVisitor, state);
         }
       },
@@ -300,9 +277,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   function getSource(source, importName) {
     switch (importName) {
       case "Fragment":
-        return `${source}/${
-          options.development ? "jsx-dev-runtime" : "jsx-runtime"
-        }`;
+        return `${source}/${development ? "jsx-dev-runtime" : "jsx-runtime"}`;
       case "jsxDEV":
         return `${source}/jsx-dev-runtime`;
       case "jsx":
@@ -505,8 +480,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       pure: false,
     };
 
-    if (options.pre) {
-      options.pre(state, file);
+    if (pre) {
+      pre(state, file);
     }
 
     let attribs = [];
@@ -548,7 +523,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     args.push(attribs);
 
-    if (!options.development) {
+    if (!development) {
       if (extracted.key !== undefined) {
         args.push(extracted.key);
       }
@@ -564,8 +539,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       );
     }
 
-    if (options.post) {
-      options.post(state, file);
+    if (post) {
+      post(state, file);
     }
 
     const call =
@@ -620,8 +595,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       pure: false,
     };
 
-    if (options.pre) {
-      options.pre(state, file);
+    if (pre) {
+      pre(state, file);
     }
 
     let childrenNode;
@@ -641,15 +616,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       ),
     );
 
-    if (options.development) {
+    if (development) {
       args.push(
         path.scope.buildUndefinedNode(),
         t.booleanLiteral(path.node.children.length > 1),
       );
     }
 
-    if (options.post) {
-      options.post(state, file);
+    if (post) {
+      post(state, file);
     }
 
     const call =
@@ -664,7 +639,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   }
 
   function buildCreateElementFragmentCall(path, file) {
-    if (options.filter && !options.filter(path.node, file)) {
+    if (filter && !filter(path.node, file)) {
       return;
     }
 
@@ -682,15 +657,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       pure: false,
     };
 
-    if (options.pre) {
-      options.pre(state, file);
+    if (pre) {
+      pre(state, file);
     }
 
     // no attributes are allowed with <> syntax
     args.push(t.nullLiteral(), ...path.node.children);
 
-    if (options.post) {
-      options.post(state, file);
+    if (post) {
+      post(state, file);
     }
 
     file.set("@babel/plugin-react-jsx/usedFragment", true);
@@ -729,8 +704,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       pure: false,
     };
 
-    if (options.pre) {
-      options.pre(state, file);
+    if (pre) {
+      pre(state, file);
     }
 
     const attribs = buildCreateElementOpeningElementAttributes(
@@ -741,8 +716,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     args.push(attribs, ...path.node.children);
 
-    if (options.post) {
-      options.post(state, file);
+    if (post) {
+      post(state, file);
     }
 
     const call =
