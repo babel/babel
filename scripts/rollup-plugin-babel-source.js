@@ -54,15 +54,14 @@ module.exports = function () {
         );
       }
 
-      const matches = importee.match(/^@babel\/([^/]+)$/);
+      const matches = importee.match(
+        /^@babel\/(?<pkg>[^/]+)(?:\/lib\/(?<internal>.*?))?$/
+      );
       if (!matches) return null;
+      const { pkg, internal } = matches.groups;
 
       // resolve babel package names to their src index file
-      const packageFolder = path.join(
-        dirname,
-        "packages",
-        `babel-${matches[1]}`
-      );
+      const packageFolder = path.join(dirname, "packages", `babel-${pkg}`);
 
       let packageJsonSource;
       try {
@@ -76,10 +75,11 @@ module.exports = function () {
 
       const packageJson = JSON.parse(packageJsonSource);
 
-      const filename =
-        typeof packageJson["browser"] === "string"
-          ? packageJson["browser"]
-          : packageJson["main"];
+      const filename = internal
+        ? `src/${internal}`
+        : typeof packageJson["browser"] === "string"
+        ? packageJson["browser"]
+        : packageJson["main"];
 
       const asJS = path.normalize(
         path.join(
