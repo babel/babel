@@ -3,6 +3,7 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  pull_request:
 
 jobs:
   log-updates:
@@ -29,7 +30,18 @@ jobs:
       - name: Build and Test
         run: make prepublish
       - name: Publish to npm
-        run: yarn release-tool publish --yes
+        #run: yarn release-tool publish --yes
+        run: |
+          cd ..
+          mkdir test-package
+          cd test-package
+          node -p "JSON.stringify({ name: '@nicolo-ribaudo/babel-publish-test', version: '1.0.1', publishConfig: { access: 'public' } }, null, 2)" > package.json
+          echo 'It works!' > README.md
+          echo 'yarnPath: ../babel/.yarn/releases/yarn-2.4.0.cjs' > .yarnrc.yml
+          yarn
+          # Don't worry, GH hides this
+          echo $YARN_NPM_AUTH_TOKEN
+          yarn npm publish
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
