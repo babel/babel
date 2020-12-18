@@ -1,6 +1,7 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
+import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
 
 import { helper } from "./helper";
 
@@ -10,6 +11,12 @@ const DEFAULT = {
   pragma: "React.createElement",
   pragmaFrag: "React.Fragment",
 };
+
+const JSX_SOURCE_ANNOTATION_REGEX = /\*?\s*@jsxImportSource\s+([^\s]+)/;
+const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
+
+const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
+const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
 
 export default function createPlugin({ name, development }) {
   return declare((api, options) => {
@@ -62,14 +69,6 @@ export default function createPlugin({ name, development }) {
       useBuiltIns,
 
       RUNTIME_DEFAULT,
-      IMPORT_SOURCE_DEFAULT,
-      PRAGMA_DEFAULT,
-      PRAGMA_FRAG_DEFAULT,
-
-      runtimeSet: !!options.runtime,
-      sourceSet: !!options.importSource,
-      pragmaSet: !!options.pragma,
-      pragmaFragSet: !!options.pragmaFrag,
 
       pre(state) {
         const tagName = state.tagName;
@@ -118,6 +117,32 @@ export default function createPlugin({ name, development }) {
       },
     });
 
+    const injectMetaPropertiesVisitor = {
+      JSXOpeningElement(path, state) {
+        for (const attr of path.get("attributes")) {
+          if (!attr.isJSXElement()) continue;
+
+          const { name } = attr.node.name;
+          if (name === "__source" || name === "__self") {
+            throw path.buildCodeFrameError(
+              `__source and __self should not be defined in props and are reserved for internal usage.`,
+            );
+          }
+        }
+
+        const self = t.jsxAttribute(
+          t.jsxIdentifier("__self"),
+          t.jsxExpressionContainer(t.thisExpression()),
+        );
+        const source = t.jsxAttribute(
+          t.jsxIdentifier("__source"),
+          t.jsxExpressionContainer(makeSource(path, state)),
+        );
+
+        path.pushContainer("attributes", [self, source]);
+      },
+    };
+
     return {
       name,
       inherits: jsx,
@@ -137,8 +162,259 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           );
         },
 
+        Program: {
+          enter(path, state) {
+            const { file } = state;
+            let runtime = RUNTIME_DEFAULT;
+
+            let source = IMPORT_SOURCE_DEFAULT;
+            let pragma = PRAGMA_DEFAULT;
+            let pragmaFrag = PRAGMA_FRAG_DEFAULT;
+
+            let sourceSet = !!options.importSource;
+            let pragmaSet = !!options.pragma;
+            let pragmaFragSet = !!options.pragmaFrag;
+
+            if (file.ast.comments) {
+              for (const comment of (file.ast.comments: Array<Object>)) {
+                const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(
+                  comment.value,
+                );
+                if (sourceMatches) {
+                  source = sourceMatches[1];
+                  sourceSet = true;
+                }
+
+                const runtimeMatches = JSX_RUNTIME_ANNOTATION_REGEX.exec(
+                  comment.value,
+                );
+                if (runtimeMatches) {
+                  runtime = runtimeMatches[1];
+                }
+
+                const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
+                if (jsxMatches) {
+                  pragma = jsxMatches[1];
+                  pragmaSet = true;
+                }
+                const jsxFragMatches = JSX_FRAG_ANNOTATION_REGEX.exec(
+                  comment.value,
+                );
+                if (jsxFragMatches) {
+                  pragmaFrag = jsxFragMatches[1];
+                  pragmaFragSet = true;
+                }
+              }
+            }
+
+            state.set("@babel/plugin-react-jsx/runtime", runtime);
+            if (runtime === "classic") {
+              if (sourceSet) {
+                throw path.buildCodeFrameError(
+                  `importSource cannot be set when runtime is classic.`,
+                );
+              }
+              state.set(
+                "@babel/plugin-react-jsx/createElementIdentifier",
+                createIdentifierParser(pragma),
+              );
+              state.set(
+                "@babel/plugin-react-jsx/jsxFragIdentifier",
+                createIdentifierParser(pragmaFrag),
+              );
+              state.set("@babel/plugin-react-jsx/usedFragment", false);
+              state.set(
+                "@babel/plugin-react-jsx/pragmaSet",
+                pragma !== DEFAULT.pragma,
+              );
+              state.set(
+                "@babel/plugin-react-jsx/pragmaFragSet",
+                pragmaFrag !== DEFAULT.pragmaFrag,
+              );
+            } else if (runtime === "automatic") {
+              if (pragmaSet || pragmaFragSet) {
+                throw path.buildCodeFrameError(
+                  `pragma and pragmaFrag cannot be set when runtime is automatic.`,
+                );
+              }
+
+              state.set(
+                "@babel/plugin-react-jsx/jsxIdentifier",
+                createImportLazily(
+                  state,
+                  path,
+                  development ? "jsxDEV" : "jsx",
+                  source,
+                ),
+              );
+              state.set(
+                "@babel/plugin-react-jsx/jsxStaticIdentifier",
+                createImportLazily(
+                  state,
+                  path,
+                  development ? "jsxDEV" : "jsxs",
+                  source,
+                ),
+              );
+
+              state.set(
+                "@babel/plugin-react-jsx/createElementIdentifier",
+                createImportLazily(state, path, "createElement", source),
+              );
+
+              state.set(
+                "@babel/plugin-react-jsx/jsxFragIdentifier",
+                createImportLazily(state, path, "Fragment", source),
+              );
+
+              state.set(
+                "@babel/plugin-react-jsx/importSourceSet",
+                source !== DEFAULT.importSource,
+              );
+            } else {
+              throw path.buildCodeFrameError(
+                `Runtime must be either "classic" or "automatic".`,
+              );
+            }
+
+            if (development) {
+              path.traverse(injectMetaPropertiesVisitor, state);
+            }
+          },
+
+          // TODO (Babel 8): Decide if this should be removed or brought back.
+          // see: https://github.com/babel/babel/pull/12253#discussion_r513086528
+          //
+          // exit(path, state) {
+          //   if (
+          //     state.get("@babel/plugin-react-jsx/runtime") === "classic" &&
+          //     state.get("@babel/plugin-react-jsx/pragmaSet") &&
+          //     state.get("@babel/plugin-react-jsx/usedFragment") &&
+          //     !state.get("@babel/plugin-react-jsx/pragmaFragSet")
+          //   ) {
+          //     throw new Error(
+          //       "transform-react-jsx: pragma has been set but " +
+          //         "pragmaFrag has not been set",
+          //     );
+          //   }
+          // },
+        },
+
         ...visitor,
       },
     };
   });
+
+  function getSource(source, importName) {
+    switch (importName) {
+      case "Fragment":
+        return `${source}/${development ? "jsx-dev-runtime" : "jsx-runtime"}`;
+      case "jsxDEV":
+        return `${source}/jsx-dev-runtime`;
+      case "jsx":
+      case "jsxs":
+        return `${source}/jsx-runtime`;
+      case "createElement":
+        return source;
+    }
+  }
+
+  function createImportLazily(pass, path, importName, source) {
+    return () => {
+      const actualSource = getSource(source, importName);
+      if (isModule(path)) {
+        let reference = pass.get(
+          `@babel/plugin-react-jsx/imports/${importName}`,
+        );
+        if (reference) return t.cloneNode(reference);
+
+        reference = addNamed(path, importName, actualSource, {
+          importedInterop: "uncompiled",
+        });
+        pass.set(`@babel/plugin-react-jsx/imports/${importName}`, reference);
+
+        return reference;
+      } else {
+        let reference = pass.get(
+          `@babel/plugin-react-jsx/requires/${actualSource}`,
+        );
+        if (reference) {
+          reference = t.cloneNode(reference);
+        } else {
+          reference = addNamespace(path, actualSource, {
+            importedInterop: "uncompiled",
+          });
+          pass.set(
+            `@babel/plugin-react-jsx/requires/${actualSource}`,
+            reference,
+          );
+        }
+
+        return t.memberExpression(reference, t.identifier(importName));
+      }
+    };
+  }
+}
+
+function createIdentifierParser(id) {
+  return () => {
+    return id
+      .split(".")
+      .map(name => t.identifier(name))
+      .reduce((object, property) => t.memberExpression(object, property));
+  };
+}
+
+function makeSource(path, state) {
+  const location = path.node.loc;
+  if (!location) {
+    // the element was generated and doesn't have location information
+    return path.scope.buildUndefinedNode();
+  }
+
+  if (!state.fileNameIdentifier) {
+    const { filename = "" } = state;
+
+    const fileNameIdentifier = path.scope.generateUidIdentifier("_jsxFileName");
+    const scope = path.hub.getScope();
+    if (scope) {
+      scope.push({
+        id: fileNameIdentifier,
+        init: t.stringLiteral(filename),
+      });
+    }
+    state.fileNameIdentifier = fileNameIdentifier;
+  }
+
+  return makeTrace(
+    t.cloneNode(state.fileNameIdentifier),
+    location.start.line,
+    location.start.column,
+  );
+}
+
+function makeTrace(fileNameIdentifier, lineNumber, column0Based) {
+  const fileLineLiteral =
+    lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
+
+  const fileColumnLiteral =
+    column0Based != null ? t.numericLiteral(column0Based + 1) : t.nullLiteral();
+
+  const fileNameProperty = t.objectProperty(
+    t.identifier("fileName"),
+    fileNameIdentifier,
+  );
+  const lineNumberProperty = t.objectProperty(
+    t.identifier("lineNumber"),
+    fileLineLiteral,
+  );
+  const columnNumberProperty = t.objectProperty(
+    t.identifier("columnNumber"),
+    fileColumnLiteral,
+  );
+  return t.objectExpression([
+    fileNameProperty,
+    lineNumberProperty,
+    columnNumberProperty,
+  ]);
 }
