@@ -73,26 +73,18 @@ export default function createPlugin({ name, development }) {
 
       RUNTIME_DEFAULT,
 
-      post(state, pass) {
-        if (get(pass, "runtime") === "classic" && !development) {
-          // TODO(Babel 8): We should throw if we are using the classic runtime in dev
+      getState(pass) {
+        // TODO(Babel 8): We should throw if we are using the classic runtime in dev
+        const classic = get(pass, "runtime") === "classic" && !development;
+        return {
+          pure:
+            PURE_ANNOTATION ??
+            !get(pass, classic ? "pragmaSet" : "importSourceSet"),
 
-          state.createElementCallee = get(pass, "createElementIdentifier")();
-          state.pure = PURE_ANNOTATION ?? !get(pass, "pragmaSet");
-        } else {
-          const getter = get => ({ enumerable: true, configurable: true, get });
-
-          // TODO(Babel 8): helper-builder-react-jsx expects those properties to be AST nodes, but we want to
-          // generate them lazily so that we only inject imports when needed.
-          // These should actually be functions.
-          Object.defineProperties(state, {
-            jsxCallee: getter(get(pass, "jsxIdentifier")),
-            jsxStaticCallee: getter(get(pass, "jsxStaticIdentifier")),
-            createElementCallee: getter(get(pass, "createElementIdentifier")),
-          });
-
-          state.pure = PURE_ANNOTATION ?? !get(pass, "importSourceSet");
-        }
+          jsxCallee: get(pass, "jsxIdentifier"),
+          jsxStaticCallee: get(pass, "jsxStaticIdentifier"),
+          createElementCallee: get(pass, "createElementIdentifier"),
+        };
       },
     });
 

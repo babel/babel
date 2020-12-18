@@ -11,7 +11,7 @@ export function helper(options) {
     useSpread,
     useBuiltIns,
 
-    post,
+    getState,
   } = options;
 
   return {
@@ -200,15 +200,14 @@ export function helper(options) {
       );
     }
 
-    const state = { pure: false };
-    post(state, file);
+    const state = getState(file);
 
-    const call =
-      state.call ||
-      t.callExpression(
-        path.node.children.length > 1 ? state.jsxStaticCallee : state.jsxCallee,
-        args,
-      );
+    const call = t.callExpression(
+      path.node.children.length > 1
+        ? state.jsxStaticCallee()
+        : state.jsxCallee(),
+      args,
+    );
     if (state.pure) annotateAsPure(call);
 
     return call;
@@ -273,17 +272,14 @@ export function helper(options) {
       );
     }
 
-    const state = { pure: false };
-    if (post) {
-      post(state, file);
-    }
+    const state = getState(file);
 
-    const call =
-      state.call ||
-      t.callExpression(
-        path.node.children.length > 1 ? state.jsxStaticCallee : state.jsxCallee,
-        args,
-      );
+    const call = t.callExpression(
+      path.node.children.length > 1
+        ? state.jsxStaticCallee()
+        : state.jsxCallee(),
+      args,
+    );
     if (state.pure) annotateAsPure(call);
 
     return call;
@@ -297,29 +293,18 @@ export function helper(options) {
     const openingPath = path.get("openingElement");
     openingPath.parent.children = t.react.buildChildren(openingPath.parent);
 
-    const tagName = null;
     const tagExpr = file.get("@babel/plugin-react-jsx/jsxFragIdentifier")();
 
-    const state = {
-      tagExpr: tagExpr,
-      tagName: tagName,
-      args: args,
-      pure: false,
-    };
-
-    const args = [getTag(tagName, tagExpr)];
+    const args = [getTag(null, tagExpr)];
 
     // no attributes are allowed with <> syntax
     args.push(t.nullLiteral(), ...path.node.children);
 
-    if (post) {
-      post(state, file);
-    }
+    const state = getState(file);
 
     file.set("@babel/plugin-react-jsx/usedFragment", true);
 
-    const call =
-      state.call || t.callExpression(state.createElementCallee, args);
+    const call = t.callExpression(state.createElementCallee(), args);
     if (state.pure) annotateAsPure(call);
 
     return call;
@@ -340,13 +325,9 @@ export function helper(options) {
 
     args.push(attribs, ...path.node.children);
 
-    const state = { pure: false };
-    if (post) {
-      post(state, file);
-    }
+    const state = getState(file);
 
-    const call =
-      state.call || t.callExpression(state.createElementCallee, args);
+    const call = t.callExpression(state.createElementCallee(), args);
     if (state.pure) annotateAsPure(call);
 
     return call;
