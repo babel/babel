@@ -57,7 +57,6 @@ export default function createPlugin({ name, development }) {
     const visitor = helper({
       development,
 
-      throwIfNamespace,
       filter,
       useSpread,
       useBuiltIns,
@@ -119,6 +118,27 @@ export default function createPlugin({ name, development }) {
       },
     });
 
-    return { name, visitor, inherits: jsx };
+    return {
+      name,
+      inherits: jsx,
+      visitor: {
+        JSXNamespacedName(path) {
+          if (throwIfNamespace) {
+            throw path.buildCodeFrameError(
+              `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
+You can set \`throwIfNamespace: false\` to bypass this warning.`,
+            );
+          }
+        },
+
+        JSXSpreadChild(path) {
+          throw path.buildCodeFrameError(
+            "Spread children are not supported in React.",
+          );
+        },
+
+        ...visitor,
+      },
+    };
   });
 }

@@ -26,7 +26,6 @@ export function helper(options) {
     PRAGMA_DEFAULT,
     PRAGMA_FRAG_DEFAULT,
 
-    throwIfNamespace,
     filter,
     useSpread,
     useBuiltIns,
@@ -62,21 +61,6 @@ export function helper(options) {
   };
 
   return {
-    JSXNamespacedName(path) {
-      if (throwIfNamespace) {
-        throw path.buildCodeFrameError(
-          `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
-You can set \`throwIfNamespace: false\` to bypass this warning.`,
-        );
-      }
-    },
-
-    JSXSpreadChild(path) {
-      throw path.buildCodeFrameError(
-        "Spread children are not supported in React.",
-      );
-    },
-
     JSXElement: {
       exit(path, file) {
         let callExpr;
