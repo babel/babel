@@ -4851,6 +4851,7 @@ __metadata:
     jest: ^26.6.1
     lerna-changelog: ^0.5.0
     lint-staged: ^9.2.0
+    lodash: ^4.17.20
     mergeiterator: ^1.2.5
     prettier: ^2.0.5
     rollup: ^2.26.5
@@ -9693,7 +9694,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19":
+"lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20":
   version: 4.17.20
   resolution: "lodash@npm:4.17.20"
   checksum: c62101d2500c383b5f174a7e9e6fe8098149ddd6e9ccfa85f36d4789446195f5c4afd3cfba433026bcaf3da271256566b04a2bf2618e5a39f6e67f8c12030cb6

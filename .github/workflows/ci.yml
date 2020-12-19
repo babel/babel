@@ -30,7 +30,7 @@ jobs:
       - name: Check or update Yarn cache
         env:
           YARN_ENABLE_SCRIPTS: false # disable post-install scripts
-          YARN_NODE_LINKER: pnp # use pnp linker for better performance: it's meant to update yarn cache only
+          YARN_NODE_LINKER: pnp # use pnp linker for better linking performance: it's meant to update yarn cache only
         run: |
           yarn install --immutable --skip-builds
 
@@ -65,6 +65,8 @@ jobs:
     name: Build Babel Artifacts
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
+    env:
+      YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -132,7 +134,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Node.js latest
+      - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v2-beta
         with:
           node-version: "*" # Build Babel on latest node LTS versions
@@ -145,7 +147,7 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install
         run: |
-          BABEL_ENV=test-legacy make -j bootstrap-only
+          yarn install
       - name: Downgrade Jest for node <= 8
         if: matrix.node-version == '6' || matrix.node-version == '8'
         run: |
@@ -159,13 +161,15 @@ jobs:
       - name: Generate runtime helpers
         run: |
           make build-plugin-transform-runtime-dist
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }} # Checkout node version for test executor
         uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test on node.js ${{ matrix.node-version }}
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
+
+        # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
 

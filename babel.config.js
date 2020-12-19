@@ -49,7 +49,7 @@ module.exports = function (api) {
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
-        "**/node_modules",
+        "/**/node_modules",
         "packages/babel-preset-env/data",
         "packages/babel-compat-data"
       );

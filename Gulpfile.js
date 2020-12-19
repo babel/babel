@@ -239,6 +239,13 @@ function buildRollup(packages, targetBrowsers) {
       const bundle = await rollup.rollup({
         input,
         external,
+        onwarn(warning, warn) {
+          if (warning.code !== "CIRCULAR_DEPENDENCY") {
+            warn(warning);
+            // https://github.com/babel/babel/pull/12011#discussion_r540434534
+            throw new Error("Rollup aborted due to warnings above");
+          }
+        },
         plugins: [
           rollupBabelSource(),
           rollupReplace({
@@ -257,10 +264,6 @@ function buildRollup(packages, targetBrowsers) {
             extensions: [".mjs", ".cjs", ".ts", ".js", ".json"],
             browser: nodeResolveBrowser,
             preferBuiltins: true,
-            //todo: remove when semver and source-map are bumped to latest versions
-            dedupe(importee) {
-              return ["semver", "source-map"].includes(importee);
-            },
           }),
           rollupCommonJs({
             include: [
