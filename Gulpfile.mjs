@@ -287,7 +287,7 @@ function buildRollup(packages, targetBrowsers) {
             envName: babelEnvName,
             babelrc: false,
             babelHelpers: "bundled",
-            extends: "./babel.config.cjs",
+            extends: "./babel.config.js",
             extensions: [".mjs", ".cjs", ".ts", ".js"],
           }),
           rollupNodeResolve({
