@@ -57,14 +57,16 @@ jobs:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
             const base = process.env.GITHUB_REF.replace("/ref/heads/", "");
-            const { data: prs } = await github.pulls.list({
+            const result = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: "update-test262-parser",
               base: base
             });
+            console.log("Open PR response: ", result);
+            const prs = result.data;
             if (prs.length === 0) {
-              const { data: pr } = await github.pulls.create({
+              const result = await github.pulls.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 head: "update-test262-parser",
@@ -73,11 +75,12 @@ jobs:
                 title: "Update test262",
                 body: "Update test262 to [${{ steps.test262.outputs.sha1 }}](https://github.com/tc39/test262/commit/${{ steps.test262.outputs.sha1 }}).",
               });
+              console.log("Create PR response: ", result);
 
               github.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: pr.number,
+                issue_number: result.data.number,
                 labels: ["area: test262", "repo automation 🤖"]
               })
             }
