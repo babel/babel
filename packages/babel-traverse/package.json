@@ -3,7 +3,7 @@
   "version": "7.12.12",
   "description": "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babeljs.io/docs/en/next/babel-traverse.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

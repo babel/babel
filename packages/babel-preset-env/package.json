@@ -3,7 +3,7 @@
   "version": "7.12.11",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babeljs.io/docs/en/next/babel-preset-env.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
