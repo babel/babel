@@ -9,7 +9,6 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-create-class-features-plugin"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-helper-create-class-features-plugin",
   "main": "lib/index.js",
   "publishConfig": {
     "access": "public"
