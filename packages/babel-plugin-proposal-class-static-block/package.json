@@ -27,5 +27,6 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:*"
-  }
+  },
+  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-class-static-block.html"
 }
