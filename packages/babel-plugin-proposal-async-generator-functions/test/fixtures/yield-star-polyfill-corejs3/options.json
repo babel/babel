@@ -5,6 +5,8 @@
   "plugins": [
     "transform-async-to-generator",
     "proposal-async-generator-functions",
-    "./inject-corejs-async-iterator-polyfill.js"
+    ["babel-plugin-polyfill-corejs3", { "method": "usage-pure", "targets": {
+      "node": "6.17"
+    }}]
   ]
 }
