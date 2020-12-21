@@ -47,7 +47,7 @@ jobs:
       - name: Commit changes
         run: |
           git config user.name "Babel Bot"
-          git config user.email "Babel Bot <babel-bot@users.noreply.github.com>"
+          git config user.email "babel-bot@users.noreply.github.com"
           git checkout -b update-test262-parser
           git commit -am "chore: update test262 to ${{ steps.test262.outputs.sha1 }}"
           git push --force origin update-test262-parser
@@ -56,7 +56,7 @@ jobs:
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
-            const base = process.env.GITHUB_REF.replace("/ref/heads/", "");
+            const base = process.env.GITHUB_REF.replace("refs/heads/", "");
             const { data: prs } = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
