@@ -54,7 +54,7 @@ jobs:
       - name: Create Pull Request
         uses: actions/github-script@v3
         with:
-          github-token: ${{ secrets.BOT_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const base = process.env.GITHUB_REF.replace("/ref/heads/", "");
             const { data: prs } = await github.pulls.list({
@@ -64,7 +64,7 @@ jobs:
               base: base
             });
             if (prs.length === 0) {
-              const { data: pr } = await github.pulls.create({
+              const result = await github.pulls.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 head: "update-test262-parser",
@@ -73,11 +73,12 @@ jobs:
                 title: "Update test262",
                 body: "Update test262 to [${{ steps.test262.outputs.sha1 }}](https://github.com/tc39/test262/commit/${{ steps.test262.outputs.sha1 }}).",
               });
+              console.log(result);
 
               github.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: pr.number,
+                issue_number: result.data.number,
                 labels: ["area: test262", "repo automation 🤖"]
               })
             }
