@@ -256,6 +256,67 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   delete test.options.ignoreOutput;
 }
 
+function wrapPackagesArray(type, names, optionsDir) {
+  return names.map(function (val) {
+    if (typeof val === "string") val = [val];
+
+    // relative path (outside of monorepo)
+    if (val[0][0] === ".") {
+      if (!optionsDir) {
+        throw new Error(
+          "Please provide an options.json in test dir when using a " +
+            "relative plugin path.",
+        );
+      }
+
+      val[0] = path.resolve(optionsDir, val[0]);
+    } else {
+      const monorepoPath = __dirname + "/../../babel-" + type + "-" + val[0];
+
+      if (fs.existsSync(monorepoPath)) {
+        val[0] = monorepoPath;
+      }
+    }
+
+    return val;
+  });
+}
+
+/**
+ * Resolve plugins/presets defined in options.json
+ *
+ * @export
+ * @param {{}} options the imported options.json
+ * @param {string} optionsDir the direcotry where options.json is placed
+ * @returns {{}} options whose plugins/presets are resolved
+ */
+export function resolveOptionPluginOrPreset(
+  options: {},
+  optionsDir: string,
+): {} {
+  if (options.plugins) {
+    options.plugins = wrapPackagesArray("plugin", options.plugins, optionsDir);
+  }
+  if (options.presets) {
+    options.presets = wrapPackagesArray(
+      "preset",
+      options.presets,
+      optionsDir,
+    ).map(function (val) {
+      if (val.length > 3) {
+        throw new Error(
+          "Unexpected extra options " +
+            JSON.stringify(val.slice(3)) +
+            " passed to preset.",
+        );
+      }
+
+      return val;
+    });
+  }
+  return options;
+}
+
 export default function get(entryLoc): Array<Suite> {
   const suites = [];
 
@@ -277,7 +338,12 @@ export default function get(entryLoc): Array<Suite> {
     suites.push(suite);
 
     const suiteOptsLoc = tryResolve(suite.filename + "/options");
-    if (suiteOptsLoc) suite.options = require(suiteOptsLoc);
+    if (suiteOptsLoc) {
+      suite.options = resolveOptionPluginOrPreset(
+        require(suiteOptsLoc),
+        suite.filename,
+      );
+    }
 
     for (const taskName of fs.readdirSync(suite.filename)) {
       pushTask(taskName, suite.filename + "/" + taskName, suite, suiteName);

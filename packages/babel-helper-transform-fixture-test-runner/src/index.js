@@ -1,7 +1,10 @@
 /* eslint-env jest */
 import * as babel from "@babel/core";
 import { buildExternalHelpers } from "@babel/core";
-import getFixtures from "@babel/helper-fixtures";
+import {
+  default as getFixtures,
+  resolveOptionPluginOrPreset,
+} from "@babel/helper-fixtures";
 import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import escapeRegExp from "lodash/escapeRegExp";
@@ -37,7 +40,7 @@ function createContext() {
   // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
   // global creation in tests, which could cause things to bleed between tests.
   runModuleInTestContext(
-    "@babel/polyfill/dist/polyfill.min.js",
+    "regenerator-runtime",
     __filename,
     context,
     moduleCache,
@@ -167,32 +170,6 @@ export function runCodeInTestContext(
   }
 }
 
-function wrapPackagesArray(type, names, optionsDir) {
-  return (names || []).map(function (val) {
-    if (typeof val === "string") val = [val];
-
-    // relative path (outside of monorepo)
-    if (val[0][0] === ".") {
-      if (!optionsDir) {
-        throw new Error(
-          "Please provide an options.json in test dir when using a " +
-            "relative plugin path.",
-        );
-      }
-
-      val[0] = path.resolve(optionsDir, val[0]);
-    } else {
-      const monorepoPath = __dirname + "/../../babel-" + type + "-" + val[0];
-
-      if (fs.existsSync(monorepoPath)) {
-        val[0] = monorepoPath;
-      }
-    }
-
-    return val;
-  });
-}
-
 function run(task) {
   const {
     actual,
@@ -221,24 +198,7 @@ function run(task) {
       opts,
     );
 
-    newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
-    newOpts.presets = wrapPackagesArray(
-      "preset",
-      newOpts.presets,
-      optionsDir,
-    ).map(function (val) {
-      if (val.length > 3) {
-        throw new Error(
-          "Unexpected extra options " +
-            JSON.stringify(val.slice(3)) +
-            " passed to preset.",
-        );
-      }
-
-      return val;
-    });
-
-    return newOpts;
+    return resolveOptionPluginOrPreset(newOpts, optionsDir);
   }
 
   let execCode = exec.code;
