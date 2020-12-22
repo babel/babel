@@ -55,7 +55,6 @@ import {
   newExpressionScope,
 } from "../util/expression-scope.js";
 import { Errors } from "./error";
-import type State from "../tokenizer/state";
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -493,19 +492,15 @@ export default class ExpressionParser extends LValParser {
   // Parse unary operators, both prefix and postfix.
   // https://tc39.es/ecma262/#prod-UnaryExpression
   parseMaybeUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
-    if (this.isContextual("await")) {
-      if (this.isAwaitAllowed()) {
-        return this.parseAwait();
-      } else {
-        if (this.scope.inFunction) {
-          const lookahead = this.lookahead();
-          if (lookahead.type.startsExpr && !this.isAmbiguousAwait(lookahead)) {
-            this.raise(this.state.start, Errors.AwaitNotInAsyncContext);
-            return this.parseAwait();
-          }
-        }
-      }
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
+    const isAwait = this.isContextual("await");
+
+    if (isAwait && this.isAwaitAllowed()) {
+      this.next();
+      return this.parseAwait(startPos, startLoc);
     }
+
     const update = this.match(tt.incDec);
     const node = this.startNode();
     if (this.state.type.prefix) {
@@ -537,7 +532,19 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    return this.parseUpdate(node, update, refExpressionErrors);
+    const expr = this.parseUpdate(node, update, refExpressionErrors);
+
+    if (
+      isAwait &&
+      this.scope.inFunction &&
+      this.state.type.startsExpr &&
+      !this.isAmbiguousAwait()
+    ) {
+      this.raise(startPos, Errors.AwaitNotInAsyncContext);
+      return this.parseAwait(startPos, startLoc);
+    }
+
+    return expr;
   }
 
   // https://tc39.es/ecma262/#prod-UpdateExpression
@@ -2359,10 +2366,8 @@ export default class ExpressionParser extends LValParser {
 
   // Parses await expression inside async function.
 
-  parseAwait(): N.AwaitExpression {
-    const node = this.startNode();
-
-    this.next();
+  parseAwait(startPos: number, startLoc: Position): N.AwaitExpression {
+    const node = this.startNodeAt(startPos, startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       node.start,
@@ -2388,22 +2393,22 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "AwaitExpression");
   }
 
-  isAmbiguousAwait(state: State = this.state): boolean {
+  isAmbiguousAwait(): boolean {
     return (
-      this.hasPrecedingLineBreak(state) ||
+      this.hasPrecedingLineBreak() ||
       // All the following expressions are ambiguous:
       //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
-      state.type === tt.plusMin ||
-      state.type === tt.parenL ||
-      state.type === tt.bracketL ||
-      state.type === tt.backQuote ||
+      this.match(tt.plusMin) ||
+      this.match(tt.parenL) ||
+      this.match(tt.bracketL) ||
+      this.match(tt.backQuote) ||
       // Sometimes the tokenizer generates tt.slash for regexps, and this is
       // handler by parseExprAtom
-      state.type === tt.regexp ||
-      state.type === tt.slash ||
+      this.match(tt.regexp) ||
+      this.match(tt.slash) ||
       // This code could be parsed both as a modulo operator or as an intrinsic:
       //   await %x(0)
-      (this.hasPlugin("v8intrinsic") && state.type === tt.modulo)
+      (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
     );
   }
 
