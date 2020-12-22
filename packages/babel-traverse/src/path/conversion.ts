@@ -3,7 +3,7 @@
 import * as t from "@babel/types";
 import nameFunction from "@babel/helper-function-name";
 
-export function toComputedKey(): Object {
+export function toComputedKey(): any {
   const node = this.node;
 
   let key;

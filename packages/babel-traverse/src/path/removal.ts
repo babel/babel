@@ -28,7 +28,7 @@ export function _removeFromScope() {
 }
 
 export function _callRemovalHooks() {
-  for (const fn of (hooks: Array<Function>)) {
+  for (const fn of hooks as Array<Function>) {
     if (fn(this, this.parentPath)) return true;
   }
 }

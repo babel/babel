@@ -1,7 +1,7 @@
 import type NodePath from "../index";
 import * as t from "@babel/types";
 
-export default function (node: Object) {
+export default function (node: any) {
   if (!this.isReferenced()) return;
 
   // check if a binding exists of this value and if so then return a union type of all
@@ -86,7 +86,7 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     constantViolations = constantViolations.concat(functionConstantViolations);
 
     // push on inferred types of violated paths
-    for (const violation of (constantViolations: Array<NodePath>)) {
+    for (const violation of constantViolations as Array<NodePath>) {
       types.push(violation.getTypeAnnotation());
     }
   }

@@ -4,7 +4,7 @@ import * as t from "@babel/types";
 
 export const ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
-  checkPath(path: NodePath, opts?: Object): boolean {
+  checkPath(path: NodePath, opts?: any): boolean {
     const { node, parent } = path;
     if (!t.isIdentifier(node, opts) && !t.isJSXMemberExpression(parent, opts)) {
       if (t.isJSXIdentifier(node, opts)) {

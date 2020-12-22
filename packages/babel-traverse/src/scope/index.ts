@@ -7,7 +7,7 @@ import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 
 // Recursively gathers the identifying names of a node.
-function gatherNodeParts(node: Object, parts: Array) {
+function gatherNodeParts(node: any, parts: Array) {
   switch (node?.type) {
     default:
       if (t.isModuleDeclaration(node)) {
@@ -150,7 +150,7 @@ function gatherNodeParts(node: Object, parts: Array) {
 
 const collectorVisitor = {
   For(path) {
-    for (const key of (t.FOR_INIT_KEYS: Array)) {
+    for (const key of t.FOR_INIT_KEYS as Array) {
       const declar = path.get(key);
       // delegate block scope handling to the `BlockScoped` method
       if (declar.isVar()) {
@@ -198,7 +198,7 @@ const collectorVisitor = {
         const binding = scope.getBinding(id.name);
         if (binding) binding.reference(path);
       } else if (t.isVariableDeclaration(declar)) {
-        for (const decl of (declar.declarations: Array<Object>)) {
+        for (const decl of declar.declarations as Array<any>) {
           for (const name of Object.keys(t.getBindingIdentifiers(decl))) {
             const binding = scope.getBinding(name);
             if (binding) binding.reference(path);
@@ -245,7 +245,7 @@ const collectorVisitor = {
 
   Block(path) {
     const paths = path.get("body");
-    for (const bodyPath of (paths: Array)) {
+    for (const bodyPath of paths as Array) {
       if (bodyPath.isFunctionDeclaration()) {
         path.scope.getBlockParent().registerDeclaration(bodyPath);
       }
@@ -334,7 +334,7 @@ export default class Scope {
    * Traverse node with current scope and path.
    */
 
-  traverse(node: Object, opts: Object, state?) {
+  traverse(node: any, opts: any, state?) {
     traverse(node, opts, this, state, this.path);
   }
 
@@ -395,7 +395,7 @@ export default class Scope {
     return `_${id}`;
   }
 
-  generateUidBasedOnNode(node: Object, defaultName?: String) {
+  generateUidBasedOnNode(node: any, defaultName?: String) {
     const parts = [];
     gatherNodeParts(node, parts);
 
@@ -409,7 +409,7 @@ export default class Scope {
    * Generate a unique identifier based on a node.
    */
 
-  generateUidIdentifierBasedOnNode(node: Object, defaultName?: String): Object {
+  generateUidIdentifierBasedOnNode(node: any, defaultName?: String): any {
     return t.identifier(this.generateUidBasedOnNode(node, defaultName));
   }
 
@@ -423,7 +423,7 @@ export default class Scope {
    *  - Bound identifiers
    */
 
-  isStatic(node: Object): boolean {
+  isStatic(node: any): boolean {
     if (t.isThisExpression(node) || t.isSuper(node)) {
       return true;
     }
@@ -444,7 +444,7 @@ export default class Scope {
    * Possibly generate a memoised identifier if it is not static and has consequences.
    */
 
-  maybeGenerateMemoised(node: Object, dontPush?: boolean): ?Object {
+  maybeGenerateMemoised(node: any, dontPush?: boolean): any {
     if (this.isStatic(node)) {
       return null;
     } else {
@@ -457,7 +457,7 @@ export default class Scope {
     }
   }
 
-  checkBlockScopedCollisions(local, kind: string, name: string, id: Object) {
+  checkBlockScopedCollisions(local, kind: string, name: string, id: any) {
     // ignore parameters
     if (kind === "param") return;
 
@@ -518,7 +518,7 @@ export default class Scope {
   }
 
   // TODO: (Babel 8) Split i in two parameters, and use an object of flags
-  toArray(node: Object, i?: number | boolean, allowArrayLike?: boolean) {
+  toArray(node: any, i?: number | boolean, allowArrayLike?: boolean) {
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding?.constant && binding.path.isGenericType("Array")) {
@@ -589,14 +589,14 @@ export default class Scope {
       this.registerBinding("hoisted", path.get("id"), path);
     } else if (path.isVariableDeclaration()) {
       const declarations = path.get("declarations");
-      for (const declar of (declarations: Array)) {
+      for (const declar of declarations as Array) {
         this.registerBinding(path.node.kind, declar);
       }
     } else if (path.isClassDeclaration()) {
       this.registerBinding("let", path);
     } else if (path.isImportDeclaration()) {
       const specifiers = path.get("specifiers");
-      for (const specifier of (specifiers: Array)) {
+      for (const specifier of specifiers as Array) {
         this.registerBinding("module", specifier);
       }
     } else if (path.isExportDeclaration()) {
@@ -642,7 +642,7 @@ export default class Scope {
     for (const name of Object.keys(ids)) {
       parent.references[name] = true;
 
-      for (const id of (ids[name]: Array<Object>)) {
+      for (const id of ids[name] as Array<any>) {
         const local = this.getOwnBinding(name);
 
         if (local) {
@@ -668,7 +668,7 @@ export default class Scope {
     }
   }
 
-  addGlobal(node: Object) {
+  addGlobal(node: any) {
     this.globals[node.name] = node;
   }
 
@@ -718,12 +718,12 @@ export default class Scope {
         this.isPure(node.right, constantsOnly)
       );
     } else if (t.isArrayExpression(node)) {
-      for (const elem of (node.elements: Array<Object>)) {
+      for (const elem of node.elements as Array<any>) {
         if (!this.isPure(elem, constantsOnly)) return false;
       }
       return true;
     } else if (t.isObjectExpression(node)) {
-      for (const prop of (node.properties: Array<Object>)) {
+      for (const prop of node.properties as Array<any>) {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
       return true;
@@ -743,7 +743,7 @@ export default class Scope {
         this.isPure(node.quasi, constantsOnly)
       );
     } else if (t.isTemplateLiteral(node)) {
-      for (const expression of (node.expressions: Array<Object>)) {
+      for (const expression of node.expressions as Array<any>) {
         if (!this.isPure(expression, constantsOnly)) return false;
       }
       return true;
@@ -860,11 +860,11 @@ export default class Scope {
   }
 
   push(opts: {
-    id: Object,
-    init: ?Object,
-    unique: ?boolean,
-    _blockHoist: ?number,
-    kind: "var" | "let",
+    id: any;
+    init: any | undefined | null;
+    unique: boolean | undefined | null;
+    _blockHoist: number | undefined | null;
+    kind: "var" | "let";
   }) {
     let path = this.path;
 
@@ -950,7 +950,7 @@ export default class Scope {
    * Walks the scope tree and gathers **all** bindings.
    */
 
-  getAllBindings(): Object {
+  getAllBindings(): any {
     const ids = Object.create(null);
 
     let scope = this;
@@ -970,10 +970,10 @@ export default class Scope {
    * Walks the scope tree and gathers all declarations of `kind`.
    */
 
-  getAllBindingsOfKind(): Object {
+  getAllBindingsOfKind(): any {
     const ids = Object.create(null);
 
-    for (const kind of (arguments: Array)) {
+    for (const kind of arguments as Array) {
       let scope = this;
       do {
         for (const name of Object.keys(scope.bindings)) {
@@ -987,7 +987,7 @@ export default class Scope {
     return ids;
   }
 
-  bindingIdentifierEquals(name: string, node: Object): boolean {
+  bindingIdentifierEquals(name: string, node: any): boolean {
     return this.getBindingIdentifier(name) === node;
   }
 

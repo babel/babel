@@ -428,7 +428,7 @@ export function resolve(dangerous, resolved) {
   return this._resolve(dangerous, resolved) || this;
 }
 
-export function _resolve(dangerous?, resolved?): ?NodePath {
+export function _resolve(dangerous?, resolved?): NodePath | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
@@ -474,7 +474,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
 
     if (target.isObjectExpression()) {
       const props = target.get("properties");
-      for (const prop of (props: Array)) {
+      for (const prop of props as Array) {
         if (!prop.isProperty()) continue;
 
         const key = prop.get("key");

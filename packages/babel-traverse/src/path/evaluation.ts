@@ -382,7 +382,7 @@ function _evaluate(path, state) {
   deopt(path, state);
 }
 
-function evaluateQuasis(path, quasis: Array<Object>, state, raw = false) {
+function evaluateQuasis(path, quasis: Array<any>, state, raw = false) {
   let str = "";
 
   let i = 0;
@@ -421,9 +421,9 @@ function evaluateQuasis(path, quasis: Array<Object>, state, raw = false) {
  */
 
 export function evaluate(): {
-  confident: boolean,
-  value: any,
-  deopt?: NodePath,
+  confident: boolean;
+  value: any;
+  deopt?: NodePath;
 } {
   const state = {
     confident: true,

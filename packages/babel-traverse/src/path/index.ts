@@ -28,7 +28,7 @@ export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
 export default class NodePath {
-  constructor(hub: HubInterface, parent: Object) {
+  constructor(hub: HubInterface, parent: any) {
     this.parent = parent;
     this.hub = hub;
     this.data = null;
@@ -37,24 +37,24 @@ export default class NodePath {
     this.scope = null;
   }
 
-  declare parent: Object;
+  declare parent: any;
   declare hub: HubInterface;
-  declare data: Object;
+  declare data: any;
   declare context: TraversalContext;
   declare scope: Scope;
 
   contexts: Array<TraversalContext> = [];
   state: any = null;
-  opts: ?Object = null;
+  opts: any = null;
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
-  skipKeys: ?Object = null;
-  parentPath: ?NodePath = null;
-  container: ?Object | Array<Object> = null;
-  listKey: ?string = null;
-  key: ?string = null;
-  node: ?Object = null;
-  type: ?string = null;
+  skipKeys: any = null;
+  parentPath: NodePath | undefined | null = null;
+  container: any | Array<any> = null;
+  listKey: string | undefined | null = null;
+  key: string | undefined | null = null;
+  node: any = null;
+  type: string | undefined | null = null;
 
   static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
     if (!hub && parentPath) {
@@ -108,11 +108,11 @@ export default class NodePath {
     return this.hub.buildError(this.node, msg, Error);
   }
 
-  traverse(visitor: Object, state?: any) {
+  traverse(visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
-  set(key: string, node: Object) {
+  set(key: string, node: any) {
     t.validate(this.node, key, node);
     this.node[key] = node;
   }
@@ -203,7 +203,7 @@ Object.assign(
   NodePath_comments,
 );
 
-for (const type of (t.TYPES: Array<string>)) {
+for (const type of t.TYPES as Array<string>) {
   const typeKey = `is${type}`;
   const fn = t[typeKey];
   NodePath.prototype[typeKey] = function (opts) {

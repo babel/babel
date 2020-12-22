@@ -1,11 +1,10 @@
-// @flow
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
 import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "@babel/types";
 
-export function getOpposite(): ?NodePath {
+export function getOpposite(): NodePath | undefined | null {
   if (this.key === "left") {
     return this.getSibling("right");
   } else if (this.key === "right") {
@@ -18,7 +17,7 @@ function addCompletionRecords(path, paths) {
   return paths;
 }
 
-function findBreak(statements): ?NodePath {
+function findBreak(statements): NodePath | undefined | null {
   let breakStatement;
   if (!Array.isArray(statements)) {
     statements = [statements];
@@ -162,7 +161,7 @@ export function getAllPrevSiblings(): NodePath[] {
 
 export function get(
   key: string,
-  context?: boolean | TraversalContext = true,
+  context: boolean | TraversalContext = true,
 ): NodePath | NodePath[] {
   if (context === true) context = this.context;
   const parts = key.split(".");
@@ -222,11 +221,11 @@ export function _getPattern(
   return path;
 }
 
-export function getBindingIdentifiers(duplicates?: boolean): Object {
+export function getBindingIdentifiers(duplicates?: boolean): any {
   return t.getBindingIdentifiers(this.node, duplicates);
 }
 
-export function getOuterBindingIdentifiers(duplicates?: boolean): Object {
+export function getOuterBindingIdentifiers(duplicates?: boolean): any {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
 }
 
@@ -234,9 +233,11 @@ export function getOuterBindingIdentifiers(duplicates?: boolean): Object {
 // path.getBindingIdentifiers returns nodes where the following re-implementation
 // returns paths
 export function getBindingIdentifierPaths(
-  duplicates?: boolean = false,
-  outerOnly?: boolean = false,
-): { [string]: NodePath } {
+  duplicates: boolean = false,
+  outerOnly: boolean = false,
+): {
+  [x: string]: NodePath;
+} {
   const path = this;
   let search = [].concat(path);
   const ids = Object.create(null);
@@ -293,6 +294,8 @@ export function getBindingIdentifierPaths(
 
 export function getOuterBindingIdentifierPaths(
   duplicates?: boolean,
-): { [string]: NodePath } {
+): {
+  [x: string]: NodePath;
+} {
   return this.getBindingIdentifierPaths(duplicates, true);
 }

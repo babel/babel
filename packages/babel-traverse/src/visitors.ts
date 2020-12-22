@@ -50,7 +50,7 @@ export function explode(visitor) {
   ensureCallbackArrays(visitor);
 
   // add type wrappers
-  for (const nodeType of (Object.keys(visitor): Array)) {
+  for (const nodeType of Object.keys(visitor) as Array) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     const wrapper = virtualTypes[nodeType];
@@ -66,7 +66,7 @@ export function explode(visitor) {
     delete visitor[nodeType];
 
     if (wrapper.types) {
-      for (const type of (wrapper.types: Array<string>)) {
+      for (const type of wrapper.types as Array<string>) {
         // merge the visitor if necessary or just put it back in
         if (visitor[type]) {
           mergePair(visitor[type], fns);
@@ -85,7 +85,8 @@ export function explode(visitor) {
 
     const fns = visitor[nodeType];
 
-    let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[nodeType];
+    let aliases: Array<string> | undefined | null =
+      t.FLIPPED_ALIAS_KEYS[nodeType];
 
     const deprecratedKey = t.DEPRECATED_KEYS[nodeType];
     if (deprecratedKey) {
@@ -178,7 +179,7 @@ function validateVisitorMethods(path, val) {
 export function merge(
   visitors: Array,
   states: Array = [],
-  wrapper?: ?Function,
+  wrapper?: Function | null,
 ) {
   const rootVisitor = {};
 
@@ -204,7 +205,7 @@ export function merge(
   return rootVisitor;
 }
 
-function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
+function wrapWithStateOrWrapper(oldVisitor, state, wrapper?: Function | null) {
   const newVisitor = {};
 
   for (const key of Object.keys(oldVisitor)) {

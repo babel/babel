@@ -15,7 +15,7 @@ export default class TraversalContext {
   declare scope;
   declare state;
   declare opts;
-  queue: ?Array<NodePath> = null;
+  queue: Array<NodePath> | undefined | null = null;
 
   /**
    * This method does a simple check to determine whether or not we really need to attempt
@@ -30,7 +30,7 @@ export default class TraversalContext {
     if (opts[node.type]) return true;
 
     // check if we're going to traverse into this node
-    const keys: ?Array<string> = t.VISITOR_KEYS[node.type];
+    const keys: Array<string> | undefined | null = t.VISITOR_KEYS[node.type];
     if (!keys?.length) return false;
 
     // we need to traverse into this node so ensure that it has children to traverse into!

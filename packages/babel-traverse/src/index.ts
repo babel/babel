@@ -11,11 +11,11 @@ export type { HubInterface } from "./hub";
 export { visitors };
 
 export default function traverse(
-  parent: Object | Array<Object>,
-  opts?: Object,
-  scope?: Object,
-  state: Object,
-  parentPath: Object,
+  parent: any | Array<any>,
+  opts: any | undefined | null,
+  scope: any | undefined | null,
+  state: any,
+  parentPath: any,
 ) {
   if (!parent) return;
   if (!opts) opts = {};
@@ -48,11 +48,11 @@ traverse.cheap = function (node, enter) {
 };
 
 traverse.node = function (
-  node: Object,
-  opts: Object,
-  scope: Object,
-  state: Object,
-  parentPath: Object,
+  node: any,
+  opts: any,
+  scope: any,
+  state: any,
+  parentPath: any,
   skipKeys?,
 ) {
   const keys: Array = t.VISITOR_KEYS[node.type];
@@ -84,8 +84,8 @@ function hasDenylistedType(path, state) {
 }
 
 traverse.hasType = function (
-  tree: Object,
-  type: Object,
+  tree: any,
+  type: any,
   denylistTypes?: Array<string>,
 ): boolean {
   // the node we're searching in is denylisted

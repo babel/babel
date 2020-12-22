@@ -10,7 +10,7 @@ import NodePath from "./index";
  * truthy value.
  */
 
-export function findParent(callback): ?NodePath {
+export function findParent(callback): NodePath | undefined | null {
   let path = this;
   while ((path = path.parentPath)) {
     if (callback(path)) return path;
@@ -24,7 +24,7 @@ export function findParent(callback): ?NodePath {
  * or `null` if the `callback` never returns a truthy value.
  */
 
-export function find(callback): ?NodePath {
+export function find(callback): NodePath | undefined | null {
   let path = this;
   do {
     if (callback(path)) return path;
@@ -36,7 +36,7 @@ export function find(callback): ?NodePath {
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent(): ?NodePath {
+export function getFunctionParent(): NodePath | undefined | null {
   return this.findParent(p => p.isFunction());
 }
 
@@ -84,7 +84,7 @@ export function getEarliestCommonAncestorFrom(
       let earliest;
       const keys = t.VISITOR_KEYS[deepest.type];
 
-      for (const ancestry of (ancestries: Array)) {
+      for (const ancestry of ancestries as Array) {
         const path = ancestry[i + 1];
 
         // first path
@@ -163,7 +163,7 @@ export function getDeepestCommonAncestorFrom(
   depthLoop: for (let i = 0; i < minDepth; i++) {
     const shouldMatch = first[i];
 
-    for (const ancestry of (ancestries: Array)) {
+    for (const ancestry of ancestries as Array) {
       if (ancestry[i] !== shouldMatch) {
         // we've hit a snag
         break depthLoop;
@@ -218,7 +218,7 @@ export function isDescendant(maybeAncestor: NodePath): boolean {
 export function inType(): boolean {
   let path = this;
   while (path) {
-    for (const type of (arguments: Array)) {
+    for (const type of arguments as Array) {
       if (path.node.type === type) return true;
     }
     path = path.parentPath;
