@@ -72,7 +72,10 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install and build
-        run: make -j bootstrap
+        # make bootstrap modifies some files (babel-runtime-*/package.json), so we reset them
+        run: |
+          make -j bootstrap
+          git reset --hard HEAD
 
       - name: Regenerate fixtures
         # Hack: --color has supports-color@5 returned true for GitHub CI
