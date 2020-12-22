@@ -16,8 +16,6 @@
 *.cache
 /build
 /.eslintcache
-/browser.js
-/browser-polyfill.js
 /runtime.js
 coverage
 dist

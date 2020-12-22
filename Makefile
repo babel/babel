@@ -55,11 +55,7 @@ build-babel-standalone:
 prepublish-build-standalone:
 	BABEL_ENV=production IS_PUBLISH=true $(YARN) gulp build-babel-standalone
 
-build-dist: build-polyfill-dist build-plugin-transform-runtime-dist
-
-build-polyfill-dist:
-	cd packages/babel-polyfill; \
-	scripts/build-dist.sh
+build-dist: build-plugin-transform-runtime-dist
 
 build-plugin-transform-runtime-dist:
 	cd packages/babel-plugin-transform-runtime; \
@@ -109,8 +105,6 @@ build-compat-data:
 
 clean: test-clean
 	rm -f .npmrc
-	rm -rf packages/babel-polyfill/browser*
-	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 	rm -rf node_modules/.cache
