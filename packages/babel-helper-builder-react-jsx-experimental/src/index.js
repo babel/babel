@@ -50,6 +50,19 @@ export function helper(babel, options) {
     pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
   } = options;
 
+  if (
+    RUNTIME_DEFAULT === "automatic" &&
+    (options.pragma !== undefined || options.pragmaFrag !== undefined)
+  ) {
+    throw new Error(
+      `pragma and pragmaFrag cannot be set when runtime is automatic.`,
+    );
+  }
+
+  if (RUNTIME_DEFAULT === "classic" && options.importSource !== undefined) {
+    throw new Error(`importSource cannot be set when runtime is classic.`);
+  }
+
   const injectMetaPropertiesVisitor = {
     JSXOpeningElement(path, state) {
       for (const attr of path.get("attributes")) {
@@ -138,53 +151,48 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
         // For jsx mode
         let source = IMPORT_SOURCE_DEFAULT;
-        let sourceSet = !!options.importSource;
 
         // For createElement mode
         let pragma = PRAGMA_DEFAULT;
         let pragmaFrag = PRAGMA_FRAG_DEFAULT;
-        let pragmaSet = !!options.pragma;
-        let pragmaFragSet = !!options.pragmaFrag;
+
+        let runtimeMatch;
+        let sourceMatch;
+        let jsxMatch;
+        let jsxFragMatch;
 
         if (file.ast.comments) {
           for (const comment of (file.ast.comments: Array<Object>)) {
-            const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(
-              comment.value,
-            );
-            if (sourceMatches) {
-              source = sourceMatches[1];
-              sourceSet = true;
-            }
+            runtimeMatch =
+              JSX_RUNTIME_ANNOTATION_REGEX.exec(comment.value)?.[1] ??
+              runtimeMatch;
 
-            const runtimeMatches = JSX_RUNTIME_ANNOTATION_REGEX.exec(
-              comment.value,
-            );
-            if (runtimeMatches) {
-              runtime = runtimeMatches[1];
-            }
+            sourceMatch =
+              JSX_SOURCE_ANNOTATION_REGEX.exec(comment.value)?.[1] ??
+              sourceMatch;
 
-            const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
-            if (jsxMatches) {
-              pragma = jsxMatches[1];
-              pragmaSet = true;
-            }
-            const jsxFragMatches = JSX_FRAG_ANNOTATION_REGEX.exec(
-              comment.value,
-            );
-            if (jsxFragMatches) {
-              pragmaFrag = jsxFragMatches[1];
-              pragmaFragSet = true;
-            }
+            jsxMatch =
+              JSX_ANNOTATION_REGEX.exec(comment.value)?.[1] ?? jsxMatch;
+
+            jsxFragMatch =
+              JSX_FRAG_ANNOTATION_REGEX.exec(comment.value)?.[1] ??
+              jsxFragMatch;
           }
+        }
+
+        if (runtimeMatch) {
+          runtime = runtimeMatch;
+        } else if (sourceMatch) {
+          runtime = "automatic";
+        } else if (jsxMatch || jsxFragMatch) {
+          runtime = "classic";
         }
 
         state.set("@babel/plugin-react-jsx/runtime", runtime);
         if (runtime === "classic") {
-          if (sourceSet) {
-            throw path.buildCodeFrameError(
-              `importSource cannot be set when runtime is classic.`,
-            );
-          }
+          pragma = jsxMatch ?? pragma;
+          pragmaFrag = jsxFragMatch ?? pragmaFrag;
+
           state.set(
             "@babel/plugin-react-jsx/createElementIdentifier",
             createIdentifierParser(pragma),
@@ -203,11 +211,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             pragmaFrag !== DEFAULT.pragmaFrag,
           );
         } else if (runtime === "automatic") {
-          if (pragmaSet || pragmaFragSet) {
-            throw path.buildCodeFrameError(
-              `pragma and pragmaFrag cannot be set when runtime is automatic.`,
-            );
-          }
+          source = sourceMatch ?? source;
 
           state.set(
             "@babel/plugin-react-jsx/jsxIdentifier",

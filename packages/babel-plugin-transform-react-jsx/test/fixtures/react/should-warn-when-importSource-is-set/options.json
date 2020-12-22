@@ -3,7 +3,7 @@
     [
       "transform-react-jsx",
       {
-        "runtime": "automatic",
+        "runtime": "classic",
         "importSource": "foo"
       }
     ]
