@@ -520,9 +520,7 @@ export default function transformClass(
     path: NodePath,
   ) {
     // https://github.com/babel/babel/issues/1077
-    if (path.scope.hasOwnBinding(classState.classRef.name)) {
-      path.scope.rename(classState.classRef.name);
-    }
+    ensureClassRefValidInChildScopes(path);
 
     setState({
       userConstructorPath: path,
