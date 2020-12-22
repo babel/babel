@@ -168,6 +168,11 @@ export default function transformClass(
       if (t.isClassMethod(node)) {
         const isConstructor = node.kind === "constructor";
 
+        // https://github.com/babel/babel/issues/11994
+        if (!isConstructor) {
+          ensureClassRefValidInChildScopes(path);
+        }
+
         const replaceSupers = new ReplaceSupers({
           methodPath: path,
           objectRef: classState.classRef,
@@ -199,6 +204,24 @@ export default function transformClass(
         }
       }
     }
+  }
+
+  function ensureClassRefValidInChildScopes(path: NodePath) {
+    path.traverse({
+      Scopable(path) {
+        if (
+          path.type === "ClassDeclaration" ||
+          path.type === "ClassExpression"
+        ) {
+          path.skip();
+          return;
+        }
+
+        if (path.scope.hasOwnBinding(classState.classRef.name)) {
+          path.scope.rename(classState.classRef.name);
+        }
+      },
+    });
   }
 
   function clearDescriptors() {
