@@ -199,7 +199,8 @@ function run(task) {
     stderr,
   } = task;
 
-  function getOpts(self) {
+  // todo(flow->ts) add proper return type (added any, because empty object is inferred)
+  function getOpts(self): any {
     const newOpts = merge(
       {
         ast: true,
