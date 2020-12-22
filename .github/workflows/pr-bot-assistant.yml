@@ -58,6 +58,7 @@ jobs:
           repository: ${{ steps.pr-meta.outputs.repository }}
           ref: ${{ steps.pr-meta.outputs.branch }}
           fetch-depth: 0 # Otherwise we cannot push
+          persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
 
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
