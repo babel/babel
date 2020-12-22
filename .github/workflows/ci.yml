@@ -96,7 +96,6 @@ jobs:
             codemods/*/lib/**/*
             eslint/*/lib/**/*
             packages/*/lib/**/*
-            packages/babel-polyfill/dist/**/*
             packages/babel-standalone/*.js
             !**/node_modules/**
 

@@ -13,7 +13,7 @@ const cwd = process.cwd();
 const packageDir = join(cwd, "packages");
 
 const packages = readdirSync(packageDir);
-const packagesInstalledToDep = ["@babel/polyfill", "@babel/runtime"];
+const packagesInstalledToDep = ["@babel/runtime"];
 const getWebsiteLink = n => `https://babeljs.io/docs/en/${n}`;
 const getPackageJson = pkg => require(join(packageDir, pkg, "package.json"));
 const getIssueLabelLink = l =>
@@ -36,7 +36,6 @@ const labels = {
   "babel-cli": getIssueLabelLink("pkg: cli"),
   "babel-core": getIssueLabelLink("pkg: core"),
   "babel-generator": getIssueLabelLink("pkg: generator"),
-  "babel-polyfill": getIssueLabelLink("pkg: polyfill"),
   "babel-preset-env": getIssueLabelLink("pkg: preset-env"),
   "babel-register": getIssueLabelLink("pkg: register"),
   "babel-template": getIssueLabelLink("pkg: template"),
