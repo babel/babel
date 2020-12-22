@@ -169,9 +169,7 @@ export default function transformClass(
         const isConstructor = node.kind === "constructor";
 
         // https://github.com/babel/babel/issues/11994
-        if (!isConstructor) {
-          ensureClassRefValidInChildScopes(path);
-        }
+        ensureClassRefValidInChildScopes(path);
 
         const replaceSupers = new ReplaceSupers({
           methodPath: path,
@@ -520,7 +518,10 @@ export default function transformClass(
     path: NodePath,
   ) {
     // https://github.com/babel/babel/issues/1077
-    ensureClassRefValidInChildScopes(path);
+    if (path.scope.hasOwnBinding(classState.classRef.name)) {
+      ensureClassRefValidInChildScopes(path);
+      path.scope.rename(classState.classRef.name);
+    }
 
     setState({
       userConstructorPath: path,
