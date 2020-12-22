@@ -5,12 +5,43 @@ on:
     tags: ["v*"]
 
 jobs:
-  github_release:
-    name: Trigger GitHub release
+  log-updates:
+    name: Log packages to publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the new tag
-        uses: actions/checkout@v1.0.0
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: This release will publish the following packages
+        run: git diff --name-only HEAD^..HEAD
+
+  npm-release:
+    name: Publish release on npm
+    runs-on: ubuntu-latest
+    needs: log-updates
+    environment: npm
+    steps:
+      - name: Checkout the new tag
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Build and Test
+        run: make prepublish
+      - name: Publish to npm
+        run: yarn release-tool publish --yes
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  github-release:
+    name: Trigger GitHub release
+    runs-on: ubuntu-latest
+    needs: npm-release
+    steps:
+      - name: Checkout the new tag
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Get tag info
         id: tags

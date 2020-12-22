@@ -217,17 +217,6 @@ ifneq ("$(shell grep 3155328e5 .yarn/releases/yarn-*.cjs -c)", "0")
 	@exit 1
 endif
 
-publish-ci: prepublish
-ifneq ("$(NPM_TOKEN)", "")
-	echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-else
-	echo "Missing NPM_TOKEN env var"
-	exit 1
-endif
-	$(YARN) release-tool publish --yes
-	rm -f .npmrc
-	$(MAKE) clean
-
 publish-test:
 ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
