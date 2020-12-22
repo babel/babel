@@ -119,7 +119,15 @@ export default class Renamer {
       }
     }
 
-    scope.traverse(block || scope.block, renameVisitor, this);
+    const blockToTraverse = block || scope.block;
+    if (blockToTraverse?.type === "SwitchStatement") {
+      // discriminant is not part of current scope, should be skipped.
+      blockToTraverse.cases.forEach(c => {
+        scope.traverse(c, renameVisitor, this);
+      });
+    } else {
+      scope.traverse(blockToTraverse, renameVisitor, this);
+    }
 
     if (!block) {
       scope.removeOwnBinding(oldName);
