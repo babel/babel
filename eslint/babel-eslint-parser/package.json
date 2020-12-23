@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/",
   "engines": {
     "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },

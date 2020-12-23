@@ -33,7 +33,7 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/",
   "devDependencies": {
     "eslint": "^7.5.0"
   }
