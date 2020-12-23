@@ -56,7 +56,8 @@ export default function (
       modules.length === 1 &&
       polyfills.has(modules[0]) &&
       available.has(modules[0]) &&
-      getModulePath(modules[0]) === source
+      (getModulePath(modules[0]) === source ||
+        getModulePath(modules[0]) === `${source}.js`)
     ) {
       return false;
     }
