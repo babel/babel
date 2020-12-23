@@ -4,6 +4,7 @@
   "description": "Babel preset for all React plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/docs/en/next/babel-preset-react.html",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20react%22+is%3Aopen",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
