@@ -25,5 +25,6 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
-  }
+  },
+  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-export-namespace-from.html"
 }

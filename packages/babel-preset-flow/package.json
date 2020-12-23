@@ -29,5 +29,6 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
-  }
+  },
+  "homepage": "https://babeljs.io/docs/en/next/babel-preset-flow.html"
 }

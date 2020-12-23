@@ -23,5 +23,6 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:*"
-  }
+  },
+  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-syntax-export-default-from.html"
 }

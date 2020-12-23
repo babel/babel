@@ -30,5 +30,6 @@
     "@babel/core": "workspace:*",
     "@babel/plugin-transform-modules-commonjs": "workspace:*",
     "browserify": "^16.5.2"
-  }
+  },
+  "homepage": "https://babeljs.io/docs/en/next/babel-register.html"
 }
