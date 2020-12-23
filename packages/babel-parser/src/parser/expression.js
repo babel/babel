@@ -534,11 +534,15 @@ export default class ExpressionParser extends LValParser {
 
     const expr = this.parseUpdate(node, update, refExpressionErrors);
 
+    const startsExpr = this.hasPlugin("v8intrinsic")
+      ? this.state.type.startsExpr
+      : this.state.type.startsExpr && !this.match(tt.modulo);
     if (
       isAwait &&
-      this.scope.inFunction &&
-      this.state.type.startsExpr &&
-      !this.isAmbiguousAwait()
+      startsExpr &&
+      !this.isAmbiguousAwait() &&
+      (this.scope.inFunction ||
+        (this.hasPlugin("topLevelAwait") && !this.inModule))
     ) {
       this.raise(startPos, Errors.AwaitNotInAsyncContext);
       return this.parseAwait(startPos, startLoc);
