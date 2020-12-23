@@ -19,6 +19,26 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.12 (2020-12-23)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#12530](https://github.com/babel/babel/pull/12530) skip discriminant when renamer starts from SwitchStatement. Closes [#12148](https://github.com/babel/babel/issues/12148) ([@Zzzen](https://github.com/Zzzen))
+* `babel-types`
+  * [#12521](https://github.com/babel/babel/pull/12521) Restore `@babel/types` support for old TS versions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-block-scoping`
+  * [#12512](https://github.com/babel/babel/pull/12512) Fix annex B block function hoisting semantics ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-polyfill`
+  * [#12541](https://github.com/babel/babel/pull/12541) Archive `@babel/polyfill` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-builder-react-jsx-experimental`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`
+  * [#12524](https://github.com/babel/babel/pull/12524) refactor: Move `react-jsx-development` implementation into `react-jsx` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-fixtures`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-decorators`
+  * [#12130](https://github.com/babel/babel/pull/12130) Remove babel polyfill from fixture test runner ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#12527](https://github.com/babel/babel/pull/12527) Update `release-tool` and define implicit deps for `@babel/runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#12011](https://github.com/babel/babel/pull/12011) Enable PnP linker on CI build job ([@JLHwung](https://github.com/JLHwung))
 ## v7.12.11 (2020-12-16)
 
 #### :eyeglasses: Spec Compliance
