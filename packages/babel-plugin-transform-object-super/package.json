@@ -7,7 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-object-super"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-transform-object-super.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-object-super.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

@@ -7,7 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-optional-catch-binding"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-optional-catch-binding.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-optional-catch-binding.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

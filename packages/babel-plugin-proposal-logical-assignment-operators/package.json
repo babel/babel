@@ -28,5 +28,5 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:*",
     "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.0"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-logical-assignment-operators.html"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-logical-assignment-operators.html"
 }

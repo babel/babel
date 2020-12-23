@@ -7,7 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-react-inline-elements"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-transform-react-inline-elements.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-react-inline-elements.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

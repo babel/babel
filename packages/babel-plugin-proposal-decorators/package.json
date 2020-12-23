@@ -12,7 +12,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-decorators"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-decorators.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-decorators.html",
   "main": "lib/index.js",
   "keywords": [
     "babel",

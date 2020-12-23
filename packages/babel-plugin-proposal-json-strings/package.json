@@ -7,7 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-json-strings"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-json-strings.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-json-strings.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

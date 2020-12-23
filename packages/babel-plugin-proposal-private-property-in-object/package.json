@@ -7,7 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-private-property-in-object"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-private-property-in-object.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-private-property-in-object.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

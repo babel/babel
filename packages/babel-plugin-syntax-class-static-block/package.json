@@ -7,7 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-syntax-class-static-block"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-syntax-class-static-block.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-class-static-block.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

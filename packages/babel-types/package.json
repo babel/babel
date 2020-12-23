@@ -3,7 +3,7 @@
   "version": "7.12.12",
   "description": "Babel Types is a Lodash-esque utility library for AST nodes",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://babeljs.io/docs/en/next/babel-types.html",
+  "homepage": "https://babel.dev/docs/en/next/babel-types.html",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20types%22+is%3Aopen",
   "license": "MIT",
   "publishConfig": {

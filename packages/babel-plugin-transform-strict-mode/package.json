@@ -25,5 +25,5 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-transform-strict-mode.html"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-strict-mode.html"
 }

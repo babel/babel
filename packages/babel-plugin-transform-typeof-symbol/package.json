@@ -28,5 +28,5 @@
     "@babel/runtime-corejs2": "workspace:*",
     "@babel/runtime-corejs3": "workspace:*"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-transform-typeof-symbol.html"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-typeof-symbol.html"
 }

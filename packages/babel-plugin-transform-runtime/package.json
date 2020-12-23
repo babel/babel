@@ -39,5 +39,5 @@
     "@babel/types": "workspace:*",
     "make-dir": "^2.1.0"
   },
-  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-transform-runtime.html"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime.html"
 }
