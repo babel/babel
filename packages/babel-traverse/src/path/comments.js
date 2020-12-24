@@ -22,7 +22,7 @@ export function shareCommentsWithSiblings() {
   const hasNext = Boolean(next.node);
   if (hasPrev && !hasNext) {
     prev.addComments("trailing", trailing);
-  } else if (hasNext && !hasPrev) {
+  } else if (hasNext) {
     next.addComments("leading", leading);
   }
 }
