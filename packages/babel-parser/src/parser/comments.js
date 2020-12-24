@@ -127,18 +127,10 @@ export default class CommentsParser extends BaseParser {
     } else if (stack.length > 0) {
       const lastInStack = last(stack);
       if (
-        lastInStack.innerComments &&
-        lastInStack.innerComments[0].start >= node.start &&
-        lastInStack.innerComments[0].end <= node.end
-      ) {
-        trailingComments = lastInStack.innerComments;
-        delete lastInStack.innerComments;
-      }
-      if (
         lastInStack.trailingComments &&
         lastInStack.trailingComments[0].start >= node.end
       ) {
-        trailingComments = (trailingComments || []).concat(lastInStack.trailingComments);
+        trailingComments = lastInStack.trailingComments;
         delete lastInStack.trailingComments;
       }
     }
