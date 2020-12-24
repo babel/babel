@@ -1,0 +1,5 @@
+foo
+/* WORKING */
+(
+/* NOT WORKING */
+);
