@@ -112,7 +112,7 @@ export default class CommentsParser extends BaseParser {
       // current node, then we're good - all comments in the array will
       // come after the node and so it's safe to add them as official
       // trailingComments.
-      if (this.state.trailingComments[0].start >= node.end) {
+      if (this.state.trailingComments[0].start >= node.start) {
         trailingComments = this.state.trailingComments;
         this.state.trailingComments = [];
       } else {
@@ -127,10 +127,18 @@ export default class CommentsParser extends BaseParser {
     } else if (stack.length > 0) {
       const lastInStack = last(stack);
       if (
+        lastInStack.innerComments &&
+        lastInStack.innerComments[0].start >= node.start &&
+        lastInStack.innerComments[0].end <= node.end
+      ) {
+        trailingComments = lastInStack.innerComments;
+        delete lastInStack.innerComments;
+      }
+      if (
         lastInStack.trailingComments &&
         lastInStack.trailingComments[0].start >= node.end
       ) {
-        trailingComments = lastInStack.trailingComments;
+        trailingComments = (trailingComments || []).concat(lastInStack.trailingComments);
         delete lastInStack.trailingComments;
       }
     }
