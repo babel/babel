@@ -1889,6 +1889,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               this.tsCheckForInvalidTypeCasts(node.arguments);
 
               node.typeParameters = typeArguments;
+              if (state.optionalChainMember) {
+                // $FlowIgnore
+                node.optional = false;
+              }
               return this.finishCallExpression(node, state.optionalChainMember);
             } else if (this.match(tt.backQuote)) {
               const result = this.parseTaggedTemplateExpression(
