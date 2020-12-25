@@ -1,5 +1,5 @@
 foo
 /* WORKING */
 (
-/* NOT WORKING */
+  /* NOT WORKING */
 );

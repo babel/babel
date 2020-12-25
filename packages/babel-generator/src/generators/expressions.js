@@ -146,6 +146,7 @@ export function CallExpression(node: Object) {
   this.print(node.typeParameters, node); // TS
   this.token("(");
   this.printList(node.arguments, node);
+  this.printInnerComments(node);
   this.token(")");
 }
 
