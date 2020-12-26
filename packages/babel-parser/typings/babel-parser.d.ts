@@ -47,6 +47,13 @@ export interface ParserOptions {
    * Set this to true to allow export statements to reference undeclared variables.
    */
   allowUndeclaredExports?: boolean;
+  
+  /**
+   * By default, Babel always throws an error when it finds some invalid code.
+   * When this option is set to true, it will store the parsing error and
+   * try to continue parsing the invalid input file.
+   */
+  errorRecovery?: boolean;
 
   /**
    * Indicate the mode the code should be parsed in.
