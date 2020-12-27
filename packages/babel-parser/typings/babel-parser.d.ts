@@ -49,6 +49,13 @@ export interface ParserOptions {
   allowUndeclaredExports?: boolean;
 
   /**
+   * By default, Babel always throws an error when it finds some invalid code.
+   * When this option is set to true, it will store the parsing error and
+   * try to continue parsing the invalid input file.
+   */
+  errorRecovery?: boolean;
+
+  /**
    * Indicate the mode the code should be parsed in.
    * Can be one of "script", "module", or "unambiguous". Defaults to "script".
    * "unambiguous" will make @babel/parser attempt to guess, based on the presence
