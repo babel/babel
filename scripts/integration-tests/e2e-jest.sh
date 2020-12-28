@@ -42,6 +42,13 @@ yarn install
 yarn dedupe '@babel/*'
 yarn build
 
+# Workaround for https://github.com/babel/babel/pull/12567
+node -e '
+  let snapshots = fs.readFileSync("packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap", "utf8");
+  snapshots = snapshots.replace(/(?<!^<dim>.*)\| <\/>/gm, "|<\/> ");
+  fs.writeFileSync("packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap", snapshots);
+'
+
 # The full test suite takes about 20mins on CircleCI. We run only a few of them
 # to speed it up.
 # The goals of this e2e test are:
