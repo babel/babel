@@ -125,6 +125,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             chunkStart = this.state.pos;
             break;
 
+          case charCodes.greaterThan:
+          case charCodes.rightCurlyBrace:
+            if (process.env.BABEL_8_BREAKING) {
+              const htmlEntity =
+                ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
+              const char = this.input[this.state.pos];
+              this.raise(
+                this.state.pos,
+                `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
+              );
+            }
+          /* falls through */
+
           default:
             if (isNewLine(ch)) {
               out += this.input.slice(chunkStart, this.state.pos);
