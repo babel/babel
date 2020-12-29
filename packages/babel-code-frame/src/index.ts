@@ -152,7 +152,7 @@ export function codeFrameColumns(
     .map((line, index) => {
       const number = start + 1 + index;
       const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
-      const gutter = ` ${paddedNumber} | `;
+      const gutter = ` ${paddedNumber} |`;
       const hasMarker = markerLines[number];
       const lastMarkerLine = !markerLines[number + 1];
       if (hasMarker) {
@@ -166,6 +166,7 @@ export function codeFrameColumns(
           markerLine = [
             "\n ",
             maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),
+            " ",
             markerSpacing,
             maybeHighlight(defs.marker, "^").repeat(numberOfMarkers),
           ].join("");
@@ -177,11 +178,13 @@ export function codeFrameColumns(
         return [
           maybeHighlight(defs.marker, ">"),
           maybeHighlight(defs.gutter, gutter),
-          line,
+          line.length > 0 ? ` ${line}` : "",
           markerLine,
         ].join("");
       } else {
-        return ` ${maybeHighlight(defs.gutter, gutter)}${line}`;
+        return ` ${maybeHighlight(defs.gutter, gutter)}${
+          line.length > 0 ? ` ${line}` : ""
+        }`;
       }
     })
     .join("\n");
