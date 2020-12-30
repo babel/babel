@@ -14,6 +14,7 @@ function generateCode(node) {
 describe("converters", function () {
   it("toIdentifier", function () {
     expect(t.toIdentifier("swag-lord")).toBe("swagLord");
+    expect(t.toIdentifier("ɵ2")).toBe("ɵ2");
   });
 
   describe("valueToNode", function () {
