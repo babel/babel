@@ -16,6 +16,7 @@ describe("converters", function () {
     expect(t.toIdentifier("swag-lord")).toBe("swagLord");
     expect(t.toIdentifier("ɵ2")).toBe("ɵ2");
     expect(t.toIdentifier("ℬ1")).toBe("ℬ1");
+    expect(t.toIdentifier("1bc")).toBe("bc");
   });
 
   describe("valueToNode", function () {
