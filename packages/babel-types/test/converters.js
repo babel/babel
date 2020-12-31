@@ -17,6 +17,7 @@ describe("converters", function () {
     expect(t.toIdentifier("ɵ2")).toBe("ɵ2");
     expect(t.toIdentifier("ℬ1")).toBe("ℬ1");
     expect(t.toIdentifier("1bc")).toBe("bc");
+    expect(t.toIdentifier("\u0487a")).toBe("_\u0487a");
   });
 
   describe("valueToNode", function () {
