@@ -775,7 +775,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-validator-identifier@workspace:*, @babel/helper-validator-identifier@workspace:^7.10.4, @babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier":
+"@babel/helper-validator-identifier@workspace:*, @babel/helper-validator-identifier@workspace:^7.10.4, @babel/helper-validator-identifier@workspace:^7.12.11, @babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier":
   version: 0.0.0-use.local
   resolution: "@babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier"
   dependencies:
@@ -3378,7 +3378,7 @@ __metadata:
   resolution: "@babel/types@workspace:packages/babel-types"
   dependencies:
     "@babel/generator": "workspace:*"
-    "@babel/helper-validator-identifier": "workspace:*"
+    "@babel/helper-validator-identifier": "workspace:^7.12.11"
     "@babel/parser": "workspace:*"
     "@types/lodash": ^4.14.162
     chalk: ^4.1.0

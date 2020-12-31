@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@babel/generator": "workspace:*",
-    "@babel/helper-validator-identifier": "workspace:*",
     "@babel/parser": "workspace:*",
     "@types/lodash": "^4.14.162",
     "chalk": "^4.1.0"
