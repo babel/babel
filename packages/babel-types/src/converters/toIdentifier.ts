@@ -1,10 +1,14 @@
 import isValidIdentifier from "../validators/isValidIdentifier";
+import { isIdentifierChar } from "@babel/helper-validator-identifier";
 
-export default function toIdentifier(name: string): string {
-  name = name + "";
+export default function toIdentifier(input: string): string {
+  input = input + "";
 
   // replace all non-valid identifiers with dashes
-  name = name.replace(/[^a-zA-Z0-9$_]/g, "-");
+  let name = "";
+  for (const c of input) {
+    name += isIdentifierChar(c.codePointAt(0)) ? c : "-";
+  }
 
   // remove all dashes and numbers from start of name
   name = name.replace(/^[-0-9]+/, "");
