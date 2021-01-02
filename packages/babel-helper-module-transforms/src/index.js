@@ -1,4 +1,5 @@
 import assert from "assert";
+import path from "path";
 import * as t from "@babel/types";
 import template from "@babel/template";
 import chunk from "lodash/chunk";
@@ -14,9 +15,9 @@ import normalizeAndLoadModuleMetadata, {
   type SourceModuleMetadata,
 } from "./normalize-and-load-metadata";
 
-export { default as getModuleName } from "./get-module-name";
+import getModuleName from "./get-module-name";
 
-export { hasExports, isSideEffectImport, isModule, rewriteThis };
+export { hasExports, isSideEffectImport, isModule, rewriteThis, getModuleName };
 
 /**
  * Perform all of the generic ES6 module rewriting needed to handle initial
@@ -180,6 +181,56 @@ export function buildNamespaceInitStatements(
     statements.push(statement);
   }
   return statements;
+}
+
+export function withExtension(filename, ext) {
+  return null == ext ? filename : filename.replace(/\.\w*$/, ext);
+}
+
+const reWinPathSep = /\\/g;
+
+export function normalizePathSeparators(srcPath) {
+  return path.sep === "\\" ? srcPath.replace(reWinPathSep, "/") : srcPath;
+}
+
+const reRelativePath = /^\.*[\\/]/;
+
+export function resolveRelativeImportPaths(importRelative, rootOpts) {
+  if (!reRelativePath.test(importRelative)) {
+    return {
+      filename: importRelative,
+      filenameRelative: importRelative,
+    };
+  }
+  const rootAbsolute = rootOpts.filename;
+  const rootRelativeSource = rootOpts.filenameRelative;
+  const importAbsolute =
+    rootAbsolute &&
+    normalizePathSeparators(
+      path.join(path.dirname(rootAbsolute), importRelative),
+    );
+  const importRelativeSource =
+    rootRelativeSource &&
+    normalizePathSeparators(
+      path.join(path.dirname(rootRelativeSource), importRelative),
+    );
+  return {
+    filename: importAbsolute,
+    filenameRelative: importRelativeSource,
+  };
+}
+
+export function amdImportId(importRelative, rootOpts, pluginOpts) {
+  if (!reRelativePath.test(importRelative)) return importRelative;
+  return (
+    getModuleName(
+      {
+        ...rootOpts,
+        ...resolveRelativeImportPaths(importRelative, rootOpts),
+      },
+      pluginOpts,
+    ) || withExtension(importRelative, pluginOpts.importFileExt)
+  );
 }
 
 const ReexportTemplate = {
