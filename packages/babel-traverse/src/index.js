@@ -59,9 +59,14 @@ traverse.node = function (
   if (!keys) return;
 
   const context = new TraversalContext(scope, opts, state, parentPath);
-  for (const key of keys) {
-    if (skipKeys && skipKeys[key]) continue;
-    if (context.visit(node, key)) return;
+  try {
+    context.enter();
+    for (const key of keys) {
+      if (skipKeys && skipKeys[key]) continue;
+      if (context.visit(node, key)) return;
+    }
+  } finally {
+    context.exit();
   }
 };
 
@@ -99,16 +104,21 @@ traverse.hasType = function (
     type: type,
   };
 
-  traverse(
-    tree,
-    {
-      noScope: true,
-      denylist: denylistTypes,
-      enter: hasDenylistedType,
-    },
-    null,
-    state,
-  );
+  cache.enter();
+  try {
+    traverse(
+      tree,
+      {
+        noScope: true,
+        denylist: denylistTypes,
+        enter: hasDenylistedType,
+      },
+      null,
+      state,
+    );
+  } finally {
+    cache.exit();
+  }
 
   return state.has;
 };

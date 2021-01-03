@@ -15,17 +15,14 @@ function getPath(code, options) {
   return path;
 }
 
-function getIdentifierPath(code) {
+function onFirstIdentifierPath(code, cb) {
   const ast = parse(code);
-  let nodePath;
   traverse(ast, {
     Identifier: function (path) {
-      nodePath = path;
+      cb(path);
       path.stop();
     },
   });
-
-  return nodePath;
 }
 
 function createNode(node) {
@@ -271,16 +268,18 @@ describe("scope", () => {
     });
 
     it("reference paths", function () {
-      const path = getIdentifierPath("function square(n) { return n * n}");
-      const referencePaths = path.context.scope.bindings.n.referencePaths;
-      expect(referencePaths).toHaveLength(2);
-      expect(referencePaths[0].node.loc.start).toEqual({
-        line: 1,
-        column: 28,
-      });
-      expect(referencePaths[1].node.loc.start).toEqual({
-        line: 1,
-        column: 32,
+      expect.assertions(3);
+      onFirstIdentifierPath("function square(n) { return n * n }", path => {
+        const referencePaths = path.context.scope.bindings.n.referencePaths;
+        expect(referencePaths).toHaveLength(2);
+        expect(referencePaths[0].node.loc.start).toEqual({
+          line: 1,
+          column: 28,
+        });
+        expect(referencePaths[1].node.loc.start).toEqual({
+          line: 1,
+          column: 32,
+        });
       });
     });
 

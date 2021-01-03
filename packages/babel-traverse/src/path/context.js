@@ -1,5 +1,6 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
+import TraversalContext from "../context";
 import traverse from "../index";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 
@@ -136,7 +137,7 @@ export function setContext(context) {
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   this._traverseFlags = 0;
 
-  if (context) {
+  if (0 && context) {
     this.context = context;
     this.state = context.state;
     this.opts = context.opts;
@@ -216,6 +217,7 @@ export function _resyncRemoved() {
 
 export function popContext() {
   this.contexts.pop();
+  return;
   if (this.contexts.length > 0) {
     this.setContext(this.contexts[this.contexts.length - 1]);
   } else {
@@ -270,6 +272,9 @@ export function _getQueueContexts() {
     path = path.parentPath;
     if (!path) break;
     contexts = path.contexts;
+  }
+  if (contexts === this.contexts) {
+    contexts = contexts.concat(this.context);
   }
   return contexts;
 }

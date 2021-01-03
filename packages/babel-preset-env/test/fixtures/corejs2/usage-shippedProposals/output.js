@@ -1,5 +1,9 @@
 "use strict";
 
+require("core-js/modules/es6.array.index-of.js");
+
+require("regenerator-runtime/runtime.js");
+
 require("core-js/modules/es6.object.define-properties.js");
 
 require("core-js/modules/es7.object.get-own-property-descriptors.js");
@@ -8,17 +12,13 @@ require("core-js/modules/es6.array.for-each.js");
 
 require("core-js/modules/es6.array.filter.js");
 
-require("core-js/modules/es6.object.define-property.js");
-
-require("core-js/modules/es6.array.index-of.js");
-
 require("core-js/modules/web.dom.iterable.js");
 
 require("core-js/modules/es6.array.iterator.js");
 
 require("core-js/modules/es6.object.keys.js");
 
-require("regenerator-runtime/runtime.js");
+require("core-js/modules/es6.object.define-property.js");
 
 require("core-js/modules/es7.symbol.async-iterator.js");
 

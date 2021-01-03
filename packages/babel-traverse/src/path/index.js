@@ -1,11 +1,11 @@
 import type { HubInterface } from "../hub";
-import type TraversalContext from "../context";
+import TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import traverse from "../index";
 import Scope from "../scope";
 import * as t from "@babel/types";
-import { path as pathCache } from "../cache";
+import { path as pathCache, enter as enterCache, exit as exitCache } from "../cache";
 import generator from "@babel/generator";
 
 // NodePath is split across many files.
@@ -33,19 +33,30 @@ export default class NodePath {
     this.hub = hub;
     this.data = null;
 
-    this.context = null;
     this.scope = null;
+  }
+
+  get context() {
+    return TraversalContext.current;
+  }
+
+  get state() {
+    return TraversalContext.current?.state;
+  }
+
+  get opts() {
+    return TraversalContext.current?.opts;
   }
 
   declare parent: Object;
   declare hub: HubInterface;
   declare data: Object;
-  declare context: TraversalContext;
+  // declare context: TraversalContext;
   declare scope: Scope;
 
   contexts: Array<TraversalContext> = [];
-  state: any = null;
-  opts: ?Object = null;
+  // state: any = null;
+  // opts: ?Object = null;
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
   skipKeys: ?Object = null;
@@ -109,7 +120,12 @@ export default class NodePath {
   }
 
   traverse(visitor: Object, state?: any) {
-    traverse(this.node, visitor, this.scope, state, this);
+    try {
+      //enterCache();
+      traverse(this.node, visitor, this.scope, state, this);
+    } finally {
+      //exitCache();
+    }
   }
 
   set(key: string, node: Object) {

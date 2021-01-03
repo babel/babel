@@ -4,7 +4,7 @@ import traverse from "../index";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "@babel/types";
-import { scope as scopeCache } from "../cache";
+import { scope as scopeCache, enter as enterCache, exit as exitCache } from "../cache";
 
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: Object, parts: Array) {
@@ -827,8 +827,13 @@ export default class Scope {
     };
 
     this.crawling = true;
-    path.traverse(collectorVisitor, state);
-    this.crawling = false;
+    try {
+      enterCache();
+      path.traverse(collectorVisitor, state);
+    } finally {
+      exitCache();
+      this.crawling = false;
+    }
 
     // register assignments
     for (const path of state.assignments) {

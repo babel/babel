@@ -4,6 +4,9 @@ import * as t from "@babel/types";
 const testing = process.env.NODE_ENV === "test";
 
 export default class TraversalContext {
+  static current;
+  static stack = [];
+
   constructor(scope, opts, state, parentPath) {
     this.parentPath = parentPath;
     this.scope = scope;
@@ -16,6 +19,18 @@ export default class TraversalContext {
   declare state;
   declare opts;
   queue: ?Array<NodePath> = null;
+
+  enter() {
+    TraversalContext.stack.push(TraversalContext.current);
+    // console.log(".".repeat(TraversalContext.stack.length) + ">");
+    TraversalContext.current = this;
+  }
+
+  exit() {
+    //console.log(".".repeat(TraversalContext.stack.length) + "<");
+    TraversalContext.current =
+      TraversalContext.stack.pop() || TraversalContext.current;
+  }
 
   /**
    * This method does a simple check to determine whether or not we really need to attempt
