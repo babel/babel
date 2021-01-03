@@ -47,10 +47,16 @@ Using plugins:
   transform-reserved-words {}
   proposal-export-namespace-from { "chrome":"55" }
   syntax-dynamic-import { "chrome":"55" }
+corejs2: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "chrome": "55"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-force-all-transforms/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-force-all-transforms/input.mjs]
+The corejs2 polyfill entry has been replaced with the following polyfills:
   es7.array.flat-map { "chrome":"55" }
   es6.array.iterator { "chrome":"55" }
   es6.array.sort { "chrome":"55" }

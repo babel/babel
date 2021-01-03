@@ -50,10 +50,16 @@ Using plugins:
   proposal-export-namespace-from { "ie":"6" }
   transform-modules-commonjs { "ie":"6" }
   proposal-dynamic-import { "ie":"6" }
+corejs2: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "ie": "6"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-no-corejs-shippedProposals/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-no-corejs-shippedProposals/input.mjs]
+The corejs2 polyfill entry has been replaced with the following polyfills:
   es6.array.copy-within { "ie":"6" }
   es6.array.every { "ie":"6" }
   es6.array.fill { "ie":"6" }

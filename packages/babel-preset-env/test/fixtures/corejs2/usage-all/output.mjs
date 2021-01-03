@@ -1,13 +1,12 @@
-import "core-js/modules/es7.symbol.async-iterator.js";
 import "core-js/modules/es6.symbol.js";
-import "core-js/modules/es6.regexp.match.js";
-import "core-js/modules/es6.promise.js";
-import "core-js/modules/web.dom.iterable.js";
-import "core-js/modules/es6.array.iterator.js";
-import "core-js/modules/es6.object.to-string.js";
-import "core-js/modules/es6.map.js";
-import "core-js/modules/es6.string.iterator.js";
 import "core-js/modules/es6.array.from.js";
+import "core-js/modules/es6.string.iterator.js";
+import "core-js/modules/es6.object.to-string.js";
+import "core-js/modules/es6.array.iterator.js";
+import "core-js/modules/web.dom.iterable.js";
+import "core-js/modules/es6.map.js";
+import "core-js/modules/es6.promise.js";
+import "core-js/modules/es6.regexp.match.js";
 Array.from; // static method
 
 Map; // built-in

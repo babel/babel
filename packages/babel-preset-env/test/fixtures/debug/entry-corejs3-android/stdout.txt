@@ -46,10 +46,16 @@ Using plugins:
   proposal-export-namespace-from { "android":"4" }
   transform-modules-commonjs { "android":"4" }
   proposal-dynamic-import { "android":"4" }
+corejs3: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "android": "4"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-android/input.mjs] Replaced core-js entries with the following polyfills:
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-android/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.symbol { "android":"4" }
   es.symbol.description { "android":"4" }
   es.symbol.async-iterator { "android":"4" }

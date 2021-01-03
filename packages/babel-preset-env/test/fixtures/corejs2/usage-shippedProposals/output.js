@@ -1,32 +1,30 @@
 "use strict";
 
-require("core-js/modules/es6.object.define-properties.js");
-
-require("core-js/modules/es7.object.get-own-property-descriptors.js");
-
-require("core-js/modules/es6.array.for-each.js");
-
-require("core-js/modules/es6.array.filter.js");
-
-require("core-js/modules/es6.object.define-property.js");
+require("core-js/modules/es6.object.keys.js");
 
 require("core-js/modules/es6.array.index-of.js");
 
-require("core-js/modules/web.dom.iterable.js");
+require("core-js/modules/es6.object.define-property.js");
 
-require("core-js/modules/es6.array.iterator.js");
+require("core-js/modules/es6.array.filter.js");
 
-require("core-js/modules/es6.object.keys.js");
+require("core-js/modules/es6.object.get-own-property-descriptor.js");
+
+require("core-js/modules/es6.array.for-each.js");
+
+require("core-js/modules/es7.object.get-own-property-descriptors.js");
+
+require("core-js/modules/es6.object.define-properties.js");
 
 require("regenerator-runtime/runtime.js");
 
-require("core-js/modules/es7.symbol.async-iterator.js");
-
-require("core-js/modules/es6.symbol.js");
+require("core-js/modules/es6.object.to-string.js");
 
 require("core-js/modules/es6.promise.js");
 
-require("core-js/modules/es6.object.to-string.js");
+require("core-js/modules/es6.symbol.js");
+
+require("core-js/modules/es7.symbol.async-iterator.js");
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
