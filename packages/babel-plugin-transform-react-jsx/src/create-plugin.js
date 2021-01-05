@@ -316,12 +316,19 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
     }
 
-    function convertAttribute(node) {
-      const value = convertAttributeValue(node.value || t.booleanLiteral(true));
-
+    function accumulateAttribute(array, node) {
       if (t.isJSXSpreadAttribute(node)) {
-        return t.spreadElement(node.argument);
+        const arg = node.argument;
+        // Collect properties into props array if spreading object expression
+        if (t.isObjectExpression(arg)) {
+          array.push(...arg.properties);
+        } else {
+          array.push(t.spreadElement(arg));
+        }
+        return array;
       }
+
+      const value = convertAttributeValue(node.value || t.booleanLiteral(true));
 
       if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
         value.value = value.value.replace(/\n\s+/g, " ");
@@ -340,7 +347,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         node.name = t.stringLiteral(node.name.name);
       }
 
-      return t.inherits(t.objectProperty(node.name, value), node);
+      array.push(t.inherits(t.objectProperty(node.name, value), node));
+      return array;
     }
 
     function buildChildrenProperty(children) {
@@ -420,7 +428,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     // Builds props for React.jsx. This function adds children into the props
     // and ensures that props is always an object
     function buildJSXOpeningElementAttributes(attribs, file, children) {
-      const props = attribs.map(convertAttribute);
+      const props = attribs.reduce(accumulateAttribute, []);
 
       // In React.jsx, children is no longer a separate argument, but passed in
       // through the argument object
@@ -530,38 +538,36 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             found[name] = true;
           }
 
-          props.push(convertAttribute(attr));
+          accumulateAttribute(props, attr);
         }
 
         return props.length > 0 ? t.objectExpression(props) : t.nullLiteral();
       }
 
-      let props = [];
       const objs = [];
+      const props = attribs.reduce(accumulateAttribute, []);
 
-      for (const attr of attribs) {
-        if (useSpread || !t.isJSXSpreadAttribute(attr)) {
-          props.push(convertAttribute(attr));
-        } else {
-          if (props.length) {
-            objs.push(t.objectExpression(props));
-            props = [];
+      if (!useSpread) {
+        // Convert syntax to use multiple objects instead of spread
+        let start = 0;
+        props.forEach((prop, i) => {
+          if (t.isSpreadElement(prop)) {
+            if (i > start) {
+              objs.push(t.objectExpression(props.slice(start, i)));
+            }
+            objs.push(prop.argument);
+            start = i + 1;
           }
-          objs.push(attr.argument);
+        });
+        if (props.length > start) {
+          objs.push(t.objectExpression(props.slice(start)));
         }
-      }
-
-      if (!props.length && !objs.length) {
-        return t.nullLiteral();
-      }
-
-      if (useSpread) {
-        return props.length > 0 ? t.objectExpression(props) : t.nullLiteral();
-      }
-
-      if (props.length) {
+      } else if (props.length) {
         objs.push(t.objectExpression(props));
-        props = [];
+      }
+
+      if (!objs.length) {
+        return t.nullLiteral();
       }
 
       if (objs.length === 1) {
