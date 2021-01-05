@@ -73,29 +73,22 @@ export default declare((api, options) => {
           }
         }
 
-        const scope = path.scope.getProgramParent();
-        const templateObject = scope.generateUidIdentifier("templateObject");
-
-        const helperId = this.addHelper(helperName);
-        const callExpressionInput = [t.arrayExpression(strings)];
-
+        const helperArgs = [t.arrayExpression(strings)];
         // only add raw arrayExpression if there is any difference between raws and strings
         if (!isStringsRawEqual) {
-          callExpressionInput.push(t.arrayExpression(raws));
+          helperArgs.push(t.arrayExpression(raws));
         }
 
-        const lazyLoad = template.ast`
-          function ${templateObject}() {
-            const data = ${t.callExpression(helperId, callExpressionInput)};
-            ${t.cloneNode(templateObject)} = function() { return data };
-            return data;
-          }
-        `;
+        const tmp = path.scope.generateUidIdentifier("templateObject");
+        path.scope.getProgramParent().push({ id: t.cloneNode(tmp) });
 
-        scope.path.unshiftContainer("body", lazyLoad);
         path.replaceWith(
           t.callExpression(node.tag, [
-            t.callExpression(t.cloneNode(templateObject), []),
+            template.expression.ast`
+              ${t.cloneNode(tmp)} || (
+                ${tmp} = ${this.addHelper(helperName)}(${helperArgs})
+              )
+            `,
             ...quasi.expressions,
           ]),
         );
