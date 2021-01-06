@@ -92,7 +92,7 @@ export type ImportOptions = {
 
   /**
    * Define whether the import should be loaded before or after the existing imports.
-   * "last" is only allowed inside ECMAScript modules, since it's not possible to
+   * "after" is only allowed inside ECMAScript modules, since it's not possible to
    * reliably pick the location _after_ require() calls but _before_ other code in CJS.
    */
   importPosition: "before" | "after",
