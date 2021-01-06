@@ -95,7 +95,7 @@ export type ImportOptions = {
    * "last" is only allowed inside ECMAScript modules, since it's not possible to
    * reliably pick the location _after_ require() calls but _before_ other code in CJS.
    */
-  importOrder: "first" | "last",
+  importPosition: "before" | "after",
 };
 
 /**
@@ -127,7 +127,7 @@ export default class ImportInjector {
     importingInterop: "babel",
     ensureLiveReference: false,
     ensureNoContext: false,
-    importOrder: "first",
+    importPosition: "before",
   };
 
   constructor(path, importedSource, opts) {
@@ -208,11 +208,11 @@ export default class ImportInjector {
       ensureLiveReference,
       ensureNoContext,
       nameHint,
-      importOrder,
+      importPosition,
 
       // Not meant for public usage. Allows code that absolutely must control
       // ordering to set a specific hoist value on the import nodes.
-      // This is ignored when "importOrder" is "last".
+      // This is ignored when "importPosition" is "after".
       blockHoist,
     } = opts;
 
@@ -225,8 +225,8 @@ export default class ImportInjector {
     const isModuleForNode = isMod && importingInterop === "node";
     const isModuleForBabel = isMod && importingInterop === "babel";
 
-    if (importOrder === "last" && !isMod) {
-      throw new Error(`"importOrder": "last" is only supported in modules`);
+    if (importPosition === "after" && !isMod) {
+      throw new Error(`"importPosition": "after" is only supported in modules`);
     }
 
     const builder = new ImportBuilder(
@@ -411,7 +411,7 @@ export default class ImportInjector {
 
     const { statements, resultName } = builder.done();
 
-    this._insertStatements(statements, importOrder, blockHoist);
+    this._insertStatements(statements, importPosition, blockHoist);
 
     if (
       (isDefault || isNamed) &&
@@ -423,10 +423,10 @@ export default class ImportInjector {
     return resultName;
   }
 
-  _insertStatements(statements, importOrder = "first", blockHoist = 3) {
+  _insertStatements(statements, importPosition = "before", blockHoist = 3) {
     const body = this._programPath.get("body");
 
-    if (importOrder === "last") {
+    if (importPosition === "after") {
       for (let i = body.length - 1; i >= 0; i--) {
         if (body[i].isImportDeclaration()) {
           body[i].insertAfter(statements);

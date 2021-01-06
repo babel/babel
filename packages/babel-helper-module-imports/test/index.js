@@ -1110,10 +1110,10 @@ describe("@babel/helper-module-imports", () => {
     });
   });
 
-  describe("importOrder: last", () => {
+  describe("importPosition: after", () => {
     it("works in ES modules", () => {
       testModule(
-        { importOrder: "last" },
+        { importPosition: "after" },
         m => m.addNamed("read", "source"),
         `
           import f from "foo";
@@ -1134,8 +1134,10 @@ describe("@babel/helper-module-imports", () => {
 
     it("is disallowed in CJS modules", () => {
       expect(() =>
-        testScript({ importOrder: "last" }, m => m.addNamed("read", "source")),
-      ).toThrow(`"importOrder": "last" is only supported in modules`);
+        testScript({ importPosition: "after" }, m =>
+          m.addNamed("read", "source"),
+        ),
+      ).toThrow(`"importPosition": "after" is only supported in modules`);
     });
   });
 });
