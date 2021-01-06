@@ -1,33 +1,14 @@
-name: Bot Assistant
+name: Update Windows Fixtures
 
 on:
   workflow_dispatch:
     inputs:
-      task:
-        description: Which task should @babel-bot run?
-        required: true
-        default: update-windows-fixtures
       pull_request:
         description: Pull Request number
         required: true
 
 jobs:
-  validate-inputs:
-    name: "Validate inputs"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check if it is a valid task
-        if: ${{ github.event.inputs.task != 'update-windows-fixtures' }}
-        run: |
-          echo "Invalid task: '${{ github.event.inputs.task }}'. The only supported tasks are:"
-          echo " - update-windows-fixtures"
-          exit 1
-      - uses: actions/checkout@v2
-      - name: Check if it is a valid PR
-        run: git ls-remote --exit-code origin refs/pull/${{ github.event.inputs.pull_request }}/head
-
   update-windows-fixtures:
-    name: "Update Windows fixtures"
     runs-on: windows-latest
     needs: validate-inputs
     if: ${{ github.event.inputs.task == 'update-windows-fixtures' }}
