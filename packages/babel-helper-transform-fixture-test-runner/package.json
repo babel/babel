@@ -3,7 +3,7 @@
   "version": "7.12.12",
   "description": "Transform test runner for @babel/helper-fixtures module",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-transform-fixture-test-runner",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

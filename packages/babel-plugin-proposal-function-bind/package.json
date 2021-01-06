@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-function-bind"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-function-bind",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

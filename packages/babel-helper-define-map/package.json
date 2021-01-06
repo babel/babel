@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-define-map"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-define-map",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

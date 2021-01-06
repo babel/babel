@@ -24,5 +24,6 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
-  }
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-strict-mode"
 }

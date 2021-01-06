@@ -120,9 +120,9 @@
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/babel/babel/issues"
+    "url": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20standalone%22+is%3Aopen"
   },
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-standalone",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",

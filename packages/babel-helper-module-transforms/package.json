@@ -3,7 +3,7 @@
   "version": "7.12.1",
   "description": "Babel helper functions for implementing ES6 module transformations",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

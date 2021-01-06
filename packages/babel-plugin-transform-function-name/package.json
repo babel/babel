@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-function-name"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-function-name",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

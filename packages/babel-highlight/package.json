@@ -3,7 +3,7 @@
   "version": "7.10.4",
   "description": "Syntax highlight JavaScript strings for output in terminals.",
   "author": "suchipi <me@suchipi.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-highlight",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

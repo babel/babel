@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-for-of"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-for-of",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

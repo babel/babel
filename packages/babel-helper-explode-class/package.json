@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-explode-class"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-explode-class",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

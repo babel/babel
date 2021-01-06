@@ -1,7 +1,7 @@
 {
   "name": "@babel/helper-compilation-targets",
   "version": "7.12.5",
-  "author": "The Babel Team (https://babeljs.io/team)",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Engine compat data used in @babel/preset-env",
   "repository": {

@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-block-scoped-functions"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-block-scoped-functions",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

@@ -23,5 +23,6 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:*"
-  }
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-do-expressions"
 }

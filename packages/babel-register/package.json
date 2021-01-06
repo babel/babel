@@ -30,5 +30,7 @@
     "@babel/core": "workspace:*",
     "@babel/plugin-transform-modules-commonjs": "workspace:*",
     "browserify": "^16.5.2"
-  }
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-register",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20register%22+is%3Aopen"
 }

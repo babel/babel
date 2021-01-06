@@ -29,5 +29,7 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
-  }
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-preset-flow",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20flow%22+is%3Aopen"
 }

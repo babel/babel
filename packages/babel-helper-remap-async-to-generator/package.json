@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-remap-async-to-generator"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-remap-async-to-generator",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

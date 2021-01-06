@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-replace-supers"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-replace-supers",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

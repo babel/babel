@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-external-helpers"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-external-helpers",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

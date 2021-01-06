@@ -11,6 +11,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-runtime-corejs2"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-runtime-corejs2",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
     "core-js": "^2.6.5",

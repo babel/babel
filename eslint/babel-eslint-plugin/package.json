@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/",
   "peerDependencies": {
     "@babel/eslint-parser": ">=7.11.0",
     "eslint": ">=7.5.0"

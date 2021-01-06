@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-optimise-call-expression"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-optimise-call-expression",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

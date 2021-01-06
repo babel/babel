@@ -3,7 +3,8 @@
   "version": "7.12.11",
   "description": "Generate errors that contain a code frame that point to source locations.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-code-frame",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

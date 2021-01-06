@@ -12,6 +12,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-fixtures"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-fixtures",
   "main": "lib/index.js",
   "dependencies": {
     "lodash": "^4.17.19",
