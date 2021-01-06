@@ -10,8 +10,6 @@ on:
 jobs:
   update-windows-fixtures:
     runs-on: windows-latest
-    needs: validate-inputs
-    if: ${{ github.event.inputs.task == 'update-windows-fixtures' }}
     steps:
       - name: Get Pull Request branch
         uses: actions/github-script@v3
