@@ -278,8 +278,16 @@ function run(task) {
     }
 
     if (validateLogs) {
-      validateFile(normalizeOutput(actualLogs.stdout), stdout.loc, stdout.code);
-      validateFile(normalizeOutput(actualLogs.stderr), stderr.loc, stderr.code);
+      validateFile(
+        normalizeOutput(actualLogs.stdout, /* normalizePathSeparator */ true),
+        stdout.loc,
+        stdout.code,
+      );
+      validateFile(
+        normalizeOutput(actualLogs.stderr, /* normalizePathSeparator */ true),
+        stderr.loc,
+        stderr.code,
+      );
     }
   }
 
@@ -317,7 +325,7 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
   }
 }
 
-function normalizeOutput(code) {
+function normalizeOutput(code, normalizePathSeparator) {
   const projectRoot = path.resolve(__dirname, "../../../");
   const cwdSymbol = "<CWD>";
   let result = code
@@ -337,6 +345,11 @@ function normalizeOutput(code) {
         new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "\\\\")), "g"),
         cwdSymbol,
       );
+    if (normalizePathSeparator) {
+      result = result.replace(/<CWD>[\w\\/.-]+/g, path =>
+        path.replace(/\\\\?/g, "/"),
+      );
+    }
   }
   return result;
 }
