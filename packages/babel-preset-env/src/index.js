@@ -184,7 +184,7 @@ export const getPolyfillPlugins = ({
   if (useBuiltIns === "usage" || useBuiltIns === "entry") {
     const pluginOptions = {
       method: `${useBuiltIns}-global`,
-      version: corejs.toString(),
+      version: corejs ? corejs.toString() : undefined,
       targets: polyfillTargets,
       include,
       exclude,

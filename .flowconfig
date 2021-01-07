@@ -15,6 +15,7 @@ lib/file.js
 lib/parser.js
 lib/third-party-libs.js.flow
 lib/preset-modules.js.flow
+lib/babel-polyfills.js.flow
 packages/babel-types/lib/index.js.flow
 lib/babel-packages.js.flow
 lib/package-json.js.flow

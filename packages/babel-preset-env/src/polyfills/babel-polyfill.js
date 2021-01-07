@@ -12,13 +12,17 @@ const NO_DIRECT_POLYFILL_IMPORT = `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
   Please remove the direct import of \`SPECIFIER\` or use \`useBuiltIns: 'entry'\` instead.`;
 
-export default function ({ template }, { regenerator, deprecated, usage }) {
+export default function (
+  { template }: any,
+  { regenerator, deprecated, usage }: any,
+) {
   return {
     name: "preset-env/replace-babel-polyfill",
     visitor: {
       ImportDeclaration(path: NodePath) {
         const src = getImportSource(path);
         if (usage && isPolyfillSource(src)) {
+          // $FlowIgnore
           console.warn(NO_DIRECT_POLYFILL_IMPORT.replace("SPECIFIER", src));
           if (!deprecated) path.remove();
         } else if (src === "@babel/polyfill") {
@@ -40,6 +44,7 @@ export default function ({ template }, { regenerator, deprecated, usage }) {
         path.get("body").forEach(bodyPath => {
           const src = getRequireSource(bodyPath);
           if (usage && isPolyfillSource(src)) {
+            // $FlowIgnore
             console.warn(NO_DIRECT_POLYFILL_IMPORT.replace("SPECIFIER", src));
             if (!deprecated) bodyPath.remove();
           } else if (src === "@babel/polyfill") {
