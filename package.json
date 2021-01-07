@@ -55,7 +55,6 @@
     "gulp-plumber": "^1.2.1",
     "husky": "^3.0.0",
     "jest": "^26.6.1",
-    "lerna-changelog": "^0.5.0",
     "lint-staged": "^9.2.0",
     "lodash": "^4.17.20",
     "mergeiterator": "^1.2.5",
@@ -102,6 +101,22 @@
     },
     "core-js-pure": {
       "built": false
+    }
+  },
+  "changelog": {
+    "repo": "babel/babel",
+    "cacheDir": ".changelog",
+    "labels": {
+      "PR: Spec Compliance :eyeglasses:": ":eyeglasses: Spec Compliance",
+      "PR: Breaking Change :boom:": ":boom: Breaking Change",
+      "PR: New Feature :rocket:": ":rocket: New Feature",
+      "PR: Bug Fix :bug:": ":bug: Bug Fix",
+      "PR: Polish :nail_care:": ":nail_care: Polish",
+      "PR: Docs :memo:": ":memo: Documentation",
+      "PR: Internal :house:": ":house: Internal",
+      "PR: Performance :running_woman:": ":running_woman: Performance",
+      "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
+      "PR: Output optimization :microscope:": ":microscope: Output optimization"
     }
   }
 }
