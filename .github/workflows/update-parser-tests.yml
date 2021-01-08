@@ -86,6 +86,6 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: result.data.number,
-                labels: ["area: test262", "repo automation :robot_face:"]
+                labels: ["area: test262", "repo automation :robot:"]
               })
             }
