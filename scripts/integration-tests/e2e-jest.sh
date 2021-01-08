@@ -37,17 +37,22 @@ python --version
 #                                   TEST                                       #
 #==============================================================================#
 
-startLocalRegistry "$root"/verdaccio-config.yml
-yarn install
-yarn dedupe '@babel/*'
-yarn build
-
 # Workaround for https://github.com/babel/babel/pull/12567
 node -e '
   let snapshots = fs.readFileSync("packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap", "utf8");
   snapshots = snapshots.replace(/(?<!^<dim>.*)\| <\/>/gm, "|<\/> ");
   fs.writeFileSync("packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap", snapshots);
 '
+
+if [ "$BABEL_8_BREAKING" = true ] ; then
+  # This option is removed in Babel 8
+  sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
+fi
+
+startLocalRegistry "$root"/verdaccio-config.yml
+yarn install
+yarn dedupe '@babel/*'
+yarn build
 
 # The full test suite takes about 20mins on CircleCI. We run only a few of them
 # to speed it up.

@@ -2,16 +2,10 @@ import { OptionValidator } from "@babel/helper-validator-option";
 const v = new OptionValidator("@babel/preset-typescript");
 
 export default function normalizeOptions(options = {}) {
-  let {
-    allowDeclareFields,
-    allowNamespaces,
-    jsxPragma,
-    onlyRemoveTypeImports,
-  } = options;
+  let { allowNamespaces, jsxPragma, onlyRemoveTypeImports } = options;
 
   if (process.env.BABEL_8_BREAKING) {
     const TopLevelOptions = {
-      allowDeclareFields: "allowDeclareFields",
       allExtensions: "allExtensions",
       allowNamespaces: "allowNamespaces",
       isTSX: "isTSX",
@@ -20,11 +14,6 @@ export default function normalizeOptions(options = {}) {
       onlyRemoveTypeImports: "onlyRemoveTypeImports",
     };
     v.validateTopLevelOptions(options, TopLevelOptions);
-    allowDeclareFields = v.validateBooleanOption(
-      TopLevelOptions.allowDeclareFields,
-      options.allowDeclareFields,
-      true,
-    );
     allowNamespaces = v.validateBooleanOption(
       TopLevelOptions.allowNamespaces,
       options.allowNamespaces,
@@ -62,7 +51,6 @@ export default function normalizeOptions(options = {}) {
 
   return {
     allExtensions,
-    allowDeclareFields,
     allowNamespaces,
     isTSX,
     jsxPragma,

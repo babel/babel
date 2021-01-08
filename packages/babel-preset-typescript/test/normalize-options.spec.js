@@ -7,7 +7,6 @@ describe("normalize options", () => {
       );
     });
     it.each([
-      "allowDeclareFields",
       "allExtensions",
       "allowNamespaces",
       "isTSX",
@@ -32,7 +31,6 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "allExtensions": false,
-          "allowDeclareFields": true,
           "allowNamespaces": true,
           "isTSX": false,
           "jsxPragma": "React",
@@ -80,7 +78,6 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "allExtensions": false,
-          "allowDeclareFields": undefined,
           "allowNamespaces": undefined,
           "isTSX": false,
           "jsxPragma": undefined,
