@@ -25,21 +25,58 @@ export default declare((api, opts) => {
   // TODO: (Babel 8) Don't cast this option but validate it
   const development = !!opts.development;
 
+  if (process.env.BABEL_8_BREAKING) {
+    if ("useSpread" in opts) {
+      throw new Error(
+        '@babel/preset-react: Since Babel 8, an inline object with spread elements is always used, and the "useSpread" option is no longer available. Please remove it from your config.',
+      );
+    }
+
+    if ("useBuiltIns" in opts) {
+      const useBuiltInsFormatted = JSON.stringify(opts.useBuiltIns);
+      throw new Error(
+        `@babel/preset-react: Since "useBuiltIns" is removed in Babel 8, you can remove it from the config.
+- Babel 8 now transforms JSX spread to object spread. If you need to transpile object spread with
+\`useBuiltIns: ${useBuiltInsFormatted}\`, you can use the following config
+{
+  "plugins": [
+    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
+  ],
+  "presets": ["@babel/preset-react"]
+}`,
+      );
+    }
+  }
+
+  if (typeof development !== "boolean") {
+    throw new Error(
+      "@babel/preset-react 'development' option must be a boolean.",
+    );
+  }
+
   return {
     plugins: [
       [
         development ? transformReactJSXDevelopment : transformReactJSX,
-        {
-          importSource,
-          pragma,
-          pragmaFrag,
-          runtime,
-          throwIfNamespace,
-          pure,
-          // TODO (Babel 8): Remove `useBuiltIns` & `useSpread`
-          useBuiltIns: !!opts.useBuiltIns,
-          useSpread: opts.useSpread,
-        },
+        process.env.BABEL_8_BREAKING
+          ? {
+              importSource,
+              pragma,
+              pragmaFrag,
+              runtime,
+              throwIfNamespace,
+              pure,
+            }
+          : {
+              importSource,
+              pragma,
+              pragmaFrag,
+              runtime,
+              throwIfNamespace,
+              pure,
+              useBuiltIns: !!opts.useBuiltIns,
+              useSpread: opts.useSpread,
+            },
       ],
       transformReactDisplayName,
       pure !== false && transformReactPure,

@@ -1,4 +1,0 @@
-{
-  "plugins": [["transform-react-jsx", { "useSpread": 0 }]],
-  "throws": "transform-react-jsx currently only accepts a boolean option for useSpread (defaults to false)"
-}

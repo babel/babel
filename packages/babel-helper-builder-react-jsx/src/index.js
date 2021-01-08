@@ -144,7 +144,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     let attribs = openingPath.node.attributes;
     if (attribs.length) {
-      attribs = buildOpeningElementAttributes(attribs, file);
+      if (process.env.BABEL_8_BREAKING) {
+        attribs = t.objectExpression(attribs.map(convertAttribute));
+      } else {
+        attribs = buildOpeningElementAttributes(attribs, file);
+      }
     } else {
       attribs = t.nullLiteral();
     }
