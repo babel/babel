@@ -39,7 +39,7 @@ done
 export YARN_IGNORE_PATH=1
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-yarn install
+yarn install --verbose --registry http://localhost:4873
 
 # Test
 CI=true yarn test

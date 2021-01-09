@@ -116,6 +116,7 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v2
@@ -367,7 +368,7 @@ jobs:
         run: yarn test:runtime:node
 
   e2e-publish:
-    name: Publish to local Verdaccio registry
+    name: Publish to local Verdaccio registry (juan test)
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     steps:
@@ -384,16 +385,23 @@ jobs:
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
       - uses: actions/cache@v2
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            /tmp/verdaccio-workspace
+          key: |
+            yarn-${{ hashFiles('yarn.lock') }}
+            ver-${{ hashFiles('yarn.lock') }}
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
       - uses: actions/upload-artifact@v2
         with:
           name: verdaccio-workspace
-          path: |
-            /tmp/verdaccio-workspace/storage
-            /tmp/verdaccio-workspace/htpassword
+          path: /tmp/verdaccio-workspace
+
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Display workspace
+        run: ls -R /tmp/verdaccio-workspace
 
   e2e-create-react-app:
     name: E2E - create-react-app
@@ -409,5 +417,10 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Display workspace
+        run: ls -R /tmp/verdaccio-workspace
       - name: Test
         run: ./scripts/integration-tests/e2e-create-react-app.sh

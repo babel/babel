@@ -3,16 +3,17 @@
 # Copied from https://github.com/facebook/create-react-app/blob/053f9774d3f592c17741d2a86de66a7ca58f90c0/tasks/local-registry.sh
 
 custom_registry_url=http://localhost:4873
-default_verdaccio_package=verdaccio@~4.3.3
+default_verdaccio_package=verdaccio@~4.10.0
 
 function startLocalRegistry {
   # Start local registry
   tmp_registry_log=`mktemp`
   echo "Registry output file: $tmp_registry_log"
   (cd && nohup npx ${VERDACCIO_PACKAGE:-$default_verdaccio_package} -c $1 &>$tmp_registry_log &)
-
+  npm install --global verdaccio-memory
   # Wait for Verdaccio to boot
   grep -q "http address" <(tail -f $tmp_registry_log)
+  tail -f $tmp_registry_log &
 
   # Set registry to local registry
   export NPM_CONFIG_REGISTRY="$custom_registry_url"
