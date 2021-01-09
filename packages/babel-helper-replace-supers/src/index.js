@@ -264,7 +264,7 @@ type ReplaceSupersOptionsBase = {|
   file: any,
   // objectRef might have been shadowed in child scopes,
   // in that case, we need to rename related variables.
-  refToPreserve?: BabelNode,
+  refToPreserve?: BabelNodeIdentifier,
 |};
 
 type ReplaceSupersOptions =
