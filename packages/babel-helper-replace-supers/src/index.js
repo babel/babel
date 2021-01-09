@@ -26,6 +26,24 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
+function ensureClassRefValidInChildScopes(
+  path: NodePath,
+  objectRefName: string,
+) {
+  path.traverse({
+    Scopable(path) {
+      if (path.type === "ClassDeclaration" || path.type === "ClassExpression") {
+        path.skip();
+        return;
+      }
+
+      if (path.scope.hasOwnBinding(objectRefName)) {
+        path.scope.rename(objectRefName);
+      }
+    },
+  });
+}
+
 export function skipAllButComputedKey(path: NodePath) {
   // If the path isn't computed, just skip everything.
   if (!path.node.computed) {
@@ -244,6 +262,9 @@ type ReplaceSupersOptionsBase = {|
   superRef: Object,
   isLoose: boolean,
   file: any,
+  // objectRef might have been shadowed in child scopes,
+  // in that case, we need to rename related variables.
+  refToPreserve?: BabelNode,
 |};
 
 type ReplaceSupersOptions =
@@ -286,6 +307,14 @@ export default class ReplaceSupers {
   }
 
   replace() {
+    // https://github.com/babel/babel/issues/11994
+    if (this.opts.refToPreserve) {
+      ensureClassRefValidInChildScopes(
+        this.methodPath,
+        this.opts.refToPreserve.name,
+      );
+    }
+
     const handler = this.isLoose ? looseHandlers : specHandlers;
 
     memberExpressionToFunctions(this.methodPath, visitor, {

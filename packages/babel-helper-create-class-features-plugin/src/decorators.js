@@ -68,6 +68,7 @@ function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
       superRef,
       scope,
       file: this,
+      refToPreserve: classRef,
     },
     true,
   ).replace();

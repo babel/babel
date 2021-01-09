@@ -633,6 +633,7 @@ function replaceThisContext(path, ref, superRef, file, loose) {
     isLoose: loose,
     superRef,
     file,
+    refToPreserve: ref,
     getObjectRef() {
       state.needsClassRef = true;
       return path.node.static
