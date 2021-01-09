@@ -37,7 +37,7 @@ export interface SourceLocation {
   };
 }
 
-interface BaseNode {
+export interface BaseNode {
   leadingComments: ReadonlyArray<Comment> | null;
   innerComments: ReadonlyArray<Comment> | null;
   trailingComments: ReadonlyArray<Comment> | null;
