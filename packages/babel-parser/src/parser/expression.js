@@ -544,7 +544,12 @@ export default class ExpressionParser extends LValParser {
       (this.scope.inFunction ||
         (this.hasPlugin("topLevelAwait") && !this.inModule))
     ) {
-      this.raise(startPos, Errors.AwaitNotInAsyncContext);
+      this.raise(
+        startPos,
+        this.hasPlugin("topLevelAwait")
+          ? Errors.AwaitNotInAsyncContext
+          : Errors.AwaitNotInAsyncFunction,
+      );
       return this.parseAwait(startPos, startLoc);
     }
 
