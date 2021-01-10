@@ -638,6 +638,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
         reference = addNamed(path, importName, actualSource, {
           importedInterop: "uncompiled",
+          importPosition: "after",
         });
         set(pass, `imports/${importName}`, reference);
 

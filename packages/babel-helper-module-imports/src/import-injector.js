@@ -89,6 +89,13 @@ export type ImportOptions = {
    *  * false - No particular requirements for context of the access. (Default)
    */
   ensureNoContext: boolean,
+
+  /**
+   * Define whether the import should be loaded before or after the existing imports.
+   * "after" is only allowed inside ECMAScript modules, since it's not possible to
+   * reliably pick the location _after_ require() calls but _before_ other code in CJS.
+   */
+  importPosition: "before" | "after",
 };
 
 /**
@@ -120,6 +127,7 @@ export default class ImportInjector {
     importingInterop: "babel",
     ensureLiveReference: false,
     ensureNoContext: false,
+    importPosition: "before",
   };
 
   constructor(path, importedSource, opts) {
@@ -200,9 +208,11 @@ export default class ImportInjector {
       ensureLiveReference,
       ensureNoContext,
       nameHint,
+      importPosition,
 
       // Not meant for public usage. Allows code that absolutely must control
       // ordering to set a specific hoist value on the import nodes.
+      // This is ignored when "importPosition" is "after".
       blockHoist,
     } = opts;
 
@@ -214,6 +224,10 @@ export default class ImportInjector {
     const isMod = isModule(this._programPath);
     const isModuleForNode = isMod && importingInterop === "node";
     const isModuleForBabel = isMod && importingInterop === "babel";
+
+    if (importPosition === "after" && !isMod) {
+      throw new Error(`"importPosition": "after" is only supported in modules`);
+    }
 
     const builder = new ImportBuilder(
       importedSource,
@@ -397,7 +411,7 @@ export default class ImportInjector {
 
     const { statements, resultName } = builder.done();
 
-    this._insertStatements(statements, blockHoist);
+    this._insertStatements(statements, importPosition, blockHoist);
 
     if (
       (isDefault || isNamed) &&
@@ -409,20 +423,32 @@ export default class ImportInjector {
     return resultName;
   }
 
-  _insertStatements(statements, blockHoist = 3) {
-    statements.forEach(node => {
-      node._blockHoist = blockHoist;
-    });
+  _insertStatements(statements, importPosition = "before", blockHoist = 3) {
+    const body = this._programPath.get("body");
 
-    const targetPath = this._programPath.get("body").find(p => {
-      const val = p.node._blockHoist;
-      return Number.isFinite(val) && val < 4;
-    });
-
-    if (targetPath) {
-      targetPath.insertBefore(statements);
+    if (importPosition === "after") {
+      for (let i = body.length - 1; i >= 0; i--) {
+        if (body[i].isImportDeclaration()) {
+          body[i].insertAfter(statements);
+          return;
+        }
+      }
     } else {
-      this._programPath.unshiftContainer("body", statements);
+      statements.forEach(node => {
+        node._blockHoist = blockHoist;
+      });
+
+      const targetPath = body.find(p => {
+        const val = p.node._blockHoist;
+        return Number.isFinite(val) && val < 4;
+      });
+
+      if (targetPath) {
+        targetPath.insertBefore(statements);
+        return;
+      }
     }
+
+    this._programPath.unshiftContainer("body", statements);
   }
 }

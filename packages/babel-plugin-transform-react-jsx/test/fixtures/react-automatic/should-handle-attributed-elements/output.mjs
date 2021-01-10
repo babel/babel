@@ -1,5 +1,5 @@
-import { jsx as _jsx } from "react/jsx-runtime";
 import { jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx } from "react/jsx-runtime";
 var HelloMessage = React.createClass({
   displayName: "HelloMessage",
   render: function () {

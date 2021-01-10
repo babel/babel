@@ -2,18 +2,24 @@ import * as babel from "@babel/core";
 
 import { ImportInjector } from "../";
 
-function test(sourceType, opts, initializer, expectedCode) {
+function test(sourceType, opts, initializer, inputCode, expectedCode) {
   if (typeof opts === "function") {
-    expectedCode = initializer;
+    expectedCode = inputCode;
+    inputCode = initializer;
     initializer = opts;
     opts = null;
   }
+  if (expectedCode === undefined) {
+    expectedCode = inputCode;
+    inputCode = "";
+  }
 
-  const result = babel.transform("", {
+  const result = babel.transform(inputCode, {
     cwd: __dirname,
     sourceType,
     filename: "example" + (sourceType === "module" ? ".mjs" : ".js"),
     babelrc: false,
+    configFile: false,
     plugins: [
       function ({ types: t }) {
         return {
@@ -1101,6 +1107,37 @@ describe("@babel/helper-module-imports", () => {
           );
         });
       });
+    });
+  });
+
+  describe("importPosition: after", () => {
+    it("works in ES modules", () => {
+      testModule(
+        { importPosition: "after" },
+        m => m.addNamed("read", "source"),
+        `
+          import f from "foo";
+          f();
+          import b from "bar";
+          b();
+        `,
+        `
+          import f from "foo";
+          f();
+          import b from "bar";
+          import { read as _read } from "source";
+          b();
+          _read;
+        `,
+      );
+    });
+
+    it("is disallowed in CJS modules", () => {
+      expect(() =>
+        testScript({ importPosition: "after" }, m =>
+          m.addNamed("read", "source"),
+        ),
+      ).toThrow(`"importPosition": "after" is only supported in modules`);
     });
   });
 });
