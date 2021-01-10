@@ -26,24 +26,6 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-function ensureClassRefValidInChildScopes(
-  path: NodePath,
-  objectRefName: string,
-) {
-  path.traverse({
-    Scopable(path) {
-      if (path.type === "ClassDeclaration" || path.type === "ClassExpression") {
-        path.skip();
-        return;
-      }
-
-      if (path.scope.hasOwnBinding(objectRefName)) {
-        path.scope.rename(objectRefName);
-      }
-    },
-  });
-}
-
 export function skipAllButComputedKey(path: NodePath) {
   // If the path isn't computed, just skip everything.
   if (!path.node.computed) {
@@ -90,6 +72,17 @@ const visitor = traverse.visitors.merge([
       const { node, parentPath } = path;
       if (!parentPath.isMemberExpression({ object: node })) return;
       state.handle(parentPath);
+    },
+  },
+]);
+
+const unshadowSuperBindingVisitor = traverse.visitors.merge([
+  environmentVisitor,
+  {
+    Scopable(path, { refName }) {
+      if (path.scope.hasOwnBinding(refName)) {
+        path.scope.rename(refName);
+      }
     },
   },
 ]);
@@ -309,10 +302,9 @@ export default class ReplaceSupers {
   replace() {
     // https://github.com/babel/babel/issues/11994
     if (this.opts.refToPreserve) {
-      ensureClassRefValidInChildScopes(
-        this.methodPath,
-        this.opts.refToPreserve.name,
-      );
+      this.methodPath.traverse(unshadowSuperBindingVisitor, {
+        refName: this.opts.refToPreserve.name,
+      });
     }
 
     const handler = this.isLoose ? looseHandlers : specHandlers;
