@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: 'await' is only allowed within async functions and at the top levels of modules (2:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"N"},
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":12,"end":39,"loc":{"start":{"line":1,"column":12},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":18,"end":37,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":23}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":24,"end":36,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":22}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":24,"end":25,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "init": {
+                    "type": "AwaitExpression",
+                    "start":28,"end":36,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":22}},
+                    "argument": {
+                      "type": "NumericLiteral",
+                      "start":34,"end":36,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":22}},
+                      "extra": {
+                        "rawValue": 42,
+                        "raw": "42"
+                      },
+                      "value": 42
+                    }
+                  }
+                }
+              ],
+              "kind": "const"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
