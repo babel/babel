@@ -497,17 +497,6 @@ export default function transformClass(
     method: { type: "ClassMethod" },
     path: NodePath,
   ) {
-    const replaceSupers = new ReplaceSupers({
-      methodPath: path,
-      objectRef: classState.classRef,
-      superRef: classState.superName,
-      isLoose: classState.isLoose,
-      file: classState.file,
-      refToPreserve: classState.classRef,
-    });
-
-    replaceSupers.replace();
-
     setState({
       userConstructorPath: path,
       userConstructor: method,
