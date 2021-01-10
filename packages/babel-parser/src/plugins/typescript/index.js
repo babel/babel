@@ -2450,7 +2450,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let jsx;
       let typeCast;
 
-      if (this.match(tt.jsxTagStart)) {
+      if (
+        this.hasPlugin("jsx") &&
+        (this.match(tt.jsxTagStart) || this.isRelational("<"))
+      ) {
         // Prefer to parse JSX if possible. But may be an arrow fn.
         state = this.state.clone();
 
