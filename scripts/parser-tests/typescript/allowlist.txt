@@ -281,7 +281,6 @@ jsNoImplicitAnyNoCascadingReferenceErrors.ts
 jsdocAccessEnumType.ts
 jsdocPropertyTagInvalid.ts
 jsxAttributeWithoutExpressionReact.tsx
-jsxIntrinsicElementsExtendsRecord.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts
 letAsIdentifierInStrictMode.ts
