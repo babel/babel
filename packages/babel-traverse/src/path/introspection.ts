@@ -164,13 +164,30 @@ export function isStatementOrBlock(this: NodePath): boolean {
  */
 
 export function referencesImport(
-  this: NodePath<t.Identifier>,
+  this: NodePath<t.Expression>,
   moduleSource: string,
   importName: string,
 ): boolean {
-  if (!this.isReferencedIdentifier()) return false;
+  if (!this.isReferencedIdentifier()) {
+    if (
+      (this.isMemberExpression() || this.isOptionalMemberExpression()) &&
+      (this.node.computed
+        ? t.isStringLiteral(this.node.property, { value: importName })
+        : (this.node.property as t.Identifier).name === importName)
+    ) {
+      const object = (this as NodePath<
+        t.MemberExpression | t.OptionalMemberExpression
+      >).get("object");
+      return (
+        object.isReferencedIdentifier() &&
+        object.referencesImport(moduleSource, "*")
+      );
+    }
 
-  const binding = this.scope.getBinding(this.node.name);
+    return false;
+  }
+
+  const binding = this.scope.getBinding((this.node as t.Identifier).name);
   if (!binding || binding.kind !== "module") return false;
 
   const path = binding.path;
