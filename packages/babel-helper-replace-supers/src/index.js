@@ -80,6 +80,10 @@ const unshadowSuperBindingVisitor = traverse.visitors.merge([
   environmentVisitor,
   {
     Scopable(path, { refName }) {
+      if (path.type === "ClassDeclaration" || path.type === "ClassExpression") {
+        path.skip();
+        return;
+      }
       if (path.scope.hasOwnBinding(refName)) {
         path.scope.rename(refName);
       }

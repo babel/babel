@@ -44,19 +44,19 @@ var Baz = /*#__PURE__*/function () {
   babelHelpers.createClass(Baz, [{
     key: "method",
     value: function method() {
-      var _Baz2 = /*#__PURE__*/function () {
-        function _Baz2() {
-          babelHelpers.classCallCheck(this, _Baz2);
+      var _Baz = /*#__PURE__*/function () {
+        function _Baz() {
+          babelHelpers.classCallCheck(this, _Baz);
         }
 
-        babelHelpers.createClass(_Baz2, [{
+        babelHelpers.createClass(_Baz, [{
           key: "f",
           value: function f() {
             var Baz = 1;
             return Baz;
           }
         }]);
-        return _Baz2;
+        return _Baz;
       }();
 
       return babelHelpers.get(babelHelpers.getPrototypeOf(Baz.prototype), "method", this).call(this, _Baz);
