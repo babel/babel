@@ -80,11 +80,9 @@ const unshadowSuperBindingVisitor = traverse.visitors.merge([
   environmentVisitor,
   {
     Scopable(path, { refName }) {
-      if (path.type === "ClassDeclaration" || path.type === "ClassExpression") {
-        path.skip();
-        return;
-      }
-      if (path.scope.hasOwnBinding(refName)) {
+      // https://github.com/Zzzen/babel/pull/1#pullrequestreview-564833183
+      const binding = path.scope.getOwnBinding(refName);
+      if (binding && binding.identifier.name === refName) {
         path.scope.rename(refName);
       }
     },
