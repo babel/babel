@@ -538,12 +538,14 @@ export default class ExpressionParser extends LValParser {
       ? this.state.type.startsExpr
       : this.state.type.startsExpr && !this.match(tt.modulo);
     if (isAwait && startsExpr && !this.isAmbiguousAwait()) {
-      this.raise(
-        startPos,
-        this.hasPlugin("topLevelAwait")
-          ? Errors.AwaitNotInAsyncContext
-          : Errors.AwaitNotInAsyncFunction,
-      );
+      if (!this.state.invalidAwaitErrors.has(startPos)) {
+        this.raise(
+          startPos,
+          this.hasPlugin("topLevelAwait")
+            ? Errors.AwaitNotInAsyncContext
+            : Errors.AwaitNotInAsyncFunction,
+        );
+      }
       return this.parseAwait(startPos, startLoc);
     }
 
@@ -2353,6 +2355,7 @@ export default class ExpressionParser extends LValParser {
             ? Errors.AwaitNotInAsyncContext
             : Errors.AwaitNotInAsyncFunction,
         );
+        this.state.invalidAwaitErrors.add(startLoc);
       } else {
         this.raise(startLoc, Errors.UnexpectedReservedWord, word);
       }

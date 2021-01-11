@@ -154,6 +154,9 @@ export default class State {
   // Tokens length in token store
   tokensLength: number = 0;
 
+  // Positions of invalid await errors
+  invalidAwaitErrors: Set<number> = new Set();
+
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
