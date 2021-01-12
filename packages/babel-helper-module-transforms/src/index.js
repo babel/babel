@@ -47,7 +47,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
   const meta = normalizeAndLoadModuleMetadata(path, exportName, {
     noInterop,
-    loose,
+    initializeReexports: constantReexports,
     lazy,
     esNamespaceOnly,
   });

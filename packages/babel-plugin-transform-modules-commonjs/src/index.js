@@ -19,8 +19,6 @@ export default declare((api, options) => {
   const transformImportCall = createDynamicImportTransform(api);
 
   const {
-    loose,
-
     // 'true' for non-mjs files to strictly have .default, instead of having
     // destructuring-like behavior for their properties.
     strictNamespace = false,
@@ -176,7 +174,6 @@ export default declare((api, options) => {
               exportName: "exports",
               constantReexports,
               enumerableModuleMeta,
-              loose,
               strict,
               strictMode,
               allowTopLevelThis,

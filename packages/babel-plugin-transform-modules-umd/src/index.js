@@ -44,7 +44,6 @@ export default declare((api, options) => {
   const {
     globals,
     exactGlobals,
-    loose,
     allowTopLevelThis,
     strict,
     strictMode,
@@ -152,7 +151,6 @@ export default declare((api, options) => {
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
             path,
             {
-              loose,
               constantReexports,
               enumerableModuleMeta,
               strict,

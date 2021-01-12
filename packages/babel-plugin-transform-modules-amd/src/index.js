@@ -38,7 +38,7 @@ function injectWrapper(path, wrapper) {
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
+  const { allowTopLevelThis, strict, strictMode, noInterop } = options;
 
   const constantReexports =
     api.assumption("constantReexports") ?? options.loose;
@@ -109,7 +109,6 @@ export default declare((api, options) => {
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
             path,
             {
-              loose,
               enumerableModuleMeta,
               constantReexports,
               strict,
