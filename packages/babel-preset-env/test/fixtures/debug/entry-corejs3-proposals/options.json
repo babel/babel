@@ -7,6 +7,7 @@
       {
         "debug": true,
         "useBuiltIns": "entry",
+        "targets": { "browsers": "ie 6" },
         "corejs": { "version": 3, "proposals": true }
       }
     ]

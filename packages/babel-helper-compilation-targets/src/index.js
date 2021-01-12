@@ -26,21 +26,6 @@ export { unreleasedLabels } from "./targets";
 const v = new OptionValidator(packageName);
 const browserslistDefaults = browserslist.defaults;
 
-const validBrowserslistTargets = [
-  ...Object.keys(browserslist.data),
-  ...Object.keys(browserslist.aliases),
-];
-
-function objectToBrowserslist(object: Targets): Array<string> {
-  return Object.keys(object).reduce((list, targetName) => {
-    if (validBrowserslistTargets.indexOf(targetName) >= 0) {
-      const targetVersion = object[targetName];
-      return list.concat(`${targetName} ${targetVersion}`);
-    }
-    return list;
-  }, []);
-}
-
 function validateTargetNames(targets: Targets): TargetsTuple {
   const validTargets = Object.keys(TargetNames);
   for (const target of Object.keys(targets)) {
@@ -203,7 +188,7 @@ export default function getTargets(
     // of `defaults` in queries will be different since we don't want to break
     // the behavior of "no targets is the same as preset-latest".
     if (!hasTargets) {
-      browserslist.defaults = objectToBrowserslist(targets);
+      browserslist.defaults = [];
     }
 
     const browsers = browserslist(browsersquery, {

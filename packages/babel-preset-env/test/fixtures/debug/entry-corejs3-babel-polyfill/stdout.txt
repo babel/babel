@@ -1,53 +1,55 @@
 @babel/preset-env: `DEBUG` option
 
 Using targets:
-{}
+{
+  "ie": "6"
+}
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties {}
-  proposal-private-methods {}
-  proposal-numeric-separator {}
-  proposal-logical-assignment-operators {}
-  proposal-nullish-coalescing-operator {}
-  proposal-optional-chaining {}
-  proposal-json-strings {}
-  proposal-optional-catch-binding {}
-  transform-parameters {}
-  proposal-async-generator-functions {}
-  proposal-object-rest-spread {}
-  transform-dotall-regex {}
-  proposal-unicode-property-regex {}
-  transform-named-capturing-groups-regex {}
-  transform-async-to-generator {}
-  transform-exponentiation-operator {}
-  transform-template-literals {}
-  transform-literals {}
-  transform-function-name {}
-  transform-arrow-functions {}
-  transform-block-scoped-functions {}
-  transform-classes {}
-  transform-object-super {}
-  transform-shorthand-properties {}
-  transform-duplicate-keys {}
-  transform-computed-properties {}
-  transform-for-of {}
-  transform-sticky-regex {}
-  transform-unicode-escapes {}
-  transform-unicode-regex {}
-  transform-spread {}
-  transform-destructuring {}
-  transform-block-scoping {}
-  transform-typeof-symbol {}
-  transform-new-target {}
-  transform-regenerator {}
-  transform-member-expression-literals {}
-  transform-property-literals {}
-  transform-reserved-words {}
-  proposal-export-namespace-from {}
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  proposal-class-properties { "ie":"6" }
+  proposal-private-methods { "ie":"6" }
+  proposal-numeric-separator { "ie":"6" }
+  proposal-logical-assignment-operators { "ie":"6" }
+  proposal-nullish-coalescing-operator { "ie":"6" }
+  proposal-optional-chaining { "ie":"6" }
+  proposal-json-strings { "ie":"6" }
+  proposal-optional-catch-binding { "ie":"6" }
+  transform-parameters { "ie":"6" }
+  proposal-async-generator-functions { "ie":"6" }
+  proposal-object-rest-spread { "ie":"6" }
+  transform-dotall-regex { "ie":"6" }
+  proposal-unicode-property-regex { "ie":"6" }
+  transform-named-capturing-groups-regex { "ie":"6" }
+  transform-async-to-generator { "ie":"6" }
+  transform-exponentiation-operator { "ie":"6" }
+  transform-template-literals { "ie":"6" }
+  transform-literals { "ie":"6" }
+  transform-function-name { "ie":"6" }
+  transform-arrow-functions { "ie":"6" }
+  transform-block-scoped-functions { "ie":"6" }
+  transform-classes { "ie":"6" }
+  transform-object-super { "ie":"6" }
+  transform-shorthand-properties { "ie":"6" }
+  transform-duplicate-keys { "ie":"6" }
+  transform-computed-properties { "ie":"6" }
+  transform-for-of { "ie":"6" }
+  transform-sticky-regex { "ie":"6" }
+  transform-unicode-escapes { "ie":"6" }
+  transform-unicode-regex { "ie":"6" }
+  transform-spread { "ie":"6" }
+  transform-destructuring { "ie":"6" }
+  transform-block-scoping { "ie":"6" }
+  transform-typeof-symbol { "ie":"6" }
+  transform-new-target { "ie":"6" }
+  transform-regenerator { "ie":"6" }
+  transform-member-expression-literals { "ie":"6" }
+  transform-property-literals { "ie":"6" }
+  transform-reserved-words { "ie":"6" }
+  proposal-export-namespace-from { "ie":"6" }
+  transform-modules-commonjs { "ie":"6" }
+  proposal-dynamic-import { "ie":"6" }
 
 Using polyfills with `entry` option:
 
