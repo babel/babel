@@ -174,6 +174,7 @@ export default function transformClass(
           superRef: classState.superName,
           isLoose: classState.isLoose,
           file: classState.file,
+          refToPreserve: classState.classRef,
         });
 
         replaceSupers.replace();
@@ -496,11 +497,6 @@ export default function transformClass(
     method: { type: "ClassMethod" },
     path: NodePath,
   ) {
-    // https://github.com/babel/babel/issues/1077
-    if (path.scope.hasOwnBinding(classState.classRef.name)) {
-      path.scope.rename(classState.classRef.name);
-    }
-
     setState({
       userConstructorPath: path,
       userConstructor: method,

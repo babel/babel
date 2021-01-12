@@ -76,6 +76,19 @@ const visitor = traverse.visitors.merge([
   },
 ]);
 
+const unshadowSuperBindingVisitor = traverse.visitors.merge([
+  environmentVisitor,
+  {
+    Scopable(path, { refName }) {
+      // https://github.com/Zzzen/babel/pull/1#pullrequestreview-564833183
+      const binding = path.scope.getOwnBinding(refName);
+      if (binding && binding.identifier.name === refName) {
+        path.scope.rename(refName);
+      }
+    },
+  },
+]);
+
 const specHandlers = {
   memoise(superMember, count) {
     const { scope, node } = superMember;
@@ -244,6 +257,9 @@ type ReplaceSupersOptionsBase = {|
   superRef: Object,
   isLoose: boolean,
   file: any,
+  // objectRef might have been shadowed in child scopes,
+  // in that case, we need to rename related variables.
+  refToPreserve?: BabelNodeIdentifier,
 |};
 
 type ReplaceSupersOptions =
@@ -286,6 +302,13 @@ export default class ReplaceSupers {
   }
 
   replace() {
+    // https://github.com/babel/babel/issues/11994
+    if (this.opts.refToPreserve) {
+      this.methodPath.traverse(unshadowSuperBindingVisitor, {
+        refName: this.opts.refToPreserve.name,
+      });
+    }
+
     const handler = this.isLoose ? looseHandlers : specHandlers;
 
     memberExpressionToFunctions(this.methodPath, visitor, {
