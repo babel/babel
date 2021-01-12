@@ -1,104 +1,106 @@
 @babel/preset-env: `DEBUG` option
 
 Using targets:
-{}
+{
+  "ie": "6"
+}
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties {}
-  proposal-private-methods {}
-  proposal-numeric-separator {}
-  proposal-logical-assignment-operators {}
-  proposal-nullish-coalescing-operator {}
-  proposal-optional-chaining {}
-  proposal-json-strings {}
-  proposal-optional-catch-binding {}
-  transform-parameters {}
-  proposal-async-generator-functions {}
-  proposal-object-rest-spread {}
-  transform-dotall-regex {}
-  proposal-unicode-property-regex {}
-  transform-named-capturing-groups-regex {}
-  transform-async-to-generator {}
-  transform-exponentiation-operator {}
-  transform-template-literals {}
-  transform-literals {}
-  transform-function-name {}
-  transform-arrow-functions {}
-  transform-block-scoped-functions {}
-  transform-classes {}
-  transform-object-super {}
-  transform-shorthand-properties {}
-  transform-duplicate-keys {}
-  transform-computed-properties {}
-  transform-for-of {}
-  transform-sticky-regex {}
-  transform-unicode-escapes {}
-  transform-unicode-regex {}
-  transform-spread {}
-  transform-destructuring {}
-  transform-block-scoping {}
-  transform-typeof-symbol {}
-  transform-new-target {}
-  transform-regenerator {}
-  transform-member-expression-literals {}
-  transform-property-literals {}
-  transform-reserved-words {}
-  proposal-export-namespace-from {}
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  proposal-class-properties { "ie":"6" }
+  proposal-private-methods { "ie":"6" }
+  proposal-numeric-separator { "ie":"6" }
+  proposal-logical-assignment-operators { "ie":"6" }
+  proposal-nullish-coalescing-operator { "ie":"6" }
+  proposal-optional-chaining { "ie":"6" }
+  proposal-json-strings { "ie":"6" }
+  proposal-optional-catch-binding { "ie":"6" }
+  transform-parameters { "ie":"6" }
+  proposal-async-generator-functions { "ie":"6" }
+  proposal-object-rest-spread { "ie":"6" }
+  transform-dotall-regex { "ie":"6" }
+  proposal-unicode-property-regex { "ie":"6" }
+  transform-named-capturing-groups-regex { "ie":"6" }
+  transform-async-to-generator { "ie":"6" }
+  transform-exponentiation-operator { "ie":"6" }
+  transform-template-literals { "ie":"6" }
+  transform-literals { "ie":"6" }
+  transform-function-name { "ie":"6" }
+  transform-arrow-functions { "ie":"6" }
+  transform-block-scoped-functions { "ie":"6" }
+  transform-classes { "ie":"6" }
+  transform-object-super { "ie":"6" }
+  transform-shorthand-properties { "ie":"6" }
+  transform-duplicate-keys { "ie":"6" }
+  transform-computed-properties { "ie":"6" }
+  transform-for-of { "ie":"6" }
+  transform-sticky-regex { "ie":"6" }
+  transform-unicode-escapes { "ie":"6" }
+  transform-unicode-regex { "ie":"6" }
+  transform-spread { "ie":"6" }
+  transform-destructuring { "ie":"6" }
+  transform-block-scoping { "ie":"6" }
+  transform-typeof-symbol { "ie":"6" }
+  transform-new-target { "ie":"6" }
+  transform-regenerator { "ie":"6" }
+  transform-member-expression-literals { "ie":"6" }
+  transform-property-literals { "ie":"6" }
+  transform-reserved-words { "ie":"6" }
+  proposal-export-namespace-from { "ie":"6" }
+  transform-modules-commonjs { "ie":"6" }
+  proposal-dynamic-import { "ie":"6" }
 
 Using polyfills with `entry` option:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-specific-entries/input.mjs] Replaced core-js entries with the following polyfills:
-  es.symbol {}
-  es.json.to-string-tag {}
-  es.math.to-string-tag {}
-  es.object.assign {}
-  es.object.create {}
-  es.object.define-getter {}
-  es.object.define-properties {}
-  es.object.define-property {}
-  es.object.define-setter {}
-  es.object.entries {}
-  es.object.freeze {}
-  es.object.from-entries {}
-  es.object.get-own-property-descriptor {}
-  es.object.get-own-property-descriptors {}
-  es.object.get-own-property-names {}
-  es.object.get-prototype-of {}
-  es.object.is {}
-  es.object.is-extensible {}
-  es.object.is-frozen {}
-  es.object.is-sealed {}
-  es.object.keys {}
-  es.object.lookup-getter {}
-  es.object.lookup-setter {}
-  es.object.prevent-extensions {}
-  es.object.seal {}
-  es.object.set-prototype-of {}
-  es.object.to-string {}
-  es.object.values {}
-  es.reflect.apply {}
-  es.reflect.construct {}
-  es.reflect.define-property {}
-  es.reflect.delete-property {}
-  es.reflect.get {}
-  es.reflect.get-own-property-descriptor {}
-  es.reflect.get-prototype-of {}
-  es.reflect.has {}
-  es.reflect.is-extensible {}
-  es.reflect.own-keys {}
-  es.reflect.prevent-extensions {}
-  es.reflect.set {}
-  es.reflect.set-prototype-of {}
-  esnext.reflect.define-metadata {}
-  esnext.reflect.delete-metadata {}
-  esnext.reflect.get-metadata {}
-  esnext.reflect.get-metadata-keys {}
-  esnext.reflect.get-own-metadata {}
-  esnext.reflect.get-own-metadata-keys {}
-  esnext.reflect.has-metadata {}
-  esnext.reflect.has-own-metadata {}
-  esnext.reflect.metadata {}
+  es.symbol { "ie":"6" }
+  es.json.to-string-tag { "ie":"6" }
+  es.math.to-string-tag { "ie":"6" }
+  es.object.assign { "ie":"6" }
+  es.object.create { "ie":"6" }
+  es.object.define-getter { "ie":"6" }
+  es.object.define-properties { "ie":"6" }
+  es.object.define-property { "ie":"6" }
+  es.object.define-setter { "ie":"6" }
+  es.object.entries { "ie":"6" }
+  es.object.freeze { "ie":"6" }
+  es.object.from-entries { "ie":"6" }
+  es.object.get-own-property-descriptor { "ie":"6" }
+  es.object.get-own-property-descriptors { "ie":"6" }
+  es.object.get-own-property-names { "ie":"6" }
+  es.object.get-prototype-of { "ie":"6" }
+  es.object.is { "ie":"6" }
+  es.object.is-extensible { "ie":"6" }
+  es.object.is-frozen { "ie":"6" }
+  es.object.is-sealed { "ie":"6" }
+  es.object.keys { "ie":"6" }
+  es.object.lookup-getter { "ie":"6" }
+  es.object.lookup-setter { "ie":"6" }
+  es.object.prevent-extensions { "ie":"6" }
+  es.object.seal { "ie":"6" }
+  es.object.set-prototype-of { "ie":"6" }
+  es.object.to-string { "ie":"6" }
+  es.object.values { "ie":"6" }
+  es.reflect.apply { "ie":"6" }
+  es.reflect.construct { "ie":"6" }
+  es.reflect.define-property { "ie":"6" }
+  es.reflect.delete-property { "ie":"6" }
+  es.reflect.get { "ie":"6" }
+  es.reflect.get-own-property-descriptor { "ie":"6" }
+  es.reflect.get-prototype-of { "ie":"6" }
+  es.reflect.has { "ie":"6" }
+  es.reflect.is-extensible { "ie":"6" }
+  es.reflect.own-keys { "ie":"6" }
+  es.reflect.prevent-extensions { "ie":"6" }
+  es.reflect.set { "ie":"6" }
+  es.reflect.set-prototype-of { "ie":"6" }
+  esnext.reflect.define-metadata { "ie":"6" }
+  esnext.reflect.delete-metadata { "ie":"6" }
+  esnext.reflect.get-metadata { "ie":"6" }
+  esnext.reflect.get-metadata-keys { "ie":"6" }
+  esnext.reflect.get-own-metadata { "ie":"6" }
+  esnext.reflect.get-own-metadata-keys { "ie":"6" }
+  esnext.reflect.has-metadata { "ie":"6" }
+  esnext.reflect.has-own-metadata { "ie":"6" }
+  esnext.reflect.metadata { "ie":"6" }

@@ -33,7 +33,6 @@ import "core-js/modules/es.array.map.js";
 import "core-js/modules/es.array.of.js";
 import "core-js/modules/es.array.reduce.js";
 import "core-js/modules/es.array.reduce-right.js";
-import "core-js/modules/es.array.reverse.js";
 import "core-js/modules/es.array.slice.js";
 import "core-js/modules/es.array.some.js";
 import "core-js/modules/es.array.sort.js";
