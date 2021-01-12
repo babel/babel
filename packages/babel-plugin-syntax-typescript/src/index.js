@@ -34,7 +34,7 @@ export default declare((api, { isTSX }) => {
       parserOpts.plugins.push("typescript", "classProperties");
 
       if (!process.env.BABEL_8_BREAKING) {
-        // This is enabled by default since @babel/parser 8
+        // This is enabled by default since @babel/parser 7.1.5
         parserOpts.plugins.push("objectRestSpread");
       }
 
