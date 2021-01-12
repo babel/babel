@@ -39,6 +39,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     esNamespaceOnly,
 
     constantReexports = loose,
+    enumerableModuleMeta = loose,
   },
 ) {
   assert(isModule(path), "Cannot process module statements in a script");
@@ -71,7 +72,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
   const headers = [];
   if (hasExports(meta) && !strict) {
-    headers.push(buildESModuleHeader(meta, loose /* enumerable */));
+    headers.push(buildESModuleHeader(meta, enumerableModuleMeta));
   }
 
   const nameList = buildExportNameListDeclaration(path, meta);
@@ -247,9 +248,9 @@ const buildReexportsFromMeta = (
  */
 function buildESModuleHeader(
   metadata: ModuleMetadata,
-  enumerable: boolean = false,
+  enumerableModuleMeta: boolean = false,
 ) {
-  return (enumerable
+  return (enumerableModuleMeta
     ? template.statement`
         EXPORTS.__esModule = true;
       `

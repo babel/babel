@@ -39,6 +39,8 @@ export default declare((api, options) => {
 
   const constantReexports =
     api.assumption("constantReexports") ?? options.loose;
+  const enumerableModuleMeta =
+    api.assumption("enumerableModuleMeta") ?? options.loose;
 
   if (
     typeof lazy !== "boolean" &&
@@ -173,6 +175,7 @@ export default declare((api, options) => {
             {
               exportName: "exports",
               constantReexports,
+              enumerableModuleMeta,
               loose,
               strict,
               strictMode,
