@@ -37,6 +37,9 @@ export default declare((api, options) => {
     allowCommonJSExports = true,
   } = options;
 
+  const constantReexports =
+    api.assumption("constantReexports") ?? options.loose;
+
   if (
     typeof lazy !== "boolean" &&
     typeof lazy !== "function" &&
@@ -169,6 +172,7 @@ export default declare((api, options) => {
             path,
             {
               exportName: "exports",
+              constantReexports,
               loose,
               strict,
               strictMode,
@@ -215,7 +219,11 @@ export default declare((api, options) => {
 
             headers.push(header);
             headers.push(
-              ...buildNamespaceInitStatements(meta, metadata, loose),
+              ...buildNamespaceInitStatements(
+                meta,
+                metadata,
+                constantReexports,
+              ),
             );
           }
 

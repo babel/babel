@@ -51,6 +51,9 @@ export default declare((api, options) => {
     noInterop,
   } = options;
 
+  const constantReexports =
+    api.assumption("constantReexports") ?? options.loose;
+
   /**
    * Build the assignment statements that initialize the UMD global.
    */
@@ -148,6 +151,7 @@ export default declare((api, options) => {
             path,
             {
               loose,
+              constantReexports,
               strict,
               strictMode,
               allowTopLevelThis,
@@ -201,7 +205,11 @@ export default declare((api, options) => {
             }
 
             headers.push(
-              ...buildNamespaceInitStatements(meta, metadata, loose),
+              ...buildNamespaceInitStatements(
+                meta,
+                metadata,
+                constantReexports,
+              ),
             );
           }
 

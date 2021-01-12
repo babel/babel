@@ -39,6 +39,10 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
+
+  const constantReexports =
+    api.assumption("constantReexports") ?? options.loose;
+
   return {
     name: "transform-modules-amd",
 
@@ -104,6 +108,7 @@ export default declare((api, options) => {
             path,
             {
               loose,
+              constantReexports,
               strict,
               strictMode,
               allowTopLevelThis,
@@ -141,7 +146,11 @@ export default declare((api, options) => {
             }
 
             headers.push(
-              ...buildNamespaceInitStatements(meta, metadata, loose),
+              ...buildNamespaceInitStatements(
+                meta,
+                metadata,
+                constantReexports,
+              ),
             );
           }
 

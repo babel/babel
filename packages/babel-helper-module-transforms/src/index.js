@@ -27,14 +27,18 @@ export { hasExports, isSideEffectImport, isModule, rewriteThis };
 export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath,
   {
+    // TODO(Babel 8): Remove this
+    loose,
+
     exportName,
     strict,
     allowTopLevelThis,
     strictMode,
-    loose,
     noInterop,
     lazy,
     esNamespaceOnly,
+
+    constantReexports = loose,
   },
 ) {
   assert(isModule(path), "Cannot process module statements in a script");
@@ -78,7 +82,9 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   // Create all of the statically known named exports.
-  headers.push(...buildExportInitializationStatements(path, meta, loose));
+  headers.push(
+    ...buildExportInitializationStatements(path, meta, constantReexports),
+  );
 
   return { meta, headers };
 }
@@ -128,7 +134,7 @@ export function wrapInterop(
 export function buildNamespaceInitStatements(
   metadata: ModuleMetadata,
   sourceMetadata: SourceModuleMetadata,
-  loose: boolean = false,
+  constantReexports: boolean = false,
 ) {
   const statements = [];
 
@@ -146,8 +152,8 @@ export function buildNamespaceInitStatements(
       }),
     );
   }
-  if (loose) {
-    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, loose));
+  if (constantReexports) {
+    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, true));
   }
   for (const exportName of sourceMetadata.reexportNamespace) {
     // Assign export to namespace object.
@@ -172,7 +178,7 @@ export function buildNamespaceInitStatements(
     const statement = buildNamespaceReexport(
       metadata,
       t.cloneNode(srcNamespace),
-      loose,
+      constantReexports,
     );
     statement.loc = sourceMetadata.reexportAll.loc;
 
@@ -183,8 +189,8 @@ export function buildNamespaceInitStatements(
 }
 
 const ReexportTemplate = {
-  loose: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE_IMPORT;`,
-  looseComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE_IMPORT;`,
+  constant: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE_IMPORT;`,
+  constantComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE_IMPORT;`,
   spec: template`
     Object.defineProperty(EXPORTS, "EXPORT_NAME", {
       enumerable: true,
@@ -198,7 +204,7 @@ const ReexportTemplate = {
 const buildReexportsFromMeta = (
   meta: ModuleMetadata,
   metadata: SourceModuleMetadata,
-  loose,
+  constantReexports: boolean,
 ) => {
   const namespace = metadata.lazy
     ? t.callExpression(t.identifier(metadata.name), [])
@@ -224,11 +230,11 @@ const buildReexportsFromMeta = (
       EXPORT_NAME: exportName,
       NAMESPACE_IMPORT,
     };
-    if (loose) {
+    if (constantReexports) {
       if (stringSpecifiers.has(exportName)) {
-        return ReexportTemplate.looseComputed(astNodes);
+        return ReexportTemplate.constantComputed(astNodes);
       } else {
-        return ReexportTemplate.loose(astNodes);
+        return ReexportTemplate.constant(astNodes);
       }
     } else {
       return ReexportTemplate.spec(astNodes);
@@ -257,8 +263,8 @@ function buildESModuleHeader(
 /**
  * Create a re-export initialization loop for a specific imported namespace.
  */
-function buildNamespaceReexport(metadata, namespace, loose) {
-  return (loose
+function buildNamespaceReexport(metadata, namespace, constantReexports) {
+  return (constantReexports
     ? template.statement`
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;
@@ -347,7 +353,7 @@ function buildExportNameListDeclaration(
 function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
-  loose: boolean = false,
+  constantReexports: boolean = false,
 ) {
   const initStatements = [];
 
@@ -365,8 +371,8 @@ function buildExportInitializationStatements(
   }
 
   for (const data of metadata.source.values()) {
-    if (!loose) {
-      initStatements.push(...buildReexportsFromMeta(metadata, data, loose));
+    if (!constantReexports) {
+      initStatements.push(...buildReexportsFromMeta(metadata, data, false));
     }
     for (const exportName of data.reexportNamespace) {
       exportNames.push(exportName);
