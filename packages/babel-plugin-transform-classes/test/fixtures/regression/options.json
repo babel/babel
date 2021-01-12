@@ -1,4 +1,4 @@
 {
   "plugins": ["external-helpers", "proposal-class-properties"],
-  "presets": ["env", "react"]
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }], "react"]
 }
