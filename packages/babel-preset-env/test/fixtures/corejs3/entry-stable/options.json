@@ -8,5 +8,6 @@
         "corejs": 3
       }
     ]
-  ]
+  ],
+  "BABEL_8_BREAKING": true
 }

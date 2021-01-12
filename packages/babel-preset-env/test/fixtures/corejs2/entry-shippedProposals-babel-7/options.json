@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "shippedProposals": true,
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ]
+  ],
+  "plugins": [["external-helpers", { "helperVersion": "7.100.0" }]],
+  "BABEL_8_BREAKING": false
+}

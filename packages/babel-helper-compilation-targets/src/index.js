@@ -180,15 +180,17 @@ export default function getTargets(
     !options.ignoreBrowserslistConfig && !hasTargets;
 
   if (shouldParseBrowsers || shouldSearchForConfig) {
-    // If no targets are passed, we need to overwrite browserslist's defaults
-    // so that we enable all transforms (acting like the now deprecated
-    // preset-latest).
-    //
-    // Note, if browserslist resolves the config (ex. package.json), then usage
-    // of `defaults` in queries will be different since we don't want to break
-    // the behavior of "no targets is the same as preset-latest".
-    if (!hasTargets) {
-      browserslist.defaults = [];
+    if (!process.env.BABEL_8_BREAKING) {
+      // If no targets are passed, we need to overwrite browserslist's defaults
+      // so that we enable all transforms (acting like the now deprecated
+      // preset-latest).
+      //
+      // Note, if browserslist resolves the config (ex. package.json), then usage
+      // of `defaults` in queries will be different since we don't want to break
+      // the behavior of "no targets is the same as preset-latest".
+      if (!hasTargets) {
+        browserslist.defaults = [];
+      }
     }
 
     const browsers = browserslist(browsersquery, {
@@ -200,8 +202,10 @@ export default function getTargets(
     const queryBrowsers = getLowestVersions(browsers);
     targets = Object.assign(queryBrowsers, targets);
 
-    // Reset browserslist defaults
-    browserslist.defaults = browserslistDefaults;
+    if (!process.env.BABEL_8_BREAKING) {
+      // Reset browserslist defaults
+      browserslist.defaults = browserslistDefaults;
+    }
   }
 
   // Parse remaining targets
