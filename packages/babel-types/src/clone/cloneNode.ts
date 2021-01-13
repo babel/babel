@@ -102,7 +102,9 @@ export default function cloneNode<T extends t.Node>(
   return newNode;
 }
 
-function cloneCommentsWithoutLoc<T extends t.Comment>(comments: T[]): T[] {
+function cloneCommentsWithoutLoc<T extends t.Comment>(
+  comments: ReadonlyArray<T>,
+): T[] {
   return comments.map(
     ({ type, value }) =>
       ({
@@ -113,6 +115,12 @@ function cloneCommentsWithoutLoc<T extends t.Comment>(comments: T[]): T[] {
   );
 }
 
-function maybeCloneComments(comments, deep, withoutLoc) {
-  return deep && withoutLoc ? cloneCommentsWithoutLoc(comments) : comments;
+function maybeCloneComments<T extends t.Comment>(
+  comments: ReadonlyArray<T> | null,
+  deep: boolean,
+  withoutLoc: boolean,
+): ReadonlyArray<T> | null {
+  return deep && withoutLoc && comments
+    ? cloneCommentsWithoutLoc(comments)
+    : comments;
 }
