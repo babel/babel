@@ -78,43 +78,42 @@ export function getStatementParent(): NodePath {
 export function getEarliestCommonAncestorFrom(
   paths: Array<NodePath>,
 ): NodePath {
-  return this.getDeepestCommonAncestorFrom(paths, function (
-    deepest,
-    i,
-    ancestries,
-  ) {
-    let earliest;
-    const keys = t.VISITOR_KEYS[deepest.type];
+  return this.getDeepestCommonAncestorFrom(
+    paths,
+    function (deepest, i, ancestries) {
+      let earliest;
+      const keys = t.VISITOR_KEYS[deepest.type];
 
-    for (const ancestry of (ancestries: Array)) {
-      const path = ancestry[i + 1];
+      for (const ancestry of (ancestries: Array)) {
+        const path = ancestry[i + 1];
 
-      // first path
-      if (!earliest) {
-        earliest = path;
-        continue;
-      }
-
-      // handle containers
-      if (path.listKey && earliest.listKey === path.listKey) {
-        // we're in the same container so check if we're earlier
-        if (path.key < earliest.key) {
+        // first path
+        if (!earliest) {
           earliest = path;
           continue;
         }
+
+        // handle containers
+        if (path.listKey && earliest.listKey === path.listKey) {
+          // we're in the same container so check if we're earlier
+          if (path.key < earliest.key) {
+            earliest = path;
+            continue;
+          }
+        }
+
+        // handle keys
+        const earliestKeyIndex = keys.indexOf(earliest.parentKey);
+        const currentKeyIndex = keys.indexOf(path.parentKey);
+        if (earliestKeyIndex > currentKeyIndex) {
+          // key appears before so it's earlier
+          earliest = path;
+        }
       }
 
-      // handle keys
-      const earliestKeyIndex = keys.indexOf(earliest.parentKey);
-      const currentKeyIndex = keys.indexOf(path.parentKey);
-      if (earliestKeyIndex > currentKeyIndex) {
-        // key appears before so it's earlier
-        earliest = path;
-      }
-    }
-
-    return earliest;
-  });
+      return earliest;
+    },
+  );
 }
 
 /**
