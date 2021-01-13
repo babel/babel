@@ -842,6 +842,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.bracketL:
           return this.tsParseTupleType();
         case tt.parenL:
+          if (process.env.BABEL_8_BREAKING) {
+            if (!this.options.createParenthesizedExpressions) {
+              const startPos = this.state.start;
+              this.next();
+              const type = this.tsParseType();
+              this.expect(tt.parenR);
+              this.addExtra(type, "parenthesized", true);
+              this.addExtra(type, "parenStart", startPos);
+              return type;
+            }
+          }
+
           return this.tsParseParenthesizedType();
         case tt.backQuote:
           return this.tsParseTemplateLiteralType();
