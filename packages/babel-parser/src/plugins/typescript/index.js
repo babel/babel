@@ -797,7 +797,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // $FlowIgnore
         node.abstract = !!abstract;
         if (abstract) this.next();
-        this.expect(tt._new);
+        this.next(); // eat `new`
       }
       this.tsFillSignature(tt.arrow, node);
       return this.finishNode(node, type);
