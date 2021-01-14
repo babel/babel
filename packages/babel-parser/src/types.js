@@ -1250,6 +1250,7 @@ export type TsConstructorType = TsTypeBase &
   TsSignatureDeclarationBase & {
     type: "TSConstructorType",
     typeAnnotation: TsTypeAnnotation,
+    abstract: boolean,
   };
 
 export type TsTypeReference = TsTypeBase & {
