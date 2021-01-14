@@ -68,6 +68,7 @@ export default declare((api, options) => {
         if (path.isCallExpression()) {
           annotateAsPure(path);
           if (path.get("callee").isArrowFunctionExpression()) {
+            // This is an IIFE, so we don't need to worry about the newableArrowFunctions assumption
             path.get("callee").arrowFunctionToExpression();
           }
         }
