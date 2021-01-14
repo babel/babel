@@ -796,13 +796,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (type === "TSConstructorType") {
         // $FlowIgnore
         node.abstract = !!abstract;
-        if (abstract) {
-          // eat "abstract"
-          this.expectContextual("abstract");
-          this.expect(tt._new);
-        } else {
-          this.expect(tt._new);
-        }
+        if (abstract) this.next();
+        this.expect(tt._new);
       }
       this.tsFillSignature(tt.arrow, node);
       return this.finishNode(node, type);
