@@ -4,15 +4,13 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose = false, useBuiltIns = false } = options;
-
-  if (typeof loose !== "boolean") {
-    throw new Error(`.loose must be a boolean or undefined`);
-  }
+  const { useBuiltIns = false } = options;
 
   const iterableIsArray = api.assumption("iterableIsArray") ?? options.loose;
   const arrayLikeIsIterable =
     options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
+  const objectRestNoSymbols =
+    api.assumption("objectRestNoSymbols") ?? options.loose;
 
   function getExtendsHelper(file) {
     return useBuiltIns
@@ -233,7 +231,9 @@ export default declare((api, options) => {
         }
 
         value = t.callExpression(
-          this.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+          this.addHelper(
+            `objectWithoutProperties${objectRestNoSymbols ? "Loose" : ""}`,
+          ),
           [t.cloneNode(objRef), keyExpression],
         );
       }
