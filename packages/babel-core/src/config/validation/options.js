@@ -338,10 +338,12 @@ export const assumptionsNames = new Set<string>([
   "iterableIsArray",
   "mutableTemplateObject",
   "noDocumentAll",
+  "objectRestNoSymbols",
   "pureGetters",
   "setClassMethods",
   "setComputedProperties",
   "setPublicClassFields",
+  "setSpreadProperties",
   "skipForOfIteratorClosing",
 ]);
 
