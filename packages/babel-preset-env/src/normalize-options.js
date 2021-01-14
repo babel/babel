@@ -184,7 +184,7 @@ export function normalizeCoreJSOption(
   const version = rawVersion ? coerce(String(rawVersion)) : false;
 
   if (!useBuiltIns && version) {
-    console.log(
+    console.warn(
       "\nWARNING (@babel/preset-env): The `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
     );
   }
