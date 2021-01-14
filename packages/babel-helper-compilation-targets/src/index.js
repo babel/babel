@@ -103,17 +103,14 @@ function outputDecimalWarning(
     return;
   }
 
-  console.log("Warning, the following targets are using a decimal version:");
-  console.log("");
+  console.warn("Warning, the following targets are using a decimal version:\n");
   decimalTargets.forEach(({ target, value }) =>
-    console.log(`  ${target}: ${value}`),
+    console.warn(`  ${target}: ${value}`),
   );
-  console.log("");
-  console.log(
-    "We recommend using a string for minor/patch versions to avoid numbers like 6.10",
-  );
-  console.log("getting parsed as 6.1, which can lead to unexpected behavior.");
-  console.log("");
+  console.warn(`
+We recommend using a string for minor/patch versions to avoid numbers like 6.10
+getting parsed as 6.1, which can lead to unexpected behavior.
+`);
 }
 
 function semverifyTarget(target, value) {

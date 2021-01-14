@@ -7,3 +7,6 @@ You should also be sure that the version you pass to the `corejs` option matches
 
 More info about useBuiltIns: https://babeljs.io/docs/en/babel-preset-env#usebuiltins
 More info about core-js: https://babeljs.io/docs/en/babel-preset-env#corejs
+
+The uglify target has been deprecated. Set the top level
+option `forceAllTransforms: true` instead.

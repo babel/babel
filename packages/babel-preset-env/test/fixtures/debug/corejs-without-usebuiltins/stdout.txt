@@ -1,5 +1,3 @@
-WARNING (@babel/preset-env): The `corejs` option only has an effect when the `useBuiltIns` option is not `false`
-
 @babel/preset-env: `DEBUG` option
 
 Using targets:

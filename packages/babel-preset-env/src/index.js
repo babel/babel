@@ -251,23 +251,18 @@ export default declare((api, opts) => {
       hasUglifyTarget = true;
       delete optionsTargets.uglify;
 
-      console.log("");
-      console.log("The uglify target has been deprecated. Set the top level");
-      console.log("option `forceAllTransforms: true` instead.");
-      console.log("");
+      console.warn(`
+The uglify target has been deprecated. Set the top level
+option \`forceAllTransforms: true\` instead.
+`);
     }
   }
 
   if (optionsTargets?.esmodules && optionsTargets.browsers) {
-    console.log("");
-    console.log(
-      "@babel/preset-env: esmodules and browsers targets have been specified together.",
-    );
-    console.log(
-      // $FlowIgnore
-      `\`browsers\` target, \`${optionsTargets.browsers}\` will be ignored.`,
-    );
-    console.log("");
+    console.warn(`
+@babel/preset-env: esmodules and browsers targets have been specified together.
+\`browsers\` target, \`${optionsTargets.browsers.toString()}\` will be ignored.
+`);
   }
 
   const targets = getTargets(
