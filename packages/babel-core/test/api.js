@@ -167,16 +167,17 @@ describe("api", function () {
       babelrc: false,
     };
     Object.freeze(options);
-    transformFile(__dirname + "/fixtures/api/file.js", options, function (
-      err,
-      res,
-    ) {
-      if (err) return done(err);
-      expect(res.code).toBe("foo();");
-      // keep user options untouched
-      expect(options).toEqual({ babelrc: false });
-      done();
-    });
+    transformFile(
+      __dirname + "/fixtures/api/file.js",
+      options,
+      function (err, res) {
+        if (err) return done(err);
+        expect(res.code).toBe("foo();");
+        // keep user options untouched
+        expect(options).toEqual({ babelrc: false });
+        done();
+      },
+    );
   });
 
   it("transformFileSync", function () {
