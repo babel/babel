@@ -794,15 +794,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsFunctionOrConstructorType {
       const node: N.TsFunctionOrConstructorType = this.startNode();
       if (type === "TSConstructorType") {
+        // $FlowIgnore
+        node.abstract = !!abstract;
         if (abstract) {
-          // $FlowIgnore
-          node.abstract = true;
           // eat "abstract"
           this.expectContextual("abstract");
           this.expect(tt._new);
         } else {
-          // $FlowIgnore
-          node.abstract = false;
           this.expect(tt._new);
         }
       }
