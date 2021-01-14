@@ -9,3 +9,4 @@ function _iterableToArray(iter) {
 }
 
 module.exports = _iterableToArray;
+module.exports["default"] = module.exports;
