@@ -72,6 +72,7 @@ export function ensureBlock() {
 /**
  * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
  */
+// TODO(Babel 8): Remove this
 export function arrowFunctionToShadowed() {
   if (!this.isArrowFunctionExpression()) return;
 
@@ -103,7 +104,10 @@ export function unwrapFunctionEnvironment() {
  */
 export function arrowFunctionToExpression({
   allowInsertArrow = true,
+  /** @deprecated Use `newableArrowFunctions` instead */
   specCompliant = false,
+  // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+  newableArrowFunctions = !specCompliant,
 } = {}) {
   if (!this.isArrowFunctionExpression()) {
     throw this.buildCodeFrameError(
@@ -113,13 +117,13 @@ export function arrowFunctionToExpression({
 
   const thisBinding = hoistFunctionEnvironment(
     this,
-    specCompliant,
+    newableArrowFunctions,
     allowInsertArrow,
   );
 
   this.ensureBlock();
   this.node.type = "FunctionExpression";
-  if (specCompliant) {
+  if (!newableArrowFunctions) {
     const checkBinding = thisBinding
       ? null
       : this.parentPath.scope.generateUidIdentifier("arrowCheckId");
@@ -160,7 +164,8 @@ export function arrowFunctionToExpression({
  */
 function hoistFunctionEnvironment(
   fnPath,
-  specCompliant = false,
+  // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+  newableArrowFunctions = true,
   allowInsertArrow = true,
 ) {
   const thisEnvFn = fnPath.findParent(p => {
@@ -298,11 +303,11 @@ function hoistFunctionEnvironment(
 
   // Convert all "this" references in the arrow to point at the alias.
   let thisBinding;
-  if (thisPaths.length > 0 || specCompliant) {
+  if (thisPaths.length > 0 || !newableArrowFunctions) {
     thisBinding = getThisBinding(thisEnvFn, inConstructor);
 
     if (
-      !specCompliant ||
+      newableArrowFunctions ||
       // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
       // because it might not have been initialized yet.
       (inConstructor && hasSuperClass(thisEnvFn))
@@ -316,7 +321,7 @@ function hoistFunctionEnvironment(
         thisChild.replaceWith(thisRef);
       });
 
-      if (specCompliant) thisBinding = null;
+      if (!newableArrowFunctions) thisBinding = null;
     }
   }
 
