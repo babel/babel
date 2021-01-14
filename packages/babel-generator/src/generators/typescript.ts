@@ -194,6 +194,10 @@ export function TSFunctionType(this: Printer, node: t.TSFunctionType) {
 }
 
 export function TSConstructorType(this: Printer, node: t.TSConstructorType) {
+  if (node.abstract) {
+    this.word("abstract");
+    this.space();
+  }
   this.word("new");
   this.space();
   this.tsPrintFunctionOrConstructorType(node);
