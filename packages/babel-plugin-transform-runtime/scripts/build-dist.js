@@ -162,12 +162,17 @@ function writeHelpers(runtimeName, { corejs } = {}) {
 
 function writeHelperExports(runtimeName, helperSubExports) {
   const exports = {
-    "./helpers/": "./helpers/",
     ...helperSubExports,
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
+    "./regenerator/*.js": "./regenerator/*.js",
+    "./helpers/esm/*": "./helpers/esm/*.js",
+    // These patterns are deprecated, but since patterns
+    // containing * are not supported in every Node.js
+    // version we keep them for better compatibility.
     "./regenerator/": "./regenerator/",
+    "./helpers/esm/": "./helpers/esm/",
   };
   const pkgDirname = getRuntimeRoot(runtimeName);
   const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);

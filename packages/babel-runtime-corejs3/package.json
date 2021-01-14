@@ -17,7 +17,6 @@
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
-    "./helpers/": "./helpers/",
     "./helpers/typeof": {
       "node": "./helpers/typeof/index.js",
       "module": "./helpers/typeof/index.mjs",
@@ -426,7 +425,10 @@
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
+    "./regenerator/*.js": "./regenerator/*.js",
+    "./helpers/esm/*": "./helpers/esm/*.js",
     "./regenerator/": "./regenerator/",
+    "./helpers/esm/": "./helpers/esm/",
     "./core-js-stable/": "./core-js-stable/",
     "./core-js-stable/map": "./core-js-stable/map.js",
     "./core-js-stable/promise": "./core-js-stable/promise.js",

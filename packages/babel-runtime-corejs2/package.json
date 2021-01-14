@@ -18,7 +18,6 @@
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
-    "./helpers/": "./helpers/",
     "./helpers/typeof": {
       "node": "./helpers/typeof/index.js",
       "module": "./helpers/typeof/index.mjs",
@@ -427,7 +426,10 @@
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
+    "./regenerator/*.js": "./regenerator/*.js",
+    "./helpers/esm/*": "./helpers/esm/*.js",
     "./regenerator/": "./regenerator/",
+    "./helpers/esm/": "./helpers/esm/",
     "./core-js/": "./core-js/",
     "./core-js/is-iterable": "./core-js/is-iterable.js",
     "./core-js/get-iterator": "./core-js/get-iterator.js",
