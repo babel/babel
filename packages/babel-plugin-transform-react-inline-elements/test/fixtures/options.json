@@ -3,6 +3,6 @@
     "external-helpers",
     "syntax-jsx",
     "transform-react-inline-elements",
-    "transform-react-jsx"
+    ["transform-react-jsx", { "runtime": "classic" }]
   ]
 }
