@@ -7,6 +7,7 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const { method, module } = options;
+  const newableArrowFunctions = api.assumption("newableArrowFunctions");
 
   if (method && module) {
     return {
@@ -23,7 +24,7 @@ export default declare((api, options) => {
             wrapAsync = state.methodWrapper = addNamed(path, method, module);
           }
 
-          remapAsyncToGenerator(path, { wrapAsync });
+          remapAsyncToGenerator(path, { wrapAsync }, newableArrowFunctions);
         },
       },
     };
@@ -36,9 +37,11 @@ export default declare((api, options) => {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator(path, {
-          wrapAsync: state.addHelper("asyncToGenerator"),
-        });
+        remapAsyncToGenerator(
+          path,
+          { wrapAsync: state.addHelper("asyncToGenerator") },
+          newableArrowFunctions,
+        );
       },
     },
   };
