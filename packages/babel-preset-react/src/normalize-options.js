@@ -1,3 +1,6 @@
+import { OptionValidator } from "@babel/helper-validator-option";
+const v = new OptionValidator("@babel/preset-react");
+
 export default function normalizeOptions(options = {}) {
   if (process.env.BABEL_8_BREAKING) {
     if ("useSpread" in options) {
@@ -20,6 +23,53 @@ export default function normalizeOptions(options = {}) {
 }`,
       );
     }
+
+    const TopLevelOptions = {
+      development: "development",
+      importSource: "importSource",
+      pragma: "pragma",
+      pragmaFrag: "pragmaFrag",
+      pure: "pure",
+      runtime: "runtime",
+      throwIfNamespace: "throwIfNamespace",
+    };
+    v.validateTopLevelOptions(options, TopLevelOptions);
+    const development = v.validateBooleanOption(
+      TopLevelOptions.development,
+      options.development,
+    );
+    const importSource = v.validateStringOption(
+      TopLevelOptions.importSource,
+      options.importSource,
+    );
+    const pragma = v.validateStringOption(
+      TopLevelOptions.pragma,
+      options.pragma,
+    );
+    const pragmaFrag = v.validateStringOption(
+      TopLevelOptions.pragmaFrag,
+      options.pragmaFrag,
+    );
+    const pure = v.validateBooleanOption(TopLevelOptions.pure, options.pure);
+    const runtime = v.validateStringOption(
+      TopLevelOptions.runtime,
+      options.runtime,
+      "automatic",
+    );
+    const throwIfNamespace = v.validateStringOption(
+      TopLevelOptions.throwIfNamespace,
+      options.throwIfNamespace,
+    );
+
+    return {
+      development,
+      importSource,
+      pragma,
+      pragmaFrag,
+      pure,
+      runtime,
+      throwIfNamespace,
+    };
   }
 
   let { pragma, pragmaFrag } = options;
@@ -37,14 +87,7 @@ export default function normalizeOptions(options = {}) {
     pragmaFrag = pragmaFrag || "React.Fragment";
   }
 
-  // TODO: (Babel 8) Don't cast this option but validate it
   const development = !!options.development;
-
-  if (typeof development !== "boolean") {
-    throw new Error(
-      "@babel/preset-react 'development' option must be a boolean.",
-    );
-  }
 
   return {
     development,
