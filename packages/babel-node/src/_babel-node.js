@@ -196,7 +196,7 @@ if (program.eval || program.print) {
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);
-    process.execArgv.unshift(__filename);
+    process.execArgv.push(__filename);
 
     Module.runMain();
   } else {
