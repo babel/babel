@@ -142,12 +142,12 @@ function writeHelpers(runtimeName, { corejs } = {}) {
   for (const helperName of helpers.list) {
     const helperPath = path.join("helpers", helperName);
     helperSubExports[`./${helperPath}`] = {
-      node: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
-        esm: false,
-        corejs,
-      }),
       module: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
         esm: true,
+        corejs,
+      }),
+      node: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
+        esm: false,
         corejs,
       }),
       get default() {
