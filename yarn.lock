@@ -165,7 +165,6 @@ __metadata:
     eslint: ^7.5.0
     eslint-scope: 5.1.0
     eslint-visitor-keys: ^1.3.0
-    lodash.clonedeep: ^4.5.0
     semver: ^6.3.0
   peerDependencies:
     "@babel/core": ">=7.11.0"
@@ -198,7 +197,7 @@ __metadata:
   dependencies:
     eslint: ^7.5.0
     eslint-rule-composer: ^0.3.0
-    lodash.clonedeep: ^4.5.0
+    lodash: ^4.17.20
   peerDependencies:
     "@babel/eslint-parser": ">=7.11.0"
     eslint: ">=7.5.0"
@@ -9531,13 +9530,6 @@ fsevents@^1.2.7:
   dependencies:
     p-locate: ^4.1.0
   checksum: c58f49d45c8672d0a290dea0ce41fcb27205b3f2d61452ba335ef3b42ad36c10c31b1f061b46d96dd4b81e9a00e8a2897bc124d75623b80a9f6d36b1e754a6b5
-  languageName: node
-  linkType: hard
-
-"lodash.clonedeep@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "lodash.clonedeep@npm:4.5.0"
-  checksum: 41e2fe4c57c56a66a4775a6ddeebe9272f0ce4d257d97b3cb8724a9b01eeec9b09ce7e8603d6926baf5f48c287d988f0de4bf5aa244ea86b1f22c1e6f203cc27
   languageName: node
   linkType: hard
 

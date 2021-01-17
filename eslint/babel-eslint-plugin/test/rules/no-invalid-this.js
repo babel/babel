@@ -1,4 +1,4 @@
-import cloneDeep from "lodash.clonedeep";
+import cloneDeep from "lodash/cloneDeep";
 import rule from "../../src/rules/no-invalid-this";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
 
