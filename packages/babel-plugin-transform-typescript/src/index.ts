@@ -5,7 +5,7 @@ import { injectInitialization } from "@babel/helper-create-class-features-plugin
 
 import transpileEnum from "./enum";
 import transpileNamespace from "./namespace";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath } from "@babel/traverse";
 
 function isInType(path) {
   switch (path.parent.type) {
@@ -210,7 +210,7 @@ export default declare((api, opts) => {
 
         // remove type imports
         for (let stmt of path.get("body")) {
-          if (t.isImportDeclaration(stmt)) {
+          if (stmt.isImportDeclaration()) {
             if (stmt.node.importKind === "type") {
               stmt.remove();
               continue;
@@ -374,13 +374,13 @@ export default declare((api, opts) => {
             if (child.node.kind === "constructor") {
               classMemberVisitors.constructor(child, path);
             } else {
-              classMemberVisitors.method(child, path);
+              classMemberVisitors.method(child);
             }
           } else if (
             child.isClassProperty() ||
             child.isClassPrivateProperty()
           ) {
-            classMemberVisitors.field(child, path);
+            classMemberVisitors.field(child);
           }
         });
       },
