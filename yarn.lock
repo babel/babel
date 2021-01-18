@@ -4857,7 +4857,7 @@ __metadata:
     lodash: ^4.17.20
     mergeiterator: ^1.2.5
     prettier: ^2.2.1
-    rollup: ^2.26.5
+    rollup: ^2.36.2
     rollup-plugin-dts: ^2.0.0
     rollup-plugin-node-polyfills: ^0.2.1
     rollup-plugin-terser: ^7.0.0
@@ -11610,9 +11610,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.26.5":
-  version: 2.26.5
-  resolution: "rollup@npm:2.26.5"
+"rollup@npm:^2.36.2":
+  version: 2.36.2
+  resolution: "rollup@npm:2.36.2"
   dependencies:
     fsevents: ~2.1.2
   dependenciesMeta:
@@ -11620,7 +11620,7 @@ fsevents@^1.2.7:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 92b0e96cc32af0dc18f42c12aed671085b1ba684d4b3211ac019912c7947830f624c2f1913108975630f8712667f0b9fa2999895f86a68ac4ddffbc2c88ea208
+  checksum: 65a892680d0da59b77a8174d90ff203bd8f4a34a5ec9d230d9bbf735ecad700426f1e079ed1953cd24bc9c0fcf77aed7219da77db11347222814e8d9364c60cd
   languageName: node
   linkType: hard
 
