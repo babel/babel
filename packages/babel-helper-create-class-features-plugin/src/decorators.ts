@@ -59,19 +59,13 @@ function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
     );
   }
 
-  new ReplaceSupers(
-    {
-      methodPath: path,
-      methodNode: node,
-      objectRef: classRef,
-      isStatic: node.static,
-      superRef,
-      scope,
-      file: this,
-      refToPreserve: classRef,
-    },
-    true,
-  ).replace();
+  new ReplaceSupers({
+    methodPath: path,
+    objectRef: classRef,
+    superRef,
+    file: this,
+    refToPreserve: classRef,
+  }).replace();
 
   const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
