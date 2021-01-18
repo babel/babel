@@ -71,6 +71,11 @@ export function ClassBody(node: Object) {
 
 export function ClassProperty(node: Object) {
   this.printJoin(node.decorators, node);
+
+  // catch up to property key, avoid line break
+  // between member modifiers and the property key.
+  this.source("end", node.key.loc);
+
   this.tsPrintClassMemberModifiers(node, /* isField */ true);
 
   if (node.computed) {
@@ -131,6 +136,9 @@ export function ClassPrivateMethod(node: Object) {
 
 export function _classMethodHead(node) {
   this.printJoin(node.decorators, node);
+  // catch up to method key, avoid line break
+  // between member modifiers/method heads and the method key.
+  this.source("end", node.key.loc);
   this.tsPrintClassMemberModifiers(node, /* isField */ false);
   this._methodHead(node);
 }
