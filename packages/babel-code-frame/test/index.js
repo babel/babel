@@ -283,6 +283,36 @@ describe("@babel/code-frame", function () {
     );
   });
 
+  test("jsx", function () {
+    const gutter = chalk.grey;
+    const yellow = chalk.yellow;
+
+    const rawLines = ["<div />"].join("\n");
+
+    expect(
+      JSON.stringify(
+        codeFrame(rawLines, 0, null, {
+          linesAbove: 1,
+          linesBelow: 1,
+          forceColor: true,
+        }),
+      ),
+    ).toEqual(
+      JSON.stringify(
+        chalk.reset(
+          " " +
+            gutter(" 1 |") +
+            " " +
+            yellow("<") +
+            yellow("div") +
+            " " +
+            yellow("/") +
+            yellow(">"),
+        ),
+      ),
+    );
+  });
+
   test("basic usage, new API", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
