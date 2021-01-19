@@ -30,7 +30,11 @@ export default function createPlugin({ name, development }) {
       // TODO (Babel 8): It should throw if this option is used with the automatic runtime
       filter,
 
-      runtime: RUNTIME_DEFAULT = development ? "automatic" : "classic",
+      runtime: RUNTIME_DEFAULT = process.env.BABEL_8_BREAKING
+        ? "automatic"
+        : development
+        ? "automatic"
+        : "classic",
 
       importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
       pragma: PRAGMA_DEFAULT = DEFAULT.pragma,

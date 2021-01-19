@@ -1,3 +1,3 @@
 module.exports = () => ({
-  presets: [["@babel/preset-react", { development: true }]],
+  presets: [["@babel/preset-react", { development: true, runtime: "classic" }]],
 });
