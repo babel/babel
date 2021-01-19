@@ -293,6 +293,16 @@ function pluginToggleBabel8Breaking({ types: t }, { breaking }) {
           keepConsequent = !keepConsequent;
         }
 
+        // yarn-plugin-conditions inject bool(process.env.BABEL_8_BREAKING)
+        // tests, to properly cast the env variable to a boolean.
+        if (
+          test.isCallExpression() &&
+          test.get("callee").isIdentifier({ name: "bool" }) &&
+          test.get("arguments").length === 1
+        ) {
+          test = test.get("arguments")[0];
+        }
+
         if (!test.matchesPattern("process.env.BABEL_8_BREAKING")) return;
 
         path.replaceWith(
