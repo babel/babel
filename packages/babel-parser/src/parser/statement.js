@@ -20,6 +20,7 @@ import {
   SCOPE_FUNCTION,
   SCOPE_OTHER,
   SCOPE_SIMPLE_CATCH,
+  SCOPE_STATIC_BLOCK,
   SCOPE_SUPER,
   CLASS_ELEMENT_OTHER,
   CLASS_ELEMENT_INSTANCE_GETTER,
@@ -1519,10 +1520,7 @@ export default class StatementParser extends ExpressionParser {
   ) {
     this.expectPlugin("classStaticBlock", member.start);
     // Start a new lexical scope
-    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
-    // Start a new expression scope, this is required for parsing edge cases like:
-    // async (x = class { static { await; } }) => {}
-    this.expressionScope.enter(newExpressionScope());
+    this.scope.enter(SCOPE_CLASS | SCOPE_STATIC_BLOCK | SCOPE_SUPER);
     // Start a new scope with regard to loop labels
     const oldLabels = this.state.labels;
     this.state.labels = [];
@@ -1532,7 +1530,6 @@ export default class StatementParser extends ExpressionParser {
     const body = (member.body = []);
     this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
     this.prodParam.exit();
-    this.expressionScope.exit();
     this.scope.exit();
     this.state.labels = oldLabels;
     classBody.body.push(this.finishNode<N.StaticBlock>(member, "StaticBlock"));

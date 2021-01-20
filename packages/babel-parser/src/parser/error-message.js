@@ -14,6 +14,8 @@ export const ErrorMessages = Object.freeze({
     "Async functions can only be declared at the top level or inside a block",
   AwaitBindingIdentifier:
     "Can not use 'await' as identifier inside an async function",
+  AwaitBindingIdentifierInStaticBlock:
+    "Can not use 'await' as identifier inside a static block",
   AwaitExpressionFormalParameter:
     "await is not allowed in async function parameters",
   AwaitNotInAsyncContext:

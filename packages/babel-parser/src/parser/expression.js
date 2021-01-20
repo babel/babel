@@ -2320,6 +2320,9 @@ export default class ExpressionParser extends LValParser {
       if (this.prodParam.hasAwait) {
         this.raise(startLoc, Errors.AwaitBindingIdentifier);
         return;
+      } else if (this.scope.inStaticBlock && !this.scope.inNonArrowFunction) {
+        this.raise(startLoc, Errors.AwaitBindingIdentifierInStaticBlock);
+        return;
       } else {
         this.expressionScope.recordAsyncArrowParametersError(
           startLoc,
