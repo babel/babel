@@ -1,6 +1,6 @@
 {
   "type": "File",
-  "start":0,"end":485,"loc":{"start":{"line":1,"column":0},"end":{"line":23,"column":45}},
+  "start":0,"end":568,"loc":{"start":{"line":1,"column":0},"end":{"line":27,"column":34}},
   "errors": [
     "SyntaxError: Can not use 'await' as identifier inside a static block (3:21)",
     "SyntaxError: Can not use 'await' as identifier inside a static block (5:27)",
@@ -12,11 +12,13 @@
     "SyntaxError: Can not use 'await' as identifier inside a static block (17:25)",
     "SyntaxError: Can not use 'await' as identifier inside a static block (19:31)",
     "SyntaxError: Can not use 'await' as identifier inside a static block (21:31)",
-    "SyntaxError: Can not use 'await' as identifier inside a static block (23:28)"
+    "SyntaxError: Can not use 'await' as identifier inside a static block (23:28)",
+    "SyntaxError: Can not use 'await' as identifier inside a static block (25:30)",
+    "SyntaxError: Can not use 'await' as identifier inside a static block (27:21)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":485,"loc":{"start":{"line":1,"column":0},"end":{"line":23,"column":45}},
+    "start":0,"end":568,"loc":{"start":{"line":1,"column":0},"end":{"line":27,"column":34}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -669,6 +671,110 @@
             "start":482,"end":484,"loc":{"start":{"line":23,"column":42},"end":{"line":23,"column":44}},
             "body": [],
             "directives": []
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":487,"end":532,"loc":{"start":{"line":25,"column":0},"end":{"line":25,"column":45}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":487,"end":531,"loc":{"start":{"line":25,"column":0},"end":{"line":25,"column":44}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":487,"end":488,"loc":{"start":{"line":25,"column":0},"end":{"line":25,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":491,"end":531,"loc":{"start":{"line":25,"column":4},"end":{"line":25,"column":44}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":497,"end":531,"loc":{"start":{"line":25,"column":10},"end":{"line":25,"column":44}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":499,"end":529,"loc":{"start":{"line":25,"column":12},"end":{"line":25,"column":42}},
+                  "body": [
+                    {
+                      "type": "FunctionDeclaration",
+                      "start":508,"end":527,"loc":{"start":{"line":25,"column":21},"end":{"line":25,"column":40}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":517,"end":522,"loc":{"start":{"line":25,"column":30},"end":{"line":25,"column":35},"identifierName":"await"},
+                        "name": "await"
+                      },
+                      "generator": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start":525,"end":527,"loc":{"start":{"line":25,"column":38},"end":{"line":25,"column":40}},
+                        "body": [],
+                        "directives": []
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":534,"end":568,"loc":{"start":{"line":27,"column":0},"end":{"line":27,"column":34}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":534,"end":567,"loc":{"start":{"line":27,"column":0},"end":{"line":27,"column":33}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":534,"end":535,"loc":{"start":{"line":27,"column":0},"end":{"line":27,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":538,"end":567,"loc":{"start":{"line":27,"column":4},"end":{"line":27,"column":33}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":544,"end":567,"loc":{"start":{"line":27,"column":10},"end":{"line":27,"column":33}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":546,"end":565,"loc":{"start":{"line":27,"column":12},"end":{"line":27,"column":31}},
+                  "body": [
+                    {
+                      "type": "LabeledStatement",
+                      "start":555,"end":563,"loc":{"start":{"line":27,"column":21},"end":{"line":27,"column":29}},
+                      "body": {
+                        "type": "ExpressionStatement",
+                        "start":562,"end":563,"loc":{"start":{"line":27,"column":28},"end":{"line":27,"column":29}},
+                        "expression": {
+                          "type": "NumericLiteral",
+                          "start":562,"end":563,"loc":{"start":{"line":27,"column":28},"end":{"line":27,"column":29}},
+                          "extra": {
+                            "rawValue": 0,
+                            "raw": "0"
+                          },
+                          "value": 0
+                        }
+                      },
+                      "label": {
+                        "type": "Identifier",
+                        "start":555,"end":560,"loc":{"start":{"line":27,"column":21},"end":{"line":27,"column":26},"identifierName":"await"},
+                        "name": "await"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
           }
         }
       }

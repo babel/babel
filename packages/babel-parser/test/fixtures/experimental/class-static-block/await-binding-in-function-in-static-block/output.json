@@ -59,7 +59,6 @@
                       },
                       "generator": false,
                       "async": false,
-                      "expression": false,
                       "params": [],
                       "body": {
                         "type": "BlockStatement",
@@ -74,7 +73,8 @@
                               "name": "await"
                             }
                           }
-                        ]
+                        ],
+                        "directives": []
                       }
                     }
                   ]
@@ -119,7 +119,6 @@
                       },
                       "generator": false,
                       "async": false,
-                      "expression": false,
                       "params": [
                         {
                           "type": "Identifier",
@@ -130,7 +129,8 @@
                       "body": {
                         "type": "BlockStatement",
                         "start":97,"end":99,"loc":{"start":{"line":5,"column":39},"end":{"line":5,"column":41}},
-                        "body": []
+                        "body": [],
+                        "directives": []
                       }
                     }
                   ]
@@ -175,7 +175,6 @@
                       },
                       "generator": false,
                       "async": false,
-                      "expression": false,
                       "params": [
                         {
                           "type": "AssignmentPattern",
@@ -195,7 +194,8 @@
                       "body": {
                         "type": "BlockStatement",
                         "start":149,"end":151,"loc":{"start":{"line":7,"column":43},"end":{"line":7,"column":45}},
-                        "body": []
+                        "body": [],
+                        "directives": []
                       }
                     }
                   ]
@@ -240,14 +240,13 @@
                       },
                       "generator": false,
                       "async": false,
-                      "expression": false,
                       "params": [
                         {
                           "type": "ObjectPattern",
                           "start":190,"end":204,"loc":{"start":{"line":9,"column":32},"end":{"line":9,"column":46}},
                           "properties": [
                             {
-                              "type": "Property",
+                              "type": "ObjectProperty",
                               "start":192,"end":202,"loc":{"start":{"line":9,"column":34},"end":{"line":9,"column":44}},
                               "method": false,
                               "computed": true,
@@ -261,8 +260,7 @@
                                 "type": "Identifier",
                                 "start":201,"end":202,"loc":{"start":{"line":9,"column":43},"end":{"line":9,"column":44},"identifierName":"x"},
                                 "name": "x"
-                              },
-                              "kind": "init"
+                              }
                             }
                           ]
                         }
@@ -270,7 +268,8 @@
                       "body": {
                         "type": "BlockStatement",
                         "start":206,"end":208,"loc":{"start":{"line":9,"column":48},"end":{"line":9,"column":50}},
-                        "body": []
+                        "body": [],
+                        "directives": []
                       }
                     }
                   ]
@@ -280,6 +279,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }
