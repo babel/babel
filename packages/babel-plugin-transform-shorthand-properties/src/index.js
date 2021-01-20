@@ -20,13 +20,22 @@ export default declare(api => {
           );
           func.returnType = node.returnType;
 
-          path.replaceWith(t.objectProperty(node.key, func, node.computed));
+          const computedKey = t.toComputedKey(node);
+          if (t.isStringLiteral(computedKey, { value: "__proto__" })) {
+            path.replaceWith(t.objectProperty(computedKey, func, true));
+          } else {
+            path.replaceWith(t.objectProperty(node.key, func, node.computed));
+          }
         }
       },
 
       ObjectProperty({ node }) {
         if (node.shorthand) {
           node.shorthand = false;
+          if (t.isIdentifier(node.key, { name: "__proto__" })) {
+            node.key = t.stringLiteral(node.key.name);
+            node.computed = true;
+          }
         }
       },
     },
