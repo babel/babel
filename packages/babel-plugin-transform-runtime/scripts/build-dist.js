@@ -297,7 +297,10 @@ function addDefaultCJSExport({ template }) {
         exit(path) {
           path.pushContainer(
             "body",
-            template.statement.ast`module.exports.default = module.exports`
+            template.statements.ast`
+              module.exports.default = module.exports;
+              module.exports.__esModule = true;
+            `
           );
         },
       },
