@@ -29,12 +29,14 @@ export default declare(api => {
         }
       },
 
-      ObjectProperty({ node }) {
+      ObjectProperty(path) {
+        const { node } = path;
         if (node.shorthand) {
-          node.shorthand = false;
-          if (t.isIdentifier(node.key, { name: "__proto__" })) {
-            node.key = t.stringLiteral(node.key.name);
-            node.computed = true;
+          const computedKey = t.toComputedKey(node);
+          if (t.isStringLiteral(computedKey, { value: "__proto__" })) {
+            path.replaceWith(t.objectProperty(computedKey, node.value, true));
+          } else {
+            node.shorthand = false;
           }
         }
       },
