@@ -109,6 +109,8 @@ function _evaluate(path: NodePath, state) {
     if (
       object.isIdentifier() &&
       name === "String" &&
+      // todo(flow->ts): was changed from getBinding(name, true)
+      //  should this be hasBinding(name, true) as the binding is never used later?
       !path.scope.getBinding(name) &&
       property.isIdentifier() &&
       property.node.name === "raw"
