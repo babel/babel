@@ -48,7 +48,7 @@ __metadata:
     lodash: ^4.17.19
     make-dir: ^2.1.0
     rimraf: ^3.0.0
-    slash: ^2.0.0
+    slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
     source-map: ^0.5.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -1914,7 +1914,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
     "@babel/helper-replace-supers": "workspace:^7.12.1"
     "@babel/helper-split-export-declaration": "workspace:^7.10.4"
-    globals: ^11.1.0
+    globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3146,7 +3146,7 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
     browserify: ^16.5.2
-    find-cache-dir: ^2.0.0
+    find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
     lodash: ^4.17.19
     make-dir: ^2.1.0
     pirates: ^4.0.0
@@ -3356,7 +3356,7 @@ __metadata:
     "@babel/parser": "workspace:^7.12.11"
     "@babel/types": "workspace:^7.12.12"
     debug: ^4.1.0
-    globals: ^11.1.0
+    globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
     lodash: ^4.17.19
   languageName: unknown
   linkType: soft
@@ -7063,7 +7063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-dir@npm:^2.0.0":
+"find-cache-dir-BABEL_8_BREAKING-false@npm:find-cache-dir@^2.0.0, find-cache-dir@npm:^2.0.0":
   version: 2.1.0
   resolution: "find-cache-dir@npm:2.1.0"
   dependencies:
@@ -7071,6 +7071,27 @@ __metadata:
     make-dir: ^2.0.0
     pkg-dir: ^3.0.0
   checksum: 6e996026565b651d709964abad7f353976e83e869dffae96f73f99f51078eb856a82411a3f2c77f89040c4976aed28248a761590f7237796a8578d00c6b34446
+  languageName: node
+  linkType: hard
+
+"find-cache-dir-BABEL_8_BREAKING-true@npm:find-cache-dir@^3.3.1":
+  version: 3.3.1
+  resolution: "find-cache-dir@npm:3.3.1"
+  dependencies:
+    commondir: ^1.0.1
+    make-dir: ^3.0.2
+    pkg-dir: ^4.1.0
+  checksum: b1e23226ee89fba89646aa5f72d084c6d04bb64f6d523c9cb2d57a1b5280fcac39e92fd5be572e2fae8a83aa70bc5b797ce33a826b9a4b92373cc38e66d4aa64
+  languageName: node
+  linkType: hard
+
+"find-cache-dir@condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0":
+  version: 0.0.0-condition-e008bc
+  resolution: "find-cache-dir@condition:BABEL_8_BREAKING?^3.3.1:^2.0.0#e008bc"
+  dependencies:
+    find-cache-dir-BABEL_8_BREAKING-false: "npm:find-cache-dir@^2.0.0"
+    find-cache-dir-BABEL_8_BREAKING-true: "npm:find-cache-dir@^3.3.1"
+  checksum: 13e4bcacffca23684358026660d4889531e4a21d0b3cfdf700afa878134b0cbb7929f946e733719d413df60d24b8b86dab58ce75028bf027e368b9482b1fb03b
   languageName: node
   linkType: hard
 
@@ -7521,10 +7542,29 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"globals@npm:^11.1.0":
+"globals-BABEL_8_BREAKING-false@npm:globals@^11.1.0, globals@npm:^11.1.0":
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
   checksum: 2563d3306a7e646fd9ec484b0ca29bf8847d9dc6ebbe86026f11e31bda04f420f6536c2decbd4cb96350379801d2cce352ab373c40be8b024324775b31f882f9
+  languageName: node
+  linkType: hard
+
+"globals-BABEL_8_BREAKING-true@npm:globals@^13.5.0":
+  version: 13.5.0
+  resolution: "globals@npm:13.5.0"
+  dependencies:
+    type-fest: ^0.20.2
+  checksum: 0c80b26d6352119895ae9116f40f106a82950ae9683c52c69f1c22d8bb26504f86452f94699d0a7e0303277ea8d92e567f4cac05d037fcf82fa06ada5ed653ab
+  languageName: node
+  linkType: hard
+
+"globals@condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0":
+  version: 0.0.0-condition-dbd136
+  resolution: "globals@condition:BABEL_8_BREAKING?^13.5.0:^11.1.0#dbd136"
+  dependencies:
+    globals-BABEL_8_BREAKING-false: "npm:globals@^11.1.0"
+    globals-BABEL_8_BREAKING-true: "npm:globals@^13.5.0"
+  checksum: 66e0f1f0de738e7675a70c6ed8b5c6661bf56f9d74f7e2c8143435da63176cdc8d5123a733b7f1d02b94b1f3238c9e0517358a632bf5912acbc5a6a644c70519
   languageName: node
   linkType: hard
 
@@ -9626,7 +9666,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"make-dir@npm:^3.0.0":
+"make-dir@npm:^3.0.0, make-dir@npm:^3.0.2":
   version: 3.1.0
   resolution: "make-dir@npm:3.1.0"
   dependencies:
@@ -10796,7 +10836,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pkg-dir@npm:^4.2.0":
+"pkg-dir@npm:^4.1.0, pkg-dir@npm:^4.2.0":
   version: 4.2.0
   resolution: "pkg-dir@npm:4.2.0"
   dependencies:
@@ -11909,17 +11949,27 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"slash@npm:^2.0.0":
+"slash-BABEL_8_BREAKING-false@npm:slash@^2.0.0, slash@npm:^2.0.0":
   version: 2.0.0
   resolution: "slash@npm:2.0.0"
   checksum: 19b39a8b711b2820521ed23f915ecd86c6f1f64190a26ea2890367bcdbf6963b9f812c78dde91836cef67674f8463fe1cee1d58414716992f2949b102ffc57a1
   languageName: node
   linkType: hard
 
-"slash@npm:^3.0.0":
+"slash-BABEL_8_BREAKING-true@npm:slash@^3.0.0, slash@npm:^3.0.0":
   version: 3.0.0
   resolution: "slash@npm:3.0.0"
   checksum: fc3e8597d822ee3ba6cd76e9b001cd5be315f9b81c3a03a29bb611c003d1484e3b29a9e7bc020298fa669b585ff7c9268f44513f60c186216eb6af3111a3e838
+  languageName: node
+  linkType: hard
+
+"slash@condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0":
+  version: 0.0.0-condition-4a957f
+  resolution: "slash@condition:BABEL_8_BREAKING?^3.0.0:^2.0.0#4a957f"
+  dependencies:
+    slash-BABEL_8_BREAKING-false: "npm:slash@^2.0.0"
+    slash-BABEL_8_BREAKING-true: "npm:slash@^3.0.0"
+  checksum: df1ee51af836baef3cc87639133ae7271078fc0b8761b86d9753a26dcbbf35de305e1050b898e31abf5c4d5dafa94fc3e5b38b06250f0c193b9af0b4dcfb4cd7
   languageName: node
   linkType: hard
 
@@ -12789,6 +12839,13 @@ fsevents@^1.2.7:
   version: 0.11.0
   resolution: "type-fest@npm:0.11.0"
   checksum: 02e5cadf13590a5724cacf8d9133320efd173f6fb1b695fcb29e56551a315bf0f07ca988a780a1999b7b55bb3eaaa7f37223615207236d393af17bba6749dc95
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^0.20.2":
+  version: 0.20.2
+  resolution: "type-fest@npm:0.20.2"
+  checksum: 1f887bc6150e632fb772fd28e33c22a4ab036c6f484fa9ac2e2115f6cae9d62bba7ca0368e3332b539d85bd2c8391c7bff22ad410abcbc9ab3774d61e250b210
   languageName: node
   linkType: hard
 

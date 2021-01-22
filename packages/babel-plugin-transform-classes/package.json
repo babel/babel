@@ -21,7 +21,7 @@
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
     "@babel/helper-replace-supers": "workspace:^7.12.1",
     "@babel/helper-split-export-declaration": "workspace:^7.10.4",
-    "globals": "^11.1.0"
+    "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   },
   "keywords": [
     "babel-plugin"
