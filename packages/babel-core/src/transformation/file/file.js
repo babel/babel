@@ -57,6 +57,10 @@ export default class File {
     this.ast = ast;
     this.inputMap = inputMap;
 
+    this.invalidCache();
+  }
+
+  invalidCache() {
     this.path = NodePath.get({
       hub: this.hub,
       parentPath: null,
