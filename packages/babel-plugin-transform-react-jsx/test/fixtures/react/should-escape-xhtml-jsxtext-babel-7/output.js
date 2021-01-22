@@ -1,10 +1,8 @@
-/** @jsxRuntime classic */
-
 /*#__PURE__*/
 React.createElement("div", null, "wow");
 
 /*#__PURE__*/
-React.createElement("div", null, "wôw");
+React.createElement("div", null, "w\xF4w");
 
 /*#__PURE__*/
 React.createElement("div", null, "w & w");
