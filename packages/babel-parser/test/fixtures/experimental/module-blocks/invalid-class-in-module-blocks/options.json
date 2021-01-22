@@ -1,0 +1,9 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "moduleBlocks",
+    "classPrivateProperties",
+    "classPrivateMethods",
+    "classProperties"
+  ]
+}

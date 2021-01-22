@@ -2673,6 +2673,8 @@ export default class ExpressionParser extends LValParser {
     this.prodParam.enter(paramFlags);
     const oldInModule = this.inModule;
     this.inModule = true;
+    const oldClassScope = this.classScope;
+    this.classScope = new ClassScopeHandler(this.raise.bind(this));
     const program = this.startNode<N.Program>();
     node.body = this.parseProgram(program, tt.braceR, "module");
     this.scope.exit();
@@ -2682,6 +2684,7 @@ export default class ExpressionParser extends LValParser {
     this.eat(tt.braceR);
     this.state.labels = oldLabels;
     this.state.exportedIdentifiers = oldExportedIdentifiers;
+    this.classScope = oldClassScope;
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
   }
 }
