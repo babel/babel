@@ -6,13 +6,16 @@ let currentHook;
 let currentOptions;
 let sourceMapSupport = false;
 
-const registerFile = require.resolve("../lib/node");
+const registerFile = require.resolve("../lib/index");
 const testCacheFilename = path.join(__dirname, ".babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFileContent = fs.readFileSync(testFile);
 const sourceMapTestFile = require.resolve("./fixtures/source-map/index");
 const sourceMapNestedTestFile = require.resolve(
   "./fixtures/source-map/foo/bar",
+);
+const internalModulesTestFile = require.resolve(
+  "./fixtures/internal-modules/index",
 );
 
 jest.mock("pirates", () => {
@@ -152,18 +155,7 @@ describe("@babel/register", function () {
     // that working inside a test, possibly because of jest’s mocking
     // hooks, so we spawn a separate process.
 
-    const args = ["-r", registerFile, sourceMapTestFile];
-    const spawn = child.spawn(process.execPath, args, { cwd: __dirname });
-
-    let output = "";
-
-    for (const stream of [spawn.stderr, spawn.stdout]) {
-      stream.on("data", chunk => {
-        output += chunk;
-      });
-    }
-
-    spawn.on("close", function () {
+    spawnNode(["-r", registerFile, sourceMapTestFile], output => {
       let err;
 
       try {
@@ -201,4 +193,40 @@ describe("@babel/register", function () {
 
     expect(result).toBe('"use strict";\n\nrequire("assert");');
   });
+
+  test("transforms modules used within register", callback => {
+    // Need a clean environment without `convert-source-map`
+    // and `lodash/isPlainObject` already in the require cache,
+    // so we spawn a separate process
+
+    spawnNode([internalModulesTestFile], output => {
+      let err;
+
+      try {
+        const { convertSourceMap, isPlainObject } = JSON.parse(output);
+        expect(convertSourceMap).toMatch("/* transformed */");
+        expect(isPlainObject).toMatch("/* transformed */");
+      } catch (e) {
+        err = e;
+      }
+
+      callback(err);
+    });
+  });
 });
+
+function spawnNode(args, callback) {
+  const spawn = child.spawn(process.execPath, args, { cwd: __dirname });
+
+  let output = "";
+
+  for (const stream of [spawn.stderr, spawn.stdout]) {
+    stream.on("data", chunk => {
+      output += chunk;
+    });
+  }
+
+  spawn.on("close", function () {
+    callback(output);
+  });
+}

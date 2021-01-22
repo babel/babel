@@ -7,6 +7,7 @@ import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
 import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
+import Module from "module";
 
 const maps = {};
 let transformOpts = {};
@@ -82,15 +83,19 @@ function compile(code, filename) {
 }
 
 let compiling = false;
+const internalModuleCache = Module._cache;
 
 function compileHook(code, filename) {
   if (compiling) return code;
 
+  const globalModuleCache = Module._cache;
   try {
     compiling = true;
+    Module._cache = internalModuleCache;
     return compile(code, filename);
   } finally {
     compiling = false;
+    Module._cache = globalModuleCache;
   }
 }
 
