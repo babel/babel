@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-computed-properties",
+    "transform-shorthand-properties"
+  ]
+}
