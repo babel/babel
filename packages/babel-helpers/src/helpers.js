@@ -474,10 +474,12 @@ helpers.inherits = helper("7.0.0-beta.0")`
 `;
 
 helpers.inheritsLoose = helper("7.0.0-beta.0")`
+  import setPrototypeOf from "setPrototypeOf";
+
   export default function _inheritsLoose(subClass, superClass) {
     subClass.prototype = Object.create(superClass.prototype);
     subClass.prototype.constructor = subClass;
-    subClass.__proto__ = superClass;
+    setPrototypeOf(subClass, superClass);
   }
 `;
 
