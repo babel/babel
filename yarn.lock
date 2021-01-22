@@ -858,7 +858,7 @@ __metadata:
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^7.10.4"
     chalk: ^2.0.0
-    js-tokens: ^4.0.0
+    js-tokens: "condition:BABEL_8_BREAKING ? ^6.0.0 : ^4.0.0"
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -9060,10 +9060,27 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"js-tokens@npm:^4.0.0":
+"js-tokens-BABEL_8_BREAKING-false@npm:js-tokens@^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
   checksum: 1fc4e4667ac2d972aba65148b9cbf9c17566b2394d3504238d8492bbd3e68f496c657eab06b26b40b17db5cac0a34d153a12130e2d2d2bb6dc2cdc8a4764eb1b
+  languageName: node
+  linkType: hard
+
+"js-tokens-BABEL_8_BREAKING-true@npm:js-tokens@^6.0.0":
+  version: 6.0.0
+  resolution: "js-tokens@npm:6.0.0"
+  checksum: 975859a4fd68cbaaabf106639df316e662b87b296afa9c6b00cfd25bc7642137433d18bf78e1e5578fc63c2a3e7334aad4fbed47f87c6c29f9a4f6760e79e322
+  languageName: node
+  linkType: hard
+
+"js-tokens@condition:BABEL_8_BREAKING ? ^6.0.0 : ^4.0.0":
+  version: 0.0.0-condition-bceac3
+  resolution: "js-tokens@condition:BABEL_8_BREAKING?^6.0.0:^4.0.0#bceac3"
+  dependencies:
+    js-tokens-BABEL_8_BREAKING-false: "npm:js-tokens@^4.0.0"
+    js-tokens-BABEL_8_BREAKING-true: "npm:js-tokens@^6.0.0"
+  checksum: 036166b3ba76e31549eeb404d986ff5b1af55f91137bbcc6d5147b1e4c8d4c74f01d9aae10cf5d5221e60f3bcef98e7460bbf2a54a9e7b47d3b63789b11297e3
   languageName: node
   linkType: hard
 
