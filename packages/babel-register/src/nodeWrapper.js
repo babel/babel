@@ -18,4 +18,7 @@ Module._cache = globalModuleCache;
 const smsPath = require.resolve("source-map-support");
 globalModuleCache[smsPath] = internalModuleCache[smsPath];
 
+const register = node.default;
+register();
+
 module.exports = node;
