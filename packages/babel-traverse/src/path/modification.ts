@@ -119,7 +119,7 @@ export function insertAfter(this: NodePath, nodes_: t.Node | t.Node[]) {
       }),
     );
   } else if (
-    (this.isExpression() &&
+    (this.isNodeType("Expression") &&
       !this.isJSXElement() &&
       !parentPath.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
