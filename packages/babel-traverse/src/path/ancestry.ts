@@ -26,7 +26,10 @@ export function findParent(
  * or `null` if the `callback` never returns a truthy value.
  */
 
-export function find(callback: (path: NodePath) => boolean): NodePath | null {
+export function find(
+  this: NodePath,
+  callback: (path: NodePath) => boolean,
+): NodePath | null {
   let path = this;
   do {
     if (callback(path)) return path;
@@ -38,15 +41,15 @@ export function find(callback: (path: NodePath) => boolean): NodePath | null {
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent(): NodePath<t.Function> | null {
-  return this.findParent(p => p.isFunction());
+export function getFunctionParent(this: NodePath): NodePath<t.Function> | null {
+  return this.findParent(p => p.isFunction()) as NodePath<t.Function> | null;
 }
 
 /**
  * Walk up the tree until we hit a parent node path in a list.
  */
 
-export function getStatementParent(): NodePath<t.Statement> {
+export function getStatementParent(this: NodePath): NodePath<t.Statement> {
   let path = this;
 
   do {
@@ -66,7 +69,7 @@ export function getStatementParent(): NodePath<t.Statement> {
     );
   }
 
-  return path;
+  return path as NodePath<t.Statement>;
 }
 
 /**
@@ -78,6 +81,7 @@ export function getStatementParent(): NodePath<t.Statement> {
  */
 
 export function getEarliestCommonAncestorFrom(
+  this: NodePath,
   paths: Array<NodePath>,
 ): NodePath {
   return this.getDeepestCommonAncestorFrom(
@@ -106,7 +110,7 @@ export function getEarliestCommonAncestorFrom(
 
         // handle keys
         const earliestKeyIndex = keys.indexOf(earliest.parentKey);
-        const currentKeyIndex = keys.indexOf(path.parentKey);
+        const currentKeyIndex = keys.indexOf(path.parentKey as string);
         if (earliestKeyIndex > currentKeyIndex) {
           // key appears before so it's earlier
           earliest = path;
@@ -125,6 +129,7 @@ export function getEarliestCommonAncestorFrom(
  */
 
 export function getDeepestCommonAncestorFrom(
+  this: NodePath,
   paths: Array<NodePath>,
   filter?: (deepest: t.Node, i: number, ancestries: NodePath[][]) => NodePath,
 ): NodePath {
@@ -194,7 +199,7 @@ export function getDeepestCommonAncestorFrom(
  * NOTE: The current node path is included in this.
  */
 
-export function getAncestry(): Array<NodePath> {
+export function getAncestry(this: NodePath): Array<NodePath> {
   let path = this;
   const paths = [];
   do {
@@ -206,18 +211,18 @@ export function getAncestry(): Array<NodePath> {
 /**
  * A helper to find if `this` path is an ancestor of @param maybeDescendant
  */
-export function isAncestor(maybeDescendant: NodePath): boolean {
+export function isAncestor(this: NodePath, maybeDescendant: NodePath): boolean {
   return maybeDescendant.isDescendant(this);
 }
 
 /**
  * A helper to find if `this` path is a descendant of @param maybeAncestor
  */
-export function isDescendant(maybeAncestor: NodePath): boolean {
+export function isDescendant(this: NodePath, maybeAncestor: NodePath): boolean {
   return !!this.findParent(parent => parent === maybeAncestor);
 }
 
-export function inType(...candidateTypes: string[]): boolean {
+export function inType(this: NodePath, ...candidateTypes: string[]): boolean {
   let path = this;
   while (path) {
     for (const type of candidateTypes) {

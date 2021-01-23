@@ -55,7 +55,7 @@ class NodePath<T extends t.Node = t.Node> {
   parentPath: NodePath | null = null;
   container: object | null | Array<any> = null;
   listKey: string | null = null;
-  key: string | null = null;
+  key: string | number | null = null;
   node: T = null;
   type: string | null = null;
 
@@ -131,7 +131,7 @@ class NodePath<T extends t.Node = t.Node> {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
-  set(key: string, node: t.Node) {
+  set(key: string, node: any) {
     t.validate(this.node, key, node);
     this.node[key] = node;
   }

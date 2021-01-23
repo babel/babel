@@ -23,7 +23,7 @@ const INVALID_METHODS = ["random"];
  *
  */
 
-export function evaluateTruthy(): boolean {
+export function evaluateTruthy(this: NodePath): boolean {
   const res = this.evaluate();
   if (res.confident) return !!res.value;
 }
@@ -432,7 +432,9 @@ function evaluateQuasis(path, quasis: Array<any>, state, raw = false) {
  *
  */
 
-export function evaluate(): {
+export function evaluate(
+  this: NodePath,
+): {
   confident: boolean;
   value: any;
   deopt?: NodePath;

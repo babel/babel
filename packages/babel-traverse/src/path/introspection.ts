@@ -11,6 +11,7 @@ import * as t from "@babel/types";
  */
 
 export function matchesPattern(
+  this: NodePath,
   pattern: string,
   allowPartial?: boolean,
 ): boolean {
@@ -22,7 +23,7 @@ export function matchesPattern(
  * if the array has any items, otherwise we just check if it's falsy.
  */
 
-export function has(key: string): boolean {
+export function has(this: NodePath, key: string): boolean {
   const val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
@@ -35,7 +36,7 @@ export function has(key: string): boolean {
  * Description
  */
 
-export function isStatic(): boolean {
+export function isStatic(this: NodePath): boolean {
   return this.scope.isStatic(this.node);
 }
 
@@ -49,7 +50,7 @@ export const is = has;
  * Opposite of `has`.
  */
 
-export function isnt(key: string): boolean {
+export function isnt(this: NodePath, key: string): boolean {
   return !this.has(key);
 }
 
@@ -57,7 +58,7 @@ export function isnt(key: string): boolean {
  * Check whether the path node `key` strict equals `value`.
  */
 
-export function equals(key: string, value): boolean {
+export function equals(this: NodePath, key: string, value): boolean {
   return this.node[key] === value;
 }
 
@@ -66,7 +67,7 @@ export function equals(key: string, value): boolean {
  * been removed yet we still internally know the type and need it to calculate node replacement.
  */
 
-export function isNodeType(type: string): boolean {
+export function isNodeType(this: NodePath, type: string): boolean {
   return t.isType(this.type, type);
 }
 
@@ -80,7 +81,7 @@ export function isNodeType(type: string): boolean {
  * to tell the path replacement that it's ok to replace this with an expression.
  */
 
-export function canHaveVariableDeclarationOrExpression() {
+export function canHaveVariableDeclarationOrExpression(this: NodePath) {
   return (
     (this.key === "init" || this.key === "left") && this.parentPath.isFor()
   );
@@ -95,6 +96,7 @@ export function canHaveVariableDeclarationOrExpression() {
  */
 
 export function canSwapBetweenExpressionAndStatement(
+  this: NodePath,
   replacement: t.Node,
 ): boolean {
   if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
@@ -114,7 +116,10 @@ export function canSwapBetweenExpressionAndStatement(
  * Check whether the current path references a completion record
  */
 
-export function isCompletionRecord(allowInsideFunction?: boolean): boolean {
+export function isCompletionRecord(
+  this: NodePath,
+  allowInsideFunction?: boolean,
+): boolean {
   let path = this;
   let first = true;
 
@@ -143,14 +148,14 @@ export function isCompletionRecord(allowInsideFunction?: boolean): boolean {
  * so we can explode it if necessary.
  */
 
-export function isStatementOrBlock(): boolean {
+export function isStatementOrBlock(this: NodePath): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
     t.isBlockStatement(this.container)
   ) {
     return false;
   } else {
-    return t.STATEMENT_OR_BLOCK_KEYS.includes(this.key);
+    return t.STATEMENT_OR_BLOCK_KEYS.includes(this.key as string);
   }
 }
 
@@ -159,6 +164,7 @@ export function isStatementOrBlock(): boolean {
  */
 
 export function referencesImport(
+  this: NodePath<t.Identifier>,
   moduleSource: string,
   importName: string,
 ): boolean {
@@ -186,7 +192,10 @@ export function referencesImport(
     return true;
   }
 
-  if (path.isImportSpecifier() && path.node.imported.name === importName) {
+  if (
+    path.isImportSpecifier() &&
+    t.isIdentifier(path.node.imported, { name: importName })
+  ) {
     return true;
   }
 
@@ -197,7 +206,7 @@ export function referencesImport(
  * Get the source code associated with this node.
  */
 
-export function getSource(): string {
+export function getSource(this: NodePath): string {
   const node = this.node;
   if (node.end) {
     const code = this.hub.getCode();
@@ -206,7 +215,7 @@ export function getSource(): string {
   return "";
 }
 
-export function willIMaybeExecuteBefore(target): boolean {
+export function willIMaybeExecuteBefore(this: NodePath, target): boolean {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
@@ -287,6 +296,7 @@ type RelativeExecutionStatus = "before" | "after" | "unknown";
  */
 
 export function _guessExecutionStatusRelativeTo(
+  this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
   // check if the two paths are in different functions, we can't track execution of these
@@ -359,8 +369,8 @@ export function _guessExecutionStatusRelativeTo(
   // otherwise we're associated by a parent node, check which key comes before the other
   const keys = t.VISITOR_KEYS[commonPath.type];
   const keyPosition = {
-    this: keys.indexOf(divergence.this.parentKey),
-    target: keys.indexOf(divergence.target.parentKey),
+    this: keys.indexOf(divergence.this.parentKey as string),
+    target: keys.indexOf(divergence.target.parentKey as string),
   };
   return keyPosition.target > keyPosition.this ? "before" : "after";
 }
@@ -372,6 +382,7 @@ export function _guessExecutionStatusRelativeTo(
 const executionOrderCheckedNodes = new WeakSet();
 
 export function _guessExecutionStatusRelativeToDifferentFunctions(
+  this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
   if (
@@ -507,7 +518,7 @@ export function _resolve(
   }
 }
 
-export function isConstantExpression() {
+export function isConstantExpression(this: NodePath) {
   if (this.isIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return false;
@@ -529,7 +540,7 @@ export function isConstantExpression() {
   }
 
   if (this.isUnaryExpression()) {
-    if (this.get("operator").node !== "void") {
+    if (this.node.operator !== "void") {
       return false;
     }
 
@@ -546,7 +557,7 @@ export function isConstantExpression() {
   return false;
 }
 
-export function isInStrictMode() {
+export function isInStrictMode(this: NodePath) {
   const start = this.isProgram() ? this : this.parentPath;
 
   const strictParent = start.find(path => {
@@ -563,10 +574,11 @@ export function isInStrictMode() {
       return false;
     }
 
-    let { node } = path;
-    if (path.isFunction()) node = node.body;
+    const body: t.BlockStatement | t.Program = path.isFunction()
+      ? (path.node.body as t.BlockStatement)
+      : (path.node as t.Program);
 
-    for (const directive of node.directives) {
+    for (const directive of body.directives) {
       if (directive.value.value === "use strict") {
         return true;
       }
