@@ -36,7 +36,37 @@ export function createClassFeaturePlugin({
   feature,
   loose,
   manipulateOptions,
+  // TODO(Babel 8): Remove the default falue
+  api = { assumption: () => {} },
 }) {
+  const setPublicClassFields = api.assumption("setPublicClassFields");
+  const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
+
+  if (loose) {
+    const explicit = [];
+
+    if (setPublicClassFields !== undefined) {
+      explicit.push(`"setPublicClassFields"`);
+    }
+    if (privateFieldsAsProperties !== undefined) {
+      explicit.push(`"privateFieldsAsProperties"`);
+    }
+    if (explicit.length !== 0) {
+      console.warn(
+        `[${name}]: You are using the "loose: true" option and you are` +
+          ` explicitly setting a value for the ${explicit.join(" and ")}` +
+          ` assumption${explicit.length > 1 ? "s" : ""}. The "loose" option` +
+          ` can cause incompatibilities with the other class features` +
+          ` plugins, so it's recommended that you replace it with the` +
+          ` following top-level option:\n` +
+          `\t"assumptions": {\n` +
+          `\t\t"setPublicClassFields": true,\n` +
+          `\t\t"privateFieldsAsProperties": true\n` +
+          `\t}`,
+      );
+    }
+  }
+
   return {
     name,
     manipulateOptions,
@@ -151,11 +181,17 @@ export function createClassFeaturePlugin({
         const privateNamesMap = buildPrivateNamesMap(props);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
-          loose,
+          privateFieldsAsProperties ?? loose,
           state,
         );
 
-        transformPrivateNamesUsage(ref, path, privateNamesMap, loose, state);
+        transformPrivateNamesUsage(
+          ref,
+          path,
+          privateNamesMap,
+          { privateFieldsAsProperties: privateFieldsAsProperties ?? loose },
+          state,
+        );
 
         let keysNodes, staticNodes, instanceNodes, wrapClass;
 
@@ -175,6 +211,8 @@ export function createClassFeaturePlugin({
             props,
             privateNamesMap,
             state,
+            setPublicClassFields ?? loose,
+            privateFieldsAsProperties ?? loose,
             loose,
           ));
         }
