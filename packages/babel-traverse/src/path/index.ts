@@ -121,8 +121,11 @@ class NodePath<T extends t.Node = t.Node> {
     return val;
   }
 
-  buildCodeFrameError(msg: string, _Error: typeof Error = SyntaxError): Error {
-    return this.hub.buildError(this.node, msg, _Error);
+  buildCodeFrameError(
+    msg: string,
+    Error: new () => Error = SyntaxError,
+  ): Error {
+    return this.hub.buildError(this.node, msg, Error);
   }
 
   traverse<T>(visitor: Visitor<T>, state: T): void;

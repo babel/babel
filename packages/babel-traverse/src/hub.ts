@@ -4,7 +4,7 @@ export interface HubInterface {
   getCode(): string | void;
   getScope(): Scope | void;
   addHelper(name: string): any;
-  buildError(node: any, msg: string, Error: new (...args: any) => Error): Error;
+  buildError(node: any, msg: string, Error: new () => Error): Error;
 }
 
 export default class Hub implements HubInterface {
