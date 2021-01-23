@@ -149,16 +149,19 @@ export default function register(opts?: Object = {}) {
   if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
+      // $FlowIgnore
       new RegExp("^" + escapeRegExp(cwd), "i"),
     ];
     transformOpts.ignore = [
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
+          // $FlowIgnore
           escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +
+          // $FlowIgnore
           escapeRegExp(path.sep + "node_modules" + path.sep),
         "i",
       ),
