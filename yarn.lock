@@ -251,7 +251,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:*"
     "@babel/parser": "workspace:*"
     "@babel/types": "workspace:^7.12.11"
-    jsesc: ^2.5.1
+    jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
     source-map: ^0.5.0
   languageName: unknown
   linkType: soft
@@ -9210,12 +9210,31 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jsesc@npm:^2.5.1":
+"jsesc-BABEL_8_BREAKING-false@npm:jsesc@^2.5.1, jsesc@npm:^2.5.1":
   version: 2.5.2
   resolution: "jsesc@npm:2.5.2"
   bin:
     jsesc: bin/jsesc
   checksum: ca91ec33d74c55959e4b6fdbfee2af5f38be74a752cf0a982702e3a16239f26c2abbe19f5f84b15592570dda01872e929a90738615bd445f7b9b859781cfcf68
+  languageName: node
+  linkType: hard
+
+"jsesc-BABEL_8_BREAKING-true@npm:jsesc@^3.0.2":
+  version: 3.0.2
+  resolution: "jsesc@npm:3.0.2"
+  bin:
+    jsesc: bin/jsesc
+  checksum: 809c7663241f76c42528e2706f011d43c0eaa19b50a5d6f4015b4b9563292c0ffad1f5b12a9a41b71e2206efc5ae3632e8b27c35cb3ef508c0a58a3bb011da90
+  languageName: node
+  linkType: hard
+
+"jsesc@condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1":
+  version: 0.0.0-condition-31d9b4
+  resolution: "jsesc@condition:BABEL_8_BREAKING?^3.0.2:^2.5.1#31d9b4"
+  dependencies:
+    jsesc-BABEL_8_BREAKING-false: "npm:jsesc@^2.5.1"
+    jsesc-BABEL_8_BREAKING-true: "npm:jsesc@^3.0.2"
+  checksum: d6751e397e85958087fffcb6fbe5892902d2455e98ff0d69b69d0b15103892465d60aa0d750199a5d45cca75bbd89c4854b80ef4cbb98b229e3e9fa4e567d968
   languageName: node
   linkType: hard
 

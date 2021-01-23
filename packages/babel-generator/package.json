@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "@babel/types": "workspace:^7.12.11",
-    "jsesc": "^2.5.1",
+    "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1",
     "source-map": "^0.5.0"
   },
   "devDependencies": {

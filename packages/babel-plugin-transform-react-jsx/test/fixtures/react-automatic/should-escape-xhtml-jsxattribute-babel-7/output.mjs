@@ -2,7 +2,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 
 /*#__PURE__*/
 _jsx("div", {
-  id: "wôw"
+  id: "w\xF4w"
 });
 
 /*#__PURE__*/

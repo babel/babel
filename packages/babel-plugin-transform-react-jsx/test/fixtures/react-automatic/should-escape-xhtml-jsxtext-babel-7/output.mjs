@@ -8,7 +8,7 @@ _jsx("div", {
 
 /*#__PURE__*/
 _jsx("div", {
-  children: "wôw"
+  children: "w\xF4w"
 });
 
 /*#__PURE__*/
