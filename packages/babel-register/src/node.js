@@ -1,13 +1,17 @@
 import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "@babel/core";
 import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
 import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
 import Module from "module";
+
+// $FlowIgnore
+const escapeRegExp = process.env.BABEL_8_BREAKING
+  ? require("escape-string-regexp")
+  : require("lodash/escapeRegExp");
 
 const maps = {};
 let transformOpts = {};
@@ -145,16 +149,19 @@ export default function register(opts?: Object = {}) {
   if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
+      // $FlowIgnore
       new RegExp("^" + escapeRegExp(cwd), "i"),
     ];
     transformOpts.ignore = [
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
+          // $FlowIgnore
           escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +
+          // $FlowIgnore
           escapeRegExp(path.sep + "node_modules" + path.sep),
         "i",
       ),

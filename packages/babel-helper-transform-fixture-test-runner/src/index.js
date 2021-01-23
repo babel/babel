@@ -7,7 +7,6 @@ import {
 } from "@babel/helper-fixtures";
 import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
-import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
 import merge from "lodash/merge";
 import assert from "assert";
@@ -16,8 +15,12 @@ import path from "path";
 import vm from "vm";
 import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 import QuickLRU from "quick-lru";
-
 import diff from "jest-diff";
+
+// $FlowIgnore
+const escapeRegExp = process.env.BABEL_8_BREAKING
+  ? require("escape-string-regexp")
+  : require("lodash/escapeRegExp");
 
 const cachedScripts = new QuickLRU({ maxSize: 10 });
 const contextModuleCache = new WeakMap();

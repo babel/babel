@@ -19,6 +19,7 @@
     "@babel/core": "workspace:^7.12.10",
     "@babel/helper-fixtures": "workspace:^7.12.12",
     "babel-check-duplicated-nodes": "^1.0.0",
+    "escape-string-regexp": "condition:BABEL_8_BREAKING ? ^4.0.0 : ",
     "jest-diff": "^24.8.0",
     "lodash": "^4.17.19",
     "quick-lru": "5.1.0",

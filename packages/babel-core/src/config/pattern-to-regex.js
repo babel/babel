@@ -1,6 +1,9 @@
 // @flow
 import path from "path";
-import escapeRegExp from "lodash/escapeRegExp";
+
+const escapeRegExp = process.env.BABEL_8_BREAKING
+  ? require("escape-string-regexp")
+  : require("lodash/escapeRegExp");
 
 const sep = `\\${path.sep}`;
 const endSep = `(?:${sep}|$)`;
@@ -39,11 +42,13 @@ export default function pathToPattern(
         // *.ext matches a wildcard with an extension.
         if (part.indexOf("*.") === 0) {
           return (
+            // $FlowIgnore
             substitution + escapeRegExp(part.slice(1)) + (last ? endSep : sep)
           );
         }
 
         // Otherwise match the pattern text.
+        // $FlowIgnore
         return escapeRegExp(part) + (last ? endSep : sep);
       }),
     ].join(""),
