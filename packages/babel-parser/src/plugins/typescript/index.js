@@ -2281,6 +2281,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // "export declare" is equivalent to just "export".
       const isDeclare = this.eatContextual("declare");
 
+      if (
+        this.isContextual("declare") ||
+        !this.shouldParseExportDeclaration()
+      ) {
+        super.unexpected(this.state.start, this.state.value);
+      }
+
       let declaration: ?N.Declaration;
 
       if (this.match(tt.name)) {

@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "typescript"
+  ],
+  "throws": "declare (1:15)"
+}

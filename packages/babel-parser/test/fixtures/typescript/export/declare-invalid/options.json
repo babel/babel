@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "typescript"
+  ],
+  "throws": "foo (1:15)"
+}
