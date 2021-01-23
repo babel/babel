@@ -21,7 +21,7 @@ import * as NodePath_removal from "./removal";
 import * as NodePath_modification from "./modification";
 import * as NodePath_family from "./family";
 import * as NodePath_comments from "./comments";
-import type { NodePathAssetions } from "./generated/assetions";
+import type { NodePathAssetions } from "./generated/asserts";
 import type { NodePathValidators } from "./generated/validators";
 
 const debug = buildDebug("babel");

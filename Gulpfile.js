@@ -86,13 +86,12 @@ function rename(fn) {
 }
 
 /**
- *
- * @typedef {("asserts" | "builders" | "constants" | "validators")} HelperKind
- * @param {HelperKind} helperKind
+ * @param {string} generator
+ * @param {string} pkg
  * @param {string} filename
+ * @param {string} message
  */
-function generateTypeHelpers(helperKind, filename = "index.ts") {
-  const dest = `./packages/babel-types/src/${helperKind}/generated/`;
+function generateHelpers(generator, dest, filename, message) {
   const formatCode = require("./scripts/utils/formatCode");
   const stream = gulp
     .src(".", { base: __dirname })
@@ -101,20 +100,44 @@ function generateTypeHelpers(helperKind, filename = "index.ts") {
       through.obj(function (file, enc, callback) {
         file.path = filename;
         file.contents = Buffer.from(
-          formatCode(
-            require(`./packages/babel-types/scripts/generators/${helperKind}`)(
-              filename
-            ),
-            dest + file.path
-          )
+          formatCode(require(generator)(filename), dest + file.path)
         );
-        fancyLog(`${chalk.green("✔")} Generated ${helperKind}`);
+        fancyLog(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
       })
     )
     .pipe(gulp.dest(dest));
 
   return finish(stream);
+}
+
+/**
+ *
+ * @typedef {("asserts" | "builders" | "constants" | "validators")} TypesHelperKind
+ * @param {TypesHelperKind} helperKind
+ * @param {string} filename
+ */
+async function generateTypeHelpers(helperKind, filename = "index.ts") {
+  return generateHelpers(
+    `./packages/babel-types/scripts/generators/${helperKind}`,
+    `./packages/babel-types/src/${helperKind}/generated/`,
+    filename,
+    `@babel/types -> ${helperKind}`
+  );
+}
+
+/**
+ *
+ * @typedef {("asserts" | "validators" | "virtual-types")} TraverseHelperKind
+ * @param {TraverseHelperKind} helperKind
+ */
+async function generateTraverseHelpers(helperKind) {
+  return generateHelpers(
+    `./packages/babel-traverse/scripts/generators/${helperKind}`,
+    `./packages/babel-traverse/src/path/generated/`,
+    `${helperKind}.ts`,
+    `@babel/traverse -> ${helperKind}`
+  );
 }
 
 function generateStandalone() {
@@ -383,7 +406,7 @@ const standaloneBundle = [
 ];
 
 gulp.task("generate-type-helpers", () => {
-  fancyLog("Generating @babel/types dynamic functions");
+  fancyLog("Generating @babel/types and @babel/traverse dynamic functions");
 
   return Promise.all([
     generateTypeHelpers("asserts"),
@@ -392,6 +415,9 @@ gulp.task("generate-type-helpers", () => {
     generateTypeHelpers("constants"),
     generateTypeHelpers("validators"),
     generateTypeHelpers("ast-types"),
+    generateTraverseHelpers("asserts"),
+    generateTraverseHelpers("validators"),
+    generateTraverseHelpers("virtual-types"),
   ]);
 });
 
