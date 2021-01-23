@@ -4,12 +4,13 @@ import type TraversalContext from "../context";
 import NodePath from "./index";
 import * as t from "@babel/types";
 
-export function getOpposite(): NodePath | undefined | null {
+export function getOpposite(): NodePath | null {
   if (this.key === "left") {
     return this.getSibling("right");
   } else if (this.key === "right") {
     return this.getSibling("left");
   }
+  return null;
 }
 
 function addCompletionRecords(
@@ -20,7 +21,7 @@ function addCompletionRecords(
   return paths;
 }
 
-function findBreak(statements): NodePath | undefined | null {
+function findBreak(statements): NodePath | null {
   let breakStatement;
   if (!Array.isArray(statements)) {
     statements = [statements];

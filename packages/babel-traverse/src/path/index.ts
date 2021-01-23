@@ -52,12 +52,12 @@ class NodePath<T extends t.Node = t.Node> {
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
   skipKeys: any = null;
-  parentPath: NodePath | undefined | null = null;
-  container: object | undefined | null | Array<any> = null;
-  listKey: string | undefined | null = null;
-  key: string | undefined | null = null;
+  parentPath: NodePath | null = null;
+  container: object | null | Array<any> = null;
+  listKey: string | null = null;
+  key: string | null = null;
   node: T = null;
-  type: string | undefined | null = null;
+  type: string | null = null;
 
   static get({
     hub,

@@ -85,8 +85,7 @@ export function explode(visitor) {
 
     const fns = visitor[nodeType];
 
-    let aliases: Array<string> | undefined | null =
-      t.FLIPPED_ALIAS_KEYS[nodeType];
+    let aliases: Array<string> | undefined = t.FLIPPED_ALIAS_KEYS[nodeType];
 
     const deprecratedKey = t.DEPRECATED_KEYS[nodeType];
     if (deprecratedKey) {

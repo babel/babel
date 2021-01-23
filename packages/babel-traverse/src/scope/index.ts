@@ -935,7 +935,7 @@ export default class Scope {
     id: t.LVal;
     init?: t.Expression;
     unique?: boolean;
-    _blockHoist?: number | undefined | null;
+    _blockHoist?: number | undefined;
     kind?: "var" | "let";
   }) {
     let path = this.path;

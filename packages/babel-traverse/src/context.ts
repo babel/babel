@@ -16,8 +16,8 @@ export default class TraversalContext {
   declare scope: Scope;
   declare state;
   declare opts;
-  queue: Array<NodePath> | undefined | null = null;
-  declare priorityQueue: Array<NodePath> | undefined | null;
+  queue: Array<NodePath> | null = null;
+  priorityQueue: Array<NodePath> | null = null;
   declare trap?: boolean;
 
   /**
@@ -33,7 +33,7 @@ export default class TraversalContext {
     if (opts[node.type]) return true;
 
     // check if we're going to traverse into this node
-    const keys: Array<string> | undefined | null = t.VISITOR_KEYS[node.type];
+    const keys: Array<string> | undefined = t.VISITOR_KEYS[node.type];
     if (!keys?.length) return false;
 
     // we need to traverse into this node so ensure that it has children to traverse into!

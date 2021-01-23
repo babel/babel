@@ -12,7 +12,7 @@ import NodePath from "./index";
 
 export function findParent(
   callback: (path: NodePath) => boolean,
-): NodePath | undefined | null {
+): NodePath | null {
   let path = this;
   while ((path = path.parentPath)) {
     if (callback(path)) return path;
@@ -26,9 +26,7 @@ export function findParent(
  * or `null` if the `callback` never returns a truthy value.
  */
 
-export function find(
-  callback: (path: NodePath) => boolean,
-): NodePath | undefined | null {
+export function find(callback: (path: NodePath) => boolean): NodePath | null {
   let path = this;
   do {
     if (callback(path)) return path;
@@ -40,7 +38,7 @@ export function find(
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent(): NodePath<t.Function> | undefined | null {
+export function getFunctionParent(): NodePath<t.Function> | null {
   return this.findParent(p => p.isFunction());
 }
 
