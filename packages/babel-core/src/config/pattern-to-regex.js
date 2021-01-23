@@ -1,6 +1,7 @@
 // @flow
 import path from "path";
 
+// $FlowIgnore
 const escapeRegExp = process.env.BABEL_8_BREAKING
   ? require("escape-string-regexp")
   : require("lodash/escapeRegExp");

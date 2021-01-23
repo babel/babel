@@ -8,6 +8,7 @@ import fs from "fs";
 import path from "path";
 import Module from "module";
 
+// $FlowIgnore
 const escapeRegExp = process.env.BABEL_8_BREAKING
   ? require("escape-string-regexp")
   : require("lodash/escapeRegExp");
