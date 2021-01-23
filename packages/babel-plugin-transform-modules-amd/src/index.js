@@ -38,7 +38,13 @@ function injectWrapper(path, wrapper) {
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
+  const { allowTopLevelThis, strict, strictMode, noInterop } = options;
+
+  const constantReexports =
+    api.assumption("constantReexports") ?? options.loose;
+  const enumerableModuleMeta =
+    api.assumption("enumerableModuleMeta") ?? options.loose;
+
   return {
     name: "transform-modules-amd",
 
@@ -103,7 +109,8 @@ export default declare((api, options) => {
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
             path,
             {
-              loose,
+              enumerableModuleMeta,
+              constantReexports,
               strict,
               strictMode,
               allowTopLevelThis,
@@ -141,7 +148,11 @@ export default declare((api, options) => {
             }
 
             headers.push(
-              ...buildNamespaceInitStatements(meta, metadata, loose),
+              ...buildNamespaceInitStatements(
+                meta,
+                metadata,
+                constantReexports,
+              ),
             );
           }
 
