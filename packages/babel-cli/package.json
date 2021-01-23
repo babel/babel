@@ -34,7 +34,7 @@
     "source-map": "^0.5.0"
   },
   "optionalDependencies": {
-    "@nicolo-ribaudo/chokidar-2": "2.1.8-no-fsevents",
+    "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents",
     "chokidar": "^3.4.0"
   },
   "peerDependencies": {
