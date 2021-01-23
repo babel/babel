@@ -1,4 +1,5 @@
 export class C2 {}
+// Not-even E
 // everything removed
 export { C2 as C3 }; // only C2->C3
 
