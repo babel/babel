@@ -492,9 +492,15 @@ export default class ExpressionParser extends LValParser {
   // Parse unary operators, both prefix and postfix.
   // https://tc39.es/ecma262/#prod-UnaryExpression
   parseMaybeUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
-    if (this.isContextual("await") && this.isAwaitAllowed()) {
-      return this.parseAwait();
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
+    const isAwait = this.isContextual("await");
+
+    if (isAwait && this.isAwaitAllowed()) {
+      this.next();
+      return this.parseAwait(startPos, startLoc);
     }
+
     const update = this.match(tt.incDec);
     const node = this.startNode();
     if (this.state.type.prefix) {
@@ -526,7 +532,24 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    return this.parseUpdate(node, update, refExpressionErrors);
+    const expr = this.parseUpdate(node, update, refExpressionErrors);
+
+    const startsExpr = this.hasPlugin("v8intrinsic")
+      ? this.state.type.startsExpr
+      : this.state.type.startsExpr && !this.match(tt.modulo);
+    if (isAwait && startsExpr && !this.isAmbiguousAwait()) {
+      if (!this.state.invalidAwaitErrors.has(startPos)) {
+        this.raise(
+          startPos,
+          this.hasPlugin("topLevelAwait")
+            ? Errors.AwaitNotInAsyncContext
+            : Errors.AwaitNotInAsyncFunction,
+        );
+      }
+      return this.parseAwait(startPos, startLoc);
+    }
+
+    return expr;
   }
 
   // https://tc39.es/ecma262/#prod-UpdateExpression
@@ -2332,6 +2355,7 @@ export default class ExpressionParser extends LValParser {
             ? Errors.AwaitNotInAsyncContext
             : Errors.AwaitNotInAsyncFunction,
         );
+        this.state.invalidAwaitErrors.add(startLoc);
       } else {
         this.raise(startLoc, Errors.UnexpectedReservedWord, word);
       }
@@ -2348,10 +2372,8 @@ export default class ExpressionParser extends LValParser {
 
   // Parses await expression inside async function.
 
-  parseAwait(): N.AwaitExpression {
-    const node = this.startNode();
-
-    this.next();
+  parseAwait(startPos: number, startLoc: Position): N.AwaitExpression {
+    const node = this.startNodeAt(startPos, startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       node.start,
@@ -2363,22 +2385,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
-      if (
-        this.hasPrecedingLineBreak() ||
-        // All the following expressions are ambiguous:
-        //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
-        this.match(tt.plusMin) ||
-        this.match(tt.parenL) ||
-        this.match(tt.bracketL) ||
-        this.match(tt.backQuote) ||
-        // Sometimes the tokenizer generates tt.slash for regexps, and this is
-        // handler by parseExprAtom
-        this.match(tt.regexp) ||
-        this.match(tt.slash) ||
-        // This code could be parsed both as a modulo operator or as an intrinsic:
-        //   await %x(0)
-        (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
-      ) {
+      if (this.isAmbiguousAwait()) {
         this.ambiguousScriptDifferentAst = true;
       } else {
         this.sawUnambiguousESM = true;
@@ -2390,6 +2397,25 @@ export default class ExpressionParser extends LValParser {
     }
 
     return this.finishNode(node, "AwaitExpression");
+  }
+
+  isAmbiguousAwait(): boolean {
+    return (
+      this.hasPrecedingLineBreak() ||
+      // All the following expressions are ambiguous:
+      //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
+      this.match(tt.plusMin) ||
+      this.match(tt.parenL) ||
+      this.match(tt.bracketL) ||
+      this.match(tt.backQuote) ||
+      // Sometimes the tokenizer generates tt.slash for regexps, and this is
+      // handler by parseExprAtom
+      this.match(tt.regexp) ||
+      this.match(tt.slash) ||
+      // This code could be parsed both as a modulo operator or as an intrinsic:
+      //   await %x(0)
+      (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
+    );
   }
 
   // Parses yield expression inside generator.
