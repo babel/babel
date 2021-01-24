@@ -4,6 +4,7 @@ ParameterList13.ts
 ParameterList4.ts
 ParameterList5.ts
 ParameterList6.ts
+abstractPropertyNegative.ts
 accessorParameterAccessibilityModifier.ts
 accessorWithoutBody1.ts
 accessorWithoutBody2.ts
@@ -26,6 +27,7 @@ anonClassDeclarationEmitIsAnon.ts
 anyDeclare.ts
 argumentsBindsToFunctionScopeArgumentList.ts
 arrayOfExportedClass.ts
+asiAbstract.ts
 asyncFunctionsAcrossFiles.ts
 augmentExportEquals1.ts
 augmentExportEquals1_1.ts
