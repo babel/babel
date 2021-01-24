@@ -198,7 +198,7 @@ if (process.env.BABEL_8_BREAKING) {
 /**
  * Highlight `text` using the token definitions in `defs`.
  */
-function highlightTokens(defs: Object, text: string) {
+function highlightTokens(defs: any, text: string) {
   let highlighted = "";
 
   for (const { type, value } of tokenize(text)) {
@@ -221,7 +221,7 @@ function highlightTokens(defs: Object, text: string) {
  */
 
 type Options = {
-  forceColor?: boolean,
+  forceColor?: boolean;
 };
 
 /**
