@@ -2,7 +2,8 @@
   "type": "File",
   "start":0,"end":139,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
   "errors": [
-    "SyntaxError: Abstract methods can only appear within an abstract class. (5:2)"
+    "SyntaxError: Abstract methods can only appear within an abstract class. (5:2)",
+    "SyntaxError: Method 'd' cannot have an implementation because it is marked abstract. (5:2)"
   ],
   "program": {
     "type": "Program",
