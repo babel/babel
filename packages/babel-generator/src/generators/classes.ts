@@ -1,6 +1,6 @@
 import * as t from "@babel/types";
 
-export function ClassDeclaration(node: Object, parent: Object) {
+export function ClassDeclaration(node: any, parent: any) {
   if (
     !this.format.decoratorsBeforeExport ||
     (!t.isExportDefaultDeclaration(parent) &&
@@ -51,7 +51,7 @@ export function ClassDeclaration(node: Object, parent: Object) {
 
 export { ClassDeclaration as ClassExpression };
 
-export function ClassBody(node: Object) {
+export function ClassBody(node: any) {
   this.token("{");
   this.printInnerComments(node);
   if (node.body.length === 0) {
@@ -69,7 +69,7 @@ export function ClassBody(node: Object) {
   }
 }
 
-export function ClassProperty(node: Object) {
+export function ClassProperty(node: any) {
   this.printJoin(node.decorators, node);
 
   // catch up to property key, avoid line break
@@ -105,7 +105,7 @@ export function ClassProperty(node: Object) {
   this.semicolon();
 }
 
-export function ClassPrivateProperty(node: Object) {
+export function ClassPrivateProperty(node: any) {
   this.printJoin(node.decorators, node);
   if (node.static) {
     this.word("static");
@@ -122,13 +122,13 @@ export function ClassPrivateProperty(node: Object) {
   this.semicolon();
 }
 
-export function ClassMethod(node: Object) {
+export function ClassMethod(node: any) {
   this._classMethodHead(node);
   this.space();
   this.print(node.body, node);
 }
 
-export function ClassPrivateMethod(node: Object) {
+export function ClassPrivateMethod(node: any) {
   this._classMethodHead(node);
   this.space();
   this.print(node.body, node);

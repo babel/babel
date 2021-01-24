@@ -1,7 +1,7 @@
 import * as t from "@babel/types";
 import * as n from "../node";
 
-export function UnaryExpression(node: Object) {
+export function UnaryExpression(node: any) {
   if (
     node.operator === "void" ||
     node.operator === "delete" ||
@@ -18,19 +18,19 @@ export function UnaryExpression(node: Object) {
   this.print(node.argument, node);
 }
 
-export function DoExpression(node: Object) {
+export function DoExpression(node: any) {
   this.word("do");
   this.space();
   this.print(node.body, node);
 }
 
-export function ParenthesizedExpression(node: Object) {
+export function ParenthesizedExpression(node: any) {
   this.token("(");
   this.print(node.expression, node);
   this.token(")");
 }
 
-export function UpdateExpression(node: Object) {
+export function UpdateExpression(node: any) {
   if (node.prefix) {
     this.token(node.operator);
     this.print(node.argument, node);
@@ -42,7 +42,7 @@ export function UpdateExpression(node: Object) {
   }
 }
 
-export function ConditionalExpression(node: Object) {
+export function ConditionalExpression(node: any) {
   this.print(node.test, node);
   this.space();
   this.token("?");
@@ -54,7 +54,7 @@ export function ConditionalExpression(node: Object) {
   this.print(node.alternate, node);
 }
 
-export function NewExpression(node: Object, parent: Object) {
+export function NewExpression(node: any, parent: any) {
   this.word("new");
   this.space();
   this.print(node.callee, node);
@@ -80,7 +80,7 @@ export function NewExpression(node: Object, parent: Object) {
   this.token(")");
 }
 
-export function SequenceExpression(node: Object) {
+export function SequenceExpression(node: any) {
   this.printList(node.expressions, node);
 }
 
@@ -92,13 +92,13 @@ export function Super() {
   this.word("super");
 }
 
-export function Decorator(node: Object) {
+export function Decorator(node: any) {
   this.token("@");
   this.print(node.expression, node);
   this.newline();
 }
 
-export function OptionalMemberExpression(node: Object) {
+export function OptionalMemberExpression(node: any) {
   this.print(node.object, node);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
@@ -125,7 +125,7 @@ export function OptionalMemberExpression(node: Object) {
   }
 }
 
-export function OptionalCallExpression(node: Object) {
+export function OptionalCallExpression(node: any) {
   this.print(node.callee, node);
 
   this.print(node.typeArguments, node); // Flow
@@ -139,7 +139,7 @@ export function OptionalCallExpression(node: Object) {
   this.token(")");
 }
 
-export function CallExpression(node: Object) {
+export function CallExpression(node: any) {
   this.print(node.callee, node);
 
   this.print(node.typeArguments, node); // Flow
@@ -154,7 +154,7 @@ export function Import() {
 }
 
 function buildYieldAwait(keyword: string) {
-  return function (node: Object) {
+  return function (node: any) {
     this.word(keyword);
 
     if (node.delegate) {
@@ -177,12 +177,12 @@ export function EmptyStatement() {
   this.semicolon(true /* force */);
 }
 
-export function ExpressionStatement(node: Object) {
+export function ExpressionStatement(node: any) {
   this.print(node.expression, node);
   this.semicolon();
 }
 
-export function AssignmentPattern(node: Object) {
+export function AssignmentPattern(node: any) {
   this.print(node.left, node);
   if (node.left.optional) this.token("?");
   this.print(node.left.typeAnnotation, node);
@@ -192,7 +192,7 @@ export function AssignmentPattern(node: Object) {
   this.print(node.right, node);
 }
 
-export function AssignmentExpression(node: Object, parent: Object) {
+export function AssignmentExpression(node: any, parent: any) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
   const parens =
@@ -221,7 +221,7 @@ export function AssignmentExpression(node: Object, parent: Object) {
   }
 }
 
-export function BindExpression(node: Object) {
+export function BindExpression(node: any) {
   this.print(node.object, node);
   this.token("::");
   this.print(node.callee, node);
@@ -232,7 +232,7 @@ export {
   AssignmentExpression as LogicalExpression,
 };
 
-export function MemberExpression(node: Object) {
+export function MemberExpression(node: any) {
   this.print(node.object, node);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
@@ -254,18 +254,18 @@ export function MemberExpression(node: Object) {
   }
 }
 
-export function MetaProperty(node: Object) {
+export function MetaProperty(node: any) {
   this.print(node.meta, node);
   this.token(".");
   this.print(node.property, node);
 }
 
-export function PrivateName(node: Object) {
+export function PrivateName(node: any) {
   this.token("#");
   this.print(node.id, node);
 }
 
-export function V8IntrinsicIdentifier(node: Object) {
+export function V8IntrinsicIdentifier(node: any) {
   this.token("%");
   this.word(node.name);
 }

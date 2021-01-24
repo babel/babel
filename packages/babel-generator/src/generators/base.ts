@@ -1,4 +1,4 @@
-export function File(node: Object) {
+export function File(node: any) {
   if (node.program) {
     // Print this here to ensure that Program node 'leadingComments' still
     // get printed after the hashbang.
@@ -8,7 +8,7 @@ export function File(node: Object) {
   this.print(node.program, node);
 }
 
-export function Program(node: Object) {
+export function Program(node: any) {
   this.printInnerComments(node, false);
 
   this.printSequence(node.directives, node);
@@ -17,7 +17,7 @@ export function Program(node: Object) {
   this.printSequence(node.body, node);
 }
 
-export function BlockStatement(node: Object) {
+export function BlockStatement(node: any) {
   this.token("{");
   this.printInnerComments(node);
 
@@ -45,7 +45,7 @@ export function BlockStatement(node: Object) {
 
 export function Noop() {}
 
-export function Directive(node: Object) {
+export function Directive(node: any) {
   this.print(node.value, node);
   this.semicolon();
 }
@@ -54,7 +54,7 @@ export function Directive(node: Object) {
 const unescapedSingleQuoteRE = /(?:^|[^\\])(?:\\\\)*'/;
 const unescapedDoubleQuoteRE = /(?:^|[^\\])(?:\\\\)*"/;
 
-export function DirectiveLiteral(node: Object) {
+export function DirectiveLiteral(node: any) {
   const raw = this.getPossibleRaw(node);
   if (raw != null) {
     this.token(raw);
@@ -79,11 +79,11 @@ export function DirectiveLiteral(node: Object) {
   }
 }
 
-export function InterpreterDirective(node: Object) {
+export function InterpreterDirective(node: any) {
   this.token(`#!${node.value}\n`);
 }
 
-export function Placeholder(node: Object) {
+export function Placeholder(node: any) {
   this.token("%%");
   this.print(node.name);
   this.token("%%");

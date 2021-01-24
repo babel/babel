@@ -1,8 +1,8 @@
 import * as t from "@babel/types";
 
 type WhitespaceObject = {
-  before?: boolean,
-  after?: boolean,
+  before?: boolean;
+  after?: boolean;
 };
 
 /**
@@ -71,7 +71,7 @@ export const nodes = {
    * Test if AssignmentExpression needs whitespace.
    */
 
-  AssignmentExpression(node: Object): ?WhitespaceObject {
+  AssignmentExpression(node: any): WhitespaceObject | undefined | null {
     const state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
@@ -85,7 +85,7 @@ export const nodes = {
    * Test if SwitchCase needs whitespace.
    */
 
-  SwitchCase(node: Object, parent: Object): WhitespaceObject {
+  SwitchCase(node: any, parent: any): WhitespaceObject {
     return {
       before: node.consequent.length || parent.cases[0] === node,
       after:
@@ -98,7 +98,7 @@ export const nodes = {
    * Test if LogicalExpression needs whitespace.
    */
 
-  LogicalExpression(node: Object): ?WhitespaceObject {
+  LogicalExpression(node: any): WhitespaceObject | undefined | null {
     if (t.isFunction(node.left) || t.isFunction(node.right)) {
       return {
         after: true,
@@ -110,7 +110,7 @@ export const nodes = {
    * Test if Literal needs whitespace.
    */
 
-  Literal(node: Object): ?WhitespaceObject {
+  Literal(node: any): WhitespaceObject | undefined | null {
     if (node.value === "use strict") {
       return {
         after: true,
@@ -122,7 +122,7 @@ export const nodes = {
    * Test if CallExpressionish needs whitespace.
    */
 
-  CallExpression(node: Object): ?WhitespaceObject {
+  CallExpression(node: any): WhitespaceObject | undefined | null {
     if (t.isFunction(node.callee) || isHelper(node)) {
       return {
         before: true,
@@ -131,7 +131,7 @@ export const nodes = {
     }
   },
 
-  OptionalCallExpression(node: Object): ?WhitespaceObject {
+  OptionalCallExpression(node: any): WhitespaceObject | undefined | null {
     if (t.isFunction(node.callee)) {
       return {
         before: true,
@@ -144,7 +144,7 @@ export const nodes = {
    * Test if VariableDeclaration needs whitespace.
    */
 
-  VariableDeclaration(node: Object): ?WhitespaceObject {
+  VariableDeclaration(node: any): WhitespaceObject | undefined | null {
     for (let i = 0; i < node.declarations.length; i++) {
       const declar = node.declarations[i];
 
@@ -167,7 +167,7 @@ export const nodes = {
    * Test if IfStatement needs whitespace.
    */
 
-  IfStatement(node: Object): ?WhitespaceObject {
+  IfStatement(node: any): WhitespaceObject | undefined | null {
     if (t.isBlockStatement(node.consequent)) {
       return {
         before: true,
@@ -182,9 +182,9 @@ export const nodes = {
  */
 
 nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function (
-  node: Object,
+  node: any,
   parent,
-): ?WhitespaceObject {
+): WhitespaceObject | undefined | null {
   if (parent.properties[0] === node) {
     return {
       before: true,
@@ -193,9 +193,9 @@ nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function 
 };
 
 nodes.ObjectTypeCallProperty = function (
-  node: Object,
+  node: any,
   parent,
-): ?WhitespaceObject {
+): WhitespaceObject | undefined | null {
   if (parent.callProperties[0] === node && !parent.properties?.length) {
     return {
       before: true,
@@ -203,7 +203,10 @@ nodes.ObjectTypeCallProperty = function (
   }
 };
 
-nodes.ObjectTypeIndexer = function (node: Object, parent): ?WhitespaceObject {
+nodes.ObjectTypeIndexer = function (
+  node: any,
+  parent,
+): WhitespaceObject | undefined | null {
   if (
     parent.indexers[0] === node &&
     !parent.properties?.length &&
@@ -216,9 +219,9 @@ nodes.ObjectTypeIndexer = function (node: Object, parent): ?WhitespaceObject {
 };
 
 nodes.ObjectTypeInternalSlot = function (
-  node: Object,
+  node: any,
   parent,
-): ?WhitespaceObject {
+): WhitespaceObject | undefined | null {
   if (
     parent.internalSlots[0] === node &&
     !parent.properties?.length &&
@@ -240,7 +243,7 @@ export const list = {
    * Return VariableDeclaration declarations init properties.
    */
 
-  VariableDeclaration(node: Object): Array<Object> {
+  VariableDeclaration(node: any): Array<any> {
     return node.declarations.map(decl => decl.init);
   },
 
@@ -248,7 +251,7 @@ export const list = {
    * Return VariableDeclaration elements.
    */
 
-  ArrayExpression(node: Object): Array<Object> {
+  ArrayExpression(node: any): Array<any> {
     return node.elements;
   },
 
@@ -256,7 +259,7 @@ export const list = {
    * Return VariableDeclaration properties.
    */
 
-  ObjectExpression(node: Object): Array<Object> {
+  ObjectExpression(node: any): Array<any> {
     return node.properties;
   },
 };

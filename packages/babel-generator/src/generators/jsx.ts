@@ -1,4 +1,4 @@
-export function JSXAttribute(node: Object) {
+export function JSXAttribute(node: any) {
   this.print(node.name, node);
   if (node.value) {
     this.token("=");
@@ -6,43 +6,43 @@ export function JSXAttribute(node: Object) {
   }
 }
 
-export function JSXIdentifier(node: Object) {
+export function JSXIdentifier(node: any) {
   this.word(node.name);
 }
 
-export function JSXNamespacedName(node: Object) {
+export function JSXNamespacedName(node: any) {
   this.print(node.namespace, node);
   this.token(":");
   this.print(node.name, node);
 }
 
-export function JSXMemberExpression(node: Object) {
+export function JSXMemberExpression(node: any) {
   this.print(node.object, node);
   this.token(".");
   this.print(node.property, node);
 }
 
-export function JSXSpreadAttribute(node: Object) {
+export function JSXSpreadAttribute(node: any) {
   this.token("{");
   this.token("...");
   this.print(node.argument, node);
   this.token("}");
 }
 
-export function JSXExpressionContainer(node: Object) {
+export function JSXExpressionContainer(node: any) {
   this.token("{");
   this.print(node.expression, node);
   this.token("}");
 }
 
-export function JSXSpreadChild(node: Object) {
+export function JSXSpreadChild(node: any) {
   this.token("{");
   this.token("...");
   this.print(node.expression, node);
   this.token("}");
 }
 
-export function JSXText(node: Object) {
+export function JSXText(node: any) {
   const raw = this.getPossibleRaw(node);
 
   if (raw != null) {
@@ -52,13 +52,13 @@ export function JSXText(node: Object) {
   }
 }
 
-export function JSXElement(node: Object) {
+export function JSXElement(node: any) {
   const open = node.openingElement;
   this.print(open, node);
   if (open.selfClosing) return;
 
   this.indent();
-  for (const child of (node.children: Array<Object>)) {
+  for (const child of node.children as Array<any>) {
     this.print(child, node);
   }
   this.dedent();
@@ -70,7 +70,7 @@ function spaceSeparator() {
   this.space();
 }
 
-export function JSXOpeningElement(node: Object) {
+export function JSXOpeningElement(node: any) {
   this.token("<");
   this.print(node.name, node);
   this.print(node.typeParameters, node); // TS
@@ -86,21 +86,21 @@ export function JSXOpeningElement(node: Object) {
   }
 }
 
-export function JSXClosingElement(node: Object) {
+export function JSXClosingElement(node: any) {
   this.token("</");
   this.print(node.name, node);
   this.token(">");
 }
 
-export function JSXEmptyExpression(node: Object) {
+export function JSXEmptyExpression(node: any) {
   this.printInnerComments(node);
 }
 
-export function JSXFragment(node: Object) {
+export function JSXFragment(node: any) {
   this.print(node.openingFragment, node);
 
   this.indent();
-  for (const child of (node.children: Array<Object>)) {
+  for (const child of node.children as Array<any>) {
     this.print(child, node);
   }
   this.dedent();

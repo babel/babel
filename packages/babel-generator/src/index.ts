@@ -1,5 +1,7 @@
 import SourceMap from "./source-map";
-import Printer, { type Format } from "./printer";
+import Printer from "./printer";
+
+import type { Format } from "./printer";
 
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
@@ -15,7 +17,7 @@ class Generator extends Printer {
     this.ast = ast;
   }
 
-  ast: Object;
+  ast: any;
 
   /**
    * Generate code and sourcemap from ast.
@@ -113,7 +115,7 @@ export class CodeGenerator {
   }
 }
 
-export default function (ast: Object, opts: Object, code: string): Object {
+export default function (ast: any, opts: any, code: string): any {
   const gen = new Generator(ast, opts, code);
   return gen.generate();
 }

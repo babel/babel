@@ -10,7 +10,7 @@ const SPACES_RE = /^[ \t]+$/;
  */
 
 export default class Buffer {
-  constructor(map: ?SourceMap) {
+  constructor(map?: SourceMap | null) {
     this._map = map;
   }
 
@@ -19,23 +19,23 @@ export default class Buffer {
   _last: string = "";
   _queue: Array = [];
 
-  _position: Object = {
+  _position: any = {
     line: 1,
     column: 0,
   };
-  _sourcePosition: Object = {
+  _sourcePosition: any = {
     identifierName: null,
     line: null,
     column: null,
     filename: null,
   };
-  _disallowedPop: Object | null = null;
+  _disallowedPop: any | null = null;
 
   /**
    * Get the final string output from the buffer, along with the sourcemap if one exists.
    */
 
-  get(): Object {
+  get(): any {
     this._flush();
 
     const map = this._map;
@@ -112,8 +112,8 @@ export default class Buffer {
     str: string,
     line: number,
     column: number,
-    identifierName: ?string,
-    filename: ?string,
+    identifierName?: string | null,
+    filename?: string | null,
     force?: boolean,
   ): void {
     this._buf.push(str);
@@ -151,8 +151,8 @@ export default class Buffer {
   _mark(
     line: number,
     column: number,
-    identifierName: ?string,
-    filename: ?string,
+    identifierName?: string | null,
+    filename?: string | null,
     force?: boolean,
   ): void {
     this._map?.mark(
@@ -230,7 +230,7 @@ export default class Buffer {
    * With this line, there will be one mapping range over "mod" and another
    * over "();", where previously it would have been a single mapping.
    */
-  exactSource(loc: Object, cb: () => void) {
+  exactSource(loc: any, cb: () => void) {
     // In cases where parent expressions start at the same locations as the
     // identifier itself, the current active location could already be the
     // start of this range. We use 'force' here to explicitly start a new
@@ -315,12 +315,7 @@ export default class Buffer {
     this._disallowedPop = this._normalizePosition(prop, loc);
   }
 
-  _normalizePosition(
-    prop: string,
-    loc: Object,
-    targetObj: Object,
-    force?: boolean,
-  ) {
+  _normalizePosition(prop: string, loc: any, targetObj: any, force?: boolean) {
     const pos = loc ? loc[prop] : null;
 
     if (targetObj === undefined) {

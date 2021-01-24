@@ -1,7 +1,7 @@
 import * as t from "@babel/types";
 import jsesc from "jsesc";
 
-export function Identifier(node: Object) {
+export function Identifier(node: any) {
   this.exactSource(node.loc, () => {
     this.word(node.name);
   });
@@ -11,14 +11,14 @@ export function ArgumentPlaceholder() {
   this.token("?");
 }
 
-export function RestElement(node: Object) {
+export function RestElement(node: any) {
   this.token("...");
   this.print(node.argument, node);
 }
 
 export { RestElement as SpreadElement };
 
-export function ObjectExpression(node: Object) {
+export function ObjectExpression(node: any) {
   const props = node.properties;
 
   this.token("{");
@@ -35,14 +35,14 @@ export function ObjectExpression(node: Object) {
 
 export { ObjectExpression as ObjectPattern };
 
-export function ObjectMethod(node: Object) {
+export function ObjectMethod(node: any) {
   this.printJoin(node.decorators, node);
   this._methodHead(node);
   this.space();
   this.print(node.body, node);
 }
 
-export function ObjectProperty(node: Object) {
+export function ObjectProperty(node: any) {
   this.printJoin(node.decorators, node);
 
   if (node.computed) {
@@ -78,7 +78,7 @@ export function ObjectProperty(node: Object) {
   this.print(node.value, node);
 }
 
-export function ArrayExpression(node: Object) {
+export function ArrayExpression(node: any) {
   const elems = node.elements;
   const len = elems.length;
 
@@ -106,7 +106,7 @@ export function ArrayExpression(node: Object) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function RecordExpression(node: Object) {
+export function RecordExpression(node: any) {
   const props = node.properties;
 
   let startToken;
@@ -136,7 +136,7 @@ export function RecordExpression(node: Object) {
   this.token(endToken);
 }
 
-export function TupleExpression(node: Object) {
+export function TupleExpression(node: any) {
   const elems = node.elements;
   const len = elems.length;
 
@@ -169,11 +169,11 @@ export function TupleExpression(node: Object) {
   this.token(endToken);
 }
 
-export function RegExpLiteral(node: Object) {
+export function RegExpLiteral(node: any) {
   this.word(`/${node.pattern}/${node.flags}`);
 }
 
-export function BooleanLiteral(node: Object) {
+export function BooleanLiteral(node: any) {
   this.word(node.value ? "true" : "false");
 }
 
@@ -181,7 +181,7 @@ export function NullLiteral() {
   this.word("null");
 }
 
-export function NumericLiteral(node: Object) {
+export function NumericLiteral(node: any) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value + "";
@@ -196,7 +196,7 @@ export function NumericLiteral(node: Object) {
   }
 }
 
-export function StringLiteral(node: Object) {
+export function StringLiteral(node: any) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.token(raw);
@@ -216,7 +216,7 @@ export function StringLiteral(node: Object) {
   return this.token(val);
 }
 
-export function BigIntLiteral(node: Object) {
+export function BigIntLiteral(node: any) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.word(raw);
@@ -225,7 +225,7 @@ export function BigIntLiteral(node: Object) {
   this.word(node.value + "n");
 }
 
-export function DecimalLiteral(node: Object) {
+export function DecimalLiteral(node: any) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.word(raw);
@@ -234,11 +234,11 @@ export function DecimalLiteral(node: Object) {
   this.word(node.value + "m");
 }
 
-export function PipelineTopicExpression(node: Object) {
+export function PipelineTopicExpression(node: any) {
   this.print(node.expression, node);
 }
 
-export function PipelineBareFunction(node: Object) {
+export function PipelineBareFunction(node: any) {
   this.print(node.callee, node);
 }
 

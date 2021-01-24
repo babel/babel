@@ -57,8 +57,8 @@ export default class SourceMap {
     generatedColumn: number,
     line: number,
     column: number,
-    identifierName: ?string,
-    filename: ?string,
+    identifierName?: string | null,
+    filename?: string | null,
     force?: boolean,
   ) {
     // Adding an empty mapping at the start of a generated line just clutters the map.

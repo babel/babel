@@ -1,6 +1,6 @@
 import * as t from "@babel/types";
 
-export function WithStatement(node: Object) {
+export function WithStatement(node: any) {
   this.word("with");
   this.space();
   this.token("(");
@@ -9,7 +9,7 @@ export function WithStatement(node: Object) {
   this.printBlock(node);
 }
 
-export function IfStatement(node: Object) {
+export function IfStatement(node: any) {
   this.word("if");
   this.space();
   this.token("(");
@@ -47,7 +47,7 @@ function getLastStatement(statement) {
   return getLastStatement(statement.body);
 }
 
-export function ForStatement(node: Object) {
+export function ForStatement(node: any) {
   this.word("for");
   this.space();
   this.token("(");
@@ -72,7 +72,7 @@ export function ForStatement(node: Object) {
   this.printBlock(node);
 }
 
-export function WhileStatement(node: Object) {
+export function WhileStatement(node: any) {
   this.word("while");
   this.space();
   this.token("(");
@@ -82,7 +82,7 @@ export function WhileStatement(node: Object) {
 }
 
 const buildForXStatement = function (op) {
-  return function (node: Object) {
+  return function (node: any) {
     this.word("for");
     this.space();
     if (op === "of" && node.await) {
@@ -103,7 +103,7 @@ const buildForXStatement = function (op) {
 export const ForInStatement = buildForXStatement("in");
 export const ForOfStatement = buildForXStatement("of");
 
-export function DoWhileStatement(node: Object) {
+export function DoWhileStatement(node: any) {
   this.word("do");
   this.space();
   this.print(node.body, node);
@@ -117,7 +117,7 @@ export function DoWhileStatement(node: Object) {
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function (node: Object) {
+  return function (node: any) {
     this.word(prefix);
 
     const label = node[key];
@@ -138,14 +138,14 @@ export const ReturnStatement = buildLabelStatement("return", "argument");
 export const BreakStatement = buildLabelStatement("break");
 export const ThrowStatement = buildLabelStatement("throw", "argument");
 
-export function LabeledStatement(node: Object) {
+export function LabeledStatement(node: any) {
   this.print(node.label, node);
   this.token(":");
   this.space();
   this.print(node.body, node);
 }
 
-export function TryStatement(node: Object) {
+export function TryStatement(node: any) {
   this.word("try");
   this.space();
   this.print(node.block, node);
@@ -168,7 +168,7 @@ export function TryStatement(node: Object) {
   }
 }
 
-export function CatchClause(node: Object) {
+export function CatchClause(node: any) {
   this.word("catch");
   this.space();
   if (node.param) {
@@ -181,7 +181,7 @@ export function CatchClause(node: Object) {
   this.print(node.body, node);
 }
 
-export function SwitchStatement(node: Object) {
+export function SwitchStatement(node: any) {
   this.word("switch");
   this.space();
   this.token("(");
@@ -200,7 +200,7 @@ export function SwitchStatement(node: Object) {
   this.token("}");
 }
 
-export function SwitchCase(node: Object) {
+export function SwitchCase(node: any) {
   if (node.test) {
     this.word("case");
     this.space();
@@ -236,7 +236,7 @@ function constDeclarationIndent() {
   if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
 }
 
-export function VariableDeclaration(node: Object, parent: Object) {
+export function VariableDeclaration(node: any, parent: any) {
   if (node.declare) {
     // TS
     this.word("declare");
@@ -249,7 +249,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   let hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (const declar of (node.declarations: Array<Object>)) {
+    for (const declar of node.declarations as Array<any>) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -289,7 +289,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   this.semicolon();
 }
 
-export function VariableDeclarator(node: Object) {
+export function VariableDeclarator(node: any) {
   this.print(node.id, node);
   if (node.definite) this.token("!"); // TS
   this.print(node.id.typeAnnotation, node);
