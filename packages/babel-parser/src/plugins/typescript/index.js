@@ -74,6 +74,8 @@ const TSErrors = Object.freeze({
   EmptyHeritageClauseType: "'%0' list cannot be empty.",
   EmptyTypeArguments: "Type argument list cannot be empty.",
   EmptyTypeParameters: "Type parameter list cannot be empty.",
+  ExpectedAmbientAfterExportDeclare:
+    "'export declare' must be followed by an ambient declaration.",
   IndexSignatureHasAbstract:
     "Index signatures cannot have the 'abstract' modifier",
   IndexSignatureHasAccessibility:
@@ -2285,7 +2287,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.isContextual("declare") ||
         !this.shouldParseExportDeclaration()
       ) {
-        super.unexpected(this.state.start, this.state.value);
+        throw this.raise(
+          this.state.start,
+          TSErrors.ExpectedAmbientAfterExportDeclare,
+        );
       }
 
       let declaration: ?N.Declaration;
