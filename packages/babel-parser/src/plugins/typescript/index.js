@@ -85,6 +85,8 @@ const TSErrors = Object.freeze({
     "Tuple members must be labeled with a simple identifier.",
   MixedLabeledAndUnlabeledElements:
     "Tuple members must all have names or all not have names.",
+  NonAbstractClassHasAbstractMethod:
+    "Abstract methods can only appear within an abstract class.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
   PatternIsOptional:
@@ -1593,11 +1595,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 this.unexpected(null, tt._class);
               }
             }
-            return this.parseClass(
-              cls,
-              /* isStatement */ true,
-              /* optionalId */ false,
-            );
+            const oldInAbstractClass = this.state.inAbstractClass;
+            this.state.inAbstractClass = true;
+            try {
+              return this.parseClass(
+                cls,
+                /* isStatement */ true,
+                /* optionalId */ false,
+              );
+            } finally {
+              this.state.inAbstractClass = oldInAbstractClass;
+            }
           }
           break;
 
@@ -2169,6 +2177,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
 
         return;
+      }
+
+      if (!this.state.inAbstractClass && (member: any).abstract) {
+        this.raise(member.start, TSErrors.NonAbstractClassHasAbstractMethod);
       }
 
       /*:: invariant(member.type !== "TSIndexSignature") */
