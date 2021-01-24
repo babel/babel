@@ -1,26 +1,57 @@
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
+import type { TraverseOptions } from "../index";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
+import type { Visitor } from "../types";
 
 // Recursively gathers the identifying names of a node.
-function gatherNodeParts(node: Object, parts: Array) {
+function gatherNodeParts(node: t.Node, parts: any[]) {
   switch (node?.type) {
     default:
       if (t.isModuleDeclaration(node)) {
-        if (node.source) {
+        if (
+          (t.isExportAllDeclaration(node) ||
+            t.isExportNamedDeclaration(node) ||
+            t.isImportDeclaration(node)) &&
+          node.source
+        ) {
           gatherNodeParts(node.source, parts);
-        } else if (node.specifiers && node.specifiers.length) {
+        } else if (
+          (t.isExportNamedDeclaration(node) || t.isImportDeclaration(node)) &&
+          node.specifiers &&
+          node.specifiers.length
+        ) {
           for (const e of node.specifiers) gatherNodeParts(e, parts);
-        } else if (node.declaration) {
+        } else if (
+          (t.isExportDefaultDeclaration(node) ||
+            t.isExportNamedDeclaration(node)) &&
+          node.declaration
+        ) {
           gatherNodeParts(node.declaration, parts);
         }
       } else if (t.isModuleSpecifier(node)) {
+        // todo(flow->ts): should condition instead be:
+        //    ```
+        //    t.isExportSpecifier(node) ||
+        //    t.isImportDefaultSpecifier(node) ||
+        //    t.isImportNamespaceSpecifier(node) ||
+        //    t.isImportSpecifier(node)
+        //    ```
+        //    allowing only nodes with `.local`?
+        // @ts-expect-error todo(flow->ts)
         gatherNodeParts(node.local, parts);
       } else if (t.isLiteral(node)) {
+        // todo(flow->ts): should condition be stricter to ensure value is there
+        //   ```
+        //   !t.isNullLiteral(node) &&
+        //   !t.isRegExpLiteral(node) &&
+        //   !t.isTemplateLiteral(node)
+        //   ```
+        // @ts-expect-error todo(flow->ts)
         parts.push(node.value);
       }
       break;
@@ -147,11 +178,17 @@ function gatherNodeParts(node: Object, parts: Array) {
 }
 
 //
+interface CollectVisitorState {
+  assignments: NodePath<t.AssignmentExpression>[];
+  references: NodePath<t.Identifier | t.JSXIdentifier>[];
+  constantViolations: NodePath[];
+}
 
-const collectorVisitor = {
+const collectorVisitor: Visitor<CollectVisitorState> = {
   For(path) {
-    for (const key of (t.FOR_INIT_KEYS: Array)) {
-      const declar = path.get(key);
+    for (const key of t.FOR_INIT_KEYS) {
+      // todo: might be not needed with improvement to babel-types
+      const declar = path.get(key) as NodePath;
       // delegate block scope handling to the `BlockScoped` method
       if (declar.isVar()) {
         const parentScope =
@@ -166,6 +203,7 @@ const collectorVisitor = {
     if (path.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
+    // @ts-expect-error todo(flow->ts): might be not correct for export all declaration
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) {
       return;
     }
@@ -190,6 +228,7 @@ const collectorVisitor = {
   ExportDeclaration: {
     exit(path) {
       const { node, scope } = path;
+      // @ts-expect-error todo(flow->ts) declaration is not present on ExportAllDeclaration
       const declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
         const id = declar.id;
@@ -198,7 +237,7 @@ const collectorVisitor = {
         const binding = scope.getBinding(id.name);
         if (binding) binding.reference(path);
       } else if (t.isVariableDeclaration(declar)) {
-        for (const decl of (declar.declarations: Array<Object>)) {
+        for (const decl of declar.declarations) {
           for (const name of Object.keys(t.getBindingIdentifiers(decl))) {
             const binding = scope.getBinding(name);
             if (binding) binding.reference(path);
@@ -209,6 +248,7 @@ const collectorVisitor = {
   },
 
   LabeledStatement(path) {
+    // @ts-expect-error todo(flow->ts): possible bug - statement might not have name and so should not be added as global
     path.scope.getProgramParent().addGlobal(path.node);
     path.scope.getBlockParent().registerDeclaration(path);
   },
@@ -245,7 +285,7 @@ const collectorVisitor = {
 
   Block(path) {
     const paths = path.get("body");
-    for (const bodyPath of (paths: Array)) {
+    for (const bodyPath of paths) {
       if (bodyPath.isFunctionDeclaration()) {
         path.scope.getBlockParent().registerDeclaration(bodyPath);
       }
@@ -281,11 +321,25 @@ const collectorVisitor = {
 let uid = 0;
 
 export default class Scope {
+  uid;
+
+  path: NodePath;
+  block: t.Node;
+
+  labels;
+  inited;
+
+  bindings: { [name: string]: Binding };
+  references: object;
+  globals: object;
+  uids: object;
+  data: object;
+  crawling: boolean;
+
   /**
    * This searches the current "scope" and collects all references/bindings
    * within.
    */
-
   constructor(path: NodePath) {
     const { node } = path;
     const cached = scopeCache.get(node);
@@ -330,11 +384,16 @@ export default class Scope {
     return this.path.hub;
   }
 
+  traverse<S>(
+    node: t.Node | t.Node[],
+    opts: TraverseOptions<S>,
+    state: S,
+  ): void;
+  traverse(node: t.Node | t.Node[], opts?: TraverseOptions, state?: any): void;
   /**
    * Traverse node with current scope and path.
    */
-
-  traverse(node: Object, opts: Object, state?) {
+  traverse(node: any, opts: any, state?) {
     traverse(node, opts, this, state, this.path);
   }
 
@@ -360,7 +419,7 @@ export default class Scope {
    * Generate a unique `_id1` binding.
    */
 
-  generateUid(name: string = "temp") {
+  generateUid(name: string = "temp"): string {
     name = t
       .toIdentifier(name)
       .replace(/^_+/, "")
@@ -395,7 +454,7 @@ export default class Scope {
     return `_${id}`;
   }
 
-  generateUidBasedOnNode(node: Object, defaultName?: String) {
+  generateUidBasedOnNode(node: t.Node, defaultName?: string) {
     const parts = [];
     gatherNodeParts(node, parts);
 
@@ -409,7 +468,7 @@ export default class Scope {
    * Generate a unique identifier based on a node.
    */
 
-  generateUidIdentifierBasedOnNode(node: Object, defaultName?: String): Object {
+  generateUidIdentifierBasedOnNode(node: t.Node, defaultName?: string) {
     return t.identifier(this.generateUidBasedOnNode(node, defaultName));
   }
 
@@ -423,7 +482,7 @@ export default class Scope {
    *  - Bound identifiers
    */
 
-  isStatic(node: Object): boolean {
+  isStatic(node: t.Node): boolean {
     if (t.isThisExpression(node) || t.isSuper(node)) {
       return true;
     }
@@ -444,7 +503,7 @@ export default class Scope {
    * Possibly generate a memoised identifier if it is not static and has consequences.
    */
 
-  maybeGenerateMemoised(node: Object, dontPush?: boolean): ?Object {
+  maybeGenerateMemoised(node: t.Node, dontPush?: boolean) {
     if (this.isStatic(node)) {
       return null;
     } else {
@@ -457,7 +516,12 @@ export default class Scope {
     }
   }
 
-  checkBlockScopedCollisions(local, kind: string, name: string, id: Object) {
+  checkBlockScopedCollisions(
+    local: Binding,
+    kind: string,
+    name: string,
+    id: any,
+  ) {
     // ignore parameters
     if (kind === "param") return;
 
@@ -483,7 +547,7 @@ export default class Scope {
     }
   }
 
-  rename(oldName: string, newName: string, block?) {
+  rename(oldName: string, newName?: string, block?: t.Node) {
     const binding = this.getBinding(oldName);
     if (binding) {
       newName = newName || this.generateUidIdentifier(oldName).name;
@@ -501,7 +565,7 @@ export default class Scope {
   dump() {
     const sep = "-".repeat(60);
     console.log(sep);
-    let scope = this;
+    let scope: Scope = this;
     do {
       console.log("#", scope.block.type);
       for (const name of Object.keys(scope.bindings)) {
@@ -518,7 +582,7 @@ export default class Scope {
   }
 
   // TODO: (Babel 8) Split i in two parameters, and use an object of flags
-  toArray(node: Object, i?: number | boolean, allowArrayLike?: boolean) {
+  toArray(node: t.Node, i?: number | boolean, allowArrayLike?: boolean) {
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding?.constant && binding.path.isGenericType("Array")) {
@@ -567,6 +631,7 @@ export default class Scope {
       helperName = "maybeArrayLike";
     }
 
+    // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
     return t.callExpression(this.hub.addHelper(helperName), args);
   }
 
@@ -578,7 +643,7 @@ export default class Scope {
     return this.labels.get(name);
   }
 
-  registerLabel(path: NodePath) {
+  registerLabel(path: NodePath<t.LabeledStatement>) {
     this.labels.set(path.node.label.name, path);
   }
 
@@ -589,18 +654,19 @@ export default class Scope {
       this.registerBinding("hoisted", path.get("id"), path);
     } else if (path.isVariableDeclaration()) {
       const declarations = path.get("declarations");
-      for (const declar of (declarations: Array)) {
+      for (const declar of declarations) {
         this.registerBinding(path.node.kind, declar);
       }
     } else if (path.isClassDeclaration()) {
       this.registerBinding("let", path);
     } else if (path.isImportDeclaration()) {
       const specifiers = path.get("specifiers");
-      for (const specifier of (specifiers: Array)) {
+      for (const specifier of specifiers) {
         this.registerBinding("module", specifier);
       }
     } else if (path.isExportDeclaration()) {
-      const declar = path.get("declaration");
+      // todo: improve babel-types
+      const declar = path.get("declaration") as NodePath;
       if (
         declar.isClassDeclaration() ||
         declar.isFunctionDeclaration() ||
@@ -625,7 +691,11 @@ export default class Scope {
     }
   }
 
-  registerBinding(kind: string, path: NodePath, bindingPath = path) {
+  registerBinding(
+    kind: Binding["kind"],
+    path: NodePath,
+    bindingPath: NodePath = path,
+  ) {
     if (!kind) throw new ReferenceError("no `kind`");
 
     if (path.isVariableDeclaration()) {
@@ -642,7 +712,7 @@ export default class Scope {
     for (const name of Object.keys(ids)) {
       parent.references[name] = true;
 
-      for (const id of (ids[name]: Array<Object>)) {
+      for (const id of ids[name]) {
         const local = this.getOwnBinding(name);
 
         if (local) {
@@ -668,12 +738,13 @@ export default class Scope {
     }
   }
 
-  addGlobal(node: Object) {
+  // todo: flow->ts maybe add more specific type
+  addGlobal(node: Extract<t.Node, { name: string }>) {
     this.globals[node.name] = node;
   }
 
-  hasUid(name): boolean {
-    let scope = this;
+  hasUid(name: string): boolean {
+    let scope: Scope = this;
 
     do {
       if (scope.uids[name]) return true;
@@ -683,7 +754,7 @@ export default class Scope {
   }
 
   hasGlobal(name: string): boolean {
-    let scope = this;
+    let scope: Scope = this;
 
     do {
       if (scope.globals[name]) return true;
@@ -696,7 +767,7 @@ export default class Scope {
     return !!this.getProgramParent().references[name];
   }
 
-  isPure(node, constantsOnly?: boolean) {
+  isPure(node: t.Node, constantsOnly?: boolean) {
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (!binding) return false;
@@ -718,12 +789,12 @@ export default class Scope {
         this.isPure(node.right, constantsOnly)
       );
     } else if (t.isArrayExpression(node)) {
-      for (const elem of (node.elements: Array<Object>)) {
+      for (const elem of node.elements) {
         if (!this.isPure(elem, constantsOnly)) return false;
       }
       return true;
     } else if (t.isObjectExpression(node)) {
-      for (const prop of (node.properties: Array<Object>)) {
+      for (const prop of node.properties) {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
       return true;
@@ -732,6 +803,7 @@ export default class Scope {
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
     } else if (t.isProperty(node)) {
+      // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
@@ -743,7 +815,7 @@ export default class Scope {
         this.isPure(node.quasi, constantsOnly)
       );
     } else if (t.isTemplateLiteral(node)) {
-      for (const expression of (node.expressions: Array<Object>)) {
+      for (const expression of node.expressions) {
         if (!this.isPure(expression, constantsOnly)) return false;
       }
       return true;
@@ -756,7 +828,7 @@ export default class Scope {
    * Set some arbitrary data on the current scope.
    */
 
-  setData(key, val) {
+  setData(key: string, val: any) {
     return (this.data[key] = val);
   }
 
@@ -764,8 +836,8 @@ export default class Scope {
    * Recursively walk up scope tree looking for the data `key`.
    */
 
-  getData(key) {
-    let scope = this;
+  getData(key: string): any {
+    let scope: Scope = this;
     do {
       const data = scope.data[key];
       if (data != null) return data;
@@ -777,8 +849,8 @@ export default class Scope {
    * remove it.
    */
 
-  removeData(key) {
-    let scope = this;
+  removeData(key: string) {
+    let scope: Scope = this;
     do {
       const data = scope.data[key];
       if (data != null) scope.data[key] = null;
@@ -820,7 +892,7 @@ export default class Scope {
     const programParent = this.getProgramParent();
     if (programParent.crawling) return;
 
-    const state = {
+    const state: CollectVisitorState = {
       references: [],
       constantViolations: [],
       assignments: [],
@@ -860,11 +932,11 @@ export default class Scope {
   }
 
   push(opts: {
-    id: Object,
-    init: ?Object,
-    unique: ?boolean,
-    _blockHoist: ?number,
-    kind: "var" | "let",
+    id: t.LVal;
+    init?: t.Expression;
+    unique?: boolean;
+    _blockHoist?: number | undefined;
+    kind?: "var" | "let";
   }) {
     let path = this.path;
 
@@ -878,6 +950,7 @@ export default class Scope {
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
       path.ensureBlock();
+      // @ts-expect-error todo(flow->ts): improve types
       path = path.get("body");
     }
 
@@ -890,6 +963,7 @@ export default class Scope {
 
     if (!declarPath) {
       const declar = t.variableDeclaration(kind, []);
+      // @ts-expect-error todo(flow->ts): avoid modifying nodes
       declar._blockHoist = blockHoist;
 
       [declarPath] = path.unshiftContainer("body", [declar]);
@@ -906,7 +980,7 @@ export default class Scope {
    */
 
   getProgramParent() {
-    let scope = this;
+    let scope: Scope = this;
     do {
       if (scope.path.isProgram()) {
         return scope;
@@ -919,8 +993,8 @@ export default class Scope {
    * Walk up the scope tree until we hit either a Function or return null.
    */
 
-  getFunctionParent() {
-    let scope = this;
+  getFunctionParent(): Scope | null {
+    let scope: Scope = this;
     do {
       if (scope.path.isFunctionParent()) {
         return scope;
@@ -935,7 +1009,7 @@ export default class Scope {
    */
 
   getBlockParent() {
-    let scope = this;
+    let scope: Scope = this;
     do {
       if (scope.path.isBlockParent()) {
         return scope;
@@ -950,10 +1024,10 @@ export default class Scope {
    * Walks the scope tree and gathers **all** bindings.
    */
 
-  getAllBindings(): Object {
+  getAllBindings(): any {
     const ids = Object.create(null);
 
-    let scope = this;
+    let scope: Scope = this;
     do {
       for (const key of Object.keys(scope.bindings)) {
         if (key in ids === false) {
@@ -970,11 +1044,11 @@ export default class Scope {
    * Walks the scope tree and gathers all declarations of `kind`.
    */
 
-  getAllBindingsOfKind(): Object {
+  getAllBindingsOfKind(...kinds: string[]): any {
     const ids = Object.create(null);
 
-    for (const kind of (arguments: Array)) {
-      let scope = this;
+    for (const kind of kinds) {
+      let scope: Scope = this;
       do {
         for (const name of Object.keys(scope.bindings)) {
           const binding = scope.bindings[name];
@@ -987,12 +1061,12 @@ export default class Scope {
     return ids;
   }
 
-  bindingIdentifierEquals(name: string, node: Object): boolean {
+  bindingIdentifierEquals(name: string, node: t.Node): boolean {
     return this.getBindingIdentifier(name) === node;
   }
 
-  getBinding(name: string) {
-    let scope = this;
+  getBinding(name: string): Binding | undefined {
+    let scope: Scope = this;
     let previousPath;
 
     do {
@@ -1016,15 +1090,17 @@ export default class Scope {
     } while ((scope = scope.parent));
   }
 
-  getOwnBinding(name: string) {
+  getOwnBinding(name: string): Binding | undefined {
     return this.bindings[name];
   }
 
-  getBindingIdentifier(name: string) {
+  // todo: return probably can be undefined…
+  getBindingIdentifier(name: string): t.Identifier {
     return this.getBinding(name)?.identifier;
   }
 
-  getOwnBindingIdentifier(name: string) {
+  // todo: flow->ts return probably can be undefined
+  getOwnBindingIdentifier(name: string): t.Identifier {
     const binding = this.bindings[name];
     return binding?.identifier;
   }
@@ -1051,7 +1127,7 @@ export default class Scope {
    * Move a binding of `name` to another `scope`.
    */
 
-  moveBindingTo(name, scope) {
+  moveBindingTo(name: string, scope: Scope) {
     const info = this.getBinding(name);
     if (info) {
       info.scope.removeOwnBinding(name);
@@ -1069,7 +1145,7 @@ export default class Scope {
     this.getBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
-    let scope = this;
+    let scope: Scope = this;
     do {
       if (scope.uids[name]) {
         scope.uids[name] = false;

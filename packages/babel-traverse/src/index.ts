@@ -2,7 +2,11 @@ import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as t from "@babel/types";
 import * as cache from "./cache";
+import type NodePath from "./path";
+import type Scope from "./scope";
+import type { Visitor } from "./types";
 
+export type { Visitor };
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
@@ -10,15 +14,38 @@ export type { HubInterface } from "./hub";
 
 export { visitors };
 
-export default function traverse(
-  parent: Object | Array<Object>,
-  opts?: Object,
-  scope?: Object,
-  state: Object,
-  parentPath: Object,
+export type TraverseOptions<S = t.Node> =
+  | {
+      scope?: Scope;
+      noScope?: boolean;
+      denylist?: string[];
+    }
+  | Visitor<S>;
+
+function traverse<S>(
+  parent: t.Node,
+  opts: TraverseOptions<S>,
+  scope: Scope | undefined,
+  state: S,
+  parentPath?: NodePath,
+): void;
+
+function traverse(
+  parent: t.Node,
+  opts: TraverseOptions,
+  scope?: Scope,
+  state?: any,
+  parentPath?: NodePath,
+): void;
+
+function traverse(
+  parent: t.Node,
+  opts: TraverseOptions = {},
+  scope?: Scope,
+  state?: any,
+  parentPath?: NodePath,
 ) {
   if (!parent) return;
-  if (!opts) opts = {};
 
   if (!opts.noScope && !scope) {
     if (parent.type !== "Program" && parent.type !== "File") {
@@ -39,6 +66,8 @@ export default function traverse(
   traverse.node(parent, opts, scope, state, parentPath);
 }
 
+export default traverse;
+
 traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
@@ -48,14 +77,14 @@ traverse.cheap = function (node, enter) {
 };
 
 traverse.node = function (
-  node: Object,
-  opts: Object,
-  scope: Object,
-  state: Object,
-  parentPath: Object,
+  node: t.Node,
+  opts: TraverseOptions,
+  scope?: Scope,
+  state?: any,
+  parentPath?: NodePath,
   skipKeys?,
 ) {
-  const keys: Array = t.VISITOR_KEYS[node.type];
+  const keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
   const context = new TraversalContext(scope, opts, state, parentPath);
@@ -65,18 +94,18 @@ traverse.node = function (
   }
 };
 
-traverse.clearNode = function (node, opts) {
+traverse.clearNode = function (node: t.Node, opts?) {
   t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function (tree, opts) {
+traverse.removeProperties = function (tree, opts?) {
   t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 
-function hasDenylistedType(path, state) {
+function hasDenylistedType(path: NodePath, state) {
   if (path.node.type === state.type) {
     state.has = true;
     path.stop();
@@ -84,8 +113,8 @@ function hasDenylistedType(path, state) {
 }
 
 traverse.hasType = function (
-  tree: Object,
-  type: Object,
+  tree: any,
+  type: any,
   denylistTypes?: Array<string>,
 ): boolean {
   // the node we're searching in is denylisted

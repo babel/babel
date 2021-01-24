@@ -4,7 +4,7 @@ import * as t from "@babel/types";
 
 export const ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
-  checkPath(path: NodePath, opts?: Object): boolean {
+  checkPath(path: NodePath, opts?: any): boolean {
     const { node, parent } = path;
     if (!t.isIdentifier(node, opts) && !t.isJSXMemberExpression(parent, opts)) {
       if (t.isJSXIdentifier(node, opts)) {
@@ -116,6 +116,7 @@ export const Flow = {
     } else if (t.isImportDeclaration(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
     } else if (t.isExportDeclaration(node)) {
+      // @ts-expect-error todo(flow->ts) `exportKind` does not exist on ExportAllDeclaration
       return node.exportKind === "type";
     } else if (t.isImportSpecifier(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
@@ -150,7 +151,7 @@ export const NumericLiteralTypeAnnotation = {
 
 export const ForAwaitStatement = {
   types: ["ForOfStatement"],
-  checkPath({ node }: NodePath): boolean {
+  checkPath({ node }: NodePath<t.ForOfStatement>): boolean {
     return node.await === true;
   },
 };

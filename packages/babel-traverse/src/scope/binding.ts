@@ -1,5 +1,16 @@
 import type NodePath from "../path";
+import type * as t from "@babel/types";
+import type Scope from "./index";
 
+type BindingKind =
+  | "var"
+  | "let"
+  | "const"
+  | "module"
+  | "hoisted"
+  | "param"
+  | "local"
+  | "unknown";
 /**
  * This class is responsible for a binding inside of a scope.
  *
@@ -12,7 +23,22 @@ import type NodePath from "../path";
  */
 
 export default class Binding {
-  constructor({ identifier, scope, path, kind }) {
+  identifier: t.Identifier;
+  scope: Scope;
+  path: NodePath;
+  kind: BindingKind;
+
+  constructor({
+    identifier,
+    scope,
+    path,
+    kind,
+  }: {
+    identifier: t.Identifier;
+    scope: Scope;
+    path: NodePath;
+    kind: BindingKind;
+  }) {
     this.identifier = identifier;
     this.scope = scope;
     this.path = path;
@@ -53,7 +79,7 @@ export default class Binding {
    * Register a constant violation with the provided `path`.
    */
 
-  reassign(path: Object) {
+  reassign(path: any) {
     this.constant = false;
     if (this.constantViolations.indexOf(path) !== -1) {
       return;

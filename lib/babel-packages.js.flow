@@ -168,3 +168,7 @@ declare module "@babel/helper-function-name" {
 declare module "@babel/helper-split-export-declaration" {
   declare export default function splitExportDeclaration(exportDeclaration: any): any;
 }
+
+declare module "@babel/traverse" {
+  declare module.exports: any;
+}

@@ -2,27 +2,31 @@
 
 import * as t from "@babel/types";
 import nameFunction from "@babel/helper-function-name";
+import type NodePath from "./index";
 
-export function toComputedKey(): Object {
-  const node = this.node;
-
+export function toComputedKey(this: NodePath) {
   let key;
   if (this.isMemberExpression()) {
-    key = node.property;
+    key = this.node.property;
   } else if (this.isProperty() || this.isMethod()) {
-    key = node.key;
+    key = this.node.key;
   } else {
     throw new ReferenceError("todo");
   }
 
-  if (!node.computed) {
+  // @ts-expect-error todo(flow->ts) computed does not exist in ClassPrivateProperty
+  if (!this.node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }
 
   return key;
 }
 
-export function ensureBlock() {
+export function ensureBlock(
+  this: NodePath<
+    t.Loop | t.WithStatement | t.Function | t.LabeledStatement | t.CatchClause
+  >,
+) {
   const body = this.get("body");
   const bodyNode = body.node;
 
@@ -37,7 +41,7 @@ export function ensureBlock() {
     return bodyNode;
   }
 
-  const statements = [];
+  const statements: Array<t.Statement> = [];
 
   let stringPath = "body";
   let key;
@@ -50,15 +54,15 @@ export function ensureBlock() {
     stringPath += ".body.0";
     if (this.isFunction()) {
       key = "argument";
-      statements.push(t.returnStatement(body.node));
+      statements.push(t.returnStatement(body.node as t.Expression));
     } else {
       key = "expression";
-      statements.push(t.expressionStatement(body.node));
+      statements.push(t.expressionStatement(body.node as t.Expression));
     }
   }
 
   this.node.body = t.blockStatement(statements);
-  const parentPath = this.get(stringPath);
+  const parentPath = this.get(stringPath) as NodePath;
   body.setup(
     parentPath,
     listKey ? parentPath.node[listKey] : parentPath.node,
@@ -72,7 +76,7 @@ export function ensureBlock() {
 /**
  * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
  */
-export function arrowFunctionToShadowed() {
+export function arrowFunctionToShadowed(this: NodePath) {
   if (!this.isArrowFunctionExpression()) return;
 
   this.arrowFunctionToExpression();
@@ -84,7 +88,7 @@ export function arrowFunctionToShadowed() {
  * you have wrapped some set of items in an IIFE or other function, but want "this", "arguments", and super"
  * to continue behaving as expected.
  */
-export function unwrapFunctionEnvironment() {
+export function unwrapFunctionEnvironment(this: NodePath) {
   if (
     !this.isArrowFunctionExpression() &&
     !this.isFunctionExpression() &&
@@ -101,10 +105,10 @@ export function unwrapFunctionEnvironment() {
 /**
  * Convert a given arrow function into a normal ES5 function expression.
  */
-export function arrowFunctionToExpression({
-  allowInsertArrow = true,
-  specCompliant = false,
-} = {}) {
+export function arrowFunctionToExpression(
+  this: NodePath,
+  { allowInsertArrow = true, specCompliant = false } = {},
+) {
   if (!this.isArrowFunctionExpression()) {
     throw this.buildCodeFrameError(
       "Cannot convert non-arrow function to a function expression.",
@@ -118,6 +122,7 @@ export function arrowFunctionToExpression({
   );
 
   this.ensureBlock();
+  // @ts-expect-error todo(flow->ts): avoid mutating nodes
   this.node.type = "FunctionExpression";
   if (specCompliant) {
     const checkBinding = thisBinding
@@ -392,7 +397,7 @@ function standardizeSuperProperty(superProp) {
       ? superProp.scope.generateDeclaredUidIdentifier("prop")
       : null;
 
-    const parts = [
+    const parts: t.Expression[] = [
       t.assignmentExpression(
         "=",
         tmp,

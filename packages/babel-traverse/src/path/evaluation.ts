@@ -23,7 +23,7 @@ const INVALID_METHODS = ["random"];
  *
  */
 
-export function evaluateTruthy(): boolean {
+export function evaluateTruthy(this: NodePath): boolean {
   const res = this.evaluate();
   if (res.confident) return !!res.value;
 }
@@ -45,7 +45,7 @@ function deopt(path, state) {
  *   var g = a ? 1 : 2,
  *       a = g * this.foo
  */
-function evaluateCached(path, state) {
+function evaluateCached(path: NodePath, state) {
   const { node } = path;
   const { seen } = state;
 
@@ -58,7 +58,8 @@ function evaluateCached(path, state) {
       return;
     }
   } else {
-    const item = { resolved: false };
+    // todo: create type annotation for state instead
+    const item: { resolved: boolean; value?: any } = { resolved: false };
     seen.set(node, item);
 
     const val = _evaluate(path, state);
@@ -70,10 +71,8 @@ function evaluateCached(path, state) {
   }
 }
 
-function _evaluate(path, state) {
+function _evaluate(path: NodePath, state) {
   if (!state.confident) return;
-
-  const { node } = path;
 
   if (path.isSequenceExpression()) {
     const exprs = path.get("expressions");
@@ -85,7 +84,7 @@ function _evaluate(path, state) {
     path.isNumericLiteral() ||
     path.isBooleanLiteral()
   ) {
-    return node.value;
+    return path.node.value;
   }
 
   if (path.isNullLiteral()) {
@@ -93,27 +92,30 @@ function _evaluate(path, state) {
   }
 
   if (path.isTemplateLiteral()) {
-    return evaluateQuasis(path, node.quasis, state);
+    return evaluateQuasis(path, path.node.quasis, state);
   }
 
   if (
     path.isTaggedTemplateExpression() &&
     path.get("tag").isMemberExpression()
   ) {
-    const object = path.get("tag.object");
+    const object = path.get("tag.object") as NodePath;
     const {
+      // @ts-expect-error todo(flow->ts): possible bug, object is can be any expression and so name might be undefined
       node: { name },
     } = object;
-    const property = path.get("tag.property");
+    const property = path.get("tag.property") as NodePath;
 
     if (
       object.isIdentifier() &&
       name === "String" &&
-      !path.scope.getBinding(name, true) &&
-      property.isIdentifier &&
+      // todo(flow->ts): was changed from getBinding(name, true)
+      //  should this be hasBinding(name, true) as the binding is never used later?
+      !path.scope.getBinding(name) &&
+      property.isIdentifier() &&
       property.node.name === "raw"
     ) {
-      return evaluateQuasis(path, node.quasi.quasis, state, true);
+      return evaluateQuasis(path, path.node.quasi.quasis, state, true);
     }
   }
 
@@ -135,12 +137,13 @@ function _evaluate(path, state) {
   // "foo".length
   if (
     path.isMemberExpression() &&
-    !path.parentPath.isCallExpression({ callee: node })
+    !path.parentPath.isCallExpression({ callee: path.node })
   ) {
-    const property = path.get("property");
-    const object = path.get("object");
+    const property = path.get("property") as NodePath;
+    const object = path.get("object") as NodePath;
 
     if (object.isLiteral() && property.isIdentifier()) {
+      // @ts-expect-error todo(flow->ts): instead of typeof - would it be better to check type of ast node?
       const value = object.node.value;
       const type = typeof value;
       if (type === "number" || type === "string") {
@@ -150,7 +153,8 @@ function _evaluate(path, state) {
   }
 
   if (path.isReferencedIdentifier()) {
-    const binding = path.scope.getBinding(node.name);
+    // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
+    const binding = path.scope.getBinding(path.node.name);
 
     if (binding && binding.constantViolations.length > 0) {
       return deopt(binding.path, state);
@@ -163,11 +167,14 @@ function _evaluate(path, state) {
     if (binding?.hasValue) {
       return binding.value;
     } else {
-      if (node.name === "undefined") {
+      // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
+      if (path.node.name === "undefined") {
         return binding ? deopt(binding.path, state) : undefined;
-      } else if (node.name === "Infinity") {
+        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
+      } else if (path.node.name === "Infinity") {
         return binding ? deopt(binding.path, state) : Infinity;
-      } else if (node.name === "NaN") {
+        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
+      } else if (path.node.name === "NaN") {
         return binding ? deopt(binding.path, state) : NaN;
       }
 
@@ -181,14 +188,14 @@ function _evaluate(path, state) {
   }
 
   if (path.isUnaryExpression({ prefix: true })) {
-    if (node.operator === "void") {
+    if (path.node.operator === "void") {
       // we don't need to evaluate the argument to know what this will return
       return undefined;
     }
 
     const argument = path.get("argument");
     if (
-      node.operator === "typeof" &&
+      path.node.operator === "typeof" &&
       (argument.isFunction() || argument.isClass())
     ) {
       return "function";
@@ -196,7 +203,7 @@ function _evaluate(path, state) {
 
     const arg = evaluateCached(argument, state);
     if (!state.confident) return;
-    switch (node.operator) {
+    switch (path.node.operator) {
       case "!":
         return !arg;
       case "+":
@@ -227,13 +234,14 @@ function _evaluate(path, state) {
 
   if (path.isObjectExpression()) {
     const obj = {};
-    const props: Array<NodePath> = path.get("properties");
+    const props = path.get("properties");
     for (const prop of props) {
       if (prop.isObjectMethod() || prop.isSpreadElement()) {
         return deopt(prop, state);
       }
-      const keyPath = prop.get("key");
+      const keyPath: any = prop.get("key");
       let key = keyPath;
+      // @ts-expect-error todo(flow->ts): type refinement issues ObjectMethod and SpreadElement somehow not excluded
       if (prop.node.computed) {
         key = key.evaluate();
         if (!key.confident) {
@@ -245,7 +253,8 @@ function _evaluate(path, state) {
       } else {
         key = key.node.value;
       }
-      const valuePath = prop.get("value");
+      // todo(flow->ts): remove typecast
+      const valuePath = prop.get("value") as NodePath;
       let value = valuePath.evaluate();
       if (!value.confident) {
         return deopt(value.deopt, state);
@@ -266,7 +275,7 @@ function _evaluate(path, state) {
     const right = evaluateCached(path.get("right"), state);
     const rightConfident = state.confident;
 
-    switch (node.operator) {
+    switch (path.node.operator) {
       case "||":
         // TODO consider having a "truthy type" that doesn't bail on
         // left uncertainty but can still evaluate to truthy.
@@ -288,7 +297,7 @@ function _evaluate(path, state) {
     const right = evaluateCached(path.get("right"), state);
     if (!state.confident) return;
 
-    switch (node.operator) {
+    switch (path.node.operator) {
       case "-":
         return left - right;
       case "+":
@@ -340,15 +349,16 @@ function _evaluate(path, state) {
     // Number(1);
     if (
       callee.isIdentifier() &&
-      !path.scope.getBinding(callee.node.name, true) &&
+      !path.scope.getBinding(callee.node.name) &&
       VALID_CALLEES.indexOf(callee.node.name) >= 0
     ) {
-      func = global[node.callee.name];
+      func = global[callee.node.name];
     }
 
     if (callee.isMemberExpression()) {
       const object = callee.get("object");
-      const property = callee.get("property");
+      // todo: improve babel-types
+      const property = callee.get("property") as NodePath;
 
       // Math.min(1, 2)
       if (
@@ -363,8 +373,10 @@ function _evaluate(path, state) {
 
       // "abc".charCodeAt(4)
       if (object.isLiteral() && property.isIdentifier()) {
+        // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type (StringLiteral and NumberLiteral)
         const type = typeof object.node.value;
         if (type === "string" || type === "number") {
+          // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type
           context = object.node.value;
           func = context[property.node.name];
         }
@@ -382,7 +394,7 @@ function _evaluate(path, state) {
   deopt(path, state);
 }
 
-function evaluateQuasis(path, quasis: Array<Object>, state, raw = false) {
+function evaluateQuasis(path, quasis: Array<any>, state, raw = false) {
   let str = "";
 
   let i = 0;
@@ -420,10 +432,12 @@ function evaluateQuasis(path, quasis: Array<Object>, state, raw = false) {
  *
  */
 
-export function evaluate(): {
-  confident: boolean,
-  value: any,
-  deopt?: NodePath,
+export function evaluate(
+  this: NodePath,
+): {
+  confident: boolean;
+  value: any;
+  deopt?: NodePath;
 } {
   const state = {
     confident: true,

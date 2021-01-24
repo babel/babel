@@ -1,8 +1,9 @@
 import Binding from "../binding";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
+import type { Visitor } from "../../types";
 
-const renameVisitor = {
+const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
     if (node.name === state.oldName) {
       node.name = state.newName;
@@ -133,11 +134,6 @@ export default class Renamer {
       scope.removeOwnBinding(oldName);
       scope.bindings[newName] = binding;
       this.binding.identifier.name = newName;
-    }
-
-    if (binding.type === "hoisted") {
-      // https://github.com/babel/babel/issues/2435
-      // todo: hoist and convert function to a let
     }
 
     if (parentDeclar) {

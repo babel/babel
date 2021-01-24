@@ -3,6 +3,7 @@ import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import traverse from "../index";
+import type { Visitor } from "../types";
 import Scope from "../scope";
 import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
@@ -20,6 +21,8 @@ import * as NodePath_removal from "./removal";
 import * as NodePath_modification from "./modification";
 import * as NodePath_family from "./family";
 import * as NodePath_comments from "./comments";
+import type { NodePathAssetions } from "./generated/asserts";
+import type { NodePathValidators } from "./generated/validators";
 
 const debug = buildDebug("babel");
 
@@ -27,8 +30,8 @@ export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
-export default class NodePath {
-  constructor(hub: HubInterface, parent: Object) {
+class NodePath<T extends t.Node = t.Node> {
+  constructor(hub: HubInterface, parent: t.Node) {
     this.parent = parent;
     this.hub = hub;
     this.data = null;
@@ -37,26 +40,40 @@ export default class NodePath {
     this.scope = null;
   }
 
-  declare parent: Object;
+  declare parent: t.Node;
   declare hub: HubInterface;
-  declare data: Object;
+  declare data: object;
   declare context: TraversalContext;
   declare scope: Scope;
 
   contexts: Array<TraversalContext> = [];
   state: any = null;
-  opts: ?Object = null;
+  opts: any = null;
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
-  skipKeys: ?Object = null;
-  parentPath: ?NodePath = null;
-  container: ?Object | Array<Object> = null;
-  listKey: ?string = null;
-  key: ?string = null;
-  node: ?Object = null;
-  type: ?string = null;
+  skipKeys: any = null;
+  parentPath: NodePath | null = null;
+  container: object | null | Array<any> = null;
+  listKey: string | null = null;
+  key: string | number | null = null;
+  node: T = null;
+  type: string | null = null;
 
-  static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
+  static get({
+    hub,
+    parentPath,
+    parent,
+    container,
+    listKey,
+    key,
+  }: {
+    hub?;
+    parentPath;
+    parent;
+    container;
+    listKey?;
+    key;
+  }): NodePath {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }
@@ -104,22 +121,27 @@ export default class NodePath {
     return val;
   }
 
-  buildCodeFrameError(msg: string, Error: typeof Error = SyntaxError): Error {
+  buildCodeFrameError(
+    msg: string,
+    Error: new () => Error = SyntaxError,
+  ): Error {
     return this.hub.buildError(this.node, msg, Error);
   }
 
-  traverse(visitor: Object, state?: any) {
+  traverse<T>(visitor: Visitor<T>, state: T): void;
+  traverse(visitor: Visitor): void;
+  traverse(visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
-  set(key: string, node: Object) {
+  set(key: string, node: any) {
     t.validate(this.node, key, node);
     this.node[key] = node;
   }
 
   getPathLocation(): string {
     const parts = [];
-    let path = this;
+    let path: NodePath = this;
     do {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
@@ -203,7 +225,7 @@ Object.assign(
   NodePath_comments,
 );
 
-for (const type of (t.TYPES: Array<string>)) {
+for (const type of t.TYPES) {
   const typeKey = `is${type}`;
   const fn = t[typeKey];
   NodePath.prototype[typeKey] = function (opts) {
@@ -227,3 +249,23 @@ for (const type of Object.keys(virtualTypes)) {
     return virtualType.checkPath(this, opts);
   };
 }
+
+type NodePathMixins = typeof NodePath_ancestry &
+  typeof NodePath_inference &
+  typeof NodePath_replacement &
+  typeof NodePath_evaluation &
+  typeof NodePath_conversion &
+  typeof NodePath_introspection &
+  typeof NodePath_context &
+  typeof NodePath_removal &
+  typeof NodePath_modification &
+  typeof NodePath_family &
+  typeof NodePath_comments;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface NodePath<T>
+  extends NodePathAssetions,
+    NodePathValidators,
+    NodePathMixins {}
+
+export default NodePath;

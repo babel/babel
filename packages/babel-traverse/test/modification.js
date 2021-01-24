@@ -182,9 +182,9 @@ describe("modification", function () {
           const tagName = path.node.openingElement.name.name;
           if (tagName !== "span") return;
           path.insertBefore(
-            t.JSXElement(
-              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
-              t.JSXClosingElement(t.JSXIdentifier("div")),
+            t.jsxElement(
+              t.jsxOpeningElement(t.jsxIdentifier("div"), [], false),
+              t.jsxClosingElement(t.jsxIdentifier("div")),
               [],
             ),
           );
@@ -292,9 +292,9 @@ describe("modification", function () {
           const tagName = path.node.openingElement.name.name;
           if (tagName !== "span") return;
           path.insertAfter(
-            t.JSXElement(
-              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
-              t.JSXClosingElement(t.JSXIdentifier("div")),
+            t.jsxElement(
+              t.jsxOpeningElement(t.jsxIdentifier("div"), [], false),
+              t.jsxClosingElement(t.jsxIdentifier("div")),
               [],
             ),
           );

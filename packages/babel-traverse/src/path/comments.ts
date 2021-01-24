@@ -1,11 +1,12 @@
 // This file contains methods responsible for dealing with comments.
 import * as t from "@babel/types";
+import type NodePath from "./index";
 
 /**
  * Share comments amongst siblings.
  */
 
-export function shareCommentsWithSiblings() {
+export function shareCommentsWithSiblings(this: NodePath) {
   // NOTE: this assumes numbered keys
   if (typeof this.key === "string") return;
 
@@ -27,7 +28,12 @@ export function shareCommentsWithSiblings() {
   }
 }
 
-export function addComment(type: string, content: string, line?: boolean) {
+export function addComment(
+  this: NodePath,
+  type: t.CommentTypeShorthand,
+  content: string,
+  line?: boolean,
+) {
   t.addComment(this.node, type, content, line);
 }
 
@@ -35,6 +41,10 @@ export function addComment(type: string, content: string, line?: boolean) {
  * Give node `comments` of the specified `type`.
  */
 
-export function addComments(type: string, comments: Array) {
+export function addComments(
+  this: NodePath,
+  type: t.CommentTypeShorthand,
+  comments: readonly t.Comment[],
+) {
   t.addComments(this.node, type, comments);
 }

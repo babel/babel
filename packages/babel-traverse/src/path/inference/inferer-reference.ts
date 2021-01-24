@@ -1,7 +1,8 @@
 import type NodePath from "../index";
 import * as t from "@babel/types";
+import type Binding from "../../scope/binding";
 
-export default function (node: Object) {
+export default function (node: any) {
   if (!this.isReferenced()) return;
 
   // check if a binding exists of this value and if so then return a union type of all
@@ -86,7 +87,7 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     constantViolations = constantViolations.concat(functionConstantViolations);
 
     // push on inferred types of violated paths
-    for (const violation of (constantViolations: Array<NodePath>)) {
+    for (const violation of constantViolations) {
       types.push(violation.getTypeAnnotation());
     }
   }
@@ -106,7 +107,7 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
   return t.createUnionTypeAnnotation(types);
 }
 
-function getConstantViolationsBefore(binding, path, functions) {
+function getConstantViolationsBefore(binding: Binding, path, functions?) {
   const violations = binding.constantViolations.slice();
   violations.unshift(binding.path);
   return violations.filter(violation => {
@@ -117,7 +118,10 @@ function getConstantViolationsBefore(binding, path, functions) {
   });
 }
 
-function inferAnnotationFromBinaryExpression(name, path) {
+function inferAnnotationFromBinaryExpression(
+  name: string,
+  path: NodePath<t.BinaryExpression>,
+) {
   const operator = path.node.operator;
 
   const right = path.get("right").resolve();
@@ -144,14 +148,14 @@ function inferAnnotationFromBinaryExpression(name, path) {
   if (operator !== "===" && operator !== "==") return;
 
   //
-  let typeofPath;
-  let typePath;
+  let typeofPath: NodePath<t.UnaryExpression>;
+  let typePath: NodePath<t.Expression>;
   if (left.isUnaryExpression({ operator: "typeof" })) {
     typeofPath = left;
-    typePath = right;
+    typePath = right as NodePath<t.Expression>;
   } else if (right.isUnaryExpression({ operator: "typeof" })) {
     typeofPath = right;
-    typePath = left;
+    typePath = left as NodePath<t.Expression>;
   }
 
   if (!typeofPath) return;
@@ -159,14 +163,16 @@ function inferAnnotationFromBinaryExpression(name, path) {
   if (!typeofPath.get("argument").isIdentifier({ name })) return;
 
   // ensure that the type path is a Literal
-  typePath = typePath.resolve();
+  typePath = typePath.resolve() as NodePath<t.Expression>;
   if (!typePath.isLiteral()) return;
 
   // and that it's a string so we can infer it
+  // @ts-expect-error todo(flow->ts): value is not defined for NullLiteral and some other
   const typeValue = typePath.node.value;
   if (typeof typeValue !== "string") return;
 
   // turn type value into a type annotation
+  // @ts-expect-error todo(flow->ts): move validation from helper or relax type constraint to just a string
   return t.createTypeAnnotationBasedOnTypeof(typeValue);
 }
 
@@ -188,7 +194,11 @@ function getParentConditionalPath(binding, path, name) {
   }
 }
 
-function getConditionalAnnotation(binding, path, name) {
+function getConditionalAnnotation<T extends t.Node>(
+  binding: Binding,
+  path: NodePath<T>,
+  name?,
+) {
   const ifStatement = getParentConditionalPath(binding, path, name);
   if (!ifStatement) return;
 

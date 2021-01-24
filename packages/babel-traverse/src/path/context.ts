@@ -2,8 +2,10 @@
 
 import traverse from "../index";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
+import type TraversalContext from "../context";
+import type NodePath from "./index";
 
-export function call(key): boolean {
+export function call(this: NodePath, key: string): boolean {
   const opts = this.opts;
 
   this.debug(key);
@@ -19,7 +21,7 @@ export function call(key): boolean {
   return false;
 }
 
-export function _call(fns?: Array<Function>): boolean {
+export function _call(this: NodePath, fns?: Array<Function>): boolean {
   if (!fns) return false;
 
   for (const fn of fns) {
@@ -51,7 +53,7 @@ export function _call(fns?: Array<Function>): boolean {
   return false;
 }
 
-export function isDenylisted(): boolean {
+export function isDenylisted(this: NodePath): boolean {
   const denylist = this.opts.denylist ?? this.opts.blacklist;
   return denylist && denylist.indexOf(this.node.type) > -1;
 }
@@ -59,7 +61,7 @@ export function isDenylisted(): boolean {
 // TODO: Remove in Babel 8
 export { isDenylisted as isBlacklisted };
 
-export function visit(): boolean {
+export function visit(this: NodePath): boolean {
   if (!this.node) {
     return false;
   }
@@ -97,23 +99,23 @@ export function visit(): boolean {
   return this.shouldStop;
 }
 
-export function skip() {
+export function skip(this: NodePath) {
   this.shouldSkip = true;
 }
 
-export function skipKey(key) {
+export function skipKey(this: NodePath, key: string) {
   if (this.skipKeys == null) {
     this.skipKeys = {};
   }
   this.skipKeys[key] = true;
 }
 
-export function stop() {
+export function stop(this: NodePath) {
   // this.shouldSkip = true; this.shouldStop = true;
   this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
-export function setScope() {
+export function setScope(this: NodePath) {
   if (this.opts && this.opts.noScope) return;
 
   let path = this.parentPath;
@@ -129,7 +131,7 @@ export function setScope() {
   if (this.scope) this.scope.init();
 }
 
-export function setContext(context) {
+export function setContext(this: NodePath, context?: TraversalContext) {
   if (this.skipKeys != null) {
     this.skipKeys = {};
   }
@@ -153,7 +155,7 @@ export function setContext(context) {
  * for the new values.
  */
 
-export function resync() {
+export function resync(this: NodePath) {
   if (this.removed) return;
 
   this._resyncParent();
@@ -162,13 +164,13 @@ export function resync() {
   //this._resyncRemoved();
 }
 
-export function _resyncParent() {
+export function _resyncParent(this: NodePath) {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
 }
 
-export function _resyncKey() {
+export function _resyncKey(this: NodePath) {
   if (!this.container) return;
 
   if (this.node === this.container[this.key]) return;
@@ -194,7 +196,7 @@ export function _resyncKey() {
   this.key = null;
 }
 
-export function _resyncList() {
+export function _resyncList(this: NodePath) {
   if (!this.parent || !this.inList) return;
 
   const newContainer = this.parent[this.listKey];
@@ -204,7 +206,7 @@ export function _resyncList() {
   this.container = newContainer || null;
 }
 
-export function _resyncRemoved() {
+export function _resyncRemoved(this: NodePath) {
   if (
     this.key == null ||
     !this.container ||
@@ -214,7 +216,7 @@ export function _resyncRemoved() {
   }
 }
 
-export function popContext() {
+export function popContext(this: NodePath) {
   this.contexts.pop();
   if (this.contexts.length > 0) {
     this.setContext(this.contexts[this.contexts.length - 1]);
@@ -223,12 +225,12 @@ export function popContext() {
   }
 }
 
-export function pushContext(context) {
+export function pushContext(this: NodePath, context: TraversalContext) {
   this.contexts.push(context);
   this.setContext(context);
 }
 
-export function setup(parentPath, container, listKey, key) {
+export function setup(this: NodePath, parentPath, container, listKey, key) {
   this.listKey = listKey;
   this.container = container;
 
@@ -236,13 +238,13 @@ export function setup(parentPath, container, listKey, key) {
   this.setKey(key);
 }
 
-export function setKey(key) {
+export function setKey(this: NodePath, key) {
   this.key = key;
   this.node = this.container[this.key];
   this.type = this.node?.type;
 }
 
-export function requeue(pathToQueue = this) {
+export function requeue(this: NodePath, pathToQueue = this) {
   if (pathToQueue.removed) return;
 
   // TODO: Uncomment in Babel 8. If a path is skipped, and then replaced with a
@@ -263,7 +265,7 @@ export function requeue(pathToQueue = this) {
   }
 }
 
-export function _getQueueContexts() {
+export function _getQueueContexts(this: NodePath) {
   let path = this;
   let contexts = this.contexts;
   while (!contexts.length) {

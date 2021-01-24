@@ -11,6 +11,7 @@ import * as t from "@babel/types";
  */
 
 export function matchesPattern(
+  this: NodePath,
   pattern: string,
   allowPartial?: boolean,
 ): boolean {
@@ -22,7 +23,7 @@ export function matchesPattern(
  * if the array has any items, otherwise we just check if it's falsy.
  */
 
-export function has(key): boolean {
+export function has(this: NodePath, key: string): boolean {
   const val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
@@ -35,7 +36,7 @@ export function has(key): boolean {
  * Description
  */
 
-export function isStatic() {
+export function isStatic(this: NodePath): boolean {
   return this.scope.isStatic(this.node);
 }
 
@@ -49,7 +50,7 @@ export const is = has;
  * Opposite of `has`.
  */
 
-export function isnt(key): boolean {
+export function isnt(this: NodePath, key: string): boolean {
   return !this.has(key);
 }
 
@@ -57,7 +58,7 @@ export function isnt(key): boolean {
  * Check whether the path node `key` strict equals `value`.
  */
 
-export function equals(key, value): boolean {
+export function equals(this: NodePath, key: string, value): boolean {
   return this.node[key] === value;
 }
 
@@ -66,7 +67,7 @@ export function equals(key, value): boolean {
  * been removed yet we still internally know the type and need it to calculate node replacement.
  */
 
-export function isNodeType(type: string): boolean {
+export function isNodeType(this: NodePath, type: string): boolean {
   return t.isType(this.type, type);
 }
 
@@ -80,7 +81,7 @@ export function isNodeType(type: string): boolean {
  * to tell the path replacement that it's ok to replace this with an expression.
  */
 
-export function canHaveVariableDeclarationOrExpression() {
+export function canHaveVariableDeclarationOrExpression(this: NodePath) {
   return (
     (this.key === "init" || this.key === "left") && this.parentPath.isFor()
   );
@@ -94,7 +95,10 @@ export function canHaveVariableDeclarationOrExpression() {
  * is the same as containing a block statement.
  */
 
-export function canSwapBetweenExpressionAndStatement(replacement) {
+export function canSwapBetweenExpressionAndStatement(
+  this: NodePath,
+  replacement: t.Node,
+): boolean {
   if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
     return false;
   }
@@ -112,7 +116,10 @@ export function canSwapBetweenExpressionAndStatement(replacement) {
  * Check whether the current path references a completion record
  */
 
-export function isCompletionRecord(allowInsideFunction?) {
+export function isCompletionRecord(
+  this: NodePath,
+  allowInsideFunction?: boolean,
+): boolean {
   let path = this;
   let first = true;
 
@@ -141,14 +148,14 @@ export function isCompletionRecord(allowInsideFunction?) {
  * so we can explode it if necessary.
  */
 
-export function isStatementOrBlock() {
+export function isStatementOrBlock(this: NodePath): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
     t.isBlockStatement(this.container)
   ) {
     return false;
   } else {
-    return t.STATEMENT_OR_BLOCK_KEYS.includes(this.key);
+    return t.STATEMENT_OR_BLOCK_KEYS.includes(this.key as string);
   }
 }
 
@@ -156,7 +163,11 @@ export function isStatementOrBlock() {
  * Check if the currently assigned path references the `importName` of `moduleSource`.
  */
 
-export function referencesImport(moduleSource, importName) {
+export function referencesImport(
+  this: NodePath<t.Identifier>,
+  moduleSource: string,
+  importName: string,
+): boolean {
   if (!this.isReferencedIdentifier()) return false;
 
   const binding = this.scope.getBinding(this.node.name);
@@ -181,7 +192,10 @@ export function referencesImport(moduleSource, importName) {
     return true;
   }
 
-  if (path.isImportSpecifier() && path.node.imported.name === importName) {
+  if (
+    path.isImportSpecifier() &&
+    t.isIdentifier(path.node.imported, { name: importName })
+  ) {
     return true;
   }
 
@@ -192,7 +206,7 @@ export function referencesImport(moduleSource, importName) {
  * Get the source code associated with this node.
  */
 
-export function getSource() {
+export function getSource(this: NodePath): string {
   const node = this.node;
   if (node.end) {
     const code = this.hub.getCode();
@@ -201,7 +215,7 @@ export function getSource() {
   return "";
 }
 
-export function willIMaybeExecuteBefore(target) {
+export function willIMaybeExecuteBefore(this: NodePath, target): boolean {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
@@ -282,6 +296,7 @@ type RelativeExecutionStatus = "before" | "after" | "unknown";
  */
 
 export function _guessExecutionStatusRelativeTo(
+  this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
   // check if the two paths are in different functions, we can't track execution of these
@@ -354,8 +369,8 @@ export function _guessExecutionStatusRelativeTo(
   // otherwise we're associated by a parent node, check which key comes before the other
   const keys = t.VISITOR_KEYS[commonPath.type];
   const keyPosition = {
-    this: keys.indexOf(divergence.this.parentKey),
-    target: keys.indexOf(divergence.target.parentKey),
+    this: keys.indexOf(divergence.this.parentKey as string),
+    target: keys.indexOf(divergence.target.parentKey as string),
   };
   return keyPosition.target > keyPosition.this ? "before" : "after";
 }
@@ -367,6 +382,7 @@ export function _guessExecutionStatusRelativeTo(
 const executionOrderCheckedNodes = new WeakSet();
 
 export function _guessExecutionStatusRelativeToDifferentFunctions(
+  this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
   if (
@@ -423,12 +439,15 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
 /**
  * Resolve a "pointer" `NodePath` to it's absolute path.
  */
-
-export function resolve(dangerous, resolved) {
+export function resolve(this: NodePath, dangerous?, resolved?) {
   return this._resolve(dangerous, resolved) || this;
 }
 
-export function _resolve(dangerous?, resolved?): ?NodePath {
+export function _resolve(
+  this: NodePath,
+  dangerous?,
+  resolved?,
+): NodePath | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
@@ -444,6 +463,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
       // otherwise it's a request for a pattern and that's a bit more tricky
     }
   } else if (this.isReferencedIdentifier()) {
+    // @ts-expect-error todo(flow->ts): think about options to improve type refinements
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return;
 
@@ -460,6 +480,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
       return ret;
     }
   } else if (this.isTypeCastExpression()) {
+    // @ ts-ignore todo: babel-types
     return this.get("expression").resolve(dangerous, resolved);
   } else if (dangerous && this.isMemberExpression()) {
     // this is dangerous, as non-direct target assignments will mutate it's state
@@ -468,13 +489,14 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     const targetKey = this.toComputedKey();
     if (!t.isLiteral(targetKey)) return;
 
+    // @ts-expect-error todo(flow->ts): NullLiteral
     const targetName = targetKey.value;
 
     const target = this.get("object").resolve(dangerous, resolved);
 
     if (target.isObjectExpression()) {
       const props = target.get("properties");
-      for (const prop of (props: Array)) {
+      for (const prop of props as any[]) {
         if (!prop.isProperty()) continue;
 
         const key = prop.get("key");
@@ -496,7 +518,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
   }
 }
 
-export function isConstantExpression() {
+export function isConstantExpression(this: NodePath) {
   if (this.isIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return false;
@@ -518,7 +540,7 @@ export function isConstantExpression() {
   }
 
   if (this.isUnaryExpression()) {
-    if (this.get("operator").node !== "void") {
+    if (this.node.operator !== "void") {
       return false;
     }
 
@@ -535,7 +557,7 @@ export function isConstantExpression() {
   return false;
 }
 
-export function isInStrictMode() {
+export function isInStrictMode(this: NodePath) {
   const start = this.isProgram() ? this : this.parentPath;
 
   const strictParent = start.find(path => {
@@ -552,10 +574,11 @@ export function isInStrictMode() {
       return false;
     }
 
-    let { node } = path;
-    if (path.isFunction()) node = node.body;
+    const body: t.BlockStatement | t.Program = path.isFunction()
+      ? (path.node.body as t.BlockStatement)
+      : (path.node as t.Program);
 
-    for (const directive of node.directives) {
+    for (const directive of body.directives) {
       if (directive.value.value === "use strict") {
         return true;
       }

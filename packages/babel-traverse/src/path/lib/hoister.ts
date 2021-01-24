@@ -1,7 +1,11 @@
 import { react } from "@babel/types";
 import * as t from "@babel/types";
+import type Scope from "../../scope";
+import type NodePath from "../index";
+import type Binding from "../../scope/binding";
+import type { Visitor } from "../../types";
 
-const referenceVisitor = {
+const referenceVisitor: Visitor<PathHoister> = {
   // This visitor looks for bindings to establish a topmost scope for hoisting.
   ReferencedIdentifier(path, state) {
     // Don't hoist regular JSX identifiers ('div', 'span', etc).
@@ -49,8 +53,16 @@ const referenceVisitor = {
   },
 };
 
-export default class PathHoister {
-  constructor(path, scope) {
+export default class PathHoister<T extends t.Node = t.Node> {
+  breakOnScopePaths: NodePath[];
+  bindings: { [k: string]: Binding };
+  mutableBinding: boolean;
+  private scopes: Scope[];
+  scope: Scope;
+  private path: NodePath<T>;
+  private attachAfter: boolean;
+
+  constructor(path: NodePath<T>, scope: Scope) {
     // Storage for scopes we can't hoist above.
     this.breakOnScopePaths = [];
     // Storage for bindings that may affect what path we can hoist to.
@@ -131,7 +143,7 @@ export default class PathHoister {
           path = binding.path;
 
           // We also move past any constant violations.
-          for (const violationPath of (binding.constantViolations: Array)) {
+          for (const violationPath of binding.constantViolations) {
             if (this.getAttachmentParentForPath(violationPath).key > path.key) {
               path = violationPath;
             }
@@ -156,10 +168,11 @@ export default class PathHoister {
         if (this.scope === scope) return;
 
         // needs to be attached to the body
-        const bodies = scope.path.get("body").get("body");
+        const bodies = scope.path.get("body").get("body") as NodePath[];
         for (let i = 0; i < bodies.length; i++) {
           // Don't attach to something that's going to get hoisted,
           // like a default parameter
+          // @ts-expect-error todo(flow->ts): avoid mutating the node, introducing new fields
           if (bodies[i].node._blockHoist) continue;
           return bodies[i];
         }
@@ -221,6 +234,7 @@ export default class PathHoister {
     // generate declaration and insert it to our point
     let uid = attachTo.scope.generateUidIdentifier("ref");
 
+    // @ts-expect-error todo(flow->ts): more specific type for this.path
     const declarator = t.variableDeclarator(uid, this.path.node);
 
     const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";
@@ -234,7 +248,7 @@ export default class PathHoister {
     if (parent.isJSXElement() && this.path.container === parent.node.children) {
       // turning the `span` in `<div><span /></div>` to an expression so we need to wrap it with
       // an expression container
-      uid = t.JSXExpressionContainer(uid);
+      uid = t.jsxExpressionContainer(uid);
     }
 
     this.path.replaceWith(t.cloneNode(uid));

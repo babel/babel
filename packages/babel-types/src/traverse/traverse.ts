@@ -40,9 +40,9 @@ export default function traverse<T>(
 
 function traverseSimpleImpl<T>(
   node: any,
-  enter: Function | undefined | null,
-  exit: Function | undefined | null,
-  state: T | undefined | null,
+  enter: Function | undefined,
+  exit: Function | undefined,
+  state: T | undefined,
   ancestors: TraversalAncestors,
 ) {
   const keys = VISITOR_KEYS[node.type];

@@ -22,7 +22,7 @@ const hoistVariablesVisitor = {
 
     const exprs = [];
 
-    for (const declar of (path.node.declarations: Array<Object>)) {
+    for (const declar of path.node.declarations as Array<any>) {
       if (declar.init) {
         exprs.push(
           t.expressionStatement(
@@ -44,7 +44,10 @@ const hoistVariablesVisitor = {
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple(nodes: Array<Object>) {
+export function replaceWithMultiple<Nodes extends Array<t.Node>>(
+  nodes: Nodes,
+): NodePath[] {
+  // todo NodePaths
   this.resync();
 
   nodes = this._verifyNodeList(nodes);
@@ -70,7 +73,7 @@ export function replaceWithMultiple(nodes: Array<Object>) {
  * easier to use, your transforms will be extremely brittle.
  */
 
-export function replaceWithSourceString(replacement) {
+export function replaceWithSourceString(this: NodePath, replacement) {
   this.resync();
 
   try {
@@ -101,7 +104,7 @@ export function replaceWithSourceString(replacement) {
  * Replace the current node with another.
  */
 
-export function replaceWith(replacement) {
+export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
   this.resync();
 
   if (this.removed) {
@@ -187,15 +190,16 @@ export function replaceWith(replacement) {
  * Description
  */
 
-export function _replaceWith(node) {
+export function _replaceWith(this: NodePath, node) {
   if (!this.container) {
     throw new ReferenceError("Container is falsy");
   }
 
   if (this.inList) {
+    // @ts-expect-error todo(flow->ts): check if t.validate accepts a numeric key
     t.validate(this.parent, this.key, [node]);
   } else {
-    t.validate(this.parent, this.key, node);
+    t.validate(this.parent, this.key as string, node);
   }
 
   this.debug(`Replace with ${node?.type}`);
@@ -210,7 +214,10 @@ export function _replaceWith(node) {
  * extremely important to retain original semantics.
  */
 
-export function replaceExpressionWithStatements(nodes: Array<Object>) {
+export function replaceExpressionWithStatements(
+  this: NodePath,
+  nodes: Array<t.Statement>,
+) {
   this.resync();
 
   const toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
@@ -225,12 +232,17 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
 
   this.replaceWith(t.callExpression(container, []));
+  // replaceWith changes the type of "this", but it isn't trackable by TS
+  type ThisType = NodePath<
+    t.CallExpression & { callee: t.ArrowFunctionExpression }
+  >;
+
   this.traverse(hoistVariablesVisitor);
 
   // add implicit returns to all ending expression statements
-  const completionRecords: Array<NodePath> = this.get(
-    "callee",
-  ).getCompletionRecords();
+  const completionRecords: Array<NodePath> = (this as ThisType)
+    .get("callee")
+    .getCompletionRecords();
   for (const path of completionRecords) {
     if (!path.isExpressionStatement()) continue;
 
@@ -239,7 +251,7 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
       let uid = loop.getData("expressionReplacementReturnUid");
 
       if (!uid) {
-        const callee = this.get("callee");
+        const callee = (this as ThisType).get("callee");
         uid = callee.scope.generateDeclaredUidIdentifier("ret");
         callee
           .get("body")
@@ -259,26 +271,26 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
     }
   }
 
-  const callee = this.get("callee");
+  const callee = this.get("callee") as NodePath<t.FunctionExpression>;
   callee.arrowFunctionToExpression();
 
   // (() => await xxx)() -> await (async () => await xxx)();
   if (
     isParentAsync &&
     traverse.hasType(
-      this.get("callee.body").node,
+      (this.get("callee.body") as NodePath<t.BlockStatement>).node,
       "AwaitExpression",
       t.FUNCTION_TYPES,
     )
   ) {
     callee.set("async", true);
-    this.replaceWith(t.awaitExpression(this.node));
+    this.replaceWith(t.awaitExpression((this as ThisType).node));
   }
 
   return callee.get("body.body");
 }
 
-export function replaceInline(nodes: Object | Array<Object>) {
+export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {
   this.resync();
 
   if (Array.isArray(nodes)) {

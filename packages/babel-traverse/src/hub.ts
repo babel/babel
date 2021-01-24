@@ -1,10 +1,10 @@
 import type Scope from "./scope";
 
 export interface HubInterface {
-  getCode(): ?string;
-  getScope(): ?Scope;
-  addHelper(name: string): Object;
-  buildError(node: Object, msg: string, Error: Class<Error>): Error;
+  getCode(): string | void;
+  getScope(): Scope | void;
+  addHelper(name: string): any;
+  buildError(node: any, msg: string, Error: new () => Error): Error;
 }
 
 export default class Hub implements HubInterface {

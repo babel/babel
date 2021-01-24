@@ -4,15 +4,16 @@ import { path as pathCache } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import * as t from "@babel/types";
+import type Scope from "../scope";
 
 /**
  * Insert the provided nodes before the current one.
  */
 
-export function insertBefore(nodes) {
+export function insertBefore(this: NodePath, nodes_: t.Node | t.Node[]) {
   this._assertUnremoved();
 
-  nodes = this._verifyNodeList(nodes);
+  const nodes = this._verifyNodeList(nodes_);
 
   const { parentPath } = this;
 
@@ -28,17 +29,18 @@ export function insertBefore(nodes) {
     (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
+    // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
     return this._containerInsertBefore(nodes);
   } else if (this.isStatementOrBlock()) {
+    const node = this.node as t.Statement;
     const shouldInsertCurrentNode =
-      this.node &&
-      (!this.isExpressionStatement() || this.node.expression != null);
+      node &&
+      (!this.isExpressionStatement() ||
+        (node as t.ExpressionStatement).expression != null);
 
-    this.replaceWith(
-      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
-    );
+    this.replaceWith(t.blockStatement(shouldInsertCurrentNode ? [node] : []));
     return this.unshiftContainer("body", nodes);
   } else {
     throw new Error(
@@ -48,11 +50,12 @@ export function insertBefore(nodes) {
   }
 }
 
-export function _containerInsert(from, nodes) {
+export function _containerInsert(this: NodePath, from, nodes) {
   this.updateSiblingKeys(from, nodes.length);
 
   const paths = [];
 
+  // @ts-expect-error todo(flow->ts): this.container could be a NodePath
   this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
@@ -78,11 +81,12 @@ export function _containerInsert(from, nodes) {
   return paths;
 }
 
-export function _containerInsertBefore(nodes) {
+export function _containerInsertBefore(this: NodePath, nodes) {
   return this._containerInsert(this.key, nodes);
 }
 
-export function _containerInsertAfter(nodes) {
+export function _containerInsertAfter(this: NodePath, nodes) {
+  // @ts-expect-error todo(flow->ts): this.key could be a string
   return this._containerInsert(this.key + 1, nodes);
 }
 
@@ -91,10 +95,10 @@ export function _containerInsertAfter(nodes) {
  * expression, ensure that the completion record is correct by pushing the current node.
  */
 
-export function insertAfter(nodes) {
+export function insertAfter(this: NodePath, nodes_: t.Node | t.Node[]) {
   this._assertUnremoved();
 
-  nodes = this._verifyNodeList(nodes);
+  const nodes = this._verifyNodeList(nodes_);
 
   const { parentPath } = this;
   if (
@@ -121,31 +125,36 @@ export function insertAfter(nodes) {
     (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) {
+      const node = this.node as t.Expression | t.VariableDeclaration;
       let { scope } = this;
       // Inserting after the computed key of a method should insert the
       // temporary binding in the method's parent's scope.
-      if (parentPath.isMethod({ computed: true, key: this.node })) {
+      if (parentPath.isMethod({ computed: true, key: node })) {
         scope = scope.parent;
       }
       const temp = scope.generateDeclaredUidIdentifier();
       nodes.unshift(
         t.expressionStatement(
-          t.assignmentExpression("=", t.cloneNode(temp), this.node),
+          // @ts-expect-error todo(flow->ts): This can be a variable
+          // declaraion in the "init" of a for statement, but that's
+          // invalid here.
+          t.assignmentExpression("=", t.cloneNode(temp), node),
         ),
       );
       nodes.push(t.expressionStatement(t.cloneNode(temp)));
     }
+    // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
     return this._containerInsertAfter(nodes);
   } else if (this.isStatementOrBlock()) {
+    const node = this.node as t.Statement;
     const shouldInsertCurrentNode =
-      this.node &&
-      (!this.isExpressionStatement() || this.node.expression != null);
+      node &&
+      (!this.isExpressionStatement() ||
+        (node as t.ExpressionStatement).expression != null);
 
-    this.replaceWith(
-      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
-    );
+    this.replaceWith(t.blockStatement(shouldInsertCurrentNode ? [node] : []));
     return this.pushContainer("body", nodes);
   } else {
     throw new Error(
@@ -159,7 +168,11 @@ export function insertAfter(nodes) {
  * Update all sibling node paths after `fromIndex` by `incrementBy`.
  */
 
-export function updateSiblingKeys(fromIndex, incrementBy) {
+export function updateSiblingKeys(
+  this: NodePath,
+  fromIndex: number,
+  incrementBy: number,
+) {
   if (!this.parent) return;
 
   const paths = pathCache.get(this.parent);
@@ -170,12 +183,15 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
   }
 }
 
-export function _verifyNodeList(nodes) {
+export function _verifyNodeList(
+  this: NodePath,
+  nodes: t.Node | t.Node[],
+): t.Node[] {
   if (!nodes) {
     return [];
   }
 
-  if (nodes.constructor !== Array) {
+  if (!Array.isArray(nodes)) {
     nodes = [nodes];
   }
 
@@ -204,7 +220,11 @@ export function _verifyNodeList(nodes) {
   return nodes;
 }
 
-export function unshiftContainer(listKey, nodes) {
+export function unshiftContainer<Nodes extends t.Node | t.Node[]>(
+  listKey: string,
+  nodes: Nodes,
+): NodePath[] {
+  // todo: NodePaths<Nodes>
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -222,10 +242,14 @@ export function unshiftContainer(listKey, nodes) {
   return path._containerInsertBefore(nodes);
 }
 
-export function pushContainer(listKey, nodes) {
+export function pushContainer(
+  this: NodePath,
+  listKey: string,
+  nodes: t.Node | t.Node[],
+) {
   this._assertUnremoved();
 
-  nodes = this._verifyNodeList(nodes);
+  const verifiedNodes = this._verifyNodeList(nodes);
 
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
@@ -239,15 +263,17 @@ export function pushContainer(listKey, nodes) {
     key: container.length,
   }).setContext(this.context);
 
-  return path.replaceWithMultiple(nodes);
+  return path.replaceWithMultiple(verifiedNodes);
 }
 
 /**
  * Hoist the current node to the highest scope possible and return a UID
  * referencing it.
  */
-
-export function hoist(scope = this.scope) {
-  const hoister = new PathHoister(this, scope);
+export function hoist<T extends t.Node>(
+  this: NodePath<T>,
+  scope: Scope = this.scope,
+) {
+  const hoister = new PathHoister<T>(this, scope);
   return hoister.run();
 }
