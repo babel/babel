@@ -224,20 +224,21 @@ const privateNameHandlerSpec = {
     }
 
     if (isMethod) {
-      if (getId) {
+      if (isAccessor) {
+        if (!getId && setId) {
+          if (file.availableHelper("writeOnlyError")) {
+            return t.callExpression(file.addHelper("writeOnlyError"), [
+              t.stringLiteral(name),
+            ]);
+          }
+          console.warn(
+            `@babel/helpers is outdated, update it to silence this warning.`,
+          );
+        }
         return t.callExpression(file.addHelper("classPrivateFieldGet"), [
           this.receiver(member),
           t.cloneNode(id),
         ]);
-      } else if (setId) {
-        if (file.availableHelper("writeOnlyError")) {
-          return t.callExpression(file.addHelper("writeOnlyError"), [
-            t.stringLiteral(name),
-          ]);
-        }
-        console.warn(
-          `@babel/helpers is outdated, update it to silence this warning.`,
-        );
       }
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
