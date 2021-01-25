@@ -235,7 +235,9 @@ const privateNameHandlerSpec = {
             t.stringLiteral(name),
           ]);
         }
-        return;
+        console.warn(
+          `@babel/helpers is outdated, update it to silence this warning.`,
+        );
       }
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
