@@ -224,10 +224,14 @@ const privateNameHandlerSpec = {
     }
 
     if (isMethod) {
-      if (isAccessor) {
+      if (getId) {
         return t.callExpression(file.addHelper("classPrivateFieldGet"), [
           this.receiver(member),
           t.cloneNode(id),
+        ]);
+      } else if (setId && file.availableHelper("writeOnlyError")) {
+        return t.callExpression(file.addHelper("writeOnlyError"), [
+          t.stringLiteral(name),
         ]);
       }
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [

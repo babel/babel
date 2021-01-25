@@ -14,7 +14,7 @@ class Cl {
       value: 0
     });
 
-    this.publicField = babelHelpers.classPrivateFieldGet(this, _privateFieldValue);
+    this.publicField = babelHelpers.writeOnlyError("privateFieldValue");
   }
 
 }
