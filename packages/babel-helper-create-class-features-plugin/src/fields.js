@@ -229,10 +229,13 @@ const privateNameHandlerSpec = {
           this.receiver(member),
           t.cloneNode(id),
         ]);
-      } else if (setId && file.availableHelper("writeOnlyError")) {
-        return t.callExpression(file.addHelper("writeOnlyError"), [
-          t.stringLiteral(name),
-        ]);
+      } else if (setId) {
+        if (file.availableHelper("writeOnlyError")) {
+          return t.callExpression(file.addHelper("writeOnlyError"), [
+            t.stringLiteral(name),
+          ]);
+        }
+        return;
       }
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
