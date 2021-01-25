@@ -13,6 +13,8 @@ type State = {
   emit: EmitFunction;
 };
 
+type Unpacked<T> = T extends (infer U)[] ? U : T;
+
 const visitor = {
   Scope(path: NodePath, state: State) {
     if (state.kind === "let") path.skip();
@@ -27,9 +29,9 @@ const visitor = {
 
     const nodes = [];
 
-    const declarations: ReadonlyArray<NodePath<
-      VariableDeclaration["declarations"]
-    >> = path.get("declarations");
+    const declarations: ReadonlyArray<
+      NodePath<Unpacked<VariableDeclaration["declarations"]>>
+    > = path.get("declarations");
     let firstId;
 
     for (const declar of declarations) {
