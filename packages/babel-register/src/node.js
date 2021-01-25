@@ -112,8 +112,6 @@ export function revert() {
   if (piratesRevert) piratesRevert();
 }
 
-register();
-
 export default function register(opts?: Object = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
   opts = {
