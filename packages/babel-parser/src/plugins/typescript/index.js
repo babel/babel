@@ -2284,8 +2284,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const isDeclare = this.eatContextual("declare");
 
       if (
-        this.isContextual("declare") ||
-        !this.shouldParseExportDeclaration()
+        isDeclare &&
+        (this.isContextual("declare") || !this.shouldParseExportDeclaration())
       ) {
         throw this.raise(
           this.state.start,
