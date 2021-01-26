@@ -875,7 +875,7 @@ helpers.readOnlyError = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.writeOnlyError = helper("7.12.12")`
+helpers.writeOnlyError = helper("7.12.13")`
   export default function _writeOnlyError(name) {
     throw new TypeError("\\"" + name + "\\" is write-only");
   }
