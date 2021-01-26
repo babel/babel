@@ -1,18 +1,11 @@
 import type { Scope } from "@babel/traverse";
 import * as t from "@babel/types";
-import type {
-  AssignmentExpression,
-  Identifier,
-  MemberExpression,
-  Literal,
-  Super,
-} from "@babel/types";
 
 function getObjRef(
-  node: Identifier | MemberExpression,
-  nodes: Array<AssignmentExpression>,
+  node: t.Identifier | t.MemberExpression,
+  nodes: Array<t.AssignmentExpression>,
   scope: Scope,
-): Identifier | Super {
+): t.Identifier | t.Super {
   let ref;
   if (t.isIdentifier(node)) {
     if (scope.hasBinding(node.name)) {
@@ -46,10 +39,10 @@ function getObjRef(
 }
 
 function getPropRef(
-  node: MemberExpression,
-  nodes: Array<AssignmentExpression>,
+  node: t.MemberExpression,
+  nodes: Array<t.AssignmentExpression>,
   scope: Scope,
-): Identifier | Literal {
+): t.Identifier | t.Literal {
   const prop = node.property;
   if (t.isPrivateName(prop)) {
     throw new Error(
@@ -66,14 +59,14 @@ function getPropRef(
 }
 
 export default function (
-  node: Identifier | MemberExpression,
-  nodes: Array<AssignmentExpression>,
+  node: t.Identifier | t.MemberExpression,
+  nodes: Array<t.AssignmentExpression>,
   file: void,
   scope: Scope,
   allowedSingleIdent?: boolean,
 ): {
-  uid: Identifier | MemberExpression;
-  ref: Identifier | MemberExpression;
+  uid: t.Identifier | t.MemberExpression;
+  ref: t.Identifier | t.MemberExpression;
 } {
   let obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {
