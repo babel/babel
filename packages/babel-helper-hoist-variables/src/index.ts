@@ -1,9 +1,8 @@
 import * as t from "@babel/types";
-import type { Identifier, VariableDeclaration } from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
 export type EmitFunction = (
-  id: Identifier,
+  id: t.Identifier,
   idName: string,
   hasInit: boolean,
 ) => any;
@@ -24,13 +23,13 @@ const visitor = {
     path.skip();
   },
 
-  VariableDeclaration(path: NodePath<VariableDeclaration>, state: State) {
+  VariableDeclaration(path: NodePath<t.VariableDeclaration>, state: State) {
     if (state.kind && path.node.kind !== state.kind) return;
 
     const nodes = [];
 
     const declarations: ReadonlyArray<
-      NodePath<Unpacked<VariableDeclaration["declarations"]>>
+      NodePath<Unpacked<t.VariableDeclaration["declarations"]>>
     > = path.get("declarations");
     let firstId;
 
