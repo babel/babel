@@ -2832,16 +2832,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseClass<T: N.Class>(
-      node: T,
-      isStatement: /* T === ClassDeclaration */ boolean,
-      optionalId?: boolean,
-      abstract?: boolean,
-    ): T {
+    parseClass<T: N.Class>(node: T, ...args: any[]): T {
       const oldInAbstractClass = this.state.inAbstractClass;
-      this.state.inAbstractClass = !!abstract;
+      this.state.inAbstractClass = !!(node: any).abstract;
       try {
-        return super.parseClass(node, isStatement, optionalId, abstract);
+        return super.parseClass(node, ...args);
       } finally {
         this.state.inAbstractClass = oldInAbstractClass;
       }
