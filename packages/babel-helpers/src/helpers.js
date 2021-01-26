@@ -875,6 +875,12 @@ helpers.readOnlyError = helper("7.0.0-beta.0")`
   }
 `;
 
+helpers.writeOnlyError = helper("7.12.12")`
+  export default function _writeOnlyError(name) {
+    throw new TypeError("\\"" + name + "\\" is write-only");
+  }
+`;
+
 helpers.classNameTDZError = helper("7.0.0-beta.0")`
   export default function _classNameTDZError(name) {
     throw new Error("Class \\"" + name + "\\" cannot be referenced in computed property keys.");
