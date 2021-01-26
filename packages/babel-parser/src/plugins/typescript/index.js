@@ -1595,17 +1595,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 this.unexpected(null, tt._class);
               }
             }
-            const oldInAbstractClass = this.state.inAbstractClass;
-            this.state.inAbstractClass = true;
-            try {
-              return this.parseClass(
-                cls,
-                /* isStatement */ true,
-                /* optionalId */ false,
-              );
-            } finally {
-              this.state.inAbstractClass = oldInAbstractClass;
-            }
+            return this.parseClass(
+              cls,
+              /* isStatement */ true,
+              /* optionalId */ false,
+              /* abstract */ true,
+            );
           }
           break;
 
@@ -2834,6 +2829,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return cb();
       } finally {
         this.state.isDeclareContext = oldIsDeclareContext;
+      }
+    }
+
+    parseClass<T: N.Class>(
+      node: T,
+      isStatement: /* T === ClassDeclaration */ boolean,
+      optionalId?: boolean,
+      abstract?: boolean,
+    ): T {
+      const oldInAbstractClass = this.state.inAbstractClass;
+      this.state.inAbstractClass = !!abstract;
+      try {
+        return super.parseClass(node, isStatement, optionalId, abstract);
+      } finally {
+        this.state.inAbstractClass = oldInAbstractClass;
       }
     }
   };

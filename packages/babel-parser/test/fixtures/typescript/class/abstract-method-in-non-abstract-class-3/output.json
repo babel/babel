@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":52,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":52}},
+  "errors": [
+    "SyntaxError: Abstract methods can only appear within an abstract class. (1:31)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":52,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":52}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":52,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":52}},
+        "abstract": true,
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":17,"end":52,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":52}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":19,"end":50,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":50}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":19,"end":20,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":20},"identifierName":"p"},
+                "name": "p"
+              },
+              "computed": false,
+              "value": {
+                "type": "ClassExpression",
+                "start":23,"end":50,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":50}},
+                "id": null,
+                "superClass": null,
+                "body": {
+                  "type": "ClassBody",
+                  "start":29,"end":50,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":50}},
+                  "body": [
+                    {
+                      "type": "TSDeclareMethod",
+                      "start":31,"end":48,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":48}},
+                      "abstract": true,
+                      "static": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":40,"end":46,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":46},"identifierName":"method"},
+                        "name": "method"
+                      },
+                      "computed": false,
+                      "kind": "method",
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": []
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

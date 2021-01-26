@@ -1152,6 +1152,8 @@ export default class StatementParser extends ExpressionParser {
     node: T,
     isStatement: /* T === ClassDeclaration */ boolean,
     optionalId?: boolean,
+    // eslint-disable-next-line no-unused-vars -- used in TypeScript plugin
+    abstract?: boolean,
   ): T {
     this.next();
     this.takeDecorators(node);
