@@ -20,12 +20,12 @@ export default class Buffer {
   _last: string = "";
   _queue: Array<
     [
-      string,
-      number,
-      number,
-      string | null | undefined,
-      string | null | undefined,
-      boolean | undefined,
+      str: string,
+      line: number,
+      column: number,
+      identifierName: string | null,
+      filename: string | null | undefined,
+      force: boolean | undefined,
     ]
   > = [];
 
