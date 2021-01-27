@@ -1,6 +1,7 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 
-export function _params(node: Object) {
+export function _params(this: Printer, node: any) {
   this.print(node.typeParameters, node);
   this.token("(");
   this._parameters(node.params, node);
@@ -9,7 +10,7 @@ export function _params(node: Object) {
   this.print(node.returnType, node);
 }
 
-export function _parameters(parameters, parent) {
+export function _parameters(this: Printer, parameters, parent) {
   for (let i = 0; i < parameters.length; i++) {
     this._param(parameters[i], parent);
 
@@ -20,14 +21,14 @@ export function _parameters(parameters, parent) {
   }
 }
 
-export function _param(parameter, parent) {
+export function _param(this: Printer, parameter, parent?) {
   this.printJoin(parameter.decorators, parameter);
   this.print(parameter, parent);
   if (parameter.optional) this.token("?"); // TS / flow
   this.print(parameter.typeAnnotation, parameter); // TS / flow
 }
 
-export function _methodHead(node: Object) {
+export function _methodHead(this: Printer, node: any) {
   const kind = node.kind;
   const key = node.key;
 
@@ -65,7 +66,7 @@ export function _methodHead(node: Object) {
   this._params(node);
 }
 
-export function _predicate(node: Object) {
+export function _predicate(this: Printer, node: any) {
   if (node.predicate) {
     if (!node.returnType) {
       this.token(":");
@@ -75,7 +76,7 @@ export function _predicate(node: Object) {
   }
 }
 
-export function _functionHead(node: Object) {
+export function _functionHead(this: Printer, node: any) {
   if (node.async) {
     this.word("async");
     this.space();
@@ -92,7 +93,7 @@ export function _functionHead(node: Object) {
   this._predicate(node);
 }
 
-export function FunctionExpression(node: Object) {
+export function FunctionExpression(this: Printer, node: t.FunctionExpression) {
   this._functionHead(node);
   this.space();
   this.print(node.body, node);
@@ -100,7 +101,10 @@ export function FunctionExpression(node: Object) {
 
 export { FunctionExpression as FunctionDeclaration };
 
-export function ArrowFunctionExpression(node: Object) {
+export function ArrowFunctionExpression(
+  this: Printer,
+  node: t.ArrowFunctionExpression,
+) {
   if (node.async) {
     this.word("async");
     this.space();

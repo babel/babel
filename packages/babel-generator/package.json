@@ -25,6 +25,9 @@
   },
   "devDependencies": {
     "@babel/helper-fixtures": "workspace:*",
-    "@babel/parser": "workspace:*"
+    "@babel/parser": "workspace:*",
+    "@types/jsesc": "^2.5.0",
+    "@types/lodash": "^4.14.150",
+    "@types/source-map": "^0.5.0"
   }
 }

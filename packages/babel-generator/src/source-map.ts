@@ -5,6 +5,13 @@ import sourceMap from "source-map";
  */
 
 export default class SourceMap {
+  private _cachedMap: sourceMap.SourceMapGenerator | null;
+  private _code: any;
+  private _opts: any;
+  private _rawMappings: any[];
+  private _lastGenLine: number;
+  private _lastSourceLine: number;
+  private _lastSourceColumn: number;
   constructor(opts, code) {
     this._cachedMap = null;
     this._code = code;
@@ -57,8 +64,8 @@ export default class SourceMap {
     generatedColumn: number,
     line: number,
     column: number,
-    identifierName: ?string,
-    filename: ?string,
+    identifierName?: string | null,
+    filename?: string | null,
     force?: boolean,
   ) {
     // Adding an empty mapping at the start of a generated line just clutters the map.

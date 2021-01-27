@@ -1,4 +1,5 @@
 import type SourceMap from "./source-map";
+import type * as t from "@babel/types";
 
 const SPACES_RE = /^[ \t]+$/;
 
@@ -10,32 +11,41 @@ const SPACES_RE = /^[ \t]+$/;
  */
 
 export default class Buffer {
-  constructor(map: ?SourceMap) {
+  constructor(map?: SourceMap | null) {
     this._map = map;
   }
 
   _map: SourceMap = null;
-  _buf: Array = [];
+  _buf: Array<any> = [];
   _last: string = "";
-  _queue: Array = [];
+  _queue: Array<
+    [
+      str: string,
+      line: number,
+      column: number,
+      identifierName: string | null,
+      filename: string | null | undefined,
+      force: boolean | undefined,
+    ]
+  > = [];
 
-  _position: Object = {
+  _position: any = {
     line: 1,
     column: 0,
   };
-  _sourcePosition: Object = {
+  _sourcePosition: any = {
     identifierName: null,
     line: null,
     column: null,
     filename: null,
   };
-  _disallowedPop: Object | null = null;
+  _disallowedPop: any | null = null;
 
   /**
    * Get the final string output from the buffer, along with the sourcemap if one exists.
    */
 
-  get(): Object {
+  get(): any {
     this._flush();
 
     const map = this._map;
@@ -104,16 +114,25 @@ export default class Buffer {
   }
 
   _flush(): void {
-    let item;
-    while ((item = this._queue.pop())) this._append(...item);
+    let item: [
+      string,
+      number,
+      number,
+      string | null | undefined,
+      string | null | undefined,
+      boolean | undefined,
+    ];
+    while ((item = this._queue.pop())) {
+      this._append(...item);
+    }
   }
 
   _append(
     str: string,
     line: number,
     column: number,
-    identifierName: ?string,
-    filename: ?string,
+    identifierName?: string | null,
+    filename?: string | null,
     force?: boolean,
   ): void {
     this._buf.push(str);
@@ -151,8 +170,8 @@ export default class Buffer {
   _mark(
     line: number,
     column: number,
-    identifierName: ?string,
-    filename: ?string,
+    identifierName?: string | null,
+    filename?: string | null,
     force?: boolean,
   ): void {
     this._map?.mark(
@@ -230,7 +249,7 @@ export default class Buffer {
    * With this line, there will be one mapping range over "mod" and another
    * over "();", where previously it would have been a single mapping.
    */
-  exactSource(loc: Object, cb: () => void) {
+  exactSource(loc: any, cb: () => void) {
     // In cases where parent expressions start at the same locations as the
     // identifier itself, the current active location could already be the
     // start of this range. We use 'force' here to explicitly start a new
@@ -255,7 +274,7 @@ export default class Buffer {
    * will be given this position in the sourcemap.
    */
 
-  source(prop: string, loc: Location, force?: boolean): void {
+  source(prop: string, loc: t.SourceLocation, force?: boolean): void {
     if (prop && !loc) return;
 
     // Since this is called extremely often, we re-use the same _sourcePosition
@@ -267,7 +286,7 @@ export default class Buffer {
    * Call a callback with a specific source location and restore on completion.
    */
 
-  withSource(prop: string, loc: Location, cb: () => void): void {
+  withSource(prop: string, loc: t.SourceLocation, cb: () => void): void {
     if (!this._map) return cb();
 
     // Use the call stack to manage a stack of "source location" data because
@@ -309,18 +328,13 @@ export default class Buffer {
    * sourcemap output, so that certain printers can be sure that the
    * "end" location that they set is actually treated as the end position.
    */
-  _disallowPop(prop: string, loc: Location) {
+  _disallowPop(prop: string, loc: t.SourceLocation) {
     if (prop && !loc) return;
 
     this._disallowedPop = this._normalizePosition(prop, loc);
   }
 
-  _normalizePosition(
-    prop: string,
-    loc: Object,
-    targetObj: Object,
-    force?: boolean,
-  ) {
+  _normalizePosition(prop: string, loc: any, targetObj?: any, force?: boolean) {
     const pos = loc ? loc[prop] : null;
 
     if (targetObj === undefined) {

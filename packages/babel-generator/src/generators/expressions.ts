@@ -1,7 +1,8 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 import * as n from "../node";
 
-export function UnaryExpression(node: Object) {
+export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   if (
     node.operator === "void" ||
     node.operator === "delete" ||
@@ -18,19 +19,22 @@ export function UnaryExpression(node: Object) {
   this.print(node.argument, node);
 }
 
-export function DoExpression(node: Object) {
+export function DoExpression(this: Printer, node: t.DoExpression) {
   this.word("do");
   this.space();
   this.print(node.body, node);
 }
 
-export function ParenthesizedExpression(node: Object) {
+export function ParenthesizedExpression(
+  this: Printer,
+  node: t.ParenthesizedExpression,
+) {
   this.token("(");
   this.print(node.expression, node);
   this.token(")");
 }
 
-export function UpdateExpression(node: Object) {
+export function UpdateExpression(this: Printer, node: t.UpdateExpression) {
   if (node.prefix) {
     this.token(node.operator);
     this.print(node.argument, node);
@@ -42,7 +46,10 @@ export function UpdateExpression(node: Object) {
   }
 }
 
-export function ConditionalExpression(node: Object) {
+export function ConditionalExpression(
+  this: Printer,
+  node: t.ConditionalExpression,
+) {
   this.print(node.test, node);
   this.space();
   this.token("?");
@@ -54,7 +61,11 @@ export function ConditionalExpression(node: Object) {
   this.print(node.alternate, node);
 }
 
-export function NewExpression(node: Object, parent: Object) {
+export function NewExpression(
+  this: Printer,
+  node: t.NewExpression,
+  parent: any,
+) {
   this.word("new");
   this.space();
   this.print(node.callee, node);
@@ -80,25 +91,28 @@ export function NewExpression(node: Object, parent: Object) {
   this.token(")");
 }
 
-export function SequenceExpression(node: Object) {
+export function SequenceExpression(this: Printer, node: t.SequenceExpression) {
   this.printList(node.expressions, node);
 }
 
-export function ThisExpression() {
+export function ThisExpression(this: Printer) {
   this.word("this");
 }
 
-export function Super() {
+export function Super(this: Printer) {
   this.word("super");
 }
 
-export function Decorator(node: Object) {
+export function Decorator(this: Printer, node: t.Decorator) {
   this.token("@");
   this.print(node.expression, node);
   this.newline();
 }
 
-export function OptionalMemberExpression(node: Object) {
+export function OptionalMemberExpression(
+  this: Printer,
+  node: t.OptionalMemberExpression,
+) {
   this.print(node.object, node);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
@@ -106,6 +120,7 @@ export function OptionalMemberExpression(node: Object) {
   }
 
   let computed = node.computed;
+  // @ts-expect-error todo(flow->ts) maybe instead of typeof check specific literal types?
   if (t.isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
@@ -125,7 +140,10 @@ export function OptionalMemberExpression(node: Object) {
   }
 }
 
-export function OptionalCallExpression(node: Object) {
+export function OptionalCallExpression(
+  this: Printer,
+  node: t.OptionalCallExpression,
+) {
   this.print(node.callee, node);
 
   this.print(node.typeArguments, node); // Flow
@@ -139,7 +157,7 @@ export function OptionalCallExpression(node: Object) {
   this.token(")");
 }
 
-export function CallExpression(node: Object) {
+export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.callee, node);
 
   this.print(node.typeArguments, node); // Flow
@@ -149,12 +167,12 @@ export function CallExpression(node: Object) {
   this.token(")");
 }
 
-export function Import() {
+export function Import(this: Printer) {
   this.word("import");
 }
 
 function buildYieldAwait(keyword: string) {
-  return function (node: Object) {
+  return function (node: any) {
     this.word(keyword);
 
     if (node.delegate) {
@@ -173,18 +191,23 @@ function buildYieldAwait(keyword: string) {
 export const YieldExpression = buildYieldAwait("yield");
 export const AwaitExpression = buildYieldAwait("await");
 
-export function EmptyStatement() {
+export function EmptyStatement(this: Printer) {
   this.semicolon(true /* force */);
 }
 
-export function ExpressionStatement(node: Object) {
+export function ExpressionStatement(
+  this: Printer,
+  node: t.ExpressionStatement,
+) {
   this.print(node.expression, node);
   this.semicolon();
 }
 
-export function AssignmentPattern(node: Object) {
+export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
   this.print(node.left, node);
+  // @ts-expect-error todo(flow->ts) property present on some of the types in union but not all
   if (node.left.optional) this.token("?");
+  // @ts-expect-error todo(flow->ts) property present on some of the types in union but not all
   this.print(node.left.typeAnnotation, node);
   this.space();
   this.token("=");
@@ -192,7 +215,11 @@ export function AssignmentPattern(node: Object) {
   this.print(node.right, node);
 }
 
-export function AssignmentExpression(node: Object, parent: Object) {
+export function AssignmentExpression(
+  this: Printer,
+  node: t.AssignmentExpression,
+  parent: any,
+) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
   const parens =
@@ -221,7 +248,7 @@ export function AssignmentExpression(node: Object, parent: Object) {
   }
 }
 
-export function BindExpression(node: Object) {
+export function BindExpression(this: Printer, node: t.BindExpression) {
   this.print(node.object, node);
   this.token("::");
   this.print(node.callee, node);
@@ -232,7 +259,7 @@ export {
   AssignmentExpression as LogicalExpression,
 };
 
-export function MemberExpression(node: Object) {
+export function MemberExpression(this: Printer, node: t.MemberExpression) {
   this.print(node.object, node);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
@@ -240,6 +267,7 @@ export function MemberExpression(node: Object) {
   }
 
   let computed = node.computed;
+  // @ts-expect-error todo(flow->ts) maybe use specific literal types
   if (t.isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
@@ -254,18 +282,21 @@ export function MemberExpression(node: Object) {
   }
 }
 
-export function MetaProperty(node: Object) {
+export function MetaProperty(this: Printer, node: t.MetaProperty) {
   this.print(node.meta, node);
   this.token(".");
   this.print(node.property, node);
 }
 
-export function PrivateName(node: Object) {
+export function PrivateName(this: Printer, node: t.PrivateName) {
   this.token("#");
   this.print(node.id, node);
 }
 
-export function V8IntrinsicIdentifier(node: Object) {
+export function V8IntrinsicIdentifier(
+  this: Printer,
+  node: t.V8IntrinsicIdentifier,
+) {
   this.token("%");
   this.word(node.name);
 }

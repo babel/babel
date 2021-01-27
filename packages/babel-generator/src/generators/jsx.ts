@@ -1,4 +1,7 @@
-export function JSXAttribute(node: Object) {
+import type Printer from "../printer";
+import * as t from "@babel/types";
+
+export function JSXAttribute(this: Printer, node: t.JSXAttribute) {
   this.print(node.name, node);
   if (node.value) {
     this.token("=");
@@ -6,43 +9,49 @@ export function JSXAttribute(node: Object) {
   }
 }
 
-export function JSXIdentifier(node: Object) {
+export function JSXIdentifier(this: Printer, node: t.JSXIdentifier) {
   this.word(node.name);
 }
 
-export function JSXNamespacedName(node: Object) {
+export function JSXNamespacedName(this: Printer, node: t.JSXNamespacedName) {
   this.print(node.namespace, node);
   this.token(":");
   this.print(node.name, node);
 }
 
-export function JSXMemberExpression(node: Object) {
+export function JSXMemberExpression(
+  this: Printer,
+  node: t.JSXMemberExpression,
+) {
   this.print(node.object, node);
   this.token(".");
   this.print(node.property, node);
 }
 
-export function JSXSpreadAttribute(node: Object) {
+export function JSXSpreadAttribute(this: Printer, node: t.JSXSpreadAttribute) {
   this.token("{");
   this.token("...");
   this.print(node.argument, node);
   this.token("}");
 }
 
-export function JSXExpressionContainer(node: Object) {
+export function JSXExpressionContainer(
+  this: Printer,
+  node: t.JSXExpressionContainer,
+) {
   this.token("{");
   this.print(node.expression, node);
   this.token("}");
 }
 
-export function JSXSpreadChild(node: Object) {
+export function JSXSpreadChild(this: Printer, node: t.JSXSpreadChild) {
   this.token("{");
   this.token("...");
   this.print(node.expression, node);
   this.token("}");
 }
 
-export function JSXText(node: Object) {
+export function JSXText(this: Printer, node: t.JSXText) {
   const raw = this.getPossibleRaw(node);
 
   if (raw != null) {
@@ -52,13 +61,13 @@ export function JSXText(node: Object) {
   }
 }
 
-export function JSXElement(node: Object) {
+export function JSXElement(this: Printer, node: t.JSXElement) {
   const open = node.openingElement;
   this.print(open, node);
   if (open.selfClosing) return;
 
   this.indent();
-  for (const child of (node.children: Array<Object>)) {
+  for (const child of node.children as Array<any>) {
     this.print(child, node);
   }
   this.dedent();
@@ -70,7 +79,7 @@ function spaceSeparator() {
   this.space();
 }
 
-export function JSXOpeningElement(node: Object) {
+export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
   this.token("<");
   this.print(node.name, node);
   this.print(node.typeParameters, node); // TS
@@ -86,21 +95,21 @@ export function JSXOpeningElement(node: Object) {
   }
 }
 
-export function JSXClosingElement(node: Object) {
+export function JSXClosingElement(this: Printer, node: t.JSXClosingElement) {
   this.token("</");
   this.print(node.name, node);
   this.token(">");
 }
 
-export function JSXEmptyExpression(node: Object) {
+export function JSXEmptyExpression(this: Printer, node: t.JSXEmptyExpression) {
   this.printInnerComments(node);
 }
 
-export function JSXFragment(node: Object) {
+export function JSXFragment(this: Printer, node: t.JSXFragment) {
   this.print(node.openingFragment, node);
 
   this.indent();
-  for (const child of (node.children: Array<Object>)) {
+  for (const child of node.children as Array<any>) {
     this.print(child, node);
   }
   this.dedent();
@@ -108,12 +117,12 @@ export function JSXFragment(node: Object) {
   this.print(node.closingFragment, node);
 }
 
-export function JSXOpeningFragment() {
+export function JSXOpeningFragment(this: Printer) {
   this.token("<");
   this.token(">");
 }
 
-export function JSXClosingFragment() {
+export function JSXClosingFragment(this: Printer) {
   this.token("</");
   this.token(">");
 }

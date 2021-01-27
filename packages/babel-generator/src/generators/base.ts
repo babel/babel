@@ -1,4 +1,7 @@
-export function File(node: Object) {
+import type Printer from "../printer";
+import * as t from "@babel/types";
+
+export function File(this: Printer, node: t.File) {
   if (node.program) {
     // Print this here to ensure that Program node 'leadingComments' still
     // get printed after the hashbang.
@@ -8,7 +11,7 @@ export function File(node: Object) {
   this.print(node.program, node);
 }
 
-export function Program(node: Object) {
+export function Program(this: Printer, node: t.Program) {
   this.printInnerComments(node, false);
 
   this.printSequence(node.directives, node);
@@ -17,7 +20,7 @@ export function Program(node: Object) {
   this.printSequence(node.body, node);
 }
 
-export function BlockStatement(node: Object) {
+export function BlockStatement(this: Printer, node: t.BlockStatement) {
   this.token("{");
   this.printInnerComments(node);
 
@@ -43,9 +46,9 @@ export function BlockStatement(node: Object) {
   }
 }
 
-export function Noop() {}
+export function Noop(this: Printer) {}
 
-export function Directive(node: Object) {
+export function Directive(this: Printer, node: t.Directive) {
   this.print(node.value, node);
   this.semicolon();
 }
@@ -54,7 +57,7 @@ export function Directive(node: Object) {
 const unescapedSingleQuoteRE = /(?:^|[^\\])(?:\\\\)*'/;
 const unescapedDoubleQuoteRE = /(?:^|[^\\])(?:\\\\)*"/;
 
-export function DirectiveLiteral(node: Object) {
+export function DirectiveLiteral(this: Printer, node: t.DirectiveLiteral) {
   const raw = this.getPossibleRaw(node);
   if (raw != null) {
     this.token(raw);
@@ -79,11 +82,14 @@ export function DirectiveLiteral(node: Object) {
   }
 }
 
-export function InterpreterDirective(node: Object) {
+export function InterpreterDirective(
+  this: Printer,
+  node: t.InterpreterDirective,
+) {
   this.token(`#!${node.value}\n`);
 }
 
-export function Placeholder(node: Object) {
+export function Placeholder(this: Printer, node: t.Placeholder) {
   this.token("%%");
   this.print(node.name);
   this.token("%%");

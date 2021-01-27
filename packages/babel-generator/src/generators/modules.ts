@@ -1,12 +1,14 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 
-export function ImportSpecifier(node: Object) {
+export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   if (node.importKind === "type" || node.importKind === "typeof") {
     this.word(node.importKind);
     this.space();
   }
 
   this.print(node.imported, node);
+  // @ts-expect-error todo(flow-ts) maybe check node type instead of relying on name to be undefined on t.StringLiteral
   if (node.local && node.local.name !== node.imported.name) {
     this.space();
     this.word("as");
@@ -15,16 +17,23 @@ export function ImportSpecifier(node: Object) {
   }
 }
 
-export function ImportDefaultSpecifier(node: Object) {
+export function ImportDefaultSpecifier(
+  this: Printer,
+  node: t.ImportDefaultSpecifier,
+) {
   this.print(node.local, node);
 }
 
-export function ExportDefaultSpecifier(node: Object) {
+export function ExportDefaultSpecifier(
+  this: Printer,
+  node: t.ExportDefaultSpecifier,
+) {
   this.print(node.exported, node);
 }
 
-export function ExportSpecifier(node: Object) {
+export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
   this.print(node.local, node);
+  // @ts-expect-error todo(flow-ts) maybe check node type instead of relying on name to be undefined on t.StringLiteral
   if (node.exported && node.local.name !== node.exported.name) {
     this.space();
     this.word("as");
@@ -33,7 +42,10 @@ export function ExportSpecifier(node: Object) {
   }
 }
 
-export function ExportNamespaceSpecifier(node: Object) {
+export function ExportNamespaceSpecifier(
+  this: Printer,
+  node: t.ExportNamespaceSpecifier,
+) {
   this.token("*");
   this.space();
   this.word("as");
@@ -41,7 +53,10 @@ export function ExportNamespaceSpecifier(node: Object) {
   this.print(node.exported, node);
 }
 
-export function ExportAllDeclaration(node: Object) {
+export function ExportAllDeclaration(
+  this: Printer,
+  node: t.ExportAllDeclaration,
+) {
   this.word("export");
   this.space();
   if (node.exportKind === "type") {
@@ -57,7 +72,10 @@ export function ExportAllDeclaration(node: Object) {
   this.semicolon();
 }
 
-export function ExportNamedDeclaration(node: Object) {
+export function ExportNamedDeclaration(
+  this: Printer,
+  node: t.ExportNamedDeclaration,
+) {
   if (
     this.format.decoratorsBeforeExport &&
     t.isClassDeclaration(node.declaration)
@@ -70,7 +88,10 @@ export function ExportNamedDeclaration(node: Object) {
   ExportDeclaration.apply(this, arguments);
 }
 
-export function ExportDefaultDeclaration(node: Object) {
+export function ExportDefaultDeclaration(
+  this: Printer,
+  node: t.ExportDefaultDeclaration,
+) {
   if (
     this.format.decoratorsBeforeExport &&
     t.isClassDeclaration(node.declaration)
@@ -85,7 +106,7 @@ export function ExportDefaultDeclaration(node: Object) {
   ExportDeclaration.apply(this, arguments);
 }
 
-function ExportDeclaration(node: Object) {
+function ExportDeclaration(node: any) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);
@@ -139,7 +160,7 @@ function ExportDeclaration(node: Object) {
   }
 }
 
-export function ImportDeclaration(node: Object) {
+export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   this.word("import");
   this.space();
 
@@ -185,24 +206,29 @@ export function ImportDeclaration(node: Object) {
   this.printAssertions(node);
   // todo(Babel 8): remove this if branch
   // `module-attributes` support is discontinued, use `import-assertions` instead.
+  // @ts-expect-error
   if (node.attributes?.length) {
     this.space();
     this.word("with");
     this.space();
+    // @ts-expect-error
     this.printList(node.attributes, node);
   }
 
   this.semicolon();
 }
 
-export function ImportAttribute(node: Object) {
+export function ImportAttribute(this: Printer, node: t.ImportAttribute) {
   this.print(node.key);
   this.token(":");
   this.space();
   this.print(node.value);
 }
 
-export function ImportNamespaceSpecifier(node: Object) {
+export function ImportNamespaceSpecifier(
+  this: Printer,
+  node: t.ImportNamespaceSpecifier,
+) {
   this.token("*");
   this.space();
   this.word("as");

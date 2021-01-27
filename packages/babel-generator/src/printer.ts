@@ -3,6 +3,7 @@ import * as n from "./node";
 import * as t from "@babel/types";
 
 import * as generatorFunctions from "./generators";
+import type SourceMap from "./source-map";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
@@ -10,26 +11,29 @@ const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 
 export type Format = {
-  shouldPrintComment: (comment: string) => boolean,
-  retainLines: boolean,
-  retainFunctionParens: boolean,
-  comments: boolean,
-  auxiliaryCommentBefore: string,
-  auxiliaryCommentAfter: string,
-  compact: boolean | "auto",
-  minified: boolean,
-  concise: boolean,
+  shouldPrintComment: (comment: string) => boolean;
+  retainLines: boolean;
+  retainFunctionParens: boolean;
+  comments: boolean;
+  auxiliaryCommentBefore: string;
+  auxiliaryCommentAfter: string;
+  compact: boolean | "auto";
+  minified: boolean;
+  concise: boolean;
   indent: {
-    adjustMultilineComment: boolean,
-    style: string,
-    base: number,
-  },
-  decoratorsBeforeExport: boolean,
+    adjustMultilineComment: boolean;
+    style: string;
+    base: number;
+  };
+  decoratorsBeforeExport: boolean;
+  recordAndTupleSyntaxType: "bar" | "hash";
+  jsescOption;
+  jsonCompatibleStrings?;
 };
 
-export default class Printer {
-  constructor(format, map) {
-    this.format = format || {};
+class Printer {
+  constructor(format: Format, map: SourceMap) {
+    this.format = format;
     this._buf = new Buffer(map);
   }
 
@@ -37,14 +41,14 @@ export default class Printer {
   inForStatementInitCounter: number = 0;
 
   declare _buf: Buffer;
-  _printStack: Array<Node> = [];
+  _printStack: Array<t.Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;
-  _printedCommentStarts: Object = {};
-  _parenPushNewlineState: ?Object = null;
+  _printedCommentStarts: any = {};
+  _parenPushNewlineState: any = null;
   _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
-  _printedComments: WeakSet = new WeakSet();
+  _printedComments: WeakSet<any> = new WeakSet();
   _endsWithInteger = false;
   _endsWithWord = false;
 
@@ -199,19 +203,19 @@ export default class Printer {
     this._buf.removeTrailingNewline();
   }
 
-  exactSource(loc: Object, cb: () => void) {
+  exactSource(loc: any, cb: () => void) {
     this._catchUp("start", loc);
 
     this._buf.exactSource(loc, cb);
   }
 
-  source(prop: string, loc: Object): void {
+  source(prop: string, loc: any): void {
     this._catchUp(prop, loc);
 
     this._buf.source(prop, loc);
   }
 
-  withSource(prop: string, loc: Object, cb: () => void): void {
+  withSource(prop: string, loc: any, cb: () => void): void {
     this._catchUp(prop, loc);
 
     this._buf.withSource(prop, loc, cb);
@@ -303,7 +307,7 @@ export default class Printer {
     parenPushNewlineState.printed = true;
   }
 
-  _catchUp(prop: string, loc: Object) {
+  _catchUp(prop: string, loc: any) {
     if (!this.format.retainLines) return;
 
     // catch up to this nodes newline if we're behind
@@ -341,7 +345,7 @@ export default class Printer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless(isLabel: boolean = false): Object {
+  startTerminatorless(isLabel: boolean = false): any {
     if (isLabel) {
       this._noLineTerminator = true;
       return null;
@@ -356,7 +360,7 @@ export default class Printer {
    * Print an ending parentheses if a starting one has been printed.
    */
 
-  endTerminatorless(state: Object) {
+  endTerminatorless(state?: any) {
     this._noLineTerminator = false;
     if (state?.printed) {
       this.dedent();
@@ -365,7 +369,7 @@ export default class Printer {
     }
   }
 
-  print(node, parent) {
+  print(node, parent?) {
     if (!node) return;
 
     const oldConcise = this.format.concise;
@@ -417,7 +421,7 @@ export default class Printer {
     this._insideAux = oldInAux;
   }
 
-  _maybeAddAuxComment(enteredPositionlessNode) {
+  _maybeAddAuxComment(enteredPositionlessNode?) {
     if (enteredPositionlessNode) this._printAuxBeforeComment();
     if (!this._insideAux) this._printAuxAfterComment();
   }
@@ -460,7 +464,7 @@ export default class Printer {
     }
   }
 
-  printJoin(nodes: ?Array, parent: Object, opts = {}) {
+  printJoin(nodes: Array<any> | undefined | null, parent: any, opts: any = {}) {
     if (!nodes?.length) return;
 
     if (opts.indent) this.indent();
@@ -527,12 +531,24 @@ export default class Printer {
     if (indent) this.dedent();
   }
 
-  printSequence(nodes, parent, opts = {}) {
+  printSequence(
+    nodes,
+    parent,
+    opts: {
+      statement?: boolean;
+      indent?: boolean;
+      addNewlines?: Function;
+    } = {},
+  ) {
     opts.statement = true;
     return this.printJoin(nodes, parent, opts);
   }
 
-  printList(items, parent, opts = {}) {
+  printList(
+    items,
+    parent,
+    opts: { separator?: Function; indent?: boolean; statement?: boolean } = {},
+  ) {
     if (opts.separator == null) {
       opts.separator = commaSeparator;
     }
@@ -627,7 +643,7 @@ export default class Printer {
     if (printNewLines) this.newline(1);
   }
 
-  _printComments(comments?: Array<Object>, inlinePureAnnotation?: boolean) {
+  _printComments(comments?: Array<any>, inlinePureAnnotation?: boolean) {
     if (!comments?.length) return;
 
     if (
@@ -646,8 +662,8 @@ export default class Printer {
       }
     }
   }
-
-  printAssertions(node: Node) {
+  // todo(flow->ts): was Node
+  printAssertions(node) {
     if (node.assertions?.length) {
       this.space();
       this.word("assert");
@@ -663,6 +679,10 @@ export default class Printer {
 
 // Expose the node type functions and helpers on the prototype for easy usage.
 Object.assign(Printer.prototype, generatorFunctions);
+
+type GeneratorFunctions = typeof generatorFunctions;
+interface Printer extends GeneratorFunctions {}
+export default Printer;
 
 function commaSeparator() {
   this.token(",");

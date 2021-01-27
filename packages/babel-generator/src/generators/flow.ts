@@ -1,29 +1,40 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 import { ExportAllDeclaration } from "./modules";
 
-export function AnyTypeAnnotation() {
+export function AnyTypeAnnotation(this: Printer) {
   this.word("any");
 }
 
-export function ArrayTypeAnnotation(node: Object) {
+export function ArrayTypeAnnotation(
+  this: Printer,
+  node: t.ArrayTypeAnnotation,
+) {
   this.print(node.elementType, node);
   this.token("[");
   this.token("]");
 }
 
-export function BooleanTypeAnnotation() {
+export function BooleanTypeAnnotation(this: Printer) {
   this.word("boolean");
 }
 
-export function BooleanLiteralTypeAnnotation(node: Object) {
+export function BooleanLiteralTypeAnnotation(
+  this: Printer,
+  node: t.BooleanLiteralTypeAnnotation,
+) {
   this.word(node.value ? "true" : "false");
 }
 
-export function NullLiteralTypeAnnotation() {
+export function NullLiteralTypeAnnotation(this: Printer) {
   this.word("null");
 }
 
-export function DeclareClass(node: Object, parent: Object) {
+export function DeclareClass(
+  this: Printer,
+  node: t.DeclareClass,
+  parent: t.Node,
+) {
   if (!t.isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
@@ -33,7 +44,11 @@ export function DeclareClass(node: Object, parent: Object) {
   this._interfaceish(node);
 }
 
-export function DeclareFunction(node: Object, parent: Object) {
+export function DeclareFunction(
+  this: Printer,
+  node: t.DeclareFunction,
+  parent: any,
+) {
   if (!t.isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
@@ -41,6 +56,7 @@ export function DeclareFunction(node: Object, parent: Object) {
   this.word("function");
   this.space();
   this.print(node.id, node);
+  // @ts-expect-error todo(flow->ts) typeAnnotation does not exist on Noop
   this.print(node.id.typeAnnotation.typeAnnotation, node);
 
   if (node.predicate) {
@@ -56,7 +72,7 @@ export function InferredPredicate(/*node: Object*/) {
   this.word("checks");
 }
 
-export function DeclaredPredicate(node: Object) {
+export function DeclaredPredicate(this: Printer, node: t.DeclaredPredicate) {
   this.token("%");
   this.word("checks");
   this.token("(");
@@ -64,13 +80,13 @@ export function DeclaredPredicate(node: Object) {
   this.token(")");
 }
 
-export function DeclareInterface(node: Object) {
+export function DeclareInterface(this: Printer, node: t.DeclareInterface) {
   this.word("declare");
   this.space();
   this.InterfaceDeclaration(node);
 }
 
-export function DeclareModule(node: Object) {
+export function DeclareModule(this: Printer, node: t.DeclareModule) {
   this.word("declare");
   this.space();
   this.word("module");
@@ -80,7 +96,10 @@ export function DeclareModule(node: Object) {
   this.print(node.body, node);
 }
 
-export function DeclareModuleExports(node: Object) {
+export function DeclareModuleExports(
+  this: Printer,
+  node: t.DeclareModuleExports,
+) {
   this.word("declare");
   this.space();
   this.word("module");
@@ -89,13 +108,17 @@ export function DeclareModuleExports(node: Object) {
   this.print(node.typeAnnotation, node);
 }
 
-export function DeclareTypeAlias(node: Object) {
+export function DeclareTypeAlias(this: Printer, node: t.DeclareTypeAlias) {
   this.word("declare");
   this.space();
   this.TypeAlias(node);
 }
 
-export function DeclareOpaqueType(node: Object, parent: Object) {
+export function DeclareOpaqueType(
+  this: Printer,
+  node: t.DeclareOpaqueType,
+  parent: any,
+) {
   if (!t.isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
@@ -103,7 +126,11 @@ export function DeclareOpaqueType(node: Object, parent: Object) {
   this.OpaqueType(node);
 }
 
-export function DeclareVariable(node: Object, parent: Object) {
+export function DeclareVariable(
+  this: Printer,
+  node: t.DeclareVariable,
+  parent: any,
+) {
   if (!t.isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
@@ -115,7 +142,10 @@ export function DeclareVariable(node: Object, parent: Object) {
   this.semicolon();
 }
 
-export function DeclareExportDeclaration(node: Object) {
+export function DeclareExportDeclaration(
+  this: Printer,
+  node: t.DeclareExportDeclaration,
+) {
   this.word("declare");
   this.space();
   this.word("export");
@@ -134,7 +164,7 @@ export function DeclareExportAllDeclaration(/*node: Object*/) {
   ExportAllDeclaration.apply(this, arguments);
 }
 
-export function EnumDeclaration(node: Object) {
+export function EnumDeclaration(this: Printer, node: t.EnumDeclaration) {
   const { id, body } = node;
   this.word("enum");
   this.space();
@@ -143,7 +173,7 @@ export function EnumDeclaration(node: Object) {
 }
 
 function enumExplicitType(
-  context: Object,
+  context: any,
   name: string,
   hasExplicitType: boolean,
 ) {
@@ -156,7 +186,7 @@ function enumExplicitType(
   context.space();
 }
 
-function enumBody(context: Object, node: Object) {
+function enumBody(context: any, node: any) {
   const { members } = node;
   context.token("{");
   context.indent();
@@ -169,36 +199,39 @@ function enumBody(context: Object, node: Object) {
   context.token("}");
 }
 
-export function EnumBooleanBody(node: Object) {
+export function EnumBooleanBody(this: Printer, node: t.EnumBooleanBody) {
   const { explicitType } = node;
   enumExplicitType(this, "boolean", explicitType);
   enumBody(this, node);
 }
 
-export function EnumNumberBody(node: Object) {
+export function EnumNumberBody(this: Printer, node: t.EnumNumberBody) {
   const { explicitType } = node;
   enumExplicitType(this, "number", explicitType);
   enumBody(this, node);
 }
 
-export function EnumStringBody(node: Object) {
+export function EnumStringBody(this: Printer, node: t.EnumStringBody) {
   const { explicitType } = node;
   enumExplicitType(this, "string", explicitType);
   enumBody(this, node);
 }
 
-export function EnumSymbolBody(node: Object) {
+export function EnumSymbolBody(this: Printer, node: t.EnumSymbolBody) {
   enumExplicitType(this, "symbol", true);
   enumBody(this, node);
 }
 
-export function EnumDefaultedMember(node: Object) {
+export function EnumDefaultedMember(
+  this: Printer,
+  node: t.EnumDefaultedMember,
+) {
   const { id } = node;
   this.print(id, node);
   this.token(",");
 }
 
-function enumInitializedMember(context: Object, node: Object) {
+function enumInitializedMember(context: any, node: any) {
   const { id, init } = node;
   context.print(id, node);
   context.space();
@@ -208,19 +241,19 @@ function enumInitializedMember(context: Object, node: Object) {
   context.token(",");
 }
 
-export function EnumBooleanMember(node: Object) {
+export function EnumBooleanMember(this: Printer, node: t.EnumBooleanMember) {
   enumInitializedMember(this, node);
 }
 
-export function EnumNumberMember(node: Object) {
+export function EnumNumberMember(this: Printer, node: t.EnumNumberMember) {
   enumInitializedMember(this, node);
 }
 
-export function EnumStringMember(node: Object) {
+export function EnumStringMember(this: Printer, node: t.EnumStringMember) {
   enumInitializedMember(this, node);
 }
 
-function FlowExportDeclaration(node: Object) {
+function FlowExportDeclaration(node: any) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);
@@ -245,11 +278,15 @@ function FlowExportDeclaration(node: Object) {
   }
 }
 
-export function ExistsTypeAnnotation() {
+export function ExistsTypeAnnotation(this: Printer) {
   this.token("*");
 }
 
-export function FunctionTypeAnnotation(node: Object, parent: Object) {
+export function FunctionTypeAnnotation(
+  this: Printer,
+  node: t.FunctionTypeAnnotation,
+  parent: any,
+) {
   this.print(node.typeParameters, node);
   this.token("(");
   this.printList(node.params, node);
@@ -281,7 +318,7 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
   this.print(node.returnType, node);
 }
 
-export function FunctionTypeParam(node: Object) {
+export function FunctionTypeParam(this: Printer, node: t.FunctionTypeParam) {
   this.print(node.name, node);
   if (node.optional) this.token("?");
   if (node.name) {
@@ -291,7 +328,7 @@ export function FunctionTypeParam(node: Object) {
   this.print(node.typeAnnotation, node);
 }
 
-export function InterfaceExtends(node: Object) {
+export function InterfaceExtends(this: Printer, node: t.InterfaceExtends) {
   this.print(node.id, node);
   this.print(node.typeParameters, node);
 }
@@ -301,7 +338,10 @@ export {
   InterfaceExtends as GenericTypeAnnotation,
 };
 
-export function _interfaceish(node: Object) {
+export function _interfaceish(
+  this: Printer,
+  node: t.InterfaceDeclaration | t.DeclareInterface | t.DeclareClass,
+) {
   this.print(node.id, node);
   this.print(node.typeParameters, node);
   if (node.extends.length) {
@@ -326,7 +366,7 @@ export function _interfaceish(node: Object) {
   this.print(node.body, node);
 }
 
-export function _variance(node) {
+export function _variance(this: Printer, node) {
   if (node.variance) {
     if (node.variance.kind === "plus") {
       this.token("+");
@@ -336,7 +376,10 @@ export function _variance(node) {
   }
 }
 
-export function InterfaceDeclaration(node: Object) {
+export function InterfaceDeclaration(
+  this: Printer,
+  node: t.InterfaceDeclaration | t.DeclareInterface,
+) {
   this.word("interface");
   this.space();
   this._interfaceish(node);
@@ -348,7 +391,10 @@ function andSeparator() {
   this.space();
 }
 
-export function InterfaceTypeAnnotation(node: Object) {
+export function InterfaceTypeAnnotation(
+  this: Printer,
+  node: t.InterfaceTypeAnnotation,
+) {
   this.word("interface");
   if (node.extends && node.extends.length) {
     this.space();
@@ -360,19 +406,25 @@ export function InterfaceTypeAnnotation(node: Object) {
   this.print(node.body, node);
 }
 
-export function IntersectionTypeAnnotation(node: Object) {
+export function IntersectionTypeAnnotation(
+  this: Printer,
+  node: t.IntersectionTypeAnnotation,
+) {
   this.printJoin(node.types, node, { separator: andSeparator });
 }
 
-export function MixedTypeAnnotation() {
+export function MixedTypeAnnotation(this: Printer) {
   this.word("mixed");
 }
 
-export function EmptyTypeAnnotation() {
+export function EmptyTypeAnnotation(this: Printer) {
   this.word("empty");
 }
 
-export function NullableTypeAnnotation(node: Object) {
+export function NullableTypeAnnotation(
+  this: Printer,
+  node: t.NullableTypeAnnotation,
+) {
   this.token("?");
   this.print(node.typeAnnotation, node);
 }
@@ -382,31 +434,40 @@ export {
   StringLiteral as StringLiteralTypeAnnotation,
 } from "./types";
 
-export function NumberTypeAnnotation() {
+export function NumberTypeAnnotation(this: Printer) {
   this.word("number");
 }
 
-export function StringTypeAnnotation() {
+export function StringTypeAnnotation(this: Printer) {
   this.word("string");
 }
 
-export function ThisTypeAnnotation() {
+export function ThisTypeAnnotation(this: Printer) {
   this.word("this");
 }
 
-export function TupleTypeAnnotation(node: Object) {
+export function TupleTypeAnnotation(
+  this: Printer,
+  node: t.TupleTypeAnnotation,
+) {
   this.token("[");
   this.printList(node.types, node);
   this.token("]");
 }
 
-export function TypeofTypeAnnotation(node: Object) {
+export function TypeofTypeAnnotation(
+  this: Printer,
+  node: t.TypeofTypeAnnotation,
+) {
   this.word("typeof");
   this.space();
   this.print(node.argument, node);
 }
 
-export function TypeAlias(node: Object) {
+export function TypeAlias(
+  this: Printer,
+  node: t.TypeAlias | t.DeclareTypeAlias,
+) {
   this.word("type");
   this.space();
   this.print(node.id, node);
@@ -418,14 +479,18 @@ export function TypeAlias(node: Object) {
   this.semicolon();
 }
 
-export function TypeAnnotation(node) {
+export function TypeAnnotation(this: Printer, node: t.TypeAnnotation) {
   this.token(":");
   this.space();
+  // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
   if (node.optional) this.token("?");
   this.print(node.typeAnnotation, node);
 }
 
-export function TypeParameterInstantiation(node): void {
+export function TypeParameterInstantiation(
+  this: Printer,
+  node: t.TypeParameterInstantiation,
+): void {
   this.token("<");
   this.printList(node.params, node, {});
   this.token(">");
@@ -433,7 +498,7 @@ export function TypeParameterInstantiation(node): void {
 
 export { TypeParameterInstantiation as TypeParameterDeclaration };
 
-export function TypeParameter(node) {
+export function TypeParameter(this: Printer, node: t.TypeParameter) {
   this._variance(node);
 
   this.word(node.name);
@@ -450,7 +515,10 @@ export function TypeParameter(node) {
   }
 }
 
-export function OpaqueType(node: Object) {
+export function OpaqueType(
+  this: Printer,
+  node: t.OpaqueType | t.DeclareOpaqueType,
+) {
   this.word("opaque");
   this.space();
   this.word("type");
@@ -462,16 +530,22 @@ export function OpaqueType(node: Object) {
     this.space();
     this.print(node.supertype, node);
   }
+
+  // @ts-expect-error todo(flow->ts) `.impltype` does not exist on t.DeclareOpaqueType
   if (node.impltype) {
     this.space();
     this.token("=");
     this.space();
+    // @ts-expect-error todo(flow->ts) `.impltype` does not exist on t.DeclareOpaqueType
     this.print(node.impltype, node);
   }
   this.semicolon();
 }
 
-export function ObjectTypeAnnotation(node: Object) {
+export function ObjectTypeAnnotation(
+  this: Printer,
+  node: t.ObjectTypeAnnotation,
+) {
   if (node.exact) {
     this.token("{|");
   } else {
@@ -479,11 +553,12 @@ export function ObjectTypeAnnotation(node: Object) {
   }
 
   // TODO: remove the array fallbacks and instead enforce the types to require an array
-  const props = node.properties.concat(
-    node.callProperties || [],
-    node.indexers || [],
-    node.internalSlots || [],
-  );
+  const props = [
+    ...node.properties,
+    ...(node.callProperties || []),
+    ...(node.indexers || []),
+    ...(node.internalSlots || []),
+  ];
 
   if (props.length) {
     this.space();
@@ -521,7 +596,10 @@ export function ObjectTypeAnnotation(node: Object) {
   }
 }
 
-export function ObjectTypeInternalSlot(node: Object) {
+export function ObjectTypeInternalSlot(
+  this: Printer,
+  node: t.ObjectTypeInternalSlot,
+) {
   if (node.static) {
     this.word("static");
     this.space();
@@ -539,7 +617,10 @@ export function ObjectTypeInternalSlot(node: Object) {
   this.print(node.value, node);
 }
 
-export function ObjectTypeCallProperty(node: Object) {
+export function ObjectTypeCallProperty(
+  this: Printer,
+  node: t.ObjectTypeCallProperty,
+) {
   if (node.static) {
     this.word("static");
     this.space();
@@ -547,7 +628,7 @@ export function ObjectTypeCallProperty(node: Object) {
   this.print(node.value, node);
 }
 
-export function ObjectTypeIndexer(node: Object) {
+export function ObjectTypeIndexer(this: Printer, node: t.ObjectTypeIndexer) {
   if (node.static) {
     this.word("static");
     this.space();
@@ -566,7 +647,7 @@ export function ObjectTypeIndexer(node: Object) {
   this.print(node.value, node);
 }
 
-export function ObjectTypeProperty(node: Object) {
+export function ObjectTypeProperty(this: Printer, node: t.ObjectTypeProperty) {
   if (node.proto) {
     this.word("proto");
     this.space();
@@ -589,18 +670,24 @@ export function ObjectTypeProperty(node: Object) {
   this.print(node.value, node);
 }
 
-export function ObjectTypeSpreadProperty(node: Object) {
+export function ObjectTypeSpreadProperty(
+  this: Printer,
+  node: t.ObjectTypeSpreadProperty,
+) {
   this.token("...");
   this.print(node.argument, node);
 }
 
-export function QualifiedTypeIdentifier(node: Object) {
+export function QualifiedTypeIdentifier(
+  this: Printer,
+  node: t.QualifiedTypeIdentifier,
+) {
   this.print(node.qualification, node);
   this.token(".");
   this.print(node.id, node);
 }
 
-export function SymbolTypeAnnotation() {
+export function SymbolTypeAnnotation(this: Printer) {
   this.word("symbol");
 }
 
@@ -610,18 +697,21 @@ function orSeparator() {
   this.space();
 }
 
-export function UnionTypeAnnotation(node: Object) {
+export function UnionTypeAnnotation(
+  this: Printer,
+  node: t.UnionTypeAnnotation,
+) {
   this.printJoin(node.types, node, { separator: orSeparator });
 }
 
-export function TypeCastExpression(node: Object) {
+export function TypeCastExpression(this: Printer, node: t.TypeCastExpression) {
   this.token("(");
   this.print(node.expression, node);
   this.print(node.typeAnnotation, node);
   this.token(")");
 }
 
-export function Variance(node: Object) {
+export function Variance(this: Printer, node: t.Variance) {
   if (node.kind === "plus") {
     this.token("+");
   } else {
@@ -629,6 +719,6 @@ export function Variance(node: Object) {
   }
 }
 
-export function VoidTypeAnnotation() {
+export function VoidTypeAnnotation(this: Printer) {
   this.word("void");
 }

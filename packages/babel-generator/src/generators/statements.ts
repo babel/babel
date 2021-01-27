@@ -1,6 +1,7 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 
-export function WithStatement(node: Object) {
+export function WithStatement(this: Printer, node: t.WithStatement) {
   this.word("with");
   this.space();
   this.token("(");
@@ -9,7 +10,7 @@ export function WithStatement(node: Object) {
   this.printBlock(node);
 }
 
-export function IfStatement(node: Object) {
+export function IfStatement(this: Printer, node: t.IfStatement) {
   this.word("if");
   this.space();
   this.token("(");
@@ -47,7 +48,7 @@ function getLastStatement(statement) {
   return getLastStatement(statement.body);
 }
 
-export function ForStatement(node: Object) {
+export function ForStatement(this: Printer, node: t.ForStatement) {
   this.word("for");
   this.space();
   this.token("(");
@@ -72,7 +73,7 @@ export function ForStatement(node: Object) {
   this.printBlock(node);
 }
 
-export function WhileStatement(node: Object) {
+export function WhileStatement(this: Printer, node: t.WhileStatement) {
   this.word("while");
   this.space();
   this.token("(");
@@ -82,7 +83,7 @@ export function WhileStatement(node: Object) {
 }
 
 const buildForXStatement = function (op) {
-  return function (node: Object) {
+  return function (node: any) {
     this.word("for");
     this.space();
     if (op === "of" && node.await) {
@@ -103,7 +104,7 @@ const buildForXStatement = function (op) {
 export const ForInStatement = buildForXStatement("in");
 export const ForOfStatement = buildForXStatement("of");
 
-export function DoWhileStatement(node: Object) {
+export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
   this.word("do");
   this.space();
   this.print(node.body, node);
@@ -117,7 +118,7 @@ export function DoWhileStatement(node: Object) {
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function (node: Object) {
+  return function (node: any) {
     this.word(prefix);
 
     const label = node[key];
@@ -138,14 +139,14 @@ export const ReturnStatement = buildLabelStatement("return", "argument");
 export const BreakStatement = buildLabelStatement("break");
 export const ThrowStatement = buildLabelStatement("throw", "argument");
 
-export function LabeledStatement(node: Object) {
+export function LabeledStatement(this: Printer, node: t.LabeledStatement) {
   this.print(node.label, node);
   this.token(":");
   this.space();
   this.print(node.body, node);
 }
 
-export function TryStatement(node: Object) {
+export function TryStatement(this: Printer, node: t.TryStatement) {
   this.word("try");
   this.space();
   this.print(node.block, node);
@@ -154,7 +155,9 @@ export function TryStatement(node: Object) {
   // Esprima bug puts the catch clause in a `handlers` array.
   // see https://code.google.com/p/esprima/issues/detail?id=433
   // We run into this from regenerator generated ast.
+  // @ts-expect-error todo(flow->ts) should ast node type be updated to support this?
   if (node.handlers) {
+    // @ts-expect-error todo(flow->ts) should ast node type be updated to support this?
     this.print(node.handlers[0], node);
   } else {
     this.print(node.handler, node);
@@ -168,7 +171,7 @@ export function TryStatement(node: Object) {
   }
 }
 
-export function CatchClause(node: Object) {
+export function CatchClause(this: Printer, node: t.CatchClause) {
   this.word("catch");
   this.space();
   if (node.param) {
@@ -181,7 +184,7 @@ export function CatchClause(node: Object) {
   this.print(node.body, node);
 }
 
-export function SwitchStatement(node: Object) {
+export function SwitchStatement(this: Printer, node: t.SwitchStatement) {
   this.word("switch");
   this.space();
   this.token("(");
@@ -200,7 +203,7 @@ export function SwitchStatement(node: Object) {
   this.token("}");
 }
 
-export function SwitchCase(node: Object) {
+export function SwitchCase(this: Printer, node: t.SwitchCase) {
   if (node.test) {
     this.word("case");
     this.space();
@@ -217,7 +220,7 @@ export function SwitchCase(node: Object) {
   }
 }
 
-export function DebuggerStatement() {
+export function DebuggerStatement(this: Printer) {
   this.word("debugger");
   this.semicolon();
 }
@@ -236,7 +239,11 @@ function constDeclarationIndent() {
   if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
 }
 
-export function VariableDeclaration(node: Object, parent: Object) {
+export function VariableDeclaration(
+  this: Printer,
+  node: t.VariableDeclaration,
+  parent: t.Node,
+) {
   if (node.declare) {
     // TS
     this.word("declare");
@@ -249,7 +256,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   let hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (const declar of (node.declarations: Array<Object>)) {
+    for (const declar of node.declarations as Array<any>) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -283,15 +290,20 @@ export function VariableDeclaration(node: Object, parent: Object) {
 
   if (t.isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator
-    if (parent.left === node || parent.init === node) return;
+    if (t.isForStatement(parent)) {
+      if (parent.init === node) return;
+    } else {
+      if (parent.left === node) return;
+    }
   }
 
   this.semicolon();
 }
 
-export function VariableDeclarator(node: Object) {
+export function VariableDeclarator(this: Printer, node: t.VariableDeclarator) {
   this.print(node.id, node);
   if (node.definite) this.token("!"); // TS
+  // @ts-expect-error todo(flow-ts) Property 'typeAnnotation' does not exist on type 'MemberExpression'.
   this.print(node.id.typeAnnotation, node);
   if (node.init) {
     this.space();
