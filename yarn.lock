@@ -5797,17 +5797,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.6.2, core-js-compat@npm:^3.7.0, core-js-compat@npm:^3.8.0":
-  version: 3.8.1
-  resolution: "core-js-compat@npm:3.8.1"
-  dependencies:
-    browserslist: ^4.15.0
-    semver: 7.0.0
-  checksum: 964ad886a9f55399d2f33350d15f4653bfd24cb6de04606c515d0266be4101a1f435bab9a6d76b249de5f573aecb230a98468d6a8141743019abab5edd4d4281
-  languageName: node
-  linkType: hard
-
-"core-js-compat@npm:^3.8.3":
+"core-js-compat@npm:^3.6.2, core-js-compat@npm:^3.7.0, core-js-compat@npm:^3.8.0, core-js-compat@npm:^3.8.3":
   version: 3.8.3
   resolution: "core-js-compat@npm:3.8.3"
   dependencies:
