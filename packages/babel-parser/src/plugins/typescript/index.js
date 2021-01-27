@@ -87,6 +87,8 @@ const TSErrors = Object.freeze({
     "Tuple members must be labeled with a simple identifier.",
   MixedLabeledAndUnlabeledElements:
     "Tuple members must all have names or all not have names.",
+  NonAbstractClassHasAbstractMethod:
+    "Abstract methods can only appear within an abstract class.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
   PatternIsOptional:
@@ -2172,6 +2174,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
+      if (!this.state.inAbstractClass && (member: any).abstract) {
+        this.raise(member.start, TSErrors.NonAbstractClassHasAbstractMethod);
+      }
+
       /*:: invariant(member.type !== "TSIndexSignature") */
 
       super.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
@@ -2833,6 +2839,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return cb();
       } finally {
         this.state.isDeclareContext = oldIsDeclareContext;
+      }
+    }
+
+    parseClass<T: N.Class>(node: T, ...args: any[]): T {
+      const oldInAbstractClass = this.state.inAbstractClass;
+      this.state.inAbstractClass = !!(node: any).abstract;
+      try {
+        return super.parseClass(node, ...args);
+      } finally {
+        this.state.inAbstractClass = oldInAbstractClass;
       }
     }
   };

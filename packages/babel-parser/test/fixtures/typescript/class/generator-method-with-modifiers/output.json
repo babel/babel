@@ -1,6 +1,9 @@
 {
   "type": "File",
   "start":0,"end":139,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
+  "errors": [
+    "SyntaxError: Abstract methods can only appear within an abstract class. (5:2)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":139,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
