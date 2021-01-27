@@ -14,6 +14,7 @@ module.exports = {
   extends: "@babel/internal",
   rules: {
     "prettier/prettier": "error",
+    "import/no-extraneous-dependencies": "error",
   },
   env: {
     node: true,
@@ -41,7 +42,6 @@ module.exports = {
       rules: {
         "@babel/development/no-undefined-identifier": "error",
         "@babel/development/no-deprecated-clone": "error",
-        "import/no-extraneous-dependencies": "error",
         "guard-for-in": "error",
       },
     },
