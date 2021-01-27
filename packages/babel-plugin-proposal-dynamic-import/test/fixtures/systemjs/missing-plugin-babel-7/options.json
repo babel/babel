@@ -1,0 +1,8 @@
+{
+  "validateLogs": true,
+  "plugins": [
+    "transform-modules-systemjs",
+    "external-helpers"
+  ],
+  "BABEL_8_BREAKING": false
+}
