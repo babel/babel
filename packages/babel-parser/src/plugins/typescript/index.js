@@ -1599,7 +1599,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               cls,
               /* isStatement */ true,
               /* optionalId */ false,
-              /* abstract */ true,
             );
           }
           break;
