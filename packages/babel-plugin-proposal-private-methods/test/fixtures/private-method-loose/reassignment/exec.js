@@ -11,6 +11,6 @@ class Foo {
 
 try {
   new Foo;
-} catch {
+} catch (e) {
   expect(counter).toBe(1);
 }
