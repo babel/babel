@@ -26,7 +26,8 @@
     "@babel/core": "^7.12.0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-class-static-block"
 }

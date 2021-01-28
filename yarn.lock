@@ -94,6 +94,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
+    core-js-compat: ^3.8.3
     electron-to-chromium: 1.3.583
     lodash: ^4.17.19
     mdn-browser-compat-data: 1.0.38
@@ -219,6 +220,7 @@ __metadata:
     "@babel/preset-env": "workspace:^7.12.1"
     "@babel/preset-flow": "workspace:^7.12.1"
     "@babel/preset-react": "workspace:^7.12.1"
+    eslint: ^7.5.0
   languageName: unknown
   linkType: soft
 
@@ -1009,6 +1011,7 @@ __metadata:
   resolution: "@babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block"
   dependencies:
     "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.10.1"
     "@babel/plugin-syntax-class-static-block": "workspace:^7.12.1"
   peerDependencies:
@@ -5794,13 +5797,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.6.2, core-js-compat@npm:^3.7.0, core-js-compat@npm:^3.8.0":
-  version: 3.8.1
-  resolution: "core-js-compat@npm:3.8.1"
+"core-js-compat@npm:^3.6.2, core-js-compat@npm:^3.7.0, core-js-compat@npm:^3.8.0, core-js-compat@npm:^3.8.3":
+  version: 3.8.3
+  resolution: "core-js-compat@npm:3.8.3"
   dependencies:
-    browserslist: ^4.15.0
+    browserslist: ^4.16.1
     semver: 7.0.0
-  checksum: 964ad886a9f55399d2f33350d15f4653bfd24cb6de04606c515d0266be4101a1f435bab9a6d76b249de5f573aecb230a98468d6a8141743019abab5edd4d4281
+  checksum: 37e14264fa8a2a2e4afa1f85414296a536593b7fb5e1e08004de668d75107a7fc2083f1854c65c6c1b1e3fcb202ca6c9a3d0b514a9308b6f064d9f21b3dfa59b
   languageName: node
   linkType: hard
 
