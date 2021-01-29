@@ -6,6 +6,7 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import { types as tt, type TokenType } from "./types";
+import type { ParsingError } from "../parser/error";
 
 type TopicContextState = {
   // When a topic binding has been currently established,
@@ -37,7 +38,7 @@ export default class State {
     this.startLoc = this.endLoc = this.curPosition();
   }
 
-  errors: SyntaxError[] = [];
+  errors: ParsingError[] = [];
 
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number = -1;

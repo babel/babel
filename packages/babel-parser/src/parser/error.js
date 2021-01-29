@@ -16,6 +16,8 @@ type ErrorContext = {
   code?: string,
 };
 
+export type ParsingError = SyntaxError & ErrorContext;
+
 export { ErrorMessages as Errors } from "./error-message.js";
 
 export default class ParserError extends CommentsParser {
