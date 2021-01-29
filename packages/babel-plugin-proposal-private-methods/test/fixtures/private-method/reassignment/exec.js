@@ -9,8 +9,5 @@ class Foo {
   }
 }
 
-try {
-  new Foo;
-} catch (e) {
-  expect(counter).toBe(1);
-}
+expect(() => new Foo).toThrow();
+expect(counter).toBe(1);

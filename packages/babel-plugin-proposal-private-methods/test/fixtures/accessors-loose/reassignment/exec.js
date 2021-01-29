@@ -1,10 +1,10 @@
 let counter = 0;
 class Foo {
   constructor() {
-    this.#privateMethod = ++counter;
+    this.#privateFieldValue = ++counter;
   }
 
-  #privateMethod() {
+  get #privateFieldValue() {
     return 42;
   }
 }
