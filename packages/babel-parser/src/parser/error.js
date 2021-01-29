@@ -66,6 +66,8 @@ export default class ParserError extends CommentsParser {
         const error = errors[i];
         if (error.pos === pos) {
           return Object.assign(error, { message });
+        } else if (error.pos < pos) {
+          break;
         }
       }
     }
