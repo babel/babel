@@ -1528,6 +1528,5 @@ export type ParseSubscriptState = {
 
 export type ParseClassMemberState = {|
   hadConstructor: boolean,
-  hadStaticBlock: boolean,
   constructorAllowsSuper: boolean,
 |};
