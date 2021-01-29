@@ -2,7 +2,5 @@
   "plugins": [
     "topLevelAwait"
   ],
-  "sourceType": "module",
-  "errorRecovery": false,
-  "throws": "'await' is only allowed within async functions and at the top levels of modules (1:6)"
+  "sourceType": "module"
 }

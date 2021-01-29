@@ -39,6 +39,40 @@ export default class ParserError extends CommentsParser {
     return this.raiseWithData(pos, undefined, errorTemplate, ...params);
   }
 
+  /**
+   * Raise a parsing error on given postion pos. If errorRecovery is true,
+   * it will first search current errors and overwrite the error thrown on the exact
+   * position before with the new error message. If errorRecovery is false, it
+   * fallbacks to `raise`.
+   *
+   * @param {number} pos
+   * @param {string} errorTemplate
+   * @param {...any} params
+   * @returns {(Error | empty)}
+   * @memberof ParserError
+   */
+  raiseOverwrite(
+    pos: number,
+    errorTemplate: string,
+    ...params: any
+  ): Error | empty {
+    if (this.options.errorRecovery) {
+      const loc = this.getLocationForPosition(pos);
+      const message =
+        errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
+        ` (${loc.line}:${loc.column})`;
+      const errors = this.state.errors;
+      for (let i = errors.length - 1; i >= 0; i--) {
+        const error = errors[i];
+        if (error.pos === pos) {
+          Object.assign(error, { message });
+          return;
+        }
+      }
+    }
+    return this.raiseWithData(pos, undefined, errorTemplate, ...params);
+  }
+
   raiseWithData(
     pos: number,
     data?: {
