@@ -228,7 +228,7 @@ const privateNameHandlerSpec = {
         if (!getId && setId) {
           if (file.availableHelper("writeOnlyError")) {
             return t.callExpression(file.addHelper("writeOnlyError"), [
-              t.stringLiteral(name),
+              t.stringLiteral(`#${name}`),
             ]);
           }
           console.warn(
