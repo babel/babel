@@ -56,21 +56,20 @@ export default class ParserError extends CommentsParser {
     errorTemplate: string,
     ...params: any
   ): Error | empty {
+    const loc = this.getLocationForPosition(pos);
+    const message =
+      errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
+      ` (${loc.line}:${loc.column})`;
     if (this.options.errorRecovery) {
-      const loc = this.getLocationForPosition(pos);
-      const message =
-        errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
-        ` (${loc.line}:${loc.column})`;
       const errors = this.state.errors;
       for (let i = errors.length - 1; i >= 0; i--) {
         const error = errors[i];
         if (error.pos === pos) {
-          Object.assign(error, { message });
-          return;
+          return Object.assign(error, { message });
         }
       }
     }
-    return this.raiseWithData(pos, undefined, errorTemplate, ...params);
+    return this._raise({ loc, pos }, message);
   }
 
   raiseWithData(
