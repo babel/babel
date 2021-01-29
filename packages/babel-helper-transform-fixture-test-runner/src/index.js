@@ -420,7 +420,13 @@ export default function (
               delete task.options.throws;
 
               assert.throws(runTask, function (err) {
-                return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
+                assert.ok(
+                  throwMsg === true || err.message.includes(throwMsg),
+                  `
+Expected Error: ${throwMsg}
+Actual Error: ${err.message}`,
+                );
+                return true;
               });
             } else {
               if (task.exec.code) {
