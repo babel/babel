@@ -9,9 +9,6 @@ var Foo = /*#__PURE__*/function () {
     key: "foo",
     value: function foo() {}
   }, {
-    key: "foo",
-    value: function foo() {}
-  }, {
     key: bar,
     value: function value() {}
   }, {

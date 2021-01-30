@@ -23,16 +23,6 @@ var Point = /*#__PURE__*/function () {
   }
 
   babelHelpers.createClass(Point, [{
-    key: "equals",
-    value: function equals(p) {
-      return babelHelpers.classPrivateFieldGet(this, _x) === babelHelpers.classPrivateFieldGet(p, _x) && babelHelpers.classPrivateFieldGet(this, _y) === babelHelpers.classPrivateFieldGet(p, _y);
-    }
-  }, {
-    key: "toString",
-    value: function toString() {
-      return `Point<${babelHelpers.classPrivateFieldGet(this, _x)},${babelHelpers.classPrivateFieldGet(this, _y)}>`;
-    }
-  }, {
     key: "x",
     get: function () {
       return babelHelpers.classPrivateFieldGet(this, _x);
@@ -47,6 +37,16 @@ var Point = /*#__PURE__*/function () {
     },
     set: function (value) {
       babelHelpers.classPrivateFieldSet(this, _y, +value);
+    }
+  }, {
+    key: "equals",
+    value: function equals(p) {
+      return babelHelpers.classPrivateFieldGet(this, _x) === babelHelpers.classPrivateFieldGet(p, _x) && babelHelpers.classPrivateFieldGet(this, _y) === babelHelpers.classPrivateFieldGet(p, _y);
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return `Point<${babelHelpers.classPrivateFieldGet(this, _x)},${babelHelpers.classPrivateFieldGet(this, _y)}>`;
     }
   }]);
   return Point;
