@@ -41,6 +41,7 @@ export function createClassFeaturePlugin({
 }) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
+  const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
 
   if (loose) {
@@ -217,7 +218,7 @@ export function createClassFeaturePlugin({
             state,
             setPublicClassFields ?? loose,
             privateFieldsAsProperties ?? loose,
-            loose,
+            constantSuper ?? loose,
           ));
         }
 

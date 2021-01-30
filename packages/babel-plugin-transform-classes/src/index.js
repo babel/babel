@@ -22,6 +22,7 @@ export default declare((api, options) => {
   const { loose } = options;
 
   const setClassMethods = api.assumption("setClassMethods") ?? options.loose;
+  const constantSuper = api.assumption("constantSuper") ?? options.loose;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -62,6 +63,7 @@ export default declare((api, options) => {
         path.replaceWith(
           transformClass(path, state.file, builtinClasses, loose, {
             setClassMethods,
+            constantSuper,
           }),
         );
 

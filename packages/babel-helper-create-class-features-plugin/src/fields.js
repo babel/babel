@@ -647,12 +647,12 @@ const thisContextVisitor = traverse.visitors.merge([
   environmentVisitor,
 ]);
 
-function replaceThisContext(path, ref, superRef, file, loose) {
+function replaceThisContext(path, ref, superRef, file, constantSuper) {
   const state = { classRef: ref, needsClassRef: false };
 
   const replacer = new ReplaceSupers({
     methodPath: path,
-    isLoose: loose,
+    constantSuper: constantSuper,
     superRef,
     file,
     refToPreserve: ref,
@@ -678,7 +678,7 @@ export function buildFieldsInitNodes(
   state,
   setPublicClassFields,
   privateFieldsAsProperties,
-  loose,
+  constantSuper,
 ) {
   const staticNodes = [];
   const instanceNodes = [];
@@ -695,7 +695,13 @@ export function buildFieldsInitNodes(
     const isMethod = !isField;
 
     if (isStatic || (isMethod && isPrivate)) {
-      const replaced = replaceThisContext(prop, ref, superRef, state, loose);
+      const replaced = replaceThisContext(
+        prop,
+        ref,
+        superRef,
+        state,
+        constantSuper,
+      );
       needsClassRef = needsClassRef || replaced;
     }
 

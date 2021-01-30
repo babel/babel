@@ -334,6 +334,7 @@ export type NestingPath = RootPath | OverridesPath | EnvPath;
 export const assumptionsNames = new Set<string>([
   "arrayLikeIsIterable",
   "constantReexports",
+  "constantSuper",
   "enumerableModuleMeta",
   "ignoreFunctionLength",
   "ignoreToPrimitiveHint",

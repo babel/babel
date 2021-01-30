@@ -11,7 +11,7 @@ import addCreateSuperHelper from "./inline-createSuper-helpers";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
-type ClassAssumptions = { setClassMethods: boolean };
+type ClassAssumptions = { setClassMethods: boolean, constantSuper: boolean };
 
 function buildConstructor(classRef, constructorBody, node) {
   const func = t.functionDeclaration(
@@ -164,7 +164,7 @@ export default function transformClass(
           methodPath: path,
           objectRef: classState.classRef,
           superRef: classState.superName,
-          isLoose: classState.isLoose,
+          constantSuper: assumptions.constantSuper,
           file: classState.file,
           refToPreserve: classState.classRef,
         });
