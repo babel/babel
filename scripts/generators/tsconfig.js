@@ -1,9 +1,14 @@
-"use strict";
+import path from "path";
+import fs from "fs";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
 
-const path = require("path");
-const fs = require("fs");
+const require = createRequire(import.meta.url);
 
-const root = path.resolve(__dirname, "../../");
+const root = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../"
+);
 
 function getTsPkgs(subRoot) {
   return fs

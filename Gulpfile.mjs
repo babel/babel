@@ -1,26 +1,33 @@
-"use strict";
+import path from "path";
+import fs from "fs";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
 
-const plumber = require("gulp-plumber");
-const through = require("through2");
-const chalk = require("chalk");
-const newer = require("gulp-newer");
-const babel = require("gulp-babel");
-const camelCase = require("lodash/camelCase");
-const fancyLog = require("fancy-log");
-const filter = require("gulp-filter");
-const gulp = require("gulp");
-const path = require("path");
-const fs = require("fs");
-const rollup = require("rollup");
-const rollupBabel = require("@rollup/plugin-babel").default;
-const rollupBabelSource = require("./scripts/rollup-plugin-babel-source");
-const rollupCommonJs = require("@rollup/plugin-commonjs");
-const rollupJson = require("@rollup/plugin-json");
-const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
-const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
-const rollupReplace = require("@rollup/plugin-replace");
-const { terser: rollupTerser } = require("rollup-plugin-terser");
-const { default: rollupDts } = require("rollup-plugin-dts");
+import plumber from "gulp-plumber";
+import through from "through2";
+import chalk from "chalk";
+import newer from "gulp-newer";
+import babel from "gulp-babel";
+import camelCase from "lodash/camelCase.js";
+import fancyLog from "fancy-log";
+import filter from "gulp-filter";
+import gulp from "gulp";
+import { rollup } from "rollup";
+import { babel as rollupBabel } from "@rollup/plugin-babel";
+import rollupCommonJs from "@rollup/plugin-commonjs";
+import rollupJson from "@rollup/plugin-json";
+import rollupNodePolyfills from "rollup-plugin-node-polyfills";
+import rollupNodeResolve from "@rollup/plugin-node-resolve";
+import rollupReplace from "@rollup/plugin-replace";
+import { terser as rollupTerser } from "rollup-plugin-terser";
+import _rollupDts from "rollup-plugin-dts";
+const { default: rollupDts } = _rollupDts;
+
+import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
+import formatCode from "./scripts/utils/formatCode.js";
+
+const require = createRequire(import.meta.url);
+const monorepoRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
 const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,!(*.d).ts}`;
@@ -92,15 +99,16 @@ function rename(fn) {
  * @param {string} message
  */
 function generateHelpers(generator, dest, filename, message) {
-  const formatCode = require("./scripts/utils/formatCode");
   const stream = gulp
-    .src(".", { base: __dirname })
+    .src(".", { base: monorepoRoot })
     .pipe(errorsLogger())
     .pipe(
-      through.obj(function (file, enc, callback) {
+      through.obj(async (file, enc, callback) => {
+        const { default: generateCode } = await import(generator);
+
         file.path = filename;
         file.contents = Buffer.from(
-          formatCode(require(generator)(filename), dest + file.path)
+          formatCode(generateCode(filename), dest + file.path)
         );
         fancyLog(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
@@ -119,7 +127,7 @@ function generateHelpers(generator, dest, filename, message) {
  */
 async function generateTypeHelpers(helperKind, filename = "index.ts") {
   return generateHelpers(
-    `./packages/babel-types/scripts/generators/${helperKind}`,
+    `./packages/babel-types/scripts/generators/${helperKind}.js`,
     `./packages/babel-types/src/${helperKind}/generated/`,
     filename,
     `@babel/types -> ${helperKind}`
@@ -133,7 +141,7 @@ async function generateTypeHelpers(helperKind, filename = "index.ts") {
  */
 async function generateTraverseHelpers(helperKind) {
   return generateHelpers(
-    `./packages/babel-traverse/scripts/generators/${helperKind}`,
+    `./packages/babel-traverse/scripts/generators/${helperKind}.js`,
     `./packages/babel-traverse/src/path/generated/`,
     `${helperKind}.ts`,
     `@babel/traverse -> ${helperKind}`
@@ -142,9 +150,8 @@ async function generateTraverseHelpers(helperKind) {
 
 function generateStandalone() {
   const dest = "./packages/babel-standalone/src/generated/";
-  const formatCode = require("./scripts/utils/formatCode");
   return gulp
-    .src(babelStandalonePluginConfigGlob, { base: __dirname })
+    .src(babelStandalonePluginConfigGlob, { base: monorepoRoot })
     .pipe(
       through.obj((file, enc, callback) => {
         fancyLog("Generating @babel/standalone files");
@@ -190,7 +197,7 @@ function finish(stream) {
 }
 
 function getFiles(glob, { include, exclude }) {
-  let stream = gulp.src(glob, { base: __dirname });
+  let stream = gulp.src(glob, { base: monorepoRoot });
 
   if (exclude) {
     const filters = exclude.map(p => `!**/${p}/**`);
@@ -206,7 +213,7 @@ function getFiles(glob, { include, exclude }) {
 }
 
 function buildBabel(exclude) {
-  const base = __dirname;
+  const base = monorepoRoot;
 
   return getFiles(defaultSourcesGlob, {
     exclude: exclude && exclude.map(p => p.src),
@@ -259,7 +266,7 @@ function buildRollup(packages, targetBrowsers) {
       }
       const input = getIndexFromPackage(src);
       fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
-      const bundle = await rollup.rollup({
+      const bundle = await rollup({
         input,
         external,
         onwarn(warning, warn) {
@@ -352,7 +359,7 @@ function buildRollupDts(packages) {
     packages.map(async packageName => {
       const input = `${packageName}/lib/index.d.ts`;
       fancyLog(`Bundling '${chalk.cyan(input)}' with rollup ...`);
-      const bundle = await rollup.rollup({
+      const bundle = await rollup({
         input,
         plugins: [rollupDts()],
       });
@@ -378,7 +385,7 @@ function removeDts(exclude) {
 function copyDts(packages) {
   return getFiles(`${defaultPackagesGlob}/src/**/*.d.ts`, { include: packages })
     .pipe(rename(file => path.resolve(file.base, mapSrcToLib(file.relative))))
-    .pipe(gulp.dest(__dirname));
+    .pipe(gulp.dest(monorepoRoot));
 }
 
 const libBundles = [

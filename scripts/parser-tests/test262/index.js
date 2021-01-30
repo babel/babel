@@ -1,6 +1,9 @@
-const path = require("path");
-const TestStream = require("test262-stream");
-const TestRunner = require("../utils/parser-test-runner");
+import path from "path";
+import { fileURLToPath } from "url";
+import TestStream from "test262-stream";
+import TestRunner from "../utils/parser-test-runner.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const ignoredFeatures = [
   "__getter__",
@@ -163,8 +166,8 @@ function* getPlugins(features) {
 }
 
 const runner = new TestRunner({
-  testDir: path.join(__dirname, "../../../build/test262"),
-  allowlist: path.join(__dirname, "allowlist.txt"),
+  testDir: path.join(dirname, "../../../build/test262"),
+  allowlist: path.join(dirname, "allowlist.txt"),
   logInterval: 500,
   shouldUpdate: process.argv.includes("--update-allowlist"),
 

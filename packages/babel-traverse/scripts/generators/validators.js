@@ -1,11 +1,8 @@
-"use strict";
+import t from "@babel/types";
+import virtualTypes from "../../lib/path/lib/virtual-types.js";
+import definitions from "@babel/types/lib/definitions/index.js";
 
-const t = require("@babel/types");
-const virtualTypes = require("../../lib/path/lib/virtual-types");
-
-const definitions = require("@babel/types/lib/definitions");
-
-module.exports = function generateValidators() {
+export default function generateValidators() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
@@ -16,7 +13,7 @@ import NodePath from "../index";
 export interface NodePathValidators {
 `;
 
-  for (const type of t.TYPES) {
+  for (const type of [...t.TYPES].sort()) {
     output += `is${type}(opts?: object): this is NodePath<t.${type}>;`;
   }
 
@@ -34,4 +31,4 @@ export interface NodePathValidators {
 `;
 
   return output;
-};
+}

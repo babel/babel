@@ -3,6 +3,7 @@
   "version": "7.12.12",
   "private": true,
   "license": "MIT",
+  "type": "commonjs",
   "scripts": {
     "bootstrap": "make bootstrap",
     "codesandbox:build": "make build-no-bundle",
@@ -11,7 +12,7 @@
     "lint": "make lint",
     "test": "make test",
     "version": "yarn --immutable-cache && git add yarn.lock",
-    "test:esm": "node test/esm/index.mjs"
+    "test:esm": "node test/esm/index.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.0",
