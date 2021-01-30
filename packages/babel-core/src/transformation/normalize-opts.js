@@ -13,9 +13,9 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
     sourceType = "module",
     inputSourceMap,
     sourceMaps = !!inputSourceMap,
-
-    moduleRoot,
-    sourceRoot = moduleRoot,
+    sourceRoot = process.env.BABEL_8_BREAKING
+      ? undefined
+      : config.options.moduleRoot,
 
     sourceFileName = path.basename(filenameRelative),
 

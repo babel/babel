@@ -1,21 +1,38 @@
+if (!process.env.BABEL_8_BREAKING) {
+  const originalGetModuleName = getModuleName;
+
+  // @ts-expect-error TS doesn't like reassigning a function.
+  // eslint-disable-next-line no-func-assign
+  getModuleName = function getModuleName(
+    rootOpts: any,
+    pluginOpts: any,
+  ): string | null {
+    return originalGetModuleName(rootOpts, {
+      moduleId: rootOpts.moduleId ?? pluginOpts.moduleId,
+      moduleIds: rootOpts.moduleIds ?? pluginOpts.moduleIds,
+      getModuleId: rootOpts.getModuleId ?? pluginOpts.getModuleId,
+      moduleRoot: rootOpts.moduleRoot ?? pluginOpts.moduleRoot,
+    });
+  };
+}
+
 export default function getModuleName(
   rootOpts: any,
   pluginOpts: any,
-): string | undefined | null {
+): string | null {
   const {
     filename,
     filenameRelative = filename,
-
-    sourceRoot = pluginOpts.moduleRoot ?? rootOpts.moduleRoot,
+    sourceRoot = pluginOpts.moduleRoot,
   } = rootOpts;
 
   const {
-    moduleId = rootOpts.moduleId,
-    moduleIds = rootOpts.moduleIds ?? !!moduleId,
+    moduleId,
+    moduleIds = !!moduleId,
 
-    getModuleId = rootOpts.getModuleId,
+    getModuleId,
 
-    moduleRoot = rootOpts.moduleRoot ?? sourceRoot,
+    moduleRoot = sourceRoot,
   } = pluginOpts;
 
   if (!moduleIds) return null;

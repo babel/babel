@@ -98,17 +98,19 @@ commander.option(
   "The root from which all sources are relative.",
 );
 
-// Config params for certain module output formats.
-commander.option(
-  "--module-root [filename]",
-  // eslint-disable-next-line max-len
-  "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
-);
-commander.option("-M, --module-ids", "Insert an explicit id for modules.");
-commander.option(
-  "--module-id [string]",
-  "Specify a custom name for module ids.",
-);
+if (!process.env.BABEL_8_BREAKING) {
+  // Config params for certain module output formats.
+  commander.option(
+    "--module-root [filename]",
+    // eslint-disable-next-line max-len
+    "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
+  );
+  commander.option("-M, --module-ids", "Insert an explicit id for modules.");
+  commander.option(
+    "--module-id [string]",
+    "Specify a custom name for module ids.",
+  );
+}
 
 // "babel" command specific arguments that are not passed to @babel/core.
 commander.option(
@@ -277,9 +279,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     sourceMaps: opts.sourceMaps,
     sourceFileName: opts.sourceFileName,
     sourceRoot: opts.sourceRoot,
-    moduleRoot: opts.moduleRoot,
-    moduleIds: opts.moduleIds,
-    moduleId: opts.moduleId,
 
     // Commander will default the "--no-" arguments to true, but we want to
     // leave them undefined so that @babel/core can handle the
@@ -288,6 +287,15 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     highlightCode: opts.highlightCode === true ? undefined : opts.highlightCode,
     comments: opts.comments === true ? undefined : opts.comments,
   };
+
+  if (!process.env.BABEL_8_BREAKING) {
+    // $FlowIgnore
+    Object.assign(babelOptions, {
+      moduleRoot: opts.moduleRoot,
+      moduleIds: opts.moduleIds,
+      moduleId: opts.moduleId,
+    });
+  }
 
   // If the @babel/cli version is newer than the @babel/core version, and we have added
   // new options for @babel/core, we'll potentially get option validation errors from

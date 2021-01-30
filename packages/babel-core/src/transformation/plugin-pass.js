@@ -44,11 +44,14 @@ export default class PluginPass {
     return this.file.addImport();
   }
 
-  getModuleName(): ?string {
-    return this.file.getModuleName();
-  }
-
   buildCodeFrameError(node: ?NodeLocation, msg: string, Error?: typeof Error) {
     return this.file.buildCodeFrameError(node, msg, Error);
   }
+}
+
+if (!process.env.BABEL_8_BREAKING) {
+  // $FlowIgnore
+  PluginPass.prototype.getModuleName = function getModuleName(): ?string {
+    return this.file.getModuleName();
+  };
 }
