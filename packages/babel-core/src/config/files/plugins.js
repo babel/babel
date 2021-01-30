@@ -5,13 +5,12 @@
  */
 
 import buildDebug from "debug";
-import path from "path";
 
 const debug = buildDebug("babel:config:loading:files:plugins");
 
 const EXACT_RE = /^module:/;
-const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-plugin-)/;
-const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-preset-)/;
+const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|.*\/|babel-plugin-)/;
+const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|.*\/|babel-preset-)/;
 const BABEL_PLUGIN_ORG_RE = /^(@babel\/)(?!plugin-|[^/]+\/)/;
 const BABEL_PRESET_ORG_RE = /^(@babel\/)(?!preset-|[^/]+\/)/;
 const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-plugin(?:-|\/|$)|[^/]+\/)/;
@@ -59,7 +58,7 @@ export function loadPreset(
 
 function standardizeName(type: "plugin" | "preset", name: string) {
   // Let absolute and relative paths through.
-  if (path.isAbsolute(name)) return name;
+  if (name[0] === "/") return name;
 
   const isPreset = type === "preset";
 
