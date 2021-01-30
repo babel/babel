@@ -87,5 +87,20 @@ module.exports = {
         ],
       },
     },
+    {
+      files: ["packages/babel-traverse/scripts/**/*.js"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { packageDir: "./packages/babel-traverse" },
+        ],
+      },
+    },
+    {
+      files: ["scripts/**/*.js"],
+      rules: {
+        "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
+      },
+    },
   ],
 };
