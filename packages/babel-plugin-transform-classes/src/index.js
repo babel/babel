@@ -25,6 +25,7 @@ export default declare((api, options) => {
   const constantSuper = api.assumption("constantSuper") ?? options.loose;
   const superIsCallableConstructor =
     api.assumption("superIsCallableConstructor") ?? options.loose;
+  const noCallClass = api.assumption("noCallClass") ?? options.loose;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -67,6 +68,7 @@ export default declare((api, options) => {
             setClassMethods,
             constantSuper,
             superIsCallableConstructor,
+            noCallClass,
           }),
         );
 

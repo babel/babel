@@ -15,6 +15,7 @@ type ClassAssumptions = {
   setClassMethods: boolean,
   constantSuper: boolean,
   superIsCallableConstructor: boolean,
+  noCallClass: boolean,
 };
 
 function buildConstructor(classRef, constructorBody, node) {
@@ -670,7 +671,7 @@ export default function transformClass(
     buildBody();
 
     // make sure this class isn't directly called (with A() instead new A())
-    if (!classState.isLoose) {
+    if (!assumptions.noCallClass) {
       constructorBody.body.unshift(
         t.expressionStatement(
           t.callExpression(classState.file.addHelper("classCallCheck"), [
