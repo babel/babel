@@ -350,6 +350,7 @@ export const assumptionsNames = new Set<string>([
   "setPublicClassFields",
   "setSpreadProperties",
   "skipForOfIteratorClosing",
+  "superIsCallableConstructor",
 ]);
 
 function getSource(loc: NestingPath): OptionsSource {

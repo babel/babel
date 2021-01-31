@@ -11,7 +11,11 @@ import addCreateSuperHelper from "./inline-createSuper-helpers";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
-type ClassAssumptions = { setClassMethods: boolean, constantSuper: boolean };
+type ClassAssumptions = {
+  setClassMethods: boolean,
+  constantSuper: boolean,
+  superIsCallableConstructor: boolean,
+};
 
 function buildConstructor(classRef, constructorBody, node) {
   const func = t.functionDeclaration(
@@ -249,7 +253,7 @@ export default function transformClass(
     const bareSuperNode = bareSuper.node;
     let call;
 
-    if (classState.isLoose) {
+    if (assumptions.superIsCallableConstructor) {
       bareSuperNode.arguments.unshift(t.thisExpression());
       if (
         bareSuperNode.arguments.length === 2 &&
@@ -566,7 +570,7 @@ export default function transformClass(
     // Unshift to ensure that the constructor inheritance is set up before
     // any properties can be assigned to the prototype.
 
-    if (!classState.isLoose) {
+    if (!assumptions.superIsCallableConstructor) {
       classState.body.unshift(
         t.variableDeclaration("var", [
           t.variableDeclarator(

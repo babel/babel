@@ -23,6 +23,8 @@ export default declare((api, options) => {
 
   const setClassMethods = api.assumption("setClassMethods") ?? options.loose;
   const constantSuper = api.assumption("constantSuper") ?? options.loose;
+  const superIsCallableConstructor =
+    api.assumption("superIsCallableConstructor") ?? options.loose;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -64,6 +66,7 @@ export default declare((api, options) => {
           transformClass(path, state.file, builtinClasses, loose, {
             setClassMethods,
             constantSuper,
+            superIsCallableConstructor,
           }),
         );
 
