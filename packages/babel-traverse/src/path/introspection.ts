@@ -219,7 +219,7 @@ export function willIMaybeExecuteBefore(this: NodePath, target): boolean {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
-function getOuterFunction(path) {
+function getOuterFunction(path: NodePath) {
   return (path.scope.getFunctionParent() || path.scope.getProgramParent()).path;
 }
 
@@ -385,8 +385,11 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
+  const targetIsArrowExpressionDeclaration =
+    target.isArrowFunctionExpression() &&
+    t.isVariableDeclarator(target.container);
   if (
-    !target.isFunctionDeclaration() ||
+    (!target.isFunctionDeclaration() && !targetIsArrowExpressionDeclaration) ||
     target.parentPath.isExportDeclaration()
   ) {
     return "unknown";
@@ -396,7 +399,10 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   // then we can be a bit smarter and handle cases where the function is either
   // a. not called at all (part of an export)
   // b. called directly
-  const binding = target.scope.getBinding(target.node.id.name);
+  const bindingName = targetIsArrowExpressionDeclaration
+    ? target.container.id.name
+    : target.node.id.name;
+  const binding = target.scope.getBinding(bindingName);
 
   // no references!
   if (!binding.references) return "before";
