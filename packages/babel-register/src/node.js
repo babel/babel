@@ -7,11 +7,7 @@ import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
 import Module from "module";
-
-// $FlowIgnore
-const escapeRegExp = process.env.BABEL_8_BREAKING
-  ? require("escape-string-regexp")
-  : require("lodash/escapeRegExp");
+import escapeRegExp from "./escape-regexp";
 
 const maps = {};
 let transformOpts = {};

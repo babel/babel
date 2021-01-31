@@ -30,7 +30,7 @@ const require = createRequire(import.meta.url);
 const monorepoRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
-const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,!(*.d).ts}`;
+const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
 const defaultDtsGlob = `${defaultPackagesGlob}/lib/**/*.d.ts{,.map}`;
 
 const babelStandalonePluginConfigGlob =
@@ -283,6 +283,16 @@ function buildRollup(packages, targetBrowsers) {
             BABEL_VERSION: JSON.stringify(babelVersion),
             VERSION: JSON.stringify(version),
           }),
+          rollupCommonJs({
+            include: [
+              /node_modules/,
+              "packages/babel-runtime/regenerator/**",
+              "packages/babel-preset-env/data/*.js",
+              // Rollup doesn't read export maps, so it loads the cjs fallback
+              "packages/babel-compat-data/*.js",
+              "packages/*/src/**/*.cjs",
+            ],
+          }),
           rollupBabel({
             envName: babelEnvName,
             babelrc: false,
@@ -295,20 +305,11 @@ function buildRollup(packages, targetBrowsers) {
             browser: nodeResolveBrowser,
             preferBuiltins: true,
           }),
-          rollupCommonJs({
-            include: [
-              /node_modules/,
-              "packages/babel-runtime/regenerator/**",
-              "packages/babel-preset-env/data/*.js",
-              // Rollup doesn't read export maps, so it loads the cjs fallback
-              "packages/babel-compat-data/*.js",
-            ],
-          }),
           rollupJson(),
           targetBrowsers &&
             rollupNodePolyfills({
               sourceMap: sourcemap,
-              include: "**/*.{js,ts}",
+              include: "**/*.{js,cjs,ts}",
             }),
         ].filter(Boolean),
       });

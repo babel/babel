@@ -16,11 +16,7 @@ import vm from "vm";
 import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 import QuickLRU from "quick-lru";
 import diff from "jest-diff";
-
-// $FlowIgnore
-const escapeRegExp = process.env.BABEL_8_BREAKING
-  ? require("escape-string-regexp")
-  : require("lodash/escapeRegExp");
+import escapeRegExp from "./escape-regexp";
 
 const cachedScripts = new QuickLRU({ maxSize: 10 });
 const contextModuleCache = new WeakMap();
