@@ -534,19 +534,19 @@ export default class ExpressionParser extends LValParser {
 
     const expr = this.parseUpdate(node, update, refExpressionErrors);
 
-    const startsExpr = this.hasPlugin("v8intrinsic")
-      ? this.state.type.startsExpr
-      : this.state.type.startsExpr && !this.match(tt.modulo);
-    if (isAwait && startsExpr && !this.isAmbiguousAwait()) {
-      if (!this.state.invalidAwaitErrors.has(startPos)) {
-        this.raise(
+    if (isAwait) {
+      const startsExpr = this.hasPlugin("v8intrinsic")
+        ? this.state.type.startsExpr
+        : this.state.type.startsExpr && !this.match(tt.modulo);
+      if (startsExpr && !this.isAmbiguousAwait()) {
+        this.raiseOverwrite(
           startPos,
           this.hasPlugin("topLevelAwait")
             ? Errors.AwaitNotInAsyncContext
             : Errors.AwaitNotInAsyncFunction,
         );
+        return this.parseAwait(startPos, startLoc);
       }
-      return this.parseAwait(startPos, startLoc);
     }
 
     return expr;
@@ -2348,17 +2348,7 @@ export default class ExpressionParser extends LValParser {
       : isStrictReservedWord;
 
     if (reservedTest(word, this.inModule)) {
-      if (!this.prodParam.hasAwait && word === "await") {
-        this.raise(
-          startLoc,
-          this.hasPlugin("topLevelAwait")
-            ? Errors.AwaitNotInAsyncContext
-            : Errors.AwaitNotInAsyncFunction,
-        );
-        this.state.invalidAwaitErrors.add(startLoc);
-      } else {
-        this.raise(startLoc, Errors.UnexpectedReservedWord, word);
-      }
+      this.raise(startLoc, Errors.UnexpectedReservedWord, word);
     }
   }
 

@@ -16,6 +16,8 @@ type ErrorContext = {
   code?: string,
 };
 
+export type ParsingError = SyntaxError & ErrorContext;
+
 export { ErrorMessages as Errors } from "./error-message.js";
 
 export default class ParserError extends CommentsParser {
@@ -37,6 +39,41 @@ export default class ParserError extends CommentsParser {
 
   raise(pos: number, errorTemplate: string, ...params: any): Error | empty {
     return this.raiseWithData(pos, undefined, errorTemplate, ...params);
+  }
+
+  /**
+   * Raise a parsing error on given postion pos. If errorRecovery is true,
+   * it will first search current errors and overwrite the error thrown on the exact
+   * position before with the new error message. If errorRecovery is false, it
+   * fallbacks to `raise`.
+   *
+   * @param {number} pos
+   * @param {string} errorTemplate
+   * @param {...any} params
+   * @returns {(Error | empty)}
+   * @memberof ParserError
+   */
+  raiseOverwrite(
+    pos: number,
+    errorTemplate: string,
+    ...params: any
+  ): Error | empty {
+    const loc = this.getLocationForPosition(pos);
+    const message =
+      errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
+      ` (${loc.line}:${loc.column})`;
+    if (this.options.errorRecovery) {
+      const errors = this.state.errors;
+      for (let i = errors.length - 1; i >= 0; i--) {
+        const error = errors[i];
+        if (error.pos === pos) {
+          return Object.assign(error, { message });
+        } else if (error.pos < pos) {
+          break;
+        }
+      }
+    }
+    return this._raise({ loc, pos }, message);
   }
 
   raiseWithData(
