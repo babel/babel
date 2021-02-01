@@ -413,24 +413,25 @@ export default function transformClass(
     const placement = node.static ? "static" : "instance";
     const methods = classState.methods[placement];
 
-    const { computed } = node;
-    if (computed) methods.hasComputed = true;
-
-    const key = t.toComputedKey(node);
     const descKey = node.kind === "method" ? "value" : node.kind;
+    const key =
+      t.isNumericLiteral(node.key) || t.isBigIntLiteral(node.key)
+        ? t.stringLiteral(String(node.key.value))
+        : t.toComputedKey(node);
 
     let fn = t.toExpression(node);
-    // infer function name
-    if (t.isStringLiteral(key) && node.kind === "method") {
-      fn = nameFunction({ id: key, node: node, scope });
+
+    if (t.isStringLiteral(key)) {
+      // infer function name
+      if (node.kind === "method") {
+        fn = nameFunction({ id: key, node: node, scope });
+      }
+    } else {
+      methods.hasComputed = true;
     }
 
     let descriptor;
-    if (
-      !methods.hasComputed &&
-      t.isStringLiteral(key) &&
-      methods.map.has(key.value)
-    ) {
+    if (!methods.hasComputed && methods.map.has(key.value)) {
       descriptor = methods.map.get(key.value);
       descriptor[descKey] = fn;
 
