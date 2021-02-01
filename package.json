@@ -110,6 +110,7 @@
     "labels": {
       "PR: Spec Compliance :eyeglasses:": ":eyeglasses: Spec Compliance",
       "PR: Breaking Change :boom:": ":boom: Breaking Change",
+      "PR: Deprecation: :loudspeaker:": ":loudspeaker: Deprecation",
       "PR: New Feature :rocket:": ":rocket: New Feature",
       "PR: Bug Fix :bug:": ":bug: Bug Fix",
       "PR: Polish :nail_care:": ":nail_care: Polish",
