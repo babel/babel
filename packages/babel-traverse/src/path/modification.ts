@@ -132,13 +132,12 @@ export function insertAfter(
       let { scope } = this;
 
       if (scope.path.isPattern()) {
+        t.assertExpression(node);
+
         this.replaceWith(
-          t.callExpression(
-            t.arrowFunctionExpression([], this.node as t.Expression),
-            [],
-          ),
+          t.callExpression(t.arrowFunctionExpression([], node), []),
         );
-        (this.get("callee.body") as NodePath<t.Expression>).insertAfter(nodes);
+        (this.get("callee.body") as NodePath).insertAfter(nodes);
         return [this];
       }
 
