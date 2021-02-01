@@ -3660,11 +3660,11 @@ __metadata:
   linkType: hard
 
 "@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents":
-  version: 0.0.0-condition-52373d
-  resolution: "@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING?:2.1.8-no-fsevents#52373d"
+  version: 0.0.0-condition-14398a
+  resolution: "@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING?:2.1.8-no-fsevents#14398a"
   dependencies:
     "@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false": "npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents"
-  checksum: 28d0f0cd6401170f34c90ba4ca41ad11b07cef27c8b45db56e06d9d758294d5c7a8864dab4aab37aad30e1ad26f936c5d7a141185ee7ded754b5fc7b13d35f21
+  checksum: e38d4858ed266c4f04f403d03bd996b43f50759037e80b10f1862b76a1c9fc1522ed00cdb310102d492a3ac36726cc99a3ca6f92a82c859685f4616f65674810
   languageName: node
   linkType: hard
 
@@ -3712,20 +3712,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:^13.0.0":
-  version: 13.0.2
-  resolution: "@rollup/plugin-commonjs@npm:13.0.2"
+"@rollup/plugin-commonjs@npm:^17.1.0":
+  version: 17.1.0
+  resolution: "@rollup/plugin-commonjs@npm:17.1.0"
   dependencies:
-    "@rollup/pluginutils": ^3.0.8
+    "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
-    estree-walker: ^1.0.1
-    glob: ^7.1.2
-    is-reference: ^1.1.2
-    magic-string: ^0.25.2
-    resolve: ^1.11.0
+    estree-walker: ^2.0.1
+    glob: ^7.1.6
+    is-reference: ^1.2.1
+    magic-string: ^0.25.7
+    resolve: ^1.17.0
   peerDependencies:
-    rollup: ^2.3.4
-  checksum: 3a3f6fd5ec8608f4bc7343d89d84ae9253d99b45317e3dd2f05ebc7da476490ac553015ae3a4a34bbcd6afc094bfbf47d9a5769c13bb1e2a093703c8533196b4
+    rollup: ^2.30.0
+  checksum: 9b162f93090e5bf544c85bb835a29f65371726d2e6161aa1a048bbb708b77433184e5836e7118e2c6277f9a9a7b5835f56e420d2040b1b623b03ca76db4b5d10
   languageName: node
   linkType: hard
 
@@ -4861,7 +4861,7 @@ __metadata:
     "@babel/register": ^7.12.0
     "@babel/runtime": ^7.12.0
     "@rollup/plugin-babel": ^5.2.0
-    "@rollup/plugin-commonjs": ^13.0.0
+    "@rollup/plugin-commonjs": ^17.1.0
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^9.0.0
     "@rollup/plugin-replace": ^2.3.3
@@ -6498,11 +6498,11 @@ __metadata:
   linkType: hard
 
 "escape-string-regexp@condition:BABEL_8_BREAKING ? ^4.0.0 : ":
-  version: 0.0.0-condition-76f759
-  resolution: "escape-string-regexp@condition:BABEL_8_BREAKING?^4.0.0:#76f759"
+  version: 0.0.0-condition-d458a5
+  resolution: "escape-string-regexp@condition:BABEL_8_BREAKING?^4.0.0:#d458a5"
   dependencies:
     escape-string-regexp-BABEL_8_BREAKING-true: "npm:escape-string-regexp@^4.0.0"
-  checksum: 1c6b06b9d1094aa0c4bcb60d0d8d82237c35a11132cddf9ecf3fe52a356ae1cf5a65a7d2cfc19cfdb7397474dbbfeafeab74944a5f5e35a6e615db7019209a7d
+  checksum: a67cb3a0fc219d92f2c6f0964e302cc079b0ce38bf2bd19257d26865c600bec42befed4dc88aec2bfbe9e62f757ce4bec80a408937bf48c5c779e13d9b238c01
   languageName: node
   linkType: hard
 
@@ -6766,6 +6766,13 @@ __metadata:
   version: 1.0.1
   resolution: "estree-walker@npm:1.0.1"
   checksum: 85e7cee763e9125a7d8a947b3a06a8b9282873936df220dd0d791d9b3315e45e40ab096b43ba71bdc99140c11a6d23fdcf686642dc119a7b2d6181004fdb24d2
+  languageName: node
+  linkType: hard
+
+"estree-walker@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "estree-walker@npm:2.0.2"
+  checksum: 378cc9d3be56962c5219c55ad1fde732cb7d55a11cde5acbf5995f39ddd0e98c1095a43c0ef15a520d1d6910e816bd3daff5fc5d7d38baaf8b12d5a2970df57c
   languageName: node
   linkType: hard
 
@@ -7134,12 +7141,12 @@ __metadata:
   linkType: hard
 
 "find-cache-dir@condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0":
-  version: 0.0.0-condition-e008bc
-  resolution: "find-cache-dir@condition:BABEL_8_BREAKING?^3.3.1:^2.0.0#e008bc"
+  version: 0.0.0-condition-1cab84
+  resolution: "find-cache-dir@condition:BABEL_8_BREAKING?^3.3.1:^2.0.0#1cab84"
   dependencies:
     find-cache-dir-BABEL_8_BREAKING-false: "npm:find-cache-dir@^2.0.0"
     find-cache-dir-BABEL_8_BREAKING-true: "npm:find-cache-dir@^3.3.1"
-  checksum: 13e4bcacffca23684358026660d4889531e4a21d0b3cfdf700afa878134b0cbb7929f946e733719d413df60d24b8b86dab58ce75028bf027e368b9482b1fb03b
+  checksum: ecc27cee26d013251b915cac38083e2cd1e9f965984fce4de5d82391c2c878f22f7d7a717d130912dd85b0a891f58794eab8f94aca8240dbdfb41fae7f6fbb13
   languageName: node
   linkType: hard
 
@@ -7607,12 +7614,12 @@ fsevents@^1.2.7:
   linkType: hard
 
 "globals@condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0":
-  version: 0.0.0-condition-dbd136
-  resolution: "globals@condition:BABEL_8_BREAKING?^13.5.0:^11.1.0#dbd136"
+  version: 0.0.0-condition-365c0f
+  resolution: "globals@condition:BABEL_8_BREAKING?^13.5.0:^11.1.0#365c0f"
   dependencies:
     globals-BABEL_8_BREAKING-false: "npm:globals@^11.1.0"
     globals-BABEL_8_BREAKING-true: "npm:globals@^13.5.0"
-  checksum: 66e0f1f0de738e7675a70c6ed8b5c6661bf56f9d74f7e2c8143435da63176cdc8d5123a733b7f1d02b94b1f3238c9e0517358a632bf5912acbc5a6a644c70519
+  checksum: 216349112d414b806012f38d0fd676efae3ac661cf71dfe4324968fd45625c623681436807f8d7ab629b09f7d91f34a341624ad4928498e5c2c8281512f04dec
   languageName: node
   linkType: hard
 
@@ -8485,7 +8492,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"is-reference@npm:^1.1.2":
+"is-reference@npm:^1.2.1":
   version: 1.2.1
   resolution: "is-reference@npm:1.2.1"
   dependencies:
@@ -9163,12 +9170,12 @@ fsevents@^1.2.7:
   linkType: hard
 
 "js-tokens@condition:BABEL_8_BREAKING ? ^6.0.0 : ^4.0.0":
-  version: 0.0.0-condition-bceac3
-  resolution: "js-tokens@condition:BABEL_8_BREAKING?^6.0.0:^4.0.0#bceac3"
+  version: 0.0.0-condition-dcdb35
+  resolution: "js-tokens@condition:BABEL_8_BREAKING?^6.0.0:^4.0.0#dcdb35"
   dependencies:
     js-tokens-BABEL_8_BREAKING-false: "npm:js-tokens@^4.0.0"
     js-tokens-BABEL_8_BREAKING-true: "npm:js-tokens@^6.0.0"
-  checksum: 036166b3ba76e31549eeb404d986ff5b1af55f91137bbcc6d5147b1e4c8d4c74f01d9aae10cf5d5221e60f3bcef98e7460bbf2a54a9e7b47d3b63789b11297e3
+  checksum: 7d9c1ac51c367b4308071caf2d4ef7c5f5b100e5cfe14afb795b1f6fdcc05e014f2d7039b659f1e2b0615433e1474752209276ce66ae1b530179ddf81df88b2e
   languageName: node
   linkType: hard
 
@@ -9249,12 +9256,12 @@ fsevents@^1.2.7:
   linkType: hard
 
 "jsesc@condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1":
-  version: 0.0.0-condition-31d9b4
-  resolution: "jsesc@condition:BABEL_8_BREAKING?^3.0.2:^2.5.1#31d9b4"
+  version: 0.0.0-condition-bf5234
+  resolution: "jsesc@condition:BABEL_8_BREAKING?^3.0.2:^2.5.1#bf5234"
   dependencies:
     jsesc-BABEL_8_BREAKING-false: "npm:jsesc@^2.5.1"
     jsesc-BABEL_8_BREAKING-true: "npm:jsesc@^3.0.2"
-  checksum: d6751e397e85958087fffcb6fbe5892902d2455e98ff0d69b69d0b15103892465d60aa0d750199a5d45cca75bbd89c4854b80ef4cbb98b229e3e9fa4e567d968
+  checksum: c8afcacf75ac3982ed7085291eae4d16d5fcf58040e1ee84554cc571aac07a0fb5fe7debf636c53bfe9f50e1ba51f1f3387860d758af8772ba51e20ae0057018
   languageName: node
   linkType: hard
 
@@ -9714,7 +9721,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.25.2, magic-string@npm:^0.25.3, magic-string@npm:^0.25.5, magic-string@npm:^0.25.7":
+"magic-string@npm:^0.25.3, magic-string@npm:^0.25.5, magic-string@npm:^0.25.7":
   version: 0.25.7
   resolution: "magic-string@npm:0.25.7"
   dependencies:
@@ -11588,7 +11595,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.11.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1":
+"resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1":
   version: 1.19.0
   resolution: "resolve@npm:1.19.0"
   dependencies:
@@ -11598,7 +11605,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.4#builtin<compat/resolve>, resolve@patch:resolve@^1.1.6#builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.0#builtin<compat/resolve>, resolve@patch:resolve@^1.13.1#builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>, resolve@patch:resolve@^1.4.0#builtin<compat/resolve>, resolve@patch:resolve@^1.8.1#builtin<compat/resolve>":
+"resolve@patch:resolve@^1.1.4#builtin<compat/resolve>, resolve@patch:resolve@^1.1.6#builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.13.1#builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>, resolve@patch:resolve@^1.4.0#builtin<compat/resolve>, resolve@patch:resolve@^1.8.1#builtin<compat/resolve>":
   version: 1.19.0
   resolution: "resolve@patch:resolve@npm%3A1.19.0#builtin<compat/resolve>::version=1.19.0&hash=3388aa"
   dependencies:
@@ -12031,12 +12038,12 @@ fsevents@^1.2.7:
   linkType: hard
 
 "slash@condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0":
-  version: 0.0.0-condition-4a957f
-  resolution: "slash@condition:BABEL_8_BREAKING?^3.0.0:^2.0.0#4a957f"
+  version: 0.0.0-condition-8fb1fb
+  resolution: "slash@condition:BABEL_8_BREAKING?^3.0.0:^2.0.0#8fb1fb"
   dependencies:
     slash-BABEL_8_BREAKING-false: "npm:slash@^2.0.0"
     slash-BABEL_8_BREAKING-true: "npm:slash@^3.0.0"
-  checksum: df1ee51af836baef3cc87639133ae7271078fc0b8761b86d9753a26dcbbf35de305e1050b898e31abf5c4d5dafa94fc3e5b38b06250f0c193b9af0b4dcfb4cd7
+  checksum: 9defd9f4a0ac58d7e3b5de662dee97a0c693efdf61116cf7d3db9cff45ce86b5bfbd8461c5c77049e502bed16e8c6387720cf98af0e87a873dc57c21d2e1cac7
   languageName: node
   linkType: hard
 

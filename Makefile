@@ -179,7 +179,7 @@ clone-license:
 
 prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production STRIP_BABEL_8_FLAG=true $(MAKE) build-bundle
-	$(MAKE) prepublish-build-standalone clone-license prepublish-prepare-dts
+	STRIP_BABEL_8_FLAG=true $(MAKE) prepublish-build-standalone clone-license prepublish-prepare-dts
 
 prepublish-prepare-dts:
 	$(MAKE) clean-tsconfig
