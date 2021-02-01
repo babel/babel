@@ -5,26 +5,27 @@
 // Error messages are colocated with the plugin.
 /* eslint-disable @babel/development-internal/dry-error-messages */
 
-import type Parser from "../parser";
-import { types as tt, type TokenType } from "../tokenizer/types";
-import * as N from "../types";
-import type { Options } from "../options";
-import type { Pos, Position } from "../util/location";
-import type State from "../tokenizer/state";
-import { types as tc } from "../tokenizer/context";
+import type Parser from "../../parser";
+import { types as tt, type TokenType } from "../../tokenizer/types";
+import * as N from "../../types";
+import type { Pos, Position } from "../../util/location";
+import type State from "../../tokenizer/state";
+import { types as tc } from "../../tokenizer/context";
 import * as charCodes from "charcodes";
-import { isIteratorStart, isKeyword } from "../util/identifier";
+import { isIteratorStart, isKeyword } from "../../util/identifier";
+import FlowScopeHandler from "./scope";
 import {
   type BindingTypes,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
+  BIND_FLOW_DECLARE_FN,
   SCOPE_ARROW,
   SCOPE_FUNCTION,
   SCOPE_OTHER,
-} from "../util/scopeflags";
-import type { ExpressionErrors } from "../parser/util";
-import { Errors } from "../parser/error";
+} from "../../util/scopeflags";
+import type { ExpressionErrors } from "../../parser/util";
+import { Errors } from "../../parser/error";
 
 const reservedTypes = new Set([
   "_",
@@ -185,11 +186,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // The value of the @flow/@noflow pragma. Initially undefined, transitions
     // to "@flow" or "@noflow" if we see a pragma. Transitions to null if we are
     // past the initial comment.
-    flowPragma: void | null | "flow" | "noflow";
+    flowPragma: void | null | "flow" | "noflow" = undefined;
 
-    constructor(options: ?Options, input: string) {
-      super(options, input);
-      this.flowPragma = undefined;
+    getScopeHandler(): Class<FlowScopeHandler> {
+      return FlowScopeHandler;
     }
 
     shouldParseTypes(): boolean {
@@ -326,6 +326,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.resetEndLocation(id);
       this.semicolon();
+
+      this.scope.declareName(node.id.name, BIND_FLOW_DECLARE_FN, node.id.start);
 
       return this.finishNode(node, "DeclareFunction");
     }
