@@ -97,7 +97,13 @@ export default declare((api, options) => {
 
         const calleePath = skipTransparentExprWrappers(path.get("callee"));
 
-        if (calleePath.isSuper()) return;
+        if (calleePath.isSuper()) {
+          // NOTE: spread and classes have almost the same compat data, so this is very unlikely to happen in practice.
+          throw path.buildCodeFrameError(
+            "It's not possible to compile spread arguments in `super()` without compiling classes.\n" +
+              "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
+          );
+        }
 
         let contextLiteral = scope.buildUndefinedNode();
 
