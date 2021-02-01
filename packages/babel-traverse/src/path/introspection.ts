@@ -385,11 +385,11 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
-  const targetIsArrowExpressionDeclaration =
-    target.isArrowFunctionExpression() &&
-    t.isVariableDeclarator(target.container);
+  const targetIsGenericFunctionExpression =
+    (target.isArrowFunctionExpression() || target.isFunctionExpression()) &&
+    t.isVariableDeclarator(target.parent);
   if (
-    (!target.isFunctionDeclaration() && !targetIsArrowExpressionDeclaration) ||
+    (!target.isFunctionDeclaration() && !targetIsGenericFunctionExpression) ||
     target.parentPath.isExportDeclaration()
   ) {
     return "unknown";
@@ -399,9 +399,9 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   // then we can be a bit smarter and handle cases where the function is either
   // a. not called at all (part of an export)
   // b. called directly
-  const bindingName = targetIsArrowExpressionDeclaration
-    ? target.container.id.name
-    : target.node.id.name;
+  const bindingName = targetIsGenericFunctionExpression
+    ? target.parent["id"]["name"]
+    : target.node["id"]["name"];
   const binding = target.scope.getBinding(bindingName);
 
   // no references!

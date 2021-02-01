@@ -7,8 +7,12 @@ const b = () => {
   for (const key of keys) {}
 }
 
-const c = () => {
-  const d = () => {
+const c = function () {
+  for (const key of keys) {}
+}
+
+const d = () => {
+  const e = () => {
     for (const key of keys) {}
   }
 }

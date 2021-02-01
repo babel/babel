@@ -12,10 +12,16 @@ const b = () => {
   }
 };
 
-const c = () => {
-  const d = () => {
-    for (var _i3 = 0, _keys3 = keys; _i3 < _keys3.length; _i3++) {
-      const key = _keys3[_i3];
+const c = function () {
+  for (var _i3 = 0, _keys3 = keys; _i3 < _keys3.length; _i3++) {
+    const key = _keys3[_i3];
+  }
+};
+
+const d = () => {
+  const e = () => {
+    for (var _i4 = 0, _keys4 = keys; _i4 < _keys4.length; _i4++) {
+      const key = _keys4[_i4];
     }
   };
 };
