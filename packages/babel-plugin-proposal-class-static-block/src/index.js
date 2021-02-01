@@ -30,30 +30,28 @@ export default declare(({ types: t, template, assertVersion }) => {
         const { scope } = path;
         const classBody = path.get("body");
         const privateNames = new Set();
-        let staticBlockPath;
-        for (const path of classBody.get("body")) {
+        const body = classBody.get("body");
+        for (const path of body) {
           if (path.isPrivate()) {
             privateNames.add(path.get("key.id").node.name);
-          } else if (path.isStaticBlock()) {
-            staticBlockPath = path;
           }
         }
-        if (!staticBlockPath) {
-          return;
+        for (const path of body) {
+          if (!path.isStaticBlock()) continue;
+          const staticBlockPrivateId = generateUid(scope, privateNames);
+          privateNames.add(staticBlockPrivateId);
+          const staticBlockRef = t.privateName(
+            t.identifier(staticBlockPrivateId),
+          );
+          path.replaceWith(
+            t.classPrivateProperty(
+              staticBlockRef,
+              template.expression.ast`(() => { ${path.node.body} })()`,
+              [],
+              /* static */ true,
+            ),
+          );
         }
-        const staticBlockRef = t.privateName(
-          t.identifier(generateUid(scope, privateNames)),
-        );
-        classBody.pushContainer(
-          "body",
-          t.classPrivateProperty(
-            staticBlockRef,
-            template.expression.ast`(() => { ${staticBlockPath.node.body} })()`,
-            [],
-            /* static */ true,
-          ),
-        );
-        staticBlockPath.remove();
       },
     },
   };

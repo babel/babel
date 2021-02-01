@@ -1,7 +1,7 @@
 class Foo {
+  static bar = 42;
   static {
     this.foo = Foo.bar;
   }
-  static bar = 42;
 }
 expect(Foo.foo).toBe(42);
