@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
+  "errors": [
+    "SyntaxError: Missing semicolon (1:19)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
+        "expression": {
+          "type": "FunctionExpression",
+          "start":1,"end":24,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":24}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":12,"end":24,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":24}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":14,"end":19,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":19}},
+                "expression": {
+                  "type": "Identifier",
+                  "start":14,"end":19,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":19},"identifierName":"yield"},
+                  "name": "yield"
+                }
+              },
+              {
+                "type": "ExpressionStatement",
+                "start":20,"end":22,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":22}},
+                "expression": {
+                  "type": "NumericLiteral",
+                  "start":20,"end":21,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":21}},
+                  "extra": {
+                    "rawValue": 3,
+                    "raw": "3"
+                  },
+                  "value": 3
+                }
+              }
+            ],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

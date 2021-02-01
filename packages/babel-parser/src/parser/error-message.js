@@ -99,6 +99,7 @@ export const ErrorMessages = Object.freeze({
   MissingClassName: "A class name is required",
   MissingEqInAssignment:
     "Only '=' operator can be used for specifying default value.",
+  MissingSemicolon: "Missing semicolon",
   MissingUnicodeEscape: "Expecting Unicode escape sequence \\uXXXX",
   MixingCoalesceWithLogical:
     "Nullish coalescing operator(??) requires parens when mixing with logical operators",
