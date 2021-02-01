@@ -33,9 +33,7 @@ var MyClass = /*#__PURE__*/function () {
 
   babelHelpers.createClass(MyClass, [{
     key: "whatever",
-    get: function () {}
-  }, {
-    key: "whatever",
+    get: function () {},
     set: function (value) {}
   }, {
     key: _computed,
@@ -47,8 +45,8 @@ var MyClass = /*#__PURE__*/function () {
     key: _ref2,
     value: function () {}
   }], [{
-    key: 10,
-    value: function () {}
+    key: "10",
+    value: function _() {}
   }]);
   return MyClass;
 }();
