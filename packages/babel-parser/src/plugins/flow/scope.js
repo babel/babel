@@ -31,7 +31,7 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
   }
 
   isRedeclaredInScope(
-    scope: IScope,
+    scope: FlowScope,
     name: string,
     bindingType: BindingTypes,
   ): boolean {
