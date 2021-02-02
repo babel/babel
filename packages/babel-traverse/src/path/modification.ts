@@ -95,7 +95,10 @@ export function _containerInsertAfter(this: NodePath, nodes) {
  * expression, ensure that the completion record is correct by pushing the current node.
  */
 
-export function insertAfter(this: NodePath, nodes_: t.Node | t.Node[]) {
+export function insertAfter(
+  this: NodePath,
+  nodes_: t.Node | t.Node[],
+): NodePath[] {
   this._assertUnremoved();
 
   const nodes = this._verifyNodeList(nodes_);
@@ -127,6 +130,17 @@ export function insertAfter(this: NodePath, nodes_: t.Node | t.Node[]) {
     if (this.node) {
       const node = this.node as t.Expression | t.VariableDeclaration;
       let { scope } = this;
+
+      if (scope.path.isPattern()) {
+        t.assertExpression(node);
+
+        this.replaceWith(
+          t.callExpression(t.arrowFunctionExpression([], node), []),
+        );
+        (this.get("callee.body") as NodePath).insertAfter(nodes);
+        return [this];
+      }
+
       // Inserting after the computed key of a method should insert the
       // temporary binding in the method's parent's scope.
       if (parentPath.isMethod({ computed: true, key: node })) {
