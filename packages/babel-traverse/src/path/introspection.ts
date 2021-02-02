@@ -401,7 +401,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   // a. not called at all (part of an export)
   // b. called directly
   const bindingName = targetIsGenericFunctionExpression
-    ? (target.parent as t.VariableDeclarator).id.name
+    ? ((target.parent as t.VariableDeclarator).id as t.Identifier).name
     : (target.node as t.FunctionDeclaration).id.name;
   const binding = target.scope.getBinding(bindingName);
 
