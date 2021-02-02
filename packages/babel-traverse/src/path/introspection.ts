@@ -387,7 +387,8 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
 ): RelativeExecutionStatus {
   const targetIsGenericFunctionExpression =
     (target.isArrowFunctionExpression() || target.isFunctionExpression()) &&
-    t.isVariableDeclarator(target.parent);
+    t.isVariableDeclarator(target.parent) &&
+    t.isIdentifier(target.parent.id);
   if (
     (!target.isFunctionDeclaration() && !targetIsGenericFunctionExpression) ||
     target.parentPath.isExportDeclaration()
@@ -400,8 +401,8 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   // a. not called at all (part of an export)
   // b. called directly
   const bindingName = targetIsGenericFunctionExpression
-    ? target.parent["id"]["name"]
-    : target.node["id"]["name"];
+    ? (target.parent as t.VariableDeclarator).id.name
+    : (target.node as t.FunctionDeclaration).id.name;
   const binding = target.scope.getBinding(bindingName);
 
   // no references!
