@@ -15,7 +15,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^7.10.4",
-    "@babel/helper-define-map": "workspace:^7.10.4",
     "@babel/helper-function-name": "workspace:^7.10.4",
     "@babel/helper-optimise-call-expression": "workspace:^7.10.4",
     "@babel/helper-plugin-utils": "workspace:^7.10.4",

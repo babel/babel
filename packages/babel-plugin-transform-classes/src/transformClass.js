@@ -4,7 +4,6 @@ import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
@@ -49,8 +48,6 @@ export default function transformClass(
     userConstructorPath: undefined,
     hasConstructor: false,
 
-    instancePropBody: [],
-    instancePropRefs: {},
     staticPropBody: [],
     body: [],
     superThises: [],
@@ -59,10 +56,21 @@ export default function transformClass(
     protoAlias: null,
     isLoose: false,
 
-    hasInstanceDescriptors: false,
-    hasStaticDescriptors: false,
-    instanceMutatorMap: {},
-    staticMutatorMap: {},
+    methods: {
+      // 'list' is in the same order as the elements appear in the class body.
+      // if there aren't computed keys, we can safely reorder class elements
+      // and use 'map' to merge duplicates.
+      instance: {
+        hasComputed: false,
+        list: [],
+        map: new Map(),
+      },
+      static: {
+        hasComputed: false,
+        list: [],
+        map: new Map(),
+      },
+    },
   };
 
   const setState = newState => {
@@ -77,25 +85,6 @@ export default function transformClass(
       },
     },
   ]);
-
-  function pushToMap(node, enumerable, kind = "value", scope?) {
-    let mutatorMap;
-    if (node.static) {
-      setState({ hasStaticDescriptors: true });
-      mutatorMap = classState.staticMutatorMap;
-    } else {
-      setState({ hasInstanceDescriptors: true });
-      mutatorMap = classState.instanceMutatorMap;
-    }
-
-    const map = defineMap.push(mutatorMap, node, kind, classState.file, scope);
-
-    if (enumerable) {
-      map.enumerable = t.booleanLiteral(true);
-    }
-
-    return map;
-  }
 
   /**
    * Creates a class constructor or bail out if there is none
@@ -202,47 +191,42 @@ export default function transformClass(
     }
   }
 
-  function clearDescriptors() {
-    setState({
-      hasInstanceDescriptors: false,
-      hasStaticDescriptors: false,
-      instanceMutatorMap: {},
-      staticMutatorMap: {},
-    });
-  }
-
   function pushDescriptors() {
     pushInheritsToBody();
 
     const { body } = classState;
 
-    let instanceProps;
-    let staticProps;
+    const props = {
+      instance: null,
+      static: null,
+    };
 
-    if (classState.hasInstanceDescriptors) {
-      instanceProps = defineMap.toClassObject(classState.instanceMutatorMap);
+    for (const placement of ["static", "instance"]) {
+      if (classState.methods[placement].list.length) {
+        props[placement] = classState.methods[placement].list.map(desc => {
+          const obj = t.objectExpression([
+            t.objectProperty(t.identifier("key"), desc.key),
+          ]);
+
+          for (const kind of ["get", "set", "value"]) {
+            if (desc[kind] != null) {
+              obj.properties.push(
+                t.objectProperty(t.identifier(kind), desc[kind]),
+              );
+            }
+          }
+
+          return obj;
+        });
+      }
     }
 
-    if (classState.hasStaticDescriptors) {
-      staticProps = defineMap.toClassObject(classState.staticMutatorMap);
-    }
-
-    if (instanceProps || staticProps) {
-      if (instanceProps) {
-        instanceProps = defineMap.toComputedObjectFromClass(instanceProps);
-      }
-      if (staticProps) {
-        staticProps = defineMap.toComputedObjectFromClass(staticProps);
-      }
-
+    if (props.instance || props.static) {
       let args = [
         t.cloneNode(classState.classRef), // Constructor
-        t.nullLiteral(), // instanceDescriptors
-        t.nullLiteral(), // staticDescriptors
+        props.instance ? t.arrayExpression(props.instance) : t.nullLiteral(), // instanceDescriptors
+        props.static ? t.arrayExpression(props.static) : t.nullLiteral(), // staticDescriptors
       ];
-
-      if (instanceProps) args[1] = instanceProps;
-      if (staticProps) args[2] = staticProps;
 
       let lastNonNullIndex = 0;
       for (let i = 0; i < args.length; i++) {
@@ -256,8 +240,6 @@ export default function transformClass(
         ),
       );
     }
-
-    clearDescriptors();
   }
 
   function wrapSuperCall(bareSuper, superRef, thisRef, body) {
@@ -428,7 +410,45 @@ export default function transformClass(
       if (processMethod(node, scope)) return;
     }
 
-    pushToMap(node, false, null, scope);
+    const placement = node.static ? "static" : "instance";
+    const methods = classState.methods[placement];
+
+    const descKey = node.kind === "method" ? "value" : node.kind;
+    const key =
+      t.isNumericLiteral(node.key) || t.isBigIntLiteral(node.key)
+        ? t.stringLiteral(String(node.key.value))
+        : t.toComputedKey(node);
+
+    let fn = t.toExpression(node);
+
+    if (t.isStringLiteral(key)) {
+      // infer function name
+      if (node.kind === "method") {
+        fn = nameFunction({ id: key, node: node, scope });
+      }
+    } else {
+      methods.hasComputed = true;
+    }
+
+    let descriptor;
+    if (!methods.hasComputed && methods.map.has(key.value)) {
+      descriptor = methods.map.get(key.value);
+      descriptor[descKey] = fn;
+
+      if (descKey === "value") {
+        descriptor.get = null;
+        descriptor.set = null;
+      } else {
+        descriptor.value = null;
+      }
+    } else {
+      descriptor = { key: key, [descKey]: fn };
+      methods.list.push(descriptor);
+
+      if (!methods.hasComputed) {
+        methods.map.set(key.value, descriptor);
+      }
+    }
   }
 
   function processMethod(node, scope) {
