@@ -393,5 +393,29 @@ describe("@babel/template", function () {
         });
       });
     });
+
+    it("works in var declaration", () => {
+      const output = template("var %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"var x = 7;"`);
+    });
+
+    it("works in const declaration", () => {
+      const output = template("const %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"const x = 7;"`);
+    });
+
+    it("works in let declaration", () => {
+      const output = template("let %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"let x = 7;"`);
+    });
   });
 });

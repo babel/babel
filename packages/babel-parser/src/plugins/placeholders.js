@@ -150,6 +150,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      * parser/statement.js                                          *
      * ============================================================ */
 
+    isLet(context: ?string): boolean {
+      if (super.isLet(context)) {
+        return true;
+      }
+
+      // Replicate the original checks that lead to looking ahead for an
+      // identifier.
+      if (!this.isContextual("let")) {
+        return false;
+      }
+      if (context) return false;
+
+      // Accept "let %%" as the start of "let %%placeholder%%", as though the
+      // placeholder were an identifier.
+      const nextToken = this.lookahead();
+      if (nextToken.type === tt.placeholder) {
+        return true;
+      }
+
+      return false;
+    }
+
     verifyBreakContinue(node: N.BreakStatement | N.ContinueStatement) {
       if (node.label && node.label.type === "Placeholder") return;
       super.verifyBreakContinue(...arguments);
