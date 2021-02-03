@@ -2085,8 +2085,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.isAbstractClass()) {
         const cls = this.startNode();
         this.next(); // Skip "abstract"
-        this.parseClass(cls, true, true);
         cls.abstract = true;
+        this.parseClass(cls, true, true);
         return cls;
       }
 
