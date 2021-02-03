@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-test-runner",
-  "version": "7.10.4",
+  "version": "7.12.13",
   "description": "Helper function to support test runner",
   "repository": {
     "type": "git",
@@ -14,6 +14,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-transform-fixture-test-runner": "workspace:^7.10.4"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^7.12.13"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-partial-application",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "Allow parsing of partial application syntax",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

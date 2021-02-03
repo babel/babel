@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-partial-application",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "Introduces a new ? token in an argument list which allows for partially applying an argument list to a call expression",
   "repository": {
     "type": "git",
@@ -17,8 +17,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.4",
-    "@babel/plugin-syntax-partial-application": "workspace:^7.12.1"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13",
+    "@babel/plugin-syntax-partial-application": "workspace:^7.12.13"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

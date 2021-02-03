@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-get-function-arity",
-  "version": "7.12.10",
+  "version": "7.12.13",
   "description": "Helper function to get function arity",
   "repository": {
     "type": "git",
@@ -14,6 +14,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.12.10"
+    "@babel/types": "workspace:^7.12.13"
   }
 }

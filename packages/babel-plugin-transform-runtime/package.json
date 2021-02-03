@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.12.10",
+  "version": "7.12.13",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -20,8 +20,8 @@
     "./src/get-runtime-path/index.js": "./src/get-runtime-path/browser.js"
   },
   "dependencies": {
-    "@babel/helper-module-imports": "workspace:^7.12.5",
-    "@babel/helper-plugin-utils": "workspace:^7.10.4",
+    "@babel/helper-module-imports": "workspace:^7.12.13",
+    "@babel/helper-plugin-utils": "workspace:^7.12.13",
     "semver": "^5.5.1"
   },
   "peerDependencies": {

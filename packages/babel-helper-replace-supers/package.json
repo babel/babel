@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-replace-supers",
-  "version": "7.12.11",
+  "version": "7.12.13",
   "description": "Helper function to replace supers",
   "repository": {
     "type": "git",
@@ -14,9 +14,9 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-member-expression-to-functions": "workspace:^7.12.7",
-    "@babel/helper-optimise-call-expression": "workspace:^7.12.10",
-    "@babel/traverse": "workspace:^7.12.10",
-    "@babel/types": "workspace:^7.12.11"
+    "@babel/helper-member-expression-to-functions": "workspace:^7.12.13",
+    "@babel/helper-optimise-call-expression": "workspace:^7.12.13",
+    "@babel/traverse": "workspace:^7.12.13",
+    "@babel/types": "workspace:^7.12.13"
   }
 }

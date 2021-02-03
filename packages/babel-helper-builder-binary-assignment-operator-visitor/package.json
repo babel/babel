@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-binary-assignment-operator-visitor",
-  "version": "7.10.4",
+  "version": "7.12.13",
   "description": "Helper function to build binary assignment operator visitors",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-explode-assignable-expression": "workspace:^7.10.4",
-    "@babel/types": "workspace:^7.10.4"
+    "@babel/helper-explode-assignable-expression": "workspace:^7.12.13",
+    "@babel/types": "workspace:^7.12.13"
   }
 }

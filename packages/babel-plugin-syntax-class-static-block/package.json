@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-class-static-block",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "Allow parsing of class static blocks",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.1"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

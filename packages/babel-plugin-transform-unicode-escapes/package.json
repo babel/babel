@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-unicode-escapes",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "Compile ES2015 Unicode escapes to ES5",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
