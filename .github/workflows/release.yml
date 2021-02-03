@@ -48,7 +48,7 @@ jobs:
     name: Git tag and commit
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == "workflow_dispatch"
+    if: github.event_name == 'workflow_dispatch'
     environment: npm
     steps:
       - uses: actions/checkout@v2
