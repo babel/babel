@@ -86,8 +86,6 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 #### :house: Internal
 * `babel-traverse`, `babel-types`
   * [#12296](https://github.com/babel/babel/pull/12296) Use native ESM for dev scripts ([@karansapolia](https://github.com/karansapolia))
-* `babel-plugin-proposal-dynamic-import`, `babel-plugin-transform-modules-systemjs`
-  * [#12700](https://github.com/babel/babel/pull/12700) Require @babel/plugin-proposal-dynamic-import when transforming import() to SystemJS ([@JLHwung](https://github.com/JLHwung))
 * `babel-register`
   * [#12674](https://github.com/babel/babel/pull/12674) babel-register run default register with global module cache ([@overlookmotel](https://github.com/overlookmotel))
 * Other
