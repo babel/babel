@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^7.12.13",
+    "@babel/helper-validator-option": "workspace:^7.12.11",
     "@babel/plugin-transform-flow-strip-types": "workspace:^7.12.13"
   },
   "peerDependencies": {

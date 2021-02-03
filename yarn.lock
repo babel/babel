@@ -3169,6 +3169,7 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.12.13"
+    "@babel/helper-validator-option": "workspace:^7.12.11"
     "@babel/plugin-transform-flow-strip-types": "workspace:^7.12.13"
   peerDependencies:
     "@babel/core": ^7.0.0-0
