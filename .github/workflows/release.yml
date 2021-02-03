@@ -16,11 +16,10 @@ jobs:
       - name: This release will publish the following packages
         run: git diff --name-only HEAD^..HEAD
 
-  npm-release:
-    name: Publish release on npm
+  build:
+    name: Build and Test
     runs-on: ubuntu-latest
     needs: log-updates
-    environment: npm
     steps:
       - name: Checkout the new tag
         uses: actions/checkout@v2
@@ -28,6 +27,26 @@ jobs:
           fetch-depth: 0
       - name: Build and Test
         run: make prepublish
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-artifact
+          path: |
+            codemods/*/lib/**/*
+            eslint/*/lib/**/*
+            packages/*/lib/**/*
+            packages/babel-standalone/*.js
+            !**/node_modules/**
+
+  npm-release:
+    name: Publish release on npm
+    runs-on: ubuntu-latest
+    needs: build
+    environment: npm
+      - name: Checkout the new tag
+        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
       - name: Publish to npm
         run: yarn release-tool publish --yes
         env:
