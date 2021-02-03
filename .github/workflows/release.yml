@@ -3,6 +3,16 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        # This input isn't actually used as an input, but it's a reminder that
+        # this workflow can only automatically push patch versions.
+        # This is because often minor versions require human intervention, so
+        # it's safer if we force ourselves to always create them locally.
+        description: ⚠️ This workflow can only automatically release patch versions
+        required: true
+        default: patch
 
 jobs:
   log-updates:
@@ -21,10 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: log-updates
     steps:
-      - name: Checkout the new tag
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v2
       - name: Build and Test
         run: make prepublish
       - uses: actions/upload-artifact@v2
@@ -37,13 +44,39 @@ jobs:
             packages/babel-standalone/*.js
             !**/node_modules/**
 
+  git-version:
+    name: Git tag and commit
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == "workflow_dispatch"
+    environment: npm
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set @babel-bot as committer
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+      - name: Create new version
+        run: yarn release-tool version -f @babel/standalone --yes
+      - name: Output new tag
+        run: |
+          tag=$(git describe --abbrev=0)
+          echo $tag
+          echo "::set-output name=tag::$tag"
+      - name: Push to GitHub
+        run: |
+          git push "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" main --follow-tags
+
   npm-release:
     name: Publish release on npm
     runs-on: ubuntu-latest
-    needs: build
+    needs: [git-version, build]
     environment: npm
+    steps:
       - name: Checkout the new tag
         uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.git-version.outputs.tag }}
       - uses: actions/download-artifact@v2
         with:
           name: build-artifact
