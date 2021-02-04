@@ -16,10 +16,10 @@ export default function normalizeOptions(options = {}) {
     v.validateTopLevelOptions(options, TopLevelOptions);
     all = v.validateBooleanOption(TopLevelOptions.all, options.all);
     return { all };
+  } else {
+    return {
+      all,
+      allowDeclareFields,
+    };
   }
-
-  return {
-    all,
-    allowDeclareFields,
-  };
 }
