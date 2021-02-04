@@ -353,7 +353,7 @@ function pluginPackageJsonMacro({ types: t }) {
           try {
             pkg = fs.readFileSync(pathUtils.join(dir, "package.json"), "utf8");
             break;
-          } catch {}
+          } catch (_) {}
 
           const prev = dir;
           dir = pathUtils.resolve(dir, "..");
