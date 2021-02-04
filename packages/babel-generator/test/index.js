@@ -700,6 +700,30 @@ describe("programmatic generation", function () {
       expect(output).toBe("export default (class {});");
     });
   });
+
+  describe("jsescOption.minimal", () => {
+    const string = t.stringLiteral("\u8868\u683C_\u526F\u672C");
+
+    it("true", () => {
+      const output = generate(string, { jsescOption: { minimal: true } }).code;
+      expect(output).toBe(`"表格_副本"`);
+    });
+
+    it("false", () => {
+      const output = generate(string, { jsescOption: { minimal: false } }).code;
+      expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
+    });
+
+    it("default", () => {
+      const output = generate(string).code;
+
+      if (process.env.BABEL_8_BREAKING) {
+        expect(output).toBe(`"表格_副本"`);
+      } else {
+        expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
+      }
+    });
+  });
 });
 
 describe("CodeGenerator", function () {
