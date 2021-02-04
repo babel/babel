@@ -935,16 +935,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       parseConstituentType: () => N.TsType,
       operator: TokenType,
     ): N.TsType {
-      this.eat(operator);
+      const leadingOperator = this.eat(operator);
+      const leadingOperatorTokStartLoc = this.state.lastTokStartLoc;
+      const leadingOperatorTokStart = this.state.lastTokStart;
       let type = parseConstituentType();
       if (this.match(operator)) {
         const types = [type];
         while (this.eat(operator)) {
           types.push(parseConstituentType());
         }
-        const node: N.TsUnionType | N.TsIntersectionType = this.startNodeAtNode(
-          type,
-        );
+        const node: N.TsUnionType | N.TsIntersectionType = leadingOperator
+          ? this.startNodeAt(
+              leadingOperatorTokStart,
+              leadingOperatorTokStartLoc,
+            )
+          : this.startNodeAtNode(type);
         node.types = types;
         type = this.finishNode(node, kind);
       }
