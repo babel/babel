@@ -1,17 +1,21 @@
-"use strict";
+import path from "path";
+import fs from "fs";
+import { createRequire } from "module";
+import helpers from "@babel/helpers";
+import babel from "@babel/core";
+import template from "@babel/template";
+import t from "@babel/types";
+import { fileURLToPath } from "url";
 
-const path = require("path");
-const fs = require("fs");
-const helpers = require("@babel/helpers");
-const babel = require("@babel/core");
-const template = require("@babel/template");
-const t = require("@babel/types");
+import transformRuntime from "../lib/index.js";
+import buildCorejs2Definitions from "../lib/runtime-corejs2-definitions.js";
+import buildCorejs3Definitions from "../lib/runtime-corejs3-definitions.js";
 
-const transformRuntime = require("../");
-
+const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
-const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default();
-const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
+
+const corejs2Definitions = buildCorejs2Definitions.default();
+const corejs3Definitions = buildCorejs3Definitions.default();
 
 function outputFile(filePath, data) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -156,7 +160,7 @@ function writeHelperFiles(runtimeName, { esm, corejs }) {
 
 function getRuntimeRoot(runtimeName) {
   return path.resolve(
-    __dirname,
+    path.dirname(fileURLToPath(import.meta.url)),
     "..",
     "..",
     runtimeName.replace(/^@babel\//, "babel-")
