@@ -66,14 +66,36 @@ function handleVariableDeclaration(
         " https://babeljs.io/docs/en/babel-plugin-transform-typescript",
     );
   }
-  for (const declarator of node.declarations) {
-    declarator.init = t.assignmentExpression(
-      "=",
-      getMemberExpression(t, name, declarator.id.name),
-      declarator.init,
-    );
+  const { declarations } = node;
+  if (declarations.every(declarator => t.isIdentifier(declarator.id))) {
+    // `export const a = 1` transforms to `const a = N.a = 1`, the output
+    // is smaller than `const a = 1; N.a = a`;
+    for (const declarator of node.declarations) {
+      declarator.init = t.assignmentExpression(
+        "=",
+        getMemberExpression(t, name, declarator.id.name),
+        declarator.init,
+      );
+    }
+    return [node];
   }
-  return [node];
+  // Now we have pattern in declarators
+  // `export const [a] = 1` transforms to `const [a] = 1; N.a = a`
+  const bindingIdentifiers = Object.values(t.getBindingIdentifiers(node));
+  return [
+    node,
+    t.expressionStatement(
+      t.sequenceExpression(
+        bindingIdentifiers.map(id =>
+          t.assignmentExpression(
+            "=",
+            getMemberExpression(t, name, id.name),
+            t.cloneNode(id),
+          ),
+        ),
+      ),
+    ),
+  ];
 }
 
 function handleNested(path, t, node, parentExport) {
