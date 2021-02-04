@@ -936,9 +936,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       operator: TokenType,
     ): N.TsType {
       const node: N.TsUnionType | N.TsIntersectionType = this.startNode();
-      this.eat(operator);
+      const leadingOperator = this.eat(operator);
       let type = parseConstituentType();
-      if (this.match(operator)) {
+      if (this.match(operator) || leadingOperator) {
         const types = [type];
         while (this.eat(operator)) {
           types.push(parseConstituentType());
