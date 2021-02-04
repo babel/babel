@@ -28,6 +28,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 #### :house: Internal
 * `babel-core`
   * [#12740](https://github.com/babel/babel/pull/12740) test: add tests on {parser,generator}Override ([@JLHwung](https://github.com/JLHwung))
+## v7.12.14 (2021-02-03)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#12748](https://github.com/babel/babel/pull/12748) fix(ts): allow abstract methods with `export default abstract class` ([@fedeci](https://github.com/fedeci))
+
+#### :house: Internal
+* `babel-core`
+  * [#12740](https://github.com/babel/babel/pull/12740) test: add tests on {parser,generator}Override ([@JLHwung](https://github.com/JLHwung))
 ## v7.12.13 (2021-02-03)
 
 #### :eyeglasses: Spec Compliance
