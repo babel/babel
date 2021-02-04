@@ -37,13 +37,6 @@ python --version
 #                                   TEST                                       #
 #==============================================================================#
 
-# Workaround for https://github.com/babel/babel/pull/12567
-node -e '
-  let snapshots = fs.readFileSync("packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap", "utf8");
-  snapshots = snapshots.replace(/(?<!^<dim>.*)\| <\/>/gm, "|<\/> ");
-  fs.writeFileSync("packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap", snapshots);
-'
-
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # This option is removed in Babel 8
   sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
