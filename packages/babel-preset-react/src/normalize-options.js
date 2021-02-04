@@ -70,32 +70,32 @@ export default function normalizeOptions(options = {}) {
       runtime,
       throwIfNamespace,
     };
+  } else {
+    let { pragma, pragmaFrag } = options;
+
+    const {
+      pure,
+      throwIfNamespace = true,
+      runtime = "classic",
+      importSource,
+    } = options;
+
+    // TODO: (Babel 8) Remove setting these defaults
+    if (runtime === "classic") {
+      pragma = pragma || "React.createElement";
+      pragmaFrag = pragmaFrag || "React.Fragment";
+    }
+
+    const development = !!options.development;
+
+    return {
+      development,
+      importSource,
+      pragma,
+      pragmaFrag,
+      pure,
+      runtime,
+      throwIfNamespace,
+    };
   }
-
-  let { pragma, pragmaFrag } = options;
-
-  const {
-    pure,
-    throwIfNamespace = true,
-    runtime = "classic",
-    importSource,
-  } = options;
-
-  // TODO: (Babel 8) Remove setting these defaults
-  if (runtime === "classic") {
-    pragma = pragma || "React.createElement";
-    pragmaFrag = pragmaFrag || "React.Fragment";
-  }
-
-  const development = !!options.development;
-
-  return {
-    development,
-    importSource,
-    pragma,
-    pragmaFrag,
-    pure,
-    runtime,
-    throwIfNamespace,
-  };
 }
