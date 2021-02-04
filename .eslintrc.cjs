@@ -97,6 +97,15 @@ module.exports = {
       },
     },
     {
+      files: ["packages/babel-plugin-transform-runtime/scripts/**/*.js"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { packageDir: "./packages/babel-plugin-transform-runtime" },
+        ],
+      },
+    },
+    {
       files: ["scripts/**/*.js"],
       rules: {
         "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
