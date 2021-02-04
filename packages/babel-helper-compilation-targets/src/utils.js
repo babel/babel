@@ -1,13 +1,12 @@
 // @flow
 import semver from "semver";
 import { OptionValidator } from "@babel/helper-validator-option";
-import { name as packageName } from "../package.json";
 import { unreleasedLabels } from "./targets";
 import type { Target, Targets } from "./types";
 
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 
-const v = new OptionValidator(packageName);
+const v = new OptionValidator(PACKAGE_JSON.name);
 
 export function semverMin(first: ?string, second: string): string {
   return first && semver.lt(first, second) ? first : second;

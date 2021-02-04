@@ -7,7 +7,6 @@ import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import { OptionValidator } from "@babel/helper-validator-option";
 import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
-import { name as packageName } from "../package.json";
 
 import type {
   BuiltInsOption,
@@ -18,7 +17,7 @@ import type {
   PluginListOption,
 } from "./types";
 
-const v = new OptionValidator(packageName);
+const v = new OptionValidator(PACKAGE_JSON.name);
 
 const allPluginsList = Object.keys(pluginsList);
 

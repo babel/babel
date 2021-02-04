@@ -9,8 +9,6 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import register from "@babel/register";
 
-import pkg from "../package.json";
-
 const program = new commander.Command("babel-node");
 
 function collect(value, previousValue): Array<string> {
@@ -61,7 +59,7 @@ program.option(
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
-program.version(pkg.version);
+program.version(PACKAGE_JSON.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 

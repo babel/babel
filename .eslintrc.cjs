@@ -44,6 +44,7 @@ module.exports = {
         "@babel/development/no-deprecated-clone": "error",
         "guard-for-in": "error",
       },
+      globals: { PACKAGE_JSON: "readonly" },
     },
     {
       files: [

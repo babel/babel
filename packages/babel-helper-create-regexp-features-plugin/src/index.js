@@ -8,7 +8,6 @@ import {
 } from "./features";
 import { generateRegexpuOptions } from "./util";
 
-import pkg from "../package.json";
 import { types as t } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
@@ -29,7 +28,9 @@ function pullFlag(node, flag: RegExpFlags): void {
 //       as 70000100005. This method is easier than using a semver-parsing
 //       package, but it breaks if we release x.y.z where x, y or z are
 //       greater than 99_999.
-const version = pkg.version.split(".").reduce((v, x) => v * 1e5 + +x, 0);
+const version = PACKAGE_JSON.version
+  .split(".")
+  .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-regexp-features/version";
 
 export function createRegExpFeaturePlugin({ name, feature, options = {} }) {

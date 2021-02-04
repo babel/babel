@@ -20,15 +20,15 @@ import {
   isLoose,
 } from "./features";
 
-import pkg from "../package.json";
-
 export { FEATURES, injectInitialization };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
 //       package, but it breaks if we release x.y.z where x, y or z are
 //       greater than 99_999.
-const version = pkg.version.split(".").reduce((v, x) => v * 1e5 + +x, 0);
+const version = PACKAGE_JSON.version
+  .split(".")
+  .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
 export function createClassFeaturePlugin({
