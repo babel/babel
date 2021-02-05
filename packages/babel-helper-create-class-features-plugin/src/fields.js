@@ -130,7 +130,7 @@ function privateNameVisitorFactory(visitor) {
 }
 
 const privateNameVisitor = privateNameVisitorFactory({
-  PrivateName(path) {
+  PrivateName(path, { noDocumentAll }) {
     const { privateNamesMap, redeclared } = this;
     const { node, parentPath } = path;
 
@@ -144,7 +144,7 @@ const privateNameVisitor = privateNameVisitorFactory({
     if (!privateNamesMap.has(name)) return;
     if (redeclared && redeclared.includes(name)) return;
 
-    this.handle(parentPath);
+    this.handle(parentPath, noDocumentAll);
   },
 });
 
@@ -378,7 +378,7 @@ export function transformPrivateNamesUsage(
   ref,
   path,
   privateNamesMap,
-  { privateFieldsAsProperties },
+  { privateFieldsAsProperties, noDocumentAll },
   state,
 ) {
   if (!privateNamesMap.size) return;
@@ -393,6 +393,7 @@ export function transformPrivateNamesUsage(
     classRef: ref,
     file: state,
     ...handler,
+    noDocumentAll,
   });
   body.traverse(privateInVisitor, {
     privateNamesMap,
