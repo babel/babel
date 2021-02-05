@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":265,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":26}},
+  "start":0,"end":301,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":17}},
   "program": {
     "type": "Program",
-    "start":0,"end":265,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":26}},
+    "start":0,"end":301,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":17}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -259,6 +259,44 @@
             {
               "type": "TSStringKeyword",
               "start":259,"end":265,"loc":{"start":{"line":9,"column":20},"end":{"line":9,"column":26}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":266,"end":283,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":17}},
+        "id": {
+          "type": "Identifier",
+          "start":271,"end":272,"loc":{"start":{"line":10,"column":5},"end":{"line":10,"column":6},"identifierName":"N"},
+          "name": "N"
+        },
+        "typeAnnotation": {
+          "type": "TSUnionType",
+          "start":275,"end":283,"loc":{"start":{"line":10,"column":9},"end":{"line":10,"column":17}},
+          "types": [
+            {
+              "type": "TSNumberKeyword",
+              "start":277,"end":283,"loc":{"start":{"line":10,"column":11},"end":{"line":10,"column":17}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":284,"end":301,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":17}},
+        "id": {
+          "type": "Identifier",
+          "start":289,"end":290,"loc":{"start":{"line":11,"column":5},"end":{"line":11,"column":6},"identifierName":"O"},
+          "name": "O"
+        },
+        "typeAnnotation": {
+          "type": "TSIntersectionType",
+          "start":293,"end":301,"loc":{"start":{"line":11,"column":9},"end":{"line":11,"column":17}},
+          "types": [
+            {
+              "type": "TSStringKeyword",
+              "start":295,"end":301,"loc":{"start":{"line":11,"column":11},"end":{"line":11,"column":17}}
             }
           ]
         }

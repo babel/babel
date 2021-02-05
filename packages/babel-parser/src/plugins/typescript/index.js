@@ -936,17 +936,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       operator: TokenType,
     ): N.TsType {
       const node: N.TsUnionType | N.TsIntersectionType = this.startNode();
-      this.eat(operator);
-      let type = parseConstituentType();
-      if (this.match(operator)) {
-        const types = [type];
-        while (this.eat(operator)) {
-          types.push(parseConstituentType());
-        }
-        node.types = types;
-        type = this.finishNode(node, kind);
+      const hasLeadingOperator = this.eat(operator);
+      const types = [];
+      do {
+        types.push(parseConstituentType());
+      } while (this.eat(operator));
+      if (types.length === 1 && !hasLeadingOperator) {
+        return types[0];
       }
-      return type;
+      node.types = types;
+      return this.finishNode(node, kind);
     }
 
     tsParseIntersectionTypeOrHigher(): N.TsType {
