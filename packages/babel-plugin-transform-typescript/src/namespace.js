@@ -130,11 +130,15 @@ function handleNested(path, t, node, parentExport) {
       case "ClassDeclaration":
         names.add(subNode.id.name);
         continue;
-      case "VariableDeclaration":
-        for (const variable of subNode.declarations) {
-          names.add(variable.id.name);
+      case "VariableDeclaration": {
+        const bindingIdentifiers = Object.values(
+          t.getBindingIdentifiers(subNode),
+        );
+        for (const id of bindingIdentifiers) {
+          names.add(id.name);
         }
         continue;
+      }
       default:
         // Neither named declaration nor export, continue to next item.
         continue;
