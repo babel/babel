@@ -1,7 +1,7 @@
-import { createElement as _createElement } from "react";
-import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime.js";
-import { Fragment as _Fragment } from "react/jsx-dev-runtime.js";
 var _jsxFileName = "<CWD>/packages/babel-plugin-transform-react-jsx-development/test/fixtures/linux/auto-import-dev/input.js";
+import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+import { createElement as _createElement } from "react";
+import { Fragment as _Fragment } from "react/jsx-dev-runtime";
 
 var x = /*#__PURE__*/_jsxDEV(_Fragment, {
   children: /*#__PURE__*/_jsxDEV("div", {
@@ -21,12 +21,12 @@ var x = /*#__PURE__*/_jsxDEV(_Fragment, {
       columnNumber: 7
     }, this), /*#__PURE__*/_createElement("div", { ...props,
       key: "4",
+      __self: this,
       __source: {
         fileName: _jsxFileName,
         lineNumber: 7,
         columnNumber: 7
-      },
-      __self: this
+      }
     })]
   }, void 0, true, {
     fileName: _jsxFileName,

@@ -6,6 +6,7 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import { types as tt, type TokenType } from "./types";
+import type { ParsingError } from "../parser/error";
 
 type TopicContextState = {
   // When a topic binding has been currently established,
@@ -37,7 +38,7 @@ export default class State {
     this.startLoc = this.endLoc = this.curPosition();
   }
 
-  errors: SyntaxError[] = [];
+  errors: ParsingError[] = [];
 
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number = -1;
@@ -57,13 +58,7 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
-  // This flag is used to track async arrow head across function declarations.
-  // e.g. async (foo = function (await) {}) => {}
-  // When parsing `await` in this expression, `maybeInAsyncArrowHead` is true
-  // but `maybeInArrowParameters` is false
-  maybeInAsyncArrowHead: boolean = false;
   inPipeline: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
@@ -71,6 +66,7 @@ export default class State {
   hasFlowComment: boolean = false;
   isIterator: boolean = false;
   isDeclareContext: boolean = false;
+  inAbstractClass: boolean = false;
 
   // For the smartPipelines plugin:
   topicContext: TopicContextState = {
@@ -93,10 +89,6 @@ export default class State {
   // Supports nesting of decorators, e.g. @foo(@bar class inner {}) class outer {}
   // where @foo belongs to the outer class and @bar to the inner
   decoratorStack: Array<Array<N.Decorator>> = [[]];
-
-  // Positions to delayed-check that yield/await does not exist in default parameters.
-  yieldPos: number = -1;
-  awaitPos: number = -1;
 
   // Comment store.
   comments: Array<N.Comment> = [];
@@ -147,10 +139,15 @@ export default class State {
   // escape sequences must not be interpreted as keywords.
   containsEsc: boolean = false;
 
-  // This property is used to throw an error for
-  // an octal literal in a directive that occurs prior
-  // to a "use strict" directive.
-  octalPositions: number[] = [];
+  // This property is used to track the following errors
+  // - StrictNumericEscape
+  // - StrictOctalLiteral
+  //
+  // in a literal that occurs prior to/immediately after a "use strict" directive.
+
+  // todo(JLHwung): set strictErrors to null and avoid recording string errors
+  // after a non-directive is parsed
+  strictErrors: Map<number, string> = new Map();
 
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.

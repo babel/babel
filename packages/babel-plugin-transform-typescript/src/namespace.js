@@ -1,4 +1,4 @@
-import { template } from "@babel/core";
+import { template, types as t } from "@babel/core";
 
 export default function transpileNamespace(path, t, allowNamespaces) {
   if (path.node.declare || path.node.id.type === "StringLiteral") {
@@ -46,6 +46,57 @@ function getMemberExpression(t, name, itemName) {
   return t.memberExpression(t.identifier(name), t.identifier(itemName));
 }
 
+/**
+ * Convert export const foo = 1 to Namepsace.foo = 1;
+ *
+ * @param {t.VariableDeclaration} node given variable declaration, e.g. `const foo = 1`
+ * @param {string} name the generated unique namespace member name
+ * @param {*} hub An instance implements HubInterface defined in `@babel/traverse` that can throw a code frame error
+ */
+function handleVariableDeclaration(
+  node: t.VariableDeclaration,
+  name: string,
+  hub: any,
+): t.Statement[] {
+  if (node.kind !== "const") {
+    throw hub.file.buildCodeFrameError(
+      node,
+      "Namespaces exporting non-const are not supported by Babel." +
+        " Change to const or see:" +
+        " https://babeljs.io/docs/en/babel-plugin-transform-typescript",
+    );
+  }
+  const { declarations } = node;
+  if (declarations.every(declarator => t.isIdentifier(declarator.id))) {
+    // `export const a = 1` transforms to `const a = N.a = 1`, the output
+    // is smaller than `const a = 1; N.a = a`;
+    for (const declarator of node.declarations) {
+      declarator.init = t.assignmentExpression(
+        "=",
+        getMemberExpression(t, name, declarator.id.name),
+        declarator.init,
+      );
+    }
+    return [node];
+  }
+  // Now we have pattern in declarators
+  // `export const [a] = 1` transforms to `const [a] = 1; N.a = a`
+  const bindingIdentifiers = t.getBindingIdentifiers(node);
+  const assignments = [];
+  // getBindingIdentifiers returns an object without prototype.
+  // eslint-disable-next-line guard-for-in
+  for (const idName in bindingIdentifiers) {
+    assignments.push(
+      t.assignmentExpression(
+        "=",
+        getMemberExpression(t, name, idName),
+        t.cloneNode(bindingIdentifiers[idName]),
+      ),
+    );
+  }
+  return [node, t.expressionStatement(t.sequenceExpression(assignments))];
+}
+
 function handleNested(path, t, node, parentExport) {
   const names = new Set();
   const realName = node.id;
@@ -78,11 +129,14 @@ function handleNested(path, t, node, parentExport) {
       case "ClassDeclaration":
         names.add(subNode.id.name);
         continue;
-      case "VariableDeclaration":
-        for (const variable of subNode.declarations) {
-          names.add(variable.id.name);
+      case "VariableDeclaration": {
+        // getBindingIdentifiers returns an object without prototype.
+        // eslint-disable-next-line guard-for-in
+        for (const name in t.getBindingIdentifiers(subNode)) {
+          names.add(name);
         }
         continue;
+      }
       default:
         // Neither named declaration nor export, continue to next item.
         continue;
@@ -111,24 +165,16 @@ function handleNested(path, t, node, parentExport) {
         );
         break;
       }
-      case "VariableDeclaration":
-        if (subNode.declaration.kind !== "const") {
-          throw path.hub.file.buildCodeFrameError(
-            subNode.declaration,
-            "Namespaces exporting non-const are not supported by Babel." +
-              " Change to const or see:" +
-              " https://babeljs.io/docs/en/babel-plugin-transform-typescript",
-          );
-        }
-        for (const variable of subNode.declaration.declarations) {
-          variable.init = t.assignmentExpression(
-            "=",
-            getMemberExpression(t, name, variable.id.name),
-            variable.init,
-          );
-        }
-        namespaceTopLevel[i] = subNode.declaration;
+      case "VariableDeclaration": {
+        const nodes = handleVariableDeclaration(
+          subNode.declaration,
+          name,
+          path.hub,
+        );
+        namespaceTopLevel.splice(i, nodes.length, ...nodes);
+        i += nodes.length - 1;
         break;
+      }
       case "TSModuleDeclaration": {
         const transformed = handleNested(
           path,

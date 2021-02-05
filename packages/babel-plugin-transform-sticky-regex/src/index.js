@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import * as regex from "@babel/helper-regex";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -11,7 +10,7 @@ export default declare(api => {
     visitor: {
       RegExpLiteral(path) {
         const { node } = path;
-        if (!regex.is(node, "y")) return;
+        if (!node.flags.includes("y")) return;
 
         path.replaceWith(
           t.newExpression(t.identifier("RegExp"), [

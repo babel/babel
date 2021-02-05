@@ -1,3 +1,0 @@
-/** @jsxRuntime classic */
-
-<Namespace.Component />;

@@ -5,17 +5,7 @@ import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Position } from "../util/location";
-import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 import { Errors } from "../parser/error";
-
-function isSimpleProperty(node: N.Node): boolean {
-  return (
-    node != null &&
-    node.type === "Property" &&
-    node.kind === "init" &&
-    node.method === false
-  );
-}
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
@@ -35,8 +25,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     estreeParseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
-      // $FlowIgnore
-      const bigInt = typeof BigInt !== "undefined" ? BigInt(value) : null;
+      let bigInt;
+      try {
+        // $FlowIgnore
+        bigInt = BigInt(value);
+      } catch {
+        bigInt = null;
+      }
       const node = this.estreeParseLiteral(bigInt);
       node.bigint = String(node.value || value);
 
@@ -66,7 +61,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         directiveLiteral.loc.start,
       );
 
-      expression.value = directiveLiteral.value;
+      expression.value = directiveLiteral.extra.expressionValue;
       expression.raw = directiveLiteral.extra.raw;
 
       stmt.expression = this.finishNodeAt(
@@ -98,7 +93,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
-      if (isSimpleProperty(node)) {
+      if (node != null && this.isObjectProperty(node)) {
         this.checkDeclaration(((node: any): N.EstreeProperty).value);
       } else {
         super.checkDeclaration(node);
@@ -108,49 +103,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
       return ((method: any): N.EstreeProperty | N.EstreeMethodDefinition).value
         .params;
-    }
-
-    checkLVal(
-      expr: N.Expression,
-      bindingType: BindingTypes = BIND_NONE,
-      checkClashes: ?{ [key: string]: boolean },
-      contextDescription: string,
-      disallowLetBinding?: boolean,
-    ): void {
-      switch (expr.type) {
-        case "ObjectPattern":
-          expr.properties.forEach(prop => {
-            this.checkLVal(
-              prop.type === "Property" ? prop.value : prop,
-              bindingType,
-              checkClashes,
-              "object destructuring pattern",
-              disallowLetBinding,
-            );
-          });
-          break;
-        default:
-          super.checkLVal(
-            expr,
-            bindingType,
-            checkClashes,
-            contextDescription,
-            disallowLetBinding,
-          );
-      }
-    }
-
-    checkProto(
-      prop: N.ObjectMember | N.SpreadElement,
-      isRecord: boolean,
-      protoRef: { used: boolean },
-      refExpressionErrors: ?ExpressionErrors,
-    ): void {
-      // $FlowIgnore: check prop.method and fallback to super method
-      if (prop.method) {
-        return;
-      }
-      super.checkProto(prop, isRecord, protoRef, refExpressionErrors);
     }
 
     isValidDirective(stmt: N.Statement): boolean {
@@ -166,20 +118,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const directive = super.stmtToDirective(stmt);
       const value = stmt.expression.value;
 
-      // Reset value to the actual value as in estree mode we want
-      // the stmt to have the real value and not the raw value
-      directive.value.value = value;
+      // Record the expression value as in estree mode we want
+      // the stmt to have the real value e.g. ("use strict") and
+      // not the raw value e.g. ("use\\x20strict")
+      this.addExtra(directive.value, "expressionValue", value);
 
       return directive;
     }
 
     parseBlockBody(
       node: N.BlockStatementLike,
-      allowDirectives: ?boolean,
-      topLevel: boolean,
-      end: TokenType,
+      ...args: [?boolean, boolean, TokenType, void | (boolean => void)]
     ): void {
-      super.parseBlockBody(node, allowDirectives, topLevel, end);
+      super.parseBlockBody(node, ...args);
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
@@ -341,23 +292,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
-    toAssignable(node: N.Node): N.Node {
-      if (isSimpleProperty(node)) {
-        this.toAssignable(node.value);
+    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
+      if (node != null && this.isObjectProperty(node)) {
+        this.toAssignable(node.value, isLHS);
 
         return node;
       }
 
-      return super.toAssignable(node);
+      return super.toAssignable(node, isLHS);
     }
 
-    toAssignableObjectExpressionProp(prop: N.Node, isLast: boolean) {
+    toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
-        throw this.raise(prop.key.start, Errors.PatternHasAccessor);
+        this.raise(prop.key.start, Errors.PatternHasAccessor);
       } else if (prop.method) {
-        throw this.raise(prop.key.start, Errors.PatternHasMethod);
+        this.raise(prop.key.start, Errors.PatternHasMethod);
       } else {
-        super.toAssignableObjectExpressionProp(prop, isLast);
+        super.toAssignableObjectExpressionProp(prop, ...args);
       }
     }
 
@@ -379,16 +330,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    toReferencedListDeep(
-      exprList: $ReadOnlyArray<?N.Expression>,
-      isParenthesizedExpr?: boolean,
-    ): void {
+    toReferencedArguments(
+      node:
+        | N.CallExpression
+        | N.OptionalCallExpression
+        | N.EstreeImportExpression,
+      /* isParenthesizedExpr?: boolean, */
+    ) {
       // ImportExpressions do not have an arguments array.
-      if (!exprList) {
+      if (node.type === "ImportExpression") {
         return;
       }
 
-      super.toReferencedListDeep(exprList, isParenthesizedExpr);
+      super.toReferencedArguments(node);
     }
 
     parseExport(node: N.Node) {
@@ -451,5 +405,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return node;
+    }
+
+    hasPropertyAsPrivateName(node: N.Node): boolean {
+      if (node.type === "ChainExpression") {
+        node = node.expression;
+      }
+      return super.hasPropertyAsPrivateName(node);
+    }
+
+    isOptionalChain(node: N.Node): boolean {
+      return node.type === "ChainExpression";
+    }
+
+    isObjectProperty(node: N.Node): boolean {
+      return node.type === "Property" && node.kind === "init" && !node.method;
+    }
+
+    isObjectMethod(node: N.Node): boolean {
+      return node.method || node.kind === "get" || node.kind === "set";
     }
   };

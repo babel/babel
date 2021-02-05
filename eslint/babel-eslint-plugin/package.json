@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "./lib/index.js",
   "type": "commonjs",
@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/",
   "peerDependencies": {
     "@babel/eslint-parser": ">=7.11.0",
     "eslint": ">=7.5.0"
@@ -41,6 +41,6 @@
   },
   "devDependencies": {
     "eslint": "^7.5.0",
-    "lodash.clonedeep": "^4.5.0"
+    "lodash": "^4.17.20"
   }
 }

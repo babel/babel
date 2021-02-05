@@ -3,7 +3,6 @@ import {
   version as babelCoreVersion,
   parseSync as babelParse,
 } from "@babel/core";
-import packageJson from "../package.json";
 import {
   normalizeBabelParseConfig,
   normalizeESLintConfig,
@@ -27,7 +26,7 @@ function baseParse(code, options) {
 
   if (!isRunningMinSupportedCoreVersion) {
     throw new Error(
-      `@babel/eslint-parser@${packageJson.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
+      `@babel/eslint-parser@${PACKAGE_JSON.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
     );
   }
 

@@ -1,9 +1,10 @@
 {
   "name": "@babel/cli",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-cli",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20cli%22+is%3Aopen",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -29,11 +30,11 @@
     "glob": "^7.0.0",
     "lodash": "^4.17.19",
     "make-dir": "^2.1.0",
-    "slash": "^2.0.0",
+    "slash": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0",
     "source-map": "^0.5.0"
   },
   "optionalDependencies": {
-    "@nicolo-ribaudo/chokidar-2": "^2.1.8",
+    "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents",
     "chokidar": "^3.4.0"
   },
   "peerDependencies": {

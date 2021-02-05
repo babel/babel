@@ -1,8 +1,11 @@
-const path = require("path");
-const fs = require("fs").promises;
-const ts = require("../../../build/typescript");
-const TestRunner = require("../utils/parser-test-runner");
-const parsingErrorCodes = require("./error-codes");
+import path from "path";
+import fs from "fs/promises";
+import { fileURLToPath } from "url";
+import ts from "../../../build/typescript/lib/typescript.js";
+import TestRunner from "../utils/parser-test-runner.js";
+import parsingErrorCodes from "./error-codes.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function* loadTests(dir) {
   const names = await fs.readdir(dir);
@@ -21,7 +24,7 @@ const plugins = [
   "dynamicImport",
 ];
 
-const TSTestsPath = path.join(__dirname, "../../../build/typescript/tests");
+const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 
 // Check if the baseline errors contain the codes that should also be thrown from babel-parser
 async function baselineContainsParserErrorCodes(testName) {
@@ -45,7 +48,7 @@ async function baselineContainsParserErrorCodes(testName) {
 
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
-  allowlist: path.join(__dirname, "allowlist.txt"),
+  allowlist: path.join(dirname, "allowlist.txt"),
   logInterval: 50,
   shouldUpdate: process.argv.includes("--update-allowlist"),
 

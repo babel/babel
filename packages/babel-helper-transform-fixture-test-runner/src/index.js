@@ -1,21 +1,22 @@
 /* eslint-env jest */
 import * as babel from "@babel/core";
 import { buildExternalHelpers } from "@babel/core";
-import getFixtures from "@babel/helper-fixtures";
+import {
+  default as getFixtures,
+  resolveOptionPluginOrPreset,
+} from "@babel/helper-fixtures";
 import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
-import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
 import merge from "lodash/merge";
-import resolve from "resolve";
 import assert from "assert";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
 import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 import QuickLRU from "quick-lru";
-
 import diff from "jest-diff";
+import escapeRegExp from "./escape-regexp";
 
 const cachedScripts = new QuickLRU({ maxSize: 10 });
 const contextModuleCache = new WeakMap();
@@ -38,7 +39,7 @@ function createContext() {
   // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
   // global creation in tests, which could cause things to bleed between tests.
   runModuleInTestContext(
-    "@babel/polyfill/dist/polyfill.min.js",
+    "regenerator-runtime",
     __filename,
     context,
     moduleCache,
@@ -107,8 +108,8 @@ function runModuleInTestContext(
   context: Context,
   moduleCache: Object,
 ) {
-  const filename = resolve.sync(id, {
-    basedir: path.dirname(relativeFilename),
+  const filename = require.resolve(id, {
+    paths: [path.dirname(relativeFilename)],
   });
 
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside
@@ -168,32 +169,6 @@ export function runCodeInTestContext(
   }
 }
 
-function wrapPackagesArray(type, names, optionsDir) {
-  return (names || []).map(function (val) {
-    if (typeof val === "string") val = [val];
-
-    // relative path (outside of monorepo)
-    if (val[0][0] === ".") {
-      if (!optionsDir) {
-        throw new Error(
-          "Please provide an options.json in test dir when using a " +
-            "relative plugin path.",
-        );
-      }
-
-      val[0] = path.resolve(optionsDir, val[0]);
-    } else {
-      const monorepoPath = __dirname + "/../../babel-" + type + "-" + val[0];
-
-      if (fs.existsSync(monorepoPath)) {
-        val[0] = monorepoPath;
-      }
-    }
-
-    return val;
-  });
-}
-
 function run(task) {
   const {
     actual,
@@ -222,24 +197,7 @@ function run(task) {
       opts,
     );
 
-    newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
-    newOpts.presets = wrapPackagesArray(
-      "preset",
-      newOpts.presets,
-      optionsDir,
-    ).map(function (val) {
-      if (val.length > 3) {
-        throw new Error(
-          "Unexpected extra options " +
-            JSON.stringify(val.slice(3)) +
-            " passed to preset.",
-        );
-      }
-
-      return val;
-    });
-
-    return newOpts;
+    return resolveOptionPluginOrPreset(newOpts, optionsDir);
   }
 
   let execCode = exec.code;
@@ -458,7 +416,13 @@ export default function (
               delete task.options.throws;
 
               assert.throws(runTask, function (err) {
-                return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
+                assert.ok(
+                  throwMsg === true || err.message.includes(throwMsg),
+                  `
+Expected Error: ${throwMsg}
+Actual Error: ${err.message}`,
+                );
+                return true;
               });
             } else {
               if (task.exec.code) {

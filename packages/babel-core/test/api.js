@@ -144,13 +144,13 @@ describe("parser and generator options", function () {
 describe("api", function () {
   it("exposes the resolvePlugin method", function () {
     expect(() => babel.resolvePlugin("nonexistent-plugin")).toThrow(
-      /Cannot find module 'babel-plugin-nonexistent-plugin'/,
+      /Cannot resolve module 'babel-plugin-nonexistent-plugin'/,
     );
   });
 
   it("exposes the resolvePreset method", function () {
     expect(() => babel.resolvePreset("nonexistent-preset")).toThrow(
-      /Cannot find module 'babel-preset-nonexistent-preset'/,
+      /Cannot resolve module 'babel-preset-nonexistent-preset'/,
     );
   });
 
@@ -167,16 +167,17 @@ describe("api", function () {
       babelrc: false,
     };
     Object.freeze(options);
-    transformFile(__dirname + "/fixtures/api/file.js", options, function (
-      err,
-      res,
-    ) {
-      if (err) return done(err);
-      expect(res.code).toBe("foo();");
-      // keep user options untouched
-      expect(options).toEqual({ babelrc: false });
-      done();
-    });
+    transformFile(
+      __dirname + "/fixtures/api/file.js",
+      options,
+      function (err, res) {
+        if (err) return done(err);
+        expect(res.code).toBe("foo();");
+        // keep user options untouched
+        expect(options).toEqual({ babelrc: false });
+        done();
+      },
+    );
   });
 
   it("transformFileSync", function () {

@@ -13,7 +13,6 @@ import {
 import { OptionValidator } from "@babel/helper-validator-option";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
-import { name as packageName } from "../package.json";
 import type { Targets, InputTargets, Browsers, TargetsTuple } from "./types";
 
 export type { Targets, InputTargets };
@@ -23,23 +22,8 @@ export { getInclusionReasons } from "./debug";
 export { default as filterItems, isRequired } from "./filter-items";
 export { unreleasedLabels } from "./targets";
 
-const v = new OptionValidator(packageName);
+const v = new OptionValidator(PACKAGE_JSON.name);
 const browserslistDefaults = browserslist.defaults;
-
-const validBrowserslistTargets = [
-  ...Object.keys(browserslist.data),
-  ...Object.keys(browserslist.aliases),
-];
-
-function objectToBrowserslist(object: Targets): Array<string> {
-  return Object.keys(object).reduce((list, targetName) => {
-    if (validBrowserslistTargets.indexOf(targetName) >= 0) {
-      const targetVersion = object[targetName];
-      return list.concat(`${targetName} ${targetVersion}`);
-    }
-    return list;
-  }, []);
-}
 
 function validateTargetNames(targets: Targets): TargetsTuple {
   const validTargets = Object.keys(TargetNames);
@@ -118,17 +102,14 @@ function outputDecimalWarning(
     return;
   }
 
-  console.log("Warning, the following targets are using a decimal version:");
-  console.log("");
+  console.warn("Warning, the following targets are using a decimal version:\n");
   decimalTargets.forEach(({ target, value }) =>
-    console.log(`  ${target}: ${value}`),
+    console.warn(`  ${target}: ${value}`),
   );
-  console.log("");
-  console.log(
-    "We recommend using a string for minor/patch versions to avoid numbers like 6.10",
-  );
-  console.log("getting parsed as 6.1, which can lead to unexpected behavior.");
-  console.log("");
+  console.warn(`
+We recommend using a string for minor/patch versions to avoid numbers like 6.10
+getting parsed as 6.1, which can lead to unexpected behavior.
+`);
 }
 
 function semverifyTarget(target, value) {
@@ -203,7 +184,7 @@ export default function getTargets(
     // of `defaults` in queries will be different since we don't want to break
     // the behavior of "no targets is the same as preset-latest".
     if (!hasTargets) {
-      browserslist.defaults = objectToBrowserslist(targets);
+      browserslist.defaults = [];
     }
 
     const browsers = browserslist(browsersquery, {

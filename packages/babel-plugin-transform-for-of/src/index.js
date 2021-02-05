@@ -227,7 +227,9 @@ export default declare((api, options) => {
           container[0] = t.labeledStatement(parent.label, container[0]);
 
           path.parentPath.replaceWithMultiple(nodes);
-          path.remove();
+
+          // The parent has been replaced, prevent Babel from traversing a detatched path
+          path.skip();
         } else {
           path.replaceWithMultiple(nodes);
         }

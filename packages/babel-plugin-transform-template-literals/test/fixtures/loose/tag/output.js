@@ -1,35 +1,7 @@
-function _templateObject3() {
-  const data = _taggedTemplateLiteralLoose(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);
-
-  _templateObject3 = function () {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject2() {
-  const data = _taggedTemplateLiteralLoose(["wow\nab", " ", ""], ["wow\\nab", " ", ""]);
-
-  _templateObject2 = function () {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject() {
-  const data = _taggedTemplateLiteralLoose(["wow\na", "b ", ""], ["wow\\na", "b ", ""]);
-
-  _templateObject = function () {
-    return data;
-  };
-
-  return data;
-}
+var _templateObject, _templateObject2, _templateObject3;
 
 function _taggedTemplateLiteralLoose(strings, raw) { if (!raw) { raw = strings.slice(0); } strings.raw = raw; return strings; }
 
-var foo = bar(_templateObject(), 42, _.foobar());
-var bar = bar(_templateObject2(), 42, _.foobar());
-var bar = bar(_templateObject3(), 42, _.baz());
+var foo = bar(_templateObject || (_templateObject = _taggedTemplateLiteralLoose(["wow\na", "b ", ""], ["wow\\na", "b ", ""])), 42, _.foobar());
+var bar = bar(_templateObject2 || (_templateObject2 = _taggedTemplateLiteralLoose(["wow\nab", " ", ""], ["wow\\nab", " ", ""])), 42, _.foobar());
+var bar = bar(_templateObject3 || (_templateObject3 = _taggedTemplateLiteralLoose(["wow\naB", " ", ""], ["wow\\naB", " ", ""])), 42, _.baz());

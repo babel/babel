@@ -1,9 +1,10 @@
 "use strict";
 
-const path = require("path");
+const pathUtils = require("path");
+const fs = require("fs");
 
 function normalize(src) {
-  return src.replace(/\//, path.sep);
+  return src.replace(/\//, pathUtils.sep);
 }
 
 module.exports = function (api) {
@@ -14,15 +15,14 @@ module.exports = function (api) {
   const envOptsNoTargets = {
     loose: true,
     shippedProposals: true,
+    modules: false,
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
-
-  const compileDynamicImport =
-    env === "test" || env === "development" || env === "test-legacy";
 
   let convertESM = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
+  let needsPolyfillsForOldNode = false;
 
   let transformRuntimeOptions;
 
@@ -50,11 +50,12 @@ module.exports = function (api) {
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
-        "**/node_modules",
+        "/**/node_modules",
         "packages/babel-preset-env/data",
         "packages/babel-compat-data"
       );
       if (env === "rollup") envOpts.targets = { node: nodeVersion };
+      needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     case "production":
@@ -62,6 +63,7 @@ module.exports = function (api) {
       envOpts.targets = {
         node: nodeVersion,
       };
+      needsPolyfillsForOldNode = true;
       break;
     case "development":
       envOpts.debug = true;
@@ -74,6 +76,11 @@ module.exports = function (api) {
         node: "current",
       };
       break;
+  }
+
+  if (process.env.STRIP_BABEL_8_FLAG && bool(process.env.BABEL_8_BREAKING)) {
+    // Never apply polyfills when compiling for Babel 8
+    needsPolyfillsForOldNode = false;
   }
 
   if (includeRegeneratorRuntime) {
@@ -102,22 +109,30 @@ module.exports = function (api) {
     ]
       .filter(Boolean)
       .map(normalize),
-    presets: [["@babel/env", envOpts]],
-    plugins: [
-      // TODO: Use @babel/preset-flow when
-      // https://github.com/babel/babel/issues/7233 is fixed
+    presets: [
       [
-        "@babel/plugin-transform-flow-strip-types",
-        { allowDeclareFields: true },
+        "@babel/preset-typescript",
+        { onlyRemoveTypeImports: true, allowDeclareFields: true },
       ],
+      ["@babel/env", envOpts],
+      ["@babel/preset-flow", { allowDeclareFields: true }],
+    ],
+    plugins: [
       [
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
       ],
-      compileDynamicImport ? dynamicImportUrlToPath : null,
-      compileDynamicImport ? "@babel/plugin-proposal-dynamic-import" : null,
 
+      convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
+
+      pluginPackageJsonMacro,
+
+      process.env.STRIP_BABEL_8_FLAG && [
+        pluginToggleBabel8Breaking,
+        { breaking: bool(process.env.BABEL_8_BREAKING) },
+      ],
+      needsPolyfillsForOldNode && pluginPolyfillsOldNode,
     ].filter(Boolean),
     overrides: [
       {
@@ -163,44 +178,193 @@ module.exports = function (api) {
   return config;
 };
 
-// !!! WARNING !!! Hacks are coming
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return value && value !== "false" && value !== "0";
+}
 
-// import() uses file:// URLs for absolute imports, while require() uses
-// file paths.
-// Since this isn't handled by @babel/plugin-transform-modules-commonjs,
-// we must handle it here.
-// However, fileURLToPath is only supported starting from Node.js 10.
-// In older versions, we can remove the pathToFileURL call so that it keeps
-// the original absolute path.
-// NOTE: This plugin must run before @babel/plugin-transform-modules-commonjs,
-// and assumes that the target is the current node version.
-function dynamicImportUrlToPath({ template, env }) {
-  const currentNodeSupportsURL =
-    !!require("url").pathToFileURL && env() !== "test-legacy"; // test-legacy is run on legacy node versions without pathToFileURL support
-  if (currentNodeSupportsURL) {
-    return {
-      visitor: {
-        CallExpression(path) {
-          if (path.get("callee").isImport()) {
-            path.get("arguments.0").replaceWith(
-              template.expression.ast`
-              require("url").fileURLToPath(${path.node.arguments[0]})
-            `
+// TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
+/** @param {import("@babel/core")} api */
+function pluginPolyfillsOldNode({ template, types: t }) {
+  const polyfills = [
+    {
+      name: "require.resolve",
+      necessary({ node, parent }) {
+        return (
+          t.isCallExpression(parent, { callee: node }) &&
+          parent.arguments.length > 1
+        );
+      },
+      supported({ parent: { arguments: args } }) {
+        return (
+          t.isObjectExpression(args[1]) &&
+          args[1].properties.length === 1 &&
+          t.isIdentifier(args[1].properties[0].key, { name: "paths" }) &&
+          t.isArrayExpression(args[1].properties[0].value) &&
+          args[1].properties[0].value.elements.length === 1
+        );
+      },
+      // require.resolve's paths option has been introduced in Node.js 8.9
+      // https://nodejs.org/api/modules.html#modules_require_resolve_request_options
+      replacement: template({ syntacticPlaceholders: true })`
+        parseFloat(process.versions.node) >= 8.9
+          ? require.resolve
+          : (/* request */ r, { paths: [/* base */ b] }, M = require("module")) => {
+              let /* filename */ f = M._findPath(r, M._nodeModulePaths(b).concat(b));
+              if (f) return f;
+              f = new Error(\`Cannot resolve module '\${r}'\`);
+              f.code = "MODULE_NOT_FOUND";
+              throw f;
+            }
+      `,
+    },
+    {
+      // NOTE: This polyfills depends on the "make-dir" library. Any package
+      // using fs.mkdirSync must have "make-dir" as a dependency.
+      name: "fs.mkdirSync",
+      necessary({ node, parent }) {
+        return (
+          t.isCallExpression(parent, { callee: node }) &&
+          parent.arguments.length > 1
+        );
+      },
+      supported({ parent: { arguments: args } }) {
+        return (
+          t.isObjectExpression(args[1]) &&
+          args[1].properties.length === 1 &&
+          t.isIdentifier(args[1].properties[0].key, { name: "recursive" }) &&
+          t.isBooleanLiteral(args[1].properties[0].value, { value: true })
+        );
+      },
+      // fs.mkdirSync's recursive option has been introduced in Node.js 10.12
+      // https://nodejs.org/api/fs.html#fs_fs_mkdirsync_path_options
+      replacement: template`
+        parseFloat(process.versions.node) >= 10.12
+          ? fs.mkdirSync
+          : require("make-dir").sync
+      `,
+    },
+    {
+      // NOTE: This polyfills depends on the "node-environment-flags"
+      // library. Any package using process.allowedNodeEnvironmentFlags
+      // must have "node-environment-flags" as a dependency.
+      name: "process.allowedNodeEnvironmentFlags",
+      necessary({ parent, node }) {
+        // To avoid infinite replacement loops
+        return !t.isLogicalExpression(parent, { operator: "||", left: node });
+      },
+      supported: () => true,
+      // process.allowedNodeEnvironmentFlags has been introduced in Node.js 10.10
+      // https://nodejs.org/api/process.html#process_process_allowednodeenvironmentflags
+      replacement: template`
+        process.allowedNodeEnvironmentFlags || require("node-environment-flags")
+      `,
+    },
+  ];
+
+  return {
+    visitor: {
+      MemberExpression(path) {
+        for (const polyfill of polyfills) {
+          if (!path.matchesPattern(polyfill.name)) continue;
+
+          if (!polyfill.necessary(path)) return;
+          if (!polyfill.supported(path)) {
+            throw path.buildCodeFrameError(
+              `This '${polyfill.name}' usage is not supported by the inline polyfill.`
             );
           }
-        },
+
+          path.replaceWith(polyfill.replacement());
+
+          break;
+        }
       },
-    };
-  } else {
-    // TODO: Remove in Babel 8 (it's not needed when using Node 10)
-    return {
-      visitor: {
-        CallExpression(path) {
-          if (path.get("callee").isIdentifier({ name: "pathToFileURL" })) {
-            path.replaceWith(path.get("arguments.0"));
-          }
-        },
+    },
+  };
+}
+
+function pluginToggleBabel8Breaking({ types: t }, { breaking }) {
+  return {
+    visitor: {
+      "IfStatement|ConditionalExpression"(path) {
+        let test = path.get("test");
+        let keepConsequent = breaking;
+
+        if (test.isUnaryExpression({ operator: "!" })) {
+          test = test.get("argument");
+          keepConsequent = !keepConsequent;
+        }
+
+        // yarn-plugin-conditions inject bool(process.env.BABEL_8_BREAKING)
+        // tests, to properly cast the env variable to a boolean.
+        if (
+          test.isCallExpression() &&
+          test.get("callee").isIdentifier({ name: "bool" }) &&
+          test.get("arguments").length === 1
+        ) {
+          test = test.get("arguments")[0];
+        }
+
+        if (!test.matchesPattern("process.env.BABEL_8_BREAKING")) return;
+
+        path.replaceWith(
+          keepConsequent
+            ? path.node.consequent
+            : path.node.alternate || t.emptyStatement()
+        );
       },
-    };
-  }
+      MemberExpression(path) {
+        if (path.matchesPattern("process.env.BABEL_8_BREAKING")) {
+          throw path.buildCodeFrameError("This check could not be stripped.");
+        }
+      },
+    },
+  };
+}
+
+function pluginPackageJsonMacro({ types: t }) {
+  const fnName = "PACKAGE_JSON";
+
+  return {
+    visitor: {
+      ReferencedIdentifier(path) {
+        if (path.isIdentifier({ name: fnName })) {
+          throw path.buildCodeFrameError(
+            `"${fnName}" is only supported in member expressions.`
+          );
+        }
+      },
+      MemberExpression(path) {
+        if (!path.get("object").isIdentifier({ name: fnName })) return;
+
+        if (path.node.computed) {
+          throw path.buildCodeFrameError(
+            `"${fnName}" does not support computed properties.`
+          );
+        }
+        const field = path.node.property.name;
+
+        // TODO: When dropping old Node.js versions, use require.resolve
+        // instead of looping through the folders hierarchy
+
+        let pkg;
+        for (let dir = pathUtils.dirname(this.filename); ; ) {
+          try {
+            pkg = fs.readFileSync(pathUtils.join(dir, "package.json"), "utf8");
+            break;
+          } catch (_) {}
+
+          const prev = dir;
+          dir = pathUtils.resolve(dir, "..");
+
+          // We are in the root and didn't find a package.json file
+          if (dir === prev) return;
+        }
+
+        const value = JSON.parse(pkg)[field];
+        path.replaceWith(t.valueToNode(value));
+      },
+    },
+  };
 }

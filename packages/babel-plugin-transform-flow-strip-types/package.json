@@ -1,12 +1,13 @@
 {
   "name": "@babel/plugin-transform-flow-strip-types",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "Strip flow type annotations from your output code.",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-flow-strip-types"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-flow-strip-types",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -16,8 +17,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.4",
-    "@babel/plugin-syntax-flow": "workspace:^7.12.1"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13",
+    "@babel/plugin-syntax-flow": "workspace:^7.12.13"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

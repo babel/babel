@@ -16,8 +16,6 @@
 *.cache
 /build
 /.eslintcache
-/browser.js
-/browser-polyfill.js
 /runtime.js
 coverage
 dist
@@ -70,3 +68,6 @@ packages/babel-standalone/babel.min.js
 /eslint/*/LICENSE
 !/packages/babel-eslint-plugin/LICENSE
 /.vscode
+
+tsconfig.json
+tsconfig.tsbuildinfo

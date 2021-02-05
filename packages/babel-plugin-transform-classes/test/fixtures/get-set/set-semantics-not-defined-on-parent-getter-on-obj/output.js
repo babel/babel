@@ -44,13 +44,13 @@ let Obj = /*#__PURE__*/function (_Base) {
   }
 
   _createClass(Obj, [{
+    key: "test",
+    get: function () {}
+  }, {
     key: "set",
     value: function set() {
       return _set(_getPrototypeOf(Obj.prototype), "test", 3, this, true);
     }
-  }, {
-    key: "test",
-    get: function () {}
   }]);
 
   return Obj;

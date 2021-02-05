@@ -1,1 +1,1 @@
-import "core-js/modules/web.immediate";
+import "core-js/modules/web.immediate.js";

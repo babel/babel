@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated! Do not modify it directly.
- * To re-generate run 'make build'
+ * To re-generate run 'yarn gulp generate-standalone'
  */
 import externalHelpers from "@babel/plugin-external-helpers";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
@@ -95,7 +95,6 @@ import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformTypescript from "@babel/plugin-transform-typescript";
 import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
-
 export {
   externalHelpers,
   syntaxAsyncGenerators,
@@ -191,7 +190,6 @@ export {
   transformUnicodeEscapes,
   transformUnicodeRegex,
 };
-
 export const all = {
   "external-helpers": externalHelpers,
   "syntax-async-generators": syntaxAsyncGenerators,

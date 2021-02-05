@@ -338,6 +338,18 @@ const loopVisitor = {
   },
 };
 
+function isStrict(path) {
+  return !!path.find(({ node }) => {
+    if (t.isProgram(node)) {
+      if (node.sourceType === "module") return true;
+    } else if (!t.isBlockStatement(node)) return false;
+
+    return node.directives.some(
+      directive => directive.value.value === "use strict",
+    );
+  });
+}
+
 class BlockScoping {
   constructor(
     loopPath?: NodePath,
@@ -481,10 +493,21 @@ class BlockScoping {
 
       // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
-        // The same identifier might have been bound separately in the block scope and
-        // the enclosing scope (e.g. loop or catch statement), so we should handle both
-        // individually
-        if (scope.hasOwnBinding(key)) {
+        const binding = scope.getOwnBinding(key);
+        if (binding) {
+          const parentBinding = scope.parent.getOwnBinding(key);
+          if (
+            binding.kind === "hoisted" &&
+            !binding.path.node.async &&
+            !binding.path.node.generator &&
+            (!parentBinding || isVar(parentBinding.path.parent)) &&
+            !isStrict(binding.path.parentPath)
+          ) {
+            continue;
+          }
+          // The same identifier might have been bound separately in the block scope and
+          // the enclosing scope (e.g. loop or catch statement), so we should handle both
+          // individually
           scope.rename(ref.name);
         }
 

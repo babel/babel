@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs2",
-  "version": "7.12.1",
+  "version": "7.12.13",
   "description": "babel's modular runtime helpers with core-js@2 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -11,6 +11,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-runtime-corejs2"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-runtime-corejs2",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
     "core-js": "^2.6.5",
@@ -59,6 +60,7 @@
     "./helpers/taggedTemplateLiteral": "./helpers/taggedTemplateLiteral.js",
     "./helpers/taggedTemplateLiteralLoose": "./helpers/taggedTemplateLiteralLoose.js",
     "./helpers/readOnlyError": "./helpers/readOnlyError.js",
+    "./helpers/writeOnlyError": "./helpers/writeOnlyError.js",
     "./helpers/classNameTDZError": "./helpers/classNameTDZError.js",
     "./helpers/temporalUndefined": "./helpers/temporalUndefined.js",
     "./helpers/tdz": "./helpers/tdz.js",
@@ -139,6 +141,7 @@
     "./helpers/esm/taggedTemplateLiteral": "./helpers/esm/taggedTemplateLiteral.js",
     "./helpers/esm/taggedTemplateLiteralLoose": "./helpers/esm/taggedTemplateLiteralLoose.js",
     "./helpers/esm/readOnlyError": "./helpers/esm/readOnlyError.js",
+    "./helpers/esm/writeOnlyError": "./helpers/esm/writeOnlyError.js",
     "./helpers/esm/classNameTDZError": "./helpers/esm/classNameTDZError.js",
     "./helpers/esm/temporalUndefined": "./helpers/esm/temporalUndefined.js",
     "./helpers/esm/tdz": "./helpers/esm/tdz.js",

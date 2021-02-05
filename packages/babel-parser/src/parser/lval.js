@@ -1,5 +1,6 @@
 // @flow
 
+/*:: declare var invariant; */
 import * as charCodes from "charcodes";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import type {
@@ -24,7 +25,7 @@ import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { Errors } from "./error";
 
-const unwrapParenthesizedExpression = (node: Node) => {
+const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
     ? unwrapParenthesizedExpression(node.expression)
     : node;
@@ -51,19 +52,45 @@ export default class LValParser extends NodeUtils {
   +parseDecorator: () => Decorator;
   */
 
-  // Convert existing expression atom to assignable pattern
-  // if possible.
-  // NOTE: There is a corresponding "isAssignable" method in flow.js.
-  // When this one is updated, please check if also that one needs to be updated.
+  /**
+   * Convert existing expression atom to assignable pattern
+   * if possible. Also checks invalid destructuring targets:
 
-  toAssignable(node: Node): Node {
+   - Parenthesized Destructuring patterns
+   - RestElement is not the last element
+   - Missing `=` in assignment pattern
+
+   NOTE: There is a corresponding "isAssignable" method in flow.js.
+   When this one is updated, please check if also that one needs to be updated.
+
+   * @param {Node} node The expression atom
+   * @param {boolean} [isLHS=false] Whether we are parsing a LeftHandSideExpression. If isLHS is `true`, the following cases are allowed:
+                                    `[(a)] = [0]`, `[(a.b)] = [0]`
+
+   * @returns {Node} The converted assignable pattern
+   * @memberof LValParser
+   */
+  toAssignable(node: Node, isLHS: boolean = false): Node {
     let parenthesized = undefined;
     if (node.type === "ParenthesizedExpression" || node.extra?.parenthesized) {
       parenthesized = unwrapParenthesizedExpression(node);
-      if (
-        parenthesized.type !== "Identifier" &&
-        parenthesized.type !== "MemberExpression"
-      ) {
+      if (isLHS) {
+        // an LHS can be reinterpreted to a binding pattern but not vice versa.
+        // therefore a parenthesized identifier is ambiguous until we are sure it is an assignment expression
+        // i.e. `([(a) = []] = []) => {}`
+        // see also `recordParenthesizedIdentifierError` signature in packages/babel-parser/src/util/expression-scope.js
+        if (parenthesized.type === "Identifier") {
+          this.expressionScope.recordParenthesizedIdentifierError(
+            node.start,
+            Errors.InvalidParenthesizedAssignment,
+          );
+        } else if (parenthesized.type !== "MemberExpression") {
+          // A parenthesized member expression can be in LHS but not in pattern.
+          // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
+          // i.e. `([(a.b) = []] = []) => {}`
+          this.raise(node.start, Errors.InvalidParenthesizedAssignment);
+        }
+      } else {
         this.raise(node.start, Errors.InvalidParenthesizedAssignment);
       }
     }
@@ -84,7 +111,7 @@ export default class LValParser extends NodeUtils {
         ) {
           const prop = node.properties[i];
           const isLast = i === last;
-          this.toAssignableObjectExpressionProp(prop, isLast);
+          this.toAssignableObjectExpressionProp(prop, isLast, isLHS);
 
           if (
             isLast &&
@@ -97,7 +124,7 @@ export default class LValParser extends NodeUtils {
         break;
 
       case "ObjectProperty":
-        this.toAssignable(node.value);
+        this.toAssignable(node.value, isLHS);
         break;
 
       case "SpreadElement": {
@@ -105,13 +132,13 @@ export default class LValParser extends NodeUtils {
 
         node.type = "RestElement";
         const arg = node.argument;
-        this.toAssignable(arg);
+        this.toAssignable(arg, isLHS);
         break;
       }
 
       case "ArrayExpression":
         node.type = "ArrayPattern";
-        this.toAssignableList(node.elements, node.extra?.trailingComma);
+        this.toAssignableList(node.elements, node.extra?.trailingComma, isLHS);
         break;
 
       case "AssignmentExpression":
@@ -121,11 +148,12 @@ export default class LValParser extends NodeUtils {
 
         node.type = "AssignmentPattern";
         delete node.operator;
-        this.toAssignable(node.left);
+        this.toAssignable(node.left, isLHS);
         break;
 
       case "ParenthesizedExpression":
-        this.toAssignable(((parenthesized: any): Expression));
+        /*::invariant (parenthesized !== undefined) */
+        this.toAssignable(parenthesized, isLHS);
         break;
 
       default:
@@ -135,7 +163,11 @@ export default class LValParser extends NodeUtils {
     return node;
   }
 
-  toAssignableObjectExpressionProp(prop: Node, isLast: boolean) {
+  toAssignableObjectExpressionProp(
+    prop: Node,
+    isLast: boolean,
+    isLHS: boolean,
+  ) {
     if (prop.type === "ObjectMethod") {
       const error =
         prop.kind === "get" || prop.kind === "set"
@@ -148,7 +180,7 @@ export default class LValParser extends NodeUtils {
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
-      this.toAssignable(prop);
+      this.toAssignable(prop, isLHS);
     }
   }
 
@@ -157,6 +189,7 @@ export default class LValParser extends NodeUtils {
   toAssignableList(
     exprList: Expression[],
     trailingCommaPos?: ?number,
+    isLHS: boolean,
   ): $ReadOnlyArray<Pattern> {
     let end = exprList.length;
     if (end) {
@@ -165,8 +198,9 @@ export default class LValParser extends NodeUtils {
         --end;
       } else if (last?.type === "SpreadElement") {
         last.type = "RestElement";
-        const arg = last.argument;
-        this.toAssignable(arg);
+        let arg = last.argument;
+        this.toAssignable(arg, isLHS);
+        arg = unwrapParenthesizedExpression(arg);
         if (
           arg.type !== "Identifier" &&
           arg.type !== "MemberExpression" &&
@@ -186,7 +220,7 @@ export default class LValParser extends NodeUtils {
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
       if (elt) {
-        this.toAssignable(elt);
+        this.toAssignable(elt, isLHS);
         if (elt.type === "RestElement") {
           this.raiseRestNotLast(elt.start);
         }
@@ -342,64 +376,66 @@ export default class LValParser extends NodeUtils {
     return this.finishNode(node, "AssignmentPattern");
   }
 
-  // Verify that a node is an lval — something that can be assigned
-  // to.
-
+  /**
+   * Verify that if a node is an lval - something that can be assigned to.
+   *
+   * @param {Expression} expr The given node
+   * @param {string} contextDescription The auxiliary context information printed when error is thrown
+   * @param {BindingTypes} [bindingType=BIND_NONE] The desired binding type. If the given node is an identifier and `bindingType` is not
+                                                   BIND_NONE, `checkLVal` will register binding to the parser scope
+                                                   See also src/util/scopeflags.js
+   * @param {?Set<string>} checkClashes An optional string set to check if an identifier name is included. `checkLVal` will add checked
+                                        identifier name to `checkClashes` It is used in tracking duplicates in function parameter lists. If
+                                        it is nullish, `checkLVal` will skip duplicate checks
+   * @param {boolean} [disallowLetBinding] Whether an identifier named "let" should be disallowed
+   * @param {boolean} [strictModeChanged=false] Whether an identifier has been parsed in a sloppy context but should be reinterpreted as
+                                                strict-mode. e.g. `(arguments) => { "use strict "}`
+   * @memberof LValParser
+   */
   checkLVal(
     expr: Expression,
-    bindingType: BindingTypes = BIND_NONE,
-    checkClashes: ?{ [key: string]: boolean },
     contextDescription: string,
+    bindingType: BindingTypes = BIND_NONE,
+    checkClashes: ?Set<string>,
     disallowLetBinding?: boolean,
     strictModeChanged?: boolean = false,
   ): void {
     switch (expr.type) {
-      case "Identifier":
+      case "Identifier": {
+        const { name } = expr;
         if (
           this.state.strict &&
           // "Global" reserved words have already been checked by parseIdentifier,
           // unless they have been found in the id or parameters of a strict-mode
           // function in a sloppy context.
           (strictModeChanged
-            ? isStrictBindReservedWord(expr.name, this.inModule)
-            : isStrictBindOnlyReservedWord(expr.name))
+            ? isStrictBindReservedWord(name, this.inModule)
+            : isStrictBindOnlyReservedWord(name))
         ) {
           this.raise(
             expr.start,
             bindingType === BIND_NONE
               ? Errors.StrictEvalArguments
               : Errors.StrictEvalArgumentsBinding,
-            expr.name,
+            name,
           );
         }
 
         if (checkClashes) {
-          // we need to prefix this with an underscore for the cases where we have a key of
-          // `__proto__`. there's a bug in old V8 where the following wouldn't work:
-          //
-          //   > var obj = Object.create(null);
-          //   undefined
-          //   > obj.__proto__
-          //   null
-          //   > obj.__proto__ = true;
-          //   true
-          //   > obj.__proto__
-          //   null
-          const key = `_${expr.name}`;
-
-          if (checkClashes[key]) {
+          if (checkClashes.has(name)) {
             this.raise(expr.start, Errors.ParamDupe);
           } else {
-            checkClashes[key] = true;
+            checkClashes.add(name);
           }
         }
-        if (disallowLetBinding && expr.name === "let") {
+        if (disallowLetBinding && name === "let") {
           this.raise(expr.start, Errors.LetInLexicalBinding);
         }
         if (!(bindingType & BIND_NONE)) {
-          this.scope.declareName(expr.name, bindingType, expr.start);
+          this.scope.declareName(name, bindingType, expr.start);
         }
         break;
+      }
 
       case "MemberExpression":
         if (bindingType !== BIND_NONE) {
@@ -409,17 +445,17 @@ export default class LValParser extends NodeUtils {
 
       case "ObjectPattern":
         for (let prop of expr.properties) {
-          if (prop.type === "ObjectProperty") prop = prop.value;
+          if (this.isObjectProperty(prop)) prop = prop.value;
           // If we find here an ObjectMethod, it's because this was originally
           // an ObjectExpression which has then been converted.
           // toAssignable already reported this error with a nicer message.
-          else if (prop.type === "ObjectMethod") continue;
+          else if (this.isObjectMethod(prop)) continue;
 
           this.checkLVal(
             prop,
+            "object destructuring pattern",
             bindingType,
             checkClashes,
-            "object destructuring pattern",
             disallowLetBinding,
           );
         }
@@ -430,9 +466,9 @@ export default class LValParser extends NodeUtils {
           if (elem) {
             this.checkLVal(
               elem,
+              "array destructuring pattern",
               bindingType,
               checkClashes,
-              "array destructuring pattern",
               disallowLetBinding,
             );
           }
@@ -442,27 +478,27 @@ export default class LValParser extends NodeUtils {
       case "AssignmentPattern":
         this.checkLVal(
           expr.left,
+          "assignment pattern",
           bindingType,
           checkClashes,
-          "assignment pattern",
         );
         break;
 
       case "RestElement":
         this.checkLVal(
           expr.argument,
+          "rest element",
           bindingType,
           checkClashes,
-          "rest element",
         );
         break;
 
       case "ParenthesizedExpression":
         this.checkLVal(
           expr.expression,
+          "parenthesized expression",
           bindingType,
           checkClashes,
-          "parenthesized expression",
         );
         break;
 

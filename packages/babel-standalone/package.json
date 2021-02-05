@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.12.3",
+  "version": "7.12.15",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -105,9 +105,7 @@
     "@babel/preset-env": "workspace:*",
     "@babel/preset-flow": "workspace:*",
     "@babel/preset-react": "workspace:*",
-    "@babel/preset-typescript": "workspace:*",
-    "chalk": "^4.0.0",
-    "lodash": "^4.17.20"
+    "@babel/preset-typescript": "workspace:*"
   },
   "keywords": [
     "babel",
@@ -122,9 +120,9 @@
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/babel/babel/issues"
+    "url": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20standalone%22+is%3Aopen"
   },
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-standalone",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",

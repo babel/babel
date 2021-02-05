@@ -2,7 +2,6 @@
 /build
 /.git
 package.json
-lerna.json
 packages/babel-runtime
 !packages/babel-plugin-transform-runtime/scripts
 packages/babel-runtime-corejs2

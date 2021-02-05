@@ -105,8 +105,9 @@ export default class UtilParser extends Tokenizer {
   // Consume a semicolon, or, failing that, see if we are allowed to
   // pretend that there is a semicolon at this position.
 
-  semicolon(): void {
-    if (!this.isLineTerminator()) this.unexpected(null, tt.semi);
+  semicolon(allowAsi: boolean = true): void {
+    if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
+    this.raise(this.state.lastTokEnd, Errors.MissingSemicolon);
   }
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -161,18 +162,6 @@ export default class UtilParser extends Tokenizer {
           ", ",
         )}'`,
       );
-    }
-  }
-
-  checkYieldAwaitInDefaultParams() {
-    if (
-      this.state.yieldPos !== -1 &&
-      (this.state.awaitPos === -1 || this.state.yieldPos < this.state.awaitPos)
-    ) {
-      this.raise(this.state.yieldPos, Errors.YieldBindingIdentifier);
-    }
-    if (this.state.awaitPos !== -1) {
-      this.raise(this.state.awaitPos, Errors.AwaitBindingIdentifier);
     }
   }
 
@@ -263,6 +252,51 @@ export default class UtilParser extends Tokenizer {
       this.match(tt.bigint) ||
       this.match(tt.decimal)
     );
+  }
+
+  /*
+   * Test if given node is a PrivateName
+   * will be overridden in ESTree plugin
+   */
+  isPrivateName(node: Node): boolean {
+    return node.type === "PrivateName";
+  }
+
+  /*
+   * Return the string value of a given private name
+   * WITHOUT `#`
+   * @see {@link https://tc39.es/proposal-class-fields/#sec-private-names-static-semantics-stringvalue}
+   */
+  getPrivateNameSV(node: Node): string {
+    return node.id.name;
+  }
+
+  /*
+   * Return whether the given node is a member/optional chain that
+   * contains a private name as its property
+   * It is overridden in ESTree plugin
+   */
+  hasPropertyAsPrivateName(node: Node): boolean {
+    return (
+      (node.type === "MemberExpression" ||
+        node.type === "OptionalMemberExpression") &&
+      this.isPrivateName(node.property)
+    );
+  }
+
+  isOptionalChain(node: Node): boolean {
+    return (
+      node.type === "OptionalMemberExpression" ||
+      node.type === "OptionalCallExpression"
+    );
+  }
+
+  isObjectProperty(node: Node): boolean {
+    return node.type === "ObjectProperty";
+  }
+
+  isObjectMethod(node: Node): boolean {
+    return node.type === "ObjectMethod";
   }
 }
 

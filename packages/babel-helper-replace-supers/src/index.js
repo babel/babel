@@ -46,7 +46,7 @@ export function skipAllButComputedKey(path: NodePath) {
 // Avoid using `path.scope` here
 export const environmentVisitor = {
   // todo (Babel 8): remove StaticBlock brand checks
-  [`${t.StaticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
+  [`${t.staticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
     path: NodePath,
   ) {
     path.skip();
@@ -72,6 +72,19 @@ const visitor = traverse.visitors.merge([
       const { node, parentPath } = path;
       if (!parentPath.isMemberExpression({ object: node })) return;
       state.handle(parentPath);
+    },
+  },
+]);
+
+const unshadowSuperBindingVisitor = traverse.visitors.merge([
+  environmentVisitor,
+  {
+    Scopable(path, { refName }) {
+      // https://github.com/Zzzen/babel/pull/1#pullrequestreview-564833183
+      const binding = path.scope.getOwnBinding(refName);
+      if (binding && binding.identifier.name === refName) {
+        path.scope.rename(refName);
+      }
     },
   },
 ]);
@@ -166,6 +179,16 @@ const specHandlers = {
       false,
     );
   },
+
+  optionalCall(superMember, args) {
+    const thisRefs = this._getThisRefs();
+    return optimiseCall(
+      this._get(superMember, thisRefs),
+      t.cloneNode(thisRefs.this),
+      args,
+      true,
+    );
+  },
 };
 
 const looseHandlers = {
@@ -223,6 +246,10 @@ const looseHandlers = {
   call(superMember, args) {
     return optimiseCall(this.get(superMember), t.thisExpression(), args, false);
   },
+
+  optionalCall(superMember, args) {
+    return optimiseCall(this.get(superMember), t.thisExpression(), args, true);
+  },
 };
 
 type ReplaceSupersOptionsBase = {|
@@ -230,6 +257,9 @@ type ReplaceSupersOptionsBase = {|
   superRef: Object,
   isLoose: boolean,
   file: any,
+  // objectRef might have been shadowed in child scopes,
+  // in that case, we need to rename related variables.
+  refToPreserve?: BabelNodeIdentifier,
 |};
 
 type ReplaceSupersOptions =
@@ -258,20 +288,27 @@ export default class ReplaceSupers {
     this.opts = opts;
   }
 
-  file: HubInterface;
-  isDerivedConstructor: boolean;
-  isLoose: boolean;
-  isPrivateMethod: boolean;
-  isStatic: boolean;
-  methodPath: NodePath;
-  opts: ReplaceSupersOptions;
-  superRef: Object;
+  declare file: HubInterface;
+  declare isDerivedConstructor: boolean;
+  declare isLoose: boolean;
+  declare isPrivateMethod: boolean;
+  declare isStatic: boolean;
+  declare methodPath: NodePath;
+  declare opts: ReplaceSupersOptions;
+  declare superRef: Object;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
   }
 
   replace() {
+    // https://github.com/babel/babel/issues/11994
+    if (this.opts.refToPreserve) {
+      this.methodPath.traverse(unshadowSuperBindingVisitor, {
+        refName: this.opts.refToPreserve.name,
+      });
+    }
+
     const handler = this.isLoose ? looseHandlers : specHandlers;
 
     memberExpressionToFunctions(this.methodPath, visitor, {

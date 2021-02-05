@@ -1,0 +1,4 @@
+class A {
+  @foo
+  y;
+}

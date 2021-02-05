@@ -225,6 +225,16 @@ const privateNameHandlerSpec = {
 
     if (isMethod) {
       if (isAccessor) {
+        if (!getId && setId) {
+          if (file.availableHelper("writeOnlyError")) {
+            return t.callExpression(file.addHelper("writeOnlyError"), [
+              t.stringLiteral(`#${name}`),
+            ]);
+          }
+          console.warn(
+            `@babel/helpers is outdated, update it to silence this warning.`,
+          );
+        }
         return t.callExpression(file.addHelper("classPrivateFieldGet"), [
           this.receiver(member),
           t.cloneNode(id),
@@ -633,6 +643,7 @@ function replaceThisContext(path, ref, superRef, file, loose) {
     isLoose: loose,
     superRef,
     file,
+    refToPreserve: ref,
     getObjectRef() {
       state.needsClassRef = true;
       return path.node.static

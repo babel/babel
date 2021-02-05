@@ -37,6 +37,11 @@ python --version
 #                                   TEST                                       #
 #==============================================================================#
 
+if [ "$BABEL_8_BREAKING" = true ] ; then
+  # This option is removed in Babel 8
+  sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
+fi
+
 startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 yarn dedupe '@babel/*'

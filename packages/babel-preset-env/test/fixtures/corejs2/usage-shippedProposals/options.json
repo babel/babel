@@ -5,6 +5,7 @@
       "../../../../lib",
       {
         "shippedProposals": true,
+        "targets": { "browsers": "ie 6" },
         "useBuiltIns": "usage",
         "corejs": 2
       }

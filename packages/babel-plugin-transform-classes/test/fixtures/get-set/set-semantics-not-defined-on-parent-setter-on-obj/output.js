@@ -46,15 +46,15 @@ let Obj = /*#__PURE__*/function (_Base) {
   }
 
   _createClass(Obj, [{
-    key: "set",
-    value: function set() {
-      return _set(_getPrototypeOf(Obj.prototype), "test", 3, this, true);
-    }
-  }, {
     key: "test",
     set: function (v) {
       expect(this).toBe(obj);
       value = v;
+    }
+  }, {
+    key: "set",
+    value: function set() {
+      return _set(_getPrototypeOf(Obj.prototype), "test", 3, this, true);
     }
   }]);
 

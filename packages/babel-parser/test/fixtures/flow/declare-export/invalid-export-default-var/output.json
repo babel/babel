@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+  "errors": [
+    "SyntaxError: Missing semicolon (1:26)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareExportDeclaration",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+        "declaration": {
+          "type": "Identifier",
+          "start":23,"end":26,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":26},"identifierName":"var"},
+          "name": "var"
+        },
+        "default": true
+      },
+      {
+        "type": "LabeledStatement",
+        "start":27,"end":36,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":36}},
+        "body": {
+          "type": "ExpressionStatement",
+          "start":30,"end":36,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":36}},
+          "expression": {
+            "type": "Identifier",
+            "start":30,"end":36,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":36},"identifierName":"number"},
+            "name": "number"
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28},"identifierName":"a"},
+          "name": "a"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -351,6 +351,13 @@ describe("scope", () => {
 
       expect(path.scope.generateUid("Cls")).toBe("_Cls2");
     });
+
+    it("re-exports are not references", () => {
+      const path = getPath("export { x } from 'y'", {
+        sourceType: "module",
+      });
+      expect(path.scope.hasGlobal("x")).toBe(false);
+    });
   });
 
   describe("duplicate bindings", () => {

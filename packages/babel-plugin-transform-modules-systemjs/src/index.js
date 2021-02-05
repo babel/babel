@@ -28,6 +28,12 @@ WARNING: Dynamic import() transformation must be enabled using the
          no longer transform import() without using that plugin.
 `;
 
+const MISSING_PLUGIN_ERROR = `\
+ERROR: Dynamic import() transformation must be enabled using the
+       @babel/plugin-proposal-dynamic-import plugin. Babel 8
+       no longer transforms import() without using that plugin.
+`;
+
 //todo: use getExportSpecifierName in `helper-module-transforms` when this library is refactored to NodePath usage.
 
 export function getExportSpecifierName(
@@ -74,34 +80,36 @@ function constructExportCall(
   stringSpecifiers: Set<string>,
 ) {
   const statements = [];
-  if (exportNames.length === 1) {
-    statements.push(
-      t.expressionStatement(
-        t.callExpression(exportIdent, [
-          t.stringLiteral(exportNames[0]),
-          exportValues[0],
-        ]),
-      ),
-    );
-  } else if (!exportStarTarget) {
-    const objectProperties = [];
-    for (let i = 0; i < exportNames.length; i++) {
-      const exportName = exportNames[i];
-      const exportValue = exportValues[i];
-      objectProperties.push(
-        t.objectProperty(
-          stringSpecifiers.has(exportName)
-            ? t.stringLiteral(exportName)
-            : t.identifier(exportName),
-          exportValue,
+  if (!exportStarTarget) {
+    if (exportNames.length === 1) {
+      statements.push(
+        t.expressionStatement(
+          t.callExpression(exportIdent, [
+            t.stringLiteral(exportNames[0]),
+            exportValues[0],
+          ]),
+        ),
+      );
+    } else {
+      const objectProperties = [];
+      for (let i = 0; i < exportNames.length; i++) {
+        const exportName = exportNames[i];
+        const exportValue = exportValues[i];
+        objectProperties.push(
+          t.objectProperty(
+            stringSpecifiers.has(exportName)
+              ? t.stringLiteral(exportName)
+              : t.identifier(exportName),
+            exportValue,
+          ),
+        );
+      }
+      statements.push(
+        t.expressionStatement(
+          t.callExpression(exportIdent, [t.objectExpression(objectProperties)]),
         ),
       );
     }
-    statements.push(
-      t.expressionStatement(
-        t.callExpression(exportIdent, [t.objectExpression(objectProperties)]),
-      ),
-    );
   } else {
     const exportObj = path.scope.generateUid("exportObj");
 
@@ -224,7 +232,11 @@ export default declare((api, options) => {
       CallExpression(path, state: PluginState) {
         if (t.isImport(path.node.callee)) {
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
-            console.warn(MISSING_PLUGIN_WARNING);
+            if (process.env.BABEL_8_BREAKING) {
+              throw new Error(MISSING_PLUGIN_ERROR);
+            } else {
+              console.warn(MISSING_PLUGIN_WARNING);
+            }
           }
 
           path.replaceWith(

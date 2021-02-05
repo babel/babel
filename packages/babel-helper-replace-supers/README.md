@@ -2,7 +2,7 @@
 
 > Helper function to replace supers
 
-See our website [@babel/helper-replace-supers](https://babeljs.io/docs/en/next/babel-helper-replace-supers.html) for more information.
+See our website [@babel/helper-replace-supers](https://babeljs.io/docs/en/babel-helper-replace-supers) for more information.
 
 ## Install
 

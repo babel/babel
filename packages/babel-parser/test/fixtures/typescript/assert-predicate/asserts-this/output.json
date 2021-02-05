@@ -40,7 +40,7 @@
                 "start":15,"end":29,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":19}},
                 "typeAnnotation": {
                   "type": "TSTypePredicate",
-                  "start":15,"end":29,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":19}},
+                  "start":17,"end":29,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":19}},
                   "parameterName": {
                     "type": "TSThisType",
                     "start":25,"end":29,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":19}}

@@ -474,10 +474,12 @@ helpers.inherits = helper("7.0.0-beta.0")`
 `;
 
 helpers.inheritsLoose = helper("7.0.0-beta.0")`
+  import setPrototypeOf from "setPrototypeOf";
+
   export default function _inheritsLoose(subClass, superClass) {
     subClass.prototype = Object.create(superClass.prototype);
     subClass.prototype.constructor = subClass;
-    subClass.__proto__ = superClass;
+    setPrototypeOf(subClass, superClass);
   }
 `;
 
@@ -871,7 +873,13 @@ helpers.taggedTemplateLiteralLoose = helper("7.0.0-beta.0")`
 
 helpers.readOnlyError = helper("7.0.0-beta.0")`
   export default function _readOnlyError(name) {
-    throw new Error("\\"" + name + "\\" is read-only");
+    throw new TypeError("\\"" + name + "\\" is read-only");
+  }
+`;
+
+helpers.writeOnlyError = helper("7.12.13")`
+  export default function _writeOnlyError(name) {
+    throw new TypeError("\\"" + name + "\\" is write-only");
   }
 `;
 

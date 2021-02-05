@@ -117,7 +117,7 @@ process.on("uncaughtException", function (err) {
 export function requireChokidar(): Object {
   try {
     // todo(babel 8): revert `@nicolo-ribaudo/chokidar-2` hack
-    return parseInt(process.version) >= 8
+    return parseInt(process.versions.node) >= 8
       ? require("chokidar")
       : require("@nicolo-ribaudo/chokidar-2");
   } catch (err) {

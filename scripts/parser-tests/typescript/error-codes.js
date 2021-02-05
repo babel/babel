@@ -8,7 +8,7 @@ Note that babel-parser should not throw for the TypeChecking Diagnostics
 The commented out diagnostic codes will introduce false positive cases that should be addressed in separate PRs.
 */
 
-module.exports = [
+export default [
   // "TS1005", // '{0}' expected.
   "TS1009", // Trailing comma not allowed.
   "TS1014", // A rest parameter must be last in a parameter list.

@@ -13,10 +13,9 @@ import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
-import { isIteratorStart } from "../util/identifier";
+import { isIteratorStart, isKeyword } from "../util/identifier";
 import {
   type BindingTypes,
-  BIND_NONE,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
@@ -1796,21 +1795,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.match(tt.name) &&
         this.state.value === "interface"
       ) {
-        const node = this.startNode();
-        this.next();
-        return this.flowParseInterface(node);
+        const lookahead = this.lookahead();
+        if (lookahead.type === tt.name || isKeyword(lookahead.value)) {
+          const node = this.startNode();
+          this.next();
+          return this.flowParseInterface(node);
+        }
       } else if (this.shouldParseEnums() && this.isContextual("enum")) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
-      } else {
-        const stmt = super.parseStatement(context, topLevel);
-        // We will parse a flow pragma in any comment before the first statement.
-        if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
-          this.flowPragma = null;
-        }
-        return stmt;
       }
+      const stmt = super.parseStatement(context, topLevel);
+      // We will parse a flow pragma in any comment before the first statement.
+      if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
+        this.flowPragma = null;
+      }
+      return stmt;
     }
 
     // declares, interfaces and type aliases
@@ -2014,6 +2015,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // has not been converted yet.
         ((node.params: any): N.Expression[]),
         node.extra?.trailingComma,
+        /* isLHS */ false,
       );
       // Enter scope, as checkParams defines bindings
       this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
@@ -2251,11 +2253,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       if (node.type === "TypeCastExpression") {
-        return super.toAssignable(this.typeCastToParameter(node));
+        return super.toAssignable(this.typeCastToParameter(node), isLHS);
       } else {
-        return super.toAssignable(node);
+        return super.toAssignable(node, isLHS);
       }
     }
 
@@ -2263,6 +2265,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     toAssignableList(
       exprList: N.Expression[],
       trailingCommaPos?: ?number,
+      isLHS: boolean,
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
@@ -2270,7 +2273,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return super.toAssignableList(exprList, trailingCommaPos);
+      return super.toAssignableList(exprList, trailingCommaPos, isLHS);
     }
 
     // this is a list of nodes, from something like a call expression, we need to filter the
@@ -2294,19 +2297,45 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return exprList;
     }
 
+    parseArrayLike(
+      close: TokenType,
+      canBePattern: boolean,
+      isTuple: boolean,
+      refExpressionErrors: ?ExpressionErrors,
+    ): N.ArrayExpression | N.TupleExpression {
+      const node = super.parseArrayLike(
+        close,
+        canBePattern,
+        isTuple,
+        refExpressionErrors,
+      );
+
+      // This could be an array pattern:
+      //   ([a: string, b: string]) => {}
+      // In this case, we don't have to call toReferencedList. We will
+      // call it, if needed, when we are sure that it is a parenthesized
+      // expression by calling toReferencedListDeep.
+      if (canBePattern && !this.state.maybeInArrowParameters) {
+        this.toReferencedList(node.elements);
+      }
+
+      return node;
+    }
+
     checkLVal(
       expr: N.Expression,
-      bindingType: BindingTypes = BIND_NONE,
-      checkClashes: ?{ [key: string]: boolean },
-      contextDescription: string,
+      ...args:
+        | [string, BindingTypes | void]
+        | [
+            string,
+            BindingTypes | void,
+            ?Set<string>,
+            boolean | void,
+            boolean | void,
+          ]
     ): void {
       if (expr.type !== "TypeCastExpression") {
-        return super.checkLVal(
-          expr,
-          bindingType,
-          checkClashes,
-          contextDescription,
-        );
+        return super.checkLVal(expr, ...args);
       }
     }
 
@@ -2549,12 +2578,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           )
         : this.parseIdentifier();
 
-      this.checkLVal(
-        specifier.local,
-        BIND_LEXICAL,
-        undefined,
-        contextDescription,
-      );
+      this.checkLVal(specifier.local, contextDescription, BIND_LEXICAL);
       node.specifiers.push(this.finishNode(specifier, type));
     }
 
@@ -2593,13 +2617,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseImportSpecifier(node: N.ImportDeclaration): void {
       const specifier = this.startNode();
       const firstIdentLoc = this.state.start;
-      const firstIdent = this.parseIdentifier(true);
+      const firstIdent = this.parseModuleExportName();
 
       let specifierTypeKind = null;
-      if (firstIdent.name === "type") {
-        specifierTypeKind = "type";
-      } else if (firstIdent.name === "typeof") {
-        specifierTypeKind = "typeof";
+      if (firstIdent.type === "Identifier") {
+        if (firstIdent.name === "type") {
+          specifierTypeKind = "type";
+        } else if (firstIdent.name === "typeof") {
+          specifierTypeKind = "typeof";
+        }
       }
 
       let isBinding = false;
@@ -2634,6 +2660,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = specifier.imported.__clone();
         }
       } else {
+        if (firstIdent.type === "StringLiteral") {
+          throw this.raise(
+            specifier.start,
+            Errors.ImportBindingIsString,
+            firstIdent.value,
+          );
+        }
         isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
@@ -2667,12 +2700,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      this.checkLVal(
-        specifier.local,
-        BIND_LEXICAL,
-        undefined,
-        "import specifier",
-      );
+      this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
     }
 

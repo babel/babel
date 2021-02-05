@@ -1,0 +1,96 @@
+{
+  "type": "File",
+  "start":0,"end":95,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
+  "errors": [
+    "SyntaxError: 'await' is only allowed within async functions (5:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":95,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":95,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":95,"loc":{"start":{"line":1,"column":21},"end":{"line":8,"column":1}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":25,"end":93,"loc":{"start":{"line":2,"column":2},"end":{"line":7,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":31,"end":32,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"C"},
+                "name": "C"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":33,"end":93,"loc":{"start":{"line":2,"column":10},"end":{"line":7,"column":3}},
+                "body": [
+                  {
+                    "type": "ClassMethod",
+                    "start":39,"end":54,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":19}},
+                    "static": true,
+                    "key": {
+                      "type": "Identifier",
+                      "start":46,"end":49,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":14},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "computed": false,
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":52,"end":54,"loc":{"start":{"line":3,"column":17},"end":{"line":3,"column":19}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "StaticBlock",
+                    "start":59,"end":89,"loc":{"start":{"line":4,"column":4},"end":{"line":6,"column":5}},
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start":74,"end":83,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":15}},
+                        "expression": {
+                          "type": "AwaitExpression",
+                          "start":74,"end":82,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":14}},
+                          "argument": {
+                            "type": "NumericLiteral",
+                            "start":80,"end":82,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":14}},
+                            "extra": {
+                              "rawValue": 42,
+                              "raw": "42"
+                            },
+                            "value": 42
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

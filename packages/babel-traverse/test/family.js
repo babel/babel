@@ -1,5 +1,6 @@
 import traverse from "../lib";
 import { parse } from "@babel/parser";
+import * as t from "@babel/types";
 
 describe("path/family", function () {
   describe("getBindingIdentifiers", function () {
@@ -80,6 +81,32 @@ describe("path/family", function () {
       expect(lastSibling.getAllPrevSiblings().length).toBeTruthy();
       expect(sibling.getAllNextSiblings()).toHaveLength(2);
       expect(lastSibling.getAllPrevSiblings()).toHaveLength(2);
+    });
+
+    it("should initialize path.scope when needed", function () {
+      const ast = parse("if (0) {}");
+
+      let testHasScope = false;
+      let consequentHasScope = false;
+
+      traverse(ast, {
+        IfStatement(path) {
+          // @babel/traverse pre-traverses the whole tree to populate the initial
+          // scope. Thus, it pre-caches paths for all the original nodes.
+          // We need to introduce two new nodes to avoid using the cached paths
+          // that already have the path.scope property.
+          path.set("test", t.identifier("a"));
+          path.set("consequent", t.expressionStatement(t.identifier("b")));
+
+          const testPath = path.get("test");
+
+          testHasScope = !!testPath.scope;
+          consequentHasScope = !!testPath.getSibling("consequent").scope;
+        },
+      });
+
+      expect(testHasScope).toBe(true);
+      expect(consequentHasScope).toBe(true);
     });
   });
 });

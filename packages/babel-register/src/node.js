@@ -1,12 +1,13 @@
 import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "@babel/core";
 import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
 import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
+import Module from "module";
+import escapeRegExp from "./escape-regexp";
 
 const maps = {};
 let transformOpts = {};
@@ -82,15 +83,19 @@ function compile(code, filename) {
 }
 
 let compiling = false;
+const internalModuleCache = Module._cache;
 
 function compileHook(code, filename) {
   if (compiling) return code;
 
+  const globalModuleCache = Module._cache;
   try {
     compiling = true;
+    Module._cache = internalModuleCache;
     return compile(code, filename);
   } finally {
     compiling = false;
+    Module._cache = globalModuleCache;
   }
 }
 
@@ -102,8 +107,6 @@ function hookExtensions(exts) {
 export function revert() {
   if (piratesRevert) piratesRevert();
 }
-
-register();
 
 export default function register(opts?: Object = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
@@ -140,16 +143,19 @@ export default function register(opts?: Object = {}) {
   if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
+      // $FlowIgnore
       new RegExp("^" + escapeRegExp(cwd), "i"),
     ];
     transformOpts.ignore = [
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
+          // $FlowIgnore
           escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +
+          // $FlowIgnore
           escapeRegExp(path.sep + "node_modules" + path.sep),
         "i",
       ),

@@ -20,17 +20,19 @@ jobs:
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Update Yarn cache
+            yarn-
+      - name: Check Yarn dedupe
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        env:
-          YARN_ENABLE_SCRIPTS: false # disable post-install scripts
-          YARN_NODE_LINKER: pnp # use pnp linker for better performance: it's meant to update yarn cache only
         run: |
           yarn dedupe --check
-          yarn install --immutable
+      - name: Check or update Yarn cache
+        env:
+          YARN_ENABLE_SCRIPTS: false # disable post-install scripts
+          YARN_NODE_LINKER: pnp # use pnp linker for better linking performance: it's meant to update yarn cache only
+        run: |
+          yarn install --immutable --skip-builds
 
   test-coverage:
     name: Test on Node.js Latest
@@ -42,14 +44,14 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*"
+          node-version: "15"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
       - uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Generate coverage report
         run: |
           make -j test-ci-coverage
@@ -63,6 +65,9 @@ jobs:
     name: Build Babel Artifacts
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
+    # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
+    # env:
+    #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -76,12 +81,15 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            yarn-
       - name: Build babel artifacts
         run: |
           BABEL_ENV=test-legacy make -j build-standalone-ci
+        env:
+          BABEL_8_BREAKING: false
+          STRIP_BABEL_8_FLAG: true
       - uses: actions/upload-artifact@v2
         with:
           name: babel-artifact
@@ -89,9 +97,32 @@ jobs:
             codemods/*/lib/**/*
             eslint/*/lib/**/*
             packages/*/lib/**/*
-            packages/babel-polyfill/dist/**/*
             packages/babel-standalone/*.js
             !**/node_modules/**
+
+  lint:
+    name: Lint
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Lint
+        run: make -j tscheck flowcheck-ci lint-ci
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
@@ -99,36 +130,141 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [13, 12, 10, 8, 6]
+        node-version: [14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Node.js latest
+      - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*" # Build Babel on latest node versions
+          node-version: "*" # Build Babel on latest node LTS versions
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
       - uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install
         run: |
-          BABEL_ENV=test-legacy make -j bootstrap-only
+          yarn install
+      - name: Downgrade Jest for node <= 8
+        if: matrix.node-version == '6' || matrix.node-version == '8'
+        run: |
+          yarn remove jest
+          yarn add --dev jest@24
+          # Pin stack-utils to 1.0.2 https://github.com/tapjs/stack-utils/issues/56
+          yarn set resolution stack-utils@npm:^1.0.1 1.0.2
       - uses: actions/download-artifact@v2
         with:
           name: babel-artifact
       - name: Generate runtime helpers
         run: |
           make build-plugin-transform-runtime-dist
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }} # Checkout node version for test executor
         uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test on node.js ${{ matrix.node-version }}
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
+
+        # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
+
+  test-babel-8-breaking:
+    name: Test Babel 8 breaking changes
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12 # Node.js 12 is the first LTS supported by Babel 8
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install and build
+        run: make -j bootstrap
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          STRIP_BABEL_8_FLAG: true
+      - name: Test
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: |
+          yarn jest --ci --color
+          yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
+
+  test-windows:
+    name: Test on Windows
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
+      - name: Test on Windows
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: yarn jest --ci --color
+        env:
+          BABEL_ENV: test
+
+  external-parser-tests:
+    name: Third-party Parser Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Download tests
+        run: make -j bootstrap-flow bootstrap-typescript bootstrap-test262
+      - name: Run Test262 Tests
+        run: make test-test262
+      - name: Run Flow Tests
+        run: make test-flow
+      - name: Run TypeScript Tests
+        run: make test-typescript

@@ -102,6 +102,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [ClassPrivateMethod](#classprivatemethod)
   - [ClassProperty](#classproperty)
   - [ClassPrivateProperty](#classprivateproperty)
+  - [StaticBlock](#staticblock)
   - [ClassDeclaration](#classdeclaration)
   - [ClassExpression](#classexpression)
   - [MetaProperty](#metaproperty)
@@ -1081,7 +1082,7 @@ An expression wrapped by parentheses. By default `@babel/parser` does not create
 ```js
 interface DoExpression <: Expression {
   type: "DoExpression";
-  body: BlockStatement
+  body: BlockStatement;
 }
 ```
 
@@ -1364,6 +1365,7 @@ interface ExportNamedDeclaration <: ModuleDeclaration {
   declaration: Declaration | null;
   specifiers: [ ExportSpecifier ];
   source: StringLiteral | null;
+  assertions?: [ ImportAttribute ];
 }
 ```
 
@@ -1411,6 +1413,7 @@ An export default declaration, e.g., `export default function () {};` or `export
 interface ExportAllDeclaration <: ModuleDeclaration {
   type: "ExportAllDeclaration";
   source: StringLiteral;
+  assertions?: [ ImportAttribute ];
 }
 ```
 

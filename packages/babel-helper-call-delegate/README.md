@@ -2,7 +2,7 @@
 
 > Helper function to call delegate
 
-See our website [@babel/helper-call-delegate](https://babeljs.io/docs/en/next/babel-helper-call-delegate.html) for more information.
+See our website [@babel/helper-call-delegate](https://babeljs.io/docs/en/babel-helper-call-delegate) for more information.
 
 ## Install
 

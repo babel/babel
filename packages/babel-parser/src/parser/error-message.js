@@ -1,6 +1,10 @@
 // @flow
 /* eslint sort-keys: "error" */
 
+/**
+ * @module parser/error-message
+ */
+
 // The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
 export const ErrorMessages = Object.freeze({
   AccessorIsGenerator: "A %0ter cannot be a generator",
@@ -10,10 +14,13 @@ export const ErrorMessages = Object.freeze({
     "Async functions can only be declared at the top level or inside a block",
   AwaitBindingIdentifier:
     "Can not use 'await' as identifier inside an async function",
+  AwaitBindingIdentifierInStaticBlock:
+    "Can not use 'await' as identifier inside a static block",
   AwaitExpressionFormalParameter:
     "await is not allowed in async function parameters",
-  AwaitNotInAsyncFunction:
-    "Can not use keyword 'await' outside an async function",
+  AwaitNotInAsyncContext:
+    "'await' is only allowed within async functions and at the top levels of modules",
+  AwaitNotInAsyncFunction: "'await' is only allowed within async functions",
   BadGetterArity: "getter must not have any formal parameters",
   BadSetterArity: "setter must have exactly one formal parameter",
   BadSetterRestParameter:
@@ -46,7 +53,7 @@ export const ErrorMessages = Object.freeze({
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
   ExportBindingIsString:
-    "A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export { %0 as '%1' } from 'some-module'`?",
+    "A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export { '%0' as '%1' } from 'some-module'`?",
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:
@@ -94,6 +101,7 @@ export const ErrorMessages = Object.freeze({
   MissingClassName: "A class name is required",
   MissingEqInAssignment:
     "Only '=' operator can be used for specifying default value.",
+  MissingSemicolon: "Missing semicolon",
   MissingUnicodeEscape: "Expecting Unicode escape sequence \\uXXXX",
   MixingCoalesceWithLogical:
     "Nullish coalescing operator(??) requires parens when mixing with logical operators",
@@ -206,7 +214,7 @@ export const ErrorMessages = Object.freeze({
   VarRedeclaration: "Identifier '%0' has already been declared",
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator",
-  YieldInParameter: "yield is not allowed in generator parameters",
+  YieldInParameter: "Yield expression is not allowed in formal parameters",
   ZeroDigitNumericSeparator:
     "Numeric separator can not be used after leading 0",
 });

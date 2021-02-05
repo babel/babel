@@ -5,6 +5,9 @@
     [
       "env",
       {
+        "targets": {
+          "browsers": "ie 6"
+        },
         "debug": true,
         "shippedProposals": true,
         "useBuiltIns": "entry",
