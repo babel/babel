@@ -81,21 +81,20 @@ function handleVariableDeclaration(
   }
   // Now we have pattern in declarators
   // `export const [a] = 1` transforms to `const [a] = 1; N.a = a`
-  const bindingIdentifiers = Object.values(t.getBindingIdentifiers(node));
-  return [
-    node,
-    t.expressionStatement(
-      t.sequenceExpression(
-        bindingIdentifiers.map(id =>
-          t.assignmentExpression(
-            "=",
-            getMemberExpression(t, name, id.name),
-            t.cloneNode(id),
-          ),
-        ),
+  const bindingIdentifiers = t.getBindingIdentifiers(node);
+  const assignments = [];
+  // getBindingIdentifiers returns an object without prototype.
+  // eslint-disable-next-line guard-for-in
+  for (const idName in bindingIdentifiers) {
+    assignments.push(
+      t.assignmentExpression(
+        "=",
+        getMemberExpression(t, name, idName),
+        t.cloneNode(bindingIdentifiers[idName]),
       ),
-    ),
-  ];
+    );
+  }
+  return [node, t.expressionStatement(t.sequenceExpression(assignments))];
 }
 
 function handleNested(path, t, node, parentExport) {
@@ -131,11 +130,10 @@ function handleNested(path, t, node, parentExport) {
         names.add(subNode.id.name);
         continue;
       case "VariableDeclaration": {
-        const bindingIdentifiers = Object.values(
-          t.getBindingIdentifiers(subNode),
-        );
-        for (const id of bindingIdentifiers) {
-          names.add(id.name);
+        // getBindingIdentifiers returns an object without prototype.
+        // eslint-disable-next-line guard-for-in
+        for (const name in t.getBindingIdentifiers(subNode)) {
+          names.add(name);
         }
         continue;
       }
