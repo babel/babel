@@ -53,13 +53,15 @@ export default declare((api, opts) => {
   const {
     jsxPragma = "React.createElement",
     jsxPragmaFrag = "React.Fragment",
-    allowNamespaces = false,
     onlyRemoveTypeImports = false,
   } = opts;
 
   if (!process.env.BABEL_8_BREAKING) {
     // eslint-disable-next-line no-var
-    var { allowDeclareFields = false } = opts;
+    var { allowDeclareFields = false, allowNamespaces = false } = opts;
+  } else {
+    // eslint-disable-next-line no-var,no-redeclare
+    var { allowNamespaces = true } = opts;
   }
 
   const classMemberVisitors = {
