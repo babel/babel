@@ -1068,6 +1068,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             node.asserts = true;
             thisTypePredicate = this.finishNode(node, "TSTypePredicate");
           } else {
+            this.resetStartLocationFromNode(thisTypePredicate, node);
             (thisTypePredicate: N.TsTypePredicate).asserts = true;
           }
           t.typeAnnotation = thisTypePredicate;
