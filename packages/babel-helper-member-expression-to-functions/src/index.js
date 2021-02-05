@@ -84,7 +84,7 @@ const handle = {
     // noop.
   },
 
-  handle(member) {
+  handle(member: t.NodePath<t.Expression>, noDocumentAll: boolean) {
     const { node, parent, parentPath, scope } = member;
 
     if (member.isOptionalMemberExpression()) {
@@ -241,50 +241,56 @@ const handle = {
         regular = endParentPath.node;
       }
 
-      if (willEndPathCastToBoolean) {
-        const nonNullishCheck = t.logicalExpression(
-          "&&",
-          t.binaryExpression(
-            "!==",
-            baseNeedsMemoised
-              ? t.assignmentExpression(
-                  "=",
-                  t.cloneNode(baseRef),
-                  t.cloneNode(startingNode),
-                )
-              : t.cloneNode(baseRef),
-            t.nullLiteral(),
-          ),
-          t.binaryExpression(
-            "!==",
+      const baseMemoised = baseNeedsMemoised
+        ? t.assignmentExpression(
+            "=",
             t.cloneNode(baseRef),
-            scope.buildUndefinedNode(),
-          ),
-        );
+            t.cloneNode(startingNode),
+          )
+        : t.cloneNode(baseRef);
+
+      if (willEndPathCastToBoolean) {
+        let nonNullishCheck;
+        if (noDocumentAll) {
+          nonNullishCheck = t.binaryExpression(
+            "!=",
+            baseMemoised,
+            t.nullLiteral(),
+          );
+        } else {
+          nonNullishCheck = t.logicalExpression(
+            "&&",
+            t.binaryExpression("!==", baseMemoised, t.nullLiteral()),
+            t.binaryExpression(
+              "!==",
+              t.cloneNode(baseRef),
+              scope.buildUndefinedNode(),
+            ),
+          );
+        }
         replacementPath.replaceWith(
           t.logicalExpression("&&", nonNullishCheck, regular),
         );
       } else {
-        // todo: respect assumptions.noDocumentAll when assumptions are implemented
-        const nullishCheck = t.logicalExpression(
-          "||",
-          t.binaryExpression(
-            "===",
-            baseNeedsMemoised
-              ? t.assignmentExpression(
-                  "=",
-                  t.cloneNode(baseRef),
-                  t.cloneNode(startingNode),
-                )
-              : t.cloneNode(baseRef),
+        let nullishCheck;
+        if (noDocumentAll) {
+          nullishCheck = t.binaryExpression(
+            "==",
+            baseMemoised,
             t.nullLiteral(),
-          ),
-          t.binaryExpression(
-            "===",
-            t.cloneNode(baseRef),
-            scope.buildUndefinedNode(),
-          ),
-        );
+          );
+        } else {
+          nullishCheck = t.logicalExpression(
+            "||",
+            t.binaryExpression("===", baseMemoised, t.nullLiteral()),
+            t.binaryExpression(
+              "===",
+              t.cloneNode(baseRef),
+              scope.buildUndefinedNode(),
+            ),
+          );
+        }
+
         replacementPath.replaceWith(
           t.conditionalExpression(
             nullishCheck,
