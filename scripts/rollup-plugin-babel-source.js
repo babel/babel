@@ -88,13 +88,14 @@ export default function () {
         ? packageJson["browser"]
         : packageJson["main"];
 
-      const asJS = path.normalize(
+      let asJS = path.normalize(
         path.join(
           packageFolder,
           // replace lib with src in the package.json entry
           filename.replace(/^(\.\/)?lib\//, "src/")
         )
       );
+      if (!/\.[a-z]+$/.test(asJS)) asJS += ".js";
       const asTS = asJS.replace(/\.js$/, ".ts");
 
       try {

@@ -1,5 +1,5 @@
 // @flow
-import corejs3Polyfills from "core-js-compat/data";
+import corejs3Polyfills from "core-js-compat/data.json";
 import { coerce, SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 import { plugins as pluginsList } from "./plugins-compat-data";
