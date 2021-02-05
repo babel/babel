@@ -1,9 +1,10 @@
 "use strict";
 
-const path = require("path");
+const pathUtils = require("path");
+const fs = require("fs");
 
 function normalize(src) {
-  return src.replace(/\//, path.sep);
+  return src.replace(/\//, pathUtils.sep);
 }
 
 module.exports = function (api) {
@@ -124,6 +125,8 @@ module.exports = function (api) {
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
+
+      pluginPackageJsonMacro,
 
       process.env.STRIP_BABEL_8_FLAG && [
         pluginToggleBabel8Breaking,
@@ -315,6 +318,52 @@ function pluginToggleBabel8Breaking({ types: t }, { breaking }) {
         if (path.matchesPattern("process.env.BABEL_8_BREAKING")) {
           throw path.buildCodeFrameError("This check could not be stripped.");
         }
+      },
+    },
+  };
+}
+
+function pluginPackageJsonMacro({ types: t }) {
+  const fnName = "PACKAGE_JSON";
+
+  return {
+    visitor: {
+      ReferencedIdentifier(path) {
+        if (path.isIdentifier({ name: fnName })) {
+          throw path.buildCodeFrameError(
+            `"${fnName}" is only supported in member expressions.`
+          );
+        }
+      },
+      MemberExpression(path) {
+        if (!path.get("object").isIdentifier({ name: fnName })) return;
+
+        if (path.node.computed) {
+          throw path.buildCodeFrameError(
+            `"${fnName}" does not support computed properties.`
+          );
+        }
+        const field = path.node.property.name;
+
+        // TODO: When dropping old Node.js versions, use require.resolve
+        // instead of looping through the folders hierarchy
+
+        let pkg;
+        for (let dir = pathUtils.dirname(this.filename); ; ) {
+          try {
+            pkg = fs.readFileSync(pathUtils.join(dir, "package.json"), "utf8");
+            break;
+          } catch (_) {}
+
+          const prev = dir;
+          dir = pathUtils.resolve(dir, "..");
+
+          // We are in the root and didn't find a package.json file
+          if (dir === prev) return;
+        }
+
+        const value = JSON.parse(pkg)[field];
+        path.replaceWith(t.valueToNode(value));
       },
     },
   };

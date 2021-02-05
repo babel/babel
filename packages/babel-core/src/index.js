@@ -1,10 +1,11 @@
 // @flow
 
+export const version = PACKAGE_JSON.version;
+
 export { default as File } from "./transformation/file/file";
 export { default as buildExternalHelpers } from "./tools/build-external-helpers";
 export { resolvePlugin, resolvePreset } from "./config/files";
 
-export { version } from "../package.json";
 export { getEnv } from "./config/helpers/environment";
 
 export * as types from "@babel/types";

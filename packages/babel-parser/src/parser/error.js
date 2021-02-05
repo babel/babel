@@ -18,7 +18,7 @@ type ErrorContext = {
 
 export type ParsingError = SyntaxError & ErrorContext;
 
-export { ErrorMessages as Errors } from "./error-message.js";
+export { ErrorMessages as Errors } from "./error-message";
 
 export default class ParserError extends CommentsParser {
   // Forward-declaration: defined in tokenizer/index.js

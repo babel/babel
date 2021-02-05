@@ -6,8 +6,6 @@ import commander from "commander";
 import { version } from "@babel/core";
 import glob from "glob";
 
-import pkg from "../../package.json";
-
 // Standard Babel input configs.
 commander.option(
   "-f, --filename [filename]",
@@ -170,7 +168,7 @@ commander.option(
   "Use a specific extension for the output files",
 );
 
-commander.version(pkg.version + " (@babel/core " + version + ")");
+commander.version(PACKAGE_JSON.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 // register an empty action handler so that commander.js can throw on
 // unknown options _after_ args

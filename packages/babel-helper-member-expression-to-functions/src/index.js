@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import { willPathCastToBoolean } from "./util.js";
+import { willPathCastToBoolean } from "./util";
 
 class AssignmentMemoiser {
   constructor() {

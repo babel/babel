@@ -43,7 +43,9 @@ module.exports = {
         "@babel/development/no-undefined-identifier": "error",
         "@babel/development/no-deprecated-clone": "error",
         "guard-for-in": "error",
+        "import/extensions": ["error", { json: "always", cjs: "always" }],
       },
+      globals: { PACKAGE_JSON: "readonly" },
     },
     {
       files: [
@@ -63,6 +65,7 @@ module.exports = {
         "jest/no-standalone-expect": "off",
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
+        "import/extensions": ["error", { json: "always", cjs: "always" }],
       },
     },
     {

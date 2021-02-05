@@ -53,7 +53,7 @@ import {
   newArrowHeadScope,
   newAsyncArrowScope,
   newExpressionScope,
-} from "../util/expression-scope.js";
+} from "../util/expression-scope";
 import { Errors } from "./error";
 
 export default class ExpressionParser extends LValParser {

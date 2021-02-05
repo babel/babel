@@ -1,4 +1,4 @@
-import { findSuggestion } from "./find-suggestion.js";
+import { findSuggestion } from "./find-suggestion";
 
 export class OptionValidator {
   declare descriptor: string;

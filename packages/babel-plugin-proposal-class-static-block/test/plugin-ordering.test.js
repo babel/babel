@@ -1,5 +1,5 @@
 import * as babel from "@babel/core";
-import proposalClassStaticBlock from "../lib/index.js";
+import proposalClassStaticBlock from "..";
 
 describe("plugin ordering", () => {
   it("should throw when @babel/plugin-proposal-class-static-block is after class features plugin", () => {
