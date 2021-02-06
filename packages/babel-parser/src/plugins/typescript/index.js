@@ -71,6 +71,7 @@ const TSErrors = Object.freeze({
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
   DuplicateModifier: "Duplicate modifier: '%0'",
+  DuplicateAccessibilityModifier: "Accessibility modifier already seen.",
   EmptyHeritageClauseType: "'%0' list cannot be empty.",
   EmptyTypeArguments: "Type argument list cannot be empty.",
   EmptyTypeParameters: "Type parameter list cannot be empty.",
@@ -204,10 +205,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (!modifier) break;
 
-        if (Object.hasOwnProperty.call(modified, modifier)) {
-          this.raise(startPos, TSErrors.DuplicateModifier, modifier);
+        if (this.tsIsAccessModifier(modifier)) {
+          if (modified.accessibility) {
+            this.raise(startPos, TSErrors.DuplicateAccessibilityModifier);
+          } else {
+            modified.accessibility = modifier;
+          }
+        } else {
+          if (Object.hasOwnProperty.call(modified, modifier)) {
+            this.raise(startPos, TSErrors.DuplicateModifier, modifier);
+          }
+          modified[modifier] = true;
         }
-        modified[modifier] = true;
       }
     }
 
@@ -2125,10 +2134,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       member: any,
       state: N.ParseClassMemberState,
     ): void {
-      this.tsParseModifiers(member, ["declare"]);
-      const accessibility = this.parseAccessModifier();
-      if (accessibility) member.accessibility = accessibility;
-      this.tsParseModifiers(member, ["declare"]);
+      this.tsParseModifiers(member, [
+        "declare",
+        "private",
+        "public",
+        "protected",
+      ]);
 
       const callParseClassMember = () => {
         super.parseClassMember(classBody, member, state);
@@ -2848,5 +2859,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } finally {
         this.state.inAbstractClass = oldInAbstractClass;
       }
+    }
+
+    tsIsAccessModifier(modifier: string): boolean {
+      return (
+        modifier === "private" ||
+        modifier === "public" ||
+        modifier === "protected"
+      );
     }
   };
