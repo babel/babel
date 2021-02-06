@@ -31,14 +31,13 @@ import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
 import { Errors } from "../../parser/error";
 
+type AccessibilityModifier = "public" | "private" | "protected";
 type TsModifier =
   | "readonly"
   | "abstract"
   | "declare"
   | "static"
-  | "public"
-  | "private"
-  | "protected";
+  | AccessibilityModifier;
 
 function nonNull<T>(x: ?T): T {
   if (x == null) {
@@ -195,13 +194,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      *    this.tsParseModifiers(node, ["public"]);
      *    this.tsParseModifiers(node, ["abstract", "readonly"]);
      */
-    tsParseModifiers<T: TsModifier>(
-      modified: { [key: TsModifier]: ?true },
-      allowedModifiers: T[],
+    tsParseModifiers(
+      modified: {
+        [key: TsModifier]: ?true,
+        accessibility?: AccessibilityModifier,
+      },
+      allowedModifiers: TsModifier[],
     ): void {
       for (;;) {
         const startPos = this.state.start;
-        const modifier: ?T = this.tsParseModifier(allowedModifiers);
+        const modifier: ?TsModifier = this.tsParseModifier(allowedModifiers);
 
         if (!modifier) break;
 
@@ -209,6 +211,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (modified.accessibility) {
             this.raise(startPos, TSErrors.DuplicateAccessibilityModifier);
           } else {
+            // $FlowIgnore
             modified.accessibility = modifier;
           }
         } else {
