@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":84,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":17}},
+  "start":0,"end":152,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":2}},
   "program": {
     "type": "Program",
-    "start":0,"end":84,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":17}},
+    "start":0,"end":152,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":2}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -80,6 +80,71 @@
           "body": []
         },
         "declare": true
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":86,"end":93,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":7}},
+        "expression": {
+          "type": "Identifier",
+          "start":86,"end":93,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":7},"identifierName":"declare"},
+          "name": "declare"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":94,"end":100,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":6}},
+        "expression": {
+          "type": "Identifier",
+          "start":94,"end":100,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":6},"identifierName":"module"},
+          "name": "module"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":101,"end":118,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":17}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":101,"end":118,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":17}},
+          "extra": {
+            "rawValue": "external module",
+            "raw": "'external module'"
+          },
+          "value": "external module"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":119,"end":121,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":2}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":123,"end":129,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":6}},
+        "expression": {
+          "type": "Identifier",
+          "start":123,"end":129,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":6},"identifierName":"module"},
+          "name": "module"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":130,"end":149,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":19}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":130,"end":149,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":19}},
+          "extra": {
+            "rawValue": "external module 2",
+            "raw": "'external module 2'"
+          },
+          "value": "external module 2"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":150,"end":152,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":2}},
+        "body": [],
+        "directives": []
       }
     ],
     "directives": []

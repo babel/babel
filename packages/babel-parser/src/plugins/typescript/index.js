@@ -1652,10 +1652,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         case "module":
           if (next) this.next();
-          if (this.match(tt.string)) {
-            return this.tsParseAmbientExternalModuleDeclaration(node);
-          } else if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
-            return this.tsParseModuleOrNamespaceDeclaration(node);
+          if (!this.isLineTerminator()) {
+            if (this.match(tt.string)) {
+              return this.tsParseAmbientExternalModuleDeclaration(node);
+            } else if (this.match(tt.name)) {
+              return this.tsParseModuleOrNamespaceDeclaration(node);
+            }
           }
           break;
 
