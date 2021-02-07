@@ -153,8 +153,9 @@ jobs:
         run: |
           yarn remove jest
           yarn add --dev jest@24
-          # Pin stack-utils to 1.0.2 https://github.com/tapjs/stack-utils/issues/56
-          yarn set resolution stack-utils@npm:^1.0.1 1.0.2
+          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
+          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
+          yarn dedupe
       - uses: actions/download-artifact@v2
         with:
           name: babel-artifact
