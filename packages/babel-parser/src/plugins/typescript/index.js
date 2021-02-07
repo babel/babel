@@ -1662,8 +1662,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "namespace":
-          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
-            if (next) this.next();
+          if (next) this.next();
+          if (!this.isLineTerminator() && this.match(tt.name)) {
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
