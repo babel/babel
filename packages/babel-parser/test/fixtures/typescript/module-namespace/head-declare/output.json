@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":152,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":2}},
+  "start":0,"end":151,"loc":{"start":{"line":1,"column":0},"end":{"line":17,"column":2}},
   "program": {
     "type": "Program",
-    "start":0,"end":152,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":2}},
+    "start":0,"end":151,"loc":{"start":{"line":1,"column":0},"end":{"line":17,"column":2}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -101,48 +101,76 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":101,"end":118,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":17}},
+        "start":101,"end":106,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":5}},
         "expression": {
           "type": "StringLiteral",
-          "start":101,"end":118,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":17}},
+          "start":101,"end":106,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":5}},
           "extra": {
-            "rawValue": "external module",
-            "raw": "'external module'"
+            "rawValue": "foo",
+            "raw": "'foo'"
           },
-          "value": "external module"
+          "value": "foo"
         }
       },
       {
         "type": "BlockStatement",
-        "start":119,"end":121,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":2}},
+        "start":107,"end":109,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":2}},
         "body": [],
         "directives": []
       },
       {
         "type": "ExpressionStatement",
-        "start":123,"end":129,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":6}},
+        "start":111,"end":117,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":6}},
         "expression": {
           "type": "Identifier",
-          "start":123,"end":129,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":6},"identifierName":"module"},
+          "start":111,"end":117,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":6},"identifierName":"module"},
           "name": "module"
         }
       },
       {
         "type": "ExpressionStatement",
-        "start":130,"end":149,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":19}},
+        "start":118,"end":123,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":5}},
         "expression": {
           "type": "StringLiteral",
-          "start":130,"end":149,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":19}},
+          "start":118,"end":123,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":5}},
           "extra": {
-            "rawValue": "external module 2",
-            "raw": "'external module 2'"
+            "rawValue": "bar",
+            "raw": "'bar'"
           },
-          "value": "external module 2"
+          "value": "bar"
         }
       },
       {
         "type": "BlockStatement",
-        "start":150,"end":152,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":2}},
+        "start":124,"end":126,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":2}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":128,"end":142,"loc":{"start":{"line":15,"column":0},"end":{"line":15,"column":14}},
+        "expression": {
+          "type": "Identifier",
+          "start":128,"end":135,"loc":{"start":{"line":15,"column":0},"end":{"line":15,"column":7},"identifierName":"declare"},
+          "name": "declare"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":143,"end":148,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":5}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":143,"end":148,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":5}},
+          "extra": {
+            "rawValue": "baz",
+            "raw": "'baz'"
+          },
+          "value": "baz"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":149,"end":151,"loc":{"start":{"line":17,"column":0},"end":{"line":17,"column":2}},
         "body": [],
         "directives": []
       }

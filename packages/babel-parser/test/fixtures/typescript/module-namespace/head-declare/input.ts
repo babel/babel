@@ -5,9 +5,13 @@ declare global {}
 
 declare
 module
-'external module'
+'foo'
 {}
 
 module
-'external module 2'
+'bar'
+{}
+
+declare module
+'baz'
 {}
