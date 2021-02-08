@@ -1,7 +1,6 @@
 name: Update Test262 parser tests
 env:
   YARN_ENABLE_SCRIPTS: false # disable post-install scripts
-  YARN_NODE_LINKER: pnp # use pnp linker for better performance
 on:
   workflow_dispatch:
     inputs: {}
