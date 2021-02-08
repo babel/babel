@@ -31,13 +31,12 @@ import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
 import { Errors } from "../../parser/error";
 
-type AccessibilityModifier = "public" | "private" | "protected";
 type TsModifier =
   | "readonly"
   | "abstract"
   | "declare"
   | "static"
-  | AccessibilityModifier;
+  | N.Accessibility;
 
 function nonNull<T>(x: ?T): T {
   if (x == null) {
@@ -144,6 +143,12 @@ function keywordTypeFromName(
   }
 }
 
+function tsIsAccessModifier(modifier: string): boolean %checks {
+  return (
+    modifier === "private" || modifier === "public" || modifier === "protected"
+  );
+}
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     getScopeHandler(): Class<TypeScriptScopeHandler> {
@@ -197,7 +202,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseModifiers(
       modified: {
         [key: TsModifier]: ?true,
-        accessibility?: AccessibilityModifier,
+        accessibility?: N.Accessibility,
       },
       allowedModifiers: TsModifier[],
     ): void {
@@ -207,11 +212,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (!modifier) break;
 
-        if (this.tsIsAccessModifier(modifier)) {
+        if (tsIsAccessModifier(modifier)) {
           if (modified.accessibility) {
             this.raise(startPos, TSErrors.DuplicateAccessibilityModifier);
           } else {
-            // $FlowIgnore
             modified.accessibility = modifier;
           }
         } else {
@@ -2862,13 +2866,5 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } finally {
         this.state.inAbstractClass = oldInAbstractClass;
       }
-    }
-
-    tsIsAccessModifier(modifier: string): boolean {
-      return (
-        modifier === "private" ||
-        modifier === "public" ||
-        modifier === "protected"
-      );
     }
   };
