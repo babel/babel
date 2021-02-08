@@ -2848,27 +2848,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseAbstractDeclaration(
       node: any,
     ): N.ClassDeclaration | N.TsInterfaceDeclaration {
-      const isClass = this.match(tt._class);
-      if (!isClass && !this.isContextual("interface")) {
-        this.unexpected(null, tt._class);
-      }
-      node.abstract = true;
-      if (isClass) {
+      if (this.match(tt._class)) {
+        node.abstract = true;
         return this.parseClass(
           (node: N.ClassDeclaration),
           /* isStatement */ true,
           /* optionalId */ false,
         );
-      } else {
+      } else if (this.isContextual("interface")) {
         // for invalid abstract interface
-        this.raise(
-          node.start,
-          TSErrors.NonClassMethodPropertyHasAbstractModifer,
-        );
-        this.next();
-        return this.tsParseInterfaceDeclaration(
-          (node: N.TsInterfaceDeclaration),
-        );
+
+        // To avoid
+        //   abstract interface
+        //   Foo {}
+        if (!this.hasPrecedingLineBreak(this.lookahead())) {
+          node.abstract = true;
+          this.raise(
+            node.start,
+            TSErrors.NonClassMethodPropertyHasAbstractModifer,
+          );
+          this.next();
+          return this.tsParseInterfaceDeclaration(
+            (node: N.TsInterfaceDeclaration),
+          );
+        }
+      } else {
+        this.unexpected(null, tt._class);
       }
     }
   };
