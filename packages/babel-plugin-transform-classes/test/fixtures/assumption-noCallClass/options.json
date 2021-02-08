@@ -7,6 +7,6 @@
     "transform-block-scoping"
   ],
   "assumptions": {
-    "noCallClass": true
+    "noClassCalls": true
   }
 }
