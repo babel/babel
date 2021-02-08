@@ -78,7 +78,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "allExtensions": false,
-          "allowNamespaces": undefined,
+          "allowNamespaces": true,
           "isTSX": false,
           "jsxPragma": undefined,
           "jsxPragmaFrag": "React.Fragment",

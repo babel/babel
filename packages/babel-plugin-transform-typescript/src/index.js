@@ -51,6 +51,7 @@ export default declare((api, opts) => {
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;
 
   const {
+    allowNamespaces = true,
     jsxPragma = "React.createElement",
     jsxPragmaFrag = "React.Fragment",
     onlyRemoveTypeImports = false,
@@ -58,10 +59,7 @@ export default declare((api, opts) => {
 
   if (!process.env.BABEL_8_BREAKING) {
     // eslint-disable-next-line no-var
-    var { allowDeclareFields = false, allowNamespaces = false } = opts;
-  } else {
-    // eslint-disable-next-line no-var,no-redeclare
-    var { allowNamespaces = true } = opts;
+    var { allowDeclareFields = false } = opts;
   }
 
   const classMemberVisitors = {
