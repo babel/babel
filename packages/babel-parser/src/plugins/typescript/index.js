@@ -2861,7 +2861,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // To avoid
         //   abstract interface
         //   Foo {}
-        if (!this.hasPrecedingLineBreak(this.lookahead())) {
+        if (!this.hasFollowingLineBreak()) {
           node.abstract = true;
           this.raise(
             node.start,
