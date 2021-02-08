@@ -2847,10 +2847,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseAbstractDeclaration(
       node: any,
-    ): N.ClassDeclaration | N.TsInterfaceDeclaration {
+    ): N.ClassDeclaration | N.TsInterfaceDeclaration | typeof undefined {
       if (this.match(tt._class)) {
         node.abstract = true;
-        return this.parseClass(
+        return this.parseClass<N.ClassDeclaration>(
           (node: N.ClassDeclaration),
           /* isStatement */ true,
           /* optionalId */ false,
