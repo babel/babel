@@ -1571,16 +1571,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             if (value === "global") {
               return this.tsParseAmbientExternalModuleDeclaration(nany);
             } else {
-              const oldState = this.state.clone(true);
-              const declaration = this.tsParseDeclaration(
-                nany,
-                value,
-                /* next */ true,
+              return this.tsTryParse(() =>
+                this.tsParseDeclaration(nany, value, /* next */ true),
               );
-              if (!declaration) {
-                this.state = oldState;
-              }
-              return declaration;
             }
           }
         }
