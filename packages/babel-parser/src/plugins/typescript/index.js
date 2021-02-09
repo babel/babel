@@ -99,6 +99,8 @@ const TSErrors = Object.freeze({
     "Private elements cannot have the 'abstract' modifier.",
   PrivateElementHasAccessibility:
     "Private elements cannot have an accessibility modifier ('%0')",
+  ReadonlyForMethodSignature:
+    "'readonly' modifier can only appear on a property declaration or index signature.",
   TypeAnnotationAfterAssign:
     "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
   UnexpectedParameterModifier:
@@ -543,7 +545,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt.question)) node.optional = true;
       const nodeAny: any = node;
 
-      if (!readonly && (this.match(tt.parenL) || this.isRelational("<"))) {
+      if (this.match(tt.parenL) || this.isRelational("<")) {
+        if (readonly) {
+          this.raise(node.start, TSErrors.ReadonlyForMethodSignature);
+        }
         const method: N.TsMethodSignature = nodeAny;
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();

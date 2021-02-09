@@ -5,4 +5,5 @@ interface Foo {
   static d();
   declare e();
   abstract f();
+  readonly g();
 }
