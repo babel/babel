@@ -210,7 +210,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         accessibility?: N.Accessibility,
       },
       allowedModifiers: TsModifier[],
-      disallowedModifiers?: TsModifier[],
+      callback?: (startPos: number, modifer: TsModifier) => void,
     ): void {
       for (;;) {
         const startPos = this.state.start;
@@ -231,8 +231,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           modified[modifier] = true;
         }
 
-        if (disallowedModifiers && disallowedModifiers.includes(modifier)) {
-          this.raise(startPos, TSErrors.InvalidModifierOnTypeMember, modifier);
+        if (callback) {
+          callback(startPos, modifier);
         }
       }
     }
@@ -584,6 +584,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
+      const denyModifiers = [
+        "declare",
+        "abstract",
+        "private",
+        "protected",
+        "public",
+        "static",
+      ];
       this.tsParseModifiers(
         node,
         [
@@ -595,7 +603,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           "public",
           "static",
         ],
-        ["declare", "abstract", "private", "protected", "public", "static"],
+        (startPos, modifier) => {
+          if (denyModifiers.includes(modifier)) {
+            this.raise(
+              startPos,
+              TSErrors.InvalidModifierOnTypeMember,
+              modifier,
+            );
+          }
+        },
       );
 
       const idx = this.tsTryParseIndexSignature(node);
