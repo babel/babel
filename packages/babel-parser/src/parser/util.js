@@ -96,6 +96,12 @@ export default class UtilParser extends Tokenizer {
     );
   }
 
+  hasFollowingLineBreak(): boolean {
+    return lineBreak.test(
+      this.input.slice(this.state.end, this.nextTokenStart()),
+    );
+  }
+
   // TODO
 
   isLineTerminator(): boolean {

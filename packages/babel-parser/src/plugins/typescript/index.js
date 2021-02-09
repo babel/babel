@@ -89,6 +89,8 @@ const TSErrors = Object.freeze({
     "Tuple members must all have names or all not have names.",
   NonAbstractClassHasAbstractMethod:
     "Abstract methods can only appear within an abstract class.",
+  NonClassMethodPropertyHasAbstractModifer:
+    "'abstract' modifier can only appear on a class, method, or property declaration.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
   PatternIsOptional:
@@ -1585,20 +1587,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.Declaration {
       switch (value) {
         case "abstract":
-          if (this.tsCheckLineTerminatorAndMatch(tt._class, next)) {
-            const cls: N.ClassDeclaration = node;
-            cls.abstract = true;
-            if (next) {
-              this.next();
-              if (!this.match(tt._class)) {
-                this.unexpected(null, tt._class);
-              }
-            }
-            return this.parseClass(
-              cls,
-              /* isStatement */ true,
-              /* optionalId */ false,
-            );
+          if (
+            this.tsCheckLineTerminatorAndMatch(tt._class, next) ||
+            // for interface
+            this.tsCheckLineTerminatorAndMatch(tt.name, next)
+          ) {
+            if (next) this.next();
+            return this.tsParseAbstractDeclaration(node);
           }
           break;
 
@@ -2847,6 +2842,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return super.parseClass(node, ...args);
       } finally {
         this.state.inAbstractClass = oldInAbstractClass;
+      }
+    }
+
+    tsParseAbstractDeclaration(
+      node: any,
+    ): N.ClassDeclaration | N.TsInterfaceDeclaration | typeof undefined {
+      if (this.match(tt._class)) {
+        node.abstract = true;
+        return this.parseClass<N.ClassDeclaration>(
+          (node: N.ClassDeclaration),
+          /* isStatement */ true,
+          /* optionalId */ false,
+        );
+      } else if (this.isContextual("interface")) {
+        // for invalid abstract interface
+
+        // To avoid
+        //   abstract interface
+        //   Foo {}
+        if (!this.hasFollowingLineBreak()) {
+          node.abstract = true;
+          this.raise(
+            node.start,
+            TSErrors.NonClassMethodPropertyHasAbstractModifer,
+          );
+          this.next();
+          return this.tsParseInterfaceDeclaration(
+            (node: N.TsInterfaceDeclaration),
+          );
+        }
+      } else {
+        this.unexpected(null, tt._class);
       }
     }
   };
