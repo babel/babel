@@ -208,6 +208,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         accessibility?: N.Accessibility,
       },
       allowedModifiers: TsModifier[],
+      disallowedModifiers?: TsModifier[],
     ): void {
       for (;;) {
         const startPos = this.state.start;
@@ -226,6 +227,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.raise(startPos, TSErrors.DuplicateModifier, modifier);
           }
           modified[modifier] = true;
+        }
+
+        if (disallowedModifiers && disallowedModifiers.includes(modifier)) {
+          this.raise(startPos, TSErrors.InvalidModifierOnTypeMember, modifier);
         }
       }
     }
@@ -574,25 +579,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      this.tsParseModifiers(node, [
-        "readonly",
-        "declare",
-        "abstract",
-        "private",
-        "protected",
-        "public",
-        "static",
-      ]);
-
-      // type members allow only 'readonly' modifier.
-      this.tsCheckModifiers(node, [
-        "declare",
-        "abstract",
-        "private",
-        "protected",
-        "public",
-        "static",
-      ]);
+      this.tsParseModifiers(
+        node,
+        [
+          "readonly",
+          "declare",
+          "abstract",
+          "private",
+          "protected",
+          "public",
+          "static",
+        ],
+        ["declare", "abstract", "private", "protected", "public", "static"],
+      );
 
       const idx = this.tsTryParseIndexSignature(node);
       if (idx) {
@@ -2910,24 +2909,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       } else {
         this.unexpected(null, tt._class);
-      }
-    }
-
-    tsCheckModifiers(
-      modified: {
-        [key: TsModifier]: ?true,
-        accessibility?: N.Accessibility,
-      },
-      denylist: TsModifier[],
-    ): void {
-      const startPos = this.state.start;
-      for (const modifier of denylist) {
-        if (
-          modified[modifier] ||
-          (tsIsAccessModifier(modifier) && modified.accessibility === modifier)
-        ) {
-          this.raise(startPos, TSErrors.InvalidModifierOnTypeMember, modifier);
-        }
       }
     }
   };

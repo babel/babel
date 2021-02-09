@@ -2,12 +2,12 @@
   "type": "File",
   "start":0,"end":96,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
   "errors": [
-    "SyntaxError: 'private' modifier cannot appear on a type member. (2:10)",
-    "SyntaxError: 'public' modifier cannot appear on a type member. (3:9)",
-    "SyntaxError: 'protected' modifier cannot appear on a type member. (4:12)",
-    "SyntaxError: 'static' modifier cannot appear on a type member. (5:9)",
-    "SyntaxError: 'declare' modifier cannot appear on a type member. (6:10)",
-    "SyntaxError: 'abstract' modifier cannot appear on a type member. (7:11)"
+    "SyntaxError: 'private' modifier cannot appear on a type member. (2:2)",
+    "SyntaxError: 'public' modifier cannot appear on a type member. (3:2)",
+    "SyntaxError: 'protected' modifier cannot appear on a type member. (4:2)",
+    "SyntaxError: 'static' modifier cannot appear on a type member. (5:2)",
+    "SyntaxError: 'declare' modifier cannot appear on a type member. (6:2)",
+    "SyntaxError: 'abstract' modifier cannot appear on a type member. (7:2)"
   ],
   "program": {
     "type": "Program",
