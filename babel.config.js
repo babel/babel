@@ -193,7 +193,9 @@ function bool(value) {
 // semverGte("8.9", "8.9") // true
 // semverGte("9.0", "8.9") // true
 // semverGte("8.9", "8.10") // false
-`((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
+// TODO: figure out how to inject it to the `@babel/template` usage so we don't need to
+// copy and paste it.
+// `((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
 
 // TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
 /** @param {import("@babel/core")} api */
