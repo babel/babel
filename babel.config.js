@@ -187,14 +187,13 @@ function bool(value) {
 // Limitation:
 // - it only supports comparing major and minor version, assuming Node.js will never ship
 //   features in patch release so we will never need to compare a version with "1.2.3"
-// - it assumes `process.versions.node` never contains `,`
 //
 // @example
 // semverGte("8.10", "8.9") // true
 // semverGte("8.9", "8.9") // true
 // semverGte("9.0", "8.9") // true
 // semverGte("8.9", "8.10") // false
-`((a,b)=>(([,v,x,w,y]=/(\\d+)\\.(\\d+).*,(\\d+)\\.(\\d+)/.exec([a,b])),+v>+w||v==w&&+x>=+y))`;
+`((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
 
 // TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
 /** @param {import("@babel/core")} api */
@@ -220,7 +219,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       // require.resolve's paths option has been introduced in Node.js 8.9
       // https://nodejs.org/api/modules.html#modules_require_resolve_request_options
       replacement: template({ syntacticPlaceholders: true })`
-        ((a,b)=>(([,v,x,w,y]=/(\\d+)\\.(\\d+).*,(\\d+)\\.(\\d+)/.exec([a,b])),+v>+w||v==w&&+x>=+y))(process.versions.node, "8.9")
+        ((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))(process.versions.node, "8.9")
           ? require.resolve
           : (/* request */ r, { paths: [/* base */ b] }, M = require("module")) => {
               let /* filename */ f = M._findPath(r, M._nodeModulePaths(b).concat(b));
@@ -252,7 +251,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       // fs.mkdirSync's recursive option has been introduced in Node.js 10.12
       // https://nodejs.org/api/fs.html#fs_fs_mkdirsync_path_options
       replacement: template`
-        ((a,b)=>(([,v,x,w,y]=/(\\d+)\\.(\\d+).*,(\\d+)\\.(\\d+)/.exec([a,b])),+v>+w||v==w&&+x>=+y))(process.versions.node, "10.12")
+        ((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))(process.versions.node, "10.12")
           ? fs.mkdirSync
           : require("make-dir").sync
       `,
