@@ -1571,9 +1571,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             if (value === "global") {
               return this.tsParseAmbientExternalModuleDeclaration(nany);
             } else {
-              return this.tsTryParse(() =>
-                this.tsParseDeclaration(nany, value, /* next */ true),
-              );
+              return this.tsParseDeclaration(nany, value, /* next */ true);
             }
           }
         }
@@ -1653,20 +1651,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "module":
-          if (next) this.next();
-          if (!this.isLineTerminator()) {
-            if (this.match(tt.string)) {
-              return this.tsParseAmbientExternalModuleDeclaration(node);
-            } else if (this.match(tt.name)) {
-              return this.tsParseModuleOrNamespaceDeclaration(node);
+          if (!next || !this.hasFollowingLineBreak()) {
+            if (next) this.next();
+            if (!this.isLineTerminator()) {
+              if (this.match(tt.string)) {
+                return this.tsParseAmbientExternalModuleDeclaration(node);
+              } else if (this.match(tt.name)) {
+                return this.tsParseModuleOrNamespaceDeclaration(node);
+              }
             }
           }
           break;
 
         case "namespace":
-          if (next) this.next();
-          if (!this.isLineTerminator() && this.match(tt.name)) {
-            return this.tsParseModuleOrNamespaceDeclaration(node);
+          if (!next || !this.hasFollowingLineBreak()) {
+            if (next) this.next();
+            if (!this.isLineTerminator() && this.match(tt.name)) {
+              return this.tsParseModuleOrNamespaceDeclaration(node);
+            }
           }
           break;
 
