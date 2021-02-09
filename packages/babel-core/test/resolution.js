@@ -346,8 +346,8 @@ describe("addon resolution", function () {
       });
     }).toThrow(
       // Todo(Babel 8): remove node checks in this file. We cannot test the desired behaviour
-      // because Jest 24 has issue on setting the MODULE_NOT_FOUND error when the native
-      // `require.resolv` is provided.
+      // because Jest 24 has an issue on setting the MODULE_NOT_FOUND error when the native
+      // `require.resolve` is provided.
       // see https://github.com/babel/babel/pull/12439/files#r535996000
       process.versions.node.startsWith("8.")
         ? /Cannot resolve module 'babel-preset-foo'/
