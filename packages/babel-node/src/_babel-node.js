@@ -219,6 +219,7 @@ function replStart() {
     output: process.stdout,
     eval: replEval,
     useGlobal: true,
+    preview: true,
   });
 }
 
