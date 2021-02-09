@@ -36,9 +36,7 @@ type TsModifier =
   | "abstract"
   | "declare"
   | "static"
-  | "public"
-  | "private"
-  | "protected";
+  | N.Accessibility;
 
 function nonNull<T>(x: ?T): T {
   if (x == null) {
@@ -71,6 +69,7 @@ const TSErrors = Object.freeze({
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
   DuplicateModifier: "Duplicate modifier: '%0'",
+  DuplicateAccessibilityModifier: "Accessibility modifier already seen.",
   EmptyHeritageClauseType: "'%0' list cannot be empty.",
   EmptyTypeArguments: "Type argument list cannot be empty.",
   EmptyTypeParameters: "Type parameter list cannot be empty.",
@@ -146,6 +145,12 @@ function keywordTypeFromName(
   }
 }
 
+function tsIsAccessModifier(modifier: string): boolean %checks {
+  return (
+    modifier === "private" || modifier === "public" || modifier === "protected"
+  );
+}
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     getScopeHandler(): Class<TypeScriptScopeHandler> {
@@ -196,20 +201,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      *    this.tsParseModifiers(node, ["public"]);
      *    this.tsParseModifiers(node, ["abstract", "readonly"]);
      */
-    tsParseModifiers<T: TsModifier>(
-      modified: { [key: TsModifier]: ?true },
-      allowedModifiers: T[],
+    tsParseModifiers(
+      modified: {
+        [key: TsModifier]: ?true,
+        accessibility?: N.Accessibility,
+      },
+      allowedModifiers: TsModifier[],
     ): void {
       for (;;) {
         const startPos = this.state.start;
-        const modifier: ?T = this.tsParseModifier(allowedModifiers);
+        const modifier: ?TsModifier = this.tsParseModifier(allowedModifiers);
 
         if (!modifier) break;
 
-        if (Object.hasOwnProperty.call(modified, modifier)) {
-          this.raise(startPos, TSErrors.DuplicateModifier, modifier);
+        if (tsIsAccessModifier(modifier)) {
+          if (modified.accessibility) {
+            this.raise(startPos, TSErrors.DuplicateAccessibilityModifier);
+          } else {
+            modified.accessibility = modifier;
+          }
+        } else {
+          if (Object.hasOwnProperty.call(modified, modifier)) {
+            this.raise(startPos, TSErrors.DuplicateModifier, modifier);
+          }
+          modified[modifier] = true;
         }
-        modified[modifier] = true;
       }
     }
 
@@ -2120,10 +2136,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       member: any,
       state: N.ParseClassMemberState,
     ): void {
-      this.tsParseModifiers(member, ["declare"]);
-      const accessibility = this.parseAccessModifier();
-      if (accessibility) member.accessibility = accessibility;
-      this.tsParseModifiers(member, ["declare"]);
+      this.tsParseModifiers(member, [
+        "declare",
+        "private",
+        "public",
+        "protected",
+      ]);
 
       const callParseClassMember = () => {
         super.parseClassMember(classBody, member, state);
