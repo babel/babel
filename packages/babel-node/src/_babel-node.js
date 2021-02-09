@@ -213,7 +213,7 @@ function requireArgs() {
 }
 
 function replStart() {
-  repl.start({
+  const replServer = repl.start({
     prompt: "babel > ",
     input: process.stdin,
     output: process.stdout,
@@ -221,6 +221,11 @@ function replStart() {
     useGlobal: true,
     preview: true,
   });
+  if (process.env.BABEL_8_BREAKING) {
+    replServer.setupHistory(process.env.NODE_REPL_HISTORY, () => {});
+  } else {
+    replServer.setupHistory?.(process.env.NODE_REPL_HISTORY, () => {});
+  }
 }
 
 function replEval(code, context, filename, callback) {
