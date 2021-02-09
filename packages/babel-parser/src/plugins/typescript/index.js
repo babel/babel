@@ -82,6 +82,7 @@ const TSErrors = Object.freeze({
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
   IndexSignatureHasDeclare:
     "Index signatures cannot have the 'declare' modifier",
+  InvalidModifierOnTypeMember: "'%0' modifier cannot appear on a type member.",
   InvalidTupleMemberLabel:
     "Tuple members must be labeled with a simple identifier.",
   MixedLabeledAndUnlabeledElements:
@@ -573,16 +574,33 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      const readonly = !!this.tsParseModifier(["readonly"]);
+      this.tsParseModifiers(node, [
+        "readonly",
+        "declare",
+        "abstract",
+        "private",
+        "protected",
+        "public",
+        "static",
+      ]);
+
+      // type members allow only 'readonly' modifier.
+      this.tsCheckModifiers(node, [
+        "declare",
+        "abstract",
+        "private",
+        "protected",
+        "public",
+        "static",
+      ]);
 
       const idx = this.tsTryParseIndexSignature(node);
       if (idx) {
-        if (readonly) node.readonly = true;
         return idx;
       }
 
       this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
-      return this.tsParsePropertyOrMethodSignature(node, readonly);
+      return this.tsParsePropertyOrMethodSignature(node, !!node.readonly);
     }
 
     tsParseTypeLiteral(): N.TsTypeLiteral {
@@ -2892,6 +2910,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       } else {
         this.unexpected(null, tt._class);
+      }
+    }
+
+    tsCheckModifiers(
+      modified: {
+        [key: TsModifier]: ?true,
+        accessibility?: N.Accessibility,
+      },
+      denylist: TsModifier[],
+    ): void {
+      const startPos = this.state.start;
+      for (const modifier of denylist) {
+        if (
+          modified[modifier] ||
+          (tsIsAccessModifier(modifier) && modified.accessibility === modifier)
+        ) {
+          this.raise(startPos, TSErrors.InvalidModifierOnTypeMember, modifier);
+        }
       }
     }
   };
