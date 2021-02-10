@@ -2407,6 +2407,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
           }
         });
+        // estree support
+      } else if (
+        method.type === "MethodDefinition" &&
+        isConstructor &&
+        method.value?.params
+      ) {
+        method.value.params.forEach(param => {
+          if (this.isThisParam(param)) {
+            this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
+          }
+        });
       }
     }
 
