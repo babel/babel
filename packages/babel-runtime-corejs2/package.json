@@ -224,8 +224,8 @@
       "default": "./helpers/readOnlyError/index.mjs"
     },
     "./helpers/writeOnlyError": {
-      "node": "./helpers/writeOnlyError/index.js",
       "module": "./helpers/writeOnlyError/index.mjs",
+      "node": "./helpers/writeOnlyError/index.js",
       "default": "./helpers/writeOnlyError/index.mjs"
     },
     "./helpers/classNameTDZError": {
