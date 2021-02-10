@@ -2409,6 +2409,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         });
         // estree support
       } else if (
+        // $FlowFixMe flow does not know about the face that estree can replace ClassMethod with MethodDefinition
         method.type === "MethodDefinition" &&
         isConstructor &&
         method.value?.params
