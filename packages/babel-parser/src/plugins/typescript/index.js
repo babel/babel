@@ -1674,7 +1674,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           } else if (this.isLineTerminator()) {
             break;
           }
-          
+
           if (this.match(tt.name)) {
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
