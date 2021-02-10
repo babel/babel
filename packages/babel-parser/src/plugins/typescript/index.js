@@ -1651,24 +1651,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "module":
-          if (!next || !this.hasFollowingLineBreak()) {
-            if (next) this.next();
-            if (!this.isLineTerminator()) {
-              if (this.match(tt.string)) {
-                return this.tsParseAmbientExternalModuleDeclaration(node);
-              } else if (this.match(tt.name)) {
-                return this.tsParseModuleOrNamespaceDeclaration(node);
-              }
-            }
+          // "module" cannot be followed by a line break.
+          if (next) {
+            if (this.hasFollowingLineBreak()) break;
+            this.next();
+          } else if (this.isLineTerminator()) {
+            break;
+          }
+
+          if (this.match(tt.string)) {
+            return this.tsParseAmbientExternalModuleDeclaration(node);
+          } else if (this.match(tt.name)) {
+            return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "namespace":
-          if (!next || !this.hasFollowingLineBreak()) {
-            if (next) this.next();
-            if (!this.isLineTerminator() && this.match(tt.name)) {
-              return this.tsParseModuleOrNamespaceDeclaration(node);
-            }
+          // "namespace" cannot be followed by a line break.
+          if (next) {
+            if (this.hasFollowingLineBreak()) break;
+            this.next();
+          } else if (this.isLineTerminator()) {
+            break;
+          }
+          
+          if (this.match(tt.name)) {
+            return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
