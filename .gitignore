@@ -25,6 +25,7 @@ package-lock.json
 
 /packages/babel-compat-data/build
 
+/packages/babel-runtime/helpers/*.js
 /packages/babel-runtime/helpers/*/*.js
 /packages/babel-runtime/helpers/*/*.mjs
 !/packages/babel-runtime/helpers/toArray/*
@@ -35,6 +36,7 @@ package-lock.json
 !/packages/babel-runtime/helpers/esm/iterableToArray.js
 !/packages/babel-runtime/helpers/esm/temporalRef.js
 
+/packages/babel-runtime-corejs2/helpers/*.js
 /packages/babel-runtime-corejs2/helpers/*/*.js
 /packages/babel-runtime-corejs2/helpers/*/*.mjs
 !/packages/babel-runtime-corejs2/helpers/toArray/*
@@ -47,6 +49,7 @@ package-lock.json
 /packages/babel-runtime-corejs2/core-js/**/*.js
 !/packages/babel-runtime-corejs2/core-js/map.js
 
+/packages/babel-runtime-corejs3/helpers/*.js
 /packages/babel-runtime-corejs3/helpers/*/*.js
 /packages/babel-runtime-corejs3/helpers/*/*.mjs
 /packages/babel-runtime-corejs3/helpers/esm/*.js
