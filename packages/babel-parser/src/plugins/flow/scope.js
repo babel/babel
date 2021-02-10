@@ -8,6 +8,7 @@ import {
 } from "../../util/scopeflags";
 import * as N from "../../types";
 
+// Reference implementation: https://github.com/facebook/flow/blob/23aeb2a2ef6eb4241ce178fde5d8f17c5f747fb5/src/typing/env.ml#L536-L584
 class FlowScope extends Scope {
   // declare function foo(): type;
   declareFunctions: string[] = [];
