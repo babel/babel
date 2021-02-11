@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-validator-option",
-  "version": "7.12.11",
+  "version": "7.12.16",
   "description": "Validate plugin/preset options",
   "repository": {
     "type": "git",
