@@ -110,10 +110,10 @@ export function arrowFunctionToExpression(
   this: NodePath,
   {
     allowInsertArrow = true,
-    /** @deprecated Use `newableArrowFunctions` instead */
+    /** @deprecated Use `noNewArrows` instead */
     specCompliant = false,
     // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
-    newableArrowFunctions = !specCompliant,
+    noNewArrows = !specCompliant,
   } = {},
 ) {
   if (!this.isArrowFunctionExpression()) {
@@ -124,14 +124,14 @@ export function arrowFunctionToExpression(
 
   const thisBinding = hoistFunctionEnvironment(
     this,
-    newableArrowFunctions,
+    noNewArrows,
     allowInsertArrow,
   );
 
   this.ensureBlock();
   // @ts-expect-error todo(flow->ts): avoid mutating nodes
   this.node.type = "FunctionExpression";
-  if (!newableArrowFunctions) {
+  if (!noNewArrows) {
     const checkBinding = thisBinding
       ? null
       : this.parentPath.scope.generateUidIdentifier("arrowCheckId");
@@ -173,7 +173,7 @@ export function arrowFunctionToExpression(
 function hoistFunctionEnvironment(
   fnPath,
   // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
-  newableArrowFunctions = true,
+  noNewArrows = true,
   allowInsertArrow = true,
 ) {
   const thisEnvFn = fnPath.findParent(p => {
@@ -311,11 +311,11 @@ function hoistFunctionEnvironment(
 
   // Convert all "this" references in the arrow to point at the alias.
   let thisBinding;
-  if (thisPaths.length > 0 || !newableArrowFunctions) {
+  if (thisPaths.length > 0 || !noNewArrows) {
     thisBinding = getThisBinding(thisEnvFn, inConstructor);
 
     if (
-      newableArrowFunctions ||
+      noNewArrows ||
       // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
       // because it might not have been initialized yet.
       (inConstructor && hasSuperClass(thisEnvFn))
@@ -329,7 +329,7 @@ function hoistFunctionEnvironment(
         thisChild.replaceWith(thisRef);
       });
 
-      if (!newableArrowFunctions) thisBinding = null;
+      if (!noNewArrows) thisBinding = null;
     }
   }
 

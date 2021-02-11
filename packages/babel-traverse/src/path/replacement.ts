@@ -273,7 +273,7 @@ export function replaceExpressionWithStatements(
 
   const callee = this.get("callee") as NodePath<t.FunctionExpression>;
 
-  // This is an IIFE, so we don't need to worry about the newableArrowFunctions assumption
+  // This is an IIFE, so we don't need to worry about the noNewArrows assumption
   callee.arrowFunctionToExpression();
 
   // (() => await xxx)() -> await (async () => await xxx)();

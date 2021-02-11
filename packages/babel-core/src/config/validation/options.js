@@ -339,7 +339,7 @@ export const assumptionsNames = new Set<string>([
   "ignoreToPrimitiveHint",
   "iterableIsArray",
   "mutableTemplateObject",
-  "newableArrowFunctions",
+  "noNewArrows",
   "noDocumentAll",
   "objectRestNoSymbols",
   "privateFieldsAsProperties",

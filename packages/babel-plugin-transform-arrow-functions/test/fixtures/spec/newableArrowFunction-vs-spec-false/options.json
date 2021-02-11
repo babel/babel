@@ -4,6 +4,6 @@
     ["transform-arrow-functions", { "spec": false }]
   ],
   "assumptions": {
-    "newableArrowFunctions": false
+    "noNewArrows": false
   }
 }
