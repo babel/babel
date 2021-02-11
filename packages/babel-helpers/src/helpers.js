@@ -2092,11 +2092,14 @@ helpers.classPrivateMethodGet = helper("7.1.6")`
   }
 `;
 
-helpers.classPrivateMethodSet = helper("7.1.6")`
-  export default function _classPrivateMethodSet() {
-    throw new TypeError("attempted to reassign private method");
-  }
-`;
+if (!process.env.BABEL_8_BREAKING) {
+  // Use readOnlyError instead
+  helpers.classPrivateMethodSet = helper("7.1.6")`
+    export default function _classPrivateMethodSet() {
+      throw new TypeError("attempted to reassign private method");
+    }
+  `;
+}
 
 helpers.wrapRegExp = helper("7.2.6")`
   import wrapNativeSuper from "wrapNativeSuper";
