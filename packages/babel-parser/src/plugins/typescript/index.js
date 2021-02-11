@@ -215,7 +215,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       for (;;) {
         const startPos = this.state.start;
-        const modifier: ?TsModifier = this.tsParseModifier(allowedModifiers);
+        const modifier: ?TsModifier = this.tsParseModifier(
+          allowedModifiers.concat(disallowedModifiers ?? []),
+        );
 
         if (!modifier) break;
 
@@ -590,18 +592,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      const denyModifiers = [
-        "declare",
-        "abstract",
-        "private",
-        "protected",
-        "public",
-        "static",
-      ];
       this.tsParseModifiers(
         node,
-        ["readonly", ...denyModifiers],
-        denyModifiers,
+        ["readonly"],
+        ["declare", "abstract", "private", "protected", "public", "static"],
         TSErrors.InvalidModifierOnTypeMember,
       );
 
