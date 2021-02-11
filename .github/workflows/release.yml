@@ -117,6 +117,7 @@ jobs:
     outputs:
       is-main: ${{ steps.is-main.outputs.result == 1 }}
       changelog: ${{ steps.changelog.outputs.changelog }}
+      version: ${{ steps.tags.outputs.new }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -179,7 +180,7 @@ jobs:
         run: |
           git add CHANGELOG.md
           git -c user.name="Babel Bot" -c user.email="babel-bot@users.noreply.github.com" \
-            commit -m "Add ${{ steps.tags.outputs.new }} to CHANGELOG.md [skip ci]" --no-verify --quiet
+            commit -m "Add ${{ needs.github-release.outputs.version }} to CHANGELOG.md [skip ci]" --no-verify --quiet
 
       - name: Push to GitHub
         run: |
