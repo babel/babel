@@ -19,6 +19,30 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.16 (2021-02-11)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#12783](https://github.com/babel/babel/pull/12783) fix: use semver gte comparison on polyfill version tester ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#12735](https://github.com/babel/babel/pull/12735) [parser] Fix scope handling of Flow declared functions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#12775](https://github.com/babel/babel/pull/12775) babel-parser(ts): Throw recoverable for duplicates access modifier ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#12771](https://github.com/babel/babel/pull/12771) babel-parser(ts): Raise recoverable error for abstract interface ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#12763](https://github.com/babel/babel/pull/12763) fix(ts): include `asserts` in `TSTypePredicate` location ([@fedeci](https://github.com/fedeci))
+  * [#12758](https://github.com/babel/babel/pull/12758) [TS] Create `TSUnionType` or `TSIntersectionType` when typealias has a leading operator ([@fedeci](https://github.com/fedeci))
+* `babel-plugin-transform-typescript`
+  * [#12760](https://github.com/babel/babel/pull/12760) Support destructuring variable declarator within TS namespace ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-node`
+  * [#12786](https://github.com/babel/babel/pull/12786) Polish `@babel/node` REPL ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* Other
+  * [#12781](https://github.com/babel/babel/pull/12781) pnp does not work with ESM dev scripts ([@JLHwung](https://github.com/JLHwung))
+  * [#12766](https://github.com/babel/babel/pull/12766) docs: Update build requirements in CONTRIBUTING.md ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-cli`, `babel-core`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-helper-validator-option`, `babel-node`, `babel-parser`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-dynamic-import`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`, `babel-preset-env`, `babel-preset-typescript`
+  * [#12759](https://github.com/babel/babel/pull/12759) Avoid importing `.json` files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.12.15 (2021-02-04)
 
 #### :bug: Bug Fix
