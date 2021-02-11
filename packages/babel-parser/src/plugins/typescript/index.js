@@ -232,12 +232,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           modified[modifier] = true;
         }
 
-        if (
-          errorTemplate &&
-          disallowedModifiers &&
-          disallowedModifiers.includes(modifier)
-        ) {
-          this.raise(startPos, errorTemplate, modifier);
+        if (disallowedModifiers && disallowedModifiers.includes(modifier)) {
+          this.raise(
+            startPos,
+            // $FlowIgnore
+            errorTemplate,
+            modifier,
+          );
         }
       }
     }
