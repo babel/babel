@@ -102,8 +102,6 @@ const FlowErrors = Object.freeze({
   SpreadVariance: "Spread properties cannot have variance",
   ThisParamAnnotationRequired:
     "A type annotation is required for the `this` parameter.",
-  ThisParamBannedInArrowFunctions:
-    "Arrow functions cannot have a `this` parameter; arrow functions automatically bind `this` when declared.",
   ThisParamBannedInConstructor:
     "Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions.",
   ThisParamMayNotBeOptional: "The `this` parameter cannot be optional.",
@@ -1184,7 +1182,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (kind === "get" || kind === "set") {
             this.flowCheckGetterSetterParams(node);
           }
-          if (node.key.name === "constructor" && node.value.this) {
+          /** Declared classes/interfaces do not allow spread */
+          if (
+            !allowSpread &&
+            node.key.name === "constructor" &&
+            node.value.this
+          ) {
             this.raise(
               node.value.this.start,
               FlowErrors.ThisParamBannedInConstructor,
@@ -2404,23 +2407,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
 
       if (method.params && isConstructor) {
-        method.params.forEach(param => {
-          if (this.isThisParam(param)) {
-            this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
-          }
-        });
+        const params = method.params;
+        if (params.length > 0 && this.isThisParam(params[0])) {
+          this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
+        }
         // estree support
       } else if (
         // $FlowFixMe flow does not know about the face that estree can replace ClassMethod with MethodDefinition
         method.type === "MethodDefinition" &&
         isConstructor &&
-        method.value?.params
+        method.value.params
       ) {
-        method.value.params.forEach(param => {
-          if (this.isThisParam(param)) {
-            this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
-          }
-        });
+        const params = method.value.params;
+        if (params.length > 0 && this.isThisParam(params[0])) {
+          this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
+        }
       }
     }
 
@@ -2466,14 +2467,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
       super.checkGetterSetterParams(method);
       const params = this.getObjectOrClassMethodParams(method);
-
-      params.forEach(param => {
+      if (params.length > 0) {
+        const param = params[0];
         if (this.isThisParam(param) && method.kind === "get") {
           this.raise(param.start, FlowErrors.GetterMayNotHaveThisParam);
         } else if (this.isThisParam(param)) {
           this.raise(param.start, FlowErrors.SetterMayNotHaveThisParam);
         }
-      });
+      }
     }
 
     parsePropertyName(
@@ -2541,7 +2542,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       if (this.match(tt.colon)) {
         param.typeAnnotation = this.flowParseTypeAnnotation();
-      } else if (param.type === "Identifier" && param.name === "this") {
+      } else if (this.isThisParam(param)) {
         this.raise(param.start, FlowErrors.ThisParamAnnotationRequired);
       }
 

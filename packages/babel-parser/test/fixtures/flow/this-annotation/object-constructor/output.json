@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":10,"end":47,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":2}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ],
+        "expression": {
+          "type": "ObjectExpression",
+          "start":11,"end":46,"loc":{"start":{"line":3,"column":1},"end":{"line":5,"column":1}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 10
+          },
+          "properties": [
+            {
+              "type": "ObjectMethod",
+              "start":17,"end":44,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":31}},
+              "method": true,
+              "key": {
+                "type": "Identifier",
+                "start":17,"end":28,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":15},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":29,"end":41,"loc":{"start":{"line":4,"column":16},"end":{"line":4,"column":28},"identifierName":"this"},
+                  "name": "this",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start":33,"end":41,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":28}},
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start":35,"end":41,"loc":{"start":{"line":4,"column":22},"end":{"line":4,"column":28}}
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":42,"end":44,"loc":{"start":{"line":4,"column":29},"end":{"line":4,"column":31}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+    }
+  ]
+}
