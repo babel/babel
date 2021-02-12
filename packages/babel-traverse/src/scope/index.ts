@@ -279,15 +279,6 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     }
   },
 
-  Block(path) {
-    const paths = path.get("body");
-    for (const bodyPath of paths) {
-      if (bodyPath.isFunctionDeclaration()) {
-        path.scope.getBlockParent().registerDeclaration(bodyPath);
-      }
-    }
-  },
-
   CatchClause(path) {
     path.scope.registerBinding("let", path);
   },
