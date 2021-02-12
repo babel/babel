@@ -2,7 +2,7 @@ import traverse, { NodePath } from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-function getPath(code, options) {
+function getPath(code, options): NodePath<t.Program> {
   const ast =
     typeof code === "string" ? parse(code, options) : createNode(code);
   let path;
@@ -360,6 +360,41 @@ describe("scope", () => {
       });
     });
 
+    describe("after crawl", () => {
+      it("modified function identifier available in function scope", () => {
+        const path = getPath("(function f(f) {})")
+          .get("body")[0]
+          .get("expression");
+        path.get("id").replaceWith(t.identifier("g"));
+        path.scope.crawl();
+        const binding = path.scope.getBinding("g");
+        expect(binding.kind).toBe("local");
+      });
+      it("modified function param available in function scope", () => {
+        const path = getPath("(function f(f) {})")
+          .get("body")[0]
+          .get("expression");
+        path.get("params")[0].replaceWith(t.identifier("g"));
+        path.scope.crawl();
+        const binding = path.scope.getBinding("g");
+        expect(binding.kind).toBe("param");
+      });
+      it("modified class identifier available in class expression scope", () => {
+        const path = getPath("(class c {})").get("body")[0].get("expression");
+        path.get("id").replaceWith(t.identifier("g"));
+        path.scope.crawl();
+        const binding = path.scope.getBinding("g");
+        expect(binding.kind).toBe("local");
+      });
+      it("modified class identifier available in class declaration scope", () => {
+        const path = getPath("class c {}").get("body")[0];
+        path.get("id").replaceWith(t.identifier("g"));
+        path.scope.crawl();
+        const binding = path.scope.getBinding("g");
+        expect(binding.kind).toBe("let");
+      });
+    });
+
     it("class identifier available in class scope after crawl", function () {
       const path = getPath("class a { build() { return new a(); } }");
 
@@ -497,7 +532,6 @@ describe("scope", () => {
       // unless node1 === node2
       const cases = [
         ["const", "let", false],
-
         ["const", "const", false],
         ["const", "function", false],
         ["const", "class", false],
@@ -508,11 +542,14 @@ describe("scope", () => {
         ["let", "function", false],
         ["let", "var", false],
 
-        //["var", "class", true],
+        ["var", "class", false],
         ["var", "function", true],
         ["var", "var", true],
 
         ["class", "function", false],
+        ["class", "class", false],
+
+        ["function", "function", true],
       ];
 
       const createNode = function (kind) {
