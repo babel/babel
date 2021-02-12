@@ -92,6 +92,82 @@ describe("scope", () => {
       });
     });
 
+    describe("import declaration", () => {
+      it.each([
+        [
+          "import default",
+          "import foo from 'foo';(foo)=>{}",
+          "foo",
+          "ImportDefaultSpecifier",
+        ],
+        [
+          "import named default",
+          "import { default as foo } from 'foo';(foo)=>{}",
+          "foo",
+          "ImportSpecifier",
+        ],
+        [
+          "import named",
+          "import { foo } from 'foo';(foo)=>{}",
+          "foo",
+          "ImportSpecifier",
+        ],
+        [
+          "import named aliased",
+          "import { _foo as foo } from 'foo';(foo)=>{}",
+          "foo",
+          "ImportSpecifier",
+        ],
+        [
+          "import namespace",
+          "import * as foo from 'foo';(foo)=>{}",
+          "foo",
+          "ImportNamespaceSpecifier",
+        ],
+      ])("%s", (testTitle, source, bindingName, bindingNodeType) => {
+        expect(
+          getPath(source, { sourceType: "module" }).scope.getBinding(
+            bindingName,
+          ).path.type,
+        ).toBe(bindingNodeType);
+      });
+    });
+
+    describe("export declaration", () => {
+      it.each([
+        [
+          "export default function",
+          "export default function foo(foo) {}",
+          "foo",
+          "FunctionDeclaration",
+        ],
+        [
+          "export default class",
+          "export default class foo extends function foo () {} {}",
+          "foo",
+          "ClassDeclaration",
+        ],
+        [
+          "export named default",
+          "export const foo = function foo(foo) {};",
+          "foo",
+          "VariableDeclarator",
+        ],
+        [
+          "export named default",
+          "export const [ { foo } ] = function foo(foo) {};",
+          "foo",
+          "VariableDeclarator",
+        ],
+      ])("%s", (testTitle, source, bindingName, bindingNodeType) => {
+        expect(
+          getPath(source, { sourceType: "module" }).scope.getBinding(
+            bindingName,
+          ).path.type,
+        ).toBe(bindingNodeType);
+      });
+    });
+
     it("variable declaration", function () {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",
