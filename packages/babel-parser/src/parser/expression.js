@@ -54,6 +54,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope";
+import ClassScopeHandler from "../util/class-scope";
 import { Errors } from "./error";
 
 /*::
