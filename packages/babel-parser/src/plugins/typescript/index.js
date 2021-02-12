@@ -234,7 +234,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           modified[modifier] = true;
         }
 
-        if (disallowedModifiers && disallowedModifiers.includes(modifier)) {
+        if (disallowedModifiers?.includes(modifier)) {
           this.raise(
             startPos,
             // $FlowIgnore
