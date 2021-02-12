@@ -246,8 +246,6 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   LabeledStatement(path) {
-    // @ts-expect-error todo(flow->ts): possible bug - statement might not have name and so should not be added as global
-    path.scope.getProgramParent().addGlobal(path.node);
     path.scope.getBlockParent().registerDeclaration(path);
   },
 
