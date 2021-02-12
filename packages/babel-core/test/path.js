@@ -1,12 +1,16 @@
 import { transform } from "../lib/index";
 import Plugin from "../lib/config/plugin";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 describe("traversal path", function () {
   it("replaceWithSourceString", function () {
     const expectCode = "function foo() {}";
 
     const actualCode = transform(expectCode, {
-      cwd: __dirname,
+      cwd,
       plugins: [
         new Plugin({
           visitor: {
@@ -25,7 +29,7 @@ describe("traversal path", function () {
     const expectCode = "var fn = () => true;";
 
     const actualCode = transform(expectCode, {
-      cwd: __dirname,
+      cwd,
       plugins: [
         new Plugin({
           visitor: {
@@ -55,7 +59,7 @@ describe("traversal path", function () {
     const expectCode = "var fn = () => { return true; }";
 
     const actualCode = transform(expectCode, {
-      cwd: __dirname,
+      cwd,
       plugins: [
         new Plugin({
           visitor: {
@@ -77,7 +81,7 @@ describe("traversal path", function () {
     const expectCode = "for (KEY in right);";
 
     const actualCode = transform(expectCode, {
-      cwd: __dirname,
+      cwd,
       plugins: [
         new Plugin({
           visitor: {
@@ -108,7 +112,7 @@ describe("traversal path", function () {
     const expectCode = "for (var KEY in right);";
 
     const actualCode = transform(expectCode, {
-      cwd: __dirname,
+      cwd,
       plugins: [
         new Plugin({
           visitor: {
@@ -130,7 +134,7 @@ describe("traversal path", function () {
     const expectCode = "for (KEY;;);";
 
     const actualCode = transform(expectCode, {
-      cwd: __dirname,
+      cwd,
       plugins: [
         new Plugin({
           visitor: {
@@ -161,7 +165,7 @@ describe("traversal path", function () {
     const expectCode = "for (var KEY;;);";
 
     const actualCode = transform(expectCode, {
-      cwd: __dirname,
+      cwd,
       plugins: [
         new Plugin({
           visitor: {

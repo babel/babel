@@ -1,4 +1,5 @@
-import { join } from "path";
+import path from "path";
+import { fileURLToPath } from "url";
 import * as babel from "..";
 
 import {
@@ -14,7 +15,11 @@ const nodeGte8 = (...args) => {
 };
 
 describe("asynchronicity", () => {
-  const base = join(__dirname, "fixtures", "async");
+  const base = path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "fixtures",
+    "async",
+  );
   let cwd;
 
   beforeEach(function () {

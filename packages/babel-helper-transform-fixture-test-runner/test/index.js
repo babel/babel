@@ -1,4 +1,7 @@
 import { runCodeInTestContext } from "..";
+import { fileURLToPath } from "url";
+
+const filename = fileURLToPath(import.meta.url);
 
 describe("helper-transform-fixture-test-runner", function () {
   it("should not execute code in Node's global context", function () {
@@ -10,7 +13,7 @@ describe("helper-transform-fixture-test-runner", function () {
           global.foo = "inner";
         `,
         {
-          filename: `${__filename}.fake1`,
+          filename: `${filename}.fake1`,
         },
       );
 
@@ -20,7 +23,7 @@ describe("helper-transform-fixture-test-runner", function () {
           expect(global.foo).toBe("inner");
         `,
         {
-          filename: `${__filename}.fake2`,
+          filename: `${filename}.fake2`,
         },
       );
     } finally {
@@ -30,14 +33,14 @@ describe("helper-transform-fixture-test-runner", function () {
           delete global.foo;
         `,
         {
-          filename: `${__filename}.fake3`,
+          filename: `${filename}.fake3`,
         },
       );
     }
   });
   it("should print correct trace position when error is thrown in the first line", () => {
     const opts = {
-      filename: `${__filename}.fake4`,
+      filename: `${filename}.fake4`,
     };
     runCodeInTestContext(
       `try { throw new Error() } catch (e) {

@@ -1,8 +1,13 @@
 import * as babel from "../lib/index";
 import path from "path";
+import { fileURLToPath } from "url";
 
 describe("addon resolution", function () {
-  const base = path.join(__dirname, "fixtures", "resolution");
+  const base = path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "fixtures",
+    "resolution",
+  );
   let cwd;
 
   beforeEach(function () {

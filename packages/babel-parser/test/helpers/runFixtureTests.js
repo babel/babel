@@ -2,8 +2,12 @@ import { multiple as getFixtures } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const rootPath = path.join(__dirname, "../../../..");
+const rootPath = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../../..",
+);
 
 const serialized = "$$ babel internal serialized type";
 

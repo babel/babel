@@ -45,7 +45,7 @@ const aliases = new Map([
   ["-gc", "--expose-gc"],
 ]);
 
-getV8Flags(function (err, v8Flags) {
+getV8Flags(async function (err, v8Flags) {
   for (let i = 0; i < babelArgs.length; i++) {
     const arg = babelArgs[i];
     const flag = arg.split("=")[0];
@@ -73,10 +73,11 @@ getV8Flags(function (err, v8Flags) {
   }
 
   try {
-    const kexec = require("kexec");
+    const { default: kexec } = await import("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
     if (
+      err.code !== "ERR_MODULE_NOT_FOUND" &&
       err.code !== "MODULE_NOT_FOUND" &&
       err.code !== "UNDECLARED_DEPENDENCY"
     ) {

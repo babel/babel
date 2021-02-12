@@ -1,9 +1,15 @@
 import fs from "fs";
 import path from "path";
 import { parse } from "../lib";
+import { fileURLToPath } from "url";
 
 function fixture(...args) {
-  return path.join(__dirname, "fixtures", "parse", ...args);
+  return path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "fixtures",
+    "parse",
+    ...args,
+  );
 }
 
 describe("parse", function () {

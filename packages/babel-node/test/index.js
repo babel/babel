@@ -8,8 +8,11 @@ const merge = require("lodash/merge");
 const path = require("path");
 const fs = require("fs");
 
-const fixtureLoc = path.join(__dirname, "fixtures");
-const tmpLoc = path.join(__dirname, "tmp");
+import { fileURLToPath } from "url";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const fixtureLoc = path.join(dirname, "fixtures");
+const tmpLoc = path.join(dirname, "tmp");
 
 const fileFilter = function (x) {
   return x !== ".DS_Store";
@@ -91,7 +94,7 @@ const assertTest = function (stdout, stderr, opts) {
 };
 
 const buildTest = function (binName, testName, opts) {
-  const binLoc = path.join(__dirname, "../lib", binName);
+  const binLoc = path.join(dirname, "../lib", binName);
 
   return function (callback) {
     saveInFiles(opts.inFiles);

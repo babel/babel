@@ -2,11 +2,17 @@ import eslint from "eslint";
 import fs from "fs";
 import path from "path";
 import * as parser from "../../../../../babel-eslint-parser";
+import { fileURLToPath } from "url";
 
 eslint.linter.defineParser("@babel/eslint-parser", parser);
 
 const paths = {
-  fixtures: path.join(__dirname, "../../..", "fixtures", "rules"),
+  fixtures: path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../../..",
+    "fixtures",
+    "rules",
+  ),
 };
 
 const encoding = "utf8";

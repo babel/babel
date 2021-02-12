@@ -1,11 +1,14 @@
 import path from "path";
 import rule from "../../src/rules/dry-error-messages";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
+import { fileURLToPath } from "url";
 
-const FILENAME = path.resolve(__dirname, "test/lib/index.js");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const FILENAME = path.resolve(dirname, "test/lib/index.js");
 const ERRORS_MODULE = "errorsModule";
-const MODULE_SAME_DIR = path.resolve(__dirname, "test/lib/errorsModule.js");
-const MODULE_PARENT_DIR = path.resolve(__dirname, "test/errorsModule.js");
+const MODULE_SAME_DIR = path.resolve(dirname, "test/lib/errorsModule.js");
+const MODULE_PARENT_DIR = path.resolve(dirname, "test/errorsModule.js");
 
 const ruleTester = new RuleTester();
 

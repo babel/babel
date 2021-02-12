@@ -1,8 +1,11 @@
 import fs from "fs";
 import os from "os";
 import path from "path";
+import { fileURLToPath } from "url";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "../lib";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm";
 
@@ -42,11 +45,11 @@ const pfs =
   });
 
 function fixture(...args) {
-  return path.join(__dirname, "fixtures", "config", ...args);
+  return path.join(dirname, "fixtures", "config", ...args);
 }
 
 function loadOptions(opts) {
-  return babel.loadOptions({ cwd: __dirname, ...opts });
+  return babel.loadOptions({ cwd: dirname, ...opts });
 }
 
 function pairs(items) {

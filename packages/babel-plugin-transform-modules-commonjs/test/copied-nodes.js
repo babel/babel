@@ -1,10 +1,12 @@
-const babel = require("@babel/core");
+import * as babel from "@babel/core";
+import { fileURLToPath } from "url";
+import path from "path";
 
 test("Doesn't use the same object for two different nodes in the AST", function () {
   const code = 'import Foo from "bar"; Foo; Foo;';
 
   const ast = babel.transform(code, {
-    cwd: __dirname,
+    cwd: path.dirname(fileURLToPath(import.meta.url)),
     ast: true,
     plugins: [[require("../"), { loose: true }]],
   }).ast;
