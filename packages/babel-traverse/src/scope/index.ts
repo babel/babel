@@ -860,22 +860,6 @@ export default class Scope {
     this.uids = Object.create(null);
     this.data = Object.create(null);
 
-    // TODO: explore removing this as it should be covered by collectorVisitor
-    if (path.isFunction()) {
-      if (
-        path.isFunctionExpression() &&
-        path.has("id") &&
-        !path.get("id").node[t.NOT_LOCAL_BINDING]
-      ) {
-        this.registerBinding("local", path.get("id"), path);
-      }
-
-      const params: Array<NodePath> = path.get("params");
-      for (const param of params) {
-        this.registerBinding("param", param);
-      }
-    }
-
     const programParent = this.getProgramParent();
     if (programParent.crawling) return;
 
@@ -886,6 +870,21 @@ export default class Scope {
     };
 
     this.crawling = true;
+    // traverse does not visit the root node, here we explicitly collect
+    // root node binding info when the root is not a Program.
+    if (programParent.path !== path && collectorVisitor._exploded) {
+      // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
+      for (const visit of collectorVisitor.enter) {
+        visit(path, state);
+      }
+      const typeVisitors = collectorVisitor[path.type];
+      if (typeVisitors) {
+        // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
+        for (const visit of typeVisitors.enter) {
+          visit(path, state);
+        }
+      }
+    }
     path.traverse(collectorVisitor, state);
     this.crawling = false;
 
