@@ -207,7 +207,7 @@ export default function convertFunctionParams(
     const bodyPath = path.get("body.body");
     const arrowPath = bodyPath[bodyPath.length - 1].get("argument.callee");
 
-    // This is an IIFE, so we don't need to worry about the newableArrowFunctions assumption
+    // This is an IIFE, so we don't need to worry about the noNewArrows assumption
     arrowPath.arrowFunctionToExpression();
 
     arrowPath.node.generator = path.node.generator;

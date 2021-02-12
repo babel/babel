@@ -1,6 +1,6 @@
 {
   "plugins": ["external-helpers", "transform-arrow-functions"],
   "assumptions": {
-    "newableArrowFunctions": false
+    "noNewArrows": false
   }
 }

@@ -8,7 +8,7 @@ export default declare((api, options) => {
 
   const ignoreFunctionLength =
     api.assumption("ignoreFunctionLength") ?? options.loose;
-  const newableArrowFunctions = api.assumption("newableArrowFunctions");
+  const noNewArrows = api.assumption("noNewArrows");
 
   return {
     name: "transform-parameters",
@@ -22,7 +22,7 @@ export default declare((api, options) => {
             .some(param => param.isRestElement() || param.isAssignmentPattern())
         ) {
           // default/rest visitors require access to `arguments`, so it cannot be an arrow
-          path.arrowFunctionToExpression({ newableArrowFunctions });
+          path.arrowFunctionToExpression({ noNewArrows });
         }
 
         const convertedRest = convertFunctionRest(path);
