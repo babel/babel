@@ -515,14 +515,12 @@ export default class ExpressionParser extends LValParser {
       this.next();
       return this.parseAwait(startPos, startLoc);
     }
-    if (this.isContextual("module")) {
-      const lookahead = this.lookahead();
-      if (
-        lookahead.type === tt.braceL &&
-        !this.hasPrecedingLineBreak(lookahead)
-      ) {
-        return this.parseModuleExpression();
-      }
+    if (
+      this.isContextual("module") &&
+      this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
+      !this.hasFollowingLineBreak()
+    ) {
+      return this.parseModuleExpression();
     }
     const update = this.match(tt.incDec);
     const node = this.startNode();
