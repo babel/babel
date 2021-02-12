@@ -1,0 +1,121 @@
+{
+  "type": "File",
+  "start":0,"end":124,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
+  "errors": [
+    "SyntaxError: 'private' modifier cannot appear on a type member. (2:2)",
+    "SyntaxError: 'public' modifier cannot appear on a type member. (3:2)",
+    "SyntaxError: 'protected' modifier cannot appear on a type member. (4:2)",
+    "SyntaxError: 'static' modifier cannot appear on a type member. (5:2)",
+    "SyntaxError: 'declare' modifier cannot appear on a type member. (6:2)",
+    "SyntaxError: 'abstract' modifier cannot appear on a type member. (7:2)",
+    "SyntaxError: 'readonly' modifier can only appear on a property declaration or index signature. (8:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":124,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":124,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":13},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":14,"end":124,"loc":{"start":{"line":1,"column":14},"end":{"line":9,"column":1}},
+          "body": [
+            {
+              "type": "TSMethodSignature",
+              "start":18,"end":30,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}},
+              "accessibility": "private",
+              "key": {
+                "type": "Identifier",
+                "start":26,"end":27,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "parameters": []
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":33,"end":44,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":13}},
+              "accessibility": "public",
+              "key": {
+                "type": "Identifier",
+                "start":40,"end":41,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":10},"identifierName":"b"},
+                "name": "b"
+              },
+              "computed": false,
+              "parameters": []
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":47,"end":61,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":16}},
+              "accessibility": "protected",
+              "key": {
+                "type": "Identifier",
+                "start":57,"end":58,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":13},"identifierName":"c"},
+                "name": "c"
+              },
+              "computed": false,
+              "parameters": []
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":64,"end":75,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":13}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":71,"end":72,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":10},"identifierName":"d"},
+                "name": "d"
+              },
+              "computed": false,
+              "parameters": []
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":78,"end":90,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":14}},
+              "declare": true,
+              "key": {
+                "type": "Identifier",
+                "start":86,"end":87,"loc":{"start":{"line":6,"column":10},"end":{"line":6,"column":11},"identifierName":"e"},
+                "name": "e"
+              },
+              "computed": false,
+              "parameters": []
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":93,"end":106,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":15}},
+              "abstract": true,
+              "key": {
+                "type": "Identifier",
+                "start":102,"end":103,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":12},"identifierName":"f"},
+                "name": "f"
+              },
+              "computed": false,
+              "parameters": []
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":109,"end":122,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":15}},
+              "readonly": true,
+              "key": {
+                "type": "Identifier",
+                "start":118,"end":119,"loc":{"start":{"line":8,"column":11},"end":{"line":8,"column":12},"identifierName":"g"},
+                "name": "g"
+              },
+              "computed": false,
+              "parameters": []
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

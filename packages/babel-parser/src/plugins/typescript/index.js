@@ -82,6 +82,7 @@ const TSErrors = Object.freeze({
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
   IndexSignatureHasDeclare:
     "Index signatures cannot have the 'declare' modifier",
+  InvalidModifierOnTypeMember: "'%0' modifier cannot appear on a type member.",
   InvalidTupleMemberLabel:
     "Tuple members must be labeled with a simple identifier.",
   MixedLabeledAndUnlabeledElements:
@@ -98,6 +99,8 @@ const TSErrors = Object.freeze({
     "Private elements cannot have the 'abstract' modifier.",
   PrivateElementHasAccessibility:
     "Private elements cannot have an accessibility modifier ('%0')",
+  ReadonlyForMethodSignature:
+    "'readonly' modifier can only appear on a property declaration or index signature.",
   TypeAnnotationAfterAssign:
     "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
   UnexpectedParameterModifier:
@@ -207,10 +210,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         accessibility?: N.Accessibility,
       },
       allowedModifiers: TsModifier[],
+      disallowedModifiers?: TsModifier[],
+      errorTemplate?: string,
     ): void {
       for (;;) {
         const startPos = this.state.start;
-        const modifier: ?TsModifier = this.tsParseModifier(allowedModifiers);
+        const modifier: ?TsModifier = this.tsParseModifier(
+          allowedModifiers.concat(disallowedModifiers ?? []),
+        );
 
         if (!modifier) break;
 
@@ -225,6 +232,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.raise(startPos, TSErrors.DuplicateModifier, modifier);
           }
           modified[modifier] = true;
+        }
+
+        if (disallowedModifiers?.includes(modifier)) {
+          this.raise(
+            startPos,
+            // $FlowIgnore
+            errorTemplate,
+            modifier,
+          );
         }
       }
     }
@@ -537,7 +553,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt.question)) node.optional = true;
       const nodeAny: any = node;
 
-      if (!readonly && (this.match(tt.parenL) || this.isRelational("<"))) {
+      if (this.match(tt.parenL) || this.isRelational("<")) {
+        if (readonly) {
+          this.raise(node.start, TSErrors.ReadonlyForMethodSignature);
+        }
         const method: N.TsMethodSignature = nodeAny;
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
@@ -573,16 +592,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      const readonly = !!this.tsParseModifier(["readonly"]);
+      this.tsParseModifiers(
+        node,
+        ["readonly"],
+        ["declare", "abstract", "private", "protected", "public", "static"],
+        TSErrors.InvalidModifierOnTypeMember,
+      );
 
       const idx = this.tsTryParseIndexSignature(node);
       if (idx) {
-        if (readonly) node.readonly = true;
         return idx;
       }
 
       this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
-      return this.tsParsePropertyOrMethodSignature(node, readonly);
+      return this.tsParsePropertyOrMethodSignature(node, !!node.readonly);
     }
 
     tsParseTypeLiteral(): N.TsTypeLiteral {
