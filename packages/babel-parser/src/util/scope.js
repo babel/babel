@@ -174,9 +174,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   }
 
   checkLocalExport(id: N.Identifier) {
-    const currentScope = this.currentScope();
-    const scope =
-      currentScope.flags & SCOPE_PROGRAM ? currentScope : this.scopeStack[0];
+    const scope = this.currentScope();
     if (
       scope.lexical.indexOf(id.name) === -1 &&
       scope.var.indexOf(id.name) === -1 &&
