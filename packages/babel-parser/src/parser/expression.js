@@ -54,7 +54,6 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope";
-import ClassScopeHandler from "../util/class-scope";
 import { Errors } from "./error";
 
 /*::
@@ -2657,33 +2656,12 @@ export default class ExpressionParser extends LValParser {
     this.expectPlugin("moduleBlocks");
     const node = this.startNode<N.ModuleExpression>();
     this.next(); // eat "module"
-    const oldLabels = this.state.labels;
-    this.state.labels = [];
-    const oldExportedIdentifiers = this.state.exportedIdentifiers;
-    this.state.exportedIdentifiers = [];
     this.expect(tt.braceL);
-    this.scope.enter(SCOPE_PROGRAM);
-    const oldUndefinedExports = this.scope.undefinedExports;
-    this.scope.undefinedExports = new Map();
-    let paramFlags = PARAM;
-    if (this.hasPlugin("topLevelAwait")) {
-      paramFlags |= PARAM_AWAIT;
-    }
-    this.prodParam.enter(paramFlags);
-    const oldInModule = this.inModule;
-    this.inModule = true;
-    const oldClassScope = this.classScope;
-    this.classScope = new ClassScopeHandler(this.raise.bind(this));
+    const revertScopes = this.initializeScopes();
     const program = this.startNode<N.Program>();
     node.body = this.parseProgram(program, tt.braceR, "module");
-    this.scope.exit();
-    this.scope.undefinedExports = oldUndefinedExports;
-    this.prodParam.exit();
-    this.inModule = oldInModule;
     this.eat(tt.braceR);
-    this.state.labels = oldLabels;
-    this.state.exportedIdentifiers = oldExportedIdentifiers;
-    this.classScope = oldClassScope;
+    revertScopes();
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
   }
 }

@@ -6,6 +6,9 @@ import State from "../tokenizer/state";
 import type { Node } from "../types";
 import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
+import ClassScopeHandler from "../util/class-scope";
+import { SCOPE_PROGRAM } from "../util/scopeflags";
+import { PARAM_AWAIT, PARAM } from "../util/production-parameter";
 import { Errors } from "./error";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
@@ -303,6 +306,34 @@ export default class UtilParser extends Tokenizer {
 
   isObjectMethod(node: Node): boolean {
     return node.type === "ObjectMethod";
+  }
+
+  initializeScopes() {
+    const oldLabels = this.state.labels;
+    this.state.labels = [];
+    const oldExportedIdentifiers = this.state.exportedIdentifiers;
+    this.state.exportedIdentifiers = [];
+    this.scope.enter(SCOPE_PROGRAM);
+    const oldUndefinedExports = this.scope.undefinedExports;
+    this.scope.undefinedExports = new Map();
+    let paramFlags = PARAM;
+    if (this.hasPlugin("topLevelAwait")) {
+      paramFlags |= PARAM_AWAIT;
+    }
+    this.prodParam.enter(paramFlags);
+    const oldInModule = this.inModule;
+    this.inModule = true;
+    const oldClassScope = this.classScope;
+    this.classScope = new ClassScopeHandler(this.raise.bind(this));
+    return () => {
+      this.scope.exit();
+      this.scope.undefinedExports = oldUndefinedExports;
+      this.prodParam.exit();
+      this.inModule = oldInModule;
+      this.state.labels = oldLabels;
+      this.state.exportedIdentifiers = oldExportedIdentifiers;
+      this.classScope = oldClassScope;
+    };
   }
 }
 
