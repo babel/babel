@@ -5,8 +5,12 @@
 
 import getV8Flags from "v8flags";
 import path from "path";
+import child_process from "child_process";
+import { fileURLToPath } from "url";
 
-let args = [path.join(__dirname, "_babel-node")];
+let args = [
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "_babel-node"),
+];
 
 let babelArgs = process.argv.slice(2);
 let userArgs;
@@ -79,7 +83,6 @@ getV8Flags(function (err, v8Flags) {
       throw err;
     }
 
-    const child_process = require("child_process");
     const proc = child_process.spawn(process.argv[0], args, {
       stdio: ["inherit", "inherit", "inherit", "ipc"],
     });

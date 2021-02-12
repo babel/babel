@@ -159,6 +159,7 @@ module.exports = function (api) {
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
       convertESM ? pluginNodeImportInterop : null,
+      convertESM ? pluginImportMetaUrl : null,
 
       pluginPackageJsonMacro,
 
@@ -461,6 +462,51 @@ function pluginNodeImportInterop({ template }) {
         }
 
         if (path.node.specifiers.length === 0) path.remove();
+      },
+    },
+  };
+}
+
+function pluginImportMetaUrl({ types: t }) {
+  const isImportMeta = node =>
+    t.isMetaProperty(node) &&
+    t.isIdentifier(node.meta, { name: "import" }) &&
+    t.isIdentifier(node.property, { name: "meta" });
+
+  return {
+    visitor: {
+      Program(programPath) {
+        // We must be sure to run this before the instanbul plugins, because its
+        // instrumentation breaks our detection.
+        programPath.traverse({
+          CallExpression(path) {
+            const { node } = path;
+
+            if (
+              !t.isIdentifier(node.callee, { name: "fileURLToPath" }) ||
+              node.arguments.length !== 1
+            ) {
+              return;
+            }
+
+            const arg = node.arguments[0];
+
+            if (
+              !t.isMemberExpression(arg, { computed: false }) ||
+              !t.isIdentifier(arg.property, { name: "url" }) ||
+              !isImportMeta(arg.object)
+            ) {
+              return;
+            }
+
+            path.replaceWith(t.identifier("__filename"));
+          },
+          MetaProperty(path) {
+            if (isImportMeta(path.node)) {
+              throw path.buildCodeFrameError("Unsupported import.meta");
+            }
+          },
+        });
       },
     },
   };
