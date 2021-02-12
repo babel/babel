@@ -301,7 +301,7 @@ export function V8IntrinsicIdentifier(
   this.word(node.name);
 }
 
-export function ModuleExpression(node: Object) {
+export function ModuleExpression(node: t.ModuleExpression) {
   this.word("module");
   this.space();
   this.token("{");
