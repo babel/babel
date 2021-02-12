@@ -177,14 +177,14 @@ const rewriteReferencesVisitor = {
 
     const localName = path.node.name;
 
-    const localBinding = path.scope.getBinding(localName);
-    const rootBinding = scope.getBinding(localName);
-
-    // redeclared in this scope
-    if (rootBinding !== localBinding) return;
-
     const importData = imported.get(localName);
     if (importData) {
+      const localBinding = path.scope.getBinding(localName);
+      const rootBinding = scope.getBinding(localName);
+
+      // redeclared in this scope
+      if (rootBinding !== localBinding) return;
+
       const ref = buildImportReference(importData, path.node);
 
       // Preserve the binding location so that sourcemaps are nicer.
