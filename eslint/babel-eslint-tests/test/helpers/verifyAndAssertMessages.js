@@ -1,5 +1,7 @@
 import eslint from "eslint";
 import unpad from "dedent";
+import path from "path";
+import { fileURLToPath } from "url";
 import * as parser from "../../../babel-eslint-parser";
 
 export default function verifyAndAssertMessages(
@@ -24,7 +26,8 @@ export default function verifyAndAssertMessages(
       sourceType,
       requireConfigFile: false,
       babelOptions: {
-        configFile: require.resolve(
+        configFile: path.resolve(
+          path.dirname(fileURLToPath(import.meta.url)),
           "../../../babel-eslint-shared-fixtures/config/babel.config.js",
         ),
       },

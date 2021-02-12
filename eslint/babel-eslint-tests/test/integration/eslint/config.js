@@ -1,4 +1,6 @@
 import eslint from "eslint";
+import path from "path";
+import { fileURLToPath } from "url";
 import * as parser from "@babel/eslint-parser";
 
 describe("ESLint config", () => {
@@ -10,7 +12,8 @@ describe("ESLint config", () => {
       parser: "@babel/eslint-parser",
       parserOptions: {
         babelOptions: {
-          configFile: require.resolve(
+          configFile: path.resolve(
+            path.dirname(fileURLToPath(import.meta.url)),
             "../../../../babel-eslint-shared-fixtures/config/babel.config.js",
           ),
         },

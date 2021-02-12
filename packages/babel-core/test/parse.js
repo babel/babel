@@ -2,6 +2,9 @@ import fs from "fs";
 import path from "path";
 import { parse } from "../lib";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 function fixture(...args) {
   return path.join(

@@ -3,6 +3,8 @@ import vm from "vm";
 import { fileURLToPath } from "url";
 import path from "path";
 
+import transformCommonJS from "..";
+
 test("Re-export doesn't overwrite __esModule flag", function () {
   let code = 'export * from "./dep";';
   const depStub = {
@@ -15,14 +17,14 @@ test("Re-export doesn't overwrite __esModule flag", function () {
     },
     require: function (id) {
       if (id === "./dep") return depStub;
-      return require(id);
+      throw new Error("Unexpected dependency: " + id);
     },
   };
   context.exports = context.module.exports;
 
   code = babel.transform(code, {
     cwd: path.dirname(fileURLToPath(import.meta.url)),
-    plugins: [[require("../"), { loose: true }]],
+    plugins: [[transformCommonJS, { loose: true }]],
     ast: false,
   }).code;
 

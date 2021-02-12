@@ -4,6 +4,9 @@ import loadConfigRunner, {
 } from "../lib/config";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const loadConfig = loadConfigRunner.sync;
 

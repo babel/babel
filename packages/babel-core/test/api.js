@@ -5,6 +5,10 @@ import Plugin from "../lib/config/plugin";
 import generator from "@babel/generator";
 import { fileURLToPath } from "url";
 
+import presetEnv from "../../babel-preset-env";
+import pluginSyntaxFlow from "../../babel-plugin-syntax-flow";
+import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types";
+
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function assertIgnored(result) {
@@ -307,17 +311,12 @@ describe("api", function () {
           },
 
           // env preset
-          require(cwd + "/../../babel-preset-env"),
+          presetEnv,
 
           // Third preset for Flow.
-          function () {
-            return {
-              plugins: [
-                require(cwd + "/../../babel-plugin-syntax-flow"),
-                require(cwd + "/../../babel-plugin-transform-flow-strip-types"),
-              ],
-            };
-          },
+          () => ({
+            plugins: [pluginSyntaxFlow, pluginFlowStripTypes],
+          }),
         ],
       });
     }

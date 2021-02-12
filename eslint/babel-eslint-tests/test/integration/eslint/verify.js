@@ -1,4 +1,6 @@
 import verifyAndAssertMessages from "../../helpers/verifyAndAssertMessages";
+import path from "path";
+import { fileURLToPath } from "url";
 
 describe("verify", () => {
   it("arrow function support (issue #1)", () => {
@@ -1080,7 +1082,8 @@ describe("verify", () => {
         parserOptions: {
           sourceType,
           babelOptions: {
-            configFile: require.resolve(
+            configFile: path.resolve(
+              path.dirname(fileURLToPath(import.meta.url)),
               "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
             ),
           },

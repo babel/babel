@@ -1,10 +1,13 @@
 import path from "path";
 import escope from "eslint-scope";
 import unpad from "dedent";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
 import { parseForESLint } from "../src";
 
 const BABEL_OPTIONS = {
-  configFile: require.resolve(
+  configFile: path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
     "../../babel-eslint-shared-fixtures/config/babel.config.js",
   ),
 };
@@ -73,6 +76,8 @@ describe("Babel and Espree", () => {
   }
 
   beforeAll(async () => {
+    const require = createRequire(import.meta.url);
+
     // Use the version of Espree that is a dependency of
     // the version of ESLint we are testing against.
     const espreePath = require.resolve("espree", {

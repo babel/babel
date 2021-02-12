@@ -1,14 +1,16 @@
-const includes = require("lodash/includes");
-const readdir = require("fs-readdir-recursive");
-const helper = require("@babel/helper-fixtures");
-const rimraf = require("rimraf");
-const { sync: makeDirSync } = require("make-dir");
-const child = require("child_process");
-const merge = require("lodash/merge");
-const path = require("path");
-const fs = require("fs");
-
+import includes from "lodash/includes";
+import readdir from "fs-readdir-recursive";
+import * as helper from "@babel/helper-fixtures";
+import rimraf from "rimraf";
+import { sync as makeDirSync } from "make-dir";
+import child from "child_process";
+import merge from "lodash/merge";
+import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixtureLoc = path.join(dirname, "fixtures");

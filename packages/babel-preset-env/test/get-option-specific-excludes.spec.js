@@ -1,7 +1,4 @@
-"use strict";
-
-const getOptionSpecificExcludesFor = require("../lib/get-option-specific-excludes")
-  .default;
+import getOptionSpecificExcludesFor from "../lib/get-option-specific-excludes";
 
 describe("defaults", () => {
   describe("getOptionSpecificExcludesFor", () => {

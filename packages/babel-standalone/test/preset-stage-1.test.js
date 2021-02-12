@@ -1,3 +1,6 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 (process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
   "stage-1 preset",
   () => {

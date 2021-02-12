@@ -2,8 +2,11 @@ import cp from "child_process";
 import util from "util";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
 import * as babel from "../../lib";
 
+const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // "minNodeVersion": "10.0.0" <-- For Ctrl+F when dropping node 10
