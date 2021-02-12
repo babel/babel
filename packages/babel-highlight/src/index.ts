@@ -1,7 +1,8 @@
 /// <reference path="../../../lib/third-party-libs.d.ts" />
 
-import jsTokens, * as jsTokensNs from "js-tokens";
 import type { Token, JSXToken } from "js-tokens";
+import jsTokens from "js-tokens";
+
 import {
   isStrictReservedWord,
   isKeyword,
@@ -158,9 +159,6 @@ if (process.env.BABEL_8_BREAKING) {
     }
   };
 } else {
-  // This is only available in js-tokens@4, and not in js-tokens@6
-  const { matchToToken } = jsTokensNs as any;
-
   /**
    * RegExp to test for what seems to be a JSX tag name.
    */
@@ -204,8 +202,8 @@ if (process.env.BABEL_8_BREAKING) {
 
   tokenize = function* (text: string) {
     let match;
-    while ((match = (jsTokens as any).exec(text))) {
-      const token = matchToToken(match);
+    while ((match = (jsTokens as any).default.exec(text))) {
+      const token = (jsTokens as any).matchToToken(match);
 
       yield {
         type: getTokenType(token, match.index, text),

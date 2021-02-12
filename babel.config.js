@@ -158,6 +158,7 @@ module.exports = function (api) {
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
+      convertESM ? pluginDefaultImportNode : null,
 
       pluginPackageJsonMacro,
 
@@ -409,6 +410,44 @@ function pluginPackageJsonMacro({ types: t }) {
 
         const value = JSON.parse(pkg)[field];
         path.replaceWith(t.valueToNode(value));
+      },
+    },
+  };
+}
+
+// Match the Node.js behavior (the default import is module.exports)
+function pluginDefaultImportNode({ types: t }) {
+  return {
+    visitor: {
+      ImportDeclaration(path) {
+        const specifiers = path.get("specifiers");
+        if (
+          specifiers.length === 0 ||
+          !specifiers[0].isImportDefaultSpecifier()
+        ) {
+          return;
+        }
+
+        const { source } = path.node;
+        if (
+          source.value.startsWith(".") ||
+          source.value.startsWith("@babel/")
+        ) {
+          // For internal modules, it's either "all CJS" or "all ESM".
+          // We don't need to worry about interop.
+          return;
+        }
+
+        path.insertAfter(
+          t.variableDeclaration("const", [
+            t.variableDeclarator(
+              specifiers[0].node.local,
+              t.callExpression(t.identifier("require"), [path.node.source])
+            ),
+          ])
+        );
+
+        specifiers[0].remove();
       },
     },
   };
