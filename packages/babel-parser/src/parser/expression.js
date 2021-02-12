@@ -2661,7 +2661,7 @@ export default class ExpressionParser extends LValParser {
     this.state.labels = [];
     const oldExportedIdentifiers = this.state.exportedIdentifiers;
     this.state.exportedIdentifiers = [];
-    this.eat(tt.braceL);
+    this.expect(tt.braceL);
     this.scope.enter(SCOPE_PROGRAM);
     const oldUndefinedExports = this.scope.undefinedExports;
     this.scope.undefinedExports = new Map();
