@@ -1404,7 +1404,7 @@ defineType("ExportAllDeclaration", {
       optional: true,
       validate: chain(
         assertValueType("array"),
-        assertNodeType("ImportAttribute"),
+        assertEach(assertNodeType("ImportAttribute")),
       ),
     },
   },
@@ -1474,7 +1474,7 @@ defineType("ExportNamedDeclaration", {
       optional: true,
       validate: chain(
         assertValueType("array"),
-        assertNodeType("ImportAttribute"),
+        assertEach(assertNodeType("ImportAttribute")),
       ),
     },
     specifiers: {
@@ -1576,7 +1576,7 @@ defineType("ImportDeclaration", {
       optional: true,
       validate: chain(
         assertValueType("array"),
-        assertNodeType("ImportAttribute"),
+        assertEach(assertNodeType("ImportAttribute")),
       ),
     },
     specifiers: {

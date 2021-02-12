@@ -19,12 +19,18 @@ function getType(val) {
   }
 }
 
-// TODO: Import and use Node instead of any
-type Validator = { chainOf?: Validator[] } & ((
-  parent: any,
-  key: string,
-  node: any,
-) => void);
+type Validator = (
+  | { type: string }
+  | { each: Validator }
+  | { chainOf: Validator[] }
+  | { oneOf: any[] }
+  | { oneOfNodeTypes: string[] }
+  | { oneOfNodeOrValueTypes: string[] }
+  | { shapeOf: { [x: string]: FieldOptions } }
+  | {}
+) &
+  // TODO: Import and use Node instead of any
+  ((parent: any, key: string, node: any) => void);
 
 type FieldOptions = {
   default?: any;
@@ -218,12 +224,24 @@ export function assertOptionalChainStart(): Validator {
 }
 
 export function chain(...fns: Array<Validator>): Validator {
-  const validate: Validator = function (...args) {
+  function validate(...args: Parameters<Validator>) {
     for (const fn of fns) {
       fn(...args);
     }
-  };
+  }
   validate.chainOf = fns;
+
+  if (
+    fns.length >= 2 &&
+    "type" in fns[0] &&
+    fns[0].type === "array" &&
+    !("each" in fns[1])
+  ) {
+    throw new Error(
+      `An assertValueType("array") validator can only be followed by an assertEach(...) validator.`,
+    );
+  }
+
   return validate;
 }
 
