@@ -203,10 +203,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     if (path.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
-    // @ts-expect-error todo(flow->ts): might be not correct for export all declaration
-    if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) {
-      return;
-    }
+    if (path.isExportDeclaration()) return;
 
     // we've ran into a declaration!
     const parent =
@@ -228,7 +225,8 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   ExportDeclaration: {
     exit(path) {
       const { node, scope } = path;
-      // @ts-expect-error todo(flow->ts) declaration is not present on ExportAllDeclaration
+      // ExportAllDeclaration does not have `declaration`
+      if (t.isExportAllDeclaration(node)) return;
       const declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
         const id = declar.id;
