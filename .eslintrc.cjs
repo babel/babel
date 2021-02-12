@@ -2,6 +2,8 @@
 
 const path = require("path");
 
+const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
+
 module.exports = {
   root: true,
   plugins: [
@@ -44,6 +46,7 @@ module.exports = {
         "@babel/development/no-deprecated-clone": "error",
         "guard-for-in": "error",
         "import/extensions": ["error", { json: "always", cjs: "always" }],
+        "no-restricted-globals": ["error", ...cjsGlobals],
       },
       globals: { PACKAGE_JSON: "readonly" },
     },
@@ -66,6 +69,7 @@ module.exports = {
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
         "import/extensions": ["error", { json: "always", cjs: "always" }],
+        "no-restricted-globals": ["error", ...cjsGlobals],
       },
     },
     {
