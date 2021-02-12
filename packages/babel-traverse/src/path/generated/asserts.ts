@@ -331,6 +331,9 @@ export interface NodePathAssetions {
   assertModuleDeclaration(
     opts?: object,
   ): asserts this is NodePath<t.ModuleDeclaration>;
+  assertModuleExpression(
+    opts?: object,
+  ): asserts this is NodePath<t.ModuleExpression>;
   assertModuleSpecifier(
     opts?: object,
   ): asserts this is NodePath<t.ModuleSpecifier>;
