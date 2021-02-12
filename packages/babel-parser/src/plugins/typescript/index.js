@@ -1676,10 +1676,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (next) {
         if (this.hasFollowingLineBreak()) return false;
         this.next();
-      } else if (this.isLineTerminator()) {
-        return false;
+        return true;
       }
-      return true;
+      return !this.isLineTerminator();
     }
 
     tsTryParseGenericAsyncArrowFunction(
