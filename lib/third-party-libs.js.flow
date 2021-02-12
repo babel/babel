@@ -2,6 +2,10 @@
  * Basic declarations for the npm modules we use.
  */
 
+ declare module "module" {
+   declare export function createRequire(url: any): any;
+ }
+
 declare module "debug" {
   declare export default (namespace: string) => (formatter: string, ...args: any[]) => void;
 }

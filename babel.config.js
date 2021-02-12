@@ -484,6 +484,7 @@ function pluginImportMetaUrl({ types: t, template }) {
         // We must be sure to run this before the instanbul plugins, because its
         // instrumentation breaks our detection.
         programPath.traverse({
+          // fileURLToPath(import.meta.url)
           CallExpression(path) {
             const { node } = path;
 
@@ -505,6 +506,24 @@ function pluginImportMetaUrl({ types: t, template }) {
             }
 
             path.replaceWith(t.identifier("__filename"));
+          },
+
+          // const require = createRequire(import.meta.url)
+          VariableDeclarator(path) {
+            const { node } = path;
+
+            if (
+              !t.isIdentifier(node.id, { name: "require" }) ||
+              !t.isCallExpression(node.init) ||
+              !t.isIdentifier(node.init.callee, { name: "createRequire" }) ||
+              node.init.arguments.length !== 1 ||
+              !isImportMetaUrl(node.init.arguments[0])
+            ) {
+              return;
+            }
+
+            // Let's just remove this declaration to unshadow the "global" cjs require.
+            path.remove();
           },
 
           // import.meta.url

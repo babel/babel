@@ -46,7 +46,6 @@ module.exports = {
         "@babel/development/no-deprecated-clone": "error",
         "guard-for-in": "error",
         "import/extensions": ["error", { json: "always", cjs: "always" }],
-        "no-restricted-globals": ["error", ...cjsGlobals],
       },
       globals: { PACKAGE_JSON: "readonly" },
     },
@@ -73,6 +72,9 @@ module.exports = {
     },
     {
       files: [
+        "packages/*/src/**/*.{js,ts}",
+        "codemods/*/src/**/*.{js,ts}",
+        "eslint/*/src/**/*.{js,ts}",
         "packages/*/test/**/*.js",
         "codemods/*/test/**/*.js",
         "eslint/*/test/**/*.js",
@@ -81,7 +83,7 @@ module.exports = {
       ],
       excludedFiles: [
         // @babel/register is the require() hook, so it will always be CJS-based
-        "packages/babel-register/test/**/*.js",
+        "packages/babel-register/**/*.js",
       ],
       rules: {
         "no-restricted-globals": ["error", ...cjsGlobals],

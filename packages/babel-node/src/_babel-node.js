@@ -10,6 +10,9 @@ import "regenerator-runtime/runtime";
 import register from "@babel/register";
 import { fileURLToPath } from "url";
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 const program = new commander.Command("babel-node");
 
 function collect(value, previousValue): Array<string> {

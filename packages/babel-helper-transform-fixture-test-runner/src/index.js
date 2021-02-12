@@ -17,6 +17,9 @@ import QuickLRU from "quick-lru";
 import escapeRegExp from "./escape-regexp.cjs";
 import { fileURLToPath } from "url";
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 import _checkDuplicatedNodes from "babel-check-duplicated-nodes";
 const checkDuplicatedNodes = _checkDuplicatedNodes.default;
 

@@ -18,6 +18,10 @@ import type { CallerMetadata } from "../validation/options";
 
 import * as fs from "../../gensync-utils/fs";
 
+import { createRequire } from "module";
+// $FlowIgnore - https://github.com/facebook/flow/issues/6913#issuecomment-662787504
+const require = createRequire(import /*::("")*/.meta.url);
+
 const debug = buildDebug("babel:config:loading:files:configuration");
 
 export const ROOT_CONFIG_FILENAMES = [

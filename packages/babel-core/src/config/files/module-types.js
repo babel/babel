@@ -2,6 +2,9 @@ import { isAsync, waitFor } from "../../gensync-utils/async";
 import type { Handler } from "gensync";
 import path from "path";
 import { pathToFileURL } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 let import_;
 try {

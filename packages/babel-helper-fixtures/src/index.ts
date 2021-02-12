@@ -3,6 +3,9 @@ import semver from "semver";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const nodeVersion = semver.clean(process.version.slice(1));
 
