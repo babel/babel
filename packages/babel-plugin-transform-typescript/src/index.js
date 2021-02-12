@@ -397,9 +397,13 @@ export default declare((api, opts) => {
         // We replace `TSParameterProperty` here so that transforms that
         // rely on a `Function` visitor to deal with arguments, like
         // `transform-parameters`, work properly.
-        node.params = node.params.map(p => {
-          return p.type === "TSParameterProperty" ? p.parameter : p;
-        });
+        const paramsPath = path.get("params");
+        for (const p of paramsPath) {
+          if (p.type === "TSParameterProperty") {
+            p.replaceWith(p.get("parameter"));
+            scope.registerBinding("param", p);
+          }
+        }
       },
 
       TSModuleDeclaration(path) {
