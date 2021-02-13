@@ -872,7 +872,7 @@ export default class Scope {
     this.crawling = true;
     // traverse does not visit the root node, here we explicitly collect
     // root node binding info when the root is not a Program.
-    if (programParent.path !== path && collectorVisitor._exploded) {
+    if (path.type !== "Program" && collectorVisitor._exploded) {
       // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
       for (const visit of collectorVisitor.enter) {
         visit(path, state);
