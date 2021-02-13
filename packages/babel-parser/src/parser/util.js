@@ -7,8 +7,12 @@ import type { Node } from "../types";
 import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import ClassScopeHandler from "../util/class-scope";
+import ExpressionScopeHandler from "../util/expression-scope";
 import { SCOPE_PROGRAM } from "../util/scopeflags";
-import { PARAM_AWAIT, PARAM } from "../util/production-parameter";
+import ProductionParameterHandler, {
+  PARAM_AWAIT,
+  PARAM,
+} from "../util/production-parameter";
 import { Errors } from "./error";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
@@ -308,32 +312,52 @@ export default class UtilParser extends Tokenizer {
     return node.type === "ObjectMethod";
   }
 
-  initializeScopes() {
+  initializeScopes(inModule: boolean = this.options.sourceType === "module") {
+    // Initialize state
     const oldLabels = this.state.labels;
     this.state.labels = [];
+
     const oldExportedIdentifiers = this.state.exportedIdentifiers;
     this.state.exportedIdentifiers = [];
-    this.scope.enter(SCOPE_PROGRAM);
-    const oldUndefinedExports = this.scope.undefinedExports;
-    this.scope.undefinedExports = new Map();
-    let paramFlags = PARAM;
-    if (this.hasPlugin("topLevelAwait")) {
-      paramFlags |= PARAM_AWAIT;
-    }
-    this.prodParam.enter(paramFlags);
+
+    // initialize scopes
     const oldInModule = this.inModule;
-    this.inModule = true;
+    this.inModule = inModule;
+
+    const oldScope = this.scope;
+    const ScopeHandler = this.getScopeHandler();
+    this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
+
+    const oldProdParam = this.prodParam;
+    this.prodParam = new ProductionParameterHandler();
+
     const oldClassScope = this.classScope;
     this.classScope = new ClassScopeHandler(this.raise.bind(this));
+
+    const oldExpressionScope = this.expressionScope;
+    this.expressionScope = new ExpressionScopeHandler(this.raise.bind(this));
+
     return () => {
-      this.scope.exit();
-      this.scope.undefinedExports = oldUndefinedExports;
-      this.prodParam.exit();
-      this.inModule = oldInModule;
+      // Revert state
       this.state.labels = oldLabels;
       this.state.exportedIdentifiers = oldExportedIdentifiers;
+
+      // Revert scopes
+      this.inModule = oldInModule;
+      this.scope = oldScope;
+      this.prodParam = oldProdParam;
       this.classScope = oldClassScope;
+      this.expressionScope = oldExpressionScope;
     };
+  }
+
+  enterInitialScopes() {
+    let paramFlags = PARAM;
+    if (this.hasPlugin("topLevelAwait") && this.inModule) {
+      paramFlags |= PARAM_AWAIT;
+    }
+    this.scope.enter(SCOPE_PROGRAM);
+    this.prodParam.enter(paramFlags);
   }
 }
 

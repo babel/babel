@@ -2657,7 +2657,10 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNode<N.ModuleExpression>();
     this.next(); // eat "module"
     this.expect(tt.braceL);
-    const revertScopes = this.initializeScopes();
+
+    const revertScopes = this.initializeScopes(/** inModule */ true);
+    this.enterInitialScopes();
+
     const program = this.startNode<N.Program>();
     try {
       node.body = this.parseProgram(program, tt.braceR, "module");
