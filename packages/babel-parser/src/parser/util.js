@@ -29,6 +29,7 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
 // ## Parser utilities
 
 export default class UtilParser extends Tokenizer {
+  // Forward-declaration: defined in parser/index.js
   /*::
   +getScopeHandler: () => Class<ScopeHandler<*>>;
   */
