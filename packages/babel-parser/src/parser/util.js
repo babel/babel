@@ -14,6 +14,9 @@ import ProductionParameterHandler, {
   PARAM,
 } from "../util/production-parameter";
 import { Errors } from "./error";
+/*::
+import type ScopeHandler from "../util/scope";
+*/
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node,
@@ -26,6 +29,10 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
 // ## Parser utilities
 
 export default class UtilParser extends Tokenizer {
+  /*::
+  +getScopeHandler: () => Class<ScopeHandler<*>>;
+  */
+
   // TODO
 
   addExtra(node: Node, key: string, val: any): void {
