@@ -342,27 +342,26 @@ function normalizeOutput(code) {
   return result;
 }
 
-const toEqualFile = () => ({
-  compare: (actual, { filename, code }) => {
-    const pass = actual === code;
-    return {
-      pass,
-      message: () => {
-        const diffString = diff(code, actual, {
-          expand: false,
-        });
-        return (
-          `Expected ${filename} to match transform output.\n` +
-          `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
-          `Diff:\n\n${diffString}`
-        );
-      },
-    };
-  },
-  negativeCompare: () => {
-    throw new Error("Negation unsupported");
-  },
-});
+const toEqualFile = (actual, { filename, code }) => {
+  const pass = actual === code;
+  return {
+    pass,
+    message: pass
+      ? () => {
+          throw new Error(".toEqualFile does not support negation");
+        }
+      : () => {
+          const diffString = diff(code, actual, {
+            expand: false,
+          });
+          return (
+            `Expected ${filename} to match transform output.\n` +
+            `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
+            `Diff:\n\n${diffString}`
+          );
+        },
+  };
+};
 
 export default function (
   fixturesLoc: string,
@@ -377,7 +376,7 @@ export default function (
     if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
-      jest.addMatchers({
+      expect.extend({
         toEqualFile,
       });
 
