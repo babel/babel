@@ -42,7 +42,7 @@ export default class ParserError extends CommentsParser {
   }
 
   /**
-   * Raise a parsing error on given postion pos. If errorRecovery is true,
+   * Raise a parsing error on given position pos. If errorRecovery is true,
    * it will first search current errors and overwrite the error thrown on the exact
    * position before with the new error message. If errorRecovery is false, it
    * fallbacks to `raise`.
