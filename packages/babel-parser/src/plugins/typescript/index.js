@@ -1624,14 +1624,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       value: string,
       next: boolean,
     ): ?N.Declaration {
+      // no declaration apart from enum can be followed by a line break.
       switch (value) {
         case "abstract":
           if (
-            this.tsCheckLineTerminatorAndMatch(tt._class, next) ||
-            // for interface
-            this.tsCheckLineTerminatorAndMatch(tt.name, next)
+            this.tsCheckLineTerminator(next) &&
+            (this.match(tt._class) || this.match(tt.name))
           ) {
-            if (next) this.next();
             return this.tsParseAbstractDeclaration(node);
           }
           break;
@@ -1644,39 +1643,42 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "interface":
-          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
-            if (next) this.next();
+          if (this.tsCheckLineTerminator(next) && this.match(tt.name)) {
             return this.tsParseInterfaceDeclaration(node);
           }
           break;
 
         case "module":
-          if (next) this.next();
-          if (this.match(tt.string)) {
-            return this.tsParseAmbientExternalModuleDeclaration(node);
-          } else if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
-            return this.tsParseModuleOrNamespaceDeclaration(node);
+          if (this.tsCheckLineTerminator(next)) {
+            if (this.match(tt.string)) {
+              return this.tsParseAmbientExternalModuleDeclaration(node);
+            } else if (this.match(tt.name)) {
+              return this.tsParseModuleOrNamespaceDeclaration(node);
+            }
           }
           break;
 
         case "namespace":
-          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
-            if (next) this.next();
+          if (this.tsCheckLineTerminator(next) && this.match(tt.name)) {
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "type":
-          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
-            if (next) this.next();
+          if (this.tsCheckLineTerminator(next) && this.match(tt.name)) {
             return this.tsParseTypeAliasDeclaration(node);
           }
           break;
       }
     }
 
-    tsCheckLineTerminatorAndMatch(tokenType: TokenType, next: boolean) {
-      return (next || this.match(tokenType)) && !this.isLineTerminator();
+    tsCheckLineTerminator(next: boolean) {
+      if (next) {
+        if (this.hasFollowingLineBreak()) return false;
+        this.next();
+        return true;
+      }
+      return !this.isLineTerminator();
     }
 
     tsTryParseGenericAsyncArrowFunction(

@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+  "errors": [
+    "SyntaxError: Missing semicolon (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7},"identifierName":"declare"},
+          "name": "declare"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":17,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":17}},
+        "expression": {
+          "type": "Identifier",
+          "start":8,"end":17,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":17},"identifierName":"interface"},
+          "name": "interface"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":18,"end":19,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1}},
+        "expression": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1},"identifierName":"I"},
+          "name": "I"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":20,"end":22,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":2}},
+        "body": [],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

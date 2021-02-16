@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+  "errors": [
+    "SyntaxError: Missing semicolon (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7},"identifierName":"declare"},
+          "name": "declare"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":16,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":16}},
+        "expression": {
+          "type": "Identifier",
+          "start":8,"end":16,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":16},"identifierName":"abstract"},
+          "name": "abstract"
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":17,"end":27,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":10}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":25,"end":27,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":10}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
