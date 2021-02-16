@@ -100,6 +100,9 @@ jobs:
         with:
           name: build-artifact
 
+      - name: Generate LICENSE files
+        run: make clone-license
+
       - name: Publish to npm
         run: yarn release-tool publish --yes
         env:
