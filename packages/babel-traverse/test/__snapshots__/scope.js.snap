@@ -4,11 +4,15 @@ exports[`scope duplicate bindings catch const 1`] = `"Duplicate declaration \\"e
 
 exports[`scope duplicate bindings catch let 1`] = `"Duplicate declaration \\"e\\""`;
 
+exports[`scope duplicate bindings global class/class 1`] = `"Duplicate declaration \\"foo\\""`;
+
 exports[`scope duplicate bindings global class/const 1`] = `"Duplicate declaration \\"foo\\""`;
 
 exports[`scope duplicate bindings global class/function 1`] = `"Duplicate declaration \\"foo\\""`;
 
 exports[`scope duplicate bindings global class/let 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global class/var 1`] = `"Duplicate declaration \\"foo\\""`;
 
 exports[`scope duplicate bindings global const/class 1`] = `"Duplicate declaration \\"foo\\""`;
 
@@ -33,5 +37,7 @@ exports[`scope duplicate bindings global let/function 1`] = `"Duplicate declarat
 exports[`scope duplicate bindings global let/let 1`] = `"Duplicate declaration \\"foo\\""`;
 
 exports[`scope duplicate bindings global let/var 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global var/class 1`] = `"Duplicate declaration \\"foo\\""`;
 
 exports[`scope duplicate bindings global var/let 1`] = `"Duplicate declaration \\"foo\\""`;

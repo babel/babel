@@ -203,10 +203,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     if (path.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
-    // @ts-expect-error todo(flow->ts): might be not correct for export all declaration
-    if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) {
-      return;
-    }
+    if (path.isExportDeclaration()) return;
 
     // we've ran into a declaration!
     const parent =
@@ -228,7 +225,8 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   ExportDeclaration: {
     exit(path) {
       const { node, scope } = path;
-      // @ts-expect-error todo(flow->ts) declaration is not present on ExportAllDeclaration
+      // ExportAllDeclaration does not have `declaration`
+      if (t.isExportAllDeclaration(node)) return;
       const declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
         const id = declar.id;
@@ -248,8 +246,6 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   LabeledStatement(path) {
-    // @ts-expect-error todo(flow->ts): possible bug - statement might not have name and so should not be added as global
-    path.scope.getProgramParent().addGlobal(path.node);
     path.scope.getBlockParent().registerDeclaration(path);
   },
 
@@ -280,15 +276,6 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       const name = id.name;
 
       path.scope.bindings[name] = path.scope.parent.getBinding(name);
-    }
-  },
-
-  Block(path) {
-    const paths = path.get("body");
-    for (const bodyPath of paths) {
-      if (bodyPath.isFunctionDeclaration()) {
-        path.scope.getBlockParent().registerDeclaration(bodyPath);
-      }
     }
   },
 
@@ -873,22 +860,6 @@ export default class Scope {
     this.uids = Object.create(null);
     this.data = Object.create(null);
 
-    // TODO: explore removing this as it should be covered by collectorVisitor
-    if (path.isFunction()) {
-      if (
-        path.isFunctionExpression() &&
-        path.has("id") &&
-        !path.get("id").node[t.NOT_LOCAL_BINDING]
-      ) {
-        this.registerBinding("local", path.get("id"), path);
-      }
-
-      const params: Array<NodePath> = path.get("params");
-      for (const param of params) {
-        this.registerBinding("param", param);
-      }
-    }
-
     const programParent = this.getProgramParent();
     if (programParent.crawling) return;
 
@@ -899,6 +870,21 @@ export default class Scope {
     };
 
     this.crawling = true;
+    // traverse does not visit the root node, here we explicitly collect
+    // root node binding info when the root is not a Program.
+    if (path.type !== "Program" && collectorVisitor._exploded) {
+      // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
+      for (const visit of collectorVisitor.enter) {
+        visit(path, state);
+      }
+      const typeVisitors = collectorVisitor[path.type];
+      if (typeVisitors) {
+        // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
+        for (const visit of typeVisitors.enter) {
+          visit(path, state);
+        }
+      }
+    }
     path.traverse(collectorVisitor, state);
     this.crawling = false;
 
