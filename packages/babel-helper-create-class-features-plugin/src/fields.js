@@ -652,7 +652,7 @@ function replaceThisContext(path, ref, superRef, file, constantSuper) {
 
   const replacer = new ReplaceSupers({
     methodPath: path,
-    constantSuper: constantSuper,
+    constantSuper,
     superRef,
     file,
     refToPreserve: ref,
