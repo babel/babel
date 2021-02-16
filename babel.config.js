@@ -158,7 +158,7 @@ module.exports = function (api) {
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
-      convertESM ? pluginDefaultImportNode : null,
+      convertESM ? pluginNodeImportInterop : null,
 
       pluginPackageJsonMacro,
 
@@ -416,38 +416,51 @@ function pluginPackageJsonMacro({ types: t }) {
 }
 
 // Match the Node.js behavior (the default import is module.exports)
-function pluginDefaultImportNode({ types: t }) {
+function pluginNodeImportInterop({ template }) {
   return {
     visitor: {
       ImportDeclaration(path) {
         const specifiers = path.get("specifiers");
-        if (
-          specifiers.length === 0 ||
-          !specifiers[0].isImportDefaultSpecifier()
-        ) {
+        if (specifiers.length === 0) {
           return;
         }
 
         const { source } = path.node;
         if (
           source.value.startsWith(".") ||
-          source.value.startsWith("@babel/")
+          source.value.startsWith("@babel/") ||
+          source.value === "charcodes"
         ) {
           // For internal modules, it's either "all CJS" or "all ESM".
           // We don't need to worry about interop.
           return;
         }
 
-        path.insertAfter(
-          t.variableDeclaration("const", [
-            t.variableDeclarator(
-              specifiers[0].node.local,
-              t.callExpression(t.identifier("require"), [path.node.source])
-            ),
-          ])
-        );
+        const defImport = specifiers.find(s => s.isImportDefaultSpecifier());
+        const nsImport = specifiers.find(s => s.isImportNamespaceSpecifier());
 
-        specifiers[0].remove();
+        if (defImport) {
+          path.insertAfter(
+            template.ast`
+              const ${defImport.node.local} = require(${source});
+            `
+          );
+          defImport.remove();
+        }
+
+        if (nsImport) {
+          path.insertAfter(
+            template.ast`
+              const ${nsImport.node.local} = {
+                ...require(${source}),
+                default: require(${source}),
+              };
+            `
+          );
+          nsImport.remove();
+        }
+
+        if (path.node.specifiers.length === 0) path.remove();
       },
     },
   };
