@@ -384,21 +384,26 @@ export default declare((api, opts) => {
         });
       },
 
-      Function({ node }) {
+      Function(path) {
+        const { node, scope } = path;
         if (node.typeParameters) node.typeParameters = null;
         if (node.returnType) node.returnType = null;
 
-        const p0 = node.params[0];
-        if (p0 && t.isIdentifier(p0) && p0.name === "this") {
-          node.params.shift();
+        const params = node.params;
+        if (params.length > 0 && t.isIdentifier(params[0], { name: "this" })) {
+          params.shift();
         }
 
         // We replace `TSParameterProperty` here so that transforms that
         // rely on a `Function` visitor to deal with arguments, like
         // `transform-parameters`, work properly.
-        node.params = node.params.map(p => {
-          return p.type === "TSParameterProperty" ? p.parameter : p;
-        });
+        const paramsPath = path.get("params");
+        for (const p of paramsPath) {
+          if (p.type === "TSParameterProperty") {
+            p.replaceWith(p.get("parameter"));
+            scope.registerBinding("param", p);
+          }
+        }
       },
 
       TSModuleDeclaration(path) {
