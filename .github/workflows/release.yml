@@ -46,6 +46,9 @@ jobs:
             codemods/*/lib/**/*
             eslint/*/lib/**/*
             packages/*/lib/**/*
+            codemods/*/LICENSE
+            eslint/*/LICENSE
+            packages/*/LICENSE
             packages/babel-standalone/*.js
             !**/node_modules/**
 
@@ -99,9 +102,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build-artifact
-
-      - name: Generate LICENSE files
-        run: make clone-license
 
       - name: Publish to npm
         run: yarn release-tool publish --yes
