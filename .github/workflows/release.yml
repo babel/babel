@@ -46,6 +46,9 @@ jobs:
             codemods/*/lib/**/*
             eslint/*/lib/**/*
             packages/*/lib/**/*
+            codemods/*/LICENSE
+            eslint/*/LICENSE
+            packages/*/LICENSE
             packages/babel-standalone/*.js
             !**/node_modules/**
 
