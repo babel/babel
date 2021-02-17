@@ -219,6 +219,24 @@ describe("scope", () => {
               .scope.getBinding("a").path.node.init.value,
           ).toBe("outside");
         });
+
+        it("when path is in nested within another computed key", () => {
+          expect(
+            getPath(
+              `var a = "outside"; ({ get [ { get [a]() { let a = "inside"; return a; } }.outside ]() { let a = "middle"; return a; } })`,
+            )
+              .get("body.1.expression.properties.0.key.object.properties.0.key")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+
+          expect(
+            getPath(
+              `var a = "outside"; class foo { static get [ class { static get [a]() { let a = "inside"; return a; } }.outside ]() { let a = "middle"; return a; } }`,
+            )
+              .get("body.1.body.body.0.key.object.body.body.0.key")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+        });
       });
 
       it("should not have visibility on parameter bindings", () => {
