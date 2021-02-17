@@ -13,6 +13,8 @@ const DEFAULT_FILENAME = path.join(
 const FILENAME: string = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
 let data: Object = {};
 
+let cacheDirty = false;
+
 let cacheDisabled = false;
 
 function isCacheDisabled() {
@@ -23,7 +25,9 @@ function isCacheDisabled() {
  */
 
 export function save() {
-  if (isCacheDisabled()) return;
+  if (isCacheDisabled() || !cacheDirty) return;
+  cacheDirty = false;
+
   let serialised: string = "{}";
 
   try {
@@ -110,6 +114,13 @@ due to a permission issue. Cache is disabled.`,
 
 export function get(): Object {
   return data;
+}
+
+/**
+ * Set the cache dirty bit.
+ */
+export function setDirty() {
+  cacheDirty = true;
 }
 
 /**

@@ -69,6 +69,7 @@ function compile(code, filename) {
     if (cache) {
       cache[cacheKey] = cached;
       cached.mtime = mtime(filename);
+      registerCache.setDirty();
     }
   }
 
