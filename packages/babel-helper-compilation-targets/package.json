@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.12.16",
+  "version": "7.12.17",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Engine compat data used in @babel/preset-env",
@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "@babel/compat-data": "workspace:^7.12.13",
-    "@babel/helper-validator-option": "workspace:^7.12.16",
+    "@babel/helper-validator-option": "workspace:^7.12.17",
     "browserslist": "^4.14.5",
     "semver": "^5.5.0"
   },

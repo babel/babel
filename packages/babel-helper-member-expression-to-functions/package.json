@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-member-expression-to-functions",
-  "version": "7.12.16",
+  "version": "7.12.17",
   "description": "Helper function to replace certain member expressions with function calls",
   "repository": {
     "type": "git",
@@ -15,6 +15,6 @@
   "main": "lib/index.js",
   "author": "Justin Ridgewell <justin@ridgewell.name>",
   "dependencies": {
-    "@babel/types": "workspace:^7.12.13"
+    "@babel/types": "workspace:^7.12.17"
   }
 }
