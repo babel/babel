@@ -244,7 +244,8 @@ export default function resolveChain(baseUrl, ...packages) {
   const require = createRequire(baseUrl);
 
   return packages.reduce(
-    (base, pkg) => require.resolve(pkg, { paths: [path.dirname(base)] }),
+    (base, pkg) =>
+      require.resolve(pkg + "/package.json", { paths: [path.dirname(base)] }),
     fileURLToPath(baseUrl)
   );
 }
@@ -310,7 +311,7 @@ function buildRollup(packages, targetBrowsers) {
                 import.meta.url,
                 "./packages/babel-helper-create-regexp-features-plugin",
                 "regexpu-core",
-                "regenerate-unicode-properties/package.json"
+                "regenerate-unicode-properties"
               ) + "/../**",
             ],
           }),
