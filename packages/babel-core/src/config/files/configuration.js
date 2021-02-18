@@ -167,7 +167,7 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
   }>,
 ): Handler<ConfigFile | null> {
   if (!fs.exists.sync(filepath)) {
-    cache.forever();
+    cache.never();
     return null;
   }
 
