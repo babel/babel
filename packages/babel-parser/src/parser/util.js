@@ -320,7 +320,9 @@ export default class UtilParser extends Tokenizer {
     return node.type === "ObjectMethod";
   }
 
-  initializeScopes(inModule: boolean = this.options.sourceType === "module") {
+  initializeScopes(
+    inModule: boolean = this.options.sourceType === "module",
+  ): () => void {
     // Initialize state
     const oldLabels = this.state.labels;
     this.state.labels = [];
