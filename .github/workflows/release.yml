@@ -43,13 +43,10 @@ jobs:
         with:
           name: build-artifact
           path: |
-            codemods/*/lib/**/*
-            eslint/*/lib/**/*
-            packages/*/lib/**/*
-            codemods/*/LICENSE
-            eslint/*/LICENSE
-            packages/*/LICENSE
-            packages/babel-standalone/*.js
+            codemods/*/**/*
+            eslint/*/**/*
+            packages/*/**/*
+            !**/test/**
             !**/node_modules/**
 
   git-version:
