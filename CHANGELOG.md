@@ -19,6 +19,10 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.18 (2021-02-18)
+
+#### :bug: Bug Fix
+* [#12817](https://github.com/babel/babel/pull/12817) Make sure to publish all the necessary files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.12.17 (2021-02-18)
 
 #### :bug: Bug Fix
