@@ -130,7 +130,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14, 12, 10, 8, 6]
+        node-version: [14, 12.18, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -184,7 +184,7 @@ jobs:
       - name: Use Node.js 12
         uses: actions/setup-node@v2-beta
         with:
-          node-version: 12 # Node.js 12 is the first LTS supported by Babel 8
+          node-version: 12.18 # Node.js 12 is the first LTS supported by Babel 8
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
