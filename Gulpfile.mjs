@@ -292,6 +292,10 @@ function buildRollup(packages, targetBrowsers) {
               "packages/babel-compat-data/*.js",
               "packages/*/src/**/*.cjs",
             ],
+            dynamicRequireTargets: [
+              // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
+              "node_modules/regenerate-unicode-properties/**",
+            ],
           }),
           rollupBabel({
             envName: babelEnvName,
