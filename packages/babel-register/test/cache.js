@@ -30,7 +30,7 @@ function resetCache() {
 
 describe("@babel/register - caching", () => {
   describe("cache", () => {
-    let load, get, save;
+    let load, get, setDirty, save;
     let consoleWarnSpy;
 
     beforeEach(() => {
@@ -40,6 +40,7 @@ describe("@babel/register - caching", () => {
 
       load = cache.load;
       get = cache.get;
+      setDirty = cache.setDirty;
       save = cache.save;
 
       consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -73,15 +74,24 @@ describe("@babel/register - caching", () => {
       expect(get()).toEqual({});
     });
 
-    it("should create the cache on save", () => {
+    it("should not create the cache if not dirty", () => {
+      save();
+
+      expect(fs.existsSync(testCacheFilename)).toBe(false);
+      expect(get()).toEqual({});
+    });
+
+    it("should create the cache on save if dirty", () => {
+      setDirty();
       save();
 
       expect(fs.existsSync(testCacheFilename)).toBe(true);
       expect(get()).toEqual({});
     });
 
-    it("should create the cache after load", cb => {
+    it("should create the cache after dirty", cb => {
       load();
+      setDirty();
 
       process.nextTick(() => {
         expect(fs.existsSync(testCacheFilename)).toBe(true);
@@ -107,6 +117,7 @@ describe("@babel/register - caching", () => {
       writeCache({ foo: "bar" }, 0o466);
 
       load();
+      setDirty();
 
       expect(get()).toEqual({ foo: "bar" });
       process.nextTick(() => {
