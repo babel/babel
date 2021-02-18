@@ -19,6 +19,32 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.17 (2021-02-18)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#12211](https://github.com/babel/babel/pull/12211) Do not cache non-existent JS config files forever ([@devongovett](https://github.com/devongovett))
+* `babel-helper-module-transforms`, `babel-plugin-transform-typescript`
+  * [#12796](https://github.com/babel/babel/pull/12796) Register binding when transforming TSParameterProperty ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#12776](https://github.com/babel/babel/pull/12776) fix(ts): parse multiline declarations correctly ([@fedeci](https://github.com/fedeci))
+  * [#12785](https://github.com/babel/babel/pull/12785) Raise recoverable error for type members with invalid modifiers ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-traverse`
+  * [#12797](https://github.com/babel/babel/pull/12797) clean up traverse scope ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#12794](https://github.com/babel/babel/pull/12794) Fix import assertions type definitions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-private-methods`
+  * [#12792](https://github.com/babel/babel/pull/12792) Reuse the `readOnlyError` helper for private methods ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#12810](https://github.com/babel/babel/pull/12810) Store LICENSE files when publishing from GH actions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-transform-fixture-test-runner`
+  * [#12811](https://github.com/babel/babel/pull/12811) test: avoid deprecated jest.addMatchers ([@jeysal](https://github.com/jeysal))
+* `babel-parser`
+  * [#12808](https://github.com/babel/babel/pull/12808) refactor: fix typo in error.js ([@eltociear](https://github.com/eltociear))
 ## v7.12.16 (2021-02-11)
 
 #### :bug: Bug Fix
