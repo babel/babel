@@ -29,7 +29,7 @@
     "compat-data"
   ],
   "devDependencies": {
-    "core-js-compat": "^3.8.3",
+    "core-js-compat": "^3.9.0",
     "electron-to-chromium": "1.3.583",
     "lodash": "^4.17.19",
     "mdn-browser-compat-data": "1.0.38"
