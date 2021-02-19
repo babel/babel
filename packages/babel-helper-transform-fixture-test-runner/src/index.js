@@ -15,7 +15,6 @@ import path from "path";
 import vm from "vm";
 import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 import QuickLRU from "quick-lru";
-import diff from "jest-diff";
 import escapeRegExp from "./escape-regexp";
 
 const cachedScripts = new QuickLRU({ maxSize: 10 });
@@ -342,26 +341,28 @@ function normalizeOutput(code) {
   return result;
 }
 
-const toEqualFile = (actual, { filename, code }) => {
-  const pass = actual === code;
-  return {
-    pass,
-    message: pass
-      ? () => {
-          throw new Error(".toEqualFile does not support negation");
-        }
-      : () => {
-          const diffString = diff(code, actual, {
-            expand: false,
-          });
-          return (
-            `Expected ${filename} to match transform output.\n` +
-            `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
-            `Diff:\n\n${diffString}`
-          );
-        },
-  };
-};
+expect.extend({
+  toEqualFile(actual, { filename, code }) {
+    if (this.isNot) {
+      throw new Error(".toEqualFile does not support negation");
+    }
+
+    const pass = actual === code;
+    return {
+      pass,
+      message: () => {
+        const diffString = this.utils.diff(code, actual, {
+          expand: false,
+        });
+        return (
+          `Expected ${filename} to match transform output.\n` +
+          `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
+          `Diff:\n\n${diffString}`
+        );
+      },
+    };
+  },
+});
 
 export default function (
   fixturesLoc: string,
@@ -376,10 +377,6 @@ export default function (
     if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
-      expect.extend({
-        toEqualFile,
-      });
-
       for (const task of testSuite.tests) {
         if (
           suiteOpts.ignoreTasks?.includes(task.title) ||
