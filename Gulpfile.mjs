@@ -240,7 +240,7 @@ function buildBabel(exclude) {
 /**
  * Resolve a nested dependency starting from the given file
  */
-export default function resolveChain(baseUrl, ...packages) {
+function resolveChain(baseUrl, ...packages) {
   const require = createRequire(baseUrl);
 
   return packages.reduce(
