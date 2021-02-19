@@ -1804,7 +1804,7 @@ describe("verify", () => {
         );
       });
 
-      it("should not be unamed", () => {
+      it("should work with func-names", () => {
         verifyAndAssertMessages(
           `
               export class C {
