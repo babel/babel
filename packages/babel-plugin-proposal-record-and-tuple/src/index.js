@@ -19,9 +19,8 @@ import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import { types as t } from "@babel/core";
 import { addNamed, isModule } from "@babel/helper-module-imports";
 import { OptionValidator } from "@babel/helper-validator-option";
-import { name as packageName } from "../package.json";
 
-const v = new OptionValidator(packageName);
+const v = new OptionValidator(PACKAGE_JSON.name);
 
 export default declare((api, options) => {
   api.assertVersion(7);
