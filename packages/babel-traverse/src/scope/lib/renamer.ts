@@ -17,7 +17,7 @@ const renameVisitor: Visitor<Renamer> = {
         state.binding.identifier,
       )
     ) {
-      path.skip();
+      skipAllButComputedMethodKey(path);
     }
   },
 
@@ -140,5 +140,20 @@ export default class Renamer {
       this.maybeConvertFromClassFunctionDeclaration(parentDeclar);
       this.maybeConvertFromClassFunctionExpression(parentDeclar);
     }
+  }
+}
+
+function skipAllButComputedMethodKey(path) {
+  // If the path isn't method with computed key, just skip everything.
+  if (!path.isMethod() || !path.node.computed) {
+    path.skip();
+    return;
+  }
+
+  // So it's a method with a computed key. Make sure to skip every other key the
+  // traversal would visit.
+  const keys = t.VISITOR_KEYS[path.type];
+  for (const key of keys) {
+    if (key !== "key") path.skipKey(key);
   }
 }

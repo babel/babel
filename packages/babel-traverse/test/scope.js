@@ -168,6 +168,92 @@ describe("scope", () => {
       });
     });
 
+    describe("computed method key", () => {
+      describe("should not have visibility of declarations inside method body", () => {
+        it("when path is computed key", () => {
+          expect(
+            getPath(`var a = "outside"; ({ [a]() { let a = "inside" } })`)
+              .get("body.1.expression.properties.0.key")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+
+          expect(
+            getPath(
+              `var a = "outside"; class foo { [a]() { let a = "inside" } }`,
+            )
+              .get("body.1.body.body.0.key")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+        });
+
+        it("when path is in nested scope which is computed key", () => {
+          expect(
+            getPath(`var a = "outside"; ({ [() => a]() { let a = "inside" } })`)
+              .get("body.1.expression.properties.0.key.body")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+
+          expect(
+            getPath(
+              `var a = "outside"; class foo { [() => a]() { let a = "inside" } }`,
+            )
+              .get("body.1.body.body.0.key.body")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+        });
+
+        it("when path is in nested scope within computed key", () => {
+          expect(
+            getPath(
+              `var a = "outside"; ({ [(() => a)() + ""]() { let a = "inside" } })`,
+            )
+              .get("body.1.expression.properties.0.key.left.callee.body")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+
+          expect(
+            getPath(
+              `var a = "outside"; class foo { [(() => a)() + ""]() { let a = "inside" } }`,
+            )
+              .get("body.1.body.body.0.key.left.callee.body")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+        });
+
+        it("when path is in nested within another computed key", () => {
+          expect(
+            getPath(
+              `var a = "outside"; ({ get [ { get [a]() { let a = "inside"; return a; } }.outside ]() { let a = "middle"; return a; } })`,
+            )
+              .get("body.1.expression.properties.0.key.object.properties.0.key")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+
+          expect(
+            getPath(
+              `var a = "outside"; class foo { static get [ class { static get [a]() { let a = "inside"; return a; } }.outside ]() { let a = "middle"; return a; } }`,
+            )
+              .get("body.1.body.body.0.key.object.body.body.0.key")
+              .scope.getBinding("a").path.node.init.value,
+          ).toBe("outside");
+        });
+      });
+
+      it("should not have visibility on parameter bindings", () => {
+        expect(
+          getPath(`var a = "outside"; ({ [a](a = "inside") {} })`)
+            .get("body.1.expression.properties.0.key")
+            .scope.getBinding("a").path.node.init.value,
+        ).toBe("outside");
+
+        expect(
+          getPath(`var a = "outside"; class foo { [a](a = "inside") {} }`)
+            .get("body.1.body.body.0.key")
+            .scope.getBinding("a").path.node.init.value,
+        ).toBe("outside");
+      });
+    });
+
     it("variable declaration", function () {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",

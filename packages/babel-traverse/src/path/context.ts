@@ -119,6 +119,10 @@ export function setScope(this: NodePath) {
   if (this.opts && this.opts.noScope) return;
 
   let path = this.parentPath;
+
+  // Skip method scope if is computed method key
+  if (this.key === "key" && path.isMethod()) path = path.parentPath;
+
   let target;
   while (path && !target) {
     if (path.opts && path.opts.noScope) return;

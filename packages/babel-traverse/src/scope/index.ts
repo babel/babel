@@ -359,7 +359,16 @@ export default class Scope {
   static contextVariables = ["arguments", "undefined", "Infinity", "NaN"];
 
   get parent() {
-    const parent = this.path.findParent(p => p.isScope());
+    let parent,
+      path = this.path;
+    do {
+      // Skip method scope if coming from inside computed key
+      const isKey = path.key === "key";
+      path = path.parentPath;
+      if (isKey && path.isMethod()) path = path.parentPath;
+      if (path && path.isScope()) parent = path;
+    } while (path && !parent);
+
     return parent?.scope;
   }
 
