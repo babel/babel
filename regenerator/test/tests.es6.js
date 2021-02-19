@@ -14,6 +14,11 @@ var assertAlreadyFinished = shared.assertAlreadyFinished;
 var fullCompatibility = runningInTranslation ||
   require("semver").gte(process.version, "7.0.0");
 
+assert(
+  function*() {}.toString().indexOf("regenerator") !== -1,
+  "regenerator-transform should be enabled"
+);
+
 // A version of `throw` whose behavior can't be statically analyzed.
 // Useful for testing dynamic exception dispatching.
 function raise(argument) {

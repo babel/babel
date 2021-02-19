@@ -97,56 +97,6 @@ function makeMochaCopyFunction(fileName) {
   };
 }
 
-if (semver.gte(process.version, "0.11.2")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/tests.es6.js",
-  ]);
-}
-
-if (semver.gte(process.version, "8.10.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/async.js",
-  ]);
-}
-
-if (semver.gte(process.version, "6.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/class.js",
-  ]);
-}
-
-if (semver.gte(process.version, "4.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/tests-node4.es6.js",
-  ]);
-}
-
-if (semver.gte(process.version, "4.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "./test/non-writable-tostringtag-property.js",
-  ]);
-}
-
-enqueue("mocha", [
-  "--harmony",
-  "--reporter", "spec",
-  "./test/frozen-intrinsics.js",
-]);
-
 enqueue(convert, [
   "./test/tests.es6.js",
   "./test/tests.es5.js"
@@ -378,5 +328,49 @@ enqueue("./bin/regenerator", [
   "--disable-async",
   "./test/replaceWith-falsy.js"
 ], true);
+
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "--require", "./test/runtime.js",
+  "./test/tests.es5.js",
+]);
+
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "--require", "./test/runtime.js",
+  "./test/async.es5.js",
+]);
+
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "--require", "./test/runtime.js",
+  "./test/class.es5.js",
+]);
+
+if (semver.gte(process.version, "4.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "--require", "./test/runtime.js",
+    "./test/tests-node4.es6.js",
+  ]);
+}
+
+if (semver.gte(process.version, "4.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "./test/non-writable-tostringtag-property.js",
+  ]);
+}
+
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "./test/frozen-intrinsics.js",
+]);
 
 flush();

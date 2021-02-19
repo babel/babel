@@ -9,6 +9,11 @@ var assert = require("assert");
 var shared = require("./shared.js");
 var check = shared.check;
 
+assert(
+  function*() {}.toString().indexOf("regenerator") !== -1,
+  "regenerator-transform should be enabled"
+);
+
 describe("class methods", function () {
   it("should work if the generator is a class method", function () {
     class Foo {
