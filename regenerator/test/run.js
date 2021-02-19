@@ -129,6 +129,47 @@ enqueue(convert, [
   "./test/class.es5.js"
 ]);
 
+enqueue(convertWithRegeneratorPluginOnly, [
+  "./test/class.js",
+  "./test/class.regenerator.js"
+]);
+
+Error.stackTraceLimit = 1000;
+
+/**
+ * Comvert without using the preset (which also transforms things like classes and arrows)
+ */
+function convertWithRegeneratorPluginOnly(inputFile, outputFile, callback) {
+  var transformOptions = {
+    plugins:[require("regenerator-transform")],
+    parserOpts: {
+      sourceType: "module",
+      allowImportExportEverywhere: true,
+      allowReturnOutsideFunction: true,
+      allowSuperOutsideMethod: true,
+      strictMode: false,
+      plugins: ["*", "jsx", "flow"]
+    },
+    ast: true
+  };
+
+  fs.readFile(inputFile, "utf-8", function(err, input) {
+    if (err) {
+      return callback(err);
+    }
+
+    var { code: output, ast } = babel.transformSync(input, transformOptions);
+    fs.writeFileSync(outputFile, output);
+    try {
+      checkDuplicatedNodes(babel, ast);
+    } catch (err) {
+      err.message = "Occured while transforming: " + inputFile + "\n" + err.message;
+      throw err;
+    }
+    callback();
+  });
+}
+
 function convertWithParamsTransform(es6File, es5File, callback) {
   var transformOptions = {
     presets:[require("regenerator-preset")],
@@ -343,6 +384,14 @@ enqueue("mocha", [
   "./test/async.es5.js",
 ]);
 
+if (semver.gte(process.version, "6.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "--require", "./test/runtime.js",
+    "./test/class.regenerator.js",
+  ]);
+}
 enqueue("mocha", [
   "--harmony",
   "--reporter", "spec",

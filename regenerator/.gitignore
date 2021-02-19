@@ -5,6 +5,7 @@ test/mocha.js
 test/mocha.css
 
 test/*.es5.js
+test/*.regenerator.js
 test/tests.browser.js
 
 .idea
