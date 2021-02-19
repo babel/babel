@@ -7,7 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-record-and-tuple"
   },
-  "license": " Apache-2.0",
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
