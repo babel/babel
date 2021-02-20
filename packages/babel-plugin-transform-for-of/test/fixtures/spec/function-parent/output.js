@@ -18,14 +18,6 @@ const c = function () {
   }
 };
 
-const d = () => {
-  const e = () => {
-    for (var _i4 = 0, _keys4 = keys; _i4 < _keys4.length; _i4++) {
-      const key = _keys4[_i4];
-    }
-  };
-};
-
 const {
   foo
 } = () => {
