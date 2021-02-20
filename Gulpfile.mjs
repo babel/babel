@@ -237,6 +237,19 @@ function buildBabel(exclude) {
     .pipe(gulp.dest(base));
 }
 
+/**
+ * Resolve a nested dependency starting from the given file
+ */
+function resolveChain(baseUrl, ...packages) {
+  const require = createRequire(baseUrl);
+
+  return packages.reduce(
+    (base, pkg) =>
+      require.resolve(pkg + "/package.json", { paths: [path.dirname(base)] }),
+    fileURLToPath(baseUrl)
+  );
+}
+
 // If this build is part of a pull request, include the pull request number in
 // the version number.
 let versionSuffix = "";
@@ -291,6 +304,15 @@ function buildRollup(packages, targetBrowsers) {
               // Rollup doesn't read export maps, so it loads the cjs fallback
               "packages/babel-compat-data/*.js",
               "packages/*/src/**/*.cjs",
+            ],
+            dynamicRequireTargets: [
+              // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
+              resolveChain(
+                import.meta.url,
+                "./packages/babel-helper-create-regexp-features-plugin",
+                "regexpu-core",
+                "regenerate-unicode-properties"
+              ) + "/../**",
             ],
           }),
           rollupBabel({

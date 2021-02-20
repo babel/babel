@@ -217,6 +217,13 @@
           }),
         ).not.toThrow();
       });
+      it("#12815 - unicode property letter short alias should be transformed", () => {
+        expect(() =>
+          Babel.transform("/\\p{L}/u", {
+            plugins: ["proposal-unicode-property-regex"],
+          }),
+        ).not.toThrow();
+      });
     });
   },
 );
