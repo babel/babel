@@ -81,7 +81,7 @@ getV8Flags(function (err, v8Flags) {
 
     const child_process = require("child_process");
     const proc = child_process.spawn(process.argv[0], args, {
-      stdio: "inherit",
+      stdio: ["inherit", "inherit", "inherit", "ipc"],
     });
     proc.on("exit", function (code, signal) {
       process.on("exit", function () {
