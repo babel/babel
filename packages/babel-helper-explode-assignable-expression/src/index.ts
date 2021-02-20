@@ -58,6 +58,7 @@ function getPropRef(
   return temp;
 }
 
+// TODO(Babel 8): Remove the "file" parameter
 export default function (
   node: t.Identifier | t.MemberExpression,
   nodes: Array<t.AssignmentExpression>,
