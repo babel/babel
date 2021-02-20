@@ -6,9 +6,10 @@ import { isModule } from "@babel/helper-module-imports";
 
 import rewriteThis from "./rewrite-this";
 import rewriteLiveReferences from "./rewrite-live-references";
-import normalizeAndLoadModuleMetadata, {
+import normalizeModuleAndLoadMetadata, {
   hasExports,
   isSideEffectImport,
+  validateImportInteropOption,
 } from "./normalize-and-load-metadata";
 import type {
   InteropType,
@@ -38,6 +39,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     allowTopLevelThis,
     strictMode,
     noInterop,
+    importInterop = noInterop ? "none" : "babel",
     lazy,
     esNamespaceOnly,
 
@@ -49,6 +51,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     allowTopLevelThis?;
     strictMode;
     loose?;
+    importInterop?: "none" | "babel" | "node";
     noInterop?;
     lazy?;
     esNamespaceOnly?;
@@ -56,11 +59,12 @@ export function rewriteModuleStatementsAndPrepareHeader(
     enumerableModuleMeta?;
   },
 ) {
+  validateImportInteropOption(importInterop);
   assert(isModule(path), "Cannot process module statements in a script");
   path.node.sourceType = "script";
 
-  const meta = normalizeAndLoadModuleMetadata(path, exportName, {
-    noInterop,
+  const meta = normalizeModuleAndLoadMetadata(path, exportName, {
+    importInterop,
     initializeReexports: constantReexports,
     lazy,
     esNamespaceOnly,
@@ -125,6 +129,15 @@ export function wrapInterop(
   type: InteropType,
 ): t.CallExpression {
   if (type === "none") {
+    return null;
+  }
+
+  if (type === "node-namespace") {
+    return t.callExpression(
+      programPath.hub.addHelper("interopRequireWildcard"),
+      [expr, t.booleanLiteral(true)],
+    );
+  } else if (type === "node-default") {
     return null;
   }
 
@@ -227,16 +240,18 @@ const buildReexportsFromMeta = (
 
   const { stringSpecifiers } = meta;
   return Array.from(metadata.reexports, ([exportName, importName]) => {
-    let NAMESPACE_IMPORT;
-    if (stringSpecifiers.has(importName)) {
+    let NAMESPACE_IMPORT: t.Expression = t.cloneNode(namespace);
+    if (importName === "default" && metadata.interop === "node-default") {
+      // Nothing, it's ok as-is
+    } else if (stringSpecifiers.has(importName)) {
       NAMESPACE_IMPORT = t.memberExpression(
-        t.cloneNode(namespace),
+        NAMESPACE_IMPORT,
         t.stringLiteral(importName),
         true,
       );
     } else {
-      NAMESPACE_IMPORT = NAMESPACE_IMPORT = t.memberExpression(
-        t.cloneNode(namespace),
+      NAMESPACE_IMPORT = t.memberExpression(
+        NAMESPACE_IMPORT,
         t.identifier(importName),
       );
     }
@@ -245,7 +260,7 @@ const buildReexportsFromMeta = (
       EXPORT_NAME: exportName,
       NAMESPACE_IMPORT,
     };
-    if (constantReexports) {
+    if (constantReexports || t.isIdentifier(NAMESPACE_IMPORT)) {
       if (stringSpecifiers.has(exportName)) {
         return ReexportTemplate.constantComputed(astNodes);
       } else {

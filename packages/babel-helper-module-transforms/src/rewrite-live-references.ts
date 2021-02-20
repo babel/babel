@@ -96,6 +96,10 @@ export default function rewriteLiveReferences(
       let namespace: t.Expression = t.identifier(meta.name);
       if (meta.lazy) namespace = t.callExpression(namespace, []);
 
+      if (importName === "default" && meta.interop === "node-default") {
+        return namespace;
+      }
+
       const computed = metadata.stringSpecifiers.has(importName);
 
       return t.memberExpression(
