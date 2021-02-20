@@ -1363,7 +1363,7 @@ export type TsLiteralType = TsTypeBase & {
 
 export type TsImportType = TsTypeBase & {
   type: "TsImportType",
-  argument: StringLiteral,
+  argument: TsType,
   qualifier?: TsEntityName,
   typeParameters?: TsTypeParameterInstantiation,
 };
