@@ -64,7 +64,7 @@ export default declare((api, options) => {
   }
 
   return {
-    name: "@bloomberg/babel-plugin-proposal-record-and-tuple",
+    name: "proposal-record-and-tuple",
     inherits: syntaxRecordAndTuple,
     visitor: {
       Program(path, state) {
