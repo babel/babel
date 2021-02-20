@@ -87,12 +87,12 @@ export function explode(visitor) {
 
     let aliases: Array<string> | undefined = t.FLIPPED_ALIAS_KEYS[nodeType];
 
-    const deprecratedKey = t.DEPRECATED_KEYS[nodeType];
-    if (deprecratedKey) {
+    const deprecatedKey = t.DEPRECATED_KEYS[nodeType];
+    if (deprecatedKey) {
       console.trace(
-        `Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`,
+        `Visitor defined for ${nodeType} but it has been renamed to ${deprecatedKey}`,
       );
-      aliases = [deprecratedKey];
+      aliases = [deprecatedKey];
     }
 
     if (!aliases) continue;
