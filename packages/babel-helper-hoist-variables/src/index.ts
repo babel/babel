@@ -1,20 +1,36 @@
 import * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
+
+export type EmitFunction = (
+  id: t.Identifier,
+  idName: string,
+  hasInit: boolean,
+) => any;
+
+type State = {
+  kind: "var" | "let";
+  emit: EmitFunction;
+};
+
+type Unpacked<T> = T extends (infer U)[] ? U : T;
 
 const visitor = {
-  Scope(path, state) {
+  Scope(path: NodePath, state: State) {
     if (state.kind === "let") path.skip();
   },
 
-  Function(path) {
+  Function(path: NodePath) {
     path.skip();
   },
 
-  VariableDeclaration(path, state) {
+  VariableDeclaration(path: NodePath<t.VariableDeclaration>, state: State) {
     if (state.kind && path.node.kind !== state.kind) return;
 
     const nodes = [];
 
-    const declarations: Array<Object> = path.get("declarations");
+    const declarations: ReadonlyArray<
+      NodePath<Unpacked<t.VariableDeclaration["declarations"]>>
+    > = path.get("declarations");
     let firstId;
 
     for (const declar of declarations) {
@@ -42,6 +58,10 @@ const visitor = {
   },
 };
 
-export default function (path, emit: Function, kind: "var" | "let" = "var") {
+export default function hoistVariables(
+  path: NodePath,
+  emit: EmitFunction,
+  kind: "var" | "let" = "var",
+) {
   path.traverse(visitor, { kind, emit });
 }
