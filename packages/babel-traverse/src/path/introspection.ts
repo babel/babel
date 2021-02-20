@@ -419,7 +419,10 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
     const childOfFunction = !!path.find(path => path.node === target.node);
     if (childOfFunction) continue;
 
-    if (path.key !== "callee" || !path.parentPath.isCallExpression()) {
+    if (
+      (path.key !== "callee" || !path.parentPath.isCallExpression()) &&
+      !path.parentPath.isReturnStatement()
+    ) {
       // This function is passed as a reference, so we don't
       // know when it will be called.
       return "unknown";
