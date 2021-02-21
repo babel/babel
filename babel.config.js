@@ -16,6 +16,14 @@ module.exports = function (api) {
     loose: true,
     shippedProposals: true,
     modules: false,
+    exclude: [
+      // We need to enable useBuiltIns
+      "proposal-object-rest-spread",
+      // We want to enable it without `loose: true`, since it breaks
+      // https://github.com/npm/node-semver/blob/093b40f8a7cb67946527b739fe8f8974c888e2a0/classes/range.js#L136
+      // in our dependencies
+      "transform-spread",
+    ],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
@@ -122,6 +130,8 @@ module.exports = function (api) {
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
       ],
+
+      env === "standalone" && ["@babel/transform-spread", { loose: false }],
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
