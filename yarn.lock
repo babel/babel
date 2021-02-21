@@ -3729,7 +3729,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:^17.1.0":
+"@rollup/plugin-commonjs@^17.1.0":
   version: 17.1.0
   resolution: "@rollup/plugin-commonjs@npm:17.1.0"
   dependencies:
@@ -3743,6 +3743,23 @@ __metadata:
   peerDependencies:
     rollup: ^2.30.0
   checksum: 9b162f93090e5bf544c85bb835a29f65371726d2e6161aa1a048bbb708b77433184e5836e7118e2c6277f9a9a7b5835f56e420d2040b1b623b03ca76db4b5d10
+  languageName: node
+  linkType: hard
+
+"@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@^17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::locator=babel%40workspace%3A.":
+  version: 17.1.0
+  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::version=17.1.0&hash=a0d076&locator=babel%40workspace%3A."
+  dependencies:
+    "@rollup/pluginutils": ^3.1.0
+    commondir: ^1.0.1
+    estree-walker: ^2.0.1
+    glob: ^7.1.6
+    is-reference: ^1.2.1
+    magic-string: ^0.25.7
+    resolve: ^1.17.0
+  peerDependencies:
+    rollup: ^2.30.0
+  checksum: ccf44f300b5b7b9fcc72e22c414bd86ce461e412a0980fb2f73d6d2b562466409ecaae270a54028c4584650c7d1a0718a6af0d15c5a5b41d6cd20a2159ba34fb
   languageName: node
   linkType: hard
 
@@ -4883,7 +4900,7 @@ __metadata:
     "@babel/register": ^7.12.0
     "@babel/runtime": ^7.12.0
     "@rollup/plugin-babel": ^5.2.0
-    "@rollup/plugin-commonjs": ^17.1.0
+    "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch"
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^9.0.0
     "@rollup/plugin-replace": ^2.3.3
