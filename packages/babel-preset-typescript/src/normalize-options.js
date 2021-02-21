@@ -2,7 +2,7 @@ import { OptionValidator } from "@babel/helper-validator-option";
 const v = new OptionValidator("@babel/preset-typescript");
 
 export default function normalizeOptions(options = {}) {
-  let { allowNamespaces, jsxPragma, onlyRemoveTypeImports } = options;
+  let { allowNamespaces = true, jsxPragma, onlyRemoveTypeImports } = options;
 
   if (process.env.BABEL_8_BREAKING) {
     const TopLevelOptions = {

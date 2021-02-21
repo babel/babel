@@ -51,9 +51,9 @@ export default declare((api, opts) => {
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;
 
   const {
+    allowNamespaces = true,
     jsxPragma = "React.createElement",
     jsxPragmaFrag = "React.Fragment",
-    allowNamespaces = false,
     onlyRemoveTypeImports = false,
   } = opts;
 
