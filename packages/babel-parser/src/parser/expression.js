@@ -1172,12 +1172,15 @@ export default class ExpressionParser extends LValParser {
           node = (this.parseMaybePrivateName(true): N.PrivateName);
           if (this.match(tt._in)) {
             this.expectPlugin("privateIn");
-            this.classScope.usePrivateName(node.id.name, node.start);
+            this.classScope.usePrivateName(
+              this.getPrivateNameSV(node),
+              node.start,
+            );
           } else if (this.hasPlugin("privateIn")) {
             this.raise(
               this.state.start,
               Errors.PrivateInExpectedIn,
-              node.id.name,
+              this.getPrivateNameSV(node),
             );
           } else {
             throw this.unexpected(start);

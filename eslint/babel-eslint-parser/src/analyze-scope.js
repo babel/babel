@@ -166,6 +166,10 @@ class Referencer extends OriginalReferencer {
     this._visitClassProperty(node);
   }
 
+  PropertyDefinition(node) {
+    this._visitClassProperty(node);
+  }
+
   // TODO: Update to visit type annotations when TypeScript/Flow support this syntax.
   ClassPrivateMethod(node) {
     super.MethodDefinition(node);

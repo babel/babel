@@ -1734,6 +1734,15 @@ describe("verify", () => {
           { "no-unused-vars": 1 },
         );
       });
+
+      it("type annotations should work", () => {
+        verifyAndAssertMessages(
+          `class C {
+            #p: Array<number>
+          }`,
+          { "no-undef": 1 },
+        );
+      });
     });
 
     describe("private methods", () => {
@@ -1792,6 +1801,31 @@ describe("verify", () => {
   #b() {} // no-unreachable should not bail here
 }`,
           { "no-unreachable": 1 },
+        );
+      });
+
+      it("should work with func-names", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                #d() {};
+              }
+          `,
+          { "func-names": 1 },
+        );
+      });
+
+      it("should work with space-before-function-paren", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                #d() {};
+              }
+          `,
+          { "space-before-function-paren": 1 },
+          [
+            "2:5 Missing space before function parentheses. space-before-function-paren",
+          ],
         );
       });
     });

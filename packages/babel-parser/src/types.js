@@ -1077,6 +1077,19 @@ export type EstreeImportExpression = NodeBase & {
   source: Expression,
 };
 
+export type EstreePrivateIdentifier = NodeBase & {
+  type: "PrivateIdentifier",
+  name: string,
+};
+
+export type EstreePropertyDefinition = NodeBase & {
+  type: "PropertyDefinition",
+  static: boolean,
+  key: Expression | EstreePrivateIdentifier,
+  computed: boolean,
+  value: Expression,
+};
+
 // === === === ===
 // TypeScript
 // === === === ===

@@ -11,7 +11,10 @@ export default ruleComposer.filterReports(noInvalidThisRule, problem => {
     if (
       node.type === "ClassPrivateMethod" ||
       node.type === "ClassPrivateProperty" ||
-      node.type === "ClassProperty"
+      node.type === "ClassProperty" ||
+      node.type === "PropertyDefinition" ||
+      (node.type === "MethodDefinition" &&
+        node.key.type === "PrivateIdentifier")
     ) {
       inClassMember = true;
       return;
