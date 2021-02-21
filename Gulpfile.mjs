@@ -320,10 +320,10 @@ function buildRollup(packages, targetBrowsers) {
             babelrc: false,
             babelHelpers: "bundled",
             extends: "./babel.config.js",
-            extensions: [".mjs", ".cjs", ".ts", ".js"],
+            extensions: [".ts", ".js", ".mjs", ".cjs"],
           }),
           rollupNodeResolve({
-            extensions: [".mjs", ".cjs", ".ts", ".js", ".json"],
+            extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
             browser: nodeResolveBrowser,
             preferBuiltins: true,
           }),

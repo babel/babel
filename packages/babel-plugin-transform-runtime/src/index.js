@@ -4,7 +4,7 @@ import { types as t } from "@babel/core";
 
 import getCoreJS2Definitions from "./runtime-corejs2-definitions";
 import getCoreJS3Definitions from "./runtime-corejs3-definitions";
-import { typeAnnotationToString } from "./helpers";
+import { typeAnnotationToString, hasMinVersion } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
 
 function supportsStaticESM(caller) {
@@ -76,6 +76,20 @@ export default declare((api, options, dirname) => {
 
   if (typeof runtimeVersion !== "string") {
     throw new Error(`The 'version' option must be a version string.`);
+  }
+
+  // In recent @babel/runtime versions, we can use require("helper").default
+  // instead of require("helper") so that it has the same interface as the
+  // ESM helper, and bundlers can better exchange one format for the other.
+  // TODO(Babel 8): Remove this check, it's always true
+  const DUAL_MODE_RUNTIME = "7.12.12";
+  const supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
+  if (supportsCJSDefault && useESModules && !absoluteRuntime) {
+    console.warn(
+      `[@babel/plugin-transform-runtime] The 'useESModules' option is not necessary when using` +
+        ` a @babel/runtime version >= ${DUAL_MODE_RUNTIME} and not using the 'absoluteRuntime'` +
+        ` option, because it automatically detects the necessary module format.`,
+    );
   }
 
   function has(obj, key) {
@@ -211,13 +225,19 @@ export default declare((api, options, dirname) => {
             `${modulePath}/${helpersDir}/${name}`,
             name,
             blockHoist,
+            true,
           );
         });
       }
 
       const cache = new Map();
 
-      this.addDefaultImport = (source, nameHint, blockHoist) => {
+      this.addDefaultImport = (
+        source,
+        nameHint,
+        blockHoist,
+        isHelper = false,
+      ) => {
         // If something on the page adds a helper when the file is an ES6
         // file, we can't reused the cached helper name after things have been
         // transformed because it has almost certainly been renamed.
@@ -229,7 +249,8 @@ export default declare((api, options, dirname) => {
           cached = t.cloneNode(cached);
         } else {
           cached = addDefault(file.path, source, {
-            importedInterop: "uncompiled",
+            importedInterop:
+              isHelper && supportsCJSDefault ? "compiled" : "uncompiled",
             nameHint,
             blockHoist,
           });

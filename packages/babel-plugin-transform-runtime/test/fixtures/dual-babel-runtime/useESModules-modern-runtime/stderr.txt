@@ -1,0 +1,1 @@
+[@babel/plugin-transform-runtime] The 'useESModules' option is not necessary when using a @babel/runtime version >= 7.12.12 and not using the 'absoluteRuntime' option, because it automatically detects the necessary module format.

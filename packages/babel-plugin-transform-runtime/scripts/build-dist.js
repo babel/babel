@@ -112,50 +112,73 @@ function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
   outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
-function writeHelpers(runtimeName, { corejs } = {}) {
-  const helperPaths = writeHelperFiles(runtimeName, { corejs, esm: false });
-  const helperESMPaths = writeHelperFiles(runtimeName, { corejs, esm: true });
-  writeHelperExports(runtimeName, helperPaths.concat(helperESMPaths));
+function writeHelperFile(
+  runtimeName,
+  pkgDirname,
+  helperPath,
+  helperName,
+  { esm, corejs }
+) {
+  const filePath = path.join(helperPath, esm ? "index.mjs" : "index.js");
+  const fullPath = path.join(pkgDirname, filePath);
+
+  outputFile(
+    fullPath,
+    buildHelper(runtimeName, pkgDirname, fullPath, helperName, { esm, corejs })
+  );
+
+  return `./${filePath}`;
 }
 
-function writeHelperExports(runtimeName, helperPaths) {
+function writeHelperLegacyESMFile(pkgDirname, helperName) {
+  const fullPath = path.join(pkgDirname, "helpers", "esm", `${helperName}.js`);
+
+  outputFile(fullPath, `export { default } from "../${helperName}/index.mjs"`);
+}
+
+function writeHelpers(runtimeName, { corejs } = {}) {
+  const pkgDirname = getRuntimeRoot(runtimeName);
   const helperSubExports = {};
-  for (const helperPath of helperPaths) {
-    helperSubExports[helperPath.replace(".js", "")] = helperPath;
+  for (const helperName of helpers.list) {
+    const helperPath = path.join("helpers", helperName);
+    helperSubExports[`./${helperPath}`] = {
+      module: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
+        esm: true,
+        corejs,
+      }),
+      node: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
+        esm: false,
+        corejs,
+      }),
+      get default() {
+        return this.module;
+      },
+    };
+    writeHelperLegacyESMFile(pkgDirname, helperName);
   }
+
+  writeHelperExports(runtimeName, helperSubExports);
+}
+
+function writeHelperExports(runtimeName, helperSubExports) {
   const exports = {
-    "./helpers/": "./helpers/",
     ...helperSubExports,
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
+    "./regenerator/*.js": "./regenerator/*.js",
+    "./helpers/esm/*": "./helpers/esm/*.js",
+    // These patterns are deprecated, but since patterns
+    // containing * are not supported in every Node.js
+    // version we keep them for better compatibility.
     "./regenerator/": "./regenerator/",
+    "./helpers/esm/": "./helpers/esm/",
   };
   const pkgDirname = getRuntimeRoot(runtimeName);
   const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
   const pkgJson = require(pkgJsonPath);
   pkgJson.exports = exports;
   outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
-}
-function writeHelperFiles(runtimeName, { esm, corejs }) {
-  const pkgDirname = getRuntimeRoot(runtimeName);
-  const helperPaths = [];
-  for (const helperName of helpers.list) {
-    const helperPath =
-      "./" + path.join("helpers", esm ? "esm" : "", `${helperName}.js`);
-    const helperFilename = path.join(pkgDirname, helperPath);
-    outputFile(
-      helperFilename,
-      buildHelper(runtimeName, pkgDirname, helperFilename, helperName, {
-        esm,
-        corejs,
-      })
-    );
-
-    helperPaths.push(helperPath);
-  }
-
-  return helperPaths;
 }
 
 function getRuntimeRoot(runtimeName) {
@@ -184,7 +207,7 @@ function buildHelper(
     for (const dep of helpers.getDependencies(helperName)) {
       const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
       tree.body.push(template.statement.ast`
-        var ${id} = require("${`./${dep}`}");
+        var ${id} = require("${dep}");
       `);
       bindings.push(id.name);
     }
@@ -211,8 +234,9 @@ function buildHelper(
         transformRuntime,
         { corejs, useESModules: esm, version: runtimeVersion },
       ],
-      buildRuntimeRewritePlugin(runtimeName, helperName, esm),
-    ],
+      buildRuntimeRewritePlugin(runtimeName, helperName),
+      esm ? null : addDefaultCJSExport,
+    ].filter(Boolean),
     overrides: [
       {
         exclude: /typeof/,
@@ -222,8 +246,7 @@ function buildHelper(
   }).code;
 }
 
-function buildRuntimeRewritePlugin(runtimeName, helperName, esm) {
-  const helperPath = esm ? "helpers/esm" : "helpers";
+function buildRuntimeRewritePlugin(runtimeName, helperName) {
   /**
    * rewrite helpers imports to runtime imports
    * @example
@@ -233,7 +256,7 @@ function buildRuntimeRewritePlugin(runtimeName, helperName, esm) {
    */
   function adjustImportPath(node) {
     if (helpers.list.includes(node.value)) {
-      node.value = `${runtimeName}/${helperPath}/${node.value}`;
+      node.value = `${runtimeName}/helpers/${node.value}`;
     }
   }
 
@@ -262,6 +285,24 @@ function buildRuntimeRewritePlugin(runtimeName, helperName, esm) {
 
         // replace reference to internal helpers with @babel/runtime import path
         adjustImportPath(path.get("arguments")[0].node);
+      },
+    },
+  };
+}
+
+function addDefaultCJSExport({ template }) {
+  return {
+    visitor: {
+      Program: {
+        exit(path) {
+          path.pushContainer(
+            "body",
+            template.statements.ast`
+              module.exports.default = module.exports;
+              module.exports.__esModule = true;
+            `
+          );
+        },
       },
     },
   };
