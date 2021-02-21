@@ -1,6 +1,6 @@
 /*
 We bundle @babel/standalone using the dynamicRequireTargets option.
-This option needs to inject requrie() calls to all the modules that
+This option needs to inject require() calls to all the modules that
 could be dynamically required later.
 
 By default it injects them in the entrypoint, but when rollup loads the
