@@ -19,10 +19,16 @@ Using plugins:
   proposal-export-namespace-from { "chrome":"71" }
   transform-modules-commonjs { "chrome":"71" }
   proposal-dynamic-import { "chrome":"71" }
+corejs2: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "chrome": "71"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-proposals-chrome-71/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-proposals-chrome-71/input.mjs]
+The corejs2 polyfill entry has been replaced with the following polyfills:
   web.timers { "chrome":"71" }
   web.immediate { "chrome":"71" }
   web.dom.iterable { "chrome":"71" }

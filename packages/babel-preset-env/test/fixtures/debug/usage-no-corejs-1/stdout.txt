@@ -46,13 +46,29 @@ Using plugins:
   proposal-export-namespace-from { "chrome":"52", "firefox":"50", "ie":"11" }
   transform-modules-commonjs { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-dynamic-import { "chrome":"52", "firefox":"50", "ie":"11" }
+corejs2: `DEBUG` option
 
-Using polyfills with `usage` option:
+Using targets: {
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-no-corejs-1/input.js] Added following core-js polyfills:
+Using polyfills with `usage-global` method:
+regenerator: `DEBUG` option
+
+Using targets: {}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-no-corejs-1/input.js]
+The corejs2 polyfill added the following polyfills:
   es6.object.to-string { "chrome":"52", "firefox":"50", "ie":"11" }
-  es6.promise { "ie":"11" }
-  es6.map { "firefox":"50", "ie":"11" }
-  es6.string.iterator { "ie":"11" }
+  es6.promise { "chrome":"52", "firefox":"50", "ie":"11" }
+  es6.map { "chrome":"52", "firefox":"50", "ie":"11" }
+  es6.string.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   es6.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-no-corejs-1/input.js]
+Based on your code and targets, the regenerator polyfill did not add any polyfill.

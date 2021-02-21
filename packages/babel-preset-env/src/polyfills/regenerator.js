@@ -1,10 +1,13 @@
 // @flow
 
-import { getImportSource, getRequireSource } from "../../utils";
+import { getImportSource, getRequireSource } from "./utils";
 import type { NodePath } from "@babel/traverse";
 
 function isRegeneratorSource(source) {
-  return source === "regenerator-runtime/runtime";
+  return (
+    source === "regenerator-runtime/runtime" ||
+    source === "regenerator-runtime/runtime.js"
+  );
 }
 
 export default function () {
@@ -26,7 +29,7 @@ export default function () {
   };
 
   return {
-    name: "regenerator-entry",
+    name: "preset-env/remove-regenerator",
     visitor,
     pre() {
       this.regeneratorImportExcluded = false;

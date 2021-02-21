@@ -1,17 +1,12 @@
 "use strict";
 
 const babelPresetEnv = require("../lib/index");
-const addCoreJS2UsagePlugin = require("../lib/polyfills/corejs2/usage-plugin")
+const removeRegeneratorEntryPlugin = require("../lib/polyfills/regenerator")
   .default;
-const addCoreJS3UsagePlugin = require("../lib/polyfills/corejs3/usage-plugin")
-  .default;
-const addRegeneratorUsagePlugin = require("../lib/polyfills/regenerator/usage-plugin")
-  .default;
-const replaceCoreJS2EntryPlugin = require("../lib/polyfills/corejs2/entry-plugin")
-  .default;
-const replaceCoreJS3EntryPlugin = require("../lib/polyfills/corejs3/entry-plugin")
-  .default;
-const removeRegeneratorEntryPlugin = require("../lib/polyfills/regenerator/entry-plugin")
+const pluginCoreJS2 = require("babel-plugin-polyfill-corejs2").default;
+const pluginCoreJS3 = require("babel-plugin-polyfill-corejs3").default;
+const pluginRegenerator = require("babel-plugin-polyfill-regenerator").default;
+const pluginLegacyBabelPolyfill = require("../lib/polyfills/babel-polyfill")
   .default;
 const transformations = require("../lib/module-transformations").default;
 
@@ -178,8 +173,9 @@ describe("babel-preset-env", () => {
                 staticProps,
               ),
             );
-            expect(polyfillPlugins.length).toBe(1);
-            expect(polyfillPlugins[0][0]).toEqual(addCoreJS2UsagePlugin);
+            expect(polyfillPlugins.length).toBe(2);
+            expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS2);
+            expect(polyfillPlugins[1][0]).toEqual(pluginLegacyBabelPolyfill);
           });
         });
         describe("using corejs 3", () => {
@@ -195,8 +191,9 @@ describe("babel-preset-env", () => {
                   staticProps,
                 ),
               );
-              expect(polyfillPlugins.length).toBe(1);
-              expect(polyfillPlugins[0][0]).toEqual(addCoreJS3UsagePlugin);
+              expect(polyfillPlugins.length).toBe(2);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
+              expect(polyfillPlugins[1][0]).toEqual(pluginLegacyBabelPolyfill);
             });
           });
 
@@ -212,9 +209,10 @@ describe("babel-preset-env", () => {
                   staticProps,
                 ),
               );
-              expect(polyfillPlugins.length).toBe(2);
-              expect(polyfillPlugins[0][0]).toEqual(addCoreJS3UsagePlugin);
-              expect(polyfillPlugins[1][0]).toEqual(addRegeneratorUsagePlugin);
+              expect(polyfillPlugins.length).toBe(3);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
+              expect(polyfillPlugins[1][0]).toEqual(pluginLegacyBabelPolyfill);
+              expect(polyfillPlugins[2][0]).toEqual(pluginRegenerator);
             });
           });
         });
@@ -232,8 +230,9 @@ describe("babel-preset-env", () => {
                 staticProps,
               ),
             );
-            expect(polyfillPlugins.length).toBe(1);
-            expect(polyfillPlugins[0][0]).toEqual(replaceCoreJS2EntryPlugin);
+            expect(polyfillPlugins.length).toBe(2);
+            expect(polyfillPlugins[0][0]).toEqual(pluginLegacyBabelPolyfill);
+            expect(polyfillPlugins[1][0]).toEqual(pluginCoreJS2);
           });
         });
         describe("using corejs 3", () => {
@@ -249,8 +248,9 @@ describe("babel-preset-env", () => {
                   staticProps,
                 ),
               );
-              expect(polyfillPlugins.length).toBe(1);
-              expect(polyfillPlugins[0][0]).toEqual(replaceCoreJS3EntryPlugin);
+              expect(polyfillPlugins.length).toBe(2);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
+              expect(polyfillPlugins[1][0]).toEqual(pluginLegacyBabelPolyfill);
             });
           });
 
@@ -266,9 +266,10 @@ describe("babel-preset-env", () => {
                   staticProps,
                 ),
               );
-              expect(polyfillPlugins.length).toBe(2);
-              expect(polyfillPlugins[0][0]).toEqual(replaceCoreJS3EntryPlugin);
-              expect(polyfillPlugins[1][0]).toEqual(
+              expect(polyfillPlugins.length).toBe(3);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
+              expect(polyfillPlugins[1][0]).toEqual(pluginLegacyBabelPolyfill);
+              expect(polyfillPlugins[2][0]).toEqual(
                 removeRegeneratorEntryPlugin,
               );
             });

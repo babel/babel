@@ -19,8 +19,14 @@ Using plugins:
   proposal-export-namespace-from { "chrome":"71" }
   transform-modules-commonjs { "chrome":"71" }
   proposal-dynamic-import { "chrome":"71" }
+corejs2: `DEBUG` option
 
-Using polyfills with `usage` option:
+Using targets: {
+  "chrome": "71"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs2-proposals-chrome-71-2/input.js] Added following core-js polyfill:
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs2-proposals-chrome-71-2/input.js]
+The corejs2 polyfill added the following polyfills:
   web.dom.iterable { "chrome":"71" }

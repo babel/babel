@@ -27,7 +27,13 @@ Using plugins:
   proposal-export-namespace-from { "node":"6" }
   transform-modules-commonjs { "node":"6" }
   proposal-dynamic-import { "node":"6" }
+corejs3: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "node": "6"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-no-import/input.js] Import of core-js was not found.
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-no-import/input.js]
+The entry point for the corejs3 polyfill has not been found.

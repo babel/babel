@@ -6,7 +6,12 @@ import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import { OptionValidator } from "@babel/helper-validator-option";
-import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
+
+const corejs2DefaultWebIncludes = [
+  "web.timers",
+  "web.immediate",
+  "web.dom.iterable",
+];
 
 import type {
   BuiltInsOption,
@@ -38,7 +43,7 @@ const getValidIncludesAndExcludes = (
     ...(type === "exclude" ? modulePlugins : []),
     ...(corejs
       ? corejs == 2
-        ? [...Object.keys(corejs2Polyfills), ...defaultWebIncludes]
+        ? [...Object.keys(corejs2Polyfills), ...corejs2DefaultWebIncludes]
         : Object.keys(corejs3Polyfills)
       : []),
   ]);

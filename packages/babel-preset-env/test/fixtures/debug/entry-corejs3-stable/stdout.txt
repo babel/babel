@@ -50,10 +50,16 @@ Using plugins:
   proposal-export-namespace-from { "ie":"6" }
   transform-modules-commonjs { "ie":"6" }
   proposal-dynamic-import { "ie":"6" }
+corejs3: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "ie": "6"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable/input.mjs] Replaced core-js entries with the following polyfills:
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.symbol { "ie":"6" }
   es.symbol.description { "ie":"6" }
   es.symbol.async-iterator { "ie":"6" }

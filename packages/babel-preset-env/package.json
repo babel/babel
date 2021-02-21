@@ -18,7 +18,6 @@
   "dependencies": {
     "@babel/compat-data": "workspace:^7.12.13",
     "@babel/helper-compilation-targets": "workspace:^7.12.17",
-    "@babel/helper-module-imports": "workspace:^7.12.13",
     "@babel/helper-plugin-utils": "workspace:^7.12.13",
     "@babel/helper-validator-option": "workspace:^7.12.17",
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.12.13",
@@ -80,6 +79,9 @@
     "@babel/plugin-transform-unicode-regex": "workspace:^7.12.13",
     "@babel/preset-modules": "^0.1.3",
     "@babel/types": "workspace:^7.12.17",
+    "babel-plugin-polyfill-corejs2": "^0.1.0",
+    "babel-plugin-polyfill-corejs3": "^0.1.0",
+    "babel-plugin-polyfill-regenerator": "^0.1.0",
     "core-js-compat": "^3.9.0",
     "semver": "^5.5.0"
   },
