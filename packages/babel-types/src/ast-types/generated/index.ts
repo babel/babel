@@ -1772,6 +1772,7 @@ export interface TSConstructorType extends BaseNode {
   typeParameters?: TSTypeParameterDeclaration | null;
   parameters: Array<Identifier | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
+  abstract?: boolean | null;
 }
 
 export interface TSTypeReference extends BaseNode {

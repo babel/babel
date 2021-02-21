@@ -157,14 +157,22 @@ defineType("TSThisType", {
   fields: {},
 });
 
-const fnOrCtr = {
+const fnOrCtrBase = {
   aliases: ["TSType"],
   visitor: ["typeParameters", "parameters", "typeAnnotation"],
-  fields: signatureDeclarationCommon,
 };
 
-defineType("TSFunctionType", fnOrCtr);
-defineType("TSConstructorType", fnOrCtr);
+defineType("TSFunctionType", {
+  ...fnOrCtrBase,
+  fields: signatureDeclarationCommon,
+});
+defineType("TSConstructorType", {
+  ...fnOrCtrBase,
+  fields: {
+    ...signatureDeclarationCommon,
+    abstract: validateOptional(bool),
+  },
+});
 
 defineType("TSTypeReference", {
   aliases: ["TSType"],

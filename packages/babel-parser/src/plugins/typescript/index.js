@@ -790,10 +790,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseFunctionOrConstructorType(
       type: "TSFunctionType" | "TSConstructorType",
+      abstract?: boolean,
     ): N.TsFunctionOrConstructorType {
       const node: N.TsFunctionOrConstructorType = this.startNode();
       if (type === "TSConstructorType") {
-        this.expect(tt._new);
+        // $FlowIgnore
+        node.abstract = !!abstract;
+        if (abstract) this.next();
+        this.next(); // eat `new`
       }
       this.tsFillSignature(tt.arrow, node);
       return this.finishNode(node, type);
@@ -1219,6 +1223,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSConditionalType");
     }
 
+    isAbstractConstructorSignature(): boolean {
+      return this.isContextual("abstract") && this.lookahead().type === tt._new;
+    }
+
     tsParseNonConditionalType(): N.TsType {
       if (this.tsIsStartOfFunctionType()) {
         return this.tsParseFunctionOrConstructorType("TSFunctionType");
@@ -1226,6 +1234,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt._new)) {
         // As in `new () => Date`
         return this.tsParseFunctionOrConstructorType("TSConstructorType");
+      } else if (this.isAbstractConstructorSignature()) {
+        // As in `abstract new () => Date`
+        return this.tsParseFunctionOrConstructorType(
+          "TSConstructorType",
+          /* abstract */ true,
+        );
       }
       return this.tsParseUnionTypeOrHigher();
     }
