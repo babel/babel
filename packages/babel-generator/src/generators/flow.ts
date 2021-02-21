@@ -56,7 +56,7 @@ export function DeclareFunction(
   this.word("function");
   this.space();
   this.print(node.id, node);
-  // @ts-expect-error todo(flow->ts) typeAnnotation does not exist on Noop
+  // @ts-ignore TODO(Babel 8) Remove this comment, since we'll remove the Noop node
   this.print(node.id.typeAnnotation.typeAnnotation, node);
 
   if (node.predicate) {

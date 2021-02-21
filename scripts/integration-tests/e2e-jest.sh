@@ -37,14 +37,18 @@ python --version
 #                                   TEST                                       #
 #==============================================================================#
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
-  # This option is removed in Babel 8
-  sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
-fi
-
 startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 yarn dedupe '@babel/*'
+
+if [ "$BABEL_8_BREAKING" = true ] ; then
+  # This option is removed in Babel 8
+  sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
+
+  # Jest depends on @types/babel__traverse for Babel 7, and they contain the removed Noop node
+  sed -i 's/t.Noop/any/g' node_modules/@types/babel__traverse/index.d.ts
+fi
+
 yarn build
 
 # The full test suite takes about 20mins on CircleCI. We run only a few of them

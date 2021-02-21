@@ -373,15 +373,19 @@ export const functionCommon = {
 
 export const functionTypeAnnotationCommon = {
   returnType: {
-    validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+    validate: process.env.BABEL_8_BREAKING
+      ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
+      : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
-    validate: assertNodeType(
-      "TypeParameterDeclaration",
-      "TSTypeParameterDeclaration",
-      "Noop",
-    ),
+    validate: process.env.BABEL_8_BREAKING
+      ? assertNodeType("TypeParameterDeclaration", "TSTypeParameterDeclaration")
+      : assertNodeType(
+          "TypeParameterDeclaration",
+          "TSTypeParameterDeclaration",
+          "Noop",
+        ),
     optional: true,
   },
 };
@@ -455,8 +459,9 @@ defineType("FunctionExpression", {
 
 export const patternLikeCommon = {
   typeAnnotation: {
-    // TODO: @babel/plugin-transform-flow-comments puts a Noop here, is there a better way?
-    validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+    validate: process.env.BABEL_8_BREAKING
+      ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
+      : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
   decorators: {
@@ -1272,11 +1277,16 @@ defineType("ClassExpression", {
       optional: true,
     },
     typeParameters: {
-      validate: assertNodeType(
-        "TypeParameterDeclaration",
-        "TSTypeParameterDeclaration",
-        "Noop",
-      ),
+      validate: process.env.BABEL_8_BREAKING
+        ? assertNodeType(
+            "TypeParameterDeclaration",
+            "TSTypeParameterDeclaration",
+          )
+        : assertNodeType(
+            "TypeParameterDeclaration",
+            "TSTypeParameterDeclaration",
+            "Noop",
+          ),
       optional: true,
     },
     body: {
@@ -1324,11 +1334,16 @@ defineType("ClassDeclaration", {
       validate: assertNodeType("Identifier"),
     },
     typeParameters: {
-      validate: assertNodeType(
-        "TypeParameterDeclaration",
-        "TSTypeParameterDeclaration",
-        "Noop",
-      ),
+      validate: process.env.BABEL_8_BREAKING
+        ? assertNodeType(
+            "TypeParameterDeclaration",
+            "TSTypeParameterDeclaration",
+          )
+        : assertNodeType(
+            "TypeParameterDeclaration",
+            "TSTypeParameterDeclaration",
+            "Noop",
+          ),
       optional: true,
     },
     body: {

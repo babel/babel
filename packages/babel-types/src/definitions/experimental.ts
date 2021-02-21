@@ -60,7 +60,9 @@ defineType("ClassProperty", {
       optional: true,
     },
     typeAnnotation: {
-      validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      validate: process.env.BABEL_8_BREAKING
+        ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
+        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,
     },
     decorators: {
@@ -118,7 +120,9 @@ defineType("ClassPrivateProperty", {
       optional: true,
     },
     typeAnnotation: {
-      validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      validate: process.env.BABEL_8_BREAKING
+        ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
+        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,
     },
     decorators: {
