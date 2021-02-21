@@ -173,6 +173,7 @@ defineType("FunctionTypeAnnotation", {
     typeParameters: validateOptionalType("TypeParameterDeclaration"),
     params: validate(arrayOfType("FunctionTypeParam")),
     rest: validateOptionalType("FunctionTypeParam"),
+    this: validateOptionalType("FunctionTypeParam"),
     returnType: validateType("FlowType"),
   },
 });

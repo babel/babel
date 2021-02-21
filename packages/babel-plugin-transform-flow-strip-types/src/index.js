@@ -130,6 +130,13 @@ export default declare((api, opts) => {
 
       Function({ node }) {
         if (skipStrip) return;
+        if (
+          node.params.length > 0 &&
+          node.params[0].type === "Identifier" &&
+          node.params[0].name === "this"
+        ) {
+          node.params.shift();
+        }
         for (let i = 0; i < node.params.length; i++) {
           const param = node.params[i];
           param.optional = false;

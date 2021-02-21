@@ -81,6 +81,7 @@ const FlowErrors = Object.freeze({
     "Number enum members need to be initialized, e.g. `%1 = 1` in enum `%0`.",
   EnumStringMemberInconsistentlyInitailized:
     "String enum members need to consistently either all use initializers, or use no initializers, in enum `%0`.",
+  GetterMayNotHaveThisParam: "A getter cannot have a `this` parameter.",
   ImportTypeShorthandOnlyInPureImport:
     "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
   InexactInsideExact:
@@ -97,7 +98,16 @@ const FlowErrors = Object.freeze({
   NestedFlowComment: "Cannot have a flow comment inside another flow comment",
   OptionalBindingPattern:
     "A binding pattern parameter cannot be optional in an implementation signature.",
+  SetterMayNotHaveThisParam: "A setter cannot have a `this` parameter.",
   SpreadVariance: "Spread properties cannot have variance",
+  ThisParamAnnotationRequired:
+    "A type annotation is required for the `this` parameter.",
+  ThisParamBannedInConstructor:
+    "Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions.",
+  ThisParamMayNotBeOptional: "The `this` parameter cannot be optional.",
+  ThisParamMustBeFirst:
+    "The `this` parameter must be the first function parameter.",
+  ThisParamNoDefault: "The `this` parameter may not have a default value.",
   TypeBeforeInitializer:
     "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
   TypeCastInPattern:
@@ -308,6 +318,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const tmp = this.flowParseFunctionTypeParams();
       typeNode.params = tmp.params;
       typeNode.rest = tmp.rest;
+      typeNode.this = tmp._this;
       this.expect(tt.parenR);
 
       [
@@ -905,21 +916,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.params = [];
       node.rest = null;
       node.typeParameters = null;
+      node.this = null;
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
       this.expect(tt.parenL);
+      if (this.match(tt._this)) {
+        node.this = this.flowParseFunctionTypeParam(/* first */ true);
+        // match Flow parser behavior
+        node.this.name = null;
+        if (!this.match(tt.parenR)) {
+          this.expect(tt.comma);
+        }
+      }
       while (!this.match(tt.parenR) && !this.match(tt.ellipsis)) {
-        node.params.push(this.flowParseFunctionTypeParam());
+        node.params.push(this.flowParseFunctionTypeParam(false));
         if (!this.match(tt.parenR)) {
           this.expect(tt.comma);
         }
       }
 
       if (this.eat(tt.ellipsis)) {
-        node.rest = this.flowParseFunctionTypeParam();
+        node.rest = this.flowParseFunctionTypeParam(false);
       }
       this.expect(tt.parenR);
       node.returnType = this.flowParseTypeInitialiser();
@@ -1162,6 +1182,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (kind === "get" || kind === "set") {
             this.flowCheckGetterSetterParams(node);
           }
+          /** Declared classes/interfaces do not allow spread */
+          if (
+            !allowSpread &&
+            node.key.name === "constructor" &&
+            node.value.this
+          ) {
+            this.raise(
+              node.value.this.start,
+              FlowErrors.ThisParamBannedInConstructor,
+            );
+          }
         } else {
           if (kind !== "init") this.unexpected();
 
@@ -1189,6 +1220,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const start = property.start;
       const length =
         property.value.params.length + (property.value.rest ? 1 : 0);
+
+      if (property.value.this) {
+        this.raise(
+          property.value.this.start,
+          property.kind === "get"
+            ? FlowErrors.GetterMayNotHaveThisParam
+            : FlowErrors.SetterMayNotHaveThisParam,
+        );
+      }
+
       if (length !== paramCount) {
         if (property.kind === "get") {
           this.raise(start, Errors.BadGetterArity);
@@ -1270,16 +1311,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TupleTypeAnnotation");
     }
 
-    flowParseFunctionTypeParam(): N.FlowFunctionTypeParam {
+    flowParseFunctionTypeParam(first: boolean): N.FlowFunctionTypeParam {
       let name = null;
       let optional = false;
       let typeAnnotation = null;
       const node = this.startNode();
       const lh = this.lookahead();
+      const isThis = this.state.type === tt._this;
+
       if (lh.type === tt.colon || lh.type === tt.question) {
-        name = this.parseIdentifier();
+        if (isThis && !first) {
+          this.raise(node.start, FlowErrors.ThisParamMustBeFirst);
+        }
+        name = this.parseIdentifier(isThis);
         if (this.eat(tt.question)) {
           optional = true;
+          if (isThis) {
+            this.raise(node.start, FlowErrors.ThisParamMayNotBeOptional);
+          }
         }
         typeAnnotation = this.flowParseTypeInitialiser();
       } else {
@@ -1303,18 +1352,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseFunctionTypeParams(
       params: N.FlowFunctionTypeParam[] = [],
-    ): { params: N.FlowFunctionTypeParam[], rest: ?N.FlowFunctionTypeParam } {
+    ): {
+      params: N.FlowFunctionTypeParam[],
+      rest: ?N.FlowFunctionTypeParam,
+      _this: ?N.FlowFunctionTypeParam,
+    } {
       let rest: ?N.FlowFunctionTypeParam = null;
+      let _this: ?N.FlowFunctionTypeParam = null;
+      if (this.match(tt._this)) {
+        _this = this.flowParseFunctionTypeParam(/* first */ true);
+        // match Flow parser behavior
+        _this.name = null;
+        if (!this.match(tt.parenR)) {
+          this.expect(tt.comma);
+        }
+      }
       while (!this.match(tt.parenR) && !this.match(tt.ellipsis)) {
-        params.push(this.flowParseFunctionTypeParam());
+        params.push(this.flowParseFunctionTypeParam(false));
         if (!this.match(tt.parenR)) {
           this.expect(tt.comma);
         }
       }
       if (this.eat(tt.ellipsis)) {
-        rest = this.flowParseFunctionTypeParam();
+        rest = this.flowParseFunctionTypeParam(false);
       }
-      return { params, rest };
+      return { params, rest, _this };
     }
 
     flowIdentToTypeAnnotation(
@@ -1408,6 +1470,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             tmp = this.flowParseFunctionTypeParams();
             node.params = tmp.params;
             node.rest = tmp.rest;
+            node.this = tmp._this;
             this.expect(tt.parenR);
 
             this.expect(tt.arrow);
@@ -1423,7 +1486,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
           // Check to see if this is actually a grouped type
           if (!this.match(tt.parenR) && !this.match(tt.ellipsis)) {
-            if (this.match(tt.name)) {
+            if (this.match(tt.name) || this.match(tt._this)) {
               const token = this.lookahead().type;
               isGroupedType = token !== tt.question && token !== tt.colon;
             } else {
@@ -1462,6 +1525,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
           node.params = tmp.params;
           node.rest = tmp.rest;
+          node.this = tmp._this;
 
           this.expect(tt.parenR);
 
@@ -2311,6 +2375,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return !this.match(tt.colon) && super.isNonstaticConstructor(method);
     }
 
+    // determine whether a parameter is a this param
+    isThisParam(param) {
+      return param.type === "Identifier" && param.name === "this";
+    }
+
     // parse type parameters for class methods
     pushClassMethod(
       classBody: N.ClassBody,
@@ -2336,6 +2405,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isConstructor,
         allowsDirectSuper,
       );
+
+      if (method.params && isConstructor) {
+        const params = method.params;
+        if (params.length > 0 && this.isThisParam(params[0])) {
+          this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
+        }
+        // estree support
+      } else if (
+        // $FlowFixMe flow does not know about the face that estree can replace ClassMethod with MethodDefinition
+        method.type === "MethodDefinition" &&
+        isConstructor &&
+        method.value.params
+      ) {
+        const params = method.value.params;
+        if (params.length > 0 && this.isThisParam(params[0])) {
+          this.raise(method.start, FlowErrors.ThisParamBannedInConstructor);
+        }
+      }
     }
 
     pushClassPrivateMethod(
@@ -2374,6 +2461,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
           implemented.push(this.finishNode(node, "ClassImplements"));
         } while (this.eat(tt.comma));
+      }
+    }
+
+    checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
+      super.checkGetterSetterParams(method);
+      const params = this.getObjectOrClassMethodParams(method);
+      if (params.length > 0) {
+        const param = params[0];
+        if (this.isThisParam(param) && method.kind === "get") {
+          this.raise(param.start, FlowErrors.GetterMayNotHaveThisParam);
+        } else if (this.isThisParam(param)) {
+          this.raise(param.start, FlowErrors.SetterMayNotHaveThisParam);
+        }
       }
     }
 
@@ -2434,12 +2534,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (param.type !== "Identifier") {
           this.raise(param.start, FlowErrors.OptionalBindingPattern);
         }
+        if (this.isThisParam(param)) {
+          this.raise(param.start, FlowErrors.ThisParamMayNotBeOptional);
+        }
 
         ((param: any): N.Identifier).optional = true;
       }
       if (this.match(tt.colon)) {
         param.typeAnnotation = this.flowParseTypeAnnotation();
+      } else if (this.isThisParam(param)) {
+        this.raise(param.start, FlowErrors.ThisParamAnnotationRequired);
       }
+
+      if (this.match(tt.eq) && this.isThisParam(param)) {
+        this.raise(param.start, FlowErrors.ThisParamNoDefault);
+      }
+
       this.resetEndLocation(param);
       return param;
     }
@@ -2607,6 +2717,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
+    }
+
+    parseBindingAtom(): N.Pattern {
+      switch (this.state.type) {
+        case tt._this:
+          // "this" may be the name of a parameter, so allow it.
+          return this.parseIdentifier(/* liberal */ true);
+        default:
+          return super.parseBindingAtom();
+      }
     }
 
     // parse function type parameters - function foo<T>() {}
@@ -2864,6 +2984,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1
       ) {
         return;
+      }
+
+      // ensure the `this` param is first, if it exists
+      for (let i = 0; i < node.params.length; i++) {
+        if (this.isThisParam(node.params[i]) && i > 0) {
+          this.raise(node.params[i].start, FlowErrors.ThisParamMustBeFirst);
+        }
       }
 
       return super.checkParams(...arguments);

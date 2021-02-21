@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: A setter cannot have a `this` parameter. (2:10)",
+    "SyntaxError: setter must have exactly one formal parameter (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":43,"loc":{"start":{"line":1,"column":9},"end":{"line":3,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":13,"end":41,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":30}},
+              "key": {
+                "type": "Identifier",
+                "start":17,"end":20,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "set",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":13,"end":41,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":30}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "this": {
+                  "type": "FunctionTypeParam",
+                  "start":21,"end":33,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":22}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start":27,"end":33,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":22}}
+                  }
+                },
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":37,"end":41,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":30}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

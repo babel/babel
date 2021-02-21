@@ -1118,6 +1118,7 @@ export interface FunctionTypeAnnotation extends BaseNode {
   params: Array<FunctionTypeParam>;
   rest?: FunctionTypeParam | null;
   returnType: FlowType;
+  this?: FunctionTypeParam | null;
 }
 
 export interface FunctionTypeParam extends BaseNode {

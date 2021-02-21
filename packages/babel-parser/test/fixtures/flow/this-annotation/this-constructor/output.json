@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":42,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":40,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":30}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":23,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":13},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":24,"end":36,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":26},"identifierName":"this"},
+                  "name": "this",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start":28,"end":36,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":26}},
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start":30,"end":36,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":26}}
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":38,"end":40,"loc":{"start":{"line":2,"column":28},"end":{"line":2,"column":30}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

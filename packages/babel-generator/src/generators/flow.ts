@@ -289,6 +289,18 @@ export function FunctionTypeAnnotation(
 ) {
   this.print(node.typeParameters, node);
   this.token("(");
+
+  if (node.this) {
+    this.word("this");
+    this.token(":");
+    this.space();
+    this.print(node.this.typeAnnotation, node);
+    if (node.params.length || node.rest) {
+      this.token(",");
+      this.space();
+    }
+  }
+
   this.printList(node.params, node);
 
   if (node.rest) {

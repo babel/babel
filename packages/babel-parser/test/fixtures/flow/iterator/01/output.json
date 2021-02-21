@@ -42,6 +42,7 @@
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "GenericTypeAnnotation",
                   "start":34,"end":48,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":30}},

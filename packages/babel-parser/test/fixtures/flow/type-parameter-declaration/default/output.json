@@ -420,6 +420,10 @@
         "expression": {
           "type": "ClassExpression",
           "start":297,"end":321,"loc":{"start":{"line":10,"column":2},"end":{"line":10,"column":26}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 296
+          },
           "id": {
             "type": "Identifier",
             "start":303,"end":306,"loc":{"start":{"line":10,"column":8},"end":{"line":10,"column":11},"identifierName":"A10"},
@@ -446,10 +450,6 @@
             "type": "ClassBody",
             "start":319,"end":321,"loc":{"start":{"line":10,"column":24},"end":{"line":10,"column":26}},
             "body": []
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 296
           }
         }
       },
@@ -459,6 +459,10 @@
         "expression": {
           "type": "ClassExpression",
           "start":325,"end":358,"loc":{"start":{"line":11,"column":2},"end":{"line":11,"column":35}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 324
+          },
           "id": {
             "type": "Identifier",
             "start":331,"end":334,"loc":{"start":{"line":11,"column":8},"end":{"line":11,"column":11},"identifierName":"A11"},
@@ -497,10 +501,6 @@
             "type": "ClassBody",
             "start":356,"end":358,"loc":{"start":{"line":11,"column":33},"end":{"line":11,"column":35}},
             "body": []
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 324
           }
         }
       },
@@ -510,6 +510,10 @@
         "expression": {
           "type": "ClassExpression",
           "start":362,"end":398,"loc":{"start":{"line":12,"column":2},"end":{"line":12,"column":38}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 361
+          },
           "id": {
             "type": "Identifier",
             "start":368,"end":371,"loc":{"start":{"line":12,"column":8},"end":{"line":12,"column":11},"identifierName":"A12"},
@@ -554,10 +558,6 @@
             "type": "ClassBody",
             "start":396,"end":398,"loc":{"start":{"line":12,"column":36},"end":{"line":12,"column":38}},
             "body": []
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 361
           }
         }
       },
@@ -567,6 +567,10 @@
         "expression": {
           "type": "ClassExpression",
           "start":402,"end":447,"loc":{"start":{"line":13,"column":2},"end":{"line":13,"column":47}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 401
+          },
           "id": {
             "type": "Identifier",
             "start":408,"end":411,"loc":{"start":{"line":13,"column":8},"end":{"line":13,"column":11},"identifierName":"A13"},
@@ -615,10 +619,6 @@
             "type": "ClassBody",
             "start":445,"end":447,"loc":{"start":{"line":13,"column":45},"end":{"line":13,"column":47}},
             "body": []
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 401
           }
         }
       },
@@ -1101,6 +1101,10 @@
         "expression": {
           "type": "ObjectExpression",
           "start":836,"end":860,"loc":{"start":{"line":24,"column":2},"end":{"line":24,"column":26}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 835
+          },
           "properties": [
             {
               "type": "ObjectMethod",
@@ -1140,11 +1144,7 @@
                 ]
               }
             }
-          ],
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 835
-          }
+          ]
         }
       },
       {
@@ -1211,6 +1211,10 @@
         "expression": {
           "type": "ClassExpression",
           "start":902,"end":938,"loc":{"start":{"line":28,"column":2},"end":{"line":30,"column":1}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 901
+          },
           "id": {
             "type": "Identifier",
             "start":908,"end":911,"loc":{"start":{"line":28,"column":8},"end":{"line":28,"column":11},"identifierName":"A30"},
@@ -1260,10 +1264,6 @@
                 }
               }
             ]
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 901
           }
         }
       },
@@ -1317,6 +1317,7 @@
                     }
                   ]
                 },
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":980,"end":984,"loc":{"start":{"line":31,"column":39},"end":{"line":31,"column":43}}

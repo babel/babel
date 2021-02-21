@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+  "errors": [
+    "SyntaxError: The `this` parameter cannot be optional. (1:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "FunctionTypeAnnotation",
+          "start":9,"end":33,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":33}},
+          "params": [],
+          "rest": null,
+          "this": {
+            "type": "FunctionTypeParam",
+            "start":10,"end":24,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":24}},
+            "name": null,
+            "optional": true,
+            "typeAnnotation": {
+              "type": "NumberTypeAnnotation",
+              "start":18,"end":24,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":24}}
+            }
+          },
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "start":29,"end":33,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":33}}
+          },
+          "typeParameters": null
+        }
+      }
+    ],
+    "directives": []
+  }
+}
