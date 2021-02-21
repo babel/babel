@@ -21,6 +21,8 @@ import type {
   PluginListOption,
 } from "./types";
 
+declare const PACKAGE_JSON: { name: string; version: string };
+
 const v = new OptionValidator(PACKAGE_JSON.name);
 
 const allPluginsList = Object.keys(pluginsList);
@@ -248,7 +250,7 @@ export default function normalizeOptions(opts: Options) {
       opts.ignoreBrowserslistConfig,
       false,
     ),
-    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose),
+    loose: v.validateBooleanOption<boolean>(TopLevelOptions.loose, opts.loose),
     modules: validateModulesOption(opts.modules),
     shippedProposals: v.validateBooleanOption(
       TopLevelOptions.shippedProposals,
