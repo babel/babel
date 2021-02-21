@@ -73,7 +73,7 @@ function handleVariableDeclaration(
     for (const declarator of node.declarations) {
       declarator.init = t.assignmentExpression(
         "=",
-        getMemberExpression(t, name, declarator.id.name),
+        getMemberExpression(t, name, (declarator.id as t.Identifier).name),
         declarator.init,
       );
     }
