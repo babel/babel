@@ -10,6 +10,9 @@
 /* global VERSION */
 /* eslint-disable max-len */
 
+// $FlowIgnore
+import "./dynamic-require-entrypoint.cjs";
+
 import {
   transformFromAst as babelTransformFromAst,
   transform as babelTransform,

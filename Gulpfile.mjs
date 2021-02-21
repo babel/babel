@@ -245,8 +245,8 @@ function resolveChain(baseUrl, ...packages) {
 
   return packages.reduce(
     (base, pkg) =>
-      require.resolve(pkg + "/package.json", { paths: [path.dirname(base)] }),
-    fileURLToPath(baseUrl)
+      path.dirname(require.resolve(pkg + "/package.json", { paths: [base] })),
+    path.dirname(fileURLToPath(baseUrl))
   );
 }
 
@@ -304,6 +304,8 @@ function buildRollup(packages, targetBrowsers) {
               // Rollup doesn't read export maps, so it loads the cjs fallback
               "packages/babel-compat-data/*.js",
               "packages/*/src/**/*.cjs",
+              // See the comment in this file for the reason to include it
+              "packages/babel-standalone/src/dynamic-require-entrypoint.cjs",
             ],
             dynamicRequireTargets: [
               // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
@@ -312,7 +314,7 @@ function buildRollup(packages, targetBrowsers) {
                 "./packages/babel-helper-create-regexp-features-plugin",
                 "regexpu-core",
                 "regenerate-unicode-properties"
-              ) + "/../**",
+              ) + "/**/*.js",
             ],
           }),
           rollupBabel({
