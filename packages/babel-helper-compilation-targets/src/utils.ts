@@ -3,6 +3,8 @@ import { OptionValidator } from "@babel/helper-validator-option";
 import { unreleasedLabels } from "./targets";
 import type { Target, Targets } from "./types";
 
+declare const PACKAGE_JSON: { name: string; version: string };
+
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 
 const v = new OptionValidator(PACKAGE_JSON.name);

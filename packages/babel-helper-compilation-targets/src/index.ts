@@ -24,6 +24,7 @@ export { TargetNames };
 
 const ESM_SUPPORT = browserModulesData["es6.module"];
 
+declare const PACKAGE_JSON: { name: string; version: string };
 const v = new OptionValidator(PACKAGE_JSON.name);
 
 function validateTargetNames(targets: Targets): TargetsTuple {
