@@ -20,11 +20,15 @@ const bool = assertValueType("boolean");
 
 const tSFunctionTypeAnnotationCommon = {
   returnType: {
-    validate: assertNodeType("TSTypeAnnotation", "Noop"),
+    validate: process.env.BABEL_8_BREAKING
+      ? assertNodeType("TSTypeAnnotation")
+      : assertNodeType("TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
-    validate: assertNodeType("TSTypeParameterDeclaration", "Noop"),
+    validate: process.env.BABEL_8_BREAKING
+      ? assertNodeType("TSTypeParameterDeclaration")
+      : assertNodeType("TSTypeParameterDeclaration", "Noop"),
     optional: true,
   },
 };
