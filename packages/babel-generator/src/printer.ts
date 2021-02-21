@@ -680,6 +680,11 @@ class Printer {
 // Expose the node type functions and helpers on the prototype for easy usage.
 Object.assign(Printer.prototype, generatorFunctions);
 
+if (!process.env.BABEL_8_BREAKING) {
+  // @ts-ignore
+  Printer.prototype.Noop = function Noop(this: Printer) {};
+}
+
 type GeneratorFunctions = typeof generatorFunctions;
 interface Printer extends GeneratorFunctions {}
 export default Printer;

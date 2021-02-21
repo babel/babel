@@ -46,8 +46,6 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
   }
 }
 
-export function Noop(this: Printer) {}
-
 export function Directive(this: Printer, node: t.Directive) {
   this.print(node.value, node);
   this.semicolon();
