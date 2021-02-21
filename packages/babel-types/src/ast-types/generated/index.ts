@@ -1339,23 +1339,27 @@ export interface EnumBooleanBody extends BaseNode {
   type: "EnumBooleanBody";
   members: Array<EnumBooleanMember>;
   explicitType: boolean;
+  hasUnknownMembers: boolean;
 }
 
 export interface EnumNumberBody extends BaseNode {
   type: "EnumNumberBody";
   members: Array<EnumNumberMember>;
   explicitType: boolean;
+  hasUnknownMembers: boolean;
 }
 
 export interface EnumStringBody extends BaseNode {
   type: "EnumStringBody";
   members: Array<EnumStringMember | EnumDefaultedMember>;
   explicitType: boolean;
+  hasUnknownMembers: boolean;
 }
 
 export interface EnumSymbolBody extends BaseNode {
   type: "EnumSymbolBody";
   members: Array<EnumDefaultedMember>;
+  hasUnknownMembers: boolean;
 }
 
 export interface EnumBooleanMember extends BaseNode {

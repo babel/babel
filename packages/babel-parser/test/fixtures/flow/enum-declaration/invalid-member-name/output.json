@@ -42,7 +42,8 @@
                 "name": "bar"
               }
             }
-          ]
+          ],
+          "hasUnknownMembers": false
         }
       }
     ],

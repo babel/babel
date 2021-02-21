@@ -56,7 +56,8 @@
                 "value": "b"
               }
             }
-          ]
+          ],
+          "hasUnknownMembers": false
         }
       }
     ],
