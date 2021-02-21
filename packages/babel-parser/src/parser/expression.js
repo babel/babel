@@ -56,6 +56,10 @@ import {
 } from "../util/expression-scope";
 import { Errors } from "./error";
 
+/*::
+import type { SourceType } from "../options";
+*/
+
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   /*::
@@ -78,6 +82,16 @@ export default class ExpressionParser extends LValParser {
   ) => T;
   +parseFunctionParams: (node: N.Function, allowModifiers?: boolean) => void;
   +takeDecorators: (node: N.HasDecorators) => void;
+  +parseBlockOrModuleBlockBody: (
+    body: N.Statement[],
+    directives: ?(N.Directive[]),
+    topLevel: boolean,
+    end: TokenType,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void
+  ) => void
+  +parseProgram: (
+    program: N.Program, end: TokenType, sourceType?: SourceType
+  ) => N.Program
   */
 
   // For object literal, check if property __proto__ has been used more than once.
@@ -500,7 +514,13 @@ export default class ExpressionParser extends LValParser {
       this.next();
       return this.parseAwait(startPos, startLoc);
     }
-
+    if (
+      this.isContextual("module") &&
+      this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
+      !this.hasFollowingLineBreak()
+    ) {
+      return this.parseModuleExpression();
+    }
     const update = this.match(tt.incDec);
     const node = this.startNode();
     if (this.state.type.prefix) {
@@ -2629,5 +2649,25 @@ export default class ExpressionParser extends LValParser {
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return ret;
+  }
+
+  // https://github.com/tc39/proposal-js-module-blocks
+  parseModuleExpression(): N.ModuleExpression {
+    this.expectPlugin("moduleBlocks");
+    const node = this.startNode<N.ModuleExpression>();
+    this.next(); // eat "module"
+    this.eat(tt.braceL);
+
+    const revertScopes = this.initializeScopes(/** inModule */ true);
+    this.enterInitialScopes();
+
+    const program = this.startNode<N.Program>();
+    try {
+      node.body = this.parseProgram(program, tt.braceR, "module");
+    } finally {
+      revertScopes();
+    }
+    this.eat(tt.braceR);
+    return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
   }
 }

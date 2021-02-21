@@ -262,3 +262,14 @@ defineType("StaticBlock", {
   },
   aliases: ["Scopable", "BlockParent"],
 });
+
+// https://github.com/tc39/proposal-js-module-blocks
+defineType("ModuleExpression", {
+  visitor: ["body"],
+  fields: {
+    body: {
+      validate: assertNodeType("Program"),
+    },
+  },
+  aliases: ["Expression"],
+});

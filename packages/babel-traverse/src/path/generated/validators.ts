@@ -191,6 +191,7 @@ export interface NodePathValidators {
   isMethod(opts?: object): this is NodePath<t.Method>;
   isMixedTypeAnnotation(opts?: object): this is NodePath<t.MixedTypeAnnotation>;
   isModuleDeclaration(opts?: object): this is NodePath<t.ModuleDeclaration>;
+  isModuleExpression(opts?: object): this is NodePath<t.ModuleExpression>;
   isModuleSpecifier(opts?: object): this is NodePath<t.ModuleSpecifier>;
   isNewExpression(opts?: object): this is NodePath<t.NewExpression>;
   isNoop(opts?: object): this is NodePath<t.Noop>;

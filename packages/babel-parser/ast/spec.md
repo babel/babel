@@ -87,6 +87,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [SequenceExpression](#sequenceexpression)
   - [ParenthesizedExpression](#parenthesizedexpression)
   - [DoExpression](#doexpression)
+  - [ModuleExpression](#moduleexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
   - [TaggedTemplateExpression](#taggedtemplateexpression)
@@ -1085,6 +1086,17 @@ interface DoExpression <: Expression {
   body: BlockStatement;
 }
 ```
+
+## ModuleExpression
+
+```js
+interface ModuleExpression <: Expression {
+  type: "ModuleExpression";
+  body: Program
+}
+```
+
+A inline module expression proposed in https://github.com/tc39/proposal-js-module-blocks.
 
 # Template Literals
 

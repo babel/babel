@@ -188,6 +188,7 @@ export {
   tupleExpression as TupleExpression,
   decimalLiteral as DecimalLiteral,
   staticBlock as StaticBlock,
+  moduleExpression as ModuleExpression,
   tsParameterProperty as TSParameterProperty,
   tsDeclareFunction as TSDeclareFunction,
   tsDeclareMethod as TSDeclareMethod,

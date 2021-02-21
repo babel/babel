@@ -300,3 +300,16 @@ export function V8IntrinsicIdentifier(
   this.token("%");
   this.word(node.name);
 }
+
+export function ModuleExpression(node: t.ModuleExpression) {
+  this.word("module");
+  this.space();
+  this.token("{");
+  if (node.body.body.length === 0) {
+    this.token("}");
+  } else {
+    this.newline();
+    this.printSequence(node.body.body, node, { indent: true });
+    this.rightBrace();
+  }
+}

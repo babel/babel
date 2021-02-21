@@ -1088,6 +1088,12 @@ export function assertStaticBlock(
 ): asserts node is t.StaticBlock {
   assert("StaticBlock", node, opts);
 }
+export function assertModuleExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.ModuleExpression {
+  assert("ModuleExpression", node, opts);
+}
 export function assertTSParameterProperty(
   node: object | null | undefined,
   opts?: object | null,

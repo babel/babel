@@ -182,6 +182,7 @@ export type Node =
   | Method
   | MixedTypeAnnotation
   | ModuleDeclaration
+  | ModuleExpression
   | ModuleSpecifier
   | NewExpression
   | Noop
@@ -1621,6 +1622,11 @@ export interface StaticBlock extends BaseNode {
   body: Array<Statement>;
 }
 
+export interface ModuleExpression extends BaseNode {
+  type: "ModuleExpression";
+  body: Program;
+}
+
 export interface TSParameterProperty extends BaseNode {
   type: "TSParameterProperty";
   parameter: Identifier | AssignmentPattern;
@@ -2046,6 +2052,7 @@ export type Expression =
   | RecordExpression
   | TupleExpression
   | DecimalLiteral
+  | ModuleExpression
   | TSAsExpression
   | TSTypeAssertion
   | TSNonNullExpression;

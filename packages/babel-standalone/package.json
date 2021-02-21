@@ -45,6 +45,7 @@
     "@babel/plugin-syntax-import-assertions": "workspace:*",
     "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/plugin-syntax-jsx": "workspace:*",
+    "@babel/plugin-syntax-module-blocks": "workspace:*",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.0",
     "@babel/plugin-syntax-optional-catch-binding": "^7.8.0",
     "@babel/plugin-syntax-pipeline-operator": "workspace:*",

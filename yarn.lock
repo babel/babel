@@ -1656,6 +1656,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-module-blocks@workspace:*, @babel/plugin-syntax-module-blocks@workspace:packages/babel-plugin-syntax-module-blocks":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-module-blocks@workspace:packages/babel-plugin-syntax-module-blocks"
+  dependencies:
+    "@babel/helper-plugin-utils": "workspace:^7.10.1"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-module-string-names@workspace:packages/babel-plugin-syntax-module-string-names":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-module-string-names@workspace:packages/babel-plugin-syntax-module-string-names"
@@ -3258,6 +3268,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": "workspace:*"
     "@babel/plugin-syntax-import-meta": ^7.10.4
     "@babel/plugin-syntax-jsx": "workspace:*"
+    "@babel/plugin-syntax-module-blocks": "workspace:*"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.0
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.0
     "@babel/plugin-syntax-pipeline-operator": "workspace:*"
