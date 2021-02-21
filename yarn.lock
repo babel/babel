@@ -1385,6 +1385,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple"
+  dependencies:
+    "@babel/core": "workspace:*"
+    "@babel/helper-module-imports": "workspace:^7.12.13"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+    "@babel/helper-validator-option": "workspace:^7.12.17"
+    "@babel/plugin-syntax-record-and-tuple": "workspace:^7.12.1"
+  peerDependencies:
+    "@babel/core": ^7.12.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-throw-expressions@workspace:*, @babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions"
@@ -1729,7 +1744,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-record-and-tuple@workspace:*, @babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple":
+"@babel/plugin-syntax-record-and-tuple@workspace:*, @babel/plugin-syntax-record-and-tuple@workspace:^7.12.1, @babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple"
   dependencies:
