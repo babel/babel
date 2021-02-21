@@ -24,6 +24,8 @@ function pullFlag(node, flag: RegExpFlags): void {
   node.flags = node.flags.replace(flag, "");
 }
 
+declare const PACKAGE_JSON: { name: string; version: string };
+
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
 //       package, but it breaks if we release x.y.z where x, y or z are
