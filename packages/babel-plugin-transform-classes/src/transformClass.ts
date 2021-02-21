@@ -440,12 +440,16 @@ export default function transformClass(
         fn = nameFunction({ id: key, node: node, scope });
       }
     } else {
+      // todo(flow->ts) find a way to avoid "key as t.StringLiteral" below which relies on this assignment
       methods.hasComputed = true;
     }
 
     let descriptor;
-    if (!methods.hasComputed && methods.map.has(key.value)) {
-      descriptor = methods.map.get(key.value);
+    if (
+      !methods.hasComputed &&
+      methods.map.has((key as t.StringLiteral).value)
+    ) {
+      descriptor = methods.map.get((key as t.StringLiteral).value);
       descriptor[descKey] = fn;
 
       if (descKey === "value") {
@@ -459,7 +463,7 @@ export default function transformClass(
       methods.list.push(descriptor);
 
       if (!methods.hasComputed) {
-        methods.map.set(key.value, descriptor);
+        methods.map.set((key as t.StringLiteral).value, descriptor);
       }
     }
   }
@@ -554,6 +558,7 @@ export default function transformClass(
     classState.pushedConstructor = true;
 
     // we haven't pushed any descriptors yet
+    // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere esle
     if (classState.hasInstanceDescriptors || classState.hasStaticDescriptors) {
       pushDescriptors();
     }
