@@ -48,6 +48,7 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
   ".es6",
   ".es",
   ".mjs",
+  ".cjs",
 ]);
 
 // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
