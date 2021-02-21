@@ -14,6 +14,7 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 import QuickLRU from "quick-lru";
+// @ts-ignore
 import escapeRegExp from "./escape-regexp.cjs";
 import { fileURLToPath } from "url";
 
@@ -344,7 +345,7 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
   }
 }
 
-function normalizeOutput(code, normalizePathSeparator) {
+function normalizeOutput(code, normalizePathSeparator?) {
   const projectRoot = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
@@ -450,6 +451,7 @@ export default function (
 
             if (dynamicOpts) dynamicOpts(task.options, task);
 
+            // @ts-expect-error todo(flow->ts) missing property
             if (task.externalHelpers) {
               (task.options.plugins ??= []).push([
                 "external-helpers",
