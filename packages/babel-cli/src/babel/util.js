@@ -6,7 +6,11 @@ import path from "path";
 import fs from "fs";
 
 export function chmod(src: string, dest: string): void {
-  fs.chmodSync(dest, fs.statSync(src).mode);
+  try {
+    fs.chmodSync(dest, fs.statSync(src).mode);
+  } catch (err) {
+    console.warn(`Cannot change permissions to ${dest}`);
+  }
 }
 
 type ReaddirFilter = (filename: string) => boolean;
