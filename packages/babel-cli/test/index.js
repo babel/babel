@@ -7,7 +7,7 @@ const escapeRegExp = require("lodash/escapeRegExp");
 const merge = require("lodash/merge");
 const path = require("path");
 const fs = require("fs");
-const { chmod } = require("../src/babel/util");
+const { chmod } = require("../lib/babel/util");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
