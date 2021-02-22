@@ -52,8 +52,8 @@ export function rewriteModuleStatementsAndPrepareHeader(
     noInterop?;
     lazy?;
     esNamespaceOnly?;
-    constantReexports?,
-    enumerableModuleMeta?,
+    constantReexports?;
+    enumerableModuleMeta?;
   },
 ) {
   assert(isModule(path), "Cannot process module statements in a script");
