@@ -84,8 +84,8 @@ export default declare((api, options) => {
     private nodes: any;
     private scope: Scope;
     private kind: any;
-    private arrayOnlySpread: any;
-    private allowArrayLike: any;
+    private iterableIsArray: any;
+    private arrayLikeIsIterable: any;
     private addHelper: any;
     constructor(opts) {
       this.blockHoist = opts.blockHoist;
@@ -249,6 +249,7 @@ export default declare((api, options) => {
           program.scope.push({
             id,
             init: keyExpression,
+            // @ts-expect-error todo(flow->ts) types do require either "var" or "let", but not "const"
             kind: "const",
           });
 
