@@ -506,12 +506,10 @@ helpers.setPrototypeOf = helper("7.0.0-beta.0")`
 
 helpers.isNativeReflectConstruct = helper("7.9.0")`
   export default function _isNativeReflectConstruct() {
-    if (
-      typeof Reflect === "undefined" ||
-      !Reflect.construct ||
-      // core-js@3
-      Reflect.construct.sham
-    ) return false;
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+
+    // core-js@3
+    if (Reflect.construct.sham) return false;
 
     // Proxy can't be polyfilled. Every browser implemented
     // proxies before or at the same time as Reflect.construct,
@@ -524,13 +522,10 @@ helpers.isNativeReflectConstruct = helper("7.9.0")`
     // use our fallback implementation.
     try {
       // If the internal slots aren't set, this throws an error similar to
-      //   TypeError: this is not a Date object.
-      // Date#toString is generic in ES2015 [1] and it doesn't throw, but it
-      // returns "Invalid Date" if the receiver is not a properly initialized
-      // Date object.
-      // [1]: https://github.com/tc39/ecma262/issues/1268#issuecomment-410104832
+      //   TypeError: this is not a Boolean object.
 
-      return Date.prototype.toString.call(Reflect.construct(Date, [], function() {})) !== "Invalid Date";
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+      return true;
     } catch (e) {
       return false;
     }
