@@ -230,10 +230,7 @@ function buildHelper(
       ],
     ],
     plugins: [
-      [
-        transformRuntime,
-        { corejs, useESModules: esm, version: runtimeVersion },
-      ],
+      [transformRuntime, { corejs, version: runtimeVersion }],
       buildRuntimeRewritePlugin(runtimeName, helperName),
       esm ? null : addDefaultCJSExport,
     ].filter(Boolean),
