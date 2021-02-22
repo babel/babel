@@ -85,7 +85,8 @@ const handle = {
     // noop.
   },
 
-  handle(member: t.NodePath<t.Expression>, noDocumentAll: boolean) {
+  // todo(flow->ts) member:NodePath<t.Expression>, refactor function body to avoid too many typecasts
+  handle(member: any, noDocumentAll: boolean) {
     const { node, parent, parentPath, scope } = member;
 
     if (member.isOptionalMemberExpression()) {
