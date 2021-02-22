@@ -3790,15 +3790,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-replace@npm:^2.3.3":
-  version: 2.3.3
-  resolution: "@rollup/plugin-replace@npm:2.3.3"
+"@rollup/plugin-replace@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@rollup/plugin-replace@npm:2.4.0"
   dependencies:
-    "@rollup/pluginutils": ^3.0.8
-    magic-string: ^0.25.5
+    "@rollup/pluginutils": ^3.1.0
+    magic-string: ^0.25.7
   peerDependencies:
     rollup: ^1.20.0 || ^2.0.0
-  checksum: d08a514b8f446a3fe3db7e9de7d1a57c4aaeaaa3d6f70c2e18925d893ed81480dbfd29fe939f61c1ef31194b036ab7b1df22a744ffd33196335f9fa1925d3c22
+  checksum: 5151bed6479eeddfb0368f21e4ebc9a872f46e0443f17e32fc9362164ab9a4fd996b0703361190d085b46fc911e5d6ae757866a318e5651583af7019b2ee533e
   languageName: node
   linkType: hard
 
@@ -4904,7 +4904,7 @@ __metadata:
     "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch"
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^9.0.0
-    "@rollup/plugin-replace": ^2.3.3
+    "@rollup/plugin-replace": ^2.4.0
     "@typescript-eslint/eslint-plugin": ^4.6.1
     "@typescript-eslint/parser": ^4.6.1
     babel-plugin-transform-charcodes: ^0.2.0
@@ -9744,7 +9744,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.25.3, magic-string@npm:^0.25.5, magic-string@npm:^0.25.7":
+"magic-string@npm:^0.25.3, magic-string@npm:^0.25.7":
   version: 0.25.7
   resolution: "magic-string@npm:0.25.7"
   dependencies:
