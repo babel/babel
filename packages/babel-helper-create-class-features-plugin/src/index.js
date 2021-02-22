@@ -99,19 +99,6 @@ export function createClassFeaturePlugin({
         const computedPaths = [];
         const privateNames = new Set();
         const classElements = path.get("body").get("body");
-        const isPublicClassFieldsTransformRequired = isRequired(
-          "public_class_fields",
-          targets,
-          { compatData },
-        );
-        if (
-          !isPublicClassFieldsTransformRequired &&
-          classElements.every(
-            element => element.isClassMethod() || element.isClassProperty(),
-          )
-        ) {
-          return;
-        }
 
         for (const path of classElements) {
           verifyUsedFeatures(path, this.file);
@@ -182,7 +169,17 @@ export function createClassFeaturePlugin({
           }
         }
 
-        if (!props.length && !isDecorated) return;
+        if (!isDecorated) {
+          if (!props.length) return;
+          const isPublicClassFieldsTransformRequired = isRequired(
+            "public_class_fields",
+            targets,
+            { compatData },
+          );
+          if (!isPublicClassFieldsTransformRequired && !privateNames.size) {
+            return;
+          }
+        }
 
         let ref;
 

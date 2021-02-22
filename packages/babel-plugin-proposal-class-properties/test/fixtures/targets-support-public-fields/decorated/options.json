@@ -1,0 +1,6 @@
+{
+  "targets": {
+    "node": "12"
+  },
+  "plugins": ["proposal-class-properties", ["proposal-decorators", { "decoratorsBeforeExport": true }], ["external-helpers", { "helperVersion": "7.100.0" }]]
+}
