@@ -2,10 +2,14 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-import getCoreJS2Definitions from "./runtime-corejs2-definitions";
-import getCoreJS3Definitions from "./runtime-corejs3-definitions";
-import { typeAnnotationToString, hasMinVersion } from "./helpers";
+import { hasMinVersion } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
+
+import pluginCorejs2 from "babel-plugin-polyfill-corejs2";
+import pluginCorejs3 from "babel-plugin-polyfill-corejs3";
+import pluginRegenerator from "babel-plugin-polyfill-regenerator";
+
+const pluginsCompat = "#__secret_key__@babel/runtime__compatibility";
 
 function supportsStaticESM(caller) {
   return !!caller?.supportsStaticESM;
@@ -96,42 +100,6 @@ export default declare((api, options, dirname) => {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
-  function hasMapping(methods, name) {
-    return has(methods, name) && (proposals || methods[name].stable);
-  }
-
-  function hasStaticMapping(object, method) {
-    return (
-      has(StaticProperties, object) &&
-      hasMapping(StaticProperties[object], method)
-    );
-  }
-
-  function isNamespaced(path) {
-    const binding = path.scope.getBinding(path.node.name);
-    if (!binding) return false;
-    return binding.path.isImportNamespaceSpecifier();
-  }
-
-  function maybeNeedsPolyfill(path, methods, name) {
-    if (isNamespaced(path.get("object"))) return false;
-    if (!methods[name].types) return true;
-
-    const typeAnnotation = path.get("object").getTypeAnnotation();
-    const type = typeAnnotationToString(typeAnnotation);
-    if (!type) return true;
-
-    return methods[name].types.some(name => name === type);
-  }
-
-  function resolvePropertyName(path, computed) {
-    const { node } = path;
-    if (!computed) return node.name;
-    if (path.isStringLiteral()) return node.value;
-    const result = path.evaluate();
-    return result.value;
-  }
-
   if (has(options, "useBuiltIns")) {
     if (options.useBuiltIns) {
       throw new Error(
@@ -174,7 +142,6 @@ export default declare((api, options, dirname) => {
 
   const injectCoreJS2 = corejsVersion === 2;
   const injectCoreJS3 = corejsVersion === 3;
-  const injectCoreJS = corejsVersion !== false;
 
   const moduleName = injectCoreJS3
     ? "@babel/runtime-corejs3"
@@ -182,62 +149,109 @@ export default declare((api, options, dirname) => {
     ? "@babel/runtime-corejs2"
     : "@babel/runtime";
 
-  const corejsRoot = injectCoreJS3 && !proposals ? "core-js-stable" : "core-js";
-
-  const { BuiltIns, StaticProperties, InstanceProperties } = (injectCoreJS2
-    ? getCoreJS2Definitions
-    : getCoreJS3Definitions)(runtimeVersion);
-
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
   const modulePath = getRuntimePath(moduleName, dirname, absoluteRuntime);
 
+  function createCorejsPlgin(plugin, options, regeneratorPlugin) {
+    return (api, _, filename) => {
+      return {
+        ...plugin(api, options, filename),
+        inherits: regeneratorPlugin,
+      };
+    };
+  }
+
+  function createRegeneratorPlugin(options) {
+    if (!useRuntimeRegenerator) return undefined;
+    return (api, _, filename) => {
+      return pluginRegenerator(api, options, filename);
+    };
+  }
+
+  const corejsExt = absoluteRuntime ? ".js" : "";
+
   return {
     name: "transform-runtime",
 
+    inherits: injectCoreJS2
+      ? createCorejsPlgin(
+          pluginCorejs2,
+          {
+            method: "usage-pure",
+            [pluginsCompat]: {
+              runtimeVersion,
+              useBabelRuntime: modulePath,
+              ext: corejsExt,
+            },
+          },
+          createRegeneratorPlugin({
+            method: "usage-pure",
+            [pluginsCompat]: { useBabelRuntime: modulePath },
+          }),
+        )
+      : injectCoreJS3
+      ? createCorejsPlgin(
+          pluginCorejs3,
+          {
+            method: "usage-pure",
+            version: 3,
+            proposals,
+            [pluginsCompat]: { useBabelRuntime: modulePath, ext: corejsExt },
+          },
+          createRegeneratorPlugin({
+            method: "usage-pure",
+            [pluginsCompat]: { useBabelRuntime: modulePath },
+          }),
+        )
+      : createRegeneratorPlugin({
+          method: "usage-pure",
+          [pluginsCompat]: { useBabelRuntime: modulePath },
+        }),
+
     pre(file) {
-      if (useRuntimeHelpers) {
-        file.set("helperGenerator", name => {
-          // If the helper didn't exist yet at the version given, we bail
-          // out and let Babel either insert it directly, or throw an error
-          // so that plugins can handle that case properly.
-          if (
-            file.availableHelper &&
-            !file.availableHelper(name, runtimeVersion)
-          ) {
-            return;
-          }
+      if (!useRuntimeHelpers) return;
 
-          const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
+      file.set("helperGenerator", name => {
+        // If the helper didn't exist yet at the version given, we bail
+        // out and let Babel either insert it directly, or throw an error
+        // so that plugins can handle that case properly.
+        if (
+          file.availableHelper &&
+          !file.availableHelper(name, runtimeVersion)
+        ) {
+          return;
+        }
 
-          // Explicitly set the CommonJS interop helpers to their reserve
-          // blockHoist of 4 so they are guaranteed to exist
-          // when other things used them to import.
-          const blockHoist =
-            isInteropHelper && !isModule(file.path) ? 4 : undefined;
+        const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
 
-          const helpersDir =
-            esModules && file.path.node.sourceType === "module"
-              ? "helpers/esm"
-              : "helpers";
+        // Explicitly set the CommonJS interop helpers to their reserve
+        // blockHoist of 4 so they are guaranteed to exist
+        // when other things used them to import.
+        const blockHoist =
+          isInteropHelper && !isModule(file.path) ? 4 : undefined;
 
-          return this.addDefaultImport(
-            `${modulePath}/${helpersDir}/${name}`,
-            name,
-            blockHoist,
-            true,
-          );
-        });
-      }
+        const helpersDir =
+          esModules && file.path.node.sourceType === "module"
+            ? "helpers/esm"
+            : "helpers";
+
+        return addDefaultImport(
+          `${modulePath}/${helpersDir}/${name}`,
+          name,
+          blockHoist,
+          true,
+        );
+      });
 
       const cache = new Map();
 
-      this.addDefaultImport = (
+      function addDefaultImport(
         source,
         nameHint,
         blockHoist,
         isHelper = false,
-      ) => {
+      ) {
         // If something on the page adds a helper when the file is an ES6
         // file, we can't reused the cached helper name after things have been
         // transformed because it has almost certainly been renamed.
@@ -258,217 +272,7 @@ export default declare((api, options, dirname) => {
           cache.set(key, cached);
         }
         return cached;
-      };
-    },
-
-    visitor: {
-      ReferencedIdentifier(path) {
-        const { node, parent, scope } = path;
-        const { name } = node;
-
-        // transform `regeneratorRuntime`
-        if (name === "regeneratorRuntime" && useRuntimeRegenerator) {
-          path.replaceWith(
-            this.addDefaultImport(
-              `${modulePath}/regenerator`,
-              "regeneratorRuntime",
-            ),
-          );
-          return;
-        }
-
-        if (!injectCoreJS) return;
-
-        if (t.isMemberExpression(parent)) return;
-        if (!hasMapping(BuiltIns, name)) return;
-        if (scope.getBindingIdentifier(name)) return;
-
-        // transform global built-ins like `Symbol()`, `new Promise`
-        path.replaceWith(
-          this.addDefaultImport(
-            `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
-            name,
-          ),
-        );
-      },
-
-      CallExpression(path) {
-        if (!injectCoreJS) return;
-
-        const { node } = path;
-        const { callee } = node;
-
-        if (!t.isMemberExpression(callee)) return;
-
-        const { object } = callee;
-        const propertyName = resolvePropertyName(
-          path.get("callee.property"),
-          callee.computed,
-        );
-
-        // transform calling instance methods like `something.includes()`
-        if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
-          if (
-            hasMapping(InstanceProperties, propertyName) &&
-            maybeNeedsPolyfill(
-              path.get("callee"),
-              InstanceProperties,
-              propertyName,
-            )
-          ) {
-            let context1, context2;
-            if (t.isIdentifier(object)) {
-              context1 = object;
-              context2 = t.cloneNode(object);
-            } else {
-              context1 = path.scope.generateDeclaredUidIdentifier("context");
-              context2 = t.assignmentExpression(
-                "=",
-                t.cloneNode(context1),
-                object,
-              );
-            }
-            node.callee = t.memberExpression(
-              t.callExpression(
-                this.addDefaultImport(
-                  `${modulePath}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
-                  `${propertyName}InstanceProperty`,
-                ),
-                [context2],
-              ),
-              t.identifier("call"),
-            );
-            node.arguments.unshift(context1);
-            return;
-          }
-        }
-        // we can't compile this
-        if (node.arguments.length) return;
-        if (!callee.computed) return;
-        if (!path.get("callee.property").matchesPattern("Symbol.iterator")) {
-          return;
-        }
-
-        // transform `something[Symbol.iterator]()` to calling `getIterator(something)` helper
-        path.replaceWith(
-          t.callExpression(
-            this.addDefaultImport(
-              `${modulePath}/core-js/get-iterator`,
-              "getIterator",
-            ),
-            [object],
-          ),
-        );
-      },
-
-      // transform `Symbol.iterator in something` to calling `isIterable(something)` helper
-      BinaryExpression(path) {
-        if (!injectCoreJS) return;
-        if (path.node.operator !== "in") return;
-        if (!path.get("left").matchesPattern("Symbol.iterator")) return;
-
-        path.replaceWith(
-          t.callExpression(
-            this.addDefaultImport(
-              `${modulePath}/core-js/is-iterable`,
-              "isIterable",
-            ),
-            [path.node.right],
-          ),
-        );
-      },
-
-      // transform static built-ins methods like `Array.from`
-      MemberExpression: {
-        enter(path) {
-          if (!injectCoreJS) return;
-          if (!path.isReferenced()) return;
-          // skip transforming `delete something.includes`
-          if (path.parentPath.isUnaryExpression({ operator: "delete" })) return;
-
-          const { node } = path;
-          const { object } = node;
-
-          if (!t.isReferenced(object, node)) return;
-
-          // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
-          if (
-            !injectCoreJS2 &&
-            node.computed &&
-            path.get("property").matchesPattern("Symbol.iterator")
-          ) {
-            path.replaceWith(
-              t.callExpression(
-                this.addDefaultImport(
-                  `${modulePath}/core-js/get-iterator-method`,
-                  "getIteratorMethod",
-                ),
-                [object],
-              ),
-            );
-            return;
-          }
-
-          const objectName = object.name;
-          const propertyName = resolvePropertyName(
-            path.get("property"),
-            node.computed,
-          );
-          // doesn't reference the global
-          if (
-            path.scope.getBindingIdentifier(objectName) ||
-            !hasStaticMapping(objectName, propertyName)
-          ) {
-            // transform getting of instance methods like `method = something.includes`
-            if (
-              injectCoreJS3 &&
-              hasMapping(InstanceProperties, propertyName) &&
-              maybeNeedsPolyfill(path, InstanceProperties, propertyName)
-            ) {
-              path.replaceWith(
-                t.callExpression(
-                  this.addDefaultImport(
-                    `${modulePath}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
-                    `${propertyName}InstanceProperty`,
-                  ),
-                  [object],
-                ),
-              );
-            }
-            return;
-          }
-
-          path.replaceWith(
-            this.addDefaultImport(
-              `${modulePath}/${corejsRoot}/${StaticProperties[objectName][propertyName].path}`,
-              `${objectName}$${propertyName}`,
-            ),
-          );
-        },
-
-        exit(path) {
-          if (!injectCoreJS) return;
-          if (!path.isReferenced()) return;
-          if (path.node.computed) return;
-
-          const { node } = path;
-          const { object } = node;
-          const { name } = object;
-
-          if (!hasMapping(BuiltIns, name)) return;
-          if (path.scope.getBindingIdentifier(name)) return;
-
-          path.replaceWith(
-            t.memberExpression(
-              this.addDefaultImport(
-                `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
-                name,
-              ),
-              node.property,
-            ),
-          );
-        },
-      },
+      }
     },
   };
 });

@@ -1,10 +1,10 @@
 "use strict";
 
-var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys");
+var _context;
 
 var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/for-each");
 
-var _context;
+var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys");
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
