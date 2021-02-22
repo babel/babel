@@ -96,7 +96,7 @@ __metadata:
   dependencies:
     "@mdn/browser-compat-data": ^3.1.1
     core-js-compat: ^3.9.0
-    electron-to-chromium: 1.3.583
+    electron-to-chromium: 1.3.672
     lodash: ^4.17.19
   languageName: unknown
   linkType: soft
@@ -6350,10 +6350,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.3.583, electron-to-chromium@npm:^1.3.571":
-  version: 1.3.583
-  resolution: "electron-to-chromium@npm:1.3.583"
-  checksum: 134710b06cdd0a722bba5efe502beb914bae9285cd3140c5824f043984b2595e64d6cb893675d8b185cf8bef46cc8f39c72a9f1c78237e31def0c64e076e532f
+"electron-to-chromium@npm:1.3.672, electron-to-chromium@npm:^1.3.571":
+  version: 1.3.672
+  resolution: "electron-to-chromium@npm:1.3.672"
+  checksum: 99e374a0f3e0fc2dccb028133e7d02b820e3ada6d09fcde603082e679e6b999dd2f772273b7a2af46b926e5258f7dc2fcd7bef8f6ca8def568bf1a582254ce6f
   languageName: node
   linkType: hard
 
