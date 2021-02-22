@@ -1,0 +1,14 @@
+{
+  "public_class_fields": {
+    "chrome": "72",
+    "and_chr": "72",
+    "edge": "79",
+    "firefox": "69",
+    "and_ff": "79",
+    "node": "12.0.0",
+    "opera": "60",
+    "op_mob": "51",
+    "android": "72",
+    "electron": "5.0"
+  }
+}

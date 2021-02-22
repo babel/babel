@@ -19,6 +19,8 @@ import {
   FEATURES,
   isLoose,
 } from "./features";
+import { isRequired } from "@babel/helper-compilation-targets";
+import compatData from "../data/compat.json";
 
 export { FEATURES, injectInitialization };
 
@@ -37,12 +39,13 @@ export function createClassFeaturePlugin({
   loose,
   manipulateOptions,
   // TODO(Babel 8): Remove the default falue
-  api = { assumption: () => {} },
+  api = { assumption: () => {}, targets: () => {} },
 }) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
+  const targets = api.targets();
 
   if (loose === true) {
     const explicit = [];
@@ -95,9 +98,22 @@ export function createClassFeaturePlugin({
         const elements = [];
         const computedPaths = [];
         const privateNames = new Set();
-        const body = path.get("body");
+        const classElements = path.get("body").get("body");
+        const isPublicClassFieldsTransformRequired = isRequired(
+          "public_class_fields",
+          targets,
+          { compatData },
+        );
+        if (
+          !isPublicClassFieldsTransformRequired &&
+          classElements.every(
+            element => element.isClassMethod() || element.isClassProperty(),
+          )
+        ) {
+          return;
+        }
 
-        for (const path of body.get("body")) {
+        for (const path of classElements) {
           verifyUsedFeatures(path, this.file);
 
           if (path.node.computed) {
