@@ -2,9 +2,9 @@
 
 var _context;
 
-var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/for-each.js");
+var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/for-each");
 
-var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys.js");
+var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys");
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 

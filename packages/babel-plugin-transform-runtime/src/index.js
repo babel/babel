@@ -169,6 +169,8 @@ export default declare((api, options, dirname) => {
     };
   }
 
+  const corejsExt = absoluteRuntime ? ".js" : "";
+
   return {
     name: "transform-runtime",
 
@@ -177,11 +179,15 @@ export default declare((api, options, dirname) => {
           pluginCorejs2,
           {
             method: "usage-pure",
-            [pluginsCompat]: { runtimeVersion, useBabelRuntime: true },
+            [pluginsCompat]: {
+              runtimeVersion,
+              useBabelRuntime: modulePath,
+              ext: corejsExt,
+            },
           },
           createRegeneratorPlugin({
             method: "usage-pure",
-            [pluginsCompat]: { useBabelRuntime: "@babel/runtime-corejs2" },
+            [pluginsCompat]: { useBabelRuntime: modulePath },
           }),
         )
       : injectCoreJS3
@@ -191,18 +197,16 @@ export default declare((api, options, dirname) => {
             method: "usage-pure",
             version: 3,
             proposals,
-            [pluginsCompat]: { useBabelRuntime: true },
+            [pluginsCompat]: { useBabelRuntime: modulePath, ext: corejsExt },
           },
           createRegeneratorPlugin({
             method: "usage-pure",
-            [pluginsCompat]: {
-              useBabelRuntime: "@babel/runtime-corejs3",
-            },
+            [pluginsCompat]: { useBabelRuntime: modulePath },
           }),
         )
       : createRegeneratorPlugin({
           method: "usage-pure",
-          [pluginsCompat]: { useBabelRuntime: "@babel/runtime" },
+          [pluginsCompat]: { useBabelRuntime: modulePath },
         }),
 
     pre(file) {

@@ -975,7 +975,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.12.13"
     "@babel/helper-remap-async-to-generator": "workspace:^7.12.13"
     "@babel/plugin-syntax-async-generators": ^7.8.0
-    babel-plugin-polyfill-corejs3: ^0.1.1
+    babel-plugin-polyfill-corejs3: ^0.1.2
     core-js-pure: ^3.8.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2705,8 +2705,8 @@ __metadata:
     "@babel/runtime-corejs3": "workspace:*"
     "@babel/template": "workspace:*"
     "@babel/types": "workspace:*"
-    babel-plugin-polyfill-corejs2: ^0.1.1
-    babel-plugin-polyfill-corejs3: ^0.1.1
+    babel-plugin-polyfill-corejs2: ^0.1.2
+    babel-plugin-polyfill-corejs3: ^0.1.2
     babel-plugin-polyfill-regenerator: ^0.1.1
     make-dir: ^2.1.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
@@ -3070,8 +3070,8 @@ __metadata:
     "@babel/plugin-transform-unicode-regex": "workspace:^7.12.13"
     "@babel/preset-modules": ^0.1.3
     "@babel/types": "workspace:^7.12.17"
-    babel-plugin-polyfill-corejs2: ^0.1.1
-    babel-plugin-polyfill-corejs3: ^0.1.1
+    babel-plugin-polyfill-corejs2: ^0.1.2
+    babel-plugin-polyfill-corejs3: ^0.1.2
     babel-plugin-polyfill-regenerator: ^0.1.1
     core-js-compat: ^3.9.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
@@ -4790,28 +4790,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs2@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "babel-plugin-polyfill-corejs2@npm:0.1.1"
+"babel-plugin-polyfill-corejs2@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "babel-plugin-polyfill-corejs2@npm:0.1.2"
   dependencies:
     "@babel/compat-data": ^7.11.0
     "@babel/helper-define-polyfill-provider": ^0.1.0
     semver: ^6.1.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 01e54e4b053f0374aedfa74a3b2a7ca565bad10cc5ce9921177fab170ae31a376316d64c9abb26e8ba127074aee0585d3fb54892eee79ed6a476fb10b02a8b04
+  checksum: 2b37d3865fb946e0d10872536fea16ae858a172bd3b83a7555b0e0aac1bbf6ed834487665fa6161eb0469c5522ebfc30f5ce83568c7160e69afb872c441c8478
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs3@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "babel-plugin-polyfill-corejs3@npm:0.1.1"
+"babel-plugin-polyfill-corejs3@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.1.2"
   dependencies:
     "@babel/helper-define-polyfill-provider": ^0.1.0
     core-js-compat: ^3.8.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 42b2a5d96d4a43db03de8c41ffeb63f8d770f6601f0485c9bbec2f010353399c041dbd203e9bbf955403bc13ec7b58228821ca22d74e2b627a7b78d601308f3f
+  checksum: bf7174ba83d89f9b2887abcde1784907007670ae795b7c8bfff64c4466fa5023d17299377bdfbc430325b22920c10464aab9792706b61d42d1caa4d512908108
   languageName: node
   linkType: hard
 

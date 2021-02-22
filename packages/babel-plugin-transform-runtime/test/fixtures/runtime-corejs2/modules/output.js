@@ -1,8 +1,8 @@
 "use strict";
 
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property.js");
+var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
 
-var _Object$keys = require("@babel/runtime-corejs2/core-js/object/keys.js");
+var _Object$keys = require("@babel/runtime-corejs2/core-js/object/keys");
 
 var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
 
