@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 
-const compatData = require("mdn-browser-compat-data").javascript;
+const compatData = require("@mdn/browser-compat-data").javascript;
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
 // Map mdn-browser-compat-data to browserslist browser names
@@ -41,7 +41,11 @@ function process(source) {
     if (Array.isArray(browserSupport)) {
       browserSupport = browserSupport[0]; // The first item is the most progressive support
     }
-    if (browserSupport.version_added && !browserSupport.flags) {
+    if (
+      browserSupport.version_added &&
+      !browserSupport.flags &&
+      !browserSupport.partial_implementation
+    ) {
       allowedBrowsers[browserName] = browserVersion(
         browser,
         browserSupport.version_added
