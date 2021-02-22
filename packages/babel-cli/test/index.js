@@ -7,6 +7,7 @@ const escapeRegExp = require("lodash/escapeRegExp");
 const merge = require("lodash/merge");
 const path = require("path");
 const fs = require("fs");
+const { chmod } = require("../lib/babel/util");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
@@ -266,6 +267,18 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       }
 
       it(testName, buildTest(binName, testName, opts), 20000);
+    });
+  });
+});
+
+describe("util.js", () => {
+  describe("chmod", () => {
+    it("should warn the user if chmod fails", () => {
+      const spyConsoleWarn = jest.spyOn(console, "warn");
+      // should expect a string as first argument
+      chmod(100, "file.js");
+      expect(spyConsoleWarn).toHaveBeenCalledTimes(1);
+      spyConsoleWarn.mockRestore();
     });
   });
 });
