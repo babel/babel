@@ -277,6 +277,9 @@
     },
     {
       "path": "../babel-preset-typescript"
+    },
+    {
+      "path": "../babel-plugin-syntax-module-blocks"
     }
   ]
 }
