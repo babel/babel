@@ -2705,6 +2705,9 @@ __metadata:
     "@babel/runtime-corejs3": "workspace:*"
     "@babel/template": "workspace:*"
     "@babel/types": "workspace:*"
+    babel-plugin-polyfill-corejs2: "link:../../../babel-polyfills/packages/babel-plugin-polyfill-corejs2"
+    babel-plugin-polyfill-corejs3: "link:../../../babel-polyfills/packages/babel-plugin-polyfill-corejs3"
+    babel-plugin-polyfill-regenerator: "link:../../../babel-polyfills/packages/babel-plugin-polyfill-regenerator"
     make-dir: ^2.1.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   peerDependencies:
@@ -4787,6 +4790,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-polyfill-corejs2@link:../../../babel-polyfills/packages/babel-plugin-polyfill-corejs2::locator=%40babel%2Fplugin-transform-runtime%40workspace%3Apackages%2Fbabel-plugin-transform-runtime":
+  version: 0.0.0-use.local
+  resolution: "babel-plugin-polyfill-corejs2@link:../../../babel-polyfills/packages/babel-plugin-polyfill-corejs2::locator=%40babel%2Fplugin-transform-runtime%40workspace%3Apackages%2Fbabel-plugin-transform-runtime"
+  languageName: node
+  linkType: soft
+
 "babel-plugin-polyfill-corejs2@npm:^0.1.0":
   version: 0.1.0
   resolution: "babel-plugin-polyfill-corejs2@npm:0.1.0"
@@ -4799,6 +4808,12 @@ __metadata:
   checksum: fd5ad1b43cab0e08c33a9c7b8d610e806674d9c96fcd4b743a9307e84673ab21c01fe7e68129c5f45ccf4535e6d9ff4e300ed53c66904968392803520a1184a8
   languageName: node
   linkType: hard
+
+"babel-plugin-polyfill-corejs3@link:../../../babel-polyfills/packages/babel-plugin-polyfill-corejs3::locator=%40babel%2Fplugin-transform-runtime%40workspace%3Apackages%2Fbabel-plugin-transform-runtime":
+  version: 0.0.0-use.local
+  resolution: "babel-plugin-polyfill-corejs3@link:../../../babel-polyfills/packages/babel-plugin-polyfill-corejs3::locator=%40babel%2Fplugin-transform-runtime%40workspace%3Apackages%2Fbabel-plugin-transform-runtime"
+  languageName: node
+  linkType: soft
 
 "babel-plugin-polyfill-corejs3@npm:^0.1.0":
   version: 0.1.0
@@ -4822,6 +4837,12 @@ __metadata:
   checksum: eef3e2aa3558d31b8b09726061e545352511a6e716356954af086d9ed686d306e475fb69f544fe8316b0eee2ed5834358b8ccf543305b335b99f7b38ac942221
   languageName: node
   linkType: hard
+
+"babel-plugin-polyfill-regenerator@link:../../../babel-polyfills/packages/babel-plugin-polyfill-regenerator::locator=%40babel%2Fplugin-transform-runtime%40workspace%3Apackages%2Fbabel-plugin-transform-runtime":
+  version: 0.0.0-use.local
+  resolution: "babel-plugin-polyfill-regenerator@link:../../../babel-polyfills/packages/babel-plugin-polyfill-regenerator::locator=%40babel%2Fplugin-transform-runtime%40workspace%3Apackages%2Fbabel-plugin-transform-runtime"
+  languageName: node
+  linkType: soft
 
 "babel-plugin-polyfill-regenerator@npm:^0.1.0":
   version: 0.1.0

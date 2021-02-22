@@ -8,14 +8,11 @@ import t from "@babel/types";
 import { fileURLToPath } from "url";
 
 import transformRuntime from "../lib/index.js";
-import buildCorejs2Definitions from "../lib/runtime-corejs2-definitions.js";
-import buildCorejs3Definitions from "../lib/runtime-corejs3-definitions.js";
+import corejs2Definitions from "./runtime-corejs2-definitions.js";
+import corejs3Definitions from "./runtime-corejs3-definitions.js";
 
 const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
-
-const corejs2Definitions = buildCorejs2Definitions.default();
-const corejs3Definitions = buildCorejs3Definitions.default();
 
 function outputFile(filePath, data) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
