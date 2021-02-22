@@ -17,7 +17,7 @@ Using modules transform: auto
 
 Using plugins:
   proposal-numeric-separator { "ie":"11", "ios":"12.2" }
-  proposal-logical-assignment-operators { "chrome":"84", "edge":"85", "firefox":"78", "ie":"11", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-logical-assignment-operators { "chrome":"84", "firefox":"78", "ie":"11", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
   proposal-nullish-coalescing-operator { "ie":"11", "ios":"12.2", "samsung":"11.1" }
   proposal-optional-chaining { "ie":"11", "ios":"12.2", "samsung":"11.1" }
   proposal-json-strings { "ie":"11" }
