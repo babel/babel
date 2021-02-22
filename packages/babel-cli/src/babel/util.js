@@ -9,7 +9,7 @@ export function chmod(src: string, dest: string): void {
   try {
     fs.chmodSync(dest, fs.statSync(src).mode);
   } catch (err) {
-    console.warn(`Cannot change permissions to ${dest}`);
+    console.warn(`Cannot change permissions of ${dest}`);
   }
 }
 
