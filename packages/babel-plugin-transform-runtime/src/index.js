@@ -172,39 +172,38 @@ export default declare((api, options, dirname) => {
   return {
     name: "transform-runtime",
 
-    inherits:
-      corejsVersion === 2
-        ? createCorejsPlgin(
-            pluginCorejs2,
-            {
-              method: "usage-pure",
-              [pluginsCompat]: { runtimeVersion, useBabelRuntime: true },
-            },
-            createRegeneratorPlugin({
-              method: "usage-pure",
-              [pluginsCompat]: { useBabelRuntime: "@babel/runtime-corejs2" },
-            }),
-          )
-        : corejsVersion === 3
-        ? createCorejsPlgin(
-            pluginCorejs3,
-            {
-              method: "usage-pure",
-              version: 3,
-              proposals,
-              [pluginsCompat]: { useBabelRuntime: true },
-            },
-            createRegeneratorPlugin({
-              method: "usage-pure",
-              [pluginsCompat]: {
-                useBabelRuntime: "@babel/runtime-corejs3",
-              },
-            }),
-          )
-        : createRegeneratorPlugin({
+    inherits: injectCoreJS2
+      ? createCorejsPlgin(
+          pluginCorejs2,
+          {
             method: "usage-pure",
-            [pluginsCompat]: { useBabelRuntime: "@babel/runtime" },
+            [pluginsCompat]: { runtimeVersion, useBabelRuntime: true },
+          },
+          createRegeneratorPlugin({
+            method: "usage-pure",
+            [pluginsCompat]: { useBabelRuntime: "@babel/runtime-corejs2" },
           }),
+        )
+      : injectCoreJS3
+      ? createCorejsPlgin(
+          pluginCorejs3,
+          {
+            method: "usage-pure",
+            version: 3,
+            proposals,
+            [pluginsCompat]: { useBabelRuntime: true },
+          },
+          createRegeneratorPlugin({
+            method: "usage-pure",
+            [pluginsCompat]: {
+              useBabelRuntime: "@babel/runtime-corejs3",
+            },
+          }),
+        )
+      : createRegeneratorPlugin({
+          method: "usage-pure",
+          [pluginsCompat]: { useBabelRuntime: "@babel/runtime" },
+        }),
 
     pre(file) {
       if (!useRuntimeHelpers) return;
