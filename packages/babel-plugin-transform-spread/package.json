@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-spread",
-  "version": "7.12.13",
+  "version": "7.13.0",
   "description": "Compile ES2015 spread to ES5",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.12.13",
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^7.12.1"
   },
   "peerDependencies": {

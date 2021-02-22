@@ -86,7 +86,7 @@ export default declare((api, options, dirname) => {
   // instead of require("helper") so that it has the same interface as the
   // ESM helper, and bundlers can better exchange one format for the other.
   // TODO(Babel 8): Remove this check, it's always true
-  const DUAL_MODE_RUNTIME = "7.12.12";
+  const DUAL_MODE_RUNTIME = "7.13.0";
   const supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
   if (supportsCJSDefault && useESModules && !absoluteRuntime) {
     console.warn(

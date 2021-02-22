@@ -196,14 +196,6 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 
 new-version:
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!   Update DUAL_MODE_RUNTIME in transform-runtime   !!!!!!"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@exit 1
 	git pull --rebase
 	$(YARN) release-tool version -f @babel/standalone
 
