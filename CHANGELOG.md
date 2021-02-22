@@ -19,6 +19,64 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.0 (2021-02-22)
+
+#### :rocket: New Feature
+* `babel-parser`
+  * [#12370](https://github.com/babel/babel/pull/12370) Implement class features in estree ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-syntax-module-blocks`, `babel-standalone`, `babel-traverse`, `babel-types`
+  * [#12469](https://github.com/babel/babel/pull/12469) Parse JS Module Blocks proposal ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#12628](https://github.com/babel/babel/pull/12628) Support TypeScript 4.2 abstract constructor signatures ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#12193](https://github.com/babel/babel/pull/12193) Flow Enums with unknown members support ([@gkz](https://github.com/gkz))
+* `babel-core`, `babel-register`
+  * [#11498](https://github.com/babel/babel/pull/11498) Add cjs as a default extension ([@perrin4869](https://github.com/perrin4869))
+* `babel-traverse`
+  * [#12603](https://github.com/babel/babel/pull/12603) feat(referencesImport): support named exports accessed via namespace imports ([@jeysal](https://github.com/jeysal))
+* `babel-plugin-transform-typescript`, `babel-preset-typescript`
+  * [#12765](https://github.com/babel/babel/pull/12765) Enable allowNamespaces in `transform-typescript` by default ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-parameters`, `babel-types`
+  * [#12234](https://github.com/babel/babel/pull/12234) Support Flow `this` parameter annotations ([@dsainati1](https://github.com/dsainati1))
+* `babel-plugin-proposal-record-and-tuple`
+  * [#12145](https://github.com/babel/babel/pull/12145) Implement "Records and Tuples" transform ([@rickbutton](https://github.com/rickbutton))
+* `babel-plugin-transform-runtime`, `babel-plugin-transform-typeof-symbol`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#12632](https://github.com/babel/babel/pull/12632) Use conditional exports in `@babel/runtime` for CJS/ESM ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-helper-plugin-utils`, `babel-preset-env`
+  * [#12219](https://github.com/babel/babel/pull/12219) Add `@babel/core` support for the new `assumptions` option ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-helper-compilation-targets`, `babel-helper-plugin-utils`, `babel-preset-env`
+  * [#12189](https://github.com/babel/babel/pull/12189) Add `targets` and `browserslist*` options to `@babel/core` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#12266](https://github.com/babel/babel/pull/12266) Support `.mjs` plugins/presets and async factories ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-function-name`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#8461](https://github.com/babel/babel/pull/8461) Fix _isNativeReflectConstruct helper ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`
+  * [#12846](https://github.com/babel/babel/pull/12846) [babel-cli] Don't fail when `chmod` throws an error ([@immitsu](https://github.com/immitsu))
+* `babel-node`
+  * [#12836](https://github.com/babel/babel/pull/12836) fix: create IPC channel for spawned babel-node process ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#12819](https://github.com/babel/babel/pull/12819) fix: add regenerate-unicode-properties to dynamicRequireTargets ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-optional-chaining`, `babel-traverse`
+  * [#12812](https://github.com/babel/babel/pull/12812) Fix scope of computed method keys ([@overlookmotel](https://github.com/overlookmotel))
+
+#### :house: Internal
+* `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`
+  * [#12845](https://github.com/babel/babel/pull/12845) Use the `babel-plugin-polyfill-*` packages in `transform-runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`
+  * [#12842](https://github.com/babel/babel/pull/12842) Don't use `useESModules` in `@babel/runtime` build script ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-standalone`
+  * [#12839](https://github.com/babel/babel/pull/12839) Make sure that Rollup's `dynamicRequireTargets` are included ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-transform-fixture-test-runner`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-decorators`, `babel-preset-env`
+  * [#12583](https://github.com/babel/babel/pull/12583) Use the `babel-plugin-polyfill-*` packages in `preset-env` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-register`
+  * [#12813](https://github.com/babel/babel/pull/12813) babel-register: Don’t rewrite the cache if it’s not dirty ([@andersk](https://github.com/andersk))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-plugin-proposal-class-properties`
+  * [#12762](https://github.com/babel/babel/pull/12762) Support `noDocumentAll` for `obj?.#p` ([@JLHwung](https://github.com/JLHwung))
 ## v7.12.18 (2021-02-18)
 
 #### :bug: Bug Fix
