@@ -1,4 +1,4 @@
-import _Reflect$construct from "@babel/runtime-corejs2/core-js/reflect/construct";
+import _Reflect$construct from "@babel/runtime-corejs2/core-js/reflect/construct.js";
 import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
 import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
 import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
