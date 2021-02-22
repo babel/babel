@@ -522,8 +522,9 @@ helpers.isNativeReflectConstruct = helper("7.9.0")`
     // use our fallback implementation.
     try {
       // If the internal slots aren't set, this throws an error similar to
-      //   TypeError: this is not a Date object.
-      Date.prototype.toString.call(Reflect.construct(Date, [], function() {}));
+      //   TypeError: this is not a Boolean object.
+
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
       return true;
     } catch (e) {
       return false;
