@@ -292,9 +292,12 @@ function buildRollup(packages, targetBrowsers) {
         plugins: [
           rollupBabelSource(),
           rollupReplace({
-            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-            BABEL_VERSION: JSON.stringify(babelVersion),
-            VERSION: JSON.stringify(version),
+            preventAssignment: true,
+            values: {
+              "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+              BABEL_VERSION: JSON.stringify(babelVersion),
+              VERSION: JSON.stringify(version),
+            },
           }),
           rollupCommonJs({
             include: [
