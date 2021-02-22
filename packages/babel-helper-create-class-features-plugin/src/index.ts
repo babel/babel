@@ -138,23 +138,9 @@ export function createClassFeaturePlugin({
         const elements = [];
         const computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[] = [];
         const privateNames = new Set<string>();
-        const classElements = path.get("body").get("body");
+        const body = path.get("body");
 
-        const isPublicClassFieldsTransformRequired = isRequired(
-          "public_class_fields",
-          targets,
-          { compatData },
-        );
-        if (
-          !isPublicClassFieldsTransformRequired &&
-          classElements.every(
-            element => element.isClassMethod() || element.isClassProperty(),
-          )
-        ) {
-          return;
-        }
-
-        for (const path of classElements) {
+        for (const path of body.get("body")) {
           if (
             // check path.node.computed is enough, but ts will complain
             (path.isClassProperty() || path.isClassMethod()) &&
@@ -212,6 +198,19 @@ export function createClassFeaturePlugin({
         }
 
         if (!props.length) return;
+
+        const isPublicClassFieldsTransformRequired = isRequired(
+          "public_class_fields",
+          targets,
+          { compatData },
+        );
+        if (
+          !isPublicClassFieldsTransformRequired &&
+          !props.some(prop => prop.isPrivate()) &&
+          !file.get("@babel/plugin-class-features/hasLegacyDecoratedField")
+        ) {
+          return;
+        }
 
         const innerBinding = path.node.id;
         let ref: t.Identifier | null;
