@@ -850,6 +850,17 @@
     "samsung": "4",
     "electron": "0.30"
   },
+  "es6.array.slice": {
+    "chrome": "1",
+    "edge": "12",
+    "firefox": "1",
+    "ie":"4",
+    "ios": "1",
+    "node": "0.10.0",
+    "opera": "4",
+    "safari": "1",
+    "samsung": "1.0"
+  },
   "es6.object.to-string": {
     "chrome": "57",
     "opera": "44",
