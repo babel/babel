@@ -1,6 +1,6 @@
 {
   "name": "@babel/parser",
-  "version": "7.13.0",
+  "version": "7.13.4",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babel.dev/docs/en/next/babel-parser",
