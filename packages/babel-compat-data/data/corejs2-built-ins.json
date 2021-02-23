@@ -224,6 +224,17 @@
     "samsung": "1",
     "electron": "0.20"
   },
+  "es6.array.slice": {
+    "chrome": "51",
+    "opera": "38",
+    "edge": "13",
+    "firefox": "48",
+    "safari": "10",
+    "node": "6.5",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "1.2"
+  },
   "es6.array.some": {
     "chrome": "5",
     "opera": "10.10",
@@ -849,17 +860,6 @@
     "ios": "9",
     "samsung": "4",
     "electron": "0.30"
-  },
-  "es6.array.slice": {
-    "chrome": "1",
-    "edge": "12",
-    "firefox": "1",
-    "ie":"4",
-    "ios": "1",
-    "node": "0.10.0",
-    "opera": "4",
-    "safari": "1",
-    "samsung": "1.0"
   },
   "es6.object.to-string": {
     "chrome": "57",

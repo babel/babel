@@ -73,8 +73,8 @@ module.exports = {
   "es6.array.of": "Array static methods / Array.of",
   "es6.array.reduce": "Array methods / Array.prototype.reduce",
   "es6.array.reduce-right": "Array methods / Array.prototype.reduceRight",
-  // compat-table missing babel6 mapping
-  // "es6.array.slice": "well-known symbols / Symbol.species, Array.prototype.slice",
+  "es6.array.slice":
+    "well-known symbols / Symbol.species, Array.prototype.slice",
   "es6.array.some": "Array methods / Array.prototype.some",
   "es6.array.sort": "Array methods / Array.prototype.sort",
   "es6.array.species": "Array static methods / Array[Symbol.species]",
