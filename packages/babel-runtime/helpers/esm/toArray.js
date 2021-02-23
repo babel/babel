@@ -1,1 +1,1 @@
-export { default } from "../toArray/index.mjs"
+export { default } from "../toArray/_index.mjs"
