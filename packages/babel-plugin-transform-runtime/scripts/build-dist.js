@@ -287,15 +287,14 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
 function addDefaultCJSExport({ template }) {
   return {
     visitor: {
-      Program: {
+      AssignmentExpression: {
         exit(path) {
-          path.pushContainer(
-            "body",
-            template.statements.ast`
-              module.exports.default = module.exports;
-              module.exports.__esModule = true;
-            `
-          );
+          if (path.get("left").matchesPattern("module.exports")) {
+            path.insertAfter(template.expression.ast`
+              module.exports.default = module.exports,
+              module.exports.__esModule = true
+            `);
+          }
         },
       },
     },

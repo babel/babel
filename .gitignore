@@ -31,6 +31,7 @@ package-lock.json
 !/packages/babel-runtime/helpers/toArray/*
 !/packages/babel-runtime/helpers/iterableToArray/*
 !/packages/babel-runtime/helpers/temporalRef/*
+!/packages/babel-runtime/helpers/typeof/*
 /packages/babel-runtime/helpers/esm/*.js
 !/packages/babel-runtime/helpers/esm/toArray.js
 !/packages/babel-runtime/helpers/esm/iterableToArray.js
@@ -42,6 +43,7 @@ package-lock.json
 !/packages/babel-runtime-corejs2/helpers/toArray/*
 !/packages/babel-runtime-corejs2/helpers/iterableToArray/*
 !/packages/babel-runtime-corejs2/helpers/temporalRef/*
+!/packages/babel-runtime-corejs2/helpers/typeof/*
 /packages/babel-runtime-corejs2/helpers/esm/*.js
 !/packages/babel-runtime-corejs2/helpers/esm/toArray.js
 !/packages/babel-runtime-corejs2/helpers/esm/iterableToArray.js
