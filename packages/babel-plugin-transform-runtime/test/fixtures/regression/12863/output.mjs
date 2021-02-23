@@ -1,3 +1,4 @@
+import _Reflect$construct from "@babel/runtime-corejs3/core-js-stable/reflect/construct";
 import _classCallCheck from "@babel/runtime-corejs3/helpers/classCallCheck";
 import _assertThisInitialized from "@babel/runtime-corejs3/helpers/assertThisInitialized";
 import _inherits from "@babel/runtime-corejs3/helpers/inherits";
