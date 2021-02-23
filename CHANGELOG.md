@@ -19,6 +19,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.5 (2021-02-23)
+
+#### :bug: Bug Fix
+* `babel-compat-data`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#12870](https://github.com/babel/babel/pull/12870) Add `es6.array.slice` in corejs2 builtins ([@eligao](https://github.com/eligao))
+* `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#12869](https://github.com/babel/babel/pull/12869) Ensure that `@babel/runtime-corejs3` imports are injected ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.4 (2021-02-23)
 
 #### :bug: Bug Fix
