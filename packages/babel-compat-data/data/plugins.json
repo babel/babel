@@ -3,6 +3,7 @@
     "chrome": "74",
     "opera": "62",
     "edge": "79",
+    "safari": "14.1",
     "node": "12",
     "samsung": "11",
     "electron": "6.0"
@@ -27,9 +28,11 @@
   },
   "proposal-logical-assignment-operators": {
     "chrome": "85",
+    "edge": "85",
     "firefox": "79",
     "safari": "14",
     "node": "15",
+    "ios": "14",
     "electron": "10.0"
   },
   "proposal-nullish-coalescing-operator": {
@@ -432,6 +435,7 @@
     "and_chr": "72",
     "edge": "79",
     "firefox": "80",
+    "and_ff": "80",
     "node": "13.2",
     "opera": "60",
     "op_mob": "51",

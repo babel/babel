@@ -84,9 +84,9 @@ __metadata:
   linkType: soft
 
 "@babel/compat-data@npm:^7.11.0, @babel/compat-data@npm:^7.12.0, @babel/compat-data@npm:^7.12.5":
-  version: 7.13.0
-  resolution: "@babel/compat-data@npm:7.13.0"
-  checksum: 74d92839feee9f104f9f8bbee12d39cf4ff87700c285c30d949b568f80b2f8de0cd243c6fb81ead69e2229b6fc31c7b4ff958c20c9e58bb240577d85a110c718
+  version: 7.13.5
+  resolution: "@babel/compat-data@npm:7.13.5"
+  checksum: d9de71345536951e9b9c537633289d89486af7a3720f35e498561e6d11df5b70dbcd2cd10880335f5abe0933f2f4e58e226efc33545f9b5246167bc4a4abef23
   languageName: node
   linkType: hard
 
@@ -94,10 +94,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
+    "@mdn/browser-compat-data": ^3.1.1
     core-js-compat: ^3.9.0
-    electron-to-chromium: 1.3.583
+    electron-to-chromium: 1.3.672
     lodash: ^4.17.19
-    mdn-browser-compat-data: 1.0.38
   languageName: unknown
   linkType: soft
 
@@ -3660,6 +3660,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mdn/browser-compat-data@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@mdn/browser-compat-data@npm:3.1.1"
+  dependencies:
+    extend: 3.0.2
+  checksum: 1e98cab2a160a65edd8ee16c5f10fda9d27df22a159666faa5a57fa0f64a152ced3926ab81f512b3dfe66af82291b58c9cf4b64d4443b2cca05664a4454d7910
+  languageName: node
+  linkType: hard
+
 "@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents":
   version: 2.1.8-no-fsevents
   resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents"
@@ -6341,10 +6350,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.3.583, electron-to-chromium@npm:^1.3.571":
-  version: 1.3.583
-  resolution: "electron-to-chromium@npm:1.3.583"
-  checksum: 134710b06cdd0a722bba5efe502beb914bae9285cd3140c5824f043984b2595e64d6cb893675d8b185cf8bef46cc8f39c72a9f1c78237e31def0c64e076e532f
+"electron-to-chromium@npm:1.3.672, electron-to-chromium@npm:^1.3.571":
+  version: 1.3.672
+  resolution: "electron-to-chromium@npm:1.3.672"
+  checksum: 99e374a0f3e0fc2dccb028133e7d02b820e3ada6d09fcde603082e679e6b999dd2f772273b7a2af46b926e5258f7dc2fcd7bef8f6ca8def568bf1a582254ce6f
   languageName: node
   linkType: hard
 
@@ -9829,15 +9838,6 @@ fsevents@^1.2.7:
     inherits: ^2.0.1
     safe-buffer: ^5.1.2
   checksum: ca0b260ea29746f1017ad16bc0e164299ae453d2d6a24d635cc6ec03e280f350b09faa4899bfed9387c81457ca55981e9a684336d89faa94b1d2a01903fae2ec
-  languageName: node
-  linkType: hard
-
-"mdn-browser-compat-data@npm:1.0.38":
-  version: 1.0.38
-  resolution: "mdn-browser-compat-data@npm:1.0.38"
-  dependencies:
-    extend: 3.0.2
-  checksum: 137bffed36b3d65fa2f58b7d7c58a238ff0a7de9d942517a280a04f817f06681354b62825c70966a2920d6efd666da86795942762d64c7b209eea7e543097a09
   languageName: node
   linkType: hard
 

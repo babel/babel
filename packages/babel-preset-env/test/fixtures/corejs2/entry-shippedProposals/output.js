@@ -1,3 +1,5 @@
+require("core-js/modules/es6.array.concat.js");
+
 require("core-js/modules/es6.array.copy-within.js");
 
 require("core-js/modules/es6.array.every.js");
@@ -34,11 +36,15 @@ require("core-js/modules/es6.array.reduce.js");
 
 require("core-js/modules/es6.array.reduce-right.js");
 
+require("core-js/modules/es6.array.slice.js");
+
 require("core-js/modules/es6.array.some.js");
 
 require("core-js/modules/es6.array.sort.js");
 
 require("core-js/modules/es6.array.species.js");
+
+require("core-js/modules/es6.array.splice.js");
 
 require("core-js/modules/es6.date.now.js");
 

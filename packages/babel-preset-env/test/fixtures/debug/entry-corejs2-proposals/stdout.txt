@@ -58,6 +58,7 @@ Using polyfills with `entry-global` method:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-proposals/input.mjs]
 The corejs2 polyfill entry has been replaced with the following polyfills:
+  es6.array.concat { "ie":"6" }
   es6.array.copy-within { "ie":"6" }
   es6.array.every { "ie":"6" }
   es6.array.fill { "ie":"6" }
@@ -76,9 +77,11 @@ The corejs2 polyfill entry has been replaced with the following polyfills:
   es6.array.of { "ie":"6" }
   es6.array.reduce { "ie":"6" }
   es6.array.reduce-right { "ie":"6" }
+  es6.array.slice { "ie":"6" }
   es6.array.some { "ie":"6" }
   es6.array.sort { "ie":"6" }
   es6.array.species { "ie":"6" }
+  es6.array.splice { "ie":"6" }
   es6.date.now { "ie":"6" }
   es6.date.to-iso-string { "ie":"6" }
   es6.date.to-json { "ie":"6" }
