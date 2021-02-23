@@ -19,6 +19,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.6 (2021-02-23)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#12877](https://github.com/babel/babel/pull/12877) Define fallback `exports` for `@babel/runtime` on old Node ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-compat-data`, `babel-preset-env`
+  * [#12850](https://github.com/babel/babel/pull/12850) Update compat table ([@JLHwung](https://github.com/JLHwung))
 ## v7.13.5 (2021-02-23)
 
 #### :bug: Bug Fix
