@@ -2,6 +2,7 @@
 
 /*:: declare var invariant; */
 
+import gensync from "gensync";
 import type { Handler } from "gensync";
 import type { PluginTarget, PluginOptions } from "./validation/options";
 
@@ -14,6 +15,8 @@ import {
 export function createItemFromDescriptor(desc: UnloadedDescriptor): ConfigItem {
   return new ConfigItem(desc);
 }
+
+export const createConfigItemSync = gensync(createConfigItem).sync;
 
 /**
  * Create a config item using the same value format used in Babel's config
