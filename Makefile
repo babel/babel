@@ -242,6 +242,9 @@ clean-runtime-helpers:
 	rm -f packages/babel-runtime/helpers/**/*.js
 	rm -f packages/babel-runtime-corejs2/helpers/**/*.js
 	rm -f packages/babel-runtime-corejs3/helpers/**/*.js
+	rm -f packages/babel-runtime/helpers/**/*.mjs
+	rm -f packages/babel-runtime-corejs2/helpers/**/*.mjs
+	rm -f packages/babel-runtime-corejs3/helpers/**/*.mjs
 	rm -rf packages/babel-runtime-corejs2/core-js
 
 clean-all: clean-tsconfig
