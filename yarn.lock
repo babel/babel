@@ -84,9 +84,9 @@ __metadata:
   linkType: soft
 
 "@babel/compat-data@npm:^7.11.0, @babel/compat-data@npm:^7.12.0, @babel/compat-data@npm:^7.12.5":
-  version: 7.13.0
-  resolution: "@babel/compat-data@npm:7.13.0"
-  checksum: 74d92839feee9f104f9f8bbee12d39cf4ff87700c285c30d949b568f80b2f8de0cd243c6fb81ead69e2229b6fc31c7b4ff958c20c9e58bb240577d85a110c718
+  version: 7.13.5
+  resolution: "@babel/compat-data@npm:7.13.5"
+  checksum: d9de71345536951e9b9c537633289d89486af7a3720f35e498561e6d11df5b70dbcd2cd10880335f5abe0933f2f4e58e226efc33545f9b5246167bc4a4abef23
   languageName: node
   linkType: hard
 
