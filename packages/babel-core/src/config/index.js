@@ -9,6 +9,8 @@ export type {
   Plugin,
 } from "./full";
 
+import type { PluginTarget } from "./validation/options";
+
 import loadFullConfig from "./full";
 import { loadPartialConfig as loadPartialConfigRunner } from "./partial";
 
@@ -43,6 +45,18 @@ export const loadOptions = maybeErrback(loadOptionsRunner);
 export const loadOptionsSync = loadOptionsRunner.sync;
 export const loadOptionsAsync = loadOptionsRunner.async;
 
-export const createConfigItem = maybeErrback(createConfigItemRunner);
 export const createConfigItemSync = createConfigItemRunner.sync;
 export const createConfigItemAsync = createConfigItemRunner.async;
+export function createConfigItem(
+  target: PluginTarget,
+  options: object | Function,
+  callback?: Function,
+) {
+  if (callback !== undefined) {
+    return createConfigItemRunner.errback(target, options, callback);
+  } else if (typeof options === "function") {
+    return createConfigItemRunner.errback(target, undefined, callback);
+  } else {
+    return createConfigItemRunner.sync(target, options);
+  }
+}
