@@ -15,7 +15,7 @@ export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
 
 export {
-  createConfigItem as createConfigItem,
+  createConfigItem,
   createConfigItemSync,
   createConfigItemAsync,
 } from "./config";
