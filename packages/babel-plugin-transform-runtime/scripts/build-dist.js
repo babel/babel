@@ -116,7 +116,7 @@ function writeHelperFile(
   helperName,
   { esm, corejs }
 ) {
-  const filePath = path.join(helperPath, esm ? "index.mjs" : "index.js");
+  const filePath = path.join(helperPath, esm ? "_index.mjs" : "index.js");
   const fullPath = path.join(pkgDirname, filePath);
 
   outputFile(
@@ -130,7 +130,7 @@ function writeHelperFile(
 function writeHelperLegacyESMFile(pkgDirname, helperName) {
   const fullPath = path.join(pkgDirname, "helpers", "esm", `${helperName}.js`);
 
-  outputFile(fullPath, `export { default } from "../${helperName}/index.mjs"`);
+  outputFile(fullPath, `export { default } from "../${helperName}/_index.mjs"`);
 }
 
 function writeHelpers(runtimeName, { corejs } = {}) {
