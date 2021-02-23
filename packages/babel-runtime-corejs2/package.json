@@ -26,6 +26,7 @@
       },
       "./helpers/typeof/index.js"
     ],
+    "./helpers/esm/typeof": "./helpers/typeof/_index.mjs",
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx/index.js",
@@ -34,6 +35,7 @@
       },
       "./helpers/jsx/index.js"
     ],
+    "./helpers/esm/jsx": "./helpers/jsx/_index.mjs",
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator/index.js",
@@ -42,6 +44,7 @@
       },
       "./helpers/asyncIterator/index.js"
     ],
+    "./helpers/esm/asyncIterator": "./helpers/asyncIterator/_index.mjs",
     "./helpers/AwaitValue": [
       {
         "node": "./helpers/AwaitValue/index.js",
@@ -50,6 +53,7 @@
       },
       "./helpers/AwaitValue/index.js"
     ],
+    "./helpers/esm/AwaitValue": "./helpers/AwaitValue/_index.mjs",
     "./helpers/AsyncGenerator": [
       {
         "node": "./helpers/AsyncGenerator/index.js",
@@ -58,6 +62,7 @@
       },
       "./helpers/AsyncGenerator/index.js"
     ],
+    "./helpers/esm/AsyncGenerator": "./helpers/AsyncGenerator/_index.mjs",
     "./helpers/wrapAsyncGenerator": [
       {
         "node": "./helpers/wrapAsyncGenerator/index.js",
@@ -66,6 +71,7 @@
       },
       "./helpers/wrapAsyncGenerator/index.js"
     ],
+    "./helpers/esm/wrapAsyncGenerator": "./helpers/wrapAsyncGenerator/_index.mjs",
     "./helpers/awaitAsyncGenerator": [
       {
         "node": "./helpers/awaitAsyncGenerator/index.js",
@@ -74,6 +80,7 @@
       },
       "./helpers/awaitAsyncGenerator/index.js"
     ],
+    "./helpers/esm/awaitAsyncGenerator": "./helpers/awaitAsyncGenerator/_index.mjs",
     "./helpers/asyncGeneratorDelegate": [
       {
         "node": "./helpers/asyncGeneratorDelegate/index.js",
@@ -82,6 +89,7 @@
       },
       "./helpers/asyncGeneratorDelegate/index.js"
     ],
+    "./helpers/esm/asyncGeneratorDelegate": "./helpers/asyncGeneratorDelegate/_index.mjs",
     "./helpers/asyncToGenerator": [
       {
         "node": "./helpers/asyncToGenerator/index.js",
@@ -90,6 +98,7 @@
       },
       "./helpers/asyncToGenerator/index.js"
     ],
+    "./helpers/esm/asyncToGenerator": "./helpers/asyncToGenerator/_index.mjs",
     "./helpers/classCallCheck": [
       {
         "node": "./helpers/classCallCheck/index.js",
@@ -98,6 +107,7 @@
       },
       "./helpers/classCallCheck/index.js"
     ],
+    "./helpers/esm/classCallCheck": "./helpers/classCallCheck/_index.mjs",
     "./helpers/createClass": [
       {
         "node": "./helpers/createClass/index.js",
@@ -106,6 +116,7 @@
       },
       "./helpers/createClass/index.js"
     ],
+    "./helpers/esm/createClass": "./helpers/createClass/_index.mjs",
     "./helpers/defineEnumerableProperties": [
       {
         "node": "./helpers/defineEnumerableProperties/index.js",
@@ -114,6 +125,7 @@
       },
       "./helpers/defineEnumerableProperties/index.js"
     ],
+    "./helpers/esm/defineEnumerableProperties": "./helpers/defineEnumerableProperties/_index.mjs",
     "./helpers/defaults": [
       {
         "node": "./helpers/defaults/index.js",
@@ -122,6 +134,7 @@
       },
       "./helpers/defaults/index.js"
     ],
+    "./helpers/esm/defaults": "./helpers/defaults/_index.mjs",
     "./helpers/defineProperty": [
       {
         "node": "./helpers/defineProperty/index.js",
@@ -130,6 +143,7 @@
       },
       "./helpers/defineProperty/index.js"
     ],
+    "./helpers/esm/defineProperty": "./helpers/defineProperty/_index.mjs",
     "./helpers/extends": [
       {
         "node": "./helpers/extends/index.js",
@@ -138,6 +152,7 @@
       },
       "./helpers/extends/index.js"
     ],
+    "./helpers/esm/extends": "./helpers/extends/_index.mjs",
     "./helpers/objectSpread": [
       {
         "node": "./helpers/objectSpread/index.js",
@@ -146,6 +161,7 @@
       },
       "./helpers/objectSpread/index.js"
     ],
+    "./helpers/esm/objectSpread": "./helpers/objectSpread/_index.mjs",
     "./helpers/objectSpread2": [
       {
         "node": "./helpers/objectSpread2/index.js",
@@ -154,6 +170,7 @@
       },
       "./helpers/objectSpread2/index.js"
     ],
+    "./helpers/esm/objectSpread2": "./helpers/objectSpread2/_index.mjs",
     "./helpers/inherits": [
       {
         "node": "./helpers/inherits/index.js",
@@ -162,6 +179,7 @@
       },
       "./helpers/inherits/index.js"
     ],
+    "./helpers/esm/inherits": "./helpers/inherits/_index.mjs",
     "./helpers/inheritsLoose": [
       {
         "node": "./helpers/inheritsLoose/index.js",
@@ -170,6 +188,7 @@
       },
       "./helpers/inheritsLoose/index.js"
     ],
+    "./helpers/esm/inheritsLoose": "./helpers/inheritsLoose/_index.mjs",
     "./helpers/getPrototypeOf": [
       {
         "node": "./helpers/getPrototypeOf/index.js",
@@ -178,6 +197,7 @@
       },
       "./helpers/getPrototypeOf/index.js"
     ],
+    "./helpers/esm/getPrototypeOf": "./helpers/getPrototypeOf/_index.mjs",
     "./helpers/setPrototypeOf": [
       {
         "node": "./helpers/setPrototypeOf/index.js",
@@ -186,6 +206,7 @@
       },
       "./helpers/setPrototypeOf/index.js"
     ],
+    "./helpers/esm/setPrototypeOf": "./helpers/setPrototypeOf/_index.mjs",
     "./helpers/isNativeReflectConstruct": [
       {
         "node": "./helpers/isNativeReflectConstruct/index.js",
@@ -194,6 +215,7 @@
       },
       "./helpers/isNativeReflectConstruct/index.js"
     ],
+    "./helpers/esm/isNativeReflectConstruct": "./helpers/isNativeReflectConstruct/_index.mjs",
     "./helpers/construct": [
       {
         "node": "./helpers/construct/index.js",
@@ -202,6 +224,7 @@
       },
       "./helpers/construct/index.js"
     ],
+    "./helpers/esm/construct": "./helpers/construct/_index.mjs",
     "./helpers/isNativeFunction": [
       {
         "node": "./helpers/isNativeFunction/index.js",
@@ -210,6 +233,7 @@
       },
       "./helpers/isNativeFunction/index.js"
     ],
+    "./helpers/esm/isNativeFunction": "./helpers/isNativeFunction/_index.mjs",
     "./helpers/wrapNativeSuper": [
       {
         "node": "./helpers/wrapNativeSuper/index.js",
@@ -218,6 +242,7 @@
       },
       "./helpers/wrapNativeSuper/index.js"
     ],
+    "./helpers/esm/wrapNativeSuper": "./helpers/wrapNativeSuper/_index.mjs",
     "./helpers/instanceof": [
       {
         "node": "./helpers/instanceof/index.js",
@@ -226,6 +251,7 @@
       },
       "./helpers/instanceof/index.js"
     ],
+    "./helpers/esm/instanceof": "./helpers/instanceof/_index.mjs",
     "./helpers/interopRequireDefault": [
       {
         "node": "./helpers/interopRequireDefault/index.js",
@@ -234,6 +260,7 @@
       },
       "./helpers/interopRequireDefault/index.js"
     ],
+    "./helpers/esm/interopRequireDefault": "./helpers/interopRequireDefault/_index.mjs",
     "./helpers/interopRequireWildcard": [
       {
         "node": "./helpers/interopRequireWildcard/index.js",
@@ -242,6 +269,7 @@
       },
       "./helpers/interopRequireWildcard/index.js"
     ],
+    "./helpers/esm/interopRequireWildcard": "./helpers/interopRequireWildcard/_index.mjs",
     "./helpers/newArrowCheck": [
       {
         "node": "./helpers/newArrowCheck/index.js",
@@ -250,6 +278,7 @@
       },
       "./helpers/newArrowCheck/index.js"
     ],
+    "./helpers/esm/newArrowCheck": "./helpers/newArrowCheck/_index.mjs",
     "./helpers/objectDestructuringEmpty": [
       {
         "node": "./helpers/objectDestructuringEmpty/index.js",
@@ -258,6 +287,7 @@
       },
       "./helpers/objectDestructuringEmpty/index.js"
     ],
+    "./helpers/esm/objectDestructuringEmpty": "./helpers/objectDestructuringEmpty/_index.mjs",
     "./helpers/objectWithoutPropertiesLoose": [
       {
         "node": "./helpers/objectWithoutPropertiesLoose/index.js",
@@ -266,6 +296,7 @@
       },
       "./helpers/objectWithoutPropertiesLoose/index.js"
     ],
+    "./helpers/esm/objectWithoutPropertiesLoose": "./helpers/objectWithoutPropertiesLoose/_index.mjs",
     "./helpers/objectWithoutProperties": [
       {
         "node": "./helpers/objectWithoutProperties/index.js",
@@ -274,6 +305,7 @@
       },
       "./helpers/objectWithoutProperties/index.js"
     ],
+    "./helpers/esm/objectWithoutProperties": "./helpers/objectWithoutProperties/_index.mjs",
     "./helpers/assertThisInitialized": [
       {
         "node": "./helpers/assertThisInitialized/index.js",
@@ -282,6 +314,7 @@
       },
       "./helpers/assertThisInitialized/index.js"
     ],
+    "./helpers/esm/assertThisInitialized": "./helpers/assertThisInitialized/_index.mjs",
     "./helpers/possibleConstructorReturn": [
       {
         "node": "./helpers/possibleConstructorReturn/index.js",
@@ -290,6 +323,7 @@
       },
       "./helpers/possibleConstructorReturn/index.js"
     ],
+    "./helpers/esm/possibleConstructorReturn": "./helpers/possibleConstructorReturn/_index.mjs",
     "./helpers/createSuper": [
       {
         "node": "./helpers/createSuper/index.js",
@@ -298,6 +332,7 @@
       },
       "./helpers/createSuper/index.js"
     ],
+    "./helpers/esm/createSuper": "./helpers/createSuper/_index.mjs",
     "./helpers/superPropBase": [
       {
         "node": "./helpers/superPropBase/index.js",
@@ -306,6 +341,7 @@
       },
       "./helpers/superPropBase/index.js"
     ],
+    "./helpers/esm/superPropBase": "./helpers/superPropBase/_index.mjs",
     "./helpers/get": [
       {
         "node": "./helpers/get/index.js",
@@ -314,6 +350,7 @@
       },
       "./helpers/get/index.js"
     ],
+    "./helpers/esm/get": "./helpers/get/_index.mjs",
     "./helpers/set": [
       {
         "node": "./helpers/set/index.js",
@@ -322,6 +359,7 @@
       },
       "./helpers/set/index.js"
     ],
+    "./helpers/esm/set": "./helpers/set/_index.mjs",
     "./helpers/taggedTemplateLiteral": [
       {
         "node": "./helpers/taggedTemplateLiteral/index.js",
@@ -330,6 +368,7 @@
       },
       "./helpers/taggedTemplateLiteral/index.js"
     ],
+    "./helpers/esm/taggedTemplateLiteral": "./helpers/taggedTemplateLiteral/_index.mjs",
     "./helpers/taggedTemplateLiteralLoose": [
       {
         "node": "./helpers/taggedTemplateLiteralLoose/index.js",
@@ -338,6 +377,7 @@
       },
       "./helpers/taggedTemplateLiteralLoose/index.js"
     ],
+    "./helpers/esm/taggedTemplateLiteralLoose": "./helpers/taggedTemplateLiteralLoose/_index.mjs",
     "./helpers/readOnlyError": [
       {
         "node": "./helpers/readOnlyError/index.js",
@@ -346,6 +386,7 @@
       },
       "./helpers/readOnlyError/index.js"
     ],
+    "./helpers/esm/readOnlyError": "./helpers/readOnlyError/_index.mjs",
     "./helpers/writeOnlyError": [
       {
         "node": "./helpers/writeOnlyError/index.js",
@@ -354,6 +395,7 @@
       },
       "./helpers/writeOnlyError/index.js"
     ],
+    "./helpers/esm/writeOnlyError": "./helpers/writeOnlyError/_index.mjs",
     "./helpers/classNameTDZError": [
       {
         "node": "./helpers/classNameTDZError/index.js",
@@ -362,6 +404,7 @@
       },
       "./helpers/classNameTDZError/index.js"
     ],
+    "./helpers/esm/classNameTDZError": "./helpers/classNameTDZError/_index.mjs",
     "./helpers/temporalUndefined": [
       {
         "node": "./helpers/temporalUndefined/index.js",
@@ -370,6 +413,7 @@
       },
       "./helpers/temporalUndefined/index.js"
     ],
+    "./helpers/esm/temporalUndefined": "./helpers/temporalUndefined/_index.mjs",
     "./helpers/tdz": [
       {
         "node": "./helpers/tdz/index.js",
@@ -378,6 +422,7 @@
       },
       "./helpers/tdz/index.js"
     ],
+    "./helpers/esm/tdz": "./helpers/tdz/_index.mjs",
     "./helpers/temporalRef": [
       {
         "node": "./helpers/temporalRef/index.js",
@@ -386,6 +431,7 @@
       },
       "./helpers/temporalRef/index.js"
     ],
+    "./helpers/esm/temporalRef": "./helpers/temporalRef/_index.mjs",
     "./helpers/slicedToArray": [
       {
         "node": "./helpers/slicedToArray/index.js",
@@ -394,6 +440,7 @@
       },
       "./helpers/slicedToArray/index.js"
     ],
+    "./helpers/esm/slicedToArray": "./helpers/slicedToArray/_index.mjs",
     "./helpers/slicedToArrayLoose": [
       {
         "node": "./helpers/slicedToArrayLoose/index.js",
@@ -402,6 +449,7 @@
       },
       "./helpers/slicedToArrayLoose/index.js"
     ],
+    "./helpers/esm/slicedToArrayLoose": "./helpers/slicedToArrayLoose/_index.mjs",
     "./helpers/toArray": [
       {
         "node": "./helpers/toArray/index.js",
@@ -410,6 +458,7 @@
       },
       "./helpers/toArray/index.js"
     ],
+    "./helpers/esm/toArray": "./helpers/toArray/_index.mjs",
     "./helpers/toConsumableArray": [
       {
         "node": "./helpers/toConsumableArray/index.js",
@@ -418,6 +467,7 @@
       },
       "./helpers/toConsumableArray/index.js"
     ],
+    "./helpers/esm/toConsumableArray": "./helpers/toConsumableArray/_index.mjs",
     "./helpers/arrayWithoutHoles": [
       {
         "node": "./helpers/arrayWithoutHoles/index.js",
@@ -426,6 +476,7 @@
       },
       "./helpers/arrayWithoutHoles/index.js"
     ],
+    "./helpers/esm/arrayWithoutHoles": "./helpers/arrayWithoutHoles/_index.mjs",
     "./helpers/arrayWithHoles": [
       {
         "node": "./helpers/arrayWithHoles/index.js",
@@ -434,6 +485,7 @@
       },
       "./helpers/arrayWithHoles/index.js"
     ],
+    "./helpers/esm/arrayWithHoles": "./helpers/arrayWithHoles/_index.mjs",
     "./helpers/maybeArrayLike": [
       {
         "node": "./helpers/maybeArrayLike/index.js",
@@ -442,6 +494,7 @@
       },
       "./helpers/maybeArrayLike/index.js"
     ],
+    "./helpers/esm/maybeArrayLike": "./helpers/maybeArrayLike/_index.mjs",
     "./helpers/iterableToArray": [
       {
         "node": "./helpers/iterableToArray/index.js",
@@ -450,6 +503,7 @@
       },
       "./helpers/iterableToArray/index.js"
     ],
+    "./helpers/esm/iterableToArray": "./helpers/iterableToArray/_index.mjs",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit/index.js",
@@ -458,6 +512,7 @@
       },
       "./helpers/iterableToArrayLimit/index.js"
     ],
+    "./helpers/esm/iterableToArrayLimit": "./helpers/iterableToArrayLimit/_index.mjs",
     "./helpers/iterableToArrayLimitLoose": [
       {
         "node": "./helpers/iterableToArrayLimitLoose/index.js",
@@ -466,6 +521,7 @@
       },
       "./helpers/iterableToArrayLimitLoose/index.js"
     ],
+    "./helpers/esm/iterableToArrayLimitLoose": "./helpers/iterableToArrayLimitLoose/_index.mjs",
     "./helpers/unsupportedIterableToArray": [
       {
         "node": "./helpers/unsupportedIterableToArray/index.js",
@@ -474,6 +530,7 @@
       },
       "./helpers/unsupportedIterableToArray/index.js"
     ],
+    "./helpers/esm/unsupportedIterableToArray": "./helpers/unsupportedIterableToArray/_index.mjs",
     "./helpers/arrayLikeToArray": [
       {
         "node": "./helpers/arrayLikeToArray/index.js",
@@ -482,6 +539,7 @@
       },
       "./helpers/arrayLikeToArray/index.js"
     ],
+    "./helpers/esm/arrayLikeToArray": "./helpers/arrayLikeToArray/_index.mjs",
     "./helpers/nonIterableSpread": [
       {
         "node": "./helpers/nonIterableSpread/index.js",
@@ -490,6 +548,7 @@
       },
       "./helpers/nonIterableSpread/index.js"
     ],
+    "./helpers/esm/nonIterableSpread": "./helpers/nonIterableSpread/_index.mjs",
     "./helpers/nonIterableRest": [
       {
         "node": "./helpers/nonIterableRest/index.js",
@@ -498,6 +557,7 @@
       },
       "./helpers/nonIterableRest/index.js"
     ],
+    "./helpers/esm/nonIterableRest": "./helpers/nonIterableRest/_index.mjs",
     "./helpers/createForOfIteratorHelper": [
       {
         "node": "./helpers/createForOfIteratorHelper/index.js",
@@ -506,6 +566,7 @@
       },
       "./helpers/createForOfIteratorHelper/index.js"
     ],
+    "./helpers/esm/createForOfIteratorHelper": "./helpers/createForOfIteratorHelper/_index.mjs",
     "./helpers/createForOfIteratorHelperLoose": [
       {
         "node": "./helpers/createForOfIteratorHelperLoose/index.js",
@@ -514,6 +575,7 @@
       },
       "./helpers/createForOfIteratorHelperLoose/index.js"
     ],
+    "./helpers/esm/createForOfIteratorHelperLoose": "./helpers/createForOfIteratorHelperLoose/_index.mjs",
     "./helpers/skipFirstGeneratorNext": [
       {
         "node": "./helpers/skipFirstGeneratorNext/index.js",
@@ -522,6 +584,7 @@
       },
       "./helpers/skipFirstGeneratorNext/index.js"
     ],
+    "./helpers/esm/skipFirstGeneratorNext": "./helpers/skipFirstGeneratorNext/_index.mjs",
     "./helpers/toPrimitive": [
       {
         "node": "./helpers/toPrimitive/index.js",
@@ -530,6 +593,7 @@
       },
       "./helpers/toPrimitive/index.js"
     ],
+    "./helpers/esm/toPrimitive": "./helpers/toPrimitive/_index.mjs",
     "./helpers/toPropertyKey": [
       {
         "node": "./helpers/toPropertyKey/index.js",
@@ -538,6 +602,7 @@
       },
       "./helpers/toPropertyKey/index.js"
     ],
+    "./helpers/esm/toPropertyKey": "./helpers/toPropertyKey/_index.mjs",
     "./helpers/initializerWarningHelper": [
       {
         "node": "./helpers/initializerWarningHelper/index.js",
@@ -546,6 +611,7 @@
       },
       "./helpers/initializerWarningHelper/index.js"
     ],
+    "./helpers/esm/initializerWarningHelper": "./helpers/initializerWarningHelper/_index.mjs",
     "./helpers/initializerDefineProperty": [
       {
         "node": "./helpers/initializerDefineProperty/index.js",
@@ -554,6 +620,7 @@
       },
       "./helpers/initializerDefineProperty/index.js"
     ],
+    "./helpers/esm/initializerDefineProperty": "./helpers/initializerDefineProperty/_index.mjs",
     "./helpers/applyDecoratedDescriptor": [
       {
         "node": "./helpers/applyDecoratedDescriptor/index.js",
@@ -562,6 +629,7 @@
       },
       "./helpers/applyDecoratedDescriptor/index.js"
     ],
+    "./helpers/esm/applyDecoratedDescriptor": "./helpers/applyDecoratedDescriptor/_index.mjs",
     "./helpers/classPrivateFieldLooseKey": [
       {
         "node": "./helpers/classPrivateFieldLooseKey/index.js",
@@ -570,6 +638,7 @@
       },
       "./helpers/classPrivateFieldLooseKey/index.js"
     ],
+    "./helpers/esm/classPrivateFieldLooseKey": "./helpers/classPrivateFieldLooseKey/_index.mjs",
     "./helpers/classPrivateFieldLooseBase": [
       {
         "node": "./helpers/classPrivateFieldLooseBase/index.js",
@@ -578,6 +647,7 @@
       },
       "./helpers/classPrivateFieldLooseBase/index.js"
     ],
+    "./helpers/esm/classPrivateFieldLooseBase": "./helpers/classPrivateFieldLooseBase/_index.mjs",
     "./helpers/classPrivateFieldGet": [
       {
         "node": "./helpers/classPrivateFieldGet/index.js",
@@ -586,6 +656,7 @@
       },
       "./helpers/classPrivateFieldGet/index.js"
     ],
+    "./helpers/esm/classPrivateFieldGet": "./helpers/classPrivateFieldGet/_index.mjs",
     "./helpers/classPrivateFieldSet": [
       {
         "node": "./helpers/classPrivateFieldSet/index.js",
@@ -594,6 +665,7 @@
       },
       "./helpers/classPrivateFieldSet/index.js"
     ],
+    "./helpers/esm/classPrivateFieldSet": "./helpers/classPrivateFieldSet/_index.mjs",
     "./helpers/classPrivateFieldDestructureSet": [
       {
         "node": "./helpers/classPrivateFieldDestructureSet/index.js",
@@ -602,6 +674,7 @@
       },
       "./helpers/classPrivateFieldDestructureSet/index.js"
     ],
+    "./helpers/esm/classPrivateFieldDestructureSet": "./helpers/classPrivateFieldDestructureSet/_index.mjs",
     "./helpers/classStaticPrivateFieldSpecGet": [
       {
         "node": "./helpers/classStaticPrivateFieldSpecGet/index.js",
@@ -610,6 +683,7 @@
       },
       "./helpers/classStaticPrivateFieldSpecGet/index.js"
     ],
+    "./helpers/esm/classStaticPrivateFieldSpecGet": "./helpers/classStaticPrivateFieldSpecGet/_index.mjs",
     "./helpers/classStaticPrivateFieldSpecSet": [
       {
         "node": "./helpers/classStaticPrivateFieldSpecSet/index.js",
@@ -618,6 +692,7 @@
       },
       "./helpers/classStaticPrivateFieldSpecSet/index.js"
     ],
+    "./helpers/esm/classStaticPrivateFieldSpecSet": "./helpers/classStaticPrivateFieldSpecSet/_index.mjs",
     "./helpers/classStaticPrivateMethodGet": [
       {
         "node": "./helpers/classStaticPrivateMethodGet/index.js",
@@ -626,6 +701,7 @@
       },
       "./helpers/classStaticPrivateMethodGet/index.js"
     ],
+    "./helpers/esm/classStaticPrivateMethodGet": "./helpers/classStaticPrivateMethodGet/_index.mjs",
     "./helpers/classStaticPrivateMethodSet": [
       {
         "node": "./helpers/classStaticPrivateMethodSet/index.js",
@@ -634,6 +710,7 @@
       },
       "./helpers/classStaticPrivateMethodSet/index.js"
     ],
+    "./helpers/esm/classStaticPrivateMethodSet": "./helpers/classStaticPrivateMethodSet/_index.mjs",
     "./helpers/decorate": [
       {
         "node": "./helpers/decorate/index.js",
@@ -642,6 +719,7 @@
       },
       "./helpers/decorate/index.js"
     ],
+    "./helpers/esm/decorate": "./helpers/decorate/_index.mjs",
     "./helpers/classPrivateMethodGet": [
       {
         "node": "./helpers/classPrivateMethodGet/index.js",
@@ -650,6 +728,7 @@
       },
       "./helpers/classPrivateMethodGet/index.js"
     ],
+    "./helpers/esm/classPrivateMethodGet": "./helpers/classPrivateMethodGet/_index.mjs",
     "./helpers/classPrivateMethodSet": [
       {
         "node": "./helpers/classPrivateMethodSet/index.js",
@@ -658,6 +737,7 @@
       },
       "./helpers/classPrivateMethodSet/index.js"
     ],
+    "./helpers/esm/classPrivateMethodSet": "./helpers/classPrivateMethodSet/_index.mjs",
     "./helpers/wrapRegExp": [
       {
         "node": "./helpers/wrapRegExp/index.js",
@@ -666,13 +746,12 @@
       },
       "./helpers/wrapRegExp/index.js"
     ],
+    "./helpers/esm/wrapRegExp": "./helpers/wrapRegExp/_index.mjs",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
     "./regenerator/*.js": "./regenerator/*.js",
-    "./helpers/esm/*": "./helpers/esm/*.js",
     "./regenerator/": "./regenerator/",
-    "./helpers/esm/": "./helpers/esm/",
     "./core-js/": "./core-js/",
     "./core-js/is-iterable": "./core-js/is-iterable.js",
     "./core-js/get-iterator": "./core-js/get-iterator.js",

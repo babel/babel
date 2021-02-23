@@ -168,6 +168,8 @@ function writeHelpers(runtimeName, { corejs } = {}) {
       { node: cjs, require: cjs, default: esm },
       cjs,
     ];
+    // For backward compatibility. We can remove this in Babel 8.
+    helperSubExports[`./${path.join("helpers", "esm", helperName)}`] = esm;
 
     writeHelperLegacyESMFile(pkgDirname, helperName);
   }
@@ -182,12 +184,10 @@ function writeHelperExports(runtimeName, helperSubExports) {
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
     "./regenerator/*.js": "./regenerator/*.js",
-    "./helpers/esm/*": "./helpers/esm/*.js",
     // These patterns are deprecated, but since patterns
     // containing * are not supported in every Node.js
     // version we keep them for better compatibility.
     "./regenerator/": "./regenerator/",
-    "./helpers/esm/": "./helpers/esm/",
   };
   const pkgDirname = getRuntimeRoot(runtimeName);
   const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
