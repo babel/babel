@@ -1,4 +1,7 @@
-import loadConfigRunner, { loadPartialConfig } from "../lib/config";
+import loadConfigRunner, {
+  loadPartialConfig,
+  createConfigItem,
+} from "../lib/config";
 import path from "path";
 
 const loadConfig = loadConfigRunner.sync;
@@ -37,6 +40,41 @@ describe("@babel/core config loading", () => {
         : [[require("./fixtures/config-loading/plugin6"), {}]],
     };
   }
+
+  describe("createConfigItem", () => {
+    // Windows uses different file paths
+    const noWin = process.platform === "win32" ? it.skip : it;
+
+    noWin("can be called synchronously with one param", () => {
+      function myPlugin() {
+        return {};
+      }
+
+      expect(createConfigItem(myPlugin)).toEqual({
+        dirname: process.cwd(),
+        file: undefined,
+        name: undefined,
+        options: undefined,
+        value: myPlugin,
+      });
+    });
+
+    noWin("can be called synchronously with two params", () => {
+      function myPlugin() {
+        return {};
+      }
+
+      expect(
+        createConfigItem(myPlugin, { dirname: "/foo", type: "plugin" }),
+      ).toEqual({
+        dirname: "/foo",
+        file: undefined,
+        name: undefined,
+        options: undefined,
+        value: myPlugin,
+      });
+    });
+  });
 
   describe("loadPartialConfig", () => {
     it("should preserve disabled plugins in the partial config", () => {

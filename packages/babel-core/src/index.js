@@ -14,7 +14,11 @@ export { tokTypes } from "@babel/parser";
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
 
-export { createConfigItem } from "./config/item";
+export {
+  createConfigItem,
+  createConfigItemSync,
+  createConfigItemAsync,
+} from "./config";
 
 export {
   loadPartialConfig,
