@@ -1,3 +1,7 @@
 {
-  "plugins": ["typescript", "estree", "classPrivateProperties"]
+  "plugins": [
+    "typescript",
+    ["estree", { "classFeatures": true }],
+    "classPrivateProperties"
+  ]
 }

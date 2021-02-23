@@ -31,7 +31,10 @@ export function normalizeBabelParseConfig(options) {
       allowReturnOutsideFunction: true,
       allowSuperOutsideMethod: true,
       ...options.babelOptions.parserOpts,
-      plugins: ["estree", ...(options.babelOptions.parserOpts?.plugins ?? [])],
+      plugins: [
+        ["estree", { classFeatures: false }],
+        ...(options.babelOptions.parserOpts?.plugins ?? []),
+      ],
       ranges: true,
       tokens: true,
     },
