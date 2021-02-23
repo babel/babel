@@ -42,7 +42,10 @@ describe("@babel/core config loading", () => {
   }
 
   describe("createConfigItem", () => {
-    it("can be called synchronously with one param", () => {
+    // Windows uses different file paths
+    const noWin = process.platform === "win32" ? it.skip : it;
+
+    noWin("can be called synchronously with one param", () => {
       function myPlugin() {
         return {};
       }
@@ -56,7 +59,7 @@ describe("@babel/core config loading", () => {
       });
     });
 
-    it("can be called synchronously with two params", () => {
+    noWin("can be called synchronously with two params", () => {
       function myPlugin() {
         return {};
       }
