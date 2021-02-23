@@ -19,6 +19,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.1 (2021-02-23)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#12855](https://github.com/babel/babel/pull/12855) Rename `index.mjs` to `_index.mjs` in `@babel/runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#12852](https://github.com/babel/babel/pull/12852) Export function versions of `createConfigItem` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.0 (2021-02-22)
 
 #### :rocket: New Feature
