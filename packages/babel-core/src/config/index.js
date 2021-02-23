@@ -25,7 +25,8 @@ const loadOptionsRunner = gensync<[mixed], Object | null>(function* (opts) {
   return config?.options ?? null;
 });
 
-const createConfigItemRunner = gensync<[mixed], Object | null>(
+const createConfigItemRunner = gensync<[PluginTarget, any], Object | null>(
+  // $FlowIgnore
   createConfigItemImpl,
 );
 
@@ -49,7 +50,7 @@ export const createConfigItemSync = createConfigItemRunner.sync;
 export const createConfigItemAsync = createConfigItemRunner.async;
 export function createConfigItem(
   target: PluginTarget,
-  options: object | Function,
+  options: any,
   callback?: Function,
 ) {
   if (callback !== undefined) {
