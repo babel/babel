@@ -196,7 +196,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseMaybePrivateName(...args: [boolean]): any {
       const node = super.parseMaybePrivateName(...args);
-      if (node.type === "PrivateName") {
+      if (
+        node.type === "PrivateName" &&
+        this.getPluginOption("estree", "classFeatures")
+      ) {
         return this.convertPrivateNameToPrivateIdentifier(node);
       }
       return node;
@@ -205,10 +208,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     convertPrivateNameToPrivateIdentifier(
       node: N.PrivateName,
     ): N.EstreePrivateIdentifier {
-      if (!this.getPluginOption("estree", "classFeatures")) {
-        return node;
-      }
-
       const name = super.getPrivateNameSV(node);
       node = (node: any);
       delete node.id;
