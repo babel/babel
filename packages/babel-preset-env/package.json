@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.13.0",
+  "version": "7.13.5",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-env",
@@ -16,11 +16,11 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/compat-data": "workspace:^7.13.0",
+    "@babel/compat-data": "workspace:^7.13.5",
     "@babel/helper-compilation-targets": "workspace:^7.13.0",
     "@babel/helper-plugin-utils": "workspace:^7.13.0",
     "@babel/helper-validator-option": "workspace:^7.12.17",
-    "@babel/plugin-proposal-async-generator-functions": "workspace:^7.13.0",
+    "@babel/plugin-proposal-async-generator-functions": "workspace:^7.13.5",
     "@babel/plugin-proposal-class-properties": "workspace:^7.13.0",
     "@babel/plugin-proposal-dynamic-import": "workspace:^7.12.17",
     "@babel/plugin-proposal-export-namespace-from": "workspace:^7.12.13",

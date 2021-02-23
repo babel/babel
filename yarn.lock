@@ -90,7 +90,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@workspace:^7.13.0, @babel/compat-data@workspace:packages/babel-compat-data":
+"@babel/compat-data@workspace:^7.13.0, @babel/compat-data@workspace:^7.13.5, @babel/compat-data@workspace:packages/babel-compat-data":
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
@@ -966,7 +966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-async-generator-functions@workspace:*, @babel/plugin-proposal-async-generator-functions@workspace:^7.13.0, @babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions":
+"@babel/plugin-proposal-async-generator-functions@workspace:*, @babel/plugin-proposal-async-generator-functions@workspace:^7.13.5, @babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions"
   dependencies:
@@ -3005,13 +3005,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/preset-env@workspace:packages/babel-preset-env"
   dependencies:
-    "@babel/compat-data": "workspace:^7.13.0"
+    "@babel/compat-data": "workspace:^7.13.5"
     "@babel/core": "workspace:*"
     "@babel/helper-compilation-targets": "workspace:^7.13.0"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/helper-validator-option": "workspace:^7.12.17"
-    "@babel/plugin-proposal-async-generator-functions": "workspace:^7.13.0"
+    "@babel/plugin-proposal-async-generator-functions": "workspace:^7.13.5"
     "@babel/plugin-proposal-class-properties": "workspace:^7.13.0"
     "@babel/plugin-proposal-dynamic-import": "workspace:^7.12.17"
     "@babel/plugin-proposal-export-namespace-from": "workspace:^7.12.13"
