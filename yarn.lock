@@ -84,9 +84,9 @@ __metadata:
   linkType: soft
 
 "@babel/compat-data@npm:^7.11.0, @babel/compat-data@npm:^7.12.0, @babel/compat-data@npm:^7.12.5":
-  version: 7.12.7
-  resolution: "@babel/compat-data@npm:7.12.7"
-  checksum: 96e60c267b955a1bc40dcfa845cb10b9d94d1c0f3c76247c00464173e1e45e94b4755246c1cefdd875ec59902effbfd9a99bd0e9d6a364fd04c51af1aa88f6d9
+  version: 7.13.0
+  resolution: "@babel/compat-data@npm:7.13.0"
+  checksum: 74d92839feee9f104f9f8bbee12d39cf4ff87700c285c30d949b568f80b2f8de0cd243c6fb81ead69e2229b6fc31c7b4ff958c20c9e58bb240577d85a110c718
   languageName: node
   linkType: hard
 
@@ -432,9 +432,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-define-polyfill-provider@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@babel/helper-define-polyfill-provider@npm:0.1.0"
+"@babel/helper-define-polyfill-provider@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@babel/helper-define-polyfill-provider@npm:0.1.1"
   dependencies:
     "@babel/helper-compilation-targets": ^7.10.4
     "@babel/helper-module-imports": ^7.10.4
@@ -446,7 +446,7 @@ __metadata:
     semver: ^6.1.2
   peerDependencies:
     "@babel/core": ^7.4.0-0
-  checksum: 84903cd705c5e8af2e237118039801bb2f439ae0e251e0e1fa5b768b4990e74395dd3d4e3e092af0fd12a89375d633ca3e7a8484229e5691cced2b333fe86d13
+  checksum: c2298d3b9b0e73d3646baae77f9c794ea5b4d76959a65cecde8622156ffaceca693e84dc0a66faaddbb6f4c96a2785ec07b623bc6b9580d8ebb3335f12efeab5
   languageName: node
   linkType: hard
 
@@ -975,7 +975,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/helper-remap-async-to-generator": "workspace:^7.13.0"
     "@babel/plugin-syntax-async-generators": ^7.8.0
-    babel-plugin-polyfill-corejs3: ^0.1.2
+    babel-plugin-polyfill-corejs3: ^0.1.3
     core-js-pure: ^3.8.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -1029,7 +1029,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-decorators": "workspace:^7.12.13"
-    babel-plugin-polyfill-es-shims: ^0.1.1
+    babel-plugin-polyfill-es-shims: ^0.1.2
     object.getownpropertydescriptors: ^2.1.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2705,9 +2705,9 @@ __metadata:
     "@babel/runtime-corejs3": "workspace:*"
     "@babel/template": "workspace:*"
     "@babel/types": "workspace:*"
-    babel-plugin-polyfill-corejs2: ^0.1.2
-    babel-plugin-polyfill-corejs3: ^0.1.2
-    babel-plugin-polyfill-regenerator: ^0.1.1
+    babel-plugin-polyfill-corejs2: ^0.1.3
+    babel-plugin-polyfill-corejs3: ^0.1.3
+    babel-plugin-polyfill-regenerator: ^0.1.2
     make-dir: ^2.1.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   peerDependencies:
@@ -3070,9 +3070,9 @@ __metadata:
     "@babel/plugin-transform-unicode-regex": "workspace:^7.12.13"
     "@babel/preset-modules": ^0.1.3
     "@babel/types": "workspace:^7.13.0"
-    babel-plugin-polyfill-corejs2: ^0.1.2
-    babel-plugin-polyfill-corejs3: ^0.1.2
-    babel-plugin-polyfill-regenerator: ^0.1.1
+    babel-plugin-polyfill-corejs2: ^0.1.3
+    babel-plugin-polyfill-corejs3: ^0.1.3
+    babel-plugin-polyfill-regenerator: ^0.1.2
     core-js-compat: ^3.9.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   peerDependencies:
@@ -4790,50 +4790,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs2@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "babel-plugin-polyfill-corejs2@npm:0.1.2"
+"babel-plugin-polyfill-corejs2@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "babel-plugin-polyfill-corejs2@npm:0.1.3"
   dependencies:
     "@babel/compat-data": ^7.11.0
-    "@babel/helper-define-polyfill-provider": ^0.1.0
+    "@babel/helper-define-polyfill-provider": ^0.1.1
     semver: ^6.1.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 2b37d3865fb946e0d10872536fea16ae858a172bd3b83a7555b0e0aac1bbf6ed834487665fa6161eb0469c5522ebfc30f5ce83568c7160e69afb872c441c8478
+  checksum: 3e3283140d42cc2612d17f1f461d854ed02feb5f01ba6a32342721595228d7ec412dde866fa23970fd39712ae2a2c8f769e8027daa6a1a5a5733fb217bc803dd
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs3@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "babel-plugin-polyfill-corejs3@npm:0.1.2"
+"babel-plugin-polyfill-corejs3@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.1.3"
   dependencies:
-    "@babel/helper-define-polyfill-provider": ^0.1.0
+    "@babel/helper-define-polyfill-provider": ^0.1.1
     core-js-compat: ^3.8.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: bf7174ba83d89f9b2887abcde1784907007670ae795b7c8bfff64c4466fa5023d17299377bdfbc430325b22920c10464aab9792706b61d42d1caa4d512908108
+  checksum: 1fccb0ef66a4626a0d429d1de3dcc314a8dd4d335961bc09f141efa2c5684b7acf3f50d41e06feff0a78e3f7de98b8347e25a96a8dfd0470267d71a98cb96505
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-es-shims@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "babel-plugin-polyfill-es-shims@npm:0.1.1"
+"babel-plugin-polyfill-es-shims@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "babel-plugin-polyfill-es-shims@npm:0.1.2"
   dependencies:
-    "@babel/helper-define-polyfill-provider": ^0.1.0
+    "@babel/helper-define-polyfill-provider": ^0.1.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 103f545b61621eb5cb2216bb733bb9bc0b308abdf9d77613d1b61c12177df2eb2f7b0638ea457db10ca5b35bc564a8cfc3d626a5641de055edbb4932c304a74c
+  checksum: 0ff6c01bb52552a6e126fedb77a7ceafc11912607a08c2e30288d6a29c8da9f0491f41e7a8d94f65244716914ccfec246ce6c43613406f19b1243db211092463
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-regenerator@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "babel-plugin-polyfill-regenerator@npm:0.1.1"
+"babel-plugin-polyfill-regenerator@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "babel-plugin-polyfill-regenerator@npm:0.1.2"
   dependencies:
-    "@babel/helper-define-polyfill-provider": ^0.1.0
+    "@babel/helper-define-polyfill-provider": ^0.1.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 185d54a101e12eb8f424d92337a46d641d0cf563277c70685594bd44914d6e5a440dbda7b77a35457ed75169440b1cb59acd1ec3817b533aec635f51b60a034e
+  checksum: 35fe4f971a81387dbf6af63430921027ca9dc96e1d7dd568aea4b75e09fdd5022e77eea7b94d75a3f46ba564d54aa323d633816b8058a89e31c2d6ef637b15ba
   languageName: node
   linkType: hard
 

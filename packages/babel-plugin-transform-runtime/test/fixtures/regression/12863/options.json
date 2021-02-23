@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "proposal-class-properties",
+    ["transform-runtime", { "corejs": 3 }],
+    "transform-classes",
+    "transform-spread"
+  ]
+}
