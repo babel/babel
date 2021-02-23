@@ -138,25 +138,37 @@ function writeHelpers(runtimeName, { corejs } = {}) {
   const helperSubExports = {};
   for (const helperName of helpers.list) {
     const helperPath = path.join("helpers", helperName);
-    helperSubExports[`./${helperPath}`] = {
-      get node() {
-        return this.require;
-      },
-      require: writeHelperFile(
-        runtimeName,
-        pkgDirname,
-        helperPath,
-        helperName,
-        { esm: false, corejs }
-      ),
-      default: writeHelperFile(
-        runtimeName,
-        pkgDirname,
-        helperPath,
-        helperName,
-        { esm: true, corejs }
-      ),
-    };
+    const cjs = writeHelperFile(
+      runtimeName,
+      pkgDirname,
+      helperPath,
+      helperName,
+      { esm: false, corejs }
+    );
+    const esm = writeHelperFile(
+      runtimeName,
+      pkgDirname,
+      helperPath,
+      helperName,
+      { esm: true, corejs }
+    );
+
+    // Node.js versions >=13.0.0, <13.7.0 support the `exports` field but
+    // not conditional exports (`require`/`node`/`default`)
+    // We can specify exports with an array of fallbacks:
+    // - Node.js >=13.7.0 and bundlers will succesfully load the first
+    //   array entry:
+    //    * Node.js will always load the CJS file
+    //    * Bundlers when using require() will load the CJS file
+    //    * Everything else will load the ESM file
+    // - Node.js <13.7.0 will fail resolving the first array entry, and will
+    //   fallback to the second entry (the CJS file)
+    // In Babel 8 we can simplify this.
+    helperSubExports[`./${helperPath}`] = [
+      { node: cjs, require: cjs, default: esm },
+      cjs,
+    ];
+
     writeHelperLegacyESMFile(pkgDirname, helperName);
   }
 
