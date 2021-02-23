@@ -248,6 +248,7 @@ function buildHelper(
       [transformRuntime, { corejs, version: runtimeVersion }],
       buildRuntimeRewritePlugin(runtimeName, helperName),
       esm ? null : addDefaultCJSExport,
+      esm ? useRelativeImports : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -314,6 +315,21 @@ function addDefaultCJSExport({ template }) {
             `);
           }
         },
+      },
+    },
+  };
+}
+
+function useRelativeImports() {
+  const RE = /^@babel\/runtime(?:-corejs[23])?\/helpers\/(?<name>.+)$/;
+
+  return {
+    visitor: {
+      ImportDeclaration(path) {
+        path.node.source.value = path.node.source.value.replace(
+          RE,
+          "../$<name>/_index.mjs"
+        );
       },
     },
   };

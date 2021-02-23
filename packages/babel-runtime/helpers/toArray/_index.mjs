@@ -1,7 +1,7 @@
-import arrayWithHoles from "@babel/runtime/helpers/arrayWithHoles";
-import iterableToArray from "@babel/runtime/helpers/iterableToArray";
-import unsupportedIterableToArray from "@babel/runtime/helpers/unsupportedIterableToArray";
-import nonIterableRest from "@babel/runtime/helpers/nonIterableRest";
+import arrayWithHoles from "../arrayWithHoles/_index.mjs";
+import iterableToArray from "../iterableToArray/_index.mjs";
+import unsupportedIterableToArray from "../unsupportedIterableToArray/_index.mjs";
+import nonIterableRest from "../nonIterableRest/_index.mjs";
 export default function _toArray(arr) {
   return arrayWithHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableRest();
 }
