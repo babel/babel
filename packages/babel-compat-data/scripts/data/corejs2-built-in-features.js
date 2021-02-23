@@ -27,13 +27,12 @@ const typedArrayMethods = [
 ];
 
 module.exports = {
-  // compat-table missing babel6 mapping
-  // "es6.array.concat": {
-  //   features: [
-  //     "well-known symbols / Symbol.isConcatSpreadable",
-  //     "well-known symbols / Symbol.species, Array.prototype.concat",
-  //   ]
-  // },
+  "es6.array.concat": {
+    features: [
+      "well-known symbols / Symbol.isConcatSpreadable",
+      "well-known symbols / Symbol.species, Array.prototype.concat",
+    ],
+  },
   "es6.array.copy-within":
     "Array.prototype methods / Array.prototype.copyWithin",
   "es6.array.every": "Array methods / Array.prototype.every",
@@ -41,8 +40,7 @@ module.exports = {
   "es6.array.filter": {
     features: [
       "Array methods / Array.prototype.filter",
-      // compat-table missing babel6 mapping
-      // "well-known symbols / Symbol.species, Array.prototype.filter",
+      "well-known symbols / Symbol.species, Array.prototype.filter",
     ],
   },
   "es6.array.find": "Array.prototype methods / Array.prototype.find",
@@ -66,20 +64,19 @@ module.exports = {
   "es6.array.map": {
     features: [
       "Array methods / Array.prototype.map",
-      // compat-table missing babel6 mapping
-      // "well-known symbols / Symbol.species, Array.prototype.map",
+      "well-known symbols / Symbol.species, Array.prototype.map",
     ],
   },
   "es6.array.of": "Array static methods / Array.of",
   "es6.array.reduce": "Array methods / Array.prototype.reduce",
   "es6.array.reduce-right": "Array methods / Array.prototype.reduceRight",
-  // compat-table missing babel6 mapping
-  // "es6.array.slice": "well-known symbols / Symbol.species, Array.prototype.slice",
+  "es6.array.slice":
+    "well-known symbols / Symbol.species, Array.prototype.slice",
   "es6.array.some": "Array methods / Array.prototype.some",
   "es6.array.sort": "Array methods / Array.prototype.sort",
   "es6.array.species": "Array static methods / Array[Symbol.species]",
-  // compat-table missing babel6 mapping
-  //"es6.array.splice": "well-known symbols / Symbol.species, Array.prototype.splice",
+  "es6.array.splice":
+    "well-known symbols / Symbol.species, Array.prototype.splice",
 
   "es6.date.now": "Date methods / Date.now",
   "es6.date.to-iso-string": "Date methods / Date.prototype.toISOString",

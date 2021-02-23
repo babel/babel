@@ -22,7 +22,7 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^7.12.13",
     "@babel/helper-plugin-utils": "workspace:^7.13.0",
-    "babel-plugin-polyfill-corejs2": "^0.1.3",
+    "babel-plugin-polyfill-corejs2": "^0.1.4",
     "babel-plugin-polyfill-corejs3": "^0.1.3",
     "babel-plugin-polyfill-regenerator": "^0.1.2",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"

@@ -1,4 +1,15 @@
 {
+  "es6.array.concat": {
+    "chrome": "51",
+    "opera": "38",
+    "edge": "15",
+    "firefox": "48",
+    "safari": "10",
+    "node": "6.5",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "1.2"
+  },
   "es6.array.copy-within": {
     "chrome": "45",
     "opera": "32",
@@ -36,18 +47,15 @@
     "electron": "0.31"
   },
   "es6.array.filter": {
-    "chrome": "5",
-    "opera": "10.10",
-    "edge": "12",
-    "firefox": "2",
-    "safari": "3.1",
-    "node": "0.10",
-    "ie": "9",
-    "android": "4",
-    "ios": "6",
-    "phantom": "2",
-    "samsung": "1",
-    "electron": "0.20"
+    "chrome": "51",
+    "opera": "38",
+    "edge": "13",
+    "firefox": "48",
+    "safari": "10",
+    "node": "6.5",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "1.2"
   },
   "es6.array.find": {
     "chrome": "45",
@@ -172,18 +180,15 @@
     "electron": "0.20"
   },
   "es6.array.map": {
-    "chrome": "5",
-    "opera": "10.10",
-    "edge": "12",
-    "firefox": "2",
-    "safari": "3.1",
-    "node": "0.10",
-    "ie": "9",
-    "android": "4",
-    "ios": "6",
-    "phantom": "2",
-    "samsung": "1",
-    "electron": "0.20"
+    "chrome": "51",
+    "opera": "38",
+    "edge": "13",
+    "firefox": "48",
+    "safari": "10",
+    "node": "6.5",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "1.2"
   },
   "es6.array.of": {
     "chrome": "45",
@@ -224,6 +229,17 @@
     "samsung": "1",
     "electron": "0.20"
   },
+  "es6.array.slice": {
+    "chrome": "51",
+    "opera": "38",
+    "edge": "13",
+    "firefox": "48",
+    "safari": "10",
+    "node": "6.5",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "1.2"
+  },
   "es6.array.some": {
     "chrome": "5",
     "opera": "10.10",
@@ -251,6 +267,17 @@
     "electron": "3.0"
   },
   "es6.array.species": {
+    "chrome": "51",
+    "opera": "38",
+    "edge": "13",
+    "firefox": "48",
+    "safari": "10",
+    "node": "6.5",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "1.2"
+  },
+  "es6.array.splice": {
     "chrome": "51",
     "opera": "38",
     "edge": "13",
