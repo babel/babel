@@ -19,408 +19,408 @@
   },
   "exports": {
     "./helpers/typeof": {
-      "module": "./helpers/typeof/_index.mjs",
       "node": "./helpers/typeof/index.js",
+      "require": "./helpers/typeof/index.js",
       "default": "./helpers/typeof/_index.mjs"
     },
     "./helpers/jsx": {
-      "module": "./helpers/jsx/_index.mjs",
       "node": "./helpers/jsx/index.js",
+      "require": "./helpers/jsx/index.js",
       "default": "./helpers/jsx/_index.mjs"
     },
     "./helpers/asyncIterator": {
-      "module": "./helpers/asyncIterator/_index.mjs",
       "node": "./helpers/asyncIterator/index.js",
+      "require": "./helpers/asyncIterator/index.js",
       "default": "./helpers/asyncIterator/_index.mjs"
     },
     "./helpers/AwaitValue": {
-      "module": "./helpers/AwaitValue/_index.mjs",
       "node": "./helpers/AwaitValue/index.js",
+      "require": "./helpers/AwaitValue/index.js",
       "default": "./helpers/AwaitValue/_index.mjs"
     },
     "./helpers/AsyncGenerator": {
-      "module": "./helpers/AsyncGenerator/_index.mjs",
       "node": "./helpers/AsyncGenerator/index.js",
+      "require": "./helpers/AsyncGenerator/index.js",
       "default": "./helpers/AsyncGenerator/_index.mjs"
     },
     "./helpers/wrapAsyncGenerator": {
-      "module": "./helpers/wrapAsyncGenerator/_index.mjs",
       "node": "./helpers/wrapAsyncGenerator/index.js",
+      "require": "./helpers/wrapAsyncGenerator/index.js",
       "default": "./helpers/wrapAsyncGenerator/_index.mjs"
     },
     "./helpers/awaitAsyncGenerator": {
-      "module": "./helpers/awaitAsyncGenerator/_index.mjs",
       "node": "./helpers/awaitAsyncGenerator/index.js",
+      "require": "./helpers/awaitAsyncGenerator/index.js",
       "default": "./helpers/awaitAsyncGenerator/_index.mjs"
     },
     "./helpers/asyncGeneratorDelegate": {
-      "module": "./helpers/asyncGeneratorDelegate/_index.mjs",
       "node": "./helpers/asyncGeneratorDelegate/index.js",
+      "require": "./helpers/asyncGeneratorDelegate/index.js",
       "default": "./helpers/asyncGeneratorDelegate/_index.mjs"
     },
     "./helpers/asyncToGenerator": {
-      "module": "./helpers/asyncToGenerator/_index.mjs",
       "node": "./helpers/asyncToGenerator/index.js",
+      "require": "./helpers/asyncToGenerator/index.js",
       "default": "./helpers/asyncToGenerator/_index.mjs"
     },
     "./helpers/classCallCheck": {
-      "module": "./helpers/classCallCheck/_index.mjs",
       "node": "./helpers/classCallCheck/index.js",
+      "require": "./helpers/classCallCheck/index.js",
       "default": "./helpers/classCallCheck/_index.mjs"
     },
     "./helpers/createClass": {
-      "module": "./helpers/createClass/_index.mjs",
       "node": "./helpers/createClass/index.js",
+      "require": "./helpers/createClass/index.js",
       "default": "./helpers/createClass/_index.mjs"
     },
     "./helpers/defineEnumerableProperties": {
-      "module": "./helpers/defineEnumerableProperties/_index.mjs",
       "node": "./helpers/defineEnumerableProperties/index.js",
+      "require": "./helpers/defineEnumerableProperties/index.js",
       "default": "./helpers/defineEnumerableProperties/_index.mjs"
     },
     "./helpers/defaults": {
-      "module": "./helpers/defaults/_index.mjs",
       "node": "./helpers/defaults/index.js",
+      "require": "./helpers/defaults/index.js",
       "default": "./helpers/defaults/_index.mjs"
     },
     "./helpers/defineProperty": {
-      "module": "./helpers/defineProperty/_index.mjs",
       "node": "./helpers/defineProperty/index.js",
+      "require": "./helpers/defineProperty/index.js",
       "default": "./helpers/defineProperty/_index.mjs"
     },
     "./helpers/extends": {
-      "module": "./helpers/extends/_index.mjs",
       "node": "./helpers/extends/index.js",
+      "require": "./helpers/extends/index.js",
       "default": "./helpers/extends/_index.mjs"
     },
     "./helpers/objectSpread": {
-      "module": "./helpers/objectSpread/_index.mjs",
       "node": "./helpers/objectSpread/index.js",
+      "require": "./helpers/objectSpread/index.js",
       "default": "./helpers/objectSpread/_index.mjs"
     },
     "./helpers/objectSpread2": {
-      "module": "./helpers/objectSpread2/_index.mjs",
       "node": "./helpers/objectSpread2/index.js",
+      "require": "./helpers/objectSpread2/index.js",
       "default": "./helpers/objectSpread2/_index.mjs"
     },
     "./helpers/inherits": {
-      "module": "./helpers/inherits/_index.mjs",
       "node": "./helpers/inherits/index.js",
+      "require": "./helpers/inherits/index.js",
       "default": "./helpers/inherits/_index.mjs"
     },
     "./helpers/inheritsLoose": {
-      "module": "./helpers/inheritsLoose/_index.mjs",
       "node": "./helpers/inheritsLoose/index.js",
+      "require": "./helpers/inheritsLoose/index.js",
       "default": "./helpers/inheritsLoose/_index.mjs"
     },
     "./helpers/getPrototypeOf": {
-      "module": "./helpers/getPrototypeOf/_index.mjs",
       "node": "./helpers/getPrototypeOf/index.js",
+      "require": "./helpers/getPrototypeOf/index.js",
       "default": "./helpers/getPrototypeOf/_index.mjs"
     },
     "./helpers/setPrototypeOf": {
-      "module": "./helpers/setPrototypeOf/_index.mjs",
       "node": "./helpers/setPrototypeOf/index.js",
+      "require": "./helpers/setPrototypeOf/index.js",
       "default": "./helpers/setPrototypeOf/_index.mjs"
     },
     "./helpers/isNativeReflectConstruct": {
-      "module": "./helpers/isNativeReflectConstruct/_index.mjs",
       "node": "./helpers/isNativeReflectConstruct/index.js",
+      "require": "./helpers/isNativeReflectConstruct/index.js",
       "default": "./helpers/isNativeReflectConstruct/_index.mjs"
     },
     "./helpers/construct": {
-      "module": "./helpers/construct/_index.mjs",
       "node": "./helpers/construct/index.js",
+      "require": "./helpers/construct/index.js",
       "default": "./helpers/construct/_index.mjs"
     },
     "./helpers/isNativeFunction": {
-      "module": "./helpers/isNativeFunction/_index.mjs",
       "node": "./helpers/isNativeFunction/index.js",
+      "require": "./helpers/isNativeFunction/index.js",
       "default": "./helpers/isNativeFunction/_index.mjs"
     },
     "./helpers/wrapNativeSuper": {
-      "module": "./helpers/wrapNativeSuper/_index.mjs",
       "node": "./helpers/wrapNativeSuper/index.js",
+      "require": "./helpers/wrapNativeSuper/index.js",
       "default": "./helpers/wrapNativeSuper/_index.mjs"
     },
     "./helpers/instanceof": {
-      "module": "./helpers/instanceof/_index.mjs",
       "node": "./helpers/instanceof/index.js",
+      "require": "./helpers/instanceof/index.js",
       "default": "./helpers/instanceof/_index.mjs"
     },
     "./helpers/interopRequireDefault": {
-      "module": "./helpers/interopRequireDefault/_index.mjs",
       "node": "./helpers/interopRequireDefault/index.js",
+      "require": "./helpers/interopRequireDefault/index.js",
       "default": "./helpers/interopRequireDefault/_index.mjs"
     },
     "./helpers/interopRequireWildcard": {
-      "module": "./helpers/interopRequireWildcard/_index.mjs",
       "node": "./helpers/interopRequireWildcard/index.js",
+      "require": "./helpers/interopRequireWildcard/index.js",
       "default": "./helpers/interopRequireWildcard/_index.mjs"
     },
     "./helpers/newArrowCheck": {
-      "module": "./helpers/newArrowCheck/_index.mjs",
       "node": "./helpers/newArrowCheck/index.js",
+      "require": "./helpers/newArrowCheck/index.js",
       "default": "./helpers/newArrowCheck/_index.mjs"
     },
     "./helpers/objectDestructuringEmpty": {
-      "module": "./helpers/objectDestructuringEmpty/_index.mjs",
       "node": "./helpers/objectDestructuringEmpty/index.js",
+      "require": "./helpers/objectDestructuringEmpty/index.js",
       "default": "./helpers/objectDestructuringEmpty/_index.mjs"
     },
     "./helpers/objectWithoutPropertiesLoose": {
-      "module": "./helpers/objectWithoutPropertiesLoose/_index.mjs",
       "node": "./helpers/objectWithoutPropertiesLoose/index.js",
+      "require": "./helpers/objectWithoutPropertiesLoose/index.js",
       "default": "./helpers/objectWithoutPropertiesLoose/_index.mjs"
     },
     "./helpers/objectWithoutProperties": {
-      "module": "./helpers/objectWithoutProperties/_index.mjs",
       "node": "./helpers/objectWithoutProperties/index.js",
+      "require": "./helpers/objectWithoutProperties/index.js",
       "default": "./helpers/objectWithoutProperties/_index.mjs"
     },
     "./helpers/assertThisInitialized": {
-      "module": "./helpers/assertThisInitialized/_index.mjs",
       "node": "./helpers/assertThisInitialized/index.js",
+      "require": "./helpers/assertThisInitialized/index.js",
       "default": "./helpers/assertThisInitialized/_index.mjs"
     },
     "./helpers/possibleConstructorReturn": {
-      "module": "./helpers/possibleConstructorReturn/_index.mjs",
       "node": "./helpers/possibleConstructorReturn/index.js",
+      "require": "./helpers/possibleConstructorReturn/index.js",
       "default": "./helpers/possibleConstructorReturn/_index.mjs"
     },
     "./helpers/createSuper": {
-      "module": "./helpers/createSuper/_index.mjs",
       "node": "./helpers/createSuper/index.js",
+      "require": "./helpers/createSuper/index.js",
       "default": "./helpers/createSuper/_index.mjs"
     },
     "./helpers/superPropBase": {
-      "module": "./helpers/superPropBase/_index.mjs",
       "node": "./helpers/superPropBase/index.js",
+      "require": "./helpers/superPropBase/index.js",
       "default": "./helpers/superPropBase/_index.mjs"
     },
     "./helpers/get": {
-      "module": "./helpers/get/_index.mjs",
       "node": "./helpers/get/index.js",
+      "require": "./helpers/get/index.js",
       "default": "./helpers/get/_index.mjs"
     },
     "./helpers/set": {
-      "module": "./helpers/set/_index.mjs",
       "node": "./helpers/set/index.js",
+      "require": "./helpers/set/index.js",
       "default": "./helpers/set/_index.mjs"
     },
     "./helpers/taggedTemplateLiteral": {
-      "module": "./helpers/taggedTemplateLiteral/_index.mjs",
       "node": "./helpers/taggedTemplateLiteral/index.js",
+      "require": "./helpers/taggedTemplateLiteral/index.js",
       "default": "./helpers/taggedTemplateLiteral/_index.mjs"
     },
     "./helpers/taggedTemplateLiteralLoose": {
-      "module": "./helpers/taggedTemplateLiteralLoose/_index.mjs",
       "node": "./helpers/taggedTemplateLiteralLoose/index.js",
+      "require": "./helpers/taggedTemplateLiteralLoose/index.js",
       "default": "./helpers/taggedTemplateLiteralLoose/_index.mjs"
     },
     "./helpers/readOnlyError": {
-      "module": "./helpers/readOnlyError/_index.mjs",
       "node": "./helpers/readOnlyError/index.js",
+      "require": "./helpers/readOnlyError/index.js",
       "default": "./helpers/readOnlyError/_index.mjs"
     },
     "./helpers/writeOnlyError": {
-      "module": "./helpers/writeOnlyError/_index.mjs",
       "node": "./helpers/writeOnlyError/index.js",
+      "require": "./helpers/writeOnlyError/index.js",
       "default": "./helpers/writeOnlyError/_index.mjs"
     },
     "./helpers/classNameTDZError": {
-      "module": "./helpers/classNameTDZError/_index.mjs",
       "node": "./helpers/classNameTDZError/index.js",
+      "require": "./helpers/classNameTDZError/index.js",
       "default": "./helpers/classNameTDZError/_index.mjs"
     },
     "./helpers/temporalUndefined": {
-      "module": "./helpers/temporalUndefined/_index.mjs",
       "node": "./helpers/temporalUndefined/index.js",
+      "require": "./helpers/temporalUndefined/index.js",
       "default": "./helpers/temporalUndefined/_index.mjs"
     },
     "./helpers/tdz": {
-      "module": "./helpers/tdz/_index.mjs",
       "node": "./helpers/tdz/index.js",
+      "require": "./helpers/tdz/index.js",
       "default": "./helpers/tdz/_index.mjs"
     },
     "./helpers/temporalRef": {
-      "module": "./helpers/temporalRef/_index.mjs",
       "node": "./helpers/temporalRef/index.js",
+      "require": "./helpers/temporalRef/index.js",
       "default": "./helpers/temporalRef/_index.mjs"
     },
     "./helpers/slicedToArray": {
-      "module": "./helpers/slicedToArray/_index.mjs",
       "node": "./helpers/slicedToArray/index.js",
+      "require": "./helpers/slicedToArray/index.js",
       "default": "./helpers/slicedToArray/_index.mjs"
     },
     "./helpers/slicedToArrayLoose": {
-      "module": "./helpers/slicedToArrayLoose/_index.mjs",
       "node": "./helpers/slicedToArrayLoose/index.js",
+      "require": "./helpers/slicedToArrayLoose/index.js",
       "default": "./helpers/slicedToArrayLoose/_index.mjs"
     },
     "./helpers/toArray": {
-      "module": "./helpers/toArray/_index.mjs",
       "node": "./helpers/toArray/index.js",
+      "require": "./helpers/toArray/index.js",
       "default": "./helpers/toArray/_index.mjs"
     },
     "./helpers/toConsumableArray": {
-      "module": "./helpers/toConsumableArray/_index.mjs",
       "node": "./helpers/toConsumableArray/index.js",
+      "require": "./helpers/toConsumableArray/index.js",
       "default": "./helpers/toConsumableArray/_index.mjs"
     },
     "./helpers/arrayWithoutHoles": {
-      "module": "./helpers/arrayWithoutHoles/_index.mjs",
       "node": "./helpers/arrayWithoutHoles/index.js",
+      "require": "./helpers/arrayWithoutHoles/index.js",
       "default": "./helpers/arrayWithoutHoles/_index.mjs"
     },
     "./helpers/arrayWithHoles": {
-      "module": "./helpers/arrayWithHoles/_index.mjs",
       "node": "./helpers/arrayWithHoles/index.js",
+      "require": "./helpers/arrayWithHoles/index.js",
       "default": "./helpers/arrayWithHoles/_index.mjs"
     },
     "./helpers/maybeArrayLike": {
-      "module": "./helpers/maybeArrayLike/_index.mjs",
       "node": "./helpers/maybeArrayLike/index.js",
+      "require": "./helpers/maybeArrayLike/index.js",
       "default": "./helpers/maybeArrayLike/_index.mjs"
     },
     "./helpers/iterableToArray": {
-      "module": "./helpers/iterableToArray/_index.mjs",
       "node": "./helpers/iterableToArray/index.js",
+      "require": "./helpers/iterableToArray/index.js",
       "default": "./helpers/iterableToArray/_index.mjs"
     },
     "./helpers/iterableToArrayLimit": {
-      "module": "./helpers/iterableToArrayLimit/_index.mjs",
       "node": "./helpers/iterableToArrayLimit/index.js",
+      "require": "./helpers/iterableToArrayLimit/index.js",
       "default": "./helpers/iterableToArrayLimit/_index.mjs"
     },
     "./helpers/iterableToArrayLimitLoose": {
-      "module": "./helpers/iterableToArrayLimitLoose/_index.mjs",
       "node": "./helpers/iterableToArrayLimitLoose/index.js",
+      "require": "./helpers/iterableToArrayLimitLoose/index.js",
       "default": "./helpers/iterableToArrayLimitLoose/_index.mjs"
     },
     "./helpers/unsupportedIterableToArray": {
-      "module": "./helpers/unsupportedIterableToArray/_index.mjs",
       "node": "./helpers/unsupportedIterableToArray/index.js",
+      "require": "./helpers/unsupportedIterableToArray/index.js",
       "default": "./helpers/unsupportedIterableToArray/_index.mjs"
     },
     "./helpers/arrayLikeToArray": {
-      "module": "./helpers/arrayLikeToArray/_index.mjs",
       "node": "./helpers/arrayLikeToArray/index.js",
+      "require": "./helpers/arrayLikeToArray/index.js",
       "default": "./helpers/arrayLikeToArray/_index.mjs"
     },
     "./helpers/nonIterableSpread": {
-      "module": "./helpers/nonIterableSpread/_index.mjs",
       "node": "./helpers/nonIterableSpread/index.js",
+      "require": "./helpers/nonIterableSpread/index.js",
       "default": "./helpers/nonIterableSpread/_index.mjs"
     },
     "./helpers/nonIterableRest": {
-      "module": "./helpers/nonIterableRest/_index.mjs",
       "node": "./helpers/nonIterableRest/index.js",
+      "require": "./helpers/nonIterableRest/index.js",
       "default": "./helpers/nonIterableRest/_index.mjs"
     },
     "./helpers/createForOfIteratorHelper": {
-      "module": "./helpers/createForOfIteratorHelper/_index.mjs",
       "node": "./helpers/createForOfIteratorHelper/index.js",
+      "require": "./helpers/createForOfIteratorHelper/index.js",
       "default": "./helpers/createForOfIteratorHelper/_index.mjs"
     },
     "./helpers/createForOfIteratorHelperLoose": {
-      "module": "./helpers/createForOfIteratorHelperLoose/_index.mjs",
       "node": "./helpers/createForOfIteratorHelperLoose/index.js",
+      "require": "./helpers/createForOfIteratorHelperLoose/index.js",
       "default": "./helpers/createForOfIteratorHelperLoose/_index.mjs"
     },
     "./helpers/skipFirstGeneratorNext": {
-      "module": "./helpers/skipFirstGeneratorNext/_index.mjs",
       "node": "./helpers/skipFirstGeneratorNext/index.js",
+      "require": "./helpers/skipFirstGeneratorNext/index.js",
       "default": "./helpers/skipFirstGeneratorNext/_index.mjs"
     },
     "./helpers/toPrimitive": {
-      "module": "./helpers/toPrimitive/_index.mjs",
       "node": "./helpers/toPrimitive/index.js",
+      "require": "./helpers/toPrimitive/index.js",
       "default": "./helpers/toPrimitive/_index.mjs"
     },
     "./helpers/toPropertyKey": {
-      "module": "./helpers/toPropertyKey/_index.mjs",
       "node": "./helpers/toPropertyKey/index.js",
+      "require": "./helpers/toPropertyKey/index.js",
       "default": "./helpers/toPropertyKey/_index.mjs"
     },
     "./helpers/initializerWarningHelper": {
-      "module": "./helpers/initializerWarningHelper/_index.mjs",
       "node": "./helpers/initializerWarningHelper/index.js",
+      "require": "./helpers/initializerWarningHelper/index.js",
       "default": "./helpers/initializerWarningHelper/_index.mjs"
     },
     "./helpers/initializerDefineProperty": {
-      "module": "./helpers/initializerDefineProperty/_index.mjs",
       "node": "./helpers/initializerDefineProperty/index.js",
+      "require": "./helpers/initializerDefineProperty/index.js",
       "default": "./helpers/initializerDefineProperty/_index.mjs"
     },
     "./helpers/applyDecoratedDescriptor": {
-      "module": "./helpers/applyDecoratedDescriptor/_index.mjs",
       "node": "./helpers/applyDecoratedDescriptor/index.js",
+      "require": "./helpers/applyDecoratedDescriptor/index.js",
       "default": "./helpers/applyDecoratedDescriptor/_index.mjs"
     },
     "./helpers/classPrivateFieldLooseKey": {
-      "module": "./helpers/classPrivateFieldLooseKey/_index.mjs",
       "node": "./helpers/classPrivateFieldLooseKey/index.js",
+      "require": "./helpers/classPrivateFieldLooseKey/index.js",
       "default": "./helpers/classPrivateFieldLooseKey/_index.mjs"
     },
     "./helpers/classPrivateFieldLooseBase": {
-      "module": "./helpers/classPrivateFieldLooseBase/_index.mjs",
       "node": "./helpers/classPrivateFieldLooseBase/index.js",
+      "require": "./helpers/classPrivateFieldLooseBase/index.js",
       "default": "./helpers/classPrivateFieldLooseBase/_index.mjs"
     },
     "./helpers/classPrivateFieldGet": {
-      "module": "./helpers/classPrivateFieldGet/_index.mjs",
       "node": "./helpers/classPrivateFieldGet/index.js",
+      "require": "./helpers/classPrivateFieldGet/index.js",
       "default": "./helpers/classPrivateFieldGet/_index.mjs"
     },
     "./helpers/classPrivateFieldSet": {
-      "module": "./helpers/classPrivateFieldSet/_index.mjs",
       "node": "./helpers/classPrivateFieldSet/index.js",
+      "require": "./helpers/classPrivateFieldSet/index.js",
       "default": "./helpers/classPrivateFieldSet/_index.mjs"
     },
     "./helpers/classPrivateFieldDestructureSet": {
-      "module": "./helpers/classPrivateFieldDestructureSet/_index.mjs",
       "node": "./helpers/classPrivateFieldDestructureSet/index.js",
+      "require": "./helpers/classPrivateFieldDestructureSet/index.js",
       "default": "./helpers/classPrivateFieldDestructureSet/_index.mjs"
     },
     "./helpers/classStaticPrivateFieldSpecGet": {
-      "module": "./helpers/classStaticPrivateFieldSpecGet/_index.mjs",
       "node": "./helpers/classStaticPrivateFieldSpecGet/index.js",
+      "require": "./helpers/classStaticPrivateFieldSpecGet/index.js",
       "default": "./helpers/classStaticPrivateFieldSpecGet/_index.mjs"
     },
     "./helpers/classStaticPrivateFieldSpecSet": {
-      "module": "./helpers/classStaticPrivateFieldSpecSet/_index.mjs",
       "node": "./helpers/classStaticPrivateFieldSpecSet/index.js",
+      "require": "./helpers/classStaticPrivateFieldSpecSet/index.js",
       "default": "./helpers/classStaticPrivateFieldSpecSet/_index.mjs"
     },
     "./helpers/classStaticPrivateMethodGet": {
-      "module": "./helpers/classStaticPrivateMethodGet/_index.mjs",
       "node": "./helpers/classStaticPrivateMethodGet/index.js",
+      "require": "./helpers/classStaticPrivateMethodGet/index.js",
       "default": "./helpers/classStaticPrivateMethodGet/_index.mjs"
     },
     "./helpers/classStaticPrivateMethodSet": {
-      "module": "./helpers/classStaticPrivateMethodSet/_index.mjs",
       "node": "./helpers/classStaticPrivateMethodSet/index.js",
+      "require": "./helpers/classStaticPrivateMethodSet/index.js",
       "default": "./helpers/classStaticPrivateMethodSet/_index.mjs"
     },
     "./helpers/decorate": {
-      "module": "./helpers/decorate/_index.mjs",
       "node": "./helpers/decorate/index.js",
+      "require": "./helpers/decorate/index.js",
       "default": "./helpers/decorate/_index.mjs"
     },
     "./helpers/classPrivateMethodGet": {
-      "module": "./helpers/classPrivateMethodGet/_index.mjs",
       "node": "./helpers/classPrivateMethodGet/index.js",
+      "require": "./helpers/classPrivateMethodGet/index.js",
       "default": "./helpers/classPrivateMethodGet/_index.mjs"
     },
     "./helpers/classPrivateMethodSet": {
-      "module": "./helpers/classPrivateMethodSet/_index.mjs",
       "node": "./helpers/classPrivateMethodSet/index.js",
+      "require": "./helpers/classPrivateMethodSet/index.js",
       "default": "./helpers/classPrivateMethodSet/_index.mjs"
     },
     "./helpers/wrapRegExp": {
-      "module": "./helpers/wrapRegExp/_index.mjs",
       "node": "./helpers/wrapRegExp/index.js",
+      "require": "./helpers/wrapRegExp/index.js",
       "default": "./helpers/wrapRegExp/_index.mjs"
     },
     "./package": "./package.json",
