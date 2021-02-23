@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.2 (2021-02-23)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime`
+  * [#12858](https://github.com/babel/babel/pull/12858) Correctly update `module.exports.default` of `typeof` helper ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.1 (2021-02-23)
 
 #### :bug: Bug Fix
