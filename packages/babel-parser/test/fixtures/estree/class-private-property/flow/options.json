@@ -1,3 +1,7 @@
 {
-  "plugins": ["flow", "estree", "classPrivateProperties"]
+  "plugins": [
+    "flow",
+    ["estree", { "classFeatures": true }],
+    "classPrivateProperties"
+  ]
 }

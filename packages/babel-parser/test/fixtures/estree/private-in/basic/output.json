@@ -21,21 +21,24 @@
           "start":8,"end":75,"loc":{"start":{"line":1,"column":8},"end":{"line":6,"column":1}},
           "body": [
             {
-              "type": "PropertyDefinition",
+              "type": "ClassPrivateProperty",
               "start":12,"end":25,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":15}},
               "static": false,
               "key": {
-                "type": "PrivateIdentifier",
+                "type": "PrivateName",
                 "start":12,"end":16,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":6}},
-                "name": "foo"
+                "id": {
+                  "type": "Identifier",
+                  "start":13,"end":16,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":6},"identifierName":"foo"},
+                  "name": "foo"
+                }
               },
               "value": {
                 "type": "Literal",
                 "start":19,"end":24,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":14}},
                 "value": "bar",
                 "raw": "\"bar\""
-              },
-              "computed": false
+              }
             },
             {
               "type": "MethodDefinition",
@@ -73,9 +76,13 @@
                         "type": "BinaryExpression",
                         "start":57,"end":68,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":22}},
                         "left": {
-                          "type": "PrivateIdentifier",
+                          "type": "PrivateName",
                           "start":57,"end":61,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":15}},
-                          "name": "foo"
+                          "id": {
+                            "type": "Identifier",
+                            "start":58,"end":61,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"foo"},
+                            "name": "foo"
+                          }
                         },
                         "operator": "in",
                         "right": {

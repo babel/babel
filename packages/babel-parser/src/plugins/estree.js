@@ -205,6 +205,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     convertPrivateNameToPrivateIdentifier(
       node: N.PrivateName,
     ): N.EstreePrivateIdentifier {
+      if (!this.getPluginOption("estree", "classFeatures")) {
+        return node;
+      }
+
       const name = super.getPrivateNameSV(node);
       node = (node: any);
       delete node.id;
@@ -214,10 +218,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isPrivateName(node: N.Node): boolean {
+      if (!this.getPluginOption("estree", "classFeatures")) {
+        return super.isPrivateName(node);
+      }
       return node.type === "PrivateIdentifier";
     }
 
     getPrivateNameSV(node: N.Node): string {
+      if (!this.getPluginOption("estree", "classFeatures")) {
+        return super.getPrivateNameSV(node);
+      }
       return node.name;
     }
 
@@ -277,14 +287,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassProperty(...args: [N.ClassProperty]): any {
       const propertyNode = (super.parseClassProperty(...args): any);
-      propertyNode.type = "PropertyDefinition";
+      if (this.getPluginOption("estree", "classFeatures")) {
+        propertyNode.type = "PropertyDefinition";
+      }
       return (propertyNode: N.EstreePropertyDefinition);
     }
 
     parseClassPrivateProperty(...args: [N.ClassPrivateProperty]): any {
       const propertyNode = (super.parseClassPrivateProperty(...args): any);
-      propertyNode.type = "PropertyDefinition";
-      propertyNode.computed = false;
+      if (this.getPluginOption("estree", "classFeatures")) {
+        propertyNode.type = "PropertyDefinition";
+        propertyNode.computed = false;
+      }
       return (propertyNode: N.EstreePropertyDefinition);
     }
 

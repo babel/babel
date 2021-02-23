@@ -1,3 +1,8 @@
 {
-  "plugins": ["flow", "jsx", "estree", "classPrivateMethods"]
+  "plugins": [
+    "flow",
+    "jsx",
+    ["estree", { "classFeatures": true }],
+    "classPrivateMethods"
+  ]
 }
