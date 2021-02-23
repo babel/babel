@@ -19,6 +19,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.4 (2021-02-23)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#12867](https://github.com/babel/babel/pull/12867) Don't enable class features by default in `estree` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#12865](https://github.com/babel/babel/pull/12865) Always load the CJS helpers when using `require` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 ## v7.13.2 (2021-02-23)
 
