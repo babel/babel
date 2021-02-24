@@ -12,7 +12,7 @@ module.exports = function (api) {
 
   const includeCoverage = process.env.BABEL_COVERAGE === "true";
 
-  const envOptsNoTargets = {
+  const envOpts = {
     loose: true,
     shippedProposals: true,
     modules: false,
@@ -25,8 +25,8 @@ module.exports = function (api) {
       "transform-spread",
     ],
   };
-  const envOpts = Object.assign({}, envOptsNoTargets);
 
+  let targets = {};
   let convertESM = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
@@ -62,27 +62,20 @@ module.exports = function (api) {
         "packages/babel-preset-env/data",
         "packages/babel-compat-data"
       );
-      if (env === "rollup") envOpts.targets = { node: nodeVersion };
+      if (env === "rollup") targets = { node: nodeVersion };
       needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     case "production":
       // Config during builds before publish.
-      envOpts.targets = {
-        node: nodeVersion,
-      };
+      targets = { node: nodeVersion };
       needsPolyfillsForOldNode = true;
       break;
     case "development":
       envOpts.debug = true;
-      envOpts.targets = {
-        node: "current",
-      };
-      break;
+    // fall through
     case "test":
-      envOpts.targets = {
-        node: "current",
-      };
+      targets = { node: "current" };
       break;
   }
 
@@ -102,6 +95,8 @@ module.exports = function (api) {
   }
 
   const config = {
+    targets,
+
     // Our dependencies are all standard CommonJS, along with all sorts of
     // other random files in Babel's codebase, so we use script as the default,
     // and then mark actual modules as modules farther down.
@@ -166,7 +161,7 @@ module.exports = function (api) {
       },
       {
         test: normalize("./packages/babel-polyfill"),
-        presets: [["@babel/env", envOptsNoTargets]],
+        presets: [["@babel/env", envOpts]],
       },
       {
         test: unambiguousSources.map(normalize),
