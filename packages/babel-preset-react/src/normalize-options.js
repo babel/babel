@@ -80,7 +80,6 @@ export default function normalizeOptions(options = {}) {
       importSource,
     } = options;
 
-    // TODO: (Babel 8) Remove setting these defaults
     if (runtime === "classic") {
       pragma = pragma || "React.createElement";
       pragmaFrag = pragmaFrag || "React.Fragment";
