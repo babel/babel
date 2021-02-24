@@ -3,7 +3,7 @@ import transformReactJSX from "@babel/plugin-transform-react-jsx";
 import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-development";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
-import normalizeOptions from "./normalize-options.js";
+import normalizeOptions from "./normalize-options";
 
 export default declare((api, opts) => {
   api.assertVersion(7);
