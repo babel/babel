@@ -160,10 +160,6 @@ module.exports = function (api) {
         ].filter(Boolean),
       },
       {
-        test: normalize("./packages/babel-polyfill"),
-        presets: [["@babel/env", envOpts]],
-      },
-      {
         test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
       },
