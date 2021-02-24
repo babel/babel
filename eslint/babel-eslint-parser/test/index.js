@@ -327,6 +327,26 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[3].value).toEqual("#");
   });
 
+  it("parse to PropertyDeclaration when `classFeatures: true`", () => {
+    const code = "class A { #x }";
+    const babylonAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: {
+        filename: "test.js",
+        parserOpts: {
+          plugins: [
+            ["estree", { classFeatures: true }],
+            "classPrivateProperties",
+            "classProperties",
+          ],
+        },
+      },
+    }).ast;
+    const classDeclaration = babylonAST.body[0];
+    expect(classDeclaration.body.body[0].type).toEqual("PropertyDefinition");
+  });
+
   it("empty program with line comment", () => {
     parseAndAssertSame("// single comment");
   });

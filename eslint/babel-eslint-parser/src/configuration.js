@@ -21,6 +21,26 @@ export function normalizeESLintConfig(options) {
   };
 }
 
+/**
+ * Merge user supplied estree plugin options to default estree plugin options
+ *
+ * @param {*} babelOptions
+ * @returns {Array} Merged parser plugin descriptors
+ */
+function getParserPlugins(babelOptions) {
+  const babelParserPlugins = babelOptions.parserOpts?.plugins ?? [];
+  // todo: enable classFeatures when it is supported by ESLint
+  const estreeOptions = { classFeatures: false };
+  for (const plugin of babelParserPlugins) {
+    if (Array.isArray(plugin) && plugin[0] === "estree") {
+      Object.assign(estreeOptions, plugin[1]);
+      break;
+    }
+  }
+  // estree must be the first parser plugin to work with other parser plugins
+  return [["estree", estreeOptions], ...babelParserPlugins];
+}
+
 export function normalizeBabelParseConfig(options) {
   const parseOptions = {
     sourceType: options.sourceType,
@@ -31,10 +51,7 @@ export function normalizeBabelParseConfig(options) {
       allowReturnOutsideFunction: true,
       allowSuperOutsideMethod: true,
       ...options.babelOptions.parserOpts,
-      plugins: [
-        ["estree", { classFeatures: false }],
-        ...(options.babelOptions.parserOpts?.plugins ?? []),
-      ],
+      plugins: getParserPlugins(options.babelOptions),
       ranges: true,
       tokens: true,
     },
