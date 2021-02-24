@@ -22,7 +22,7 @@ export function normalizeESLintConfig(options) {
 }
 
 /**
- * Merge the first user supplied estree plugin options to default estree plugin options
+ * Merge user supplied estree plugin options to default estree plugin options
  *
  * @param {*} babelOptions
  * @returns {Array} Merged parser plugin descriptors
