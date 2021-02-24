@@ -318,13 +318,6 @@ function buildRollup(packages, targetBrowsers) {
                 "regexpu-core",
                 "regenerate-unicode-properties"
               ) + "/**/*.js",
-              // TODO(Babel 8) Remove when removing BABEL_8_BREAKING
-              resolveChain(
-                import.meta.url,
-                "./packages/babel-core",
-                "semver",
-                "semver-BABEL_8_BREAKING-false"
-              ) + "/{functions,classes,internal,ranges}/**/*.js",
             ],
           }),
           rollupBabel({

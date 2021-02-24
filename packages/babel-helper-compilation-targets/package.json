@@ -24,7 +24,7 @@
     "@babel/compat-data": "workspace:^7.13.0",
     "@babel/helper-validator-option": "workspace:^7.12.17",
     "browserslist": "^4.14.5",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
