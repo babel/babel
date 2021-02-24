@@ -269,3 +269,84 @@ jobs:
         run: make test-flow
       - name: Run TypeScript Tests
         run: make test-typescript
+
+  runtime-interop:
+    name: Test @babel/runtime integrations
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
+      - name: Generate absoluteRuntime tests
+        run: yarn test:runtime:generate-absolute-runtime
+      - name: Test bundlers
+        run: yarn test:runtime:bundlers
+      - name: Test Node.js
+        run: yarn test:runtime:node
+      - name: Use Node.js 10
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 10
+      - name: Test Node.js 10
+        run: yarn test:runtime:node
+      - name: Use Node.js 12.0
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12.0" # quoted, otherwise it's just 13
+      - name: Test Node.js 12.0
+        run: yarn test:runtime:node
+      - name: Use Node.js 12.17
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12.17
+      - name: Test Node.js  12.17
+        run: yarn test:runtime:node
+      - name: Use Node.js 13.0
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "13.0" # quoted, otherwise it's just 13
+      - name: Test Node.js 13.0
+        run: yarn test:runtime:node
+      # - name: Use Node.js 13.2
+      #   uses: actions/setup-node@v2-beta
+      #   with:
+      #     node-version: 13.2
+      # - name: Test Node.js 13.2
+      #   run: yarn test:runtime:node
+      # - name: Use Node.js 13.6
+      #   uses: actions/setup-node@v2-beta
+      #   with:
+      #     node-version: 13.6
+      # - name: Test Node.js 13.6
+      #   run: yarn test:runtime:node
+      - name: Use Node.js 13.7
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 13.7
+      - name: Test Node.js 13.7
+        run: yarn test:runtime:node
+      - name: Use Node.js 14.2
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14.2
+      - name: Test Node.js 14.2
+        run: yarn test:runtime:node

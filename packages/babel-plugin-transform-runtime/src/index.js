@@ -88,13 +88,6 @@ export default declare((api, options, dirname) => {
   // TODO(Babel 8): Remove this check, it's always true
   const DUAL_MODE_RUNTIME = "7.13.0";
   const supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
-  if (supportsCJSDefault && useESModules && !absoluteRuntime) {
-    console.warn(
-      `[@babel/plugin-transform-runtime] The 'useESModules' option is not necessary when using` +
-        ` a @babel/runtime version >= ${DUAL_MODE_RUNTIME} and not using the 'absoluteRuntime'` +
-        ` option, because it automatically detects the necessary module format.`,
-    );
-  }
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);

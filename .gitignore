@@ -79,3 +79,6 @@ packages/babel-standalone/babel.min.js
 
 tsconfig.json
 tsconfig.tsbuildinfo
+
+/test/runtime-integration/*/output.js
+/test/runtime-integration/*/absolute-output.js
