@@ -12,7 +12,10 @@
     "lint": "make lint",
     "test": "make test",
     "version": "yarn --immutable-cache && git add yarn.lock",
-    "test:esm": "node test/esm/index.js"
+    "test:esm": "node test/esm/index.js",
+    "test:runtime:generate-absolute-runtime": "node test/runtime-integration/generate-absolute-runtime.cjs",
+    "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
+    "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.0",
@@ -73,7 +76,8 @@
     "codemods/*",
     "eslint/*",
     "packages/*",
-    "test/esm"
+    "test/esm",
+    "test/runtime-integration/*"
   ],
   "resolutions": {
     "browserslist": "npm:4.14.5",

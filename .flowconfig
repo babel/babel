@@ -5,6 +5,8 @@
 <PROJECT_ROOT>/codemods/.*/lib
 <PROJECT_ROOT>/codemods/.*/test
 <PROJECT_ROOT>/node_modules/module-deps/
+<PROJECT_ROOT>/node_modules/webpack-cli/
+<PROJECT_ROOT>/test/runtime-integration/
 
 [include]
 packages/*/src
