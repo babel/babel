@@ -28,7 +28,7 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.0"
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-systemjs"
 }
