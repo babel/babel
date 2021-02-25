@@ -132,14 +132,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/compat-data@npm:^7.11.0, @babel/compat-data@npm:^7.13.0, @babel/compat-data@npm:^7.13.5":
+"@babel/compat-data@npm:^7.13.0, @babel/compat-data@npm:^7.13.5":
   version: 7.13.6
   resolution: "@babel/compat-data@npm:7.13.6"
   checksum: 0bed7ac3e2c4597140e56db034e2b7a664516c7f094ee521a15efee814a208e3937fd9a5ac12e8d3d6ccfcbbfd35ceced75163fc7b2d9ca71b48d8fcfbc6f990
   languageName: node
   linkType: hard
 
-"@babel/compat-data@workspace:^7.13.0, @babel/compat-data@workspace:^7.13.5, @babel/compat-data@workspace:^7.13.6, @babel/compat-data@workspace:packages/babel-compat-data":
+"@babel/compat-data@workspace:*, @babel/compat-data@workspace:^7.13.0, @babel/compat-data@workspace:^7.13.5, @babel/compat-data@workspace:^7.13.6, @babel/compat-data@workspace:packages/babel-compat-data":
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:

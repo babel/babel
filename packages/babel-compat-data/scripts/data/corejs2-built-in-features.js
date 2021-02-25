@@ -27,12 +27,6 @@ const typedArrayMethods = [
 ];
 
 module.exports = {
-  "es6.array.concat": {
-    features: [
-      "well-known symbols / Symbol.isConcatSpreadable",
-      "well-known symbols / Symbol.species, Array.prototype.concat",
-    ],
-  },
   "es6.array.copy-within":
     "Array.prototype methods / Array.prototype.copyWithin",
   "es6.array.every": "Array methods / Array.prototype.every",
@@ -75,8 +69,6 @@ module.exports = {
   "es6.array.some": "Array methods / Array.prototype.some",
   "es6.array.sort": "Array methods / Array.prototype.sort",
   "es6.array.species": "Array static methods / Array[Symbol.species]",
-  "es6.array.splice":
-    "well-known symbols / Symbol.species, Array.prototype.splice",
 
   "es6.date.now": "Date methods / Date.now",
   "es6.date.to-iso-string": "Date methods / Date.prototype.toISOString",

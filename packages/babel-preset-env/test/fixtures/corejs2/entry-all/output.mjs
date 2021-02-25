@@ -1,4 +1,3 @@
-import "core-js/modules/es6.array.concat.js";
 import "core-js/modules/es6.array.copy-within.js";
 import "core-js/modules/es6.array.every.js";
 import "core-js/modules/es6.array.fill.js";
@@ -21,7 +20,6 @@ import "core-js/modules/es6.array.slice.js";
 import "core-js/modules/es6.array.some.js";
 import "core-js/modules/es6.array.sort.js";
 import "core-js/modules/es6.array.species.js";
-import "core-js/modules/es6.array.splice.js";
 import "core-js/modules/es6.date.now.js";
 import "core-js/modules/es6.date.to-iso-string.js";
 import "core-js/modules/es6.date.to-json.js";

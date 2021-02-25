@@ -65,7 +65,6 @@ Using polyfills with `entry-global` method:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-specific-targets/input.mjs]
 The corejs2 polyfill entry has been replaced with the following polyfills:
-  es6.array.concat { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.array.copy-within { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.array.fill { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.array.filter { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
@@ -80,7 +79,6 @@ The corejs2 polyfill entry has been replaced with the following polyfills:
   es6.array.slice { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.array.sort { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.array.species { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.array.splice { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.date.to-json { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.date.to-primitive { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.function.has-instance { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

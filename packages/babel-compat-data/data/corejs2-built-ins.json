@@ -1,15 +1,4 @@
 {
-  "es6.array.concat": {
-    "chrome": "51",
-    "opera": "38",
-    "edge": "15",
-    "firefox": "48",
-    "safari": "10",
-    "node": "6.5",
-    "ios": "10",
-    "samsung": "5",
-    "electron": "1.2"
-  },
   "es6.array.copy-within": {
     "chrome": "45",
     "opera": "32",
@@ -267,17 +256,6 @@
     "electron": "3.0"
   },
   "es6.array.species": {
-    "chrome": "51",
-    "opera": "38",
-    "edge": "13",
-    "firefox": "48",
-    "safari": "10",
-    "node": "6.5",
-    "ios": "10",
-    "samsung": "5",
-    "electron": "1.2"
-  },
-  "es6.array.splice": {
     "chrome": "51",
     "opera": "38",
     "edge": "13",

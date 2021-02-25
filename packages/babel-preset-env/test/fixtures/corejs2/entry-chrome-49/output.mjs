@@ -1,4 +1,3 @@
-import "core-js/modules/es6.array.concat.js";
 import "core-js/modules/es6.array.filter.js";
 import "core-js/modules/es7.array.flat-map.js";
 import "core-js/modules/es6.array.from.js";
@@ -7,7 +6,6 @@ import "core-js/modules/es6.array.map.js";
 import "core-js/modules/es6.array.slice.js";
 import "core-js/modules/es6.array.sort.js";
 import "core-js/modules/es6.array.species.js";
-import "core-js/modules/es6.array.splice.js";
 import "core-js/modules/es6.function.has-instance.js";
 import "core-js/modules/es6.map.js";
 import "core-js/modules/es7.object.define-getter.js";

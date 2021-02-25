@@ -56,7 +56,6 @@ Using polyfills with `entry-global` method:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-android/input.mjs]
 The corejs2 polyfill entry has been replaced with the following polyfills:
-  es6.array.concat { "android":"4" }
   es6.array.copy-within { "android":"4" }
   es6.array.fill { "android":"4" }
   es6.array.filter { "android":"4" }
@@ -71,7 +70,6 @@ The corejs2 polyfill entry has been replaced with the following polyfills:
   es6.array.slice { "android":"4" }
   es6.array.sort { "android":"4" }
   es6.array.species { "android":"4" }
-  es6.array.splice { "android":"4" }
   es6.date.to-primitive { "android":"4" }
   es6.function.has-instance { "android":"4" }
   es6.map { "android":"4" }

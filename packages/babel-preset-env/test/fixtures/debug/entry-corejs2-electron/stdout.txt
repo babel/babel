@@ -42,7 +42,6 @@ Using polyfills with `entry-global` method:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-electron/input.mjs]
 The corejs2 polyfill entry has been replaced with the following polyfills:
-  es6.array.concat { "electron":"0.36" }
   es6.array.filter { "electron":"0.36" }
   es7.array.flat-map { "electron":"0.36" }
   es6.array.from { "electron":"0.36" }
@@ -51,7 +50,6 @@ The corejs2 polyfill entry has been replaced with the following polyfills:
   es6.array.slice { "electron":"0.36" }
   es6.array.sort { "electron":"0.36" }
   es6.array.species { "electron":"0.36" }
-  es6.array.splice { "electron":"0.36" }
   es6.function.has-instance { "electron":"0.36" }
   es6.map { "electron":"0.36" }
   es6.object.assign { "electron":"0.36" }
