@@ -2,6 +2,8 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
+import { isRequired } from "@babel/helper-compilation-targets";
+import compatData from "@babel/compat-data/corejs2-built-ins";
 
 // TODO: Remove in Babel 8
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
@@ -17,7 +19,12 @@ const ZERO_REFS = (() => {
 export default declare((api, opts) => {
   api.assertVersion(7);
 
-  const { useBuiltIns = false, loose = false } = opts;
+  const targets = api.targets();
+  const supportsObjectAssign = !isRequired("es6.object.assign", targets, {
+    compatData,
+  });
+
+  const { useBuiltIns = supportsObjectAssign, loose = false } = opts;
 
   if (typeof loose !== "boolean") {
     throw new Error(".loose must be a boolean, or undefined");
