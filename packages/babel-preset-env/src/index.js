@@ -16,9 +16,12 @@ import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator";
 import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill";
 
-import pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
-import pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
-import pluginRegenerator from "babel-plugin-polyfill-regenerator";
+import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
+import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
+import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
+const pluginCoreJS2 = _pluginCoreJS2.default;
+const pluginCoreJS3 = _pluginCoreJS3.default;
+const pluginRegenerator = _pluginRegenerator.default;
 
 import getTargets, {
   prettifyTargets,
