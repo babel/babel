@@ -44,7 +44,11 @@ export function createClassFeaturePlugin({
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
 
-  if (loose) {
+  if (
+    loose === true ||
+    loose ===
+      "#__internal__@babel/preset-env__prefer-true-but-false-is-ok-if-it-prevents-an-error"
+  ) {
     const explicit = [];
 
     if (setPublicClassFields !== undefined) {
