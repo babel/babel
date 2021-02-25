@@ -1,4 +1,5 @@
 {
+  "externalHelpers": false,
   "parserOpts": {
     "allowReturnOutsideFunction": true
   },
