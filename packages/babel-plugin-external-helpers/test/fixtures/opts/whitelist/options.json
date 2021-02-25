@@ -1,4 +1,5 @@
 {
+  "externalHelpers": false,
   "plugins": [
     [
       "external-helpers",
