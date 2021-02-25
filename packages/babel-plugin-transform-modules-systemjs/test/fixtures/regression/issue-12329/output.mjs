@@ -3,8 +3,6 @@ System.register([], function (_export, _context) {
 
   var Light, Vec3;
 
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
   _export("Light", void 0);
 
   return {
@@ -12,7 +10,7 @@ System.register([], function (_export, _context) {
     execute: function () {
       _export("Light", Light = class Light {
         constructor() {
-          _defineProperty(this, "_color", Vec3);
+          babelHelpers.defineProperty(this, "_color", Vec3);
         }
 
       });

@@ -1,14 +1,8 @@
-function _classPrivateFieldLooseBase(receiver, privateKey) { if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) { throw new TypeError("attempted to use private field on non-instance"); } return receiver; }
+var _x = babelHelpers.classPrivateFieldLooseKey("x");
 
-var id = 0;
+var _m = babelHelpers.classPrivateFieldLooseKey("m");
 
-function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
-
-var _x = _classPrivateFieldLooseKey("x");
-
-var _m = _classPrivateFieldLooseKey("m");
-
-var _self = _classPrivateFieldLooseKey("self");
+var _self = babelHelpers.classPrivateFieldLooseKey("self");
 
 class Foo {
   static getSelf() {
@@ -33,18 +27,18 @@ class Foo {
       return deep;
     }
 
-    function f(o, r = (() => o === null || o === void 0 ? void 0 : _classPrivateFieldLooseBase(o.Foo, _m)[_m]())()) {
+    function f(o, r = (() => o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(o.Foo, _m)[_m]())()) {
       return r;
     }
 
-    function g(o, r = (() => o === null || o === void 0 ? void 0 : _classPrivateFieldLooseBase(_classPrivateFieldLooseBase(o.Foo, _self)[_self].getSelf(), _m)[_m])()?.()) {
+    function g(o, r = (() => o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(babelHelpers.classPrivateFieldLooseBase(o.Foo, _self)[_self].getSelf(), _m)[_m])()?.()) {
       return r;
     }
 
     function h(fnDeep, r = (() => {
       var _fnDeep$very$o$Foo;
 
-      return (_fnDeep$very$o$Foo = fnDeep?.().very.o?.Foo) === null || _fnDeep$very$o$Foo === void 0 ? void 0 : _classPrivateFieldLooseBase(_fnDeep$very$o$Foo, _m)[_m]();
+      return (_fnDeep$very$o$Foo = fnDeep?.().very.o?.Foo) === null || _fnDeep$very$o$Foo === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_fnDeep$very$o$Foo, _m)[_m]();
     })()) {
       return r;
     }
@@ -52,12 +46,12 @@ class Foo {
     function i(fn, r = (() => {
       var _getSelf;
 
-      return (_getSelf = (() => fn === null || fn === void 0 ? void 0 : _classPrivateFieldLooseBase(fn().Foo, _self)[_self])()?.getSelf()) === null || _getSelf === void 0 ? void 0 : _classPrivateFieldLooseBase(_getSelf.self, _m)[_m]();
+      return (_getSelf = (() => fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])()?.getSelf()) === null || _getSelf === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf.self, _m)[_m]();
     })()) {
       return r;
     }
 
-    function j(fn, r = (() => _classPrivateFieldLooseBase(_classPrivateFieldLooseBase(fn().Foo, _self)[_self].getSelf().self, _m)[_m]?.())()) {
+    function j(fn, r = (() => babelHelpers.classPrivateFieldLooseBase(babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].getSelf().self, _m)[_m]?.())()) {
       return r;
     }
 
@@ -77,7 +71,7 @@ Object.defineProperty(Foo, _x, {
 Object.defineProperty(Foo, _m, {
   writable: true,
   value: function () {
-    return _classPrivateFieldLooseBase(this, _x)[_x];
+    return babelHelpers.classPrivateFieldLooseBase(this, _x)[_x];
   }
 });
 Object.defineProperty(Foo, _self, {

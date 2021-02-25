@@ -1,7 +1,5 @@
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 (_ref, a) => {
-  let R = _extends({}, _ref);
+  let R = babelHelpers.extends({}, _ref);
 
   if (a === void 0) {
     a = R;
@@ -9,7 +7,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 };
 
 (_ref2, e, c = 2, a, f) => {
-  let R = _extends({}, _ref2);
+  let R = babelHelpers.extends({}, _ref2);
 
   if (a === void 0) {
     a = R;
@@ -25,7 +23,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 };
 
 (_ref3, a) => {
-  let R = _extends({}, _ref3);
+  let R = babelHelpers.extends({}, _ref3);
 
   if (a === void 0) {
     a = f(R);
