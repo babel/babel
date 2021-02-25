@@ -17,6 +17,8 @@ import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 import QuickLRU from "quick-lru";
 import escapeRegExp from "./escape-regexp.cjs";
 
+const EXTERNAL_HELPERS_VERSION = "7.100.0";
+
 const cachedScripts = new QuickLRU({ maxSize: 10 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
@@ -417,6 +419,13 @@ export default function (
             Object.assign(task.options, taskOpts);
 
             if (dynamicOpts) dynamicOpts(task.options, task);
+
+            if (task.externalHelpers) {
+              (task.options.plugins ??= []).push([
+                "external-helpers",
+                { helperVersion: EXTERNAL_HELPERS_VERSION },
+              ]);
+            }
 
             const throwMsg = task.options.throws;
             if (throwMsg) {
