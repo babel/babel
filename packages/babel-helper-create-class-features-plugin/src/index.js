@@ -20,7 +20,7 @@ import {
   isLoose,
 } from "./features";
 import { isRequired } from "@babel/helper-compilation-targets";
-import compatData from "../data/compat.json";
+import compatData from "../data/compat.cjs";
 
 export { FEATURES, injectInitialization };
 
