@@ -84,7 +84,8 @@
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
-    "@babel/parser/@babel/types": "workspace:*"
+    "@babel/parser/@babel/types": "workspace:*",
+    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
   },
   "engines": {
     "node": ">= 6.9.0",
