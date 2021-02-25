@@ -7,7 +7,7 @@ import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
 import Module from "module";
-import escapeRegExp from "./escape-regexp";
+import escapeRegExp from "./escape-regexp.cjs";
 
 const maps = {};
 let transformOpts = {};
