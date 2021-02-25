@@ -44,7 +44,7 @@ export function createClassFeaturePlugin({
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
 
-  if (loose) {
+  if (loose === true) {
     const explicit = [];
 
     if (setPublicClassFields !== undefined) {

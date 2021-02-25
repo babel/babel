@@ -429,6 +429,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-replace-supers": "workspace:^7.13.0"
     "@babel/helper-split-export-declaration": "workspace:^7.12.13"
+    "@babel/preset-env": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
