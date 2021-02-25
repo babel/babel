@@ -75,14 +75,14 @@ module.exports = function (api) {
     // Configs used during bundling builds.
     case "standalone":
       includeRegeneratorRuntime = true;
-      unambiguousSources.push("packages/babel-runtime/regenerator");
       convertESM = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
         "/**/node_modules",
         "packages/babel-preset-env/data",
-        "packages/babel-compat-data"
+        "packages/babel-compat-data",
+        "packages/babel-runtime/regenerator"
       );
       break;
     case "rollup":
