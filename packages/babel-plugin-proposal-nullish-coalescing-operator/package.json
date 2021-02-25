@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^7.13.0",
-    "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.0"
+    "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

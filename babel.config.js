@@ -10,23 +10,49 @@ function normalize(src) {
 module.exports = function (api) {
   const env = api.env();
 
+  const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
+
   const includeCoverage = process.env.BABEL_COVERAGE === "true";
 
-  const envOptsNoTargets = {
-    loose: true,
+  const envOpts = {
     shippedProposals: true,
     modules: false,
     exclude: [
+      "transform-typeof-symbol",
       // We need to enable useBuiltIns
       "proposal-object-rest-spread",
-      // We want to enable it without `loose: true`, since it breaks
-      // https://github.com/npm/node-semver/blob/093b40f8a7cb67946527b739fe8f8974c888e2a0/classes/range.js#L136
-      // in our dependencies
-      "transform-spread",
     ],
   };
-  const envOpts = Object.assign({}, envOptsNoTargets);
 
+  // These are "safe" assumptions, that we can enable globally
+  const assumptions = {
+    constantSuper: true,
+    ignoreFunctionLength: true,
+    ignoreToPrimitiveHint: true,
+    mutableTemplateObject: true,
+    noClassCalls: true,
+    noDocumentAll: true,
+    noNewArrows: true,
+    setClassMethods: true,
+    setComputedProperties: true,
+    setSpreadProperties: true,
+    skipForOfIteratorClosing: true,
+    superIsCallableConstructor: true,
+  };
+
+  // These are "less safe": we only enable them on our own code
+  // and not when compiling dependencies.
+  const sourceAssumptions = {
+    objectRestNoSymbols: true,
+    pureGetters: true,
+    setPublicClassFields: true,
+  };
+
+  const parserAssumptions = {
+    iterableIsArray: true,
+  };
+
+  let targets = {};
   let convertESM = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
@@ -39,11 +65,9 @@ module.exports = function (api) {
   // unambiguous to keep things simple until we get around to renaming
   // the modules to be more easily distinguished from CommonJS
   const unambiguousSources = [
-    "packages/*/src",
+    ...sources,
     "packages/*/test",
-    "codemods/*/src",
     "codemods/*/test",
-    "eslint/*/src",
     "eslint/*/test",
   ];
 
@@ -62,27 +86,20 @@ module.exports = function (api) {
         "packages/babel-preset-env/data",
         "packages/babel-compat-data"
       );
-      if (env === "rollup") envOpts.targets = { node: nodeVersion };
+      if (env === "rollup") targets = { node: nodeVersion };
       needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     case "production":
       // Config during builds before publish.
-      envOpts.targets = {
-        node: nodeVersion,
-      };
+      targets = { node: nodeVersion };
       needsPolyfillsForOldNode = true;
       break;
     case "development":
       envOpts.debug = true;
-      envOpts.targets = {
-        node: "current",
-      };
-      break;
+    // fall through
     case "test":
-      envOpts.targets = {
-        node: "current",
-      };
+      targets = { node: "current" };
       break;
   }
 
@@ -102,6 +119,9 @@ module.exports = function (api) {
   }
 
   const config = {
+    targets,
+    assumptions,
+
     // Our dependencies are all standard CommonJS, along with all sorts of
     // other random files in Babel's codebase, so we use script as the default,
     // and then mark actual modules as modules farther down.
@@ -126,12 +146,7 @@ module.exports = function (api) {
       ["@babel/preset-flow", { allowDeclareFields: true }],
     ],
     plugins: [
-      [
-        "@babel/proposal-object-rest-spread",
-        { useBuiltIns: true, loose: true },
-      ],
-
-      env === "standalone" && ["@babel/transform-spread", { loose: false }],
+      ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
@@ -150,10 +165,8 @@ module.exports = function (api) {
           "packages/babel-parser",
           "packages/babel-helper-validator-identifier",
         ].map(normalize),
-        plugins: [
-          "babel-plugin-transform-charcodes",
-          ["@babel/transform-for-of", { assumeArray: true }],
-        ],
+        plugins: ["babel-plugin-transform-charcodes"],
+        assumptions: parserAssumptions,
       },
       {
         test: ["./packages/babel-cli", "./packages/babel-core"].map(normalize),
@@ -165,8 +178,8 @@ module.exports = function (api) {
         ].filter(Boolean),
       },
       {
-        test: normalize("./packages/babel-polyfill"),
-        presets: [["@babel/env", envOptsNoTargets]],
+        test: sources.map(normalize),
+        assumptions: sourceAssumptions,
       },
       {
         test: unambiguousSources.map(normalize),
