@@ -9,6 +9,5 @@
         "corejs": 2
       }
     ]
-  ],
-  "plugins": [["external-helpers", { "helperVersion": "7.100.0" }]]
+  ]
 }

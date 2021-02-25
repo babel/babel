@@ -3,7 +3,6 @@
     "allowReturnOutsideFunction": true
   },
   "plugins": [
-    "external-helpers",
     "transform-async-to-generator",
     "proposal-async-generator-functions"
   ],

@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    "transform-spread"
-  ],
+  "plugins": ["transform-spread"],
   "throws": "It's not possible to compile spread arguments in `super()` without compiling classes."
 }

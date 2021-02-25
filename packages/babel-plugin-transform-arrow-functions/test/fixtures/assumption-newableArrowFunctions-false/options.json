@@ -1,5 +1,5 @@
 {
-  "plugins": ["external-helpers", "transform-arrow-functions"],
+  "plugins": ["transform-arrow-functions"],
   "assumptions": {
     "noNewArrows": false
   }

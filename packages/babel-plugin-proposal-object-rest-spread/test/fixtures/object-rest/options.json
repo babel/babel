@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "proposal-object-rest-spread",
-    ["external-helpers", { "helperVersion": "7.1.5" }]
-  ]
+  "plugins": ["proposal-object-rest-spread"]
 }

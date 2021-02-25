@@ -3,7 +3,6 @@
     "proposal-class-static-block",
     ["proposal-private-property-in-object", { "loose": true }],
     ["proposal-private-methods", { "loose": true }],
-    ["proposal-class-properties", { "loose": true }],
-    "external-helpers"
+    ["proposal-class-properties", { "loose": true }]
   ]
 }

@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    "external-helpers",
-    "transform-computed-properties"
-  ],
+  "plugins": ["transform-computed-properties"],
   "assumptions": {
     "setComputedProperties": true
   }

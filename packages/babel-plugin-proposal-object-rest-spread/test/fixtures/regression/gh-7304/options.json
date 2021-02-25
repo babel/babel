@@ -11,6 +11,5 @@
         "corejs": 3
       }
     ]
-  ],
-  "plugins": ["external-helpers"]
+  ]
 }

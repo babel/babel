@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    "proposal-class-properties"
-  ],
+  "plugins": ["proposal-class-properties"],
   "minNodeVersion": "14.0.0"
 }

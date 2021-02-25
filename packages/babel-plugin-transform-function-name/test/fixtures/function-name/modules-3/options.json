@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "external-helpers",
     "transform-function-name",
     "transform-modules-commonjs",
     "transform-classes",

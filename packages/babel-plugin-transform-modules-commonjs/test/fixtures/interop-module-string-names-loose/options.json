@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "external-helpers",
     ["transform-modules-commonjs", { "loose": true }],
     "syntax-module-string-names"
   ]

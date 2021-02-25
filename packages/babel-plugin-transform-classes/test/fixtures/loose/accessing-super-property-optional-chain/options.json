@@ -1,6 +1,5 @@
 {
   "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
     ["proposal-optional-chaining", { "loose": true }],
     "transform-function-name",
     ["transform-classes", { "loose": true }],

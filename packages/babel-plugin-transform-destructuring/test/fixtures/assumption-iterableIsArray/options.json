@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    "transform-destructuring"
-  ],
+  "plugins": ["transform-destructuring"],
   "assumptions": {
     "iterableIsArray": true
   }

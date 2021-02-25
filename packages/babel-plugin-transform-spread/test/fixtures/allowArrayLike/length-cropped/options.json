@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    ["transform-spread", { "allowArrayLike": true }]
-  ]
+  "plugins": [["transform-spread", { "allowArrayLike": true }]]
 }

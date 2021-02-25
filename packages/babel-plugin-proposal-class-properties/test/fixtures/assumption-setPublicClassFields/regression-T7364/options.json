@@ -1,9 +1,5 @@
 {
-  "plugins": [
-    "external-helpers",
-    "transform-async-to-generator",
-    "proposal-class-properties"
-  ],
+  "plugins": ["transform-async-to-generator", "proposal-class-properties"],
   "assumptions": {
     "setPublicClassFields": true
   }

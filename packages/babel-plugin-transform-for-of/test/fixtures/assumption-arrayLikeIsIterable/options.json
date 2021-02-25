@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    "transform-for-of"
-  ],
+  "plugins": ["transform-for-of"],
   "assumptions": {
     "arrayLikeIsIterable": true
   }

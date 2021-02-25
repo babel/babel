@@ -1,11 +1,5 @@
 {
   "plugins": [
-    [
-      "external-helpers",
-      {
-        "helperVersion": "7.0.2"
-      }
-    ],
     ["proposal-class-properties", { "loose": true }],
     "transform-block-scoping",
     "syntax-class-properties"

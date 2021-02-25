@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "external-helpers",
-    ["transform-modules-commonjs", { "noInterop": true }]
-  ]
+  "plugins": [["transform-modules-commonjs", { "noInterop": true }]]
 }
