@@ -43,6 +43,18 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
+# Older @babel/core versions don't support "targets" and "assumptions"
+# Let's just remove them when running this e2e test.
+node -e "
+  var config = fs.readFileSync('./babel.config.js', 'utf8')
+    .replace(/assumptions,/, '')
+    .replace(/targets,/g, '')
+    .replace(/assumptions,/g, '')
+    .replace(/assumptions:[^,]*,/g, '')
+    .replace(/(?<=envOpts\s+=\s+\{)/, 'targets: { node: \'6.9\' },');
+  fs.writeFileSync('./babel.config.js', config);
+"
+
 # https://github.com/babel/babel/pull/12331 - This test is fixed in @babel/traverse 7.12.7,
 # so it will fail with older versions. We can disable it.
 (cd packages/babel-plugin-transform-modules-systemjs/test/fixtures/regression/; mv issue-12329 .issue-12329)
