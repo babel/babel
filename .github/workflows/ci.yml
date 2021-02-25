@@ -288,6 +288,21 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ hashFiles('yarn.lock') }}
+      # See https://github.com/babel/babel/pull/12906
+      - name: Workaround yarn bug
+        run: |
+          echo '{
+            "private": true,
+            "devDependencies": {
+              "@babel/runtime": "workspace:*",
+              "@babel/runtime-corejs3": "workspace:*"
+            }
+          }' > packages/package.json
+          node -e "
+            const pkg = require('./package.json');
+            pkg.workspaces.push('packages');
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
+          "
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v2
