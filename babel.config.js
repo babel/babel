@@ -84,7 +84,8 @@ module.exports = function (api) {
       unambiguousSources.push(
         "/**/node_modules",
         "packages/babel-preset-env/data",
-        "packages/babel-compat-data"
+        "packages/babel-compat-data",
+        "packages/babel-helper-create-class-features-plugin/data"
       );
       if (env === "rollup") targets = { node: nodeVersion };
       needsPolyfillsForOldNode = true;
