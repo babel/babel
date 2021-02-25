@@ -76,7 +76,15 @@ module.exports = function (api) {
     case "standalone":
       includeRegeneratorRuntime = true;
       unambiguousSources.push("packages/babel-runtime/regenerator");
-    // fall through
+      convertESM = false;
+      ignoreLib = false;
+      // rollup-commonjs will converts node_modules to ESM
+      unambiguousSources.push(
+        "/**/node_modules",
+        "packages/babel-preset-env/data",
+        "packages/babel-compat-data"
+      );
+      break;
     case "rollup":
       convertESM = false;
       ignoreLib = false;
@@ -86,7 +94,7 @@ module.exports = function (api) {
         "packages/babel-preset-env/data",
         "packages/babel-compat-data"
       );
-      if (env === "rollup") targets = { node: nodeVersion };
+      targets = { node: nodeVersion };
       needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
