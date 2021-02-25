@@ -22,6 +22,8 @@ const expectedCjsAbsolute =
     ? "expected-cjs-absolute-10.txt"
     : major === 13 && minor <= 1
     ? "expected-cjs-absolute-13.0.txt"
+    : major === 13 && minor <= 3
+    ? "expected-cjs-absolute-13.2.txt"
     : "expected-cjs-absolute.txt";
 
 test(

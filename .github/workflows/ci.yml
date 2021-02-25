@@ -326,18 +326,18 @@ jobs:
           node-version: "13.0" # quoted, otherwise it's just 13
       - name: Test Node.js 13.0
         run: yarn test:runtime:node
-      # - name: Use Node.js 13.2
-      #   uses: actions/setup-node@v2-beta
-      #   with:
-      #     node-version: 13.2
-      # - name: Test Node.js 13.2
-      #   run: yarn test:runtime:node
-      # - name: Use Node.js 13.6
-      #   uses: actions/setup-node@v2-beta
-      #   with:
-      #     node-version: 13.6
-      # - name: Test Node.js 13.6
-      #   run: yarn test:runtime:node
+      - name: Use Node.js 13.2
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 13.2
+      - name: Test Node.js 13.2
+        run: yarn test:runtime:node
+      - name: Use Node.js 13.6
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 13.6
+      - name: Test Node.js 13.6
+        run: yarn test:runtime:node
       - name: Use Node.js 13.7
         uses: actions/setup-node@v2-beta
         with:
