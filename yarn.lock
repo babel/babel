@@ -914,6 +914,7 @@ __metadata:
   resolution: "@babel/highlight@workspace:packages/babel-highlight"
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^7.12.11"
+    "@types/chalk": ^2.0.0
     chalk: ^2.0.0
     js-tokens: "condition:BABEL_8_BREAKING ? ^6.0.0 : ^4.0.0"
     strip-ansi: ^4.0.0

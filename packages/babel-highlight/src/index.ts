@@ -1,9 +1,14 @@
+/// <reference path="../../../lib/third-party-libs.d.ts" />
+
 import jsTokens, * as jsTokensNs from "js-tokens";
+import type { Token, JSXToken } from "js-tokens";
 import {
   isStrictReservedWord,
   isKeyword,
 } from "@babel/helper-validator-identifier";
 import Chalk from "chalk";
+
+type ChalkClass = ReturnType<typeof getChalk>;
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -16,10 +21,21 @@ import Chalk from "chalk";
  */
 const sometimesKeywords = new Set(["as", "async", "from", "get", "of", "set"]);
 
+type InternalTokenType =
+  | "keyword"
+  | "capitalized"
+  | "jsxIdentifier"
+  | "punctuator"
+  | "number"
+  | "string"
+  | "regex"
+  | "comment"
+  | "invalid";
+
 /**
  * Chalk styles for token types.
  */
-function getDefs(chalk) {
+function getDefs(chalk: ChalkClass): Record<InternalTokenType, ChalkClass> {
   return {
     keyword: chalk.cyan,
     capitalized: chalk.yellow,
@@ -43,13 +59,17 @@ const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
  */
 const BRACKET = /^[()[\]{}]$/;
 
-let tokenize;
+let tokenize: (
+  text: string,
+) => Generator<{ type: InternalTokenType | "uncolored"; value: string }>;
 
 if (process.env.BABEL_8_BREAKING) {
   /**
    * Get the type of token, specifying punctuator type.
    */
-  const getTokenType = function (token) {
+  const getTokenType = function (
+    token: Token | JSXToken,
+  ): InternalTokenType | "uncolored" {
     if (token.type === "IdentifierName") {
       if (
         isKeyword(token.value) ||
@@ -139,7 +159,7 @@ if (process.env.BABEL_8_BREAKING) {
   };
 } else {
   // This is only available in js-tokens@4, and not in js-tokens@6
-  const { matchToToken } = jsTokensNs;
+  const { matchToToken } = jsTokensNs as any;
 
   /**
    * RegExp to test for what seems to be a JSX tag name.
@@ -184,7 +204,7 @@ if (process.env.BABEL_8_BREAKING) {
 
   tokenize = function* (text: string) {
     let match;
-    while ((match = jsTokens.exec(text))) {
+    while ((match = (jsTokens as any).exec(text))) {
       const token = matchToToken(match);
 
       yield {
@@ -198,7 +218,7 @@ if (process.env.BABEL_8_BREAKING) {
 /**
  * Highlight `text` using the token definitions in `defs`.
  */
-function highlightTokens(defs: Object, text: string) {
+function highlightTokens(defs: Record<string, ChalkClass>, text: string) {
   let highlighted = "";
 
   for (const { type, value } of tokenize(text)) {
@@ -221,25 +241,23 @@ function highlightTokens(defs: Object, text: string) {
  */
 
 type Options = {
-  forceColor?: boolean,
+  forceColor?: boolean;
 };
 
 /**
  * Whether the code should be highlighted given the passed options.
  */
 export function shouldHighlight(options: Options): boolean {
-  return Chalk.supportsColor || options.forceColor;
+  return !!Chalk.supportsColor || options.forceColor;
 }
 
 /**
  * The Chalk instance that should be used given the passed options.
  */
 export function getChalk(options: Options) {
-  let chalk = Chalk;
-  if (options.forceColor) {
-    chalk = new Chalk.constructor({ enabled: true, level: 1 });
-  }
-  return chalk;
+  return options.forceColor
+    ? new Chalk.constructor({ enabled: true, level: 1 })
+    : Chalk;
 }
 
 /**
