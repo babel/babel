@@ -14,12 +14,12 @@ var _get_privateFieldValue = function () {
   return babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField];
 };
 
-Object.defineProperty(Cl, _privateField, {
-  writable: true,
-  value: 0
-});
 Object.defineProperty(Cl, _privateFieldValue, {
   get: _get_privateFieldValue,
   set: void 0
+});
+Object.defineProperty(Cl, _privateField, {
+  writable: true,
+  value: 0
 });
 const cl = new Cl();
