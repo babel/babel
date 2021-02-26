@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-logical-assignment-operators",
-  "version": "7.12.13",
+  "version": "7.13.8",
   "description": "Transforms logical assignment operators into short-circuited assignments",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.12.13",
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
     "@babel/plugin-syntax-logical-assignment-operators": "^7.10.4"
   },
   "peerDependencies": {

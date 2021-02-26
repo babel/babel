@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-commonjs",
-  "version": "7.13.0",
+  "version": "7.13.8",
   "description": "This plugin transforms ES2015 modules to CommonJS",
   "repository": {
     "type": "git",
