@@ -242,7 +242,7 @@ Other than normal Babel options, `options.json` can contain other properties to 
 
 - **`externalHelpers`** (boolean)
 
-  By default, all the tests run with the `@babel/plugin-external-helpers` enabled. You can disable this behavior with
+  By default, all the tests run with the [`@babel/plugin-external-helpers`](https://babel.dev/docs/en/babel-plugin-external-helpers) enabled. You can disable this behavior with
 
   ```jsonc
   // options.json example
