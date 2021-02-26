@@ -9,6 +9,7 @@ class A {
   constructor() {
     expect(() => this.self().#method = 2).toThrow(TypeError);
     expect(this.counter).toBe(1);
+    expect(() => ([this.#method] = [2])).toThrow(TypeError);
   }
 }
 

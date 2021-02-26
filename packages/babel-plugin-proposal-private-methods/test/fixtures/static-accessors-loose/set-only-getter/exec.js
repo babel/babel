@@ -1,13 +1,14 @@
 class Cl {
-  static #PRIVATE_STATIC_FIELD = 0;
+  static #privateField = 0;
 
-  static get #privateStaticFieldValue() {
-    return Cl.#PRIVATE_STATIC_FIELD;
+  static get #privateFieldValue() {
+    return this.#privateField;
   }
 
-  static setPrivateStaticFieldValue() {
-    Cl.#privateStaticFieldValue = 1;
+  constructor() {
+    expect(() => Cl.#privateFieldValue = 1).toThrow(TypeError);
+    expect(() => ([Cl.#privateFieldValue] = [1])).toThrow(TypeError);
   }
 }
 
-expect(() => Cl.setPrivateStaticFieldValue()).toThrow(TypeError);
+const cl = new Cl();

@@ -20,7 +20,7 @@ class Cl {
     });
 
     babelHelpers.defineProperty(this, "counter", 0);
-    this.self, 1, babelHelpers.readOnlyError("#privateFieldValue");
+    this.self, 1([babelHelpers.classPrivateFieldDestructureSet(this.self, _privateFieldValue).value] = [1]), babelHelpers.readOnlyError("#privateFieldValue");
   }
 
 }

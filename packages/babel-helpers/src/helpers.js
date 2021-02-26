@@ -1336,9 +1336,6 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
 
 helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
   export default function _classPrivateFieldDestructureSet(receiver, privateMap) {
-    if (privateMap === undefined) {
-      throw new TypeError("attempted to set private static field before its declaration");
-    }
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");
     }
@@ -1416,6 +1413,36 @@ helpers.classStaticPrivateMethodGet = helper("7.3.2")`
 helpers.classStaticPrivateMethodSet = helper("7.3.2")`
   export default function _classStaticPrivateMethodSet() {
     throw new TypeError("attempted to set read only static private field");
+  }
+`;
+
+helpers.classStaticPrivateFieldDestructureSet = helper("7.99.0")`
+  export default function _classStaticPrivateFieldDestructureSet(receiver, classConstructor, descriptor) {
+    if (receiver !== classConstructor) {
+      throw new TypeError("Private static access of wrong provenance");
+    }
+    if (descriptor === undefined) {
+      throw new TypeError("attempted to set private static field before its declaration");
+    }
+    if (descriptor.set) {
+      if (!("__destrObj" in descriptor)) {
+        descriptor.__destrObj = {
+          set value(v) {
+            descriptor.set.call(receiver, v)
+          },
+        };
+      }
+      return descriptor.__destrObj;
+    } else {
+      if (!descriptor.writable) {
+        // This should only throw in strict mode, but class bodies are
+        // always strict and private fields can only be used inside
+        // class bodies.
+        throw new TypeError("attempted to set read only private field");
+      }
+
+      return descriptor;
+    }
   }
 `;
 

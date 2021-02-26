@@ -318,9 +318,19 @@ const privateNameHandlerSpec = {
   },
 
   destructureSet(member) {
-    const { privateNamesMap, file } = this;
+    const { classRef, privateNamesMap, file } = this;
     const { name } = member.node.property.id;
-    const { id } = privateNamesMap.get(name);
+    const { id, static: isStatic } = privateNamesMap.get(name);
+    if (isStatic) {
+      return t.memberExpression(
+        t.callExpression(
+          file.addHelper("classStaticPrivateFieldDestructureSet"),
+          [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id)],
+        ),
+        t.identifier("value"),
+      );
+    }
+
     return t.memberExpression(
       t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
         this.receiver(member),

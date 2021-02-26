@@ -7,6 +7,7 @@ class Cl {
 
   constructor() {
     expect(() => this.#privateFieldValue = 1).toThrow(TypeError);
+    expect(() => ([this.#privateFieldValue] = [1])).toThrow(TypeError);
   }
 }
 
