@@ -213,24 +213,43 @@ expect(2 ** 3).toBe(8);
 expect(3 * 2 ** 3).toBe(24);
 ```
 
-If you need to check for an error that is thrown you can add to the `options.json`
+##### `options.json` settings
 
-```js
-// options.json example
-{
-  "plugins": [["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
-  "throws": "@babel/plugin-proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
-}
-```
+Other than normal Babel options, `options.json` can contain other properties to configure the test behavior:
 
-If the test requires a minimum Node version, you can add `minNodeVersion` (must be in semver format).
+- **`throws`** (string)
 
-```js
-// options.json example
-{
-  "minNodeVersion": "5.0.0"
-}
-```
+  If you need to check for an error that is thrown you can add to the `options.json`
+
+  ```jsonc
+  // options.json example
+  {
+    "plugins": [["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+    "throws": "@babel/plugin-proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+  }
+  ```
+
+- **`minNodeVersion`** (string)
+
+  If the test requires a minimum Node version, you can add `minNodeVersion` (must be in semver format).
+
+  ```jsonc
+  // options.json example
+  {
+    "minNodeVersion": "5.0.0"
+  }
+  ```
+
+- **`externalHelpers`** (boolean)
+
+  By default, all the tests run with the [`@babel/plugin-external-helpers`](https://babel.dev/docs/en/babel-plugin-external-helpers) enabled. You can disable this behavior with
+
+  ```jsonc
+  // options.json example
+  {
+    "externalHelpers": false
+  }
+  ```
 
 #### `@babel/parser` (babylon)
 

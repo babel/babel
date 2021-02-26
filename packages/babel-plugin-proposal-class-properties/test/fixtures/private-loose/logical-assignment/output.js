@@ -1,14 +1,8 @@
-function _classPrivateFieldLooseBase(receiver, privateKey) { if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) { throw new TypeError("attempted to use private field on non-instance"); } return receiver; }
+var _nullish = babelHelpers.classPrivateFieldLooseKey("nullish");
 
-var id = 0;
+var _and = babelHelpers.classPrivateFieldLooseKey("and");
 
-function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
-
-var _nullish = _classPrivateFieldLooseKey("nullish");
-
-var _and = _classPrivateFieldLooseKey("and");
-
-var _or = _classPrivateFieldLooseKey("or");
+var _or = babelHelpers.classPrivateFieldLooseKey("or");
 
 class Foo {
   constructor() {
@@ -31,12 +25,12 @@ class Foo {
   }
 
   test() {
-    var _classPrivateFieldLoo, _classPrivateFieldLoo2, _classPrivateFieldLoo3, _classPrivateFieldLoo4;
+    var _babelHelpers$classPr, _babelHelpers$classPr2, _babelHelpers$classPr3, _babelHelpers$classPr4;
 
-    (_classPrivateFieldLoo = _classPrivateFieldLooseBase(this, _nullish))[_nullish] ?? (_classPrivateFieldLoo[_nullish] = 42);
-    (_classPrivateFieldLoo2 = _classPrivateFieldLooseBase(this, _and))[_and] && (_classPrivateFieldLoo2[_and] = 0);
-    (_classPrivateFieldLoo3 = _classPrivateFieldLooseBase(this, _or))[_or] || (_classPrivateFieldLoo3[_or] = 0);
-    (_classPrivateFieldLoo4 = _classPrivateFieldLooseBase(this.self(), _nullish))[_nullish] ?? (_classPrivateFieldLoo4[_nullish] = 42);
+    (_babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _nullish))[_nullish] ?? (_babelHelpers$classPr[_nullish] = 42);
+    (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldLooseBase(this, _and))[_and] && (_babelHelpers$classPr2[_and] = 0);
+    (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldLooseBase(this, _or))[_or] || (_babelHelpers$classPr3[_or] = 0);
+    (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldLooseBase(this.self(), _nullish))[_nullish] ?? (_babelHelpers$classPr4[_nullish] = 42);
   }
 
 }

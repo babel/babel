@@ -1,10 +1,12 @@
 {
   "sourceType": "module",
   "plugins": [
-    "external-helpers",
-    ["transform-modules-amd", {
-      "moduleIds": true,
-      "moduleId": "my custom module name"
-    }]
+    [
+      "transform-modules-amd",
+      {
+        "moduleIds": true,
+        "moduleId": "my custom module name"
+      }
+    ]
   ]
 }

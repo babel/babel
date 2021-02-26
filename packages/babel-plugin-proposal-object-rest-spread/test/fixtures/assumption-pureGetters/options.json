@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0"}],
-    "proposal-object-rest-spread"
-  ],
+  "plugins": ["proposal-object-rest-spread"],
   "assumptions": {
     "pureGetters": true
   }

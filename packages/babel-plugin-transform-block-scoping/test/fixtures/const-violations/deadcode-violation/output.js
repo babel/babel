@@ -1,7 +1,5 @@
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
-
 (function () {
   var a = "foo";
-  if (false) a = (_readOnlyError("a"), "false");
+  if (false) a = (babelHelpers.readOnlyError("a"), "false");
   return a;
 })();

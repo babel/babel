@@ -1,3 +1,4 @@
 {
+  "externalHelpers": false,
   "os": ["linux", "darwin"]
 }

@@ -1,7 +1,3 @@
 {
-  "plugins": [
-    "transform-arrow-functions",
-    "transform-async-to-generator",
-    "external-helpers"
-  ]
+  "plugins": ["transform-arrow-functions", "transform-async-to-generator"]
 }

@@ -1,7 +1,6 @@
 {
   "plugins": [
     "proposal-dynamic-import",
-    ["transform-modules-commonjs", { "noInterop": true }],
-    "external-helpers"
+    ["transform-modules-commonjs", { "noInterop": true }]
   ]
 }

@@ -1,8 +1,4 @@
-var id = 0;
-
-function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
-
-var _privateMethod = _classPrivateFieldLooseKey("privateMethod");
+var _privateMethod = babelHelpers.classPrivateFieldLooseKey("privateMethod");
 
 class X {
   constructor() {

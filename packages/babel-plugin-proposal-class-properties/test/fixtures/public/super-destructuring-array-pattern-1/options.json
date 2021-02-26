@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "external-helpers",
     "proposal-class-properties",
     "transform-classes",
     "transform-block-scoping",

@@ -1,4 +1,4 @@
 {
   "presets": [["env", { "loose": true }]],
-  "plugins": ["transform-flow-comments", "external-helpers"]
+  "plugins": ["transform-flow-comments"]
 }

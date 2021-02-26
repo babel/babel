@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0"}],
-    ["proposal-object-rest-spread", { "useBuiltIns": true }]
-  ],
+  "plugins": [["proposal-object-rest-spread", { "useBuiltIns": true }]],
   "assumptions": {
     "setSpreadProperties": true
   }

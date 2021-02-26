@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    "proposal-class-properties"
-  ],
+  "plugins": ["proposal-class-properties"],
   "presets": ["env"],
   "assumptions": {
     "setPublicClassFields": true

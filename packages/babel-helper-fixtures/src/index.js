@@ -128,6 +128,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
         ? taskOpts.BABEL_8_BREAKING === false
         : taskOpts.BABEL_8_BREAKING === true),
     options: taskOpts,
+    externalHelpers: taskOpts.externalHelpers ?? true,
     validateLogs: taskOpts.validateLogs,
     ignoreOutput: taskOpts.ignoreOutput,
     stdout: { loc: stdoutLoc, code: readFile(stdoutLoc) },
@@ -254,6 +255,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   // Delete to avoid option validation error
   delete test.options.validateLogs;
   delete test.options.ignoreOutput;
+  delete test.options.externalHelpers;
 }
 
 function wrapPackagesArray(type, names, optionsDir) {

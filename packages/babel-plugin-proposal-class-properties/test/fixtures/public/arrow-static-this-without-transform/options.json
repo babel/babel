@@ -1,7 +1,3 @@
 {
-  "plugins": [
-    "external-helpers",
-    "transform-arrow-functions",
-    "syntax-class-properties"
-  ]
+  "plugins": ["transform-arrow-functions", "syntax-class-properties"]
 }

@@ -1,4 +1,5 @@
 {
+  "externalHelpers": false,
   "presets": [
     [
       "@babel/preset-env",

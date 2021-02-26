@@ -1,6 +1,4 @@
 {
-  "plugins": [
-    ["transform-modules-commonjs", { "lazy": true }],
-    "external-helpers"
-  ]
+  "externalHelpers": true,
+  "plugins": [["transform-modules-commonjs", { "lazy": true }]]
 }
