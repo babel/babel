@@ -202,6 +202,7 @@ new-version:
 	@echo "!!!!!!   Update classStaticPrivateFieldDestructureSet    !!!!!!"
 	@echo "!!!!!!   helper version in                               !!!!!!"
 	@echo "!!!!!!   packages/babel-helpers/src/helpers.js           !!!!!!"
+	@echo "!!!!!!   packages/babel-helper-create-class-features-plugin/src/fields.js"
 	@echo "!!!!!!                                                   !!!!!!"
 	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
