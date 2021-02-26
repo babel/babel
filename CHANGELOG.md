@@ -19,6 +19,30 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.8 (2021-02-26)
+
+#### :bug: Bug Fix
+* Other
+  * [#12909](https://github.com/babel/babel/pull/12909) chore: do not provide polyfills on bundling @babel/standalone ([@JLHwung](https://github.com/JLHwung))
+  * [#12891](https://github.com/babel/babel/pull/12891) fix(eslint-parser): merge input `estree` options ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-preset-env`
+  * [#12901](https://github.com/babel/babel/pull/12901) Fix Module not found: Error: Can't resolve 'core-js/modules/es6.array.concat.js' with compat-data@7.13.x ([@luxp](https://github.com/luxp))
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#12893](https://github.com/babel/babel/pull/12893) Allow `require()` of runtime helpers in Node.js 13.2-13.6 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-helper-create-class-features-plugin`
+  * [#12898](https://github.com/babel/babel/pull/12898) Do not warn for `loose` of class features in `preset-env` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-core`, `babel-helper-transform-fixture-test-runner`, `babel-register`
+  * [#12820](https://github.com/babel/babel/pull/12820) [internal] Keep the `.cjs` extension when compiling source files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime`
+  * [#12883](https://github.com/babel/babel/pull/12883) Improve `@babel/runtime` esm stability ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-plugin-proposal-object-rest-spread`
+  * [#12899](https://github.com/babel/babel/pull/12899) Skip `_extends` helper for `{…x}` with modern targets ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 ## v7.13.6 (2021-02-23)
 
