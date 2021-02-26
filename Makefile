@@ -196,6 +196,16 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 
 new-version:
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!   Update classStaticPrivateFieldDestructureSet    !!!!!!"
+	@echo "!!!!!!   helper version in                               !!!!!!"
+	@echo "!!!!!!   packages/babel-helpers/src/helpers.js           !!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@exit 1
 	git pull --rebase
 	$(YARN) release-tool version -f @babel/standalone
 
