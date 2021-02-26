@@ -19,733 +19,733 @@
   "exports": {
     "./helpers/typeof": [
       {
-        "node": "./helpers/typeof/index.js",
-        "import": "./helpers/typeof/_index.mjs",
-        "default": "./helpers/typeof/index.js"
+        "node": "./helpers/typeof.js",
+        "import": "./helpers/esm/typeof.js",
+        "default": "./helpers/typeof.js"
       },
-      "./helpers/typeof/index.js"
+      "./helpers/typeof.js"
     ],
-    "./helpers/esm/typeof": "./helpers/typeof/_index.mjs",
+    "./helpers/esm/typeof": "./helpers/esm/typeof.js",
     "./helpers/jsx": [
       {
-        "node": "./helpers/jsx/index.js",
-        "import": "./helpers/jsx/_index.mjs",
-        "default": "./helpers/jsx/index.js"
+        "node": "./helpers/jsx.js",
+        "import": "./helpers/esm/jsx.js",
+        "default": "./helpers/jsx.js"
       },
-      "./helpers/jsx/index.js"
+      "./helpers/jsx.js"
     ],
-    "./helpers/esm/jsx": "./helpers/jsx/_index.mjs",
+    "./helpers/esm/jsx": "./helpers/esm/jsx.js",
     "./helpers/asyncIterator": [
       {
-        "node": "./helpers/asyncIterator/index.js",
-        "import": "./helpers/asyncIterator/_index.mjs",
-        "default": "./helpers/asyncIterator/index.js"
+        "node": "./helpers/asyncIterator.js",
+        "import": "./helpers/esm/asyncIterator.js",
+        "default": "./helpers/asyncIterator.js"
       },
-      "./helpers/asyncIterator/index.js"
+      "./helpers/asyncIterator.js"
     ],
-    "./helpers/esm/asyncIterator": "./helpers/asyncIterator/_index.mjs",
+    "./helpers/esm/asyncIterator": "./helpers/esm/asyncIterator.js",
     "./helpers/AwaitValue": [
       {
-        "node": "./helpers/AwaitValue/index.js",
-        "import": "./helpers/AwaitValue/_index.mjs",
-        "default": "./helpers/AwaitValue/index.js"
+        "node": "./helpers/AwaitValue.js",
+        "import": "./helpers/esm/AwaitValue.js",
+        "default": "./helpers/AwaitValue.js"
       },
-      "./helpers/AwaitValue/index.js"
+      "./helpers/AwaitValue.js"
     ],
-    "./helpers/esm/AwaitValue": "./helpers/AwaitValue/_index.mjs",
+    "./helpers/esm/AwaitValue": "./helpers/esm/AwaitValue.js",
     "./helpers/AsyncGenerator": [
       {
-        "node": "./helpers/AsyncGenerator/index.js",
-        "import": "./helpers/AsyncGenerator/_index.mjs",
-        "default": "./helpers/AsyncGenerator/index.js"
+        "node": "./helpers/AsyncGenerator.js",
+        "import": "./helpers/esm/AsyncGenerator.js",
+        "default": "./helpers/AsyncGenerator.js"
       },
-      "./helpers/AsyncGenerator/index.js"
+      "./helpers/AsyncGenerator.js"
     ],
-    "./helpers/esm/AsyncGenerator": "./helpers/AsyncGenerator/_index.mjs",
+    "./helpers/esm/AsyncGenerator": "./helpers/esm/AsyncGenerator.js",
     "./helpers/wrapAsyncGenerator": [
       {
-        "node": "./helpers/wrapAsyncGenerator/index.js",
-        "import": "./helpers/wrapAsyncGenerator/_index.mjs",
-        "default": "./helpers/wrapAsyncGenerator/index.js"
+        "node": "./helpers/wrapAsyncGenerator.js",
+        "import": "./helpers/esm/wrapAsyncGenerator.js",
+        "default": "./helpers/wrapAsyncGenerator.js"
       },
-      "./helpers/wrapAsyncGenerator/index.js"
+      "./helpers/wrapAsyncGenerator.js"
     ],
-    "./helpers/esm/wrapAsyncGenerator": "./helpers/wrapAsyncGenerator/_index.mjs",
+    "./helpers/esm/wrapAsyncGenerator": "./helpers/esm/wrapAsyncGenerator.js",
     "./helpers/awaitAsyncGenerator": [
       {
-        "node": "./helpers/awaitAsyncGenerator/index.js",
-        "import": "./helpers/awaitAsyncGenerator/_index.mjs",
-        "default": "./helpers/awaitAsyncGenerator/index.js"
+        "node": "./helpers/awaitAsyncGenerator.js",
+        "import": "./helpers/esm/awaitAsyncGenerator.js",
+        "default": "./helpers/awaitAsyncGenerator.js"
       },
-      "./helpers/awaitAsyncGenerator/index.js"
+      "./helpers/awaitAsyncGenerator.js"
     ],
-    "./helpers/esm/awaitAsyncGenerator": "./helpers/awaitAsyncGenerator/_index.mjs",
+    "./helpers/esm/awaitAsyncGenerator": "./helpers/esm/awaitAsyncGenerator.js",
     "./helpers/asyncGeneratorDelegate": [
       {
-        "node": "./helpers/asyncGeneratorDelegate/index.js",
-        "import": "./helpers/asyncGeneratorDelegate/_index.mjs",
-        "default": "./helpers/asyncGeneratorDelegate/index.js"
+        "node": "./helpers/asyncGeneratorDelegate.js",
+        "import": "./helpers/esm/asyncGeneratorDelegate.js",
+        "default": "./helpers/asyncGeneratorDelegate.js"
       },
-      "./helpers/asyncGeneratorDelegate/index.js"
+      "./helpers/asyncGeneratorDelegate.js"
     ],
-    "./helpers/esm/asyncGeneratorDelegate": "./helpers/asyncGeneratorDelegate/_index.mjs",
+    "./helpers/esm/asyncGeneratorDelegate": "./helpers/esm/asyncGeneratorDelegate.js",
     "./helpers/asyncToGenerator": [
       {
-        "node": "./helpers/asyncToGenerator/index.js",
-        "import": "./helpers/asyncToGenerator/_index.mjs",
-        "default": "./helpers/asyncToGenerator/index.js"
+        "node": "./helpers/asyncToGenerator.js",
+        "import": "./helpers/esm/asyncToGenerator.js",
+        "default": "./helpers/asyncToGenerator.js"
       },
-      "./helpers/asyncToGenerator/index.js"
+      "./helpers/asyncToGenerator.js"
     ],
-    "./helpers/esm/asyncToGenerator": "./helpers/asyncToGenerator/_index.mjs",
+    "./helpers/esm/asyncToGenerator": "./helpers/esm/asyncToGenerator.js",
     "./helpers/classCallCheck": [
       {
-        "node": "./helpers/classCallCheck/index.js",
-        "import": "./helpers/classCallCheck/_index.mjs",
-        "default": "./helpers/classCallCheck/index.js"
+        "node": "./helpers/classCallCheck.js",
+        "import": "./helpers/esm/classCallCheck.js",
+        "default": "./helpers/classCallCheck.js"
       },
-      "./helpers/classCallCheck/index.js"
+      "./helpers/classCallCheck.js"
     ],
-    "./helpers/esm/classCallCheck": "./helpers/classCallCheck/_index.mjs",
+    "./helpers/esm/classCallCheck": "./helpers/esm/classCallCheck.js",
     "./helpers/createClass": [
       {
-        "node": "./helpers/createClass/index.js",
-        "import": "./helpers/createClass/_index.mjs",
-        "default": "./helpers/createClass/index.js"
+        "node": "./helpers/createClass.js",
+        "import": "./helpers/esm/createClass.js",
+        "default": "./helpers/createClass.js"
       },
-      "./helpers/createClass/index.js"
+      "./helpers/createClass.js"
     ],
-    "./helpers/esm/createClass": "./helpers/createClass/_index.mjs",
+    "./helpers/esm/createClass": "./helpers/esm/createClass.js",
     "./helpers/defineEnumerableProperties": [
       {
-        "node": "./helpers/defineEnumerableProperties/index.js",
-        "import": "./helpers/defineEnumerableProperties/_index.mjs",
-        "default": "./helpers/defineEnumerableProperties/index.js"
+        "node": "./helpers/defineEnumerableProperties.js",
+        "import": "./helpers/esm/defineEnumerableProperties.js",
+        "default": "./helpers/defineEnumerableProperties.js"
       },
-      "./helpers/defineEnumerableProperties/index.js"
+      "./helpers/defineEnumerableProperties.js"
     ],
-    "./helpers/esm/defineEnumerableProperties": "./helpers/defineEnumerableProperties/_index.mjs",
+    "./helpers/esm/defineEnumerableProperties": "./helpers/esm/defineEnumerableProperties.js",
     "./helpers/defaults": [
       {
-        "node": "./helpers/defaults/index.js",
-        "import": "./helpers/defaults/_index.mjs",
-        "default": "./helpers/defaults/index.js"
+        "node": "./helpers/defaults.js",
+        "import": "./helpers/esm/defaults.js",
+        "default": "./helpers/defaults.js"
       },
-      "./helpers/defaults/index.js"
+      "./helpers/defaults.js"
     ],
-    "./helpers/esm/defaults": "./helpers/defaults/_index.mjs",
+    "./helpers/esm/defaults": "./helpers/esm/defaults.js",
     "./helpers/defineProperty": [
       {
-        "node": "./helpers/defineProperty/index.js",
-        "import": "./helpers/defineProperty/_index.mjs",
-        "default": "./helpers/defineProperty/index.js"
+        "node": "./helpers/defineProperty.js",
+        "import": "./helpers/esm/defineProperty.js",
+        "default": "./helpers/defineProperty.js"
       },
-      "./helpers/defineProperty/index.js"
+      "./helpers/defineProperty.js"
     ],
-    "./helpers/esm/defineProperty": "./helpers/defineProperty/_index.mjs",
+    "./helpers/esm/defineProperty": "./helpers/esm/defineProperty.js",
     "./helpers/extends": [
       {
-        "node": "./helpers/extends/index.js",
-        "import": "./helpers/extends/_index.mjs",
-        "default": "./helpers/extends/index.js"
+        "node": "./helpers/extends.js",
+        "import": "./helpers/esm/extends.js",
+        "default": "./helpers/extends.js"
       },
-      "./helpers/extends/index.js"
+      "./helpers/extends.js"
     ],
-    "./helpers/esm/extends": "./helpers/extends/_index.mjs",
+    "./helpers/esm/extends": "./helpers/esm/extends.js",
     "./helpers/objectSpread": [
       {
-        "node": "./helpers/objectSpread/index.js",
-        "import": "./helpers/objectSpread/_index.mjs",
-        "default": "./helpers/objectSpread/index.js"
+        "node": "./helpers/objectSpread.js",
+        "import": "./helpers/esm/objectSpread.js",
+        "default": "./helpers/objectSpread.js"
       },
-      "./helpers/objectSpread/index.js"
+      "./helpers/objectSpread.js"
     ],
-    "./helpers/esm/objectSpread": "./helpers/objectSpread/_index.mjs",
+    "./helpers/esm/objectSpread": "./helpers/esm/objectSpread.js",
     "./helpers/objectSpread2": [
       {
-        "node": "./helpers/objectSpread2/index.js",
-        "import": "./helpers/objectSpread2/_index.mjs",
-        "default": "./helpers/objectSpread2/index.js"
+        "node": "./helpers/objectSpread2.js",
+        "import": "./helpers/esm/objectSpread2.js",
+        "default": "./helpers/objectSpread2.js"
       },
-      "./helpers/objectSpread2/index.js"
+      "./helpers/objectSpread2.js"
     ],
-    "./helpers/esm/objectSpread2": "./helpers/objectSpread2/_index.mjs",
+    "./helpers/esm/objectSpread2": "./helpers/esm/objectSpread2.js",
     "./helpers/inherits": [
       {
-        "node": "./helpers/inherits/index.js",
-        "import": "./helpers/inherits/_index.mjs",
-        "default": "./helpers/inherits/index.js"
+        "node": "./helpers/inherits.js",
+        "import": "./helpers/esm/inherits.js",
+        "default": "./helpers/inherits.js"
       },
-      "./helpers/inherits/index.js"
+      "./helpers/inherits.js"
     ],
-    "./helpers/esm/inherits": "./helpers/inherits/_index.mjs",
+    "./helpers/esm/inherits": "./helpers/esm/inherits.js",
     "./helpers/inheritsLoose": [
       {
-        "node": "./helpers/inheritsLoose/index.js",
-        "import": "./helpers/inheritsLoose/_index.mjs",
-        "default": "./helpers/inheritsLoose/index.js"
+        "node": "./helpers/inheritsLoose.js",
+        "import": "./helpers/esm/inheritsLoose.js",
+        "default": "./helpers/inheritsLoose.js"
       },
-      "./helpers/inheritsLoose/index.js"
+      "./helpers/inheritsLoose.js"
     ],
-    "./helpers/esm/inheritsLoose": "./helpers/inheritsLoose/_index.mjs",
+    "./helpers/esm/inheritsLoose": "./helpers/esm/inheritsLoose.js",
     "./helpers/getPrototypeOf": [
       {
-        "node": "./helpers/getPrototypeOf/index.js",
-        "import": "./helpers/getPrototypeOf/_index.mjs",
-        "default": "./helpers/getPrototypeOf/index.js"
+        "node": "./helpers/getPrototypeOf.js",
+        "import": "./helpers/esm/getPrototypeOf.js",
+        "default": "./helpers/getPrototypeOf.js"
       },
-      "./helpers/getPrototypeOf/index.js"
+      "./helpers/getPrototypeOf.js"
     ],
-    "./helpers/esm/getPrototypeOf": "./helpers/getPrototypeOf/_index.mjs",
+    "./helpers/esm/getPrototypeOf": "./helpers/esm/getPrototypeOf.js",
     "./helpers/setPrototypeOf": [
       {
-        "node": "./helpers/setPrototypeOf/index.js",
-        "import": "./helpers/setPrototypeOf/_index.mjs",
-        "default": "./helpers/setPrototypeOf/index.js"
+        "node": "./helpers/setPrototypeOf.js",
+        "import": "./helpers/esm/setPrototypeOf.js",
+        "default": "./helpers/setPrototypeOf.js"
       },
-      "./helpers/setPrototypeOf/index.js"
+      "./helpers/setPrototypeOf.js"
     ],
-    "./helpers/esm/setPrototypeOf": "./helpers/setPrototypeOf/_index.mjs",
+    "./helpers/esm/setPrototypeOf": "./helpers/esm/setPrototypeOf.js",
     "./helpers/isNativeReflectConstruct": [
       {
-        "node": "./helpers/isNativeReflectConstruct/index.js",
-        "import": "./helpers/isNativeReflectConstruct/_index.mjs",
-        "default": "./helpers/isNativeReflectConstruct/index.js"
+        "node": "./helpers/isNativeReflectConstruct.js",
+        "import": "./helpers/esm/isNativeReflectConstruct.js",
+        "default": "./helpers/isNativeReflectConstruct.js"
       },
-      "./helpers/isNativeReflectConstruct/index.js"
+      "./helpers/isNativeReflectConstruct.js"
     ],
-    "./helpers/esm/isNativeReflectConstruct": "./helpers/isNativeReflectConstruct/_index.mjs",
+    "./helpers/esm/isNativeReflectConstruct": "./helpers/esm/isNativeReflectConstruct.js",
     "./helpers/construct": [
       {
-        "node": "./helpers/construct/index.js",
-        "import": "./helpers/construct/_index.mjs",
-        "default": "./helpers/construct/index.js"
+        "node": "./helpers/construct.js",
+        "import": "./helpers/esm/construct.js",
+        "default": "./helpers/construct.js"
       },
-      "./helpers/construct/index.js"
+      "./helpers/construct.js"
     ],
-    "./helpers/esm/construct": "./helpers/construct/_index.mjs",
+    "./helpers/esm/construct": "./helpers/esm/construct.js",
     "./helpers/isNativeFunction": [
       {
-        "node": "./helpers/isNativeFunction/index.js",
-        "import": "./helpers/isNativeFunction/_index.mjs",
-        "default": "./helpers/isNativeFunction/index.js"
+        "node": "./helpers/isNativeFunction.js",
+        "import": "./helpers/esm/isNativeFunction.js",
+        "default": "./helpers/isNativeFunction.js"
       },
-      "./helpers/isNativeFunction/index.js"
+      "./helpers/isNativeFunction.js"
     ],
-    "./helpers/esm/isNativeFunction": "./helpers/isNativeFunction/_index.mjs",
+    "./helpers/esm/isNativeFunction": "./helpers/esm/isNativeFunction.js",
     "./helpers/wrapNativeSuper": [
       {
-        "node": "./helpers/wrapNativeSuper/index.js",
-        "import": "./helpers/wrapNativeSuper/_index.mjs",
-        "default": "./helpers/wrapNativeSuper/index.js"
+        "node": "./helpers/wrapNativeSuper.js",
+        "import": "./helpers/esm/wrapNativeSuper.js",
+        "default": "./helpers/wrapNativeSuper.js"
       },
-      "./helpers/wrapNativeSuper/index.js"
+      "./helpers/wrapNativeSuper.js"
     ],
-    "./helpers/esm/wrapNativeSuper": "./helpers/wrapNativeSuper/_index.mjs",
+    "./helpers/esm/wrapNativeSuper": "./helpers/esm/wrapNativeSuper.js",
     "./helpers/instanceof": [
       {
-        "node": "./helpers/instanceof/index.js",
-        "import": "./helpers/instanceof/_index.mjs",
-        "default": "./helpers/instanceof/index.js"
+        "node": "./helpers/instanceof.js",
+        "import": "./helpers/esm/instanceof.js",
+        "default": "./helpers/instanceof.js"
       },
-      "./helpers/instanceof/index.js"
+      "./helpers/instanceof.js"
     ],
-    "./helpers/esm/instanceof": "./helpers/instanceof/_index.mjs",
+    "./helpers/esm/instanceof": "./helpers/esm/instanceof.js",
     "./helpers/interopRequireDefault": [
       {
-        "node": "./helpers/interopRequireDefault/index.js",
-        "import": "./helpers/interopRequireDefault/_index.mjs",
-        "default": "./helpers/interopRequireDefault/index.js"
+        "node": "./helpers/interopRequireDefault.js",
+        "import": "./helpers/esm/interopRequireDefault.js",
+        "default": "./helpers/interopRequireDefault.js"
       },
-      "./helpers/interopRequireDefault/index.js"
+      "./helpers/interopRequireDefault.js"
     ],
-    "./helpers/esm/interopRequireDefault": "./helpers/interopRequireDefault/_index.mjs",
+    "./helpers/esm/interopRequireDefault": "./helpers/esm/interopRequireDefault.js",
     "./helpers/interopRequireWildcard": [
       {
-        "node": "./helpers/interopRequireWildcard/index.js",
-        "import": "./helpers/interopRequireWildcard/_index.mjs",
-        "default": "./helpers/interopRequireWildcard/index.js"
+        "node": "./helpers/interopRequireWildcard.js",
+        "import": "./helpers/esm/interopRequireWildcard.js",
+        "default": "./helpers/interopRequireWildcard.js"
       },
-      "./helpers/interopRequireWildcard/index.js"
+      "./helpers/interopRequireWildcard.js"
     ],
-    "./helpers/esm/interopRequireWildcard": "./helpers/interopRequireWildcard/_index.mjs",
+    "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
     "./helpers/newArrowCheck": [
       {
-        "node": "./helpers/newArrowCheck/index.js",
-        "import": "./helpers/newArrowCheck/_index.mjs",
-        "default": "./helpers/newArrowCheck/index.js"
+        "node": "./helpers/newArrowCheck.js",
+        "import": "./helpers/esm/newArrowCheck.js",
+        "default": "./helpers/newArrowCheck.js"
       },
-      "./helpers/newArrowCheck/index.js"
+      "./helpers/newArrowCheck.js"
     ],
-    "./helpers/esm/newArrowCheck": "./helpers/newArrowCheck/_index.mjs",
+    "./helpers/esm/newArrowCheck": "./helpers/esm/newArrowCheck.js",
     "./helpers/objectDestructuringEmpty": [
       {
-        "node": "./helpers/objectDestructuringEmpty/index.js",
-        "import": "./helpers/objectDestructuringEmpty/_index.mjs",
-        "default": "./helpers/objectDestructuringEmpty/index.js"
+        "node": "./helpers/objectDestructuringEmpty.js",
+        "import": "./helpers/esm/objectDestructuringEmpty.js",
+        "default": "./helpers/objectDestructuringEmpty.js"
       },
-      "./helpers/objectDestructuringEmpty/index.js"
+      "./helpers/objectDestructuringEmpty.js"
     ],
-    "./helpers/esm/objectDestructuringEmpty": "./helpers/objectDestructuringEmpty/_index.mjs",
+    "./helpers/esm/objectDestructuringEmpty": "./helpers/esm/objectDestructuringEmpty.js",
     "./helpers/objectWithoutPropertiesLoose": [
       {
-        "node": "./helpers/objectWithoutPropertiesLoose/index.js",
-        "import": "./helpers/objectWithoutPropertiesLoose/_index.mjs",
-        "default": "./helpers/objectWithoutPropertiesLoose/index.js"
+        "node": "./helpers/objectWithoutPropertiesLoose.js",
+        "import": "./helpers/esm/objectWithoutPropertiesLoose.js",
+        "default": "./helpers/objectWithoutPropertiesLoose.js"
       },
-      "./helpers/objectWithoutPropertiesLoose/index.js"
+      "./helpers/objectWithoutPropertiesLoose.js"
     ],
-    "./helpers/esm/objectWithoutPropertiesLoose": "./helpers/objectWithoutPropertiesLoose/_index.mjs",
+    "./helpers/esm/objectWithoutPropertiesLoose": "./helpers/esm/objectWithoutPropertiesLoose.js",
     "./helpers/objectWithoutProperties": [
       {
-        "node": "./helpers/objectWithoutProperties/index.js",
-        "import": "./helpers/objectWithoutProperties/_index.mjs",
-        "default": "./helpers/objectWithoutProperties/index.js"
+        "node": "./helpers/objectWithoutProperties.js",
+        "import": "./helpers/esm/objectWithoutProperties.js",
+        "default": "./helpers/objectWithoutProperties.js"
       },
-      "./helpers/objectWithoutProperties/index.js"
+      "./helpers/objectWithoutProperties.js"
     ],
-    "./helpers/esm/objectWithoutProperties": "./helpers/objectWithoutProperties/_index.mjs",
+    "./helpers/esm/objectWithoutProperties": "./helpers/esm/objectWithoutProperties.js",
     "./helpers/assertThisInitialized": [
       {
-        "node": "./helpers/assertThisInitialized/index.js",
-        "import": "./helpers/assertThisInitialized/_index.mjs",
-        "default": "./helpers/assertThisInitialized/index.js"
+        "node": "./helpers/assertThisInitialized.js",
+        "import": "./helpers/esm/assertThisInitialized.js",
+        "default": "./helpers/assertThisInitialized.js"
       },
-      "./helpers/assertThisInitialized/index.js"
+      "./helpers/assertThisInitialized.js"
     ],
-    "./helpers/esm/assertThisInitialized": "./helpers/assertThisInitialized/_index.mjs",
+    "./helpers/esm/assertThisInitialized": "./helpers/esm/assertThisInitialized.js",
     "./helpers/possibleConstructorReturn": [
       {
-        "node": "./helpers/possibleConstructorReturn/index.js",
-        "import": "./helpers/possibleConstructorReturn/_index.mjs",
-        "default": "./helpers/possibleConstructorReturn/index.js"
+        "node": "./helpers/possibleConstructorReturn.js",
+        "import": "./helpers/esm/possibleConstructorReturn.js",
+        "default": "./helpers/possibleConstructorReturn.js"
       },
-      "./helpers/possibleConstructorReturn/index.js"
+      "./helpers/possibleConstructorReturn.js"
     ],
-    "./helpers/esm/possibleConstructorReturn": "./helpers/possibleConstructorReturn/_index.mjs",
+    "./helpers/esm/possibleConstructorReturn": "./helpers/esm/possibleConstructorReturn.js",
     "./helpers/createSuper": [
       {
-        "node": "./helpers/createSuper/index.js",
-        "import": "./helpers/createSuper/_index.mjs",
-        "default": "./helpers/createSuper/index.js"
+        "node": "./helpers/createSuper.js",
+        "import": "./helpers/esm/createSuper.js",
+        "default": "./helpers/createSuper.js"
       },
-      "./helpers/createSuper/index.js"
+      "./helpers/createSuper.js"
     ],
-    "./helpers/esm/createSuper": "./helpers/createSuper/_index.mjs",
+    "./helpers/esm/createSuper": "./helpers/esm/createSuper.js",
     "./helpers/superPropBase": [
       {
-        "node": "./helpers/superPropBase/index.js",
-        "import": "./helpers/superPropBase/_index.mjs",
-        "default": "./helpers/superPropBase/index.js"
+        "node": "./helpers/superPropBase.js",
+        "import": "./helpers/esm/superPropBase.js",
+        "default": "./helpers/superPropBase.js"
       },
-      "./helpers/superPropBase/index.js"
+      "./helpers/superPropBase.js"
     ],
-    "./helpers/esm/superPropBase": "./helpers/superPropBase/_index.mjs",
+    "./helpers/esm/superPropBase": "./helpers/esm/superPropBase.js",
     "./helpers/get": [
       {
-        "node": "./helpers/get/index.js",
-        "import": "./helpers/get/_index.mjs",
-        "default": "./helpers/get/index.js"
+        "node": "./helpers/get.js",
+        "import": "./helpers/esm/get.js",
+        "default": "./helpers/get.js"
       },
-      "./helpers/get/index.js"
+      "./helpers/get.js"
     ],
-    "./helpers/esm/get": "./helpers/get/_index.mjs",
+    "./helpers/esm/get": "./helpers/esm/get.js",
     "./helpers/set": [
       {
-        "node": "./helpers/set/index.js",
-        "import": "./helpers/set/_index.mjs",
-        "default": "./helpers/set/index.js"
+        "node": "./helpers/set.js",
+        "import": "./helpers/esm/set.js",
+        "default": "./helpers/set.js"
       },
-      "./helpers/set/index.js"
+      "./helpers/set.js"
     ],
-    "./helpers/esm/set": "./helpers/set/_index.mjs",
+    "./helpers/esm/set": "./helpers/esm/set.js",
     "./helpers/taggedTemplateLiteral": [
       {
-        "node": "./helpers/taggedTemplateLiteral/index.js",
-        "import": "./helpers/taggedTemplateLiteral/_index.mjs",
-        "default": "./helpers/taggedTemplateLiteral/index.js"
+        "node": "./helpers/taggedTemplateLiteral.js",
+        "import": "./helpers/esm/taggedTemplateLiteral.js",
+        "default": "./helpers/taggedTemplateLiteral.js"
       },
-      "./helpers/taggedTemplateLiteral/index.js"
+      "./helpers/taggedTemplateLiteral.js"
     ],
-    "./helpers/esm/taggedTemplateLiteral": "./helpers/taggedTemplateLiteral/_index.mjs",
+    "./helpers/esm/taggedTemplateLiteral": "./helpers/esm/taggedTemplateLiteral.js",
     "./helpers/taggedTemplateLiteralLoose": [
       {
-        "node": "./helpers/taggedTemplateLiteralLoose/index.js",
-        "import": "./helpers/taggedTemplateLiteralLoose/_index.mjs",
-        "default": "./helpers/taggedTemplateLiteralLoose/index.js"
+        "node": "./helpers/taggedTemplateLiteralLoose.js",
+        "import": "./helpers/esm/taggedTemplateLiteralLoose.js",
+        "default": "./helpers/taggedTemplateLiteralLoose.js"
       },
-      "./helpers/taggedTemplateLiteralLoose/index.js"
+      "./helpers/taggedTemplateLiteralLoose.js"
     ],
-    "./helpers/esm/taggedTemplateLiteralLoose": "./helpers/taggedTemplateLiteralLoose/_index.mjs",
+    "./helpers/esm/taggedTemplateLiteralLoose": "./helpers/esm/taggedTemplateLiteralLoose.js",
     "./helpers/readOnlyError": [
       {
-        "node": "./helpers/readOnlyError/index.js",
-        "import": "./helpers/readOnlyError/_index.mjs",
-        "default": "./helpers/readOnlyError/index.js"
+        "node": "./helpers/readOnlyError.js",
+        "import": "./helpers/esm/readOnlyError.js",
+        "default": "./helpers/readOnlyError.js"
       },
-      "./helpers/readOnlyError/index.js"
+      "./helpers/readOnlyError.js"
     ],
-    "./helpers/esm/readOnlyError": "./helpers/readOnlyError/_index.mjs",
+    "./helpers/esm/readOnlyError": "./helpers/esm/readOnlyError.js",
     "./helpers/writeOnlyError": [
       {
-        "node": "./helpers/writeOnlyError/index.js",
-        "import": "./helpers/writeOnlyError/_index.mjs",
-        "default": "./helpers/writeOnlyError/index.js"
+        "node": "./helpers/writeOnlyError.js",
+        "import": "./helpers/esm/writeOnlyError.js",
+        "default": "./helpers/writeOnlyError.js"
       },
-      "./helpers/writeOnlyError/index.js"
+      "./helpers/writeOnlyError.js"
     ],
-    "./helpers/esm/writeOnlyError": "./helpers/writeOnlyError/_index.mjs",
+    "./helpers/esm/writeOnlyError": "./helpers/esm/writeOnlyError.js",
     "./helpers/classNameTDZError": [
       {
-        "node": "./helpers/classNameTDZError/index.js",
-        "import": "./helpers/classNameTDZError/_index.mjs",
-        "default": "./helpers/classNameTDZError/index.js"
+        "node": "./helpers/classNameTDZError.js",
+        "import": "./helpers/esm/classNameTDZError.js",
+        "default": "./helpers/classNameTDZError.js"
       },
-      "./helpers/classNameTDZError/index.js"
+      "./helpers/classNameTDZError.js"
     ],
-    "./helpers/esm/classNameTDZError": "./helpers/classNameTDZError/_index.mjs",
+    "./helpers/esm/classNameTDZError": "./helpers/esm/classNameTDZError.js",
     "./helpers/temporalUndefined": [
       {
-        "node": "./helpers/temporalUndefined/index.js",
-        "import": "./helpers/temporalUndefined/_index.mjs",
-        "default": "./helpers/temporalUndefined/index.js"
+        "node": "./helpers/temporalUndefined.js",
+        "import": "./helpers/esm/temporalUndefined.js",
+        "default": "./helpers/temporalUndefined.js"
       },
-      "./helpers/temporalUndefined/index.js"
+      "./helpers/temporalUndefined.js"
     ],
-    "./helpers/esm/temporalUndefined": "./helpers/temporalUndefined/_index.mjs",
+    "./helpers/esm/temporalUndefined": "./helpers/esm/temporalUndefined.js",
     "./helpers/tdz": [
       {
-        "node": "./helpers/tdz/index.js",
-        "import": "./helpers/tdz/_index.mjs",
-        "default": "./helpers/tdz/index.js"
+        "node": "./helpers/tdz.js",
+        "import": "./helpers/esm/tdz.js",
+        "default": "./helpers/tdz.js"
       },
-      "./helpers/tdz/index.js"
+      "./helpers/tdz.js"
     ],
-    "./helpers/esm/tdz": "./helpers/tdz/_index.mjs",
+    "./helpers/esm/tdz": "./helpers/esm/tdz.js",
     "./helpers/temporalRef": [
       {
-        "node": "./helpers/temporalRef/index.js",
-        "import": "./helpers/temporalRef/_index.mjs",
-        "default": "./helpers/temporalRef/index.js"
+        "node": "./helpers/temporalRef.js",
+        "import": "./helpers/esm/temporalRef.js",
+        "default": "./helpers/temporalRef.js"
       },
-      "./helpers/temporalRef/index.js"
+      "./helpers/temporalRef.js"
     ],
-    "./helpers/esm/temporalRef": "./helpers/temporalRef/_index.mjs",
+    "./helpers/esm/temporalRef": "./helpers/esm/temporalRef.js",
     "./helpers/slicedToArray": [
       {
-        "node": "./helpers/slicedToArray/index.js",
-        "import": "./helpers/slicedToArray/_index.mjs",
-        "default": "./helpers/slicedToArray/index.js"
+        "node": "./helpers/slicedToArray.js",
+        "import": "./helpers/esm/slicedToArray.js",
+        "default": "./helpers/slicedToArray.js"
       },
-      "./helpers/slicedToArray/index.js"
+      "./helpers/slicedToArray.js"
     ],
-    "./helpers/esm/slicedToArray": "./helpers/slicedToArray/_index.mjs",
+    "./helpers/esm/slicedToArray": "./helpers/esm/slicedToArray.js",
     "./helpers/slicedToArrayLoose": [
       {
-        "node": "./helpers/slicedToArrayLoose/index.js",
-        "import": "./helpers/slicedToArrayLoose/_index.mjs",
-        "default": "./helpers/slicedToArrayLoose/index.js"
+        "node": "./helpers/slicedToArrayLoose.js",
+        "import": "./helpers/esm/slicedToArrayLoose.js",
+        "default": "./helpers/slicedToArrayLoose.js"
       },
-      "./helpers/slicedToArrayLoose/index.js"
+      "./helpers/slicedToArrayLoose.js"
     ],
-    "./helpers/esm/slicedToArrayLoose": "./helpers/slicedToArrayLoose/_index.mjs",
+    "./helpers/esm/slicedToArrayLoose": "./helpers/esm/slicedToArrayLoose.js",
     "./helpers/toArray": [
       {
-        "node": "./helpers/toArray/index.js",
-        "import": "./helpers/toArray/_index.mjs",
-        "default": "./helpers/toArray/index.js"
+        "node": "./helpers/toArray.js",
+        "import": "./helpers/esm/toArray.js",
+        "default": "./helpers/toArray.js"
       },
-      "./helpers/toArray/index.js"
+      "./helpers/toArray.js"
     ],
-    "./helpers/esm/toArray": "./helpers/toArray/_index.mjs",
+    "./helpers/esm/toArray": "./helpers/esm/toArray.js",
     "./helpers/toConsumableArray": [
       {
-        "node": "./helpers/toConsumableArray/index.js",
-        "import": "./helpers/toConsumableArray/_index.mjs",
-        "default": "./helpers/toConsumableArray/index.js"
+        "node": "./helpers/toConsumableArray.js",
+        "import": "./helpers/esm/toConsumableArray.js",
+        "default": "./helpers/toConsumableArray.js"
       },
-      "./helpers/toConsumableArray/index.js"
+      "./helpers/toConsumableArray.js"
     ],
-    "./helpers/esm/toConsumableArray": "./helpers/toConsumableArray/_index.mjs",
+    "./helpers/esm/toConsumableArray": "./helpers/esm/toConsumableArray.js",
     "./helpers/arrayWithoutHoles": [
       {
-        "node": "./helpers/arrayWithoutHoles/index.js",
-        "import": "./helpers/arrayWithoutHoles/_index.mjs",
-        "default": "./helpers/arrayWithoutHoles/index.js"
+        "node": "./helpers/arrayWithoutHoles.js",
+        "import": "./helpers/esm/arrayWithoutHoles.js",
+        "default": "./helpers/arrayWithoutHoles.js"
       },
-      "./helpers/arrayWithoutHoles/index.js"
+      "./helpers/arrayWithoutHoles.js"
     ],
-    "./helpers/esm/arrayWithoutHoles": "./helpers/arrayWithoutHoles/_index.mjs",
+    "./helpers/esm/arrayWithoutHoles": "./helpers/esm/arrayWithoutHoles.js",
     "./helpers/arrayWithHoles": [
       {
-        "node": "./helpers/arrayWithHoles/index.js",
-        "import": "./helpers/arrayWithHoles/_index.mjs",
-        "default": "./helpers/arrayWithHoles/index.js"
+        "node": "./helpers/arrayWithHoles.js",
+        "import": "./helpers/esm/arrayWithHoles.js",
+        "default": "./helpers/arrayWithHoles.js"
       },
-      "./helpers/arrayWithHoles/index.js"
+      "./helpers/arrayWithHoles.js"
     ],
-    "./helpers/esm/arrayWithHoles": "./helpers/arrayWithHoles/_index.mjs",
+    "./helpers/esm/arrayWithHoles": "./helpers/esm/arrayWithHoles.js",
     "./helpers/maybeArrayLike": [
       {
-        "node": "./helpers/maybeArrayLike/index.js",
-        "import": "./helpers/maybeArrayLike/_index.mjs",
-        "default": "./helpers/maybeArrayLike/index.js"
+        "node": "./helpers/maybeArrayLike.js",
+        "import": "./helpers/esm/maybeArrayLike.js",
+        "default": "./helpers/maybeArrayLike.js"
       },
-      "./helpers/maybeArrayLike/index.js"
+      "./helpers/maybeArrayLike.js"
     ],
-    "./helpers/esm/maybeArrayLike": "./helpers/maybeArrayLike/_index.mjs",
+    "./helpers/esm/maybeArrayLike": "./helpers/esm/maybeArrayLike.js",
     "./helpers/iterableToArray": [
       {
-        "node": "./helpers/iterableToArray/index.js",
-        "import": "./helpers/iterableToArray/_index.mjs",
-        "default": "./helpers/iterableToArray/index.js"
+        "node": "./helpers/iterableToArray.js",
+        "import": "./helpers/esm/iterableToArray.js",
+        "default": "./helpers/iterableToArray.js"
       },
-      "./helpers/iterableToArray/index.js"
+      "./helpers/iterableToArray.js"
     ],
-    "./helpers/esm/iterableToArray": "./helpers/iterableToArray/_index.mjs",
+    "./helpers/esm/iterableToArray": "./helpers/esm/iterableToArray.js",
     "./helpers/iterableToArrayLimit": [
       {
-        "node": "./helpers/iterableToArrayLimit/index.js",
-        "import": "./helpers/iterableToArrayLimit/_index.mjs",
-        "default": "./helpers/iterableToArrayLimit/index.js"
+        "node": "./helpers/iterableToArrayLimit.js",
+        "import": "./helpers/esm/iterableToArrayLimit.js",
+        "default": "./helpers/iterableToArrayLimit.js"
       },
-      "./helpers/iterableToArrayLimit/index.js"
+      "./helpers/iterableToArrayLimit.js"
     ],
-    "./helpers/esm/iterableToArrayLimit": "./helpers/iterableToArrayLimit/_index.mjs",
+    "./helpers/esm/iterableToArrayLimit": "./helpers/esm/iterableToArrayLimit.js",
     "./helpers/iterableToArrayLimitLoose": [
       {
-        "node": "./helpers/iterableToArrayLimitLoose/index.js",
-        "import": "./helpers/iterableToArrayLimitLoose/_index.mjs",
-        "default": "./helpers/iterableToArrayLimitLoose/index.js"
+        "node": "./helpers/iterableToArrayLimitLoose.js",
+        "import": "./helpers/esm/iterableToArrayLimitLoose.js",
+        "default": "./helpers/iterableToArrayLimitLoose.js"
       },
-      "./helpers/iterableToArrayLimitLoose/index.js"
+      "./helpers/iterableToArrayLimitLoose.js"
     ],
-    "./helpers/esm/iterableToArrayLimitLoose": "./helpers/iterableToArrayLimitLoose/_index.mjs",
+    "./helpers/esm/iterableToArrayLimitLoose": "./helpers/esm/iterableToArrayLimitLoose.js",
     "./helpers/unsupportedIterableToArray": [
       {
-        "node": "./helpers/unsupportedIterableToArray/index.js",
-        "import": "./helpers/unsupportedIterableToArray/_index.mjs",
-        "default": "./helpers/unsupportedIterableToArray/index.js"
+        "node": "./helpers/unsupportedIterableToArray.js",
+        "import": "./helpers/esm/unsupportedIterableToArray.js",
+        "default": "./helpers/unsupportedIterableToArray.js"
       },
-      "./helpers/unsupportedIterableToArray/index.js"
+      "./helpers/unsupportedIterableToArray.js"
     ],
-    "./helpers/esm/unsupportedIterableToArray": "./helpers/unsupportedIterableToArray/_index.mjs",
+    "./helpers/esm/unsupportedIterableToArray": "./helpers/esm/unsupportedIterableToArray.js",
     "./helpers/arrayLikeToArray": [
       {
-        "node": "./helpers/arrayLikeToArray/index.js",
-        "import": "./helpers/arrayLikeToArray/_index.mjs",
-        "default": "./helpers/arrayLikeToArray/index.js"
+        "node": "./helpers/arrayLikeToArray.js",
+        "import": "./helpers/esm/arrayLikeToArray.js",
+        "default": "./helpers/arrayLikeToArray.js"
       },
-      "./helpers/arrayLikeToArray/index.js"
+      "./helpers/arrayLikeToArray.js"
     ],
-    "./helpers/esm/arrayLikeToArray": "./helpers/arrayLikeToArray/_index.mjs",
+    "./helpers/esm/arrayLikeToArray": "./helpers/esm/arrayLikeToArray.js",
     "./helpers/nonIterableSpread": [
       {
-        "node": "./helpers/nonIterableSpread/index.js",
-        "import": "./helpers/nonIterableSpread/_index.mjs",
-        "default": "./helpers/nonIterableSpread/index.js"
+        "node": "./helpers/nonIterableSpread.js",
+        "import": "./helpers/esm/nonIterableSpread.js",
+        "default": "./helpers/nonIterableSpread.js"
       },
-      "./helpers/nonIterableSpread/index.js"
+      "./helpers/nonIterableSpread.js"
     ],
-    "./helpers/esm/nonIterableSpread": "./helpers/nonIterableSpread/_index.mjs",
+    "./helpers/esm/nonIterableSpread": "./helpers/esm/nonIterableSpread.js",
     "./helpers/nonIterableRest": [
       {
-        "node": "./helpers/nonIterableRest/index.js",
-        "import": "./helpers/nonIterableRest/_index.mjs",
-        "default": "./helpers/nonIterableRest/index.js"
+        "node": "./helpers/nonIterableRest.js",
+        "import": "./helpers/esm/nonIterableRest.js",
+        "default": "./helpers/nonIterableRest.js"
       },
-      "./helpers/nonIterableRest/index.js"
+      "./helpers/nonIterableRest.js"
     ],
-    "./helpers/esm/nonIterableRest": "./helpers/nonIterableRest/_index.mjs",
+    "./helpers/esm/nonIterableRest": "./helpers/esm/nonIterableRest.js",
     "./helpers/createForOfIteratorHelper": [
       {
-        "node": "./helpers/createForOfIteratorHelper/index.js",
-        "import": "./helpers/createForOfIteratorHelper/_index.mjs",
-        "default": "./helpers/createForOfIteratorHelper/index.js"
+        "node": "./helpers/createForOfIteratorHelper.js",
+        "import": "./helpers/esm/createForOfIteratorHelper.js",
+        "default": "./helpers/createForOfIteratorHelper.js"
       },
-      "./helpers/createForOfIteratorHelper/index.js"
+      "./helpers/createForOfIteratorHelper.js"
     ],
-    "./helpers/esm/createForOfIteratorHelper": "./helpers/createForOfIteratorHelper/_index.mjs",
+    "./helpers/esm/createForOfIteratorHelper": "./helpers/esm/createForOfIteratorHelper.js",
     "./helpers/createForOfIteratorHelperLoose": [
       {
-        "node": "./helpers/createForOfIteratorHelperLoose/index.js",
-        "import": "./helpers/createForOfIteratorHelperLoose/_index.mjs",
-        "default": "./helpers/createForOfIteratorHelperLoose/index.js"
+        "node": "./helpers/createForOfIteratorHelperLoose.js",
+        "import": "./helpers/esm/createForOfIteratorHelperLoose.js",
+        "default": "./helpers/createForOfIteratorHelperLoose.js"
       },
-      "./helpers/createForOfIteratorHelperLoose/index.js"
+      "./helpers/createForOfIteratorHelperLoose.js"
     ],
-    "./helpers/esm/createForOfIteratorHelperLoose": "./helpers/createForOfIteratorHelperLoose/_index.mjs",
+    "./helpers/esm/createForOfIteratorHelperLoose": "./helpers/esm/createForOfIteratorHelperLoose.js",
     "./helpers/skipFirstGeneratorNext": [
       {
-        "node": "./helpers/skipFirstGeneratorNext/index.js",
-        "import": "./helpers/skipFirstGeneratorNext/_index.mjs",
-        "default": "./helpers/skipFirstGeneratorNext/index.js"
+        "node": "./helpers/skipFirstGeneratorNext.js",
+        "import": "./helpers/esm/skipFirstGeneratorNext.js",
+        "default": "./helpers/skipFirstGeneratorNext.js"
       },
-      "./helpers/skipFirstGeneratorNext/index.js"
+      "./helpers/skipFirstGeneratorNext.js"
     ],
-    "./helpers/esm/skipFirstGeneratorNext": "./helpers/skipFirstGeneratorNext/_index.mjs",
+    "./helpers/esm/skipFirstGeneratorNext": "./helpers/esm/skipFirstGeneratorNext.js",
     "./helpers/toPrimitive": [
       {
-        "node": "./helpers/toPrimitive/index.js",
-        "import": "./helpers/toPrimitive/_index.mjs",
-        "default": "./helpers/toPrimitive/index.js"
+        "node": "./helpers/toPrimitive.js",
+        "import": "./helpers/esm/toPrimitive.js",
+        "default": "./helpers/toPrimitive.js"
       },
-      "./helpers/toPrimitive/index.js"
+      "./helpers/toPrimitive.js"
     ],
-    "./helpers/esm/toPrimitive": "./helpers/toPrimitive/_index.mjs",
+    "./helpers/esm/toPrimitive": "./helpers/esm/toPrimitive.js",
     "./helpers/toPropertyKey": [
       {
-        "node": "./helpers/toPropertyKey/index.js",
-        "import": "./helpers/toPropertyKey/_index.mjs",
-        "default": "./helpers/toPropertyKey/index.js"
+        "node": "./helpers/toPropertyKey.js",
+        "import": "./helpers/esm/toPropertyKey.js",
+        "default": "./helpers/toPropertyKey.js"
       },
-      "./helpers/toPropertyKey/index.js"
+      "./helpers/toPropertyKey.js"
     ],
-    "./helpers/esm/toPropertyKey": "./helpers/toPropertyKey/_index.mjs",
+    "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
     "./helpers/initializerWarningHelper": [
       {
-        "node": "./helpers/initializerWarningHelper/index.js",
-        "import": "./helpers/initializerWarningHelper/_index.mjs",
-        "default": "./helpers/initializerWarningHelper/index.js"
+        "node": "./helpers/initializerWarningHelper.js",
+        "import": "./helpers/esm/initializerWarningHelper.js",
+        "default": "./helpers/initializerWarningHelper.js"
       },
-      "./helpers/initializerWarningHelper/index.js"
+      "./helpers/initializerWarningHelper.js"
     ],
-    "./helpers/esm/initializerWarningHelper": "./helpers/initializerWarningHelper/_index.mjs",
+    "./helpers/esm/initializerWarningHelper": "./helpers/esm/initializerWarningHelper.js",
     "./helpers/initializerDefineProperty": [
       {
-        "node": "./helpers/initializerDefineProperty/index.js",
-        "import": "./helpers/initializerDefineProperty/_index.mjs",
-        "default": "./helpers/initializerDefineProperty/index.js"
+        "node": "./helpers/initializerDefineProperty.js",
+        "import": "./helpers/esm/initializerDefineProperty.js",
+        "default": "./helpers/initializerDefineProperty.js"
       },
-      "./helpers/initializerDefineProperty/index.js"
+      "./helpers/initializerDefineProperty.js"
     ],
-    "./helpers/esm/initializerDefineProperty": "./helpers/initializerDefineProperty/_index.mjs",
+    "./helpers/esm/initializerDefineProperty": "./helpers/esm/initializerDefineProperty.js",
     "./helpers/applyDecoratedDescriptor": [
       {
-        "node": "./helpers/applyDecoratedDescriptor/index.js",
-        "import": "./helpers/applyDecoratedDescriptor/_index.mjs",
-        "default": "./helpers/applyDecoratedDescriptor/index.js"
+        "node": "./helpers/applyDecoratedDescriptor.js",
+        "import": "./helpers/esm/applyDecoratedDescriptor.js",
+        "default": "./helpers/applyDecoratedDescriptor.js"
       },
-      "./helpers/applyDecoratedDescriptor/index.js"
+      "./helpers/applyDecoratedDescriptor.js"
     ],
-    "./helpers/esm/applyDecoratedDescriptor": "./helpers/applyDecoratedDescriptor/_index.mjs",
+    "./helpers/esm/applyDecoratedDescriptor": "./helpers/esm/applyDecoratedDescriptor.js",
     "./helpers/classPrivateFieldLooseKey": [
       {
-        "node": "./helpers/classPrivateFieldLooseKey/index.js",
-        "import": "./helpers/classPrivateFieldLooseKey/_index.mjs",
-        "default": "./helpers/classPrivateFieldLooseKey/index.js"
+        "node": "./helpers/classPrivateFieldLooseKey.js",
+        "import": "./helpers/esm/classPrivateFieldLooseKey.js",
+        "default": "./helpers/classPrivateFieldLooseKey.js"
       },
-      "./helpers/classPrivateFieldLooseKey/index.js"
+      "./helpers/classPrivateFieldLooseKey.js"
     ],
-    "./helpers/esm/classPrivateFieldLooseKey": "./helpers/classPrivateFieldLooseKey/_index.mjs",
+    "./helpers/esm/classPrivateFieldLooseKey": "./helpers/esm/classPrivateFieldLooseKey.js",
     "./helpers/classPrivateFieldLooseBase": [
       {
-        "node": "./helpers/classPrivateFieldLooseBase/index.js",
-        "import": "./helpers/classPrivateFieldLooseBase/_index.mjs",
-        "default": "./helpers/classPrivateFieldLooseBase/index.js"
+        "node": "./helpers/classPrivateFieldLooseBase.js",
+        "import": "./helpers/esm/classPrivateFieldLooseBase.js",
+        "default": "./helpers/classPrivateFieldLooseBase.js"
       },
-      "./helpers/classPrivateFieldLooseBase/index.js"
+      "./helpers/classPrivateFieldLooseBase.js"
     ],
-    "./helpers/esm/classPrivateFieldLooseBase": "./helpers/classPrivateFieldLooseBase/_index.mjs",
+    "./helpers/esm/classPrivateFieldLooseBase": "./helpers/esm/classPrivateFieldLooseBase.js",
     "./helpers/classPrivateFieldGet": [
       {
-        "node": "./helpers/classPrivateFieldGet/index.js",
-        "import": "./helpers/classPrivateFieldGet/_index.mjs",
-        "default": "./helpers/classPrivateFieldGet/index.js"
+        "node": "./helpers/classPrivateFieldGet.js",
+        "import": "./helpers/esm/classPrivateFieldGet.js",
+        "default": "./helpers/classPrivateFieldGet.js"
       },
-      "./helpers/classPrivateFieldGet/index.js"
+      "./helpers/classPrivateFieldGet.js"
     ],
-    "./helpers/esm/classPrivateFieldGet": "./helpers/classPrivateFieldGet/_index.mjs",
+    "./helpers/esm/classPrivateFieldGet": "./helpers/esm/classPrivateFieldGet.js",
     "./helpers/classPrivateFieldSet": [
       {
-        "node": "./helpers/classPrivateFieldSet/index.js",
-        "import": "./helpers/classPrivateFieldSet/_index.mjs",
-        "default": "./helpers/classPrivateFieldSet/index.js"
+        "node": "./helpers/classPrivateFieldSet.js",
+        "import": "./helpers/esm/classPrivateFieldSet.js",
+        "default": "./helpers/classPrivateFieldSet.js"
       },
-      "./helpers/classPrivateFieldSet/index.js"
+      "./helpers/classPrivateFieldSet.js"
     ],
-    "./helpers/esm/classPrivateFieldSet": "./helpers/classPrivateFieldSet/_index.mjs",
+    "./helpers/esm/classPrivateFieldSet": "./helpers/esm/classPrivateFieldSet.js",
     "./helpers/classPrivateFieldDestructureSet": [
       {
-        "node": "./helpers/classPrivateFieldDestructureSet/index.js",
-        "import": "./helpers/classPrivateFieldDestructureSet/_index.mjs",
-        "default": "./helpers/classPrivateFieldDestructureSet/index.js"
+        "node": "./helpers/classPrivateFieldDestructureSet.js",
+        "import": "./helpers/esm/classPrivateFieldDestructureSet.js",
+        "default": "./helpers/classPrivateFieldDestructureSet.js"
       },
-      "./helpers/classPrivateFieldDestructureSet/index.js"
+      "./helpers/classPrivateFieldDestructureSet.js"
     ],
-    "./helpers/esm/classPrivateFieldDestructureSet": "./helpers/classPrivateFieldDestructureSet/_index.mjs",
+    "./helpers/esm/classPrivateFieldDestructureSet": "./helpers/esm/classPrivateFieldDestructureSet.js",
     "./helpers/classStaticPrivateFieldSpecGet": [
       {
-        "node": "./helpers/classStaticPrivateFieldSpecGet/index.js",
-        "import": "./helpers/classStaticPrivateFieldSpecGet/_index.mjs",
-        "default": "./helpers/classStaticPrivateFieldSpecGet/index.js"
+        "node": "./helpers/classStaticPrivateFieldSpecGet.js",
+        "import": "./helpers/esm/classStaticPrivateFieldSpecGet.js",
+        "default": "./helpers/classStaticPrivateFieldSpecGet.js"
       },
-      "./helpers/classStaticPrivateFieldSpecGet/index.js"
+      "./helpers/classStaticPrivateFieldSpecGet.js"
     ],
-    "./helpers/esm/classStaticPrivateFieldSpecGet": "./helpers/classStaticPrivateFieldSpecGet/_index.mjs",
+    "./helpers/esm/classStaticPrivateFieldSpecGet": "./helpers/esm/classStaticPrivateFieldSpecGet.js",
     "./helpers/classStaticPrivateFieldSpecSet": [
       {
-        "node": "./helpers/classStaticPrivateFieldSpecSet/index.js",
-        "import": "./helpers/classStaticPrivateFieldSpecSet/_index.mjs",
-        "default": "./helpers/classStaticPrivateFieldSpecSet/index.js"
+        "node": "./helpers/classStaticPrivateFieldSpecSet.js",
+        "import": "./helpers/esm/classStaticPrivateFieldSpecSet.js",
+        "default": "./helpers/classStaticPrivateFieldSpecSet.js"
       },
-      "./helpers/classStaticPrivateFieldSpecSet/index.js"
+      "./helpers/classStaticPrivateFieldSpecSet.js"
     ],
-    "./helpers/esm/classStaticPrivateFieldSpecSet": "./helpers/classStaticPrivateFieldSpecSet/_index.mjs",
+    "./helpers/esm/classStaticPrivateFieldSpecSet": "./helpers/esm/classStaticPrivateFieldSpecSet.js",
     "./helpers/classStaticPrivateMethodGet": [
       {
-        "node": "./helpers/classStaticPrivateMethodGet/index.js",
-        "import": "./helpers/classStaticPrivateMethodGet/_index.mjs",
-        "default": "./helpers/classStaticPrivateMethodGet/index.js"
+        "node": "./helpers/classStaticPrivateMethodGet.js",
+        "import": "./helpers/esm/classStaticPrivateMethodGet.js",
+        "default": "./helpers/classStaticPrivateMethodGet.js"
       },
-      "./helpers/classStaticPrivateMethodGet/index.js"
+      "./helpers/classStaticPrivateMethodGet.js"
     ],
-    "./helpers/esm/classStaticPrivateMethodGet": "./helpers/classStaticPrivateMethodGet/_index.mjs",
+    "./helpers/esm/classStaticPrivateMethodGet": "./helpers/esm/classStaticPrivateMethodGet.js",
     "./helpers/classStaticPrivateMethodSet": [
       {
-        "node": "./helpers/classStaticPrivateMethodSet/index.js",
-        "import": "./helpers/classStaticPrivateMethodSet/_index.mjs",
-        "default": "./helpers/classStaticPrivateMethodSet/index.js"
+        "node": "./helpers/classStaticPrivateMethodSet.js",
+        "import": "./helpers/esm/classStaticPrivateMethodSet.js",
+        "default": "./helpers/classStaticPrivateMethodSet.js"
       },
-      "./helpers/classStaticPrivateMethodSet/index.js"
+      "./helpers/classStaticPrivateMethodSet.js"
     ],
-    "./helpers/esm/classStaticPrivateMethodSet": "./helpers/classStaticPrivateMethodSet/_index.mjs",
+    "./helpers/esm/classStaticPrivateMethodSet": "./helpers/esm/classStaticPrivateMethodSet.js",
     "./helpers/decorate": [
       {
-        "node": "./helpers/decorate/index.js",
-        "import": "./helpers/decorate/_index.mjs",
-        "default": "./helpers/decorate/index.js"
+        "node": "./helpers/decorate.js",
+        "import": "./helpers/esm/decorate.js",
+        "default": "./helpers/decorate.js"
       },
-      "./helpers/decorate/index.js"
+      "./helpers/decorate.js"
     ],
-    "./helpers/esm/decorate": "./helpers/decorate/_index.mjs",
+    "./helpers/esm/decorate": "./helpers/esm/decorate.js",
     "./helpers/classPrivateMethodGet": [
       {
-        "node": "./helpers/classPrivateMethodGet/index.js",
-        "import": "./helpers/classPrivateMethodGet/_index.mjs",
-        "default": "./helpers/classPrivateMethodGet/index.js"
+        "node": "./helpers/classPrivateMethodGet.js",
+        "import": "./helpers/esm/classPrivateMethodGet.js",
+        "default": "./helpers/classPrivateMethodGet.js"
       },
-      "./helpers/classPrivateMethodGet/index.js"
+      "./helpers/classPrivateMethodGet.js"
     ],
-    "./helpers/esm/classPrivateMethodGet": "./helpers/classPrivateMethodGet/_index.mjs",
+    "./helpers/esm/classPrivateMethodGet": "./helpers/esm/classPrivateMethodGet.js",
     "./helpers/classPrivateMethodSet": [
       {
-        "node": "./helpers/classPrivateMethodSet/index.js",
-        "import": "./helpers/classPrivateMethodSet/_index.mjs",
-        "default": "./helpers/classPrivateMethodSet/index.js"
+        "node": "./helpers/classPrivateMethodSet.js",
+        "import": "./helpers/esm/classPrivateMethodSet.js",
+        "default": "./helpers/classPrivateMethodSet.js"
       },
-      "./helpers/classPrivateMethodSet/index.js"
+      "./helpers/classPrivateMethodSet.js"
     ],
-    "./helpers/esm/classPrivateMethodSet": "./helpers/classPrivateMethodSet/_index.mjs",
+    "./helpers/esm/classPrivateMethodSet": "./helpers/esm/classPrivateMethodSet.js",
     "./helpers/wrapRegExp": [
       {
-        "node": "./helpers/wrapRegExp/index.js",
-        "import": "./helpers/wrapRegExp/_index.mjs",
-        "default": "./helpers/wrapRegExp/index.js"
+        "node": "./helpers/wrapRegExp.js",
+        "import": "./helpers/esm/wrapRegExp.js",
+        "default": "./helpers/wrapRegExp.js"
       },
-      "./helpers/wrapRegExp/index.js"
+      "./helpers/wrapRegExp.js"
     ],
-    "./helpers/esm/wrapRegExp": "./helpers/wrapRegExp/_index.mjs",
+    "./helpers/esm/wrapRegExp": "./helpers/esm/wrapRegExp.js",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
