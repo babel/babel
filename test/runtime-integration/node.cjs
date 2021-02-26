@@ -4,8 +4,15 @@ const fs = require("fs");
 
 const [major, minor] = process.versions.node.split(".").map(n => +n);
 
-if (major > 12 || (major === 12 && minor >= 17)) {
-  test("ESM", "--experimental-modules ./src/main-esm.mjs", "expected-esm.txt");
+if (
+  major > 13 ||
+  (major === 12 && minor >= 17) ||
+  (major === 13 && minor >= 2)
+) {
+  const expectedEsm =
+    major === 13 && minor <= 3 ? "expected-esm-13.2.txt" : "expected-esm.txt";
+
+  test("ESM", "./src/main-esm.mjs", expectedEsm);
   // TODO: This never worked in any Babel version
   // test("ESM - absoluteRuntime", "--esperimental-modules ./src/absolute/main-esm.mjs", "expected-esm-absolute.txt");
 }
@@ -13,6 +20,10 @@ if (major > 12 || (major === 12 && minor >= 17)) {
 const expectedCjs =
   major === 10 || (major === 12 && minor < 12.17)
     ? "expected-cjs-10.txt"
+    : major === 13 && minor <= 1
+    ? "expected-cjs-13.0.txt"
+    : major === 13 && minor <= 3
+    ? "expected-cjs-13.2.txt"
     : "expected-cjs.txt";
 
 test("CJS", "./src/main-cjs.cjs", expectedCjs);
