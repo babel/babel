@@ -328,8 +328,8 @@ const privateNameHandlerSpec = {
         var helper = file.addHelper("classStaticPrivateFieldDestructureSet");
       } catch {
         throw new Error(
-          "Babel can not transpile `[C.#p] = [0]` with @babel/helper < 7.99.0, \n" +
-            "please update @babel/helper to the latest version",
+          "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.99.0, \n" +
+            "please update @babel/helpers to the latest version.",
         );
       }
       return t.memberExpression(

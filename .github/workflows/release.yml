@@ -49,7 +49,9 @@ jobs:
           git config user.email "babel-bot@users.noreply.github.com"
 
       - name: Create new version
-        run: yarn release-tool version -f @babel/standalone --yes patch
+        run: |
+          make new-version-checklist
+          yarn release-tool version -f @babel/standalone --yes patch
 
       - name: Push to GitHub
         id: push
@@ -167,5 +169,4 @@ jobs:
 
       - name: Delete temporary branch from GitHub
         if: needs.git-version.result == 'success'
-        run:
-          git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" :${{ needs.git-version.outputs.branch }}
+        run: git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" :${{ needs.git-version.outputs.branch }}
