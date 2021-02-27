@@ -182,6 +182,7 @@
                 }
               ],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "GenericTypeAnnotation",
                 "start":163,"end":165,"loc":{"start":{"line":5,"column":28},"end":{"line":5,"column":30}},
