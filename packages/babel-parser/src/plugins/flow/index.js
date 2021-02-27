@@ -1649,6 +1649,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const node = this.startNodeAt(param.start, param.loc.start);
         node.params = [this.reinterpretTypeAsFunctionTypeParam(param)];
         node.rest = null;
+        node.this = null;
         node.returnType = this.flowParseType();
         node.typeParameters = null;
         return this.finishNode(node, "FunctionTypeAnnotation");
