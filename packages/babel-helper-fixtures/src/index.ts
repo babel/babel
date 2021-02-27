@@ -11,25 +11,25 @@ function humanize(val, noext) {
 }
 
 type TestFile = {
-  loc: string,
-  code: string,
-  filename: string,
+  loc: string;
+  code: string;
+  filename: string;
 };
 
 type Test = {
-  title: string,
-  disabled: boolean,
-  options: Object,
-  exec: TestFile,
-  actual: TestFile,
-  expected: TestFile,
+  title: string;
+  disabled: boolean;
+  options: any;
+  exec: TestFile;
+  actual: TestFile;
+  expected: TestFile;
 };
 
 type Suite = {
-  options: Object,
-  tests: Array<Test>,
-  title: string,
-  filename: string,
+  options: any;
+  tests: Array<Test>;
+  title: string;
+  filename: string;
 };
 
 function tryResolve(module) {
