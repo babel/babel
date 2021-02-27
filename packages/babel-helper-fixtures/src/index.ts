@@ -122,7 +122,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   const taskOptsLoc = tryResolve(taskDir + "/options");
   if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
-  const test: any = {
+  const test = {
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
     disabled:
@@ -151,6 +151,9 @@ function pushTask(taskName, taskDir, suite, suiteName) {
       code: readFile(expectLoc),
       filename: expectLocAlias,
     },
+    sourceMappings: undefined,
+    sourceMap: undefined,
+    inputSourceMap: undefined,
   };
 
   delete taskOpts.BABEL_8_BREAKING;
