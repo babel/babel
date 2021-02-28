@@ -2680,6 +2680,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return super.toAssignable(this.typeCastToParameter(node), isLHS);
         case "TSParameterProperty":
           return super.toAssignable(node, isLHS);
+        case "ParenthesizedExpression":
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
