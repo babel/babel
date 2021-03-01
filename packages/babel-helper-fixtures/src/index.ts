@@ -5,31 +5,34 @@ import fs from "fs";
 
 const nodeVersion = semver.clean(process.version.slice(1));
 
-function humanize(val, noext) {
+function humanize(val, noext?) {
   if (noext) val = path.basename(val, path.extname(val));
   return val.replace(/-/g, " ");
 }
 
 type TestFile = {
-  loc: string,
-  code: string,
-  filename: string,
+  loc: string;
+  code: string;
+  filename: string;
 };
 
 type Test = {
-  title: string,
-  disabled: boolean,
-  options: Object,
-  exec: TestFile,
-  actual: TestFile,
-  expected: TestFile,
+  title: string;
+  disabled: boolean;
+  options: any;
+  exec: TestFile;
+  actual: TestFile;
+  expected: TestFile;
+  // todo(flow->ts): improve types here
+  sourceMappings;
+  sourceMap;
 };
 
 type Suite = {
-  options: Object,
-  tests: Array<Test>,
-  title: string,
-  filename: string,
+  options: any;
+  tests: Array<Test>;
+  title: string;
+  filename: string;
 };
 
 function tryResolve(module) {
@@ -60,7 +63,7 @@ function shouldIgnore(name, ignore?: Array<string>) {
 
 const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx"];
 
-function findFile(filepath: string, allowJSON: boolean) {
+function findFile(filepath: string, allowJSON?: boolean) {
   const matches = [];
 
   for (const ext of EXTENSIONS.concat(allowJSON ? ".json" : [])) {
@@ -148,6 +151,9 @@ function pushTask(taskName, taskDir, suite, suiteName) {
       code: readFile(expectLoc),
       filename: expectLocAlias,
     },
+    sourceMappings: undefined,
+    sourceMap: undefined,
+    inputSourceMap: undefined,
   };
 
   delete taskOpts.BABEL_8_BREAKING;
@@ -293,7 +299,7 @@ function wrapPackagesArray(type, names, optionsDir) {
  * @returns {{}} options whose plugins/presets are resolved
  */
 export function resolveOptionPluginOrPreset(
-  options: {},
+  options: any,
   optionsDir: string,
 ): {} {
   if (options.plugins) {
