@@ -435,7 +435,7 @@ export function TSInterfaceDeclaration(
   this.space();
   this.print(id, node);
   this.print(typeParameters, node);
-  if (extendz) {
+  if (extendz?.length) {
     this.space();
     this.word("extends");
     this.space();

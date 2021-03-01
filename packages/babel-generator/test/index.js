@@ -735,6 +735,19 @@ describe("programmatic generation", function () {
       }
     });
   });
+
+  describe("typescript interface declaration", () => {
+    it("empty extends array", () => {
+      const tsInterfaceDeclaration = t.tsInterfaceDeclaration(
+        t.identifier("A"),
+        undefined,
+        [],
+        t.tsInterfaceBody([]),
+      );
+      const output = generate(tsInterfaceDeclaration).code;
+      expect(output).toBe("interface A {}");
+    });
+  });
 });
 
 describe("CodeGenerator", function () {
