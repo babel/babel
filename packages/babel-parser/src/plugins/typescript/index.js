@@ -2681,6 +2681,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSParameterProperty":
           return super.toAssignable(node, isLHS);
         case "ParenthesizedExpression":
+          if (
+            node.expression.type === "TSAsExpression" ||
+            node.expression.type === "ParenthesizedExpression"
+          ) {
+            node.expression = this.toAssignable(node.expression, isLHS);
+            return node;
+          } else {
+            return super.toAssignable(node, isLHS);
+          }
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
