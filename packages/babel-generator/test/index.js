@@ -462,6 +462,17 @@ describe("programmatic generation", function () {
 }`);
   });
 
+  it("flow interface with nullish extends", () => {
+    const interfaceDeclaration = t.interfaceDeclaration(
+      t.identifier("A"),
+      undefined,
+      undefined,
+      t.objectTypeAnnotation([]),
+    );
+    const output = generate(interfaceDeclaration).code;
+    expect(output).toBe("interface A {}");
+  });
+
   describe("directives", function () {
     it("preserves escapes", function () {
       const directive = t.directive(

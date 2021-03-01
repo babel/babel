@@ -360,7 +360,7 @@ export function _interfaceish(
 ) {
   this.print(node.id, node);
   this.print(node.typeParameters, node);
-  if (node.extends.length) {
+  if (node.extends?.length) {
     this.space();
     this.word("extends");
     this.space();
