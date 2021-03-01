@@ -1,9 +1,15 @@
 class A {
+  counter = 0;
   #method() {}
+  self() {
+    this.counter++;
+    return this;
+  }
 
-  run() {
-    this.#method = 2;
+  constructor() {
+    expect(() => this.self().#method = 2).toThrow(TypeError);
+    expect(this.counter).toBe(1);
   }
 }
 
-expect(() => new A().run()).toThrow(TypeError);
+new A;

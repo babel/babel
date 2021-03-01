@@ -232,8 +232,11 @@ const privateNameHandlerSpec = {
       if (isAccessor) {
         if (!getId && setId) {
           if (file.availableHelper("writeOnlyError")) {
-            return t.callExpression(file.addHelper("writeOnlyError"), [
-              t.stringLiteral(`#${name}`),
+            return t.sequenceExpression([
+              this.receiver(member),
+              t.callExpression(file.addHelper("writeOnlyError"), [
+                t.stringLiteral(`#${name}`),
+              ]),
             ]);
           }
           console.warn(
