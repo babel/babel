@@ -1,4 +1,4 @@
-var counter = 0;
+var results = [];
 
 var _privateFieldValue = new WeakMap();
 
@@ -9,7 +9,12 @@ class Foo {
       set: void 0
     });
 
-    babelHelpers.classPrivateMethodSet(++counter);
+    this.self, results.push(2), babelHelpers.readOnlyError("#privateFieldValue");
+  }
+
+  get self() {
+    results.push(1);
+    return this;
   }
 
 }

@@ -1,10 +1,15 @@
-let counter = 0;
+let results = [];
 class Foo {
   constructor() {
-    this.#privateMethod = ++counter;
+    this.self.#privateFieldValue = results.push(2);
   }
 
-  #privateMethod() {
+  get self() {
+    results.push(1);
+    return this;
+  }
+
+  #privateFieldValue() {
     return 42;
   }
 }

@@ -1,7 +1,12 @@
-let counter = 0;
+let results = [];
 class Foo {
   constructor() {
-    this.#privateFieldValue = ++counter;
+    this.self.#privateFieldValue = results.push(2);
+  }
+
+  get self() {
+    results.push(1);
+    return this;
   }
 
   get #privateFieldValue() {

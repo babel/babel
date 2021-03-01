@@ -300,6 +300,7 @@ const privateNameHandlerSpec = {
         ]);
       }
       return t.sequenceExpression([
+        this.receiver(member),
         value,
         t.callExpression(file.addHelper("readOnlyError"), [
           t.stringLiteral(`#${name}`),

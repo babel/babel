@@ -1,16 +1,21 @@
-var counter = 0;
+var results = [];
 
-var _privateMethod = new WeakSet();
+var _privateFieldValue = new WeakSet();
 
 class Foo {
   constructor() {
-    _privateMethod.add(this);
+    _privateFieldValue.add(this);
 
-    ++counter, babelHelpers.readOnlyError("#privateMethod");
+    this.self, results.push(2), babelHelpers.readOnlyError("#privateFieldValue");
+  }
+
+  get self() {
+    results.push(1);
+    return this;
   }
 
 }
 
-var _privateMethod2 = function _privateMethod2() {
+var _privateFieldValue2 = function _privateFieldValue2() {
   return 42;
 };
