@@ -2938,15 +2938,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseMethod(...args: any[]) {
       const method = super.parseMethod(...args);
-      if ((method: any).abstract) {
+      if (method.abstract) {
         const hasBody = this.hasPlugin("estree")
           ? !!method.value.body
           : !!method.body;
         if (hasBody) {
+          const { key } = method;
           this.raise(
             method.start,
             TSErrors.AbstractMethodHasImplementation,
-            (method: any).key.name,
+            key.type === "Identifier"
+              ? key.name
+              : `[${this.input.slice(key.start, key.end)}]`,
           );
         }
       }
