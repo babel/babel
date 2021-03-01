@@ -19,6 +19,21 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.9 (2021-03-01)
+
+#### :bug: Bug Fix
+* `babel-preset-env`
+  * [#12934](https://github.com/babel/babel/pull/12934) Load `.browserslistrc` when using old `@babel/core` versions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#12939](https://github.com/babel/babel/pull/12939) fix: add tokens when tokens: true is passed to parseExpression ([@JLHwung](https://github.com/JLHwung))
+  * [#12930](https://github.com/babel/babel/pull/12930) babel-parser(flow): Add null property to FunctionTypeAnnotation without parens ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-generator`
+  * [#12921](https://github.com/babel/babel/pull/12921) Fix a bug with invalid print output when empty array is passed to t.tsInterfaceDeclaration ([@saitonakamura](https://github.com/saitonakamura))
+  * [#12920](https://github.com/babel/babel/pull/12920) Allow nullish extends in interfaceish ([@saitonakamura](https://github.com/saitonakamura))
+
+#### :house: Internal
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#12919](https://github.com/babel/babel/pull/12919) Put back ESM helpers in a folder where we can use `.js` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.8 (2021-02-26)
 
 #### :bug: Bug Fix
