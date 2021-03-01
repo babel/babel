@@ -1,12 +1,16 @@
 var _method = new WeakSet();
 
 class A {
-  constructor() {
-    _method.add(this);
+  self() {
+    this.counter++;
+    return this;
   }
 
-  run() {
-    babelHelpers.readOnlyError("#method");
+  constructor() {
+    _method.add(this);
+
+    babelHelpers.defineProperty(this, "counter", 0);
+    this.self(), 2, babelHelpers.readOnlyError("#method");
   }
 
 }

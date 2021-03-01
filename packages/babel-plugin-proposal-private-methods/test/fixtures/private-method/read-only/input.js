@@ -1,7 +1,12 @@
 class A {
+  counter = 0;
   #method() {}
+  self() {
+    this.counter++;
+    return this;
+  }
 
-  run() {
-    this.#method = 2;
+  constructor() {
+    this.self().#method = 2;
   }
 }
