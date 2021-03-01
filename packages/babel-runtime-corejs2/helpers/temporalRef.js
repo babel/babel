@@ -1,6 +1,6 @@
-var temporalUndefined = require("@babel/runtime/helpers/temporalUndefined");
+var temporalUndefined = require("./temporalUndefined.js");
 
-var tdz = require("@babel/runtime/helpers/tdz");
+var tdz = require("./tdz.js");
 
 function _temporalRef(val, name) {
   return val === temporalUndefined ? tdz(name) : val;

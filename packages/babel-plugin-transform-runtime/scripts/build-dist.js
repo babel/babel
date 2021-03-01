@@ -116,7 +116,10 @@ function writeHelperFile(
   helperName,
   { esm, corejs }
 ) {
-  const filePath = path.join(helperPath, esm ? "_index.mjs" : "index.js");
+  const fileName = `${helperName}.js`;
+  const filePath = esm
+    ? path.join("helpers", "esm", fileName)
+    : path.join("helpers", fileName);
   const fullPath = path.join(pkgDirname, filePath);
 
   outputFile(
@@ -125,12 +128,6 @@ function writeHelperFile(
   );
 
   return `./${filePath}`;
-}
-
-function writeHelperLegacyESMFile(pkgDirname, helperName) {
-  const fullPath = path.join(pkgDirname, "helpers", "esm", `${helperName}.js`);
-
-  outputFile(fullPath, `export { default } from "../${helperName}/_index.mjs"`);
 }
 
 function writeHelpers(runtimeName, { corejs } = {}) {
@@ -173,8 +170,6 @@ function writeHelpers(runtimeName, { corejs } = {}) {
     ];
     // For backward compatibility. We can remove this in Babel 8.
     helperSubExports[`./${path.join("helpers", "esm", helperName)}`] = esm;
-
-    writeHelperLegacyESMFile(pkgDirname, helperName);
   }
 
   writeHelperExports(runtimeName, helperSubExports);
@@ -251,7 +246,6 @@ function buildHelper(
       [transformRuntime, { corejs, version: runtimeVersion }],
       buildRuntimeRewritePlugin(runtimeName, helperName),
       esm ? null : addDefaultCJSExport,
-      esm ? useRelativeImports : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -272,7 +266,7 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
    */
   function adjustImportPath(node) {
     if (helpers.list.includes(node.value)) {
-      node.value = `${runtimeName}/helpers/${node.value}`;
+      node.value = `./${node.value}.js`;
     }
   }
 
@@ -318,21 +312,6 @@ function addDefaultCJSExport({ template }) {
             `);
           }
         },
-      },
-    },
-  };
-}
-
-function useRelativeImports() {
-  const RE = /^@babel\/runtime(?:-corejs[23])?\/helpers\/(?<name>.+)$/;
-
-  return {
-    visitor: {
-      ImportDeclaration(path) {
-        path.node.source.value = path.node.source.value.replace(
-          RE,
-          "../$<name>/_index.mjs"
-        );
       },
     },
   };

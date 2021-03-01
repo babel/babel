@@ -3,7 +3,7 @@ typeof objectWithoutProperties: function
 typeof objectWithoutProperties.default: function
 obj: { b: 2, [Symbol(Symbol.toStringTag)]: 5 }
 ================= require - esm =====================
-Error: Unexpected token export
+Error: Unexpected identifier
 =============== require - corejs ====================
 typeof Set: function
 arr: 1,2,3
