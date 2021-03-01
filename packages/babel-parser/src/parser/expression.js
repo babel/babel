@@ -148,7 +148,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Convenience method to parse an Expression only
-  getExpression(): N.Expression {
+  getExpression(): N.Expression & N.ParserOutput {
     let paramFlags = PARAM;
     if (this.hasPlugin("topLevelAwait") && this.inModule) {
       paramFlags |= PARAM_AWAIT;
@@ -162,6 +162,9 @@ export default class ExpressionParser extends LValParser {
     }
     expr.comments = this.state.comments;
     expr.errors = this.state.errors;
+    if (this.options.tokens) {
+      expr.tokens = this.tokens;
+    }
     return expr;
   }
 

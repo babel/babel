@@ -4,6 +4,7 @@ import type { SourceType } from "./options";
 import type { Token } from "./tokenizer";
 import type { SourceLocation } from "./util/location";
 import type { PlaceholderTypes } from "./plugins/placeholders";
+import type { ParsingError } from "./parser/error";
 
 /*
  * If making any changes to the AST, update:
@@ -129,6 +130,11 @@ export type BigIntLiteral = NodeBase & {
   value: number,
 };
 
+export type ParserOutput = {
+  comments: $ReadOnlyArray<Comment>,
+  errors: Array<ParsingError>,
+  tokens?: $ReadOnlyArray<Token | Comment>,
+};
 // Programs
 
 export type BlockStatementLike = Program | BlockStatement;
@@ -136,9 +142,7 @@ export type BlockStatementLike = Program | BlockStatement;
 export type File = NodeBase & {
   type: "File",
   program: Program,
-  comments: $ReadOnlyArray<Comment>,
-  tokens: $ReadOnlyArray<Token | Comment>,
-};
+} & ParserOutput;
 
 export type Program = NodeBase & {
   type: "Program",
