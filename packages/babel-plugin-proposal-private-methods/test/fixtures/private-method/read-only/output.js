@@ -6,7 +6,7 @@ class A {
   }
 
   run() {
-    babelHelpers.readOnlyError("#method");
+    2, babelHelpers.readOnlyError("#method");
   }
 
 }

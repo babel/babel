@@ -299,8 +299,11 @@ const privateNameHandlerSpec = {
           value,
         ]);
       }
-      return t.callExpression(file.addHelper("readOnlyError"), [
-        t.stringLiteral(`#${name}`),
+      return t.sequenceExpression([
+        value,
+        t.callExpression(file.addHelper("readOnlyError"), [
+          t.stringLiteral(`#${name}`),
+        ]),
       ]);
     }
     return t.callExpression(file.addHelper("classPrivateFieldSet"), [

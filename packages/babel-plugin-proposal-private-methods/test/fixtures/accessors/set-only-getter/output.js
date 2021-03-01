@@ -14,7 +14,7 @@ class Cl {
       value: 0
     });
 
-    babelHelpers.readOnlyError("#privateFieldValue");
+    1, babelHelpers.readOnlyError("#privateFieldValue");
   }
 
 }
