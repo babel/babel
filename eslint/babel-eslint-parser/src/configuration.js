@@ -66,9 +66,13 @@ export function normalizeBabelParseConfig(options) {
 
     if (config !== null) {
       if (!config.hasFilesystemConfig()) {
-        throw new Error(
-          `No Babel config file detected for ${config.options.filename}. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`,
-        );
+        let error = `No Babel config file detected for ${config.options.filename}. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`;
+
+        if (config.options.filename.includes("node_modules")) {
+          error += `\nIf you have a .babelrc.js file or use package.json#babel, keep in mind that it's not used when parsing dependencies. If you want your config to be applied to your whole app, consider using babel.config.js or babel.config.json instead.`;
+        }
+
+        throw new Error(error);
       }
 
       return config.options;
