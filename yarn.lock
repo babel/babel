@@ -428,8 +428,8 @@ __metadata:
   linkType: soft
 
 "@babel/helper-create-class-features-plugin@npm:^7.13.0":
-  version: 7.13.0
-  resolution: "@babel/helper-create-class-features-plugin@npm:7.13.0"
+  version: 7.13.8
+  resolution: "@babel/helper-create-class-features-plugin@npm:7.13.8"
   dependencies:
     "@babel/helper-function-name": ^7.12.13
     "@babel/helper-member-expression-to-functions": ^7.13.0
@@ -438,7 +438,7 @@ __metadata:
     "@babel/helper-split-export-declaration": ^7.12.13
   peerDependencies:
     "@babel/core": ^7.0.0
-  checksum: 2b336d8216894738f7d31c76512b572e1571f3065e61b8d8bc36da481a255021d5fd543088779b5b5812a00a305d27a5b3cf47bbda9e4e28dadffbd0c46a036c
+  checksum: b0cda9616cb0413865fe3c5c55453cfff08739b276584bcf6a7aed1bb53fac276a0eecd288ea1201db7744ccb5c248b6b1b09110b28e0d77fc236df066ab67bd
   languageName: node
   linkType: hard
 
