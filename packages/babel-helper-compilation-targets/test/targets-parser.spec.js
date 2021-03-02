@@ -267,6 +267,12 @@ describe("getTargets", () => {
     });
 
     it("'intersect' behaves like 'true' if no browsers are specified", () => {
+      expect(getTargets({ esmodules: "intersect" })).toEqual(
+        getTargets({ esmodules: true }, { ignoreBrowserslistConfig: true }),
+      );
+    });
+
+    it("'intersect' behaves like 'true' if no browsers are specified and the browserslist config is ignored", () => {
       expect(
         getTargets(
           { esmodules: "intersect" },

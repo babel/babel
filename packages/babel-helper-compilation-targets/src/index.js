@@ -205,7 +205,7 @@ export default function getTargets(
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
-  if (esmodules && (esmodules !== "intersect" || !browsers)) {
+  if (esmodules && (esmodules !== "intersect" || !browsers?.length)) {
     browsers = Object.keys(ESM_SUPPORT)
       .map(browser => `${browser} >= ${ESM_SUPPORT[browser]}`)
       .join(", ");
