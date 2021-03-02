@@ -33,7 +33,6 @@
     "@babel/preset-typescript": "^7.13.0",
     "@babel/register": "^7.13.0",
     "@babel/runtime": "^7.13.7",
-    "@babel/traverse": "^7.13.0",
     "@rollup/plugin-babel": "^5.2.0",
     "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch",
     "@rollup/plugin-json": "^4.1.0",

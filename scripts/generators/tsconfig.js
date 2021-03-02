@@ -3,9 +3,6 @@ import fs from "fs";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import globby from "globby";
-import * as babel from "@babel/core";
-import traverseModule from "@babel/traverse";
-const traverse = traverseModule.default;
 
 const require = createRequire(import.meta.url);
 
@@ -50,19 +47,11 @@ function sourceDeps(packageDir) {
     const filename = path.join(packageDir, file);
     const source = fs.readFileSync(filename, { encoding: "utf8" });
 
-    const ast = babel.parseSync(source, {
-      ast: true,
-      filename,
-    });
-
-    traverse(ast, {
-      ImportDeclaration(path) {
-        const importSource = path.node.source.value;
-        if (importSource.startsWith("@babel/")) {
-          result.add(importSource);
-        }
-      },
-    });
+    for (const [importSource] of source.matchAll(
+      /(?<=from\s*")@babel\/[^"/]+/g
+    )) {
+      result.add(importSource);
+    }
   }
   return result;
 }
