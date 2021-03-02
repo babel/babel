@@ -29,4 +29,4 @@ programmatic options from @babel/cli
   },
   "filename": "src//foo.js"
 }
-Successfully compiled 1 file with Babel (123ms).
+Successfully compiled 2 file with Babel (123ms).
