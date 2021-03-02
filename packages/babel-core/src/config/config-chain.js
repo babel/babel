@@ -263,7 +263,6 @@ export function* buildRootChain(
           .filter(x => !!x)
           .join("\n\n"),
     );
-    return null;
   }
   // Insert file chain in front so programmatic options have priority
   // over configuration file chain items.
