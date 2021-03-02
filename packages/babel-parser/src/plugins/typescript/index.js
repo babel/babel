@@ -60,6 +60,8 @@ type ParsingContext =
   | "TypeParametersOrArguments";
 
 const TSErrors = Object.freeze({
+  AbstractMethodHasImplementation:
+    "Method '%0' cannot have an implementation because it is marked abstract.",
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier",
   ConstructorHasTypeParameters:
@@ -2932,5 +2934,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         this.unexpected(null, tt._class);
       }
+    }
+
+    parseMethod(...args: any[]) {
+      const method = super.parseMethod(...args);
+      if (method.abstract) {
+        const hasBody = this.hasPlugin("estree")
+          ? !!method.value.body
+          : !!method.body;
+        if (hasBody) {
+          const { key } = method;
+          this.raise(
+            method.start,
+            TSErrors.AbstractMethodHasImplementation,
+            key.type === "Identifier"
+              ? key.name
+              : `[${this.input.slice(key.start, key.end)}]`,
+          );
+        }
+      }
+      return method;
     }
   };
