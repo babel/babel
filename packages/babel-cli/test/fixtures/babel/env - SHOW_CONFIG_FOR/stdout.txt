@@ -124,4 +124,5 @@ programmatic options from @babel/cli
   },
   "filename": "./src/index.js"
 }
+-----End Babel configs-----
 "use strict";
