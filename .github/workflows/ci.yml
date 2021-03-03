@@ -399,10 +399,14 @@ jobs:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace
 
-  e2e-babel:
-    name: E2E - babel
+  e2e-tests:
+    name: E2E
     needs: e2e-publish
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [babel, babel-old-version, create-react-app]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -415,40 +419,4 @@ jobs:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace
       - name: Test
-        run: ./scripts/integration-tests/e2e-babel.sh
-
-  e2e-babel-old-version:
-    name: E2E - babel-old-version
-    needs: e2e-publish
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: "*"
-      - uses: actions/download-artifact@v2
-        with:
-          name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
-      - name: Test
-        run: ./scripts/integration-tests/e2e-babel-old-version.sh
-
-  e2e-create-react-app:
-    name: E2E - create-react-app
-    needs: e2e-publish
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: "*"
-      - uses: actions/download-artifact@v2
-        with:
-          name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
-      - name: Test
-        run: ./scripts/integration-tests/e2e-create-react-app.sh
+        run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
