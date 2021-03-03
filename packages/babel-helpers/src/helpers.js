@@ -1336,6 +1336,9 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
 
 helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
   export default function _classPrivateFieldDestructureSet(receiver, privateMap) {
+    if (privateMap === undefined) {
+      throw new TypeError("attempted to set private static field before its declaration");
+    }
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");
     }
@@ -1367,6 +1370,9 @@ helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
+    if (descriptor === undefined) {
+      throw new TypeError("attempted to get private static field before its declaration");
+    }
     if (descriptor.get) {
       return descriptor.get.call(receiver);
     }
@@ -1378,6 +1384,9 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
   export default function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
+    }
+    if (descriptor === undefined) {
+      throw new TypeError("attempted to set private static field before its declaration");
     }
     if (descriptor.set) {
       descriptor.set.call(receiver, value);
