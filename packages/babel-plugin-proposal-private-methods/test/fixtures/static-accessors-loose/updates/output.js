@@ -42,12 +42,12 @@ var _get_privateFieldValue = function () {
   return babelHelpers.classPrivateFieldLooseBase(Cl, _privateField)[_privateField];
 };
 
+Object.defineProperty(Cl, _privateFieldValue, {
+  get: _get_privateFieldValue,
+  set: _set_privateFieldValue
+});
 Object.defineProperty(Cl, _privateField, {
   writable: true,
   value: "top secret string"
 });
 Cl.publicField = "not secret string";
-Object.defineProperty(Cl, _privateFieldValue, {
-  get: _get_privateFieldValue,
-  set: _set_privateFieldValue
-});

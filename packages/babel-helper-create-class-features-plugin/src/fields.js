@@ -806,7 +806,7 @@ export function buildFieldsInitNodes(
         break;
       case isStatic && isPrivate && isMethod && !privateFieldsAsProperties:
         needsClassRef = true;
-        staticNodes.push(
+        staticNodes.unshift(
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
         staticNodes.unshift(
@@ -819,7 +819,7 @@ export function buildFieldsInitNodes(
         break;
       case isStatic && isPrivate && isMethod && privateFieldsAsProperties:
         needsClassRef = true;
-        staticNodes.push(
+        staticNodes.unshift(
           buildPrivateStaticMethodInitLoose(
             t.cloneNode(ref),
             prop,

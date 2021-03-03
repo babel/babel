@@ -17,11 +17,11 @@ var _get_privateStaticFieldValue = function () {
   return babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _PRIVATE_STATIC_FIELD);
 };
 
-var _PRIVATE_STATIC_FIELD = {
-  writable: true,
-  value: "top secret string"
-};
 var _privateStaticFieldValue = {
   get: _get_privateStaticFieldValue,
   set: _set_privateStaticFieldValue
+};
+var _PRIVATE_STATIC_FIELD = {
+  writable: true,
+  value: "top secret string"
 };

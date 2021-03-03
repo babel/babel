@@ -21,11 +21,11 @@ var _get_privateStaticFieldValue = function () {
   return babelHelpers.classPrivateFieldLooseBase(Cl, _PRIVATE_STATIC_FIELD)[_PRIVATE_STATIC_FIELD];
 };
 
-Object.defineProperty(Cl, _PRIVATE_STATIC_FIELD, {
-  writable: true,
-  value: "top secret string"
-});
 Object.defineProperty(Cl, _privateStaticFieldValue, {
   get: _get_privateStaticFieldValue,
   set: _set_privateStaticFieldValue
+});
+Object.defineProperty(Cl, _PRIVATE_STATIC_FIELD, {
+  writable: true,
+  value: "top secret string"
 });

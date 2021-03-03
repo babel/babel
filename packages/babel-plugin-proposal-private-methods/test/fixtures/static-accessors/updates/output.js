@@ -40,12 +40,12 @@ var _get_privateFieldValue = function () {
   return babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateField);
 };
 
+var _privateFieldValue = {
+  get: _get_privateFieldValue,
+  set: _set_privateFieldValue
+};
 var _privateField = {
   writable: true,
   value: "top secret string"
 };
 babelHelpers.defineProperty(Cl, "publicField", "not secret string");
-var _privateFieldValue = {
-  get: _get_privateFieldValue,
-  set: _set_privateFieldValue
-};

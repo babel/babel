@@ -24,14 +24,15 @@ var _getB2 = function _getB2() {
   return this.b;
 };
 
+Object.defineProperty(B, _getB, {
+  value: _getB2
+});
+
 var _getA2 = function _getA2() {
   return A.a;
 };
 
 Object.defineProperty(B, _getA, {
   value: _getA2
-});
-Object.defineProperty(B, _getB, {
-  value: _getB2
 });
 var [getA, getB] = B.extract();
