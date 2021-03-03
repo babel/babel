@@ -399,6 +399,24 @@ jobs:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace
 
+  e2e-babel:
+    name: E2E - babel
+    needs: e2e-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - uses: actions/download-artifact@v2
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+      - name: Test
+        run: ./scripts/integration-tests/e2e-babel.sh
+
   e2e-create-react-app:
     name: E2E - create-react-app
     needs: e2e-publish
