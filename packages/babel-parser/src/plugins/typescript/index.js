@@ -77,6 +77,7 @@ const TSErrors = Object.freeze({
   EmptyTypeParameters: "Type parameter list cannot be empty.",
   ExpectedAmbientAfterExportDeclare:
     "'export declare' must be followed by an ambient declaration.",
+  ImportAliasHasImportType: "An import alias can not use 'import type'",
   IndexSignatureHasAbstract:
     "Index signatures cannot have the 'abstract' modifier",
   IndexSignatureHasAccessibility:
@@ -1482,7 +1483,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       this.checkLVal(node.id, "import equals declaration", BIND_LEXICAL);
       this.expect(tt.eq);
-      node.moduleReference = this.tsParseModuleReference();
+      const moduleReference = this.tsParseModuleReference();
+      if (
+        node.importKind === "type" &&
+        moduleReference.type !== "TSExternalModuleReference"
+      ) {
+        this.raise(moduleReference.start, TSErrors.ImportAliasHasImportType);
+      }
+      node.moduleReference = moduleReference;
       this.semicolon();
       return this.finishNode(node, "TSImportEqualsDeclaration");
     }
@@ -2052,27 +2060,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     checkDuplicateExports() {}
 
     parseImport(node: N.Node): N.AnyImport {
+      node.importKind = "value";
       if (this.match(tt.name) || this.match(tt.star) || this.match(tt.braceL)) {
-        const ahead = this.lookahead();
-
-        if (this.match(tt.name) && ahead.type === tt.eq) {
-          return this.tsParseImportEqualsDeclaration(node);
-        }
+        let ahead = this.lookahead();
 
         if (
           this.isContextual("type") &&
           // import type, { a } from "b";
           ahead.type !== tt.comma &&
           // import type from "a";
-          !(ahead.type === tt.name && ahead.value === "from")
+          !(ahead.type === tt.name && ahead.value === "from") &&
+          // import type = require("a");
+          ahead.type !== tt.eq
         ) {
           node.importKind = "type";
           this.next();
+          ahead = this.lookahead();
         }
-      }
 
-      if (!node.importKind) {
-        node.importKind = "value";
+        if (this.match(tt.name) && ahead.type === tt.eq) {
+          return this.tsParseImportEqualsDeclaration(node);
+        }
       }
 
       const importNode = super.parseImport(node);
@@ -2097,7 +2105,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseExport(node: N.Node): N.AnyExport {
       if (this.match(tt._import)) {
         // `export import A = B;`
-        this.expect(tt._import);
+        this.next(); // eat `tt._import`
+        if (
+          this.isContextual("type") &&
+          this.lookaheadCharCode() !== charCodes.equalsTo
+        ) {
+          node.importKind = "type";
+          this.next(); // eat "type"
+        } else {
+          node.importKind = "value";
+        }
         return this.tsParseImportEqualsDeclaration(node, /* isExport */ true);
       } else if (this.eat(tt.eq)) {
         // `export = x;`

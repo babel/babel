@@ -1461,6 +1461,7 @@ export type TsImportEqualsDeclaration = NodeBase & {
   type: "TSImportEqualsDeclaration",
   isExport: boolean,
   id: Identifier,
+  importKind: "type" | "value",
   moduleReference: TsModuleReference,
 };
 
