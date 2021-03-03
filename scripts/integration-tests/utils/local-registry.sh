@@ -13,7 +13,6 @@ function startLocalRegistry {
   npm install --global verdaccio-memory
   # Wait for Verdaccio to boot
   grep -q "http address" <(tail -f $tmp_registry_log)
-  tail -f $tmp_registry_log &
 
   # Set registry to local registry
   export NPM_CONFIG_REGISTRY="$custom_registry_url"
