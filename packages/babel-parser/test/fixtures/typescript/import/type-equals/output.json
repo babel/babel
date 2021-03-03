@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
+  "errors": [
+    "SyntaxError: An import alias can not use 'import type' (1:16)",
+    "SyntaxError: An import alias can not use 'import type' (2:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+        "importKind": "type",
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13},"identifierName":"A"},
+          "name": "A"
+        },
+        "moduleReference": {
+          "type": "TSQualifiedName",
+          "start":16,"end":19,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":19}},
+          "left": {
+            "type": "Identifier",
+            "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"B"},
+            "name": "B"
+          },
+          "right": {
+            "type": "Identifier",
+            "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19},"identifierName":"C"},
+            "name": "C"
+          }
+        }
+      },
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":21,"end":39,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
+        "importKind": "type",
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start":33,"end":34,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"B"},
+          "name": "B"
+        },
+        "moduleReference": {
+          "type": "Identifier",
+          "start":37,"end":38,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":17},"identifierName":"C"},
+          "name": "C"
+        }
+      }
+    ],
+    "directives": []
+  }
+}
