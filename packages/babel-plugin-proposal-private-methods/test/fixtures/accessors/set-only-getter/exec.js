@@ -14,6 +14,8 @@ class Cl {
   constructor() {
     expect(() => this.self.#privateFieldValue = 1).toThrow(TypeError);
     expect(this.counter).toBe(1);
+    expect(() => ([this.self.#privateFieldValue] = [1])).toThrow(TypeError);
+    expect(this.counter).toBe(2);
   }
 }
 

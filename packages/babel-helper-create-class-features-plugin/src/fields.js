@@ -318,9 +318,30 @@ const privateNameHandlerSpec = {
   },
 
   destructureSet(member) {
-    const { privateNamesMap, file } = this;
+    const { classRef, privateNamesMap, file } = this;
     const { name } = member.node.property.id;
-    const { id } = privateNamesMap.get(name);
+    const { id, static: isStatic } = privateNamesMap.get(name);
+    if (isStatic) {
+      try {
+        // classStaticPrivateFieldDestructureSet was introduced in 7.99.0
+        // eslint-disable-next-line no-var
+        var helper = file.addHelper("classStaticPrivateFieldDestructureSet");
+      } catch {
+        throw new Error(
+          "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.99.0, \n" +
+            "please update @babel/helpers to the latest version.",
+        );
+      }
+      return t.memberExpression(
+        t.callExpression(helper, [
+          this.receiver(member),
+          t.cloneNode(classRef),
+          t.cloneNode(id),
+        ]),
+        t.identifier("value"),
+      );
+    }
+
     return t.memberExpression(
       t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
         this.receiver(member),

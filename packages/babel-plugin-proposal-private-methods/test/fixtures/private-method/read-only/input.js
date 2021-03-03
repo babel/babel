@@ -8,5 +8,6 @@ class A {
 
   constructor() {
     this.self().#method = 2;
+    ([this.#method] = [2]);
   }
 }

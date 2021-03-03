@@ -7,5 +7,6 @@ class Cl {
 
   constructor() {
     this.#privateFieldValue = 1;
+    ([this.#privateFieldValue] = [1]);
   }
 }

@@ -1299,11 +1299,81 @@ helpers.classPrivateFieldLooseBase = helper("7.0.0-beta.0")`
 `;
 
 helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
+  import classApplyDescriptorGet from "classApplyDescriptorGet";
+  import classExtractFieldDescriptor from "classExtractFieldDescriptor";
   export default function _classPrivateFieldGet(receiver, privateMap) {
-    var descriptor = privateMap.get(receiver);
-    if (!descriptor) {
-      throw new TypeError("attempted to get private field on non-instance");
+    var descriptor = classExtractFieldDescriptor(receiver, privateMap, "get");
+    return classApplyDescriptorGet(receiver, descriptor);
+  }
+`;
+
+helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
+  import classApplyDescriptorSet from "classApplyDescriptorSet";
+  import classExtractFieldDescriptor from "classExtractFieldDescriptor";
+  export default function _classPrivateFieldSet(receiver, privateMap, value) {
+    var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+    classApplyDescriptorSet(receiver, descriptor, value);
+    return value;
+  }
+`;
+
+helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
+  import classApplyDescriptorDestructureSet from "classApplyDescriptorDestructureSet";
+  import classExtractFieldDescriptor from "classExtractFieldDescriptor";
+  export default function _classPrivateFieldDestructureSet(receiver, privateMap) {
+    var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+    return classApplyDescriptorDestructureSet(receiver, descriptor);
+  }
+`;
+
+helpers.classExtractFieldDescriptor = helper("7.99.0")`
+  export default function _classExtractFieldDescriptor(receiver, privateMap, action) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to " + action + " private field on non-instance");
     }
+    return privateMap.get(receiver);
+  }
+`;
+
+helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
+  import classApplyDescriptorGet from "classApplyDescriptorGet";
+  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
+  export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
+    classCheckPrivateStaticAccess(receiver, classConstructor);
+    classCheckPrivateStaticFieldDescriptor(descriptor, "get");
+    return classApplyDescriptorGet(receiver, descriptor);
+  }
+`;
+
+helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
+  import classApplyDescriptorSet from "classApplyDescriptorSet";
+  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
+  export default function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {
+    classCheckPrivateStaticAccess(receiver, classConstructor);
+    classCheckPrivateStaticFieldDescriptor(descriptor, "set");
+    classApplyDescriptorSet(receiver, descriptor, value);
+    return value;
+  }
+`;
+
+helpers.classStaticPrivateMethodGet = helper("7.3.2")`
+  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
+    classCheckPrivateStaticAccess(receiver, classConstructor);
+    return method;
+  }
+`;
+
+helpers.classStaticPrivateMethodSet = helper("7.3.2")`
+  export default function _classStaticPrivateMethodSet() {
+    throw new TypeError("attempted to set read only static private field");
+  }
+`;
+
+helpers.classApplyDescriptorGet = helper("7.99.0")`
+  export default function _classApplyDescriptorGet(receiver, descriptor) {
     if (descriptor.get) {
       return descriptor.get.call(receiver);
     }
@@ -1311,12 +1381,8 @@ helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
-  export default function _classPrivateFieldSet(receiver, privateMap, value) {
-    var descriptor = privateMap.get(receiver);
-    if (!descriptor) {
-      throw new TypeError("attempted to set private field on non-instance");
-    }
+helpers.classApplyDescriptorSet = helper("7.99.0")`
+  export default function _classApplyDescriptorSet(receiver, descriptor, value) {
     if (descriptor.set) {
       descriptor.set.call(receiver, value);
     } else {
@@ -1326,23 +1392,13 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
         // class bodies.
         throw new TypeError("attempted to set read only private field");
       }
-
       descriptor.value = value;
     }
-
-    return value;
   }
 `;
 
-helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
-  export default function _classPrivateFieldDestructureSet(receiver, privateMap) {
-    if (privateMap === undefined) {
-      throw new TypeError("attempted to set private static field before its declaration");
-    }
-    if (!privateMap.has(receiver)) {
-      throw new TypeError("attempted to set private field on non-instance");
-    }
-    var descriptor = privateMap.get(receiver);
+helpers.classApplyDescriptorDestructureSet = helper("7.99.0")`
+  export default function _classApplyDescriptorDestructureSet(receiver, descriptor) {
     if (descriptor.set) {
       if (!("__destrObj" in descriptor)) {
         descriptor.__destrObj = {
@@ -1365,57 +1421,30 @@ helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
   }
 `;
 
-helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
-  export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
+helpers.classStaticPrivateFieldDestructureSet = helper("7.99.0")`
+  import classApplyDescriptorDestructureSet from "classApplyDescriptorDestructureSet";
+  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
+  export default function _classStaticPrivateFieldDestructureSet(receiver, classConstructor, descriptor) {
+    classCheckPrivateStaticAccess(receiver, classConstructor);
+    classCheckPrivateStaticFieldDescriptor(descriptor, "set");
+    return classApplyDescriptorDestructureSet(receiver, descriptor);
+  }
+`;
+
+helpers.classCheckPrivateStaticAccess = helper("7.99.0")`
+  export default function _classCheckPrivateStaticAccess(receiver, classConstructor) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
+  }
+`;
+
+helpers.classCheckPrivateStaticFieldDescriptor = helper("7.99.0")`
+  export default function _classCheckPrivateStaticFieldDescriptor(descriptor, action) {
     if (descriptor === undefined) {
-      throw new TypeError("attempted to get private static field before its declaration");
+      throw new TypeError("attempted to " + action + " private static field before its declaration");
     }
-    if (descriptor.get) {
-      return descriptor.get.call(receiver);
-    }
-    return descriptor.value;
-  }
-`;
-
-helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
-  export default function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {
-    if (receiver !== classConstructor) {
-      throw new TypeError("Private static access of wrong provenance");
-    }
-    if (descriptor === undefined) {
-      throw new TypeError("attempted to set private static field before its declaration");
-    }
-    if (descriptor.set) {
-      descriptor.set.call(receiver, value);
-    } else {
-      if (!descriptor.writable) {
-        // This should only throw in strict mode, but class bodies are
-        // always strict and private fields can only be used inside
-        // class bodies.
-        throw new TypeError("attempted to set read only private field");
-      }
-      descriptor.value = value;
-    }
-
-    return value;
-  }
-`;
-
-helpers.classStaticPrivateMethodGet = helper("7.3.2")`
-  export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
-    if (receiver !== classConstructor) {
-      throw new TypeError("Private static access of wrong provenance");
-    }
-    return method;
-  }
-`;
-
-helpers.classStaticPrivateMethodSet = helper("7.3.2")`
-  export default function _classStaticPrivateMethodSet() {
-    throw new TypeError("attempted to set read only static private field");
   }
 `;
 

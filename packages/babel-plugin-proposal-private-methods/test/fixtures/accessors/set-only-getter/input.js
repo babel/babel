@@ -13,6 +13,7 @@ class Cl {
 
   constructor() {
     this.self.#privateFieldValue = 1
+    ([this.self.#privateFieldValue] = [1]);
   }
 }
 
