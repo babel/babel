@@ -406,7 +406,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: [babel, babel-old-version, create-react-app, vue-cli]
+        project: [babel, babel-old-version, create-react-app, vue-cli, jest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
