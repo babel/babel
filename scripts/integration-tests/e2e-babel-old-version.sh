@@ -23,10 +23,13 @@ cd ../..
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 
 node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
+
 (
-  yarn why @babel/core | grep -o "@babel/core@npm:.* (via npm:.*)";
-  yarn why @babel/helpers | grep -o "@babel/helpers@npm:.* (via npm:.*)";
-  yarn why @babel/traverse | grep -o "@babel/traverse@npm:.* (via npm:.*)"
+  # Yarn prints colors on GH actions even if it's piped, unless explicitly disabled
+  # https://github.com/yarnpkg/berry/pull/659
+  YARN_ENABLE_COLORS=0 yarn why @babel/core | grep -o "@babel/core@npm:.* (via npm:.*)";
+  YARN_ENABLE_COLORS=0 yarn why @babel/helpers | grep -o "@babel/helpers@npm:.* (via npm:.*)";
+  YARN_ENABLE_COLORS=0 yarn why @babel/traverse | grep -o "@babel/traverse@npm:.* (via npm:.*)"
 ) | uniq | node -e "
   var pkg = require('./package.json');
   var packages = fs.readFileSync(0, 'utf8').trim().split('\n');
