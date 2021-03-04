@@ -467,11 +467,16 @@ function pluginNodeImportInterop({ template }) {
   };
 }
 
-function pluginImportMetaUrl({ types: t }) {
+function pluginImportMetaUrl({ types: t, template }) {
   const isImportMeta = node =>
     t.isMetaProperty(node) &&
     t.isIdentifier(node.meta, { name: "import" }) &&
     t.isIdentifier(node.property, { name: "meta" });
+
+  const isImportMetaUrl = node =>
+    t.isMemberExpression(node, { computed: false }) &&
+    t.isIdentifier(node.property, { name: "url" }) &&
+    isImportMeta(node.object);
 
   return {
     visitor: {
@@ -501,6 +506,17 @@ function pluginImportMetaUrl({ types: t }) {
 
             path.replaceWith(t.identifier("__filename"));
           },
+
+          // import.meta.url
+          MemberExpression(path) {
+            if (!isImportMetaUrl(path.node)) return;
+
+            path.replaceWith(
+              template.expression
+                .ast`\`file://\${__filename.replace(/\\\\/g, "/")}\``
+            );
+          },
+
           MetaProperty(path) {
             if (isImportMeta(path.node)) {
               throw path.buildCodeFrameError("Unsupported import.meta");
