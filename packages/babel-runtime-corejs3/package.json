@@ -674,6 +674,15 @@
       "./helpers/classPrivateFieldDestructureSet.js"
     ],
     "./helpers/esm/classPrivateFieldDestructureSet": "./helpers/esm/classPrivateFieldDestructureSet.js",
+    "./helpers/classExtractFieldDescriptor": [
+      {
+        "node": "./helpers/classExtractFieldDescriptor.js",
+        "import": "./helpers/esm/classExtractFieldDescriptor.js",
+        "default": "./helpers/classExtractFieldDescriptor.js"
+      },
+      "./helpers/classExtractFieldDescriptor.js"
+    ],
+    "./helpers/esm/classExtractFieldDescriptor": "./helpers/esm/classExtractFieldDescriptor.js",
     "./helpers/classStaticPrivateFieldSpecGet": [
       {
         "node": "./helpers/classStaticPrivateFieldSpecGet.js",
@@ -710,6 +719,60 @@
       "./helpers/classStaticPrivateMethodSet.js"
     ],
     "./helpers/esm/classStaticPrivateMethodSet": "./helpers/esm/classStaticPrivateMethodSet.js",
+    "./helpers/classApplyDescriptorGet": [
+      {
+        "node": "./helpers/classApplyDescriptorGet.js",
+        "import": "./helpers/esm/classApplyDescriptorGet.js",
+        "default": "./helpers/classApplyDescriptorGet.js"
+      },
+      "./helpers/classApplyDescriptorGet.js"
+    ],
+    "./helpers/esm/classApplyDescriptorGet": "./helpers/esm/classApplyDescriptorGet.js",
+    "./helpers/classApplyDescriptorSet": [
+      {
+        "node": "./helpers/classApplyDescriptorSet.js",
+        "import": "./helpers/esm/classApplyDescriptorSet.js",
+        "default": "./helpers/classApplyDescriptorSet.js"
+      },
+      "./helpers/classApplyDescriptorSet.js"
+    ],
+    "./helpers/esm/classApplyDescriptorSet": "./helpers/esm/classApplyDescriptorSet.js",
+    "./helpers/classApplyDescriptorDestructureSet": [
+      {
+        "node": "./helpers/classApplyDescriptorDestructureSet.js",
+        "import": "./helpers/esm/classApplyDescriptorDestructureSet.js",
+        "default": "./helpers/classApplyDescriptorDestructureSet.js"
+      },
+      "./helpers/classApplyDescriptorDestructureSet.js"
+    ],
+    "./helpers/esm/classApplyDescriptorDestructureSet": "./helpers/esm/classApplyDescriptorDestructureSet.js",
+    "./helpers/classStaticPrivateFieldDestructureSet": [
+      {
+        "node": "./helpers/classStaticPrivateFieldDestructureSet.js",
+        "import": "./helpers/esm/classStaticPrivateFieldDestructureSet.js",
+        "default": "./helpers/classStaticPrivateFieldDestructureSet.js"
+      },
+      "./helpers/classStaticPrivateFieldDestructureSet.js"
+    ],
+    "./helpers/esm/classStaticPrivateFieldDestructureSet": "./helpers/esm/classStaticPrivateFieldDestructureSet.js",
+    "./helpers/classCheckPrivateStaticAccess": [
+      {
+        "node": "./helpers/classCheckPrivateStaticAccess.js",
+        "import": "./helpers/esm/classCheckPrivateStaticAccess.js",
+        "default": "./helpers/classCheckPrivateStaticAccess.js"
+      },
+      "./helpers/classCheckPrivateStaticAccess.js"
+    ],
+    "./helpers/esm/classCheckPrivateStaticAccess": "./helpers/esm/classCheckPrivateStaticAccess.js",
+    "./helpers/classCheckPrivateStaticFieldDescriptor": [
+      {
+        "node": "./helpers/classCheckPrivateStaticFieldDescriptor.js",
+        "import": "./helpers/esm/classCheckPrivateStaticFieldDescriptor.js",
+        "default": "./helpers/classCheckPrivateStaticFieldDescriptor.js"
+      },
+      "./helpers/classCheckPrivateStaticFieldDescriptor.js"
+    ],
+    "./helpers/esm/classCheckPrivateStaticFieldDescriptor": "./helpers/esm/classCheckPrivateStaticFieldDescriptor.js",
     "./helpers/decorate": [
       {
         "node": "./helpers/decorate.js",
