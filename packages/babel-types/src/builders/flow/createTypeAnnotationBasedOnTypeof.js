@@ -28,6 +28,9 @@ export default function createTypeAnnotationBasedOnTypeof(
     return genericTypeAnnotation(identifier("Object"));
   } else if (type === "symbol") {
     return genericTypeAnnotation(identifier("Symbol"));
+  } else if(type === "bigint"){
+//     what about bigint?
+//     I got a problem while building electron app using node-unzipper saying 'Invalid typeof value'
   } else {
     throw new Error("Invalid typeof value");
   }
