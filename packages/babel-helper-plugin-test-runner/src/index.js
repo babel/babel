@@ -11,7 +11,13 @@ export default function (loc) {
     }
   }
 
-  const fixtures = new URL("./fixtures", loc).pathname;
+  let fixtures = new URL("./fixtures", loc).pathname;
+  if (process.platform === "win32") {
+    // Remove the leading / before the drive letter
+    // TODO: After dropping Node.js 10 support, use fileURLToPath
+    fixtures = fixtures.slice(1);
+  }
+
   const name = path.basename(new URL("..", loc).pathname);
 
   testRunner(fixtures, name);
