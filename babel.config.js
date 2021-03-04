@@ -178,14 +178,17 @@ module.exports = function (api) {
         plugins: ["babel-plugin-transform-charcodes"],
         assumptions: parserAssumptions,
       },
-      {
+      convertESM && {
         test: ["./packages/babel-cli", "./packages/babel-core"].map(normalize),
         plugins: [
           // Explicitly use the lazy version of CommonJS modules.
-          convertESM
-            ? ["@babel/transform-modules-commonjs", { lazy: true }]
-            : null,
-        ].filter(Boolean),
+          ["@babel/transform-modules-commonjs", { lazy: true }],
+        ],
+      },
+      convertESM && {
+        test: ["./packages/babel-node/src"].map(normalize),
+        // Used to conditionally import kexec
+        plugins: ["@babel/plugin-proposal-dynamic-import"],
       },
       {
         test: sources.map(normalize),
