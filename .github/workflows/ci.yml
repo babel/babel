@@ -387,11 +387,6 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ hashFiles('yarn.lock') }}
-      - name: Setup Verdaccio cache
-        uses: actions/cache@v2
-        with:
-          path: /tmp/verdaccio-workspace
-          key: verdaccio-${{ hashFiles('yarn.lock') }}
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
       - uses: actions/upload-artifact@v2
