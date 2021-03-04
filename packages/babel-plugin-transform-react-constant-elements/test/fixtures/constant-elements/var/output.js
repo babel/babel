@@ -1,6 +1,6 @@
 function fn(Component) {
-  var data = "prop",
-      _ref = <Component prop={data} />;
+  var _Component;
 
-  return () => _ref;
+  var data = "prop";
+  return () => _Component || (_Component = <Component prop={data} />);
 }

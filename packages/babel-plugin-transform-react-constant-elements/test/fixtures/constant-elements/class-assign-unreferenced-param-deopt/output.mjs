@@ -1,6 +1,6 @@
-import React from 'react'; // Regression test for https://github.com/babel/babel/issues/5552
+var _div2;
 
-var _ref = <div />;
+import React from 'react'; // Regression test for https://github.com/babel/babel/issues/5552
 
 class BugReport extends React.Component {
   constructor(...args) {
@@ -8,8 +8,12 @@ class BugReport extends React.Component {
 
     this.thisWontWork = ({
       color
-    }) => data => {
-      return <div color={color}>does not reference data</div>;
+    }) => {
+      var _div;
+
+      return data => {
+        return _div || (_div = <div color={color}>does not reference data</div>);
+      };
     };
 
     this.thisWorks = ({
@@ -20,7 +24,7 @@ class BugReport extends React.Component {
   }
 
   render() {
-    return _ref;
+    return _div2 || (_div2 = <div />);
   }
 
 }

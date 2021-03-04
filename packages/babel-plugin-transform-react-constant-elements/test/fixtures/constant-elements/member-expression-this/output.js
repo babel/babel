@@ -1,14 +1,12 @@
-var _ref = <span>Sub Component</span>;
+var _span, _this$subComponent;
 
 class Component extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.subComponent = () => _ref;
+    this.subComponent = () => _span || (_span = <span>Sub Component</span>);
 
-    var _ref2 = <this.subComponent />;
-
-    this.render = () => _ref2;
+    this.render = () => _this$subComponent || (_this$subComponent = <this.subComponent />);
   }
 
 }
