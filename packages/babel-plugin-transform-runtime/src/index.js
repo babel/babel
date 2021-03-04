@@ -5,9 +5,12 @@ import { types as t } from "@babel/core";
 import { hasMinVersion } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
 
-import pluginCorejs2 from "babel-plugin-polyfill-corejs2";
-import pluginCorejs3 from "babel-plugin-polyfill-corejs3";
-import pluginRegenerator from "babel-plugin-polyfill-regenerator";
+import _pluginCorejs2 from "babel-plugin-polyfill-corejs2";
+import _pluginCorejs3 from "babel-plugin-polyfill-corejs3";
+import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
+const pluginCorejs2 = _pluginCorejs2.default;
+const pluginCorejs3 = _pluginCorejs3.default;
+const pluginRegenerator = _pluginRegenerator.default;
 
 const pluginsCompat = "#__secret_key__@babel/runtime__compatibility";
 

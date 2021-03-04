@@ -13,9 +13,11 @@ import assert from "assert";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
-import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 import QuickLRU from "quick-lru";
 import escapeRegExp from "./escape-regexp.cjs";
+
+import _checkDuplicatedNodes from "babel-check-duplicated-nodes";
+const checkDuplicatedNodes = _checkDuplicatedNodes.default;
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
