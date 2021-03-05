@@ -18,6 +18,19 @@ export default declare((api, options) => {
   // Element -> Target scope
   const HOISTED = new WeakMap();
 
+  function declares(
+    node: t.ThisExpression | t.Identifier | t.JSXIdentifier,
+    scope,
+  ) {
+    // Ideally this should always be a ThisExpression 🤷
+    if (t.isThisExpression(node) || t.isJSXIdentifier(node, { name: "this" })) {
+      const { path } = scope;
+      return path.isFunctionParent() && !path.isArrowFunctionExpression();
+    }
+
+    return scope.hasOwnBinding(node.name);
+  }
+
   const analyzer = {
     enter(path, state) {
       const stop = () => {
@@ -76,9 +89,9 @@ export default declare((api, options) => {
         stop();
       }
     },
-    ReferencedIdentifier(path, state) {
-      const { name } = path.node;
-      let scope = path.scope;
+    "ReferencedIdentifier|ThisExpression"(path, state) {
+      const { node } = path;
+      let { scope } = path;
       let targetScope;
 
       let isNestedScope = true;
@@ -131,7 +144,7 @@ export default declare((api, options) => {
         //  2. We are in an upper scope, so this declaration defines
         //     a new hoisting constraint. The targetScope variable
         //     refers to the current scope.
-        if (scope.hasOwnBinding(name)) break;
+        if (declares(node, scope)) break;
 
         scope = scope.parent;
       }
