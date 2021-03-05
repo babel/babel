@@ -23,7 +23,12 @@ export default declare((api, options) => {
     scope,
   ) {
     // Ideally this should always be a ThisExpression 🤷
-    if (t.isThisExpression(node) || t.isJSXIdentifier(node, { name: "this" })) {
+    if (
+      t.isJSXIdentifier(node, { name: "this" }) ||
+      t.isJSXIdentifier(node, { name: "arguments" }) ||
+      t.isJSXIdentifier(node, { name: "super" }) ||
+      t.isJSXIdentifier(node, { name: "new" })
+    ) {
       const { path } = scope;
       return path.isFunctionParent() && !path.isArrowFunctionExpression();
     }
