@@ -32,6 +32,15 @@ export default declare((api, options) => {
     return scope.hasOwnBinding(node.name);
   }
 
+  function isHoistingScope({ path }) {
+    return path.isFunctionParent() || path.isLoop() || path.isProgram();
+  }
+
+  function getHoistingScope(scope) {
+    while (!isHoistingScope(scope)) scope = scope.parent;
+    return scope;
+  }
+
   const analyzer = {
     enter(path, state) {
       const stop = () => {
@@ -90,6 +99,31 @@ export default declare((api, options) => {
         stop();
       }
     },
+
+    ReferencedIdentifier(path, state) {
+      const { node } = path;
+      let { scope } = path;
+
+      while (scope) {
+        // We cannot hoist outside of the previous hoisting target
+        // scope, so we return early and we don't update it.
+        if (scope === state.targetScope) return;
+
+        // If the scope declares this identifier (or we're at the function
+        // providing the lexical env binding), we can't hoist the var any
+        // higher.
+        if (declares(node, scope)) break;
+
+        scope = scope.parent;
+      }
+
+      state.targetScope = getHoistingScope(scope);
+    },
+
+    /*
+    See the discussion at https://github.com/babel/babel/pull/12967#discussion_r587948958
+    to uncomment this code.
+
     ReferencedIdentifier(path, state) {
       const { node } = path;
       let { scope } = path;
@@ -129,10 +163,7 @@ export default declare((api, options) => {
         if (scope === state.jsxScope) {
           needsHoisting = false;
         }
-        if (
-          !needsHoisting &&
-          (scope.path.isFunctionParent() || scope.path.isLoop())
-        ) {
+        if (!needsHoisting && isHoistingScope(scope)) {
           needsHoisting = true;
         }
 
@@ -151,7 +182,7 @@ export default declare((api, options) => {
       }
 
       if (targetScope) state.targetScope = targetScope;
-    },
+    },*/
   };
 
   return {
@@ -180,6 +211,21 @@ export default declare((api, options) => {
           mutablePropsAllowed = allowMutablePropsOnTags.includes(elementName);
         }
 
+        const state = {
+          isImmutable: true,
+          mutablePropsAllowed,
+          targetScope: path.scope.getProgramParent(),
+        };
+
+        // Traverse all props passed to this element for immutability,
+        // and compute the target hoisting scope
+        path.traverse(analyzer, state);
+
+        if (!state.isImmutable) return;
+
+        const { targetScope } = state;
+        HOISTED.set(path.node, targetScope);
+
         // In order to avoid hoisting unnecessarily, we need to know which is
         // the scope containing the current JSX element. If a parent of the
         // current element has already been hoisted, we can consider its target
@@ -190,25 +236,7 @@ export default declare((api, options) => {
           current = current.parentPath;
           jsxScope = HOISTED.get(current.node);
         }
-        jsxScope ??= path.scope;
-
-        const state = {
-          isImmutable: true,
-          mutablePropsAllowed,
-          jsxScope,
-          targetScope: null,
-        };
-
-        // Traverse all props passed to this element for immutability,
-        // and compute the target hoisting scope
-        path.traverse(analyzer, state);
-
-        if (!state.isImmutable) return;
-
-        // If we didn't find any hoisting constraint, we can hoist the current
-        // helement to the program scope.
-        const targetScope = state.targetScope ?? path.scope.getProgramParent();
-        HOISTED.set(path.node, targetScope);
+        jsxScope ??= getHoistingScope(path.scope);
 
         // Only hoist if it would give us an advantage.
         if (targetScope === jsxScope) return;
