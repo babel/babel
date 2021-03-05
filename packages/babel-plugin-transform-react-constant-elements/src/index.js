@@ -148,7 +148,7 @@ export default declare((api, options) => {
         if (HOISTED.has(path.node)) return;
         HOISTED.set(path.node, path.scope);
 
-        const name = path.get("openingElement.name").node;
+        const name = path.node.openingElement.name;
 
         // This transform takes the option `allowMutablePropsOnTags`, which is an array
         // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
