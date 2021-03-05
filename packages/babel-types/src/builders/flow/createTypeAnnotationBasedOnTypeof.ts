@@ -26,7 +26,8 @@ export default function createTypeAnnotationBasedOnTypeof(
   | t.VoidTypeAnnotation
   | t.NumberTypeAnnotation
   | t.BooleanTypeAnnotation
-  | t.GenericTypeAnnotation {
+  | t.GenericTypeAnnotation
+  | t.AnyTypeAnnotation {
   if (type === "string") {
     return stringTypeAnnotation();
   } else if (type === "number") {
