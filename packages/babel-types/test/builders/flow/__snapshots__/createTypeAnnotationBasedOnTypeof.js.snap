@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`builders flow createTypeAnnotationBasedOnTypeof bigint 1`] = `
+Object {
+  "type": "AnyTypeAnnotation",
+}
+`;
+
 exports[`builders flow createTypeAnnotationBasedOnTypeof function 1`] = `
 Object {
   "id": Object {

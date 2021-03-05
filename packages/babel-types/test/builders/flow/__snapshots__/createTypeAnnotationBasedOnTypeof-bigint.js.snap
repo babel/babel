@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`builders flow createTypeAnnotationBasedOnTypeof on bigint bigint 1`] = `
-Object {
-  "type": "AnyTypeAnnotation",
-}
-`;
