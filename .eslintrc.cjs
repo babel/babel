@@ -2,6 +2,8 @@
 
 const path = require("path");
 
+const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
+
 module.exports = {
   root: true,
   plugins: [
@@ -66,6 +68,25 @@ module.exports = {
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
         "import/extensions": ["error", { json: "always", cjs: "always" }],
+      },
+    },
+    {
+      files: [
+        "packages/*/src/**/*.{js,ts}",
+        "codemods/*/src/**/*.{js,ts}",
+        "eslint/*/src/**/*.{js,ts}",
+        "packages/*/test/**/*.js",
+        "codemods/*/test/**/*.js",
+        "eslint/*/test/**/*.js",
+        "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
+        "test/**/*.js",
+      ],
+      excludedFiles: [
+        // @babel/register is the require() hook, so it will always be CJS-based
+        "packages/babel-register/**/*.js",
+      ],
+      rules: {
+        "no-restricted-globals": ["error", ...cjsGlobals],
       },
     },
     {

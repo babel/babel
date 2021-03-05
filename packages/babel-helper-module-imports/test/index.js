@@ -1,6 +1,10 @@
 import * as babel from "@babel/core";
+import { fileURLToPath } from "url";
+import path from "path";
 
 import { ImportInjector } from "../";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function test(sourceType, opts, initializer, inputCode, expectedCode) {
   if (typeof opts === "function") {
@@ -15,7 +19,7 @@ function test(sourceType, opts, initializer, inputCode, expectedCode) {
   }
 
   const result = babel.transform(inputCode, {
-    cwd: __dirname,
+    cwd,
     sourceType,
     filename: "example" + (sourceType === "module" ? ".mjs" : ".js"),
     babelrc: false,

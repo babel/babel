@@ -4,6 +4,7 @@ import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import path from "path";
 import fs from "fs";
+import { createRequire } from "module";
 
 export function chmod(src: string, dest: string): void {
   try {
@@ -119,6 +120,9 @@ process.on("uncaughtException", function (err) {
 });
 
 export function requireChokidar(): Object {
+  // $FlowIgnore - https://github.com/facebook/flow/issues/6913#issuecomment-662787504
+  const require = createRequire(import /*::("")*/.meta.url);
+
   try {
     // todo(babel 8): revert `@nicolo-ribaudo/chokidar-2` hack
     return parseInt(process.versions.node) >= 8

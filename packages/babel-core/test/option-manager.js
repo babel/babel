@@ -1,11 +1,11 @@
 import { loadOptions as loadOptionsOrig } from "../lib";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function loadOptions(opts) {
-  return loadOptionsOrig({
-    cwd: __dirname,
-    ...opts,
-  });
+  return loadOptionsOrig({ cwd, ...opts });
 }
 
 describe("option-manager", () => {
@@ -220,9 +220,7 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return expect(() => {
         loadOptions({
-          presets: [
-            path.join(__dirname, "fixtures/option-manager/not-a-preset"),
-          ],
+          presets: [path.join(cwd, "fixtures/option-manager/not-a-preset")],
         });
       }).toThrow(
         /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/,
@@ -234,9 +232,7 @@ describe("option-manager", () => {
     function presetTest(name) {
       it(name, function () {
         const options = loadOptions({
-          presets: [
-            path.join(__dirname, "fixtures/option-manager/presets", name),
-          ],
+          presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
         });
 
         expect(Array.isArray(options.plugins)).toBe(true);
@@ -249,9 +245,7 @@ describe("option-manager", () => {
       it(name, function () {
         expect(() =>
           loadOptions({
-            presets: [
-              path.join(__dirname, "fixtures/option-manager/presets", name),
-            ],
+            presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
           }),
         ).toThrow(msg);
       });

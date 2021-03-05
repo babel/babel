@@ -1,8 +1,11 @@
 import { loadOptions as loadOptionsOrig } from "../lib";
-import { join } from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const cwd = dirname(fileURLToPath(import.meta.url));
 
 function loadOptions(opts) {
-  return loadOptionsOrig({ cwd: __dirname, ...opts });
+  return loadOptionsOrig({ cwd, ...opts });
 }
 
 function withTargets(targets) {
@@ -83,7 +86,7 @@ describe("browserslist", () => {
   it("loads .browserslistrc by default", () => {
     expect(
       loadOptions({
-        cwd: join(__dirname, "fixtures", "targets"),
+        cwd: join(cwd, "fixtures", "targets"),
       }).targets,
     ).toEqual({ chrome: "80.0.0" });
   });
@@ -91,7 +94,7 @@ describe("browserslist", () => {
   it("loads .browserslistrc relative to the input file", () => {
     expect(
       loadOptions({
-        cwd: join(__dirname, "fixtures", "targets"),
+        cwd: join(cwd, "fixtures", "targets"),
         filename: "./nested/test.js",
       }).targets,
     ).toEqual({ edge: "14.0.0" });
@@ -101,7 +104,7 @@ describe("browserslist", () => {
     it("can disable config loading", () => {
       expect(
         loadOptions({
-          cwd: join(__dirname, "fixtures", "targets"),
+          cwd: join(cwd, "fixtures", "targets"),
           browserslistConfigFile: false,
         }).targets,
       ).toEqual({});
@@ -110,7 +113,7 @@ describe("browserslist", () => {
     it("can specify a custom file", () => {
       expect(
         loadOptions({
-          cwd: join(__dirname, "fixtures", "targets"),
+          cwd: join(cwd, "fixtures", "targets"),
           browserslistConfigFile: "./.browserslistrc-firefox",
         }).targets,
       ).toEqual({ firefox: "74.0.0" });
@@ -119,7 +122,7 @@ describe("browserslist", () => {
     it("is relative to the project root", () => {
       expect(
         loadOptions({
-          cwd: join(__dirname, "fixtures", "targets"),
+          cwd: join(cwd, "fixtures", "targets"),
           root: "..",
           filename: "./nested/test.js",
           browserslistConfigFile: "./targets/.browserslistrc-firefox",
@@ -132,7 +135,7 @@ describe("browserslist", () => {
     it("is forwarded to browserslist", () => {
       expect(
         loadOptions({
-          cwd: join(__dirname, "fixtures", "targets"),
+          cwd: join(cwd, "fixtures", "targets"),
           browserslistEnv: "browserslist-loading-test",
         }).targets,
       ).toEqual({ chrome: "70.0.0" });

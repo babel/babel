@@ -5,8 +5,12 @@
 
 import getV8Flags from "v8flags";
 import path from "path";
+import child_process from "child_process";
+import { fileURLToPath } from "url";
 
-let args = [path.join(__dirname, "_babel-node")];
+let args = [
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "_babel-node"),
+];
 
 let babelArgs = process.argv.slice(2);
 let userArgs;
@@ -41,7 +45,7 @@ const aliases = new Map([
   ["-gc", "--expose-gc"],
 ]);
 
-getV8Flags(function (err, v8Flags) {
+getV8Flags(async function (err, v8Flags) {
   for (let i = 0; i < babelArgs.length; i++) {
     const arg = babelArgs[i];
     const flag = arg.split("=")[0];
@@ -69,17 +73,17 @@ getV8Flags(function (err, v8Flags) {
   }
 
   try {
-    const kexec = require("kexec");
+    const { default: kexec } = await import("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
     if (
+      err.code !== "ERR_MODULE_NOT_FOUND" &&
       err.code !== "MODULE_NOT_FOUND" &&
       err.code !== "UNDECLARED_DEPENDENCY"
     ) {
       throw err;
     }
 
-    const child_process = require("child_process");
     const proc = child_process.spawn(process.argv[0], args, {
       stdio: ["inherit", "inherit", "inherit", "ipc"],
     });

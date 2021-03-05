@@ -1,5 +1,8 @@
 import path from "path";
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 export default function (moduleName, dirname, absoluteRuntime) {
   if (absoluteRuntime === false) return moduleName;
 

@@ -1,7 +1,10 @@
 import * as babel from "@babel/core";
 import fs from "fs";
+import { createRequire } from "module";
 
 import transformTypeofSymbol from "..";
+
+const require = createRequire(import.meta.url);
 
 const readFile = path =>
   new Promise((resolve, reject) =>

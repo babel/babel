@@ -1,5 +1,6 @@
 import browserslist from "browserslist";
-import { join } from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 import getTargets from "..";
 
 describe("getTargets", () => {
@@ -250,7 +251,13 @@ describe("getTargets", () => {
           {
             esmodules: "intersect",
           },
-          { configPath: join(__dirname, "fixtures", "foo.js") },
+          {
+            configPath: join(
+              dirname(fileURLToPath(import.meta.url)),
+              "fixtures",
+              "foo.js",
+            ),
+          },
         ),
       ).toMatchSnapshot();
     });

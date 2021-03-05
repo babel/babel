@@ -2,6 +2,10 @@ import cloneDeep from "lodash/cloneDeep";
 import semver from "semver";
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const nodeVersion = semver.clean(process.version.slice(1));
 
@@ -279,7 +283,11 @@ function wrapPackagesArray(type, names, optionsDir) {
 
       val[0] = path.resolve(optionsDir, val[0]);
     } else {
-      const monorepoPath = __dirname + "/../../babel-" + type + "-" + val[0];
+      const monorepoPath = path.join(
+        path.dirname(fileURLToPath(import.meta.url)),
+        "../..",
+        `babel-${type}-${val[0]}`,
+      );
 
       if (fs.existsSync(monorepoPath)) {
         val[0] = monorepoPath;

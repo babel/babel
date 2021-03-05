@@ -1,7 +1,13 @@
 import cp from "child_process";
 import util from "util";
 import path from "path";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
 import * as babel from "../../lib";
+
+const require = createRequire(import.meta.url);
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // "minNodeVersion": "10.0.0" <-- For Ctrl+F when dropping node 10
 const nodeSupportsESM = parseInt(process.versions.node) >= 12;
@@ -30,7 +36,7 @@ export function skipUnsupportedESM(esm, name) {
   return false;
 }
 
-export function loadOptionsAsync({ filename, cwd = __dirname }, mjs) {
+export function loadOptionsAsync({ filename, cwd = dirname }, mjs) {
   if (mjs) {
     // import() crashes with jest
     return spawn("load-options-async", filename, cwd);

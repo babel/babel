@@ -1,6 +1,8 @@
-import fs from "fs";
-import path from "path";
-import child from "child_process";
+"use strict";
+
+const fs = require("fs");
+const path = require("path");
+const child = require("child_process");
 
 let currentHook;
 let currentOptions;

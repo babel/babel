@@ -159,6 +159,7 @@ module.exports = function (api) {
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
       convertESM ? pluginNodeImportInterop : null,
+      convertESM ? pluginImportMetaUrl : null,
 
       pluginPackageJsonMacro,
 
@@ -177,14 +178,17 @@ module.exports = function (api) {
         plugins: ["babel-plugin-transform-charcodes"],
         assumptions: parserAssumptions,
       },
-      {
+      convertESM && {
         test: ["./packages/babel-cli", "./packages/babel-core"].map(normalize),
         plugins: [
           // Explicitly use the lazy version of CommonJS modules.
-          convertESM
-            ? ["@babel/transform-modules-commonjs", { lazy: true }]
-            : null,
-        ].filter(Boolean),
+          ["@babel/transform-modules-commonjs", { lazy: true }],
+        ],
+      },
+      convertESM && {
+        test: ["./packages/babel-node/src"].map(normalize),
+        // Used to conditionally import kexec
+        plugins: ["@babel/plugin-proposal-dynamic-import"],
       },
       {
         test: sources.map(normalize),
@@ -461,6 +465,86 @@ function pluginNodeImportInterop({ template }) {
         }
 
         if (path.node.specifiers.length === 0) path.remove();
+      },
+    },
+  };
+}
+
+function pluginImportMetaUrl({ types: t, template }) {
+  const isImportMeta = node =>
+    t.isMetaProperty(node) &&
+    t.isIdentifier(node.meta, { name: "import" }) &&
+    t.isIdentifier(node.property, { name: "meta" });
+
+  const isImportMetaUrl = node =>
+    t.isMemberExpression(node, { computed: false }) &&
+    t.isIdentifier(node.property, { name: "url" }) &&
+    isImportMeta(node.object);
+
+  return {
+    visitor: {
+      Program(programPath) {
+        // We must be sure to run this before the instanbul plugins, because its
+        // instrumentation breaks our detection.
+        programPath.traverse({
+          // fileURLToPath(import.meta.url)
+          CallExpression(path) {
+            const { node } = path;
+
+            if (
+              !t.isIdentifier(node.callee, { name: "fileURLToPath" }) ||
+              node.arguments.length !== 1
+            ) {
+              return;
+            }
+
+            const arg = node.arguments[0];
+
+            if (
+              !t.isMemberExpression(arg, { computed: false }) ||
+              !t.isIdentifier(arg.property, { name: "url" }) ||
+              !isImportMeta(arg.object)
+            ) {
+              return;
+            }
+
+            path.replaceWith(t.identifier("__filename"));
+          },
+
+          // const require = createRequire(import.meta.url)
+          VariableDeclarator(path) {
+            const { node } = path;
+
+            if (
+              !t.isIdentifier(node.id, { name: "require" }) ||
+              !t.isCallExpression(node.init) ||
+              !t.isIdentifier(node.init.callee, { name: "createRequire" }) ||
+              node.init.arguments.length !== 1 ||
+              !isImportMetaUrl(node.init.arguments[0])
+            ) {
+              return;
+            }
+
+            // Let's just remove this declaration to unshadow the "global" cjs require.
+            path.remove();
+          },
+
+          // import.meta.url
+          MemberExpression(path) {
+            if (!isImportMetaUrl(path.node)) return;
+
+            path.replaceWith(
+              template.expression
+                .ast`\`file://\${__filename.replace(/\\\\/g, "/")}\``
+            );
+          },
+
+          MetaProperty(path) {
+            if (isImportMeta(path.node)) {
+              throw path.buildCodeFrameError("Unsupported import.meta");
+            }
+          },
+        });
       },
     },
   };

@@ -8,6 +8,10 @@ import vm from "vm";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import register from "@babel/register";
+import { fileURLToPath } from "url";
+
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 
 const program = new commander.Command("babel-node");
 
@@ -194,7 +198,7 @@ if (program.eval || program.print) {
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);
-    process.execArgv.push(__filename);
+    process.execArgv.push(fileURLToPath(import.meta.url));
 
     Module.runMain();
   } else {

@@ -24,6 +24,7 @@
     "@babel/eslint-parser": "workspace:*",
     "@babel/eslint-plugin-development": "workspace:*",
     "@babel/eslint-plugin-development-internal": "workspace:*",
+    "@babel/plugin-proposal-dynamic-import": "^7.13.8",
     "@babel/plugin-proposal-export-namespace-from": "^7.12.13",
     "@babel/plugin-proposal-object-rest-spread": "^7.13.0",
     "@babel/plugin-transform-modules-commonjs": "^7.13.0",

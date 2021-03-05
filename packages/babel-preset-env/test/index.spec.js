@@ -1,17 +1,17 @@
-"use strict";
+import compatData from "@babel/compat-data/plugins";
 
-const babelPresetEnv = require("../lib/index");
-const removeRegeneratorEntryPlugin = require("../lib/polyfills/regenerator")
-  .default;
-const pluginCoreJS2 = require("babel-plugin-polyfill-corejs2").default;
-const pluginCoreJS3 = require("babel-plugin-polyfill-corejs3").default;
-const pluginRegenerator = require("babel-plugin-polyfill-regenerator").default;
-const pluginLegacyBabelPolyfill = require("../lib/polyfills/babel-polyfill")
-  .default;
-const transformations = require("../lib/module-transformations").default;
+import * as babelPresetEnv from "../lib/index";
+import removeRegeneratorEntryPlugin from "../lib/polyfills/regenerator";
+import pluginLegacyBabelPolyfill from "../lib/polyfills/babel-polyfill";
+import transformations from "../lib/module-transformations";
+import availablePlugins from "../lib/available-plugins";
 
-const compatData = require("@babel/compat-data/plugins");
-const availablePlugins = require("../lib/available-plugins").default;
+import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
+import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
+import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
+const pluginCoreJS2 = _pluginCoreJS2.default;
+const pluginCoreJS3 = _pluginCoreJS3.default;
+const pluginRegenerator = _pluginRegenerator.default;
 
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {

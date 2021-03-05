@@ -1104,15 +1104,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-dynamic-import@npm:^7.12.17":
-  version: 7.12.17
-  resolution: "@babel/plugin-proposal-dynamic-import@npm:7.12.17"
+"@babel/plugin-proposal-dynamic-import@npm:^7.12.17, @babel/plugin-proposal-dynamic-import@npm:^7.13.8":
+  version: 7.13.8
+  resolution: "@babel/plugin-proposal-dynamic-import@npm:7.13.8"
   dependencies:
-    "@babel/helper-plugin-utils": ^7.12.13
-    "@babel/plugin-syntax-dynamic-import": ^7.8.0
+    "@babel/helper-plugin-utils": ^7.13.0
+    "@babel/plugin-syntax-dynamic-import": ^7.8.3
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: ff09c210552e7c0e5a624c4c56f5cba00922f6c5c01fe46fb2ea5c2d68285d31c92e96a39cc2a68d2ed90c8f5a8c21cbae15ee7b83129f24c0656b26b8e73554
+  checksum: 47ff82e3e3731f93a9e51a7f16f1807ee5fbd627df67b423bcf9bb206ae9230385d62c7310e41ec6ef732f01f0af81061bbbf5f6cbfe6b95aa8fa01571166c9e
   languageName: node
   linkType: hard
 
@@ -4085,9 +4085,9 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 12.12.15
-  resolution: "@types/node@npm:12.12.15"
-  checksum: 3f68af6f288ab0994be8d69f2e9f2a530b276ac8de4bc48492897e9c204492ce706072effdadda21f399490688bfb35ffb0f4aa674f6a2e72b27d0cc3b094842
+  version: 14.14.31
+  resolution: "@types/node@npm:14.14.31"
+  checksum: 635dc8a0898a923621e02ca179e17baa39fdfa44f0096fcc1b7046c9b32317e74a99956a7b45ca0e8069874f51f4e7873a418239a318a4b6e7936f6510ac5992
   languageName: node
   linkType: hard
 
@@ -5471,6 +5471,7 @@ __metadata:
     "@babel/eslint-parser": "workspace:*"
     "@babel/eslint-plugin-development": "workspace:*"
     "@babel/eslint-plugin-development-internal": "workspace:*"
+    "@babel/plugin-proposal-dynamic-import": ^7.13.8
     "@babel/plugin-proposal-export-namespace-from": ^7.12.13
     "@babel/plugin-proposal-object-rest-spread": ^7.13.0
     "@babel/plugin-transform-modules-commonjs": ^7.13.0

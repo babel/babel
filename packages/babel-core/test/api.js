@@ -3,6 +3,13 @@ import sourceMap from "source-map";
 import path from "path";
 import Plugin from "../lib/config/plugin";
 import generator from "@babel/generator";
+import { fileURLToPath } from "url";
+
+import presetEnv from "../../babel-preset-env";
+import pluginSyntaxFlow from "../../babel-plugin-syntax-flow";
+import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function assertIgnored(result) {
   expect(result).toBeNull();
@@ -13,54 +20,26 @@ function assertNotIgnored(result) {
 }
 
 function parse(code, opts) {
-  return babel.parse(code, {
-    cwd: __dirname,
-    configFile: false,
-    ...opts,
-  });
+  return babel.parse(code, { cwd, configFile: false, ...opts });
 }
 
 function transform(code, opts) {
-  return babel.transform(code, {
-    cwd: __dirname,
-    configFile: false,
-    ...opts,
-  });
+  return babel.transform(code, { cwd, configFile: false, ...opts });
 }
 
 function transformFile(filename, opts, cb) {
-  return babel.transformFile(
-    filename,
-    {
-      cwd: __dirname,
-      configFile: false,
-      ...opts,
-    },
-    cb,
-  );
+  return babel.transformFile(filename, { cwd, configFile: false, ...opts }, cb);
 }
 function transformFileSync(filename, opts) {
-  return babel.transformFileSync(filename, {
-    cwd: __dirname,
-    configFile: false,
-    ...opts,
-  });
+  return babel.transformFileSync(filename, { cwd, configFile: false, ...opts });
 }
 
 function transformAsync(code, opts) {
-  return babel.transformAsync(code, {
-    cwd: __dirname,
-    configFile: false,
-    ...opts,
-  });
+  return babel.transformAsync(code, { cwd, configFile: false, ...opts });
 }
 
 function transformFromAst(ast, code, opts) {
-  return babel.transformFromAst(ast, code, {
-    cwd: __dirname,
-    configFile: false,
-    ...opts,
-  });
+  return babel.transformFromAst(ast, code, { cwd, configFile: false, ...opts });
 }
 
 describe("parser and generator options", function () {
@@ -111,7 +90,7 @@ describe("parser and generator options", function () {
     function newTransformWithPlugins(string) {
       return transform(string, {
         ast: true,
-        plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
+        plugins: [cwd + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
           parser: recast.parse,
         },
@@ -173,17 +152,13 @@ describe("api", function () {
       babelrc: false,
     };
     Object.freeze(options);
-    transformFile(
-      __dirname + "/fixtures/api/file.js",
-      options,
-      function (err, res) {
-        if (err) return done(err);
-        expect(res.code).toBe("foo();");
-        // keep user options untouched
-        expect(options).toEqual({ babelrc: false });
-        done();
-      },
-    );
+    transformFile(cwd + "/fixtures/api/file.js", options, function (err, res) {
+      if (err) return done(err);
+      expect(res.code).toBe("foo();");
+      // keep user options untouched
+      expect(options).toEqual({ babelrc: false });
+      done();
+    });
   });
 
   it("transformFileSync", function () {
@@ -191,9 +166,9 @@ describe("api", function () {
       babelrc: false,
     };
     Object.freeze(options);
-    expect(
-      transformFileSync(__dirname + "/fixtures/api/file.js", options).code,
-    ).toBe("foo();");
+    expect(transformFileSync(cwd + "/fixtures/api/file.js", options).code).toBe(
+      "foo();",
+    );
     expect(options).toEqual({ babelrc: false });
   });
 
@@ -249,15 +224,15 @@ describe("api", function () {
   it("options throw on falsy true", function () {
     return expect(function () {
       transform("", {
-        plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
+        plugins: [cwd + "/../../babel-plugin-syntax-jsx", false],
       });
     }).toThrow(/.plugins\[1\] must be a string, object, function/);
   });
 
   it("options merge backwards", function () {
     return transformAsync("", {
-      presets: [__dirname + "/../../babel-preset-env"],
-      plugins: [__dirname + "/../../babel-plugin-syntax-jsx"],
+      presets: [cwd + "/../../babel-preset-env"],
+      plugins: [cwd + "/../../babel-plugin-syntax-jsx"],
     }).then(function (result) {
       expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
         expect.stringContaining("jsx"),
@@ -336,18 +311,12 @@ describe("api", function () {
           },
 
           // env preset
-          require(__dirname + "/../../babel-preset-env"),
+          presetEnv,
 
           // Third preset for Flow.
-          function () {
-            return {
-              plugins: [
-                require(__dirname + "/../../babel-plugin-syntax-flow"),
-                require(__dirname +
-                  "/../../babel-plugin-transform-flow-strip-types"),
-              ],
-            };
-          },
+          () => ({
+            plugins: [pluginSyntaxFlow, pluginFlowStripTypes],
+          }),
         ],
       });
     }
@@ -393,9 +362,9 @@ describe("api", function () {
     process.env.BABEL_ENV = "development";
 
     const result = transform("", {
-      cwd: path.join(__dirname, "fixtures", "config", "complex-plugin-config"),
+      cwd: path.join(cwd, "fixtures", "config", "complex-plugin-config"),
       filename: path.join(
-        __dirname,
+        cwd,
         "fixtures",
         "config",
         "complex-plugin-config",
@@ -792,7 +761,7 @@ describe("api", function () {
 
     it("only syntax plugin available", function (done) {
       transformFile(
-        __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
+        cwd + "/fixtures/api/parsing-errors/only-syntax/file.js",
         options,
         function (err) {
           expect(err.message).toMatch(
@@ -809,7 +778,7 @@ describe("api", function () {
 
     it("both syntax and transform plugin available", function (done) {
       transformFile(
-        __dirname + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
+        cwd + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
         options,
         function (err) {
           expect(err.message).toMatch(

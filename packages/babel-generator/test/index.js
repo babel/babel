@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
 import sourcemap from "source-map";
+import { fileURLToPath } from "url";
 
 describe("generation", function () {
   it("completeness", function () {
@@ -758,7 +759,9 @@ describe("CodeGenerator", function () {
   });
 });
 
-const suites = fixtures(`${__dirname}/fixtures`);
+const suites = fixtures(
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
+);
 
 suites.forEach(function (testSuite) {
   describe("generation/" + testSuite.title, function () {
@@ -783,7 +786,10 @@ suites.forEach(function (testSuite) {
               ...task.options.parserOpts,
             });
             const options = {
-              sourceFileName: path.relative(__dirname, actual.loc),
+              sourceFileName: path.relative(
+                path.dirname(fileURLToPath(import.meta.url)),
+                actual.loc,
+              ),
               ...task.options,
               sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
             };

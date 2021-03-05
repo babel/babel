@@ -1,7 +1,11 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const testCacheFilename = path.join(__dirname, ".babel");
+const testCacheFilename = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  ".babel",
+);
 const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
 
 process.env.BABEL_CACHE_PATH = testCacheFilename;

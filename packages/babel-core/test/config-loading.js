@@ -3,12 +3,16 @@ import loadConfigRunner, {
   createConfigItem,
 } from "../lib/config";
 import path from "path";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const loadConfig = loadConfigRunner.sync;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
-    __dirname,
+    path.dirname(fileURLToPath(import.meta.url)),
     "fixtures",
     "config-loading",
     "folder",

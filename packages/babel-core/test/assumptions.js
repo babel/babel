@@ -1,7 +1,11 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import { loadOptions as loadOptionsOrig, transformSync } from "../lib";
 
+const cwd = path.dirname(fileURLToPath(import.meta.url));
+
 function loadOptions(opts) {
-  return loadOptionsOrig({ cwd: __dirname, ...opts });
+  return loadOptionsOrig({ cwd, ...opts });
 }
 
 function withAssumptions(assumptions) {
