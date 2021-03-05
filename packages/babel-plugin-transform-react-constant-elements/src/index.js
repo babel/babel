@@ -18,11 +18,7 @@ export default declare((api, options) => {
   // Element -> Target scope
   const HOISTED = new WeakMap();
 
-  function declares(
-    node: t.ThisExpression | t.Identifier | t.JSXIdentifier,
-    scope,
-  ) {
-    // Ideally this should always be a ThisExpression 🤷
+  function declares(node: t.Identifier | t.JSXIdentifier, scope) {
     if (
       t.isJSXIdentifier(node, { name: "this" }) ||
       t.isJSXIdentifier(node, { name: "arguments" }) ||
@@ -94,7 +90,7 @@ export default declare((api, options) => {
         stop();
       }
     },
-    "ReferencedIdentifier|ThisExpression"(path, state) {
+    ReferencedIdentifier(path, state) {
       const { node } = path;
       let { scope } = path;
       let targetScope;
