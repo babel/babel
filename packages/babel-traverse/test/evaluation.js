@@ -248,7 +248,72 @@ describe("evaluation", function () {
     expect(result.value).toEqual(["foo", "bar"]);
   });
 
+  it("obj not computed", () => {
+    const ast = parse(`
+      const obj = {foo:'bar'};
+      obj.foo;
+    `);
+
+    let result;
+
+    traverse(ast, {
+      MemberExpression: {
+        enter(path) {
+          result = path.evaluate();
+        },
+      },
+    });
+
+    expect(result.confident).toBe(true);
+    expect(result.deopt).toBeNull();
+    expect(result.value).toEqual("bar");
+  });
+
+  it("should evaluate MemberExpression with non-computed identifier", () => {
+    expect(
+      getPath("const obj = { foo: 'bar' };obj.foo").get("body.1").evaluate()
+        .value,
+    ).toBe("bar");
+  });
+
+  it("should evaluate MemberExpression with nested identifier", () => {
+    expect(
+      getPath("const obj = { foo: { bar: 'baz' } };obj.foo.bar")
+        .get("body.1")
+        .evaluate().value,
+    ).toBe("baz");
+  });
+
+  it("should evaluate MemberExpression with string literal", () => {
+    expect(
+      getPath("const obj = { foo: 'bar' };obj['foo']").get("body.1").evaluate()
+        .value,
+    ).toBe("bar");
+  });
+
+  it("should evaluate MemberExpression with numeric literal", () => {
+    expect(
+      getPath("const obj = { 1: 'bar' };obj[1]").get("body.1").evaluate().value,
+    ).toBe("bar");
+  });
+
+  it("should evaluate MemberExpression with computed identifier", () => {
+    expect(
+      getPath("const obj = { foo: 'bar' };const key = 'foo';obj[key]")
+        .get("body.2")
+        .evaluate().value,
+    ).toBe("bar");
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
+  addDeoptTest("obj.foo", "MemberExpression", "Identifier");
+  addDeoptTest("obj['foo']", "MemberExpression", "Identifier");
+  addDeoptTest("obj[foo]", "MemberExpression", "Identifier");
+  addDeoptTest(
+    "const obj = {};obj.constructor",
+    "MemberExpression",
+    "Identifier",
+  );
 });

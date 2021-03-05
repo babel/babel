@@ -391,6 +391,27 @@ function _evaluate(path: NodePath, state) {
     }
   }
 
+  if (path.isMemberExpression()) {
+    const property = path.get("property");
+    const object = path.get("object");
+    let key: any;
+
+    if (path.node.computed) {
+      key = evaluateCached(property, state);
+      if (!state.confident) return deopt(property, state);
+    } else if (property.isIdentifier()) {
+      key = property.node.name;
+    } else {
+      return deopt(property, state);
+    }
+
+    const value = evaluateCached(object, state);
+    if (state.confident && Object.prototype.hasOwnProperty.call(value, key)) {
+      return value[key];
+    }
+    return deopt(object, state);
+  }
+
   deopt(path, state);
 }
 
