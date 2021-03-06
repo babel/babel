@@ -65,7 +65,8 @@ export default declare((api, options) => {
       if (
         path.isJSXIdentifier() ||
         path.isIdentifier() ||
-        path.isJSXMemberExpression()
+        path.isJSXMemberExpression() ||
+        path.isJSXNamespacedName()
       ) {
         return;
       }
