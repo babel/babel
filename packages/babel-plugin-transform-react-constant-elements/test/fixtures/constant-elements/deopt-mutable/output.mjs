@@ -1,5 +1,7 @@
+var _span;
+
 let foo = 'hello';
 export const Component = () => {
   foo = 'goodbye';
-  return <span>{foo}</span>;
+  return _span || (_span = <span>{foo}</span>);
 };
