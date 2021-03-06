@@ -1,4 +1,4 @@
-# Compiler assumptions
+# Compiler Assumptions
 
 Babel and its associated official transforms make some assumptions about your code. These
 assumptions are only made as they're either **impossible** to take into consideration or
