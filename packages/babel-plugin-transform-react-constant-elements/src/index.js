@@ -232,7 +232,7 @@ export default declare((api, options) => {
         // scope as the base scope for the current element.
         let jsxScope;
         let current = path;
-        while (!jsxScope && current.parentPath.isJSXElement()) {
+        while (!jsxScope && current.parentPath.isJSX()) {
           current = current.parentPath;
           jsxScope = HOISTED.get(current.node);
         }
@@ -247,7 +247,10 @@ export default declare((api, options) => {
         let replacement = template.expression.ast`
           ${t.identifier(id)} || (${t.identifier(id)} = ${path.node})
         `;
-        if (path.parentPath.isJSXElement()) {
+        if (
+          path.parentPath.isJSXElement() ||
+          path.parentPath.isJSXAttribute()
+        ) {
           replacement = t.jsxExpressionContainer(replacement);
         }
 
