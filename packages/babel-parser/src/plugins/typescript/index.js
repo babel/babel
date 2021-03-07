@@ -485,7 +485,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeParameter(): N.TsTypeParameter {
       const node: N.TsTypeParameter = this.startNode();
-      node.name = this.parseIdentifierName(node.start);
+
+      const typeName: N.Identifier = this.parseIdentifier();
+      node.name = process.env.BABEL_8_BREAKING ? typeName : typeName.name;
+
       node.constraint = this.tsEatThenParseType(tt._extends);
       node.default = this.tsEatThenParseType(tt.eq);
       return this.finishNode(node, "TSTypeParameter");

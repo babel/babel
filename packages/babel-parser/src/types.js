@@ -974,7 +974,8 @@ export type TsTypeParameterDeclaration = TypeParameterDeclarationBase & {
 };
 
 export type TypeParameterBase = NodeBase & {
-  name: string,
+  // TODO(Babel-8): remove string type support
+  name: string | Identifier,
 };
 
 export type TypeParameter = TypeParameterBase & {
