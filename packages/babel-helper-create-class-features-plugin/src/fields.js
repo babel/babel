@@ -323,12 +323,12 @@ const privateNameHandlerSpec = {
     const { id, static: isStatic } = privateNamesMap.get(name);
     if (isStatic) {
       try {
-        // classStaticPrivateFieldDestructureSet was introduced in 7.99.0
+        // classStaticPrivateFieldDestructureSet was introduced in 7.13.10
         // eslint-disable-next-line no-var
         var helper = file.addHelper("classStaticPrivateFieldDestructureSet");
       } catch {
         throw new Error(
-          "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.99.0, \n" +
+          "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.13.10, \n" +
             "please update @babel/helpers to the latest version.",
         );
       }

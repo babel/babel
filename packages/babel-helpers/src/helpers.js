@@ -1326,7 +1326,7 @@ helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
   }
 `;
 
-helpers.classExtractFieldDescriptor = helper("7.99.0")`
+helpers.classExtractFieldDescriptor = helper("7.13.10")`
   export default function _classExtractFieldDescriptor(receiver, privateMap, action) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to " + action + " private field on non-instance");
@@ -1372,7 +1372,7 @@ helpers.classStaticPrivateMethodSet = helper("7.3.2")`
   }
 `;
 
-helpers.classApplyDescriptorGet = helper("7.99.0")`
+helpers.classApplyDescriptorGet = helper("7.13.10")`
   export default function _classApplyDescriptorGet(receiver, descriptor) {
     if (descriptor.get) {
       return descriptor.get.call(receiver);
@@ -1381,7 +1381,7 @@ helpers.classApplyDescriptorGet = helper("7.99.0")`
   }
 `;
 
-helpers.classApplyDescriptorSet = helper("7.99.0")`
+helpers.classApplyDescriptorSet = helper("7.13.10")`
   export default function _classApplyDescriptorSet(receiver, descriptor, value) {
     if (descriptor.set) {
       descriptor.set.call(receiver, value);
@@ -1397,7 +1397,7 @@ helpers.classApplyDescriptorSet = helper("7.99.0")`
   }
 `;
 
-helpers.classApplyDescriptorDestructureSet = helper("7.99.0")`
+helpers.classApplyDescriptorDestructureSet = helper("7.13.10")`
   export default function _classApplyDescriptorDestructureSet(receiver, descriptor) {
     if (descriptor.set) {
       if (!("__destrObj" in descriptor)) {
@@ -1421,7 +1421,7 @@ helpers.classApplyDescriptorDestructureSet = helper("7.99.0")`
   }
 `;
 
-helpers.classStaticPrivateFieldDestructureSet = helper("7.99.0")`
+helpers.classStaticPrivateFieldDestructureSet = helper("7.13.10")`
   import classApplyDescriptorDestructureSet from "classApplyDescriptorDestructureSet";
   import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
   import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
@@ -1432,7 +1432,7 @@ helpers.classStaticPrivateFieldDestructureSet = helper("7.99.0")`
   }
 `;
 
-helpers.classCheckPrivateStaticAccess = helper("7.99.0")`
+helpers.classCheckPrivateStaticAccess = helper("7.13.10")`
   export default function _classCheckPrivateStaticAccess(receiver, classConstructor) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
@@ -1440,7 +1440,7 @@ helpers.classCheckPrivateStaticAccess = helper("7.99.0")`
   }
 `;
 
-helpers.classCheckPrivateStaticFieldDescriptor = helper("7.99.0")`
+helpers.classCheckPrivateStaticFieldDescriptor = helper("7.13.10")`
   export default function _classCheckPrivateStaticFieldDescriptor(descriptor, action) {
     if (descriptor === undefined) {
       throw new TypeError("attempted to " + action + " private static field before its declaration");
