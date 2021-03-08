@@ -21,7 +21,11 @@ export function TSTypeParameterInstantiation(
 export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
 
 export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
-  this.word(!process.env.BABEL_8_BREAKING ? node.name : node.name.name);
+  this.word(
+    !process.env.BABEL_8_BREAKING
+      ? ((node.name as unknown) as string)
+      : ((node.name as unknown) as t.Identifier).name,
+  );
 
   if (node.constraint) {
     this.space();
@@ -389,8 +393,8 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
   this.token("[");
   this.word(
     !process.env.BABEL_8_BREAKING
-      ? typeParameter.name
-      : typeParameter.name.name,
+      ? ((typeParameter.name as unknown) as string)
+      : ((typeParameter.name as unknown) as t.Identifier).name,
   );
   this.space();
   this.word("in");
