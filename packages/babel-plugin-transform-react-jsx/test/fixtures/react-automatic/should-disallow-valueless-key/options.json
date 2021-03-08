@@ -1,0 +1,3 @@
+{
+  "throws": "Provide an explicit value to be used as a key. You are not supposed to use the \"key\" shorthand for \"key={true}\"."
+}
