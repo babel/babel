@@ -19,6 +19,37 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.10 (2021-03-08)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-jsx`
+  * [#12967](https://github.com/babel/babel/pull/12967) Lazily initialize and cache constant JSX elements ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-private-methods`
+  * [#12918](https://github.com/babel/babel/pull/12918) Ensure static private method init run before static property ([@JLHwung](https://github.com/JLHwung))
+  * [#12707](https://github.com/babel/babel/pull/12707) Evaluate object and initializer when setting a private method ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`
+  * [#12917](https://github.com/babel/babel/pull/12917) Class static private field destructure set ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#12687](https://github.com/babel/babel/pull/12687) (ts) Raise syntax error for an abstract method that has body ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#12908](https://github.com/babel/babel/pull/12908) Fix `esmodules: true` without specified browsers ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* Other
+  * [#12956](https://github.com/babel/babel/pull/12956) Suggest using `babel.config.json` when linting dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`
+  * [#12910](https://github.com/babel/babel/pull/12910) check descriptor before private field access ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* [#12974](https://github.com/babel/babel/pull/12974) Capitalize design docs headings ([@MrBrain295](https://github.com/MrBrain295))
+
+#### :house: Internal
+* `babel-helper-fixtures`
+  * [#12982](https://github.com/babel/babel/pull/12982) Optionally enable external-helpers in tests ([@jridgewell](https://github.com/jridgewell))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-fixtures`, `babel-helper-module-imports`, `babel-helper-plugin-test-runner`, `babel-helper-transform-fixture-test-runner`, `babel-helpers`, `babel-node`, `babel-parser`, `babel-plugin-external-helpers`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-do-expressions`, `babel-plugin-proposal-dynamic-import`, `babel-plugin-proposal-export-default-from`, `babel-plugin-proposal-export-namespace-from`, `babel-plugin-proposal-function-bind`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-json-strings`, `babel-plugin-proposal-logical-assignment-operators`, `babel-plugin-proposal-nullish-coalescing-operator`, `babel-plugin-proposal-numeric-separator`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-proposal-optional-catch-binding`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-proposal-throw-expressions`, `babel-plugin-proposal-unicode-property-regex`, `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoped-functions`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-computed-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-dotall-regex`, `babel-plugin-transform-duplicate-keys`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-for-of`, `babel-plugin-transform-function-name`, `babel-plugin-transform-instanceof`, `babel-plugin-transform-jscript`, `babel-plugin-transform-member-expression-literals`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-plugin-transform-new-target`, `babel-plugin-transform-object-super`, `babel-plugin-transform-parameters`, `babel-plugin-transform-property-literals`, `babel-plugin-transform-property-mutators`, `babel-plugin-transform-proto-to-assign`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-display-name`, `babel-plugin-transform-react-inline-elements`, `babel-plugin-transform-react-jsx-compat`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx-self`, `babel-plugin-transform-react-jsx-source`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-react-pure-annotations`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-reserved-words`, `babel-plugin-transform-runtime`, `babel-plugin-transform-shorthand-properties`, `babel-plugin-transform-spread`, `babel-plugin-transform-sticky-regex`, `babel-plugin-transform-strict-mode`, `babel-plugin-transform-template-literals`, `babel-plugin-transform-typeof-symbol`, `babel-plugin-transform-typescript`, `babel-plugin-transform-unicode-escapes`, `babel-plugin-transform-unicode-regex`, `babel-preset-env`, `babel-preset-flow`, `babel-preset-react`, `babel-preset-typescript`, `babel-register`, `babel-standalone`, `babel-traverse`
+  * [#12963](https://github.com/babel/babel/pull/12963) Avoid using CJS globals in internal source files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-transform-fixture-test-runner`, `babel-highlight`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#12795](https://github.com/babel/babel/pull/12795) [internal] Use the Node.js behavior for default imports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.9 (2021-03-01)
 
 #### :bug: Bug Fix
