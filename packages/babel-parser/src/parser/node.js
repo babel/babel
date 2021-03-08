@@ -2,7 +2,7 @@
 
 import type Parser from "./index";
 import UtilParser from "./util";
-import { SourceLocation, type Position } from "../util/location";
+import { SourceLocation, Position } from "../util/location";
 import type { Comment, Node as NodeType, NodeBase } from "../types";
 
 // Start an AST node, attaching a start offset.
@@ -50,13 +50,17 @@ class Node implements NodeBase {
 
 export class NodeUtils extends UtilParser {
   startNode<T: NodeType>(): T {
+    const startLoc = new Position(
+      this.state.startLoc.line,
+      this.state.startLoc.column,
+    );
     // $FlowIgnore
-    return new Node(this, this.state.start, this.state.startLoc);
+    return new Node(this, this.state.start, startLoc);
   }
 
   startNodeAt<T: NodeType>(pos: number, loc: Position): T {
     // $FlowIgnore
-    return new Node(this, pos, loc);
+    return new Node(this, pos, new Position(loc.line, loc.column));
   }
 
   /** Start a new node with a previous node's location. */
@@ -91,7 +95,7 @@ export class NodeUtils extends UtilParser {
     }
     node.type = type;
     node.end = pos;
-    node.loc.end = loc;
+    node.loc.end = new Position(loc.line, loc.column);
     if (this.options.ranges) node.range[1] = pos;
     this.processComment(node);
     return node;
@@ -99,7 +103,7 @@ export class NodeUtils extends UtilParser {
 
   resetStartLocation(node: NodeBase, start: number, startLoc: Position): void {
     node.start = start;
-    node.loc.start = startLoc;
+    node.loc.start = new Position(startLoc.line, startLoc.column);
     if (this.options.ranges) node.range[0] = start;
   }
 
@@ -109,7 +113,11 @@ export class NodeUtils extends UtilParser {
     endLoc?: Position = this.state.lastTokEndLoc,
   ): void {
     node.end = end;
-    node.loc.end = endLoc;
+    if (endLoc) {
+      node.loc.end = new Position(endLoc.line, endLoc.column);
+    } else {
+      node.loc.end = endLoc;
+    }
     if (this.options.ranges) node.range[1] = end;
   }
 
