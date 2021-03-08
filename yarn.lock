@@ -198,17 +198,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@workspace:*, @babel/core@workspace:^7.12.13, @babel/core@workspace:^7.13.8, @babel/core@workspace:packages/babel-core":
+"@babel/core@workspace:*, @babel/core@workspace:^7.12.13, @babel/core@workspace:^7.13.10, @babel/core@workspace:packages/babel-core":
   version: 0.0.0-use.local
   resolution: "@babel/core@workspace:packages/babel-core"
   dependencies:
     "@babel/code-frame": "workspace:^7.12.13"
-    "@babel/generator": "workspace:^7.13.0"
-    "@babel/helper-compilation-targets": "workspace:^7.13.8"
+    "@babel/generator": "workspace:^7.13.9"
+    "@babel/helper-compilation-targets": "workspace:^7.13.10"
     "@babel/helper-module-transforms": "workspace:^7.13.0"
     "@babel/helper-transform-fixture-test-runner": "workspace:*"
-    "@babel/helpers": "workspace:^7.13.0"
-    "@babel/parser": "workspace:^7.13.4"
+    "@babel/helpers": "workspace:^7.13.10"
+    "@babel/parser": "workspace:^7.13.10"
     "@babel/template": "workspace:^7.12.13"
     "@babel/traverse": "workspace:^7.13.0"
     "@babel/types": "workspace:^7.13.0"
@@ -320,7 +320,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@workspace:*, @babel/generator@workspace:^7.12.13, @babel/generator@workspace:^7.13.0, @babel/generator@workspace:packages/babel-generator":
+"@babel/generator@workspace:*, @babel/generator@workspace:^7.12.13, @babel/generator@workspace:^7.13.0, @babel/generator@workspace:^7.13.9, @babel/generator@workspace:packages/babel-generator":
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
@@ -413,7 +413,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-compilation-targets@workspace:^7.13.8, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
+"@babel/helper-compilation-targets@workspace:^7.13.10, @babel/helper-compilation-targets@workspace:^7.13.8, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
   version: 0.0.0-use.local
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
   dependencies:
@@ -540,7 +540,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-fixtures@workspace:*, @babel/helper-fixtures@workspace:^7.13.8, @babel/helper-fixtures@workspace:packages/babel-helper-fixtures":
+"@babel/helper-fixtures@workspace:*, @babel/helper-fixtures@workspace:^7.13.10, @babel/helper-fixtures@workspace:packages/babel-helper-fixtures":
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
@@ -699,7 +699,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-plugin-test-runner@workspace:packages/babel-helper-plugin-test-runner"
   dependencies:
-    "@babel/helper-transform-fixture-test-runner": "workspace:^7.12.13"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^7.13.10"
   languageName: unknown
   linkType: soft
 
@@ -813,13 +813,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-transform-fixture-test-runner@workspace:*, @babel/helper-transform-fixture-test-runner@workspace:^7.12.13, @babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner":
+"@babel/helper-transform-fixture-test-runner@workspace:*, @babel/helper-transform-fixture-test-runner@workspace:^7.13.10, @babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner":
   version: 0.0.0-use.local
   resolution: "@babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner"
   dependencies:
     "@babel/code-frame": "workspace:^7.12.13"
-    "@babel/core": "workspace:^7.13.8"
-    "@babel/helper-fixtures": "workspace:^7.13.8"
+    "@babel/core": "workspace:^7.13.10"
+    "@babel/helper-fixtures": "workspace:^7.13.10"
     babel-check-duplicated-nodes: ^1.0.0
     escape-string-regexp: "condition:BABEL_8_BREAKING ? ^4.0.0 : "
     lodash: ^4.17.19
@@ -892,7 +892,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@workspace:*, @babel/helpers@workspace:^7.13.0, @babel/helpers@workspace:packages/babel-helpers":
+"@babel/helpers@workspace:*, @babel/helpers@workspace:^7.13.10, @babel/helpers@workspace:packages/babel-helpers":
   version: 0.0.0-use.local
   resolution: "@babel/helpers@workspace:packages/babel-helpers"
   dependencies:
@@ -932,7 +932,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/helper-fixtures": "workspace:*"
-    "@babel/register": "workspace:^7.13.0"
+    "@babel/register": "workspace:^7.13.8"
     "@babel/runtime": "workspace:*"
     commander: ^4.0.1
     core-js: ^3.2.1
@@ -959,7 +959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@workspace:*, @babel/parser@workspace:^7.12.13, @babel/parser@workspace:^7.13.0, @babel/parser@workspace:^7.13.4, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:*, @babel/parser@workspace:^7.12.13, @babel/parser@workspace:^7.13.0, @babel/parser@workspace:^7.13.10, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
@@ -2574,7 +2574,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
-    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+    "@babel/helper-plugin-utils": "workspace:^7.13.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3064,7 +3064,7 @@ __metadata:
     "@babel/compat-data": "workspace:^7.13.8"
     "@babel/core": "workspace:*"
     "@babel/core-7.12": "npm:@babel/core@7.12.9"
-    "@babel/helper-compilation-targets": "workspace:^7.13.8"
+    "@babel/helper-compilation-targets": "workspace:^7.13.10"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/helper-validator-option": "workspace:^7.12.17"
@@ -3235,7 +3235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/register@workspace:^7.13.0, @babel/register@workspace:packages/babel-register":
+"@babel/register@workspace:^7.13.8, @babel/register@workspace:packages/babel-register":
   version: 0.0.0-use.local
   resolution: "@babel/register@workspace:packages/babel-register"
   dependencies:

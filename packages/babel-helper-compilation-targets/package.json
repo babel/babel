@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.13.8",
+  "version": "7.13.10",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Engine compat data used in @babel/preset-env",
