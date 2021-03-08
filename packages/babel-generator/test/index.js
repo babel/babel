@@ -342,7 +342,13 @@ describe("generation", function () {
 
   it("wraps around infer inside an array type", () => {
     const type = t.tsArrayType(
-      t.tsInferType(t.tsTypeParameter(null, null, "T")),
+      t.tsInferType(
+        t.tsTypeParameter(
+          null,
+          null,
+          !process.env.BABEL_8_BREAKING ? "T" : t.identifier("T"),
+        ),
+      ),
     );
 
     const output = generate(type).code;
