@@ -136,7 +136,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
         : taskOpts.BABEL_8_BREAKING === true),
     options: taskOpts,
     externalHelpers:
-      taskOpts.externalHelpers ?? tryResolve("babel-plugin-external-helpers"),
+      taskOpts.externalHelpers ?? !!tryResolve("babel-plugin-external-helpers"),
     validateLogs: taskOpts.validateLogs,
     ignoreOutput: taskOpts.ignoreOutput,
     stdout: { loc: stdoutLoc, code: readFile(stdoutLoc) },
