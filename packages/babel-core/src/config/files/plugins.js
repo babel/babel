@@ -99,10 +99,11 @@ function resolveStandardizedName(
   dirname: string = process.cwd(),
 ) {
   const standardizedName = standardizeName(type, name);
+  const dirnames = [dirname, process.cwd()];
 
   try {
     return require.resolve(standardizedName, {
-      paths: [dirname],
+      paths: dirnames,
     });
   } catch (e) {
     if (e.code !== "MODULE_NOT_FOUND") throw e;
@@ -111,7 +112,7 @@ function resolveStandardizedName(
       let resolvedOriginal = false;
       try {
         require.resolve(name, {
-          paths: [dirname],
+          paths: dirnames,
         });
         resolvedOriginal = true;
       } catch {}
@@ -124,7 +125,7 @@ function resolveStandardizedName(
     let resolvedBabel = false;
     try {
       require.resolve(standardizeName(type, "@babel/" + name), {
-        paths: [dirname],
+        paths: dirnames,
       });
       resolvedBabel = true;
     } catch {}
@@ -137,7 +138,7 @@ function resolveStandardizedName(
     const oppositeType = type === "preset" ? "plugin" : "preset";
     try {
       require.resolve(standardizeName(oppositeType, name), {
-        paths: [dirname],
+        paths: dirnames,
       });
       resolvedOppositeType = true;
     } catch {}
