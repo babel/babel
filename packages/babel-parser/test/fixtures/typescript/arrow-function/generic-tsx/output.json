@@ -10,6 +10,13 @@
       {
         "type": "ExpressionStatement",
         "start":61,"end":79,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Same as `generic`. Verify that JSX doesn't change things.",
+            "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":60}}
+          }
+        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start":61,"end":78,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":17}},
@@ -61,18 +68,15 @@
               {
                 "type": "TSTypeParameter",
                 "start":62,"end":63,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2}},
-                "name": "T"
+                "name": {
+                  "type": "Identifier",
+                  "start":62,"end":63,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2},"identifierName":"T"},
+                  "name": "T"
+                }
               }
             ]
           }
-        },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " Same as `generic`. Verify that JSX doesn't change things.",
-            "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":60}}
-          }
-        ]
+        }
       }
     ],
     "directives": []

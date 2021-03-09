@@ -35,7 +35,11 @@
                   {
                     "type": "TSTypeParameter",
                     "start":20,"end":52,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":38}},
-                    "name": "T",
+                    "name": {
+                      "type": "Identifier",
+                      "start":20,"end":21,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"T"},
+                      "name": "T"
+                    },
                     "constraint": {
                       "type": "TSObjectKeyword",
                       "start":30,"end":36,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":22}}

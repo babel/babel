@@ -1,4 +1,5 @@
 {
   "plugins": ["typescript"],
-  "createParenthesizedExpressions": true
+  "createParenthesizedExpressions": true,
+  "BABEL_8_BREAKING": true
 }
