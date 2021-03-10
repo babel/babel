@@ -191,16 +191,23 @@ export default function getTargets(
     !options.ignoreBrowserslistConfig && !hasTargets;
 
   if (!browsers && shouldSearchForConfig) {
-    browsers =
-      browserslist.loadConfig({
-        config: options.configFile,
-        path: options.configPath,
-        env: options.browserslistEnv,
-      }) ??
-      // If no targets are passed, we need to overwrite browserslist's defaults
-      // so that we enable all transforms (acting like the now deprecated
-      // preset-latest).
-      [];
+    browsers = browserslist.loadConfig({
+      config: options.configFile,
+      path: options.configPath,
+      env: options.browserslistEnv,
+    });
+    if (browsers == null) {
+      if (process.env.BABEL_8_BREAKING) {
+        // In Babel 8, if no targets are passed, we use browserslist's defaults
+        // and exclude IE 11.
+        browsers = ["defaults, not ie 11"];
+      } else {
+        // If no targets are passed, we need to overwrite browserslist's defaults
+        // so that we enable all transforms (acting like the now deprecated
+        // preset-latest).
+        browsers = [];
+      }
+    }
   }
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
