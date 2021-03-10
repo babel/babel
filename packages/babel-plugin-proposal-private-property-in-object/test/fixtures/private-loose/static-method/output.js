@@ -16,7 +16,7 @@ let Foo = /*#__PURE__*/function () {
   return Foo;
 }();
 
-var _foo2 = function _foo2() {};
+function _foo2() {}
 
 Object.defineProperty(Foo, _foo, {
   value: _foo2

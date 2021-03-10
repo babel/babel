@@ -19,6 +19,6 @@ class Cl {
 
 }
 
-var _set_privateFieldValue = function (newValue) {
+function _set_privateFieldValue(newValue) {
   babelHelpers.classPrivateFieldSet(this, _privateField, newValue);
-};
+}

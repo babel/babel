@@ -25,6 +25,6 @@ class Sub extends Base {
 
 }
 
-var _privateMethod2 = function _privateMethod2() {
+function _privateMethod2() {
   return Base.prototype.superMethod.call(this);
-};
+}

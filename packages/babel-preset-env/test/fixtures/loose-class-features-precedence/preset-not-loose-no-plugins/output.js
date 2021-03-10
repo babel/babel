@@ -9,4 +9,4 @@ class A {
 
 }
 
-var _foo2 = function _foo2() {};
+function _foo2() {}

@@ -18,6 +18,6 @@ class Cl {
 
 }
 
-var _get_privateFieldValue = function () {
+function _get_privateFieldValue() {
   return babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField];
-};
+}

@@ -10,9 +10,9 @@ class Cl {
 
 }
 
-var _get_privateFieldValue = function () {
+function _get_privateFieldValue() {
   return babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField];
-};
+}
 
 Object.defineProperty(Cl, _privateFieldValue, {
   get: _get_privateFieldValue,

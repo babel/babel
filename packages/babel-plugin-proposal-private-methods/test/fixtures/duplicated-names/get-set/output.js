@@ -17,10 +17,10 @@ class Cl {
 
 }
 
-var _get_getSet = function () {
+function _get_getSet() {
   return babelHelpers.classPrivateFieldGet(this, _privateField);
-};
+}
 
-var _set_getSet = function (newValue) {
+function _set_getSet(newValue) {
   babelHelpers.classPrivateFieldSet(this, _privateField, newValue);
-};
+}

@@ -9,8 +9,8 @@ class A extends B {
 
 }
 
-var _foo2 = function _foo2() {
+function _foo2() {
   let _A;
 
   babelHelpers.get(babelHelpers.getPrototypeOf(A.prototype), "x", this);
-};
+}

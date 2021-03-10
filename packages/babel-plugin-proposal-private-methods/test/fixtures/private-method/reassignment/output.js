@@ -16,6 +16,6 @@ class Foo {
 
 }
 
-var _privateFieldValue2 = function _privateFieldValue2() {
+function _privateFieldValue2() {
   return 42;
-};
+}

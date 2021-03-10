@@ -9,9 +9,9 @@ class C {
 
 }
 
-var _set_p = function (v) {
+function _set_p(v) {
   babelHelpers.classPrivateFieldLooseBase(C, _q)[_q] = v;
-};
+}
 
 Object.defineProperty(C, _p, {
   get: void 0,

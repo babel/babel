@@ -13,6 +13,6 @@ class Cl {
 
 }
 
-var _foo2 = async function _foo2() {
+async function _foo2() {
   return 2;
-};
+}

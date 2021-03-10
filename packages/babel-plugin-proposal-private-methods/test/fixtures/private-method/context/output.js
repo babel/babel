@@ -33,6 +33,6 @@ class Foo {
 
 }
 
-var _getStatus2 = function _getStatus2() {
+function _getStatus2() {
   return this.status;
-};
+}

@@ -6,4 +6,4 @@ class A {
 
 }
 
-var _method = function _method() {};
+function _method() {}

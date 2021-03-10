@@ -5,9 +5,9 @@ class Cl {
 
 }
 
-var _set_privateStaticFieldValue = function (newValue) {
+function _set_privateStaticFieldValue(newValue) {
   babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _PRIVATE_STATIC_FIELD, newValue);
-};
+}
 
 var _privateStaticFieldValue = {
   get: void 0,

@@ -25,10 +25,10 @@ class Cl {
 
 }
 
-var _get_privateFieldValue = function () {
+function _get_privateFieldValue() {
   return babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField];
-};
+}
 
-var _set_privateFieldValue = function (newValue) {
+function _set_privateFieldValue(newValue) {
   babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField] = newValue;
-};
+}

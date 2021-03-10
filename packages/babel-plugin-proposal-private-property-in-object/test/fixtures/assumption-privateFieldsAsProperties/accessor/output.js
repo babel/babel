@@ -14,4 +14,4 @@ class Foo {
 
 }
 
-var _get_foo = function () {};
+function _get_foo() {}

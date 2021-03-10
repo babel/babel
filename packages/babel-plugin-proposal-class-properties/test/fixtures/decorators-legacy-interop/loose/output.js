@@ -1,15 +1,15 @@
-var _class, _descriptor, _descriptor2, _temp;
+var _class, _descriptor, _descriptor2;
 
 function dec() {}
 
-let A = (_class = (_temp = function A() {
+let A = (_class = function A() {
   "use strict";
 
   babelHelpers.classCallCheck(this, A);
   babelHelpers.initializerDefineProperty(this, "a", _descriptor, this);
   babelHelpers.initializerDefineProperty(this, "b", _descriptor2, this);
   this.c = 456;
-}, _temp), (_descriptor = babelHelpers.applyDecoratedDescriptor(_class.prototype, "a", [dec], {
+}, (_descriptor = babelHelpers.applyDecoratedDescriptor(_class.prototype, "a", [dec], {
   configurable: true,
   enumerable: true,
   writable: true,

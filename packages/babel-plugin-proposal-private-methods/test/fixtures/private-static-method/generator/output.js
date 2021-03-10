@@ -5,7 +5,7 @@ class Cl {
 
 }
 
-var _foo = function* _foo() {
+function* _foo() {
   yield 2;
   return 3;
-};
+}
