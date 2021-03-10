@@ -625,46 +625,34 @@ function buildPrivateMethodDeclaration(
     static: isStatic,
   } = privateName;
   const { params, body, generator, async } = prop.node;
-  const methodValue = t.functionExpression(
-    methodId,
-    params,
-    body,
-    generator,
-    async,
-  );
   const isGetter = getId && !getterDeclared && params.length === 0;
   const isSetter = setId && !setterDeclared && params.length > 0;
+
+  let declId = methodId;
 
   if (isGetter) {
     privateNamesMap.set(prop.node.key.id.name, {
       ...privateName,
       getterDeclared: true,
     });
-    return t.variableDeclaration("var", [
-      t.variableDeclarator(getId, methodValue),
-    ]);
-  }
-  if (isSetter) {
+    declId = getId;
+  } else if (isSetter) {
     privateNamesMap.set(prop.node.key.id.name, {
       ...privateName,
       setterDeclared: true,
     });
-    return t.variableDeclaration("var", [
-      t.variableDeclarator(setId, methodValue),
-    ]);
-  }
-  if (isStatic && !privateFieldsAsProperties) {
-    return t.variableDeclaration("var", [
-      t.variableDeclarator(
-        t.cloneNode(id),
-        t.functionExpression(id, params, body, generator, async),
-      ),
-    ]);
+    declId = setId;
+  } else if (isStatic && !privateFieldsAsProperties) {
+    declId = id;
   }
 
-  return t.variableDeclaration("var", [
-    t.variableDeclarator(t.cloneNode(methodId), methodValue),
-  ]);
+  return t.functionDeclaration(
+    t.cloneNode(declId),
+    params,
+    body,
+    generator,
+    async,
+  );
 }
 
 const thisContextVisitor = traverse.visitors.merge([
@@ -710,9 +698,11 @@ export function buildFieldsInitNodes(
   privateFieldsAsProperties,
   constantSuper,
 ) {
+  let needsClassRef = false;
   const staticNodes = [];
   const instanceNodes = [];
-  let needsClassRef = false;
+  // These nodes are pure and can be moved to the closest statement position
+  const pureStaticNodes = [];
 
   for (const prop of props) {
     ts.assertFieldTransformed(prop);
@@ -780,7 +770,7 @@ export function buildFieldsInitNodes(
             privateNamesMap,
           ),
         );
-        staticNodes.push(
+        pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             prop,
             privateNamesMap,
@@ -796,7 +786,7 @@ export function buildFieldsInitNodes(
             privateNamesMap,
           ),
         );
-        staticNodes.push(
+        pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             prop,
             privateNamesMap,
@@ -809,7 +799,7 @@ export function buildFieldsInitNodes(
         staticNodes.unshift(
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
-        staticNodes.unshift(
+        pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             prop,
             privateNamesMap,
@@ -827,7 +817,7 @@ export function buildFieldsInitNodes(
             privateNamesMap,
           ),
         );
-        staticNodes.unshift(
+        pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             prop,
             privateNamesMap,
@@ -851,6 +841,7 @@ export function buildFieldsInitNodes(
   return {
     staticNodes: staticNodes.filter(Boolean),
     instanceNodes: instanceNodes.filter(Boolean),
+    pureStaticNodes: pureStaticNodes.filter(Boolean),
     wrapClass(path) {
       for (const prop of props) {
         prop.remove();
