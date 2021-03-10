@@ -414,7 +414,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             case "key": {
               const keyValue = convertAttributeValue(attr.node.value);
               if (keyValue === null) {
-                throw path.buildCodeFrameError(
+                throw attr.buildCodeFrameError(
                   'Provide an explicit value to be used as a key. You are not supposed to use the "key" shorthand for "key={true}".',
                 );
               }
