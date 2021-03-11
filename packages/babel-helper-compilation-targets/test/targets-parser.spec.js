@@ -282,11 +282,21 @@ describe("getTargets", () => {
       ).toMatchSnapshot();
     });
 
-    it("'intersect' behaves like 'true' if no browsers are specified", () => {
-      expect(getTargets({ esmodules: "intersect" })).toEqual(
-        getTargets({ esmodules: true }, { ignoreBrowserslistConfig: true }),
-      );
-    });
+    (process.env.BABEL_8_BREAKING ? it.skip : it)(
+      "'intersect' behaves like 'true' if no browsers are specified - Babel 7",
+      () => {
+        expect(getTargets({ esmodules: "intersect" })).toEqual(
+          getTargets({ esmodules: true }, { ignoreBrowserslistConfig: true }),
+        );
+      },
+    );
+
+    (process.env.BABEL_8_BREAKING ? it : it.skip)(
+      "'intersect' behaves like no-op if no browsers are specified",
+      () => {
+        expect(getTargets({ esmodules: "intersect" })).toEqual(getTargets({}));
+      },
+    );
 
     it("'intersect' behaves like 'true' if no browsers are specified and the browserslist config is ignored", () => {
       expect(
