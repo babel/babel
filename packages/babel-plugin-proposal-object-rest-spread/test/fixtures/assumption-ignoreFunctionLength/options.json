@@ -4,5 +4,8 @@
   ],
   "assumptions": {
     "ignoreFunctionLength": true
+  },
+  "targets": {
+    "browsers": "ie 6"
   }
 }
