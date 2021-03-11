@@ -1,0 +1,16 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "browsers": "chrome 84"
+        },
+        "shippedProposals": true
+      }
+    ]
+  ]
+}

@@ -1,0 +1,31 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-numeric-separator { "chrome":"71" }
+  proposal-logical-assignment-operators { "chrome":"71" }
+  proposal-nullish-coalescing-operator { "chrome":"71" }
+  proposal-optional-chaining { "chrome":"71" }
+  syntax-json-strings { "chrome":"71" }
+  syntax-optional-catch-binding { "chrome":"71" }
+  syntax-async-generators { "chrome":"71" }
+  syntax-object-rest-spread { "chrome":"71" }
+  proposal-export-namespace-from { "chrome":"71" }
+  transform-modules-commonjs { "chrome":"71" }
+  proposal-dynamic-import { "chrome":"71" }
+corejs3: `DEBUG` option
+
+Using targets: {
+  "chrome": "71"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/usage-corejs3-proposals-chrome-71-2/input.js]
+Based on your code and targets, the corejs3 polyfill did not add any polyfill.

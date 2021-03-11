@@ -1,0 +1,11 @@
+When setting `useBuiltIns: 'usage'`, polyfills are automatically imported when needed.
+  Please remove the direct import of `@babel/polyfill` or use `useBuiltIns: 'entry'` instead.
+
+  When setting `useBuiltIns: 'usage'`, polyfills are automatically imported when needed.
+  Please remove the direct import of `@babel/polyfill` or use `useBuiltIns: 'entry'` instead.
+
+  When setting `useBuiltIns: 'usage'`, polyfills are automatically imported when needed.
+  Please remove the direct import of `@babel/polyfill` or use `useBuiltIns: 'entry'` instead.
+
+  When setting `useBuiltIns: 'usage'`, polyfills are automatically imported when needed.
+  Please remove the direct import of `@babel/polyfill` or use `useBuiltIns: 'entry'` instead.

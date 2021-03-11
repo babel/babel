@@ -1,0 +1,31 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "android": "85",
+  "chrome": "84",
+  "edge": "85",
+  "firefox": "78",
+  "ios": "12.2",
+  "opera": "71",
+  "safari": "13.1",
+  "samsung": "11.1"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-numeric-separator { "ios":"12.2" }
+  proposal-logical-assignment-operators { "chrome":"84", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-nullish-coalescing-operator { "ios":"12.2", "samsung":"11.1" }
+  proposal-optional-chaining { "ios":"12.2", "samsung":"11.1" }
+  syntax-json-strings { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-optional-catch-binding { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-async-generators { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-object-rest-spread { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  transform-template-literals { "ios":"12.2" }
+  proposal-export-namespace-from { "firefox":"78", "ios":"12.2", "safari":"13.1" }
+  transform-modules-commonjs { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-dynamic-import { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

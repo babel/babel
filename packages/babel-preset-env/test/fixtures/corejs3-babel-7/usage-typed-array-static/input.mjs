@@ -1,0 +1,1 @@
+Int8Array.of();
