@@ -5,9 +5,9 @@ class C {
 
 }
 
-var _set_p = function (v) {
+function _set_p(v) {
   babelHelpers.classStaticPrivateFieldSpecSet(C, C, _q, v);
-};
+}
 
 var _p = {
   get: void 0,

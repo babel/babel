@@ -20,6 +20,6 @@ class Cl {
 
 }
 
-var _method2 = function _method2(x) {
+function _method2(x) {
   return x;
-};
+}

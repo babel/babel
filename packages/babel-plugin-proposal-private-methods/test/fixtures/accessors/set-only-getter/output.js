@@ -25,8 +25,8 @@ class Cl {
 
 }
 
-var _get_privateFieldValue = function () {
+function _get_privateFieldValue() {
   return babelHelpers.classPrivateFieldGet(this, _privateField);
-};
+}
 
 var cl = new Cl();

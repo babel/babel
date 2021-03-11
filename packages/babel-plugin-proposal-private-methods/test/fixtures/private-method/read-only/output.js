@@ -16,4 +16,4 @@ class A {
 
 }
 
-var _method2 = function _method2() {};
+function _method2() {}

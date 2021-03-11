@@ -198,10 +198,10 @@ export function createClassFeaturePlugin({
           state,
         );
 
-        let keysNodes, staticNodes, instanceNodes, wrapClass;
+        let keysNodes, staticNodes, pureStaticNodes, instanceNodes, wrapClass;
 
         if (isDecorated) {
-          staticNodes = keysNodes = [];
+          staticNodes = pureStaticNodes = keysNodes = [];
           ({ instanceNodes, wrapClass } = buildDecoratedClass(
             ref,
             path,
@@ -210,7 +210,12 @@ export function createClassFeaturePlugin({
           ));
         } else {
           keysNodes = extractComputedKeys(ref, path, computedPaths, this.file);
-          ({ staticNodes, instanceNodes, wrapClass } = buildFieldsInitNodes(
+          ({
+            staticNodes,
+            pureStaticNodes,
+            instanceNodes,
+            wrapClass,
+          } = buildFieldsInitNodes(
             ref,
             path.node.superClass,
             props,
@@ -239,7 +244,14 @@ export function createClassFeaturePlugin({
 
         path = wrapClass(path);
         path.insertBefore([...privateNamesNodes, ...keysNodes]);
-        path.insertAfter(staticNodes);
+        if (staticNodes.length > 0) {
+          path.insertAfter(staticNodes);
+        }
+        if (pureStaticNodes.length > 0) {
+          path
+            .find(parent => parent.isStatement() || parent.isDeclaration())
+            .insertAfter(pureStaticNodes);
+        }
       },
 
       PrivateName(path) {

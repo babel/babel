@@ -50,10 +50,10 @@ class Cl {
 
 }
 
-var _get_privateFieldValue = function () {
+function _get_privateFieldValue() {
   return babelHelpers.classPrivateFieldGet(this, _privateField);
-};
+}
 
-var _set_privateFieldValue = function (newValue) {
+function _set_privateFieldValue(newValue) {
   babelHelpers.classPrivateFieldSet(this, _privateField, newValue);
-};
+}

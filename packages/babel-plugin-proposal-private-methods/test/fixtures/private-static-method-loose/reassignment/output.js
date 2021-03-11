@@ -7,7 +7,7 @@ class Cl {
 
 }
 
-var _privateStaticMethod2 = function _privateStaticMethod2() {};
+function _privateStaticMethod2() {}
 
 Object.defineProperty(Cl, _privateStaticMethod, {
   value: _privateStaticMethod2

@@ -14,7 +14,7 @@ let Foo = /*#__PURE__*/function () {
   return Foo;
 }();
 
-var _get_foo = function () {};
+function _get_foo() {}
 
 var _foo = {
   get: _get_foo,

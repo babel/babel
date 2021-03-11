@@ -10,6 +10,6 @@ class Foo {
 
 }
 
-var _privateMethod2 = function _privateMethod2() {
+function _privateMethod2() {
   return 42;
-};
+}
