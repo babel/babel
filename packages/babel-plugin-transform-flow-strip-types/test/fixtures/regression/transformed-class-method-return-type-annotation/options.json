@@ -1,4 +1,4 @@
 {
-  "presets": ["env"],
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
   "plugins": ["transform-flow-strip-types"]
 }
