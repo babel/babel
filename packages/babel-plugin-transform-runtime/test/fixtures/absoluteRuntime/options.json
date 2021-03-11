@@ -1,4 +1,5 @@
 {
   "externalHelpers": false,
-  "os": ["linux", "darwin"]
+  "os": ["linux", "darwin"],
+  "targets": { "browsers": "ie 6, ios 4" }
 }
