@@ -8,7 +8,7 @@ const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 const browserNameMap = {
   chrome_android: "and_chr",
   firefox_android: "and_ff",
-  safari_ios: "ios_saf",
+  safari_ios: "ios",
   nodejs: "node",
   webview_android: "android",
   opera_android: "op_mob",
@@ -58,8 +58,13 @@ function process(source) {
 }
 
 const dataPath = path.join(__dirname, "../data/native-modules.json");
+const processed = process(compatData.statements.export);
+// Todo(Babel 8): remove `ios_saf` as it is identical to ios
+if (processed.ios) {
+  processed.ios_saf = processed.ios;
+}
 const data = {
-  "es6.module": process(compatData.statements.export),
+  "es6.module": processed,
 };
 fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
 exports.process = process;
