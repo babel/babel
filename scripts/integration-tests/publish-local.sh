@@ -28,10 +28,10 @@ yarn
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry
 
-# This script gets the last @babel/standalone version (because it's always published),
+# This script gets the last root package.json version,
 # and then increases by one the patch number
 VERSION=$(
-  node -p "'$(npm view @babel/standalone version)'.replace(/(?<=\\d+\\.\\d+\\.)\\d+/, x => ++x)"
+  node -p "require('./package.json').version.replace(/(?<=\\d+\\.\\d+\\.)\\d+/, x => ++x)"
 )
 
 I_AM_USING_VERDACCIO=I_AM_SURE VERSION="$VERSION" make publish-test

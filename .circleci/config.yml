@@ -115,19 +115,6 @@ jobs:
       - store_test_results: *artifact_test262_xunit
       - save_cache: *save-yarn-cache
 
-  publish-verdaccio:
-    executor: node-executor
-    steps:
-      - checkout
-      - restore_cache: *restore-yarn-cache
-      - run: ./scripts/integration-tests/publish-local.sh
-      - persist_to_workspace:
-          root: /tmp/verdaccio-workspace
-          paths:
-            - storage
-            - htpasswd
-      - save_cache: *save-yarn-cache
-
   publish-verdaccio-babel-8-breaking:
     executor: node-executor
     steps:
@@ -141,15 +128,7 @@ jobs:
             - htpasswd
       - save_cache: *save-yarn-cache
 
-  e2e-babel:
-    executor: node-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run: ./scripts/integration-tests/e2e-babel.sh
-
-  e2e-babel-breaking:
+  e2e-breaking-babel:
     executor: node-executor
     steps:
       - checkout
@@ -157,23 +136,15 @@ jobs:
           at: /tmp/verdaccio-workspace
       - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-babel.sh
 
-  e2e-babel-old-version:
+  e2e-breaking-create-react-app:
     executor: node-executor
     steps:
       - checkout
       - attach_workspace:
           at: /tmp/verdaccio-workspace
-      - run: ./scripts/integration-tests/e2e-babel-old-version.sh
+      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-create-react-app.sh
 
-  e2e-create-react-app:
-    executor: node-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run: ./scripts/integration-tests/e2e-create-react-app.sh
-
-  e2e-vue-cli:
+  e2e-breaking-vue-cli:
     executor: node-browsers-executor
     steps:
       - checkout
@@ -183,17 +154,9 @@ jobs:
           # vue-cli uses puppeteer, and it depends on the libXss.so.1 shared library
           name: Install Headless Chrome dependencies
           command: sudo apt-get install -yq libxss1
-      - run: ./scripts/integration-tests/e2e-vue-cli.sh
+      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-vue-cli.sh
 
-  e2e-jest:
-    executor: node-python-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run: ./scripts/integration-tests/e2e-jest.sh
-
-  e2e-jest-breaking:
+  e2e-breaking-jest:
     executor: node-python-executor
     steps:
       - checkout
@@ -238,24 +201,6 @@ workflows:
                 - next-8-dev
                 - next-8-rebased
           context: babel-test262
-  e2e:
-    jobs:
-      - publish-verdaccio
-      - e2e-babel:
-          requires:
-            - publish-verdaccio
-      - e2e-babel-old-version:
-          requires:
-            - publish-verdaccio
-      - e2e-create-react-app:
-          requires:
-            - publish-verdaccio
-      - e2e-vue-cli:
-          requires:
-            - publish-verdaccio
-      - e2e-jest:
-          requires:
-            - publish-verdaccio
 
   e2e-breaking:
     jobs:
@@ -263,16 +208,16 @@ workflows:
           filters:
             branches:
               only: [main, next-8-dev, next-8-rebased]
-      - e2e-babel-breaking:
+      - e2e-breaking-babel:
           requires:
             - publish-verdaccio-babel-8-breaking
-      - e2e-create-react-app:
+      - e2e-breaking-create-react-app:
           requires:
             - publish-verdaccio-babel-8-breaking
-      - e2e-vue-cli:
+      - e2e-breaking-vue-cli:
           requires:
             - publish-verdaccio-babel-8-breaking
-      - e2e-jest-breaking:
+      - e2e-breaking-jest:
           requires:
             - publish-verdaccio-babel-8-breaking
 
@@ -286,16 +231,15 @@ workflows:
       - publish-verdaccio-babel-8-breaking:
           requires:
             - approve-e2e-breaking-run
-      - e2e-babel-breaking:
+      - e2e-breaking-babel:
           requires:
             - publish-verdaccio-babel-8-breaking
-      - e2e-create-react-app:
+      - e2e-breaking-create-react-app:
           requires:
             - publish-verdaccio-babel-8-breaking
-      - e2e-vue-cli:
+      - e2e-breaking-vue-cli:
           requires:
             - publish-verdaccio-babel-8-breaking
-      - e2e-jest-breaking:
+      - e2e-breaking-jest:
           requires:
             - publish-verdaccio-babel-8-breaking
-

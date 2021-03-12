@@ -22,14 +22,14 @@ uplinks:
     url: https://registry.npmjs.org/
 
 packages:
-  '@*/*':
+  "@*/*":
     # scoped packages
     access: $all
     publish: $all
     unpublish: $all
     proxy: npmjs
 
-  '**':
+  "**":
     # allow all users (including non-authenticated users) to read and
     # publish all packages
     #
@@ -54,7 +54,7 @@ middlewares:
 
 # log settings
 logs:
-  - { type: stdout, format: pretty, level: http }
+  - { type: stdout, format: pretty, level: warn }
   #- {type: file, path: verdaccio.log, level: info}
 #experiments:
 #  # support for npm token command

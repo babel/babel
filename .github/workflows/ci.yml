@@ -289,7 +289,7 @@ jobs:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ hashFiles('yarn.lock') }}
       # See https://github.com/babel/babel/pull/12906
-      - name: Workaround yarn bug
+      - name: Support self-references on old Node.js
         run: |
           echo '{
             "private": true,
@@ -365,3 +365,53 @@ jobs:
           node-version: 14.2
       - name: Test Node.js 14.2
         run: yarn test:runtime:node
+
+  e2e-publish:
+    name: Publish to local Verdaccio registry
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Setup Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Publish
+        run: ./scripts/integration-tests/publish-local.sh
+      - uses: actions/upload-artifact@v2
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+
+  e2e-tests:
+    name: E2E
+    needs: e2e-publish
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [babel, babel-old-version, create-react-app, vue-cli, jest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - uses: actions/download-artifact@v2
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+      - name: Test
+        run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
