@@ -7,6 +7,12 @@ Object {
 }
 `;
 
+exports[`getTargets esmodules can be intersected with ios browsers option 1`] = `
+Object {
+  "ios": "12.0.0",
+}
+`;
+
 exports[`getTargets esmodules can be intersected with the browsers option 1`] = `
 Object {
   "chrome": "70.0.0",

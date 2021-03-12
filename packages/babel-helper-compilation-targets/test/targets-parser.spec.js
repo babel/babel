@@ -245,6 +245,15 @@ describe("getTargets", () => {
       ).toMatchSnapshot();
     });
 
+    it("can be intersected with ios browsers option", () => {
+      expect(
+        getTargets({
+          esmodules: "intersect",
+          browsers: ["ios >= 12"],
+        }),
+      ).toMatchSnapshot();
+    });
+
     it("can be intersected with a .browserslistrc file", () => {
       expect(
         getTargets(
