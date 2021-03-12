@@ -1204,7 +1204,6 @@ export default class StatementParser extends ExpressionParser {
     const state: N.ParseClassMemberState = {
       constructorAllowsSuper,
       hadConstructor: false,
-      hadStaticBlock: false,
     };
     let decorators: N.Decorator[] = [];
     const classBody: N.ClassBody = this.startNode();
@@ -1313,11 +1312,7 @@ export default class StatementParser extends ExpressionParser {
         return;
       }
       if (this.eat(tt.braceL)) {
-        this.parseClassStaticBlock(
-          classBody,
-          ((member: any): N.StaticBlock),
-          state,
-        );
+        this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
         return;
       }
     }
@@ -1521,7 +1516,6 @@ export default class StatementParser extends ExpressionParser {
   parseClassStaticBlock(
     classBody: N.ClassBody,
     member: N.StaticBlock & { decorators?: Array<N.Decorator> },
-    state: N.ParseClassMemberState,
   ) {
     this.expectPlugin("classStaticBlock", member.start);
     // Start a new lexical scope
@@ -1538,13 +1532,9 @@ export default class StatementParser extends ExpressionParser {
     this.scope.exit();
     this.state.labels = oldLabels;
     classBody.body.push(this.finishNode<N.StaticBlock>(member, "StaticBlock"));
-    if (state.hadStaticBlock) {
-      this.raise(member.start, Errors.DuplicateStaticBlock);
-    }
     if (member.decorators?.length) {
       this.raise(member.start, Errors.DecoratorStaticBlock);
     }
-    state.hadStaticBlock = true;
   }
 
   pushClassProperty(classBody: N.ClassBody, prop: N.ClassProperty) {

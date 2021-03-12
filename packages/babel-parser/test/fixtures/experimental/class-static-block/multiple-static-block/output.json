@@ -1,9 +1,6 @@
 {
   "type": "File",
   "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
-  "errors": [
-    "SyntaxError: Duplicate static block in the same class (4:2)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},

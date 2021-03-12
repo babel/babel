@@ -9,6 +9,3 @@ class Foo {
     this.qux2 = this.qux;
   }
 }
-expect(Foo.foo).toBe(21);
-expect(Foo.qux1).toBe(undefined);
-expect(Foo.qux2).toBe(21);
