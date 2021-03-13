@@ -415,7 +415,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               const keyValue = convertAttributeValue(attr.node.value);
               if (keyValue === null) {
                 throw attr.buildCodeFrameError(
-                  'Provide an explicit value to be used as a key. You are not supposed to use the "key" shorthand for "key={true}".',
+                  'Please provide an explicit key value. Using "key" as a shorthand for "key={true}" is not allowed.',
                 );
               }
 
