@@ -1068,7 +1068,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
-    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+    "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-class-static-block": "workspace:^7.12.13"
   peerDependencies:
     "@babel/core": ^7.12.0
