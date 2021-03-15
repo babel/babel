@@ -4,57 +4,45 @@ import { isIdentifierName } from "@babel/helper-validator-identifier";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 
 export type ModuleMetadata = {
-  exportName: string,
-
+  exportName: string;
   // The name of the variable that will reference an object containing export names.
-  exportNameListName: null | string,
-
-  hasExports: boolean,
-
+  exportNameListName: null | string;
+  hasExports: boolean;
   // Lookup from local binding to export information.
-  local: Map<string, LocalExportMetadata>,
-
+  local: Map<string, LocalExportMetadata>;
   // Lookup of source file to source file metadata.
-  source: Map<string, SourceModuleMetadata>,
-
+  source: Map<string, SourceModuleMetadata>;
   // List of names that should only be printed as string literals.
   // i.e. `import { "any unicode" as foo } from "some-module"`
   // `stringSpecifiers` is Set(1) ["any unicode"]
   // In most cases `stringSpecifiers` is an empty Set
-  stringSpecifiers: Set<string>,
+  stringSpecifiers: Set<string>;
 };
 
 export type InteropType = "default" | "namespace" | "none";
 
 export type SourceModuleMetadata = {
   // A unique variable name to use for this namespace object. Centralized for simplicity.
-  name: string,
-
-  loc: ?BabelNodeSourceLocation,
-
-  interop: InteropType,
-
+  name: string;
+  loc: BabelNodeSourceLocation | undefined | null;
+  interop: InteropType;
   // Local binding to reference from this source namespace. Key: Local name, value: Import name
-  imports: Map<string, string>,
-
+  imports: Map<string, string>;
   // Local names that reference namespace object.
-  importsNamespace: Set<string>,
-
+  importsNamespace: Set<string>;
   // Reexports to create for namespace. Key: Export name, value: Import name
-  reexports: Map<string, string>,
-
+  reexports: Map<string, string>;
   // List of names to re-export namespace as.
-  reexportNamespace: Set<string>,
-
+  reexportNamespace: Set<string>;
   // Tracks if the source should be re-exported.
   reexportAll: null | {
-    loc: ?BabelNodeSourceLocation,
-  },
+    loc: BabelNodeSourceLocation | undefined | null;
+  };
 };
 
 export type LocalExportMetadata = {
-  name: Array<string>, // names of exports
-  kind: "import" | "hoisted" | "block" | "var",
+  name: Array<string>; // names of exports,
+  kind: "import" | "hoisted" | "block" | "var";
 };
 
 /**
@@ -170,7 +158,10 @@ function getModuleMetadata(
   {
     lazy,
     initializeReexports,
-  }: { lazy: boolean, initializeReexports: boolean },
+  }: {
+    lazy: boolean;
+    initializeReexports: boolean;
+  },
   stringSpecifiers: Set<string>,
 ) {
   const localData = getLocalExportMetadata(
