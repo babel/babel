@@ -1,4 +1,3 @@
-// @flow
 import type { HubInterface, NodePath } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
@@ -252,25 +251,23 @@ const looseHandlers = {
   },
 };
 
-type ReplaceSupersOptionsBase = {|
-  methodPath: NodePath,
-  superRef: Object,
-  constantSuper: boolean,
-  file: any,
+type ReplaceSupersOptionsBase = {
+  methodPath: NodePath;
+  superRef: any;
+  constantSuper: boolean;
+  file: any;
   // objectRef might have been shadowed in child scopes,
   // in that case, we need to rename related variables.
-  refToPreserve?: BabelNodeIdentifier,
-|};
+  refToPreserve?: BabelNodeIdentifier;
+};
 
 type ReplaceSupersOptions =
-  | {|
-      ...ReplaceSupersOptionsBase,
-      getObjectRef: () => BabelNode,
-    |}
-  | {|
-      ...ReplaceSupersOptionsBase,
-      objectRef: BabelNode,
-    |};
+  | ({
+      getObjectRef: () => BabelNode;
+    } & ReplaceSupersOptionsBase)
+  | ({
+      objectRef: BabelNode;
+    } & ReplaceSupersOptionsBase);
 
 export default class ReplaceSupers {
   constructor(opts: ReplaceSupersOptions) {
@@ -287,7 +284,7 @@ export default class ReplaceSupers {
     this.constantSuper = process.env.BABEL_8_BREAKING
       ? opts.constantSuper
       : // Fallback to isLoose for backward compatibility
-        opts.constantSuper ?? (opts: any).isLoose;
+        opts.constantSuper ?? (opts as any).isLoose;
     this.opts = opts;
   }
 
@@ -298,7 +295,7 @@ export default class ReplaceSupers {
   declare isStatic: boolean;
   declare methodPath: NodePath;
   declare opts: ReplaceSupersOptions;
-  declare superRef: Object;
+  declare superRef: any;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
