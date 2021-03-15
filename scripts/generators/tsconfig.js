@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
+import globby from "globby";
 
 const require = createRequire(import.meta.url);
 
@@ -34,6 +35,27 @@ const tsPkgs = [
   ...getTsPkgs("codemods"),
 ];
 
+function sourceDeps(packageDir) {
+  const files = globby.sync(`src/**/*.ts`, {
+    cwd: packageDir,
+    onlyFiles: true,
+    dot: true,
+    ignore: ["**/node_modules/**"],
+  });
+  const result = new Set();
+  for (const file of files) {
+    const filename = path.join(packageDir, file);
+    const source = fs.readFileSync(filename, { encoding: "utf8" });
+
+    for (const [importSource] of source.matchAll(
+      /(?<=from\s*")@babel\/[^"/]+/g
+    )) {
+      result.add(importSource);
+    }
+  }
+  return result;
+}
+
 for (const { dir } of tsPkgs) {
   const pkg = require(`${dir}/package.json`);
 
@@ -43,9 +65,12 @@ for (const { dir } of tsPkgs) {
     if (!tsconfig.generated) continue;
   } catch {}
 
-  const deps = [];
-  if (pkg.dependencies) deps.push(...Object.keys(pkg.dependencies));
-  if (pkg.peerDependencies) deps.push(...Object.keys(pkg.peerDependencies));
+  const deps = new Set([
+    ...(pkg.dependencies ? Object.keys(pkg.dependencies) : []),
+    ...(pkg.peerDependencies ? Object.keys(pkg.peerDependencies) : []),
+    // todo(flow->ts): update dependencies in package.json if dependency declared incorrectly
+    ...sourceDeps(dir),
+  ]);
 
   const references = [];
   for (const dep of deps) {

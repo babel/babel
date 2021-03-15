@@ -243,8 +243,8 @@ endif
 bootstrap-only: clean-all
 	yarn install
 
-bootstrap: bootstrap-only generate-tsconfig
-	$(MAKE) build
+bootstrap: bootstrap-only
+	$(MAKE) generate-tsconfig build
 
 clean-lib:
 	$(foreach source, $(SOURCES), \
