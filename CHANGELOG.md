@@ -19,6 +19,23 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.11 (2021-03-15)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`, `babel-plugin-proposal-class-static-block`
+  * [#12738](https://github.com/babel/babel/pull/12738) Support multiple static blocks ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-compat-data`
+  * [#13000](https://github.com/babel/babel/pull/13000) Point to CJS files in `@babel/compat-data`'s `exports` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#12962](https://github.com/babel/babel/pull/12962) Parse type imports in TSImportEqualsDeclaration ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-helper-compilation-targets`
+  * [#12996](https://github.com/babel/babel/pull/12996) Fix `esmodule: "intersect"` on iOS versions ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#12990](https://github.com/babel/babel/pull/12990) Use `function` rather than `var` to compile private methods ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.10 (2021-03-08)
 
 #### :bug: Bug Fix
