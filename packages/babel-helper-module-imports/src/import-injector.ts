@@ -8,16 +8,14 @@ export type ImportOptions = {
   /**
    * The module being referenced.
    */
-  importedSource: string | null,
-
+  importedSource: string | null;
   /**
    * The type of module being imported:
    *
    *  * 'es6'      - An ES6 module.
    *  * 'commonjs' - A CommonJS module. (Default)
    */
-  importedType: "es6" | "commonjs",
-
+  importedType: "es6" | "commonjs";
   /**
    * The type of interop behavior for namespace/default/named when loading
    * CommonJS modules.
@@ -59,8 +57,7 @@ export type ImportOptions = {
    * * Default: The module.exports object.
    * * Named: The .named property of module.exports.
    */
-  importedInterop: "babel" | "node" | "compiled" | "uncompiled",
-
+  importedInterop: "babel" | "node" | "compiled" | "uncompiled";
   /**
    * The type of CommonJS interop included in the environment that will be
    * loading the output code.
@@ -70,8 +67,7 @@ export type ImportOptions = {
    *
    * See descriptions in 'importedInterop' for more details.
    */
-  importingInterop: "babel" | "node",
-
+  importingInterop: "babel" | "node";
   /**
    * Define whether we explicitly care that the import be a live reference.
    * Only applies when importing default and named imports, not the namespace.
@@ -79,8 +75,7 @@ export type ImportOptions = {
    *  * true  - Force imported values to be live references.
    *  * false - No particular requirements. Keeps the code simplest. (Default)
    */
-  ensureLiveReference: boolean,
-
+  ensureLiveReference: boolean;
   /**
    * Define if we explicitly care that the result not be a property reference.
    *
@@ -88,14 +83,13 @@ export type ImportOptions = {
    *            be used as function callee.
    *  * false - No particular requirements for context of the access. (Default)
    */
-  ensureNoContext: boolean,
-
+  ensureNoContext: boolean;
   /**
    * Define whether the import should be loaded before or after the existing imports.
    * "after" is only allowed inside ECMAScript modules, since it's not possible to
    * reliably pick the location _after_ require() calls but _before_ other code in CJS.
    */
-  importPosition: "before" | "after",
+  importPosition: "before" | "after";
 };
 
 /**
