@@ -774,6 +774,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-simple-access@workspace:packages/babel-helper-simple-access"
   dependencies:
+    "@babel/traverse": "workspace:^7.12.17"
     "@babel/types": "workspace:^7.12.13"
   languageName: unknown
   linkType: soft
@@ -3442,7 +3443,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.13.0, @babel/traverse@workspace:packages/babel-traverse":
+"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.12.17, @babel/traverse@workspace:^7.13.0, @babel/traverse@workspace:packages/babel-traverse":
   version: 0.0.0-use.local
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:
