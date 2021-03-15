@@ -70,7 +70,7 @@ function runCacheableScriptInTestContext(
   filename: string,
   srcFn: () => string,
   context: Context,
-  moduleCache: Object,
+  moduleCache: any,
 ) {
   let cached = cachedScripts.get(filename);
   if (!cached) {
@@ -116,7 +116,7 @@ function runModuleInTestContext(
   id: string,
   relativeFilename: string,
   context: Context,
-  moduleCache: Object,
+  moduleCache: any,
 ) {
   const filename = require.resolve(id, {
     paths: [path.dirname(relativeFilename)],
@@ -148,7 +148,9 @@ function runModuleInTestContext(
  */
 export function runCodeInTestContext(
   code: string,
-  opts: { filename: string },
+  opts: {
+    filename: string;
+  },
   context = sharedTestContext,
 ) {
   const filename = opts.filename;
