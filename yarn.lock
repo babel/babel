@@ -976,7 +976,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining":
+"@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:^7.13.8, @babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining"
   dependencies:
@@ -984,7 +984,8 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^7.12.1"
-    "@babel/plugin-transform-block-scoping": "workspace:*"
+    "@babel/plugin-proposal-optional-chaining": "workspace:^7.13.8"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.13.0
   languageName: unknown
@@ -3086,6 +3087,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/helper-validator-option": "workspace:^7.12.17"
+    "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^7.13.8"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.13.8"
     "@babel/plugin-proposal-class-properties": "workspace:^7.13.0"
     "@babel/plugin-proposal-dynamic-import": "workspace:^7.13.8"

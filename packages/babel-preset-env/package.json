@@ -20,6 +20,7 @@
     "@babel/helper-compilation-targets": "workspace:^7.13.10",
     "@babel/helper-plugin-utils": "workspace:^7.13.0",
     "@babel/helper-validator-option": "workspace:^7.12.17",
+    "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^7.13.8",
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.13.8",
     "@babel/plugin-proposal-class-properties": "workspace:^7.13.0",
     "@babel/plugin-proposal-dynamic-import": "workspace:^7.13.8",
