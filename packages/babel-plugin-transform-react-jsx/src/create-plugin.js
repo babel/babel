@@ -341,9 +341,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
     }
 
-    function accumulateAttribute(array, node) {
-      if (t.isJSXSpreadAttribute(node)) {
-        const arg = node.argument;
+    function accumulateAttribute(array, attribute) {
+      if (t.isJSXSpreadAttribute(attribute.node)) {
+        const arg = attribute.node.argument;
         // Collect properties into props array if spreading object expression
         if (t.isObjectExpression(arg)) {
           array.push(...arg.properties);
@@ -353,26 +353,46 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         return array;
       }
 
-      const value = convertAttributeValue(node.value || t.booleanLiteral(true));
+      const value = convertAttributeValue(
+        attribute.node.name.name !== "key"
+          ? attribute.node.value || t.booleanLiteral(true)
+          : attribute.node.value,
+      );
 
-      if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
+      if (attribute.node.name.name === "key" && value === null) {
+        throw attribute.buildCodeFrameError(
+          'Please provide an explicit key value. Using "key" as a shorthand for "key={true}" is not allowed.',
+        );
+      }
+
+      if (
+        t.isStringLiteral(value) &&
+        !t.isJSXExpressionContainer(attribute.node.value)
+      ) {
         value.value = value.value.replace(/\n\s+/g, " ");
 
         // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
         delete value.extra?.raw;
       }
 
-      if (t.isJSXNamespacedName(node.name)) {
-        node.name = t.stringLiteral(
-          node.name.namespace.name + ":" + node.name.name.name,
+      if (t.isJSXNamespacedName(attribute.node.name)) {
+        attribute.node.name = t.stringLiteral(
+          attribute.node.name.namespace.name +
+            ":" +
+            attribute.node.name.name.name,
         );
-      } else if (t.isValidIdentifier(node.name.name, false)) {
-        node.name.type = "Identifier";
+      } else if (t.isValidIdentifier(attribute.node.name.name, false)) {
+        attribute.node.name.type = "Identifier";
       } else {
-        node.name = t.stringLiteral(node.name.name);
+        attribute.node.name = t.stringLiteral(attribute.node.name.name);
       }
 
-      array.push(t.inherits(t.objectProperty(node.name, value), node));
+      array.push(
+        t.inherits(
+          t.objectProperty(attribute.node.name, value),
+          attribute.node,
+        ),
+      );
       return array;
     }
 
@@ -411,14 +431,22 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             case "__self":
               if (extracted[name]) throw sourceSelfError(path, name);
             /* falls through */
-            case "key":
-              extracted[name] = convertAttributeValue(attr.node.value);
+            case "key": {
+              const keyValue = convertAttributeValue(attr.node.value);
+              if (keyValue === null) {
+                throw attr.buildCodeFrameError(
+                  'Please provide an explicit key value. Using "key" as a shorthand for "key={true}" is not allowed.',
+                );
+              }
+
+              extracted[name] = keyValue;
               break;
+            }
             default:
-              attribs.push(attr.node);
+              attribs.push(attr);
           }
         } else {
-          attribs.push(attr.node);
+          attribs.push(attr);
         }
       }
 
@@ -511,7 +539,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         buildCreateElementOpeningElementAttributes(
           file,
           path,
-          openingPath.node.attributes,
+          openingPath.get("attributes"),
         ),
         ...t.react.buildChildren(path.node),
       ]);
