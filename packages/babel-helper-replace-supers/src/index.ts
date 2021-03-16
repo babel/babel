@@ -1,4 +1,3 @@
-// @flow
 import type { HubInterface, NodePath } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
@@ -26,8 +25,11 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-export function skipAllButComputedKey(path: NodePath) {
+export function skipAllButComputedKey(
+  path: NodePath<t.Method | t.ClassProperty | t.ClassPrivateProperty>,
+) {
   // If the path isn't computed, just skip everything.
+  // @ts-expect-error todo(flow->ts) check node type before cheking the property
   if (!path.node.computed) {
     path.skip();
     return;
@@ -60,7 +62,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  "Method|ClassProperty"(path: NodePath) {
+  "Method|ClassProperty"(path: NodePath<t.Method | t.ClassProperty>) {
     skipAllButComputedKey(path);
   },
 };
@@ -252,25 +254,25 @@ const looseHandlers = {
   },
 };
 
-type ReplaceSupersOptionsBase = {|
-  methodPath: NodePath,
-  superRef: Object,
-  constantSuper: boolean,
-  file: any,
+type ReplaceSupersOptionsBase = {
+  methodPath: NodePath<any>;
+  superRef: any;
+  constantSuper?: boolean;
+  file: any;
   // objectRef might have been shadowed in child scopes,
   // in that case, we need to rename related variables.
-  refToPreserve?: BabelNodeIdentifier,
-|};
+  refToPreserve?: t.Identifier;
+};
 
 type ReplaceSupersOptions =
-  | {|
-      ...ReplaceSupersOptionsBase,
-      getObjectRef: () => BabelNode,
-    |}
-  | {|
-      ...ReplaceSupersOptionsBase,
-      objectRef: BabelNode,
-    |};
+  | ({
+      objectRef?: undefined;
+      getObjectRef: () => t.Node;
+    } & ReplaceSupersOptionsBase)
+  | ({
+      objectRef: t.Node;
+      getObjectRef?: () => t.Node;
+    } & ReplaceSupersOptionsBase);
 
 export default class ReplaceSupers {
   constructor(opts: ReplaceSupersOptions) {
@@ -287,7 +289,7 @@ export default class ReplaceSupers {
     this.constantSuper = process.env.BABEL_8_BREAKING
       ? opts.constantSuper
       : // Fallback to isLoose for backward compatibility
-        opts.constantSuper ?? (opts: any).isLoose;
+        opts.constantSuper ?? (opts as any).isLoose;
     this.opts = opts;
   }
 
@@ -298,7 +300,7 @@ export default class ReplaceSupers {
   declare isStatic: boolean;
   declare methodPath: NodePath;
   declare opts: ReplaceSupersOptions;
-  declare superRef: Object;
+  declare superRef: any;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
