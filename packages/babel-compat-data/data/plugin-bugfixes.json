@@ -133,7 +133,7 @@
     "samsung": "13",
     "electron": "8.0"
   },
-  "bugfix/transform-v8-spread-parameters-after-optional-chaining": {
+  "bugfix/transform-v8-spread-parameters-in-optional-chaining": {
     "firefox": "74",
     "safari": "13.1",
     "ios": "13.4"
