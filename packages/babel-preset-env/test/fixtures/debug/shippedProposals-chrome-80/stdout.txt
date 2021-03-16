@@ -13,7 +13,7 @@ Using plugins:
   syntax-numeric-separator { "chrome":"80" }
   proposal-logical-assignment-operators { "chrome":"80" }
   syntax-nullish-coalescing-operator { "chrome":"80" }
-  syntax-optional-chaining { "chrome":"80" }
+  proposal-optional-chaining { "chrome":"80" }
   syntax-json-strings { "chrome":"80" }
   syntax-optional-catch-binding { "chrome":"80" }
   syntax-async-generators { "chrome":"80" }

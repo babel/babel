@@ -18,7 +18,7 @@ Using plugins:
   syntax-numeric-separator { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
   proposal-logical-assignment-operators { "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
   proposal-nullish-coalescing-operator { "samsung":"11.1" }
-  proposal-optional-chaining { "samsung":"11.1" }
+  proposal-optional-chaining { "android":"85", "chrome":"85", "edge":"85", "opera":"71", "samsung":"11.1" }
   syntax-json-strings { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
   syntax-optional-catch-binding { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
   syntax-async-generators { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
