@@ -57,7 +57,10 @@ describe("shouldTransform", () => {
     "class C { #c; p = obj?.#c(...[]) }",
   ];
 
-  const typescriptPositiveCases = ["(a?.(...[], 0) as any).b"];
+  const typescriptPositiveCases = [
+    "(a?.(...[], 0) as any)?.b",
+    "(a?.(...[], 0) as any)?.()",
+  ];
 
   const typescriptNegativeCases = ["(a?.b as any)(...[], 0)"];
 
