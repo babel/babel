@@ -26,7 +26,33 @@ function priority(bodyNode) {
   if (priority === true) priority = 2;
 
   // Higher priorities should move toward the top.
-  return -1 * priority;
+  return priority;
+}
+
+function stableSort(body, index) {
+  // By default, we use priorities of 0-4.
+  const buckets = [[], [], [], [], []];
+
+  // By collecting into buckets, we can guarantee a stable sort.
+  for (let i = index; i < body.length; i++) {
+    const n = body[i];
+    const p = priority(n);
+
+    // In case some plugin is setting an unexpected priority.
+    (buckets[p] ??= []).push(n);
+  }
+
+  // Highest priorities go first
+  for (let i = buckets.length - 1; i >= 0; i--) {
+    const bucket = buckets[i];
+
+    // In that unexpected priority caused a sparse array.
+    if (!bucket) continue;
+
+    for (const n of bucket) {
+      body[index++] = n;
+    }
+  }
 }
 
 const blockHoistPlugin = {
@@ -47,18 +73,18 @@ const blockHoistPlugin = {
   visitor: {
     Block: {
       exit({ node }) {
-        let hasChange = false;
-        for (let i = 0; i < node.body.length; i++) {
-          const bodyNode = node.body[i];
-          if (bodyNode?._blockHoist != null) {
-            hasChange = true;
+        const { body } = node;
+        let i = 0;
+        for (; i < body.length; i++) {
+          const n = body[i];
+          if (n?._blockHoist != null) {
             break;
           }
         }
-        if (!hasChange) return;
+        if (i === body.length) return;
 
-        // Sort in ascending order
-        node.body.sort((a, b) => priority(a) - priority(b));
+        // My kingdom for a stable sort!
+        stableSort(body, i);
       },
     },
   },
