@@ -166,6 +166,20 @@ const require = createRequire(import.meta.url);
           "function Foo() {\n  this instanceof Foo ? this.constructor : void 0;\n}",
         );
       });
+
+      it("useBuiltIns works", () => {
+        const output = Babel.transform("[].includes(2)", {
+          sourceType: "module",
+          presets: [
+            ["env", { useBuiltIns: "usage", corejs: 3, modules: false }],
+          ],
+        }).code;
+
+        expect(output).toMatchInlineSnapshot(`
+          "import \\"core-js/modules/es.array.includes.js\\";
+          [].includes(2);"
+        `);
+      });
     });
 
     describe("custom plugins and presets", () => {
