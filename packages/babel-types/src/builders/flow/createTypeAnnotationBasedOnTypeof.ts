@@ -47,6 +47,6 @@ export default function createTypeAnnotationBasedOnTypeof(
     // https://github.com/facebook/flow/issues/6639
     return anyTypeAnnotation();
   } else {
-    throw new Error("Invalid typeof value");
+    throw new Error("Invalid typeof value: " + type);
   }
 }
