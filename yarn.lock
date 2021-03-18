@@ -639,6 +639,7 @@ __metadata:
   resolution: "@babel/helper-module-imports@workspace:packages/babel-helper-module-imports"
   dependencies:
     "@babel/core": "workspace:*"
+    "@babel/traverse": "workspace:*"
     "@babel/types": "workspace:^7.12.13"
   languageName: unknown
   linkType: soft

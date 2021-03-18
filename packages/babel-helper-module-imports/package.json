@@ -18,6 +18,7 @@
     "@babel/types": "workspace:^7.12.13"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*"
+    "@babel/core": "workspace:*",
+    "@babel/traverse": "workspace:*"
   }
 }
