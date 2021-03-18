@@ -59,6 +59,7 @@ type ParsingContext =
   | "TypeMembers"
   | "TypeParametersOrArguments";
 
+/* eslint sort-keys: "error" */
 const TSErrors = Object.freeze({
   AbstractMethodHasImplementation:
     "Method '%0' cannot have an implementation because it is marked abstract.",
@@ -70,8 +71,8 @@ const TSErrors = Object.freeze({
     "Initializers are not allowed in ambient contexts.",
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
-  DuplicateModifier: "Duplicate modifier: '%0'",
   DuplicateAccessibilityModifier: "Accessibility modifier already seen.",
+  DuplicateModifier: "Duplicate modifier: '%0'",
   EmptyHeritageClauseType: "'%0' list cannot be empty.",
   EmptyTypeArguments: "Type argument list cannot be empty.",
   EmptyTypeParameters: "Type parameter list cannot be empty.",
@@ -82,9 +83,9 @@ const TSErrors = Object.freeze({
     "Index signatures cannot have the 'abstract' modifier",
   IndexSignatureHasAccessibility:
     "Index signatures cannot have an accessibility modifier ('%0')",
-  IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
   IndexSignatureHasDeclare:
     "Index signatures cannot have the 'declare' modifier",
+  IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
   InvalidModifierOnTypeMember: "'%0' modifier cannot appear on a type member.",
   InvalidTupleMemberLabel:
     "Tuple members must be labeled with a simple identifier.",
@@ -119,6 +120,7 @@ const TSErrors = Object.freeze({
   UnsupportedSignatureParameterKind:
     "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0",
 });
+/* eslint-disable sort-keys */
 
 // Doesn't handle "void" or "null" because those are keywords, not identifiers.
 // It also doesn't handle "intrinsic", since usually it's not a keyword.
