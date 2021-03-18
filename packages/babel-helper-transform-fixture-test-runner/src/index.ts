@@ -14,6 +14,7 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 import QuickLRU from "quick-lru";
+// @ts-ignore
 import escapeRegExp from "./escape-regexp.cjs";
 import { fileURLToPath } from "url";
 
@@ -69,10 +70,12 @@ function createContext() {
 function runCacheableScriptInTestContext(
   filename: string,
   srcFn: () => string,
-  context: Context,
-  moduleCache: Object,
+  // todo(flow->ts) was Context type, but it is missing
+  context: any,
+  moduleCache: any,
 ) {
-  let cached = cachedScripts.get(filename);
+  // todo(flow->ts) improve types
+  let cached: any = cachedScripts.get(filename);
   if (!cached) {
     const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
     cached = {
@@ -90,7 +93,9 @@ function runCacheableScriptInTestContext(
     produceCachedData: true,
   });
 
+  // @ts-expect-error todo(flow->ts) improve types
   if (script.cachedDataProduced) {
+    // @ts-expect-error todo(flow->ts) improve types
     cached.cachedData = script.cachedData;
   }
 
@@ -115,8 +120,9 @@ function runCacheableScriptInTestContext(
 function runModuleInTestContext(
   id: string,
   relativeFilename: string,
-  context: Context,
-  moduleCache: Object,
+  // todo(flow->ts) was Context type, but it is missing
+  context: any,
+  moduleCache: any,
 ) {
   const filename = require.resolve(id, {
     paths: [path.dirname(relativeFilename)],
@@ -148,7 +154,9 @@ function runModuleInTestContext(
  */
 export function runCodeInTestContext(
   code: string,
-  opts: { filename: string },
+  opts: {
+    filename: string;
+  },
   context = sharedTestContext,
 ) {
   const filename = opts.filename;
@@ -192,7 +200,8 @@ function run(task) {
     stderr,
   } = task;
 
-  function getOpts(self) {
+  // todo(flow->ts) add proper return type (added any, because empty object is inferred)
+  function getOpts(self): any {
     const newOpts = merge(
       {
         ast: true,
@@ -226,7 +235,7 @@ function run(task) {
     } catch (err) {
       // Pass empty location to include the whole file in the output.
       err.message =
-        `${exec.loc}: ${err.message}\n` + codeFrameColumns(execCode, {});
+        `${exec.loc}: ${err.message}\n` + codeFrameColumns(execCode, {} as any);
       throw err;
     }
   }
@@ -336,7 +345,7 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
   }
 }
 
-function normalizeOutput(code, normalizePathSeparator) {
+function normalizeOutput(code, normalizePathSeparator?) {
   const projectRoot = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
@@ -391,11 +400,21 @@ expect.extend({
   },
 });
 
+declare global {
+  // eslint-disable-next-line no-redeclare,@typescript-eslint/no-unused-vars
+  namespace jest {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface Matchers<R> {
+      toEqualFile({ filename, code }): jest.CustomMatcherResult;
+    }
+  }
+}
+
 export default function (
   fixturesLoc: string,
   name: string,
-  suiteOpts = {},
-  taskOpts = {},
+  suiteOpts: any = {},
+  taskOpts: any = {},
   dynamicOpts?: Function,
 ) {
   const suites = getFixtures(fixturesLoc);
@@ -432,6 +451,7 @@ export default function (
 
             if (dynamicOpts) dynamicOpts(task.options, task);
 
+            // @ts-expect-error todo(flow->ts) missing property
             if (task.externalHelpers) {
               (task.options.plugins ??= []).push([
                 "external-helpers",
