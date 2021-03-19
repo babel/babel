@@ -490,7 +490,6 @@ __metadata:
   dependencies:
     "@babel/helper-function-name": "workspace:^7.12.13"
     "@babel/types": "workspace:^7.12.13"
-    lodash: ^4.17.19
   languageName: unknown
   linkType: soft
 
