@@ -74,13 +74,18 @@ const blockHoistPlugin = {
     Block: {
       exit({ node }) {
         const { body } = node;
+
+        // Largest SMI
+        let max = 2 ** 30 - 1;
         let hasChange = false;
         for (let i = 0; i < body.length; i++) {
           const n = body[i];
-          if (n?._blockHoist != null) {
+          const p = priority(n);
+          if (p > max) {
             hasChange = true;
             break;
           }
+          max = p;
         }
         if (!hasChange) return;
 
