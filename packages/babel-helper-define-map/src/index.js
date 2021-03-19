@@ -1,5 +1,4 @@
 import nameFunction from "@babel/helper-function-name";
-import has from "lodash/has";
 import * as t from "@babel/types";
 
 function toKind(node: Object) {
@@ -11,6 +10,8 @@ function toKind(node: Object) {
 
   return "value";
 }
+
+const has = Function.prototype.call.bind(Object.prototype.hasOwnProperty);
 
 export function push(
   mutatorMap: Object,
