@@ -166,7 +166,9 @@ declare module "@babel/helper-function-name" {
 }
 
 declare module "@babel/helper-split-export-declaration" {
-  declare export default function splitExportDeclaration(exportDeclaration: any): any;
+  declare export default function splitExportDeclaration(
+    exportDeclaration: any
+  ): any;
 }
 
 declare module "@babel/traverse" {
@@ -196,6 +198,13 @@ declare module "@babel/highlight" {
   /**
    * Highlight `code`.
    */
-  declare export default function highlight(code: string, options?: Options): string;
-    declare export { getChalk, shouldHighlight };
+  declare export default function highlight(
+    code: string,
+    options?: Options
+  ): string;
+  declare export { getChalk, shouldHighlight };
+}
+
+declare module "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining" {
+  declare module.exports: any;
 }

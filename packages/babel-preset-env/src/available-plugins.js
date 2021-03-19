@@ -65,6 +65,7 @@ import bugfixEdgeFunctionName from "@babel/preset-modules/lib/plugins/transform-
 import bugfixTaggedTemplateCaching from "@babel/preset-modules/lib/plugins/transform-tagged-template-caching";
 import bugfixSafariBlockShadowing from "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing";
 import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing";
+import bugfixV8SpreadParametersInOptionalChaining from "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining";
 
 export default {
   "bugfix/transform-async-arrows-in-class": bugfixAsyncArrowsInClass,
@@ -73,6 +74,7 @@ export default {
   "bugfix/transform-safari-block-shadowing": bugfixSafariBlockShadowing,
   "bugfix/transform-safari-for-shadowing": bugfixSafariForShadowing,
   "bugfix/transform-tagged-template-caching": bugfixTaggedTemplateCaching,
+  "bugfix/transform-v8-spread-parameters-in-optional-chaining": bugfixV8SpreadParametersInOptionalChaining,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-class-properties": proposalClassProperties,
   "proposal-dynamic-import": proposalDynamicImport,

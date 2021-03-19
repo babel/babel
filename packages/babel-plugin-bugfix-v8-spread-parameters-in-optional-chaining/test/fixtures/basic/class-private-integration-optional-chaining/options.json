@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    "proposal-class-properties", "proposal-private-methods", "proposal-optional-chaining", "bugfix-v8-spread-parameters-in-optional-chaining"
+  ]
+}
