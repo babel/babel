@@ -1,9 +1,6 @@
 "use strict";
 
 const fs = require("fs");
-const flatMap = require("lodash/flatMap");
-const mapValues = require("lodash/mapValues");
-const findLastIndex = require("lodash/findLastIndex");
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
 const envs = require("../build/compat-table/environments");
@@ -35,8 +32,8 @@ exports.environments = [
   "samsung",
 ];
 
-const compatibilityTests = flatMap(compatSources, data =>
-  flatMap(data.tests, test => {
+const compatibilityTests = compatSources.flatMap(data =>
+  data.tests.flatMap(test => {
     if (!test.subtests) return test;
 
     return test.subtests.map(subtest =>
@@ -63,13 +60,19 @@ exports.getLowestImplementedVersion = (
   });
 
   const envTests = tests.map(({ res }) => {
-    const lastNotImplemented = findLastIndex(
-      envsVersions[env],
-      // Babel assumes strict mode
-      ({ id }) => !(res[id] === true || res[id] === "strict")
-    );
+    const versions = envsVersions[env];
+    let i = versions.length - 1;
 
-    return envsVersions[env][lastNotImplemented + 1];
+    // Find the last not-implemented version
+    for (; i >= 0; i--) {
+      const { id } = versions[i];
+      // Babel assumes strict mode
+      if (res[id] !== true && res[id] !== "strict") {
+        break;
+      }
+    }
+
+    return envsVersions[env][i + 1];
   });
 
   if (envTests.length === 0 || envTests.some(t => !t)) return null;
@@ -85,7 +88,7 @@ exports.getLowestImplementedVersion = (
 };
 
 exports.generateData = (environments, features) => {
-  return mapValues(features, options => {
+  return Object.values(features).map(options => {
     if (!options.features) {
       options = {
         features: [options],
