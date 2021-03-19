@@ -5,16 +5,26 @@ import NodePath from "./index";
 import * as t from "@babel/types";
 
 const NORMAL_COMPLETION = 0;
-// const BREAK_COMPLETION = 1;
+const BREAK_COMPLETION = 1;
 
 type Completion = {
   path: NodePath;
   type: 0 | 1;
 };
 
-// type CompletionContext = {
-//   inCatchClause: boolean;
-// };
+type CompletionContext = {
+  canHaveBreak: boolean;
+  inCaseClause: boolean;
+  shouldPopulateBreak: boolean;
+};
+
+function NormalCompletion(path: NodePath) {
+  return { type: NORMAL_COMPLETION, path };
+}
+
+function BreakCompletion(path: NodePath) {
+  return { type: BREAK_COMPLETION, path };
+}
 
 export function getOpposite(this: NodePath): NodePath | null {
   if (this.key === "left") {
@@ -28,8 +38,9 @@ export function getOpposite(this: NodePath): NodePath | null {
 function addCompletionRecords(
   path: NodePath | null | undefined,
   records: Completion[],
+  context: CompletionContext,
 ): Completion[] {
-  if (path) return records.concat(_getCompletionRecords(path));
+  if (path) return records.concat(_getCompletionRecords(path, context));
   return records;
 }
 
@@ -67,7 +78,9 @@ function findBreak(statements): NodePath | null {
   return null;
 }
 
-function completionRecordForSwitch(cases, paths) {
+// eslint-disable-next-line
+function _completionRecordForSwitch(cases, paths) {
+  // https://tc39.es/ecma262/#sec-runtime-semantics-caseblockevaluation
   let isLastCaseWithConsequent = true;
 
   for (let i = cases.length - 1; i >= 0; i--) {
@@ -109,41 +122,157 @@ function completionRecordForSwitch(cases, paths) {
   return paths;
 }
 
-function _getCompletionRecords(path: NodePath): Completion[] {
-  let records = [];
+function completionRecordForSwitch(
+  cases: NodePath<t.SwitchCase>[],
+  records: Completion[],
+  context: CompletionContext,
+): Completion[] {
+  // https://tc39.es/ecma262/#sec-runtime-semantics-caseblockevaluation
+  let lastNormalCompletions = [];
+  for (let i = 0; i < cases.length; i++) {
+    const casePath = cases[i];
+    const caseCompletions = _getCompletionRecords(casePath, context);
+    const normalCompletions = [];
+    const breakCompletions = [];
+    for (const c of caseCompletions) {
+      if (c.type === NORMAL_COMPLETION) {
+        normalCompletions.push(c);
+      }
+      if (c.type === BREAK_COMPLETION) {
+        breakCompletions.push(c);
+      }
+    }
+    if (normalCompletions.length) {
+      lastNormalCompletions = normalCompletions;
+    }
+    records = records.concat(breakCompletions);
+  }
+  records = records.concat(lastNormalCompletions);
+  return records;
+}
 
+function markCompletionsAs(completions: Completion[], type) {
+  completions.forEach(c => {
+    c.type = type;
+  });
+}
+
+function getStatementListCompletion(
+  paths: NodePath[],
+  context: CompletionContext,
+): Completion[] {
+  let completions = [];
+  if (context.canHaveBreak) {
+    let lastNormalCompletions = [];
+    for (let i = 0; i < paths.length; i++) {
+      const path = paths[i];
+      const newContext = { ...context, inCaseClause: false };
+      if (
+        path.isBlockStatement() &&
+        (context.inCaseClause || context.shouldPopulateBreak)
+      ) {
+        newContext.shouldPopulateBreak = true;
+      } else {
+        newContext.shouldPopulateBreak = false;
+      }
+      const statementCompletions = _getCompletionRecords(path, newContext);
+      if (
+        statementCompletions.length > 0 &&
+        statementCompletions.every(c => c.type === BREAK_COMPLETION)
+      ) {
+        if (
+          lastNormalCompletions.length > 0 &&
+          statementCompletions.every(c =>
+            c.path.isBreakStatement({ label: null }),
+          )
+        ) {
+          markCompletionsAs(lastNormalCompletions, BREAK_COMPLETION);
+          completions = completions.concat(lastNormalCompletions);
+          statementCompletions.forEach(c => c.path.remove());
+        } else {
+          completions = completions.concat(statementCompletions);
+          if (!context.shouldPopulateBreak) {
+            statementCompletions.forEach(c => {
+              if (c.path.isBreakStatement({ label: null })) {
+                c.path.replaceWith(paths[0].scope.buildUndefinedNode());
+              }
+            });
+          }
+        }
+        break;
+      }
+      if (i === paths.length - 1) {
+        completions = completions.concat(statementCompletions);
+      } else {
+        completions = completions.concat(
+          statementCompletions.filter(c => c.type === BREAK_COMPLETION),
+        );
+        lastNormalCompletions = statementCompletions.filter(
+          c => c.type === NORMAL_COMPLETION,
+        );
+      }
+    }
+  } else if (paths.length) {
+    completions = completions.concat(
+      _getCompletionRecords(paths[paths.length - 1], context),
+    );
+  }
+  return completions;
+}
+
+function _getCompletionRecords(
+  path: NodePath,
+  context: CompletionContext,
+): Completion[] {
+  let records = [];
   if (path.isIfStatement()) {
-    records = addCompletionRecords(path.get("consequent"), records);
-    records = addCompletionRecords(path.get("alternate"), records);
+    records = addCompletionRecords(path.get("consequent"), records, context);
+    records = addCompletionRecords(path.get("alternate"), records, context);
   } else if (path.isDoExpression() || path.isFor() || path.isWhile()) {
     // @ts-expect-error(flow->ts): todo
-    records = addCompletionRecords(path.get("body"), records);
+    records = addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
     // @ts-expect-error(flow->ts): todo
-    records = addCompletionRecords(path.get("body").pop(), records);
+    records = records.concat(
+      getStatementListCompletion(path.get("body"), context),
+    );
   } else if (path.isFunction()) {
-    return _getCompletionRecords(path.get("body"));
+    return _getCompletionRecords(path.get("body"), context);
   } else if (path.isTryStatement()) {
-    records = addCompletionRecords(path.get("block"), records);
-    records = addCompletionRecords(path.get("handler"), records);
+    records = addCompletionRecords(path.get("block"), records, context);
+    records = addCompletionRecords(path.get("handler"), records, context);
   } else if (path.isCatchClause()) {
-    records = addCompletionRecords(path.get("body"), records);
+    records = addCompletionRecords(path.get("body"), records, context);
   } else if (path.isSwitchStatement()) {
-    records = completionRecordForSwitch(path.get("cases"), records);
+    records = completionRecordForSwitch(path.get("cases"), records, context);
+  } else if (path.isSwitchCase()) {
+    records = records.concat(
+      getStatementListCompletion(path.get("consequent"), {
+        canHaveBreak: true,
+        shouldPopulateBreak: false,
+        inCaseClause: true,
+      }),
+    );
+  } else if (path.isBreakStatement()) {
+    records.push(BreakCompletion(path));
+  } else if (path.isDeclaration()) {
+    // do nothing
   } else {
-    records.push({ type: NORMAL_COMPLETION, path: path });
+    records.push(NormalCompletion(path));
   }
 
   return records;
 }
 
 export function getCompletionRecords(this: NodePath): NodePath[] {
-  const records = _getCompletionRecords(this);
+  const records = _getCompletionRecords(this, {
+    canHaveBreak: false,
+    shouldPopulateBreak: false,
+    inCaseClause: false,
+  });
   const paths = [];
   for (const record of records) {
-    if (record.type === NORMAL_COMPLETION) {
-      paths.push(record.path);
-    }
+    paths.push(record.path);
   }
   return paths;
 }
