@@ -32,10 +32,17 @@ export function resolveTargets(
   }
 
   const { browserslistConfigFile } = options;
+  let configFile;
+  let ignoreBrowserslistConfig = false;
+  if (typeof browserslistConfigFile === "string") {
+    configFile = browserslistConfigFile;
+  } else {
+    ignoreBrowserslistConfig = browserslistConfigFile === false;
+  }
 
   return getTargets((targets: any), {
-    ignoreBrowserslistConfig: browserslistConfigFile === false,
-    configFile: browserslistConfigFile,
+    ignoreBrowserslistConfig,
+    configFile,
     configPath: root,
     browserslistEnv: options.browserslistEnv,
   });
