@@ -32,15 +32,8 @@ exports.environments = [
   "samsung",
 ];
 
-function flatMap(array, cb) {
-  if (array.flatMap) return array.flatMap(cb);
-  return array.reduce((flattened, value) => {
-    return flattened.concat(value);
-  }, []);
-}
-
-const compatibilityTests = flatMap(compatSources, data =>
-  flatMap(data.tests, test => {
+const compatibilityTests = compatSources.flatMap(data =>
+  data.tests.flatMap(test => {
     if (!test.subtests) return test;
 
     return test.subtests.map(subtest =>
