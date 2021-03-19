@@ -38,7 +38,8 @@ function stableSort(body) {
     const p = priority(n);
 
     // In case some plugin is setting an unexpected priority.
-    (buckets[p] ??= []).push(n);
+    const bucket = buckets[p] || (buckets[p] = []);
+    bucket.push(n);
   }
 
   // Highest priorities go first
