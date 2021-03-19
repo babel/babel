@@ -939,7 +939,6 @@ __metadata:
     commander: ^4.0.1
     core-js: ^3.2.1
     fs-readdir-recursive: ^1.0.0
-    lodash: ^4.17.19
     make-dir: ^2.1.0
     node-environment-flags: ^1.0.5
     regenerator-runtime: ^0.13.4

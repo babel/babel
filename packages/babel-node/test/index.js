@@ -1,10 +1,8 @@
-import includes from "lodash/includes";
 import readdir from "fs-readdir-recursive";
 import * as helper from "@babel/helper-fixtures";
 import rimraf from "rimraf";
 import { sync as makeDirSync } from "make-dir";
 import child from "child_process";
-import merge from "lodash/merge";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -51,7 +49,7 @@ const assertTest = function (stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      expect(includes(stderr, expectStderr)).toBeTruthy();
+      expect(stderr.includes(expectStderr)).toBeTruthy();
     } else {
       expect(stderr).toBe(expectStderr);
     }
@@ -65,7 +63,7 @@ const assertTest = function (stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      expect(includes(stdout, expectStdout)).toBeTruthy();
+      expect(stdout.includes(expectStdout)).toBeTruthy();
     } else {
       expect(stdout).toBe(expectStdout);
     }
@@ -176,7 +174,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
+      if (fs.existsSync(optionsLoc)) Object.assign(opts, require(optionsLoc));
 
       ["stdout", "stdin", "stderr"].forEach(function (key) {
         const loc = path.join(testLoc, key + ".txt");
