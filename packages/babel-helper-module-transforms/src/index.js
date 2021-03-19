@@ -1,7 +1,6 @@
 import assert from "assert";
 import * as t from "@babel/types";
 import template from "@babel/template";
-import chunk from "lodash/chunk";
 
 import { isModule } from "@babel/helper-module-imports";
 
@@ -418,4 +417,12 @@ function buildInitStatement(metadata: ModuleMetadata, exportNames, initExpr) {
       }
     }, initExpr),
   );
+}
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
 }
