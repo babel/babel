@@ -4,6 +4,18 @@ import type TraversalContext from "../context";
 import NodePath from "./index";
 import * as t from "@babel/types";
 
+const NORMAL_COMPLETION = 0;
+// const BREAK_COMPLETION = 1;
+
+type Completion = {
+  path: NodePath;
+  type: 0 | 1;
+};
+
+// type CompletionContext = {
+//   inCatchClause: boolean;
+// };
+
 export function getOpposite(this: NodePath): NodePath | null {
   if (this.key === "left") {
     return this.getSibling("right");
@@ -15,10 +27,10 @@ export function getOpposite(this: NodePath): NodePath | null {
 
 function addCompletionRecords(
   path: NodePath | null | undefined,
-  paths: NodePath[],
-): NodePath[] {
-  if (path) return paths.concat(path.getCompletionRecords());
-  return paths;
+  records: Completion[],
+): Completion[] {
+  if (path) return records.concat(_getCompletionRecords(path));
+  return records;
 }
 
 function findBreak(statements): NodePath | null {
@@ -97,31 +109,42 @@ function completionRecordForSwitch(cases, paths) {
   return paths;
 }
 
-export function getCompletionRecords(this: NodePath): NodePath[] {
-  let paths = [];
+function _getCompletionRecords(path: NodePath): Completion[] {
+  let records = [];
 
-  if (this.isIfStatement()) {
-    paths = addCompletionRecords(this.get("consequent"), paths);
-    paths = addCompletionRecords(this.get("alternate"), paths);
-  } else if (this.isDoExpression() || this.isFor() || this.isWhile()) {
+  if (path.isIfStatement()) {
+    records = addCompletionRecords(path.get("consequent"), records);
+    records = addCompletionRecords(path.get("alternate"), records);
+  } else if (path.isDoExpression() || path.isFor() || path.isWhile()) {
     // @ts-expect-error(flow->ts): todo
-    paths = addCompletionRecords(this.get("body"), paths);
-  } else if (this.isProgram() || this.isBlockStatement()) {
+    records = addCompletionRecords(path.get("body"), records);
+  } else if (path.isProgram() || path.isBlockStatement()) {
     // @ts-expect-error(flow->ts): todo
-    paths = addCompletionRecords(this.get("body").pop(), paths);
-  } else if (this.isFunction()) {
-    return this.get("body").getCompletionRecords();
-  } else if (this.isTryStatement()) {
-    paths = addCompletionRecords(this.get("block"), paths);
-    paths = addCompletionRecords(this.get("handler"), paths);
-  } else if (this.isCatchClause()) {
-    paths = addCompletionRecords(this.get("body"), paths);
-  } else if (this.isSwitchStatement()) {
-    paths = completionRecordForSwitch(this.get("cases"), paths);
+    records = addCompletionRecords(path.get("body").pop(), records);
+  } else if (path.isFunction()) {
+    return _getCompletionRecords(path.get("body"));
+  } else if (path.isTryStatement()) {
+    records = addCompletionRecords(path.get("block"), records);
+    records = addCompletionRecords(path.get("handler"), records);
+  } else if (path.isCatchClause()) {
+    records = addCompletionRecords(path.get("body"), records);
+  } else if (path.isSwitchStatement()) {
+    records = completionRecordForSwitch(path.get("cases"), records);
   } else {
-    paths.push(this);
+    records.push({ type: NORMAL_COMPLETION, path: path });
   }
 
+  return records;
+}
+
+export function getCompletionRecords(this: NodePath): NodePath[] {
+  const records = _getCompletionRecords(this);
+  const paths = [];
+  for (const record of records) {
+    if (record.type === NORMAL_COMPLETION) {
+      paths.push(record.path);
+    }
+  }
   return paths;
 }
 
