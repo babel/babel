@@ -29,3 +29,10 @@ const x = (n) => do {
       "bar";
   }
 };
+
+expect(x(0)).toBeUndefined();
+expect(x(1)).toBeUndefined();
+expect(x(2)).toBeUndefined();
+expect(x(3)).toBe("c");
+expect(x(6)).toBeUndefined();
+expect(x(7)).toBe("bar");

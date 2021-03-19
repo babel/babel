@@ -13,8 +13,14 @@ type Completion = {
 };
 
 type CompletionContext = {
+  // whether the current context allows `break` statement. When it allows, we have
+  // to search all the statements for potential `break`
   canHaveBreak: boolean;
+  // whether the statement is an immediate descendant of a switch case clause
   inCaseClause: boolean;
+  // whether the `break` statement record should be populated to upper level
+  // when a `break` statement is an immediate descendant of a block statement, e.g.
+  // `{ break }`, it can influence the control flow in the upper levels.
   shouldPopulateBreak: boolean;
 };
 
@@ -151,9 +157,24 @@ function completionRecordForSwitch(
   return records;
 }
 
-function markCompletionsAs(completions: Completion[], type) {
+function normalCompletionToBreak(completions: Completion[]) {
   completions.forEach(c => {
-    c.type = type;
+    c.type = BREAK_COMPLETION;
+  });
+}
+
+function replaceBreakStatementInBreakCompletion(
+  completions: Completion[],
+  reachable: boolean,
+) {
+  completions.forEach(c => {
+    if (c.path.isBreakStatement({ label: null })) {
+      if (reachable) {
+        c.path.replaceWith(t.unaryExpression("void", t.numericLiteral(0)));
+      } else {
+        c.path.remove();
+      }
+    }
   });
 }
 
@@ -169,7 +190,8 @@ function getStatementListCompletion(
       const newContext = { ...context, inCaseClause: false };
       if (
         path.isBlockStatement() &&
-        (context.inCaseClause || context.shouldPopulateBreak)
+        (context.inCaseClause || // case test: { break }
+          context.shouldPopulateBreak) // case test: { { break } }
       ) {
         newContext.shouldPopulateBreak = true;
       } else {
@@ -178,6 +200,12 @@ function getStatementListCompletion(
       const statementCompletions = _getCompletionRecords(path, newContext);
       if (
         statementCompletions.length > 0 &&
+        // we can stop search `paths` when we have seen a `path` that is
+        // effectively a `break` statement. Examples are
+        // - `break`
+        // - `if (true) { 1; break } else { 2; break }`
+        // - `{ break }```
+        // In other words, the paths after this `path` are unreachable
         statementCompletions.every(c => c.type === BREAK_COMPLETION)
       ) {
         if (
@@ -186,17 +214,33 @@ function getStatementListCompletion(
             c.path.isBreakStatement({ label: null }),
           )
         ) {
-          markCompletionsAs(lastNormalCompletions, BREAK_COMPLETION);
+          // when a break completion has a path as BreakStatement, it must be `{ break }`
+          // whose completion value we can not determine, otherwise it would have been
+          // replaced by `replaceBreakStatementInBreakCompletion`
+          // When we have seen normal completions from the last statement
+          // it is safe to stop pupulating break and mark normal completions as break
+          normalCompletionToBreak(lastNormalCompletions);
           completions = completions.concat(lastNormalCompletions);
-          statementCompletions.forEach(c => c.path.remove());
+          // Declarations have empty completion record, however they can not be nested
+          // directly in return statement, i.e. `return (var a = 1)` is invalid.
+          if (lastNormalCompletions.some(c => c.path.isDeclaration())) {
+            completions = completions.concat(statementCompletions);
+            replaceBreakStatementInBreakCompletion(
+              statementCompletions,
+              /* reachable */ true,
+            );
+          }
+          replaceBreakStatementInBreakCompletion(
+            statementCompletions,
+            /* reachable */ false,
+          );
         } else {
           completions = completions.concat(statementCompletions);
           if (!context.shouldPopulateBreak) {
-            statementCompletions.forEach(c => {
-              if (c.path.isBreakStatement({ label: null })) {
-                c.path.replaceWith(paths[0].scope.buildUndefinedNode());
-              }
-            });
+            replaceBreakStatementInBreakCompletion(
+              statementCompletions,
+              /* reachable */ true,
+            );
           }
         }
         break;
@@ -213,6 +257,9 @@ function getStatementListCompletion(
       }
     }
   } else if (paths.length) {
+    // When we are in a context where `break` must not exist, we can skip linear
+    // search on statement lists and assume that the last statement determines
+    // the completion
     completions = completions.concat(
       _getCompletionRecords(paths[paths.length - 1], context),
     );
@@ -232,8 +279,8 @@ function _getCompletionRecords(
     // @ts-expect-error(flow->ts): todo
     records = addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
-    // @ts-expect-error(flow->ts): todo
     records = records.concat(
+      // @ts-expect-error(flow->ts): todo
       getStatementListCompletion(path.get("body"), context),
     );
   } else if (path.isFunction()) {
@@ -255,8 +302,6 @@ function _getCompletionRecords(
     );
   } else if (path.isBreakStatement()) {
     records.push(BreakCompletion(path));
-  } else if (path.isDeclaration()) {
-    // do nothing
   } else {
     records.push(NormalCompletion(path));
   }
