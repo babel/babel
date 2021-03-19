@@ -35,4 +35,10 @@ module.exports = {
     features: ["template literals / TemplateStrings permanent caching"],
     replaces: "transform-template-literals",
   },
+  "bugfix/transform-v8-spread-parameters-in-optional-chaining": {
+    features: [
+      "optional chaining operator (?.) / spread parameters after optional chaining",
+    ],
+    replaces: "proposal-optional-chaining",
+  },
 };

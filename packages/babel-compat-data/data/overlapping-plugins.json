@@ -14,5 +14,8 @@
   ],
   "transform-template-literals": [
     "bugfix/transform-tagged-template-caching"
+  ],
+  "proposal-optional-chaining": [
+    "bugfix/transform-v8-spread-parameters-in-optional-chaining"
   ]
 }
