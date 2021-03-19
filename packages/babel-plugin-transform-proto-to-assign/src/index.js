@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import pull from "lodash/pull";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -65,11 +64,14 @@ export default declare(api => {
       ObjectExpression(path, file) {
         let proto;
         const { node } = path;
+        const { properties } = node;
 
-        for (const prop of (node.properties: Array)) {
+        for (let i = 0; i < properties.length; i++) {
+          const prop = properties[i];
           if (isProtoKey(prop)) {
             proto = prop.value;
-            pull(node.properties, prop);
+            properties.splice(i, 1);
+            break;
           }
         }
 
