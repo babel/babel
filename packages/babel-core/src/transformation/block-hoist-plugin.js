@@ -21,17 +21,16 @@ export default function loadBlockHoistPlugin(): Plugin {
   return LOADED_PLUGIN;
 }
 function priority(bodyNode) {
-  let priority = bodyNode?._blockHoist;
-  if (priority == null) priority = 1;
-  if (priority === true) priority = 2;
-
-  // Higher priorities should move toward the top.
+  const priority = bodyNode?._blockHoist;
+  if (priority == null) return 1;
+  if (priority === true) return 2;
   return priority;
 }
 
-function stableSort(body, index) {
+function stableSort(body) {
   // By default, we use priorities of 0-4.
   const buckets = [[], [], [], [], []];
+  let index = 0;
 
   // By collecting into buckets, we can guarantee a stable sort.
   for (let i = index; i < body.length; i++) {
@@ -47,12 +46,13 @@ function stableSort(body, index) {
     const bucket = buckets[i];
 
     // In that unexpected priority caused a sparse array.
-    if (!bucket) continue;
+    if (bucket == null) continue;
 
     for (const n of bucket) {
       body[index++] = n;
     }
   }
+  return body;
 }
 
 const blockHoistPlugin = {
@@ -74,17 +74,18 @@ const blockHoistPlugin = {
     Block: {
       exit({ node }) {
         const { body } = node;
-        let i = 0;
-        for (; i < body.length; i++) {
+        let hasChange = false;
+        for (let i = 0; i < body.length; i++) {
           const n = body[i];
           if (n?._blockHoist != null) {
+            hasChange = true;
             break;
           }
         }
-        if (i === body.length) return;
+        if (!hasChange) return;
 
         // My kingdom for a stable sort!
-        stableSort(body, i);
+        node.body = stableSort(body.slice());
       },
     },
   },
