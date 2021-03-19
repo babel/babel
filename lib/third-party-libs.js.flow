@@ -22,10 +22,6 @@ declare module "json5" {
   };
 }
 
-declare module "lodash/defaults" {
-  declare export default <T: Object>(T, Object) =>  T;
-}
-
 declare module "lodash/clone" {
   declare export default <T>(obj: T) => T;
 }
