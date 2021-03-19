@@ -8,7 +8,7 @@ export function resolveTargets(
   // eslint-disable-next-line no-unused-vars
   root: string,
   // eslint-disable-next-line no-unused-vars
-  filename: string | void,
+  configFilePath: string | void,
 ): Targets {
   let { targets } = options;
   if (typeof targets === "string" || Array.isArray(targets)) {
