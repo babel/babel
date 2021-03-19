@@ -11,6 +11,13 @@ describe("builders", function () {
         undefined: typeof undefined,
         function: typeof function () {},
         symbol: typeof Symbol(),
+        bigint: (() => {
+          try {
+            return eval("typeof 0n");
+          } catch (e) {
+            return "bigint";
+          }
+        })(),
       };
 
       for (const name in values) {

@@ -1,4 +1,5 @@
 import {
+  anyTypeAnnotation,
   stringTypeAnnotation,
   numberTypeAnnotation,
   voidTypeAnnotation,
@@ -25,7 +26,8 @@ export default function createTypeAnnotationBasedOnTypeof(
   | t.VoidTypeAnnotation
   | t.NumberTypeAnnotation
   | t.BooleanTypeAnnotation
-  | t.GenericTypeAnnotation {
+  | t.GenericTypeAnnotation
+  | t.AnyTypeAnnotation {
   if (type === "string") {
     return stringTypeAnnotation();
   } else if (type === "number") {
@@ -40,7 +42,11 @@ export default function createTypeAnnotationBasedOnTypeof(
     return genericTypeAnnotation(identifier("Object"));
   } else if (type === "symbol") {
     return genericTypeAnnotation(identifier("Symbol"));
+  } else if (type === "bigint") {
+    // todo: use BigInt annotation when Flow supports BigInt
+    // https://github.com/facebook/flow/issues/6639
+    return anyTypeAnnotation();
   } else {
-    throw new Error("Invalid typeof value");
+    throw new Error("Invalid typeof value: " + type);
   }
 }
