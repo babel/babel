@@ -2,6 +2,7 @@ import * as t from "@babel/types";
 import { willPathCastToBoolean } from "./util";
 
 class AssignmentMemoiser {
+  private _map: WeakMap<object, any>;
   constructor() {
     this._map = new WeakMap();
   }
@@ -84,7 +85,8 @@ const handle = {
     // noop.
   },
 
-  handle(member: t.NodePath<t.Expression>, noDocumentAll: boolean) {
+  // todo(flow->ts) member:NodePath<t.Expression>, refactor function body to avoid too many typecasts
+  handle(member: any, noDocumentAll: boolean) {
     const { node, parent, parentPath, scope } = member;
 
     if (member.isOptionalMemberExpression()) {
@@ -350,7 +352,12 @@ const handle = {
         const ref = scope.generateUidIdentifierBasedOnNode(node);
         scope.push({ id: ref });
 
-        value.left = t.assignmentExpression("=", t.cloneNode(ref), value.left);
+        value.left = t.assignmentExpression(
+          "=",
+          t.cloneNode(ref),
+          // @ts-expect-error todo(flow->ts) value.left is possibly PrivateName, which is not usable here
+          value.left,
+        );
 
         parentPath.replaceWith(
           t.sequenceExpression([this.set(member, value), t.cloneNode(ref)]),
