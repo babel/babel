@@ -3,7 +3,6 @@
 import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
-import cloneDeep from "lodash/cloneDeep";
 import type { Handler } from "gensync";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
@@ -35,9 +34,8 @@ export default function* normalizeFile(
       throw new Error("AST root must be a Program or File node");
     }
 
-    const { cloneInputAst } = options;
-    if (cloneInputAst) {
-      ast = cloneDeep(ast);
+    if (options.cloneInputAst) {
+      ast = JSON.parse(JSON.stringify(ast));
     }
   } else {
     ast = yield* parser(pluginPasses, options, code);

@@ -15,11 +15,9 @@
   "homepage": "https://babel.dev/docs/en/next/babel-helper-fixtures",
   "main": "lib/index.js",
   "dependencies": {
-    "lodash": "^4.17.19",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.150",
     "@types/semver": "^7.3.4"
   }
 }

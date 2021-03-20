@@ -1,4 +1,3 @@
-import cloneDeep from "lodash/cloneDeep";
 import semver from "semver";
 import path from "path";
 import fs from "fs";
@@ -121,7 +120,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
     execLocAlias = suiteName + "/" + taskName;
   }
 
-  const taskOpts = cloneDeep(suite.options);
+  const taskOpts = JSON.parse(JSON.stringify(suite.options));
 
   const taskOptsLoc = tryResolve(taskDir + "/options");
   if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
