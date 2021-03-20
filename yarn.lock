@@ -3468,7 +3468,6 @@ __metadata:
     "@babel/types": "workspace:^7.13.0"
     debug: ^4.1.0
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
-    lodash: ^4.17.19
   languageName: unknown
   linkType: soft
 
