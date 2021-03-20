@@ -29,11 +29,10 @@ function priority(bodyNode) {
 
 function stableSort(body) {
   // By default, we use priorities of 0-4.
-  const buckets = [[], [], [], [], []];
-  let index = 0;
+  const buckets = Object.create(null);
 
   // By collecting into buckets, we can guarantee a stable sort.
-  for (let i = index; i < body.length; i++) {
+  for (let i = 0; i < body.length; i++) {
     const n = body[i];
     const p = priority(n);
 
@@ -42,13 +41,15 @@ function stableSort(body) {
     bucket.push(n);
   }
 
-  // Highest priorities go first
-  for (let i = buckets.length - 1; i >= 0; i--) {
-    const bucket = buckets[i];
+  // Sort our keys in descending order. Keys are unique, so we don't have to
+  // worry about stability.
+  const keys = Object.keys(buckets)
+    .map(k => +k)
+    .sort((a, b) => b - a);
 
-    // In that unexpected priority caused a sparse array.
-    if (bucket == null) continue;
-
+  let index = 0;
+  for (const key of keys) {
+    const bucket = buckets[key];
     for (const n of bucket) {
       body[index++] = n;
     }
