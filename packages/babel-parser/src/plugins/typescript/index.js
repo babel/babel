@@ -178,6 +178,11 @@ const TSErrors = Object.freeze({
     template:
       "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
   },
+  TypeImportCannotSpecifyDefaultAndNamed: {
+    code: "TypeImportCannotSpecifyDefaultAndNamed",
+    template:
+      "A type-only import can specify a default import or named bindings, but not both.",
+  },
   UnexpectedParameterModifier: {
     code: "UnexpectedParameterModifier",
     template:
@@ -2186,11 +2191,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         importNode.specifiers.length > 1 &&
         importNode.specifiers[0].type === "ImportDefaultSpecifier"
       ) {
-        this.raise(importNode.start, {
-          code: "TSTypeImportCannotSpecifyBothDefaultAndNamedBindings",
-          template:
-            "A type-only import can specify a default import or named bindings, but not both.",
-        });
+        this.raise(
+          importNode.start,
+          TSErrors.TypeImportCannotSpecifyDefaultAndNamed,
+        );
       }
 
       return importNode;
