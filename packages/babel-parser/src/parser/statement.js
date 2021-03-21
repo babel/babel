@@ -3,7 +3,7 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { Errors } from "./error";
+import { Errors, SourceTypeModuleErrors } from "./error";
 import {
   isIdentifierChar,
   isIdentifierStart,
@@ -324,13 +324,7 @@ export default class StatementParser extends ExpressionParser {
 
   assertModuleNodeAllowed(node: N.Node): void {
     if (!this.options.allowImportExportEverywhere && !this.inModule) {
-      this.raiseWithData(
-        node.start,
-        {
-          code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
-        },
-        Errors.ImportOutsideModule,
-      );
+      this.raise(node.start, SourceTypeModuleErrors.ImportOutsideModule);
     }
   }
 
@@ -1690,7 +1684,7 @@ export default class StatementParser extends ExpressionParser {
       if (optionalId || !isStatement) {
         node.id = null;
       } else {
-        this.unexpected(null, Errors.MissingClassName);
+        this.unexpected(null, Errors.MissingClassName.template);
       }
     }
   }
@@ -1935,7 +1929,10 @@ export default class StatementParser extends ExpressionParser {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
         if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
-          this.unexpected(this.state.start, Errors.DecoratorBeforeExport);
+          this.unexpected(
+            this.state.start,
+            Errors.DecoratorBeforeExport.template,
+          );
         } else {
           return true;
         }
@@ -2236,7 +2233,7 @@ export default class StatementParser extends ExpressionParser {
       if (!this.match(tt.string)) {
         throw this.unexpected(
           this.state.start,
-          Errors.ModuleAttributeInvalidValue,
+          Errors.ModuleAttributeInvalidValue.template,
         );
       }
       node.value = this.parseLiteral<N.StringLiteral>(
@@ -2290,7 +2287,7 @@ export default class StatementParser extends ExpressionParser {
       if (!this.match(tt.string)) {
         throw this.unexpected(
           this.state.start,
-          Errors.ModuleAttributeInvalidValue,
+          Errors.ModuleAttributeInvalidValue.template,
         );
       }
       node.value = this.parseLiteral(this.state.value, "StringLiteral");

@@ -18,7 +18,21 @@ type ErrorContext = {
 
 export type ParsingError = SyntaxError & ErrorContext;
 
-export { ErrorMessages as Errors } from "./error-message";
+export type ErrorTemplate = {
+  code: string,
+  template: string,
+};
+
+export type ErrorTemplates = {
+  [key: string]: ErrorTemplate,
+};
+
+export type raiseFunction = (number, ErrorTemplate, ...any) => void;
+
+export {
+  ErrorMessages as Errors,
+  SourceTypeModuleErrorMessages as SourceTypeModuleErrors,
+} from "./error-message";
 
 export default class ParserError extends CommentsParser {
   // Forward-declaration: defined in tokenizer/index.js
@@ -37,8 +51,12 @@ export default class ParserError extends CommentsParser {
     return loc;
   }
 
-  raise(pos: number, errorTemplate: string, ...params: any): Error | empty {
-    return this.raiseWithData(pos, undefined, errorTemplate, ...params);
+  raise(
+    pos: number,
+    { code, template }: ErrorTemplate,
+    ...params: any
+  ): Error | empty {
+    return this.raiseWithData(pos, { code }, template, ...params);
   }
 
   /**
@@ -55,12 +73,12 @@ export default class ParserError extends CommentsParser {
    */
   raiseOverwrite(
     pos: number,
-    errorTemplate: string,
+    { code, template }: ErrorTemplate,
     ...params: any
   ): Error | empty {
     const loc = this.getLocationForPosition(pos);
     const message =
-      errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
+      template.replace(/%(\d+)/g, (_, i: number) => params[i]) +
       ` (${loc.line}:${loc.column})`;
     if (this.options.errorRecovery) {
       const errors = this.state.errors;
@@ -73,7 +91,7 @@ export default class ParserError extends CommentsParser {
         }
       }
     }
-    return this._raise({ loc, pos }, message);
+    return this._raise({ code, loc, pos }, message);
   }
 
   raiseWithData(

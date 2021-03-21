@@ -21,17 +21,36 @@ const DECIMAL_NUMBER = /^\d+$/;
 
 /* eslint sort-keys: "error" */
 const JsxErrors = Object.freeze({
-  AttributeIsEmpty:
-    "JSX attributes must only be assigned a non-empty expression",
-  MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
-  MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
-  UnexpectedSequenceExpression:
-    "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-  UnsupportedJsxValue:
-    "JSX value should be either an expression or a quoted JSX text",
-  UnterminatedJsxContent: "Unterminated JSX contents",
-  UnwrappedAdjacentJSXElements:
-    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+  AttributeIsEmpty: {
+    code: "AttributeIsEmpty",
+    template: "JSX attributes must only be assigned a non-empty expression",
+  },
+  MissingClosingTagElement: {
+    code: "MissingClosingTagElement",
+    template: "Expected corresponding JSX closing tag for <%0>",
+  },
+  MissingClosingTagFragment: {
+    code: "MissingClosingTagFragment",
+    template: "Expected corresponding JSX closing tag for <>",
+  },
+  UnexpectedSequenceExpression: {
+    code: "UnexpectedSequenceExpression",
+    template:
+      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
+  },
+  UnsupportedJsxValue: {
+    code: "UnsupportedJsxValue",
+    template: "JSX value should be either an expression or a quoted JSX text",
+  },
+  UnterminatedJsxContent: {
+    code: "UnterminatedJsxContent",
+    template: "Unterminated JSX contents",
+  },
+  UnwrappedAdjacentJSXElements: {
+    code: "UnwrappedAdjacentJSXElements",
+    template:
+      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+  },
 });
 /* eslint-disable sort-keys */
 
@@ -133,10 +152,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               const htmlEntity =
                 ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
               const char = this.input[this.state.pos];
-              this.raise(
-                this.state.pos,
-                `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
-              );
+              this.raise(this.state.pos, {
+                code: "UnexpectedToken",
+                template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
+              });
             }
           /* falls through */
 

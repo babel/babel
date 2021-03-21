@@ -142,7 +142,10 @@ export default class UtilParser extends Tokenizer {
   assertNoSpace(message: string = "Unexpected space."): void {
     if (this.state.start > this.state.lastTokEnd) {
       /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(this.state.lastTokEnd, message);
+      this.raise(this.state.lastTokEnd, {
+        code: "UnexpectedSpace",
+        template: message,
+      });
       /* eslint-enable @babel/development-internal/dry-error-messages */
     }
   }
@@ -158,7 +161,10 @@ export default class UtilParser extends Tokenizer {
       messageOrType = `Unexpected token, expected "${messageOrType.label}"`;
     }
     /* eslint-disable @babel/development-internal/dry-error-messages */
-    throw this.raise(pos != null ? pos : this.state.start, messageOrType);
+    throw this.raise(pos != null ? pos : this.state.start, {
+      code: "UnexpectedToken",
+      template: messageOrType,
+    });
     /* eslint-enable @babel/development-internal/dry-error-messages */
   }
 

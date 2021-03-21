@@ -49,89 +49,221 @@ const reservedTypes = new Set([
 /* eslint sort-keys: "error" */
 // The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
 const FlowErrors = Object.freeze({
-  AmbiguousConditionalArrow:
-    "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
-  AmbiguousDeclareModuleKind:
-    "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module",
-  AssignReservedType: "Cannot overwrite reserved type %0",
-  DeclareClassElement:
-    "The `declare` modifier can only appear on class fields.",
-  DeclareClassFieldInitializer:
-    "Initializers are not allowed in fields with the `declare` modifier.",
-  DuplicateDeclareModuleExports: "Duplicate `declare module.exports` statement",
-  EnumBooleanMemberNotInitialized:
-    "Boolean enum members need to be initialized. Use either `%0 = true,` or `%0 = false,` in enum `%1`.",
-  EnumDuplicateMemberName:
-    "Enum member names need to be unique, but the name `%0` has already been used before in enum `%1`.",
-  EnumInconsistentMemberValues:
-    "Enum `%0` has inconsistent member initializers. Either use no initializers, or consistently use literals (either booleans, numbers, or strings) for all member initializers.",
-  EnumInvalidExplicitType:
-    "Enum type `%1` is not valid. Use one of `boolean`, `number`, `string`, or `symbol` in enum `%0`.",
-  EnumInvalidExplicitTypeUnknownSupplied:
-    "Supplied enum type is not valid. Use one of `boolean`, `number`, `string`, or `symbol` in enum `%0`.",
-  EnumInvalidMemberInitializerPrimaryType:
-    "Enum `%0` has type `%2`, so the initializer of `%1` needs to be a %2 literal.",
-  EnumInvalidMemberInitializerSymbolType:
-    "Symbol enum members cannot be initialized. Use `%1,` in enum `%0`.",
-  EnumInvalidMemberInitializerUnknownType:
-    "The enum member initializer for `%1` needs to be a literal (either a boolean, number, or string) in enum `%0`.",
-  EnumInvalidMemberName:
-    "Enum member names cannot start with lowercase 'a' through 'z'. Instead of using `%0`, consider using `%1`, in enum `%2`.",
-  EnumNumberMemberNotInitialized:
-    "Number enum members need to be initialized, e.g. `%1 = 1` in enum `%0`.",
-  EnumStringMemberInconsistentlyInitailized:
-    "String enum members need to consistently either all use initializers, or use no initializers, in enum `%0`.",
-  GetterMayNotHaveThisParam: "A getter cannot have a `this` parameter.",
-  ImportTypeShorthandOnlyInPureImport:
-    "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
-  InexactInsideExact:
-    "Explicit inexact syntax cannot appear inside an explicit exact object type",
-  InexactInsideNonObject:
-    "Explicit inexact syntax cannot appear in class or interface definitions",
-  InexactVariance: "Explicit inexact syntax cannot have variance",
-  InvalidNonTypeImportInDeclareModule:
-    "Imports within a `declare module` body must always be `import type` or `import typeof`",
-  MissingTypeParamDefault:
-    "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
-  NestedDeclareModule:
-    "`declare module` cannot be used inside another `declare module`",
-  NestedFlowComment: "Cannot have a flow comment inside another flow comment",
-  OptionalBindingPattern:
-    "A binding pattern parameter cannot be optional in an implementation signature.",
-  SetterMayNotHaveThisParam: "A setter cannot have a `this` parameter.",
-  SpreadVariance: "Spread properties cannot have variance",
-  ThisParamAnnotationRequired:
-    "A type annotation is required for the `this` parameter.",
-  ThisParamBannedInConstructor:
-    "Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions.",
-  ThisParamMayNotBeOptional: "The `this` parameter cannot be optional.",
-  ThisParamMustBeFirst:
-    "The `this` parameter must be the first function parameter.",
-  ThisParamNoDefault: "The `this` parameter may not have a default value.",
-  TypeBeforeInitializer:
-    "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
-  TypeCastInPattern:
-    "The type cast expression is expected to be wrapped with parenthesis",
-  UnexpectedExplicitInexactInObject:
-    "Explicit inexact syntax must appear at the end of an inexact object",
-  UnexpectedReservedType: "Unexpected reserved type %0",
-  UnexpectedReservedUnderscore:
-    "`_` is only allowed as a type argument to call or new",
-  UnexpectedSpaceBetweenModuloChecks:
-    "Spaces between `%` and `checks` are not allowed here.",
-  UnexpectedSpreadType:
-    "Spread operator cannot appear in class or interface definitions",
-  UnexpectedSubtractionOperand:
-    'Unexpected token, expected "number" or "bigint"',
-  UnexpectedTokenAfterTypeParameter:
-    "Expected an arrow function after this type parameter declaration",
-  UnexpectedTypeParameterBeforeAsyncArrowFunction:
-    "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`",
-  UnsupportedDeclareExportKind:
-    "`declare export %0` is not supported. Use `%1` instead",
-  UnsupportedStatementInDeclareModule:
-    "Only declares and type imports are allowed inside declare module",
-  UnterminatedFlowComment: "Unterminated flow-comment",
+  AmbiguousConditionalArrow: {
+    code: "AmbiguousConditionalArrow",
+    template:
+      "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
+  },
+  AmbiguousDeclareModuleKind: {
+    code: "AmbiguousDeclareModuleKind",
+    template:
+      "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module",
+  },
+  AssignReservedType: {
+    code: "AssignReservedType",
+    template: "Cannot overwrite reserved type %0",
+  },
+  DeclareClassElement: {
+    code: "DeclareClassElement",
+    template: "The `declare` modifier can only appear on class fields.",
+  },
+  DeclareClassFieldInitializer: {
+    code: "DeclareClassFieldInitializer",
+    template:
+      "Initializers are not allowed in fields with the `declare` modifier.",
+  },
+  DuplicateDeclareModuleExports: {
+    code: "DuplicateDeclareModuleExports",
+    template: "Duplicate `declare module.exports` statement",
+  },
+  EnumBooleanMemberNotInitialized: {
+    code: "EnumBooleanMemberNotInitialized",
+    template:
+      "Boolean enum members need to be initialized. Use either `%0 = true,` or `%0 = false,` in enum `%1`.",
+  },
+  EnumDuplicateMemberName: {
+    code: "EnumDuplicateMemberName",
+    template:
+      "Enum member names need to be unique, but the name `%0` has already been used before in enum `%1`.",
+  },
+  EnumInconsistentMemberValues: {
+    code: "EnumInconsistentMemberValues",
+    template:
+      "Enum `%0` has inconsistent member initializers. Either use no initializers, or consistently use literals (either booleans, numbers, or strings) for all member initializers.",
+  },
+  EnumInvalidExplicitType: {
+    code: "EnumInvalidExplicitType",
+    template:
+      "Enum type `%1` is not valid. Use one of `boolean`, `number`, `string`, or `symbol` in enum `%0`.",
+  },
+  EnumInvalidExplicitTypeUnknownSupplied: {
+    code: "EnumInvalidExplicitTypeUnknownSupplied",
+    template:
+      "Supplied enum type is not valid. Use one of `boolean`, `number`, `string`, or `symbol` in enum `%0`.",
+  },
+  EnumInvalidMemberInitializerPrimaryType: {
+    code: "EnumInvalidMemberInitializerPrimaryType",
+    template:
+      "Enum `%0` has type `%2`, so the initializer of `%1` needs to be a %2 literal.",
+  },
+  EnumInvalidMemberInitializerSymbolType: {
+    code: "EnumInvalidMemberInitializerSymbolType",
+    template:
+      "Symbol enum members cannot be initialized. Use `%1,` in enum `%0`.",
+  },
+  EnumInvalidMemberInitializerUnknownType: {
+    code: "EnumInvalidMemberInitializerUnknownType",
+    template:
+      "The enum member initializer for `%1` needs to be a literal (either a boolean, number, or string) in enum `%0`.",
+  },
+  EnumInvalidMemberName: {
+    code: "EnumInvalidMemberName",
+    template:
+      "Enum member names cannot start with lowercase 'a' through 'z'. Instead of using `%0`, consider using `%1`, in enum `%2`.",
+  },
+  EnumNumberMemberNotInitialized: {
+    code: "EnumNumberMemberNotInitialized",
+    template:
+      "Number enum members need to be initialized, e.g. `%1 = 1` in enum `%0`.",
+  },
+  EnumStringMemberInconsistentlyInitailized: {
+    code: "EnumStringMemberInconsistentlyInitailized",
+    template:
+      "String enum members need to consistently either all use initializers, or use no initializers, in enum `%0`.",
+  },
+  GetterMayNotHaveThisParam: {
+    code: "GetterMayNotHaveThisParam",
+    template: "A getter cannot have a `this` parameter.",
+  },
+  ImportTypeShorthandOnlyInPureImport: {
+    code: "ImportTypeShorthandOnlyInPureImport",
+    template:
+      "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
+  },
+  InexactInsideExact: {
+    code: "InexactInsideExact",
+    template:
+      "Explicit inexact syntax cannot appear inside an explicit exact object type",
+  },
+  InexactInsideNonObject: {
+    code: "InexactInsideNonObject",
+    template:
+      "Explicit inexact syntax cannot appear in class or interface definitions",
+  },
+  InexactVariance: {
+    code: "InexactVariance",
+    template: "Explicit inexact syntax cannot have variance",
+  },
+  InvalidNonTypeImportInDeclareModule: {
+    code: "InvalidNonTypeImportInDeclareModule",
+    template:
+      "Imports within a `declare module` body must always be `import type` or `import typeof`",
+  },
+  MissingTypeParamDefault: {
+    code: "MissingTypeParamDefault",
+    template:
+      "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
+  },
+  NestedDeclareModule: {
+    code: "NestedDeclareModule",
+    template: "`declare module` cannot be used inside another `declare module`",
+  },
+  NestedFlowComment: {
+    code: "NestedFlowComment",
+    template: "Cannot have a flow comment inside another flow comment",
+  },
+  OptionalBindingPattern: {
+    code: "OptionalBindingPattern",
+    template:
+      "A binding pattern parameter cannot be optional in an implementation signature.",
+  },
+  SetterMayNotHaveThisParam: {
+    code: "SetterMayNotHaveThisParam",
+    template: "A setter cannot have a `this` parameter.",
+  },
+  SpreadVariance: {
+    code: "SpreadVariance",
+    template: "Spread properties cannot have variance",
+  },
+  ThisParamAnnotationRequired: {
+    code: "ThisParamAnnotationRequired",
+    template: "A type annotation is required for the `this` parameter.",
+  },
+  ThisParamBannedInConstructor: {
+    code: "ThisParamBannedInConstructor",
+    template:
+      "Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions.",
+  },
+  ThisParamMayNotBeOptional: {
+    code: "ThisParamMayNotBeOptional",
+    template: "The `this` parameter cannot be optional.",
+  },
+  ThisParamMustBeFirst: {
+    code: "ThisParamMustBeFirst",
+    template: "The `this` parameter must be the first function parameter.",
+  },
+  ThisParamNoDefault: {
+    code: "ThisParamNoDefault",
+    template: "The `this` parameter may not have a default value.",
+  },
+  TypeBeforeInitializer: {
+    code: "TypeBeforeInitializer",
+    template:
+      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+  },
+  TypeCastInPattern: {
+    code: "TypeCastInPattern",
+    template:
+      "The type cast expression is expected to be wrapped with parenthesis",
+  },
+  UnexpectedExplicitInexactInObject: {
+    code: "UnexpectedExplicitInexactInObject",
+    template:
+      "Explicit inexact syntax must appear at the end of an inexact object",
+  },
+  UnexpectedReservedType: {
+    code: "UnexpectedReservedType",
+    template: "Unexpected reserved type %0",
+  },
+  UnexpectedReservedUnderscore: {
+    code: "UnexpectedReservedUnderscore",
+    template: "`_` is only allowed as a type argument to call or new",
+  },
+  UnexpectedSpaceBetweenModuloChecks: {
+    code: "UnexpectedSpaceBetweenModuloChecks",
+    template: "Spaces between `%` and `checks` are not allowed here.",
+  },
+  UnexpectedSpreadType: {
+    code: "UnexpectedSpreadType",
+    template: "Spread operator cannot appear in class or interface definitions",
+  },
+  UnexpectedSubtractionOperand: {
+    code: "UnexpectedSubtractionOperand",
+    template: 'Unexpected token, expected "number" or "bigint"',
+  },
+  UnexpectedTokenAfterTypeParameter: {
+    code: "UnexpectedTokenAfterTypeParameter",
+    template:
+      "Expected an arrow function after this type parameter declaration",
+  },
+  UnexpectedTypeParameterBeforeAsyncArrowFunction: {
+    code: "UnexpectedTypeParameterBeforeAsyncArrowFunction",
+    template:
+      "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`",
+  },
+  UnsupportedDeclareExportKind: {
+    code: "UnsupportedDeclareExportKind",
+    template: "`declare export %0` is not supported. Use `%1` instead",
+  },
+  UnsupportedStatementInDeclareModule: {
+    code: "UnsupportedStatementInDeclareModule",
+    template:
+      "Only declares and type imports are allowed inside declare module",
+  },
+  UnterminatedFlowComment: {
+    code: "UnterminatedFlowComment",
+    template: "Unterminated flow-comment",
+  },
 });
 /* eslint-disable sort-keys */
 
@@ -414,7 +546,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           this.expectContextual(
             "declare",
-            FlowErrors.UnsupportedStatementInDeclareModule,
+            FlowErrors.UnsupportedStatementInDeclareModule.template,
           );
 
           bodyNode = this.flowParseDeclare(bodyNode, true);
@@ -3185,7 +3317,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     skipBlockComment(): void {
       if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
-          this.unexpected(null, FlowErrors.NestedFlowComment);
+          this.unexpected(null, FlowErrors.NestedFlowComment.template);
         }
         this.hasFlowCommentCompletion();
         this.state.pos += this.skipFlowComment();
