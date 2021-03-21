@@ -14,13 +14,13 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors } from "../../parser/error";
+import { Errors, type ErrorTemplates } from "../../parser/error";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
 /* eslint sort-keys: "error" */
-const JsxErrors = Object.freeze({
+const JsxErrors: ErrorTemplates = Object.freeze({
   AttributeIsEmpty: {
     code: "AttributeIsEmpty",
     template: "JSX attributes must only be assigned a non-empty expression",

@@ -25,7 +25,7 @@ import {
   SCOPE_OTHER,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
-import { Errors } from "../../parser/error";
+import { Errors, type ErrorTemplates } from "../../parser/error";
 
 const reservedTypes = new Set([
   "_",
@@ -48,7 +48,7 @@ const reservedTypes = new Set([
 
 /* eslint sort-keys: "error" */
 // The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
-const FlowErrors = Object.freeze({
+const FlowErrors: ErrorTemplates = Object.freeze({
   AmbiguousConditionalArrow: {
     code: "AmbiguousConditionalArrow",
     template:

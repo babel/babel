@@ -29,7 +29,11 @@ import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
-import { Errors, type ErrorTemplate } from "../../parser/error";
+import {
+  Errors,
+  type ErrorTemplate,
+  type ErrorTemplates,
+} from "../../parser/error";
 
 type TsModifier =
   | "readonly"
@@ -60,7 +64,7 @@ type ParsingContext =
   | "TypeParametersOrArguments";
 
 /* eslint sort-keys: "error" */
-const TSErrors = Object.freeze({
+const TSErrors: ErrorTemplates = Object.freeze({
   AbstractMethodHasImplementation: {
     code: "AbstractMethodHasImplementation",
     template:
