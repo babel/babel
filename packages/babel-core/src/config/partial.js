@@ -139,6 +139,7 @@ export default function* loadPrivatePartialConfig(
     envName: context.envName,
     cwd: context.cwd,
     root: context.root,
+    rootMode: "root",
     filename:
       typeof context.filename === "string" ? context.filename : undefined,
 

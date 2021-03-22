@@ -118,6 +118,25 @@ describe("@babel/core config loading", () => {
       expect(item.value).toBe(preset);
       expect(item.options).toBe(false);
     });
+
+    it("should always set 'rootMode' to 'root'", async () => {
+      const cwd = path.join(
+        path.dirname(fileURLToPath(import.meta.url)),
+        "fixtures",
+        "config-loading",
+        "root",
+        "nested",
+      );
+
+      const { options } = await loadPartialConfig({
+        cwd,
+        filename: path.join(cwd, "file.js"),
+        rootMode: "upward",
+      });
+
+      expect(options.root).toBe(path.join(cwd, ".."));
+      expect(options.rootMode).toBe("root");
+    });
   });
 
   describe("config file", () => {
