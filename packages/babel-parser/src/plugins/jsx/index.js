@@ -14,43 +14,28 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors, type ErrorTemplates } from "../../parser/error";
+import {
+  Errors,
+  makeErrorTemplates,
+  type ErrorTemplates,
+} from "../../parser/error";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
 /* eslint sort-keys: "error" */
-const JsxErrors: ErrorTemplates = Object.freeze({
-  AttributeIsEmpty: {
-    code: "AttributeIsEmpty",
-    template: "JSX attributes must only be assigned a non-empty expression",
-  },
-  MissingClosingTagElement: {
-    code: "MissingClosingTagElement",
-    template: "Expected corresponding JSX closing tag for <%0>",
-  },
-  MissingClosingTagFragment: {
-    code: "MissingClosingTagFragment",
-    template: "Expected corresponding JSX closing tag for <>",
-  },
-  UnexpectedSequenceExpression: {
-    code: "UnexpectedSequenceExpression",
-    template:
-      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-  },
-  UnsupportedJsxValue: {
-    code: "UnsupportedJsxValue",
-    template: "JSX value should be either an expression or a quoted JSX text",
-  },
-  UnterminatedJsxContent: {
-    code: "UnterminatedJsxContent",
-    template: "Unterminated JSX contents",
-  },
-  UnwrappedAdjacentJSXElements: {
-    code: "UnwrappedAdjacentJSXElements",
-    template:
-      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-  },
+const JsxErrors: ErrorTemplates = makeErrorTemplates({
+  AttributeIsEmpty:
+    "JSX attributes must only be assigned a non-empty expression",
+  MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
+  MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
+  UnexpectedSequenceExpression:
+    "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
+  UnsupportedJsxValue:
+    "JSX value should be either an expression or a quoted JSX text",
+  UnterminatedJsxContent: "Unterminated JSX contents",
+  UnwrappedAdjacentJSXElements:
+    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
 });
 /* eslint-disable sort-keys */
 

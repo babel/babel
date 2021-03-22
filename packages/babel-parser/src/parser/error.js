@@ -34,6 +34,19 @@ export {
   SourceTypeModuleErrorMessages as SourceTypeModuleErrors,
 } from "./error-message";
 
+export function makeErrorTemplates(messages: {
+  [key: string]: string,
+}): ErrorTemplates {
+  const templates: ErrorTemplates = {};
+  Object.keys(messages).forEach(code => {
+    templates[code] = {
+      code,
+      template: messages[code],
+    };
+  });
+  return Object.freeze(templates);
+}
+
 export default class ParserError extends CommentsParser {
   // Forward-declaration: defined in tokenizer/index.js
   /*::
