@@ -158,7 +158,7 @@ module.exports = function (api) {
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
-      convertESM ? pluginNodeImportInterop : null,
+      convertESM ? pluginNodeImportInteropBabel : pluginNodeImportInteropRollup,
       convertESM ? pluginImportMetaUrl : null,
 
       pluginPackageJsonMacro,
@@ -420,7 +420,7 @@ function pluginPackageJsonMacro({ types: t }) {
 }
 
 // Match the Node.js behavior (the default import is module.exports)
-function pluginNodeImportInterop({ template }) {
+function pluginNodeImportInteropBabel({ template }) {
   return {
     visitor: {
       ImportDeclaration(path) {
@@ -465,6 +465,30 @@ function pluginNodeImportInterop({ template }) {
         }
 
         if (path.node.specifiers.length === 0) path.remove();
+      },
+    },
+  };
+}
+
+function pluginNodeImportInteropRollup({ types: t }) {
+  const depsUsing__esModuleAndDefaultExport = [
+    src => src.startsWith("babel-plugin-polyfill-"),
+  ];
+
+  return {
+    visitor: {
+      ImportDeclaration(path) {
+        const { value: source } = path.node.source;
+        if (depsUsing__esModuleAndDefaultExport.every(test => !test(source))) {
+          return;
+        }
+
+        const defImport = path
+          .get("specifiers")
+          .find(s => s.isImportDefaultSpecifier());
+        if (!defImport) return;
+
+        defImport.replaceWith(t.importNamespaceSpecifier(defImport.node.local));
       },
     },
   };
