@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.13.10",
+  "version": "7.13.12",
   "description": "Babel command line",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babel.dev/docs/en/next/babel-node",
