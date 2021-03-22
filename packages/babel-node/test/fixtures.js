@@ -11,8 +11,9 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const fixtureLoc = path.join(dirname, "fixtures");
+const fixtureLoc = path.join(dirname, "fixtures", "cli");
 const tmpLoc = path.join(dirname, "tmp");
+const binLoc = path.join(dirname, "../lib/babel-node");
 
 const fileFilter = function (x) {
   return x !== ".DS_Store";
@@ -93,9 +94,7 @@ const assertTest = function (stdout, stderr, opts) {
   }
 };
 
-const buildTest = function (binName, testName, opts) {
-  const binLoc = path.join(dirname, "../lib", binName);
-
+const buildTest = function (testName, opts) {
   return function (callback) {
     saveInFiles(opts.inFiles);
     let args = [binLoc];
@@ -139,62 +138,57 @@ const buildTest = function (binName, testName, opts) {
   };
 };
 
-fs.readdirSync(fixtureLoc).forEach(function (binName) {
-  if (binName[0] === ".") return;
+describe("bin/babel-node", function () {
+  let cwd;
 
-  const suiteLoc = path.join(fixtureLoc, binName);
-  describe("bin/" + binName, function () {
-    let cwd;
+  beforeEach(() => {
+    cwd = process.cwd();
 
-    beforeEach(() => {
-      cwd = process.cwd();
+    if (fs.existsSync(tmpLoc)) {
+      for (const child of fs.readdirSync(tmpLoc)) {
+        rimraf.sync(path.join(tmpLoc, child));
+      }
+    } else {
+      fs.mkdirSync(tmpLoc);
+    }
 
-      if (fs.existsSync(tmpLoc)) {
-        for (const child of fs.readdirSync(tmpLoc)) {
-          rimraf.sync(path.join(tmpLoc, child));
-        }
+    process.chdir(tmpLoc);
+  });
+
+  afterEach(() => {
+    process.chdir(cwd);
+  });
+
+  fs.readdirSync(fixtureLoc).forEach(function (testName) {
+    if (testName[0] === ".") return;
+
+    const testLoc = path.join(fixtureLoc, testName);
+
+    const opts = {
+      args: [],
+    };
+
+    const optionsLoc = path.join(testLoc, "options.json");
+    if (fs.existsSync(optionsLoc)) Object.assign(opts, require(optionsLoc));
+
+    ["stdout", "stdin", "stderr"].forEach(function (key) {
+      const loc = path.join(testLoc, key + ".txt");
+      if (fs.existsSync(loc)) {
+        opts[key] = helper.readFile(loc);
       } else {
-        fs.mkdirSync(tmpLoc);
+        opts[key] = opts[key] || "";
       }
-
-      process.chdir(tmpLoc);
     });
 
-    afterEach(() => {
-      process.chdir(cwd);
-    });
+    opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
+    opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
 
-    fs.readdirSync(suiteLoc).forEach(function (testName) {
-      if (testName[0] === ".") return;
+    const babelrcLoc = path.join(testLoc, ".babelrc");
+    if (fs.existsSync(babelrcLoc)) {
+      // copy .babelrc file to tmp directory
+      opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+    }
 
-      const testLoc = path.join(suiteLoc, testName);
-
-      const opts = {
-        args: [],
-      };
-
-      const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) Object.assign(opts, require(optionsLoc));
-
-      ["stdout", "stdin", "stderr"].forEach(function (key) {
-        const loc = path.join(testLoc, key + ".txt");
-        if (fs.existsSync(loc)) {
-          opts[key] = helper.readFile(loc);
-        } else {
-          opts[key] = opts[key] || "";
-        }
-      });
-
-      opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
-      opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
-
-      const babelrcLoc = path.join(testLoc, ".babelrc");
-      if (fs.existsSync(babelrcLoc)) {
-        // copy .babelrc file to tmp directory
-        opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
-      }
-
-      it(testName, buildTest(binName, testName, opts), 20000);
-    });
+    it(testName, buildTest(testName, opts), 20000);
   });
 });
