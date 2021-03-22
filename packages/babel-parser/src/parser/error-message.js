@@ -73,8 +73,6 @@ export const ErrorMessages: ErrorTemplates = makeErrorTemplates({
   ImportCallArity: "import() requires exactly %0",
   ImportCallNotNewExpression: "Cannot use new with import(...)",
   ImportCallSpreadArgument: "... is not allowed in import()",
-  ImportMetaOutsideModule: `import.meta may appear only with 'sourceType: "module"'`,
-  ImportOutsideModule: `'import' and 'export' may appear only with 'sourceType: "module"'`,
   InvalidBigIntLiteral: "Invalid BigIntLiteral",
   InvalidCodePoint: "Code point out of bounds",
   InvalidDecimal: "Invalid decimal",
