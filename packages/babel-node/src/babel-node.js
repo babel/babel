@@ -96,6 +96,7 @@ getV8Flags(async function (err, v8Flags) {
         }
       });
     });
+    proc.on("message", message => process.send && process.send(message));
     process.on("SIGINT", () => proc.kill("SIGINT"));
   }
 });
