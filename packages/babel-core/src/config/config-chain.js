@@ -261,9 +261,9 @@ export function* buildRootChain(
         // print config by the order of ascending priority
         [configReport, babelRcReport, programmaticReport]
           .filter(x => !!x)
-          .join("\n\n"),
+          .join("\n\n") +
+        "\n-----End Babel configs-----",
     );
-    return null;
   }
   // Insert file chain in front so programmatic options have priority
   // over configuration file chain items.

@@ -39,7 +39,6 @@ config <CWD>/my-extended.js .overrides[0].env["test"]
     "@foo/babel-preset-1",
     [
       {
-        "name": "@foo/inline-babel-preset-1",
         "plugins": [
           {
             "name": "@foo/inline-babel-plugin-1",
@@ -125,3 +124,5 @@ programmatic options from @babel/cli
   },
   "filename": "./src/index.js"
 }
+-----End Babel configs-----
+"use strict";
