@@ -982,6 +982,7 @@ describe("buildConfigChain", function () {
       browserslistConfigFile: false,
       cwd: process.cwd(),
       root: process.cwd(),
+      rootMode: "root",
       envName: "development",
       passPerPreset: false,
       plugins: [],
