@@ -25,6 +25,7 @@
             "expression": {
               "type": "DoExpression",
               "start":9,"end":27,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":27}},
+              "async": false,
               "body": {
                 "type": "BlockStatement",
                 "start":12,"end":27,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":27}},
