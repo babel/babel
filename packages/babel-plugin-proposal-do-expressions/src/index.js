@@ -11,7 +11,12 @@ export default declare(api => {
     visitor: {
       DoExpression: {
         exit(path) {
-          const body = path.node.body.body;
+          const { node } = path;
+          if (node.async) {
+            // Async do expressions are not yet supported
+            return;
+          }
+          const body = node.body.body;
           if (body.length) {
             path.replaceExpressionWithStatements(body);
           } else {
