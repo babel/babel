@@ -1537,6 +1537,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions"
+  dependencies:
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-async-generators@npm:^7.8.0, @babel/plugin-syntax-async-generators@npm:^7.8.4":
   version: 7.8.4
   resolution: "@babel/plugin-syntax-async-generators@npm:7.8.4"
