@@ -824,7 +824,7 @@ export default class Scope {
    * Set some arbitrary data on the current scope.
    */
 
-  setData(key: string, val: any) {
+  setData(key: string | symbol, val: any) {
     return (this.data[key] = val);
   }
 
@@ -832,7 +832,7 @@ export default class Scope {
    * Recursively walk up scope tree looking for the data `key`.
    */
 
-  getData(key: string): any {
+  getData(key: string | symbol): any {
     let scope: Scope = this;
     do {
       const data = scope.data[key];

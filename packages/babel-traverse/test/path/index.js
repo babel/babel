@@ -39,5 +39,13 @@ describe("NodePath", () => {
 
       expect(path.getData("__proto__", "test")).toBe("test");
     });
+
+    it("can use symbols as keys", () => {
+      const path = new NodePath({}, {});
+      const symbol = Symbol("foo");
+      path.setData(symbol, 42);
+
+      expect(path.getData(symbol)).toBe(42);
+    });
   });
 });
