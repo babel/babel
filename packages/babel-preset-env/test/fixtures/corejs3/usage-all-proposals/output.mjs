@@ -1,6 +1,3 @@
-import "core-js/modules/es.array.from.js";
-import "core-js/modules/es.string.iterator.js";
-import "core-js/modules/es.map.js";
 import "core-js/modules/esnext.map.delete-all.js";
 import "core-js/modules/esnext.map.every.js";
 import "core-js/modules/esnext.map.filter.js";
@@ -14,18 +11,7 @@ import "core-js/modules/esnext.map.merge.js";
 import "core-js/modules/esnext.map.reduce.js";
 import "core-js/modules/esnext.map.some.js";
 import "core-js/modules/esnext.map.update.js";
-import "core-js/modules/es.object.to-string.js";
-import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/web.dom-collections.iterator.js";
-import "core-js/modules/es.promise.js";
-import "core-js/modules/es.symbol.match.js";
-import "core-js/modules/es.string.match.js";
-import "core-js/modules/es.symbol.js";
-import "core-js/modules/es.symbol.description.js";
-import "core-js/modules/es.symbol.iterator.js";
-import "core-js/modules/es.regexp.exec.js";
-import "core-js/modules/web.queue-microtask.js";
-import "core-js/modules/esnext.global-this.js";
 import "core-js/modules/esnext.observable.js";
 import "core-js/modules/esnext.symbol.observable.js";
 Array.from; // static method
@@ -58,10 +44,8 @@ function H(WeakMap) {
 } // shadowed
 
 
-var foo = new Promise(function (resolve) {
+const foo = new Promise(resolve => {
   resolve(new Map());
 });
-queueMicrotask(function () {
-  return globalThis;
-});
+queueMicrotask(() => globalThis);
 Observable.from(10);

@@ -1,8 +1,3 @@
-var _this = this;
+const bar = "bar";
 
-var bar = "bar";
-
-var x = function x() {
-  babelHelpers.newArrowCheck(this, _this);
-  return "foo".concat(bar);
-}.bind(this);
+const x = () => "foo".concat(bar);

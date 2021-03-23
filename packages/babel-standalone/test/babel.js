@@ -117,7 +117,7 @@ const require = createRequire(import.meta.url);
       it("works w/o targets", () => {
         const output = Babel.transform("const a = 1;", {
           sourceType: "script",
-          presets: ["env"],
+          presets: [["env", { targets: { browsers: "ie 6" } }]],
         }).code;
         expect(output).toBe("var a = 1;");
       });
@@ -160,7 +160,7 @@ const require = createRequire(import.meta.url);
       it("uses transform-new-targets plugin", () => {
         const output = Babel.transform("function Foo() {new.target}", {
           sourceType: "script",
-          presets: ["env"],
+          presets: [["env", { targets: { browsers: "ie 6" } }]],
         }).code;
         expect(output).toBe(
           "function Foo() {\n  this instanceof Foo ? this.constructor : void 0;\n}",

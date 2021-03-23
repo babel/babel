@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 2,
+        "targets": {
+          "edge": "13"
+        },
+        "modules": false
+      }
+    ]
+  ]
+}

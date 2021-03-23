@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "../lib";
+import getTargets from "@babel/helper-compilation-targets";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -976,6 +977,7 @@ describe("buildConfigChain", function () {
   });
 
   describe("config files", () => {
+    const defaultTargets = getTargets();
     const getDefaults = () => ({
       babelrc: false,
       configFile: false,
@@ -988,7 +990,7 @@ describe("buildConfigChain", function () {
       plugins: [],
       presets: [],
       cloneInputAst: true,
-      targets: {},
+      targets: defaultTargets,
       assumptions: {},
     });
     const realEnv = process.env.NODE_ENV;

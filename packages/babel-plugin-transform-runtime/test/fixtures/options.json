@@ -1,3 +1,4 @@
 {
-  "externalHelpers": false
+  "externalHelpers": false,
+  "targets": { "browsers": "ie 6, ios 4" }
 }

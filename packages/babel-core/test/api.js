@@ -311,7 +311,7 @@ describe("api", function () {
           },
 
           // env preset
-          presetEnv,
+          [presetEnv, { targets: { browsers: "ie 6" } }],
 
           // Third preset for Flow.
           () => ({

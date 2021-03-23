@@ -1,0 +1,39 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "node": "6"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-numeric-separator { "node":"6" }
+  proposal-logical-assignment-operators { "node":"6" }
+  proposal-nullish-coalescing-operator { "node":"6" }
+  proposal-optional-chaining { "node":"6" }
+  proposal-json-strings { "node":"6" }
+  proposal-optional-catch-binding { "node":"6" }
+  proposal-async-generator-functions { "node":"6" }
+  proposal-object-rest-spread { "node":"6" }
+  transform-dotall-regex { "node":"6" }
+  proposal-unicode-property-regex { "node":"6" }
+  transform-named-capturing-groups-regex { "node":"6" }
+  transform-async-to-generator { "node":"6" }
+  transform-exponentiation-operator { "node":"6" }
+  transform-function-name { "node":"6" }
+  transform-for-of { "node":"6" }
+  transform-destructuring { "node":"6" }
+  proposal-export-namespace-from { "node":"6" }
+  transform-modules-commonjs { "node":"6" }
+  proposal-dynamic-import { "node":"6" }
+corejs3: `DEBUG` option
+
+Using targets: {
+  "node": "6"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/entry-corejs3-no-import/input.js]
+The entry point for the corejs3 polyfill has not been found.
