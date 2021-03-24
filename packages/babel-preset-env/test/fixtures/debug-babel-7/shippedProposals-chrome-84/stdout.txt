@@ -12,7 +12,7 @@ Using plugins:
   syntax-numeric-separator { "chrome":"84" }
   proposal-logical-assignment-operators { "chrome":"84" }
   syntax-nullish-coalescing-operator { "chrome":"84" }
-  syntax-optional-chaining { "chrome":"84" }
+  proposal-optional-chaining { "chrome":"84" }
   syntax-json-strings { "chrome":"84" }
   syntax-optional-catch-binding { "chrome":"84" }
   syntax-async-generators { "chrome":"84" }
