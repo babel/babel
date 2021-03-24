@@ -25,11 +25,7 @@ import {
   SCOPE_OTHER,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
-import {
-  Errors,
-  type ErrorTemplates,
-  makeErrorTemplates,
-} from "../../parser/error";
+import { Errors, makeErrorTemplates } from "../../parser/error";
 
 const reservedTypes = new Set([
   "_",
@@ -52,7 +48,7 @@ const reservedTypes = new Set([
 
 /* eslint sort-keys: "error" */
 // The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
-const FlowErrors: ErrorTemplates = makeErrorTemplates({
+const FlowErrors = makeErrorTemplates({
   AmbiguousConditionalArrow:
     "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
   AmbiguousDeclareModuleKind:

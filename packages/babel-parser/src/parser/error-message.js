@@ -9,7 +9,7 @@ import { makeErrorTemplates, type ErrorTemplates } from "../parser/error";
  */
 
 // The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
-export const ErrorMessages: ErrorTemplates = makeErrorTemplates({
+export const ErrorMessages = makeErrorTemplates({
   AccessorIsGenerator: "A %0ter cannot be a generator",
   ArgumentsInClass:
     "'arguments' is only allowed in functions and class methods",

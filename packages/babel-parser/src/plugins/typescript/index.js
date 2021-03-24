@@ -33,7 +33,6 @@ import {
   Errors,
   makeErrorTemplates,
   type ErrorTemplate,
-  type ErrorTemplates,
 } from "../../parser/error";
 
 type TsModifier =
@@ -65,7 +64,7 @@ type ParsingContext =
   | "TypeParametersOrArguments";
 
 /* eslint sort-keys: "error" */
-const TSErrors: ErrorTemplates = makeErrorTemplates({
+const TSErrors = makeErrorTemplates({
   AbstractMethodHasImplementation:
     "Method '%0' cannot have an implementation because it is marked abstract.",
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier",
