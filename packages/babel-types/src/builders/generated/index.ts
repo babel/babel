@@ -1039,7 +1039,10 @@ export function importAttribute(
 export function decorator(expression: t.Expression): t.Decorator {
   return builder("Decorator", ...arguments);
 }
-export function doExpression(body: t.BlockStatement): t.DoExpression {
+export function doExpression(
+  body: t.BlockStatement,
+  async?: boolean,
+): t.DoExpression {
   return builder("DoExpression", ...arguments);
 }
 export function exportDefaultSpecifier(

@@ -196,7 +196,7 @@ defineType("DoExpression", {
     },
     async: {
       validate: assertValueType("boolean"),
-      optional: true,
+      default: false,
     },
   },
 });
