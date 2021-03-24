@@ -43,6 +43,7 @@ interface BaseNode {
   end: number | null;
   loc: SourceLocation | null;
   type: Node["type"];
+  range?: [number, number];
   extra?: Record<string, unknown>;
 }
 
