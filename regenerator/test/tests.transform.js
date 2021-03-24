@@ -256,7 +256,7 @@ context("functions", function() {
       const { ast } = require("@babel/core").transformSync(input, {
         configFile: false,
         ast: true,
-        plugins: [require("../packages/regenerator-transform")],
+        plugins: [require("../packages/transform")],
       });
 
       const method = ast.program.body[0].body.body[0];
@@ -305,7 +305,7 @@ context("functions", function() {
       assert.doesNotThrow(function() {
         require("@babel/core").transformSync(code, {
           configFile: false,
-          plugins: [require("../packages/regenerator-transform")],
+          plugins: [require("../packages/transform")],
         });
       });
     });
@@ -322,7 +322,7 @@ context("functions", function() {
       const compiled = require("@babel/core").transformSync(code, {
         configFile: false,
         plugins: [
-          require("../packages/regenerator-transform"),
+          require("../packages/transform"),
           require("@babel/plugin-transform-modules-commonjs")
         ]
       }).code;
@@ -342,7 +342,7 @@ describe("ast serialization", function() {
       {
         ast: true,
         configFile: false,
-        plugins: [require("../packages/regenerator-transform")],
+        plugins: [require("../packages/transform")],
       },
     ).ast;
   }
