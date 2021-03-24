@@ -414,7 +414,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           this.expectContextual(
             "declare",
-            FlowErrors.UnsupportedStatementInDeclareModule.template,
+            FlowErrors.UnsupportedStatementInDeclareModule,
           );
 
           bodyNode = this.flowParseDeclare(bodyNode, true);
@@ -3185,7 +3185,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     skipBlockComment(): void {
       if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
-          this.unexpected(null, FlowErrors.NestedFlowComment.template);
+          this.unexpected(null, FlowErrors.NestedFlowComment);
         }
         this.hasFlowCommentCompletion();
         this.state.pos += this.skipFlowComment();

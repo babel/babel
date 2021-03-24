@@ -115,7 +115,7 @@ export default class Tokenizer extends ParserErrors {
   // parser/util.js
   /*::
   +hasPrecedingLineBreak: () => boolean;
-  +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  +unexpected: (pos?: ?number, messageOrType?: ErrorTemplate | TokenType) => empty;
   +expectPlugin: (name: string, pos?: ?number) => true;
   */
 

@@ -1684,7 +1684,7 @@ export default class StatementParser extends ExpressionParser {
       if (optionalId || !isStatement) {
         node.id = null;
       } else {
-        this.unexpected(null, Errors.MissingClassName.template);
+        this.unexpected(null, Errors.MissingClassName);
       }
     }
   }
@@ -1929,10 +1929,7 @@ export default class StatementParser extends ExpressionParser {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
         if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
-          this.unexpected(
-            this.state.start,
-            Errors.DecoratorBeforeExport.template,
-          );
+          this.unexpected(this.state.start, Errors.DecoratorBeforeExport);
         } else {
           return true;
         }
@@ -2233,7 +2230,7 @@ export default class StatementParser extends ExpressionParser {
       if (!this.match(tt.string)) {
         throw this.unexpected(
           this.state.start,
-          Errors.ModuleAttributeInvalidValue.template,
+          Errors.ModuleAttributeInvalidValue,
         );
       }
       node.value = this.parseLiteral<N.StringLiteral>(
@@ -2287,7 +2284,7 @@ export default class StatementParser extends ExpressionParser {
       if (!this.match(tt.string)) {
         throw this.unexpected(
           this.state.start,
-          Errors.ModuleAttributeInvalidValue.template,
+          Errors.ModuleAttributeInvalidValue,
         );
       }
       node.value = this.parseLiteral(this.state.value, "StringLiteral");
