@@ -105,14 +105,14 @@ class NodePath<T extends t.Node = t.Node> {
     return this.isScope() ? new Scope(this) : scope;
   }
 
-  setData(key: string, val: any): any {
+  setData(key: string | symbol, val: any): any {
     if (this.data == null) {
       this.data = Object.create(null);
     }
     return (this.data[key] = val);
   }
 
-  getData(key: string, def?: any): any {
+  getData(key: string | symbol, def?: any): any {
     if (this.data == null) {
       this.data = Object.create(null);
     }
