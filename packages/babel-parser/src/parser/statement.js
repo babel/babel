@@ -548,7 +548,7 @@ export default class StatementParser extends ExpressionParser {
     const refExpressionErrors = new ExpressionErrors();
     const init = this.parseExpression(true, refExpressionErrors);
     const isForOf = this.isContextual("of");
-    if (this.match(tt._in) || isForOf) {
+    if (isForOf || this.match(tt._in)) {
       if (isForOf && startsWithLet) {
         this.raise(init.start, Errors.ForOfLet);
       }
