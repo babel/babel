@@ -13,7 +13,7 @@
   "sideEffects": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime"
+    "url": "https://github.com/facebook/regenerator/tree/master/packages/runtime"
   },
   "license": "MIT"
 }

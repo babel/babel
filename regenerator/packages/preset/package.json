@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebook/regenerator/tree/master/packages/regenerator-preset"
+    "url": "https://github.com/facebook/regenerator/tree/master/packages/preset"
   },
   "license": "MIT",
   "dependencies": {
