@@ -43,7 +43,8 @@
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
     "./src/config/files/index.js": "./src/config/files/index-browser.js",
     "./src/config/resolve-targets.js": "./src/config/resolve-targets-browser.js",
-    "./src/transform-file.js": "./src/transform-file-browser.js"
+    "./src/transform-file.js": "./src/transform-file-browser.js",
+    "./src/transformation/util/clone-deep.js": "./src/transformation/util/clone-deep-browser.js"
   },
   "dependencies": {
     "@babel/code-frame": "workspace:^7.12.13",

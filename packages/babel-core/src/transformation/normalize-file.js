@@ -9,6 +9,7 @@ import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
 import File from "./file/file";
 import parser from "../parser";
+import cloneDeep from "./util/clone-deep";
 
 const debug = buildDebug("babel:transform:file");
 const LARGE_INPUT_SOURCEMAP_THRESHOLD = 1_000_000;
@@ -35,7 +36,7 @@ export default function* normalizeFile(
     }
 
     if (options.cloneInputAst) {
-      ast = JSON.parse(JSON.stringify(ast));
+      ast = cloneDeep(ast);
     }
   } else {
     ast = yield* parser(pluginPasses, options, code);
