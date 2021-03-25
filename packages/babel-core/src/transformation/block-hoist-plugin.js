@@ -1,7 +1,5 @@
 // @flow
 
-import sortBy from "lodash/sortBy";
-
 import loadConfig, { type Plugin } from "../config";
 
 let LOADED_PLUGIN: Plugin | void;
@@ -22,6 +20,42 @@ export default function loadBlockHoistPlugin(): Plugin {
 
   return LOADED_PLUGIN;
 }
+function priority(bodyNode) {
+  const priority = bodyNode?._blockHoist;
+  if (priority == null) return 1;
+  if (priority === true) return 2;
+  return priority;
+}
+
+function stableSort(body) {
+  // By default, we use priorities of 0-4.
+  const buckets = Object.create(null);
+
+  // By collecting into buckets, we can guarantee a stable sort.
+  for (let i = 0; i < body.length; i++) {
+    const n = body[i];
+    const p = priority(n);
+
+    // In case some plugin is setting an unexpected priority.
+    const bucket = buckets[p] || (buckets[p] = []);
+    bucket.push(n);
+  }
+
+  // Sort our keys in descending order. Keys are unique, so we don't have to
+  // worry about stability.
+  const keys = Object.keys(buckets)
+    .map(k => +k)
+    .sort((a, b) => b - a);
+
+  let index = 0;
+  for (const key of keys) {
+    const bucket = buckets[key];
+    for (const n of bucket) {
+      body[index++] = n;
+    }
+  }
+  return body;
+}
 
 const blockHoistPlugin = {
   /**
@@ -41,24 +75,24 @@ const blockHoistPlugin = {
   visitor: {
     Block: {
       exit({ node }) {
+        const { body } = node;
+
+        // Largest SMI
+        let max = 2 ** 30 - 1;
         let hasChange = false;
-        for (let i = 0; i < node.body.length; i++) {
-          const bodyNode = node.body[i];
-          if (bodyNode?._blockHoist != null) {
+        for (let i = 0; i < body.length; i++) {
+          const n = body[i];
+          const p = priority(n);
+          if (p > max) {
             hasChange = true;
             break;
           }
+          max = p;
         }
         if (!hasChange) return;
 
-        node.body = sortBy(node.body, function (bodyNode) {
-          let priority = bodyNode?._blockHoist;
-          if (priority == null) priority = 1;
-          if (priority === true) priority = 2;
-
-          // Higher priorities should move toward the top.
-          return -1 * priority;
-        });
+        // My kingdom for a stable sort!
+        node.body = stableSort(body.slice());
       },
     },
   },
