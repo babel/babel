@@ -3,13 +3,13 @@
 import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
-import cloneDeep from "lodash/cloneDeep";
 import type { Handler } from "gensync";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
 import File from "./file/file";
 import parser from "../parser";
+import cloneDeep from "./util/clone-deep";
 
 const debug = buildDebug("babel:transform:file");
 const LARGE_INPUT_SOURCEMAP_THRESHOLD = 1_000_000;
@@ -35,8 +35,7 @@ export default function* normalizeFile(
       throw new Error("AST root must be a Program or File node");
     }
 
-    const { cloneInputAst } = options;
-    if (cloneInputAst) {
+    if (options.cloneInputAst) {
       ast = cloneDeep(ast);
     }
   } else {

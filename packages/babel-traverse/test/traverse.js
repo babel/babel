@@ -1,4 +1,3 @@
-import cloneDeep from "lodash/cloneDeep";
 import traverse from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
@@ -17,7 +16,7 @@ describe("traverse", function () {
       type: "StringLiteral",
       value: "foo",
     };
-    const ast2 = cloneDeep(program);
+    const ast2 = JSON.parse(JSON.stringify(program));
 
     traverse(ast2, {
       enter: function (path) {

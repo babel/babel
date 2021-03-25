@@ -542,9 +542,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
-    "@types/lodash": ^4.14.150
     "@types/semver": ^7.3.4
-    lodash: ^4.17.19
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   languageName: unknown
   linkType: soft
@@ -3470,7 +3468,6 @@ __metadata:
     "@babel/types": "workspace:^7.13.0"
     debug: ^4.1.0
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
-    lodash: ^4.17.19
   languageName: unknown
   linkType: soft
 

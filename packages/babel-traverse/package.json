@@ -23,8 +23,7 @@
     "@babel/parser": "workspace:^7.13.0",
     "@babel/types": "workspace:^7.13.0",
     "debug": "^4.1.0",
-    "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0",
-    "lodash": "^4.17.19"
+    "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "workspace:*"
