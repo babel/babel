@@ -73,7 +73,9 @@ export default function normalizeOptions(options = {}) {
     } else {
       throw new Error(
         `@babel/preset-react: 'runtime' must be one of ['automatic', 'classic'] but we have '${runtime}'\n` +
-          `- Did you mean '${findSuggestion(runtime, validRuntime)}'?`,
+          `- Did you mean '` +
+          findSuggestion(runtime, validRuntime) +
+          `'?`,
       );
     }
 
