@@ -14,7 +14,7 @@ import getTargets, { type Targets } from "@babel/helper-compilation-targets";
 export function resolveTargets(
   options: ValidatedOptions,
   root: string,
-  filename: string | void,
+  configFilePath: string = root,
 ): Targets {
   let { targets } = options;
   if (typeof targets === "string" || Array.isArray(targets)) {
@@ -27,13 +27,13 @@ export function resolveTargets(
 
   let configFile;
   if (typeof options.browserslistConfigFile === "string") {
-    configFile = path.resolve(root, options.browserslistConfigFile);
+    configFile = path.resolve(configFilePath, options.browserslistConfigFile);
   }
 
   return getTargets((targets: any), {
     ignoreBrowserslistConfig: options.browserslistConfigFile === false,
     configFile,
-    configPath: filename ?? root,
+    configPath: root,
     browserslistEnv: options.browserslistEnv,
   });
 }
