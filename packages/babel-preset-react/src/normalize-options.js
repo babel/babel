@@ -1,4 +1,7 @@
-import { OptionValidator } from "@babel/helper-validator-option";
+import {
+  OptionValidator,
+  findSuggestion,
+} from "@babel/helper-validator-option";
 const v = new OptionValidator("@babel/preset-react");
 
 export default function normalizeOptions(options = {}) {
@@ -37,16 +40,14 @@ export default function normalizeOptions(options = {}) {
     const development = v.validateBooleanOption(
       TopLevelOptions.development,
       options.development,
+      false,
     );
-    const importSource = v.validateStringOption(
+    let importSource = v.validateStringOption(
       TopLevelOptions.importSource,
       options.importSource,
     );
-    const pragma = v.validateStringOption(
-      TopLevelOptions.pragma,
-      options.pragma,
-    );
-    const pragmaFrag = v.validateStringOption(
+    let pragma = v.validateStringOption(TopLevelOptions.pragma, options.pragma);
+    let pragmaFrag = v.validateStringOption(
       TopLevelOptions.pragmaFrag,
       options.pragmaFrag,
     );
@@ -56,10 +57,25 @@ export default function normalizeOptions(options = {}) {
       options.runtime,
       "automatic",
     );
-    const throwIfNamespace = v.validateStringOption(
+    const throwIfNamespace = v.validateBooleanOption(
       TopLevelOptions.throwIfNamespace,
       options.throwIfNamespace,
+      true,
     );
+
+    const validRuntime = ["classic", "automatic"];
+
+    if (runtime === "classic") {
+      pragma = pragma || "React.createElement";
+      pragmaFrag = pragmaFrag || "React.Fragment";
+    } else if (runtime === "automatic") {
+      importSource = importSource || "react";
+    } else {
+      throw new Error(
+        `@babel/preset-react: 'runtime' must be one of ['automatic', 'classic'] but we have '${runtime}'\n` +
+          `- Did you mean '${findSuggestion(runtime, validRuntime)}'?`,
+      );
+    }
 
     return {
       development,
