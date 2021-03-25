@@ -94,6 +94,8 @@ export default function normalizeOptions(options = {}) {
       throwIfNamespace = true,
       runtime = "classic",
       importSource,
+      useBuiltIns,
+      useSpread,
     } = options;
 
     if (runtime === "classic") {
@@ -111,6 +113,8 @@ export default function normalizeOptions(options = {}) {
       pure,
       runtime,
       throwIfNamespace,
+      useBuiltIns,
+      useSpread,
     };
   }
 }

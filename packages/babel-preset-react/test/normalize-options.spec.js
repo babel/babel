@@ -106,6 +106,8 @@ describe("normalize options", () => {
           "pure": undefined,
           "runtime": "classic",
           "throwIfNamespace": true,
+          "useBuiltIns": undefined,
+          "useSpread": undefined,
         }
       `);
       expect(normalizeOptions({ runtime: "automatic" })).toMatchInlineSnapshot(`
@@ -117,6 +119,8 @@ describe("normalize options", () => {
           "pure": undefined,
           "runtime": "automatic",
           "throwIfNamespace": true,
+          "useBuiltIns": undefined,
+          "useSpread": undefined,
         }
       `);
     });
