@@ -1,5 +1,3 @@
-var _span;
-
 let foo = 'hello';
 
 const mutate = () => {
@@ -8,5 +6,5 @@ const mutate = () => {
 
 export const Component = () => {
   if (Math.random() > 0.5) mutate();
-  return _span || (_span = <span>{foo}</span>);
+  return <span>{foo}</span>;
 };
