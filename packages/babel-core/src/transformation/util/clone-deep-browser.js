@@ -14,6 +14,6 @@ function revive(key, value) {
   return BigInt(value.value);
 }
 
-export function cloneDeep(value) {
+export default function cloneDeep(value) {
   return JSON.parse(JSON.stringify(value, serialize), revive);
 }
