@@ -64,11 +64,15 @@ export default declare((api, options) => {
       // Ignore identifiers & JSX expressions.
       if (
         path.isJSXIdentifier() ||
-        path.isIdentifier() ||
         path.isJSXMemberExpression() ||
         path.isJSXNamespacedName()
       ) {
         return;
+      }
+
+      if (path.isIdentifier()) {
+        const binding = path.scope.getBinding(path.node.name);
+        if (binding && binding.constant) return;
       }
 
       if (!path.isImmutable()) {
