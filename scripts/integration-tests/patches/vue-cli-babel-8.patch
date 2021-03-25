@@ -1,92 +1,43 @@
 diff --git a/packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js b/packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
-index d57f42b..724bb37 100644
+index d57f42b..60c938a 100644
 --- a/packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
 +++ b/packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
-@@ -3,7 +3,8 @@ const babel = require('@babel/core')
+@@ -3,7 +3,7 @@ const babel = require('@babel/core')
  const preset = require('../index')
  const defaultOptions = {
    babelrc: false,
 -  presets: [preset],
-+  targets: { ie: 9 },
 +  presets: [[preset, { targets: { ie: 9 } }]],
    filename: 'test-entry-file.js'
  }
  
-@@ -21,6 +22,7 @@ test('polyfill detection', () => {
-     const a = new Map()
+@@ -161,6 +161,7 @@ test('disable absoluteRuntime', () => {
    `.trim(), {
      babelrc: false,
-+    targets: { ie: 9 },
-     presets: [[preset, {
-       targets: { node: 'current' }
-     }]],
-@@ -35,6 +37,7 @@ test('polyfill detection', () => {
-     const a = new Map()
-   `.trim(), {
-     babelrc: false,
-+    targets: { ie: 9 },
-     presets: [[preset, {
-       targets: { ie: 9 }
-     }]],
-@@ -55,6 +58,7 @@ test('modern mode always skips unnecessary polyfills', () => {
-     console.log(globalThis)
-   `.trim(), {
-     babelrc: false,
-+    targets: { ie: 9 },
-     presets: [[preset, {
-       targets: { ie: 9, safari: '12' },
-       useBuiltIns: 'usage'
-@@ -82,6 +86,7 @@ test('modern mode always skips unnecessary polyfills', () => {
-     const a = new Map()
-   `.trim(), {
-     babelrc: false,
-+    targets: { ie: 9 },
-     presets: [[preset, {
-       targets: { ie: 9, safari: '12' },
-       useBuiltIns: 'entry'
-@@ -144,6 +149,7 @@ test('jsx options', () => {
-     }
-   `.trim(), {
-     babelrc: false,
-+    targets: { ie: 9 },
-     presets: [[preset, {
-       jsx: {
-         injectH: false
-@@ -160,7 +166,9 @@ test('disable absoluteRuntime', () => {
-     const a = [...arr]
-   `.trim(), {
-     babelrc: false,
-+    targets: { ie: 9 },
      presets: [[preset, {
 +      targets: { ie: 9 },
        absoluteRuntime: false
      }]],
      filename: 'test-entry-file.js'
-@@ -182,7 +190,9 @@ test('should inject polyfills / helpers using "require" statements for a umd mod
-   }))
+@@ -183,6 +184,7 @@ test('should inject polyfills / helpers using "require" statements for a umd mod
    `.trim(), {
      babelrc: false,
-+    targets: { ie: 9 },
      presets: [[preset, {
 +      targets: { ie: 9 },
        absoluteRuntime: false
      }]],
      filename: 'test-entry-file.js'
-@@ -199,7 +209,9 @@ test('should inject polyfills / helpers using "import" statements for an es modu
-     new Promise()
+@@ -200,6 +202,7 @@ test('should inject polyfills / helpers using "import" statements for an es modu
    `.trim(), {
      babelrc: false,
-+    targets: { ie: 9 },
      presets: [[preset, {
 +      targets: { ie: 9 },
        absoluteRuntime: false
      }]],
      filename: 'test-entry-file.js'
-@@ -215,7 +227,9 @@ test('should not inject excluded polyfills', () => {
-     new Promise()
+@@ -216,6 +219,7 @@ test('should not inject excluded polyfills', () => {
    `.trim(), {
      babelrc: false,
-+    targets: { ie: 9 },
      presets: [[preset, {
 +      targets: { ie: 9 },
        exclude: ['es.promise'],
