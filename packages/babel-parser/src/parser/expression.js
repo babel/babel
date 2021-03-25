@@ -399,17 +399,6 @@ export default class ExpressionParser extends LValParser {
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
         node.left = left;
         node.operator = this.state.value;
-        if (
-          op === tt.exponent &&
-          left.type === "UnaryExpression" &&
-          (this.options.createParenthesizedExpressions ||
-            !(left.extra && left.extra.parenthesized))
-        ) {
-          this.raise(
-            left.argument.start,
-            Errors.UnexpectedTokenUnaryExponentiation,
-          );
-        }
 
         const logical = op === tt.logicalOR || op === tt.logicalAND;
         const coalesce = op === tt.nullishCoalescing;
@@ -506,16 +495,30 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
+  checkExponentialAfterUnary(node: N.AwaitExpression | N.UnaryExpression) {
+    if (this.match(tt.exponent)) {
+      this.raise(
+        node.argument.start,
+        Errors.UnexpectedTokenUnaryExponentiation,
+      );
+    }
+  }
+
   // Parse unary operators, both prefix and postfix.
   // https://tc39.es/ecma262/#prod-UnaryExpression
-  parseMaybeUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
+  parseMaybeUnary(
+    refExpressionErrors: ?ExpressionErrors,
+    sawUnary?: boolean,
+  ): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const isAwait = this.isContextual("await");
 
     if (isAwait && this.isAwaitAllowed()) {
       this.next();
-      return this.parseAwait(startPos, startLoc);
+      const expr = this.parseAwait(startPos, startLoc);
+      if (!sawUnary) this.checkExponentialAfterUnary(expr);
+      return expr;
     }
     if (
       this.isContextual("module") &&
@@ -536,7 +539,7 @@ export default class ExpressionParser extends LValParser {
       const isDelete = this.match(tt._delete);
       this.next();
 
-      node.argument = this.parseMaybeUnary();
+      node.argument = this.parseMaybeUnary(null, true);
 
       this.checkExpressionErrors(refExpressionErrors, true);
 
@@ -551,6 +554,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       if (!update) {
+        if (!sawUnary) this.checkExponentialAfterUnary(node);
         return this.finishNode(node, "UnaryExpression");
       }
     }
@@ -2412,7 +2416,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!this.state.soloAwait) {
-      node.argument = this.parseMaybeUnary();
+      node.argument = this.parseMaybeUnary(null, true);
     }
 
     return this.finishNode(node, "AwaitExpression");
