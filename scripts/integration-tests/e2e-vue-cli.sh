@@ -33,7 +33,7 @@ yarn install
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # Babel 8 defaults to "default, not ie 11", but this breaks vue-cli's tests
   # which expect different ES features to be compiled.
-  sed -i 's/babelrc: false,/babelrc: false, targets: { ie: 9 },/g' packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
+  patch -p1 < "$PWD"/../../patches/vue-cli-babel-8.patch
 fi
 
 # Test
