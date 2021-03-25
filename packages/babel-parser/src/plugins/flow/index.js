@@ -1633,7 +1633,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.objectType = type;
           node.indexType = this.flowParseType();
           this.expect(tt.bracketR);
-          type = this.finishNode<N.FlowIndexedAccess>(
+          type = this.finishNode<N.FlowIndexedAccessType>(
             node,
             "IndexedAccessType",
           );

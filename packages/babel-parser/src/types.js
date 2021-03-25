@@ -1050,7 +1050,7 @@ export type FlowInterfaceType = NodeBase & {
   body: FlowObjectTypeAnnotation,
 };
 
-export type FlowIndexedAccess = Node & {
+export type FlowIndexedAccessType = Node & {
   type: "IndexedAccessType",
   objectType: FlowType,
   indexType: FlowType,
