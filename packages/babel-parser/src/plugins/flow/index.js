@@ -1627,7 +1627,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.expect(tt.bracketL);
         if (this.match(tt.bracketR)) {
           node.elementType = type;
-          this.expect(tt.bracketR);
+          this.next(); // eat `]`
           type = this.finishNode(node, "ArrayTypeAnnotation");
         } else {
           node.objectType = type;
