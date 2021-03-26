@@ -122,9 +122,12 @@ export function validatePlugins(plugins: PluginList) {
     hasPlugin(plugins, "asyncDoExpressions") &&
     !hasPlugin(plugins, "doExpressions")
   ) {
-    throw new Error(
+    const error = new Error(
       "'asyncDoExpressions' requires 'doExpressions', please add 'doExpressions' to parser plugins.",
     );
+    // $FlowIgnore
+    error.missingPlugins = "doExpressions"; // so @babel/core can provide better error message
+    throw error;
   }
 }
 

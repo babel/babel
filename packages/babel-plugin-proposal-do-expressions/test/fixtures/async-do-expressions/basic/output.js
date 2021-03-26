@@ -1,1 +1,1 @@
-(async do {});
+async do {};
