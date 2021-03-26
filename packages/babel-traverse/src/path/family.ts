@@ -231,6 +231,16 @@ function _getCompletionRecords(
   return records;
 }
 
+/**
+ * Retrieve the completion records of a given path.
+ * Note: to ensure proper support on `break` statement, this method
+ * will manipulate the AST around the break statement. Do not call the method
+ * twice for the same path.
+ *
+ * @export
+ * @param {NodePath} this
+ * @returns {NodePath[]} Completion records
+ */
 export function getCompletionRecords(this: NodePath): NodePath[] {
   const records = _getCompletionRecords(this, {
     canHaveBreak: false,
