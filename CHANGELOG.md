@@ -19,6 +19,42 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.13 (2021-03-26)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#12441](https://github.com/babel/babel/pull/12441) Disallow await before exponential ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#13031](https://github.com/babel/babel/pull/13031) Correctly handle relative `browserslistConfigFile` paths ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-preset-env`
+  * [#13028](https://github.com/babel/babel/pull/13028) Resolve `.browserslistrc` as a project-wide file ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-react-constant-elements`
+  * [#13054](https://github.com/babel/babel/pull/13054) fix: constant variables only enable constant react elements ([@cgood92](https://github.com/cgood92))
+* `babel-types`
+  * [#13046](https://github.com/babel/babel/pull/13046) fix(types): add missing range for BaseNode ([@JounQin](https://github.com/JounQin))
+* `babel-node`
+  * [#13037](https://github.com/babel/babel/pull/13037) fix: make babel-node spawned process bubble msg ([@lambertkevin](https://github.com/lambertkevin))
+  * [#13037](https://github.com/babel/babel/pull/13037) fix: make babel-node spawned process bubble msg ([@lambertkevin](https://github.com/lambertkevin))
+* `babel-parser`
+  * [#12933](https://github.com/babel/babel/pull/12933) fix(ts): parenthesized assert and assign ([@fedeci](https://github.com/fedeci))
+
+#### :nail_care: Polish
+* `babel-cli`, `babel-core`
+  * [#12954](https://github.com/babel/babel/pull/12954) Do not bail on SHOW_CONFIG_FOR matches ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-core`
+  * [#13021](https://github.com/babel/babel/pull/13021) Remove lodash sortBy use ([@jridgewell](https://github.com/jridgewell))
+* Other
+  * [#13055](https://github.com/babel/babel/pull/13055) Replace CircleCI badge by GitHub CI ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#13044](https://github.com/babel/babel/pull/13044) Expand type definitions for path.{get,set}Data to cover symbols ([@addaleax](https://github.com/addaleax))
+
+#### :running_woman: Performance
+* `babel-core`
+  * [#13040](https://github.com/babel/babel/pull/13040) Set `rootMode: "root"` in `loadPartialConfig` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.12 (2021-03-22)
 
 #### :bug: Bug Fix
