@@ -1,4 +1,4 @@
-(async do {
+async do {
   1;
-});
-(async do {});
+};
+async do {};

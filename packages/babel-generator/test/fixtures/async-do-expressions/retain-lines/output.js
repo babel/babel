@@ -1,3 +1,3 @@
 /* leading comments
-*/(async do
-{1;}) + 0;
+*/async do
+{1;} + 0;
