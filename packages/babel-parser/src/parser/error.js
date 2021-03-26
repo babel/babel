@@ -14,6 +14,7 @@ type ErrorContext = {
   loc: Position,
   missingPlugin?: Array<string>,
   code?: string,
+  reasonCode?: String,
 };
 
 export type ParsingError = SyntaxError & ErrorContext;
@@ -21,6 +22,7 @@ export type ParsingError = SyntaxError & ErrorContext;
 export type ErrorTemplate = {
   code: string,
   template: string,
+  reasonCode: string,
 };
 
 export type ErrorTemplates = {
@@ -34,14 +36,18 @@ export {
   SourceTypeModuleErrorMessages as SourceTypeModuleErrors,
 } from "./error-message";
 
-export function makeErrorTemplates(messages: {
-  [key: string]: string,
-}): ErrorTemplates {
+export function makeErrorTemplates(
+  messages: {
+    [key: string]: string,
+  },
+  code: string,
+): ErrorTemplates {
   const templates: ErrorTemplates = {};
-  Object.keys(messages).forEach(code => {
-    templates[code] = {
+  Object.keys(messages).forEach(reasonCode => {
+    templates[reasonCode] = {
       code,
-      template: messages[code],
+      reasonCode,
+      template: messages[reasonCode],
     };
   });
   return Object.freeze(templates);
@@ -66,10 +72,10 @@ export default class ParserError extends CommentsParser {
 
   raise(
     pos: number,
-    { code, template }: ErrorTemplate,
+    { code, reasonCode, template }: ErrorTemplate,
     ...params: any
   ): Error | empty {
-    return this.raiseWithData(pos, { code }, template, ...params);
+    return this.raiseWithData(pos, { code, reasonCode }, template, ...params);
   }
 
   /**

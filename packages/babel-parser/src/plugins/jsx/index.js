@@ -20,19 +20,22 @@ const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
 /* eslint sort-keys: "error" */
-const JsxErrors = makeErrorTemplates({
-  AttributeIsEmpty:
-    "JSX attributes must only be assigned a non-empty expression",
-  MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
-  MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
-  UnexpectedSequenceExpression:
-    "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-  UnsupportedJsxValue:
-    "JSX value should be either an expression or a quoted JSX text",
-  UnterminatedJsxContent: "Unterminated JSX contents",
-  UnwrappedAdjacentJSXElements:
-    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-});
+const JsxErrors = makeErrorTemplates(
+  {
+    AttributeIsEmpty:
+      "JSX attributes must only be assigned a non-empty expression",
+    MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
+    MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
+    UnexpectedSequenceExpression:
+      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
+    UnsupportedJsxValue:
+      "JSX value should be either an expression or a quoted JSX text",
+    UnterminatedJsxContent: "Unterminated JSX contents",
+    UnwrappedAdjacentJSXElements:
+      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+  },
+  /* code */ "BABEL_PARSER_SYNTAX_ERROR",
+);
 /* eslint-disable sort-keys */
 
 // Be aware that this file is always executed and not only when the plugin is enabled.
