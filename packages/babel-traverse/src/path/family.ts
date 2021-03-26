@@ -85,6 +85,19 @@ function normalCompletionToBreak(completions: Completion[]) {
   });
 }
 
+/**
+ * Determine how we should handle the break statement for break completions
+ *
+ * @param {Completion[]} completions
+ * @param {boolean} reachable Whether the break statement is reachable after
+   we mark the noraml completions _before_ the given break completions as the final
+   completions. For example,
+   `{ 0 }; break;` is transformed to `{ return 0 }; break;`, the `break` here is unreachable
+   and thus can be removed without consequences. We may in the future reserve them instead since
+   we do not consistently remove unreachable statements _after_ break
+   `{ var x = 0 }; break;` is transformed to `{ var x = 0 }; return void 0;`, the `break` is reachable
+   because we can not wrap variable declaration under a return statement
+ */
 function replaceBreakStatementInBreakCompletion(
   completions: Completion[],
   reachable: boolean,
