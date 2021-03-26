@@ -161,7 +161,7 @@ function generateStandalone() {
         let allList = "";
 
         for (const plugin of pluginConfig) {
-          const camelPlugin = plugin.replace(/-([a-z])/g, c =>
+          const camelPlugin = plugin.replace(/-[a-z]/g, c =>
             c[1].toUpperCase()
           );
           imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;

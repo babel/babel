@@ -32,7 +32,7 @@ export default valueToNode as {
   (value: unknown): t.Expression;
 };
 
-function isRegExp(value): boolean {
+function isRegExp(value): value is RegExp {
   return Object.prototype.toString.call(value) === "[object RegExp]";
 }
 
@@ -84,7 +84,7 @@ function valueToNode(value: unknown): t.Expression {
 
   // regexes
   if (isRegExp(value)) {
-    const pattern = (value as RegExp).source;
+    const pattern = value.source;
     const flags = value.toString().match(/\/([a-z]+|)$/)[1];
     return regExpLiteral(pattern, flags);
   }
