@@ -7,7 +7,6 @@ import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
 import Module from "module";
-import escapeRegExp from "./escape-regexp.cjs";
 
 const maps = {};
 let transformOpts = {};
@@ -107,6 +106,10 @@ function hookExtensions(exts) {
 
 export function revert() {
   if (piratesRevert) piratesRevert();
+}
+
+function escapeRegExp(string) {
+  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
 export default function register(opts?: Object = {}) {

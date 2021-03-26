@@ -1,9 +1,6 @@
 // @flow
 import path from "path";
 
-// $FlowIgnore
-import escapeRegExp from "./helpers/escape-regexp.cjs";
-
 const sep = `\\${path.sep}`;
 const endSep = `(?:${sep}|$)`;
 
@@ -14,6 +11,10 @@ const starPatLast = `(?:${substitution}${endSep})`;
 
 const starStarPat = `${starPat}*?`;
 const starStarPatLast = `${starPat}*?${starPatLast}?`;
+
+function escapeRegExp(string) {
+  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
+}
 
 /**
  * Implement basic pattern matching that will allow users to do the simple

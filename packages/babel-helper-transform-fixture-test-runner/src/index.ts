@@ -14,8 +14,6 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 import QuickLRU from "quick-lru";
-// @ts-ignore
-import escapeRegExp from "./escape-regexp.cjs";
 import { fileURLToPath } from "url";
 
 import { createRequire } from "module";
@@ -343,6 +341,10 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
     console.log(`Updated test file: ${expectedLoc}`);
     fs.writeFileSync(expectedLoc, `${actualCode}\n`);
   }
+}
+
+function escapeRegExp(string) {
+  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
 function normalizeOutput(code, normalizePathSeparator?) {
