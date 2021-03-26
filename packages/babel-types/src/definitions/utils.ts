@@ -280,7 +280,7 @@ export default function defineType(
       for (const key of keys) {
         const field = inherits.fields[key];
         fields[key] = {
-          default: field.default,
+          default: Array.isArray(field.default) ? [] : field.default,
           optional: field.optional,
           validate: field.validate,
         };
