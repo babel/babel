@@ -9,6 +9,9 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
   getModuleName,
+  withExtension,
+  resolveRelativeImportPaths,
+  amdImportId,
 } from "@babel/helper-module-transforms";
 import { types as t, template } from "@babel/core";
 
@@ -48,6 +51,7 @@ export default declare((api, options) => {
     strict,
     strictMode,
     noInterop,
+    importFileExt,
   } = options;
 
   const constantReexports =
@@ -74,7 +78,8 @@ export default declare((api, options) => {
     let initAssignments = [];
 
     if (exactGlobals) {
-      const globalName = browserGlobals[moduleNameOrBasename];
+      const globalName =
+        browserGlobals[filename] || browserGlobals[moduleNameOrBasename];
 
       if (globalName) {
         initAssignments = [];
@@ -107,10 +112,11 @@ export default declare((api, options) => {
   /**
    * Build the member expression that reads from a global for a given source.
    */
-  function buildBrowserArg(browserGlobals, exactGlobals, source) {
+  function buildBrowserArg(browserGlobals, exactGlobals, source, filename) {
     let memberExpression;
     if (exactGlobals) {
-      const globalRef = browserGlobals[source];
+      const globalRef =
+        (filename && browserGlobals[filename]) || browserGlobals[source];
       if (globalRef) {
         memberExpression = globalRef
           .split(".")
@@ -143,9 +149,10 @@ export default declare((api, options) => {
         exit(path) {
           if (!isModule(path)) return;
 
+          const fileOpts = this.file.opts;
           const browserGlobals = globals || {};
 
-          let moduleName = getModuleName(this.file.opts, options);
+          let moduleName = getModuleName(fileOpts, options);
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
@@ -175,14 +182,25 @@ export default declare((api, options) => {
           }
 
           for (const [source, metadata] of meta.source) {
-            amdArgs.push(t.stringLiteral(source));
+            const {
+              filename: sourceFilename,
+              filenameRelative: sourceRelative,
+            } = resolveRelativeImportPaths(source, fileOpts);
+            amdArgs.push(
+              t.stringLiteral(amdImportId(source, fileOpts, options)),
+            );
             commonjsArgs.push(
               t.callExpression(t.identifier("require"), [
-                t.stringLiteral(source),
+                t.stringLiteral(withExtension(source, importFileExt)),
               ]),
             );
             browserArgs.push(
-              buildBrowserArg(browserGlobals, exactGlobals, source),
+              buildBrowserArg(
+                browserGlobals,
+                exactGlobals,
+                source,
+                sourceRelative || sourceFilename,
+              ),
             );
             importNames.push(t.identifier(metadata.name));
 
@@ -232,7 +250,10 @@ export default declare((api, options) => {
               GLOBAL_TO_ASSIGN: buildBrowserInit(
                 browserGlobals,
                 exactGlobals,
-                this.filename || "unknown",
+                fileOpts.filenameRelative ||
+                  fileOpts.filename ||
+                  this.filename ||
+                  "unknown",
                 moduleName,
               ),
             }),
