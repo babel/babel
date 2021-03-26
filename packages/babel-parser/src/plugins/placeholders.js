@@ -48,9 +48,12 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 // the substituted nodes.
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
-const PlaceHolderErrors = makeErrorTemplates({
-  ClassNameIsRequired: "A class name is required",
-});
+const PlaceHolderErrors = makeErrorTemplates(
+  {
+    ClassNameIsRequired: "A class name is required",
+  },
+  /* code */ "BABEL_PARSER_SYNTAX_ERROR",
+);
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
