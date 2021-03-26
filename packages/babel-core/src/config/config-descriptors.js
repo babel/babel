@@ -19,6 +19,8 @@ import type {
   PluginItem,
 } from "./validation/options";
 
+import { resolveBrowserslistConfigFile } from "./resolve-targets";
+
 // Represents a config object and functions to lazily load the descriptors
 // for the plugins and presets so we don't load the plugins/presets unless
 // the options object actually ends up being applicable.
@@ -71,6 +73,19 @@ function* handlerOf<T>(value: T): Handler<T> {
   return value;
 }
 
+function optionsWithResolvedBrowserslistConfigFile(
+  options: ValidatedOptions,
+  dirname: string,
+): ValidatedOptions {
+  if (typeof options.browserslistConfigFile === "string") {
+    options.browserslistConfigFile = resolveBrowserslistConfigFile(
+      options.browserslistConfigFile,
+      dirname,
+    );
+  }
+  return options;
+}
+
 /**
  * Create a set of descriptors from a given options object, preserving
  * descriptor identity based on the identity of the plugin/preset arrays
@@ -83,7 +98,7 @@ export function createCachedDescriptors(
 ): OptionsAndDescriptors {
   const { plugins, presets, passPerPreset } = options;
   return {
-    options,
+    options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
     plugins: plugins
       ? () => createCachedPluginDescriptors(plugins, dirname)(alias)
       : () => handlerOf([]),
@@ -112,7 +127,7 @@ export function createUncachedDescriptors(
   let presets;
 
   return {
-    options,
+    options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
     *plugins() {
       if (!plugins) {
         plugins = yield* createPluginDescriptors(

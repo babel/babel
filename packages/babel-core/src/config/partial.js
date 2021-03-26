@@ -126,7 +126,7 @@ export default function* loadPrivatePartialConfig(
 
   const options: NormalizedOptions = {
     ...merged,
-    targets: resolveTargets(merged, absoluteRootDir, absoluteRootDir),
+    targets: resolveTargets(merged, absoluteRootDir),
 
     // Tack the passes onto the object itself so that, if this object is
     // passed back to Babel a second time, it will be in the right structure

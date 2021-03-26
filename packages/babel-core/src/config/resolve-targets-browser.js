@@ -3,12 +3,19 @@
 import type { ValidatedOptions } from "./validation/options";
 import getTargets, { type Targets } from "@babel/helper-compilation-targets";
 
+export function resolveBrowserslistConfigFile(
+  // eslint-disable-next-line no-unused-vars
+  browserslistConfigFile: string,
+  // eslint-disable-next-line no-unused-vars
+  configFilePath: string,
+): string | void {
+  return undefined;
+}
+
 export function resolveTargets(
   options: ValidatedOptions,
   // eslint-disable-next-line no-unused-vars
   root: string,
-  // eslint-disable-next-line no-unused-vars
-  configFilePath: string | void,
 ): Targets {
   let { targets } = options;
   if (typeof targets === "string" || Array.isArray(targets)) {

@@ -11,10 +11,16 @@ import type { ValidatedOptions } from "./validation/options";
 import path from "path";
 import getTargets, { type Targets } from "@babel/helper-compilation-targets";
 
+export function resolveBrowserslistConfigFile(
+  browserslistConfigFile: string,
+  configFileDir: string,
+): string | void {
+  return path.resolve(configFileDir, browserslistConfigFile);
+}
+
 export function resolveTargets(
   options: ValidatedOptions,
   root: string,
-  configFilePath: string = root,
 ): Targets {
   let { targets } = options;
   if (typeof targets === "string" || Array.isArray(targets)) {
@@ -25,13 +31,17 @@ export function resolveTargets(
     targets = { ...targets, esmodules: "intersect" };
   }
 
+  const { browserslistConfigFile } = options;
   let configFile;
-  if (typeof options.browserslistConfigFile === "string") {
-    configFile = path.resolve(configFilePath, options.browserslistConfigFile);
+  let ignoreBrowserslistConfig = false;
+  if (typeof browserslistConfigFile === "string") {
+    configFile = browserslistConfigFile;
+  } else {
+    ignoreBrowserslistConfig = browserslistConfigFile === false;
   }
 
   return getTargets((targets: any), {
-    ignoreBrowserslistConfig: options.browserslistConfigFile === false,
+    ignoreBrowserslistConfig,
     configFile,
     configPath: root,
     browserslistEnv: options.browserslistEnv,

@@ -100,19 +100,6 @@ describe("browserslist", () => {
     ).toEqual({ chrome: "80.0.0" });
   });
 
-  // TODO: browserslistConfig is currently resolved starting from the root
-  // rather than from the config file.
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip("loads nested .browserslistrc files if explicitly specified", () => {
-    expect(
-      loadOptions({
-        cwd: join(cwd, "fixtures", "targets"),
-        filename: "./node_modules/dep/test.js",
-        babelrcRoots: ["./node_modules/dep/"],
-      }).targets,
-    ).toEqual({ edge: "14.0.0" });
-  });
-
   describe("browserslistConfigFile", () => {
     it("can disable config loading", () => {
       expect(
@@ -132,15 +119,25 @@ describe("browserslist", () => {
       ).toEqual({ firefox: "74.0.0" });
     });
 
-    it("is relative to the project root", () => {
+    it("is relative to the cwd even if specifying 'root'", () => {
       expect(
         loadOptions({
           cwd: join(cwd, "fixtures", "targets"),
           root: "..",
           filename: "./nested/test.js",
-          browserslistConfigFile: "./targets/.browserslistrc-firefox",
+          browserslistConfigFile: "./.browserslistrc-firefox",
         }).targets,
       ).toEqual({ firefox: "74.0.0" });
+    });
+
+    it("is relative to the config files that defines it", () => {
+      expect(
+        loadOptions({
+          cwd: join(cwd, "fixtures", "targets"),
+          filename: "./node_modules/dep/test.js",
+          babelrcRoots: ["./node_modules/dep/"],
+        }).targets,
+      ).toEqual({ edge: "14.0.0" });
     });
   });
 
