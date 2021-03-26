@@ -117,6 +117,15 @@ export function validatePlugins(plugins: PluginList) {
         RECORD_AND_TUPLE_SYNTAX_TYPES.map(p => `'${p}'`).join(", "),
     );
   }
+
+  if (
+    hasPlugin(plugins, "asyncDoExpressions") &&
+    !hasPlugin(plugins, "doExpressions")
+  ) {
+    throw new Error(
+      "'asyncDoExpressions' requires 'doExpressions', please add 'doExpressions' to parser plugins.",
+    );
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.
