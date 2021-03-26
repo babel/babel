@@ -238,7 +238,7 @@ __metadata:
     "@babel/core": "workspace:*"
     dedent: ^0.7.0
     eslint: ^7.5.0
-    eslint-scope: 5.1.0
+    eslint-scope: ^5.1.0
     eslint-visitor-keys: ^1.3.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
@@ -7571,16 +7571,6 @@ __metadata:
   version: 0.3.0
   resolution: "eslint-rule-composer@npm:0.3.0"
   checksum: eb96fffa4eb2cc40061bf082bb4cc48df746e9c556e4b20c653e1b84b34cabd66462bafad124d44ea2b89a750a2aec26c21507bd7b8b23f355136a8901e09d00
-  languageName: node
-  linkType: hard
-
-"eslint-scope@npm:5.1.0":
-  version: 5.1.0
-  resolution: "eslint-scope@npm:5.1.0"
-  dependencies:
-    esrecurse: ^4.1.0
-    estraverse: ^4.1.1
-  checksum: 4a0e97979a855d09c4bb3a3f4f945cefaf8f6638a6a8f49472cefb0cf64982ab7ed1683a1e63d20ce1bcb01f94c133dc7a5bdf03b28eb945999f50f08878a2b4
   languageName: node
   linkType: hard
 
