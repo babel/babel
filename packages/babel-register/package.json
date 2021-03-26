@@ -17,7 +17,6 @@
     "./lib/nodeWrapper.js": "./lib/browser.js"
   },
   "dependencies": {
-    "escape-string-regexp": "condition:BABEL_8_BREAKING ? ^4.0.0 : ",
     "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
     "lodash": "^4.17.19",
     "make-dir": "^2.1.0",

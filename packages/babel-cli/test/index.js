@@ -3,7 +3,6 @@ import * as helper from "@babel/helper-fixtures";
 import rimraf from "rimraf";
 import { sync as makeDirSync } from "make-dir";
 import child from "child_process";
-import escapeRegExp from "lodash/escapeRegExp";
 import merge from "lodash/merge";
 import path from "path";
 import fs from "fs";
@@ -57,6 +56,10 @@ const saveInFiles = function (files) {
     outputFileSync(filename, content);
   });
 };
+
+function escapeRegExp(string) {
+  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
+}
 
 const normalizeOutput = function (str, cwd) {
   let result = str

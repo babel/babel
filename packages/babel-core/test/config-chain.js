@@ -2,7 +2,6 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
-import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "../lib";
 import getTargets from "@babel/helper-compilation-targets";
 
@@ -61,6 +60,10 @@ function pairs(items) {
     }
   }
   return pairs;
+}
+
+function escapeRegExp(string) {
+  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
 async function getTemp(name) {
