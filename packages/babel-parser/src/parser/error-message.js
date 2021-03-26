@@ -1,6 +1,6 @@
 // @flow
 
-import { makeErrorTemplates } from "../parser/error";
+import { makeErrorTemplates, ErrorCodes } from "./error";
 
 /* eslint sort-keys: "error" */
 
@@ -220,7 +220,7 @@ export const ErrorMessages = makeErrorTemplates(
     ZeroDigitNumericSeparator:
       "Numeric separator can not be used after leading 0",
   },
-  /* code */ "BABEL_PARSER_SYNTAX_ERROR",
+  /* code */ ErrorCodes.SyntaxError,
 );
 
 export const SourceTypeModuleErrorMessages = makeErrorTemplates(
@@ -228,5 +228,5 @@ export const SourceTypeModuleErrorMessages = makeErrorTemplates(
     ImportMetaOutsideModule: `import.meta may appear only with 'sourceType: "module"'`,
     ImportOutsideModule: `'import' and 'export' may appear only with 'sourceType: "module"'`,
   },
-  /* code */ "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
+  /* code */ ErrorCodes.SourceTypeModuleError,
 );

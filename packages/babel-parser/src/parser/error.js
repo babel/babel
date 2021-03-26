@@ -2,6 +2,7 @@
 /* eslint sort-keys: "error" */
 import { getLineInfo, type Position } from "../util/location";
 import CommentsParser from "./comments";
+import { type ErrorCode, ErrorCodes } from "./error-codes";
 
 // This function is used to raise exceptions on parse errors. It
 // takes an offset integer (into the current `input`) to indicate
@@ -16,31 +17,22 @@ type ErrorContext = {
   code?: string,
   reasonCode?: String,
 };
-
 export type ParsingError = SyntaxError & ErrorContext;
 
 export type ErrorTemplate = {
-  code: string,
+  code: ErrorCode,
   template: string,
   reasonCode: string,
 };
-
 export type ErrorTemplates = {
   [key: string]: ErrorTemplate,
 };
-
-export type raiseFunction = (number, ErrorTemplate, ...any) => void;
-
-export {
-  ErrorMessages as Errors,
-  SourceTypeModuleErrorMessages as SourceTypeModuleErrors,
-} from "./error-message";
 
 export function makeErrorTemplates(
   messages: {
     [key: string]: string,
   },
-  code: string,
+  code: ErrorCode,
 ): ErrorTemplates {
   const templates: ErrorTemplates = {};
   Object.keys(messages).forEach(reasonCode => {
@@ -52,6 +44,14 @@ export function makeErrorTemplates(
   });
   return Object.freeze(templates);
 }
+
+export { ErrorCodes };
+export {
+  ErrorMessages as Errors,
+  SourceTypeModuleErrorMessages as SourceTypeModuleErrors,
+} from "./error-message";
+
+export type raiseFunction = (number, ErrorTemplate, ...any) => void;
 
 export default class ParserError extends CommentsParser {
   // Forward-declaration: defined in tokenizer/index.js

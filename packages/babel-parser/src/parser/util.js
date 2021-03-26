@@ -13,7 +13,7 @@ import ProductionParameterHandler, {
   PARAM_AWAIT,
   PARAM,
 } from "../util/production-parameter";
-import { Errors, type ErrorTemplate } from "./error";
+import { Errors, type ErrorTemplate, ErrorCodes } from "./error";
 /*::
 import type ScopeHandler from "../util/scope";
 */
@@ -143,7 +143,8 @@ export default class UtilParser extends Tokenizer {
     if (this.state.start > this.state.lastTokEnd) {
       /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(this.state.lastTokEnd, {
-        code: "UnexpectedSpace",
+        code: ErrorCodes.SyntaxError,
+        reasonCode: "UnexpectedSpace",
         template: message,
       });
       /* eslint-enable @babel/development-internal/dry-error-messages */
@@ -156,13 +157,15 @@ export default class UtilParser extends Tokenizer {
   unexpected(
     pos: ?number,
     messageOrType: ErrorTemplate | TokenType = {
-      code: "UnexpectedToken",
+      code: ErrorCodes.SyntaxError,
+      reasonCode: "UnexpectedToken",
       template: "Unexpected token",
     },
   ): empty {
     if (messageOrType instanceof TokenType) {
       messageOrType = {
-        code: "UnexpectedToken",
+        code: ErrorCodes.SyntaxError,
+        reasonCode: "UnexpectedToken",
         template: `Unexpected token, expected "${messageOrType.label}"`,
       };
     }

@@ -33,6 +33,7 @@ import {
   Errors,
   makeErrorTemplates,
   type ErrorTemplate,
+  ErrorCodes,
 } from "../../parser/error";
 
 type TsModifier =
@@ -130,7 +131,7 @@ const TSErrors = makeErrorTemplates(
     UnsupportedSignatureParameterKind:
       "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0",
   },
-  /* code */ "BABEL_PARSER_SYNTAX_ERROR",
+  /* code */ ErrorCodes.SyntaxError,
 );
 /* eslint-disable sort-keys */
 

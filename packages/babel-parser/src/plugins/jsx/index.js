@@ -14,7 +14,7 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors, makeErrorTemplates } from "../../parser/error";
+import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
@@ -34,7 +34,7 @@ const JsxErrors = makeErrorTemplates(
     UnwrappedAdjacentJSXElements:
       "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
   },
-  /* code */ "BABEL_PARSER_SYNTAX_ERROR",
+  /* code */ ErrorCodes.SyntaxError,
 );
 /* eslint-disable sort-keys */
 
@@ -137,7 +137,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
               const char = this.input[this.state.pos];
               this.raise(this.state.pos, {
-                code: "UnexpectedToken",
+                code: ErrorCodes.SyntaxError,
+                reasonCode: "UnexpectedToken",
                 template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
               });
             }

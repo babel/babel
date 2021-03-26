@@ -25,7 +25,7 @@ import {
   SCOPE_OTHER,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
-import { Errors, makeErrorTemplates } from "../../parser/error";
+import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
 
 const reservedTypes = new Set([
   "_",
@@ -135,7 +135,7 @@ const FlowErrors = makeErrorTemplates(
       "Only declares and type imports are allowed inside declare module",
     UnterminatedFlowComment: "Unterminated flow-comment",
   },
-  /* code */ "BABEL_PARSER_SYNTAX_ERROR",
+  /* code */ ErrorCodes.SyntaxError,
 );
 /* eslint-disable sort-keys */
 

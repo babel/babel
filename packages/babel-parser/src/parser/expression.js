@@ -1520,17 +1520,14 @@ export default class ExpressionParser extends LValParser {
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
       if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
-        let error = Errors.UnexpectedNewTarget.template;
+        const errorTemplate = { ...Errors.UnexpectedNewTarget };
 
         if (this.hasPlugin("classProperties")) {
-          error += " or class properties";
+          errorTemplate.template += " or class properties";
         }
 
         /* eslint-disable @babel/development-internal/dry-error-messages */
-        this.raise(metaProp.start, {
-          code: Errors.UnexpectedNewTarget.code,
-          template: error,
-        });
+        this.raise(metaProp.start, errorTemplate);
         /* eslint-enable @babel/development-internal/dry-error-messages */
       }
 

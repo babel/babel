@@ -5,7 +5,7 @@ import * as charCodes from "charcodes";
 import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-import { makeErrorTemplates } from "../parser/error";
+import { makeErrorTemplates, ErrorCodes } from "../parser/error";
 
 tt.placeholder = new TokenType("%%", { startsExpr: true });
 
@@ -52,7 +52,7 @@ const PlaceHolderErrors = makeErrorTemplates(
   {
     ClassNameIsRequired: "A class name is required",
   },
-  /* code */ "BABEL_PARSER_SYNTAX_ERROR",
+  /* code */ ErrorCodes.SyntaxError,
 );
 
 export default (superClass: Class<Parser>): Class<Parser> =>
