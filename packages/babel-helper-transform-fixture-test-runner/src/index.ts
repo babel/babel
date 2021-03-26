@@ -8,7 +8,6 @@ import {
 import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import * as helpers from "./helpers";
-import merge from "lodash/merge";
 import assert from "assert";
 import fs from "fs";
 import path from "path";
@@ -200,19 +199,17 @@ function run(task) {
 
   // todo(flow->ts) add proper return type (added any, because empty object is inferred)
   function getOpts(self): any {
-    const newOpts = merge(
-      {
-        ast: true,
-        cwd: path.dirname(self.loc),
-        filename: self.loc,
-        filenameRelative: self.filename,
-        sourceFileName: self.filename,
-        sourceType: "script",
-        babelrc: false,
-        inputSourceMap: task.inputSourceMap || undefined,
-      },
-      opts,
-    );
+    const newOpts = {
+      ast: true,
+      cwd: path.dirname(self.loc),
+      filename: self.loc,
+      filenameRelative: self.filename,
+      sourceFileName: self.filename,
+      sourceType: "script",
+      babelrc: false,
+      inputSourceMap: task.inputSourceMap || undefined,
+      ...opts,
+    };
 
     return resolveOptionPluginOrPreset(newOpts, optionsDir);
   }
