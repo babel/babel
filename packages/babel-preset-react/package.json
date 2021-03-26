@@ -17,6 +17,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^7.12.13",
+    "@babel/helper-validator-option": "workspace:^7.12.17",
     "@babel/plugin-transform-react-display-name": "workspace:^7.12.13",
     "@babel/plugin-transform-react-jsx": "workspace:^7.12.13",
     "@babel/plugin-transform-react-jsx-development": "workspace:^7.12.12",
