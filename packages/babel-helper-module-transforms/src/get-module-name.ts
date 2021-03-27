@@ -1,9 +1,7 @@
-// @flow
-
 export default function getModuleName(
-  rootOpts: Object,
-  pluginOpts: Object,
-): ?string {
+  rootOpts: any,
+  pluginOpts: any,
+): string | undefined | null {
   const {
     filename,
     filenameRelative = filename,

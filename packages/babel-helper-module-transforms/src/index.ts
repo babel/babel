@@ -9,9 +9,13 @@ import rewriteLiveReferences from "./rewrite-live-references";
 import normalizeAndLoadModuleMetadata, {
   hasExports,
   isSideEffectImport,
-  type ModuleMetadata,
-  type SourceModuleMetadata,
 } from "./normalize-and-load-metadata";
+import type {
+  InteropType,
+  ModuleMetadata,
+  SourceModuleMetadata,
+} from "./normalize-and-load-metadata";
+import type { NodePath } from "@babel/traverse";
 
 export { default as getModuleName } from "./get-module-name";
 
@@ -24,7 +28,7 @@ export { hasExports, isSideEffectImport, isModule, rewriteThis };
  * and returns a list of statements for use when initializing the module.
  */
 export function rewriteModuleStatementsAndPrepareHeader(
-  path: NodePath,
+  path: NodePath<t.Program>,
   {
     // TODO(Babel 8): Remove this
     loose,
@@ -39,6 +43,17 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
     constantReexports = loose,
     enumerableModuleMeta = loose,
+  }: {
+    exportName?;
+    strict;
+    allowTopLevelThis?;
+    strictMode;
+    loose?;
+    noInterop?;
+    lazy?;
+    esNamespaceOnly?;
+    constantReexports?;
+    enumerableModuleMeta?;
   },
 ) {
   assert(isModule(path), "Cannot process module statements in a script");
@@ -106,9 +121,9 @@ export function ensureStatementsHoisted(statements) {
  */
 export function wrapInterop(
   programPath: NodePath,
-  expr: Node,
+  expr: t.Expression,
   type: InteropType,
-): Node {
+): t.CallExpression {
   if (type === "none") {
     return null;
   }
@@ -138,7 +153,7 @@ export function buildNamespaceInitStatements(
 ) {
   const statements = [];
 
-  let srcNamespace = t.identifier(sourceMetadata.name);
+  let srcNamespace: t.Node = t.identifier(sourceMetadata.name);
   if (sourceMetadata.lazy) srcNamespace = t.callExpression(srcNamespace, []);
 
   for (const localName of sourceMetadata.importsNamespace) {
@@ -329,7 +344,7 @@ function buildExportNameListDeclaration(
       exportedVars[exportName] = true;
     }
 
-    hasReexport = hasReexport || data.reexportAll;
+    hasReexport = hasReexport || !!data.reexportAll;
   }
 
   if (!hasReexport || Object.keys(exportedVars).length === 0) return null;

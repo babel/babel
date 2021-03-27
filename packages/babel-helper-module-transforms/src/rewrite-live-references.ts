@@ -1,12 +1,33 @@
 import assert from "assert";
 import * as t from "@babel/types";
 import template from "@babel/template";
+import type { NodePath, Visitor, Scope } from "@babel/traverse";
 import simplifyAccess from "@babel/helper-simple-access";
 
 import type { ModuleMetadata } from "./normalize-and-load-metadata";
 
+interface RewriteReferencesVisitorState {
+  exported: Map<any, any>;
+  metadata: ModuleMetadata;
+  requeueInParent: (path) => void;
+  scope: Scope;
+  imported: Map<any, any>;
+  buildImportReference: (
+    [source, importName, localName]: readonly [any, any, any],
+    identNode,
+  ) => any;
+  seen: WeakSet<object>;
+}
+
+interface RewriteBindingInitVisitorState {
+  exported: Map<any, any>;
+  metadata: ModuleMetadata;
+  requeueInParent: (path) => void;
+  scope: Scope;
+}
+
 export default function rewriteLiveReferences(
-  programPath: NodePath,
+  programPath: NodePath<t.Program>,
   metadata: ModuleMetadata,
 ) {
   const imported = new Map();
@@ -39,12 +60,16 @@ export default function rewriteLiveReferences(
   }
 
   // Rewrite initialization of bindings to update exports.
-  programPath.traverse(rewriteBindingInitVisitor, {
+  const rewriteBindingInitVisitorState: RewriteBindingInitVisitorState = {
     metadata,
     requeueInParent,
     scope: programPath.scope,
     exported, // local name => exported name list
-  });
+  };
+  programPath.traverse(
+    rewriteBindingInitVisitor,
+    rewriteBindingInitVisitorState,
+  );
 
   simplifyAccess(
     programPath,
@@ -53,7 +78,7 @@ export default function rewriteLiveReferences(
   );
 
   // Rewrite reads/writes from imports and exports to have the correct behavior.
-  programPath.traverse(rewriteReferencesVisitor, {
+  const rewriteReferencesVisitorState: RewriteReferencesVisitorState = {
     seen: new WeakSet(),
     metadata,
     requeueInParent,
@@ -68,7 +93,7 @@ export default function rewriteLiveReferences(
         return identNode;
       }
 
-      let namespace = t.identifier(meta.name);
+      let namespace: t.Expression = t.identifier(meta.name);
       if (meta.lazy) namespace = t.callExpression(namespace, []);
 
       const computed = metadata.stringSpecifiers.has(importName);
@@ -79,13 +104,14 @@ export default function rewriteLiveReferences(
         computed,
       );
     },
-  });
+  };
+  programPath.traverse(rewriteReferencesVisitor, rewriteReferencesVisitorState);
 }
 
 /**
  * A visitor to inject export update statements during binding initialization.
  */
-const rewriteBindingInitVisitor = {
+const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
   Scope(path) {
     path.skip();
   },
@@ -105,6 +131,7 @@ const rewriteBindingInitVisitor = {
           t.identifier(localName),
         ),
       );
+      // @ts-expect-error todo(flow->ts): avoid mutations
       statement._blockHoist = path.node._blockHoist;
 
       requeueInParent(path.insertAfter(statement)[0]);
@@ -124,6 +151,7 @@ const rewriteBindingInitVisitor = {
             t.identifier(localName),
           ),
         );
+        // @ts-expect-error todo(flow->ts): avoid mutations
         statement._blockHoist = path.node._blockHoist;
 
         requeueInParent(path.insertAfter(statement)[0]);
@@ -163,7 +191,7 @@ const buildImportThrow = localName => {
   `;
 };
 
-const rewriteReferencesVisitor = {
+const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
   ReferencedIdentifier(path) {
     const {
       seen,
@@ -200,9 +228,11 @@ const rewriteReferencesVisitor = {
       } else if (path.isJSXIdentifier() && t.isMemberExpression(ref)) {
         const { object, property } = ref;
         path.replaceWith(
-          t.JSXMemberExpression(
-            t.JSXIdentifier(object.name),
-            t.JSXIdentifier(property.name),
+          t.jsxMemberExpression(
+            // @ts-expect-error todo(flow->ts): possible bug `object` might not have a name
+            t.jsxIdentifier(object.name),
+            // @ts-expect-error todo(flow->ts): possible bug `property` might not have a name
+            t.jsxIdentifier(property.name),
           ),
         );
       } else {
@@ -303,9 +333,10 @@ const rewriteReferencesVisitor = {
         });
 
         if (items.length > 0) {
-          let node = t.sequenceExpression(items);
+          let node: t.Node = t.sequenceExpression(items);
           if (path.parentPath.isExpressionStatement()) {
             node = t.expressionStatement(node);
+            // @ts-expect-error todo(flow->ts): avoid mutations
             node._blockHoist = path.parentPath.node._blockHoist;
           }
 
@@ -315,7 +346,9 @@ const rewriteReferencesVisitor = {
       }
     },
   },
-  "ForOfStatement|ForInStatement"(path) {
+  "ForOfStatement|ForInStatement"(
+    path: NodePath<t.ForOfStatement | t.ForInStatement>,
+  ) {
     const { scope, node } = path;
     const { left } = node;
     const { exported, scope: programScope } = this;
