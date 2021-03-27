@@ -58,10 +58,8 @@
     "@babel/types": "workspace:^7.13.13",
     "convert-source-map": "^1.7.0",
     "debug": "^4.1.0",
-    "escape-string-regexp": "condition:BABEL_8_BREAKING ? ^4.0.0 : ",
     "gensync": "^1.0.0-beta.2",
     "json5": "^2.1.2",
-    "lodash": "^4.17.19",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0",
     "source-map": "^0.5.0"
   },

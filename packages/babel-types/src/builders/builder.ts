@@ -1,4 +1,3 @@
-import loClone from "lodash/clone";
 import { NODE_FIELDS, BUILDER_KEYS } from "../definitions";
 import validate from "../validators/validate";
 import type * as t from "..";
@@ -23,7 +22,9 @@ export default function builder<T extends t.Node>(
 
     let arg;
     if (i < countArgs) arg = args[i];
-    if (arg === undefined) arg = loClone(field.default);
+    if (arg === undefined) {
+      arg = Array.isArray(field.default) ? [] : field.default;
+    }
 
     node[key] = arg;
     i++;

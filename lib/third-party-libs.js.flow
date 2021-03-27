@@ -22,18 +22,6 @@ declare module "json5" {
   };
 }
 
-declare module "lodash/clone" {
-  declare export default <T>(obj: T) => T;
-}
-
-declare module "lodash/merge" {
-  declare export default <T: Object>(T, Object) => T;
-}
-
-declare module "lodash/escapeRegExp" {
-  declare export default (toEscape?: string) => string;
-}
-
 declare module "semver" {
   declare class SemVer {
     build: Array<string>;

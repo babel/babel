@@ -8,7 +8,6 @@ import through from "through2";
 import chalk from "chalk";
 import newer from "gulp-newer";
 import babel from "gulp-babel";
-import camelCase from "lodash/camelCase.js";
 import fancyLog from "fancy-log";
 import filter from "gulp-filter";
 import revertPath from "gulp-revert-path";
@@ -162,7 +161,9 @@ function generateStandalone() {
         let allList = "";
 
         for (const plugin of pluginConfig) {
-          const camelPlugin = camelCase(plugin);
+          const camelPlugin = plugin.replace(/-[a-z]/g, c =>
+            c[1].toUpperCase()
+          );
           imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
           list += `${camelPlugin},`;
           allList += `"${plugin}": ${camelPlugin},`;

@@ -279,8 +279,16 @@ export default function defineType(
       const keys = Object.getOwnPropertyNames(inherits.fields);
       for (const key of keys) {
         const field = inherits.fields[key];
+        const def = field.default;
+        if (
+          Array.isArray(def) ? def.length > 0 : def && typeof def === "object"
+        ) {
+          throw new Error(
+            "field defaults can only be primitives or empty arrays currently",
+          );
+        }
         fields[key] = {
-          default: field.default,
+          default: Array.isArray(def) ? [] : def,
           optional: field.optional,
           validate: field.validate,
         };

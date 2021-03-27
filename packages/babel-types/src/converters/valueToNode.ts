@@ -1,5 +1,4 @@
 import isPlainObject from "lodash/isPlainObject";
-import isRegExp from "lodash/isRegExp";
 import isValidIdentifier from "../validators/isValidIdentifier";
 import {
   identifier,
@@ -32,6 +31,10 @@ export default valueToNode as {
 
   (value: unknown): t.Expression;
 };
+
+function isRegExp(value): value is RegExp {
+  return Object.prototype.toString.call(value) === "[object RegExp]";
+}
 
 function valueToNode(value: unknown): t.Expression {
   // undefined

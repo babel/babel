@@ -213,10 +213,8 @@ __metadata:
     "@babel/types": "workspace:^7.13.13"
     convert-source-map: ^1.7.0
     debug: ^4.1.0
-    escape-string-regexp: "condition:BABEL_8_BREAKING ? ^4.0.0 : "
     gensync: ^1.0.0-beta.2
     json5: ^2.1.2
-    lodash: ^4.17.19
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
     source-map: ^0.5.0
   languageName: unknown
@@ -820,8 +818,6 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^7.13.10"
     "@types/jest": ^25.2.2
     babel-check-duplicated-nodes: ^1.0.0
-    escape-string-regexp: "condition:BABEL_8_BREAKING ? ^4.0.0 : "
-    lodash: ^4.17.19
     quick-lru: 5.1.0
     regenerator-runtime: ^0.13.7
     source-map: ^0.5.0
@@ -3257,7 +3253,6 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
     browserify: ^16.5.2
-    escape-string-regexp: "condition:BABEL_8_BREAKING ? ^4.0.0 : "
     find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
     lodash: ^4.17.19
     make-dir: ^2.1.0
@@ -7426,22 +7421,6 @@ __metadata:
   version: 3.1.1
   resolution: "escalade@npm:3.1.1"
   checksum: 1e31ff50d66f47cd0dfffa702061127116ccf9886d1f54a802a7b3bc95b94cab0cbf5b145cc5ac199036df6fd9d1bb24af1fa1bfed87c94879e950fbee5f86d1
-  languageName: node
-  linkType: hard
-
-"escape-string-regexp-BABEL_8_BREAKING-true@npm:escape-string-regexp@^4.0.0":
-  version: 4.0.0
-  resolution: "escape-string-regexp@npm:4.0.0"
-  checksum: c747be8d5ff7873127e3e0cffe7d2206a37208077fa9c30a3c1bb4f26bebd081c8c24d5fba7a99449f9d20670bea3dc5e1b6098b0f074b099bd38766271a272f
-  languageName: node
-  linkType: hard
-
-"escape-string-regexp@condition:BABEL_8_BREAKING ? ^4.0.0 : ":
-  version: 0.0.0-condition-d458a5
-  resolution: "escape-string-regexp@condition:BABEL_8_BREAKING?^4.0.0:#d458a5"
-  dependencies:
-    escape-string-regexp-BABEL_8_BREAKING-true: "npm:escape-string-regexp@^4.0.0"
-  checksum: a67cb3a0fc219d92f2c6f0964e302cc079b0ce38bf2bd19257d26865c600bec42befed4dc88aec2bfbe9e62f757ce4bec80a408937bf48c5c779e13d9b238c01
   languageName: node
   linkType: hard
 

@@ -19,8 +19,6 @@
     "@babel/core": "workspace:^7.13.10",
     "@babel/helper-fixtures": "workspace:^7.13.10",
     "babel-check-duplicated-nodes": "^1.0.0",
-    "escape-string-regexp": "condition:BABEL_8_BREAKING ? ^4.0.0 : ",
-    "lodash": "^4.17.19",
     "quick-lru": "5.1.0",
     "regenerator-runtime": "^0.13.7",
     "source-map": "^0.5.0"

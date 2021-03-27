@@ -3,8 +3,6 @@ import * as helper from "@babel/helper-fixtures";
 import rimraf from "rimraf";
 import { sync as makeDirSync } from "make-dir";
 import child from "child_process";
-import escapeRegExp from "lodash/escapeRegExp";
-import merge from "lodash/merge";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -57,6 +55,10 @@ const saveInFiles = function (files) {
     outputFileSync(filename, content);
   });
 };
+
+function escapeRegExp(string) {
+  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
+}
 
 const normalizeOutput = function (str, cwd) {
   let result = str
@@ -218,7 +220,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
 
       const testLoc = path.join(suiteLoc, testName);
 
-      const opts = {
+      let opts = {
         args: [],
       };
 
@@ -244,7 +246,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
 
           delete taskOpts.os;
         }
-        merge(opts, taskOpts);
+        opts = { args: [], ...taskOpts };
       }
 
       ["stdout", "stdin", "stderr"].forEach(function (key) {
