@@ -1,15 +1,14 @@
-// @flow
-
 import path from "path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
-import {
-  validate,
-  type ValidatedOptions,
-  type IgnoreList,
-  type ConfigApplicableTest,
-  type BabelrcSearch,
-  type CallerMetadata,
+import { validate } from "./validation/options";
+import type {
+  ValidatedOptions,
+  IgnoreList,
+  ConfigApplicableTest,
+  BabelrcSearch,
+  CallerMetadata,
+  IgnoreItem,
 } from "./validation/options";
 import pathPatternToRegex from "./pattern-to-regex";
 import { ConfigPrinter, ChainFormatter } from "./printer";
@@ -21,41 +20,41 @@ import {
   findRelativeConfig,
   findRootConfig,
   loadConfig,
-  type ConfigFile,
-  type IgnoreFile,
-  type FilePackageData,
 } from "./files";
+import type { ConfigFile, IgnoreFile, FilePackageData } from "./files";
 
 import { makeWeakCacheSync, makeStrongCacheSync } from "./caching";
 
 import {
   createCachedDescriptors,
   createUncachedDescriptors,
-  type UnloadedDescriptor,
-  type OptionsAndDescriptors,
-  type ValidatedFile,
+} from "./config-descriptors";
+import type {
+  UnloadedDescriptor,
+  OptionsAndDescriptors,
+  ValidatedFile,
 } from "./config-descriptors";
 
 export type ConfigChain = {
-  plugins: Array<UnloadedDescriptor>,
-  presets: Array<UnloadedDescriptor>,
-  options: Array<ValidatedOptions>,
-  files: Set<string>,
+  plugins: Array<UnloadedDescriptor>;
+  presets: Array<UnloadedDescriptor>;
+  options: Array<ValidatedOptions>;
+  files: Set<string>;
 };
 
 export type PresetInstance = {
-  options: ValidatedOptions,
-  alias: string,
-  dirname: string,
+  options: ValidatedOptions;
+  alias: string;
+  dirname: string;
 };
 
 export type ConfigContext = {
-  filename: string | void,
-  cwd: string,
-  root: string,
-  envName: string,
-  caller: CallerMetadata | void,
-  showConfig: boolean,
+  filename: string | void;
+  cwd: string;
+  root: string;
+  envName: string;
+  caller: CallerMetadata | void;
+  showConfig: boolean;
 };
 
 /**
@@ -63,7 +62,7 @@ export type ConfigContext = {
  */
 export function* buildPresetChain(
   arg: PresetInstance,
-  context: *,
+  context: any,
 ): Handler<ConfigChain | null> {
   const chain = yield* buildPresetChainWalker(arg, context);
   if (!chain) return null;
@@ -76,10 +75,7 @@ export function* buildPresetChain(
   };
 }
 
-export const buildPresetChainWalker: (
-  arg: PresetInstance,
-  context: *,
-) => * = makeChainWalker({
+export const buildPresetChainWalker = makeChainWalker<PresetInstance>({
   root: preset => loadPresetDescriptors(preset),
   env: (preset, envName) => loadPresetEnvDescriptors(preset)(envName),
   overrides: (preset, index) => loadPresetOverridesDescriptors(preset)(index),
@@ -128,11 +124,11 @@ const loadPresetOverridesEnvDescriptors = makeWeakCacheSync(
 
 export type FileHandling = "transpile" | "ignored" | "unsupported";
 export type RootConfigChain = ConfigChain & {
-  babelrc: ConfigFile | void,
-  config: ConfigFile | void,
-  ignore: IgnoreFile | void,
-  fileHandling: FileHandling,
-  files: Set<string>,
+  babelrc: ConfigFile | void;
+  config: ConfigFile | void;
+  ignore: IgnoreFile | void;
+  fileHandling: FileHandling;
+  files: Set<string>;
 };
 
 /**
@@ -257,7 +253,6 @@ export function* buildRootChain(
 
   if (context.showConfig) {
     console.log(
-      // $FlowIgnore: context.showConfig implies context.filename is not null
       `Babel configs on "${context.filename}" (ascending priority):\n` +
         // print config by the order of ascending priority
         [configReport, babelRcReport, programmaticReport]
@@ -288,7 +283,7 @@ export function* buildRootChain(
 function babelrcLoadEnabled(
   context: ConfigContext,
   pkgData: FilePackageData,
-  babelrcRoots: BabelrcSearch | void,
+  babelrcRoots: BabelrcSearch | undefined,
   babelrcRootsDirectory: string,
 ): boolean {
   if (typeof babelrcRoots === "boolean") return babelrcRoots;
@@ -302,7 +297,9 @@ function babelrcLoadEnabled(
   }
 
   let babelrcPatterns = babelrcRoots;
-  if (!Array.isArray(babelrcPatterns)) babelrcPatterns = [babelrcPatterns];
+  if (!Array.isArray(babelrcPatterns)) {
+    babelrcPatterns = [babelrcPatterns as IgnoreItem];
+  }
   babelrcPatterns = babelrcPatterns.map(pat => {
     return typeof pat === "string"
       ? path.resolve(babelrcRootsDirectory, pat)
@@ -374,7 +371,7 @@ const loadProgrammaticChain = makeChainWalker({
 /**
  * Build a config chain for a given file.
  */
-const loadFileChainWalker = makeChainWalker({
+const loadFileChainWalker = makeChainWalker<ValidatedFile>({
   root: file => loadFileDescriptors(file),
   env: (file, envName) => loadFileEnvDescriptors(file)(envName),
   overrides: (file, index) => loadFileOverridesDescriptors(file)(index),
@@ -499,36 +496,46 @@ function buildOverrideEnvDescriptors(
     : null;
 }
 
-function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
+function makeChainWalker<
+  ArgT extends { options: ValidatedOptions; dirname: string }
+>({
   root,
   env,
   overrides,
   overridesEnv,
   createLogger,
-}: {|
-  root: ArgT => OptionsAndDescriptors,
-  env: (ArgT, string) => OptionsAndDescriptors | null,
-  overrides: (ArgT, number) => OptionsAndDescriptors,
-  overridesEnv: (ArgT, number, string) => OptionsAndDescriptors | null,
+}: {
+  root: (configEntry: ArgT) => OptionsAndDescriptors;
+  env: (configEntry: ArgT, env: string) => OptionsAndDescriptors | null;
+  overrides: (configEntry: ArgT, index: number) => OptionsAndDescriptors;
+  overridesEnv: (
+    configEntry: ArgT,
+    index: number,
+    env: string,
+  ) => OptionsAndDescriptors | null;
   createLogger: (
-    ArgT,
-    ConfigContext,
-    ConfigPrinter | void,
-  ) => (OptionsAndDescriptors, ?number, ?string) => void,
-|}): (
-  ArgT,
-  ConfigContext,
-  files?: Set<ConfigFile> | void,
-  baseLogger: ConfigPrinter | void,
+    configEntry: ArgT,
+    context: ConfigContext,
+    printer: ConfigPrinter | void,
+  ) => (
+    opts: OptionsAndDescriptors,
+    index?: number | null,
+    env?: string | null,
+  ) => void;
+}): (
+  configEntry: ArgT,
+  context: ConfigContext,
+  files?: Set<ConfigFile>,
+  baseLogger?: ConfigPrinter,
 ) => Handler<ConfigChain | null> {
   return function* (input, context, files = new Set(), baseLogger) {
     const { dirname } = input;
 
-    const flattenedConfigs: Array<{|
-      config: OptionsAndDescriptors,
-      index: ?number,
-      envName: ?string,
-    |}> = [];
+    const flattenedConfigs: Array<{
+      config: OptionsAndDescriptors;
+      index: number | undefined | null;
+      envName: string | undefined | null;
+    }> = [];
 
     const rootOpts = root(input);
     if (configIsApplicable(rootOpts, dirname, context)) {
@@ -612,7 +619,7 @@ function* mergeExtendsChain(
   dirname: string,
   context: ConfigContext,
   files: Set<ConfigFile>,
-  baseLogger: ConfigPrinter | void,
+  baseLogger?: ConfigPrinter,
 ): Handler<boolean> {
   if (opts.extends === undefined) return true;
 
@@ -708,7 +715,7 @@ function dedupDescriptors(
 ): Array<UnloadedDescriptor> {
   const map: Map<
     Function,
-    Map<string | void, { value: UnloadedDescriptor }>,
+    Map<string | void, { value: UnloadedDescriptor }>
   > = new Map();
 
   const descriptors = [];
@@ -773,8 +780,8 @@ function configFieldIsApplicable(
  */
 function shouldIgnore(
   context: ConfigContext,
-  ignore: ?IgnoreList,
-  only: ?IgnoreList,
+  ignore: IgnoreList | undefined | null,
+  only: IgnoreList | undefined | null,
   dirname: string,
 ): boolean {
   if (ignore && matchesPatterns(context, ignore, dirname)) {

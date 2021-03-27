@@ -1,7 +1,6 @@
-// @flow
-
 import type { PluginPasses } from "../../config";
-import convertSourceMap, { typeof SourceMap } from "convert-source-map";
+import convertSourceMap from "convert-source-map";
+type SourceMap = any;
 import generate from "@babel/generator";
 
 import type File from "./file";
@@ -11,8 +10,8 @@ export default function generateCode(
   pluginPasses: PluginPasses,
   file: File,
 ): {
-  outputCode: string,
-  outputMap: SourceMap | null,
+  outputCode: string;
+  outputMap: SourceMap | null;
 } {
   const { opts, ast, code, inputMap } = file;
 

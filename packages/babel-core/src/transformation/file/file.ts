@@ -1,7 +1,6 @@
-// @flow
-
 import * as helpers from "@babel/helpers";
-import { NodePath, Scope, type HubInterface } from "@babel/traverse";
+import { NodePath, Scope } from "@babel/traverse";
+import type { HubInterface } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
@@ -22,27 +21,39 @@ const errorVisitor = {
 
 export type NodeLocation = {
   loc?: {
-    end?: { line: number, column: number },
-    start: { line: number, column: number },
-  },
+    end?: {
+      line: number;
+      column: number;
+    };
+    start: {
+      line: number;
+      column: number;
+    };
+  };
   _loc?: {
-    end?: { line: number, column: number },
-    start: { line: number, column: number },
-  },
+    end?: {
+      line: number;
+      column: number;
+    };
+    start: {
+      line: number;
+      column: number;
+    };
+  };
 };
 
 export default class File {
   _map: Map<any, any> = new Map();
-  opts: Object;
-  declarations: Object = {};
-  path: NodePath = null;
-  ast: Object = {};
+  opts: any;
+  declarations: any = {};
+  path: NodePath<t.Program> = null;
+  ast: any = {};
   scope: Scope;
   metadata: {} = {};
   code: string = "";
-  inputMap: Object | null = null;
+  inputMap: any | null = null;
 
-  hub: HubInterface = {
+  hub: HubInterface & { file: File } = {
     // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
     file: this,
     getCode: () => this.code,
@@ -63,7 +74,7 @@ export default class File {
       parent: this.ast,
       container: this.ast,
       key: "program",
-    }).setContext();
+    }).setContext() as NodePath<t.Program>;
     this.scope = this.path.scope;
   }
 
@@ -76,7 +87,7 @@ export default class File {
     const { interpreter } = this.path.node;
     return interpreter ? interpreter.value : "";
   }
-  set shebang(value: string): void {
+  set shebang(value: string) {
     if (value) {
       this.path.get("interpreter").replaceWith(t.interpreterDirective(value));
     } else {
@@ -84,7 +95,7 @@ export default class File {
     }
   }
 
-  set(key: mixed, val: mixed) {
+  set(key: unknown, val: unknown) {
     if (key === "helpersNamespace") {
       throw new Error(
         "Babel 7.0.0-beta.56 has dropped support for the 'helpersNamespace' utility." +
@@ -98,15 +109,15 @@ export default class File {
     this._map.set(key, val);
   }
 
-  get(key: mixed): any {
+  get(key: unknown): any {
     return this._map.get(key);
   }
 
-  has(key: mixed): boolean {
+  has(key: unknown): boolean {
     return this._map.has(key);
   }
 
-  getModuleName(): ?string {
+  getModuleName(): string | undefined | null {
     return getModuleName(this.opts, this.opts);
   }
 
@@ -126,7 +137,7 @@ export default class File {
    * helper exists, but was not available for the full given range, it will be
    * considered unavailable.
    */
-  availableHelper(name: string, versionRange: ?string): boolean {
+  availableHelper(name: string, versionRange?: string | null): boolean {
     let minVersion;
     try {
       minVersion = helpers.minVersion(name);
@@ -163,7 +174,7 @@ export default class File {
     );
   }
 
-  addHelper(name: string): Object {
+  addHelper(name: string): any {
     const declar = this.declarations[name];
     if (declar) return t.cloneNode(declar);
 
@@ -220,9 +231,9 @@ export default class File {
   }
 
   buildCodeFrameError(
-    node: ?NodeLocation,
+    node: NodeLocation | undefined | null,
     msg: string,
-    Error: typeof Error = SyntaxError,
+    _Error: typeof Error = SyntaxError,
   ): Error {
     let loc = node && (node.loc || node._loc);
 
@@ -230,7 +241,7 @@ export default class File {
       const state = {
         loc: null,
       };
-      traverse(node, errorVisitor, this.scope, state);
+      traverse(node as t.Node, errorVisitor, this.scope, state);
       loc = state.loc;
 
       let txt =
@@ -264,6 +275,6 @@ export default class File {
         );
     }
 
-    return new Error(msg);
+    return new _Error(msg);
   }
 }

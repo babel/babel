@@ -1,32 +1,29 @@
-// @flow
-
-import gensync, { type Handler } from "gensync";
+import gensync from "gensync";
+import type { Handler } from "gensync";
 import { forwardAsync, maybeAsync, isThenable } from "../gensync-utils/async";
 
 import { mergeOptions } from "./util";
 import * as context from "../index";
 import Plugin from "./plugin";
 import { getItemDescriptor } from "./item";
-import {
-  buildPresetChain,
-  type ConfigContext,
-  type ConfigChain,
-  type PresetInstance,
+import { buildPresetChain } from "./config-chain";
+import type {
+  ConfigContext,
+  ConfigChain,
+  PresetInstance,
 } from "./config-chain";
 import type { UnloadedDescriptor } from "./config-descriptors";
 import traverse from "@babel/traverse";
-import {
-  makeWeakCache,
-  makeWeakCacheSync,
-  type CacheConfigurator,
-} from "./caching";
+import { makeWeakCache, makeWeakCacheSync } from "./caching";
+import type { CacheConfigurator } from "./caching";
 import {
   validate,
   checkNoUnwrappedItemOptionPairs,
-  type PluginItem,
 } from "./validation/options";
+import type { PluginItem } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api";
+import type { PluginAPI, PresetAPI } from "./helpers/config-api";
 
 import loadPrivatePartialConfig from "./partial";
 import type { ValidatedOptions } from "./validation/options";
@@ -34,172 +31,183 @@ import type { ValidatedOptions } from "./validation/options";
 import * as Context from "./cache-contexts";
 
 type LoadedDescriptor = {
-  value: {},
-  options: {},
-  dirname: string,
-  alias: string,
+  value: {};
+  options: {};
+  dirname: string;
+  alias: string;
 };
 
 export type { InputOptions } from "./validation/options";
 
 export type ResolvedConfig = {
-  options: Object,
-  passes: PluginPasses,
+  options: any;
+  passes: PluginPasses;
 };
 
 export type { Plugin };
 export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
 
-export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
-  inputOpts: mixed,
-): Handler<ResolvedConfig | null> {
-  const result = yield* loadPrivatePartialConfig(inputOpts);
-  if (!result) {
-    return null;
-  }
-  const { options, context, fileHandling } = result;
+export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
+  function* loadFullConfig(inputOpts) {
+    const result = yield* loadPrivatePartialConfig(inputOpts);
+    if (!result) {
+      return null;
+    }
+    const { options, context, fileHandling } = result;
 
-  if (fileHandling === "ignored") {
-    return null;
-  }
-
-  const optionDefaults = {};
-
-  const { plugins, presets } = options;
-
-  if (!plugins || !presets) {
-    throw new Error("Assertion failure - plugins and presets exist");
-  }
-
-  const pluginContext: Context.FullPlugin = {
-    ...context,
-    targets: options.targets,
-    assumptions: options.assumptions ?? {},
-  };
-
-  const toDescriptor = (item: PluginItem) => {
-    const desc = getItemDescriptor(item);
-    if (!desc) {
-      throw new Error("Assertion failure - must be config item");
+    if (fileHandling === "ignored") {
+      return null;
     }
 
-    return desc;
-  };
+    const optionDefaults = {};
 
-  const presetsDescriptors = presets.map(toDescriptor);
-  const initialPluginsDescriptors = plugins.map(toDescriptor);
-  const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor>> = [[]];
-  const passes: Array<Array<Plugin>> = [];
+    const { plugins, presets } = options;
 
-  const ignored = yield* enhanceError(
-    context,
-    function* recursePresetDescriptors(
-      rawPresets: Array<UnloadedDescriptor>,
-      pluginDescriptorsPass: Array<UnloadedDescriptor>,
-    ) {
-      const presets: Array<{|
-        preset: ConfigChain | null,
-        pass: Array<UnloadedDescriptor>,
-      |}> = [];
+    if (!plugins || !presets) {
+      throw new Error("Assertion failure - plugins and presets exist");
+    }
 
-      for (let i = 0; i < rawPresets.length; i++) {
-        const descriptor = rawPresets[i];
-        if (descriptor.options !== false) {
-          try {
-            // Presets normally run in reverse order, but if they
-            // have their own pass they run after the presets
-            // in the previous pass.
-            if (descriptor.ownPass) {
-              presets.push({
-                preset: yield* loadPresetDescriptor(descriptor, pluginContext),
-                pass: [],
-              });
-            } else {
-              presets.unshift({
-                preset: yield* loadPresetDescriptor(descriptor, pluginContext),
-                pass: pluginDescriptorsPass,
-              });
+    const pluginContext: Context.FullPlugin = {
+      ...context,
+      targets: options.targets,
+      assumptions: options.assumptions ?? {},
+    };
+
+    const toDescriptor = (item: PluginItem) => {
+      const desc = getItemDescriptor(item);
+      if (!desc) {
+        throw new Error("Assertion failure - must be config item");
+      }
+
+      return desc;
+    };
+
+    const presetsDescriptors = presets.map(toDescriptor);
+    const initialPluginsDescriptors = plugins.map(toDescriptor);
+    const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor>> = [[]];
+    const passes: Array<Array<Plugin>> = [];
+
+    const ignored = yield* enhanceError(
+      context,
+      function* recursePresetDescriptors(
+        rawPresets: Array<UnloadedDescriptor>,
+        pluginDescriptorsPass: Array<UnloadedDescriptor>,
+      ) {
+        const presets: Array<{
+          preset: ConfigChain | null;
+          pass: Array<UnloadedDescriptor>;
+        }> = [];
+
+        for (let i = 0; i < rawPresets.length; i++) {
+          const descriptor = rawPresets[i];
+          if (descriptor.options !== false) {
+            try {
+              // Presets normally run in reverse order, but if they
+              // have their own pass they run after the presets
+              // in the previous pass.
+              if (descriptor.ownPass) {
+                presets.push({
+                  preset: yield* loadPresetDescriptor(
+                    descriptor,
+                    pluginContext,
+                  ),
+                  pass: [],
+                });
+              } else {
+                presets.unshift({
+                  preset: yield* loadPresetDescriptor(
+                    descriptor,
+                    pluginContext,
+                  ),
+                  pass: pluginDescriptorsPass,
+                });
+              }
+            } catch (e) {
+              if (e.code === "BABEL_UNKNOWN_OPTION") {
+                checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
+              }
+              throw e;
             }
-          } catch (e) {
-            if (e.code === "BABEL_UNKNOWN_OPTION") {
-              checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
+          }
+        }
+
+        // resolve presets
+        if (presets.length > 0) {
+          // The passes are created in the same order as the preset list, but are inserted before any
+          // existing additional passes.
+          pluginDescriptorsByPass.splice(
+            1,
+            0,
+            ...presets
+              .map(o => o.pass)
+              .filter(p => p !== pluginDescriptorsPass),
+          );
+
+          for (const { preset, pass } of presets) {
+            if (!preset) return true;
+
+            pass.push(...preset.plugins);
+
+            const ignored = yield* recursePresetDescriptors(
+              preset.presets,
+              pass,
+            );
+            if (ignored) return true;
+
+            preset.options.forEach(opts => {
+              mergeOptions(optionDefaults, opts);
+            });
+          }
+        }
+      },
+    )(presetsDescriptors, pluginDescriptorsByPass[0]);
+
+    if (ignored) return null;
+
+    const opts: any = optionDefaults;
+    mergeOptions(opts, options);
+
+    yield* enhanceError(context, function* loadPluginDescriptors() {
+      pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
+
+      for (const descs of pluginDescriptorsByPass) {
+        const pass = [];
+        passes.push(pass);
+
+        for (let i = 0; i < descs.length; i++) {
+          const descriptor: UnloadedDescriptor = descs[i];
+          if (descriptor.options !== false) {
+            try {
+              pass.push(yield* loadPluginDescriptor(descriptor, pluginContext));
+            } catch (e) {
+              if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
+                // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
+                checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e);
+              }
+              throw e;
             }
-            throw e;
           }
         }
       }
+    })();
 
-      // resolve presets
-      if (presets.length > 0) {
-        // The passes are created in the same order as the preset list, but are inserted before any
-        // existing additional passes.
-        pluginDescriptorsByPass.splice(
-          1,
-          0,
-          ...presets.map(o => o.pass).filter(p => p !== pluginDescriptorsPass),
-        );
+    opts.plugins = passes[0];
+    opts.presets = passes
+      .slice(1)
+      .filter(plugins => plugins.length > 0)
+      .map(plugins => ({ plugins }));
+    opts.passPerPreset = opts.presets.length > 0;
 
-        for (const { preset, pass } of presets) {
-          if (!preset) return true;
+    return {
+      options: opts,
+      passes: passes,
+    };
+  },
+);
 
-          pass.push(...preset.plugins);
-
-          const ignored = yield* recursePresetDescriptors(preset.presets, pass);
-          if (ignored) return true;
-
-          preset.options.forEach(opts => {
-            mergeOptions(optionDefaults, opts);
-          });
-        }
-      }
-    },
-  )(presetsDescriptors, pluginDescriptorsByPass[0]);
-
-  if (ignored) return null;
-
-  const opts: Object = optionDefaults;
-  mergeOptions(opts, options);
-
-  yield* enhanceError(context, function* loadPluginDescriptors() {
-    pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
-
-    for (const descs of pluginDescriptorsByPass) {
-      const pass = [];
-      passes.push(pass);
-
-      for (let i = 0; i < descs.length; i++) {
-        const descriptor: UnloadedDescriptor = descs[i];
-        if (descriptor.options !== false) {
-          try {
-            pass.push(yield* loadPluginDescriptor(descriptor, pluginContext));
-          } catch (e) {
-            if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
-              // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
-              checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e);
-            }
-            throw e;
-          }
-        }
-      }
-    }
-  })();
-
-  opts.plugins = passes[0];
-  opts.presets = passes
-    .slice(1)
-    .filter(plugins => plugins.length > 0)
-    .map(plugins => ({ plugins }));
-  opts.passPerPreset = opts.presets.length > 0;
-
-  return {
-    options: opts,
-    passes: passes,
-  };
-});
-
-function enhanceError<T: Function>(context, fn: T): T {
-  return (function* (arg1, arg2) {
+function enhanceError<T extends Function>(context, fn: T): T {
+  return function* (arg1, arg2) {
     try {
       return yield* fn(arg1, arg2);
     } catch (e) {
@@ -211,7 +219,7 @@ function enhanceError<T: Function>(context, fn: T): T {
 
       throw e;
     }
-  }: any);
+  } as any;
 }
 
 /**
@@ -255,7 +263,8 @@ const makeDescriptorLoader = <Context, API>(
     }
 
     if (isThenable(item)) {
-      yield* []; // if we want to support async plugins
+      // @ts-expect-error - if we want to support async plugins
+      yield* [];
 
       throw new Error(
         `You appear to be using a promise as a plugin, ` +
@@ -270,12 +279,14 @@ const makeDescriptorLoader = <Context, API>(
     return { value: item, options, dirname, alias };
   });
 
-const pluginDescriptorLoader = makeDescriptorLoader<Context.SimplePlugin, *>(
-  makePluginAPI,
-);
-const presetDescriptorLoader = makeDescriptorLoader<Context.SimplePreset, *>(
-  makePresetAPI,
-);
+const pluginDescriptorLoader = makeDescriptorLoader<
+  Context.SimplePlugin,
+  PluginAPI
+>(makePluginAPI);
+const presetDescriptorLoader = makeDescriptorLoader<
+  Context.SimplePreset,
+  PresetAPI
+>(makePresetAPI);
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.

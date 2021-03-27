@@ -1,15 +1,10 @@
-// @flow
-
-/*:: declare var invariant; */
-
 import type { Handler } from "gensync";
 import type { PluginTarget, PluginOptions } from "./validation/options";
 
 import path from "path";
-import {
-  createDescriptor,
-  type UnloadedDescriptor,
-} from "./config-descriptors";
+import { createDescriptor } from "./config-descriptors";
+
+import type { UnloadedDescriptor } from "./config-descriptors";
 
 export function createItemFromDescriptor(desc: UnloadedDescriptor): ConfigItem {
   return new ConfigItem(desc);
@@ -30,8 +25,8 @@ export function* createConfigItem(
     dirname = ".",
     type,
   }: {
-    dirname?: string,
-    type?: "preset" | "plugin",
+    dirname?: string;
+    type?: "preset" | "plugin";
   } = {},
 ): Handler<ConfigItem> {
   const descriptor = yield* createDescriptor(value, path.resolve(dirname), {
@@ -42,10 +37,9 @@ export function* createConfigItem(
   return createItemFromDescriptor(descriptor);
 }
 
-export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
-  if ((item: any)?.[CONFIG_ITEM_BRAND]) {
-    /*:: invariant(item instanceof ConfigItem) */
-    return item._descriptor;
+export function getItemDescriptor(item: unknown): UnloadedDescriptor | void {
+  if ((item as any)?.[CONFIG_ITEM_BRAND]) {
+    return (item as ConfigItem)._descriptor;
   }
 
   return undefined;
@@ -74,7 +68,6 @@ class ConfigItem {
   /**
    * Used to detect ConfigItem instances from other Babel instances.
    */
-  // $FlowIgnore
   [CONFIG_ITEM_BRAND] = true;
 
   /**
@@ -105,10 +98,9 @@ class ConfigItem {
    */
   file: {
     // The requested path, e.g. "@babel/env".
-    request: string,
-
+    request: string;
     // The resolved absolute path of the file.
-    resolved: string,
+    resolved: string;
   } | void;
 
   constructor(descriptor: UnloadedDescriptor) {

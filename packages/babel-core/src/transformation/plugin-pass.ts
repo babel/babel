@@ -1,13 +1,11 @@
-// @flow
-
 import type File from "./file/file";
-import type NodeLocation from "./file/file";
+import type { NodeLocation } from "./file/file";
 
 export default class PluginPass {
-  _map: Map<mixed, mixed> = new Map();
-  key: ?string;
+  _map: Map<unknown, unknown> = new Map();
+  key: string | undefined | null;
   file: File;
-  opts: Object;
+  opts: any;
 
   // The working directory that Babel's programmatic options are loaded
   // relative to.
@@ -16,7 +14,7 @@ export default class PluginPass {
   // The absolute path of the file being compiled.
   filename: string | void;
 
-  constructor(file: File, key: ?string, options: ?Object) {
+  constructor(file: File, key?: string | null, options?: any | null) {
     this.key = key;
     this.file = file;
     this.opts = options || {};
@@ -24,15 +22,15 @@ export default class PluginPass {
     this.filename = file.opts.filename;
   }
 
-  set(key: mixed, val: mixed) {
+  set(key: unknown, val: unknown) {
     this._map.set(key, val);
   }
 
-  get(key: mixed): any {
+  get(key: unknown): any {
     return this._map.get(key);
   }
 
-  availableHelper(name: string, versionRange: ?string) {
+  availableHelper(name: string, versionRange?: string | null) {
     return this.file.availableHelper(name, versionRange);
   }
 
@@ -44,14 +42,19 @@ export default class PluginPass {
     return this.file.addImport();
   }
 
-  buildCodeFrameError(node: ?NodeLocation, msg: string, Error?: typeof Error) {
-    return this.file.buildCodeFrameError(node, msg, Error);
+  buildCodeFrameError(
+    node: NodeLocation | undefined | null,
+    msg: string,
+    _Error?: typeof Error,
+  ) {
+    return this.file.buildCodeFrameError(node, msg, _Error);
   }
 }
 
 if (!process.env.BABEL_8_BREAKING) {
-  // $FlowIgnore
-  PluginPass.prototype.getModuleName = function getModuleName(): ?string {
+  (PluginPass as any).prototype.getModuleName = function getModuleName():
+    | string
+    | undefined {
     return this.file.getModuleName();
   };
 }

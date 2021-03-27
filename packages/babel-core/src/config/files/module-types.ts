@@ -17,7 +17,7 @@ export default function* loadCjsOrMjsDefault(
   asyncError: string,
   // TODO(Babel 8): Remove this
   fallbackToTranspiledModule: boolean = false,
-): Handler<mixed> {
+): Handler<unknown> {
   switch (guessJSModuleType(filepath)) {
     case "cjs":
       return loadCjsDefault(filepath, fallbackToTranspiledModule);
@@ -48,7 +48,7 @@ function guessJSModuleType(filename: string): "cjs" | "mjs" | "unknown" {
 }
 
 function loadCjsDefault(filepath: string, fallbackToTranspiledModule: boolean) {
-  const module = (require(filepath): mixed);
+  const module = require(filepath) as any;
   return module?.__esModule
     ? // TODO (Babel 8): Remove "module" and "undefined" fallback
       module.default || (fallbackToTranspiledModule ? module : undefined)

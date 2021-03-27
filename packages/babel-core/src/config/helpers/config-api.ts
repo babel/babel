@@ -1,14 +1,12 @@
-// @flow
-
 import semver from "semver";
 import type { Targets } from "@babel/helper-compilation-targets";
 
 import { version as coreVersion } from "../../";
-import {
-  assertSimpleType,
-  type CacheConfigurator,
-  type SimpleCacheConfigurator,
-  type SimpleType,
+import { assertSimpleType } from "../caching";
+import type {
+  CacheConfigurator,
+  SimpleCacheConfigurator,
+  SimpleType,
 } from "../caching";
 
 import type { CallerMetadata } from "../validation/options";
@@ -16,38 +14,36 @@ import type { CallerMetadata } from "../validation/options";
 import * as Context from "../cache-contexts";
 
 type EnvFunction = {
-  (): string,
-  <T>((string) => T): T,
-  (string): boolean,
-  (Array<string>): boolean,
+  (): string;
+  <T>(extractor: (babelEnv: string) => T): T;
+  (envVar: string): boolean;
+  (envVars: Array<string>): boolean;
 };
 
-type CallerFactory = ((CallerMetadata | void) => mixed) => SimpleType;
-
+type CallerFactory = (
+  extractor: (callerMetadata: CallerMetadata | void) => unknown,
+) => SimpleType;
 type TargetsFunction = () => Targets;
-
 type AssumptionFunction = (name: string) => boolean | void;
 
-export type ConfigAPI = {|
-  version: string,
-  cache: SimpleCacheConfigurator,
-  env: EnvFunction,
-  async: () => boolean,
-  assertVersion: typeof assertVersion,
-  caller?: CallerFactory,
-|};
+export type ConfigAPI = {
+  version: string;
+  cache: SimpleCacheConfigurator;
+  env: EnvFunction;
+  async: () => boolean;
+  assertVersion: typeof assertVersion;
+  caller?: CallerFactory;
+};
 
-export type PresetAPI = {|
-  ...ConfigAPI,
-  targets: TargetsFunction,
-|};
+export type PresetAPI = {
+  targets: TargetsFunction;
+} & ConfigAPI;
 
-export type PluginAPI = {|
-  ...PresetAPI,
-  assumption: AssumptionFunction,
-|};
+export type PluginAPI = {
+  assumption: AssumptionFunction;
+} & PresetAPI;
 
-export function makeConfigAPI<SideChannel: Context.SimpleConfig>(
+export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
   cache: CacheConfigurator<SideChannel>,
 ): ConfigAPI {
   const env: any = value =>
@@ -58,7 +54,7 @@ export function makeConfigAPI<SideChannel: Context.SimpleConfig>(
       }
       if (!Array.isArray(value)) value = [value];
 
-      return value.some((entry: mixed) => {
+      return value.some((entry: unknown) => {
         if (typeof entry !== "string") {
           throw new Error("Unexpected non-string value");
         }
@@ -79,7 +75,7 @@ export function makeConfigAPI<SideChannel: Context.SimpleConfig>(
   };
 }
 
-export function makePresetAPI<SideChannel: Context.SimplePreset>(
+export function makePresetAPI<SideChannel extends Context.SimplePreset>(
   cache: CacheConfigurator<SideChannel>,
 ): PresetAPI {
   const targets = () =>
@@ -91,7 +87,7 @@ export function makePresetAPI<SideChannel: Context.SimplePreset>(
   return { ...makeConfigAPI(cache), targets };
 }
 
-export function makePluginAPI<SideChannel: Context.SimplePlugin>(
+export function makePluginAPI<SideChannel extends Context.SimplePlugin>(
   cache: CacheConfigurator<SideChannel>,
 ): PluginAPI {
   const assumption = name => cache.using(data => data.assumptions[name]);
@@ -133,12 +129,9 @@ function assertVersion(range: string | number): void {
     Error.stackTraceLimit = limit;
   }
 
-  throw Object.assign(
-    err,
-    ({
-      code: "BABEL_VERSION_UNSUPPORTED",
-      version: coreVersion,
-      range,
-    }: any),
-  );
+  throw Object.assign(err, {
+    code: "BABEL_VERSION_UNSUPPORTED",
+    version: coreVersion,
+    range,
+  });
 }

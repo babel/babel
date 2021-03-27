@@ -1,6 +1,6 @@
-// @flow
+import loadConfig from "../config";
 
-import loadConfig, { type Plugin } from "../config";
+import type { Plugin } from "../config";
 
 let LOADED_PLUGIN: Plugin | void;
 

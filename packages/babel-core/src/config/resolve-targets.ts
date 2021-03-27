@@ -1,20 +1,20 @@
-// @flow
-
-import typeof * as browserType from "./resolve-targets-browser";
-import typeof * as nodeType from "./resolve-targets";
+type browserType = typeof import("./resolve-targets-browser");
+type nodeType = typeof import("./resolve-targets");
 
 // Kind of gross, but essentially asserting that the exports of this module are the same as the
 // exports of index-browser, since this file may be replaced at bundle time with index-browser.
-((({}: any): $Exact<browserType>): $Exact<nodeType>);
+((({} as any) as browserType) as nodeType);
 
 import type { ValidatedOptions } from "./validation/options";
 import path from "path";
-import getTargets, { type Targets } from "@babel/helper-compilation-targets";
+import getTargets from "@babel/helper-compilation-targets";
+
+import type { Targets } from "@babel/helper-compilation-targets";
 
 export function resolveBrowserslistConfigFile(
   browserslistConfigFile: string,
   configFileDir: string,
-): string | void {
+): string | undefined {
   return path.resolve(configFileDir, browserslistConfigFile);
 }
 
@@ -22,11 +22,11 @@ export function resolveTargets(
   options: ValidatedOptions,
   root: string,
 ): Targets {
-  let { targets } = options;
+  // todo(flow->ts) remove any and refactor to not assign different types into same variable
+  let targets: any = options.targets;
   if (typeof targets === "string" || Array.isArray(targets)) {
     targets = { browsers: targets };
   }
-  // $FlowIgnore it thinks that targets.esmodules doesn't exist.
   if (targets && targets.esmodules) {
     targets = { ...targets, esmodules: "intersect" };
   }
@@ -40,7 +40,7 @@ export function resolveTargets(
     ignoreBrowserslistConfig = browserslistConfigFile === false;
   }
 
-  return getTargets((targets: any), {
+  return getTargets(targets, {
     ignoreBrowserslistConfig,
     configFile,
     configPath: root,

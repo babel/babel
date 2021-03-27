@@ -1,17 +1,14 @@
-// @flow
-
 /**
  * This file handles all logic for converting string-based configuration references into loaded objects.
  */
 
 import buildDebug from "debug";
 import path from "path";
-import { type Handler } from "gensync";
+import type { Handler } from "gensync";
 import loadCjsOrMjsDefault from "./module-types";
 
 import { createRequire } from "module";
-// $FlowIgnore - https://github.com/facebook/flow/issues/6913#issuecomment-662787504
-const require = createRequire(import /*::("")*/.meta.url);
+const require = createRequire(import.meta.url);
 
 const debug = buildDebug("babel:config:loading:files:plugins");
 
@@ -35,7 +32,7 @@ export function resolvePreset(name: string, dirname: string): string | null {
 export function* loadPlugin(
   name: string,
   dirname: string,
-): Handler<{ filepath: string, value: mixed }> {
+): Handler<{ filepath: string; value: unknown }> {
   const filepath = resolvePlugin(name, dirname);
   if (!filepath) {
     throw new Error(`Plugin ${name} not found relative to ${dirname}`);
@@ -50,7 +47,7 @@ export function* loadPlugin(
 export function* loadPreset(
   name: string,
   dirname: string,
-): Handler<{ filepath: string, value: mixed }> {
+): Handler<{ filepath: string; value: unknown }> {
   const filepath = resolvePreset(name, dirname);
   if (!filepath) {
     throw new Error(`Preset ${name} not found relative to ${dirname}`);
@@ -151,7 +148,7 @@ function resolveStandardizedName(
 }
 
 const LOADING_MODULES = new Set();
-function* requireModule(type: string, name: string): Handler<mixed> {
+function* requireModule(type: string, name: string): Handler<unknown> {
   if (LOADING_MODULES.has(name)) {
     throw new Error(
       `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
@@ -162,7 +159,7 @@ function* requireModule(type: string, name: string): Handler<mixed> {
 
   try {
     LOADING_MODULES.add(name);
-    return (yield* loadCjsOrMjsDefault(
+    return yield* loadCjsOrMjsDefault(
       name,
       `You appear to be using a native ECMAScript module ${type}, ` +
         "which is only supported when running Babel asynchronously.",
@@ -171,7 +168,7 @@ function* requireModule(type: string, name: string): Handler<mixed> {
       // export.
       // See packages/babel-core/test/fixtures/option-manager/presets/es2015_named.js
       true,
-    ): mixed);
+    );
   } catch (err) {
     err.message = `[BABEL]: ${err.message} (While processing: ${name})`;
     throw err;

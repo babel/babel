@@ -105,7 +105,7 @@ function buildUmd(allowlist) {
       AMD_ARGUMENTS: t.arrayExpression([t.stringLiteral("exports")]),
       FACTORY_BODY: body,
       UMD_ROOT: t.identifier("this"),
-    }),
+    }) as t.Statement,
   ]);
 }
 
