@@ -1,4 +1,3 @@
-// @flow
 import path from "path";
 
 const sep = `\\${path.sep}`;

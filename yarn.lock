@@ -211,6 +211,12 @@ __metadata:
     "@babel/template": "workspace:^7.12.13"
     "@babel/traverse": "workspace:^7.13.13"
     "@babel/types": "workspace:^7.13.14"
+    "@types/convert-source-map": ^1.5.1
+    "@types/debug": ^4.1.0
+    "@types/lodash": ^4.14.150
+    "@types/resolve": ^1.3.2
+    "@types/semver": ^5.4.0
+    "@types/source-map": ^0.5.0
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
@@ -659,6 +665,7 @@ __metadata:
   resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.13.14#f57fb3"
   dependencies:
     "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.13.14"
+  checksum: 82d133091e69e2b2c742cfeb03c3f9acb3d0a00391d3ab2624154aa537dc714eedc5d8145c6c671bacd63d5314de09982a36b216b520c22466e4af3e375aff2d
   languageName: node
   linkType: hard
 
@@ -3992,6 +3999,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/convert-source-map@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@types/convert-source-map@npm:1.5.1"
+  checksum: 36cd50ea42b5e5c41db2415e4f42bdbc426e6b963a7d0d0a511164b789d4140629fbc0b3c5a29306ad3731ab41708088bb63e95972060cd3983af1f22b33f414
+  languageName: node
+  linkType: hard
+
+"@types/debug@npm:^4.1.0":
+  version: 4.1.5
+  resolution: "@types/debug@npm:4.1.5"
+  checksum: 416ad24bc589be0fb8c78bea972aa7d4ffdf6b136239701b1792674463b2dbf8c6707f6055ec484f79ec1f2b528ffef90c87e55df7e4a0f458184cad5bf0cfc8
+  languageName: node
+  linkType: hard
+
 "@types/eslint-scope@npm:^3.7.0":
   version: 3.7.0
   resolution: "@types/eslint-scope@npm:3.7.0"
@@ -4160,6 +4181,20 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 8e72a73574f9489760662498c1ad512a8d4084a5db15f327e0d785cb277bb0a3146cd049241a8e3268bd0ed204ad3ee7b4a6b4622ef681e70547be9af258ca6a
+  languageName: node
+  linkType: hard
+
+"@types/resolve@npm:^1.3.2":
+  version: 1.20.0
+  resolution: "@types/resolve@npm:1.20.0"
+  checksum: 3c75135d5cf3652453ef8f099b109f7fec5e82fe67bf38048226614dbcd11a943affee383e5d28c12c5f03b049281a3e486395326b9810297f9649c7b00f41fd
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^5.4.0":
+  version: 5.5.0
+  resolution: "@types/semver@npm:5.5.0"
+  checksum: df74589466e171c36dd868b760609e518830f212134c238674ddd6eb83653368c59f4510aa6523b7692ec99c5d8ab40b818e30f9d65e0df97c56bdbacef06661
   languageName: node
   linkType: hard
 

@@ -1,5 +1,3 @@
-// @flow
-
 import gensync from "gensync";
 
 export type {
@@ -18,19 +16,19 @@ export { loadFullConfig as default };
 export type { PartialConfig } from "./partial";
 
 import { createConfigItem as createConfigItemImpl } from "./item";
+import type { ConfigItem } from "./item";
 
-const loadOptionsRunner = gensync<[mixed], Object | null>(function* (opts) {
+const loadOptionsRunner = gensync<(opts: unknown) => any>(function* (opts) {
   const config = yield* loadFullConfig(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
 });
 
-const createConfigItemRunner = gensync<[PluginTarget, any], Object | null>(
-  // $FlowIgnore
-  createConfigItemImpl,
-);
+const createConfigItemRunner = gensync<
+  (...args: Parameters<typeof createConfigItemImpl>) => ConfigItem
+>(createConfigItemImpl);
 
-const maybeErrback = runner => (opts: mixed, callback: Function) => {
+const maybeErrback = runner => (opts: unknown, callback?: Function) => {
   if (callback === undefined && typeof opts === "function") {
     callback = opts;
     opts = undefined;
@@ -51,7 +49,7 @@ export const createConfigItemAsync = createConfigItemRunner.async;
 export function createConfigItem(
   target: PluginTarget,
   options: any,
-  callback?: Function,
+  callback?: (err: Error, val: ConfigItem | null) => void,
 ) {
   if (callback !== undefined) {
     return createConfigItemRunner.errback(target, options, callback);

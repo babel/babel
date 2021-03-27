@@ -1,6 +1,6 @@
-// @flow
+import gensync from "gensync";
 
-import gensync, { type Handler } from "gensync";
+import type { Handler } from "gensync";
 
 import { loadPlugin, loadPreset } from "./files";
 
@@ -10,8 +10,8 @@ import {
   makeWeakCacheSync,
   makeStrongCacheSync,
   makeStrongCache,
-  type CacheConfigurator,
 } from "./caching";
+import type { CacheConfigurator } from "./caching";
 
 import type {
   ValidatedOptions,
@@ -25,25 +25,25 @@ import { resolveBrowserslistConfigFile } from "./resolve-targets";
 // for the plugins and presets so we don't load the plugins/presets unless
 // the options object actually ends up being applicable.
 export type OptionsAndDescriptors = {
-  options: ValidatedOptions,
-  plugins: () => Handler<Array<UnloadedDescriptor>>,
-  presets: () => Handler<Array<UnloadedDescriptor>>,
+  options: ValidatedOptions;
+  plugins: () => Handler<Array<UnloadedDescriptor>>;
+  presets: () => Handler<Array<UnloadedDescriptor>>;
 };
 
 // Represents a plugin or presets at a given location in a config object.
 // At this point these have been resolved to a specific object or function,
 // but have not yet been executed to call functions with options.
 export type UnloadedDescriptor = {
-  name: string | void,
-  value: {} | Function,
-  options: {} | void | false,
-  dirname: string,
-  alias: string,
-  ownPass?: boolean,
+  name: string | undefined;
+  value: any | Function;
+  options: {} | undefined | false;
+  dirname: string;
+  alias: string;
+  ownPass?: boolean;
   file?: {
-    request: string,
-    resolved: string,
-  } | void,
+    request: string;
+    resolved: string;
+  };
 };
 
 function isEqualDescriptor(
@@ -63,9 +63,9 @@ function isEqualDescriptor(
 }
 
 export type ValidatedFile = {
-  filepath: string,
-  dirname: string,
-  options: ValidatedOptions,
+  filepath: string;
+  dirname: string;
+  options: ValidatedOptions;
 };
 
 // eslint-disable-next-line require-yield
@@ -100,10 +100,13 @@ export function createCachedDescriptors(
   return {
     options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
     plugins: plugins
-      ? () => createCachedPluginDescriptors(plugins, dirname)(alias)
+      ? () =>
+          // @ts-expect-error todo(flow->ts) ts complains about incorrect arguments
+          createCachedPluginDescriptors(plugins, dirname)(alias)
       : () => handlerOf([]),
     presets: presets
       ? () =>
+          // @ts-expect-error todo(flow->ts) ts complains about incorrect arguments
           createCachedPresetDescriptors(presets, dirname)(alias)(
             !!passPerPreset,
           )
@@ -295,9 +298,9 @@ export function* createDescriptor(
     alias,
     ownPass,
   }: {
-    type?: "plugin" | "preset",
-    alias: string,
-    ownPass?: boolean,
+    type?: "plugin" | "preset";
+    alias: string;
+    ownPass?: boolean;
   },
 ): Handler<UnloadedDescriptor> {
   const desc = getItemDescriptor(pair);
@@ -307,7 +310,8 @@ export function* createDescriptor(
 
   let name;
   let options;
-  let value = pair;
+  // todo(flow->ts) better type annotation
+  let value: any = pair;
   if (Array.isArray(value)) {
     if (value.length === 3) {
       [value, options, name] = value;

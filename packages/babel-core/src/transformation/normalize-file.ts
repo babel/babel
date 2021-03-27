@@ -1,12 +1,11 @@
-// @flow
-
 import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
-import convertSourceMap, { typeof Converter } from "convert-source-map";
+import convertSourceMap from "convert-source-map";
+import type { SourceMapConverter as Converter } from "convert-source-map";
 import File from "./file/file";
 import parser from "../parser";
 import cloneDeep from "./util/clone-deep";
@@ -15,16 +14,16 @@ const debug = buildDebug("babel:transform:file");
 const LARGE_INPUT_SOURCEMAP_THRESHOLD = 1_000_000;
 
 export type NormalizedFile = {
-  code: string,
-  ast: {},
-  inputMap: Converter | null,
+  code: string;
+  ast: {};
+  inputMap: Converter | null;
 };
 
 export default function* normalizeFile(
   pluginPasses: PluginPasses,
-  options: Object,
+  options: any,
   code: string,
-  ast: ?(BabelNodeFile | BabelNodeProgram),
+  ast?: t.File | t.Program | null,
 ): Handler<File> {
   code = `${code || ""}`;
 
@@ -66,16 +65,19 @@ export default function* normalizeFile(
       if (typeof options.filename === "string" && lastComment) {
         try {
           // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
-          const match: [string, string] = (EXTERNAL_SOURCEMAP_REGEX.exec(
+          const match: [string, string] = EXTERNAL_SOURCEMAP_REGEX.exec(
             lastComment,
-          ): any);
-          const inputMapContent: Buffer = fs.readFileSync(
+          ) as any;
+          const inputMapContent = fs.readFileSync(
             path.resolve(path.dirname(options.filename), match[1]),
           );
           if (inputMapContent.length > LARGE_INPUT_SOURCEMAP_THRESHOLD) {
             debug("skip merging input map > 1 MB");
           } else {
-            inputMap = convertSourceMap.fromJSON(inputMapContent);
+            inputMap = convertSourceMap.fromJSON(
+              // todo:
+              (inputMapContent as unknown) as string,
+            );
           }
         } catch (err) {
           debug("discarding unknown file input sourcemap", err);
@@ -116,19 +118,16 @@ function extractCommentsFromList(regex, comments, lastComment) {
 function extractComments(regex, ast) {
   let lastComment = null;
   t.traverseFast(ast, node => {
-    // $FlowIgnore destructuring with expressions is not supported
     [node.leadingComments, lastComment] = extractCommentsFromList(
       regex,
       node.leadingComments,
       lastComment,
     );
-    // $FlowIgnore destructuring with expressions is not supported
     [node.innerComments, lastComment] = extractCommentsFromList(
       regex,
       node.innerComments,
       lastComment,
     );
-    // $FlowIgnore destructuring with expressions is not supported
     [node.trailingComments, lastComment] = extractCommentsFromList(
       regex,
       node.trailingComments,

@@ -1,5 +1,4 @@
-// @flow
-
+declare const PACKAGE_JSON: { name: string; version: string };
 export const version = PACKAGE_JSON.version;
 
 export { default as File } from "./transformation/file/file";
@@ -53,7 +52,7 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
   ".es",
   ".mjs",
   ".cjs",
-]);
+] as const);
 
 // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
 import { loadOptions } from "./config";

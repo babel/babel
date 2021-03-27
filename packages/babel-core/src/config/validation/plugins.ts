@@ -1,45 +1,42 @@
-// @flow
 import {
   assertString,
   assertFunction,
   assertObject,
   msg,
-  type ValidatorSet,
-  type Validator,
-  type OptionPath,
-  type RootPath,
+} from "./option-assertions";
+
+import type {
+  ValidatorSet,
+  Validator,
+  OptionPath,
+  RootPath,
 } from "./option-assertions";
 
 // Note: The casts here are just meant to be static assertions to make sure
 // that the assertion functions actually assert that the value's type matches
 // the declared types.
 const VALIDATORS: ValidatorSet = {
-  name: (assertString: Validator<$PropertyType<PluginObject, "name">>),
-  manipulateOptions: (assertFunction: Validator<
-    $PropertyType<PluginObject, "manipulateOptions">,
-  >),
-  pre: (assertFunction: Validator<$PropertyType<PluginObject, "pre">>),
-  post: (assertFunction: Validator<$PropertyType<PluginObject, "post">>),
-  inherits: (assertFunction: Validator<
-    $PropertyType<PluginObject, "inherits">,
-  >),
-  visitor: (assertVisitorMap: Validator<
-    $PropertyType<PluginObject, "visitor">,
-  >),
+  name: assertString as Validator<PluginObject["name"]>,
+  manipulateOptions: assertFunction as Validator<
+    PluginObject["manipulateOptions"]
+  >,
+  pre: assertFunction as Validator<PluginObject["pre"]>,
+  post: assertFunction as Validator<PluginObject["post"]>,
+  inherits: assertFunction as Validator<PluginObject["inherits"]>,
+  visitor: assertVisitorMap as Validator<PluginObject["visitor"]>,
 
-  parserOverride: (assertFunction: Validator<
-    $PropertyType<PluginObject, "parserOverride">,
-  >),
-  generatorOverride: (assertFunction: Validator<
-    $PropertyType<PluginObject, "generatorOverride">,
-  >),
+  parserOverride: assertFunction as Validator<PluginObject["parserOverride"]>,
+  generatorOverride: assertFunction as Validator<
+    PluginObject["generatorOverride"]
+  >,
 };
 
-function assertVisitorMap(loc: OptionPath, value: mixed): VisitorMap {
+function assertVisitorMap(loc: OptionPath, value: unknown): VisitorMap {
   const obj = assertObject(loc, value);
   if (obj) {
     Object.keys(obj).forEach(prop => assertVisitorHandler(prop, obj[prop]));
 
+    // @ts-ignore
     if (obj.enter || obj.exit) {
       throw new Error(
         `${msg(
@@ -48,12 +45,12 @@ function assertVisitorMap(loc: OptionPath, value: mixed): VisitorMap {
       );
     }
   }
-  return (obj: any);
+  return obj as VisitorMap;
 }
 
 function assertVisitorHandler(
   key: string,
-  value: mixed,
+  value: unknown,
 ): VisitorHandler | void {
   if (value && typeof value === "object") {
     Object.keys(value).forEach((handler: string) => {
@@ -67,26 +64,29 @@ function assertVisitorHandler(
     throw new Error(`.visitor["${key}"] must be a function`);
   }
 
-  return (value: any);
+  return value as any;
 }
 
-type VisitorHandler = Function | { enter?: Function, exit?: Function };
+type VisitorHandler =
+  | Function
+  | {
+      enter?: Function;
+      exit?: Function;
+    };
+
 export type VisitorMap = {
-  [string]: VisitorHandler,
+  [x: string]: VisitorHandler;
 };
 
 export type PluginObject = {
-  name?: string,
-  manipulateOptions?: (options: mixed, parserOpts: mixed) => void,
-
-  pre?: Function,
-  post?: Function,
-
-  inherits?: Function,
-  visitor?: VisitorMap,
-
-  parserOverride?: Function,
-  generatorOverride?: Function,
+  name?: string;
+  manipulateOptions?: (options: unknown, parserOpts: unknown) => void;
+  pre?: Function;
+  post?: Function;
+  inherits?: Function;
+  visitor?: VisitorMap;
+  parserOverride?: Function;
+  generatorOverride?: Function;
 };
 
 export function validatePluginObject(obj: {}): PluginObject {
@@ -108,11 +108,11 @@ export function validatePluginObject(obj: {}): PluginObject {
       const invalidPluginPropertyError = new Error(
         `.${key} is not a valid Plugin property`,
       );
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) consider additing BabelConfigError with code field
       invalidPluginPropertyError.code = "BABEL_UNKNOWN_PLUGIN_PROPERTY";
       throw invalidPluginPropertyError;
     }
   });
 
-  return (obj: any);
+  return obj as any;
 }

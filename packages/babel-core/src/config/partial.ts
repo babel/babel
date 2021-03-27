@@ -1,30 +1,26 @@
-// @flow
-
 import path from "path";
-import gensync, { type Handler } from "gensync";
+import gensync from "gensync";
+import type { Handler } from "gensync";
 import Plugin from "./plugin";
 import { mergeOptions } from "./util";
 import { createItemFromDescriptor } from "./item";
-import {
-  buildRootChain,
-  type ConfigContext,
-  type FileHandling,
-} from "./config-chain";
+import { buildRootChain } from "./config-chain";
+import type { ConfigContext, FileHandling } from "./config-chain";
 import { getEnv } from "./helpers/environment";
-import {
-  validate,
-  type ValidatedOptions,
-  type NormalizedOptions,
-  type RootMode,
+import { validate } from "./validation/options";
+
+import type {
+  ValidatedOptions,
+  NormalizedOptions,
+  RootMode,
 } from "./validation/options";
 
 import {
   findConfigUpwards,
   resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
-  type ConfigFile,
-  type IgnoreFile,
 } from "./files";
+import type { ConfigFile, IgnoreFile } from "./files";
 import { resolveTargets } from "./resolve-targets";
 
 function* resolveRootMode(
@@ -45,12 +41,12 @@ function* resolveRootMode(
       if (upwardRootDir !== null) return upwardRootDir;
 
       throw Object.assign(
-        (new Error(
+        new Error(
           `Babel was run with rootMode:"upward" but a root could not ` +
             `be found when searching upward from "${rootDir}".\n` +
             `One of the following config files must be in the directory tree: ` +
             `"${ROOT_CONFIG_FILENAMES.join(", ")}".`,
-        ): any),
+        ) as any,
         {
           code: "BABEL_ROOT_NOT_FOUND",
           dirname: rootDir,
@@ -63,17 +59,17 @@ function* resolveRootMode(
 }
 
 type PrivPartialConfig = {
-  options: NormalizedOptions,
-  context: ConfigContext,
-  fileHandling: FileHandling,
-  ignore: IgnoreFile | void,
-  babelrc: ConfigFile | void,
-  config: ConfigFile | void,
-  files: Set<string>,
+  options: NormalizedOptions;
+  context: ConfigContext;
+  fileHandling: FileHandling;
+  ignore: IgnoreFile | void;
+  babelrc: ConfigFile | void;
+  config: ConfigFile | void;
+  files: Set<string>;
 };
 
 export default function* loadPrivatePartialConfig(
-  inputOpts: mixed,
+  inputOpts: unknown,
 ): Handler<PrivPartialConfig | null> {
   if (
     inputOpts != null &&
@@ -121,7 +117,7 @@ export default function* loadPrivatePartialConfig(
     assumptions: {},
   };
   configChain.options.forEach(opts => {
-    mergeOptions((merged: any), opts);
+    mergeOptions(merged as any, opts);
   });
 
   const options: NormalizedOptions = {
@@ -163,47 +159,50 @@ export default function* loadPrivatePartialConfig(
 }
 
 type LoadPartialConfigOpts = {
-  showIgnoredFiles?: boolean,
-  ...
+  showIgnoredFiles?: boolean;
 };
 
-export const loadPartialConfig = gensync<[any], PartialConfig | null>(
-  function* (opts?: LoadPartialConfigOpts): Handler<PartialConfig | null> {
-    let showIgnoredFiles = false;
-    // We only extract showIgnoredFiles if opts is an object, so that
-    // loadPrivatePartialConfig can throw the appropriate error if it's not.
-    if (typeof opts === "object" && opts !== null && !Array.isArray(opts)) {
-      ({ showIgnoredFiles, ...opts } = opts);
+export const loadPartialConfig = gensync<
+  (opts?: LoadPartialConfigOpts) => PartialConfig | null
+>(function* (opts) {
+  let showIgnoredFiles = false;
+  // We only extract showIgnoredFiles if opts is an object, so that
+  // loadPrivatePartialConfig can throw the appropriate error if it's not.
+  if (typeof opts === "object" && opts !== null && !Array.isArray(opts)) {
+    ({ showIgnoredFiles, ...opts } = opts);
+  }
+
+  const result:
+    | PrivPartialConfig
+    | undefined
+    | null = yield* loadPrivatePartialConfig(opts);
+  if (!result) return null;
+
+  const { options, babelrc, ignore, config, fileHandling, files } = result;
+
+  if (fileHandling === "ignored" && !showIgnoredFiles) {
+    return null;
+  }
+
+  (options.plugins || []).forEach(item => {
+    // @ts-expect-error todo(flow->ts): better type annotation for `item.value`
+    if (item.value instanceof Plugin) {
+      throw new Error(
+        "Passing cached plugin instances is not supported in " +
+          "babel.loadPartialConfig()",
+      );
     }
+  });
 
-    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(opts);
-    if (!result) return null;
-
-    const { options, babelrc, ignore, config, fileHandling, files } = result;
-
-    if (fileHandling === "ignored" && !showIgnoredFiles) {
-      return null;
-    }
-
-    (options.plugins || []).forEach(item => {
-      if (item.value instanceof Plugin) {
-        throw new Error(
-          "Passing cached plugin instances is not supported in " +
-            "babel.loadPartialConfig()",
-        );
-      }
-    });
-
-    return new PartialConfig(
-      options,
-      babelrc ? babelrc.filepath : undefined,
-      ignore ? ignore.filepath : undefined,
-      config ? config.filepath : undefined,
-      fileHandling,
-      files,
-    );
-  },
-);
+  return new PartialConfig(
+    options,
+    babelrc ? babelrc.filepath : undefined,
+    ignore ? ignore.filepath : undefined,
+    config ? config.filepath : undefined,
+    fileHandling,
+    files,
+  );
+});
 
 export type { PartialConfig };
 

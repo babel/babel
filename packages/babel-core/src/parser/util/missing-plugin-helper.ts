@@ -1,5 +1,3 @@
-// @flow
-
 const pluginNameMap = {
   classProperties: {
     syntax: {
@@ -290,7 +288,10 @@ to enable [parsing|transformation].
 */
 export default function generateMissingPluginMessage(
   missingPluginName: string,
-  loc: { line: number, column: number },
+  loc: {
+    line: number;
+    column: number;
+  },
   codeFrame: string,
 ): string {
   let helpMessage =

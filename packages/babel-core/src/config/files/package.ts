@@ -1,5 +1,3 @@
-// @flow
-
 import path from "path";
 import type { Handler } from "gensync";
 import { makeStaticFileCache } from "./utils";
@@ -39,7 +37,7 @@ const readConfigPackage = makeStaticFileCache(
   (filepath, content): ConfigFile => {
     let options;
     try {
-      options = (JSON.parse(content): mixed);
+      options = JSON.parse(content) as unknown;
     } catch (err) {
       err.message = `${filepath}: Error while parsing JSON - ${err.message}`;
       throw err;

@@ -1,5 +1,3 @@
-// @flow
-
 import type { ValidatedOptions, NormalizedOptions } from "./validation/options";
 
 export function mergeOptions(
@@ -16,25 +14,22 @@ export function mergeOptions(
       mergeDefaultFields(targetObj, parserOpts);
     } else {
       const val = source[k];
-      if (val !== undefined) target[k] = (val: any);
+      if (val !== undefined) target[k] = val as any;
     }
   }
 }
 
-function mergeDefaultFields<T: {}>(target: T, source: T) {
+function mergeDefaultFields<T extends {}>(target: T, source: T) {
   for (const k of Object.keys(source)) {
     const val = source[k];
-    if (val !== undefined) target[k] = (val: any);
+    if (val !== undefined) target[k] = val as any;
   }
 }
 
-export function isIterableIterator(value: mixed): boolean %checks {
+export function isIterableIterator(value: any): value is IterableIterator<any> {
   return (
-    /*:: value instanceof Generator && */
-    // /*:: "@@iterator" in value && */
     !!value &&
     typeof value.next === "function" &&
-    // $FlowIgnore
     typeof value[Symbol.iterator] === "function"
   );
 }

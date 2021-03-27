@@ -1,10 +1,8 @@
-// @flow
-
 import type { PluginObject } from "./validation/plugins";
 
 export default class Plugin {
-  key: ?string;
-  manipulateOptions: ((options: mixed, parserOpts: mixed) => void) | void;
+  key: string | undefined | null;
+  manipulateOptions: ((options: unknown, parserOpts: unknown) => void) | void;
   post: Function | void;
   pre: Function | void;
   visitor: {};
