@@ -201,56 +201,57 @@ export function* buildRootChain(
     mergeChain(configFileChain, result);
   }
 
-  const pkgData =
-    typeof context.filename === "string"
-      ? yield* findPackageData(context.filename)
-      : null;
-
   let ignoreFile, babelrcFile;
   let isIgnored = false;
   const fileChain = emptyChain();
   // resolve all .babelrc files
   if (
     (babelrc === true || babelrc === undefined) &&
-    pkgData &&
-    babelrcLoadEnabled(context, pkgData, babelrcRoots, babelrcRootsDirectory)
+    typeof context.filename === "string"
   ) {
-    ({ ignore: ignoreFile, config: babelrcFile } = yield* findRelativeConfig(
-      pkgData,
-      context.envName,
-      context.caller,
-    ));
-
-    if (ignoreFile) {
-      fileChain.files.add(ignoreFile.filepath);
-    }
+    const pkgData = yield* findPackageData(context.filename);
 
     if (
-      ignoreFile &&
-      shouldIgnore(context, ignoreFile.ignore, null, ignoreFile.dirname)
+      pkgData &&
+      babelrcLoadEnabled(context, pkgData, babelrcRoots, babelrcRootsDirectory)
     ) {
-      isIgnored = true;
-    }
+      ({ ignore: ignoreFile, config: babelrcFile } = yield* findRelativeConfig(
+        pkgData,
+        context.envName,
+        context.caller,
+      ));
 
-    if (babelrcFile && !isIgnored) {
-      const validatedFile = validateBabelrcFile(babelrcFile);
-      const babelrcLogger = new ConfigPrinter();
-      const result = yield* loadFileChain(
-        validatedFile,
-        context,
-        undefined,
-        babelrcLogger,
-      );
-      if (!result) {
-        isIgnored = true;
-      } else {
-        babelRcReport = yield* babelrcLogger.output();
-        mergeChain(fileChain, result);
+      if (ignoreFile) {
+        fileChain.files.add(ignoreFile.filepath);
       }
-    }
 
-    if (babelrcFile && isIgnored) {
-      fileChain.files.add(babelrcFile.filepath);
+      if (
+        ignoreFile &&
+        shouldIgnore(context, ignoreFile.ignore, null, ignoreFile.dirname)
+      ) {
+        isIgnored = true;
+      }
+
+      if (babelrcFile && !isIgnored) {
+        const validatedFile = validateBabelrcFile(babelrcFile);
+        const babelrcLogger = new ConfigPrinter();
+        const result = yield* loadFileChain(
+          validatedFile,
+          context,
+          undefined,
+          babelrcLogger,
+        );
+        if (!result) {
+          isIgnored = true;
+        } else {
+          babelRcReport = yield* babelrcLogger.output();
+          mergeChain(fileChain, result);
+        }
+      }
+
+      if (babelrcFile && isIgnored) {
+        fileChain.files.add(babelrcFile.filepath);
+      }
     }
   }
 
