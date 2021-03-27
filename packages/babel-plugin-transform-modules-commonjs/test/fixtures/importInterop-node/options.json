@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    ["transform-modules-commonjs", { "importInterop": "node" }]
-  ]
+  "plugins": [["transform-modules-commonjs", { "importInterop": "node" }]]
 }
