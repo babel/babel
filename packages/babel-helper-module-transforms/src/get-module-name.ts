@@ -8,10 +8,10 @@ if (!process.env.BABEL_8_BREAKING) {
     pluginOpts: any,
   ): string | null {
     return originalGetModuleName(rootOpts, {
-      moduleId: rootOpts.moduleId ?? pluginOpts.moduleId,
-      moduleIds: rootOpts.moduleIds ?? pluginOpts.moduleIds,
-      getModuleId: rootOpts.getModuleId ?? pluginOpts.getModuleId,
-      moduleRoot: rootOpts.moduleRoot ?? pluginOpts.moduleRoot,
+      moduleId: pluginOpts.moduleId ?? rootOpts.moduleId,
+      moduleIds: pluginOpts.moduleIds ?? rootOpts.moduleIds,
+      getModuleId: pluginOpts.getModuleId ?? rootOpts.getModuleId,
+      moduleRoot: pluginOpts.moduleRoot ?? rootOpts.moduleRoot,
     });
   };
 }
