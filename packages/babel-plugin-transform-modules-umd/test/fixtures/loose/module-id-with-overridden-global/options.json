@@ -7,9 +7,9 @@
           "my custom module name": "baz"
         },
         "exactGlobals": true,
-        "loose": true
+        "loose": true,
+        "moduleId": "my custom module name"
       }
     ]
-  ],
-  "moduleId": "my custom module name"
+  ]
 }

@@ -173,18 +173,6 @@ const COMMON_VALIDATORS: ValidatorSet = {
   sourceRoot: (assertString: Validator<
     $PropertyType<ValidatedOptions, "sourceRoot">,
   >),
-  getModuleId: (assertFunction: Validator<
-    $PropertyType<ValidatedOptions, "getModuleId">,
-  >),
-  moduleRoot: (assertString: Validator<
-    $PropertyType<ValidatedOptions, "moduleRoot">,
-  >),
-  moduleIds: (assertBoolean: Validator<
-    $PropertyType<ValidatedOptions, "moduleIds">,
-  >),
-  moduleId: (assertString: Validator<
-    $PropertyType<ValidatedOptions, "moduleId">,
-  >),
   parserOpts: (assertObject: Validator<
     $PropertyType<ValidatedOptions, "parserOpts">,
   >),
@@ -192,6 +180,15 @@ const COMMON_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "generatorOpts">,
   >),
 };
+if (!process.env.BABEL_8_BREAKING) {
+  Object.assign(COMMON_VALIDATORS, {
+    getModuleId: assertFunction,
+    moduleRoot: assertString,
+    moduleIds: assertBoolean,
+    moduleId: assertString,
+  });
+}
+
 export type InputOptions = ValidatedOptions;
 
 export type ValidatedOptions = {
@@ -252,12 +249,6 @@ export type ValidatedOptions = {
   sourceMap?: SourceMapsOption,
   sourceFileName?: string,
   sourceRoot?: string,
-
-  // AMD/UMD/SystemJS module naming options.
-  getModuleId?: Function,
-  moduleRoot?: string,
-  moduleIds?: boolean,
-  moduleId?: string,
 
   // Deprecate top level parserOpts
   parserOpts?: {},

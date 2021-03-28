@@ -50,7 +50,7 @@
     "@babel/code-frame": "workspace:^7.12.13",
     "@babel/generator": "workspace:^7.13.9",
     "@babel/helper-compilation-targets": "workspace:^7.13.13",
-    "@babel/helper-module-transforms": "workspace:^7.13.12",
+    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.13.12",
     "@babel/helpers": "workspace:^7.13.10",
     "@babel/parser": "workspace:^7.13.13",
     "@babel/template": "workspace:^7.12.13",
