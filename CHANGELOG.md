@@ -19,6 +19,21 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.14 (2021-03-29)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#13068](https://github.com/babel/babel/pull/13068) fix(core): make sure "clone-deep-browser" code path is used on browsers ([@charlessuh](https://github.com/charlessuh))
+
+#### :house: Internal
+* Other
+  * [#13066](https://github.com/babel/babel/pull/13066) add SHOW_CONFIG_FOR to template ([@hzoo](https://github.com/hzoo))
+* `babel-cli`, `babel-core`, `babel-helper-transform-fixture-test-runner`, `babel-register`, `babel-types`
+  * [#13057](https://github.com/babel/babel/pull/13057) Remove lodash deps ([@hzoo](https://github.com/hzoo))
+
+#### :running_woman: Performance
+* `babel-core`
+  * [#13063](https://github.com/babel/babel/pull/13063) Only resolve `package.json` when relative configs are enabled ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.13 (2021-03-26)
 
 #### :eyeglasses: Spec Compliance
