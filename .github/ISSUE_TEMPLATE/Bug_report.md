@@ -32,6 +32,9 @@ var your => (code) => here;
 <!-- A clear and concise description of what you expected to happen (or code). -->
 
 **Babel Configuration (babel.config.js, .babelrc, package.json#babel, cli command, .eslintrc)**
+<!--- Tip: You can also run Babel with the environment variable SHOW_CONFIG_FOR=your_file_path to print all configs associated with a path-->
+<!-- https://babeljs.io/docs/en/configuration#print-effective-configs for more information -->
+
 - Filename: `babel.config.js`
 
 ```js
