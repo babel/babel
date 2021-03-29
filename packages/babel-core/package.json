@@ -41,6 +41,7 @@
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
     "./lib/config/resolve-targets.js": "./lib/config/resolve-targets-browser.js",
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
+    "./lib/transformation/util/clone-deep.js": "./lib/transformation/util/clone-deep-browser.js",
     "./src/config/files/index.js": "./src/config/files/index-browser.js",
     "./src/config/resolve-targets.js": "./src/config/resolve-targets-browser.js",
     "./src/transform-file.js": "./src/transform-file-browser.js",
