@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-module-transforms",
-  "version": "7.13.12",
+  "version": "7.13.14",
   "description": "Babel helper functions for implementing ES6 module transformations",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
@@ -21,7 +21,7 @@
     "@babel/helper-split-export-declaration": "workspace:^7.12.13",
     "@babel/helper-validator-identifier": "workspace:^7.12.11",
     "@babel/template": "workspace:^7.12.13",
-    "@babel/traverse": "workspace:^7.13.0",
-    "@babel/types": "workspace:^7.13.12"
+    "@babel/traverse": "workspace:^7.13.13",
+    "@babel/types": "workspace:^7.13.14"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-transform-fixture-test-runner",
-  "version": "7.13.12",
+  "version": "7.13.14",
   "description": "Transform test runner for @babel/helper-fixtures module",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-transform-fixture-test-runner",
@@ -16,8 +16,8 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/code-frame": "workspace:^7.12.13",
-    "@babel/core": "workspace:^7.13.10",
-    "@babel/helper-fixtures": "workspace:^7.13.10",
+    "@babel/core": "workspace:^7.13.14",
+    "@babel/helper-fixtures": "workspace:^7.13.13",
     "babel-check-duplicated-nodes": "^1.0.0",
     "quick-lru": "5.1.0",
     "regenerator-runtime": "^0.13.7",
