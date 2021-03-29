@@ -57,6 +57,7 @@ export const ErrorMessages = Object.freeze({
     "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:
     "%0 loop variable declaration may not have an initializer",
+  ForOfLet: "The left-hand side of a for-of loop may not start with 'let'.",
   GeneratorInSingleStatementContext:
     "Generators can only be declared at the top level or inside a block",
   IllegalBreakContinue: "Unsyntactic %0",

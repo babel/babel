@@ -125,6 +125,19 @@ export default class StatementParser extends ExpressionParser {
     if (!this.isContextual("let")) {
       return false;
     }
+    return this.isLetKeyword(context);
+  }
+
+  /**
+   * Assuming we have seen a contextual `let`, check if it starts a variable declaration
+   so that `left` should be interpreted as a `let` keyword.
+   *
+   * @param {?string} context When `context` is non nullish, it will return early and _skip_ checking
+                              if the next token after `let` is `{` or a keyword relational operator
+   * @returns {boolean}
+   * @memberof StatementParser
+   */
+  isLetKeyword(context: ?string): boolean {
     const next = this.nextTokenStart();
     const nextCh = this.input.charCodeAt(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
@@ -511,7 +524,8 @@ export default class StatementParser extends ExpressionParser {
       return this.parseFor(node, null);
     }
 
-    const isLet = this.isLet();
+    const startsWithLet = this.isContextual("let");
+    const isLet = startsWithLet && this.isLetKeyword();
     if (this.match(tt._var) || this.match(tt._const) || isLet) {
       const init = this.startNode();
       const kind = isLet ? "let" : this.state.value;
@@ -533,11 +547,13 @@ export default class StatementParser extends ExpressionParser {
 
     const refExpressionErrors = new ExpressionErrors();
     const init = this.parseExpression(true, refExpressionErrors);
-    if (this.match(tt._in) || this.isContextual("of")) {
+    const isForOf = this.isContextual("of");
+    if (isForOf || this.match(tt._in)) {
+      if (isForOf && startsWithLet) {
+        this.raise(init.start, Errors.ForOfLet);
+      }
       this.toAssignable(init, /* isLHS */ true);
-      const description = this.isContextual("of")
-        ? "for-of statement"
-        : "for-in statement";
+      const description = isForOf ? "for-of statement" : "for-in statement";
       this.checkLVal(init, description);
       return this.parseForIn(node, init, awaitAt);
     } else {
