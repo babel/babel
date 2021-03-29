@@ -151,6 +151,7 @@ export type Node =
   | ImportDefaultSpecifier
   | ImportNamespaceSpecifier
   | ImportSpecifier
+  | IndexedAccessType
   | InferredPredicate
   | InterfaceDeclaration
   | InterfaceExtends
@@ -1271,6 +1272,12 @@ export interface ThisTypeAnnotation extends BaseNode {
   type: "ThisTypeAnnotation";
 }
 
+export interface IndexedAccessType extends BaseNode {
+  type: "IndexedAccessType";
+  objectType: FlowType;
+  indexType: FlowType;
+}
+
 export interface TupleTypeAnnotation extends BaseNode {
   type: "TupleTypeAnnotation";
   types: Array<FlowType>;
@@ -2338,6 +2345,7 @@ export type Flow =
   | StringTypeAnnotation
   | SymbolTypeAnnotation
   | ThisTypeAnnotation
+  | IndexedAccessType
   | TupleTypeAnnotation
   | TypeofTypeAnnotation
   | TypeAlias
@@ -2370,6 +2378,7 @@ export type FlowType =
   | StringTypeAnnotation
   | SymbolTypeAnnotation
   | ThisTypeAnnotation
+  | IndexedAccessType
   | TupleTypeAnnotation
   | TypeofTypeAnnotation
   | UnionTypeAnnotation

@@ -1,0 +1,1 @@
+type E = Obj['bar'][];

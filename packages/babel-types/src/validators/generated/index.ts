@@ -2113,6 +2113,23 @@ export function isThisTypeAnnotation(
 
   return false;
 }
+export function isIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.IndexedAccessType {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "IndexedAccessType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTupleTypeAnnotation(
   node: object | null | undefined,
   opts?: object | null,
@@ -5074,6 +5091,7 @@ export function isFlow(
     "StringTypeAnnotation" === nodeType ||
     "SymbolTypeAnnotation" === nodeType ||
     "ThisTypeAnnotation" === nodeType ||
+    "IndexedAccessType" === nodeType ||
     "TupleTypeAnnotation" === nodeType ||
     "TypeofTypeAnnotation" === nodeType ||
     "TypeAlias" === nodeType ||
@@ -5123,6 +5141,7 @@ export function isFlowType(
     "StringTypeAnnotation" === nodeType ||
     "SymbolTypeAnnotation" === nodeType ||
     "ThisTypeAnnotation" === nodeType ||
+    "IndexedAccessType" === nodeType ||
     "TupleTypeAnnotation" === nodeType ||
     "TypeofTypeAnnotation" === nodeType ||
     "UnionTypeAnnotation" === nodeType ||

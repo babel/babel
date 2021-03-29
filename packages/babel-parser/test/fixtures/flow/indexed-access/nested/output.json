@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"C"},
+          "name": "C"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "IndexedAccessType",
+          "start":9,"end":31,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":31}},
+          "objectType": {
+            "type": "IndexedAccessType",
+            "start":9,"end":24,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":24}},
+            "objectType": {
+              "type": "IndexedAccessType",
+              "start":9,"end":19,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":19}},
+              "objectType": {
+                "type": "GenericTypeAnnotation",
+                "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"Obj"},
+                  "name": "Obj"
+                }
+              },
+              "indexType": {
+                "type": "StringLiteralTypeAnnotation",
+                "start":13,"end":18,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":18}},
+                "extra": {
+                  "rawValue": "bar",
+                  "raw": "'bar'"
+                },
+                "value": "bar"
+              }
+            },
+            "indexType": {
+              "type": "GenericTypeAnnotation",
+              "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23}},
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23},"identifierName":"foo"},
+                "name": "foo"
+              }
+            }
+          },
+          "indexType": {
+            "type": "StringLiteralTypeAnnotation",
+            "start":25,"end":30,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":30}},
+            "extra": {
+              "rawValue": "boz",
+              "raw": "'boz'"
+            },
+            "value": "boz"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

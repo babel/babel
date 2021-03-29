@@ -257,6 +257,9 @@ export interface NodePathAssetions {
   assertImportSpecifier(
     opts?: object,
   ): asserts this is NodePath<t.ImportSpecifier>;
+  assertIndexedAccessType(
+    opts?: object,
+  ): asserts this is NodePath<t.IndexedAccessType>;
   assertInferredPredicate(
     opts?: object,
   ): asserts this is NodePath<t.InferredPredicate>;

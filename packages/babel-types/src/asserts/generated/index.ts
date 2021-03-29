@@ -758,6 +758,12 @@ export function assertThisTypeAnnotation(
 ): asserts node is t.ThisTypeAnnotation {
   assert("ThisTypeAnnotation", node, opts);
 }
+export function assertIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.IndexedAccessType {
+  assert("IndexedAccessType", node, opts);
+}
 export function assertTupleTypeAnnotation(
   node: object | null | undefined,
   opts?: object | null,

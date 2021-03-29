@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"E"},
+          "name": "E"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ArrayTypeAnnotation",
+          "start":9,"end":21,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":21}},
+          "elementType": {
+            "type": "IndexedAccessType",
+            "start":9,"end":19,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":19}},
+            "objectType": {
+              "type": "GenericTypeAnnotation",
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12}},
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"Obj"},
+                "name": "Obj"
+              }
+            },
+            "indexType": {
+              "type": "StringLiteralTypeAnnotation",
+              "start":13,"end":18,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":18}},
+              "extra": {
+                "rawValue": "bar",
+                "raw": "'bar'"
+              },
+              "value": "bar"
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

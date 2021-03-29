@@ -381,6 +381,15 @@ defineType("ThisTypeAnnotation", {
   aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
+defineType("IndexedAccessType", {
+  aliases: ["Flow", "FlowType"],
+  visitor: ["objectType", "indexType"],
+  fields: {
+    objectType: validateType("FlowType"),
+    indexType: validateType("FlowType"),
+  },
+});
+
 defineType("TupleTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow", "FlowType"],

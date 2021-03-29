@@ -752,6 +752,12 @@ export function symbolTypeAnnotation(): t.SymbolTypeAnnotation {
 export function thisTypeAnnotation(): t.ThisTypeAnnotation {
   return builder("ThisTypeAnnotation", ...arguments);
 }
+export function indexedAccessType(
+  objectType: t.FlowType,
+  indexType: t.FlowType,
+): t.IndexedAccessType {
+  return builder("IndexedAccessType", ...arguments);
+}
 export function tupleTypeAnnotation(
   types: Array<t.FlowType>,
 ): t.TupleTypeAnnotation {

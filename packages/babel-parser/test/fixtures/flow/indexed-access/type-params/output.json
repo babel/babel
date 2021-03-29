@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":31}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":31}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":31}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"B"},
+          "name": "B"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "IndexedAccessType",
+          "start":9,"end":30,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":30}},
+          "objectType": {
+            "type": "GenericTypeAnnotation",
+            "start":9,"end":22,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":22}},
+            "typeParameters": {
+              "type": "TypeParameterInstantiation",
+              "start":14,"end":22,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":22}},
+              "params": [
+                {
+                  "type": "StringTypeAnnotation",
+                  "start":15,"end":21,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":21}}
+                }
+              ]
+            },
+            "id": {
+              "type": "Identifier",
+              "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14},"identifierName":"Array"},
+              "name": "Array"
+            }
+          },
+          "indexType": {
+            "type": "NumberTypeAnnotation",
+            "start":23,"end":29,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":29}}
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

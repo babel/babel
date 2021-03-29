@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "IndexedAccessType",
+          "start":9,"end":17,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":17}},
+          "objectType": {
+            "type": "GenericTypeAnnotation",
+            "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12}},
+            "typeParameters": null,
+            "id": {
+              "type": "Identifier",
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"Obj"},
+              "name": "Obj"
+            }
+          },
+          "indexType": {
+            "type": "StringLiteralTypeAnnotation",
+            "start":13,"end":16,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":16}},
+            "extra": {
+              "rawValue": "a",
+              "raw": "'a'"
+            },
+            "value": "a"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

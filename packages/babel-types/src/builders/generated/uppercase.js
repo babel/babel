@@ -133,6 +133,7 @@ export {
   stringTypeAnnotation as StringTypeAnnotation,
   symbolTypeAnnotation as SymbolTypeAnnotation,
   thisTypeAnnotation as ThisTypeAnnotation,
+  indexedAccessType as IndexedAccessType,
   tupleTypeAnnotation as TupleTypeAnnotation,
   typeofTypeAnnotation as TypeofTypeAnnotation,
   typeAlias as TypeAlias,
