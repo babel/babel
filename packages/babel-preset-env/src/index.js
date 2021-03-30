@@ -81,7 +81,7 @@ function getPluginList(proposals: boolean, bugfixes: boolean) {
 }
 
 const getPlugin = (pluginName: string) => {
-  const plugin = availablePlugins[pluginName];
+  const plugin = availablePlugins[pluginName]();
 
   if (!plugin) {
     throw new Error(

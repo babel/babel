@@ -179,7 +179,11 @@ module.exports = function (api) {
         assumptions: parserAssumptions,
       },
       convertESM && {
-        test: ["./packages/babel-cli", "./packages/babel-core"].map(normalize),
+        test: [
+          "./packages/babel-cli",
+          "./packages/babel-core",
+          "./packages/babel-preset-env/src/available-plugins.js",
+        ].map(normalize),
         plugins: [
           // Explicitly use the lazy version of CommonJS modules.
           ["@babel/transform-modules-commonjs", { lazy: true }],
