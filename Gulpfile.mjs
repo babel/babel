@@ -268,129 +268,144 @@ const babelVersion =
 function buildRollup(packages, targetBrowsers) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
-    packages.map(async ({ src, format, dest, name, filename }) => {
-      const pkgJSON = require("./" + src + "/package.json");
-      const version = pkgJSON.version + versionSuffix;
-      const { dependencies = {}, peerDependencies = {} } = pkgJSON;
-      const external = Object.keys(dependencies).concat(
-        Object.keys(peerDependencies)
-      );
-      let nodeResolveBrowser = false,
-        babelEnvName = "rollup";
-      switch (src) {
-        case "packages/babel-standalone":
-          nodeResolveBrowser = true;
-          babelEnvName = "standalone";
-          break;
-      }
-      const input = getIndexFromPackage(src);
-      fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
-      const bundle = await rollup({
-        input,
-        external,
-        onwarn(warning, warn) {
-          if (warning.code === "CIRCULAR_DEPENDENCY") return;
-          if (warning.code === "UNUSED_EXTERNAL_IMPORT") {
-            warn(warning);
-            return;
-          }
-
-          // We use console.warn here since it prints more info than just "warn",
-          // in case we want to stop throwing for a specific message.
-          console.warn(warning);
-
-          // https://github.com/babel/babel/pull/12011#discussion_r540434534
-          throw new Error("Rollup aborted due to warnings above");
-        },
-        plugins: [
-          rollupBabelSource(),
-          rollupReplace({
-            preventAssignment: true,
-            values: {
-              "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-              BABEL_VERSION: JSON.stringify(babelVersion),
-              VERSION: JSON.stringify(version),
-            },
-          }),
-          rollupCommonJs({
-            include: [
-              /node_modules/,
-              "packages/babel-runtime/regenerator/**",
-              "packages/babel-preset-env/data/*.js",
-              // Rollup doesn't read export maps, so it loads the cjs fallback
-              "packages/babel-compat-data/*.js",
-              "packages/*/src/**/*.cjs",
-              // See the comment in this file for the reason to include it
-              "packages/babel-standalone/src/dynamic-require-entrypoint.cjs",
-            ],
-            dynamicRequireTargets: [
-              // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
-              resolveChain(
-                import.meta.url,
-                "./packages/babel-helper-create-regexp-features-plugin",
-                "regexpu-core",
-                "regenerate-unicode-properties"
-              ) + "/**/*.js",
-            ],
-          }),
-          rollupBabel({
-            envName: babelEnvName,
-            babelrc: false,
-            babelHelpers: "bundled",
-            extends: "./babel.config.js",
-            extensions: [".ts", ".js", ".mjs", ".cjs"],
-          }),
-          rollupNodeResolve({
-            extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
-            browser: nodeResolveBrowser,
-            preferBuiltins: true,
-          }),
-          rollupJson(),
-          targetBrowsers &&
-            rollupNodePolyfills({
-              sourceMap: sourcemap,
-              include: "**/*.{js,cjs,ts}",
-            }),
-        ].filter(Boolean),
-      });
-
-      const outputFile = path.join(src, dest, filename || "index.js");
-      await bundle.write({
-        file: outputFile,
-        format,
-        name,
-        sourcemap: sourcemap,
-        exports: "named",
-      });
-
-      if (!process.env.IS_PUBLISH) {
-        fancyLog(
-          chalk.yellow(
-            `Skipped minification of '${chalk.cyan(
-              outputFile
-            )}' because not publishing`
-          )
+    packages.map(
+      async ({ src, format, dest, name, filename, envName = "rollup" }) => {
+        const pkgJSON = require("./" + src + "/package.json");
+        const version = pkgJSON.version + versionSuffix;
+        const { dependencies = {}, peerDependencies = {} } = pkgJSON;
+        const external = Object.keys(dependencies).concat(
+          Object.keys(peerDependencies)
         );
-        return undefined;
-      }
-      fancyLog(`Minifying '${chalk.cyan(outputFile)}'...`);
 
-      await bundle.write({
-        file: outputFile.replace(/\.js$/, ".min.js"),
-        format,
-        name,
-        sourcemap: sourcemap,
-        exports: "named",
-        plugins: [
-          rollupTerser({
-            // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
-            output: {
-              ascii_only: true,
-            },
-          }),
-        ],
-      });
-    })
+        const input = getIndexFromPackage(src);
+        fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+        const bundle = await rollup({
+          input,
+          external,
+          onwarn(warning, warn) {
+            if (warning.code === "CIRCULAR_DEPENDENCY") return;
+            if (warning.code === "UNUSED_EXTERNAL_IMPORT") {
+              warn(warning);
+              return;
+            }
+
+            // Rollup warns about using babel.default at
+            // https://github.com/babel/babel-polyfills/blob/4ac92be5b70b13e3d8a34614d8ecd900eb3f40e4/packages/babel-helper-define-polyfill-provider/src/types.js#L5
+            // We can safely ignore this warning, and let Rollup replace it with undefined.
+            if (
+              warning.code === "MISSING_EXPORT" &&
+              warning.exporter === "packages/babel-core/src/index.ts" &&
+              warning.missing === "default" &&
+              [
+                "@babel/helper-define-polyfill-provider",
+                "babel-plugin-polyfill-corejs2",
+                "babel-plugin-polyfill-corejs3",
+                "babel-plugin-polyfill-regenerator",
+              ].some(pkg => warning.importer.includes(pkg))
+            ) {
+              return;
+            }
+
+            // We use console.warn here since it prints more info than just "warn",
+            // in case we want to stop throwing for a specific message.
+            console.warn(warning);
+
+            // https://github.com/babel/babel/pull/12011#discussion_r540434534
+            throw new Error("Rollup aborted due to warnings above");
+          },
+          plugins: [
+            rollupBabelSource(),
+            rollupReplace({
+              preventAssignment: true,
+              values: {
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+                BABEL_VERSION: JSON.stringify(babelVersion),
+                VERSION: JSON.stringify(version),
+              },
+            }),
+            rollupCommonJs({
+              include: [
+                /node_modules/,
+                "packages/babel-runtime/regenerator/**",
+                "packages/babel-preset-env/data/*.js",
+                // Rollup doesn't read export maps, so it loads the cjs fallback
+                "packages/babel-compat-data/*.js",
+                "packages/*/src/**/*.cjs",
+                // See the comment in this file for the reason to include it
+                "packages/babel-standalone/src/dynamic-require-entrypoint.cjs",
+              ],
+              dynamicRequireTargets: [
+                // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
+                resolveChain(
+                  import.meta.url,
+                  "./packages/babel-helper-create-regexp-features-plugin",
+                  "regexpu-core",
+                  "regenerate-unicode-properties"
+                ) + "/**/*.js",
+              ],
+            }),
+            rollupBabel({
+              envName,
+              babelrc: false,
+              babelHelpers: "bundled",
+              extends: "./babel.config.js",
+              extensions: [".ts", ".js", ".mjs", ".cjs"],
+            }),
+            rollupNodeResolve({
+              extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
+              browser: targetBrowsers,
+              exportConditions: targetBrowsers ? ["browser"] : [],
+              // It needs to be set to 'false' when using rollupNodePolyfills
+              // https://github.com/rollup/plugins/issues/772
+              preferBuiltins: !targetBrowsers,
+            }),
+            rollupJson(),
+            targetBrowsers &&
+              rollupNodePolyfills({
+                sourceMap: sourcemap,
+                include: "**/*.{js,cjs,ts}",
+              }),
+          ].filter(Boolean),
+        });
+
+        const outputFile = path.join(src, dest, filename || "index.js");
+        await bundle.write({
+          file: outputFile,
+          format,
+          name,
+          sourcemap: sourcemap,
+          exports: "named",
+        });
+
+        if (!process.env.IS_PUBLISH) {
+          fancyLog(
+            chalk.yellow(
+              `Skipped minification of '${chalk.cyan(
+                outputFile
+              )}' because not publishing`
+            )
+          );
+          return undefined;
+        }
+        fancyLog(`Minifying '${chalk.cyan(outputFile)}'...`);
+
+        await bundle.write({
+          file: outputFile.replace(/\.js$/, ".min.js"),
+          format,
+          name,
+          sourcemap: sourcemap,
+          exports: "named",
+          plugins: [
+            rollupTerser({
+              // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
+              output: {
+                ascii_only: true,
+              },
+            }),
+          ],
+        });
+      }
+    )
   );
 }
 
@@ -452,6 +467,7 @@ const standaloneBundle = [
     filename: "babel.js",
     dest: "",
     version: babelVersion,
+    envName: "standalone",
   },
 ];
 

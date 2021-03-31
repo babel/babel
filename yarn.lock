@@ -3905,9 +3905,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:^11.2.0":
-  version: 11.2.0
-  resolution: "@rollup/plugin-node-resolve@npm:11.2.0"
+"@rollup/plugin-node-resolve@npm:^11.2.0, @rollup/plugin-node-resolve@npm:^11.2.1":
+  version: 11.2.1
+  resolution: "@rollup/plugin-node-resolve@npm:11.2.1"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     "@types/resolve": 1.17.1
@@ -3917,23 +3917,7 @@ __metadata:
     resolve: ^1.19.0
   peerDependencies:
     rollup: ^1.20.0||^2.0.0
-  checksum: 173bb5822b8a6fd3a2c09303efd437711062885099dd1a4a6e91b449b99fcf5a4dc43e7d3836edeaca85ef7235547a193a3011314298ecbc529e8b123c371718
-  languageName: node
-  linkType: hard
-
-"@rollup/plugin-node-resolve@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@rollup/plugin-node-resolve@npm:9.0.0"
-  dependencies:
-    "@rollup/pluginutils": ^3.1.0
-    "@types/resolve": 1.17.1
-    builtin-modules: ^3.1.0
-    deepmerge: ^4.2.2
-    is-module: ^1.0.0
-    resolve: ^1.17.0
-  peerDependencies:
-    rollup: ^1.20.0||^2.0.0
-  checksum: 34576bbd9cfb096ed6fcce256e9210995144ccfd352ef09134507a7c6b479cee20da2896525ebf8bf139d9a31e8eec4b6787ed9de3209ee6610a949dc9f7c268
+  checksum: ae1bed46a949a1d8c077e021751c0140a523f731bea464ed0bfc3d335096493d1638be2a756f72d96f1f3a00fbdad8ba8fad8e86381d3eafce5ea2dffd62f175
   languageName: node
   linkType: hard
 
@@ -5622,7 +5606,7 @@ __metadata:
     "@rollup/plugin-babel": ^5.2.0
     "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch"
     "@rollup/plugin-json": ^4.1.0
-    "@rollup/plugin-node-resolve": ^9.0.0
+    "@rollup/plugin-node-resolve": ^11.2.1
     "@rollup/plugin-replace": ^2.4.0
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
