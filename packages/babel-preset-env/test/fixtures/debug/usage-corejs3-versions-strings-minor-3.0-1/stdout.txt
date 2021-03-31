@@ -72,11 +72,11 @@ Using polyfills with `usage-global` method:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-versions-strings-minor-3.0-1/input.js]
 The corejs3 polyfill added the following polyfills:
-  es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
   es.object.to-string { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   es.map { "chrome":"52", "firefox":"50", "ie":"11" }
   es.string.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
 
