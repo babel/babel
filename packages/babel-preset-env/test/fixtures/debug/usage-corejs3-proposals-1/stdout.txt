@@ -72,9 +72,11 @@ Using polyfills with `usage-global` method:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-proposals-1/input.js]
 The corejs3 polyfill added the following polyfills:
-  es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
   es.object.to-string { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   es.map { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.string.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.delete-all { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.every { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.filter { "chrome":"52", "firefox":"50", "ie":"11" }
@@ -88,8 +90,6 @@ The corejs3 polyfill added the following polyfills:
   esnext.map.reduce { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.some { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.update { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.string.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }

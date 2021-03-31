@@ -1,5 +1,5 @@
-import "core-js/modules/es.promise.js";
 import "core-js/modules/es.object.to-string.js";
+import "core-js/modules/es.promise.js";
 import "core-js/modules/web.timers.js";
 import "core-js/modules/web.immediate.js";
 Promise.resolve().then(function (it) {

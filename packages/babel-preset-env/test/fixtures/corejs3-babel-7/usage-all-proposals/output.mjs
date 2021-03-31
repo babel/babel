@@ -1,6 +1,8 @@
 import "core-js/modules/es.array.from.js";
 import "core-js/modules/es.string.iterator.js";
+import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/es.map.js";
+import "core-js/modules/es.object.to-string.js";
 import "core-js/modules/esnext.map.delete-all.js";
 import "core-js/modules/esnext.map.every.js";
 import "core-js/modules/esnext.map.filter.js";
@@ -14,8 +16,6 @@ import "core-js/modules/esnext.map.merge.js";
 import "core-js/modules/esnext.map.reduce.js";
 import "core-js/modules/esnext.map.some.js";
 import "core-js/modules/esnext.map.update.js";
-import "core-js/modules/es.object.to-string.js";
-import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/web.dom-collections.iterator.js";
 import "core-js/modules/es.promise.js";
 import "core-js/modules/es.symbol.match.js";

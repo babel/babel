@@ -1,8 +1,8 @@
 import "core-js/modules/es.array.from.js";
 import "core-js/modules/es.string.iterator.js";
+import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/es.map.js";
 import "core-js/modules/es.object.to-string.js";
-import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/web.dom-collections.iterator.js";
 import "core-js/modules/es.array.includes.js";
 import "core-js/modules/es.string.includes.js";
@@ -15,8 +15,8 @@ import "core-js/modules/es.string.starts-with.js";
 import "core-js/modules/es.string.code-point-at.js";
 import "core-js/modules/es.string.ends-with.js";
 import "core-js/modules/es.array.copy-within.js";
-import "core-js/modules/es.string.search.js";
 import "core-js/modules/es.regexp.exec.js";
+import "core-js/modules/es.string.search.js";
 import "core-js/modules/es.string.replace.js";
 import "core-js/modules/es.string.split.js";
 Array.from; // static function
