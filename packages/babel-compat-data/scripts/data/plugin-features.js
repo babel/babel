@@ -72,7 +72,14 @@ const es2015 = {
     ],
   },
   "transform-spread": {
-    features: ["spread syntax for iterable objects"],
+    features: [
+      "spread syntax for iterable objects",
+      // We need to compile classes when spread is not supported, because
+      // we cannot compile super(...args) without also rewriting the
+      // "super" handling. There is a bugfix that makes it better.
+      "class",
+      "super",
+    ],
   },
   "transform-destructuring": {
     features: ["destructuring, assignment", "destructuring, declarations"],

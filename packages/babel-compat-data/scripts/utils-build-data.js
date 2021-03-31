@@ -88,7 +88,10 @@ exports.getLowestImplementedVersion = (
 };
 
 exports.generateData = (environments, features) => {
-  return Object.values(features).map(options => {
+  const data = {};
+
+  // eslint-disable-next-line prefer-const
+  for (let [key, options] of Object.entries(features)) {
     if (!options.features) {
       options = {
         features: [options],
@@ -103,8 +106,10 @@ exports.generateData = (environments, features) => {
     });
     addElectronSupportFromChromium(plugin);
 
-    return plugin;
-  });
+    data[key] = plugin;
+  }
+
+  return data;
 };
 
 exports.writeFile = function (data, dataPath, name) {

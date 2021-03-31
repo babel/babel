@@ -1,0 +1,4 @@
+{
+  "targets": "firefox 40",
+  "presets": ["env"]
+}
