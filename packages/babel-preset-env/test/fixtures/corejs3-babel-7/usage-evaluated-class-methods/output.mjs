@@ -1,5 +1,5 @@
-import "core-js/modules/es.object.to-string.js";
 import "core-js/modules/es.array.iterator.js";
+import "core-js/modules/es.object.to-string.js";
 import "core-js/modules/web.dom-collections.iterator.js";
 import "core-js/modules/es.object.assign.js";
 var objectClass = Object;
