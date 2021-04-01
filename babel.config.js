@@ -475,15 +475,14 @@ function pluginNodeImportInteropBabel({ template }) {
 }
 
 function pluginNodeImportInteropRollup({ types: t }) {
-  const depsUsing__esModuleAndDefaultExport = [
-    src => src.startsWith("babel-plugin-polyfill-"),
-  ];
+  const depsUsing__esModuleAndDefaultExport = src =>
+    src.startsWith("babel-plugin-polyfill-") || src === "regenerator-transform";
 
   return {
     visitor: {
       ImportDeclaration(path) {
         const { value: source } = path.node.source;
-        if (depsUsing__esModuleAndDefaultExport.every(test => !test(source))) {
+        if (!depsUsing__esModuleAndDefaultExport(source)) {
           return;
         }
 
