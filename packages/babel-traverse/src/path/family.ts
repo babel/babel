@@ -153,7 +153,7 @@ function getStatementListCompletion(
           // whose completion value we can not determine, otherwise it would have been
           // replaced by `replaceBreakStatementInBreakCompletion`
           // When we have seen normal completions from the last statement
-          // it is safe to stop pupulating break and mark normal completions as break
+          // it is safe to stop populating break and mark normal completions as break
           normalCompletionToBreak(lastNormalCompletions);
           completions = completions.concat(lastNormalCompletions);
           // Declarations have empty completion record, however they can not be nested
