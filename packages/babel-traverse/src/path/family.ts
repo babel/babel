@@ -210,7 +210,12 @@ function _getCompletionRecords(
   if (path.isIfStatement()) {
     records = addCompletionRecords(path.get("consequent"), records, context);
     records = addCompletionRecords(path.get("alternate"), records, context);
-  } else if (path.isDoExpression() || path.isFor() || path.isWhile()) {
+  } else if (
+    path.isDoExpression() ||
+    path.isFor() ||
+    path.isWhile() ||
+    path.isLabeledStatement()
+  ) {
     // @ts-expect-error(flow->ts): todo
     records = addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
