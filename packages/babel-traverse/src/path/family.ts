@@ -90,7 +90,7 @@ function normalCompletionToBreak(completions: Completion[]) {
  *
  * @param {Completion[]} completions
  * @param {boolean} reachable Whether the break statement is reachable after
-   we mark the noraml completions _before_ the given break completions as the final
+   we mark the normal completions _before_ the given break completions as the final
    completions. For example,
    `{ 0 }; break;` is transformed to `{ return 0 }; break;`, the `break` here is unreachable
    and thus can be removed without consequences. We may in the future reserve them instead since
