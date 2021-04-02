@@ -603,6 +603,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const method: N.TsMethodSignature = nodeAny;
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
+        if (!method.kind) {
+          method.kind = "method";
+        }
         return this.finishNode(method, "TSMethodSignature");
       } else {
         const property: N.TsPropertySignature = nodeAny;
@@ -611,6 +614,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (type) property.typeAnnotation = type;
         this.tsParseTypeMemberSemicolon();
         return this.finishNode(property, "TSPropertySignature");
+      }
+    }
+
+    tsParseMethodSignatureKind(node: any) {
+      if (!this.isContextual("get") && !this.isContextual("set")) {
+        return;
+      }
+      const kind = this.state.value;
+      if (
+        this.tsTryParse(() => {
+          if (this.tsNextTokenCanFollowModifier()) {
+            // Check if a property is a method signature
+            const lookahead = this.lookahead();
+            return (
+              lookahead.type === tt.parenL ||
+              (lookahead.type === tt.relational && lookahead.value === "<")
+            );
+          }
+        })
+      ) {
+        node.kind = kind;
       }
     }
 
@@ -655,6 +679,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return idx;
       }
 
+      this.tsParseMethodSignatureKind(node);
       this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
       return this.tsParsePropertyOrMethodSignature(node, !!node.readonly);
     }
