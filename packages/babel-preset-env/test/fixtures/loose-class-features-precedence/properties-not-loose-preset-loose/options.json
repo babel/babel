@@ -3,7 +3,6 @@
   "presets": [
     ["env", {
       "targets": { "node": 10 },
-      "shippedProposals": true,
       "loose": true
     }]
   ],

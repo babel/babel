@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-properties { android }
+  proposal-private-methods { android }
   proposal-numeric-separator { android }
   proposal-logical-assignment-operators { android }
   proposal-nullish-coalescing-operator { android }

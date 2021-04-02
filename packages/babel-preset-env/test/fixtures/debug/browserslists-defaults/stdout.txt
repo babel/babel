@@ -16,6 +16,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-properties { firefox, ie, ios, safari, samsung }
+  proposal-private-methods { firefox, ie, ios, safari, samsung }
   proposal-numeric-separator { ie }
   proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, safari < 14, samsung }
   proposal-nullish-coalescing-operator { ie, samsung < 13 }
