@@ -4,6 +4,34 @@ import type TraversalContext from "../context";
 import NodePath from "./index";
 import * as t from "@babel/types";
 
+const NORMAL_COMPLETION = 0;
+const BREAK_COMPLETION = 1;
+
+type Completion = {
+  path: NodePath;
+  type: 0 | 1;
+};
+
+type CompletionContext = {
+  // whether the current context allows `break` statement. When it allows, we have
+  // to search all the statements for potential `break`
+  canHaveBreak: boolean;
+  // whether the statement is an immediate descendant of a switch case clause
+  inCaseClause: boolean;
+  // whether the `break` statement record should be populated to upper level
+  // when a `break` statement is an immediate descendant of a block statement, e.g.
+  // `{ break }`, it can influence the control flow in the upper levels.
+  shouldPopulateBreak: boolean;
+};
+
+function NormalCompletion(path: NodePath) {
+  return { type: NORMAL_COMPLETION, path };
+}
+
+function BreakCompletion(path: NodePath) {
+  return { type: BREAK_COMPLETION, path };
+}
+
 export function getOpposite(this: NodePath): NodePath | null {
   if (this.key === "left") {
     return this.getSibling("right");
@@ -15,114 +43,224 @@ export function getOpposite(this: NodePath): NodePath | null {
 
 function addCompletionRecords(
   path: NodePath | null | undefined,
-  paths: NodePath[],
-): NodePath[] {
-  if (path) return paths.concat(path.getCompletionRecords());
-  return paths;
+  records: Completion[],
+  context: CompletionContext,
+): Completion[] {
+  if (path) return records.concat(_getCompletionRecords(path, context));
+  return records;
 }
 
-function findBreak(statements): NodePath | null {
-  let breakStatement;
-  if (!Array.isArray(statements)) {
-    statements = [statements];
-  }
-
-  for (const statement of statements) {
-    if (
-      statement.isDoExpression() ||
-      statement.isProgram() ||
-      statement.isBlockStatement() ||
-      statement.isCatchClause() ||
-      statement.isLabeledStatement()
-    ) {
-      breakStatement = findBreak(statement.get("body"));
-    } else if (statement.isIfStatement()) {
-      breakStatement =
-        findBreak(statement.get("consequent")) ??
-        findBreak(statement.get("alternate"));
-    } else if (statement.isTryStatement()) {
-      breakStatement =
-        findBreak(statement.get("block")) ??
-        findBreak(statement.get("handler"));
-    } else if (statement.isBreakStatement()) {
-      breakStatement = statement;
-    }
-
-    if (breakStatement) {
-      return breakStatement;
-    }
-  }
-  return null;
-}
-
-function completionRecordForSwitch(cases, paths) {
-  let isLastCaseWithConsequent = true;
-
-  for (let i = cases.length - 1; i >= 0; i--) {
-    const switchCase = cases[i];
-    const consequent = switchCase.get("consequent");
-
-    let breakStatement = findBreak(consequent);
-
-    if (breakStatement) {
-      while (
-        breakStatement.key === 0 &&
-        breakStatement.parentPath.isBlockStatement()
-      ) {
-        breakStatement = breakStatement.parentPath;
+function completionRecordForSwitch(
+  cases: NodePath<t.SwitchCase>[],
+  records: Completion[],
+  context: CompletionContext,
+): Completion[] {
+  // https://tc39.es/ecma262/#sec-runtime-semantics-caseblockevaluation
+  let lastNormalCompletions = [];
+  for (let i = 0; i < cases.length; i++) {
+    const casePath = cases[i];
+    const caseCompletions = _getCompletionRecords(casePath, context);
+    const normalCompletions = [];
+    const breakCompletions = [];
+    for (const c of caseCompletions) {
+      if (c.type === NORMAL_COMPLETION) {
+        normalCompletions.push(c);
       }
+      if (c.type === BREAK_COMPLETION) {
+        breakCompletions.push(c);
+      }
+    }
+    if (normalCompletions.length) {
+      lastNormalCompletions = normalCompletions;
+    }
+    records = records.concat(breakCompletions);
+  }
+  records = records.concat(lastNormalCompletions);
+  return records;
+}
 
-      const prevSibling = breakStatement.getPrevSibling();
-      if (
-        breakStatement.key > 0 &&
-        (prevSibling.isExpressionStatement() || prevSibling.isBlockStatement())
-      ) {
-        paths = addCompletionRecords(prevSibling, paths);
-        breakStatement.remove();
+function normalCompletionToBreak(completions: Completion[]) {
+  completions.forEach(c => {
+    c.type = BREAK_COMPLETION;
+  });
+}
+
+/**
+ * Determine how we should handle the break statement for break completions
+ *
+ * @param {Completion[]} completions
+ * @param {boolean} reachable Whether the break statement is reachable after
+   we mark the normal completions _before_ the given break completions as the final
+   completions. For example,
+   `{ 0 }; break;` is transformed to `{ return 0 }; break;`, the `break` here is unreachable
+   and thus can be removed without consequences. We may in the future reserve them instead since
+   we do not consistently remove unreachable statements _after_ break
+   `{ var x = 0 }; break;` is transformed to `{ var x = 0 }; return void 0;`, the `break` is reachable
+   because we can not wrap variable declaration under a return statement
+ */
+function replaceBreakStatementInBreakCompletion(
+  completions: Completion[],
+  reachable: boolean,
+) {
+  completions.forEach(c => {
+    if (c.path.isBreakStatement({ label: null })) {
+      if (reachable) {
+        c.path.replaceWith(t.unaryExpression("void", t.numericLiteral(0)));
       } else {
-        breakStatement.replaceWith(breakStatement.scope.buildUndefinedNode());
-        paths = addCompletionRecords(breakStatement, paths);
-      }
-    } else if (isLastCaseWithConsequent) {
-      const statementFinder = statement =>
-        !statement.isBlockStatement() ||
-        statement.get("body").some(statementFinder);
-      const hasConsequent = consequent.some(statementFinder);
-      if (hasConsequent) {
-        paths = addCompletionRecords(consequent[consequent.length - 1], paths);
-        isLastCaseWithConsequent = false;
+        c.path.remove();
       }
     }
-  }
-  return paths;
+  });
 }
 
-export function getCompletionRecords(this: NodePath): NodePath[] {
-  let paths = [];
+function getStatementListCompletion(
+  paths: NodePath[],
+  context: CompletionContext,
+): Completion[] {
+  let completions = [];
+  if (context.canHaveBreak) {
+    let lastNormalCompletions = [];
+    for (let i = 0; i < paths.length; i++) {
+      const path = paths[i];
+      const newContext = { ...context, inCaseClause: false };
+      if (
+        path.isBlockStatement() &&
+        (context.inCaseClause || // case test: { break }
+          context.shouldPopulateBreak) // case test: { { break } }
+      ) {
+        newContext.shouldPopulateBreak = true;
+      } else {
+        newContext.shouldPopulateBreak = false;
+      }
+      const statementCompletions = _getCompletionRecords(path, newContext);
+      if (
+        statementCompletions.length > 0 &&
+        // we can stop search `paths` when we have seen a `path` that is
+        // effectively a `break` statement. Examples are
+        // - `break`
+        // - `if (true) { 1; break } else { 2; break }`
+        // - `{ break }```
+        // In other words, the paths after this `path` are unreachable
+        statementCompletions.every(c => c.type === BREAK_COMPLETION)
+      ) {
+        if (
+          lastNormalCompletions.length > 0 &&
+          statementCompletions.every(c =>
+            c.path.isBreakStatement({ label: null }),
+          )
+        ) {
+          // when a break completion has a path as BreakStatement, it must be `{ break }`
+          // whose completion value we can not determine, otherwise it would have been
+          // replaced by `replaceBreakStatementInBreakCompletion`
+          // When we have seen normal completions from the last statement
+          // it is safe to stop populating break and mark normal completions as break
+          normalCompletionToBreak(lastNormalCompletions);
+          completions = completions.concat(lastNormalCompletions);
+          // Declarations have empty completion record, however they can not be nested
+          // directly in return statement, i.e. `return (var a = 1)` is invalid.
+          if (lastNormalCompletions.some(c => c.path.isDeclaration())) {
+            completions = completions.concat(statementCompletions);
+            replaceBreakStatementInBreakCompletion(
+              statementCompletions,
+              /* reachable */ true,
+            );
+          }
+          replaceBreakStatementInBreakCompletion(
+            statementCompletions,
+            /* reachable */ false,
+          );
+        } else {
+          completions = completions.concat(statementCompletions);
+          if (!context.shouldPopulateBreak) {
+            replaceBreakStatementInBreakCompletion(
+              statementCompletions,
+              /* reachable */ true,
+            );
+          }
+        }
+        break;
+      }
+      if (i === paths.length - 1) {
+        completions = completions.concat(statementCompletions);
+      } else {
+        completions = completions.concat(
+          statementCompletions.filter(c => c.type === BREAK_COMPLETION),
+        );
+        lastNormalCompletions = statementCompletions.filter(
+          c => c.type === NORMAL_COMPLETION,
+        );
+      }
+    }
+  } else if (paths.length) {
+    // When we are in a context where `break` must not exist, we can skip linear
+    // search on statement lists and assume that the last statement determines
+    // the completion
+    completions = completions.concat(
+      _getCompletionRecords(paths[paths.length - 1], context),
+    );
+  }
+  return completions;
+}
 
-  if (this.isIfStatement()) {
-    paths = addCompletionRecords(this.get("consequent"), paths);
-    paths = addCompletionRecords(this.get("alternate"), paths);
-  } else if (this.isDoExpression() || this.isFor() || this.isWhile()) {
+function _getCompletionRecords(
+  path: NodePath,
+  context: CompletionContext,
+): Completion[] {
+  let records = [];
+  if (path.isIfStatement()) {
+    records = addCompletionRecords(path.get("consequent"), records, context);
+    records = addCompletionRecords(path.get("alternate"), records, context);
+  } else if (path.isDoExpression() || path.isFor() || path.isWhile()) {
     // @ts-expect-error(flow->ts): todo
-    paths = addCompletionRecords(this.get("body"), paths);
-  } else if (this.isProgram() || this.isBlockStatement()) {
-    // @ts-expect-error(flow->ts): todo
-    paths = addCompletionRecords(this.get("body").pop(), paths);
-  } else if (this.isFunction()) {
-    return this.get("body").getCompletionRecords();
-  } else if (this.isTryStatement()) {
-    paths = addCompletionRecords(this.get("block"), paths);
-    paths = addCompletionRecords(this.get("handler"), paths);
-  } else if (this.isCatchClause()) {
-    paths = addCompletionRecords(this.get("body"), paths);
-  } else if (this.isSwitchStatement()) {
-    paths = completionRecordForSwitch(this.get("cases"), paths);
+    records = addCompletionRecords(path.get("body"), records, context);
+  } else if (path.isProgram() || path.isBlockStatement()) {
+    records = records.concat(
+      // @ts-expect-error(flow->ts): todo
+      getStatementListCompletion(path.get("body"), context),
+    );
+  } else if (path.isFunction()) {
+    return _getCompletionRecords(path.get("body"), context);
+  } else if (path.isTryStatement()) {
+    records = addCompletionRecords(path.get("block"), records, context);
+    records = addCompletionRecords(path.get("handler"), records, context);
+  } else if (path.isCatchClause()) {
+    records = addCompletionRecords(path.get("body"), records, context);
+  } else if (path.isSwitchStatement()) {
+    records = completionRecordForSwitch(path.get("cases"), records, context);
+  } else if (path.isSwitchCase()) {
+    records = records.concat(
+      getStatementListCompletion(path.get("consequent"), {
+        canHaveBreak: true,
+        shouldPopulateBreak: false,
+        inCaseClause: true,
+      }),
+    );
+  } else if (path.isBreakStatement()) {
+    records.push(BreakCompletion(path));
   } else {
-    paths.push(this);
+    records.push(NormalCompletion(path));
   }
 
-  return paths;
+  return records;
+}
+
+/**
+ * Retrieve the completion records of a given path.
+ * Note: to ensure proper support on `break` statement, this method
+ * will manipulate the AST around the break statement. Do not call the method
+ * twice for the same path.
+ *
+ * @export
+ * @param {NodePath} this
+ * @returns {NodePath[]} Completion records
+ */
+export function getCompletionRecords(this: NodePath): NodePath[] {
+  const records = _getCompletionRecords(this, {
+    canHaveBreak: false,
+    shouldPopulateBreak: false,
+    inCaseClause: false,
+  });
+  return records.map(r => r.path);
 }
 
 export function getSibling(this: NodePath, key: string | number): NodePath {

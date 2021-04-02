@@ -2,14 +2,14 @@
 // https://github.com/babel/babel/pull/10070#discussion_r296048106
 const x = (n) => do {
   switch (n) {
-    case 0: 
+    case 0:
       { "a"; }
       { "b"; };
-    case 1: 
+    case 1:
       { "c"; }
       break;
       { "d"; };
-    case 2: 
+    case 2:
       "a";
       "b";
     case 3:
