@@ -27,11 +27,23 @@ const cachedScripts = new QuickLRU({ maxSize: 10 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
+// We never want our tests to accidentally load the root
+// babel.config.js file, so we disable config loading by
+// default. Tests can still set `configFile: true | string`
+// to re-enable config loading.
+function transformWithoutConfigFile(code, opts) {
+  return babel.transform(code, {
+    configFile: false,
+    babelrc: false,
+    ...opts,
+  });
+}
+
 function createContext() {
   const context = vm.createContext({
     ...helpers,
     process: process,
-    transform: babel.transform,
+    transform: transformWithoutConfigFile,
     setTimeout: setTimeout,
     setImmediate: setImmediate,
     expect,
@@ -207,6 +219,7 @@ function run(task) {
       sourceFileName: self.filename,
       sourceType: "script",
       babelrc: false,
+      configFile: false,
       inputSourceMap: task.inputSourceMap || undefined,
       ...opts,
     };
