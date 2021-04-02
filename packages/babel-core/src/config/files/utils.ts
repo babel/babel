@@ -23,6 +23,8 @@ export function makeStaticFileCache<T>(
 }
 
 function fileMtime(filepath: string): number | null {
+  if (!nodeFs.existsSync(filepath)) return null;
+
   try {
     return +nodeFs.statSync(filepath).mtime;
   } catch (e) {
