@@ -260,11 +260,7 @@ export function getCompletionRecords(this: NodePath): NodePath[] {
     shouldPopulateBreak: false,
     inCaseClause: false,
   });
-  const paths = [];
-  for (const record of records) {
-    paths.push(record.path);
-  }
-  return paths;
+  return records.map(r => r.path);
 }
 
 export function getSibling(this: NodePath, key: string | number): NodePath {
