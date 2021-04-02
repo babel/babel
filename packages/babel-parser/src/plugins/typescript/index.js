@@ -70,6 +70,7 @@ const TSErrors = makeErrorTemplates(
   {
     AbstractMethodHasImplementation:
       "Method '%0' cannot have an implementation because it is marked abstract.",
+    AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
     ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
     ClassMethodHasReadonly:
       "Class methods cannot have the 'readonly' modifier.",
@@ -121,6 +122,8 @@ const TSErrors = makeErrorTemplates(
       "Private elements cannot have an accessibility modifier ('%0').",
     ReadonlyForMethodSignature:
       "'readonly' modifier can only appear on a property declaration or index signature.",
+    SetAccesorCannotHaveReturnType:
+      "A 'set' accessor cannot have a return type annotation.",
     TypeAnnotationAfterAssign:
       "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     TypeImportCannotSpecifyDefaultAndNamed:
@@ -603,7 +606,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const method: N.TsMethodSignature = nodeAny;
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
-        if (!method.kind) {
+        if (method.kind === "get") {
+          if (method.parameters.length > 0) {
+            this.raise(this.state.pos, Errors.BadGetterArity);
+          }
+        } else if (method.kind === "set") {
+          if (method.parameters.length < 1) {
+            this.raise(this.state.pos, Errors.BadSetterArity);
+          }
+          if (method.typeAnnotation) {
+            this.raise(
+              method.typeAnnotation.start,
+              TSErrors.SetAccesorCannotHaveReturnType,
+            );
+          }
+        } else {
           method.kind = "method";
         }
         return this.finishNode(method, "TSMethodSignature");
@@ -627,10 +644,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.tsNextTokenCanFollowModifier()) {
             // Check if a property is a method signature
             const lookahead = this.lookahead();
-            return (
-              lookahead.type === tt.parenL ||
-              (lookahead.type === tt.relational && lookahead.value === "<")
-            );
+            if (lookahead.type === tt.parenL) {
+              return true;
+            }
+            if (lookahead.type === tt.relational && lookahead.value === "<") {
+              this.raise(
+                this.state.pos,
+                TSErrors.AccesorCannotHaveTypeParameters,
+              );
+              return true;
+            }
           }
         })
       ) {
