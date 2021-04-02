@@ -3,8 +3,6 @@
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
 const proposalPlugins = new Set([
-  "proposal-class-properties",
-  "proposal-private-methods",
   "proposal-class-static-block",
   "proposal-private-property-in-object",
 ]);
