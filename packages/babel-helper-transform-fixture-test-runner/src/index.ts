@@ -34,6 +34,7 @@ const sharedTestContext = createContext();
 function transformWithoutConfigFile(code, opts) {
   return babel.transform(code, {
     configFile: false,
+    babelrc: false,
     ...opts,
   });
 }
