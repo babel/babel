@@ -611,7 +611,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.raise(this.state.pos, Errors.BadGetterArity);
           }
         } else if (method.kind === "set") {
-          if (method.parameters.length < 1) {
+          if (method.parameters.length !== 1) {
             this.raise(this.state.pos, Errors.BadSetterArity);
           }
           if (method.typeAnnotation) {
