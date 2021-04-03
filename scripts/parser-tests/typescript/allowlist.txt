@@ -398,7 +398,7 @@ shorthandPropertyAssignmentInES6Module.ts
 sourceMap-LineBreaks.ts
 sourceMapValidationDecorators.ts
 sourceMapValidationStatements.ts
-staticIndexer.ts
+staticModifierAlreadySeen.ts
 strictModeReservedWord.ts
 superCallFromClassThatHasNoBaseType1.ts
 symbolLinkDeclarationEmitModuleNames.ts
