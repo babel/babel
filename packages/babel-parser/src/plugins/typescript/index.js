@@ -29,7 +29,12 @@ import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
-import { Errors } from "../../parser/error";
+import {
+  Errors,
+  makeErrorTemplates,
+  type ErrorTemplate,
+  ErrorCodes,
+} from "../../parser/error";
 
 type TsModifier =
   | "readonly"
@@ -60,67 +65,75 @@ type ParsingContext =
   | "TypeParametersOrArguments";
 
 /* eslint sort-keys: "error" */
-const TSErrors = Object.freeze({
-  AbstractMethodHasImplementation:
-    "Method '%0' cannot have an implementation because it is marked abstract.",
-  ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier",
-  ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier",
-  ConstructorHasTypeParameters:
-    "Type parameters cannot appear on a constructor declaration.",
+const TSErrors = makeErrorTemplates(
+  {
+    AbstractMethodHasImplementation:
+      "Method '%0' cannot have an implementation because it is marked abstract.",
+    ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier",
+    ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier",
+    ConstructorHasTypeParameters:
+      "Type parameters cannot appear on a constructor declaration.",
   DeclareAccessor: "'declare' is not allowed in %0ters.",
-  DeclareClassFieldHasInitializer:
-    "Initializers are not allowed in ambient contexts.",
-  DeclareFunctionHasImplementation:
-    "An implementation cannot be declared in ambient contexts.",
-  DuplicateAccessibilityModifier: "Accessibility modifier already seen.",
-  DuplicateModifier: "Duplicate modifier: '%0'",
-  EmptyHeritageClauseType: "'%0' list cannot be empty.",
-  EmptyTypeArguments: "Type argument list cannot be empty.",
-  EmptyTypeParameters: "Type parameter list cannot be empty.",
-  ExpectedAmbientAfterExportDeclare:
-    "'export declare' must be followed by an ambient declaration.",
-  ImportAliasHasImportType: "An import alias can not use 'import type'",
-  IndexSignatureHasAbstract:
-    "Index signatures cannot have the 'abstract' modifier",
-  IndexSignatureHasAccessibility:
-    "Index signatures cannot have an accessibility modifier ('%0')",
-  IndexSignatureHasDeclare:
-    "Index signatures cannot have the 'declare' modifier",
-  IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
-  InvalidModifierOnTypeMember: "'%0' modifier cannot appear on a type member.",
-  InvalidTupleMemberLabel:
-    "Tuple members must be labeled with a simple identifier.",
-  MixedLabeledAndUnlabeledElements:
-    "Tuple members must all have names or all not have names.",
-  NonAbstractClassHasAbstractMethod:
-    "Abstract methods can only appear within an abstract class.",
-  NonClassMethodPropertyHasAbstractModifer:
-    "'abstract' modifier can only appear on a class, method, or property declaration.",
-  OptionalTypeBeforeRequired:
-    "A required element cannot follow an optional element.",
-  PatternIsOptional:
-    "A binding pattern parameter cannot be optional in an implementation signature.",
-  PrivateElementHasAbstract:
-    "Private elements cannot have the 'abstract' modifier.",
-  PrivateElementHasAccessibility:
-    "Private elements cannot have an accessibility modifier ('%0')",
-  ReadonlyForMethodSignature:
-    "'readonly' modifier can only appear on a property declaration or index signature.",
-  TypeAnnotationAfterAssign:
-    "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
-  UnexpectedParameterModifier:
-    "A parameter property is only allowed in a constructor implementation.",
-  UnexpectedReadonly:
-    "'readonly' type modifier is only permitted on array and tuple literal types.",
-  UnexpectedTypeAnnotation: "Did not expect a type annotation here.",
-  UnexpectedTypeCastInParameter: "Unexpected type cast in parameter position.",
-  UnsupportedImportTypeArgument:
-    "Argument in a type import must be a string literal",
-  UnsupportedParameterPropertyKind:
-    "A parameter property may not be declared using a binding pattern.",
-  UnsupportedSignatureParameterKind:
-    "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0",
-});
+    DeclareClassFieldHasInitializer:
+      "Initializers are not allowed in ambient contexts.",
+    DeclareFunctionHasImplementation:
+      "An implementation cannot be declared in ambient contexts.",
+    DuplicateAccessibilityModifier: "Accessibility modifier already seen.",
+    DuplicateModifier: "Duplicate modifier: '%0'",
+    EmptyHeritageClauseType: "'%0' list cannot be empty.",
+    EmptyTypeArguments: "Type argument list cannot be empty.",
+    EmptyTypeParameters: "Type parameter list cannot be empty.",
+    ExpectedAmbientAfterExportDeclare:
+      "'export declare' must be followed by an ambient declaration.",
+    ImportAliasHasImportType: "An import alias can not use 'import type'",
+    IndexSignatureHasAbstract:
+      "Index signatures cannot have the 'abstract' modifier",
+    IndexSignatureHasAccessibility:
+      "Index signatures cannot have an accessibility modifier ('%0')",
+    IndexSignatureHasDeclare:
+      "Index signatures cannot have the 'declare' modifier",
+    IndexSignatureHasStatic:
+      "Index signatures cannot have the 'static' modifier",
+    InvalidModifierOnTypeMember:
+      "'%0' modifier cannot appear on a type member.",
+    InvalidTupleMemberLabel:
+      "Tuple members must be labeled with a simple identifier.",
+    MixedLabeledAndUnlabeledElements:
+      "Tuple members must all have names or all not have names.",
+    NonAbstractClassHasAbstractMethod:
+      "Abstract methods can only appear within an abstract class.",
+    NonClassMethodPropertyHasAbstractModifer:
+      "'abstract' modifier can only appear on a class, method, or property declaration.",
+    OptionalTypeBeforeRequired:
+      "A required element cannot follow an optional element.",
+    PatternIsOptional:
+      "A binding pattern parameter cannot be optional in an implementation signature.",
+    PrivateElementHasAbstract:
+      "Private elements cannot have the 'abstract' modifier.",
+    PrivateElementHasAccessibility:
+      "Private elements cannot have an accessibility modifier ('%0')",
+    ReadonlyForMethodSignature:
+      "'readonly' modifier can only appear on a property declaration or index signature.",
+    TypeAnnotationAfterAssign:
+      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+    TypeImportCannotSpecifyDefaultAndNamed:
+      "A type-only import can specify a default import or named bindings, but not both.",
+    UnexpectedParameterModifier:
+      "A parameter property is only allowed in a constructor implementation.",
+    UnexpectedReadonly:
+      "'readonly' type modifier is only permitted on array and tuple literal types.",
+    UnexpectedTypeAnnotation: "Did not expect a type annotation here.",
+    UnexpectedTypeCastInParameter:
+      "Unexpected type cast in parameter position.",
+    UnsupportedImportTypeArgument:
+      "Argument in a type import must be a string literal",
+    UnsupportedParameterPropertyKind:
+      "A parameter property may not be declared using a binding pattern.",
+    UnsupportedSignatureParameterKind:
+      "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0",
+  },
+  /* code */ ErrorCodes.SyntaxError,
+);
 /* eslint-disable sort-keys */
 
 // Doesn't handle "void" or "null" because those are keywords, not identifiers.
@@ -217,7 +230,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       },
       allowedModifiers: TsModifier[],
       disallowedModifiers?: TsModifier[],
-      errorTemplate?: string,
+      errorTemplate?: ErrorTemplate,
     ): void {
       for (;;) {
         const startPos = this.state.start;
@@ -2098,7 +2111,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         this.raise(
           importNode.start,
-          "A type-only import can specify a default import or named bindings, but not both.",
+          TSErrors.TypeImportCannotSpecifyDefaultAndNamed,
         );
       }
 
