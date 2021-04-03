@@ -1400,6 +1400,9 @@ export default class StatementParser extends ExpressionParser {
         if (state.hadConstructor && !this.hasPlugin("typescript")) {
           this.raise(key.start, Errors.DuplicateConstructor);
         }
+        if (isConstructor && this.hasPlugin("typescript") && member.override) {
+          this.raise(key.start, Errors.OverrideOnConstructor);
+        }
         state.hadConstructor = true;
         allowsDirectSuper = state.constructorAllowsSuper;
       }

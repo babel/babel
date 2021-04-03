@@ -41,6 +41,7 @@ type TsModifier =
   | "abstract"
   | "declare"
   | "static"
+  | "override"
   | N.Accessibility;
 
 function nonNull<T>(x: ?T): T {
@@ -621,7 +622,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.tsParseModifiers(
         node,
         ["readonly"],
-        ["declare", "abstract", "private", "protected", "public", "static"],
+        [
+          "declare",
+          "abstract",
+          "private",
+          "protected",
+          "public",
+          "static",
+          "override",
+        ],
         TSErrors.InvalidModifierOnTypeMember,
       );
 
@@ -2222,6 +2231,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "private",
         "public",
         "protected",
+        "override",
       ]);
 
       const callParseClassMember = () => {
@@ -2245,6 +2255,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "readonly",
         "declare",
         "static",
+        "override",
       ]);
 
       if (isStatic) {
@@ -2268,12 +2279,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if ((member: any).declare) {
           this.raise(member.start, TSErrors.IndexSignatureHasDeclare);
         }
+        if ((member: any).override) {
+          this.raise(member.start, TSErrors.IndexSignatureHasOverride);
+        }
 
         return;
       }
 
       if (!this.state.inAbstractClass && (member: any).abstract) {
         this.raise(member.start, TSErrors.NonAbstractClassHasAbstractMethod);
+      }
+
+      if ((member: any).override && isStatic) {
+        this.raise(member.start, TSErrors.OverrideWithStatic);
       }
 
       /*:: invariant(member.type !== "TSIndexSignature") */

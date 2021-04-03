@@ -1,0 +1,288 @@
+{
+  "type": "File",
+  "start":0,"end":345,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":1}},
+  "errors": [
+    "SyntaxError: 'override' modifier cannot appear on a constructor declaration. (11:11)",
+    "SyntaxError: 'override' modifier cannot appear on an index signature. (12:2)",
+    "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (13:2)",
+    "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (14:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":345,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":194,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":14,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":14},"identifierName":"MyClass1"},
+          "name": "MyClass1"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":23,"end":32,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":32},"identifierName":"BaseClass"},
+          "name": "BaseClass"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":33,"end":194,"loc":{"start":{"line":1,"column":33},"end":{"line":8,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":37,"end":55,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":20}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":46,"end":50,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":15},"identifierName":"show"},
+                "name": "show"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":53,"end":55,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":20}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":58,"end":83,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":27}},
+              "override": true,
+              "accessibility": "public",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":74,"end":78,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":22},"identifierName":"show"},
+                "name": "show"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":81,"end":83,"loc":{"start":{"line":3,"column":25},"end":{"line":3,"column":27}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":86,"end":111,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":27}},
+              "accessibility": "public",
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":102,"end":106,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":22},"identifierName":"show"},
+                "name": "show"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":109,"end":111,"loc":{"start":{"line":4,"column":25},"end":{"line":4,"column":27}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":114,"end":132,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":20}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":123,"end":127,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":15},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":130,"end":131,"loc":{"start":{"line":5,"column":18},"end":{"line":5,"column":19}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":135,"end":162,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":29}},
+              "override": true,
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":153,"end":157,"loc":{"start":{"line":6,"column":20},"end":{"line":6,"column":24},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":160,"end":161,"loc":{"start":{"line":6,"column":27},"end":{"line":6,"column":28}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":165,"end":192,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":29}},
+              "readonly": true,
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":183,"end":187,"loc":{"start":{"line":7,"column":20},"end":{"line":7,"column":24},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":190,"end":191,"loc":{"start":{"line":7,"column":27},"end":{"line":7,"column":28}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":196,"end":345,"loc":{"start":{"line":10,"column":0},"end":{"line":15,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":202,"end":210,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":14},"identifierName":"MyClass2"},
+          "name": "MyClass2"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":219,"end":228,"loc":{"start":{"line":10,"column":23},"end":{"line":10,"column":32},"identifierName":"BaseClass"},
+          "name": "BaseClass"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":229,"end":345,"loc":{"start":{"line":10,"column":33},"end":{"line":15,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":233,"end":258,"loc":{"start":{"line":11,"column":2},"end":{"line":11,"column":27}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":242,"end":253,"loc":{"start":{"line":11,"column":11},"end":{"line":11,"column":22},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":256,"end":258,"loc":{"start":{"line":11,"column":25},"end":{"line":11,"column":27}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "TSIndexSignature",
+              "start":261,"end":287,"loc":{"start":{"line":12,"column":2},"end":{"line":12,"column":28}},
+              "override": true,
+              "parameters": [
+                {
+                  "type": "Identifier",
+                  "start":271,"end":280,"loc":{"start":{"line":12,"column":12},"end":{"line":12,"column":21},"identifierName":"x"},
+                  "name": "x",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":272,"end":280,"loc":{"start":{"line":12,"column":13},"end":{"line":12,"column":21}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":274,"end":280,"loc":{"start":{"line":12,"column":15},"end":{"line":12,"column":21}}
+                    }
+                  }
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":281,"end":286,"loc":{"start":{"line":12,"column":22},"end":{"line":12,"column":27}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":283,"end":286,"loc":{"start":{"line":12,"column":24},"end":{"line":12,"column":27}}
+                }
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":290,"end":315,"loc":{"start":{"line":13,"column":2},"end":{"line":13,"column":27}},
+              "override": true,
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":306,"end":310,"loc":{"start":{"line":13,"column":18},"end":{"line":13,"column":22},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":313,"end":314,"loc":{"start":{"line":13,"column":25},"end":{"line":13,"column":26}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":318,"end":343,"loc":{"start":{"line":14,"column":2},"end":{"line":14,"column":27}},
+              "override": true,
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":334,"end":338,"loc":{"start":{"line":14,"column":18},"end":{"line":14,"column":22},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":341,"end":342,"loc":{"start":{"line":14,"column":25},"end":{"line":14,"column":26}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
