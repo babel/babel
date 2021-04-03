@@ -2232,7 +2232,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseClassMemberState,
       isStatic: boolean,
     ): void {
-      this.tsParseModifiers(member, ["abstract", "readonly", "declare"]);
+      this.tsParseModifiers(member, [
+        "abstract",
+        "readonly",
+        "declare",
+        "static",
+      ]);
+
+      if (isStatic) {
+        member.static = true;
+      }
 
       const idx = this.tsTryParseIndexSignature(member);
       if (idx) {
@@ -2240,9 +2249,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if ((member: any).abstract) {
           this.raise(member.start, TSErrors.IndexSignatureHasAbstract);
-        }
-        if (isStatic) {
-          this.raise(member.start, TSErrors.IndexSignatureHasStatic);
         }
         if ((member: any).accessibility) {
           this.raise(

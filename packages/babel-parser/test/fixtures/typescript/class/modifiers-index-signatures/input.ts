@@ -1,6 +1,5 @@
 class C {
   abstract [key: string]: string;
-  static [key: string]: string;
   declare [key: string]: string;
   private [key: string]: string;
   public [key: string]: string;
