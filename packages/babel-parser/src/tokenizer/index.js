@@ -9,7 +9,7 @@ import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
-import ParserErrors, { Errors } from "../parser/error";
+import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
 import { SourceLocation } from "../util/location";
 import {
   lineBreak,
@@ -115,7 +115,7 @@ export default class Tokenizer extends ParserErrors {
   // parser/util.js
   /*::
   +hasPrecedingLineBreak: () => boolean;
-  +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  +unexpected: (pos?: ?number, messageOrType?: ErrorTemplate | TokenType) => empty;
   +expectPlugin: (name: string, pos?: ?number) => true;
   */
 
@@ -1321,7 +1321,7 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  recordStrictModeErrors(pos: number, message: string) {
+  recordStrictModeErrors(pos: number, message: ErrorTemplate) {
     if (this.state.strict && !this.state.strictErrors.has(pos)) {
       this.raise(pos, message);
     } else {
