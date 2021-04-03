@@ -1,6 +1,6 @@
 // @flow
 
-import { types as tt, type TokenType } from "../tokenizer/types";
+import { types as tt, TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
 import type { Node } from "../types";
@@ -13,7 +13,7 @@ import ProductionParameterHandler, {
   PARAM_AWAIT,
   PARAM,
 } from "../util/production-parameter";
-import { Errors } from "./error";
+import { Errors, type ErrorTemplate, ErrorCodes } from "./error";
 /*::
 import type ScopeHandler from "../util/scope";
 */
@@ -91,8 +91,8 @@ export default class UtilParser extends Tokenizer {
 
   // Asserts that following token is given contextual keyword.
 
-  expectContextual(name: string, message?: string): void {
-    if (!this.eatContextual(name)) this.unexpected(null, message);
+  expectContextual(name: string, template?: ErrorTemplate): void {
+    if (!this.eatContextual(name)) this.unexpected(null, template);
   }
 
   // Test whether a semicolon can be inserted at the current position.
@@ -142,7 +142,11 @@ export default class UtilParser extends Tokenizer {
   assertNoSpace(message: string = "Unexpected space."): void {
     if (this.state.start > this.state.lastTokEnd) {
       /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(this.state.lastTokEnd, message);
+      this.raise(this.state.lastTokEnd, {
+        code: ErrorCodes.SyntaxError,
+        reasonCode: "UnexpectedSpace",
+        template: message,
+      });
       /* eslint-enable @babel/development-internal/dry-error-messages */
     }
   }
@@ -152,10 +156,18 @@ export default class UtilParser extends Tokenizer {
 
   unexpected(
     pos: ?number,
-    messageOrType: string | TokenType = "Unexpected token",
+    messageOrType: ErrorTemplate | TokenType = {
+      code: ErrorCodes.SyntaxError,
+      reasonCode: "UnexpectedToken",
+      template: "Unexpected token",
+    },
   ): empty {
-    if (typeof messageOrType !== "string") {
-      messageOrType = `Unexpected token, expected "${messageOrType.label}"`;
+    if (messageOrType instanceof TokenType) {
+      messageOrType = {
+        code: ErrorCodes.SyntaxError,
+        reasonCode: "UnexpectedToken",
+        template: `Unexpected token, expected "${messageOrType.label}"`,
+      };
     }
     /* eslint-disable @babel/development-internal/dry-error-messages */
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);

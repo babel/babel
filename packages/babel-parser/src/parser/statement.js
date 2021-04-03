@@ -3,7 +3,7 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { Errors } from "./error";
+import { Errors, SourceTypeModuleErrors } from "./error";
 import {
   isIdentifierChar,
   isIdentifierStart,
@@ -324,13 +324,7 @@ export default class StatementParser extends ExpressionParser {
 
   assertModuleNodeAllowed(node: N.Node): void {
     if (!this.options.allowImportExportEverywhere && !this.inModule) {
-      this.raiseWithData(
-        node.start,
-        {
-          code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
-        },
-        Errors.ImportOutsideModule,
-      );
+      this.raise(node.start, SourceTypeModuleErrors.ImportOutsideModule);
     }
   }
 

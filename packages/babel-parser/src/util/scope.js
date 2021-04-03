@@ -17,7 +17,7 @@ import {
   type BindingTypes,
 } from "./scopeflags";
 import * as N from "../types";
-import { Errors } from "../parser/error";
+import { Errors, type raiseFunction } from "../parser/error";
 
 // Start an AST node, attaching a start offset.
 export class Scope {
@@ -33,8 +33,6 @@ export class Scope {
     this.flags = flags;
   }
 }
-
-type raiseFunction = (number, string, ...any) => void;
 
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
