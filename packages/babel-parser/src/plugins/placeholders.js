@@ -5,6 +5,7 @@ import * as charCodes from "charcodes";
 import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
+import { makeErrorTemplates, ErrorCodes } from "../parser/error";
 
 tt.placeholder = new TokenType("%%", { startsExpr: true });
 
@@ -46,6 +47,13 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 // Placeholder<T> breaks everything, because its type is incompatible with
 // the substituted nodes.
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
+
+const PlaceHolderErrors = makeErrorTemplates(
+  {
+    ClassNameIsRequired: "A class name is required",
+  },
+  /* code */ ErrorCodes.SyntaxError,
+);
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
@@ -240,7 +248,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.body = this.finishPlaceholder(placeholder, "ClassBody");
           return this.finishNode(node, type);
         } else {
-          this.unexpected(null, "A class name is required");
+          this.unexpected(null, PlaceHolderErrors.ClassNameIsRequired);
         }
       } else {
         this.parseClassId(node, isStatement, optionalId);

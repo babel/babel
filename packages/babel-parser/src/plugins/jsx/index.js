@@ -14,25 +14,28 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors } from "../../parser/error";
+import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
 /* eslint sort-keys: "error" */
-const JsxErrors = Object.freeze({
-  AttributeIsEmpty:
-    "JSX attributes must only be assigned a non-empty expression",
-  MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
-  MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
-  UnexpectedSequenceExpression:
-    "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-  UnsupportedJsxValue:
-    "JSX value should be either an expression or a quoted JSX text",
-  UnterminatedJsxContent: "Unterminated JSX contents",
-  UnwrappedAdjacentJSXElements:
-    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-});
+const JsxErrors = makeErrorTemplates(
+  {
+    AttributeIsEmpty:
+      "JSX attributes must only be assigned a non-empty expression",
+    MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
+    MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
+    UnexpectedSequenceExpression:
+      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
+    UnsupportedJsxValue:
+      "JSX value should be either an expression or a quoted JSX text",
+    UnterminatedJsxContent: "Unterminated JSX contents",
+    UnwrappedAdjacentJSXElements:
+      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+  },
+  /* code */ ErrorCodes.SyntaxError,
+);
 /* eslint-disable sort-keys */
 
 // Be aware that this file is always executed and not only when the plugin is enabled.
@@ -133,10 +136,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               const htmlEntity =
                 ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
               const char = this.input[this.state.pos];
-              this.raise(
-                this.state.pos,
-                `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
-              );
+              this.raise(this.state.pos, {
+                code: ErrorCodes.SyntaxError,
+                reasonCode: "UnexpectedToken",
+                template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
+              });
             }
           /* falls through */
 

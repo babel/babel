@@ -6,7 +6,7 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import { types as tt, type TokenType } from "./types";
-import type { ParsingError } from "../parser/error";
+import type { ParsingError, ErrorTemplate } from "../parser/error";
 
 type TopicContextState = {
   // When a topic binding has been currently established,
@@ -147,7 +147,7 @@ export default class State {
 
   // todo(JLHwung): set strictErrors to null and avoid recording string errors
   // after a non-directive is parsed
-  strictErrors: Map<number, string> = new Map();
+  strictErrors: Map<number, ErrorTemplate> = new Map();
 
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.
