@@ -54,7 +54,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope";
-import { Errors } from "./error";
+import { Errors, SourceTypeModuleErrors } from "./error";
 
 /*::
 import type { SourceType } from "../options";
@@ -1358,11 +1358,7 @@ export default class ExpressionParser extends LValParser {
 
     if (this.isContextual("meta")) {
       if (!this.inModule) {
-        this.raiseWithData(
-          id.start,
-          { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
-          Errors.ImportMetaOutsideModule,
-        );
+        this.raise(id.start, SourceTypeModuleErrors.ImportMetaOutsideModule);
       }
       this.sawUnambiguousESM = true;
     }
@@ -1524,14 +1520,14 @@ export default class ExpressionParser extends LValParser {
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
       if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
-        let error = Errors.UnexpectedNewTarget;
+        const errorTemplate = { ...Errors.UnexpectedNewTarget };
 
         if (this.hasPlugin("classProperties")) {
-          error += " or class properties";
+          errorTemplate.template += " or class properties";
         }
 
         /* eslint-disable @babel/development-internal/dry-error-messages */
-        this.raise(metaProp.start, error);
+        this.raise(metaProp.start, errorTemplate);
         /* eslint-enable @babel/development-internal/dry-error-messages */
       }
 
