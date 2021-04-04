@@ -808,6 +808,7 @@ export type ClassPrivateProperty = NodeBase & {
   optional?: true,
   definite?: true,
   readonly?: true,
+  override?: true,
 };
 
 export type OptClassDeclaration = ClassBase &
