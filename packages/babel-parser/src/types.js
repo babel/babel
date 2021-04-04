@@ -730,6 +730,7 @@ export type ClassMemberBase = NodeBase &
     computed: boolean,
     // TypeScript only:
     accessibility?: ?Accessibility,
+    override?: ?true,
     abstract?: ?true,
     optional?: ?true,
   };
