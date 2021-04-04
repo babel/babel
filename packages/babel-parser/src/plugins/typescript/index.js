@@ -2745,7 +2745,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSAsExpression":
         case "TSTypeAssertion":
           if (
-            !args[0] &&
+            /*bindingType*/ !args[0] &&
             contextDescription !== "parenthesized expression" &&
             !expr.extra?.parenthesized
           ) {
