@@ -17,6 +17,10 @@
           "left": {
             "type": "TSTypeAssertion",
             "start":1,"end":11,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":11}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            },
             "typeAnnotation": {
               "type": "TSNumberKeyword",
               "start":2,"end":8,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":8}}
@@ -25,10 +29,6 @@
               "type": "Identifier",
               "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"x"},
               "name": "x"
-            },
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
             }
           },
           "right": {
