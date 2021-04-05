@@ -93,6 +93,30 @@ const patterns = [
     invalid: [],
   },
 
+  {
+    code: "class A {a = () => { function b() { return this.b;} };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
+  },
+
+  {
+    code: "class A {a = () => { (function b() { return this.b;}); };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
+  },
+
   // Class Private methods
   {
     code: "class A {#a = this.b;};",
@@ -106,6 +130,30 @@ const patterns = [
     parserOptions: { ecmaVersion: 6 },
     valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
     invalid: [],
+  },
+
+  {
+    code: "class A {#a = () => { function b() { return this.b;} };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
+  },
+
+  {
+    code: "class A {#a = () => { (function b() { return this.b;}); };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
   },
 
   {
