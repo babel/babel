@@ -248,6 +248,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           if (Object.hasOwnProperty.call(modified, modifier)) {
             this.raise(startPos, TSErrors.DuplicateModifier, modifier);
+          } else if (modified.readonly && modifier === "static") {
+            this.raise(
+              startPos,
+              TSErrors.ModifierPrecede,
+              "static",
+              "readonly",
+            );
           }
           modified[modifier] = true;
         }
