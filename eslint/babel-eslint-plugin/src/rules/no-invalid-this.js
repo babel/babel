@@ -17,7 +17,13 @@ export default ruleComposer.filterReports(noInvalidThisRule, problem => {
         node.key.type === "PrivateIdentifier")
     ) {
       inClassMember = true;
-      return;
+      break;
+    } else if (
+      node.type === "FunctionDeclaration" ||
+      node.type === "FunctionExpression"
+    ) {
+      inClassMember = false;
+      break;
     }
 
     node = node.parent;
