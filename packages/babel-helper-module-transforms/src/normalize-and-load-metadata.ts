@@ -22,11 +22,11 @@ export interface ModuleMetadata {
 }
 
 export type InteropType =
-  | "default"
-  | "namespace"
-  | "node-default"
-  | "node-namespace"
-  | "none";
+  | "default" // Babel interop for default-only imports
+  | "namespace" // Babel interop for namespace or default+named imports
+  | "node-default" // Node.js interop for default-only imports
+  | "node-namespace" // Node.js interop for namespace or default+named imports
+  | "none"; // No interop, or named-only imports
 
 export interface SourceModuleMetadata {
   // A unique variable name to use for this namespace object. Centralized for simplicity.
