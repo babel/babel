@@ -294,7 +294,10 @@ export function replaceExpressionWithStatements(
     );
   if (needToAwaitFunction) {
     callee.set("async", true);
-    this.replaceWith(t.awaitExpression((this as ThisType).node));
+    // yield* will await the generator return result
+    if (!needToYieldFunction) {
+      this.replaceWith(t.awaitExpression((this as ThisType).node));
+    }
   }
   if (needToYieldFunction) {
     callee.set("generator", true);

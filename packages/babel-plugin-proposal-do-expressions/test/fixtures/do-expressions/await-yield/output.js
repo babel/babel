@@ -1,5 +1,5 @@
 async function* asyncGenerator(x) {
-  const y = yield* await async function* () {
+  const y = yield* async function* () {
     let z;
     return yield await x;
   }();
