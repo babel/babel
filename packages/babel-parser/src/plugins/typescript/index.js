@@ -2589,7 +2589,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (
           expr.type !== "ArrowFunctionExpression" ||
-          (expr.extra && expr.extra.parenthesized)
+          expr.extra?.parenthesized
         ) {
           abort();
         }
@@ -2743,8 +2743,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.checkLVal(expr.parameter, "parameter property", ...args);
           return;
         case "TSAsExpression":
-        case "TSNonNullExpression":
         case "TSTypeAssertion":
+          if (
+            /*bindingType*/ !args[0] &&
+            contextDescription !== "parenthesized expression" &&
+            !expr.extra?.parenthesized
+          ) {
+            this.raise(expr.start, Errors.InvalidLhs, contextDescription);
+            break;
+          }
+          this.checkLVal(expr.expression, "parenthesized expression", ...args);
+          return;
+        case "TSNonNullExpression":
           this.checkLVal(expr.expression, contextDescription, ...args);
           return;
         default:
