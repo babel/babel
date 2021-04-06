@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: This member cannot have both 'static' and 'override' modifiers. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"D"},
+          "name": "D"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":46,"loc":{"start":{"line":1,"column":18},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":22,"end":44,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":24}},
+              "override": true,
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":38,"end":39,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":19},"identifierName":"m"},
+                "name": "m"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":42,"end":44,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":24}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

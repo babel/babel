@@ -656,4 +656,8 @@ export function tsPrintClassMemberModifiers(this: Printer, node: any, isField) {
     this.word("readonly");
     this.space();
   }
+  if (node.override) {
+    this.word("override");
+    this.space();
+  }
 }

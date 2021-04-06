@@ -41,6 +41,7 @@ type TsModifier =
   | "abstract"
   | "declare"
   | "static"
+  | "override"
   | N.Accessibility;
 
 function nonNull<T>(x: ?T): T {
@@ -117,6 +118,12 @@ const TSErrors = makeErrorTemplates(
       "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
     TypeImportCannotSpecifyDefaultAndNamed:
       "A type-only import can specify a default import or named bindings, but not both.",
+    UnexpectedOverrideAndDeclareModifier:
+      "This member cannot have both 'declare' and 'override' modifiers.",
+    UnexpectedOverrideAndStaticModifier:
+      "This member cannot have both 'static' and 'override' modifiers.",
+    UnexpectedOverrideModifier:
+      "This member cannot have an 'override' modifier because its containing class does not extend another class.",
     UnexpectedParameterModifier:
       "A parameter property is only allowed in a constructor implementation.",
     UnexpectedReadonly:
@@ -2232,7 +2239,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseClassMemberState,
       isStatic: boolean,
     ): void {
-      this.tsParseModifiers(member, ["abstract", "readonly", "declare"]);
+      this.tsParseModifiers(member, [
+        "abstract",
+        "readonly",
+        "declare",
+        "override",
+      ]);
 
       const idx = this.tsTryParseIndexSignature(member);
       if (idx) {
@@ -2256,6 +2268,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
 
         return;
+      }
+
+      if ((member: any).override) {
+        // state.constructorAllowsSuper will be false if containing class does
+        // not extend another class
+        if (!state.constructorAllowsSuper) {
+          this.raise(member.start, TSErrors.UnexpectedOverrideModifier);
+        }
+
+        if (isStatic) {
+          this.raise(
+            member.start,
+            TSErrors.UnexpectedOverrideAndStaticModifier,
+          );
+        }
       }
 
       if (!this.state.inAbstractClass && (member: any).abstract) {
@@ -2442,6 +2469,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
+
+      if (this.state.isDeclareContext && node.override) {
+        this.raise(
+          this.state.start,
+          TSErrors.UnexpectedOverrideAndDeclareModifier,
+        );
+      }
 
       if (this.state.isDeclareContext && this.match(tt.eq)) {
         this.raise(this.state.start, TSErrors.DeclareClassFieldHasInitializer);

@@ -1,0 +1,136 @@
+{
+  "type": "File",
+  "start":0,"end":125,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":125,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":125,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"D"},
+          "name": "D"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":125,"loc":{"start":{"line":1,"column":18},"end":{"line":6,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":24,"end":35,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":15}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":33,"end":34,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":14},"identifierName":"p"},
+                "name": "p"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":40,"end":60,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":24}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":49,"end":51,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":15},"identifierName":"p1"},
+                "name": "p1"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":51,"end":59,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":23}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":53,"end":59,"loc":{"start":{"line":3,"column":17},"end":{"line":3,"column":23}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":65,"end":89,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":28}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":74,"end":76,"loc":{"start":{"line":4,"column":13},"end":{"line":4,"column":15},"identifierName":"p2"},
+                "name": "p2"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":76,"end":88,"loc":{"start":{"line":4,"column":15},"end":{"line":4,"column":27}},
+                "typeAnnotation": {
+                  "type": "TSFunctionType",
+                  "start":78,"end":88,"loc":{"start":{"line":4,"column":17},"end":{"line":4,"column":27}},
+                  "parameters": [],
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":81,"end":88,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":27}},
+                    "typeAnnotation": {
+                      "type": "TSVoidKeyword",
+                      "start":84,"end":88,"loc":{"start":{"line":4,"column":23},"end":{"line":4,"column":27}}
+                    }
+                  }
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "TSDeclareMethod",
+              "start":94,"end":123,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":33}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":103,"end":105,"loc":{"start":{"line":5,"column":13},"end":{"line":5,"column":15},"identifierName":"p3"},
+                "name": "p3"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":106,"end":115,"loc":{"start":{"line":5,"column":16},"end":{"line":5,"column":25},"identifierName":"v"},
+                  "name": "v",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":107,"end":115,"loc":{"start":{"line":5,"column":17},"end":{"line":5,"column":25}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":109,"end":115,"loc":{"start":{"line":5,"column":19},"end":{"line":5,"column":25}}
+                    }
+                  }
+                }
+              ],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":116,"end":122,"loc":{"start":{"line":5,"column":26},"end":{"line":5,"column":32}},
+                "typeAnnotation": {
+                  "type": "TSVoidKeyword",
+                  "start":118,"end":122,"loc":{"start":{"line":5,"column":28},"end":{"line":5,"column":32}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

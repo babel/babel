@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":75,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "errors": [
+    "SyntaxError: This member cannot have both 'declare' and 'override' modifiers. (2:21)",
+    "SyntaxError: This member cannot have both 'declare' and 'override' modifiers. (3:22)",
+    "SyntaxError: Initializers are not allowed in ambient contexts. (3:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":75,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":75,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"D"},
+          "name": "D"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":75,"loc":{"start":{"line":1,"column":18},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":22,"end":42,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":22}},
+              "declare": true,
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":39,"end":41,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":21},"identifierName":"p1"},
+                "name": "p1"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":45,"end":73,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":30}},
+              "declare": true,
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":62,"end":64,"loc":{"start":{"line":3,"column":19},"end":{"line":3,"column":21},"identifierName":"p2"},
+                "name": "p2"
+              },
+              "computed": false,
+              "value": {
+                "type": "StringLiteral",
+                "start":67,"end":72,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":29}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "'foo'"
+                },
+                "value": "foo"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

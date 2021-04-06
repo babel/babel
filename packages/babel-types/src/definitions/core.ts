@@ -1712,6 +1712,10 @@ export const classMethodOrPropertyCommon = {
     validate: assertValueType("boolean"),
     optional: true,
   },
+  override: {
+    validate: assertValueType("boolean"),
+    optional: true,
+  },
   key: {
     validate: chain(
       (function () {

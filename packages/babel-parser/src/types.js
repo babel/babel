@@ -732,6 +732,7 @@ export type ClassMemberBase = NodeBase &
     accessibility?: ?Accessibility,
     abstract?: ?true,
     optional?: ?true,
+    override?: ?true,
   };
 
 export type StaticBlock = NodeBase & {

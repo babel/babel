@@ -1,0 +1,138 @@
+{
+  "type": "File",
+  "start":0,"end":115,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+  "errors": [
+    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (2:4)",
+    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (3:4)",
+    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (4:4)",
+    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (5:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":115,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":115,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":115,"loc":{"start":{"line":1,"column":8},"end":{"line":6,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":14,"end":25,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":15}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":23,"end":24,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":14},"identifierName":"p"},
+                "name": "p"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":30,"end":50,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":24}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":39,"end":41,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":15},"identifierName":"p1"},
+                "name": "p1"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":41,"end":49,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":23}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":43,"end":49,"loc":{"start":{"line":3,"column":17},"end":{"line":3,"column":23}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":55,"end":79,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":28}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":64,"end":66,"loc":{"start":{"line":4,"column":13},"end":{"line":4,"column":15},"identifierName":"p2"},
+                "name": "p2"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":66,"end":78,"loc":{"start":{"line":4,"column":15},"end":{"line":4,"column":27}},
+                "typeAnnotation": {
+                  "type": "TSFunctionType",
+                  "start":68,"end":78,"loc":{"start":{"line":4,"column":17},"end":{"line":4,"column":27}},
+                  "parameters": [],
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":71,"end":78,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":27}},
+                    "typeAnnotation": {
+                      "type": "TSVoidKeyword",
+                      "start":74,"end":78,"loc":{"start":{"line":4,"column":23},"end":{"line":4,"column":27}}
+                    }
+                  }
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "TSDeclareMethod",
+              "start":84,"end":113,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":33}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":93,"end":95,"loc":{"start":{"line":5,"column":13},"end":{"line":5,"column":15},"identifierName":"p3"},
+                "name": "p3"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":96,"end":105,"loc":{"start":{"line":5,"column":16},"end":{"line":5,"column":25},"identifierName":"v"},
+                  "name": "v",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":97,"end":105,"loc":{"start":{"line":5,"column":17},"end":{"line":5,"column":25}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":99,"end":105,"loc":{"start":{"line":5,"column":19},"end":{"line":5,"column":25}}
+                    }
+                  }
+                }
+              ],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":106,"end":112,"loc":{"start":{"line":5,"column":26},"end":{"line":5,"column":32}},
+                "typeAnnotation": {
+                  "type": "TSVoidKeyword",
+                  "start":108,"end":112,"loc":{"start":{"line":5,"column":28},"end":{"line":5,"column":32}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
