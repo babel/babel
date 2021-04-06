@@ -2789,6 +2789,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseMaybeDecoratorArguments(expr);
     }
 
+    checkCommaAfterRest(close) {
+      if (
+        this.state.isDeclareContext &&
+        this.match(tt.comma) &&
+        this.lookaheadCharCode() === close
+      ) {
+        this.next();
+      } else {
+        super.checkCommaAfterRest(close);
+      }
+    }
+
     // === === === === === === === === === === === === === === === ===
     // Note: All below methods are duplicates of something in flow.js.
     // Not sure what the best way to combine these is.
