@@ -92,10 +92,14 @@ const TSErrors = makeErrorTemplates(
       "Index signatures cannot have an accessibility modifier ('%0')",
     IndexSignatureHasDeclare:
       "Index signatures cannot have the 'declare' modifier",
+    IndexSignatureHasOverride:
+      "'override' modifier cannot appear on an index signature.",
     IndexSignatureHasStatic:
       "Index signatures cannot have the 'static' modifier",
     InvalidModifierOnTypeMember:
       "'%0' modifier cannot appear on a type member.",
+    InvalidModifierWithAnotherModifier:
+      "'%0' modifier cannot be used with '%1' modifier.",
     InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
@@ -2291,7 +2295,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if ((member: any).override && isStatic) {
-        this.raise(member.start, TSErrors.OverrideWithStatic);
+        this.raise(
+          member.start,
+          TSErrors.InvalidModifierWithAnotherModifier,
+          "static",
+          "override",
+        );
       }
 
       /*:: invariant(member.type !== "TSIndexSignature") */
