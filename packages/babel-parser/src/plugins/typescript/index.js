@@ -2780,16 +2780,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkCommaAfterRest(close) {
-      if (this.match(tt.comma)) {
-        if (this.lookaheadCharCode() === close) {
-          if (!this.state.isDeclareContext) {
-            this.raiseTrailingCommaAfterRest(this.state.start);
-            return;
-          }
-          this.eat(tt.comma);
-        } else {
-          this.raiseRestNotLast(this.state.start);
-        }
+      if (
+        this.state.isDeclareContext &&
+        this.match(tt.comma) &&
+        this.lookaheadCharCode() === close
+      ) {
+        this.next();
+      } else {
+        super.checkCommaAfterRest(close);
       }
     }
 
