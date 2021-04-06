@@ -95,6 +95,7 @@ const TSErrors = makeErrorTemplates(
       "Index signatures cannot have the 'static' modifier",
     InvalidModifierOnTypeMember:
       "'%0' modifier cannot appear on a type member.",
+    InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
     MixedLabeledAndUnlabeledElements:
@@ -251,7 +252,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           } else if (modified.readonly && modifier === "static") {
             this.raise(
               startPos,
-              TSErrors.ModifierPrecede,
+              TSErrors.InvalidModifiersOrder,
               "static",
               "readonly",
             );
