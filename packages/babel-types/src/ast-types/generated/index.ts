@@ -909,6 +909,7 @@ export interface ClassMethod extends BaseNode {
   accessibility?: "public" | "private" | "protected" | null;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
+  override?: boolean;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
     | TypeParameterDeclaration
@@ -1535,6 +1536,7 @@ export interface ClassProperty extends BaseNode {
   declare?: boolean | null;
   definite?: boolean | null;
   optional?: boolean | null;
+  override?: boolean;
   readonly?: boolean | null;
 }
 
@@ -1576,6 +1578,7 @@ export interface ClassPrivateMethod extends BaseNode {
   decorators?: Array<Decorator> | null;
   generator?: boolean;
   optional?: boolean | null;
+  override?: boolean;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
     | TypeParameterDeclaration
@@ -1668,6 +1671,7 @@ export interface TSDeclareMethod extends BaseNode {
   generator?: boolean;
   kind?: "get" | "set" | "method" | "constructor";
   optional?: boolean | null;
+  override?: boolean;
   static?: boolean;
 }
 
