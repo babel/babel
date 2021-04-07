@@ -195,12 +195,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.match(tt.name);
     }
 
-    tsNextTokenCanFollowModifier() {
-      // Note: TypeScript's implementation is much more complicated because
-      // more things are considered modifiers there.
-      // This implementation only handles modifiers not handled by @babel/parser itself. And "static".
-      // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
-      this.next();
+    tsTokenCanFollowModifier() {
       return (
         (this.match(tt.bracketL) ||
           this.match(tt.braceL) ||
@@ -210,6 +205,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.isLiteralPropertyName()) &&
         !this.hasPrecedingLineBreak()
       );
+    }
+
+    tsNextTokenCanFollowModifier() {
+      // Note: TypeScript's implementation is much more complicated because
+      // more things are considered modifiers there.
+      // This implementation only handles modifiers not handled by @babel/parser itself. And "static".
+      // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
+      this.next();
+      return this.tsTokenCanFollowModifier();
     }
 
     /** Parses a modifier matching one the given modifier names. */
@@ -549,8 +553,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeMemberSemicolon(): void {
-      if (!this.eat(tt.comma)) {
-        this.semicolon();
+      if (!this.eat(tt.comma) && !this.isLineTerminator()) {
+        this.expect(tt.semi);
       }
     }
 
@@ -604,6 +608,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(node.start, TSErrors.ReadonlyForMethodSignature);
         }
         const method: N.TsMethodSignature = nodeAny;
+        if (method.kind && this.isRelational("<")) {
+          this.raise(this.state.pos, TSErrors.AccesorCannotHaveTypeParameters);
+        }
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
         if (method.kind === "get") {
@@ -631,33 +638,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (type) property.typeAnnotation = type;
         this.tsParseTypeMemberSemicolon();
         return this.finishNode(property, "TSPropertySignature");
-      }
-    }
-
-    tsParseMethodSignatureKind(node: any) {
-      if (!this.isContextual("get") && !this.isContextual("set")) {
-        return;
-      }
-      const kind = this.state.value;
-      if (
-        this.tsTryParse(() => {
-          if (this.tsNextTokenCanFollowModifier()) {
-            // Check if a property is a method signature
-            const lookahead = this.lookahead();
-            if (lookahead.type === tt.parenL) {
-              return true;
-            }
-            if (lookahead.type === tt.relational && lookahead.value === "<") {
-              this.raise(
-                this.state.pos,
-                TSErrors.AccesorCannotHaveTypeParameters,
-              );
-              return true;
-            }
-          }
-        })
-      ) {
-        node.kind = kind;
       }
     }
 
@@ -702,8 +682,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return idx;
       }
 
-      this.tsParseMethodSignatureKind(node);
       this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
+      if (
+        !node.computed &&
+        node.key.type === "Identifier" &&
+        (node.key.name === "get" || node.key.name === "set") &&
+        this.tsTokenCanFollowModifier()
+      ) {
+        node.kind = node.key.name;
+        this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
+      }
       return this.tsParsePropertyOrMethodSignature(node, !!node.readonly);
     }
 

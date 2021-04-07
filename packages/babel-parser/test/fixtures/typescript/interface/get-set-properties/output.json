@@ -1,10 +1,6 @@
 {
   "type": "File",
   "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
-  "errors": [
-    "SyntaxError: Missing semicolon. (2:5)",
-    "SyntaxError: Missing semicolon. (3:5)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
@@ -25,23 +21,14 @@
           "body": [
             {
               "type": "TSPropertySignature",
-              "start":18,"end":21,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5}},
-              "key": {
-                "type": "Identifier",
-                "start":18,"end":21,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5},"identifierName":"get"},
-                "name": "get"
-              },
-              "computed": false
-            },
-            {
-              "type": "TSPropertySignature",
-              "start":22,"end":34,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":18}},
+              "start":18,"end":34,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":18}},
               "key": {
                 "type": "Identifier",
                 "start":22,"end":25,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9},"identifierName":"foo"},
                 "name": "foo"
               },
               "computed": false,
+              "kind": "get",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":25,"end":33,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":17}},
@@ -53,23 +40,14 @@
             },
             {
               "type": "TSPropertySignature",
-              "start":37,"end":40,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":5}},
-              "key": {
-                "type": "Identifier",
-                "start":37,"end":40,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":5},"identifierName":"set"},
-                "name": "set"
-              },
-              "computed": false
-            },
-            {
-              "type": "TSPropertySignature",
-              "start":41,"end":53,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":18}},
+              "start":37,"end":53,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":18}},
               "key": {
                 "type": "Identifier",
                 "start":41,"end":44,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":9},"identifierName":"bar"},
                 "name": "bar"
               },
               "computed": false,
+              "kind": "set",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":44,"end":52,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":17}},
