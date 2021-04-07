@@ -142,3 +142,7 @@ export default {
   "transform-unicode-escapes": () => transformUnicodeEscapes,
   "transform-unicode-regex": () => transformUnicodeRegex,
 };
+
+export const minVersions = {
+  "proposal-class-static-block": "7.12.0",
+};
