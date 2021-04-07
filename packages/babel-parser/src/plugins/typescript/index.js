@@ -2791,7 +2791,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkCommaAfterRest(close) {
       if (
-        this.state.isDeclareContext &&
+        this.state.isAmbientContext &&
         this.match(tt.comma) &&
         this.lookaheadCharCode() === close
       ) {
