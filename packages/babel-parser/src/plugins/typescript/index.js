@@ -261,6 +261,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               "static",
               "readonly",
             );
+          } else if (
+            (modified.declare && modifier === "override") ||
+            (modified.override && modifier === "declare")
+          ) {
+            this.raise(
+              startPos,
+              TSErrors.InvalidModifierWithAnotherModifier,
+              "declare",
+              "override",
+            );
           }
           modified[modifier] = true;
         }

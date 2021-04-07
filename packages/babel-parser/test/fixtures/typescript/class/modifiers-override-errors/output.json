@@ -1,15 +1,17 @@
 {
   "type": "File",
-  "start":0,"end":149,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+  "start":0,"end":255,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":1}},
   "errors": [
     "SyntaxError: 'override' modifier cannot appear on a constructor declaration. (2:11)",
     "SyntaxError: 'override' modifier cannot appear on an index signature. (3:2)",
     "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (4:2)",
-    "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (5:2)"
+    "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (5:2)",
+    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (9:10)",
+    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (10:11)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":149,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+    "start":0,"end":255,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -122,6 +124,71 @@
                 },
                 "value": 5
               }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":151,"end":255,"loc":{"start":{"line":8,"column":0},"end":{"line":11,"column":1}},
+        "declare": true,
+        "id": {
+          "type": "Identifier",
+          "start":165,"end":173,"loc":{"start":{"line":8,"column":14},"end":{"line":8,"column":22},"identifierName":"MyClass3"},
+          "name": "MyClass3"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":182,"end":191,"loc":{"start":{"line":8,"column":31},"end":{"line":8,"column":40},"identifierName":"BaseClass"},
+          "name": "BaseClass"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":192,"end":255,"loc":{"start":{"line":8,"column":41},"end":{"line":11,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":196,"end":223,"loc":{"start":{"line":9,"column":2},"end":{"line":9,"column":29}},
+              "declare": true,
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":213,"end":218,"loc":{"start":{"line":9,"column":19},"end":{"line":9,"column":24},"identifierName":"prop1"},
+                "name": "prop1"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":218,"end":223,"loc":{"start":{"line":9,"column":24},"end":{"line":9,"column":29}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":220,"end":223,"loc":{"start":{"line":9,"column":26},"end":{"line":9,"column":29}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":226,"end":253,"loc":{"start":{"line":10,"column":2},"end":{"line":10,"column":29}},
+              "override": true,
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":243,"end":248,"loc":{"start":{"line":10,"column":19},"end":{"line":10,"column":24},"identifierName":"prop2"},
+                "name": "prop2"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":248,"end":253,"loc":{"start":{"line":10,"column":24},"end":{"line":10,"column":29}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":250,"end":253,"loc":{"start":{"line":10,"column":26},"end":{"line":10,"column":29}}
+                }
+              },
+              "value": null
             }
           ]
         }
