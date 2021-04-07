@@ -181,6 +181,16 @@ const require = createRequire(import.meta.url);
           [].includes(2);"
         `);
       });
+
+      it("regenerator works", () => {
+        const output = Babel.transform("function* fn() {}", {
+          sourceType: "module",
+          targets: { ie: 11 },
+          presets: ["env"],
+        }).code;
+
+        expect(output).toMatch("regeneratorRuntime.mark(fn)");
+      });
     });
 
     describe("custom plugins and presets", () => {

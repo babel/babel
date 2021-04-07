@@ -1,1 +1,2 @@
-export { default } from "regenerator-transform";
+import regeneratorTransform from "regenerator-transform";
+export default regeneratorTransform.default;
