@@ -11,7 +11,7 @@ Using plugins:
   proposal-numeric-separator { edge < 79 }
   proposal-logical-assignment-operators { edge < 85 }
   proposal-nullish-coalescing-operator { edge < 80 }
-  proposal-optional-chaining { edge }
+  proposal-optional-chaining { edge < 80 }
   proposal-json-strings { edge < 79 }
   proposal-optional-catch-binding { edge < 79 }
   proposal-async-generator-functions { edge < 79 }
@@ -20,7 +20,7 @@ Using plugins:
   proposal-unicode-property-regex { edge < 79 }
   transform-named-capturing-groups-regex { edge < 79 }
   proposal-export-namespace-from { edge < 79 }
-  bugfix/transform-edge-function-name
+  bugfix/transform-edge-function-name { edge < 79 }
   transform-modules-commonjs
   proposal-dynamic-import
 

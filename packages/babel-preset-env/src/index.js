@@ -420,7 +420,7 @@ option \`forceAllTransforms: true\` instead.
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
-      logPlugin(pluginName, targets, pluginsList);
+      logPlugin(pluginName, targets, compatData);
     });
 
     if (!useBuiltIns) {

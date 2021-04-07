@@ -15,7 +15,7 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  bugfix/transform-v8-spread-parameters-in-optional-chaining
+  bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome }
   transform-modules-commonjs
   proposal-dynamic-import
   proposal-export-namespace-from { }

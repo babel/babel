@@ -19,7 +19,7 @@ Using plugins:
   proposal-numeric-separator { android, chrome < 75, edge < 79, firefox < 70, ios < 13, opera < 62, safari < 13, samsung < 11 }
   proposal-logical-assignment-operators { android, chrome < 85, edge < 85, firefox < 79, ios < 14, node < 15, opera, safari < 14, samsung }
   proposal-nullish-coalescing-operator { android, chrome < 80, edge < 80, firefox < 72, ios < 13.4, node < 14, opera < 67, safari < 13.1, samsung < 13 }
-  proposal-optional-chaining { android, chrome, edge, firefox < 74, ios < 13.4, node, opera, safari < 13.1, samsung }
+  proposal-optional-chaining { android, chrome < 80, edge < 80, firefox < 74, ios < 13.4, node < 14, opera < 67, safari < 13.1, samsung < 13 }
   proposal-json-strings { android, chrome < 66, edge < 79, firefox < 62, ios < 12, opera < 53, safari < 12, samsung < 9 }
   proposal-optional-catch-binding { android, chrome < 66, edge < 79, ios < 11.3, opera < 53, safari < 11.1, samsung < 9 }
   proposal-async-generator-functions { android, chrome < 63, edge < 79, ios < 12, opera < 50, safari < 12 }
@@ -29,12 +29,12 @@ Using plugins:
   transform-named-capturing-groups-regex { android, chrome < 64, edge < 79, firefox < 78, ios < 11.3, opera < 51, safari < 11.1, samsung < 9 }
   transform-unicode-regex { ios < 12, safari < 12 }
   proposal-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios, opera < 60, safari, samsung < 11.0 }
-  bugfix/transform-async-arrows-in-class
-  bugfix/transform-edge-default-parameters
-  bugfix/transform-edge-function-name
-  bugfix/transform-safari-block-shadowing
-  bugfix/transform-safari-for-shadowing
-  bugfix/transform-tagged-template-caching
+  bugfix/transform-async-arrows-in-class { ios < 11, safari < 11 }
+  bugfix/transform-edge-default-parameters { edge < 18 }
+  bugfix/transform-edge-function-name { edge < 79 }
+  bugfix/transform-safari-block-shadowing { ios < 11, safari < 11 }
+  bugfix/transform-safari-for-shadowing { ios < 11, safari < 11 }
+  bugfix/transform-tagged-template-caching { ios < 13, safari < 13 }
   transform-modules-commonjs
   proposal-dynamic-import
 

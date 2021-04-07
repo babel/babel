@@ -20,7 +20,7 @@ Using plugins:
   transform-dotall-regex { safari < 11.1 }
   proposal-unicode-property-regex { safari < 11.1 }
   transform-named-capturing-groups-regex { safari < 11.1 }
-  transform-async-to-generator { safari < 11 }
+  transform-async-to-generator { safari < 10.1 }
   transform-exponentiation-operator { safari < 10.1 }
   transform-function-name { safari < 10 }
   transform-block-scoped-functions { safari < 10 }
@@ -30,11 +30,11 @@ Using plugins:
   transform-unicode-regex { safari < 12 }
   transform-spread { safari < 10 }
   transform-destructuring { safari < 10 }
-  transform-block-scoping { safari < 11 }
+  transform-block-scoping { safari < 10 }
   transform-new-target { safari < 10 }
   transform-regenerator { safari < 10 }
   proposal-export-namespace-from { safari }
-  bugfix/transform-tagged-template-caching
+  bugfix/transform-tagged-template-caching { safari < 13 }
   transform-modules-commonjs
   proposal-dynamic-import
 
