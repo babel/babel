@@ -30,7 +30,7 @@ export default declare(({ types: t, assertVersion }) => {
           const bodyPath = path.get("body");
 
           // add implicit returns to all ending expression statements
-          const completionRecords: Array<NodePath> = bodyPath.getCompletionRecords();
+          const completionRecords = bodyPath.getCompletionRecords();
 
           for (const p of completionRecords) {
             if (p.isExpressionStatement()) {
