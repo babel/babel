@@ -854,6 +854,12 @@ export function enumStringMember(
 export function enumDefaultedMember(id: t.Identifier): t.EnumDefaultedMember {
   return builder("EnumDefaultedMember", ...arguments);
 }
+export function indexedAccessType(
+  objectType: t.FlowType,
+  indexType: t.FlowType,
+): t.IndexedAccessType {
+  return builder("IndexedAccessType", ...arguments);
+}
 export function jsxAttribute(
   name: t.JSXIdentifier | t.JSXNamespacedName,
   value?:

@@ -559,3 +559,11 @@ defineType("EnumDefaultedMember", {
     id: validateType("Identifier"),
   },
 });
+
+defineType("IndexedAccessType", {
+  visitor: ["objectType", "indexType"],
+  fields: {
+    objectType: validateType("FlowType"),
+    indexType: validateType("FlowType"),
+  },
+});
