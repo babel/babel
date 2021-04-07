@@ -20,8 +20,8 @@ Using plugins:
   proposal-unicode-property-regex { chrome < 64 }
   transform-named-capturing-groups-regex { chrome < 64 }
   proposal-export-namespace-from { chrome < 72 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs2: `DEBUG` option
 
 Using targets: {

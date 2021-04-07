@@ -44,8 +44,8 @@ Using plugins:
   transform-new-target { ie }
   transform-regenerator { firefox < 53, ie }
   proposal-export-namespace-from { chrome < 72, firefox < 80, ie }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

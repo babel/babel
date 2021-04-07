@@ -16,13 +16,13 @@ Using plugins:
   proposal-optional-chaining { samsung }
   proposal-json-strings { samsung < 9 }
   proposal-optional-catch-binding { samsung < 9 }
-  syntax-async-generators {}
-  syntax-object-rest-spread {}
+  syntax-async-generators
+  syntax-object-rest-spread
   proposal-unicode-property-regex { samsung < 9 }
   transform-named-capturing-groups-regex { samsung < 9 }
   proposal-export-namespace-from { samsung < 11.0 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

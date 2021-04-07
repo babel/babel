@@ -20,9 +20,9 @@ Using plugins:
   proposal-unicode-property-regex { edge < 79 }
   transform-named-capturing-groups-regex { edge < 79 }
   proposal-export-namespace-from { edge < 79 }
-  bugfix/transform-edge-default-parameters {}
-  bugfix/transform-edge-function-name {}
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  bugfix/transform-edge-default-parameters
+  bugfix/transform-edge-function-name
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

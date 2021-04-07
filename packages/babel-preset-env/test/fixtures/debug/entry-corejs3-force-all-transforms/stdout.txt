@@ -46,7 +46,7 @@ Using plugins:
   transform-property-literals { }
   transform-reserved-words { }
   proposal-export-namespace-from { chrome < 72 }
-  syntax-dynamic-import {}
+  syntax-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

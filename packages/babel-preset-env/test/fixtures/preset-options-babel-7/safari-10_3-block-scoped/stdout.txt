@@ -25,7 +25,7 @@ Using plugins:
   transform-unicode-regex { safari < 12 }
   transform-block-scoping { safari < 11 }
   proposal-export-namespace-from { safari }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

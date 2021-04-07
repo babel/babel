@@ -26,7 +26,7 @@ Using plugins:
   transform-unicode-escapes { firefox < 53 }
   transform-destructuring { firefox < 53 }
   proposal-export-namespace-from { firefox < 80, node < 13.2 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

@@ -50,7 +50,7 @@ Using plugins:
   transform-new-target { ie }
   transform-regenerator { ie }
   proposal-export-namespace-from { firefox < 80, ie, ios, safari }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

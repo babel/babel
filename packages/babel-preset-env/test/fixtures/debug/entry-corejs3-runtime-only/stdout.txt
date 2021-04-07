@@ -14,13 +14,13 @@ Using plugins:
   proposal-logical-assignment-operators { chrome < 85 }
   proposal-nullish-coalescing-operator { chrome < 80 }
   proposal-optional-chaining { chrome }
-  syntax-json-strings {}
-  syntax-optional-catch-binding {}
-  syntax-async-generators {}
-  syntax-object-rest-spread {}
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
   proposal-export-namespace-from { chrome < 72 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

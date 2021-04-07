@@ -45,8 +45,8 @@ Using plugins:
   transform-new-target { ie }
   transform-regenerator { ie }
   proposal-export-namespace-from { chrome < 72, ie, node < 13.2 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

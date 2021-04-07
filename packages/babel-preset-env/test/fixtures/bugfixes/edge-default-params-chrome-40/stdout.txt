@@ -40,7 +40,7 @@ Using plugins:
   transform-new-target { chrome < 46 }
   transform-regenerator { chrome < 50 }
   proposal-export-namespace-from { chrome < 72 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

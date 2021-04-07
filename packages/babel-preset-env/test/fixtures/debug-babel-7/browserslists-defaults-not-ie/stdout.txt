@@ -19,13 +19,13 @@ Using plugins:
   proposal-logical-assignment-operators { chrome < 85, firefox < 79, ios < 14, opera, safari < 14, samsung }
   proposal-nullish-coalescing-operator { ios < 13.4, samsung < 13 }
   proposal-optional-chaining { android, chrome, edge, ios < 13.4, opera, samsung }
-  syntax-json-strings {}
-  syntax-optional-catch-binding {}
-  syntax-async-generators {}
-  syntax-object-rest-spread {}
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
   transform-template-literals { ios < 13 }
   proposal-export-namespace-from { firefox < 80, ios, safari }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

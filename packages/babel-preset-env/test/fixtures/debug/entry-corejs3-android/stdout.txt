@@ -44,8 +44,8 @@ Using plugins:
   transform-regenerator { android }
   transform-reserved-words { android < 4.4 }
   proposal-export-namespace-from { android < 72 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

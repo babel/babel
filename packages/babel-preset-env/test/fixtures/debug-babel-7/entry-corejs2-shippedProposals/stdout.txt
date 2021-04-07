@@ -48,8 +48,8 @@ Using plugins:
   transform-property-literals { ie < 9 }
   transform-reserved-words { ie < 9 }
   proposal-export-namespace-from { ie }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs2: `DEBUG` option
 
 Using targets: {

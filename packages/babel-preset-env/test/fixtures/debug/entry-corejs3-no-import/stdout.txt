@@ -25,8 +25,8 @@ Using plugins:
   transform-for-of { node < 6.5 }
   transform-destructuring { node < 6.5 }
   proposal-export-namespace-from { node < 13.2 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

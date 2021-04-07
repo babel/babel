@@ -46,7 +46,7 @@ Using plugins:
   transform-property-literals { android < 4 }
   transform-reserved-words { android < 4.4 }
   proposal-export-namespace-from { android < 72 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

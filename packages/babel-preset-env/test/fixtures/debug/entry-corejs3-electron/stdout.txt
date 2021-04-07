@@ -30,8 +30,8 @@ Using plugins:
   transform-block-scoping { electron < 0.37 }
   transform-regenerator { electron < 1.1 }
   proposal-export-namespace-from { electron < 5.0 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

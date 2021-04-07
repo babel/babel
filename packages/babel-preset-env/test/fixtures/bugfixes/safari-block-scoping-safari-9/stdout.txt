@@ -34,8 +34,8 @@ Using plugins:
   transform-new-target { safari < 10 }
   transform-regenerator { safari < 10 }
   proposal-export-namespace-from { safari }
-  bugfix/transform-tagged-template-caching {}
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  bugfix/transform-tagged-template-caching
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

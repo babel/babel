@@ -34,7 +34,7 @@ Using plugins:
   transform-unicode-regex { ios < 12, safari < 12 }
   transform-block-scoping { ios < 11, safari < 11 }
   proposal-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios, opera < 60, safari, samsung < 11.0 }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

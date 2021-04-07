@@ -48,8 +48,8 @@ Using plugins:
   transform-new-target { edge < 14, ie, ios < 10, safari < 10 }
   transform-regenerator { firefox < 53, ie, ios < 10, safari < 10 }
   proposal-export-namespace-from { chrome < 72, edge < 79, firefox < 80, ie, ios, safari }
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

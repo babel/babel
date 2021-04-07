@@ -34,7 +34,7 @@ Using plugins:
   transform-unicode-regex { ios < 12, safari < 12 }
   transform-block-scoping { ios < 11, safari < 11 }
   proposal-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios, opera < 60, safari, samsung < 11.0 }
-  syntax-dynamic-import {}
+  syntax-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

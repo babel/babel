@@ -23,10 +23,10 @@ Using plugins:
   transform-exponentiation-operator { safari < 10.1 }
   transform-unicode-regex { safari < 12 }
   proposal-export-namespace-from { safari }
-  bugfix/transform-safari-block-shadowing {}
-  bugfix/transform-safari-for-shadowing {}
-  bugfix/transform-tagged-template-caching {}
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  bugfix/transform-safari-block-shadowing
+  bugfix/transform-safari-for-shadowing
+  bugfix/transform-tagged-template-caching
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

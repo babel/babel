@@ -24,8 +24,8 @@ Using plugins:
   transform-for-of { edge < 15 }
   transform-destructuring { edge < 15 }
   proposal-export-namespace-from { edge < 79 }
-  bugfix/transform-edge-function-name {}
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  bugfix/transform-edge-function-name
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
