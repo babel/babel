@@ -1,0 +1,3 @@
+{
+  "plugins": ["syntax-async-do-expressions", "proposal-do-expressions"]
+}

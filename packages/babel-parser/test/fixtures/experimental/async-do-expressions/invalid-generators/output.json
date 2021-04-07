@@ -1,0 +1,81 @@
+{
+  "type": "File",
+  "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
+  "errors": [
+    "SyntaxError: Missing semicolon (3:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":16,"end":20,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":20},"identifierName":"iter"},
+          "name": "iter"
+        },
+        "generator": true,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":23,"end":62,"loc":{"start":{"line":1,"column":23},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":27,"end":60,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
+              "expression": {
+                "type": "AwaitExpression",
+                "start":27,"end":60,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
+                "argument": {
+                  "type": "DoExpression",
+                  "start":39,"end":60,"loc":{"start":{"line":2,"column":14},"end":{"line":4,"column":3}},
+                  "async": true,
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":42,"end":60,"loc":{"start":{"line":2,"column":17},"end":{"line":4,"column":3}},
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start":48,"end":53,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":9}},
+                        "expression": {
+                          "type": "Identifier",
+                          "start":48,"end":53,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":9},"identifierName":"yield"},
+                          "name": "yield"
+                        }
+                      },
+                      {
+                        "type": "ExpressionStatement",
+                        "start":54,"end":56,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":12}},
+                        "expression": {
+                          "type": "NumericLiteral",
+                          "start":54,"end":55,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":11}},
+                          "extra": {
+                            "rawValue": 1,
+                            "raw": "1"
+                          },
+                          "value": 1
+                        }
+                      }
+                    ],
+                    "directives": []
+                  }
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":62,"end":63,"loc":{"start":{"line":5,"column":1},"end":{"line":5,"column":2}}
+      }
+    ],
+    "directives": []
+  }
+}
