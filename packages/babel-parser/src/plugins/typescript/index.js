@@ -1563,7 +1563,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         kind = "let";
       }
 
-      return this.tsInDeclareContext(() => {
+      return this.tsInAmbientContext(() => {
         switch (starttype) {
           case tt._function:
             nany.declare = true;
@@ -1853,7 +1853,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.finishNode(node, bodilessType);
         return;
       }
-      if (bodilessType === "TSDeclareFunction" && this.state.isDeclareContext) {
+      if (bodilessType === "TSDeclareFunction" && this.state.isAmbientContext) {
         this.raise(node.start, TSErrors.DeclareFunctionHasImplementation);
         if (
           // $FlowIgnore
@@ -2207,7 +2207,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         super.parseClassMember(classBody, member, state);
       };
       if (member.declare) {
-        this.tsInDeclareContext(callParseClassMember);
+        this.tsInAmbientContext(callParseClassMember);
       } else {
         callParseClassMember();
       }
@@ -2430,7 +2430,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
 
-      if (this.state.isDeclareContext && this.match(tt.eq)) {
+      if (this.state.isAmbientContext && this.match(tt.eq)) {
         this.raise(this.state.start, TSErrors.DeclareClassFieldHasInitializer);
       }
 
@@ -2680,7 +2680,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt.question)) {
         if (
           param.type !== "Identifier" &&
-          !this.state.isDeclareContext &&
+          !this.state.isAmbientContext &&
           !this.state.inType
         ) {
           this.raise(param.start, TSErrors.PatternIsOptional);
@@ -2940,13 +2940,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return param;
     }
 
-    tsInDeclareContext<T>(cb: () => T): T {
-      const oldIsDeclareContext = this.state.isDeclareContext;
-      this.state.isDeclareContext = true;
+    tsInAmbientContext<T>(cb: () => T): T {
+      const oldIsAmbientContext = this.state.isAmbientContext;
+      this.state.isAmbientContext = true;
       try {
         return cb();
       } finally {
-        this.state.isDeclareContext = oldIsDeclareContext;
+        this.state.isAmbientContext = oldIsAmbientContext;
       }
     }
 
