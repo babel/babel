@@ -10,6 +10,9 @@ class MyClass extends BaseClass {
   override set text(value) {}
 
   override async fetch() {}
+
+  override [x] = 2
+  override [x]() {}
 }
 
 declare class DeclaredClass extends BaseClass {
