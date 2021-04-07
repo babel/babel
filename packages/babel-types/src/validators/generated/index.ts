@@ -2453,6 +2453,23 @@ export function isEnumDefaultedMember(
 
   return false;
 }
+export function isIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.IndexedAccessType {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "IndexedAccessType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isJSXAttribute(
   node: object | null | undefined,
   opts?: object | null,
