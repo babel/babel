@@ -412,9 +412,8 @@ sourceMap-LineBreaks.ts
 sourceMapValidationDecorators.ts
 sourceMapValidationStatements.ts
 staticAsIdentifier.ts
-staticIndexer.ts
-strictModeReservedWord.ts
 staticModifierAlreadySeen.ts
+strictModeReservedWord.ts
 superCallFromClassThatHasNoBaseType1.ts
 symbolLinkDeclarationEmitModuleNames.ts
 symbolMergeValueAndImportedType.ts
