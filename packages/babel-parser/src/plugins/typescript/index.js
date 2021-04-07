@@ -86,6 +86,7 @@ const TSErrors = makeErrorTemplates(
     ExpectedAmbientAfterExportDeclare:
       "'export declare' must be followed by an ambient declaration.",
     ImportAliasHasImportType: "An import alias can not use 'import type'",
+    IncompatibleModifiers: "'%0' modifier cannot be used with '%1' modifier.",
     IndexSignatureHasAbstract:
       "Index signatures cannot have the 'abstract' modifier",
     IndexSignatureHasAccessibility:
@@ -98,8 +99,6 @@ const TSErrors = makeErrorTemplates(
       "Index signatures cannot have the 'static' modifier",
     InvalidModifierOnTypeMember:
       "'%0' modifier cannot appear on a type member.",
-    InvalidModifierWithAnotherModifier:
-      "'%0' modifier cannot be used with '%1' modifier.",
     InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
@@ -269,7 +268,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           ) {
             this.raise(
               startPos,
-              TSErrors.InvalidModifierWithAnotherModifier,
+              TSErrors.IncompatibleModifiers,
               "declare",
               "override",
             );
@@ -2310,7 +2309,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (isStatic) {
           this.raise(
             member.start,
-            TSErrors.InvalidModifierWithAnotherModifier,
+            TSErrors.IncompatibleModifiers,
             "static",
             "override",
           );
