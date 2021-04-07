@@ -1050,6 +1050,12 @@ export type FlowInterfaceType = NodeBase & {
   body: FlowObjectTypeAnnotation,
 };
 
+export type FlowIndexedAccessType = Node & {
+  type: "IndexedAccessType",
+  objectType: FlowType,
+  indexType: FlowType,
+};
+
 // ESTree
 
 export type EstreeProperty = NodeBase & {

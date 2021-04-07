@@ -1628,10 +1628,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let type = this.flowParsePrimaryType();
       while (this.match(tt.bracketL) && !this.canInsertSemicolon()) {
         const node = this.startNodeAt(startPos, startLoc);
-        node.elementType = type;
         this.expect(tt.bracketL);
-        this.expect(tt.bracketR);
-        type = this.finishNode(node, "ArrayTypeAnnotation");
+        if (this.match(tt.bracketR)) {
+          node.elementType = type;
+          this.next(); // eat `]`
+          type = this.finishNode(node, "ArrayTypeAnnotation");
+        } else {
+          node.objectType = type;
+          node.indexType = this.flowParseType();
+          this.expect(tt.bracketR);
+          type = this.finishNode<N.FlowIndexedAccessType>(
+            node,
+            "IndexedAccessType",
+          );
+        }
       }
       return type;
     }
