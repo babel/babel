@@ -1205,15 +1205,12 @@ export default class StatementParser extends ExpressionParser {
   }
 
   // https://tc39.es/ecma262/#prod-ClassBody
-  parseClassBody(
-    constructorAllowsSuper: boolean,
-    oldStrict: boolean,
-  ): N.ClassBody {
+  parseClassBody(hadSuperClass: boolean, oldStrict: boolean): N.ClassBody {
     this.classScope.enter();
 
     const state: N.ParseClassMemberState = {
-      constructorAllowsSuper,
       hadConstructor: false,
+      hadSuperClass,
     };
     let decorators: N.Decorator[] = [];
     const classBody: N.ClassBody = this.startNode();
@@ -1404,7 +1401,7 @@ export default class StatementParser extends ExpressionParser {
           this.raise(key.start, Errors.OverrideOnConstructor);
         }
         state.hadConstructor = true;
-        allowsDirectSuper = state.constructorAllowsSuper;
+        allowsDirectSuper = state.hadSuperClass;
       }
 
       this.pushClassMethod(

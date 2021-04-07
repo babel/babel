@@ -1,17 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":255,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":1}},
+  "start":0,"end":296,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":1}},
   "errors": [
     "SyntaxError: 'override' modifier cannot appear on a constructor declaration. (2:11)",
     "SyntaxError: 'override' modifier cannot appear on an index signature. (3:2)",
     "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (4:2)",
     "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (5:2)",
     "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (9:10)",
-    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (10:11)"
+    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (10:11)",
+    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (14:2)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":255,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":1}},
+    "start":0,"end":296,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -186,6 +187,43 @@
                 "typeAnnotation": {
                   "type": "TSAnyKeyword",
                   "start":250,"end":253,"loc":{"start":{"line":10,"column":26},"end":{"line":10,"column":29}}
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":257,"end":296,"loc":{"start":{"line":13,"column":0},"end":{"line":15,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":263,"end":271,"loc":{"start":{"line":13,"column":6},"end":{"line":13,"column":14},"identifierName":"MyClass4"},
+          "name": "MyClass4"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":272,"end":296,"loc":{"start":{"line":13,"column":15},"end":{"line":15,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":276,"end":294,"loc":{"start":{"line":14,"column":2},"end":{"line":14,"column":20}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":285,"end":289,"loc":{"start":{"line":14,"column":11},"end":{"line":14,"column":15},"identifierName":"prop"},
+                "name": "prop"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":289,"end":294,"loc":{"start":{"line":14,"column":15},"end":{"line":14,"column":20}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":291,"end":294,"loc":{"start":{"line":14,"column":17},"end":{"line":14,"column":20}}
                 }
               },
               "value": null

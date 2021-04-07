@@ -111,6 +111,8 @@ const TSErrors = makeErrorTemplates(
       "'abstract' modifier can only appear on a class, method, or property declaration.",
     OptionalTypeBeforeRequired:
       "A required element cannot follow an optional element.",
+    OverrideNotInSubClass:
+      "This member cannot have an 'override' modifier because its containing class does not extend another class.",
     PatternIsOptional:
       "A binding pattern parameter cannot be optional in an implementation signature.",
     PrivateElementHasAbstract:
@@ -2304,13 +2306,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.raise(member.start, TSErrors.NonAbstractClassHasAbstractMethod);
       }
 
-      if ((member: any).override && isStatic) {
-        this.raise(
-          member.start,
-          TSErrors.InvalidModifierWithAnotherModifier,
-          "static",
-          "override",
-        );
+      if ((member: any).override) {
+        if (isStatic) {
+          this.raise(
+            member.start,
+            TSErrors.InvalidModifierWithAnotherModifier,
+            "static",
+            "override",
+          );
+        } else if (!state.hadSuperClass) {
+          this.raise(member.start, TSErrors.OverrideNotInSubClass);
+        }
       }
 
       /*:: invariant(member.type !== "TSIndexSignature") */
