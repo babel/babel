@@ -3011,4 +3011,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       return method;
     }
+
+    shouldParseAsDts(): boolean {
+      return !!this.getPluginOption("typescript", "dts");
+    }
+
+    parse() {
+      if (this.shouldParseAsDts()) {
+        this.state.isAmbientContext = true;
+      }
+      return super.parse();
+    }
   };
