@@ -151,6 +151,7 @@ export type Node =
   | ImportDefaultSpecifier
   | ImportNamespaceSpecifier
   | ImportSpecifier
+  | IndexedAccessType
   | InferredPredicate
   | InterfaceDeclaration
   | InterfaceExtends
@@ -1385,6 +1386,12 @@ export interface EnumStringMember extends BaseNode {
 export interface EnumDefaultedMember extends BaseNode {
   type: "EnumDefaultedMember";
   id: Identifier;
+}
+
+export interface IndexedAccessType extends BaseNode {
+  type: "IndexedAccessType";
+  objectType: FlowType;
+  indexType: FlowType;
 }
 
 export interface JSXAttribute extends BaseNode {
