@@ -27,6 +27,7 @@ export const logPlugin = (
     if (!first) formattedTargets += `,`;
     first = false;
     formattedTargets += ` ${target}`;
+    // $FlowIgnore
     if (support[target]) formattedTargets += ` < ${support[target]}`;
   }
   formattedTargets += ` }`;
