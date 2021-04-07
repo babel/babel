@@ -1,7 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxAsyncDoExpressions from "@babel/plugin-syntax-async-do-expressions";
 import hoistVariables from "@babel/helper-hoist-variables";
-import type NodePath from "@babel/traverse";
+import type * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
 export default declare(({ types: t, assertVersion }) => {
   assertVersion("^7.13.0");

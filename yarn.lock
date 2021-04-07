@@ -1060,6 +1060,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-async-do-expressions": "workspace:^7.13.0"
     "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.13.0
   languageName: unknown
