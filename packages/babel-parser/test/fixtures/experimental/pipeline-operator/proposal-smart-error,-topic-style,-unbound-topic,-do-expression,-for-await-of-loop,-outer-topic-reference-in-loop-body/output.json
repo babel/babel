@@ -44,6 +44,7 @@
                   "expression": {
                     "type": "DoExpression",
                     "start":34,"end":75,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":52}},
+                    "async": false,
                     "body": {
                       "type": "BlockStatement",
                       "start":37,"end":75,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":52}},

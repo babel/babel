@@ -82,7 +82,8 @@ export function DoExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack);
+  // `async do` can start an expression statement
+  return !node.async && isFirstInStatement(printStack);
 }
 
 export function Binary(node: any, parent: any): boolean {

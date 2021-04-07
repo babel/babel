@@ -1,4 +1,10 @@
 const pluginNameMap = {
+  asyncDoExpressions: {
+    syntax: {
+      name: "@babel/plugin-syntax-async-do-expressions",
+      url: "https://git.io/JYer8",
+    },
+  },
   classProperties: {
     syntax: {
       name: "@babel/plugin-syntax-class-properties",
