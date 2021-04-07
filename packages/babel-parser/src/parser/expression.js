@@ -1033,6 +1033,8 @@ export default class ExpressionParser extends LValParser {
             );
           } else if (this.match(tt.name)) {
             return this.parseAsyncArrowUnaryFunction(id);
+          } else if (this.match(tt._do)) {
+            return this.parseDo(true);
           }
         }
 
@@ -1049,7 +1051,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt._do: {
-        return this.parseDo();
+        return this.parseDo(false);
       }
 
       case tt.regexp: {
@@ -1231,13 +1233,27 @@ export default class ExpressionParser extends LValParser {
   }
 
   // https://github.com/tc39/proposal-do-expressions
-  parseDo(): N.DoExpression {
+  // https://github.com/tc39/proposal-async-do-expressions
+  parseDo(isAsync: boolean): N.DoExpression {
     this.expectPlugin("doExpressions");
+    if (isAsync) {
+      this.expectPlugin("asyncDoExpressions");
+    }
     const node = this.startNode();
+    node.async = isAsync;
     this.next(); // eat `do`
     const oldLabels = this.state.labels;
     this.state.labels = [];
-    node.body = this.parseBlock();
+    if (isAsync) {
+      // AsyncDoExpression :
+      // async [no LineTerminator here] do Block[~Yield, +Await, ~Return]
+      this.prodParam.enter(PARAM_AWAIT);
+      node.body = this.parseBlock();
+      this.prodParam.exit();
+    } else {
+      node.body = this.parseBlock();
+    }
+
     this.state.labels = oldLabels;
     return this.finishNode(node, "DoExpression");
   }

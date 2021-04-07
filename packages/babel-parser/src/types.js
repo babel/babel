@@ -402,6 +402,7 @@ export type ArrayExpression = NodeBase & {
 export type DoExpression = NodeBase & {
   type: "DoExpression",
   body: ?BlockStatement,
+  async: boolean,
 };
 
 export type TupleExpression = NodeBase & {

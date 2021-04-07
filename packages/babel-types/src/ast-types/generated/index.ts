@@ -1609,6 +1609,7 @@ export interface Decorator extends BaseNode {
 export interface DoExpression extends BaseNode {
   type: "DoExpression";
   body: BlockStatement;
+  async: boolean;
 }
 
 export interface ExportDefaultSpecifier extends BaseNode {

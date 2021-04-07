@@ -20,6 +20,10 @@ export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
 }
 
 export function DoExpression(this: Printer, node: t.DoExpression) {
+  if (node.async) {
+    this.word("async");
+    this.space();
+  }
   this.word("do");
   this.space();
   this.print(node.body, node);
