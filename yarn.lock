@@ -1059,6 +1059,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-async-do-expressions": "workspace:^7.13.0"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.13.0
   languageName: unknown

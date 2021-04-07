@@ -28,7 +28,8 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-async-do-expressions"
 }
