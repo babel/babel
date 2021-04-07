@@ -8,16 +8,16 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  syntax-numeric-separator { "chrome":"89" }
-  syntax-nullish-coalescing-operator { "chrome":"89" }
-  syntax-optional-chaining { "chrome":"89" }
-  syntax-json-strings { "chrome":"89" }
-  syntax-optional-catch-binding { "chrome":"89" }
-  syntax-async-generators { "chrome":"89" }
-  syntax-object-rest-spread { "chrome":"89" }
-  bugfix/transform-v8-spread-parameters-in-optional-chaining { "chrome":"89" }
-  transform-modules-commonjs { "chrome":"89" }
-  proposal-dynamic-import { "chrome":"89" }
-  proposal-export-namespace-from {}
+  syntax-numeric-separator
+  syntax-nullish-coalescing-operator
+  syntax-optional-chaining
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome }
+  transform-modules-commonjs
+  proposal-dynamic-import
+  proposal-export-namespace-from { }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

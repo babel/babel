@@ -11,43 +11,43 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-logical-assignment-operators { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-nullish-coalescing-operator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-optional-chaining { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-parameters { "electron":"0.36", "ie":"10" }
-  proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-named-capturing-groups-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-async-to-generator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-exponentiation-operator { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-template-literals { "ie":"10" }
-  transform-literals { "ie":"10" }
-  transform-function-name { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-arrow-functions { "ie":"10" }
-  transform-block-scoped-functions { "ie":"10" }
-  transform-classes { "ie":"10" }
-  transform-object-super { "ie":"10" }
-  transform-shorthand-properties { "ie":"10" }
-  transform-duplicate-keys { "ie":"10" }
-  transform-computed-properties { "ie":"10" }
-  transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-sticky-regex { "electron":"0.36", "ie":"10" }
-  transform-unicode-escapes { "ie":"10" }
-  transform-unicode-regex { "electron":"0.36", "ie":"10" }
-  transform-spread { "ie":"10" }
-  transform-destructuring { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-block-scoping { "electron":"0.36", "ie":"10" }
-  transform-typeof-symbol { "ie":"10" }
-  transform-new-target { "ie":"10" }
-  transform-regenerator { "electron":"0.36", "ie":"10" }
-  proposal-export-namespace-from { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-modules-commonjs { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-dynamic-import { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-numeric-separator { chrome < 75, electron < 6.0, ie, node < 12.5 }
+  proposal-logical-assignment-operators { chrome < 85, electron < 10.0, ie, node < 15 }
+  proposal-nullish-coalescing-operator { chrome < 80, electron < 8.0, ie, node < 14 }
+  proposal-optional-chaining { chrome, electron, ie, node }
+  proposal-json-strings { chrome < 66, electron < 3.0, ie, node < 10 }
+  proposal-optional-catch-binding { chrome < 66, electron < 3.0, ie, node < 10 }
+  transform-parameters { electron < 0.37, ie }
+  proposal-async-generator-functions { chrome < 63, electron < 3.0, ie, node < 10 }
+  proposal-object-rest-spread { chrome < 60, electron < 2.0, ie, node < 8.3 }
+  transform-dotall-regex { chrome < 62, electron < 3.0, ie, node < 8.10 }
+  proposal-unicode-property-regex { chrome < 64, electron < 3.0, ie, node < 10 }
+  transform-named-capturing-groups-regex { chrome < 64, electron < 3.0, ie, node < 10 }
+  transform-async-to-generator { chrome < 55, electron < 1.6, ie, node < 7.6 }
+  transform-exponentiation-operator { electron < 1.3, ie, node < 7 }
+  transform-template-literals { ie }
+  transform-literals { ie }
+  transform-function-name { electron < 1.2, ie, node < 6.5 }
+  transform-arrow-functions { ie }
+  transform-block-scoped-functions { ie < 11 }
+  transform-classes { ie }
+  transform-object-super { ie }
+  transform-shorthand-properties { ie }
+  transform-duplicate-keys { ie }
+  transform-computed-properties { ie }
+  transform-for-of { electron < 1.2, ie, node < 6.5 }
+  transform-sticky-regex { electron < 0.37, ie }
+  transform-unicode-escapes { ie }
+  transform-unicode-regex { electron < 1.1, ie }
+  transform-spread { ie }
+  transform-destructuring { electron < 1.2, ie, node < 6.5 }
+  transform-block-scoping { electron < 0.37, ie }
+  transform-typeof-symbol { ie }
+  transform-new-target { ie }
+  transform-regenerator { electron < 1.1, ie }
+  proposal-export-namespace-from { chrome < 72, electron < 5.0, ie, node < 13.2 }
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

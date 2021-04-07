@@ -1,7 +1,7 @@
 //@flow
 
 import { SemVer, lt } from "semver";
-import { logPluginOrPolyfill } from "./debug";
+import { logPlugin } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
@@ -420,7 +420,7 @@ option \`forceAllTransforms: true\` instead.
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
-      logPluginOrPolyfill(pluginName, targets, pluginsList);
+      logPlugin(pluginName, targets, compatData);
     });
 
     if (!useBuiltIns) {

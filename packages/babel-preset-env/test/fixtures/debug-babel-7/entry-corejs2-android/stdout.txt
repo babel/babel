@@ -8,44 +8,44 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "android":"4" }
-  proposal-logical-assignment-operators { "android":"4" }
-  proposal-nullish-coalescing-operator { "android":"4" }
-  proposal-optional-chaining { "android":"4" }
-  proposal-json-strings { "android":"4" }
-  proposal-optional-catch-binding { "android":"4" }
-  transform-parameters { "android":"4" }
-  proposal-async-generator-functions { "android":"4" }
-  proposal-object-rest-spread { "android":"4" }
-  transform-dotall-regex { "android":"4" }
-  proposal-unicode-property-regex { "android":"4" }
-  transform-named-capturing-groups-regex { "android":"4" }
-  transform-async-to-generator { "android":"4" }
-  transform-exponentiation-operator { "android":"4" }
-  transform-template-literals { "android":"4" }
-  transform-literals { "android":"4" }
-  transform-function-name { "android":"4" }
-  transform-arrow-functions { "android":"4" }
-  transform-block-scoped-functions { "android":"4" }
-  transform-classes { "android":"4" }
-  transform-object-super { "android":"4" }
-  transform-shorthand-properties { "android":"4" }
-  transform-duplicate-keys { "android":"4" }
-  transform-computed-properties { "android":"4" }
-  transform-for-of { "android":"4" }
-  transform-sticky-regex { "android":"4" }
-  transform-unicode-escapes { "android":"4" }
-  transform-unicode-regex { "android":"4" }
-  transform-spread { "android":"4" }
-  transform-destructuring { "android":"4" }
-  transform-block-scoping { "android":"4" }
-  transform-typeof-symbol { "android":"4" }
-  transform-new-target { "android":"4" }
-  transform-regenerator { "android":"4" }
-  transform-reserved-words { "android":"4" }
-  proposal-export-namespace-from { "android":"4" }
-  transform-modules-commonjs { "android":"4" }
-  proposal-dynamic-import { "android":"4" }
+  proposal-numeric-separator { android }
+  proposal-logical-assignment-operators { android }
+  proposal-nullish-coalescing-operator { android }
+  proposal-optional-chaining { android }
+  proposal-json-strings { android }
+  proposal-optional-catch-binding { android }
+  transform-parameters { android }
+  proposal-async-generator-functions { android }
+  proposal-object-rest-spread { android }
+  transform-dotall-regex { android }
+  proposal-unicode-property-regex { android }
+  transform-named-capturing-groups-regex { android }
+  transform-async-to-generator { android }
+  transform-exponentiation-operator { android }
+  transform-template-literals { android }
+  transform-literals { android }
+  transform-function-name { android }
+  transform-arrow-functions { android }
+  transform-block-scoped-functions { android }
+  transform-classes { android }
+  transform-object-super { android }
+  transform-shorthand-properties { android }
+  transform-duplicate-keys { android }
+  transform-computed-properties { android }
+  transform-for-of { android }
+  transform-sticky-regex { android }
+  transform-unicode-escapes { android }
+  transform-unicode-regex { android }
+  transform-spread { android }
+  transform-destructuring { android }
+  transform-block-scoping { android }
+  transform-typeof-symbol { android }
+  transform-new-target { android }
+  transform-regenerator { android }
+  transform-reserved-words { android < 4.4 }
+  proposal-export-namespace-from { android < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs2: `DEBUG` option
 
 Using targets: {

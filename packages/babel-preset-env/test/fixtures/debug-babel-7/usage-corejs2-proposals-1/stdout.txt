@@ -10,42 +10,42 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-logical-assignment-operators { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-nullish-coalescing-operator { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-optional-chaining { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-json-strings { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-optional-catch-binding { "chrome":"52", "firefox":"50", "ie":"11" }
-  transform-parameters { "firefox":"50", "ie":"11" }
-  proposal-async-generator-functions { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-object-rest-spread { "chrome":"52", "firefox":"50", "ie":"11" }
-  transform-dotall-regex { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-unicode-property-regex { "chrome":"52", "firefox":"50", "ie":"11" }
-  transform-named-capturing-groups-regex { "chrome":"52", "firefox":"50", "ie":"11" }
-  transform-async-to-generator { "chrome":"52", "firefox":"50", "ie":"11" }
-  transform-exponentiation-operator { "firefox":"50", "ie":"11" }
-  transform-template-literals { "ie":"11" }
-  transform-literals { "firefox":"50", "ie":"11" }
-  transform-function-name { "firefox":"50", "ie":"11" }
-  transform-arrow-functions { "ie":"11" }
-  transform-classes { "ie":"11" }
-  transform-object-super { "ie":"11" }
-  transform-shorthand-properties { "ie":"11" }
-  transform-duplicate-keys { "ie":"11" }
-  transform-computed-properties { "ie":"11" }
-  transform-for-of { "firefox":"50", "ie":"11" }
-  transform-sticky-regex { "ie":"11" }
-  transform-unicode-escapes { "firefox":"50", "ie":"11" }
-  transform-unicode-regex { "ie":"11" }
-  transform-spread { "ie":"11" }
-  transform-destructuring { "firefox":"50", "ie":"11" }
-  transform-block-scoping { "firefox":"50", "ie":"11" }
-  transform-typeof-symbol { "ie":"11" }
-  transform-new-target { "ie":"11" }
-  transform-regenerator { "firefox":"50", "ie":"11" }
-  proposal-export-namespace-from { "chrome":"52", "firefox":"50", "ie":"11" }
-  transform-modules-commonjs { "chrome":"52", "firefox":"50", "ie":"11" }
-  proposal-dynamic-import { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-numeric-separator { chrome < 75, firefox < 70, ie }
+  proposal-logical-assignment-operators { chrome < 85, firefox < 79, ie }
+  proposal-nullish-coalescing-operator { chrome < 80, firefox < 72, ie }
+  proposal-optional-chaining { chrome, firefox < 74, ie }
+  proposal-json-strings { chrome < 66, firefox < 62, ie }
+  proposal-optional-catch-binding { chrome < 66, firefox < 58, ie }
+  transform-parameters { firefox < 53, ie }
+  proposal-async-generator-functions { chrome < 63, firefox < 57, ie }
+  proposal-object-rest-spread { chrome < 60, firefox < 55, ie }
+  transform-dotall-regex { chrome < 62, firefox < 78, ie }
+  proposal-unicode-property-regex { chrome < 64, firefox < 78, ie }
+  transform-named-capturing-groups-regex { chrome < 64, firefox < 78, ie }
+  transform-async-to-generator { chrome < 55, firefox < 52, ie }
+  transform-exponentiation-operator { firefox < 52, ie }
+  transform-template-literals { ie }
+  transform-literals { firefox < 53, ie }
+  transform-function-name { firefox < 53, ie }
+  transform-arrow-functions { ie }
+  transform-classes { ie }
+  transform-object-super { ie }
+  transform-shorthand-properties { ie }
+  transform-duplicate-keys { ie }
+  transform-computed-properties { ie }
+  transform-for-of { firefox < 53, ie }
+  transform-sticky-regex { ie }
+  transform-unicode-escapes { firefox < 53, ie }
+  transform-unicode-regex { ie }
+  transform-spread { ie }
+  transform-destructuring { firefox < 53, ie }
+  transform-block-scoping { firefox < 51, ie }
+  transform-typeof-symbol { ie }
+  transform-new-target { ie }
+  transform-regenerator { firefox < 53, ie }
+  proposal-export-namespace-from { chrome < 72, firefox < 80, ie }
+  transform-modules-commonjs
+  proposal-dynamic-import
 corejs2: `DEBUG` option
 
 Using targets: {
