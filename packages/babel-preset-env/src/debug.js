@@ -14,10 +14,21 @@ export const logPlugin = (
 ) => {
   const filteredList = getInclusionReasons(item, targetVersions, list);
 
-  const formattedTargets = JSON.stringify(filteredList)
-    .replace(/,/g, ", ")
-    .replace(/^\{"/, '{ "')
-    .replace(/"\}$/, '" }');
+  const support = list[item];
+  let formattedTargets;
+  if (support) {
+    formattedTargets = `{`;
+    let first = true;
+    for (const target of Object.keys(filteredList)) {
+      if (!first) formattedTargets += `,`;
+      first = false;
+      formattedTargets += ` ${target}`;
+      if (support[target]) formattedTargets += ` < ${support[target]}`;
+    }
+    formattedTargets += ` }`;
+  } else {
+    formattedTargets = "{}";
+  }
 
   console.log(`  ${item} ${formattedTargets}`);
 };
