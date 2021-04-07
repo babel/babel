@@ -17,7 +17,7 @@ Using modules transform: auto
 
 Using plugins:
   proposal-numeric-separator { ie, ios < 13 }
-  proposal-logical-assignment-operators { chrome < 85, firefox < 79, ie, ios < 14, opera, safari < 14, samsung }
+  proposal-logical-assignment-operators { chrome < 85, firefox < 79, ie, ios < 14, safari < 14, samsung }
   proposal-nullish-coalescing-operator { ie, ios < 13.4, samsung < 13 }
   proposal-optional-chaining { android, chrome, edge, ie, ios < 13.4, opera, samsung }
   proposal-json-strings { ie }

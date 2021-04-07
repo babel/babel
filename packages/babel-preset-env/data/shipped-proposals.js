@@ -4,13 +4,15 @@
 
 const proposalPlugins = new Set([
   "proposal-class-properties",
-  "proposal-private-methods"
+  "proposal-private-methods",
+  "proposal-class-static-block",
 ]);
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = {
   "proposal-async-generator-functions": "syntax-async-generators",
   "proposal-class-properties": "syntax-class-properties",
+  "proposal-class-static-block": "syntax-class-static-block",
   "proposal-json-strings": "syntax-json-strings",
   "proposal-nullish-coalescing-operator": "syntax-nullish-coalescing-operator",
   "proposal-numeric-separator": "syntax-numeric-separator",
