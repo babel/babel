@@ -2496,32 +2496,14 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
   ): N.PipelineBody {
     const bodyNode = this.startNodeAt(startPos, startLoc);
-    const isSimpleReference = this.isSimpleReference(childExpression);
-    if (isSimpleReference) {
-      bodyNode.callee = childExpression;
-    } else {
-      if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
-        this.raise(startPos, Errors.PipelineTopicUnused);
-      }
-      bodyNode.expression = childExpression;
-    }
-    return this.finishNode(
-      bodyNode,
-      isSimpleReference ? "PipelineBareFunction" : "PipelineTopicExpression",
-    );
-  }
 
-  isSimpleReference(expression: N.Expression): boolean {
-    switch (expression.type) {
-      case "MemberExpression":
-        return (
-          !expression.computed && this.isSimpleReference(expression.object)
-        );
-      case "Identifier":
-        return true;
-      default:
-        return false;
+    if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
+      this.raise(startPos, Errors.PipelineTopicUnused);
     }
+
+    bodyNode.expression = childExpression;
+
+    return this.finishNode(bodyNode, "PipelineTopicExpression");
   }
 
   // Enable topic references from outer contexts within smart pipeline bodies.
