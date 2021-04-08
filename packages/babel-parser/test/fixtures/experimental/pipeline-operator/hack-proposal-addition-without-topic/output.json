@@ -23,22 +23,18 @@
           },
           "operator": "|>",
           "right": {
-            "type": "PipelineTopicExpression",
+            "type": "BinaryExpression",
             "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
-            "expression": {
-              "type": "BinaryExpression",
-              "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
-              "left": {
-                "type": "Identifier",
-                "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"a"},
-                "name": "a"
-              },
-              "operator": "+",
-              "right": {
-                "type": "Identifier",
-                "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14},"identifierName":"b"},
-                "name": "b"
-              }
+            "left": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"a"},
+              "name": "a"
+            },
+            "operator": "+",
+            "right": {
+              "type": "Identifier",
+              "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14},"identifierName":"b"},
+              "name": "b"
             }
           }
         }

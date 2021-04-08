@@ -960,19 +960,6 @@ interface BindExpression <: Expression {
 
 If `object` is `null`, then `callee` should be a `MemberExpression`.
 
-### Pipeline
-
-These nodes are used by the Hack-style pipe operator. (The F# Pipeline uses simple `BinaryExpression`s and `AwaitExpression`s.)
-
-#### PipeBody
-
-```js
-interface PipeBody <: NodeBase {
-    type: "PipeBody";
-    callee: Expression;
-}
-```
-
 ## ConditionalExpression
 
 ```js

@@ -455,24 +455,21 @@ export default class ExpressionParser extends LValParser {
 
   parseExprOpRightExpr(op: TokenType, prec: number): N.Expression {
     const startPos = this.state.start;
-    const startLoc = this.state.startLoc;
     switch (op) {
       case tt.pipeline:
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
           case "hack":
             return this.withTopicBindingContext(() => {
-              return this.parseHackPipelineBody(
-                this.parseExprOpBaseRightExpr(op, prec),
-                startPos,
-                startLoc,
-              );
+              const bodyExpr = this.parseExprOpBaseRightExpr(op, prec);
+              this.checkHackPipeBodyEarlyErrors(startPos);
+              return bodyExpr;
             });
           case "fsharp":
             return this.withSoloAwaitPermittingContext(() => {
               return this.parseFSharpPipelineBody(prec);
             });
         }
-      // falls through
+      // Falls through.
 
       default:
         return this.parseExprOpBaseRightExpr(op, prec);
@@ -2463,45 +2460,24 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "YieldExpression");
   }
 
-  parseHackPipelineBody(
-    childExpression: N.Expression,
-    startPos: number,
-    startLoc: Position,
-  ): N.PipelineBody {
-    this.checkHackPipelineBodyEarlyErrors();
+  // This helper method is to be called immediately
+  // after a Hack-style pipe body is parsed.
+  // The `startPos` is the starting position of the pipe body.
 
-    return this.parseHackPipelineBodyInStyle(
-      childExpression,
-      startPos,
-      startLoc,
-    );
-  }
-
-  checkHackPipelineBodyEarlyErrors(): void {
+  checkHackPipeBodyEarlyErrors(startPos: number): void {
+    // If the following token is invalidly `=>`, then throw a human-friendly error
+    // instead of something like 'Unexpected token, expected ";"'.
+    // For example, `x => x |> y => #` (assuming `#` is the topic reference)
+    // groups into `x => (x |> y) => #`,
+    // and `(x |> y) => #` is an invalid arrow function.
+    // This is because Hack-style `|>` has tighter precedence than `=>`.
     if (this.match(tt.arrow)) {
-      // If the following token is invalidly `=>`, then throw a human-friendly error
-      // instead of something like 'Unexpected token, expected ";"'.
-      // For example, `x => x |> y => %` groups into `x => (x |> y) => %`,
-      // and `(x |> y) => %` is an invalid arrow function.
-      // This is because Hack-style `|>` has tighter precedence than `=>`.
       throw this.raise(this.state.start, Errors.PipeBodyCannotBeArrow);
     }
-  }
-
-  parseHackPipelineBodyInStyle(
-    childExpression: N.Expression,
-    startPos: number,
-    startLoc: Position,
-  ): N.PipelineBody {
-    const bodyNode = this.startNodeAt(startPos, startLoc);
-
-    if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
-      this.raise(startPos, Errors.PipelineTopicUnused);
+    // A Hack pipe body must use the topic reference at least once.
+    else if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
+      this.raise(startPos, Errors.PipeTopicUnused);
     }
-
-    bodyNode.expression = childExpression;
-
-    return this.finishNode(bodyNode, "PipelineTopicExpression");
   }
 
   // Enable topic references from outer contexts within Hack-style pipe bodies.

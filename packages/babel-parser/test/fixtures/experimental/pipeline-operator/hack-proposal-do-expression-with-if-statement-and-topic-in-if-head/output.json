@@ -20,52 +20,48 @@
           },
           "operator": "|>",
           "right": {
-            "type": "PipelineTopicExpression",
+            "type": "DoExpression",
             "start":9,"end":33,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":33}},
-            "expression": {
-              "type": "DoExpression",
-              "start":9,"end":33,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":33}},
-              "body": {
-                "type": "BlockStatement",
-                "start":12,"end":33,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":33}},
-                "body": [
-                  {
-                    "type": "IfStatement",
-                    "start":14,"end":31,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":31}},
-                    "test": {
-                      "type": "PipelinePrimaryTopicReference",
-                      "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}}
-                    },
-                    "consequent": {
-                      "type": "ExpressionStatement",
-                      "start":21,"end":23,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":23}},
-                      "expression": {
-                        "type": "NumericLiteral",
-                        "start":21,"end":22,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":22}},
-                        "extra": {
-                          "rawValue": 1,
-                          "raw": "1"
-                        },
-                        "value": 1
-                      }
-                    },
-                    "alternate": {
-                      "type": "ExpressionStatement",
-                      "start":29,"end":31,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":31}},
-                      "expression": {
-                        "type": "NumericLiteral",
-                        "start":29,"end":30,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":30}},
-                        "extra": {
-                          "rawValue": 0,
-                          "raw": "0"
-                        },
-                        "value": 0
-                      }
+            "body": {
+              "type": "BlockStatement",
+              "start":12,"end":33,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":33}},
+              "body": [
+                {
+                  "type": "IfStatement",
+                  "start":14,"end":31,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":31}},
+                  "test": {
+                    "type": "PipelinePrimaryTopicReference",
+                    "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}}
+                  },
+                  "consequent": {
+                    "type": "ExpressionStatement",
+                    "start":21,"end":23,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":23}},
+                    "expression": {
+                      "type": "NumericLiteral",
+                      "start":21,"end":22,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":22}},
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  },
+                  "alternate": {
+                    "type": "ExpressionStatement",
+                    "start":29,"end":31,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":31}},
+                    "expression": {
+                      "type": "NumericLiteral",
+                      "start":29,"end":30,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":30}},
+                      "extra": {
+                        "rawValue": 0,
+                        "raw": "0"
+                      },
+                      "value": 0
                     }
                   }
-                ],
-                "directives": []
-              }
+                }
+              ],
+              "directives": []
             }
           }
         }

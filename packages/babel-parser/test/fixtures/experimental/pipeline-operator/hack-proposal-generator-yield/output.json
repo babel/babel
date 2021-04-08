@@ -35,20 +35,16 @@
                 },
                 "operator": "|>",
                 "right": {
-                  "type": "PipelineTopicExpression",
-                  "start":32,"end":41,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":23}},
-                  "expression": {
-                    "type": "YieldExpression",
-                    "start":33,"end":40,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":22}},
-                    "delegate": false,
-                    "argument": {
-                      "type": "PipelinePrimaryTopicReference",
-                      "start":39,"end":40,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":22}}
-                    },
-                    "extra": {
-                      "parenthesized": true,
-                      "parenStart": 32
-                    }
+                  "type": "YieldExpression",
+                  "start":33,"end":40,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":22}},
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 32
+                  },
+                  "delegate": false,
+                  "argument": {
+                    "type": "PipelinePrimaryTopicReference",
+                    "start":39,"end":40,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":22}}
                   }
                 }
               }
