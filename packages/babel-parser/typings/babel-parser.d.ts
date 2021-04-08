@@ -157,7 +157,7 @@ export interface DecoratorsPluginOptions {
 }
 
 export interface PipelineOperatorPluginOptions {
-  proposal: "fsharp" | "minimal" | "smart";
+  proposal: "minimal" | "fsharp" | "hack";
 }
 
 export interface RecordAndTuplePluginOptions {

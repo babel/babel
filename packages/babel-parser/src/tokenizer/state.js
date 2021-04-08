@@ -68,13 +68,13 @@ export default class State {
   isDeclareContext: boolean = false;
   inAbstractClass: boolean = false;
 
-  // For the smartPipelines plugin:
+  // For the Hack-style pipelines plugin
   topicContext: TopicContextState = {
     maxNumOfResolvableTopics: 0,
     maxTopicIndex: null,
   };
 
-  // For the F# plugin
+  // For the F#-style pipelines plugin
   soloAwait: boolean = false;
   inFSharpPipelineDirectBody: boolean = false;
 

@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "hack"
+      }
+    ]
+  ],
+  "throws": "Unexpected token (1:4)"
+}
