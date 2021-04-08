@@ -19,6 +19,40 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.15 (2021-04-08)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#13099](https://github.com/babel/babel/pull/13099) fix: raise `SyntaxError` for unparenthesized assert and assign ([@fedeci](https://github.com/fedeci))
+  * [#13049](https://github.com/babel/babel/pull/13049) fix: the LHS in for-of loop should not start with let ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13101](https://github.com/babel/babel/pull/13101) fix(ts): allow trailing comma after rest parameter in `TSDeclareFunction` ([@fedeci](https://github.com/fedeci))
+* `babel-plugin-proposal-do-expressions`, `babel-traverse`
+  * [#10101](https://github.com/babel/babel/pull/10101) yield for do expression ([@tanhauhau](https://github.com/tanhauhau))
+  * [#13030](https://github.com/babel/babel/pull/13030) Refactor switch support in `NodePath#getCompletionRecords` ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#13106](https://github.com/babel/babel/pull/13106) fix: do not filter report from functions within class elements ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-preset-env`
+  * [#13075](https://github.com/babel/babel/pull/13075) Compile classes when spread is unsupported ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-preset-env`
+  * [#13115](https://github.com/babel/babel/pull/13115) [preset-env - debug] Print targets that need each plugin ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :memo: Documentation
+* [#13081](https://github.com/babel/babel/pull/13081) Update CoC contacts ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-plugin-transform-regenerator`, `babel-standalone`
+  * [#13086](https://github.com/babel/babel/pull/13086) Align `regenerator-transform` import with native ESM ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-transform-fixture-test-runner`
+  * [#13087](https://github.com/babel/babel/pull/13087) Do not load root `babel.config.js` in tests ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-preset-env`
+  * [#13076](https://github.com/babel/babel/pull/13076) perf: lazy load preset-env plugins ([@JLHwung](https://github.com/JLHwung))
 ## v7.13.14 (2021-03-29)
 
 #### :bug: Bug Fix
