@@ -2546,29 +2546,6 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  // Disable topic references from outer contexts within syntax constructs
-  // such as the bodies of iteration statements.
-  // The function modifies the parser's topic-context state to enable or disable
-  // the use of topic references with the smartPipelines plugin. They then run a
-  // callback, then they reset the parser to the old topic-context state that it
-  // had before the function was called.
-
-  withTopicForbiddingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.state.topicContext;
-    this.state.topicContext = {
-      // Disable the use of the primary topic reference.
-      maxNumOfResolvableTopics: 0,
-      // Hide the use of any topic references from outer contexts.
-      maxTopicIndex: null,
-    };
-
-    try {
-      return callback();
-    } finally {
-      this.state.topicContext = outerContextTopicState;
-    }
-  }
-
   withSoloAwaitPermittingContext<T>(callback: () => T): T {
     const outerContextSoloAwaitState = this.state.soloAwait;
     this.state.soloAwait = true;
