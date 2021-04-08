@@ -2500,6 +2500,9 @@ export default class ExpressionParser extends LValParser {
     if (this.match(tt.arrow)) {
       // If the following token is invalidly `=>`, then throw a human-friendly error
       // instead of something like 'Unexpected token, expected ";"'.
+      // For example, `x => x |> y => %` groups into `x => (x |> y) => %`,
+      // and `(x |> y) => %` is an invalid arrow function.
+      // This is because Hack-style `|>` has tighter precedence than `=>`.
       throw this.raise(this.state.start, Errors.PipelineBodyNoArrow);
     } else if (childExpression.type === "SequenceExpression") {
       this.raise(startPos, Errors.PipelineBodySequenceExpression);
