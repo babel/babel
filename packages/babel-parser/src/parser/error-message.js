@@ -131,10 +131,6 @@ export const ErrorMessages = Object.freeze({
   PatternHasMethod: "Object pattern can't contain methods",
   PipelineBodyNoArrow:
     'Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized',
-  PipelineBodySequenceExpression:
-    "Pipeline body may not be a comma-separated sequence expression",
-  PipelineHeadSequenceExpression:
-    "Pipeline head should not be a comma-separated sequence expression",
   PipelineTopicUnused:
     "Pipeline is in topic style but does not use topic reference",
   PrimaryTopicNotAllowed:

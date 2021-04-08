@@ -394,7 +394,6 @@ export default class ExpressionParser extends LValParser {
             return left;
           }
           this.state.inPipeline = true;
-          this.checkPipelineAtInfixOperator(left, leftStartPos);
         }
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
         node.left = left;
@@ -2466,25 +2465,12 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "YieldExpression");
   }
 
-  // Validates a pipeline (for any of the pipeline Babylon plugins) at the point
-  // of the infix operator `|>`.
-
-  checkPipelineAtInfixOperator(left: N.Expression, leftStartPos: number) {
-    if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
-      if (left.type === "SequenceExpression") {
-        // Ensure that the pipeline head is not a comma-delimited
-        // sequence expression.
-        this.raise(leftStartPos, Errors.PipelineHeadSequenceExpression);
-      }
-    }
-  }
-
   parseSmartPipelineBody(
     childExpression: N.Expression,
     startPos: number,
     startLoc: Position,
   ): N.PipelineBody {
-    this.checkSmartPipelineBodyEarlyErrors(childExpression, startPos);
+    this.checkSmartPipelineBodyEarlyErrors();
 
     return this.parseSmartPipelineBodyInStyle(
       childExpression,
@@ -2493,10 +2479,7 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
-  checkSmartPipelineBodyEarlyErrors(
-    childExpression: N.Expression,
-    startPos: number,
-  ): void {
+  checkSmartPipelineBodyEarlyErrors(): void {
     if (this.match(tt.arrow)) {
       // If the following token is invalidly `=>`, then throw a human-friendly error
       // instead of something like 'Unexpected token, expected ";"'.
@@ -2504,8 +2487,6 @@ export default class ExpressionParser extends LValParser {
       // and `(x |> y) => %` is an invalid arrow function.
       // This is because Hack-style `|>` has tighter precedence than `=>`.
       throw this.raise(this.state.start, Errors.PipelineBodyNoArrow);
-    } else if (childExpression.type === "SequenceExpression") {
-      this.raise(startPos, Errors.PipelineBodySequenceExpression);
     }
   }
 
