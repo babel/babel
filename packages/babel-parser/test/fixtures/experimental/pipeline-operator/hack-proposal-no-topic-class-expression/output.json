@@ -23,18 +23,14 @@
           },
           "operator": "|>",
           "right": {
-            "type": "PipelineTopicExpression",
+            "type": "ClassExpression",
             "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18}},
-            "expression": {
-              "type": "ClassExpression",
-              "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18}},
-              "id": null,
-              "superClass": null,
-              "body": {
-                "type": "ClassBody",
-                "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18}},
-                "body": []
-              }
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18}},
+              "body": []
             }
           }
         }

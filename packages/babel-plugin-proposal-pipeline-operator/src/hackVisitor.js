@@ -1,48 +1,50 @@
 import { types as t } from "@babel/core";
 
-const updateTopicReferenceVisitor = {
+function pathNodeIsPipeExpression(path) {
+  return path.node.operator === "|>";
+}
+
+const topicReferenceReplacementVisitor = {
   PipelinePrimaryTopicReference(path) {
-    path.replaceWith(t.cloneNode(this.topicId));
-  },
-  PipelineTopicExpression(path) {
-    path.skip();
+    path.replaceWith(t.cloneNode(this.topicVariable));
   },
 };
 
-const hackVisitor = {
-  BinaryExpression(path) {
-    const { scope } = path;
-    const { node } = path;
-    const { operator, left, right } = node;
-    if (operator !== "|>") return;
+function replaceTopicReferencesWithVariables(path, topicVariable) {
+  return path.traverse(topicReferenceReplacementVisitor, { topicVariable });
+}
 
-    const placeholder = scope.generateUidIdentifierBasedOnNode(left);
-    scope.push({ id: placeholder });
+function replacePipeExpressionWithAssignment(path, topicVariable) {
+  const { left, right } = path.node;
 
-    let call;
-    if (t.isPipelineTopicExpression(right)) {
-      path
-        .get("right")
-        .traverse(updateTopicReferenceVisitor, { topicId: placeholder });
+  return path.replaceWith(
+    t.sequenceExpression([
+      t.assignmentExpression("=", t.cloneNode(topicVariable), left),
+      right,
+    ]),
+  );
+}
 
-      call = right.expression;
-    } else {
-      // PipelineBareFunction
-      let callee = right.callee;
-      if (t.isIdentifier(callee, { name: "eval" })) {
-        callee = t.sequenceExpression([t.numericLiteral(0), callee]);
+// This visitor traverses `BinaryExpression`
+// and replaces any that use `|>`
+// with sequence expressions containing assignment expressions
+// with automatically generated variables,
+// from inside to outside, from left to right.
+export default {
+  BinaryExpression: {
+    exit(path) {
+      const { scope, node } = path;
+
+      if (!pathNodeIsPipeExpression(path)) {
+        return;
       }
 
-      call = t.callExpression(callee, [t.cloneNode(placeholder)]);
-    }
+      const topicVariable = scope.generateUidIdentifierBasedOnNode(node);
+      const pipeBodyPath = path.get("right");
 
-    path.replaceWith(
-      t.sequenceExpression([
-        t.assignmentExpression("=", t.cloneNode(placeholder), left),
-        call,
-      ]),
-    );
+      scope.push({ id: topicVariable });
+      replaceTopicReferencesWithVariables(pipeBodyPath, topicVariable);
+      replacePipeExpressionWithAssignment(path, topicVariable);
+    },
   },
 };
-
-export default hackVisitor;

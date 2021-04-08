@@ -1,6 +1,3 @@
-var result = 5
-  |> # + 1
-  |> # + #
-  |> Math.pow(((x) => (x * 7))(#), 2)
+const result = 5 |> # + 1 |> # + #;
 
-expect(result).toBe(7056);
+expect(result).toBe(12);

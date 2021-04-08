@@ -131,7 +131,7 @@ export const ErrorMessages = Object.freeze({
   PatternHasMethod: "Object pattern can't contain methods",
   PipeBodyCannotBeArrow:
     'Unexpected arrow "=>" after pipeline body; arrow function acting as pipe body must be parenthesized due to operator precedence',
-  PipelineTopicUnused:
+  PipeTopicUnused:
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once",
   PrimaryTopicNotAllowed:
     "Topic reference is unbound; it must be inside a Hack-style pipe body",

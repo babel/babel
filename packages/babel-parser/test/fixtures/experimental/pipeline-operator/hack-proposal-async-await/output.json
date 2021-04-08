@@ -35,15 +35,11 @@
                 },
                 "operator": "|>",
                 "right": {
-                  "type": "PipelineTopicExpression",
+                  "type": "AwaitExpression",
                   "start":36,"end":43,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":21}},
-                  "expression": {
-                    "type": "AwaitExpression",
-                    "start":36,"end":43,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":21}},
-                    "argument": {
-                      "type": "PipelinePrimaryTopicReference",
-                      "start":42,"end":43,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":21}}
-                    }
+                  "argument": {
+                    "type": "PipelinePrimaryTopicReference",
+                    "start":42,"end":43,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":21}}
                   }
                 }
               }
