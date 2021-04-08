@@ -129,14 +129,14 @@ export const ErrorMessages = Object.freeze({
   ParamDupe: "Argument name clash",
   PatternHasAccessor: "Object pattern can't contain getter or setter",
   PatternHasMethod: "Object pattern can't contain methods",
-  PipelineBodyNoArrow:
-    'Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized',
+  PipeBodyCannotBeArrow:
+    'Unexpected arrow "=>" after pipeline body; arrow function acting as pipe body must be parenthesized due to operator precedence',
   PipelineTopicUnused:
-    "Pipeline is in topic style but does not use topic reference",
+    "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once",
   PrimaryTopicNotAllowed:
-    "Topic reference was used in a lexical context without topic binding",
-  PrimaryTopicRequiresSmartPipeline:
-    "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
+    "Topic reference is unbound; it must be inside a Hack-style pipe body",
+  PrimaryTopicRequiresHackPipes:
+    "Topic reference is used, but the pipelineOperator plugin was not passed a 'proposal': 'hack' option.",
   PrivateInExpectedIn:
     "Private names are only allowed in property accesses (`obj.#%0`) or in `in` expressions (`#%0 in obj`)",
   PrivateNameRedeclaration: "Duplicate private name #%0",

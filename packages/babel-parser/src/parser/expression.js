@@ -459,9 +459,9 @@ export default class ExpressionParser extends LValParser {
     switch (op) {
       case tt.pipeline:
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
-          case "smart":
-            return this.withTopicPermittingContext(() => {
-              return this.parseSmartPipelineBody(
+          case "hack":
+            return this.withTopicBindingContext(() => {
+              return this.parseHackPipelineBody(
                 this.parseExprOpBaseRightExpr(op, prec),
                 startPos,
                 startLoc,
@@ -1152,10 +1152,8 @@ export default class ExpressionParser extends LValParser {
         if (this.state.inPipeline) {
           node = this.startNode();
 
-          if (
-            this.getPluginOption("pipelineOperator", "proposal") !== "smart"
-          ) {
-            this.raise(node.start, Errors.PrimaryTopicRequiresSmartPipeline);
+          if (this.getPluginOption("pipelineOperator", "proposal") !== "hack") {
+            this.raise(node.start, Errors.PrimaryTopicRequiresHackPipes);
           }
 
           this.next();
@@ -2465,32 +2463,32 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "YieldExpression");
   }
 
-  parseSmartPipelineBody(
+  parseHackPipelineBody(
     childExpression: N.Expression,
     startPos: number,
     startLoc: Position,
   ): N.PipelineBody {
-    this.checkSmartPipelineBodyEarlyErrors();
+    this.checkHackPipelineBodyEarlyErrors();
 
-    return this.parseSmartPipelineBodyInStyle(
+    return this.parseHackPipelineBodyInStyle(
       childExpression,
       startPos,
       startLoc,
     );
   }
 
-  checkSmartPipelineBodyEarlyErrors(): void {
+  checkHackPipelineBodyEarlyErrors(): void {
     if (this.match(tt.arrow)) {
       // If the following token is invalidly `=>`, then throw a human-friendly error
       // instead of something like 'Unexpected token, expected ";"'.
       // For example, `x => x |> y => %` groups into `x => (x |> y) => %`,
       // and `(x |> y) => %` is an invalid arrow function.
       // This is because Hack-style `|>` has tighter precedence than `=>`.
-      throw this.raise(this.state.start, Errors.PipelineBodyNoArrow);
+      throw this.raise(this.state.start, Errors.PipeBodyCannotBeArrow);
     }
   }
 
-  parseSmartPipelineBodyInStyle(
+  parseHackPipelineBodyInStyle(
     childExpression: N.Expression,
     startPos: number,
     startLoc: Position,
@@ -2506,13 +2504,13 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(bodyNode, "PipelineTopicExpression");
   }
 
-  // Enable topic references from outer contexts within smart pipeline bodies.
+  // Enable topic references from outer contexts within Hack-style pipe bodies.
   // The function modifies the parser's topic-context state to enable or disable
-  // the use of topic references with the smartPipelines plugin. They then run a
-  // callback, then they reset the parser to the old topic-context state that it
-  // had before the function was called.
+  // the use of topic references.
+  // The function then calls a callback, then resets the parser
+  // to the old topic-context state that it had before the function was called.
 
-  withTopicPermittingContext<T>(callback: () => T): T {
+  withTopicBindingContext<T>(callback: () => T): T {
     const outerContextTopicState = this.state.topicContext;
     this.state.topicContext = {
       // Enable the use of the primary topic reference.

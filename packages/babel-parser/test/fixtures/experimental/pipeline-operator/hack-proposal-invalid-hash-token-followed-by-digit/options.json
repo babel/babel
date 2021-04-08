@@ -1,0 +1,4 @@
+{
+  "plugins": [["pipelineOperator", { "proposal": "hack" }]],
+  "throws": "Unexpected digit after hash token (1:5)"
+}
