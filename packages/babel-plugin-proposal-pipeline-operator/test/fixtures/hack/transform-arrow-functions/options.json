@@ -1,6 +1,6 @@
 {
   "plugins": [
-    ["proposal-pipeline-operator", { "proposal": "hack" }],
+    ["proposal-pipeline-operator", { "proposal": "hack", "topicToken": "#" }],
     "transform-arrow-functions"
   ],
   "parserOpts": {

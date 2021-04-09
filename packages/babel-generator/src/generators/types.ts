@@ -237,5 +237,16 @@ export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
 }
 
 export function TopicReference(this: Printer) {
-  this.token("#");
+  const { topicToken } = this.format;
+  switch (topicToken) {
+    case "#":
+      this.token("#");
+      break;
+
+    default: {
+      const givenTopicTokenJSON = JSON.stringify(topicToken);
+      const message = `The "topicToken" generator option must be "#" (${givenTopicTokenJSON} received instead).`;
+      throw new Error(message);
+    }
+  }
 }

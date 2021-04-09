@@ -2,9 +2,7 @@
   "plugins": [
     [
       "pipelineOperator",
-      {
-        "proposal": "hack"
-      }
+      { "proposal": "hack", "topicToken": "#" }
     ]
   ],
   "throws": "Unexpected token (1:4)"

@@ -39,6 +39,7 @@ export function getPluginOption(
 }
 
 const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack"];
+const TOPIC_TOKENS = ["#"];
 const RECORD_AND_TUPLE_SYNTAX_TYPES = ["hash", "bar"];
 
 export function validatePlugins(plugins: PluginList) {
@@ -82,6 +83,22 @@ export function validatePlugins(plugins: PluginList) {
       throw new Error(
         `"pipelineOperator" requires "proposal" option whose value must be one of: ${proposalList}.`,
       );
+    }
+
+    if (proposal === "hack") {
+      const topicToken = getPluginOption(
+        plugins,
+        "pipelineOperator",
+        "topicToken",
+      );
+
+      if (!TOPIC_TOKENS.includes(topicToken)) {
+        const tokenList = TOPIC_TOKENS.map(t => `"${t}"`).join(", ");
+
+        throw new Error(
+          `"pipelineOperator" in "proposal": "hack" mode also requires a "topicToken" option whose value must be one of: ${tokenList}.`,
+        );
+      }
     }
   }
 
