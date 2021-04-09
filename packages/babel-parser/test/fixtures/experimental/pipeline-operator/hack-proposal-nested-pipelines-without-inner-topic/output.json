@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
   "errors": [
-    "SyntaxError: Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once (1:11)"
+    "SyntaxError: Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once. (1:11)"
   ],
   "program": {
     "type": "Program",

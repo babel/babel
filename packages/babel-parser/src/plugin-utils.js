@@ -74,16 +74,15 @@ export function validatePlugins(plugins: PluginList) {
     throw new Error("Cannot combine placeholders and v8intrinsic plugins.");
   }
 
-  if (
-    hasPlugin(plugins, "pipelineOperator") &&
-    !PIPELINE_PROPOSALS.includes(
-      getPluginOption(plugins, "pipelineOperator", "proposal"),
-    )
-  ) {
-    throw new Error(
-      "'pipelineOperator' requires 'proposal' option whose value should be one of: " +
-        PIPELINE_PROPOSALS.map(p => `'${p}'`).join(", "),
-    );
+  if (hasPlugin(plugins, "pipelineOperator")) {
+    const proposal = getPluginOption(plugins, "pipelineOperator", "proposal");
+
+    if (!PIPELINE_PROPOSALS.includes(proposal)) {
+      const proposalList = PIPELINE_PROPOSALS.map(p => `"${p}"`).join(", ");
+      throw new Error(
+        `"pipelineOperator" requires "proposal" option whose value must be one of: ${proposalList}.`,
+      );
+    }
   }
 
   if (hasPlugin(plugins, "moduleAttributes")) {
