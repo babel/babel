@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":23}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'enum' (1:8)"
+    "SyntaxError: Unexpected reserved word 'enum'. (1:8)"
   ],
   "program": {
     "type": "Program",
@@ -24,6 +24,9 @@
                 {
                   "type": "ObjectProperty",
                   "start":8,"end":12,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":12}},
+                  "extra": {
+                    "shorthand": true
+                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -36,9 +39,6 @@
                     "type": "Identifier",
                     "start":8,"end":12,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":12},"identifierName":"enum"},
                     "name": "enum"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]

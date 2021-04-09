@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
   "errors": [
-    "SyntaxError: Argument name clash (1:30)"
+    "SyntaxError: Argument name clash. (1:30)"
   ],
   "program": {
     "type": "Program",
@@ -33,6 +33,9 @@
               {
                 "type": "ObjectProperty",
                 "start":30,"end":31,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":31}},
+                "extra": {
+                  "shorthand": true
+                },
                 "method": false,
                 "key": {
                   "type": "Identifier",
@@ -45,9 +48,6 @@
                   "type": "Identifier",
                   "start":30,"end":31,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":31},"identifierName":"a"},
                   "name": "a"
-                },
-                "extra": {
-                  "shorthand": true
                 }
               }
             ]
@@ -68,11 +68,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
             "raw": "\"use strict\"",
             "rawValue": "use strict"
-          }
+          },
+          "value": "use strict"
         }
       }
     ]

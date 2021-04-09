@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":35}},
   "errors": [
-    "SyntaxError: Binding 'yield' in strict mode (1:10)"
+    "SyntaxError: Binding 'yield' in strict mode. (1:10)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "FunctionExpression",
           "start":1,"end":34,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":34}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "id": {
             "type": "Identifier",
             "start":10,"end":15,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":15},"identifierName":"yield"},
@@ -35,18 +39,14 @@
                 "value": {
                   "type": "DirectiveLiteral",
                   "start":19,"end":31,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":31}},
-                  "value": "use strict",
                   "extra": {
                     "raw": "\"use strict\"",
                     "rawValue": "use strict"
-                  }
+                  },
+                  "value": "use strict"
                 }
               }
             ]
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
           }
         }
       }

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":103,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":76}},
   "errors": [
-    "SyntaxError: Identifier 'foo4' has already been declared (2:58)",
+    "SyntaxError: Identifier 'foo4' has already been declared. (2:58)",
     "SyntaxError: `foo4` has already been exported. Exported identifiers must be unique. (2:58)"
   ],
   "program": {
@@ -99,6 +99,9 @@
                   {
                     "type": "ObjectProperty",
                     "start":62,"end":63,"loc":{"start":{"line":2,"column":35},"end":{"line":2,"column":36}},
+                    "extra": {
+                      "shorthand": true
+                    },
                     "method": false,
                     "key": {
                       "type": "Identifier",
@@ -111,9 +114,6 @@
                       "type": "Identifier",
                       "start":62,"end":63,"loc":{"start":{"line":2,"column":35},"end":{"line":2,"column":36},"identifierName":"b"},
                       "name": "b"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   },
                   {

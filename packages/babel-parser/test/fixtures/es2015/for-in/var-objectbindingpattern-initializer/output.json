@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
   "errors": [
-    "SyntaxError: for-in loop variable declaration may not have an initializer (1:5)"
+    "SyntaxError: 'for-in' loop variable declaration may not have an initializer. (1:5)"
   ],
   "program": {
     "type": "Program",
@@ -27,6 +27,9 @@
                   {
                     "type": "ObjectProperty",
                     "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}},
+                    "extra": {
+                      "shorthand": true
+                    },
                     "method": false,
                     "key": {
                       "type": "Identifier",
@@ -39,9 +42,6 @@
                       "type": "Identifier",
                       "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"a"},
                       "name": "a"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   }
                 ]

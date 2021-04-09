@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":54}},
   "errors": [
-    "SyntaxError: Argument name clash (1:44)"
+    "SyntaxError: Argument name clash. (1:44)"
   ],
   "program": {
     "type": "Program",
@@ -31,6 +31,10 @@
               "expression": {
                 "type": "FunctionExpression",
                 "start":30,"end":50,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":50}},
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 29
+                },
                 "id": {
                   "type": "Identifier",
                   "start":39,"end":40,"loc":{"start":{"line":1,"column":39},"end":{"line":1,"column":40},"identifierName":"b"},
@@ -55,10 +59,6 @@
                   "start":47,"end":50,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":50}},
                   "body": [],
                   "directives": []
-                },
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 29
                 }
               }
             }
@@ -70,11 +70,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":15,"end":27,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":27}},
-                "value": "use strict",
                 "extra": {
                   "raw": "\"use strict\"",
                   "rawValue": "use strict"
-                }
+                },
+                "value": "use strict"
               }
             }
           ]

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
   "errors": [
-    "SyntaxError: Can not use 'yield' as identifier inside a generator (1:18)"
+    "SyntaxError: Can not use 'yield' as identifier inside a generator. (1:18)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "FunctionExpression",
           "start":1,"end":26,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":26}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "id": null,
           "generator": true,
           "async": false,
@@ -40,10 +44,6 @@
             "start":24,"end":26,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":26}},
             "body": [],
             "directives": []
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
           }
         }
       }

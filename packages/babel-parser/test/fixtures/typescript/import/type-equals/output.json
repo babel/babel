@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
   "errors": [
-    "SyntaxError: An import alias can not use 'import type' (1:16)",
-    "SyntaxError: An import alias can not use 'import type' (2:16)"
+    "SyntaxError: An import alias can not use 'import type'. (1:16)",
+    "SyntaxError: An import alias can not use 'import type'. (2:16)"
   ],
   "program": {
     "type": "Program",

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: Classes may not have static property named prototype (2:9)"
+    "SyntaxError: Classes may not have static property named prototype. (2:9)"
   ],
   "program": {
     "type": "Program",
