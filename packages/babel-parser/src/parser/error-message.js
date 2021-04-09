@@ -130,7 +130,7 @@ export const ErrorMessages = makeErrorTemplates(
       "Tagged Template Literals are not allowed in optionalChain.",
     OverrideOnConstructor:
       "'override' modifier cannot appear on a constructor declaration.",
-    ParamDupe: "Argument name clash",
+    ParamDupe: "Argument name clash.",
     PatternHasAccessor: "Object pattern can't contain getter or setter.",
     PatternHasMethod: "Object pattern can't contain methods.",
     PipelineBodyNoArrow:
