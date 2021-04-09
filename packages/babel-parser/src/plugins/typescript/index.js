@@ -3012,10 +3012,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return method;
     }
 
+    shouldParseAsAmbientContext(): boolean {
+      return !!this.getPluginOption("typescript", "dts");
+    }
+
     parse() {
-      if (this.getPluginOption("typescript", "dts")) {
+      if (this.shouldParseAsAmbientContext()) {
         this.state.isAmbientContext = true;
       }
       return super.parse();
+    }
+
+    getExpression() {
+      if (this.shouldParseAsAmbientContext()) {
+        this.state.isAmbientContext = true;
+      }
+      return super.getExpression();
     }
   };
