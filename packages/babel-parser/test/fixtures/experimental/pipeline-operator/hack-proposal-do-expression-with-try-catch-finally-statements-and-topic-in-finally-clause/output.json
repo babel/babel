@@ -129,7 +129,7 @@
                           },
                           "arguments": [
                             {
-                              "type": "PipelinePrimaryTopicReference",
+                              "type": "TopicReference",
                               "start":110,"end":111,"loc":{"start":{"line":4,"column":22},"end":{"line":4,"column":23}}
                             }
                           ]

@@ -30,7 +30,7 @@
                   "type": "SwitchStatement",
                   "start":16,"end":81,"loc":{"start":{"line":2,"column":2},"end":{"line":6,"column":3}},
                   "discriminant": {
-                    "type": "PipelinePrimaryTopicReference",
+                    "type": "TopicReference",
                     "start":24,"end":25,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}}
                   },
                   "cases": [

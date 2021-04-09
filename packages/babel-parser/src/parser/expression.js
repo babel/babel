@@ -1150,17 +1150,17 @@ export default class ExpressionParser extends LValParser {
           node = this.startNode();
 
           if (this.getPluginOption("pipelineOperator", "proposal") !== "hack") {
-            this.raise(node.start, Errors.PrimaryTopicRequiresHackPipes);
+            this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
           }
 
           this.next();
 
-          if (!this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
-            this.raise(node.start, Errors.PrimaryTopicNotAllowed);
+          if (!this.topicReferenceIsAllowedInCurrentContext()) {
+            this.raise(node.start, Errors.PipeTopicUnbound);
           }
 
           this.registerTopicReference();
-          return this.finishNode(node, "PipelinePrimaryTopicReference");
+          return this.finishNode(node, "TopicReference");
         }
 
         // https://tc39.es/proposal-private-fields-in-in
@@ -2475,7 +2475,7 @@ export default class ExpressionParser extends LValParser {
       throw this.raise(this.state.start, Errors.PipeBodyCannotBeArrow);
     }
     // A Hack pipe body must use the topic reference at least once.
-    else if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
+    else if (!this.topicReferenceWasUsedInCurrentContext()) {
       this.raise(startPos, Errors.PipeTopicUnused);
     }
   }
@@ -2547,11 +2547,11 @@ export default class ExpressionParser extends LValParser {
     this.state.topicContext.maxTopicIndex = 0;
   }
 
-  primaryTopicReferenceIsAllowedInCurrentTopicContext(): boolean {
+  topicReferenceIsAllowedInCurrentContext(): boolean {
     return this.state.topicContext.maxNumOfResolvableTopics >= 1;
   }
 
-  topicReferenceWasUsedInCurrentTopicContext(): boolean {
+  topicReferenceWasUsedInCurrentContext(): boolean {
     return (
       this.state.topicContext.maxTopicIndex != null &&
       this.state.topicContext.maxTopicIndex >= 0

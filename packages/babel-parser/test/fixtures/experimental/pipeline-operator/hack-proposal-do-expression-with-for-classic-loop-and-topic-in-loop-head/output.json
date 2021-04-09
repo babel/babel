@@ -42,7 +42,7 @@
                           "name": "i"
                         },
                         "init": {
-                          "type": "PipelinePrimaryTopicReference",
+                          "type": "TopicReference",
                           "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28}}
                         }
                       }
@@ -64,7 +64,7 @@
                         "name": "i"
                       },
                       {
-                        "type": "PipelinePrimaryTopicReference",
+                        "type": "TopicReference",
                         "start":43,"end":44,"loc":{"start":{"line":1,"column":43},"end":{"line":1,"column":44}}
                       }
                     ]
@@ -79,7 +79,7 @@
                       "name": "i"
                     },
                     "right": {
-                      "type": "PipelinePrimaryTopicReference",
+                      "type": "TopicReference",
                       "start":52,"end":53,"loc":{"start":{"line":1,"column":52},"end":{"line":1,"column":53}}
                     }
                   },

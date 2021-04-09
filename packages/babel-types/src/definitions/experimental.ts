@@ -256,4 +256,4 @@ defineType("ModuleExpression", {
 
 // https://github.com/tc39/proposal-pipeline-operator
 // https://github.com/js-choi/proposal-hack-pipes
-defineType("PipelinePrimaryTopicReference", {});
+defineType("TopicReference", {});

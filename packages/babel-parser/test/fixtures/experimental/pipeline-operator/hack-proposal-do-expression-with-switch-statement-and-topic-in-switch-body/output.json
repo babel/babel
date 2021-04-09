@@ -43,7 +43,7 @@
                           "type": "ExpressionStatement",
                           "start":46,"end":48,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":14}},
                           "expression": {
-                            "type": "PipelinePrimaryTopicReference",
+                            "type": "TopicReference",
                             "start":46,"end":47,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":13}}
                           }
                         }
@@ -69,7 +69,7 @@
                             "type": "BinaryExpression",
                             "start":61,"end":66,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":17}},
                             "left": {
-                              "type": "PipelinePrimaryTopicReference",
+                              "type": "TopicReference",
                               "start":61,"end":62,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":13}}
                             },
                             "operator": "+",
@@ -106,7 +106,7 @@
                             "type": "BinaryExpression",
                             "start":81,"end":87,"loc":{"start":{"line":5,"column":13},"end":{"line":5,"column":19}},
                             "left": {
-                              "type": "PipelinePrimaryTopicReference",
+                              "type": "TopicReference",
                               "start":81,"end":82,"loc":{"start":{"line":5,"column":13},"end":{"line":5,"column":14}}
                             },
                             "operator": "+",

@@ -63,7 +63,7 @@
                           "kind": "const"
                         },
                         "right": {
-                          "type": "PipelinePrimaryTopicReference",
+                          "type": "TopicReference",
                           "start":61,"end":62,"loc":{"start":{"line":2,"column":38},"end":{"line":2,"column":39}}
                         },
                         "body": {

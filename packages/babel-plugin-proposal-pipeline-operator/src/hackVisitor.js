@@ -5,7 +5,7 @@ function pathNodeIsPipeExpression(path) {
 }
 
 const topicReferenceReplacementVisitor = {
-  PipelinePrimaryTopicReference(path) {
+  TopicReference(path) {
     path.replaceWith(t.cloneNode(this.topicVariable));
   },
 };
