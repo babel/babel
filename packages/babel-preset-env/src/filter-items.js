@@ -3,6 +3,7 @@
 import { lt } from "semver";
 import { minVersions } from "./available-plugins";
 
+// $FlowIgnore
 const has = Function.call.bind(Object.hasOwnProperty);
 
 export function removeUnnecessaryItems(
