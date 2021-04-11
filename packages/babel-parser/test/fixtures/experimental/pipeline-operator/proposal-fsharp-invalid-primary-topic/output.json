@@ -3,7 +3,7 @@
   "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
   "errors": [
     "SyntaxError: Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option. (1:5)",
-    "SyntaxError: Topic reference was used in a lexical context without topic binding (1:5)"
+    "SyntaxError: Topic reference was used in a lexical context without topic binding. (1:5)"
   ],
   "program": {
     "type": "Program",

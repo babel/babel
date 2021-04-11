@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":67,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":24}},
   "errors": [
-    "SyntaxError: Binding invalid left-hand side in function parameter list (2:11)"
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (2:11)"
   ],
   "program": {
     "type": "Program",
@@ -13,6 +13,13 @@
       {
         "type": "ExpressionStatement",
         "start":43,"end":67,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":24}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Function which looks like a return type",
+            "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}}
+          }
+        ],
         "expression": {
           "type": "ConditionalExpression",
           "start":43,"end":66,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":23}},
@@ -24,11 +31,11 @@
           "consequent": {
             "type": "Identifier",
             "start":48,"end":49,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"b"},
-            "name": "b",
             "extra": {
               "parenthesized": true,
               "parenStart": 47
-            }
+            },
+            "name": "b"
           },
           "alternate": {
             "type": "ArrowFunctionExpression",
@@ -63,14 +70,7 @@
               "name": "e"
             }
           }
-        },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " Function which looks like a return type",
-            "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}}
-          }
-        ]
+        }
       }
     ],
     "directives": []

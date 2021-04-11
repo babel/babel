@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
   "errors": [
-    "SyntaxError: Invalid left-hand side in object destructuring pattern (1:4)"
+    "SyntaxError: Invalid left-hand side in object destructuring pattern. (1:4)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":1,"end":11,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":11}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -47,10 +51,6 @@
               "raw": "0"
             },
             "value": 0
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
           }
         }
       }

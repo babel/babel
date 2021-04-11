@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
   "errors": [
-    "SyntaxError: Unexpected keyword 'null' (1:11)"
+    "SyntaxError: Unexpected keyword 'null'. (1:11)"
   ],
   "program": {
     "type": "Program",

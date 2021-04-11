@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
   "errors": [
-    "SyntaxError: Invalid parenthesized assignment pattern (1:7)"
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:7)"
   ],
   "program": {
     "type": "Program",
@@ -43,6 +43,10 @@
                         {
                           "type": "ArrayPattern",
                           "start":7,"end":14,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":14}},
+                          "extra": {
+                            "parenthesized": true,
+                            "parenStart": 6
+                          },
                           "elements": [
                             {
                               "type": "AssignmentPattern",
@@ -59,11 +63,7 @@
                                 "raw": "1"
                               }
                             }
-                          ],
-                          "extra": {
-                            "parenthesized": true,
-                            "parenStart": 6
-                          }
+                          ]
                         }
                       ]
                     },

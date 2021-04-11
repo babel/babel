@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":59,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
   "errors": [
-    "SyntaxError: Private fields can't be accessed on super (5:4)"
+    "SyntaxError: Private fields can't be accessed on super. (5:4)"
   ],
   "program": {
     "type": "Program",
@@ -71,6 +71,7 @@
                         "type": "Super",
                         "start":44,"end":49,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":9}}
                       },
+                      "computed": false,
                       "property": {
                         "type": "PrivateName",
                         "start":50,"end":52,"loc":{"start":{"line":5,"column":10},"end":{"line":5,"column":12}},
@@ -79,8 +80,7 @@
                           "start":51,"end":52,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":12},"identifierName":"x"},
                           "name": "x"
                         }
-                      },
-                      "computed": false
+                      }
                     }
                   }
                 ],

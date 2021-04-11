@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
   "errors": [
-    "SyntaxError: Invalid regular expression flag (1:16)",
-    "SyntaxError: Invalid regular expression flag (1:18)"
+    "SyntaxError: Invalid regular expression flag. (1:16)",
+    "SyntaxError: Invalid regular expression flag. (1:18)"
   ],
   "program": {
     "type": "Program",

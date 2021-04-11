@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":64,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":7}},
   "errors": [
-    "SyntaxError: 'with' in strict mode (2:2)"
+    "SyntaxError: 'with' in strict mode. (2:2)"
   ],
   "program": {
     "type": "Program",
@@ -21,6 +21,10 @@
         "superClass": {
           "type": "CallExpression",
           "start":17,"end":60,"loc":{"start":{"line":1,"column":17},"end":{"line":4,"column":3}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 16
+          },
           "callee": {
             "type": "FunctionExpression",
             "start":17,"end":58,"loc":{"start":{"line":1,"column":17},"end":{"line":4,"column":1}},
@@ -62,11 +66,7 @@
               "directives": []
             }
           },
-          "arguments": [],
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 16
-          }
+          "arguments": []
         },
         "body": {
           "type": "ClassBody",

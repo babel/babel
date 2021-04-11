@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: new.target can only be used in functions (2:2)"
+    "SyntaxError: `new.target` can only be used in functions. (2:2)"
   ],
   "program": {
     "type": "Program",

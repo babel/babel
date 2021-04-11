@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
   "errors": [
-    "SyntaxError: Duplicate private name #x (3:2)"
+    "SyntaxError: Duplicate private name #x. (3:2)"
   ],
   "program": {
     "type": "Program",

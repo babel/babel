@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
   "errors": [
-    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:14)",
-    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:18)"
+    "SyntaxError: Legacy octal literals are not allowed in strict mode. (1:14)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode. (1:18)"
   ],
   "program": {
     "type": "Program",

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":35}},
   "errors": [
-    "SyntaxError: Binding invalid left-hand side in function parameter list (2:11)"
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (2:11)"
   ],
   "program": {
     "type": "Program",
@@ -13,6 +13,13 @@
       {
         "type": "ExpressionStatement",
         "start":25,"end":60,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":35}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Invalid LHS parameter",
+            "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}}
+          }
+        ],
         "expression": {
           "type": "ConditionalExpression",
           "start":25,"end":59,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":34}},
@@ -51,11 +58,11 @@
             "body": {
               "type": "Identifier",
               "start":48,"end":49,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":24},"identifierName":"d"},
-              "name": "d",
               "extra": {
                 "parenthesized": true,
                 "parenStart": 47
-              }
+              },
+              "name": "d"
             }
           },
           "alternate": {
@@ -77,14 +84,7 @@
               "name": "g"
             }
           }
-        },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " Invalid LHS parameter",
-            "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}}
-          }
-        ]
+        }
       }
     ],
     "directives": []
