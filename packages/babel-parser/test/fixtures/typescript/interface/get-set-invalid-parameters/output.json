@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
   "errors": [
-    "SyntaxError: getter must not have any formal parameters (3:5)",
-    "SyntaxError: setter must have exactly one formal parameter (4:1)"
+    "SyntaxError: A 'get' accesor must not have any formal parameters. (3:5)",
+    "SyntaxError: A 'set' accesor must have exactly one formal parameter. (4:1)"
   ],
   "program": {
     "type": "Program",
@@ -26,13 +26,13 @@
             {
               "type": "TSMethodSignature",
               "start":18,"end":41,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":25}},
-              "kind": "get",
               "key": {
                 "type": "Identifier",
                 "start":22,"end":25,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9},"identifierName":"foo"},
                 "name": "foo"
               },
               "computed": false,
+              "kind": "get",
               "parameters": [
                 {
                   "type": "Identifier",
@@ -52,13 +52,13 @@
             {
               "type": "TSMethodSignature",
               "start":44,"end":54,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":12}},
-              "kind": "set",
               "key": {
                 "type": "Identifier",
                 "start":48,"end":51,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":9},"identifierName":"foo"},
                 "name": "foo"
               },
               "computed": false,
+              "kind": "set",
               "parameters": []
             }
           ]
