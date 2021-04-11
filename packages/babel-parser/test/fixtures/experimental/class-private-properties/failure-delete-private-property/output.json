@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
   "errors": [
-    "SyntaxError: Deleting a private field is not allowed (4:4)"
+    "SyntaxError: Deleting a private field is not allowed. (4:4)"
   ],
   "program": {
     "type": "Program",
@@ -72,6 +72,7 @@
                           "type": "ThisExpression",
                           "start":47,"end":51,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":15}}
                         },
+                        "computed": false,
                         "property": {
                           "type": "PrivateName",
                           "start":52,"end":54,"loc":{"start":{"line":4,"column":16},"end":{"line":4,"column":18}},
@@ -80,8 +81,7 @@
                             "start":53,"end":54,"loc":{"start":{"line":4,"column":17},"end":{"line":4,"column":18},"identifierName":"x"},
                             "name": "x"
                           }
-                        },
-                        "computed": false
+                        }
                       }
                     }
                   }

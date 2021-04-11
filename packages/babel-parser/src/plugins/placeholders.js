@@ -50,7 +50,7 @@ type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
 const PlaceHolderErrors = makeErrorTemplates(
   {
-    ClassNameIsRequired: "A class name is required",
+    ClassNameIsRequired: "A class name is required.",
   },
   /* code */ ErrorCodes.SyntaxError,
 );

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
   "errors": [
-    "SyntaxError: Unexpected keyword 'class' (1:5)"
+    "SyntaxError: Unexpected keyword 'class'. (1:5)"
   ],
   "program": {
     "type": "Program",
@@ -21,9 +21,9 @@
         "body": {
           "type": "EnumStringBody",
           "start":11,"end":14,"loc":{"start":{"line":1,"column":11},"end":{"line":2,"column":1}},
+          "hasUnknownMembers": false,
           "explicitType": false,
-          "members": [],
-          "hasUnknownMembers": false
+          "members": []
         }
       }
     ],

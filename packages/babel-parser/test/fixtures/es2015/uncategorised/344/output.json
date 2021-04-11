@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}},
   "errors": [
-    "SyntaxError: super is only allowed in object methods and classes (1:0)",
-    "SyntaxError: super can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]) (1:0)"
+    "SyntaxError: 'super' is only allowed in object methods and classes. (1:0)",
+    "SyntaxError: 'super' can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]). (1:0)"
   ],
   "program": {
     "type": "Program",

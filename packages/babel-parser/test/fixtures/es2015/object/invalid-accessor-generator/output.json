@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":2}},
   "errors": [
-    "SyntaxError: A getter cannot be a generator (2:9)",
-    "SyntaxError: A setter cannot be a generator (3:9)"
+    "SyntaxError: A getter cannot be a generator. (2:9)",
+    "SyntaxError: A setter cannot be a generator. (3:9)"
   ],
   "program": {
     "type": "Program",
@@ -17,6 +17,10 @@
         "expression": {
           "type": "ObjectExpression",
           "start":1,"end":57,"loc":{"start":{"line":1,"column":1},"end":{"line":4,"column":1}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "properties": [
             {
               "type": "ObjectMethod",
@@ -68,11 +72,7 @@
                 "directives": []
               }
             }
-          ],
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          }
+          ]
         }
       }
     ],

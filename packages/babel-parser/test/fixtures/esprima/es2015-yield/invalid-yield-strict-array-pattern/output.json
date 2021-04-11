@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'yield' (1:16)"
+    "SyntaxError: Unexpected reserved word 'yield'. (1:16)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":15,"end":26,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":26}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
+          },
           "operator": "=",
           "left": {
             "type": "ArrayPattern",
@@ -32,10 +36,6 @@
             "type": "Identifier",
             "start":25,"end":26,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":26},"identifierName":"x"},
             "name": "x"
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 14
           }
         }
       }
@@ -47,11 +47,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
             "raw": "\"use strict\"",
             "rawValue": "use strict"
-          }
+          },
+          "value": "use strict"
         }
       }
     ]

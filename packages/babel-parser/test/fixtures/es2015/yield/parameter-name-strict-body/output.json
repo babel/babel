@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
   "errors": [
-    "SyntaxError: Binding 'yield' in strict mode (1:12)"
+    "SyntaxError: Binding 'yield' in strict mode. (1:12)"
   ],
   "program": {
     "type": "Program",
@@ -38,11 +38,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":21,"end":33,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":33}},
-                "value": "use strict",
                 "extra": {
                   "raw": "\"use strict\"",
                   "rawValue": "use strict"
-                }
+                },
+                "value": "use strict"
               }
             }
           ]

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
   "errors": [
-    "SyntaxError: Assigning to 'eval' in strict mode (1:16)"
+    "SyntaxError: Assigning to 'eval' in strict mode. (1:16)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":15,"end":38,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":38}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
+          },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -24,6 +28,9 @@
               {
                 "type": "ObjectProperty",
                 "start":16,"end":31,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":31}},
+                "extra": {
+                  "shorthand": true
+                },
                 "method": false,
                 "key": {
                   "type": "Identifier",
@@ -45,9 +52,6 @@
                     "start":23,"end":31,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":31},"identifierName":"defValue"},
                     "name": "defValue"
                   }
-                },
-                "extra": {
-                  "shorthand": true
                 }
               }
             ]
@@ -56,10 +60,6 @@
             "type": "Identifier",
             "start":35,"end":38,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":38},"identifierName":"obj"},
             "name": "obj"
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 14
           }
         }
       }
@@ -71,11 +71,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
             "raw": "'use strict'",
             "rawValue": "use strict"
-          }
+          },
+          "value": "use strict"
         }
       }
     ]

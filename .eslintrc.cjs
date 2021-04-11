@@ -109,6 +109,7 @@ module.exports = {
             ),
           },
         ],
+        "@babel/development-internal/report-error-message-format": "error",
       },
     },
     {

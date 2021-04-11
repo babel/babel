@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":58}},
   "errors": [
-    "SyntaxError: Binding 'eval' in strict mode (1:47)"
+    "SyntaxError: Binding 'eval' in strict mode. (1:47)"
   ],
   "program": {
     "type": "Program",
@@ -59,11 +59,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":18,"end":30,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}},
-                "value": "use strict",
                 "extra": {
                   "raw": "'use strict'",
                   "rawValue": "use strict"
-                }
+                },
+                "value": "use strict"
               }
             }
           ]

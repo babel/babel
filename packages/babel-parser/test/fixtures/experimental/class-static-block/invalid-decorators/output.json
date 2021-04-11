@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
   "errors": [
-    "SyntaxError: Decorators can't be used with a static block (3:2)"
+    "SyntaxError: Decorators can't be used with a static block. (3:2)"
   ],
   "program": {
     "type": "Program",

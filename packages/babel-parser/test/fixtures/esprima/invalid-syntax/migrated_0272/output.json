@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
   "errors": [
-    "SyntaxError: Class constructor may not be an accessor (1:13)"
+    "SyntaxError: Class constructor may not be an accessor. (1:13)"
   ],
   "program": {
     "type": "Program",
