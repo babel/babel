@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
   "errors": [
-    "SyntaxError: Yield expression is not allowed in formal parameters (1:21)"
+    "SyntaxError: Yield expression is not allowed in formal parameters. (1:21)"
   ],
   "program": {
     "type": "Program",

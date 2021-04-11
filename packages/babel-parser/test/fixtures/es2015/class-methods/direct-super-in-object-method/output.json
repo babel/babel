@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":87,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":3}},
   "errors": [
-    "SyntaxError: super is only allowed in object methods and classes (4:13)"
+    "SyntaxError: 'super' is only allowed in object methods and classes. (4:13)"
   ],
   "program": {
     "type": "Program",
@@ -24,12 +24,12 @@
               "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6},"identifierName":"Object"},
               "name": "Object"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":7,"end":13,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":13},"identifierName":"create"},
               "name": "create"
-            },
-            "computed": false
+            }
           },
           "arguments": [
             {
@@ -88,12 +88,12 @@
                                     "type": "Super",
                                     "start":63,"end":68,"loc":{"start":{"line":4,"column":13},"end":{"line":4,"column":18}}
                                   },
+                                  "computed": false,
                                   "property": {
                                     "type": "Identifier",
                                     "start":69,"end":72,"loc":{"start":{"line":4,"column":19},"end":{"line":4,"column":22},"identifierName":"foo"},
                                     "name": "foo"
-                                  },
-                                  "computed": false
+                                  }
                                 }
                               }
                             ],

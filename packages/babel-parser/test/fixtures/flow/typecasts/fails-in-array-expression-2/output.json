@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
   "errors": [
-    "SyntaxError: The type cast expression is expected to be wrapped with parenthesis (1:3)"
+    "SyntaxError: The type cast expression is expected to be wrapped with parenthesis. (1:3)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "ArrayExpression",
           "start":1,"end":12,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":12}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "elements": [
             {
               "type": "TypeCastExpression",
@@ -34,11 +38,7 @@
                 }
               }
             }
-          ],
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          }
+          ]
         }
       }
     ],

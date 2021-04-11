@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":90,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'yield' (5:6)",
-    "SyntaxError: Missing semicolon (5:11)"
+    "SyntaxError: Unexpected reserved word 'yield'. (5:6)",
+    "SyntaxError: Missing semicolon. (5:11)"
   ],
   "program": {
     "type": "Program",

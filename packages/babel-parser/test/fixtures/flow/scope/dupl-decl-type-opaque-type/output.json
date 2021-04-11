@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
   "errors": [
-    "SyntaxError: Identifier 'A' has already been declared (2:12)"
+    "SyntaxError: Identifier 'A' has already been declared. (2:12)"
   ],
   "program": {
     "type": "Program",

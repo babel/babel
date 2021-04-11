@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
   "errors": [
-    "SyntaxError: import() requires exactly one argument (1:0)"
+    "SyntaxError: `import()` requires exactly one argument. (1:0)"
   ],
   "program": {
     "type": "Program",

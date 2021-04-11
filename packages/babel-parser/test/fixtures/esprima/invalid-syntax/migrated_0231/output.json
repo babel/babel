@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":45,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":45}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'yield' (1:37)"
+    "SyntaxError: Unexpected reserved word 'yield'. (1:37)"
   ],
   "program": {
     "type": "Program",
@@ -50,11 +50,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":19,"end":31,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":31}},
-                "value": "use strict",
                 "extra": {
                   "raw": "\"use strict\"",
                   "rawValue": "use strict"
-                }
+                },
+                "value": "use strict"
               }
             }
           ]

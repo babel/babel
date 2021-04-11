@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
   "errors": [
-    "SyntaxError: Argument name clash (1:16)"
+    "SyntaxError: Argument name clash. (1:16)"
   ],
   "program": {
     "type": "Program",
@@ -33,6 +33,9 @@
               {
                 "type": "ObjectProperty",
                 "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17}},
+                "extra": {
+                  "shorthand": true
+                },
                 "method": false,
                 "key": {
                   "type": "Identifier",
@@ -45,9 +48,6 @@
                   "type": "Identifier",
                   "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"a"},
                   "name": "a"
-                },
-                "extra": {
-                  "shorthand": true
                 }
               }
             ]

@@ -1,3 +1,7 @@
 {
-  "throws": "Unterminated string constant (1:9)"
+  "plugins": [
+    "jsx",
+    "flow"
+  ],
+  "throws": "Unterminated string constant. (1:9)"
 }
