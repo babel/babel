@@ -124,6 +124,8 @@ const TSErrors = makeErrorTemplates(
       "Private elements cannot have an accessibility modifier ('%0').",
     ReadonlyForMethodSignature:
       "'readonly' modifier can only appear on a property declaration or index signature.",
+    SetAccesorCannotHaveOptionalParameter:
+      "A 'set' accessor cannot have an optional parameter.",
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
     TypeAnnotationAfterAssign:
@@ -628,11 +630,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else if (method.kind === "set") {
           if (method.parameters.length !== 1) {
             this.raise(this.state.pos, Errors.BadSetterArity);
-          } else if (this.isThisParam(method.parameters[0])) {
-            this.raise(
-              this.state.pos,
-              TSErrors.AccesorCannotDeclareThisParameter,
-            );
+          } else {
+            const firstParameter = method.parameters[0];
+            if (this.isThisParam(firstParameter)) {
+              this.raise(
+                this.state.pos,
+                TSErrors.AccesorCannotDeclareThisParameter,
+              );
+            }
+            if (
+              firstParameter.type === "Identifier" &&
+              firstParameter.optional
+            ) {
+              this.raise(
+                this.state.pos,
+                TSErrors.SetAccesorCannotHaveOptionalParameter,
+              );
+            }
           }
           if (method.typeAnnotation) {
             this.raise(
