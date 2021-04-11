@@ -70,6 +70,8 @@ const TSErrors = makeErrorTemplates(
   {
     AbstractMethodHasImplementation:
       "Method '%0' cannot have an implementation because it is marked abstract.",
+    AccesorCannotDeclareThisParameter:
+      "'get' and 'set' accessors cannot declare 'this' parameters.",
     AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
     ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
     ClassMethodHasReadonly:
@@ -616,10 +618,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (method.kind === "get") {
           if (method.parameters.length > 0) {
             this.raise(this.state.pos, Errors.BadGetterArity);
+            if (this.isThisParam(method.parameters[0])) {
+              this.raise(
+                this.state.pos,
+                TSErrors.AccesorCannotDeclareThisParameter,
+              );
+            }
           }
         } else if (method.kind === "set") {
           if (method.parameters.length !== 1) {
             this.raise(this.state.pos, Errors.BadSetterArity);
+          } else if (this.isThisParam(method.parameters[0])) {
+            this.raise(
+              this.state.pos,
+              TSErrors.AccesorCannotDeclareThisParameter,
+            );
           }
           if (method.typeAnnotation) {
             this.raise(
