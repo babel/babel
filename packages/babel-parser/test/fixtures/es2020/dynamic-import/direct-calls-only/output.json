@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: The only valid meta property for import is import.meta (2:16)"
+    "SyntaxError: The only valid meta property for import is import.meta. (2:16)"
   ],
   "program": {
     "type": "Program",

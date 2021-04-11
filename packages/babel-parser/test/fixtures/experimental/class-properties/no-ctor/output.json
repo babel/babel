@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: Classes may not have a field named 'constructor' (2:2)"
+    "SyntaxError: Classes may not have a field named 'constructor'. (2:2)"
   ],
   "program": {
     "type": "Program",

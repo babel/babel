@@ -2,11 +2,11 @@
   "type": "File",
   "start":0,"end":178,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
   "errors": [
-    "SyntaxError: Index signatures cannot have the 'abstract' modifier (2:2)",
-    "SyntaxError: Index signatures cannot have the 'declare' modifier (3:2)",
-    "SyntaxError: Index signatures cannot have an accessibility modifier ('private') (4:2)",
-    "SyntaxError: Index signatures cannot have an accessibility modifier ('public') (5:2)",
-    "SyntaxError: Index signatures cannot have an accessibility modifier ('protected') (6:2)"
+    "SyntaxError: Index signatures cannot have the 'abstract' modifier. (2:2)",
+    "SyntaxError: Index signatures cannot have the 'declare' modifier. (3:2)",
+    "SyntaxError: Index signatures cannot have an accessibility modifier ('private'). (4:2)",
+    "SyntaxError: Index signatures cannot have an accessibility modifier ('public'). (5:2)",
+    "SyntaxError: Index signatures cannot have an accessibility modifier ('protected'). (6:2)"
   ],
   "program": {
     "type": "Program",

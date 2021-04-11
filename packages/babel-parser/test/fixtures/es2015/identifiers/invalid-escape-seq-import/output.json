@@ -2,9 +2,9 @@
   "type": "File",
   "start":0,"end":90,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":41}},
   "errors": [
-    "SyntaxError: Unexpected keyword 'import' (1:4)",
-    "SyntaxError: Escape sequence in keyword import (1:4)",
-    "SyntaxError: Escape sequence in keyword import (3:0)"
+    "SyntaxError: Unexpected keyword 'import'. (1:4)",
+    "SyntaxError: Escape sequence in keyword import. (1:4)",
+    "SyntaxError: Escape sequence in keyword import. (3:0)"
   ],
   "program": {
     "type": "Program",

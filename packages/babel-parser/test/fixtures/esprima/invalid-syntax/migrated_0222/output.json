@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":76}},
   "errors": [
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (1:36)",
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (1:57)"
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:36)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:57)"
   ],
   "program": {
     "type": "Program",

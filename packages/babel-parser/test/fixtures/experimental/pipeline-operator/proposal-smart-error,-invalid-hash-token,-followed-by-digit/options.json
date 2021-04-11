@@ -1,4 +1,11 @@
 {
-  "plugins": [["pipelineOperator", { "proposal": "smart" }]],
-  "throws": "Unexpected digit after hash token (1:5)"
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "smart"
+      }
+    ]
+  ],
+  "throws": "Unexpected digit after hash token. (1:5)"
 }

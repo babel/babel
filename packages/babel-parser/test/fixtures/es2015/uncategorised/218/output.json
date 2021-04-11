@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
   "errors": [
-    "SyntaxError: Bad character escape sequence (1:4)"
+    "SyntaxError: Bad character escape sequence. (1:4)"
   ],
   "program": {
     "type": "Program",
@@ -17,11 +17,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
-          "value": "\\u{FFFF",
           "extra": {
             "raw": "\"\\u{FFFF\"",
             "rawValue": "\\u{FFFF"
-          }
+          },
+          "value": "\\u{FFFF"
         }
       }
     ]

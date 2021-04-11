@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":73,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
   "errors": [
-    "SyntaxError: Private name #p is not defined (4:22)"
+    "SyntaxError: Private name #p is not defined. (4:22)"
   ],
   "program": {
     "type": "Program",

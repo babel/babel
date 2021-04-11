@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
   "errors": [
-    "SyntaxError: Pipeline is in topic style but does not use topic reference (1:5)"
+    "SyntaxError: Pipeline is in topic style but does not use topic reference. (1:5)"
   ],
   "program": {
     "type": "Program",
@@ -28,6 +28,10 @@
             "expression": {
               "type": "ArrowFunctionExpression",
               "start":6,"end":17,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":17}},
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 5
+              },
               "id": null,
               "generator": false,
               "async": false,
@@ -55,10 +59,6 @@
                     "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17}}
                   }
                 }
-              },
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 5
               }
             }
           }
