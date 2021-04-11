@@ -6,5 +6,5 @@
     "supportsTopLevelAwait": false
   },
   "presets": ["env"],
-  "throws": "Unexpected reserved word 'await' (1:0)"
+  "throws": "Unexpected reserved word 'await'. (1:0)"
 }

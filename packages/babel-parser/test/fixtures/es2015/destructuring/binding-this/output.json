@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
   "errors": [
-    "SyntaxError: Unexpected keyword 'this' (1:6)"
+    "SyntaxError: Unexpected keyword 'this'. (1:6)"
   ],
   "program": {
     "type": "Program",
@@ -24,6 +24,9 @@
                 {
                   "type": "ObjectProperty",
                   "start":6,"end":10,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":10}},
+                  "extra": {
+                    "shorthand": true
+                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -36,9 +39,6 @@
                     "type": "Identifier",
                     "start":6,"end":10,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":10},"identifierName":"this"},
                     "name": "this"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]

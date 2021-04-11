@@ -70,8 +70,9 @@ const TSErrors = makeErrorTemplates(
   {
     AbstractMethodHasImplementation:
       "Method '%0' cannot have an implementation because it is marked abstract.",
-    ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier",
-    ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier",
+    ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
+    ClassMethodHasReadonly:
+      "Class methods cannot have the 'readonly' modifier.",
     ConstructorHasTypeParameters:
       "Type parameters cannot appear on a constructor declaration.",
   DeclareAccessor: "'declare' is not allowed in %0ters.",
@@ -80,24 +81,24 @@ const TSErrors = makeErrorTemplates(
     DeclareFunctionHasImplementation:
       "An implementation cannot be declared in ambient contexts.",
     DuplicateAccessibilityModifier: "Accessibility modifier already seen.",
-    DuplicateModifier: "Duplicate modifier: '%0'",
+    DuplicateModifier: "Duplicate modifier: '%0'.",
     EmptyHeritageClauseType: "'%0' list cannot be empty.",
     EmptyTypeArguments: "Type argument list cannot be empty.",
     EmptyTypeParameters: "Type parameter list cannot be empty.",
     ExpectedAmbientAfterExportDeclare:
       "'export declare' must be followed by an ambient declaration.",
-    ImportAliasHasImportType: "An import alias can not use 'import type'",
+    ImportAliasHasImportType: "An import alias can not use 'import type'.",
     IncompatibleModifiers: "'%0' modifier cannot be used with '%1' modifier.",
     IndexSignatureHasAbstract:
-      "Index signatures cannot have the 'abstract' modifier",
+      "Index signatures cannot have the 'abstract' modifier.",
     IndexSignatureHasAccessibility:
-      "Index signatures cannot have an accessibility modifier ('%0')",
+      "Index signatures cannot have an accessibility modifier ('%0').",
     IndexSignatureHasDeclare:
-      "Index signatures cannot have the 'declare' modifier",
+      "Index signatures cannot have the 'declare' modifier.",
     IndexSignatureHasOverride:
       "'override' modifier cannot appear on an index signature.",
     IndexSignatureHasStatic:
-      "Index signatures cannot have the 'static' modifier",
+      "Index signatures cannot have the 'static' modifier.",
     InvalidModifierOnTypeMember:
       "'%0' modifier cannot appear on a type member.",
     InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
@@ -118,11 +119,11 @@ const TSErrors = makeErrorTemplates(
     PrivateElementHasAbstract:
       "Private elements cannot have the 'abstract' modifier.",
     PrivateElementHasAccessibility:
-      "Private elements cannot have an accessibility modifier ('%0')",
+      "Private elements cannot have an accessibility modifier ('%0').",
     ReadonlyForMethodSignature:
       "'readonly' modifier can only appear on a property declaration or index signature.",
     TypeAnnotationAfterAssign:
-      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     TypeImportCannotSpecifyDefaultAndNamed:
       "A type-only import can specify a default import or named bindings, but not both.",
     UnexpectedParameterModifier:
@@ -133,11 +134,11 @@ const TSErrors = makeErrorTemplates(
     UnexpectedTypeCastInParameter:
       "Unexpected type cast in parameter position.",
     UnsupportedImportTypeArgument:
-      "Argument in a type import must be a string literal",
+      "Argument in a type import must be a string literal.",
     UnsupportedParameterPropertyKind:
       "A parameter property may not be declared using a binding pattern.",
     UnsupportedSignatureParameterKind:
-      "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0",
+      "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0.",
   },
   /* code */ ErrorCodes.SyntaxError,
 );

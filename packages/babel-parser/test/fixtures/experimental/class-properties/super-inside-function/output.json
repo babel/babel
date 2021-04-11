@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
   "errors": [
-    "SyntaxError: super is only allowed in object methods and classes (3:4)"
+    "SyntaxError: 'super' is only allowed in object methods and classes. (3:4)"
   ],
   "program": {
     "type": "Program",
@@ -61,12 +61,12 @@
                             "type": "Super",
                             "start":38,"end":43,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":9}}
                           },
+                          "computed": false,
                           "property": {
                             "type": "Identifier",
                             "start":44,"end":45,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":11},"identifierName":"x"},
                             "name": "x"
-                          },
-                          "computed": false
+                          }
                         },
                         "arguments": []
                       }

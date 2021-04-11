@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
   "errors": [
-    "SyntaxError: Private name #priv is not defined (4:19)"
+    "SyntaxError: Private name #priv is not defined. (4:19)"
   ],
   "program": {
     "type": "Program",
@@ -77,6 +77,7 @@
                             "start":42,"end":45,"loc":{"start":{"line":4,"column":15},"end":{"line":4,"column":18},"identifierName":"foo"},
                             "name": "foo"
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":46,"end":51,"loc":{"start":{"line":4,"column":19},"end":{"line":4,"column":24}},
@@ -85,8 +86,7 @@
                               "start":47,"end":51,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":24},"identifierName":"priv"},
                               "name": "priv"
                             }
-                          },
-                          "computed": false
+                          }
                         }
                       }
                     ],

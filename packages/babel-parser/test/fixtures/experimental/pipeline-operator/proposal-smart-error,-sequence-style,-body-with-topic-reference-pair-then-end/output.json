@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
   "errors": [
-    "SyntaxError: Pipeline body may not be a comma-separated sequence expression (1:6)"
+    "SyntaxError: Pipeline body may not be a comma-separated sequence expression. (1:6)"
   ],
   "program": {
     "type": "Program",
@@ -32,6 +32,10 @@
             "expression": {
               "type": "SequenceExpression",
               "start":7,"end":11,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":11}},
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 6
+              },
               "expressions": [
                 {
                   "type": "PipelinePrimaryTopicReference",
@@ -41,11 +45,7 @@
                   "type": "PipelinePrimaryTopicReference",
                   "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}}
                 }
-              ],
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 6
-              }
+              ]
             }
           }
         }

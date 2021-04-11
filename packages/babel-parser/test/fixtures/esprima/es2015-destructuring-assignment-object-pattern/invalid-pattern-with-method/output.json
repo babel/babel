@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":11,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":11}},
   "errors": [
-    "SyntaxError: Object pattern can't contain methods (1:2)"
+    "SyntaxError: Object pattern can't contain methods. (1:2)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":1,"end":10,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":10}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -53,10 +57,6 @@
               "raw": "0"
             },
             "value": 0
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
           }
         }
       }

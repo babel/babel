@@ -2,12 +2,12 @@
   "type": "File",
   "start":0,"end":182,"loc":{"start":{"line":1,"column":0},"end":{"line":21,"column":1}},
   "errors": [
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (2:4)",
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (7:4)",
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (8:4)",
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (14:4)",
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (19:4)",
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (20:4)"
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (2:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (7:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (8:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (14:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (19:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (20:4)"
   ],
   "program": {
     "type": "Program",

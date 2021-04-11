@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":3}},
   "errors": [
-    "SyntaxError: Illegal newline after throw (1:5)"
+    "SyntaxError: Illegal newline after throw. (1:5)"
   ],
   "program": {
     "type": "Program",

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: Argument name clash (2:11)"
+    "SyntaxError: Argument name clash. (2:11)"
   ],
   "program": {
     "type": "Program",

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
   "errors": [
-    "SyntaxError: Invalid parenthesized assignment pattern (1:1)"
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:1)"
   ],
   "program": {
     "type": "Program",
@@ -20,10 +20,17 @@
           "left": {
             "type": "ObjectPattern",
             "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            },
             "properties": [
               {
                 "type": "ObjectProperty",
                 "start":2,"end":3,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":3}},
+                "extra": {
+                  "shorthand": true
+                },
                 "method": false,
                 "key": {
                   "type": "Identifier",
@@ -36,16 +43,9 @@
                   "type": "Identifier",
                   "start":2,"end":3,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":3},"identifierName":"a"},
                   "name": "a"
-                },
-                "extra": {
-                  "shorthand": true
                 }
               }
-            ],
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
-            }
+            ]
           },
           "right": {
             "type": "NumericLiteral",

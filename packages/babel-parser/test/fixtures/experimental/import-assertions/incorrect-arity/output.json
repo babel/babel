@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":75,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":65}},
   "errors": [
-    "SyntaxError: import() requires exactly one or two arguments (1:0)",
-    "SyntaxError: import() requires exactly one or two arguments (2:0)"
+    "SyntaxError: `import()` requires exactly one or two arguments. (1:0)",
+    "SyntaxError: `import()` requires exactly one or two arguments. (2:0)"
   ],
   "program": {
     "type": "Program",

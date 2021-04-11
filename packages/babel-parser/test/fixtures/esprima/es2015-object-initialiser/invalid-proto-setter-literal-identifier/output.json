@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":61}},
   "errors": [
-    "SyntaxError: Redefinition of __proto__ property (1:42)"
+    "SyntaxError: Redefinition of __proto__ property. (1:42)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,11 @@
         "expression": {
           "type": "ObjectExpression",
           "start":1,"end":60,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":60}},
+          "extra": {
+            "trailingComma": 57,
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "properties": [
             {
               "type": "ObjectMethod",
@@ -81,12 +86,7 @@
                 "start":53,"end":57,"loc":{"start":{"line":1,"column":53},"end":{"line":1,"column":57}}
               }
             }
-          ],
-          "extra": {
-            "trailingComma": 57,
-            "parenthesized": true,
-            "parenStart": 0
-          }
+          ]
         }
       }
     ],

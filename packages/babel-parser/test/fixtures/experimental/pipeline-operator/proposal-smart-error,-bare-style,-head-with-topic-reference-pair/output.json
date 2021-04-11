@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
   "errors": [
-    "SyntaxError: Pipeline head should not be a comma-separated sequence expression (1:0)"
+    "SyntaxError: Pipeline head should not be a comma-separated sequence expression. (1:0)"
   ],
   "program": {
     "type": "Program",
@@ -19,6 +19,10 @@
           "left": {
             "type": "SequenceExpression",
             "start":1,"end":5,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":5}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            },
             "expressions": [
               {
                 "type": "NumericLiteral",
@@ -38,11 +42,7 @@
                 },
                 "value": 2
               }
-            ],
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
-            }
+            ]
           },
           "operator": "|>",
           "right": {

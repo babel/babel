@@ -53,14 +53,14 @@ const FlowErrors = makeErrorTemplates(
     AmbiguousConditionalArrow:
       "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
     AmbiguousDeclareModuleKind:
-      "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module",
-    AssignReservedType: "Cannot overwrite reserved type %0",
+      "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module.",
+    AssignReservedType: "Cannot overwrite reserved type %0.",
     DeclareClassElement:
       "The `declare` modifier can only appear on class fields.",
     DeclareClassFieldInitializer:
       "Initializers are not allowed in fields with the `declare` modifier.",
     DuplicateDeclareModuleExports:
-      "Duplicate `declare module.exports` statement",
+      "Duplicate `declare module.exports` statement.",
     EnumBooleanMemberNotInitialized:
       "Boolean enum members need to be initialized. Use either `%0 = true,` or `%0 = false,` in enum `%1`.",
     EnumDuplicateMemberName:
@@ -85,23 +85,24 @@ const FlowErrors = makeErrorTemplates(
       "String enum members need to consistently either all use initializers, or use no initializers, in enum `%0`.",
     GetterMayNotHaveThisParam: "A getter cannot have a `this` parameter.",
     ImportTypeShorthandOnlyInPureImport:
-      "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
+      "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements.",
     InexactInsideExact:
-      "Explicit inexact syntax cannot appear inside an explicit exact object type",
+      "Explicit inexact syntax cannot appear inside an explicit exact object type.",
     InexactInsideNonObject:
-      "Explicit inexact syntax cannot appear in class or interface definitions",
-    InexactVariance: "Explicit inexact syntax cannot have variance",
+      "Explicit inexact syntax cannot appear in class or interface definitions.",
+    InexactVariance: "Explicit inexact syntax cannot have variance.",
     InvalidNonTypeImportInDeclareModule:
-      "Imports within a `declare module` body must always be `import type` or `import typeof`",
+      "Imports within a `declare module` body must always be `import type` or `import typeof`.",
     MissingTypeParamDefault:
       "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
     NestedDeclareModule:
-      "`declare module` cannot be used inside another `declare module`",
-    NestedFlowComment: "Cannot have a flow comment inside another flow comment",
+      "`declare module` cannot be used inside another `declare module`.",
+    NestedFlowComment:
+      "Cannot have a flow comment inside another flow comment.",
     OptionalBindingPattern:
       "A binding pattern parameter cannot be optional in an implementation signature.",
     SetterMayNotHaveThisParam: "A setter cannot have a `this` parameter.",
-    SpreadVariance: "Spread properties cannot have variance",
+    SpreadVariance: "Spread properties cannot have variance.",
     ThisParamAnnotationRequired:
       "A type annotation is required for the `this` parameter.",
     ThisParamBannedInConstructor:
@@ -111,29 +112,29 @@ const FlowErrors = makeErrorTemplates(
       "The `this` parameter must be the first function parameter.",
     ThisParamNoDefault: "The `this` parameter may not have a default value.",
     TypeBeforeInitializer:
-      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     TypeCastInPattern:
-      "The type cast expression is expected to be wrapped with parenthesis",
+      "The type cast expression is expected to be wrapped with parenthesis.",
     UnexpectedExplicitInexactInObject:
-      "Explicit inexact syntax must appear at the end of an inexact object",
-    UnexpectedReservedType: "Unexpected reserved type %0",
+      "Explicit inexact syntax must appear at the end of an inexact object.",
+    UnexpectedReservedType: "Unexpected reserved type %0.",
     UnexpectedReservedUnderscore:
-      "`_` is only allowed as a type argument to call or new",
+      "`_` is only allowed as a type argument to call or new.",
     UnexpectedSpaceBetweenModuloChecks:
       "Spaces between `%` and `checks` are not allowed here.",
     UnexpectedSpreadType:
-      "Spread operator cannot appear in class or interface definitions",
+      "Spread operator cannot appear in class or interface definitions.",
     UnexpectedSubtractionOperand:
-      'Unexpected token, expected "number" or "bigint"',
+      'Unexpected token, expected "number" or "bigint".',
     UnexpectedTokenAfterTypeParameter:
-      "Expected an arrow function after this type parameter declaration",
+      "Expected an arrow function after this type parameter declaration.",
     UnexpectedTypeParameterBeforeAsyncArrowFunction:
-      "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`",
+      "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`.",
     UnsupportedDeclareExportKind:
-      "`declare export %0` is not supported. Use `%1` instead",
+      "`declare export %0` is not supported. Use `%1` instead.",
     UnsupportedStatementInDeclareModule:
-      "Only declares and type imports are allowed inside declare module",
-    UnterminatedFlowComment: "Unterminated flow-comment",
+      "Only declares and type imports are allowed inside declare module.",
+    UnterminatedFlowComment: "Unterminated flow-comment.",
   },
   /* code */ ErrorCodes.SyntaxError,
 );
