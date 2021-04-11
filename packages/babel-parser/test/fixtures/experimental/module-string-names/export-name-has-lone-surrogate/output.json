@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":127,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":52}},
   "errors": [
-    "SyntaxError: An export name cannot include a lone surrogate, found '\\ud800' (2:16)"
+    "SyntaxError: An export name cannot include a lone surrogate, found '\\ud800'. (2:16)"
   ],
   "program": {
     "type": "Program",

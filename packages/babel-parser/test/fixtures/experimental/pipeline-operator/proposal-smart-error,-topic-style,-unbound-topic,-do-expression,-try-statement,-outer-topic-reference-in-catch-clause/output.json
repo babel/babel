@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":78,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
   "errors": [
-    "SyntaxError: Topic reference was used in a lexical context without topic binding (3:32)"
+    "SyntaxError: Topic reference was used in a lexical context without topic binding. (3:32)"
   ],
   "program": {
     "type": "Program",
@@ -53,12 +53,12 @@
                                 "start":22,"end":26,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":12},"identifierName":"JSON"},
                                 "name": "JSON"
                               },
+                              "computed": false,
                               "property": {
                                 "type": "Identifier",
                                 "start":27,"end":32,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":18},"identifierName":"parse"},
                                 "name": "parse"
-                              },
-                              "computed": false
+                              }
                             },
                             "arguments": [
                               {
@@ -97,12 +97,12 @@
                                   "start":57,"end":64,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":25},"identifierName":"console"},
                                   "name": "console"
                                 },
+                                "computed": false,
                                 "property": {
                                   "type": "Identifier",
                                   "start":65,"end":70,"loc":{"start":{"line":3,"column":26},"end":{"line":3,"column":31},"identifierName":"error"},
                                   "name": "error"
-                                },
-                                "computed": false
+                                }
                               },
                               "arguments": [
                                 {

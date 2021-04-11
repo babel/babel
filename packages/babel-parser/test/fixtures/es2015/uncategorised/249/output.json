@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":23}},
   "errors": [
-    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:21)"
+    "SyntaxError: Legacy octal literals are not allowed in strict mode. (1:21)"
   ],
   "program": {
     "type": "Program",
@@ -45,11 +45,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
             "raw": "\"use strict\"",
             "rawValue": "use strict"
-          }
+          },
+          "value": "use strict"
         }
       }
     ]

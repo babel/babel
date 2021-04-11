@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":52,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
   "errors": [
-    "SyntaxError: Illegal 'use strict' directive in function with non-simple parameter list (1:8)"
+    "SyntaxError: Illegal 'use strict' directive in function with non-simple parameter list. (1:8)"
   ],
   "program": {
     "type": "Program",
@@ -55,11 +55,11 @@
                     "value": {
                       "type": "DirectiveLiteral",
                       "start":36,"end":48,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}},
-                      "value": "use strict",
                       "extra": {
                         "raw": "\"use strict\"",
                         "rawValue": "use strict"
-                      }
+                      },
+                      "value": "use strict"
                     }
                   }
                 ]

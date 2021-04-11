@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":25}},
   "errors": [
-    "SyntaxError: Identifier 'foo' has already been declared (2:16)",
+    "SyntaxError: Identifier 'foo' has already been declared. (2:16)",
     "SyntaxError: `foo` has already been exported. Exported identifiers must be unique. (2:0)"
   ],
   "program": {

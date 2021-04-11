@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":65,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":65}},
   "errors": [
-    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:50)"
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes. (1:50)"
   ],
   "program": {
     "type": "Program",

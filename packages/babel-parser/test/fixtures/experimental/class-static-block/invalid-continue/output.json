@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":84,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
   "errors": [
-    "SyntaxError: Unsyntactic continue (5:6)"
+    "SyntaxError: Unsyntactic continue. (5:6)"
   ],
   "program": {
     "type": "Program",

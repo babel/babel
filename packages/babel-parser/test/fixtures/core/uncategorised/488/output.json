@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
   "errors": [
-    "SyntaxError: Binding 'eval' in strict mode (1:10)"
+    "SyntaxError: Binding 'eval' in strict mode. (1:10)"
   ],
   "program": {
     "type": "Program",
@@ -19,6 +19,10 @@
           "callee": {
             "type": "FunctionExpression",
             "start":1,"end":33,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":33}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            },
             "id": {
               "type": "Identifier",
               "start":10,"end":14,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":14},"identifierName":"eval"},
@@ -38,18 +42,14 @@
                   "value": {
                     "type": "DirectiveLiteral",
                     "start":18,"end":30,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}},
-                    "value": "use strict",
                     "extra": {
                       "raw": "'use strict'",
                       "rawValue": "use strict"
-                    }
+                    },
+                    "value": "use strict"
                   }
                 }
               ]
-            },
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
             }
           },
           "arguments": []

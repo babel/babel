@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":29}},
   "errors": [
-    "SyntaxError: Invalid left-hand side in assignment expression (1:0)",
-    "SyntaxError: Invalid left-hand side in assignment expression (2:6)"
+    "SyntaxError: Invalid left-hand side in assignment expression. (1:0)",
+    "SyntaxError: Invalid left-hand side in assignment expression. (2:6)"
   ],
   "program": {
     "type": "Program",

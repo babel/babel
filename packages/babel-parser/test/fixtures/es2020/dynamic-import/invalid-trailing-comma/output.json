@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
   "errors": [
-    "SyntaxError: Trailing comma is disallowed inside import(...) arguments (1:12)"
+    "SyntaxError: Trailing comma is disallowed inside import(...) arguments. (1:12)"
   ],
   "program": {
     "type": "Program",
@@ -16,12 +16,12 @@
         "expression": {
           "type": "CallExpression",
           "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+          "extra": {
+            "trailingComma": 12
+          },
           "callee": {
             "type": "Import",
             "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}}
-          },
-          "extra": {
-            "trailingComma": 12
           },
           "arguments": [
             {

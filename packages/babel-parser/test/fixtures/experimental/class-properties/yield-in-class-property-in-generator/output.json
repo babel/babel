@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":100,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'yield' (4:8)"
+    "SyntaxError: Unexpected reserved word 'yield'. (4:8)"
   ],
   "program": {
     "type": "Program",
@@ -41,6 +41,13 @@
                   {
                     "type": "ClassProperty",
                     "start":79,"end":94,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":19}},
+                    "leadingComments": [
+                      {
+                        "type": "CommentLine",
+                        "value": " here yield is an identifier reference",
+                        "start":34,"end":74,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":44}}
+                      }
+                    ],
                     "static": false,
                     "key": {
                       "type": "Identifier",
@@ -66,14 +73,7 @@
                         },
                         "value": 42
                       }
-                    },
-                    "leadingComments": [
-                      {
-                        "type": "CommentLine",
-                        "value": " here yield is an identifier reference",
-                        "start":34,"end":74,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":44}}
-                      }
-                    ]
+                    }
                   }
                 ]
               }
