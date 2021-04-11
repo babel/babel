@@ -126,6 +126,8 @@ const TSErrors = makeErrorTemplates(
       "'readonly' modifier can only appear on a property declaration or index signature.",
     SetAccesorCannotHaveOptionalParameter:
       "A 'set' accessor cannot have an optional parameter.",
+    SetAccesorCannotHaveRestParameter:
+      "A 'set' accessor cannot have rest parameter.",
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
     TypeAnnotationAfterAssign:
@@ -645,6 +647,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               this.raise(
                 this.state.pos,
                 TSErrors.SetAccesorCannotHaveOptionalParameter,
+              );
+            }
+            if (firstParameter.type === "RestElement") {
+              this.raise(
+                this.state.pos,
+                TSErrors.SetAccesorCannotHaveRestParameter,
               );
             }
           }
