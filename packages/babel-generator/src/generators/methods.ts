@@ -119,9 +119,11 @@ export function ArrowFunctionExpression(
   ) {
     if (
       (this.format.retainLines || node.async) &&
-      node.loc &&
-      node.body.loc &&
-      node.loc.start.line < node.body.loc.start.line
+      ((node.loc &&
+        node.body.loc &&
+        node.loc.start.line < node.body.loc.start.line) ||
+        firstParam.leadingComments?.length ||
+        firstParam.trailingComments?.length)
     ) {
       this.token("(");
       if (firstParam.loc && firstParam.loc.start.line > node.loc.start.line) {

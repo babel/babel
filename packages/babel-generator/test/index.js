@@ -819,7 +819,13 @@ suites.forEach(function (testSuite) {
                 console.log(`New test file created: ${expected.loc}`);
                 fs.writeFileSync(expected.loc, result.code);
               } else {
-                expect(result.code).toBe(expected.code);
+                try {
+                  expect(result.code).toBe(expected.code);
+                } catch (e) {
+                  if (!process.env.OVERWRITE) throw e;
+                  console.log(`Updated test file: ${expected.loc}`);
+                  fs.writeFileSync(expected.loc, result.code);
+                }
               }
             }
           }
