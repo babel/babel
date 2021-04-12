@@ -1208,6 +1208,7 @@ export type TsPropertySignature = TsNamedTypeElementBase & {
 export type TsMethodSignature = TsSignatureDeclarationBase &
   TsNamedTypeElementBase & {
     type: "TSMethodSignature",
+    kind: "method" | "get" | "set",
   };
 
 // *Not* a ClassMemberBase: Can't have accessibility, can't be abstract, can't be optional.

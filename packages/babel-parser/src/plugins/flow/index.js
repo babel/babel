@@ -2392,11 +2392,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return !this.match(tt.colon) && super.isNonstaticConstructor(method);
     }
 
-    // determine whether a parameter is a this param
-    isThisParam(param) {
-      return param.type === "Identifier" && param.name === "this";
-    }
-
     // parse type parameters for class methods
     pushClassMethod(
       classBody: N.ClassBody,

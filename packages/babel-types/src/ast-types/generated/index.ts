@@ -1712,6 +1712,7 @@ export interface TSMethodSignature extends BaseNode {
   parameters: Array<Identifier | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
   computed?: boolean | null;
+  kind: "method" | "get" | "set";
   optional?: boolean | null;
 }
 

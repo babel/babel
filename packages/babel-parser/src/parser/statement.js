@@ -2384,4 +2384,12 @@ export default class StatementParser extends ExpressionParser {
     this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
   }
+
+  // This is used in flow and typescript plugin
+  // Determine whether a parameter is a this param
+  isThisParam(
+    param: N.Pattern | N.Identifier | N.TSParameterProperty,
+  ): boolean {
+    return param.type === "Identifier" && param.name === "this";
+  }
 }
