@@ -142,7 +142,7 @@ export function withExtension(filename: string, ext: string = ".js") {
   return path.join(path.dirname(filename), newBasename);
 }
 
-export function debounce(fn, time) {
+export function debounce(fn: () => void, time: number) {
   let timer;
   function debounced() {
     clearTimeout(timer);
