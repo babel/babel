@@ -144,13 +144,12 @@ export function withExtension(filename: string, ext: string = ".js") {
 
 export function debounce(fn, time) {
   let timer;
-  const clear = () => clearTimeout(timer);
   function debounced() {
-    clear();
+    clearTimeout(timer);
     timer = setTimeout(fn, time);
   }
   debounced.flush = () => {
-    clear();
+    clearTimeout(timer);
     fn();
   };
   return debounced;
