@@ -36,11 +36,11 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Jest hangs forever in the Babel 8 e2e test when using multiple workers,
   # but we don't know yet why. Until we figure it out (see
   # https://github.com/babel/babel/pull/13618) we can use --runInBand.
-  make -j build-standalone-ci
+  YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j build-standalone-ci
   BABEL_ENV=test yarn jest --ci --runInBand
   make -j test-clean
 else
-  make -j test-ci
+  YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
 fi
 
 cleanup
