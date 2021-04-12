@@ -36,11 +36,11 @@ export function makeErrorTemplates(
 ): ErrorTemplates {
   const templates: ErrorTemplates = {};
   Object.keys(messages).forEach(reasonCode => {
-    templates[reasonCode] = {
+    templates[reasonCode] = Object.freeze({
       code,
       reasonCode,
       template: messages[reasonCode],
-    };
+    });
   });
   return Object.freeze(templates);
 }
