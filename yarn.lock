@@ -1021,6 +1021,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-async-do-expressions@workspace:packages/babel-plugin-proposal-async-do-expressions":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-async-do-expressions@workspace:packages/babel-plugin-proposal-async-do-expressions"
+  dependencies:
+    "@babel/core": "workspace:*"
+    "@babel/helper-hoist-variables": "workspace:^7.13.0"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:^7.13.0"
+    "@babel/plugin-syntax-async-do-expressions": "workspace:^7.13.0"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
+  peerDependencies:
+    "@babel/core": ^7.13.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-async-generator-functions@npm:^7.13.15":
   version: 7.13.15
   resolution: "@babel/plugin-proposal-async-generator-functions@npm:7.13.15"
@@ -1512,7 +1528,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
+"@babel/plugin-syntax-async-do-expressions@workspace:^7.13.0, @babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions"
   dependencies:

@@ -1,0 +1,36 @@
+{
+  "name": "@babel/plugin-proposal-async-do-expressions",
+  "version": "7.13.11",
+  "description": "Transform async do expressions to ES2021",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-async-do-expressions"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-hoist-variables": "workspace:^7.13.0",
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "@babel/plugin-syntax-async-do-expressions": "workspace:^7.13.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.13.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*",
+    "@babel/types": "workspace:*"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-async-do-expressions"
+}
