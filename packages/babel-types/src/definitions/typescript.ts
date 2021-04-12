@@ -118,6 +118,9 @@ defineType("TSMethodSignature", {
   fields: {
     ...signatureDeclarationCommon,
     ...namedTypeElementCommon,
+    kind: {
+      validate: assertOneOf("method", "get", "set"),
+    },
   },
 });
 

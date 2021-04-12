@@ -43,7 +43,8 @@
                   "type": "TSVoidKeyword",
                   "start":26,"end":30,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":16}}
                 }
-              }
+              },
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -74,7 +75,8 @@
                   "type": "TSAnyKeyword",
                   "start":48,"end":51,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":19}}
                 }
-              }
+              },
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -126,7 +128,8 @@
                   "type": "TSVoidKeyword",
                   "start":87,"end":91,"loc":{"start":{"line":4,"column":34},"end":{"line":4,"column":38}}
                 }
-              }
+              },
+              "kind": "method"
             }
           ]
         }
