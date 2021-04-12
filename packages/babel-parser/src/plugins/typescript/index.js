@@ -70,6 +70,9 @@ const TSErrors = makeErrorTemplates(
   {
     AbstractMethodHasImplementation:
       "Method '%0' cannot have an implementation because it is marked abstract.",
+    AccesorCannotDeclareThisParameter:
+      "'get' and 'set' accessors cannot declare 'this' parameters.",
+    AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
     ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
     ClassMethodHasReadonly:
       "Class methods cannot have the 'readonly' modifier.",
@@ -122,6 +125,12 @@ const TSErrors = makeErrorTemplates(
       "Private elements cannot have an accessibility modifier ('%0').",
     ReadonlyForMethodSignature:
       "'readonly' modifier can only appear on a property declaration or index signature.",
+    SetAccesorCannotHaveOptionalParameter:
+      "A 'set' accessor cannot have an optional parameter.",
+    SetAccesorCannotHaveRestParameter:
+      "A 'set' accessor cannot have rest parameter.",
+    SetAccesorCannotHaveReturnType:
+      "A 'set' accessor cannot have a return type annotation.",
     TypeAnnotationAfterAssign:
       "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     TypeImportCannotSpecifyDefaultAndNamed:
@@ -193,12 +202,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.match(tt.name);
     }
 
-    tsNextTokenCanFollowModifier() {
-      // Note: TypeScript's implementation is much more complicated because
-      // more things are considered modifiers there.
-      // This implementation only handles modifiers not handled by @babel/parser itself. And "static".
-      // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
-      this.next();
+    tsTokenCanFollowModifier() {
       return (
         (this.match(tt.bracketL) ||
           this.match(tt.braceL) ||
@@ -208,6 +212,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.isLiteralPropertyName()) &&
         !this.hasPrecedingLineBreak()
       );
+    }
+
+    tsNextTokenCanFollowModifier() {
+      // Note: TypeScript's implementation is much more complicated because
+      // more things are considered modifiers there.
+      // This implementation only handles modifiers not handled by @babel/parser itself. And "static".
+      // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
+      this.next();
+      return this.tsTokenCanFollowModifier();
     }
 
     /** Parses a modifier matching one the given modifier names. */
@@ -547,8 +560,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeMemberSemicolon(): void {
-      if (!this.eat(tt.comma)) {
-        this.semicolon();
+      if (!this.eat(tt.comma) && !this.isLineTerminator()) {
+        this.expect(tt.semi);
       }
     }
 
@@ -602,8 +615,57 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(node.start, TSErrors.ReadonlyForMethodSignature);
         }
         const method: N.TsMethodSignature = nodeAny;
+        if (method.kind && this.isRelational("<")) {
+          this.raise(this.state.pos, TSErrors.AccesorCannotHaveTypeParameters);
+        }
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
+        if (method.kind === "get") {
+          if (method.parameters.length > 0) {
+            this.raise(this.state.pos, Errors.BadGetterArity);
+            if (this.isThisParam(method.parameters[0])) {
+              this.raise(
+                this.state.pos,
+                TSErrors.AccesorCannotDeclareThisParameter,
+              );
+            }
+          }
+        } else if (method.kind === "set") {
+          if (method.parameters.length !== 1) {
+            this.raise(this.state.pos, Errors.BadSetterArity);
+          } else {
+            const firstParameter = method.parameters[0];
+            if (this.isThisParam(firstParameter)) {
+              this.raise(
+                this.state.pos,
+                TSErrors.AccesorCannotDeclareThisParameter,
+              );
+            }
+            if (
+              firstParameter.type === "Identifier" &&
+              firstParameter.optional
+            ) {
+              this.raise(
+                this.state.pos,
+                TSErrors.SetAccesorCannotHaveOptionalParameter,
+              );
+            }
+            if (firstParameter.type === "RestElement") {
+              this.raise(
+                this.state.pos,
+                TSErrors.SetAccesorCannotHaveRestParameter,
+              );
+            }
+          }
+          if (method.typeAnnotation) {
+            this.raise(
+              method.typeAnnotation.start,
+              TSErrors.SetAccesorCannotHaveReturnType,
+            );
+          }
+        } else {
+          method.kind = "method";
+        }
         return this.finishNode(method, "TSMethodSignature");
       } else {
         const property: N.TsPropertySignature = nodeAny;
@@ -657,6 +719,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
+      if (
+        !node.computed &&
+        node.key.type === "Identifier" &&
+        (node.key.name === "get" || node.key.name === "set") &&
+        this.tsTokenCanFollowModifier()
+      ) {
+        node.kind = node.key.name;
+        this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
+      }
       return this.tsParsePropertyOrMethodSignature(node, !!node.readonly);
     }
 

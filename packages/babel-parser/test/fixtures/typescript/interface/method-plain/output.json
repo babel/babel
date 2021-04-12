@@ -28,7 +28,8 @@
                 "name": "m"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -83,7 +84,8 @@
                   "type": "TSVoidKeyword",
                   "start":58,"end":62,"loc":{"start":{"line":3,"column":35},"end":{"line":3,"column":39}}
                 }
-              }
+              },
+              "kind": "method"
             }
           ]
         }

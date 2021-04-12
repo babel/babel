@@ -127,6 +127,11 @@ export function tsPrintPropertyOrMethodName(this: Printer, node) {
 }
 
 export function TSMethodSignature(this: Printer, node: t.TSMethodSignature) {
+  const { kind } = node;
+  if (kind === "set" || kind === "get") {
+    this.word(kind);
+    this.space();
+  }
   this.tsPrintPropertyOrMethodName(node);
   this.tsPrintSignatureDeclarationBase(node);
   this.token(";");
