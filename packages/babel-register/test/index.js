@@ -204,9 +204,8 @@ describe("@babel/register", function () {
       let err;
 
       try {
-        const { convertSourceMap, isPlainObject } = JSON.parse(output);
+        const { convertSourceMap } = JSON.parse(output);
         expect(convertSourceMap).toMatch("/* transformed */");
-        expect(isPlainObject).toMatch("/* transformed */");
       } catch (e) {
         err = e;
       }
