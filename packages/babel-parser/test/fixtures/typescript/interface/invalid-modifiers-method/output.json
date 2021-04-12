@@ -38,7 +38,8 @@
                 "name": "a"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -50,7 +51,8 @@
                 "name": "b"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -62,7 +64,8 @@
                 "name": "c"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -74,7 +77,8 @@
                 "name": "d"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -86,7 +90,8 @@
                 "name": "e"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -98,7 +103,8 @@
                 "name": "f"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             },
             {
               "type": "TSMethodSignature",
@@ -110,7 +116,8 @@
                 "name": "g"
               },
               "computed": false,
-              "parameters": []
+              "parameters": [],
+              "kind": "method"
             }
           ]
         }
