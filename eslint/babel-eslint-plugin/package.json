@@ -40,7 +40,7 @@
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
-    "eslint": "^7.5.0",
-    "lodash": "^4.17.20"
+    "clone-deep": "^4.0.1",
+    "eslint": "^7.5.0"
   }
 }

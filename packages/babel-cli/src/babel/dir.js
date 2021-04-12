@@ -1,6 +1,5 @@
 // @flow
 
-import debounce from "lodash/debounce";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -135,7 +134,7 @@ export default async function ({
   let compiledFiles = 0;
   let startTime = null;
 
-  const logSuccess = debounce(
+  const logSuccess = util.debounce(
     function () {
       if (startTime === null) {
         // This should never happen, but just in case it's better

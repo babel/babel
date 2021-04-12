@@ -141,3 +141,17 @@ export function withExtension(filename: string, ext: string = ".js") {
   const newBasename = path.basename(filename, path.extname(filename)) + ext;
   return path.join(path.dirname(filename), newBasename);
 }
+
+export function debounce(fn, time) {
+  let timer;
+  const clear = () => clearTimeout(timer);
+  function debounced() {
+    clear();
+    timer = setTimeout(fn, time);
+  }
+  debounced.flush = () => {
+    clear();
+    fn();
+  };
+  return debounced;
+}

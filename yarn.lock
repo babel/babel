@@ -94,7 +94,6 @@ __metadata:
     convert-source-map: ^1.1.0
     fs-readdir-recursive: ^1.1.0
     glob: ^7.0.0
-    lodash: ^4.17.19
     make-dir: ^2.1.0
     rimraf: ^3.0.0
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
@@ -213,7 +212,6 @@ __metadata:
     "@babel/types": "workspace:^7.13.14"
     "@types/convert-source-map": ^1.5.1
     "@types/debug": ^4.1.0
-    "@types/lodash": ^4.14.150
     "@types/resolve": ^1.3.2
     "@types/semver": ^5.4.0
     "@types/source-map": ^0.5.0
@@ -274,9 +272,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin"
   dependencies:
+    clone-deep: ^4.0.1
     eslint: ^7.5.0
     eslint-rule-composer: ^0.3.0
-    lodash: ^4.17.20
   peerDependencies:
     "@babel/eslint-parser": ">=7.11.0"
     eslint: ">=7.5.0"
@@ -331,7 +329,6 @@ __metadata:
     "@babel/parser": "workspace:*"
     "@babel/types": "workspace:^7.13.0"
     "@types/jsesc": ^2.5.0
-    "@types/lodash": ^4.14.150
     "@types/source-map": ^0.5.0
     jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
     source-map: ^0.5.0
@@ -3286,8 +3283,8 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
     browserify: ^16.5.2
+    clone-deep: ^4.0.1
     find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
-    lodash: ^4.17.19
     make-dir: ^2.1.0
     pirates: ^4.0.0
     source-map-support: ^0.5.16
@@ -3519,9 +3516,7 @@ __metadata:
     "@babel/generator": "workspace:*"
     "@babel/helper-validator-identifier": "workspace:^7.12.11"
     "@babel/parser": "workspace:*"
-    "@types/lodash": ^4.14.162
     chalk: ^4.1.0
-    lodash: ^4.17.19
     to-fast-properties: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -4139,13 +4134,6 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 66e9ac0143ec521522c7bb670301e9836ee886207eeed1aab6d4854a1b19b404ab3a54cd8d449f9b1f13acc357f540be96f8ac2d1e86e301eab52ae0f9a4066f
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:^4.14.150, @types/lodash@npm:^4.14.162":
-  version: 4.14.168
-  resolution: "@types/lodash@npm:4.14.168"
-  checksum: 9a4e25f89fc035b9f0388f1f7be85e5eff49f9e6db0d93432c9a89fce0916f8a89db4e8290415f7ea02de6b00d3573826378dcb655b7b2d20530a6e8d6dd6fd0
   languageName: node
   linkType: hard
 
