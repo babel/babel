@@ -236,6 +236,6 @@ export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
   this.word(node.value + "m");
 }
 
-export function PipelinePrimaryTopicReference(this: Printer) {
+export function TopicReference(this: Printer) {
   this.token("#");
 }

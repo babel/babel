@@ -603,6 +603,12 @@ export type ParenthesizedExpression = NodeBase & {
   expression: Expression,
 };
 
+// Hack pipe operator
+
+export type TopicReference = NodeBase & {
+  type: "TopicReference",
+};
+
 // Template Literals
 
 export type TemplateLiteral = NodeBase & {

@@ -1050,6 +1050,17 @@ interface ModuleExpression <: Expression {
 
 A inline module expression proposed in https://github.com/tc39/proposal-js-module-blocks.
 
+## TopicReference
+
+```js
+interface TopicReference <: Expression {
+  type: "TopicReference";
+}
+```
+
+A topic reference to be used inside the body of
+a [Hack-style pipe expression](https://github.com/js-choi/proposal-hack-pipes).
+
 # Template Literals
 
 ## TemplateLiteral

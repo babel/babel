@@ -27,7 +27,7 @@
               "parenStart": 5
             },
             "left": {
-              "type": "PipelinePrimaryTopicReference",
+              "type": "TopicReference",
               "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}}
             },
             "operator": "|>",
@@ -41,7 +41,7 @@
               },
               "arguments": [
                 {
-                  "type": "PipelinePrimaryTopicReference",
+                  "type": "TopicReference",
                   "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14}}
                 },
                 {

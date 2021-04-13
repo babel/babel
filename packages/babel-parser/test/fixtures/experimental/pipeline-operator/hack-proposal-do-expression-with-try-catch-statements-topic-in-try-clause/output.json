@@ -56,7 +56,7 @@
                           },
                           "arguments": [
                             {
-                              "type": "PipelinePrimaryTopicReference",
+                              "type": "TopicReference",
                               "start":33,"end":34,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":20}}
                             }
                           ]

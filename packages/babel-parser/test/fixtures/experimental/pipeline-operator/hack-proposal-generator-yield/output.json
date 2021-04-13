@@ -43,7 +43,7 @@
                   },
                   "delegate": false,
                   "argument": {
-                    "type": "PipelinePrimaryTopicReference",
+                    "type": "TopicReference",
                     "start":39,"end":40,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":22}}
                   }
                 }

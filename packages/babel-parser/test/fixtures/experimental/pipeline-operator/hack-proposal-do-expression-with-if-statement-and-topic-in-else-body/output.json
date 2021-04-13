@@ -54,7 +54,7 @@
                       "type": "ExpressionStatement",
                       "start":42,"end":44,"loc":{"start":{"line":1,"column":42},"end":{"line":1,"column":44}},
                       "expression": {
-                        "type": "PipelinePrimaryTopicReference",
+                        "type": "TopicReference",
                         "start":42,"end":43,"loc":{"start":{"line":1,"column":42},"end":{"line":1,"column":43}}
                       }
                     },
