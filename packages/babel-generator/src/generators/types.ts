@@ -236,6 +236,7 @@ export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
   this.word(node.value + "m");
 }
 
+// Hack pipe operator
 export function TopicReference(this: Printer) {
   const { topicToken } = this.format;
   switch (topicToken) {
@@ -249,4 +250,23 @@ export function TopicReference(this: Printer) {
       throw new Error(message);
     }
   }
+}
+
+// Smart-mix pipe operator
+export function PipelineTopicExpression(
+  this: Printer,
+  node: t.PipelineTopicExpression,
+) {
+  this.print(node.expression, node);
+}
+
+export function PipelineBareFunction(
+  this: Printer,
+  node: t.PipelineBareFunction,
+) {
+  this.print(node.callee, node);
+}
+
+export function PipelinePrimaryTopicReference(this: Printer) {
+  this.token("#");
 }

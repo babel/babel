@@ -8,5 +8,5 @@
     ],
     "estree"
   ],
-  "throws": "\"pipelineOperator\" requires \"proposal\" option whose value must be one of: \"minimal\", \"fsharp\", \"hack\"."
+  "throws": "\"pipelineOperator\" requires \"proposal\" option whose value must be one of: \"minimal\", \"fsharp\", \"hack\", \"smart\"."
 }

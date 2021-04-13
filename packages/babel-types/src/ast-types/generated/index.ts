@@ -211,6 +211,9 @@ export type Node =
   | ParenthesizedExpression
   | Pattern
   | PatternLike
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference
+  | PipelineTopicExpression
   | Placeholder
   | Private
   | PrivateName
@@ -1616,6 +1619,20 @@ export interface TopicReference extends BaseNode {
   type: "TopicReference";
 }
 
+export interface PipelineTopicExpression extends BaseNode {
+  type: "PipelineTopicExpression";
+  expression: Expression;
+}
+
+export interface PipelineBareFunction extends BaseNode {
+  type: "PipelineBareFunction";
+  callee: Expression;
+}
+
+export interface PipelinePrimaryTopicReference extends BaseNode {
+  type: "PipelinePrimaryTopicReference";
+}
+
 export interface TSParameterProperty extends BaseNode {
   type: "TSParameterProperty";
   parameter: Identifier | AssignmentPattern;
@@ -2041,6 +2058,10 @@ export type Expression =
   | TupleExpression
   | DecimalLiteral
   | ModuleExpression
+  | TopicReference
+  | PipelineTopicExpression
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference
   | TSAsExpression
   | TSTypeAssertion
   | TSNonNullExpression;

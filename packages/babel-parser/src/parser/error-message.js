@@ -132,7 +132,7 @@ export const ErrorMessages = Object.freeze({
   PipeBodyCannotBeArrow:
     'Unexpected arrow "=>" after pipeline body; arrow function acting as pipe body must be parenthesized due to operator precedence.',
   PipeTopicRequiresHackPipes:
-    'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" option.',
+    'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
   PipeTopicUnbound:
     "Topic reference is unbound; it must be inside a Hack-style pipe body.",
   PipeTopicUnused:

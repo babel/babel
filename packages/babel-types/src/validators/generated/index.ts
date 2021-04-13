@@ -3031,6 +3031,57 @@ export function isTopicReference(
 
   return false;
 }
+export function isPipelineTopicExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PipelineTopicExpression {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "PipelineTopicExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isPipelineBareFunction(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PipelineBareFunction {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "PipelineBareFunction") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isPipelinePrimaryTopicReference(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PipelinePrimaryTopicReference {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "PipelinePrimaryTopicReference") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSParameterProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -4152,6 +4203,10 @@ export function isExpression(
     "TupleExpression" === nodeType ||
     "DecimalLiteral" === nodeType ||
     "ModuleExpression" === nodeType ||
+    "TopicReference" === nodeType ||
+    "PipelineTopicExpression" === nodeType ||
+    "PipelineBareFunction" === nodeType ||
+    "PipelinePrimaryTopicReference" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||

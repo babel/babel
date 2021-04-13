@@ -609,6 +609,26 @@ export type TopicReference = NodeBase & {
   type: "TopicReference",
 };
 
+// Smart-mix pipe operator
+
+export type PipelineBody = NodeBase & {
+  type: "PipelineBody",
+};
+
+export type PipelineBareFunctionBody = NodeBase & {
+  type: "PipelineBareFunctionBody",
+  callee: Expression,
+};
+
+export type PipelineTopicBody = NodeBase & {
+  type: "PipelineTopicBody",
+  expression: Expression,
+};
+
+export type PipelinePrimaryTopicReference = NodeBase & {
+  type: "PipelinePrimaryTopicReference",
+};
+
 // Template Literals
 
 export type TemplateLiteral = NodeBase & {

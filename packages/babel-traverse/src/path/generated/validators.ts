@@ -241,6 +241,15 @@ export interface NodePathValidators {
   ): this is NodePath<t.ParenthesizedExpression>;
   isPattern(opts?: object): this is NodePath<t.Pattern>;
   isPatternLike(opts?: object): this is NodePath<t.PatternLike>;
+  isPipelineBareFunction(
+    opts?: object,
+  ): this is NodePath<t.PipelineBareFunction>;
+  isPipelinePrimaryTopicReference(
+    opts?: object,
+  ): this is NodePath<t.PipelinePrimaryTopicReference>;
+  isPipelineTopicExpression(
+    opts?: object,
+  ): this is NodePath<t.PipelineTopicExpression>;
   isPlaceholder(opts?: object): this is NodePath<t.Placeholder>;
   isPrivate(opts?: object): this is NodePath<t.Private>;
   isPrivateName(opts?: object): this is NodePath<t.PrivateName>;

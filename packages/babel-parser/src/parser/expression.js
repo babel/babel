@@ -464,6 +464,13 @@ export default class ExpressionParser extends LValParser {
               this.checkHackPipeBodyEarlyErrors(startPos);
               return bodyExpr;
             });
+
+          case "smart":
+            return this.withTopicBindingContext(() => {
+              const childExpr = this.parseExprOpBaseRightExpr(op, prec);
+              return this.parseSmartPipelineBodyInStyle(childExpr);
+            });
+
           case "fsharp":
             return this.withSoloAwaitPermittingContext(() => {
               return this.parseFSharpPipelineBody(prec);
@@ -1149,9 +1156,17 @@ export default class ExpressionParser extends LValParser {
         if (this.state.inPipeline) {
           node = this.startNode();
 
-          if (this.getPluginOption("pipelineOperator", "proposal") !== "hack") {
-            this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
-          }
+          const proposal = this.getPluginOption("pipelineOperator", "proposal");
+          const proposalToNodeType = {
+            hack: "TopicReference",
+            smart: "PipelinePrimaryTopicReference",
+          };
+          const throwPipeTopicRequiresHackPipesError = () => {
+            throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
+          };
+          const nodeType =
+            proposalToNodeType[proposal] ||
+            throwPipeTopicRequiresHackPipesError();
 
           this.next();
 
@@ -1160,7 +1175,8 @@ export default class ExpressionParser extends LValParser {
           }
 
           this.registerTopicReference();
-          return this.finishNode(node, "TopicReference");
+
+          return this.finishNode(node, nodeType);
         }
 
         // https://tc39.es/proposal-private-fields-in-in
@@ -2474,9 +2490,39 @@ export default class ExpressionParser extends LValParser {
     if (this.match(tt.arrow)) {
       throw this.raise(this.state.start, Errors.PipeBodyCannotBeArrow);
     }
+
     // A Hack pipe body must use the topic reference at least once.
     else if (!this.topicReferenceWasUsedInCurrentContext()) {
       this.raise(startPos, Errors.PipeTopicUnused);
+    }
+  }
+
+  parseSmartPipelineBodyInStyle(
+    childExpr: N.Expression,
+    startPos: number,
+    startLoc: Position,
+  ): N.PipelineBody {
+    const bodyNode = this.startNodeAt(startPos, startLoc);
+    if (this.isSimpleReference(childExpr)) {
+      bodyNode.callee = childExpr;
+      return this.finishNode(bodyNode, "PipelineBareFunction");
+    } else {
+      this.checkHackPipeBodyEarlyErrors(startPos);
+      bodyNode.expression = childExpr;
+      return this.finishNode(bodyNode, "PipelineTopicExpression");
+    }
+  }
+
+  isSimpleReference(expression: N.Expression): boolean {
+    switch (expression.type) {
+      case "MemberExpression":
+        return (
+          !expression.computed && this.isSimpleReference(expression.object)
+        );
+      case "Identifier":
+        return true;
+      default:
+        return false;
     }
   }
 

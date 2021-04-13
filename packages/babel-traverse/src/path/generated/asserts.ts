@@ -395,6 +395,15 @@ export interface NodePathAssetions {
   ): asserts this is NodePath<t.ParenthesizedExpression>;
   assertPattern(opts?: object): asserts this is NodePath<t.Pattern>;
   assertPatternLike(opts?: object): asserts this is NodePath<t.PatternLike>;
+  assertPipelineBareFunction(
+    opts?: object,
+  ): asserts this is NodePath<t.PipelineBareFunction>;
+  assertPipelinePrimaryTopicReference(
+    opts?: object,
+  ): asserts this is NodePath<t.PipelinePrimaryTopicReference>;
+  assertPipelineTopicExpression(
+    opts?: object,
+  ): asserts this is NodePath<t.PipelineTopicExpression>;
   assertPlaceholder(opts?: object): asserts this is NodePath<t.Placeholder>;
   assertPrivate(opts?: object): asserts this is NodePath<t.Private>;
   assertPrivateName(opts?: object): asserts this is NodePath<t.PrivateName>;
