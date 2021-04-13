@@ -1,12 +1,5 @@
-const triple = (x) => x * 3;
+const triple = x => x * 3;
 
-async function myFunction(n) {
-  return n
-    |> Math.abs(#)
-    |> await Promise.resolve(#)
-    |> triple(#);
-}
+const result = -7 |> Math.abs(#) |> triple(#);
 
-return myFunction(-7).then(result => {
-  expect(result).toBe(21);
-});
+return expect(result).toBe(21);
