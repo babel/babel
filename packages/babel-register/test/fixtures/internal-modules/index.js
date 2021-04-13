@@ -22,7 +22,6 @@ register( {
 
 console.log(
   JSON.stringify({
-    convertSourceMap: require('convert-source-map').fromObject.toString(),
-    isPlainObject: require('lodash/isPlainObject').toString()
+    convertSourceMap: require('convert-source-map').fromObject.toString()
   })
 );

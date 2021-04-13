@@ -1,4 +1,3 @@
-import isPlainObject from "lodash/isPlainObject";
 import isValidIdentifier from "../validators/isValidIdentifier";
 import {
   identifier,
@@ -25,15 +24,27 @@ export default valueToNode as {
   (value: RegExp): t.RegExpLiteral;
   (value: ReadonlyArray<unknown>): t.ArrayExpression;
 
-  // this throws with objects that are not PlainObject according to lodash,
+  // this throws with objects that are not plain objects,
   // or if there are non-valueToNode-able values
   (value: object): t.ObjectExpression;
 
   (value: unknown): t.Expression;
 };
 
+const objectToString: (value: object) => string = Function.call.bind(
+  Object.prototype.toString,
+);
+
 function isRegExp(value): value is RegExp {
-  return Object.prototype.toString.call(value) === "[object RegExp]";
+  return objectToString(value) === "[object RegExp]";
+}
+
+function isPlainObject(value): value is object {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === null || proto === Object.prototype;
 }
 
 function valueToNode(value: unknown): t.Expression {

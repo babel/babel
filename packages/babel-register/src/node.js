@@ -1,4 +1,4 @@
-import deepClone from "lodash/cloneDeep";
+import cloneDeep from "clone-deep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import * as babel from "@babel/core";
@@ -42,7 +42,7 @@ function compile(code, filename) {
     // sourceRoot can be overwritten
     {
       sourceRoot: path.dirname(filename) + path.sep,
-      ...deepClone(transformOpts),
+      ...cloneDeep(transformOpts),
       filename,
     },
   );

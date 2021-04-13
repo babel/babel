@@ -25,13 +25,11 @@
   },
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^7.12.11",
-    "lodash": "^4.17.19",
     "to-fast-properties": "^2.0.0"
   },
   "devDependencies": {
     "@babel/generator": "workspace:*",
     "@babel/parser": "workspace:*",
-    "@types/lodash": "^4.14.162",
     "chalk": "^4.1.0"
   }
 }

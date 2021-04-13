@@ -198,16 +198,14 @@ describe("@babel/register", function () {
 
   test("transforms modules used within register", callback => {
     // Need a clean environment without `convert-source-map`
-    // and `lodash/isPlainObject` already in the require cache,
-    // so we spawn a separate process
+    // already in the require cache, so we spawn a separate process
 
     spawnNode([internalModulesTestFile], output => {
       let err;
 
       try {
-        const { convertSourceMap, isPlainObject } = JSON.parse(output);
+        const { convertSourceMap } = JSON.parse(output);
         expect(convertSourceMap).toMatch("/* transformed */");
-        expect(isPlainObject).toMatch("/* transformed */");
       } catch (e) {
         err = e;
       }

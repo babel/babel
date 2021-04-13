@@ -1,6 +1,5 @@
 // @flow
 
-import debounce from "lodash/debounce";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -135,27 +134,23 @@ export default async function ({
   let compiledFiles = 0;
   let startTime = null;
 
-  const logSuccess = debounce(
-    function () {
-      if (startTime === null) {
-        // This should never happen, but just in case it's better
-        // to ignore the log message rather than making @babel/cli crash.
-        return;
-      }
+  const logSuccess = util.debounce(function () {
+    if (startTime === null) {
+      // This should never happen, but just in case it's better
+      // to ignore the log message rather than making @babel/cli crash.
+      return;
+    }
 
-      const diff = process.hrtime(startTime);
+    const diff = process.hrtime(startTime);
 
-      console.log(
-        `Successfully compiled ${compiledFiles} ${
-          compiledFiles !== 1 ? "files" : "file"
-        } with Babel (${diff[0] * 1e3 + Math.round(diff[1] / 1e6)}ms).`,
-      );
-      compiledFiles = 0;
-      startTime = null;
-    },
-    100,
-    { trailing: true },
-  );
+    console.log(
+      `Successfully compiled ${compiledFiles} ${
+        compiledFiles !== 1 ? "files" : "file"
+      } with Babel (${diff[0] * 1e3 + Math.round(diff[1] / 1e6)}ms).`,
+    );
+    compiledFiles = 0;
+    startTime = null;
+  }, 100);
 
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
