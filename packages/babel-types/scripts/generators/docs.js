@@ -87,49 +87,51 @@ Object.keys(t.BUILDER_KEYS)
         "(node, opts)`."
     );
     readme.push("");
-    readme.push("AST Node `" + key + "` shape:");
-    Object.keys(t.NODE_FIELDS[key])
-      .sort(function (fieldA, fieldB) {
-        const indexA = t.BUILDER_KEYS[key].indexOf(fieldA);
-        const indexB = t.BUILDER_KEYS[key].indexOf(fieldB);
-        if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        return indexA - indexB;
-      })
-      .forEach(function (field) {
-        const defaultValue = t.NODE_FIELDS[key][field].default;
-        const fieldDescription = ["`" + field + "`"];
-        const validator = t.NODE_FIELDS[key][field].validate;
-        if (customTypes[key] && customTypes[key][field]) {
-          fieldDescription.push(`: ${customTypes[key][field]}`);
-        } else if (validator) {
-          try {
-            fieldDescription.push(
-              ": `" + stringifyValidator(validator, "") + "`"
-            );
-          } catch (ex) {
-            if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {
-              console.log(
-                "Unrecognised validator type for " + key + "." + field
+    if (Object.keys(t.NODE_FIELDS[key]).length > 0) {
+      readme.push("AST Node `" + key + "` shape:");
+      Object.keys(t.NODE_FIELDS[key])
+        .sort(function (fieldA, fieldB) {
+          const indexA = t.BUILDER_KEYS[key].indexOf(fieldA);
+          const indexB = t.BUILDER_KEYS[key].indexOf(fieldB);
+          if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        })
+        .forEach(function (field) {
+          const defaultValue = t.NODE_FIELDS[key][field].default;
+          const fieldDescription = ["`" + field + "`"];
+          const validator = t.NODE_FIELDS[key][field].validate;
+          if (customTypes[key] && customTypes[key][field]) {
+            fieldDescription.push(`: ${customTypes[key][field]}`);
+          } else if (validator) {
+            try {
+              fieldDescription.push(
+                ": `" + stringifyValidator(validator, "") + "`"
               );
-              console.dir(ex.validator, { depth: 10, colors: true });
+            } catch (ex) {
+              if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {
+                console.log(
+                  "Unrecognised validator type for " + key + "." + field
+                );
+                console.dir(ex.validator, { depth: 10, colors: true });
+              }
             }
           }
-        }
-        if (defaultValue !== null || t.NODE_FIELDS[key][field].optional) {
-          fieldDescription.push(
-            " (default: `" + util.inspect(defaultValue) + "`"
-          );
-          if (t.BUILDER_KEYS[key].indexOf(field) < 0) {
-            fieldDescription.push(", excluded from builder function");
+          if (defaultValue !== null || t.NODE_FIELDS[key][field].optional) {
+            fieldDescription.push(
+              " (default: `" + util.inspect(defaultValue) + "`"
+            );
+            if (t.BUILDER_KEYS[key].indexOf(field) < 0) {
+              fieldDescription.push(", excluded from builder function");
+            }
+            fieldDescription.push(")");
+          } else {
+            fieldDescription.push(" (required)");
           }
-          fieldDescription.push(")");
-        } else {
-          fieldDescription.push(" (required)");
-        }
-        readme.push("- " + fieldDescription.join(""));
-      });
+          readme.push("- " + fieldDescription.join(""));
+        });
+    }
 
     if (t.ALIAS_KEYS[key] && t.ALIAS_KEYS[key].length) {
       readme.push("");
