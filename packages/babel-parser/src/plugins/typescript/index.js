@@ -2191,6 +2191,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.tsParseModifier(["public", "protected", "private"]);
     }
 
+    checkClassElementName(
+      member: N.ClassMember,
+      key: N.Expression | N.Identifier,
+    ) {
+      if (
+        // $FlowIgnore
+        member.declare &&
+        (key.name === "get" || key.name === "set")
+      ) {
+        this.raise(member.start, Errors.DeclareAccessor, key.name);
+      }
+      super.checkClassElementName(member, key);
+    }
+
     parseClassMember(
       classBody: N.ClassBody,
       member: any,

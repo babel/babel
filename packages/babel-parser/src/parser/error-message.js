@@ -32,6 +32,7 @@ export const ErrorMessages = Object.freeze({
   ConstructorIsAsync: "Constructor can't be an async function",
   ConstructorIsGenerator: "Constructor can't be a generator",
   DeclarationMissingInitializer: "%0 require an initialization value",
+  DeclareAccessor: "'declare' is not allowed in %0ters.",
   DecoratorBeforeExport:
     "Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax",
   DecoratorConstructor:
