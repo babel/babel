@@ -255,6 +255,7 @@ readme.push("### Aliases");
 readme.push("");
 for (const alias of [...mapAliasToNodeTypes.keys()].sort()) {
   const nodeTypes = mapAliasToNodeTypes.get(alias);
+  nodeTypes.sort();
   if (!(alias in aliasDescriptions)) {
     throw new Error(
       'Missing alias descriptions of "' +
