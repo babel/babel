@@ -124,7 +124,7 @@ function printAliasKeys(key, readme) {
       "Aliases: " +
         t.ALIAS_KEYS[key]
           .map(function (key) {
-            return "`" + key + "`";
+            return "[`" + key + "`](#" + key.toLowerCase() + ")";
           })
           .join(", ")
     );
@@ -273,7 +273,7 @@ for (const alias of [...mapAliasToNodeTypes.keys()].sort()) {
   readme.push("");
   readme.push("Covered nodes: ");
   for (const nodeType of nodeTypes) {
-    readme.push("- `" + nodeType + "`");
+    readme.push("- [`" + nodeType + "`](#" + nodeType.toLowerCase() + ")");
   }
   readme.push("");
 }
