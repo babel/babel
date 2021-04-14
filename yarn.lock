@@ -389,16 +389,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-call-delegate@workspace:packages/babel-helper-call-delegate":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-call-delegate@workspace:packages/babel-helper-call-delegate"
-  dependencies:
-    "@babel/helper-hoist-variables": "workspace:^7.12.13"
-    "@babel/traverse": "workspace:*"
-    "@babel/types": "workspace:^7.12.13"
-  languageName: unknown
-  linkType: soft
-
 "@babel/helper-compilation-targets@npm:^7.13.0":
   version: 7.13.0
   resolution: "@babel/helper-compilation-targets@npm:7.13.0"
@@ -614,7 +604,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-hoist-variables@workspace:^7.12.13, @babel/helper-hoist-variables@workspace:^7.13.0, @babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables":
+"@babel/helper-hoist-variables@workspace:^7.13.0, @babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables":
   version: 0.0.0-use.local
   resolution: "@babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables"
   dependencies:
