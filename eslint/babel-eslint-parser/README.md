@@ -105,4 +105,4 @@ While [`@babel/eslint-parser`](https://github.com/babel/babel/tree/main/eslint/b
 
 If you have an issue, please first check if it can be reproduced with the default parser and with the latest versions of `eslint` and `@babel/eslint-parser`. If it is not reproducible with the default parser, it is most likely an issue with `@babel/eslint-parser`.
 
-For questions and support please visit the [`#discussion`](https://babeljs.slack.com/messages/discussion/) Babel Slack channel (sign up [here](https://slack.babeljs.io/)) or the ESLint [Gitter](https://gitter.im/eslint/eslint).
+For questions and support please visit the [`#discussion`](https://babeljs.slack.com/messages/discussion/) Babel Slack channel (sign up [here](https://slack.babeljs.io/)) or the [ESLint Discord server](https://eslint.org/chat).
