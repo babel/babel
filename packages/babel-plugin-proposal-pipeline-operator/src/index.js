@@ -15,6 +15,12 @@ const visitorsPerProposal = {
 export default declare((api, options) => {
   api.assertVersion(7);
 
+  if (options.proposal === "smart") {
+    console.warn(
+      `The smart-mix pipe operator is deprecated. Use "proposal": "hack" instead.`,
+    );
+  }
+
   return {
     name: "proposal-pipeline-operator",
     inherits: syntaxPipelineOperator,
