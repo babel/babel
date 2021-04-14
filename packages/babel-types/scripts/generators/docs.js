@@ -62,6 +62,75 @@ function formatHistory(historyItems) {
     "</details>",
   ];
 }
+function printAPIHistory(key, readme) {
+  if (APIHistory[key]) {
+    readme.push("");
+    readme.push(...formatHistory(APIHistory[key]));
+  }
+}
+function printNodeFields(key, readme) {
+  if (Object.keys(t.NODE_FIELDS[key]).length > 0) {
+    readme.push("");
+    readme.push("AST Node `" + key + "` shape:");
+    Object.keys(t.NODE_FIELDS[key])
+      .sort(function (fieldA, fieldB) {
+        const indexA = t.BUILDER_KEYS[key].indexOf(fieldA);
+        const indexB = t.BUILDER_KEYS[key].indexOf(fieldB);
+        if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+      })
+      .forEach(function (field) {
+        const defaultValue = t.NODE_FIELDS[key][field].default;
+        const fieldDescription = ["`" + field + "`"];
+        const validator = t.NODE_FIELDS[key][field].validate;
+        if (customTypes[key] && customTypes[key][field]) {
+          fieldDescription.push(`: ${customTypes[key][field]}`);
+        } else if (validator) {
+          try {
+            fieldDescription.push(
+              ": `" + stringifyValidator(validator, "") + "`"
+            );
+          } catch (ex) {
+            if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {
+              console.log(
+                "Unrecognised validator type for " + key + "." + field
+              );
+              console.dir(ex.validator, { depth: 10, colors: true });
+            }
+          }
+        }
+        if (defaultValue !== null || t.NODE_FIELDS[key][field].optional) {
+          fieldDescription.push(
+            " (default: `" + util.inspect(defaultValue) + "`"
+          );
+          if (t.BUILDER_KEYS[key].indexOf(field) < 0) {
+            fieldDescription.push(", excluded from builder function");
+          }
+          fieldDescription.push(")");
+        } else {
+          fieldDescription.push(" (required)");
+        }
+        readme.push("- " + fieldDescription.join(""));
+      });
+  }
+}
+
+function printAliasKeys(key, readme) {
+  if (t.ALIAS_KEYS[key] && t.ALIAS_KEYS[key].length) {
+    readme.push("");
+    readme.push(
+      "Aliases: " +
+        t.ALIAS_KEYS[key]
+          .map(function (key) {
+            return "`" + key + "`";
+          })
+          .join(", ")
+    );
+  }
+}
+
 Object.keys(t.BUILDER_KEYS)
   .sort()
   .forEach(function (key) {
@@ -72,11 +141,8 @@ Object.keys(t.BUILDER_KEYS)
       "t." + toFunctionName(key) + "(" + t.BUILDER_KEYS[key].join(", ") + ");"
     );
     readme.push("```");
+    printAPIHistory(key, readme);
     readme.push("");
-    if (APIHistory[key]) {
-      readme.push(...formatHistory(APIHistory[key]));
-      readme.push("");
-    }
     readme.push(
       "See also `t.is" +
         key +
@@ -84,64 +150,10 @@ Object.keys(t.BUILDER_KEYS)
         key +
         "(node, opts)`."
     );
-    readme.push("");
-    if (Object.keys(t.NODE_FIELDS[key]).length > 0) {
-      readme.push("AST Node `" + key + "` shape:");
-      Object.keys(t.NODE_FIELDS[key])
-        .sort(function (fieldA, fieldB) {
-          const indexA = t.BUILDER_KEYS[key].indexOf(fieldA);
-          const indexB = t.BUILDER_KEYS[key].indexOf(fieldB);
-          if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
-          if (indexA === -1) return 1;
-          if (indexB === -1) return -1;
-          return indexA - indexB;
-        })
-        .forEach(function (field) {
-          const defaultValue = t.NODE_FIELDS[key][field].default;
-          const fieldDescription = ["`" + field + "`"];
-          const validator = t.NODE_FIELDS[key][field].validate;
-          if (customTypes[key] && customTypes[key][field]) {
-            fieldDescription.push(`: ${customTypes[key][field]}`);
-          } else if (validator) {
-            try {
-              fieldDescription.push(
-                ": `" + stringifyValidator(validator, "") + "`"
-              );
-            } catch (ex) {
-              if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {
-                console.log(
-                  "Unrecognised validator type for " + key + "." + field
-                );
-                console.dir(ex.validator, { depth: 10, colors: true });
-              }
-            }
-          }
-          if (defaultValue !== null || t.NODE_FIELDS[key][field].optional) {
-            fieldDescription.push(
-              " (default: `" + util.inspect(defaultValue) + "`"
-            );
-            if (t.BUILDER_KEYS[key].indexOf(field) < 0) {
-              fieldDescription.push(", excluded from builder function");
-            }
-            fieldDescription.push(")");
-          } else {
-            fieldDescription.push(" (required)");
-          }
-          readme.push("- " + fieldDescription.join(""));
-        });
-    }
 
-    if (t.ALIAS_KEYS[key] && t.ALIAS_KEYS[key].length) {
-      readme.push("");
-      readme.push(
-        "Aliases: " +
-          t.ALIAS_KEYS[key]
-            .map(function (key) {
-              return "`" + key + "`";
-            })
-            .join(", ")
-      );
-    }
+    printNodeFields(key, readme);
+    printAliasKeys(key, readme);
+
     readme.push("");
     readme.push("---");
     readme.push("");
