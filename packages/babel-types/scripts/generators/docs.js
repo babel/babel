@@ -216,7 +216,7 @@ const aliasDescriptions = {
   JSX:
     "A cover of AST nodes defined for [JSX](https://facebook.github.io/jsx/).",
   LVal:
-    "A cover of [BindingPattern](https://tc39.es/ecma262/#prod-BindingPattern)s. ",
+    "A cover of left hand side expressions used in the `left` of assignment expressions and [ForXStatement](#forxstatement)s. ",
   Literal:
     "A cover of [Literal](https://tc39.es/ecma262/#sec-primary-expression-literals)s, [Regular Expression Literal](https://tc39.es/ecma262/#sec-primary-expression-regular-expression-literals)s and [Template Literal](https://tc39.es/ecma262/#sec-template-literals)s.",
   Loop: "A cover of loop statements.",
@@ -227,8 +227,10 @@ const aliasDescriptions = {
     "A cover of import and export specifiers. Note: It is _not_ the [ModuleSpecifier](https://tc39.es/ecma262/#prod-ModuleSpecifier) defined in the spec.",
   ObjectMember:
     "A cover of [members](https://tc39.es/ecma262/#prod-PropertyDefinitionList) in an object literal.",
-  Pattern: "A cover of BindingPattern except Identifiers.",
-  PatternLike: "= LVal?",
+  Pattern:
+    "A cover of [BindingPattern](https://tc39.es/ecma262/#prod-BindingPattern) except Identifiers.",
+  PatternLike:
+    "A cover of [BindingPattern](https://tc39.es/ecma262/#prod-BindingPattern)s. ",
   Private: "A cover of private class elements and private identifiers.",
   Property: "A cover of object properties and class properties.",
   Pureish:
