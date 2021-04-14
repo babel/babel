@@ -19,7 +19,7 @@ const visitor = {
     if (state.kind === "let") path.skip();
   },
 
-  Function(path: NodePath) {
+  FunctionParent(path: NodePath) {
     path.skip();
   },
 

@@ -175,7 +175,7 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
         state.loopDepth--;
       },
     },
-    Function(path, state) {
+    FunctionParent(path, state) {
       // References to block-scoped variables only require added closures if it's
       // possible for the code to run more than once -- otherwise it is safe to
       // simply rename the variables.
