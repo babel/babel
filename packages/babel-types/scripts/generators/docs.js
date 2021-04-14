@@ -178,7 +178,7 @@ function generateMapAliasToNodeTypes() {
 const aliasDescriptions = {
   Binary:
     "A cover of BinaryExpression and LogicalExpression, which share the same AST shape.",
-  Block: "A cover of BlockStatement and its alike.",
+  Block: "Deprecated. Will be removed in Babel 8.",
   BlockParent:
     "A cover of AST nodes that start an execution context with new [LexicalEnvironment](https://tc39.es/ecma262/#table-additional-state-components-for-ecmascript-code-execution-contexts). In other words, they define the scope of `let` and `const` declarations.",
   Class:
@@ -189,16 +189,14 @@ const aliasDescriptions = {
     "A cover of ConditionalExpression and IfStatement, which share the same AST shape.",
   Declaration:
     "A cover of any [Declaration](https://tc39.es/ecma262/#prod-Declaration)s.",
-  EnumBody:
-    "A cover of enum bodies defined in [TypeScript](https://www.typescriptlang.org/docs/handbook/enums.html) and Flow.",
-  EnumMember:
-    "A cover of enum membors defined in [TypeScript](https://www.typescriptlang.org/docs/handbook/enums.html) and Flow.",
+  EnumBody: "A cover of Flow enum bodies.",
+  EnumMember: "A cover of Flow enum membors.",
   ExportDeclaration:
     "A cover of any [ExportDeclaration](https://tc39.es/ecma262/#prod-ExportDeclaration)s.",
   Expression:
     "A cover of any [Expression](https://tc39.es/ecma262/#sec-ecmascript-language-expressions)s.",
   ExpressionWrapper:
-    "A wrapper of expression that does not have run semantics.",
+    "A wrapper of expression that does not have runtime semantics.",
   Flow: "A cover of AST nodes defined for Flow.",
   FlowBaseAnnotation: "A cover of primary Flow type annotations.",
   FlowDeclaration: "A cover of Flow declarations.",
@@ -212,7 +210,8 @@ const aliasDescriptions = {
     "A cover of functions and [method](#method)s, the must have `body` and `params`. Note: `Function` is different to `FunctionParent`.",
   FunctionParent:
     "A cover of AST nodes that start an execution context with new [VariableEnvironment](https://tc39.es/ecma262/#table-additional-state-components-for-ecmascript-code-execution-contexts). In other words, they define the scope of `var` declarations. FunctionParent did not include `Program` since Babel 7.",
-  Immutable: "A cover of immutable AST nodes.",
+  Immutable:
+    "A cover of immutable objects and JSX elements. An object is [immutable](https://tc39.es/ecma262/#immutable-prototype-exotic-object) if no other properties can be defined once created.",
   JSX:
     "A cover of AST nodes defined for [JSX](https://facebook.github.io/jsx/).",
   LVal:
@@ -246,7 +245,7 @@ const aliasDescriptions = {
   Terminatorless:
     "A cover of AST nodes whose semantic will change when a line terminator is inserted between the operator and the operand.",
   UnaryLike: "A cover of UnaryExpression and SpreadElement.",
-  UserWhitespacable: "",
+  UserWhitespacable: "Deprecated. Will be removed in Babel 8.",
   While:
     "A cover of DoWhileStatement and WhileStatement, which share the same AST shape.",
 };
