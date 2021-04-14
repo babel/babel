@@ -233,9 +233,9 @@ const aliasDescriptions = {
   Private: "A cover of private class elements and private identifiers.",
   Property: "A cover of object properties and class properties.",
   Pureish:
-    "A cover of AST nodes which does not have side-effect. In other words, there is no observable behaviour changes if they are evaluated more than once.",
+    "A cover of AST nodes which do not have side-effects. In other words, there is no observable behaviour changes if they are evaluated more than once.",
   Scopable:
-    "A cover of [FunctionParent](#FunctionParent) and [BlockParent](#BlockParent).",
+    "A cover of [FunctionParent](#functionparent) and [BlockParent](#blockparent).",
   Statement:
     "A cover of any [Statement](https://tc39.es/ecma262/#prod-Statement)s.",
   TSBaseType: "A cover of primary TypeScript type annotations.",
