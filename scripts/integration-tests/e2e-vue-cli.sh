@@ -14,7 +14,7 @@ source utils/cleanup.sh
 set -x
 
 # Clone vue-cli
-git clone --depth=1 https://github.com/vuejs/vue-cli tmp/vue-cli
+git clone --branch v4 --depth=1 https://github.com/vuejs/vue-cli tmp/vue-cli
 cd tmp/vue-cli || exit
 
 #==============================================================================#
