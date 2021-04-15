@@ -83,18 +83,15 @@ helpers.jsx = helper("7.0.0-beta.0")`
 
 helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
-    var method
+    var method;
     if (typeof Symbol !== "undefined") {
-      if (Symbol.asyncIterator) {
-        method = iterable[Symbol.asyncIterator]
-        if (method != null) return method.call(iterable);
-      }
-      if (Symbol.iterator) {
-        method = iterable[Symbol.iterator]
-        if (method != null) return method.call(iterable);
-      }
+      if (Symbol.asyncIterator) method = iterable[Symbol.asyncIterator];
+      if (method == null && Symbol.iterator) method = iterable[Symbol.iterator];
     }
-    throw new TypeError("Object is not async iterable");
+    if (method == null) method = iterable["@@asyncIterator"];
+    if (method == null) method = iterable["@@iterator"]
+    if (method == null) throw new TypeError("Object is not async iterable");
+    return method.call(iterable);
   }
 `;
 
@@ -179,9 +176,7 @@ helpers.AsyncGenerator = helper("7.0.0-beta.0")`
     }
   }
 
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () { return this; };
-  }
+  AsyncGenerator.prototype[typeof Symbol === "function" && Symbol.asyncIterator || "@@asyncIterator"] = function () { return this; };
 
   AsyncGenerator.prototype.next = function (arg) { return this._invoke("next", arg); };
   AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", arg); };
@@ -216,9 +211,7 @@ helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
       return { done: false, value: awaitWrap(value) };
     };
 
-    if (typeof Symbol === "function" && Symbol.iterator) {
-      iter[Symbol.iterator] = function () { return this; };
-    }
+    iter[typeof Symbol !== "undefined" && Symbol.iterator || "@@iterator"] = function () { return this; };
 
     iter.next = function (value) {
       if (waiting) {
@@ -1003,7 +996,7 @@ helpers.maybeArrayLike = helper("7.9.0")`
 
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 `;
 
@@ -1019,14 +1012,15 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     // _i = _iterator
     // _s = _step
 
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+    if (_i == null) return;
 
     var _arr = [];
     var _n = true;
     var _d = false;
     var _e = undefined;
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
         if (i && _arr.length === i) break;
       }
@@ -1046,10 +1040,11 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
 
 helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+    if (_i == null) return;
 
     var _arr = [];
-    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+    for (_i = _i.call(arr), _step; !(_step = _i.next()).done;) {
       _arr.push(_step.value);
       if (i && _arr.length === i) break;
     }
@@ -1104,8 +1099,9 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
   // f: finish (always called at the end)
 
   export default function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it;
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+
+    if (!it) {
       // Fallback for engines without symbol support
       if (
         Array.isArray(o) ||
@@ -1133,7 +1129,7 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
 
     return {
       s: function() {
-        it = o[Symbol.iterator]();
+        it = it.call(o);
       },
       n: function() {
         var step = it.next();
@@ -1159,28 +1155,25 @@ helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
   import unsupportedIterableToArray from "unsupportedIterableToArray";
 
   export default function _createForOfIteratorHelperLoose(o, allowArrayLike) {
-    var it;
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
 
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-      // Fallback for engines without symbol support
-      if (
-        Array.isArray(o) ||
-        (it = unsupportedIterableToArray(o)) ||
-        (allowArrayLike && o && typeof o.length === "number")
-      ) {
-        if (it) o = it;
-        var i = 0;
-        return function() {
-          if (i >= o.length) return { done: true };
-          return { done: false, value: o[i++] };
-        }
+    if (it) return (it = it.call(o)).next.bind(it);
+
+    // Fallback for engines without symbol support
+    if (
+      Array.isArray(o) ||
+      (it = unsupportedIterableToArray(o)) ||
+      (allowArrayLike && o && typeof o.length === "number")
+    ) {
+      if (it) o = it;
+      var i = 0;
+      return function() {
+        if (i >= o.length) return { done: true };
+        return { done: false, value: o[i++] };
       }
-
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
 
-    it = o[Symbol.iterator]();
-    return it.next.bind(it);
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 `;
 

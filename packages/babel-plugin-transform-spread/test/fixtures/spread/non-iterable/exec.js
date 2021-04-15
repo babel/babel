@@ -1,6 +1,6 @@
 var o = {};
 
-expect(() => [...undefined]).toThrow(/spread non-iterable/);
+expect(() => [...undefined]).toThrow(/undefined is not iterable|property 'Symbol\(Symbol\.iterator\)' of undefined/);
 
 expect(() => [...o]).toThrow(/spread non-iterable/);
 
