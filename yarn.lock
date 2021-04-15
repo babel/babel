@@ -352,15 +352,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-bindify-decorators@workspace:^7.12.13, @babel/helper-bindify-decorators@workspace:packages/babel-helper-bindify-decorators":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-bindify-decorators@workspace:packages/babel-helper-bindify-decorators"
-  dependencies:
-    "@babel/traverse": "workspace:*"
-    "@babel/types": "workspace:^7.12.13"
-  languageName: unknown
-  linkType: soft
-
 "@babel/helper-builder-binary-assignment-operator-visitor@npm:^7.12.13":
   version: 7.12.13
   resolution: "@babel/helper-builder-binary-assignment-operator-visitor@npm:7.12.13"
@@ -534,16 +525,6 @@ __metadata:
   dependencies:
     "@babel/traverse": "workspace:*"
     "@babel/types": "workspace:^7.13.0"
-  languageName: unknown
-  linkType: soft
-
-"@babel/helper-explode-class@workspace:packages/babel-helper-explode-class":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-explode-class@workspace:packages/babel-helper-explode-class"
-  dependencies:
-    "@babel/helper-bindify-decorators": "workspace:^7.12.13"
-    "@babel/traverse": "workspace:*"
-    "@babel/types": "workspace:^7.12.13"
   languageName: unknown
   linkType: soft
 
