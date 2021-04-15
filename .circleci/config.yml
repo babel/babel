@@ -151,9 +151,11 @@ jobs:
       - attach_workspace:
           at: /tmp/verdaccio-workspace
       - run:
-          # vue-cli uses puppeteer, and it depends on the libXss.so.1 shared library
+          # - vue-cli uses puppeteer, and it depends on the libXss.so.1 shared library
+          # - We use fuser (psmisc) in local-registry.sh, and for some reason it's
+          #   missing in this Docker image
           name: Install Headless Chrome dependencies
-          command: sudo apt-get install -yq libxss1
+          command: sudo apt-get update && sudo apt-get install -yq libxss1 psmisc
       - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-vue-cli.sh
 
   e2e-breaking-jest:

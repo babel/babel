@@ -30,12 +30,6 @@ node "$PWD"/../../utils/bump-babel-dependencies.js
 yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
 yarn install
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
-  # Babel 8 defaults to "default, not ie 11", but this breaks vue-cli's tests
-  # which expect different ES features to be compiled.
-  patch -p1 < "$PWD"/../../patches/vue-cli-babel-8.patch
-fi
-
 # Test
 CI=true yarn test -p babel,babel-preset-app
 
