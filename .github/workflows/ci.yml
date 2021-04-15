@@ -58,8 +58,6 @@ jobs:
           yarn test:esm
       - name: Upload coverage report
         uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     name: Build Babel Artifacts
