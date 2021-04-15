@@ -155,7 +155,7 @@ jobs:
           # - We use fuser (psmisc) in local-registry.sh, and for some reason it's
           #   missing in this Docker image
           name: Install Headless Chrome dependencies
-          command: sudo apt-get install -yq libxss1 psmisc
+          command: sudo apt-get update && sudo apt-get install -yq libxss1 psmisc
       - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-vue-cli.sh
 
   e2e-breaking-jest:
