@@ -179,6 +179,7 @@ export default function getTargets(
   options: GetTargetsOption = {},
 ): Targets {
   let { browsers, esmodules } = inputTargets;
+  const { configPath = "." } = options;
 
   validateBrowsers(browsers);
 
@@ -193,7 +194,7 @@ export default function getTargets(
   if (!browsers && shouldSearchForConfig) {
     browsers = browserslist.loadConfig({
       config: options.configFile,
-      path: options.configPath,
+      path: configPath,
       env: options.browserslistEnv,
     });
     if (browsers == null) {
