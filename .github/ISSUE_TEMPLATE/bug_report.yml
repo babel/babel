@@ -23,7 +23,7 @@ body:
         - "@babel/cli"
         - "@babel/register or @babel/node"
         - Programmatic API (`babel.transform`, `babel.parse`)
-        - Other
+        - Other (Next.js, Gatsby, vue-cli, ...)
     validations:
       required: true
 
