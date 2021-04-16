@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-static-block { chrome < 91 }
   syntax-class-properties
   syntax-numeric-separator
   proposal-logical-assignment-operators { chrome < 85 }

@@ -3,6 +3,7 @@
 
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
+import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
@@ -15,6 +16,7 @@ import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
+import proposalClassStaticBlock from "@babel/plugin-proposal-class-static-block";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalExportNamespaceFrom from "@babel/plugin-proposal-export-namespace-from";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
@@ -78,6 +80,7 @@ export default {
     bugfixV8SpreadParametersInOptionalChaining,
   "proposal-async-generator-functions": () => proposalAsyncGeneratorFunctions,
   "proposal-class-properties": () => proposalClassProperties,
+  "proposal-class-static-block": () => proposalClassStaticBlock,
   "proposal-dynamic-import": () => proposalDynamicImport,
   "proposal-export-namespace-from": () => proposalExportNamespaceFrom,
   "proposal-json-strings": () => proposalJsonStrings,
@@ -93,6 +96,7 @@ export default {
   "proposal-unicode-property-regex": () => proposalUnicodePropertyRegex,
   "syntax-async-generators": () => syntaxAsyncGenerators,
   "syntax-class-properties": () => syntaxClassProperties,
+  "syntax-class-static-block": () => syntaxClassStaticBlock,
   "syntax-dynamic-import": () => syntaxDynamicImport,
   "syntax-export-namespace-from": () => syntaxExportNamespaceFrom,
   "syntax-json-strings": () => syntaxJsonStrings,
@@ -137,4 +141,8 @@ export default {
   "transform-typeof-symbol": () => transformTypeofSymbol,
   "transform-unicode-escapes": () => transformUnicodeEscapes,
   "transform-unicode-regex": () => transformUnicodeRegex,
+};
+
+export const minVersions = {
+  "proposal-class-static-block": "7.12.0",
 };
