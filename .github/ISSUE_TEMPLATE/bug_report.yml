@@ -31,7 +31,7 @@ body:
     attributes:
       label: Input code
       description: |
-        You must write here the minimal imput code necessary to reproduce the bug.
+        You must write here the minimal input code necessary to reproduce the bug.
         Even better, you can share a link to the Babel [REPL](https://babel.dev/repl):
         this will make it easier for us to reproduce the issue, and it may help fixing
         the bug sooner.
