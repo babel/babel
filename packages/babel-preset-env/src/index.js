@@ -392,10 +392,15 @@ option \`forceAllTransforms: true\` instead.
   const plugins = Array.from(pluginNames)
     .map(pluginName => {
       if (
+        pluginName === "proposal-private-property-in-object" &&
+        !pluginNames.has("proposal-class-properties")
+      ) {
+        return [getPlugin(pluginName), { nativePrivateFields: true }];
+      }
+
+      if (
         pluginName === "proposal-class-properties" ||
         pluginName === "proposal-private-methods" ||
-        // This is not included in preset-env yet, but let's keep it here so we
-        // don't forget about it in the future.
         pluginName === "proposal-private-property-in-object"
       ) {
         return [
@@ -407,6 +412,7 @@ option \`forceAllTransforms: true\` instead.
           },
         ];
       }
+
       return [
         getPlugin(pluginName),
         { spec, loose, useBuiltIns: pluginUseBuiltIns },

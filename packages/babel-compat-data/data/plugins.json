@@ -1,8 +1,8 @@
 {
-  "proposal-private-property-in-object": {
+  "proposal-class-static-block": {
     "chrome": "91"
   },
-  "proposal-class-static-block": {
+  "proposal-private-property-in-object": {
     "chrome": "91"
   },
   "proposal-class-properties": {

@@ -13,6 +13,7 @@ import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
+import syntaxPrivatePropertyInObject from "@babel/plugin-syntax-private-property-in-object";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
@@ -27,6 +28,7 @@ import proposalObjectRestSpread from "@babel/plugin-proposal-object-rest-spread"
 import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
 import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
 import proposalPrivateMethods from "@babel/plugin-proposal-private-methods";
+import proposalPrivatePropertyInObject from "@babel/plugin-proposal-private-property-in-object";
 import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
@@ -93,6 +95,7 @@ export default {
   "proposal-optional-catch-binding": () => proposalOptionalCatchBinding,
   "proposal-optional-chaining": () => proposalOptionalChaining,
   "proposal-private-methods": () => proposalPrivateMethods,
+  "proposal-private-property-in-object": () => proposalPrivatePropertyInObject,
   "proposal-unicode-property-regex": () => proposalUnicodePropertyRegex,
   "syntax-async-generators": () => syntaxAsyncGenerators,
   "syntax-class-properties": () => syntaxClassProperties,
@@ -106,6 +109,7 @@ export default {
   "syntax-object-rest-spread": () => syntaxObjectRestSpread,
   "syntax-optional-catch-binding": () => syntaxOptionalCatchBinding,
   "syntax-optional-chaining": () => syntaxOptionalChaining,
+  "syntax-private-property-in-object": () => syntaxPrivatePropertyInObject,
   "syntax-top-level-await": () => syntaxTopLevelAwait,
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
@@ -145,4 +149,5 @@ export default {
 
 export const minVersions = {
   "proposal-class-static-block": "7.12.0",
+  "proposal-private-property-in-object": "7.10.0",
 };
