@@ -3067,10 +3067,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const baseCount = super.getGetterSetterExpectedParamCount(method);
       const params = this.getObjectOrClassMethodParams(method);
       const firstParam = params[0];
-      const hasContextParam =
-        firstParam &&
-        firstParam.type === "Identifier" &&
-        firstParam.name === "this";
+      const hasContextParam = firstParam && this.isThisParam(firstParam);
 
       return hasContextParam ? baseCount + 1 : baseCount;
     }
