@@ -135,6 +135,7 @@ const es2021 = {
 };
 
 const shippedProposal = {
+  "proposal-class-static-block": "Class static initialization blocks",
   "proposal-class-properties": {
     features: [
       "static class fields",
