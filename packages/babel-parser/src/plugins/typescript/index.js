@@ -41,6 +41,7 @@ type TsModifier =
   | "abstract"
   | "declare"
   | "static"
+  | "override"
   | N.Accessibility;
 
 function nonNull<T>(x: ?T): T {
@@ -86,12 +87,15 @@ const TSErrors = makeErrorTemplates(
     ExpectedAmbientAfterExportDeclare:
       "'export declare' must be followed by an ambient declaration.",
     ImportAliasHasImportType: "An import alias can not use 'import type'",
+    IncompatibleModifiers: "'%0' modifier cannot be used with '%1' modifier.",
     IndexSignatureHasAbstract:
       "Index signatures cannot have the 'abstract' modifier",
     IndexSignatureHasAccessibility:
       "Index signatures cannot have an accessibility modifier ('%0')",
     IndexSignatureHasDeclare:
       "Index signatures cannot have the 'declare' modifier",
+    IndexSignatureHasOverride:
+      "'override' modifier cannot appear on an index signature.",
     IndexSignatureHasStatic:
       "Index signatures cannot have the 'static' modifier",
     InvalidModifierOnTypeMember:
@@ -107,6 +111,8 @@ const TSErrors = makeErrorTemplates(
       "'abstract' modifier can only appear on a class, method, or property declaration.",
     OptionalTypeBeforeRequired:
       "A required element cannot follow an optional element.",
+    OverrideNotInSubClass:
+      "This member cannot have an 'override' modifier because its containing class does not extend another class.",
     PatternIsOptional:
       "A binding pattern parameter cannot be optional in an implementation signature.",
     PrivateElementHasAbstract:
@@ -256,6 +262,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               TSErrors.InvalidModifiersOrder,
               "static",
               "readonly",
+            );
+          } else if (
+            (modified.declare && modifier === "override") ||
+            (modified.override && modifier === "declare")
+          ) {
+            this.raise(
+              startPos,
+              TSErrors.IncompatibleModifiers,
+              "declare",
+              "override",
             );
           }
           modified[modifier] = true;
@@ -622,7 +638,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.tsParseModifiers(
         node,
         ["readonly"],
-        ["declare", "abstract", "private", "protected", "public", "static"],
+        [
+          "declare",
+          "abstract",
+          "private",
+          "protected",
+          "public",
+          "static",
+          "override",
+        ],
         TSErrors.InvalidModifierOnTypeMember,
       );
 
@@ -2223,6 +2247,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "private",
         "public",
         "protected",
+        "override",
       ]);
 
       const callParseClassMember = () => {
@@ -2246,6 +2271,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "readonly",
         "declare",
         "static",
+        "override",
       ]);
 
       if (isStatic) {
@@ -2269,12 +2295,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if ((member: any).declare) {
           this.raise(member.start, TSErrors.IndexSignatureHasDeclare);
         }
+        if ((member: any).override) {
+          this.raise(member.start, TSErrors.IndexSignatureHasOverride);
+        }
 
         return;
       }
 
       if (!this.state.inAbstractClass && (member: any).abstract) {
         this.raise(member.start, TSErrors.NonAbstractClassHasAbstractMethod);
+      }
+
+      if ((member: any).override) {
+        if (isStatic) {
+          this.raise(
+            member.start,
+            TSErrors.IncompatibleModifiers,
+            "static",
+            "override",
+          );
+        } else if (!state.hadSuperClass) {
+          this.raise(member.start, TSErrors.OverrideNotInSubClass);
+        }
       }
 
       /*:: invariant(member.type !== "TSIndexSignature") */

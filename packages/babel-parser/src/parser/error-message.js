@@ -128,6 +128,8 @@ export const ErrorMessages = makeErrorTemplates(
       "constructors in/after an Optional Chain are not allowed",
     OptionalChainingNoTemplate:
       "Tagged Template Literals are not allowed in optionalChain",
+    OverrideOnConstructor:
+      "'override' modifier cannot appear on a constructor declaration.",
     ParamDupe: "Argument name clash",
     PatternHasAccessor: "Object pattern can't contain getter or setter",
     PatternHasMethod: "Object pattern can't contain methods",
