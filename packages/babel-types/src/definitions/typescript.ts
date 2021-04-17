@@ -126,6 +126,7 @@ defineType("TSIndexSignature", {
   visitor: ["parameters", "typeAnnotation"],
   fields: {
     readonly: validateOptional(bool),
+    static: validateOptional(bool),
     parameters: validateArrayOfType("Identifier"), // Length must be 1
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
   },

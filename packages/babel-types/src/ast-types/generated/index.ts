@@ -1709,6 +1709,7 @@ export interface TSIndexSignature extends BaseNode {
   parameters: Array<Identifier>;
   typeAnnotation?: TSTypeAnnotation | null;
   readonly?: boolean | null;
+  static?: boolean | null;
 }
 
 export interface TSAnyKeyword extends BaseNode {

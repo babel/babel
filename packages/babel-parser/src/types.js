@@ -1205,6 +1205,7 @@ export type TsMethodSignature = TsSignatureDeclarationBase &
 // *Not* a ClassMemberBase: Can't have accessibility, can't be abstract, can't be optional.
 export type TsIndexSignature = TsSignatureDeclarationOrIndexSignatureBase & {
   readonly?: true,
+  static?: true,
   type: "TSIndexSignature",
   // Note: parameters.length must be 1.
 };
