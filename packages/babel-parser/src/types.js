@@ -730,6 +730,7 @@ export type ClassMemberBase = NodeBase &
     computed: boolean,
     // TypeScript only:
     accessibility?: ?Accessibility,
+    override?: ?true,
     abstract?: ?true,
     optional?: ?true,
   };
@@ -807,6 +808,7 @@ export type ClassPrivateProperty = NodeBase & {
   optional?: true,
   definite?: true,
   readonly?: true,
+  override?: true,
 };
 
 export type OptClassDeclaration = ClassBase &
@@ -1536,5 +1538,5 @@ export type ParseSubscriptState = {
 
 export type ParseClassMemberState = {|
   hadConstructor: boolean,
-  constructorAllowsSuper: boolean,
+  hadSuperClass: boolean,
 |};
