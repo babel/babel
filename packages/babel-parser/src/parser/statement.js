@@ -1509,14 +1509,7 @@ export default class StatementParser extends ExpressionParser {
   // https://tc39.es/proposal-class-fields/#prod-ClassElementName
   parseClassElementName(member: N.ClassMember): N.Expression | N.Identifier {
     const key = this.parsePropertyName(member, /* isPrivateNameAllowed */ true);
-    this.checkClassElementName(member, key);
-    return key;
-  }
 
-  checkClassElementName(
-    member: N.ClassMember,
-    key: N.Expression | N.Identifier,
-  ) {
     if (
       !member.computed &&
       member.static &&
@@ -1532,6 +1525,8 @@ export default class StatementParser extends ExpressionParser {
     ) {
       this.raise(key.start, Errors.ConstructorClassPrivateField);
     }
+
+    return key;
   }
 
   parseClassStaticBlock(

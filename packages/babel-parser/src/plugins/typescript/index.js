@@ -67,6 +67,7 @@ const TSErrors = Object.freeze({
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier",
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
+  DeclareAccessor: "'declare' is not allowed in %0ters.",
   DeclareClassFieldHasInitializer:
     "Initializers are not allowed in ambient contexts.",
   DeclareFunctionHasImplementation:
@@ -2191,20 +2192,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.tsParseModifier(["public", "protected", "private"]);
     }
 
-    checkClassElementName(
-      member: N.ClassMember,
-      key: N.Expression | N.Identifier,
-    ) {
-      if (
-        // $FlowIgnore
-        member.declare &&
-        (key.name === "get" || key.name === "set")
-      ) {
-        this.raise(member.start, Errors.DeclareAccessor, key.name);
-      }
-      super.checkClassElementName(member, key);
-    }
-
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
@@ -2483,6 +2470,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters && isConstructor) {
         this.raise(typeParameters.start, TSErrors.ConstructorHasTypeParameters);
+      }
+
+      // $FlowIgnore
+      if (method.declare && (method.kind === "get" || method.kind === "set")) {
+        this.raise(method.start, TSErrors.DeclareAccessor, method.kind);
       }
       if (typeParameters) method.typeParameters = typeParameters;
       super.pushClassMethod(
