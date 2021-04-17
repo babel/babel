@@ -1,0 +1,332 @@
+{
+  "type": "File",
+  "start":0,"end":390,"loc":{"start":{"line":1,"column":0},"end":{"line":20,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":390,"loc":{"start":{"line":1,"column":0},"end":{"line":20,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":318,"loc":{"start":{"line":1,"column":0},"end":{"line":16,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":13,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":13},"identifierName":"MyClass"},
+          "name": "MyClass"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":22,"end":31,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":31},"identifierName":"BaseClass"},
+          "name": "BaseClass"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":32,"end":318,"loc":{"start":{"line":1,"column":32},"end":{"line":16,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":36,"end":54,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":20}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":45,"end":49,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":15},"identifierName":"show"},
+                "name": "show"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":52,"end":54,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":20}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":57,"end":82,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":27}},
+              "override": true,
+              "accessibility": "public",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":73,"end":77,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":22},"identifierName":"show"},
+                "name": "show"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":80,"end":82,"loc":{"start":{"line":3,"column":25},"end":{"line":3,"column":27}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":85,"end":110,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":27}},
+              "accessibility": "public",
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":101,"end":105,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":22},"identifierName":"show"},
+                "name": "show"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":108,"end":110,"loc":{"start":{"line":4,"column":25},"end":{"line":4,"column":27}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":113,"end":131,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":20}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":122,"end":126,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":15},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":129,"end":130,"loc":{"start":{"line":5,"column":18},"end":{"line":5,"column":19}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":134,"end":161,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":29}},
+              "override": true,
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":152,"end":156,"loc":{"start":{"line":6,"column":20},"end":{"line":6,"column":24},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":159,"end":160,"loc":{"start":{"line":6,"column":27},"end":{"line":6,"column":28}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":164,"end":191,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":29}},
+              "readonly": true,
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":182,"end":186,"loc":{"start":{"line":7,"column":20},"end":{"line":7,"column":24},"identifierName":"size"},
+                "name": "size"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":189,"end":190,"loc":{"start":{"line":7,"column":27},"end":{"line":7,"column":28}},
+                "extra": {
+                  "rawValue": 5,
+                  "raw": "5"
+                },
+                "value": 5
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":195,"end":217,"loc":{"start":{"line":9,"column":2},"end":{"line":9,"column":24}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":208,"end":212,"loc":{"start":{"line":9,"column":15},"end":{"line":9,"column":19},"identifierName":"text"},
+                "name": "text"
+              },
+              "computed": false,
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":215,"end":217,"loc":{"start":{"line":9,"column":22},"end":{"line":9,"column":24}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":220,"end":247,"loc":{"start":{"line":10,"column":2},"end":{"line":10,"column":29}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":233,"end":237,"loc":{"start":{"line":10,"column":15},"end":{"line":10,"column":19},"identifierName":"text"},
+                "name": "text"
+              },
+              "computed": false,
+              "kind": "set",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":238,"end":243,"loc":{"start":{"line":10,"column":20},"end":{"line":10,"column":25},"identifierName":"value"},
+                  "name": "value"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":245,"end":247,"loc":{"start":{"line":10,"column":27},"end":{"line":10,"column":29}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":251,"end":276,"loc":{"start":{"line":12,"column":2},"end":{"line":12,"column":27}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":266,"end":271,"loc":{"start":{"line":12,"column":17},"end":{"line":12,"column":22},"identifierName":"fetch"},
+                "name": "fetch"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": true,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":274,"end":276,"loc":{"start":{"line":12,"column":25},"end":{"line":12,"column":27}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":280,"end":296,"loc":{"start":{"line":14,"column":2},"end":{"line":14,"column":18}},
+              "override": true,
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start":290,"end":291,"loc":{"start":{"line":14,"column":12},"end":{"line":14,"column":13},"identifierName":"x"},
+                "name": "x"
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":295,"end":296,"loc":{"start":{"line":14,"column":17},"end":{"line":14,"column":18}},
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "2"
+                },
+                "value": 2
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":299,"end":316,"loc":{"start":{"line":15,"column":2},"end":{"line":15,"column":19}},
+              "override": true,
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start":309,"end":310,"loc":{"start":{"line":15,"column":12},"end":{"line":15,"column":13},"identifierName":"x"},
+                "name": "x"
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":314,"end":316,"loc":{"start":{"line":15,"column":17},"end":{"line":15,"column":19}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":320,"end":390,"loc":{"start":{"line":18,"column":0},"end":{"line":20,"column":1}},
+        "declare": true,
+        "id": {
+          "type": "Identifier",
+          "start":334,"end":347,"loc":{"start":{"line":18,"column":14},"end":{"line":18,"column":27},"identifierName":"DeclaredClass"},
+          "name": "DeclaredClass"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":356,"end":365,"loc":{"start":{"line":18,"column":36},"end":{"line":18,"column":45},"identifierName":"BaseClass"},
+          "name": "BaseClass"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":366,"end":390,"loc":{"start":{"line":18,"column":46},"end":{"line":20,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":370,"end":388,"loc":{"start":{"line":19,"column":2},"end":{"line":19,"column":20}},
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":379,"end":383,"loc":{"start":{"line":19,"column":11},"end":{"line":19,"column":15},"identifierName":"test"},
+                "name": "test"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":386,"end":388,"loc":{"start":{"line":19,"column":18},"end":{"line":19,"column":20}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
