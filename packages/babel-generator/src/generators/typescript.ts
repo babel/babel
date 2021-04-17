@@ -133,7 +133,11 @@ export function TSMethodSignature(this: Printer, node: t.TSMethodSignature) {
 }
 
 export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
-  const { readonly } = node;
+  const { readonly, static: isStatic } = node;
+  if (isStatic) {
+    this.word("static");
+    this.space();
+  }
   if (readonly) {
     this.word("readonly");
     this.space();
