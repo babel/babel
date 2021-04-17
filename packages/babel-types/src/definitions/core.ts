@@ -1705,6 +1705,9 @@ export const classMethodOrPropertyCommon = {
   static: {
     default: false,
   },
+  override: {
+    default: false,
+  },
   computed: {
     default: false,
   },
