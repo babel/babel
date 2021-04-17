@@ -96,6 +96,7 @@ const TSErrors = makeErrorTemplates(
       "Index signatures cannot have the 'static' modifier",
     InvalidModifierOnTypeMember:
       "'%0' modifier cannot appear on a type member.",
+    InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
     MixedLabeledAndUnlabeledElements:
@@ -249,6 +250,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           if (Object.hasOwnProperty.call(modified, modifier)) {
             this.raise(startPos, TSErrors.DuplicateModifier, modifier);
+          } else if (modified.readonly && modifier === "static") {
+            this.raise(
+              startPos,
+              TSErrors.InvalidModifiersOrder,
+              "static",
+              "readonly",
+            );
           }
           modified[modifier] = true;
         }
@@ -2233,7 +2241,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseClassMemberState,
       isStatic: boolean,
     ): void {
-      this.tsParseModifiers(member, ["abstract", "readonly", "declare"]);
+      this.tsParseModifiers(member, [
+        "abstract",
+        "readonly",
+        "declare",
+        "static",
+      ]);
+
+      if (isStatic) {
+        member.static = true;
+      }
 
       const idx = this.tsTryParseIndexSignature(member);
       if (idx) {
@@ -2241,9 +2258,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if ((member: any).abstract) {
           this.raise(member.start, TSErrors.IndexSignatureHasAbstract);
-        }
-        if (isStatic) {
-          this.raise(member.start, TSErrors.IndexSignatureHasStatic);
         }
         if ((member: any).accessibility) {
           this.raise(

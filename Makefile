@@ -1,6 +1,6 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = 6888a8df829d416b93cb7057aa860261aa05cf08
-TYPESCRIPT_COMMIT = da8633212023517630de5f3620a23736b63234b1
+TYPESCRIPT_COMMIT = 41dc625b0a609eb294b975dd92675e72b2b3fdec
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
