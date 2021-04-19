@@ -71,7 +71,6 @@ classCannotExtendVar.ts
 classExpressionWithDecorator1.ts
 classExtendsAcrossFiles.ts
 classExtendsMultipleBaseClasses.ts
-classIndexer5.ts
 classOverloadForFunction.ts
 classWithEmptyTypeParameter.ts
 collisionExportsRequireAndClass.ts
@@ -87,7 +86,6 @@ constEnumNoEmitReexport.ts
 constEnumNoPreserveDeclarationReexport.ts
 constEnumPreserveEmitReexport.ts
 contextualOverloadListFromArrayUnion.ts
-controlFlowPrivateClassField.ts
 convertKeywordsYes.ts
 declarationEmitAmdModuleNameDirective.ts
 declarationEmitCommonSourceDirectoryDoesNotContainAllFiles.ts
@@ -199,7 +197,6 @@ esModuleInterop.ts
 esModuleInteropImportTSLibHasImport.ts
 esModuleInteropNamedDefaultImports.ts
 esModuleInteropTslibHelpers.ts
-esNextWeakRefs_IterableWeakMap.ts
 expandoFunctionContextualTypesNoValue.ts
 exportAssignClassAndModule.ts
 exportAssignmentImportMergeNoCrash.ts
@@ -250,7 +247,6 @@ importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
 importHelpers.ts
 importHelpersAmd.ts
-importHelpersES6.ts
 importHelpersInAmbientContext.ts
 importHelpersInIsolatedModules.ts
 importHelpersInTsx.tsx
@@ -390,8 +386,6 @@ preserveUnusedImports.ts
 privacyCheckExternalModuleExportAssignmentOfGenericClass.ts
 privacyTopLevelAmbientExternalModuleImportWithExport.ts
 privacyTopLevelAmbientExternalModuleImportWithoutExport.ts
-privateFieldAssignabilityFromUnknown.ts
-privateNameWeakMapCollision.ts
 reExportGlobalDeclaration1.ts
 reExportUndefined1.ts
 reExportUndefined2.ts
