@@ -75,7 +75,7 @@ const TSErrors = makeErrorTemplates(
       "Class methods cannot have the 'readonly' modifier.",
     ConstructorHasTypeParameters:
       "Type parameters cannot appear on a constructor declaration.",
-  DeclareAccessor: "'declare' is not allowed in %0ters.",
+    DeclareAccessor: "'declare' is not allowed in %0ters.",
     DeclareClassFieldHasInitializer:
       "Initializers are not allowed in ambient contexts.",
     DeclareFunctionHasImplementation:
