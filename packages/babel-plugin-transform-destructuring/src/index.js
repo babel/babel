@@ -615,6 +615,7 @@ export default declare((api, options) => {
         if (!variableDeclarationHasPattern(node)) return;
 
         const nodeKind = node.kind;
+        const nodeLoc = node.loc;
         const nodes = [];
         let declar;
 
@@ -664,6 +665,10 @@ export default declare((api, options) => {
           } else {
             // Make sure the original node kind is used for each compound declaration
             node.kind = nodeKind;
+            // Propagate the original declaration node's location
+            if (!node.loc) {
+              node.loc = nodeLoc;
+            }
             nodesOut.push(node);
             tail = t.isVariableDeclaration(node) ? node : null;
           }
