@@ -2,12 +2,25 @@ import syntaxPlugin from "@babel/plugin-syntax-private-property-in-object";
 import { injectInitialization as injectConstructorInit } from "@babel/helper-create-class-features-plugin";
 
 export default function pluginPrivateIn({ types: t, template }) {
-  const ids = new WeakMap();
+  const classWeakSets = new WeakMap();
+  const fieldsWeakSets = new WeakSet();
 
   function unshadow(name, targetScope, scope) {
     while (scope !== targetScope) {
       if (scope.hasOwnBinding(name)) scope.rename(name);
       scope = scope.parent;
+    }
+  }
+
+  function injectToFieldInit(fieldPath, expr, before = false) {
+    if (fieldPath.node.value) {
+      if (before) {
+        fieldPath.get("value").insertBefore(expr);
+      } else {
+        fieldPath.get("value").insertAfter(expr);
+      }
+    } else {
+      fieldPath.set("value", t.unaryExpression("void", expr));
     }
   }
 
@@ -29,19 +42,27 @@ export default function pluginPrivateIn({ types: t, template }) {
     }
 
     if (firstFieldPath) {
-      if (firstFieldPath.node.value) {
-        firstFieldPath.set(
-          "value",
-          t.sequenceExpression([init, firstFieldPath.node.value]),
-        );
-      } else {
-        firstFieldPath.set("value", t.unaryExpression("void", init));
-      }
+      injectToFieldInit(firstFieldPath, init, true);
     } else {
       injectConstructorInit(classPath, consturctorPath, [
         t.expressionStatement(init),
       ]);
     }
+  }
+
+  function getWeakSetId(weakSets, outerClass, reference, name = "", inject) {
+    let id = classWeakSets.get(reference.node);
+
+    if (!id) {
+      id = outerClass.scope.generateUidIdentifier(`${name || ""} brandCheck`);
+      classWeakSets.set(reference.node, id);
+
+      inject(reference, template.expression.ast`${t.cloneNode(id)}.add(this)`);
+
+      outerClass.insertBefore(template.ast`var ${id} = new WeakSet()`);
+    }
+
+    return t.cloneNode(id);
   }
 
   return {
@@ -55,17 +76,15 @@ export default function pluginPrivateIn({ types: t, template }) {
 
         const { name } = node.left.id;
 
-        let isStatic;
+        let privateElement;
         const outerClass = path.findParent(path => {
           if (!path.isClass()) return false;
 
-          const privateElement = path.node.body.body.find(
-            node => t.isPrivate(node) && node.key.id.name === name,
-          );
-          if (!privateElement) return false;
+          privateElement = path
+            .get("body.body")
+            .find(({ node }) => t.isPrivate(node) && node.key.id.name === name);
 
-          isStatic = privateElement.static;
-          return true;
+          return !!privateElement;
         });
 
         if (outerClass.parentPath.scope.path.isPattern()) {
@@ -74,38 +93,47 @@ export default function pluginPrivateIn({ types: t, template }) {
           return;
         }
 
-        if (isStatic) {
-          if (outerClass.node.id) {
-            unshadow(outerClass.node.id.name, outerClass.scope, path.scope);
+        if (privateElement.isMethod()) {
+          if (privateElement.node.static) {
+            if (outerClass.node.id) {
+              unshadow(outerClass.node.id.name, outerClass.scope, path.scope);
+            } else {
+              outerClass.set("id", path.scope.generateUidIdentifier("class"));
+            }
+            path.replaceWith(
+              template.expression.ast`
+                ${t.cloneNode(outerClass.node.id)} === ${path.node.right}
+              `,
+            );
           } else {
-            outerClass.set("id", path.scope.generateUidIdentifier("class"));
+            const id = getWeakSetId(
+              classWeakSets,
+              outerClass,
+              outerClass,
+              outerClass.node.id?.name,
+              injectInitialization,
+            );
+
+            path.replaceWith(
+              template.expression.ast`${id}.has(${path.node.right})`,
+            );
           }
-          path.replaceWith(
-            template.expression.ast`
-              ${t.cloneNode(outerClass.node.id)} === ${path.node.right}
-            `,
-          );
-          return;
-        }
+        } else {
+          // Private fields might not all be initialized: see the 'halfConstructed'
+          // example at https://v8.dev/features/private-brand-checks.
 
-        let id = ids.get(outerClass.node);
-        if (!id) {
-          id = outerClass.scope.generateUidIdentifier(
-            `${outerClass.node.id?.name || ""} brandCheck`,
-          );
-          ids.set(outerClass.node, id);
-
-          injectInitialization(
+          const id = getWeakSetId(
+            fieldsWeakSets,
             outerClass,
-            template.expression.ast`${t.cloneNode(id)}.add(this)`,
+            privateElement,
+            privateElement.node.key.id.name,
+            injectToFieldInit,
           );
 
-          outerClass.insertBefore(template.ast`var ${id} = new WeakSet()`);
+          path.replaceWith(
+            template.expression.ast`${id}.has(${path.node.right})`,
+          );
         }
-
-        path.replaceWith(
-          template.expression.ast`${t.cloneNode(id)}.has(${path.node.right})`,
-        );
       },
     },
   };

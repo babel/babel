@@ -1,9 +1,11 @@
+var _fooBrandCheck = new WeakSet();
+
 class A {
-  static #foo;
+  static #foo = void _fooBrandCheck.add(this);
 
   test() {
-    let _A2 = function fn(_A) {
-      return A === _A;
+    let A = function fn(A) {
+      return _fooBrandCheck.has(A);
     };
   }
 

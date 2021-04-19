@@ -1,17 +1,19 @@
-var _FooBrandCheck = new WeakSet();
+var _temp;
+
+var _fooBrandCheck = new WeakSet();
 
 class Foo {
-  #foo = (_FooBrandCheck.add(this), 1);
+  #foo = (_temp = 1, _fooBrandCheck.add(this), _temp);
 
   test() {
     class Nested {
       test() {
-        _FooBrandCheck.has(this);
+        _fooBrandCheck.has(this);
       }
 
     }
 
-    _FooBrandCheck.has(this);
+    _fooBrandCheck.has(this);
   }
 
 }

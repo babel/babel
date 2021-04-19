@@ -1,11 +1,11 @@
 (x = (() => {
-  var _brandCheck;
+  var _fooBrandCheck;
 
-  return _brandCheck = new WeakSet(), class {
-    #foo = void _brandCheck.add(this);
+  return _fooBrandCheck = new WeakSet(), class {
+    #foo = void _fooBrandCheck.add(this);
 
     test(other) {
-      return _brandCheck.has(other);
+      return _fooBrandCheck.has(other);
     }
 
   };
