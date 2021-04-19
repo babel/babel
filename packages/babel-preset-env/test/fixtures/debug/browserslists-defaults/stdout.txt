@@ -2,24 +2,24 @@
 
 Using targets:
 {
-  "android": "85",
-  "chrome": "84",
-  "edge": "85",
+  "android": "89",
+  "chrome": "87",
+  "edge": "88",
   "firefox": "78",
   "ie": "11",
-  "ios": "12.2",
-  "opera": "71",
+  "ios": "13.4",
+  "opera": "74",
   "safari": "13.1",
-  "samsung": "11.1"
+  "samsung": "12"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { ie, ios < 13 }
-  proposal-logical-assignment-operators { chrome < 85, firefox < 79, ie, ios < 14, opera, safari < 14, samsung }
-  proposal-nullish-coalescing-operator { ie, ios < 13.4, samsung < 13 }
-  proposal-optional-chaining { android, chrome, edge, ie, ios < 13.4, opera, samsung }
+  proposal-numeric-separator { ie }
+  proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, opera, safari < 14, samsung }
+  proposal-nullish-coalescing-operator { ie, samsung < 13 }
+  proposal-optional-chaining { android, chrome, edge, ie, opera, samsung }
   proposal-json-strings { ie }
   proposal-optional-catch-binding { ie }
   transform-parameters { ie }
@@ -30,7 +30,7 @@ Using plugins:
   transform-named-capturing-groups-regex { ie }
   transform-async-to-generator { ie }
   transform-exponentiation-operator { ie }
-  transform-template-literals { ie, ios < 13 }
+  transform-template-literals { ie }
   transform-literals { ie }
   transform-function-name { ie }
   transform-arrow-functions { ie }

@@ -1,3 +1,3 @@
 const bar = "bar";
 
-const x = () => "foo".concat(bar);
+const x = () => `foo${bar}`;
