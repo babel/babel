@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["proposal-private-property-in-object", { "nativePrivateFields": true }],
+    "syntax-class-properties"
+  ]
+}

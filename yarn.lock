@@ -1442,6 +1442,7 @@ __metadata:
     "@babel/helper-create-class-features-plugin": "workspace:^7.13.0"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
+    "@babel/plugin-syntax-private-property-in-object": "workspace:^7.13.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -1810,6 +1811,16 @@ __metadata:
   resolution: "@babel/plugin-syntax-pipeline-operator@workspace:packages/babel-plugin-syntax-pipeline-operator"
   dependencies:
     "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-syntax-private-property-in-object@workspace:^7.13.0, @babel/plugin-syntax-private-property-in-object@workspace:packages/babel-plugin-syntax-private-property-in-object":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-private-property-in-object@workspace:packages/babel-plugin-syntax-private-property-in-object"
+  dependencies:
     "@babel/helper-plugin-utils": "workspace:^7.12.13"
   peerDependencies:
     "@babel/core": ^7.0.0-0
