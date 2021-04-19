@@ -2,14 +2,14 @@
 
 Using targets:
 {
-  "android": "85",
-  "chrome": "85",
-  "edge": "85",
-  "firefox": "81",
+  "android": "89",
+  "chrome": "89",
+  "edge": "89",
+  "firefox": "86",
   "ios": "13.4",
-  "opera": "71",
+  "opera": "74",
   "safari": "13.1",
-  "samsung": "11.1"
+  "samsung": "12"
 }
 
 Using modules transform: auto

@@ -2,28 +2,27 @@
 
 Using targets:
 {
-  "android": "85",
-  "chrome": "84",
-  "edge": "85",
+  "android": "89",
+  "chrome": "87",
+  "edge": "88",
   "firefox": "78",
-  "ios": "12.2",
-  "opera": "71",
+  "ios": "13.4",
+  "opera": "74",
   "safari": "13.1",
-  "samsung": "11.1"
+  "samsung": "12"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { ios < 13 }
-  proposal-logical-assignment-operators { chrome < 85, firefox < 79, ios < 14, opera, safari < 14, samsung }
-  proposal-nullish-coalescing-operator { ios < 13.4, samsung < 13 }
-  proposal-optional-chaining { android, chrome, edge, ios < 13.4, opera, samsung }
+  syntax-numeric-separator
+  proposal-logical-assignment-operators { firefox < 79, ios < 14, opera, safari < 14, samsung }
+  proposal-nullish-coalescing-operator { samsung < 13 }
+  proposal-optional-chaining { android, chrome, edge, opera, samsung }
   syntax-json-strings
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  transform-template-literals { ios < 13 }
   proposal-export-namespace-from { firefox < 80, ios, safari }
   transform-modules-commonjs
   proposal-dynamic-import

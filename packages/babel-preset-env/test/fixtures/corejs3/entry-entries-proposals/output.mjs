@@ -35,7 +35,6 @@ import "core-js/modules/esnext.math.signbit.js";
 import "core-js/modules/esnext.math.umulh.js";
 import "core-js/modules/esnext.number.from-string.js";
 import "core-js/modules/esnext.observable.js";
-import "core-js/modules/esnext.promise.all-settled.js";
 import "core-js/modules/esnext.promise.any.js";
 import "core-js/modules/esnext.promise.try.js";
 import "core-js/modules/esnext.reflect.define-metadata.js";
