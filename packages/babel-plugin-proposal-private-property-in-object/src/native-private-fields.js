@@ -3,7 +3,7 @@ import { injectInitialization as injectConstructorInit } from "@babel/helper-cre
 
 export default function pluginPrivateIn({ types: t, template }) {
   const classWeakSets = new WeakMap();
-  const fieldsWeakSets = new WeakSet();
+  const fieldsWeakSets = new WeakMap();
 
   function unshadow(name, targetScope, scope) {
     while (scope !== targetScope) {
