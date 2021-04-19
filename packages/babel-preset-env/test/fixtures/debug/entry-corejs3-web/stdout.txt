@@ -9,6 +9,7 @@ Using modules transform: auto
 
 Using plugins:
   proposal-class-static-block { ie }
+  proposal-private-property-in-object { ie }
   proposal-class-properties { ie }
   proposal-private-methods { ie }
   proposal-numeric-separator { ie }
