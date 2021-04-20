@@ -1,6 +1,5 @@
 name: "🚀 Feature Request"
 description: "I have a specific suggestion for Babel!"
-title: ""
 labels: ["i: needs triage", "i: enhancement"]
 body:
   - type: markdown
@@ -8,8 +7,9 @@ body:
       value: Thanks for taking the time to suggest a new feature! Please fill out this form as completely as possible.
 
   - type: checkboxes
+    id: input1
     attributes:
-      label: ""
+      label: "💻"
       description: |
         Check this if you would like to implement a PR, we are more than happy to help you go through the process
       options:
