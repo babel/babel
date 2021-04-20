@@ -189,7 +189,8 @@ export const ErrorMessages = makeErrorTemplates(
       "Leading decorators must be attached to a class declaration.",
     UnexpectedLexicalDeclaration:
       "Lexical declaration cannot appear in a single-statement context.",
-    UnexpectedNewTarget: "`new.target` can only be used in functions.",
+    UnexpectedNewTarget:
+      "`new.target` can only be used in functions or class properties.",
     UnexpectedNumericSeparator:
       "A numeric separator is only allowed between two digits.",
     UnexpectedPrivateField:
