@@ -19,6 +19,17 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.17 (2021-04-20)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-transform-modules-commonjs`
+  * [#13185](https://github.com/babel/babel/pull/13185) Fix undeclared variable in `iterableToArrayLimit` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-do-expressions`, `babel-traverse`
+  * [#13084](https://github.com/babel/babel/pull/13084) Fix completion record for labeled statement ([@addaleax](https://github.com/addaleax))
+* `babel-plugin-transform-destructuring`
+  * [#13173](https://github.com/babel/babel/pull/13173) fix(destructuring): preserve loc of original declaration in output ([@motiz88](https://github.com/motiz88))
+* `babel-types`
+  * [#13178](https://github.com/babel/babel/pull/13178) fix: clone comments in cloneNode ([@gzzhanghao](https://github.com/gzzhanghao))
 ## v7.13.16 (2021-04-20)
 
 #### :eyeglasses: Spec Compliance
