@@ -1,0 +1,5 @@
+{
+  "targets": { "node": 10 },
+  "plugins": ["proposal-private-property-in-object", "syntax-class-properties"],
+  "throws": "Class fields are not enabled. If you want to only compile '#priv in obj' checks, you can either pass the `nativePrivateFields: true` option to @babel/plugin-proposal-private-property-in-object or you can set the top-level 'targets' option to something that natively supports private fields and methods."
+}
