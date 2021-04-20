@@ -10,7 +10,7 @@ body:
   - type: checkboxes
     id: input1
     attributes:
-      label: "🐛"
+      label: "💻"
       options:
         - label: Would you like to work on a fix?
 
