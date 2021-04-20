@@ -62,5 +62,10 @@ const x = n => function () {
       }
 
     case 7:
+      {
+        a: return "m";
+      }
+
+    case 8:
   }
 }();

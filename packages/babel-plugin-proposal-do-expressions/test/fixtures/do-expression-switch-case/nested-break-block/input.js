@@ -21,5 +21,8 @@ const x = (n) => do {
       }
       { break; "l" }
     case 7:
+      { a: "m" }
+      break;
+    case 8:
   }
 }
