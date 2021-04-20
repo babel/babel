@@ -1283,7 +1283,6 @@ export default class ExpressionParser extends LValParser {
     const isPrivate = this.match(tt.hash);
 
     if (isPrivate) {
-      this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       if (!isPrivateNameAllowed) {
         this.raise(this.state.pos, Errors.UnexpectedPrivateField);
       }
@@ -1520,15 +1519,7 @@ export default class ExpressionParser extends LValParser {
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
       if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
-        const errorTemplate = { ...Errors.UnexpectedNewTarget };
-
-        if (this.hasPlugin("classProperties")) {
-          errorTemplate.template += " or class properties";
-        }
-
-        /* eslint-disable @babel/development-internal/dry-error-messages */
-        this.raise(metaProp.start, errorTemplate);
-        /* eslint-enable @babel/development-internal/dry-error-messages */
+        this.raise(metaProp.start, Errors.UnexpectedNewTarget);
       }
 
       return metaProp;

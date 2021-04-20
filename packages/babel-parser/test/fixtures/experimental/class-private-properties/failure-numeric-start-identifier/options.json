@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "classPrivateProperties"
-  ],
-  "throws": "Unexpected digit after hash token. (2:2)"
-}
