@@ -1,6 +1,5 @@
-name: "🚀 Feature Request"
+name: "🚀 Feature Request 2"
 description: "I have a specific suggestion for Babel!"
-title: ""
 labels: ["i: needs triage", "i: enhancement"]
 body:
   - type: markdown
@@ -8,6 +7,7 @@ body:
       value: Thanks for taking the time to suggest a new feature! Please fill out this form as completely as possible.
 
   - type: checkboxes
+    id: input1
     attributes:
       label: ""
       description: |
