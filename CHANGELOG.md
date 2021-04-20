@@ -19,6 +19,39 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.13.16 (2021-04-20)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#13143](https://github.com/babel/babel/pull/13143) fix: raise `SyntaxError` for `declare` before getter/setter ([@fedeci](https://github.com/fedeci))
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-spread`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime`
+  * [#13129](https://github.com/babel/babel/pull/13129) Support iterating generators in browsers without `Symbol` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-compilation-targets`
+  * [#13159](https://github.com/babel/babel/pull/13159) fix: add default value for browserslist config path ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#13136](https://github.com/babel/babel/pull/13136) Fix printing of single-param async arrow function with comments ([@nwalters512](https://github.com/nwalters512))
+
+#### :memo: Documentation
+* Other
+  * [#13155](https://github.com/babel/babel/pull/13155) Update links in eslint-parser README ([@codyatwork](https://github.com/codyatwork))
+* `babel-types`
+  * [#13148](https://github.com/babel/babel/pull/13148) docs: refine babel-types docs generator ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-compilation-targets`
+  * [#13131](https://github.com/babel/babel/pull/13131) docs: add README to helper-compilation-targets ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-helper-bindify-decorators`, `babel-helper-explode-class`
+  * [#13160](https://github.com/babel/babel/pull/13160) Archive helper-explode-class and helper-bindify-decorators ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#13158](https://github.com/babel/babel/pull/13158) codecov: token not required ([@hzoo](https://github.com/hzoo))
+* `babel-helper-call-delegate`
+  * [#13153](https://github.com/babel/babel/pull/13153) Archive `@babel/helper-call-delegate` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-hoist-variables`, `babel-plugin-transform-block-scoping`
+  * [#13152](https://github.com/babel/babel/pull/13152) refactor: use FunctionParent on visiting var scope ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-plugin-transform-function-name`, `babel-register`, `babel-types`
+  * [#13139](https://github.com/babel/babel/pull/13139) Remove remaining `lodash` dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.15 (2021-04-08)
 
 #### :eyeglasses: Spec Compliance
