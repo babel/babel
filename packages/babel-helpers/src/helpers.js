@@ -1018,9 +1018,9 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _e = undefined;
+    var _s, _e;
     try {
-      for (_i = _i.call(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
         if (i && _arr.length === i) break;
       }
