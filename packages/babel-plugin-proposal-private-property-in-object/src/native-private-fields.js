@@ -1,7 +1,11 @@
 import syntaxPlugin from "@babel/plugin-syntax-private-property-in-object";
-import { injectInitialization as injectConstructorInit } from "@babel/helper-create-class-features-plugin";
+import {
+  enableFeature,
+  FEATURES,
+  injectInitialization as injectConstructorInit,
+} from "@babel/helper-create-class-features-plugin";
 
-export default function pluginPrivateIn({ types: t, template }) {
+export default function pluginPrivateIn({ types: t, template }, options) {
   const classWeakSets = new WeakMap();
   const fieldsWeakSets = new WeakMap();
 
@@ -68,6 +72,9 @@ export default function pluginPrivateIn({ types: t, template }) {
   return {
     name: "proposal-private-property-in-object",
     inherits: syntaxPlugin,
+    pre() {
+      enableFeature(this.file, FEATURES.privateIn, options.loose);
+    },
     visitor: {
       BinaryExpression(path) {
         const { node } = path;

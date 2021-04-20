@@ -1,36 +1,17 @@
 /* eslint-disable @babel/development/plugin-name */
 
 import { declare } from "@babel/helper-plugin-utils";
-import {
-  createClassFeaturePlugin,
-  FEATURES,
-} from "@babel/helper-create-class-features-plugin";
-import { isRequired } from "@babel/helper-compilation-targets";
 
 import pluginPrivateIn from "./native-private-fields";
 
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const {
-    loose,
-    nativePrivateFields = !isRequired(
-      "proposal-private-methods",
-      api.targets(),
-    ),
-  } = options;
+  // NOTE: When using the class fields or private methods plugins,
+  // they will also take care of '#priv in obj' checks when visiting
+  // the ClassExpression or ClassDeclaration nodes.
+  // The visitor of this plugin is only effective when not compiling
+  // private fields and methods.
 
-  if (nativePrivateFields) return pluginPrivateIn(api);
-
-  return createClassFeaturePlugin({
-    name: "proposal-class-properties",
-
-    api,
-    feature: FEATURES.privateIn,
-    loose,
-
-    manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("privateIn");
-    },
-  });
+  return pluginPrivateIn(api, options);
 });
