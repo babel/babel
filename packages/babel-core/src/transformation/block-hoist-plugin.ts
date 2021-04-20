@@ -12,6 +12,7 @@ export default function loadBlockHoistPlugin(): Plugin {
     const config = loadConfig.sync({
       babelrc: false,
       configFile: false,
+      browserslistConfigFile: false,
       plugins: [blockHoistPlugin],
     });
     LOADED_PLUGIN = config ? config.passes[0][0] : undefined;
@@ -20,6 +21,11 @@ export default function loadBlockHoistPlugin(): Plugin {
 
   return LOADED_PLUGIN;
 }
+
+export function resetBlockHoistPlugin(): void {
+  LOADED_PLUGIN = undefined;
+}
+
 function priority(bodyNode) {
   const priority = bodyNode?._blockHoist;
   if (priority == null) return 1;

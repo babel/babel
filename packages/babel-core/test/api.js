@@ -8,6 +8,8 @@ import { fileURLToPath } from "url";
 import presetEnv from "../../babel-preset-env";
 import pluginSyntaxFlow from "../../babel-plugin-syntax-flow";
 import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types";
+import * as helperCompilationTargets from "../../babel-helper-compilation-targets";
+import { resetBlockHoistPlugin } from "../lib/transformation/block-hoist-plugin";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -170,6 +172,38 @@ describe("api", function () {
       "foo();",
     );
     expect(options).toEqual({ babelrc: false });
+  });
+
+  describe("browserslistConfigFile", function () {
+    afterEach(function () {
+      jest.restoreAllMocks();
+    });
+
+    it("passes `ignoreBrowserslistConfig` to getTargets when browserslistConfigFile is false", function () {
+      const realGetTargets = helperCompilationTargets.default;
+      const getTargets = jest
+        .spyOn(helperCompilationTargets, "default")
+        .mockImplementation((inputTargets, options) => {
+          if (options.ignoreBrowserslistConfig !== true) {
+            throw new Error(
+              `getTargets should not be called with ignoreBrowserslistConfig set to a value other than true but called with '${options.ignoreBrowserslistsConfig}'`,
+            );
+          }
+
+          return realGetTargets(inputTargets, options);
+        });
+
+      const options = {
+        babelrc: false,
+        browserslistConfigFile: false,
+      };
+      resetBlockHoistPlugin(); // Force reload the plugin
+
+      Object.freeze(options);
+      transformFileSync(cwd + "/fixtures/api/file.js", options);
+
+      expect(getTargets).toHaveBeenCalled();
+    });
   });
 
   it("transformFromAst should not mutate the AST", function () {
