@@ -1564,8 +1564,6 @@ export default class StatementParser extends ExpressionParser {
     classBody: N.ClassBody,
     prop: N.ClassPrivateProperty,
   ) {
-    this.expectPlugin("classPrivateProperties", prop.key.start);
-
     const node = this.parseClassPrivateProperty(prop);
     classBody.body.push(node);
 
@@ -1603,8 +1601,6 @@ export default class StatementParser extends ExpressionParser {
     isGenerator: boolean,
     isAsync: boolean,
   ): void {
-    this.expectPlugin("classPrivateMethods", method.key.start);
-
     const node = this.parseMethod(
       method,
       isGenerator,
@@ -1650,9 +1646,6 @@ export default class StatementParser extends ExpressionParser {
 
   // https://tc39.es/proposal-class-fields/#prod-FieldDefinition
   parseClassProperty(node: N.ClassProperty): N.ClassProperty {
-    if (!node.typeAnnotation || this.match(tt.eq)) {
-      this.expectPlugin("classProperties");
-    }
     this.parseInitializer(node);
     this.semicolon();
     return this.finishNode(node, "ClassProperty");

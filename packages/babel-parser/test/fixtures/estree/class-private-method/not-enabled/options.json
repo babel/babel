@@ -1,3 +1,3 @@
 {
-  "plugins": ["flow", "jsx", "estree", "classPrivateMethods"]
+  "plugins": ["flow", "jsx", "estree"]
 }
