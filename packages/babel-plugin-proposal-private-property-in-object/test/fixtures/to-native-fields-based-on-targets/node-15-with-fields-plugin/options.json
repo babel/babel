@@ -1,7 +1,0 @@
-{
-  "targets": { "node": 15 },
-  "plugins": [
-    "proposal-private-property-in-object",
-    "proposal-class-properties"
-  ]
-}

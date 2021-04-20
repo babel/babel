@@ -170,16 +170,7 @@ export function verifyUsedFeatures(path, file) {
 
   if (path.isProperty()) {
     if (!hasFeature(file, FEATURES.fields)) {
-      let msg = "Class fields are not enabled.";
-      if (file.get(featuresKey) === FEATURES.privateIn) {
-        msg +=
-          " If you want to only compile '#priv in obj' checks, you" +
-          " can either pass the `nativePrivateFields: true` option to" +
-          " @babel/plugin-proposal-private-property-in-object or you" +
-          " can set the top-level 'targets' option to something that" +
-          " natively supports private fields and methods.";
-      }
-      throw path.buildCodeFrameError(msg);
+      throw path.buildCodeFrameError("Class fields are not enabled.");
     }
   }
 }
