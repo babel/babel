@@ -1,8 +1,8 @@
-var _ABrandCheck = new WeakSet();
+var _fooBrandCheck = new WeakSet();
 
 class A {
-  #foo = void _ABrandCheck.add(this);
+  #foo = void _fooBrandCheck.add(this);
   static #_ = (() => {
-    register(A, _ABrandCheck.has(A));
+    register(A, _fooBrandCheck.has(A));
   })();
 }
