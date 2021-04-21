@@ -22,10 +22,6 @@ export default function loadBlockHoistPlugin(): Plugin {
   return LOADED_PLUGIN;
 }
 
-export function resetBlockHoistPlugin(): void {
-  LOADED_PLUGIN = undefined;
-}
-
 function priority(bodyNode) {
   const priority = bodyNode?._blockHoist;
   if (priority == null) return 1;
