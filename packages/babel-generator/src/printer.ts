@@ -44,7 +44,6 @@ class Printer {
   _printStack: Array<t.Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;
-  _printedCommentStarts: any = {};
   _parenPushNewlineState: any = null;
   _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
@@ -597,11 +596,6 @@ class Printer {
 
     if (this._printedComments.has(comment)) return;
     this._printedComments.add(comment);
-
-    if (comment.start != null) {
-      if (this._printedCommentStarts[comment.start]) return;
-      this._printedCommentStarts[comment.start] = true;
-    }
 
     const isBlockComment = comment.type === "CommentBlock";
 

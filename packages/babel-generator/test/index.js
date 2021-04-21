@@ -348,6 +348,20 @@ describe("generation", function () {
     const output = generate(type).code;
     expect(output).toBe("(infer T)[]");
   });
+
+  it("should not deduplicate comments with same start index", () => {
+    const code1 = "/*#__PURE__*/ a();";
+    const code2 = "/*#__PURE__*/ b();";
+
+    const ast1 = parse(code1).program;
+    const ast2 = parse(code2).program;
+
+    const ast = t.program([...ast1.body, ...ast2.body]);
+
+    expect(generate(ast).code).toBe(
+      "/*#__PURE__*/\na();\n\n/*#__PURE__*/\nb();",
+    );
+  });
 });
 
 describe("programmatic generation", function () {
