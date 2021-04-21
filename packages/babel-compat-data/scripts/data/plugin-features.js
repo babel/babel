@@ -136,6 +136,8 @@ const es2021 = {
 
 const shippedProposal = {
   "proposal-class-static-block": "Class static initialization blocks",
+  "proposal-private-property-in-object":
+    "Ergonomic brand checks for private fields",
   "proposal-class-properties": {
     features: [
       "static class fields",

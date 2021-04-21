@@ -1443,7 +1443,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-private-property-in-object@workspace:*, @babel/plugin-proposal-private-property-in-object@workspace:packages/babel-plugin-proposal-private-property-in-object":
+"@babel/plugin-proposal-private-property-in-object@workspace:*, @babel/plugin-proposal-private-property-in-object@workspace:^7.13.0, @babel/plugin-proposal-private-property-in-object@workspace:packages/babel-plugin-proposal-private-property-in-object":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-private-property-in-object@workspace:packages/babel-plugin-proposal-private-property-in-object"
   dependencies:
@@ -3111,6 +3111,7 @@ __metadata:
     "@babel/plugin-proposal-optional-catch-binding": "workspace:^7.13.8"
     "@babel/plugin-proposal-optional-chaining": "workspace:^7.13.12"
     "@babel/plugin-proposal-private-methods": "workspace:^7.13.0"
+    "@babel/plugin-proposal-private-property-in-object": "workspace:^7.13.0"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^7.12.13"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": "workspace:^7.12.13"
@@ -3124,6 +3125,7 @@ __metadata:
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
     "@babel/plugin-syntax-optional-chaining": ^7.8.3
+    "@babel/plugin-syntax-private-property-in-object": "workspace:^7.13.0"
     "@babel/plugin-syntax-top-level-await": "workspace:^7.12.13"
     "@babel/plugin-transform-arrow-functions": "workspace:^7.13.0"
     "@babel/plugin-transform-async-to-generator": "workspace:^7.13.0"
