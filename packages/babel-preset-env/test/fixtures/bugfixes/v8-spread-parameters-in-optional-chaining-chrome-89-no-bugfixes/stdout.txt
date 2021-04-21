@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  syntax-class-properties
   syntax-numeric-separator
   syntax-nullish-coalescing-operator
   proposal-optional-chaining { chrome }

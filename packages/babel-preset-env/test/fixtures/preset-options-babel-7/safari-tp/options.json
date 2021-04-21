@@ -5,8 +5,7 @@
       {
         "targets": {
           "safari": "tp"
-        },
-        "shippedProposals": true
+        }
       }
     ]
   ]

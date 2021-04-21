@@ -11,6 +11,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-properties { chrome < 84, electron < 10.0, ie, node < 14.6 }
+  proposal-private-methods { chrome < 84, electron < 10.0, ie, node < 14.6 }
   proposal-numeric-separator { chrome < 75, electron < 6.0, ie, node < 12.5 }
   proposal-logical-assignment-operators { chrome < 85, electron < 10.0, ie, node < 15 }
   proposal-nullish-coalescing-operator { chrome < 80, electron < 8.0, ie, node < 14 }
