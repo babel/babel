@@ -12,8 +12,14 @@
     "files": [
       "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts}"
     ],
+    "excludeFiles": ["**/packages/babel-helpers/src/helpers/**/*.js"],
     "options": {
       "trailingComma": "all"
+    }
+  }, {
+    "files": "**/packages/babel-helpers/src/helpers/**/*.js",
+    "options": {
+      "trailingComma": "es5"
     }
   }, {
     "files": [

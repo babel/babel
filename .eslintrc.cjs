@@ -112,6 +112,13 @@ module.exports = {
       },
     },
     {
+      files: ["packages/babel-helpers/src/helpers/**.js"],
+      rules: {
+        "no-var": "off",
+        "comma-dangle": "off",
+      },
+    },
+    {
       files: ["packages/babel-traverse/scripts/**/*.js"],
       rules: {
         "import/no-extraneous-dependencies": [
