@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-properties { ie }
+  proposal-private-methods { ie }
   proposal-numeric-separator { ie }
   proposal-logical-assignment-operators { ie }
   proposal-nullish-coalescing-operator { ie }
