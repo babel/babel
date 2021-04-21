@@ -2,6 +2,9 @@
   "proposal-class-static-block": {
     "chrome": "91"
   },
+  "proposal-private-property-in-object": {
+    "chrome": "91"
+  },
   "proposal-class-properties": {
     "chrome": "74",
     "opera": "62",
