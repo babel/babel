@@ -26,6 +26,15 @@
       "./helpers/jsx.js"
     ],
     "./helpers/esm/jsx": "./helpers/esm/jsx.js",
+    "./helpers/objectSpread2": [
+      {
+        "node": "./helpers/objectSpread2.js",
+        "import": "./helpers/esm/objectSpread2.js",
+        "default": "./helpers/objectSpread2.js"
+      },
+      "./helpers/objectSpread2.js"
+    ],
+    "./helpers/esm/objectSpread2": "./helpers/esm/objectSpread2.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",
@@ -161,15 +170,6 @@
       "./helpers/objectSpread.js"
     ],
     "./helpers/esm/objectSpread": "./helpers/esm/objectSpread.js",
-    "./helpers/objectSpread2": [
-      {
-        "node": "./helpers/objectSpread2.js",
-        "import": "./helpers/esm/objectSpread2.js",
-        "default": "./helpers/objectSpread2.js"
-      },
-      "./helpers/objectSpread2.js"
-    ],
-    "./helpers/esm/objectSpread2": "./helpers/esm/objectSpread2.js",
     "./helpers/inherits": [
       {
         "node": "./helpers/inherits.js",
