@@ -17,15 +17,6 @@
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
-    "./helpers/typeof": [
-      {
-        "node": "./helpers/typeof.js",
-        "import": "./helpers/esm/typeof.js",
-        "default": "./helpers/typeof.js"
-      },
-      "./helpers/typeof.js"
-    ],
-    "./helpers/esm/typeof": "./helpers/esm/typeof.js",
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx.js",
@@ -35,6 +26,15 @@
       "./helpers/jsx.js"
     ],
     "./helpers/esm/jsx": "./helpers/esm/jsx.js",
+    "./helpers/typeof": [
+      {
+        "node": "./helpers/typeof.js",
+        "import": "./helpers/esm/typeof.js",
+        "default": "./helpers/typeof.js"
+      },
+      "./helpers/typeof.js"
+    ],
+    "./helpers/esm/typeof": "./helpers/esm/typeof.js",
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator.js",
