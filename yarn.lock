@@ -393,7 +393,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-compilation-targets@workspace:^7.13.13, @babel/helper-compilation-targets@workspace:^7.13.16, @babel/helper-compilation-targets@workspace:^7.13.8, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
+"@babel/helper-compilation-targets@workspace:^7.12.17, @babel/helper-compilation-targets@workspace:^7.13.13, @babel/helper-compilation-targets@workspace:^7.13.16, @babel/helper-compilation-targets@workspace:^7.13.8, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
   version: 0.0.0-use.local
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
   dependencies:
@@ -1448,9 +1448,11 @@ __metadata:
   resolution: "@babel/plugin-proposal-private-property-in-object@workspace:packages/babel-plugin-proposal-private-property-in-object"
   dependencies:
     "@babel/core": "workspace:*"
+    "@babel/helper-compilation-targets": "workspace:^7.12.17"
     "@babel/helper-create-class-features-plugin": "workspace:^7.13.0"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
+    "@babel/plugin-syntax-private-property-in-object": "workspace:^7.13.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -1819,6 +1821,16 @@ __metadata:
   resolution: "@babel/plugin-syntax-pipeline-operator@workspace:packages/babel-plugin-syntax-pipeline-operator"
   dependencies:
     "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-syntax-private-property-in-object@workspace:^7.13.0, @babel/plugin-syntax-private-property-in-object@workspace:packages/babel-plugin-syntax-private-property-in-object":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-private-property-in-object@workspace:packages/babel-plugin-syntax-private-property-in-object"
+  dependencies:
     "@babel/helper-plugin-utils": "workspace:^7.12.13"
   peerDependencies:
     "@babel/core": ^7.0.0-0
