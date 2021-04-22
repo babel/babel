@@ -5,7 +5,7 @@ class Base {
 
 }
 
-var _subStaticPrivateMethod = babelHelpers.classPrivateFieldLooseKey("subStaticPrivateMethod");
+var _subStaticPrivateMethod = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("subStaticPrivateMethod");
 
 class Sub extends Base {
   static basePublicStaticMethod() {

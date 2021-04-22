@@ -1,6 +1,6 @@
-var _priv = new WeakMap();
+var _priv = /*#__PURE__*/new WeakMap();
 
-var _method = new WeakSet();
+var _method = /*#__PURE__*/new WeakSet();
 
 class Cl {
   constructor() {

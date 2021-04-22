@@ -1,7 +1,7 @@
 function classFactory() {
   var _class, _foo, _temp, _bar;
 
-  return _temp = (_foo = new WeakMap(), _class = class Foo {
+  return _temp = (_foo = /*#__PURE__*/new WeakMap(), _class = class Foo {
     constructor() {
       _foo.set(this, {
         writable: true,

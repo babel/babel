@@ -1,6 +1,6 @@
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 
-var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 
 class Foo {
   constructor() {
@@ -15,7 +15,7 @@ class Foo {
   }
 
   test() {
-    var _bar2 = babelHelpers.classPrivateFieldLooseKey("bar");
+    var _bar2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 
     class Nested {
       constructor() {

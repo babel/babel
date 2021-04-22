@@ -1,6 +1,6 @@
-var _self = babelHelpers.classPrivateFieldLooseKey("self");
+var _self = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("self");
 
-var _getA = babelHelpers.classPrivateFieldLooseKey("getA");
+var _getA = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("getA");
 
 var A = function A() {
   "use strict";

@@ -1,6 +1,6 @@
 var results = [];
 
-var _privateFieldValue = new WeakMap();
+var _privateFieldValue = /*#__PURE__*/new WeakMap();
 
 class Foo {
   constructor() {
