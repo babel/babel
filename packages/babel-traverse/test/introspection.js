@@ -176,7 +176,6 @@ describe("path/introspection", function () {
     it('rejects the "export called *" trick', function () {
       const program = getPath(`import * as ns from "source"; ns["*"].nested;`, {
         sourceType: "module",
-        plugins: ["moduleStringNames"],
       });
       const reference = program.get("body.1.expression");
       expect(reference.referencesImport("source", "nested")).toBe(false);
