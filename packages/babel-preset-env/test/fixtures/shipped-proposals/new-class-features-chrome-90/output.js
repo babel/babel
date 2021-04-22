@@ -1,4 +1,4 @@
-var _fooBrandCheck = new WeakSet();
+var _fooBrandCheck = /*#__PURE__*/new WeakSet();
 
 class A {
   #foo = void _fooBrandCheck.add(this);
