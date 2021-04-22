@@ -108,7 +108,7 @@ function generateHelpers(generator, dest, filename, message) {
 
         file.path = filename;
         file.contents = Buffer.from(
-          formatCode(generateCode(filename), dest + file.path)
+          formatCode(await generateCode(filename), dest + file.path)
         );
         fancyLog(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
@@ -145,6 +145,15 @@ async function generateTraverseHelpers(helperKind) {
     `./packages/babel-traverse/src/path/generated/`,
     `${helperKind}.ts`,
     `@babel/traverse -> ${helperKind}`
+  );
+}
+
+async function generateRuntimeHelpers() {
+  return generateHelpers(
+    `./packages/babel-helpers/scripts/generate-helpers.js`,
+    `./packages/babel-helpers/src/`,
+    "helpers-generated.js",
+    "@babel/helpers"
   );
 }
 
@@ -487,6 +496,12 @@ gulp.task("generate-type-helpers", () => {
   ]);
 });
 
+gulp.task("generate-runtime-helpers", () => {
+  fancyLog("Generating @babel/helpers runtime helpers");
+
+  return generateRuntimeHelpers();
+});
+
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
@@ -508,7 +523,7 @@ gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 gulp.task(
   "build",
   gulp.series(
-    gulp.parallel("build-rollup", "build-babel"),
+    gulp.parallel("build-rollup", "build-babel", "generate-runtime-helpers"),
     gulp.parallel(
       "generate-standalone",
       gulp.series(
@@ -548,5 +563,9 @@ gulp.task(
       gulp.task("generate-standalone")
     );
     gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
+    gulp.watch(
+      "./packages/babel-helpers/src/helpers/*.js",
+      gulp.task("generate-runtime-helpers")
+    );
   })
 );

@@ -2,84 +2,15 @@
 
 import template from "@babel/template";
 
-const helpers = Object.create(null);
+import * as generated from "./helpers-generated";
+
+const helpers = { __proto__: null, ...generated };
 export default helpers;
 
 const helper = (minVersion: string) => tpl => ({
   minVersion,
   ast: () => template.program.ast(tpl),
 });
-
-helpers.typeof = helper("7.0.0-beta.0")`
-  export default function _typeof(obj) {
-    "@babel/helpers - typeof";
-
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) { return typeof obj; };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype
-          ? "symbol"
-          : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
-  }
-`;
-
-// "for" is a reserved keyword in ES3 so escaping it here for backward compatibility
-helpers.jsx = helper("7.0.0-beta.0")`
-  var REACT_ELEMENT_TYPE;
-
-  export default function _createRawReactElement(type, props, key, children) {
-    if (!REACT_ELEMENT_TYPE) {
-      REACT_ELEMENT_TYPE = (
-        typeof Symbol === "function" && Symbol["for"] && Symbol["for"]("react.element")
-      ) || 0xeac7;
-    }
-
-    var defaultProps = type && type.defaultProps;
-    var childrenLength = arguments.length - 3;
-
-    if (!props && childrenLength !== 0) {
-      // If we're going to assign props.children, we create a new object now
-      // to avoid mutating defaultProps.
-      props = {
-        children: void 0,
-      };
-    }
-
-    if (childrenLength === 1) {
-      props.children = children;
-    } else if (childrenLength > 1) {
-      var childArray = new Array(childrenLength);
-      for (var i = 0; i < childrenLength; i++) {
-        childArray[i] = arguments[i + 3];
-      }
-      props.children = childArray;
-    }
-
-    if (props && defaultProps) {
-      for (var propName in defaultProps) {
-        if (props[propName] === void 0) {
-          props[propName] = defaultProps[propName];
-        }
-      }
-    } else if (!props) {
-      props = defaultProps || {};
-    }
-
-    return {
-      $$typeof: REACT_ELEMENT_TYPE,
-      type: type,
-      key: key === undefined ? null : '' + key,
-      ref: null,
-      props: props,
-      _owner: null,
-    };
-  }
-`;
 
 helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
@@ -401,48 +332,6 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
       ownKeys.forEach(function(key) {
         defineProperty(target, key, source[key]);
       });
-    }
-    return target;
-  }
-`;
-
-helpers.objectSpread2 = helper("7.5.0")`
-  import defineProperty from "defineProperty";
-
-  // This function is different to "Reflect.ownKeys". The enumerableOnly
-  // filters on symbol properties only. Returned string properties are always
-  // enumerable. It is good to use in objectSpread.
-
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-    return keys;
-  }
-
-  export default function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = (arguments[i] != null) ? arguments[i] : {};
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(
-            target,
-            key,
-            Object.getOwnPropertyDescriptor(source, key)
-          );
-        });
-      }
     }
     return target;
   }
