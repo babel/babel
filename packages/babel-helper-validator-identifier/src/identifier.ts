@@ -84,17 +84,16 @@ export function isIdentifierChar(code: number): boolean {
 // Test whether a given string is a valid identifier name
 
 export function isIdentifierName(name: string): boolean {
-  let isFirst = true;
-  for (const char of Array.from(name)) {
-    const cp = char.codePointAt(0);
-    if (isFirst) {
+  for (let i = 0; i < name.length; ) {
+    const cp = name.codePointAt(i);
+    if (i === 0) {
       if (!isIdentifierStart(cp)) {
         return false;
       }
-      isFirst = false;
     } else if (!isIdentifierChar(cp)) {
       return false;
     }
+    i += cp > 0xffff ? 2 : 1;
   }
-  return !isFirst;
+  return !!name;
 }
