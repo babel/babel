@@ -4,6 +4,7 @@ import ReplaceSupers, {
 } from "@babel/helper-replace-supers";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import * as ts from "./typescript";
 
@@ -53,20 +54,23 @@ export function buildPrivateNamesNodes(
     const { static: isStatic, method: isMethod, getId, setId } = value;
     const isAccessor = getId || setId;
     const id = t.cloneNode(value.id);
+
+    let init;
+
     if (privateFieldsAsProperties) {
-      initNodes.push(
-        template.statement.ast`
-          var ${id} = ${state.addHelper("classPrivateFieldLooseKey")}("${name}")
-        `,
-      );
-    } else if (isMethod && !isStatic) {
-      if (isAccessor) {
-        initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
-      } else {
-        initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
-      }
+      init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
+        t.stringLiteral(name),
+      ]);
     } else if (!isStatic) {
-      initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
+      init = t.newExpression(
+        t.identifier(!isMethod || isAccessor ? "WeakMap" : "WeakSet"),
+        [],
+      );
+    }
+
+    if (init) {
+      annotateAsPure(init);
+      initNodes.push(template.statement.ast`var ${id} = ${init}`);
     }
   }
 

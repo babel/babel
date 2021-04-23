@@ -1,8 +1,8 @@
 var foo = "bar";
 
-var _bar = new WeakMap();
+var _bar = /*#__PURE__*/new WeakMap();
 
-var _baz = new WeakMap();
+var _baz = /*#__PURE__*/new WeakMap();
 
 var Foo = function Foo(_foo) {
   "use strict";

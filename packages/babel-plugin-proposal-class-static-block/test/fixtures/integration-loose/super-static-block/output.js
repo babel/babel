@@ -1,8 +1,8 @@
 var _class, _2, _temp;
 
-var _ = babelHelpers.classPrivateFieldLooseKey("_");
+var _ = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("_");
 
-class Foo extends (_temp = (_2 = babelHelpers.classPrivateFieldLooseKey("_"), _class = class {}), Object.defineProperty(_class, _2, {
+class Foo extends (_temp = (_2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("_"), _class = class {}), Object.defineProperty(_class, _2, {
   writable: true,
   value: (() => {
     _class.bar = 42;
@@ -15,7 +15,7 @@ Object.defineProperty(Foo, _, {
   value: (() => {
     var _class2, _3, _temp2;
 
-    Foo.foo = (_temp2 = (_3 = babelHelpers.classPrivateFieldLooseKey("_"), _class2 = class {}), Object.defineProperty(_class2, _3, {
+    Foo.foo = (_temp2 = (_3 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("_"), _class2 = class {}), Object.defineProperty(_class2, _3, {
       writable: true,
       value: (() => {
         _class2.bar = 42;

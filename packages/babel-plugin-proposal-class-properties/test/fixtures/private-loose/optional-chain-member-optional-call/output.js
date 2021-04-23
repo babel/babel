@@ -1,8 +1,8 @@
-var _x = babelHelpers.classPrivateFieldLooseKey("x");
+var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
 
-var _m = babelHelpers.classPrivateFieldLooseKey("m");
+var _m = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("m");
 
-var _self = babelHelpers.classPrivateFieldLooseKey("self");
+var _self = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("self");
 
 class Foo {
   static getSelf() {

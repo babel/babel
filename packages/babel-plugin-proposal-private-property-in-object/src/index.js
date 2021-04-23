@@ -5,6 +5,7 @@ import {
   FEATURES,
   injectInitialization as injectConstructorInit,
 } from "@babel/helper-create-class-features-plugin";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 export default declare(({ assertVersion, types: t, template }, { loose }) => {
   assertVersion(7);
@@ -72,7 +73,10 @@ export default declare(({ assertVersion, types: t, template }, { loose }) => {
 
       inject(reference, template.expression.ast`${t.cloneNode(id)}.add(this)`);
 
-      outerClass.insertBefore(template.ast`var ${id} = new WeakSet()`);
+      const newExpr = t.newExpression(t.identifier("WeakSet"), []);
+      annotateAsPure(newExpr);
+
+      outerClass.insertBefore(template.ast`var ${id} = ${newExpr}`);
     }
 
     return t.cloneNode(id);

@@ -1,7 +1,7 @@
 function fn() {
   var _privBrandCheck;
 
-  return new (_privBrandCheck = new WeakSet(), class {
+  return new (_privBrandCheck = /*#__PURE__*/new WeakSet(), class {
     #priv = void _privBrandCheck.add(this);
 
     method(obj) {

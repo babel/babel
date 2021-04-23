@@ -1,4 +1,4 @@
-var _foo = new WeakMap();
+var _foo = /*#__PURE__*/new WeakMap();
 
 var Foo = /*#__PURE__*/function () {
   "use strict";
@@ -17,7 +17,7 @@ var Foo = /*#__PURE__*/function () {
     value: function test() {
       var _babelHelpers$classPr;
 
-      var _foo2 = new WeakMap();
+      var _foo2 = /*#__PURE__*/new WeakMap();
 
       _babelHelpers$classPr = babelHelpers.classPrivateFieldGet(this, _foo2);
 

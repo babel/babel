@@ -1,4 +1,4 @@
-var _x = babelHelpers.classPrivateFieldLooseKey("x");
+var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
 
 var C = function C() {
   "use strict";

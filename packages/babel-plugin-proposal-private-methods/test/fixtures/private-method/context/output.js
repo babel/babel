@@ -1,4 +1,4 @@
-var _getStatus = new WeakSet();
+var _getStatus = /*#__PURE__*/new WeakSet();
 
 class Foo {
   constructor(status) {

@@ -5,7 +5,7 @@ class Base {
 
 }
 
-var _privateMethod = new WeakSet();
+var _privateMethod = /*#__PURE__*/new WeakSet();
 
 class Sub extends Base {
   constructor(...args) {

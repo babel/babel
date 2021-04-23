@@ -5,7 +5,7 @@ class Base {
 
 }
 
-var _privateMethod = babelHelpers.classPrivateFieldLooseKey("privateMethod");
+var _privateMethod = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateMethod");
 
 class Sub extends Base {
   constructor(...args) {

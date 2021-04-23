@@ -1,8 +1,8 @@
-var _nullish = new WeakMap();
+var _nullish = /*#__PURE__*/new WeakMap();
 
-var _and = new WeakMap();
+var _and = /*#__PURE__*/new WeakMap();
 
-var _or = new WeakMap();
+var _or = /*#__PURE__*/new WeakMap();
 
 class Foo {
   constructor() {

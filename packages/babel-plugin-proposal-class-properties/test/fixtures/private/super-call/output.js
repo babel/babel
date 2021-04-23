@@ -14,7 +14,7 @@ var A = /*#__PURE__*/function () {
   return A;
 }();
 
-var _foo = new WeakMap();
+var _foo = /*#__PURE__*/new WeakMap();
 
 var B = /*#__PURE__*/function (_A) {
   "use strict";

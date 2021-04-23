@@ -1,6 +1,6 @@
 var _foo;
 
-console.log((_foo = new WeakSet(), class A {
+console.log((_foo = /*#__PURE__*/new WeakSet(), class A {
   constructor() {
     _foo.add(this);
   }

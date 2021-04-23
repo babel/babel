@@ -1,4 +1,4 @@
-var _g = new WeakSet();
+var _g = /*#__PURE__*/new WeakSet();
 
 class C {
   constructor() {

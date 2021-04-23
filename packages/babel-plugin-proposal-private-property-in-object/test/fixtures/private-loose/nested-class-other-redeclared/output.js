@@ -1,6 +1,6 @@
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 
-var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 
 let Foo = /*#__PURE__*/function () {
   "use strict";
@@ -20,7 +20,7 @@ let Foo = /*#__PURE__*/function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      var _bar2 = babelHelpers.classPrivateFieldLooseKey("bar");
+      var _bar2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 
       let Nested = /*#__PURE__*/function () {
         function Nested() {
