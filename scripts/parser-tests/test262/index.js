@@ -143,6 +143,7 @@ const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 const featuresToPlugins = {
   "arbitrary-module-namespace-names": "moduleStringNames",
   "class-fields-private": "classPrivateProperties",
+  "class-fields-private-in": "privateIn",
   "class-fields-public": "classProperties",
   "class-methods-private": "classPrivateMethods",
   "class-static-fields-public": "classProperties",
