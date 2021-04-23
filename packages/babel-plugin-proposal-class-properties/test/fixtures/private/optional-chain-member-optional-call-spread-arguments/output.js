@@ -1,4 +1,4 @@
-var _m = new WeakMap();
+var _m = /*#__PURE__*/new WeakMap();
 
 class Foo {
   constructor() {

@@ -1,6 +1,6 @@
-var _p = babelHelpers.classPrivateFieldLooseKey("p");
+var _p = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("p");
 
-var _q = babelHelpers.classPrivateFieldLooseKey("q");
+var _q = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("q");
 
 class C {
   constructor() {

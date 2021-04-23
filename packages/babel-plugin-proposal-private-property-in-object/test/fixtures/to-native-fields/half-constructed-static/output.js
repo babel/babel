@@ -1,8 +1,8 @@
 var _temp, _temp2;
 
-var _xBrandCheck = new WeakSet();
+var _xBrandCheck = /*#__PURE__*/new WeakSet();
 
-var _yBrandCheck = new WeakSet();
+var _yBrandCheck = /*#__PURE__*/new WeakSet();
 
 class F {
   static m() {

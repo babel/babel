@@ -1,4 +1,4 @@
-var _ = babelHelpers.classPrivateFieldLooseKey("_");
+var _ = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("_");
 
 class Foo {}
 

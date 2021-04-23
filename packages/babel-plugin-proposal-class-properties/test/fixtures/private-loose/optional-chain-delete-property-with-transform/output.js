@@ -1,6 +1,6 @@
-var _x = babelHelpers.classPrivateFieldLooseKey("x");
+var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
 
-var _self = babelHelpers.classPrivateFieldLooseKey("self");
+var _self = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("self");
 
 class Foo {
   static getSelf() {

@@ -17,7 +17,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-compilation-targets": "workspace:^7.12.17",
+    "@babel/helper-annotate-as-pure": "workspace:^7.12.13",
     "@babel/helper-create-class-features-plugin": "workspace:^7.13.0",
     "@babel/helper-plugin-utils": "workspace:^7.13.0",
     "@babel/plugin-syntax-private-property-in-object": "workspace:^7.13.0"

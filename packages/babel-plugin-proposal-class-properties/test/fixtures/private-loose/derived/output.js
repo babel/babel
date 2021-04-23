@@ -1,4 +1,4 @@
-var _prop = babelHelpers.classPrivateFieldLooseKey("prop");
+var _prop = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
 
 var Foo = function Foo() {
   "use strict";
@@ -10,7 +10,7 @@ var Foo = function Foo() {
   });
 };
 
-var _prop2 = babelHelpers.classPrivateFieldLooseKey("prop");
+var _prop2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
 
 var Bar = /*#__PURE__*/function (_Foo) {
   "use strict";

@@ -1,6 +1,6 @@
-var _privateField = new WeakMap();
+var _privateField = /*#__PURE__*/new WeakMap();
 
-var _getSet = new WeakMap();
+var _getSet = /*#__PURE__*/new WeakMap();
 
 class Cl {
   constructor() {

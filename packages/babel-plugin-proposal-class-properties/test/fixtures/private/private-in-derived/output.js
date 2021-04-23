@@ -1,4 +1,4 @@
-var _outer = new WeakMap();
+var _outer = /*#__PURE__*/new WeakMap();
 
 var Outer = function Outer() {
   "use strict";

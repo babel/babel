@@ -1,4 +1,4 @@
-var _client = babelHelpers.classPrivateFieldLooseKey("client");
+var _client = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("client");
 
 var Foo = function Foo(props) {
   "use strict";

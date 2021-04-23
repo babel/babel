@@ -1,4 +1,4 @@
-var _FooBrandCheck = new WeakSet();
+var _FooBrandCheck = /*#__PURE__*/new WeakSet();
 
 class Foo {
   constructor() {

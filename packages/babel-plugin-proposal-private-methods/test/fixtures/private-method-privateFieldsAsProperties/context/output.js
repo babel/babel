@@ -1,4 +1,4 @@
-var _getStatus = babelHelpers.classPrivateFieldLooseKey("getStatus");
+var _getStatus = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("getStatus");
 
 class Foo {
   constructor(status) {
