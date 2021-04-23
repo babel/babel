@@ -4,7 +4,17 @@ describe("isIdentifierName", function () {
   it("returns false if provided string is empty", function () {
     expect(isIdentifierName("")).toBe(false);
   });
-  it.each(["hello", "$", "ゆゆ式", "$20", "hello20", "_", "if"])(
+  it.each([
+    "hello",
+    "$",
+    "ゆゆ式",
+    "$20",
+    "hello20",
+    "_",
+    "if",
+    "_\u200c",
+    "_\u200d",
+  ])(
     "returns true if provided string %p is an IdentifierName",
     function (word) {
       expect(isIdentifierName(word)).toBe(true);
@@ -18,5 +28,14 @@ describe("isIdentifierName", function () {
   );
   it("supports astral symbols", function () {
     expect(isIdentifierName("x\uDB40\uDDD5")).toBe(true);
+  });
+  it("supports Unicode 13", () => {
+    expect(isIdentifierName("\u{30000}")).toBe(true);
+  });
+  it("supports Unicode 12", () => {
+    expect(isIdentifierName("\u{10fe0}")).toBe(true);
+  });
+  it("supports Unicode 11", () => {
+    expect(isIdentifierName("\u{10f00}")).toBe(true);
   });
 });
