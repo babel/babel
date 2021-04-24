@@ -30,7 +30,7 @@ export default function _wrapRegExp() {
       return _super[Symbol.replace].call(
         this,
         str,
-        substitution.replace(/\\$<([^>]+)>/g, function (_, name) {
+        substitution.replace(/\$<([^>]+)>/g, function (_, name) {
           return "$" + groups[name];
         })
       );
