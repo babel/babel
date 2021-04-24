@@ -1,4 +1,4 @@
-const x = n => function () {
+const x = (n) => function () {
   switch (n) {
     case 0:
       'a';

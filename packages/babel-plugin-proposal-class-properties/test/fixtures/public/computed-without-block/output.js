@@ -1,4 +1,4 @@
-var createClass = k => {
+var createClass = (k) => {
   var _k;
 
   return _k = k(), /*#__PURE__*/function () {

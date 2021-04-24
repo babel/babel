@@ -1,6 +1,6 @@
 var _templateObject, _templateObject2;
 
-var tag = v => v;
+var tag = (v) => v;
 
 function foo() {
   return tag(_templateObject || (_templateObject = babelHelpers.taggedTemplateLiteral(["some template"])));

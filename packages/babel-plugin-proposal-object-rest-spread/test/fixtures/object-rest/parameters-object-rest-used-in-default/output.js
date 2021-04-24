@@ -53,9 +53,9 @@
 };
 
 (_ref10, {
-  a = R => R
+  a = (R) => R
 } = {
-  b: R => R
+  b: (R) => R
 }) => {
   let R = babelHelpers.extends({}, _ref10);
 };

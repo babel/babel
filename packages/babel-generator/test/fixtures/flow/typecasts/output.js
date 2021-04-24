@@ -6,5 +6,5 @@
   xxx: number,
   yyy: string,
 });
-(xxx => xxx + 1: (xxx: number) => number);
+((xxx) => xxx + 1: (xxx: number) => number);
 (xxx: number), (yyy: string);

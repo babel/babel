@@ -11,14 +11,14 @@ class BugReport extends React.Component {
     }) => {
       var _div;
 
-      return data => {
+      return (data) => {
         return _div || (_div = <div color={color}>does not reference data</div>);
       };
     };
 
     this.thisWorks = ({
       color
-    }) => data => {
+    }) => (data) => {
       return <div color={color}>{data}</div>;
     };
   }

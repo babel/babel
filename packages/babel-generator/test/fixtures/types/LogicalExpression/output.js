@@ -1,5 +1,5 @@
 foo || bar;
-(x => x) || bar;
+((x) => x) || bar;
 
 (function a(x) {
   return x;

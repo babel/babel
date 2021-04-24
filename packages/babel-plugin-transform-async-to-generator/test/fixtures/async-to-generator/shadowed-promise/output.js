@@ -6,7 +6,7 @@ function foo() {
 
 function _foo() {
   _foo = babelHelpers.asyncToGenerator(function* () {
-    yield new Promise(resolve => {
+    yield new Promise((resolve) => {
       resolve();
     });
   });

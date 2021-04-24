@@ -1,4 +1,4 @@
-export default (param => {
+export default ((param) => {
   var _class, _props, _temp;
 
   return _temp = (_props = babelHelpers.classPrivateFieldLooseKey("props"), _class = class App {

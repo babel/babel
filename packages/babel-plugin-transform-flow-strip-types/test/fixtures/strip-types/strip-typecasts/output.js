@@ -4,6 +4,6 @@ xxx;
   yyy: "hey"
 });
 
-xxx => xxx + 1;
+(xxx) => xxx + 1;
 
 xxx, yyy;

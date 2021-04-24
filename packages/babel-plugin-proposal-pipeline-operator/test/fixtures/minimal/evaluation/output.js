@@ -7,7 +7,7 @@ var obj = {
 
   get method() {
     if (!this._prop) throw new Error('invalid evaluation order');
-    return v => v;
+    return (v) => v;
   }
 
 };

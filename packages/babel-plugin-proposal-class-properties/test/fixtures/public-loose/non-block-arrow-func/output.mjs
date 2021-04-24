@@ -1,4 +1,4 @@
-export default (param => {
+export default ((param) => {
   var _class, _temp;
 
   return _temp = _class = /*#__PURE__*/function () {

@@ -1,4 +1,4 @@
-export default (param => {
+export default ((param) => {
   var _class, _temp, _props;
 
   return _temp = _class = class App {

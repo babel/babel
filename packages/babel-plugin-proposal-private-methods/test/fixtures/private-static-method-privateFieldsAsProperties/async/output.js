@@ -14,6 +14,6 @@ async function _privateStaticMethod2() {
 Object.defineProperty(Cl, _privateStaticMethod, {
   value: _privateStaticMethod2
 });
-return new Cl().test().then(val => {
+return new Cl().test().then((val) => {
   expect(val).toBe(2);
 });
