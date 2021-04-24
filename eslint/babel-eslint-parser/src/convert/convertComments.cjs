@@ -1,4 +1,4 @@
-export default function convertComments(comments) {
+module.exports = function convertComments(comments) {
   for (const comment of comments) {
     if (comment.type === "CommentBlock") {
       comment.type = "Block";
@@ -11,4 +11,4 @@ export default function convertComments(comments) {
       comment.range = [comment.start, comment.end];
     }
   }
-}
+};

@@ -1,12 +1,4 @@
-import { tokTypes } from "@babel/core";
-
-const tl = (
-  process.env.BABEL_8_BREAKING
-    ? Object.fromEntries
-    : p => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {})
-)(Object.keys(tokTypes).map(key => [key, tokTypes[key].label]));
-
-function convertTemplateType(tokens) {
+function convertTemplateType(tokens, tl) {
   let curlyBrace = null;
   let templateTokens = [];
   const result = [];
@@ -97,7 +89,7 @@ function convertTemplateType(tokens) {
   return result;
 }
 
-function convertToken(token, source) {
+function convertToken(token, source, tl) {
   const { type } = token;
   const { label } = type;
   token.range = [token.start, token.end];
@@ -192,8 +184,8 @@ function convertToken(token, source) {
   return token;
 }
 
-export default function convertTokens(tokens, code) {
-  return convertTemplateType(tokens)
+module.exports = function convertTokens(tokens, code, tl) {
+  return convertTemplateType(tokens, tl)
     .filter(t => t.type !== "CommentLine" && t.type !== "CommentBlock")
-    .map(t => convertToken(t, code));
-}
+    .map(t => convertToken(t, code, tl));
+};

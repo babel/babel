@@ -1,15 +1,7 @@
 import semver from "semver";
-import {
-  version as babelCoreVersion,
-  parseSync as babelParse,
-} from "@babel/core";
-import {
-  normalizeBabelParseConfig,
-  normalizeESLintConfig,
-} from "./configuration";
-import convert from "./convert";
+import { normalizeESLintConfig } from "./configuration";
 import analyzeScope from "./analyze-scope";
-import visitorKeys from "./visitor-keys";
+import { getVersion, getVisitorKeys, parse as babelParse } from "./client.cjs";
 
 let isRunningMinSupportedCoreVersion = null;
 
@@ -19,33 +11,20 @@ function baseParse(code, options) {
 
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(
-      babelCoreVersion,
+      getVersion(),
       minSupportedCoreVersion,
     );
   }
 
   if (!isRunningMinSupportedCoreVersion) {
     throw new Error(
-      `@babel/eslint-parser@${PACKAGE_JSON.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
+      `@babel/eslint-parser@${
+        PACKAGE_JSON.version
+      } does not support @babel/core@${getVersion()}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
     );
   }
 
-  let ast;
-
-  try {
-    ast = babelParse(code, normalizeBabelParseConfig(options));
-  } catch (err) {
-    if (err instanceof SyntaxError) {
-      err.lineNumber = err.loc.line;
-      err.column = err.loc.column;
-    }
-
-    throw err;
-  }
-
-  convert(ast, code);
-
-  return ast;
+  return babelParse(code, options);
 }
 
 export function parse(code, options = {}) {
@@ -57,5 +36,5 @@ export function parseForESLint(code, options = {}) {
   const ast = baseParse(code, normalizedOptions);
   const scopeManager = analyzeScope(ast, normalizedOptions);
 
-  return { ast, scopeManager, visitorKeys };
+  return { ast, scopeManager, visitorKeys: getVisitorKeys() };
 }

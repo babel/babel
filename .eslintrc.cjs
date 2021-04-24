@@ -131,6 +131,12 @@ module.exports = {
       },
     },
     {
+      files: ["eslint/babel-eslint-parser/src/**/*.js"],
+      rules: {
+        "no-restricted-imports": ["error", "@babel/core"],
+      },
+    },
+    {
       files: ["packages/babel-plugin-transform-runtime/scripts/**/*.js"],
       rules: {
         "import/no-extraneous-dependencies": [
