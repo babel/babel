@@ -110,37 +110,7 @@ export function ArrowFunctionExpression(
     this.space();
   }
 
-  const firstParam = node.params[0];
-
-  if (
-    node.params.length === 1 &&
-    t.isIdentifier(firstParam) &&
-    !hasTypes(node, firstParam)
-  ) {
-    if (
-      (this.format.retainLines || node.async) &&
-      ((node.loc &&
-        node.body.loc &&
-        node.loc.start.line < node.body.loc.start.line) ||
-        firstParam.leadingComments?.length ||
-        firstParam.trailingComments?.length)
-    ) {
-      this.token("(");
-      if (firstParam.loc && firstParam.loc.start.line > node.loc.start.line) {
-        this.indent();
-        this.print(firstParam, node);
-        this.dedent();
-        this._catchUp("start", node.body.loc);
-      } else {
-        this.print(firstParam, node);
-      }
-      this.token(")");
-    } else {
-      this.print(firstParam, node);
-    }
-  } else {
-    this._params(node);
-  }
+  this._params(node);
 
   this._predicate(node);
 
@@ -149,14 +119,4 @@ export function ArrowFunctionExpression(
   this.space();
 
   this.print(node.body, node);
-}
-
-function hasTypes(node, param) {
-  return (
-    node.typeParameters ||
-    node.returnType ||
-    param.typeAnnotation ||
-    param.optional ||
-    param.trailingComments
-  );
 }
