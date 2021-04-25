@@ -11,11 +11,10 @@ import type { CallerMetadata } from "../validation/options";
 
 export type { ConfigFile, IgnoreFile, RelativeConfig, FilePackageData };
 
-// eslint-disable-next-line require-yield
-export function* findConfigUpwards(
+export function findConfigUpwards(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   rootDir: string,
-): Handler<string | null> {
+): string | null {
   return null;
 }
 

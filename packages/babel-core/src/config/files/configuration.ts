@@ -1,4 +1,5 @@
 import buildDebug from "debug";
+import nodeFs from "fs";
 import path from "path";
 import json5 from "json5";
 import gensync from "gensync";
@@ -36,11 +37,11 @@ const RELATIVE_CONFIG_FILENAMES = [
 
 const BABELIGNORE_FILENAME = ".babelignore";
 
-export function* findConfigUpwards(rootDir: string): Handler<string | null> {
+export function findConfigUpwards(rootDir: string): string | null {
   let dirname = rootDir;
-  while (true) {
+  for (;;) {
     for (const filename of ROOT_CONFIG_FILENAMES) {
-      if (yield* fs.exists(path.join(dirname, filename))) {
+      if (nodeFs.existsSync(path.join(dirname, filename))) {
         return dirname;
       }
     }
@@ -165,7 +166,7 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
     caller: CallerMetadata | void;
   }>,
 ): Handler<ConfigFile | null> {
-  if (!fs.exists.sync(filepath)) {
+  if (!nodeFs.existsSync(filepath)) {
     cache.never();
     return null;
   }
