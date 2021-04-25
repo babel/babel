@@ -252,16 +252,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParsePredicate(): N.FlowType {
       const node = this.startNode();
-      const moduloLoc = this.state.startLoc;
       const moduloPos = this.state.start;
-      this.expect(tt.modulo);
-      const checksLoc = this.state.startLoc;
+      this.next(); // eat `%`
       this.expectContextual("checks");
       // Force '%' and 'checks' to be adjacent
-      if (
-        moduloLoc.line !== checksLoc.line ||
-        moduloLoc.column !== checksLoc.column - 1
-      ) {
+      if (this.state.lastTokStart > moduloPos + 1) {
         this.raise(moduloPos, FlowErrors.UnexpectedSpaceBetweenModuloChecks);
       }
       if (this.eat(tt.parenL)) {
