@@ -35,7 +35,7 @@ var {
   [asdf]: _a
 } = k; // computed
 
-const foo = new Promise(resolve => {
+const foo = new Promise((resolve) => {
   resolve(new Map());
 });
 queueMicrotask(() => globalThis);

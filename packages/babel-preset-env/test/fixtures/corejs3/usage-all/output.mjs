@@ -29,7 +29,7 @@ function H(WeakMap) {
 } // shadowed
 
 
-const foo = new Promise(resolve => {
+const foo = new Promise((resolve) => {
   resolve(new Map());
 });
 queueMicrotask(() => globalThis);
