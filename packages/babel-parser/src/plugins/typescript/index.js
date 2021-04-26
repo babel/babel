@@ -253,6 +253,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       disallowedModifiers?: TsModifier[],
       errorTemplate?: ErrorTemplate,
     ): void {
+      const enforceOrder = (pos, before, after) => {
+        if (modified[after]) {
+          this.raise(pos, TSErrors.InvalidModifiersOrder, before, after);
+        }
+      };
+
       for (;;) {
         const startPos = this.state.start;
         const modifier: ?TsModifier = this.tsParseModifier(
@@ -267,26 +273,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           } else {
             modified.accessibility = modifier;
           }
+          enforceOrder(startPos, modifier, "override");
         } else {
           if (Object.hasOwnProperty.call(modified, modifier)) {
             this.raise(startPos, TSErrors.DuplicateModifier, modifier);
-          } else if (modified.readonly && modifier === "static") {
-            this.raise(
-              startPos,
-              TSErrors.InvalidModifiersOrder,
-              "static",
-              "readonly",
-            );
-          } else if (
-            (modified.declare && modifier === "override") ||
-            (modified.override && modifier === "declare")
-          ) {
-            this.raise(
-              startPos,
-              TSErrors.IncompatibleModifiers,
-              "declare",
-              "override",
-            );
+          } else {
+            if (modifier === "static") {
+              enforceOrder(startPos, modifier, "readonly");
+              enforceOrder(startPos, modifier, "override");
+            } else if (modifier === "override") {
+              enforceOrder(startPos, modifier, "readonly");
+            }
+
+            if (
+              (modified.declare && modifier === "override") ||
+              (modified.override && modifier === "declare")
+            ) {
+              this.raise(
+                startPos,
+                TSErrors.IncompatibleModifiers,
+                "declare",
+                "override",
+              );
+            }
           }
           modified[modifier] = true;
         }
@@ -2320,10 +2329,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "public",
         "protected",
         "override",
+        "static",
+        "abstract",
+        "readonly",
       ]);
 
       const callParseClassMember = () => {
-        super.parseClassMember(classBody, member, state);
+        this.parseClassMemberWithIsStatic(
+          classBody,
+          member,
+          state,
+          !!member.static,
+        );
       };
       if (member.declare) {
         this.tsInDeclareContext(callParseClassMember);
@@ -2338,18 +2355,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseClassMemberState,
       isStatic: boolean,
     ): void {
-      this.tsParseModifiers(member, [
-        "abstract",
-        "readonly",
-        "declare",
-        "static",
-        "override",
-      ]);
-
-      if (isStatic) {
-        member.static = true;
-      }
-
       const idx = this.tsTryParseIndexSignature(member);
       if (idx) {
         classBody.body.push(idx);
@@ -2379,14 +2384,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if ((member: any).override) {
-        if (isStatic) {
-          this.raise(
-            member.start,
-            TSErrors.IncompatibleModifiers,
-            "static",
-            "override",
-          );
-        } else if (!state.hadSuperClass) {
+        if (!state.hadSuperClass) {
           this.raise(member.start, TSErrors.OverrideNotInSubClass);
         }
       }

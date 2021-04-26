@@ -1,10 +1,8 @@
 class MyClass extends BaseClass {
   override show() {}
-  override public show() {}
   public override show() {}
   override size = 5;
   override readonly size = 5;
-  readonly override size = 5;
 
   override get text() {}
   override set text(value) {}
@@ -17,4 +15,14 @@ class MyClass extends BaseClass {
 
 declare class DeclaredClass extends BaseClass {
   override test() {}
+}
+
+abstract class AbstractBase {
+  abstract m1();
+  abstract m2();
+}
+
+abstract class AbstractDerived extends AbstractBase {
+  override abstract m1();
+  abstract override m2();
 }
