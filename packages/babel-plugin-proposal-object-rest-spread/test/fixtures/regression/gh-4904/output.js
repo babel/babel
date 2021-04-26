@@ -15,7 +15,7 @@ const _bar = bar(),
 
 const {
   a
-} = foo((_ref) => {
+} = foo(_ref => {
   let {
     b
   } = _ref,
