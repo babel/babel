@@ -1,16 +1,14 @@
 {
   "type": "File",
-  "start":0,"end":240,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":1}},
+  "start":0,"end":134,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
   "errors": [
     "SyntaxError: 'override' modifier cannot appear on a constructor declaration. (2:11)",
     "SyntaxError: 'override' modifier cannot appear on an index signature. (3:2)",
-    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (7:10)",
-    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (8:11)",
-    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (12:2)"
+    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (7:2)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":240,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":1}},
+    "start":0,"end":134,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -87,99 +85,34 @@
       },
       {
         "type": "ClassDeclaration",
-        "start":95,"end":199,"loc":{"start":{"line":6,"column":0},"end":{"line":9,"column":1}},
-        "declare": true,
+        "start":95,"end":134,"loc":{"start":{"line":6,"column":0},"end":{"line":8,"column":1}},
         "id": {
           "type": "Identifier",
-          "start":109,"end":117,"loc":{"start":{"line":6,"column":14},"end":{"line":6,"column":22},"identifierName":"MyClass3"},
-          "name": "MyClass3"
-        },
-        "superClass": {
-          "type": "Identifier",
-          "start":126,"end":135,"loc":{"start":{"line":6,"column":31},"end":{"line":6,"column":40},"identifierName":"BaseClass"},
-          "name": "BaseClass"
-        },
-        "body": {
-          "type": "ClassBody",
-          "start":136,"end":199,"loc":{"start":{"line":6,"column":41},"end":{"line":9,"column":1}},
-          "body": [
-            {
-              "type": "ClassProperty",
-              "start":140,"end":167,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":29}},
-              "declare": true,
-              "override": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":157,"end":162,"loc":{"start":{"line":7,"column":19},"end":{"line":7,"column":24},"identifierName":"prop1"},
-                "name": "prop1"
-              },
-              "computed": false,
-              "typeAnnotation": {
-                "type": "TSTypeAnnotation",
-                "start":162,"end":167,"loc":{"start":{"line":7,"column":24},"end":{"line":7,"column":29}},
-                "typeAnnotation": {
-                  "type": "TSAnyKeyword",
-                  "start":164,"end":167,"loc":{"start":{"line":7,"column":26},"end":{"line":7,"column":29}}
-                }
-              },
-              "value": null
-            },
-            {
-              "type": "ClassProperty",
-              "start":170,"end":197,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":29}},
-              "override": true,
-              "declare": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":187,"end":192,"loc":{"start":{"line":8,"column":19},"end":{"line":8,"column":24},"identifierName":"prop2"},
-                "name": "prop2"
-              },
-              "computed": false,
-              "typeAnnotation": {
-                "type": "TSTypeAnnotation",
-                "start":192,"end":197,"loc":{"start":{"line":8,"column":24},"end":{"line":8,"column":29}},
-                "typeAnnotation": {
-                  "type": "TSAnyKeyword",
-                  "start":194,"end":197,"loc":{"start":{"line":8,"column":26},"end":{"line":8,"column":29}}
-                }
-              },
-              "value": null
-            }
-          ]
-        }
-      },
-      {
-        "type": "ClassDeclaration",
-        "start":201,"end":240,"loc":{"start":{"line":11,"column":0},"end":{"line":13,"column":1}},
-        "id": {
-          "type": "Identifier",
-          "start":207,"end":215,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":14},"identifierName":"MyClass4"},
+          "start":101,"end":109,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":14},"identifierName":"MyClass4"},
           "name": "MyClass4"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":216,"end":240,"loc":{"start":{"line":11,"column":15},"end":{"line":13,"column":1}},
+          "start":110,"end":134,"loc":{"start":{"line":6,"column":15},"end":{"line":8,"column":1}},
           "body": [
             {
               "type": "ClassProperty",
-              "start":220,"end":238,"loc":{"start":{"line":12,"column":2},"end":{"line":12,"column":20}},
+              "start":114,"end":132,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":20}},
               "override": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start":229,"end":233,"loc":{"start":{"line":12,"column":11},"end":{"line":12,"column":15},"identifierName":"prop"},
+                "start":123,"end":127,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":15},"identifierName":"prop"},
                 "name": "prop"
               },
               "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":233,"end":238,"loc":{"start":{"line":12,"column":15},"end":{"line":12,"column":20}},
+                "start":127,"end":132,"loc":{"start":{"line":7,"column":15},"end":{"line":7,"column":20}},
                 "typeAnnotation": {
                   "type": "TSAnyKeyword",
-                  "start":235,"end":238,"loc":{"start":{"line":12,"column":17},"end":{"line":12,"column":20}}
+                  "start":129,"end":132,"loc":{"start":{"line":7,"column":17},"end":{"line":7,"column":20}}
                 }
               },
               "value": null

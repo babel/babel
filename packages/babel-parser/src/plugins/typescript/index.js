@@ -253,9 +253,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       disallowedModifiers?: TsModifier[],
       errorTemplate?: ErrorTemplate,
     ): void {
-      const enforceOrder = (pos, before, after) => {
-        if (modified[after]) {
+      const enforceOrder = (pos, modifier, before, after) => {
+        if (modifier === before && modified[after]) {
           this.raise(pos, TSErrors.InvalidModifiersOrder, before, after);
+        }
+      };
+      const incompatible = (pos, modifier, mod1, mod2) => {
+        if (
+          (modified[mod1] && modifier === mod2) ||
+          (modified[mod2] && modifier === mod1)
+        ) {
+          this.raise(pos, TSErrors.IncompatibleModifiers, mod1, mod2);
         }
       };
 
@@ -271,31 +279,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (modified.accessibility) {
             this.raise(startPos, TSErrors.DuplicateAccessibilityModifier);
           } else {
+            enforceOrder(startPos, modifier, modifier, "override");
+            enforceOrder(startPos, modifier, modifier, "static");
+
             modified.accessibility = modifier;
           }
-          enforceOrder(startPos, modifier, "override");
         } else {
           if (Object.hasOwnProperty.call(modified, modifier)) {
             this.raise(startPos, TSErrors.DuplicateModifier, modifier);
           } else {
-            if (modifier === "static") {
-              enforceOrder(startPos, modifier, "readonly");
-              enforceOrder(startPos, modifier, "override");
-            } else if (modifier === "override") {
-              enforceOrder(startPos, modifier, "readonly");
-            }
+            enforceOrder(startPos, modifier, "static", "readonly");
+            enforceOrder(startPos, modifier, "static", "override");
+            enforceOrder(startPos, modifier, "override", "readonly");
+            enforceOrder(startPos, modifier, "abstract", "override");
 
-            if (
-              (modified.declare && modifier === "override") ||
-              (modified.override && modifier === "declare")
-            ) {
-              this.raise(
-                startPos,
-                TSErrors.IncompatibleModifiers,
-                "declare",
-                "override",
-              );
-            }
+            incompatible(startPos, modifier, "declare", "override");
+            incompatible(startPos, modifier, "static", "abstract");
           }
           modified[modifier] = true;
         }

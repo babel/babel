@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":508,"loc":{"start":{"line":1,"column":0},"end":{"line":28,"column":1}},
+  "start":0,"end":332,"loc":{"start":{"line":1,"column":0},"end":{"line":18,"column":1}},
   "program": {
     "type": "Program",
-    "start":0,"end":508,"loc":{"start":{"line":1,"column":0},"end":{"line":28,"column":1}},
+    "start":0,"end":332,"loc":{"start":{"line":1,"column":0},"end":{"line":18,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -276,114 +276,6 @@
                 "body": [],
                 "directives": []
               }
-            }
-          ]
-        }
-      },
-      {
-        "type": "ClassDeclaration",
-        "start":334,"end":399,"loc":{"start":{"line":20,"column":0},"end":{"line":23,"column":1}},
-        "abstract": true,
-        "id": {
-          "type": "Identifier",
-          "start":349,"end":361,"loc":{"start":{"line":20,"column":15},"end":{"line":20,"column":27},"identifierName":"AbstractBase"},
-          "name": "AbstractBase"
-        },
-        "superClass": null,
-        "body": {
-          "type": "ClassBody",
-          "start":362,"end":399,"loc":{"start":{"line":20,"column":28},"end":{"line":23,"column":1}},
-          "body": [
-            {
-              "type": "TSDeclareMethod",
-              "start":366,"end":380,"loc":{"start":{"line":21,"column":2},"end":{"line":21,"column":16}},
-              "abstract": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":375,"end":377,"loc":{"start":{"line":21,"column":11},"end":{"line":21,"column":13},"identifierName":"m1"},
-                "name": "m1"
-              },
-              "computed": false,
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "async": false,
-              "params": []
-            },
-            {
-              "type": "TSDeclareMethod",
-              "start":383,"end":397,"loc":{"start":{"line":22,"column":2},"end":{"line":22,"column":16}},
-              "abstract": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":392,"end":394,"loc":{"start":{"line":22,"column":11},"end":{"line":22,"column":13},"identifierName":"m2"},
-                "name": "m2"
-              },
-              "computed": false,
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "async": false,
-              "params": []
-            }
-          ]
-        }
-      },
-      {
-        "type": "ClassDeclaration",
-        "start":401,"end":508,"loc":{"start":{"line":25,"column":0},"end":{"line":28,"column":1}},
-        "abstract": true,
-        "id": {
-          "type": "Identifier",
-          "start":416,"end":431,"loc":{"start":{"line":25,"column":15},"end":{"line":25,"column":30},"identifierName":"AbstractDerived"},
-          "name": "AbstractDerived"
-        },
-        "superClass": {
-          "type": "Identifier",
-          "start":440,"end":452,"loc":{"start":{"line":25,"column":39},"end":{"line":25,"column":51},"identifierName":"AbstractBase"},
-          "name": "AbstractBase"
-        },
-        "body": {
-          "type": "ClassBody",
-          "start":453,"end":508,"loc":{"start":{"line":25,"column":52},"end":{"line":28,"column":1}},
-          "body": [
-            {
-              "type": "TSDeclareMethod",
-              "start":457,"end":480,"loc":{"start":{"line":26,"column":2},"end":{"line":26,"column":25}},
-              "override": true,
-              "abstract": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":475,"end":477,"loc":{"start":{"line":26,"column":20},"end":{"line":26,"column":22},"identifierName":"m1"},
-                "name": "m1"
-              },
-              "computed": false,
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "async": false,
-              "params": []
-            },
-            {
-              "type": "TSDeclareMethod",
-              "start":483,"end":506,"loc":{"start":{"line":27,"column":2},"end":{"line":27,"column":25}},
-              "abstract": true,
-              "override": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":501,"end":503,"loc":{"start":{"line":27,"column":20},"end":{"line":27,"column":22},"identifierName":"m2"},
-                "name": "m2"
-              },
-              "computed": false,
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "async": false,
-              "params": []
             }
           ]
         }
