@@ -37,10 +37,10 @@ export default function _wrapRegExp() {
     } else if (typeof substitution === "function") {
       var _this = this;
       return _super[Symbol.replace].call(this, str, function () {
-        var args = [];
-        args.push.apply(args, arguments);
+        var args = arguments;
+        // Modern engines already pass result.groups returned by exec() as the last arg.
         if (typeof args[args.length - 1] !== "object") {
-          // Modern engines already pass result.groups as the last arg.
+          args = [].slice.call(args);
           args.push(buildGroups(args, _this));
         }
         return substitution.apply(this, args);
