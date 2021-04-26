@@ -85,13 +85,12 @@ export function isIdentifierChar(code: number): boolean {
 
 export function isIdentifierName(name: string): boolean {
   let isFirst = true;
-  for (let i = 0; i < name.length; ) {
+  for (let i = 0; i < name.length; i++) {
     let cp = name.charCodeAt(i);
     if ((cp & 0xfc00) === 0xd800 && i + 1 < name.length) {
       const trail = name.charCodeAt(++i);
       cp = 0x10000 + ((cp & 0x3ff) << 10) + (trail & 0x3ff);
     }
-    ++i;
     if (isFirst) {
       isFirst = false;
       if (!isIdentifierStart(cp)) {
