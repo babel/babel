@@ -1,6 +1,5 @@
-import loadConfig from "../config";
-
-import type { Plugin } from "../config";
+import traverse from "@babel/traverse";
+import Plugin from "../config/plugin";
 
 let LOADED_PLUGIN: Plugin | void;
 
@@ -9,14 +8,13 @@ export default function loadBlockHoistPlugin(): Plugin {
     // Lazy-init the internal plugin to remove the init-time circular
     // dependency between plugins being passed @babel/core's export object,
     // which loads this file, and this 'loadConfig' loading plugins.
-    const config = loadConfig.sync({
-      babelrc: false,
-      configFile: false,
-      browserslistConfigFile: false,
-      plugins: [blockHoistPlugin],
-    });
-    LOADED_PLUGIN = config ? config.passes[0][0] : undefined;
-    if (!LOADED_PLUGIN) throw new Error("Assertion failure");
+    LOADED_PLUGIN = new Plugin(
+      {
+        ...blockHoistPlugin,
+        visitor: traverse.explode(blockHoistPlugin.visitor),
+      },
+      {},
+    );
   }
 
   return LOADED_PLUGIN;
