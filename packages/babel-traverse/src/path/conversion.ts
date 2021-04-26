@@ -236,20 +236,10 @@ function hoistFunctionEnvironment(
     );
 
     argumentsPaths.forEach(argumentsChild => {
-      let currentScope = argumentsChild.scope;
-      do {
-        if (
-          !currentScope.hasOwnBinding("arguments") &&
-          !(
-            currentScope.path.isFunction() &&
-            !currentScope.path.isArrowFunctionExpression()
-          )
-        ) {
-          const argsRef = t.identifier(argumentsBinding);
-          argsRef.loc = argumentsChild.node.loc;
-          argumentsChild.replaceWith(argsRef);
-        }
-      } while ((currentScope = currentScope.parent));
+      const argsRef = t.identifier(argumentsBinding);
+      argsRef.loc = argumentsChild.node.loc;
+
+      argumentsChild.replaceWith(argsRef);
     });
   }
 
