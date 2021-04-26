@@ -45,6 +45,15 @@
       "./helpers/typeof.js"
     ],
     "./helpers/esm/typeof": "./helpers/esm/typeof.js",
+    "./helpers/wrapRegExp": [
+      {
+        "node": "./helpers/wrapRegExp.js",
+        "import": "./helpers/esm/wrapRegExp.js",
+        "default": "./helpers/wrapRegExp.js"
+      },
+      "./helpers/wrapRegExp.js"
+    ],
+    "./helpers/esm/wrapRegExp": "./helpers/esm/wrapRegExp.js",
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator.js",
@@ -801,15 +810,6 @@
       "./helpers/classPrivateMethodSet.js"
     ],
     "./helpers/esm/classPrivateMethodSet": "./helpers/esm/classPrivateMethodSet.js",
-    "./helpers/wrapRegExp": [
-      {
-        "node": "./helpers/wrapRegExp.js",
-        "import": "./helpers/esm/wrapRegExp.js",
-        "default": "./helpers/wrapRegExp.js"
-      },
-      "./helpers/wrapRegExp.js"
-    ],
-    "./helpers/esm/wrapRegExp": "./helpers/esm/wrapRegExp.js",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",

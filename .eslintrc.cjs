@@ -116,6 +116,8 @@ module.exports = {
       rules: {
         "no-var": "off",
         "comma-dangle": "off",
+        "no-func-assign": "off",
+        "import/no-extraneous-dependencies": "off",
       },
     },
     {
