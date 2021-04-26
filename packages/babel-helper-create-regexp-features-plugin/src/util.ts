@@ -1,6 +1,15 @@
 import { FEATURES, hasFeature } from "./features";
 
-export function generateRegexpuOptions(node, features) {
+type RegexpuOptions = {
+  useUnicodeFlag: boolean;
+  onNamedGroup: (name: string, index: number) => void;
+  namedGroup: boolean;
+  unicodePropertyEscape: boolean;
+  dotAllFlag: boolean;
+  lookbehind: boolean;
+};
+
+export function generateRegexpuOptions(node, features): RegexpuOptions | null {
   let useUnicodeFlag = false,
     dotAllFlag = false,
     unicodePropertyEscape = false,
@@ -47,8 +56,7 @@ export function generateRegexpuOptions(node, features) {
   }
   return {
     useUnicodeFlag,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onNamedGroup: (name, index) => {},
+    onNamedGroup: () => {},
     namedGroup,
     unicodePropertyEscape,
     dotAllFlag,
