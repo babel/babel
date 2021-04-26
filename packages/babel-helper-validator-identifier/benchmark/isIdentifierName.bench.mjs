@@ -11,13 +11,13 @@ function benchCases(implementation, name) {
     implementation.isIdentifierName("zap cannon");
   });
 
-  suite.add(name + "isIdentifierName on 1 long ASCII words", () => {
+  suite.add(name + "#isIdentifierName on 1 long ASCII words", () => {
     implementation.isIdentifierName(
       "Pneumonoultramicroscopicsilicovolcanoconiosis"
     );
   });
 
-  suite.add(name + "isIdentifierName on 3 non-ASCII words", () => {
+  suite.add(name + "#isIdentifierName on 3 non-ASCII words", () => {
     implementation.isIdentifierName("مذكور أعلاه");
     implementation.isIdentifierName("cañón de zap");
     implementation.isIdentifierName("𠡦𠧋𡆠囝〇𠁈𢘑𤯔𠀑埊");

@@ -5,32 +5,23 @@ import { report } from "./util.mjs";
 
 const suite = new Benchmark.Suite();
 
-suite.add("baseline#isStrictBindReservedWord on 4 keywords", () => {
-  baseline.isStrictBindReservedWord("arguments");
-  baseline.isStrictBindReservedWord("eval");
-  baseline.isStrictBindReservedWord("implements");
-  baseline.isStrictBindReservedWord("instanceof");
-});
+function benchCases(implementation, name) {
+  suite.add(name + "#isStrictBindReservedWord on 4 keywords", () => {
+    implementation.isStrictBindReservedWord("arguments");
+    implementation.isStrictBindReservedWord("eval");
+    implementation.isStrictBindReservedWord("implements");
+    implementation.isStrictBindReservedWord("instanceof");
+  });
 
-suite.add("baseline#isStrictBindReservedWord on 4 non-keywords", () => {
-  baseline.isStrictBindReservedWord("argumentss");
-  baseline.isStrictBindReservedWord("evals");
-  baseline.isStrictBindReservedWord("implement");
-  baseline.isStrictBindReservedWord("instanceOf");
-});
+  suite.add(name + "#isStrictBindReservedWord on 4 non-keywords", () => {
+    implementation.isStrictBindReservedWord("argumentss");
+    implementation.isStrictBindReservedWord("evals");
+    implementation.isStrictBindReservedWord("implement");
+    implementation.isStrictBindReservedWord("instanceOf");
+  });
+}
 
-suite.add("current#isStrictBindReservedWord on 4 keywords", () => {
-  current.isStrictBindReservedWord("arguments");
-  current.isStrictBindReservedWord("eval");
-  current.isStrictBindReservedWord("implements");
-  current.isStrictBindReservedWord("instanceof");
-});
-
-suite.add("current#isStrictBindReservedWord on 4 non-keywords", () => {
-  current.isStrictBindReservedWord("argumentss");
-  current.isStrictBindReservedWord("evals");
-  current.isStrictBindReservedWord("implement");
-  current.isStrictBindReservedWord("instanceOf");
-});
+benchCases(baseline, "baseline");
+benchCases(current, "current");
 
 suite.on("cycle", report).run({ async: false });

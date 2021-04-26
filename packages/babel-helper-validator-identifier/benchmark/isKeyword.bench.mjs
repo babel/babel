@@ -5,32 +5,23 @@ import { report } from "./util.mjs";
 
 const suite = new Benchmark.Suite();
 
-suite.add("baseline#isKeyword on 4 keywords", () => {
-  baseline.isKeyword("debugger");
-  baseline.isKeyword("throw");
-  baseline.isKeyword("extends");
-  baseline.isKeyword("instanceof");
-});
+function benchCases(implementation, name) {
+  suite.add(name + "#isKeyword on 4 keywords", () => {
+    implementation.isKeyword("debugger");
+    implementation.isKeyword("throw");
+    implementation.isKeyword("extends");
+    implementation.isKeyword("instanceof");
+  });
 
-suite.add("baseline#isKeyword on 4 non-keywords", () => {
-  baseline.isKeyword("debuggerr");
-  baseline.isKeyword("threw");
-  baseline.isKeyword("extend");
-  baseline.isKeyword("instanceOf");
-});
+  suite.add(name + "#isKeyword on 4 non-keywords", () => {
+    implementation.isKeyword("debuggerr");
+    implementation.isKeyword("threw");
+    implementation.isKeyword("extend");
+    implementation.isKeyword("instanceOf");
+  });
+}
 
-suite.add("current#isKeyword on 4 keywords", () => {
-  current.isKeyword("debugger");
-  current.isKeyword("throw");
-  current.isKeyword("extends");
-  current.isKeyword("instanceof");
-});
-
-suite.add("current#isKeyword on 4 non-keywords", () => {
-  current.isKeyword("debuggerr");
-  current.isKeyword("threw");
-  current.isKeyword("extend");
-  current.isKeyword("instanceOf");
-});
+benchCases(baseline, "baseline");
+benchCases(current, "current");
 
 suite.on("cycle", report).run();
