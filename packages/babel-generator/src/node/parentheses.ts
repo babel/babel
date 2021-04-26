@@ -276,6 +276,15 @@ export function LogicalExpression(node: any, parent: any): boolean {
   }
 }
 
+export function Identifier(node: t.Identifier, parent: t.Node): boolean {
+  // ECMAScript specifically forbids a for-of loop from starting with the
+  // token sequence "for ( async of", because it would be ambiguous with
+  // "for (async of => {};;)", so we need to add extra parentheses.
+  return (
+    node.name === "async" && t.isForOfStatement(parent) && node === parent.left
+  );
+}
+
 // Walk up the print stack to determine if our node can come first
 // in statement.
 function isFirstInStatement(
