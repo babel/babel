@@ -649,16 +649,16 @@ export function tsPrintClassMemberModifiers(this: Printer, node: any, isField) {
     this.word("declare");
     this.space();
   }
-  if (node.override) {
-    this.word("override");
-    this.space();
-  }
   if (node.accessibility) {
     this.word(node.accessibility);
     this.space();
   }
   if (node.static) {
     this.word("static");
+    this.space();
+  }
+  if (node.override) {
+    this.word("override");
     this.space();
   }
   if (node.abstract) {

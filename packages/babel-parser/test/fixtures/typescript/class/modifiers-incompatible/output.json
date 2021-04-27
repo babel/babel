@@ -1,0 +1,118 @@
+{
+  "type": "File",
+  "start":0,"end":144,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+  "errors": [
+    "SyntaxError: 'static' modifier cannot be used with 'abstract' modifier. (2:9)",
+    "SyntaxError: 'static' modifier cannot be used with 'abstract' modifier. (3:11)",
+    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (5:10)",
+    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (6:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":144,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":144,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+        "abstract": true,
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":25,"end":29,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":29},"identifierName":"Base"},
+          "name": "Base"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":30,"end":144,"loc":{"start":{"line":1,"column":30},"end":{"line":7,"column":1}},
+          "body": [
+            {
+              "type": "TSDeclareMethod",
+              "start":34,"end":55,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":23}},
+              "static": true,
+              "abstract": true,
+              "key": {
+                "type": "Identifier",
+                "start":50,"end":52,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":20},"identifierName":"m1"},
+                "name": "m1"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": []
+            },
+            {
+              "type": "TSDeclareMethod",
+              "start":58,"end":79,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":23}},
+              "abstract": true,
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":74,"end":76,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":20},"identifierName":"m1"},
+                "name": "m1"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": []
+            },
+            {
+              "type": "ClassProperty",
+              "start":83,"end":111,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":30}},
+              "declare": true,
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":100,"end":105,"loc":{"start":{"line":5,"column":19},"end":{"line":5,"column":24},"identifierName":"prop1"},
+                "name": "prop1"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":105,"end":110,"loc":{"start":{"line":5,"column":24},"end":{"line":5,"column":29}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":107,"end":110,"loc":{"start":{"line":5,"column":26},"end":{"line":5,"column":29}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":114,"end":142,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":30}},
+              "override": true,
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":131,"end":136,"loc":{"start":{"line":6,"column":19},"end":{"line":6,"column":24},"identifierName":"prop2"},
+                "name": "prop2"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":136,"end":141,"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":29}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":138,"end":141,"loc":{"start":{"line":6,"column":26},"end":{"line":6,"column":29}}
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

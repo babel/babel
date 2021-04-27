@@ -232,6 +232,7 @@ functionCall15.ts
 functionDeclarationWithResolutionOfTypeNamedArguments01.ts
 functionExpressionInWithBlock.ts
 functionExpressionWithResolutionOfTypeNamedArguments01.ts
+getterErrorMessageNotDuplicated.ts
 gettersAndSettersErrors.ts
 giant.ts
 globalThisDeclarationEmit.ts
@@ -407,8 +408,7 @@ shorthandPropertyAssignmentInES6Module.ts
 sourceMap-LineBreaks.ts
 sourceMapValidationDecorators.ts
 sourceMapValidationStatements.ts
-staticAsIdentifier.ts
-staticModifierAlreadySeen.ts
+stackDepthLimitCastingType.ts
 strictModeReservedWord.ts
 superCallFromClassThatHasNoBaseType1.ts
 symbolLinkDeclarationEmitModuleNames.ts
