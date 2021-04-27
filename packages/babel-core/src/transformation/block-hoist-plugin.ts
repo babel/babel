@@ -5,9 +5,7 @@ let LOADED_PLUGIN: Plugin | void;
 
 export default function loadBlockHoistPlugin(): Plugin {
   if (!LOADED_PLUGIN) {
-    // Lazy-init the internal plugin to remove the init-time circular
-    // dependency between plugins being passed @babel/core's export object,
-    // which loads this file, and this 'loadConfig' loading plugins.
+    // cache the loaded blockHoist plugin plugin
     LOADED_PLUGIN = new Plugin(
       {
         ...blockHoistPlugin,
