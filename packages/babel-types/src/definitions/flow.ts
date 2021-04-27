@@ -562,8 +562,19 @@ defineType("EnumDefaultedMember", {
 
 defineType("IndexedAccessType", {
   visitor: ["objectType", "indexType"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     objectType: validateType("FlowType"),
     indexType: validateType("FlowType"),
+  },
+});
+
+defineType("OptionalIndexedAccessType", {
+  visitor: ["objectType", "indexType"],
+  aliases: ["Flow", "FlowType"],
+  fields: {
+    objectType: validateType("FlowType"),
+    indexType: validateType("FlowType"),
+    optional: validate(assertValueType("boolean")),
   },
 });

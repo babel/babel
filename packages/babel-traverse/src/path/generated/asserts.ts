@@ -390,6 +390,9 @@ export interface NodePathAssetions {
   assertOptionalCallExpression(
     opts?: object,
   ): asserts this is NodePath<t.OptionalCallExpression>;
+  assertOptionalIndexedAccessType(
+    opts?: object,
+  ): asserts this is NodePath<t.OptionalIndexedAccessType>;
   assertOptionalMemberExpression(
     opts?: object,
   ): asserts this is NodePath<t.OptionalMemberExpression>;

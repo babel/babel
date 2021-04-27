@@ -860,6 +860,12 @@ export function indexedAccessType(
 ): t.IndexedAccessType {
   return builder("IndexedAccessType", ...arguments);
 }
+export function optionalIndexedAccessType(
+  objectType: t.FlowType,
+  indexType: t.FlowType,
+): t.OptionalIndexedAccessType {
+  return builder("OptionalIndexedAccessType", ...arguments);
+}
 export function jsxAttribute(
   name: t.JSXIdentifier | t.JSXNamespacedName,
   value?:
