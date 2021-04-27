@@ -1058,6 +1058,13 @@ export type FlowIndexedAccessType = Node & {
   indexType: FlowType,
 };
 
+export type FlowOptionalIndexedAccessType = Node & {
+  type: "OptionalIndexedAccessType",
+  objectType: FlowType,
+  indexType: FlowType,
+  optional: boolean,
+};
+
 // ESTree
 
 export type EstreeProperty = NodeBase & {

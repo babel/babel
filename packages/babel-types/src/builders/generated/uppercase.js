@@ -154,6 +154,7 @@ export {
   enumStringMember as EnumStringMember,
   enumDefaultedMember as EnumDefaultedMember,
   indexedAccessType as IndexedAccessType,
+  optionalIndexedAccessType as OptionalIndexedAccessType,
   jsxAttribute as JSXAttribute,
   jsxClosingElement as JSXClosingElement,
   jsxElement as JSXElement,

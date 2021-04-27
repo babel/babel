@@ -135,6 +135,10 @@ export function UnionTypeAnnotation(node: any, parent: any): boolean {
 
 export { UnionTypeAnnotation as IntersectionTypeAnnotation };
 
+export function OptionalIndexedAccessType(node: any, parent: any): boolean {
+  return t.isIndexedAccessType(parent, { objectType: node });
+}
+
 export function TSAsExpression() {
   return true;
 }
