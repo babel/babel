@@ -20,7 +20,7 @@ describe("isIdentifierName", function () {
       expect(isIdentifierName(word)).toBe(true);
     },
   );
-  it.each(["+hello", "0$", "-ゆゆ式", "#_", "_#"])(
+  it.each(["+hello", "0$", "-ゆゆ式", "#_", "_#", "\ud800\ud800"])(
     "returns false if provided string %p is not an IdentifierName",
     function (word) {
       expect(isIdentifierName(word)).toBe(false);
