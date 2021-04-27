@@ -234,6 +234,9 @@ export interface NodePathValidators {
   isOptionalCallExpression(
     opts?: object,
   ): this is NodePath<t.OptionalCallExpression>;
+  isOptionalIndexedAccessType(
+    opts?: object,
+  ): this is NodePath<t.OptionalIndexedAccessType>;
   isOptionalMemberExpression(
     opts?: object,
   ): this is NodePath<t.OptionalMemberExpression>;

@@ -208,6 +208,7 @@ export type Node =
   | ObjectTypeSpreadProperty
   | OpaqueType
   | OptionalCallExpression
+  | OptionalIndexedAccessType
   | OptionalMemberExpression
   | ParenthesizedExpression
   | Pattern
@@ -1395,6 +1396,13 @@ export interface IndexedAccessType extends BaseNode {
   indexType: FlowType;
 }
 
+export interface OptionalIndexedAccessType extends BaseNode {
+  type: "OptionalIndexedAccessType";
+  objectType: FlowType;
+  indexType: FlowType;
+  optional: boolean;
+}
+
 export interface JSXAttribute extends BaseNode {
   type: "JSXAttribute";
   name: JSXIdentifier | JSXNamespacedName;
@@ -2361,7 +2369,9 @@ export type Flow =
   | TypeParameterInstantiation
   | UnionTypeAnnotation
   | Variance
-  | VoidTypeAnnotation;
+  | VoidTypeAnnotation
+  | IndexedAccessType
+  | OptionalIndexedAccessType;
 export type FlowType =
   | AnyTypeAnnotation
   | ArrayTypeAnnotation
@@ -2386,7 +2396,9 @@ export type FlowType =
   | TupleTypeAnnotation
   | TypeofTypeAnnotation
   | UnionTypeAnnotation
-  | VoidTypeAnnotation;
+  | VoidTypeAnnotation
+  | IndexedAccessType
+  | OptionalIndexedAccessType;
 export type FlowBaseAnnotation =
   | AnyTypeAnnotation
   | BooleanTypeAnnotation

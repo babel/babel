@@ -1619,13 +1619,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     flowParsePostfixType(): N.FlowTypeAnnotation {
-      const startPos = this.state.start,
-        startLoc = this.state.startLoc;
+      const startPos = this.state.start;
+      const startLoc = this.state.startLoc;
       let type = this.flowParsePrimaryType();
-      while (this.match(tt.bracketL) && !this.canInsertSemicolon()) {
+      let seenOptionalIndexedAccess = false;
+      while (
+        (this.match(tt.bracketL) || this.match(tt.questionDot)) &&
+        !this.canInsertSemicolon()
+      ) {
         const node = this.startNodeAt(startPos, startLoc);
+        const optional = this.eat(tt.questionDot);
+        seenOptionalIndexedAccess = seenOptionalIndexedAccess || optional;
         this.expect(tt.bracketL);
-        if (this.match(tt.bracketR)) {
+        if (!optional && this.match(tt.bracketR)) {
           node.elementType = type;
           this.next(); // eat `]`
           type = this.finishNode(node, "ArrayTypeAnnotation");
@@ -1633,10 +1639,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.objectType = type;
           node.indexType = this.flowParseType();
           this.expect(tt.bracketR);
-          type = this.finishNode<N.FlowIndexedAccessType>(
-            node,
-            "IndexedAccessType",
-          );
+          if (seenOptionalIndexedAccess) {
+            node.optional = optional;
+            type = this.finishNode<N.FlowOptionalIndexedAccessType>(
+              node,
+              "OptionalIndexedAccessType",
+            );
+          } else {
+            type = this.finishNode<N.FlowIndexedAccessType>(
+              node,
+              "IndexedAccessType",
+            );
+          }
         }
       }
       return type;
@@ -2216,6 +2230,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         return this.finishOp(tt.relational, 1);
       } else if (this.state.inType && code === charCodes.questionMark) {
+        if (next === charCodes.dot) {
+          return this.finishOp(tt.questionDot, 2);
+        }
         // allow double nullable types in Flow: ??string
         return this.finishOp(tt.question, 1);
       } else if (isIteratorStart(code, next)) {
