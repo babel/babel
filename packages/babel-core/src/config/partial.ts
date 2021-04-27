@@ -23,21 +23,18 @@ import {
 import type { ConfigFile, IgnoreFile } from "./files";
 import { resolveTargets } from "./resolve-targets";
 
-function* resolveRootMode(
-  rootDir: string,
-  rootMode: RootMode,
-): Handler<string> {
+function resolveRootMode(rootDir: string, rootMode: RootMode): string {
   switch (rootMode) {
     case "root":
       return rootDir;
 
     case "upward-optional": {
-      const upwardRootDir = yield* findConfigUpwards(rootDir);
+      const upwardRootDir = findConfigUpwards(rootDir);
       return upwardRootDir === null ? rootDir : upwardRootDir;
     }
 
     case "upward": {
-      const upwardRootDir = yield* findConfigUpwards(rootDir);
+      const upwardRootDir = findConfigUpwards(rootDir);
       if (upwardRootDir !== null) return upwardRootDir;
 
       throw Object.assign(
@@ -89,7 +86,7 @@ export default function* loadPrivatePartialConfig(
     cloneInputAst = true,
   } = args;
   const absoluteCwd = path.resolve(cwd);
-  const absoluteRootDir = yield* resolveRootMode(
+  const absoluteRootDir = resolveRootMode(
     path.resolve(absoluteCwd, rootDir),
     rootMode,
   );
