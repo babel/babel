@@ -81,15 +81,26 @@ export function runFixtureTests(fixturesPath, parseFunction) {
   });
 }
 
-export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
+/**
+ * Run Fixture test without an exact AST match. If the output.json does not contain
+ * "errors", it asserts the actual output does not have "errors". If the output.json
+ * have "errors", it asserts the actual output have the same "errors".
+ *
+ * This routine is used to test parser options that have impact on the AST shape but
+ * does not change the syntax
+ * @param {*} fixturesPath The path to the fixture root
+ * @param {*} parseFunction The customized parseFunction, different global test options
+ * should be implemented here
+ */
+export function runFixtureTestsWithoutExactASTMatch(
+  fixturesPath,
+  parseFunction,
+) {
   const fixtures = getFixtures(fixturesPath);
 
   Object.keys(fixtures).forEach(function (name) {
     fixtures[name].forEach(function (testSuite) {
       testSuite.tests.forEach(function (task) {
-        task.options.plugins = task.options.plugins || [];
-        task.options.plugins.push("estree");
-
         const testFn = task.disabled ? it.skip : it;
 
         testFn(name + "/" + testSuite.title + "/" + task.title, function () {
