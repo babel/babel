@@ -1,24 +1,20 @@
 {
   "type": "File",
-  "start":0,"end":296,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":1}},
+  "start":0,"end":134,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
   "errors": [
     "SyntaxError: 'override' modifier cannot appear on a constructor declaration. (2:11)",
     "SyntaxError: 'override' modifier cannot appear on an index signature. (3:2)",
-    "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (4:2)",
-    "SyntaxError: 'static' modifier cannot be used with 'override' modifier. (5:2)",
-    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (9:10)",
-    "SyntaxError: 'declare' modifier cannot be used with 'override' modifier. (10:11)",
-    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (14:2)"
+    "SyntaxError: This member cannot have an 'override' modifier because its containing class does not extend another class. (7:2)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":296,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":1}},
+    "start":0,"end":134,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start":0,"end":149,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+        "start":0,"end":93,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
         "id": {
           "type": "Identifier",
           "start":6,"end":14,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":14},"identifierName":"MyClass2"},
@@ -31,7 +27,7 @@
         },
         "body": {
           "type": "ClassBody",
-          "start":33,"end":149,"loc":{"start":{"line":1,"column":33},"end":{"line":6,"column":1}},
+          "start":33,"end":93,"loc":{"start":{"line":1,"column":33},"end":{"line":4,"column":1}},
           "body": [
             {
               "type": "ClassMethod",
@@ -83,147 +79,40 @@
                   "start":87,"end":90,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":27}}
                 }
               }
-            },
-            {
-              "type": "ClassProperty",
-              "start":94,"end":119,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":27}},
-              "override": true,
-              "static": true,
-              "key": {
-                "type": "Identifier",
-                "start":110,"end":114,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":22},"identifierName":"size"},
-                "name": "size"
-              },
-              "computed": false,
-              "value": {
-                "type": "NumericLiteral",
-                "start":117,"end":118,"loc":{"start":{"line":4,"column":25},"end":{"line":4,"column":26}},
-                "extra": {
-                  "rawValue": 5,
-                  "raw": "5"
-                },
-                "value": 5
-              }
-            },
-            {
-              "type": "ClassProperty",
-              "start":122,"end":147,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":27}},
-              "override": true,
-              "static": true,
-              "key": {
-                "type": "Identifier",
-                "start":138,"end":142,"loc":{"start":{"line":5,"column":18},"end":{"line":5,"column":22},"identifierName":"size"},
-                "name": "size"
-              },
-              "computed": false,
-              "value": {
-                "type": "NumericLiteral",
-                "start":145,"end":146,"loc":{"start":{"line":5,"column":25},"end":{"line":5,"column":26}},
-                "extra": {
-                  "rawValue": 5,
-                  "raw": "5"
-                },
-                "value": 5
-              }
             }
           ]
         }
       },
       {
         "type": "ClassDeclaration",
-        "start":151,"end":255,"loc":{"start":{"line":8,"column":0},"end":{"line":11,"column":1}},
-        "declare": true,
+        "start":95,"end":134,"loc":{"start":{"line":6,"column":0},"end":{"line":8,"column":1}},
         "id": {
           "type": "Identifier",
-          "start":165,"end":173,"loc":{"start":{"line":8,"column":14},"end":{"line":8,"column":22},"identifierName":"MyClass3"},
-          "name": "MyClass3"
-        },
-        "superClass": {
-          "type": "Identifier",
-          "start":182,"end":191,"loc":{"start":{"line":8,"column":31},"end":{"line":8,"column":40},"identifierName":"BaseClass"},
-          "name": "BaseClass"
-        },
-        "body": {
-          "type": "ClassBody",
-          "start":192,"end":255,"loc":{"start":{"line":8,"column":41},"end":{"line":11,"column":1}},
-          "body": [
-            {
-              "type": "ClassProperty",
-              "start":196,"end":223,"loc":{"start":{"line":9,"column":2},"end":{"line":9,"column":29}},
-              "declare": true,
-              "override": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":213,"end":218,"loc":{"start":{"line":9,"column":19},"end":{"line":9,"column":24},"identifierName":"prop1"},
-                "name": "prop1"
-              },
-              "computed": false,
-              "typeAnnotation": {
-                "type": "TSTypeAnnotation",
-                "start":218,"end":223,"loc":{"start":{"line":9,"column":24},"end":{"line":9,"column":29}},
-                "typeAnnotation": {
-                  "type": "TSAnyKeyword",
-                  "start":220,"end":223,"loc":{"start":{"line":9,"column":26},"end":{"line":9,"column":29}}
-                }
-              },
-              "value": null
-            },
-            {
-              "type": "ClassProperty",
-              "start":226,"end":253,"loc":{"start":{"line":10,"column":2},"end":{"line":10,"column":29}},
-              "override": true,
-              "declare": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":243,"end":248,"loc":{"start":{"line":10,"column":19},"end":{"line":10,"column":24},"identifierName":"prop2"},
-                "name": "prop2"
-              },
-              "computed": false,
-              "typeAnnotation": {
-                "type": "TSTypeAnnotation",
-                "start":248,"end":253,"loc":{"start":{"line":10,"column":24},"end":{"line":10,"column":29}},
-                "typeAnnotation": {
-                  "type": "TSAnyKeyword",
-                  "start":250,"end":253,"loc":{"start":{"line":10,"column":26},"end":{"line":10,"column":29}}
-                }
-              },
-              "value": null
-            }
-          ]
-        }
-      },
-      {
-        "type": "ClassDeclaration",
-        "start":257,"end":296,"loc":{"start":{"line":13,"column":0},"end":{"line":15,"column":1}},
-        "id": {
-          "type": "Identifier",
-          "start":263,"end":271,"loc":{"start":{"line":13,"column":6},"end":{"line":13,"column":14},"identifierName":"MyClass4"},
+          "start":101,"end":109,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":14},"identifierName":"MyClass4"},
           "name": "MyClass4"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":272,"end":296,"loc":{"start":{"line":13,"column":15},"end":{"line":15,"column":1}},
+          "start":110,"end":134,"loc":{"start":{"line":6,"column":15},"end":{"line":8,"column":1}},
           "body": [
             {
               "type": "ClassProperty",
-              "start":276,"end":294,"loc":{"start":{"line":14,"column":2},"end":{"line":14,"column":20}},
+              "start":114,"end":132,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":20}},
               "override": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start":285,"end":289,"loc":{"start":{"line":14,"column":11},"end":{"line":14,"column":15},"identifierName":"prop"},
+                "start":123,"end":127,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":15},"identifierName":"prop"},
                 "name": "prop"
               },
               "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":289,"end":294,"loc":{"start":{"line":14,"column":15},"end":{"line":14,"column":20}},
+                "start":127,"end":132,"loc":{"start":{"line":7,"column":15},"end":{"line":7,"column":20}},
                 "typeAnnotation": {
                   "type": "TSAnyKeyword",
-                  "start":291,"end":294,"loc":{"start":{"line":14,"column":17},"end":{"line":14,"column":20}}
+                  "start":129,"end":132,"loc":{"start":{"line":7,"column":17},"end":{"line":7,"column":20}}
                 }
               },
               "value": null
