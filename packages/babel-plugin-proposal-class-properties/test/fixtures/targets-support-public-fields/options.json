@@ -1,0 +1,6 @@
+{
+  "targets": {
+    "node": "12"
+  },
+  "plugins": ["proposal-class-properties"]
+}
