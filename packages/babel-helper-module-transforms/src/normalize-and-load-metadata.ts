@@ -21,7 +21,12 @@ export interface ModuleMetadata {
   stringSpecifiers: Set<string>;
 }
 
-export type InteropType = "default" | "namespace" | "none";
+export type InteropType =
+  | "default" // Babel interop for default-only imports
+  | "namespace" // Babel interop for namespace or default+named imports
+  | "node-default" // Node.js interop for default-only imports
+  | "node-namespace" // Node.js interop for namespace or default+named imports
+  | "none"; // No interop, or named-only imports
 
 export interface SourceModuleMetadata {
   // A unique variable name to use for this namespace object. Centralized for simplicity.
@@ -68,19 +73,42 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
   );
 }
 
+export function validateImportInteropOption(
+  importInterop: any,
+): importInterop is "none" | "babel" | "node" | Function {
+  if (
+    typeof importInterop !== "function" &&
+    importInterop !== "none" &&
+    importInterop !== "babel" &&
+    importInterop !== "node"
+  ) {
+    throw new Error(
+      `.importInterop must be one of "none", "babel", "node", or a function returning one of those values (received ${importInterop}).`,
+    );
+  }
+  return importInterop;
+}
+
+function resolveImportInterop(importInterop, source) {
+  if (typeof importInterop === "function") {
+    return validateImportInteropOption(importInterop(source));
+  }
+  return importInterop;
+}
+
 /**
  * Remove all imports and exports from the file, and return all metadata
  * needed to reconstruct the module's behavior.
  */
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath<t.Program>,
-  exportName?: string,
+  exportName: string,
   {
-    noInterop = false,
+    importInterop,
     initializeReexports = false,
     lazy = false,
     esNamespaceOnly = false,
-  } = {},
+  },
 ): ModuleMetadata {
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
@@ -105,16 +133,24 @@ export default function normalizeModuleAndLoadMetadata(
       metadata.name = metadata.importsNamespace.values().next().value;
     }
 
-    if (noInterop) metadata.interop = "none";
-    else if (esNamespaceOnly) {
+    const resolvedInterop = resolveImportInterop(
+      importInterop,
+      metadata.source,
+    );
+
+    if (resolvedInterop === "none") {
+      metadata.interop = "none";
+    } else if (resolvedInterop === "node" && metadata.interop === "namespace") {
+      metadata.interop = "node-namespace";
+    } else if (resolvedInterop === "node" && metadata.interop === "default") {
+      metadata.interop = "node-default";
+    } else if (esNamespaceOnly && metadata.interop === "namespace") {
       // Both the default and namespace interops pass through __esModule
       // objects, but the namespace interop is used to enable Babel's
       // destructuring-like interop behavior for normal CommonJS.
       // Since some tooling has started to remove that behavior, we expose
       // it as the `esNamespace` option.
-      if (metadata.interop === "namespace") {
-        metadata.interop = "default";
-      }
+      metadata.interop = "default";
     }
   }
 
@@ -199,6 +235,8 @@ function getModuleMetadata(
         reexportAll: null,
 
         lazy: false,
+
+        source,
       };
       sourceData.set(source, data);
     }

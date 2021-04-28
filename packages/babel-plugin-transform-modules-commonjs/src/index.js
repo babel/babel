@@ -30,6 +30,7 @@ export default declare((api, options) => {
     strict,
     strictMode,
     noInterop,
+    importInterop,
     lazy = false,
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
@@ -178,6 +179,7 @@ export default declare((api, options) => {
               strictMode,
               allowTopLevelThis,
               noInterop,
+              importInterop,
               lazy,
               esNamespaceOnly:
                 typeof state.filename === "string" &&

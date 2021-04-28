@@ -500,17 +500,19 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
-  function _getRequireWildcardCache() {
+helpers.interopRequireWildcard = helper("7.14.0")`
+  function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
 
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function () { return cache; };
-    return cache;
+    var cacheBabelInterop = new WeakMap();
+    var cacheNodeInterop = new WeakMap();
+    return (_getRequireWildcardCache = function (nodeInterop) {
+      return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    })(nodeInterop);
   }
 
-  export default function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
+  export default function _interopRequireWildcard(obj, nodeInterop) {
+    if (!nodeInterop && obj && obj.__esModule) {
       return obj;
     }
 
@@ -518,7 +520,7 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       return { default: obj }
     }
 
-    var cache = _getRequireWildcardCache();
+    var cache = _getRequireWildcardCache(nodeInterop);
     if (cache && cache.has(obj)) {
       return cache.get(obj);
     }
@@ -526,7 +528,7 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
     var newObj = {};
     var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
     for (var key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
         var desc = hasPropertyDescriptor
           ? Object.getOwnPropertyDescriptor(obj, key)
           : null;

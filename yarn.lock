@@ -2320,6 +2320,7 @@ __metadata:
     "@babel/helper-module-transforms": "workspace:^7.13.0"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
+    "@babel/plugin-external-helpers": "workspace:*"
     babel-plugin-dynamic-import-node: ^2.3.3
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2349,6 +2350,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/helper-simple-access": "workspace:^7.12.13"
+    "@babel/plugin-external-helpers": "workspace:*"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
     babel-plugin-dynamic-import-node: ^2.3.3
   peerDependencies:
@@ -2408,6 +2410,7 @@ __metadata:
     "@babel/helper-module-transforms": "workspace:^7.13.0"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
+    "@babel/plugin-external-helpers": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
