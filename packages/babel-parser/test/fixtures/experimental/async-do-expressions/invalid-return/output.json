@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
   "errors": [
-    "SyntaxError: 'return' outside of function (3:4)"
+    "SyntaxError: 'return' outside of function. (3:4)"
   ],
   "program": {
     "type": "Program",
