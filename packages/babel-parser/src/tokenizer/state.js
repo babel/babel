@@ -65,7 +65,7 @@ export default class State {
   inPropertyName: boolean = false;
   hasFlowComment: boolean = false;
   isIterator: boolean = false;
-  isDeclareContext: boolean = false;
+  isAmbientContext: boolean = false;
   inAbstractClass: boolean = false;
 
   // For the smartPipelines plugin:
