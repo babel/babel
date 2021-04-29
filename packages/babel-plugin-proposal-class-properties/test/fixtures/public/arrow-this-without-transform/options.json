@@ -1,4 +1,4 @@
 {
-  "plugins": ["transform-arrow-functions", "syntax-class-properties"],
+  "plugins": ["transform-arrow-functions"],
   "throws": "Unable to transform arrow inside class property"
 }
