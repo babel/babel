@@ -33,7 +33,7 @@
     "@babel/plugin-proposal-throw-expressions": "workspace:*",
     "@babel/plugin-proposal-unicode-property-regex": "workspace:*",
     "@babel/plugin-syntax-async-generators": "^7.8.4",
-    "@babel/plugin-syntax-class-properties": "workspace:*",
+    "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/plugin-syntax-class-static-block": "workspace:*",
     "@babel/plugin-syntax-decimal": "workspace:*",
     "@babel/plugin-syntax-decorators": "workspace:*",
