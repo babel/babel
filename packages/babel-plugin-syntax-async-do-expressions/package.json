@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-async-do-expressions",
-  "version": "7.13.0",
+  "version": "7.14.0",
   "description": "Allow parsing of async do expressions",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+    "@babel/helper-plugin-utils": "workspace:^7.13.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

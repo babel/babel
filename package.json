@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "7.13.17",
+  "version": "7.14.0",
   "private": true,
   "license": "MIT",
   "type": "commonjs",
