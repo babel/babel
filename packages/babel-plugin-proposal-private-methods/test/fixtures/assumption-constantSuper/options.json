@@ -2,8 +2,7 @@
   "plugins": [
     "proposal-private-methods",
     "proposal-class-properties",
-    "transform-block-scoping",
-    "syntax-class-properties"
+    "transform-block-scoping"
   ],
   "assumptions": {
     "constantSuper": true

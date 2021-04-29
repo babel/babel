@@ -2,8 +2,7 @@
   "plugins": [
     "proposal-class-properties",
     "transform-classes",
-    "transform-block-scoping",
-    "syntax-class-properties"
+    "transform-block-scoping"
   ],
   "throws": "Destructuring to a super field is not supported yet."
 }

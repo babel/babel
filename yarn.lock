@@ -633,6 +633,7 @@ __metadata:
   resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.14.0#19c4f6"
   dependencies:
     "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.14.0"
+  checksum: e20666322832e8ef18b5b17a27dd12d081b29375087299d867c99e00b7c9ab976833eba5647ead13e51877ff8275367b3ead82a4fe623550010a7e619dee5e3a
   languageName: node
   linkType: hard
 
@@ -1570,17 +1571,6 @@ __metadata:
   checksum: 3023dec8acd42e0b691d9cdf21bc6931fe3e3d53c2231bdfe3eca3afeab168723f7315991550a163748bc49dbcd3c95632b77ec56f5e1d89bc5029cfeb7f0f7b
   languageName: node
   linkType: hard
-
-"@babel/plugin-syntax-class-properties@workspace:*, @babel/plugin-syntax-class-properties@workspace:^7.12.13, @babel/plugin-syntax-class-properties@workspace:packages/babel-plugin-syntax-class-properties":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-class-properties@workspace:packages/babel-plugin-syntax-class-properties"
-  dependencies:
-    "@babel/core": "workspace:*"
-    "@babel/helper-plugin-utils": "workspace:^7.12.13"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "@babel/plugin-syntax-class-static-block@workspace:*, @babel/plugin-syntax-class-static-block@workspace:^7.12.13, @babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block":
   version: 0.0.0-use.local
@@ -3141,7 +3131,7 @@ __metadata:
     "@babel/plugin-proposal-private-property-in-object": "workspace:^7.14.0"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^7.12.13"
     "@babel/plugin-syntax-async-generators": ^7.8.4
-    "@babel/plugin-syntax-class-properties": "workspace:^7.12.13"
+    "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": "workspace:^7.12.13"
     "@babel/plugin-syntax-dynamic-import": ^7.8.3
     "@babel/plugin-syntax-export-namespace-from": ^7.8.3
@@ -3380,7 +3370,7 @@ __metadata:
     "@babel/plugin-proposal-throw-expressions": "workspace:*"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:*"
     "@babel/plugin-syntax-async-generators": ^7.8.4
-    "@babel/plugin-syntax-class-properties": "workspace:*"
+    "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": "workspace:*"
     "@babel/plugin-syntax-decimal": "workspace:*"
     "@babel/plugin-syntax-decorators": "workspace:*"

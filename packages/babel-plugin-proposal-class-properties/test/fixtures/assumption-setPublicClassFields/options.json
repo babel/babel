@@ -1,5 +1,5 @@
 {
-  "plugins": ["proposal-class-properties", "syntax-class-properties"],
+  "plugins": ["proposal-class-properties"],
   "assumptions": {
     "setPublicClassFields": true
   }
