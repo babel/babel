@@ -157,8 +157,9 @@ module.exports = function (api) {
       ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
-      convertESM ? "@babel/transform-modules-commonjs" : null,
-      convertESM ? pluginNodeImportInteropBabel : pluginNodeImportInteropRollup,
+      convertESM
+        ? ["@babel/transform-modules-commonjs", { importInterop }]
+        : pluginNodeImportInteropRollup,
       convertESM ? pluginImportMetaUrl : null,
 
       pluginPackageJsonMacro,
@@ -186,7 +187,7 @@ module.exports = function (api) {
         ].map(normalize),
         plugins: [
           // Explicitly use the lazy version of CommonJS modules.
-          ["@babel/transform-modules-commonjs", { lazy: true }],
+          ["@babel/transform-modules-commonjs", { importInterop, lazy: true }],
         ],
       },
       convertESM && {
@@ -217,6 +218,28 @@ module.exports = function (api) {
 
   return config;
 };
+
+function importInterop(source) {
+  if (
+    // These internal files are "real CJS" (whose default export is
+    // on module.exports) and not compiled ESM.
+    source.startsWith("@babel/compat-data/") ||
+    source.includes("babel-eslint-shared-fixtures/utils") ||
+    // @babel/preset-modules is an external package, and it uses
+    // module.exports for the default export
+    source.startsWith("@babel/preset-modules/")
+  ) {
+    return "node";
+  }
+  if (source[0] === "." || source.startsWith("@babel/")) {
+    // We don't need to worry about interop for internal files, since we know
+    // for sure that they are ESM modules compiled to CJS
+    return "none";
+  }
+
+  // For external modules, we want to match the Node.js behavior
+  return "node";
+}
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
@@ -418,57 +441,6 @@ function pluginPackageJsonMacro({ types: t }) {
 
         const value = JSON.parse(pkg)[field];
         path.replaceWith(t.valueToNode(value));
-      },
-    },
-  };
-}
-
-// Match the Node.js behavior (the default import is module.exports)
-function pluginNodeImportInteropBabel({ template }) {
-  return {
-    visitor: {
-      ImportDeclaration(path) {
-        const specifiers = path.get("specifiers");
-        if (specifiers.length === 0) {
-          return;
-        }
-
-        const { source } = path.node;
-        if (
-          source.value.startsWith(".") ||
-          source.value.startsWith("@babel/") ||
-          source.value === "charcodes"
-        ) {
-          // For internal modules, it's either "all CJS" or "all ESM".
-          // We don't need to worry about interop.
-          return;
-        }
-
-        const defImport = specifiers.find(s => s.isImportDefaultSpecifier());
-        const nsImport = specifiers.find(s => s.isImportNamespaceSpecifier());
-
-        if (defImport) {
-          path.insertAfter(
-            template.ast`
-              const ${defImport.node.local} = require(${source});
-            `
-          );
-          defImport.remove();
-        }
-
-        if (nsImport) {
-          path.insertAfter(
-            template.ast`
-              const ${nsImport.node.local} = {
-                ...require(${source}),
-                default: require(${source}),
-              };
-            `
-          );
-          nsImport.remove();
-        }
-
-        if (path.node.specifiers.length === 0) path.remove();
       },
     },
   };
