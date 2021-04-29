@@ -19,6 +19,75 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.0 (2021-04-29)
+
+#### :eyeglasses: Spec Compliance
+* `babel-generator`, `babel-parser`
+  * [#13209](https://github.com/babel/babel/pull/13209) [ts] Enforce order for the `override` modifier ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :rocket: New Feature
+* `babel-plugin-proposal-async-do-expressions`
+  * [#13117](https://github.com/babel/babel/pull/13117) Implement async-do-expressions transform ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-generator`, `babel-parser`, `babel-plugin-proposal-do-expressions`, `babel-plugin-syntax-async-do-expressions`, `babel-types`
+  * [#13043](https://github.com/babel/babel/pull/13043) Parse async do expressions ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-env`
+  * [#13091](https://github.com/babel/babel/pull/13091) Enable class fields & private methods by default ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-preset-env`
+  * [#13176](https://github.com/babel/babel/pull/13176) Add private brand checks to `shippedProposals` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13114](https://github.com/babel/babel/pull/13114) Add class static blocks to `preset-env`'s `shippedProposals` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-syntax-private-property-in-object`
+  * [#13172](https://github.com/babel/babel/pull/13172) Allow compiling `#foo in obj` without compiling private fields ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#13113](https://github.com/babel/babel/pull/13113) babel-parser(ts): Add new plugin option `dts: boolean` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13175](https://github.com/babel/babel/pull/13175) Materialize the class features in `@babel/parser`. ([@JLHwung](https://github.com/JLHwung))
+  * [#13033](https://github.com/babel/babel/pull/13033) Introduce parser error codes ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-helper-module-transforms`, `babel-helpers`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#12838](https://github.com/babel/babel/pull/12838) Implement `importInterop: "node"` option for module transforms ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-traverse`, `babel-types`
+  * [#13224](https://github.com/babel/babel/pull/13224) Support parsing Flow's Optional Indexed Access Types ([@gkz](https://github.com/gkz))
+  * [#13053](https://github.com/babel/babel/pull/13053) Support parsing Flow's Indexed Access Types ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-parser`, `babel-traverse`
+  * [#13195](https://github.com/babel/babel/pull/13195) Parse string export names by default (`moduleStringNames`) ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#13089](https://github.com/babel/babel/pull/13089) Support TypeScript 4.3 get/set type members ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13097](https://github.com/babel/babel/pull/13097) support TS 4.3 `override` syntax in class ([@g-plane](https://github.com/g-plane))
+  * [#13096](https://github.com/babel/babel/pull/13096) support TS 4.3 static index signature in class ([@g-plane](https://github.com/g-plane))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#13208](https://github.com/babel/babel/pull/13208) Prevent ForOfStatement from printing the forbidden sequence "for ( async of" ([@Zalathar](https://github.com/Zalathar))
+  * [#13169](https://github.com/babel/babel/pull/13169) fix: don't deduplicate comments with same start index ([@gzzhanghao](https://github.com/gzzhanghao))
+* `babel-generator`, `babel-plugin-proposal-object-rest-spread`, `babel-preset-env`
+  * [#13204](https://github.com/babel/babel/pull/13204) Simplify the special-case printing of single-param arrow functions ([@Zalathar](https://github.com/Zalathar))
+* `babel-core`
+  * [#13182](https://github.com/babel/babel/pull/13182) fix: Don't load browserslist in block-hoist-plugin ([@MichaReiser](https://github.com/MichaReiser))
+
+#### :nail_care: Polish
+* `babel-cli`, `babel-core`, `babel-parser`, `babel-plugin-transform-classes`, `babel-preset-env`, `babel-preset-typescript`
+  * [#13130](https://github.com/babel/babel/pull/13130) babel-parser: Add new internal ESLint rule to consistent error messages ([@sosukesuzuki](https://github.com/sosukesuzuki))
+
+#### :house: Internal
+* `babel-parser`
+  * [#13227](https://github.com/babel/babel/pull/13227) Add `runFixtureTestsWithoutExactASTMatch` in parser test runner ([@JLHwung](https://github.com/JLHwung))
+  * [#13163](https://github.com/babel/babel/pull/13163) babel-parser: Use `this.isThisParam` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13200](https://github.com/babel/babel/pull/13200) refactor: avoid parsing logic on locations ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#13190](https://github.com/babel/babel/pull/13190) Allow putting helpers in individual files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#13183](https://github.com/babel/babel/pull/13183) chore: run coverage-test against node 16 ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-core`
+  * [#13090](https://github.com/babel/babel/pull/13090) perf(core): check files before interacting with them ([@FauxFaux](https://github.com/FauxFaux))
+  * [#13223](https://github.com/babel/babel/pull/13223) perf: avoid loadFullConfig when creating block hoist plugin ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-validator-identifier`
+  * [#13211](https://github.com/babel/babel/pull/13211) Improve `isIdentifierName` performance ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-preset-env`
+  * [#13194](https://github.com/babel/babel/pull/13194) Mark `WeakMap`s of private fields as pure ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#13201](https://github.com/babel/babel/pull/13201) Simplify the `wrapRegExp` helper for named groups ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.13.17 (2021-04-20)
 
 #### :bug: Bug Fix
