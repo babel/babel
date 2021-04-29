@@ -146,7 +146,7 @@ function save(test, ast) {
  generated from `getFixtures`
  * @param {*} parseFunction A parser with the same interface of `@babel/parser#parse`
  * @param {boolean} [compareErrorsOnly=false] Whether we should only compare the "errors"
- * of generated ast against the expected AST. Used for `runThrowTestsWithEstree` where an
+ * of generated ast against the expected AST. Used for `runFixtureTestsWithoutExactASTMatch` where an
  * ESTree AST is generated but we want to make sure `@babel/parser` still throws expected
  * recoverable errors on given code locations.
  * @returns {void}
@@ -191,13 +191,20 @@ function runTest(test, parseFunction, compareErrorsOnly = false) {
   if (ast.comments && !ast.comments.length) delete ast.comments;
   if (ast.errors && !ast.errors.length) delete ast.errors;
 
-  if (!test.expect.code && !opts.throws && !process.env.CI) {
+  if (
+    !test.expect.code &&
+    !opts.throws &&
+    !process.env.CI &&
+    !compareErrorsOnly
+  ) {
     test.expect.loc += "on";
     return save(test, ast);
   }
 
+  const shouldOverWrite = process.env.OVERWRITE && !compareErrorsOnly;
+
   if (opts.throws) {
-    if (process.env.OVERWRITE) {
+    if (shouldOverWrite) {
       const fn = path.dirname(test.expect.loc) + "/options.json";
       test.options = test.options || {};
       delete test.options.throws;
@@ -223,7 +230,7 @@ function runTest(test, parseFunction, compareErrorsOnly = false) {
     const mis = misMatch(JSON.parse(test.expect.code), ast);
 
     if (mis) {
-      if (process.env.OVERWRITE) {
+      if (shouldOverWrite) {
         return save(test, ast);
       }
       throw new Error(mis);
