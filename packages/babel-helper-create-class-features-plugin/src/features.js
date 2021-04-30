@@ -13,7 +13,7 @@ const featuresSameLoose = new Map([
   [FEATURES.privateMethods, "@babel/plugin-proposal-private-methods"],
   [
     FEATURES.privateIn,
-    "@babel/plugin-proposal-private-private-property-in-object",
+    "@babel/plugin-proposal-private-property-in-object",
   ],
 ]);
 
