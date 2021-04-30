@@ -450,7 +450,7 @@ function pluginNodeImportInteropRollup({ types: t }) {
   const depsUsing__esModuleAndDefaultExport = src =>
     src.startsWith("babel-plugin-polyfill-") ||
     src === "regenerator-transform" ||
-    src === "js-tokens";
+    (!bool(process.env.BABEL_8_BREAKING) && src === "js-tokens");
 
   return {
     visitor: {
