@@ -7,7 +7,7 @@
     ],
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true,
+    "noEmit": true,
     "composite": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
