@@ -407,7 +407,7 @@ export default class Tokenizer extends ParserErrors {
     }
 
     const nextPos = this.state.pos + 1;
-    const next = this.input.charCodeAt(nextPos);
+    const next = this.input.codePointAt(nextPos);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
       throw this.raise(this.state.pos, Errors.UnexpectedDigitAfterHash);
     }
@@ -438,6 +438,9 @@ export default class Tokenizer extends ParserErrors {
         this.finishToken(tt.bracketHashL);
       }
       this.state.pos += 2;
+    } else if (isIdentifierStart(next) || next === charCodes.backslash) {
+      ++this.state.pos;
+      this.finishToken(tt.privateName, this.readWord1());
     } else {
       this.finishOp(tt.hash, 1);
     }

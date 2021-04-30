@@ -29,7 +29,8 @@ import {
   isStrictBindReservedWord,
   isIdentifierStart,
 } from "../util/identifier";
-import type { Pos, Position } from "../util/location";
+import type { Pos } from "../util/location";
+import { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -1160,6 +1161,29 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
+      case tt.privateName: {
+        // https://tc39.es/proposal-private-fields-in-in
+        // RelationalExpression [In, Yield, Await]
+        //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
+        const start = this.state.start;
+        node = this.parsePrivateName();
+        if (this.match(tt._in)) {
+          this.expectPlugin("privateIn");
+          this.classScope.usePrivateName(
+            this.getPrivateNameSV(node),
+            node.start,
+          );
+        } else if (this.hasPlugin("privateIn")) {
+          this.raise(
+            this.state.start,
+            Errors.PrivateInExpectedIn,
+            this.getPrivateNameSV(node),
+          );
+        } else {
+          throw this.unexpected(start);
+        }
+        return node;
+      }
       case tt.hash: {
         if (this.state.inPipeline) {
           node = this.startNode();
@@ -1178,32 +1202,6 @@ export default class ExpressionParser extends LValParser {
 
           this.registerTopicReference();
           return this.finishNode(node, "PipelinePrimaryTopicReference");
-        }
-
-        // https://tc39.es/proposal-private-fields-in-in
-        // RelationalExpression [In, Yield, Await]
-        //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
-        const nextCh = this.input.codePointAt(this.state.end);
-        if (isIdentifierStart(nextCh) || nextCh === charCodes.backslash) {
-          const start = this.state.start;
-          // $FlowIgnore It'll either parse a PrivateName or throw.
-          node = (this.parseMaybePrivateName(true): N.PrivateName);
-          if (this.match(tt._in)) {
-            this.expectPlugin("privateIn");
-            this.classScope.usePrivateName(
-              this.getPrivateNameSV(node),
-              node.start,
-            );
-          } else if (this.hasPlugin("privateIn")) {
-            this.raise(
-              this.state.start,
-              Errors.PrivateInExpectedIn,
-              this.getPrivateNameSV(node),
-            );
-          } else {
-            throw this.unexpected(start);
-          }
-          return node;
         }
       }
       // fall through
@@ -1305,20 +1303,33 @@ export default class ExpressionParser extends LValParser {
   parseMaybePrivateName(
     isPrivateNameAllowed: boolean,
   ): N.PrivateName | N.Identifier {
-    const isPrivate = this.match(tt.hash);
+    const isPrivate = this.match(tt.privateName);
 
     if (isPrivate) {
       if (!isPrivateNameAllowed) {
-        this.raise(this.state.pos, Errors.UnexpectedPrivateField);
+        this.raise(this.state.start + 1, Errors.UnexpectedPrivateField);
       }
-      const node = this.startNode();
-      this.next();
-      this.assertNoSpace("Unexpected space between # and identifier");
-      node.id = this.parseIdentifier(true);
-      return this.finishNode(node, "PrivateName");
+      return this.parsePrivateName();
     } else {
       return this.parseIdentifier(true);
     }
+  }
+
+  parsePrivateName(): N.PrivateName {
+    const node = this.startNode();
+    const id = this.startNodeAt(
+      this.state.start + 1,
+      // The position is hardcoded because we merge `#` and name into a single
+      // tt.privateName token
+      new Position(
+        this.state.curLine,
+        this.state.start + 1 - this.state.lineStart,
+      ),
+    );
+    const name = this.state.value;
+    this.next(); // eat #name;
+    node.id = this.createIdentifier(id, name);
+    return this.finishNode(node, "PrivateName");
   }
 
   parseFunctionOrFunctionSent(): N.FunctionExpression | N.MetaProperty {

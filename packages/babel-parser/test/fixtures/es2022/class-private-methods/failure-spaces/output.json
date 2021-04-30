@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
   "errors": [
-    "SyntaxError: Unexpected space between # and identifier (2:3)"
+    "SyntaxError: Unexpected token (2:2)"
   ],
   "program": {
     "type": "Program",
