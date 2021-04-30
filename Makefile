@@ -76,6 +76,7 @@ flowcheck-ci:
 code-quality: tscheck flow lint
 
 tscheck: generate-tsconfig
+	rm -rf dts
 	$(YARN) tsc -b .
 
 flow: build-flow-typings
@@ -177,7 +178,6 @@ prepublish-build: clean-lib clean-runtime-helpers
 prepublish-prepare-dts:
 	$(MAKE) tscheck
 	$(YARN) gulp bundle-dts
-	$(YARN) gulp clean-dts
 	$(MAKE) build-typescript-legacy-typings
 
 prepublish:
