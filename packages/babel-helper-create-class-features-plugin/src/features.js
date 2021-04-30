@@ -11,10 +11,7 @@ export const FEATURES = Object.freeze({
 const featuresSameLoose = new Map([
   [FEATURES.fields, "@babel/plugin-proposal-class-properties"],
   [FEATURES.privateMethods, "@babel/plugin-proposal-private-methods"],
-  [
-    FEATURES.privateIn,
-    "@babel/plugin-proposal-private-private-property-in-object",
-  ],
+  [FEATURES.privateIn, "@babel/plugin-proposal-private-property-in-object"],
 ]);
 
 // We can't use a symbol because this needs to always be the same, even if
