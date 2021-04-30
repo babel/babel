@@ -448,7 +448,9 @@ function pluginPackageJsonMacro({ types: t }) {
 
 function pluginNodeImportInteropRollup({ types: t }) {
   const depsUsing__esModuleAndDefaultExport = src =>
-    src.startsWith("babel-plugin-polyfill-") || src === "regenerator-transform";
+    src.startsWith("babel-plugin-polyfill-") ||
+    src === "regenerator-transform" ||
+    src === "js-tokens";
 
   return {
     visitor: {
