@@ -1793,17 +1793,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-module-string-names@workspace:packages/babel-plugin-syntax-module-string-names":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-module-string-names@workspace:packages/babel-plugin-syntax-module-string-names"
-  dependencies:
-    "@babel/core": "workspace:*"
-    "@babel/helper-plugin-utils": "workspace:^7.12.13"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-syntax-nullish-coalescing-operator@npm:^7.8.3":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-nullish-coalescing-operator@npm:7.8.3"
