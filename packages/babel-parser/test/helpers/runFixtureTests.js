@@ -218,9 +218,21 @@ function runTest(test, parseFunction, compareErrorsOnly = false) {
       return save(test, ast);
     }
 
-    throw new Error(
-      "Expected error message: " + opts.throws + ". But parsing succeeded.",
-    );
+    if (ast.errors?.length) {
+      throw new Error(
+        `Expected non-recoverable error message: ${
+          opts.throws
+        }. But instead parsing recovered from errors: ${JSON.stringify(
+          ast.errors,
+          null,
+          2,
+        )}`,
+      );
+    } else {
+      throw new Error(
+        `Expected error message: ${opts.throws}. But parsing succeeded without errors.`,
+      );
+    }
   } else if (compareErrorsOnly) {
     const mis = misMatch(JSON.parse(test.expect.code).errors, ast.errors);
     if (mis) {
