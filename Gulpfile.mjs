@@ -60,7 +60,10 @@ function mapSrcToLib(srcPath) {
 }
 
 function mapToDts(packageName) {
-  return packageName.replace(/\bpackages\b/, "dts");
+  return packageName.replace(
+    /(?<\\|\/)(packages|eslint|codemods)(?=\\|\/)/,
+    "dts"
+  );
 }
 
 function getIndexFromPackage(name) {
