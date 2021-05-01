@@ -61,7 +61,7 @@ function mapSrcToLib(srcPath) {
 
 function mapToDts(packageName) {
   return packageName.replace(
-    /(?<\\|\/)(packages|eslint|codemods)(?=\\|\/)/,
+    /(?<=\\|\/|^)(packages|eslint|codemods)(?=\\|\/)/,
     "dts"
   );
 }
