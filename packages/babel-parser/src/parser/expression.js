@@ -1032,7 +1032,16 @@ export default class ExpressionParser extends LValParser {
               true,
             );
           } else if (this.match(tt.name)) {
-            return this.parseAsyncArrowUnaryFunction(id);
+            // If the next token begins with "=", commit to parsing an async
+            // arrow function. (Peeking ahead for "=" lets us avoid a more
+            // expensive full-token lookahead on this common path.)
+            if (this.lookaheadCharCode() === charCodes.equalsTo) {
+              return this.parseAsyncArrowUnaryFunction(id);
+            } else {
+              // Otherwise, treat "async" as an identifier and let calling code
+              // deal with the current tt.name token.
+              return id;
+            }
           } else if (this.match(tt._do)) {
             return this.parseDo(true);
           }
