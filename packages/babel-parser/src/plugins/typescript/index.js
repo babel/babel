@@ -2338,12 +2338,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (isStatic && this.eat(tt.braceL)) {
           this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
         } else {
-          this.parseClassMemberWithIsStatic(
-            classBody,
-            member,
-            state,
-            !!member.static,
-          );
+          this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
         }
       };
       if (member.declare) {
