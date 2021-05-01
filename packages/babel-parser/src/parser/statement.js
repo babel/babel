@@ -539,13 +539,33 @@ export default class StatementParser extends ExpressionParser {
       return this.parseFor(node, init);
     }
 
+    // Check whether the first token is possibly a contextual keyword, so that
+    // we can forbid `for (async of` if this turns out to be a for-of loop.
+    const startsWithUnescapedName =
+      this.match(tt.name) && !this.state.containsEsc;
+
     const refExpressionErrors = new ExpressionErrors();
     const init = this.parseExpression(true, refExpressionErrors);
     const isForOf = this.isContextual("of");
-    if (isForOf || this.match(tt._in)) {
-      if (isForOf && startsWithLet) {
+    if (isForOf) {
+      // Check for leading tokens that are forbidden in for-of loops:
+      if (startsWithLet) {
         this.raise(init.start, Errors.ForOfLet);
+      } else if (
+        // `for await (async of []);` is allowed.
+        awaitAt === -1 &&
+        startsWithUnescapedName &&
+        init.type === "Identifier" &&
+        init.name === "async"
+      ) {
+        // This catches the case where the `async` in `for (async of` was
+        // parsed as an identifier. If it was parsed as the start of an async
+        // arrow function (e.g. `for (async of => {} of []);`), the LVal check
+        // further down will raise a more appropriate error.
+        this.raise(init.start, Errors.ForOfAsync);
       }
+    }
+    if (isForOf || this.match(tt._in)) {
       this.toAssignable(init, /* isLHS */ true);
       const description = isForOf ? "for-of statement" : "for-in statement";
       this.checkLVal(init, description);

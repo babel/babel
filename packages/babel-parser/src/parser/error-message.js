@@ -61,6 +61,7 @@ export const ErrorMessages = makeErrorTemplates(
       "'from' is not allowed as an identifier after 'export default'.",
     ForInOfLoopInitializer:
       "'%0' loop variable declaration may not have an initializer.",
+    ForOfAsync: "The left-hand side of a for-of loop may not be 'async'.",
     ForOfLet: "The left-hand side of a for-of loop may not start with 'let'.",
     GeneratorInSingleStatementContext:
       "Generators can only be declared at the top level or inside a block.",
