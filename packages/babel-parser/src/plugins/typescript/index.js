@@ -2333,18 +2333,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "readonly",
       ]);
 
-      const callParseClassMember = () => {
-        this.parseClassMemberWithIsStatic(
-          classBody,
-          member,
-          state,
-          !!member.static,
-        );
+      const callParseClassMemberWithIsStatic = () => {
+        const isStatic = !!member.static;
+        if (isStatic && this.eat(tt.braceL)) {
+          this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
+        } else {
+          this.parseClassMemberWithIsStatic(
+            classBody,
+            member,
+            state,
+            !!member.static,
+          );
+        }
       };
       if (member.declare) {
-        this.tsInAmbientContext(callParseClassMember);
+        this.tsInAmbientContext(callParseClassMemberWithIsStatic);
       } else {
-        callParseClassMember();
+        callParseClassMemberWithIsStatic();
       }
     }
 
