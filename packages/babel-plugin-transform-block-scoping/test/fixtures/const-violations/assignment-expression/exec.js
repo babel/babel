@@ -39,3 +39,24 @@ expect(function() {
 }).toThrow('"a" is read-only');
 expect(state3.getA()).toBe(32); // Assignment did not succeed
 expect(state3.getB()).toBe(2); // `++b` was evaluated before error thrown
+
+const state4 = {};
+expect(function() {
+  const a = 1;
+  let b = 1;
+  state4.getA = () => a;
+  state4.getB = () => b;
+
+  a &&= ++b;
+}).toThrow('"a" is read-only');
+expect(state4.getA()).toBe(1); // Assignment did not succeed
+expect(state4.getB()).toBe(2); // `++b` was evaluated before error thrown
+
+{
+  const a = 1;
+  let b = 1;
+  a ||= ++b;
+
+  expect(a).toBe(1); // Assignment not made
+  expect(b).toBe(1); // `++b` was not evaluated
+}

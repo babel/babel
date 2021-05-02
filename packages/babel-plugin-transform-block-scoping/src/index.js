@@ -439,11 +439,13 @@ class BlockScoping {
               t.sequenceExpression([violation.get("right").node, throwNode]),
             );
           } else if (["&&=", "||=", "??="].includes(operator)) {
-            violation
-              .get("right")
-              .replaceWith(
+            violation.replaceWith(
+              t.logicalExpression(
+                operator.slice(0, -1),
+                violation.get("left").node,
                 t.sequenceExpression([violation.get("right").node, throwNode]),
-              );
+              ),
+            );
           } else {
             violation.replaceWith(
               t.sequenceExpression([
