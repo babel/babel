@@ -1,4 +1,4 @@
-for (var i = 0; i < 3; i = (i + 1, babelHelpers.readOnlyError("i"))) {
+for (var i = 0; i < 3; i + 1, babelHelpers.readOnlyError("i")) {
   console.log(i);
 }
 

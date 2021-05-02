@@ -434,7 +434,11 @@ class BlockScoping {
 
         if (violation.isAssignmentExpression()) {
           const { operator } = violation.node;
-          if (["=", "&&=", "||=", "??="].includes(operator)) {
+          if (operator === "=") {
+            violation.replaceWith(
+              t.sequenceExpression([violation.get("right").node, throwNode]),
+            );
+          } else if (["&&=", "||=", "??="].includes(operator)) {
             violation
               .get("right")
               .replaceWith(
