@@ -455,11 +455,7 @@ class BlockScoping {
         } else if (violation.isUpdateExpression()) {
           violation.replaceWith(
             t.sequenceExpression([
-              t.binaryExpression(
-                violation.node.operator[0],
-                violation.get("argument").node,
-                t.numericLiteral(1),
-              ),
+              t.unaryExpression("+", violation.get("argument").node),
               throwNode,
             ]),
           );
