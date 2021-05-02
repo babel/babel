@@ -49,6 +49,26 @@ describe("modification", function () {
         },
       });
     });
+
+    it("should set the correct path.context", function () {
+      expect.assertions(2);
+
+      const ast = parse("[b];");
+      traverse(ast, {
+        skipKeys: ["consequent"],
+        ExpressionStatement(path) {
+          path.traverse({ Identifier() {}, skipKeys: [] });
+
+          const arr = path.get("expression");
+          const x = arr.pushContainer("elements", [
+            { type: "Identifier", name: "x" },
+          ])[0];
+
+          expect(x.node.name).toBe("x");
+          expect(x.opts.skipKeys).toEqual(["consequent"]);
+        },
+      });
+    });
   });
   describe("unshiftContainer", function () {
     it("unshifts identifier into params", function () {
@@ -75,6 +95,26 @@ describe("modification", function () {
           expect(generateCode(path)).toBe("foo(d, a, b);");
           path.unshiftContainer("arguments", t.stringLiteral("s"));
           expect(generateCode(path)).toBe(`foo("s", d, a, b);`);
+        },
+      });
+    });
+
+    it("should set the correct path.context", function () {
+      expect.assertions(2);
+
+      const ast = parse("[b];");
+      traverse(ast, {
+        skipKeys: ["consequent"],
+        ExpressionStatement(path) {
+          path.traverse({ Identifier() {}, skipKeys: [] });
+
+          const arr = path.get("expression");
+          const x = arr.unshiftContainer("elements", [
+            { type: "Identifier", name: "x" },
+          ])[0];
+
+          expect(x.node.name).toBe("x");
+          expect(x.opts.skipKeys).toEqual(["consequent"]);
         },
       });
     });
@@ -142,9 +182,9 @@ describe("modification", function () {
           const tagName = path.node.openingElement.name.name;
           if (tagName !== "span") return;
           path.insertBefore(
-            t.JSXElement(
-              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
-              t.JSXClosingElement(t.JSXIdentifier("div")),
+            t.jsxElement(
+              t.jsxOpeningElement(t.jsxIdentifier("div"), [], false),
+              t.jsxClosingElement(t.jsxIdentifier("div")),
               [],
             ),
           );
@@ -252,9 +292,9 @@ describe("modification", function () {
           const tagName = path.node.openingElement.name.name;
           if (tagName !== "span") return;
           path.insertAfter(
-            t.JSXElement(
-              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
-              t.JSXClosingElement(t.JSXIdentifier("div")),
+            t.jsxElement(
+              t.jsxOpeningElement(t.jsxIdentifier("div"), [], false),
+              t.jsxClosingElement(t.jsxIdentifier("div")),
               [],
             ),
           );

@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+  "errors": [
+    "SyntaxError: Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}` (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":16,"end":18,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":18}},
+            "body": [],
+            "directives": []
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":2}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

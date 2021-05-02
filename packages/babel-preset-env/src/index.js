@@ -99,14 +99,16 @@ export const getModulesPluginNames = ({
   transformations,
   shouldTransformESM,
   shouldTransformDynamicImport,
+  shouldTransformExportNamespaceFrom,
   shouldParseTopLevelAwait,
-}: {
+}: {|
   modules: ModuleOption,
   transformations: ModuleTransformationsType,
   shouldTransformESM: boolean,
   shouldTransformDynamicImport: boolean,
+  shouldTransformExportNamespaceFrom: boolean,
   shouldParseTopLevelAwait: boolean,
-}) => {
+|}) => {
   const modulesPluginNames = [];
   if (modules !== false && transformations[modules]) {
     if (shouldTransformESM) {
@@ -130,6 +132,12 @@ export const getModulesPluginNames = ({
     }
   } else {
     modulesPluginNames.push("syntax-dynamic-import");
+  }
+
+  if (shouldTransformExportNamespaceFrom) {
+    modulesPluginNames.push("proposal-export-namespace-from");
+  } else {
+    modulesPluginNames.push("syntax-export-namespace-from");
   }
 
   if (shouldParseTopLevelAwait) {
@@ -206,6 +214,10 @@ function supportsDynamicImport(caller) {
   return !!caller?.supportsDynamicImport;
 }
 
+function supportsExportNamespaceFrom(caller) {
+  return !!caller?.supportsExportNamespaceFrom;
+}
+
 function supportsTopLevelAwait(caller) {
   return !!caller?.supportsTopLevelAwait;
 }
@@ -230,29 +242,27 @@ export default declare((api, opts) => {
     corejs: { version: corejs, proposals },
     browserslistEnv,
   } = normalizeOptions(opts);
-  // TODO: remove this in next major
-  let hasUglifyTarget = false;
 
-  if (optionsTargets?.uglify) {
-    hasUglifyTarget = true;
-    delete optionsTargets.uglify;
+  if (!process.env.BABEL_8_BREAKING) {
+    // eslint-disable-next-line no-var
+    var hasUglifyTarget = false;
 
-    console.log("");
-    console.log("The uglify target has been deprecated. Set the top level");
-    console.log("option `forceAllTransforms: true` instead.");
-    console.log("");
+    if (optionsTargets?.uglify) {
+      hasUglifyTarget = true;
+      delete optionsTargets.uglify;
+
+      console.warn(`
+The uglify target has been deprecated. Set the top level
+option \`forceAllTransforms: true\` instead.
+`);
+    }
   }
 
   if (optionsTargets?.esmodules && optionsTargets.browsers) {
-    console.log("");
-    console.log(
-      "@babel/preset-env: esmodules and browsers targets have been specified together.",
-    );
-    console.log(
-      // $FlowIgnore
-      `\`browsers\` target, \`${optionsTargets.browsers}\` will be ignored.`,
-    );
-    console.log("");
+    console.warn(`
+@babel/preset-env: esmodules and browsers targets have been specified together.
+\`browsers\` target, \`${optionsTargets.browsers.toString()}\` will be ignored.
+`);
   }
 
   const targets = getTargets(
@@ -263,8 +273,23 @@ export default declare((api, opts) => {
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
-  const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
+  const transformTargets = (
+    process.env.BABEL_8_BREAKING
+      ? forceAllTransforms
+      : forceAllTransforms || hasUglifyTarget
+  )
+    ? {}
+    : targets;
 
+  const compatData = getPluginList(shippedProposals, bugfixes);
+  const shouldSkipExportNamespaceFrom =
+    (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
+    (modules === false &&
+      !isRequired("proposal-export-namespace-from", transformTargets, {
+        compatData,
+        includes: include.plugins,
+        excludes: exclude.plugins,
+      }));
   const modulesPluginNames = getModulesPluginNames({
     modules,
     transformations: moduleTransformations,
@@ -273,11 +298,12 @@ export default declare((api, opts) => {
     shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller?.(supportsDynamicImport),
+    shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
     shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
   });
 
   const pluginNames = filterItems(
-    getPluginList(shippedProposals, bugfixes),
+    compatData,
     include.plugins,
     exclude.plugins,
     transformTargets,

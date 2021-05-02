@@ -2,6 +2,9 @@
   "presets": ["env"],
   "plugins": [
     ["proposal-decorators", { "legacy": true }],
-    ["proposal-class-properties", { "loose": true }]
+    ["proposal-class-properties", { "loose": true }],
+    ["babel-plugin-polyfill-es-shims", { "method": "usage-global", "targets": {
+      "node": "current"
+    }}]
   ]
 }

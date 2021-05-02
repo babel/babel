@@ -1,6 +1,6 @@
-import "core-js/modules/web.timers";
-import "core-js/modules/web.immediate";
-import "core-js/modules/web.dom.iterable";
+import "core-js/modules/web.timers.js";
+import "core-js/modules/web.immediate.js";
+import "core-js/modules/web.dom.iterable.js";
 const foo = {
   a: true
 };

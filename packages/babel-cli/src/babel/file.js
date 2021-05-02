@@ -1,10 +1,8 @@
 // @flow
 
 import convertSourceMap from "convert-source-map";
-import defaults from "lodash/defaults";
 import sourceMap from "source-map";
 import slash from "slash";
-import { sync as makeDirSync } from "make-dir";
 import path from "path";
 import fs from "fs";
 
@@ -90,7 +88,7 @@ export default async function ({
     const result = buildResult(fileResults);
 
     if (cliOptions.outFile) {
-      makeDirSync(path.dirname(cliOptions.outFile));
+      fs.mkdirSync(path.dirname(cliOptions.outFile), { recursive: true });
 
       // we've requested for a sourcemap to be written to disk
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
@@ -127,16 +125,10 @@ export default async function ({
   async function stdin(): Promise<void> {
     const code = await readStdin();
 
-    const res = await util.transform(
-      cliOptions.filename,
-      code,
-      defaults(
-        {
-          sourceFileName: "stdin",
-        },
-        babelOptions,
-      ),
-    );
+    const res = await util.transform(cliOptions.filename, code, {
+      ...babelOptions,
+      sourceFileName: "stdin",
+    });
 
     output([res]);
   }
@@ -177,22 +169,17 @@ export default async function ({
         sourceFilename = slash(sourceFilename);
 
         try {
-          return await util.compile(
-            filename,
-            defaults(
-              {
-                sourceFileName: sourceFilename,
-                // Since we're compiling everything to be merged together,
-                // "inline" applies to the final output file, but not to the individual
-                // files being concatenated.
-                sourceMaps:
-                  babelOptions.sourceMaps === "inline"
-                    ? true
-                    : babelOptions.sourceMaps,
-              },
-              babelOptions,
-            ),
-          );
+          return await util.compile(filename, {
+            ...babelOptions,
+            sourceFileName: sourceFilename,
+            // Since we're compiling everything to be merged together,
+            // "inline" applies to the final output file, but not to the individual
+            // files being concatenated.
+            sourceMaps:
+              babelOptions.sourceMaps === "inline"
+                ? true
+                : babelOptions.sourceMaps,
+          });
         } catch (err) {
           if (!cliOptions.watch) {
             throw err;

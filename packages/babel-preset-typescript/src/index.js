@@ -1,61 +1,56 @@
 import { declare } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
+import normalizeOptions from "./normalize-options";
 
-export default declare(
-  (
-    api,
-    {
-      allExtensions = false,
-      allowDeclareFields,
-      allowNamespaces,
-      jsxPragma,
-      isTSX = false,
-      onlyRemoveTypeImports,
-    },
-  ) => {
-    api.assertVersion(7);
+export default declare((api, opts) => {
+  api.assertVersion(7);
 
-    if (typeof allExtensions !== "boolean") {
-      throw new Error(".allExtensions must be a boolean, or undefined");
-    }
+  const {
+    allExtensions,
+    allowNamespaces,
+    isTSX,
+    jsxPragma,
+    jsxPragmaFrag,
+    onlyRemoveTypeImports,
+  } = normalizeOptions(opts);
 
-    if (typeof isTSX !== "boolean") {
-      throw new Error(".isTSX must be a boolean, or undefined");
-    }
+  const pluginOptions = process.env.BABEL_8_BREAKING
+    ? isTSX => ({
+        allowNamespaces,
+        isTSX,
+        jsxPragma,
+        jsxPragmaFrag,
+        onlyRemoveTypeImports,
+      })
+    : isTSX => ({
+        allowDeclareFields: opts.allowDeclareFields,
+        allowNamespaces,
+        isTSX,
+        jsxPragma,
+        jsxPragmaFrag,
+        onlyRemoveTypeImports,
+      });
 
-    if (isTSX && !allExtensions) {
-      throw new Error("isTSX:true requires allExtensions:true");
-    }
-
-    const pluginOptions = isTSX => ({
-      allowDeclareFields,
-      allowNamespaces,
-      isTSX,
-      jsxPragma,
-      onlyRemoveTypeImports,
-    });
-
-    return {
-      overrides: allExtensions
-        ? [
-            {
-              plugins: [[transformTypeScript, pluginOptions(isTSX)]],
-            },
-          ]
-        : [
-            {
-              // Only set 'test' if explicitly requested, since it requires that
-              // Babel is being called`
-              test: /\.ts$/,
-              plugins: [[transformTypeScript, pluginOptions(false)]],
-            },
-            {
-              // Only set 'test' if explicitly requested, since it requires that
-              // Babel is being called`
-              test: /\.tsx$/,
-              plugins: [[transformTypeScript, pluginOptions(true)]],
-            },
-          ],
-    };
-  },
-);
+  return {
+    overrides: allExtensions
+      ? [
+          {
+            plugins: [[transformTypeScript, pluginOptions(isTSX)]],
+          },
+        ]
+      : [
+          {
+            // Only set 'test' if explicitly requested, since it requires that
+            // Babel is being called`
+            test: /\.ts$/,
+            plugins: [[transformTypeScript, pluginOptions(false)]],
+          },
+          {
+            // Only set 'test' if explicitly requested, since it requires that
+            // Babel is being called`
+            test: /\.tsx$/,
+            plugins: [[transformTypeScript, pluginOptions(true)]],
+          },
+        ],
+  };
+});

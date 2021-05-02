@@ -5,6 +5,7 @@ import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
+import sourcemap from "source-map";
 
 describe("generation", function () {
   it("completeness", function () {
@@ -277,6 +278,48 @@ describe("generation", function () {
     expect(generated.code).toBe("function foo2() {\n  bar2;\n}");
   });
 
+  it("newline in template literal", () => {
+    const code = "`before\n\nafter`;";
+    const ast = parse(code, { filename: "inline" }).program;
+    const generated = generate(
+      ast,
+      {
+        filename: "inline",
+        sourceFileName: "inline",
+        sourceMaps: true,
+      },
+      code,
+    );
+
+    const consumer = new sourcemap.SourceMapConsumer(generated.map);
+    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    expect(loc).toMatchObject({
+      column: 0,
+      line: 2,
+    });
+  });
+
+  it("newline in string literal", () => {
+    const code = "'before\\\n\\\nafter';";
+    const ast = parse(code, { filename: "inline" }).program;
+    const generated = generate(
+      ast,
+      {
+        filename: "inline",
+        sourceFileName: "inline",
+        sourceMaps: true,
+      },
+      code,
+    );
+
+    const consumer = new sourcemap.SourceMapConsumer(generated.map);
+    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    expect(loc).toMatchObject({
+      column: 0,
+      line: 2,
+    });
+  });
+
   it("lazy source map generation", function () {
     const code = "function hi (msg) { console.log(msg); }\n";
 
@@ -463,35 +506,222 @@ describe("programmatic generation", function () {
 
   describe("typescript generate parentheses if necessary", function () {
     it("wraps around union for array", () => {
-      const typeStatement = t.TSArrayType(
-        t.TSUnionType([
-          t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
-          t.TSNullKeyword(),
+      const typeStatement = t.tsArrayType(
+        t.tsUnionType([
+          t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
+          t.tsNullKeyword(),
         ]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("((number & boolean) | null)[]");
     });
     it("wraps around intersection for array", () => {
-      const typeStatement = t.TSArrayType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      const typeStatement = t.tsArrayType(
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("(number & boolean)[]");
     });
     it("wraps around rest", () => {
       const typeStatement = t.tsRestType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("...(number & boolean)");
     });
     it("wraps around optional type", () => {
       const typeStatement = t.tsOptionalType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("(number & boolean)?");
+    });
+  });
+
+  describe("object expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const objectExpression = t.objectExpression([]);
+      const output = generate(objectExpression).code;
+      expect(output).toBe("{}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(t.objectExpression([]));
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({});");
+    });
+
+    it("wrapped in parentheses in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.objectExpression([]),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({})");
+    });
+
+    it("not wrapped in parentheses in conditional", () => {
+      const conditionalExpression = t.conditionalExpression(
+        t.objectExpression([]),
+        t.booleanLiteral(true),
+        t.booleanLiteral(false),
+      );
+      const output = generate(conditionalExpression).code;
+      expect(output).toBe("{} ? true : false");
+    });
+
+    it("wrapped in parentheses in conditional in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.conditionalExpression(
+          t.objectExpression([]),
+          t.booleanLiteral(true),
+          t.booleanLiteral(false),
+        ),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}) ? true : false;");
+    });
+
+    it("wrapped in parentheses in conditional in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.conditionalExpression(
+          t.objectExpression([]),
+          t.booleanLiteral(true),
+          t.booleanLiteral(false),
+        ),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({}) ? true : false");
+    });
+
+    it("not wrapped in parentheses in binary expression", () => {
+      const binaryExpression = t.binaryExpression(
+        "+",
+        t.objectExpression([]),
+        t.numericLiteral(1),
+      );
+      const output = generate(binaryExpression).code;
+      expect(output).toBe("{} + 1");
+    });
+
+    it("wrapped in parentheses in binary expression in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.binaryExpression("+", t.objectExpression([]), t.numericLiteral(1)),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}) + 1;");
+    });
+
+    it("wrapped in parentheses in binary expression in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.binaryExpression("+", t.objectExpression([]), t.numericLiteral(1)),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({}) + 1");
+    });
+
+    it("not wrapped in parentheses in sequence expression", () => {
+      const sequenceExpression = t.sequenceExpression([
+        t.objectExpression([]),
+        t.numericLiteral(1),
+      ]);
+      const output = generate(sequenceExpression).code;
+      expect(output).toBe("{}, 1");
+    });
+
+    it("wrapped in parentheses in sequence expression in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}), 1;");
+    });
+
+    it("wrapped in parentheses in sequence expression in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => (({}), 1)");
+    });
+  });
+
+  describe("function expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const functionExpression = t.functionExpression(
+        null,
+        [],
+        t.blockStatement([]),
+      );
+      const output = generate(functionExpression).code;
+      expect(output).toBe("function () {}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.functionExpression(null, [], t.blockStatement([])),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("(function () {});");
+    });
+
+    it("wrapped in parentheses in export default declaration", () => {
+      const exportDefaultDeclaration = t.exportDefaultDeclaration(
+        t.functionExpression(null, [], t.blockStatement([])),
+      );
+      const output = generate(exportDefaultDeclaration).code;
+      expect(output).toBe("export default (function () {});");
+    });
+  });
+
+  describe("class expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const classExpression = t.classExpression(null, null, t.classBody([]));
+      const output = generate(classExpression).code;
+      expect(output).toBe("class {}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.classExpression(null, null, t.classBody([])),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("(class {});");
+    });
+
+    it("wrapped in parentheses in export default declaration", () => {
+      const exportDefaultDeclaration = t.exportDefaultDeclaration(
+        t.classExpression(null, null, t.classBody([])),
+      );
+      const output = generate(exportDefaultDeclaration).code;
+      expect(output).toBe("export default (class {});");
+    });
+  });
+
+  describe("jsescOption.minimal", () => {
+    const string = t.stringLiteral("\u8868\u683C_\u526F\u672C");
+
+    it("true", () => {
+      const output = generate(string, { jsescOption: { minimal: true } }).code;
+      expect(output).toBe(`"表格_副本"`);
+    });
+
+    it("false", () => {
+      const output = generate(string, { jsescOption: { minimal: false } }).code;
+      expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
+    });
+
+    it("default", () => {
+      const output = generate(string).code;
+
+      if (process.env.BABEL_8_BREAKING) {
+        expect(output).toBe(`"表格_副本"`);
+      } else {
+        expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
+      }
     });
   });
 });

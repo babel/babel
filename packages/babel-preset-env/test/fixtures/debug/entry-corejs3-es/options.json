@@ -7,6 +7,7 @@
       {
         "debug": true,
         "shippedProposals": true,
+        "targets": { "browsers": "ie 6" },
         "useBuiltIns": "entry",
         "corejs": 3
       }

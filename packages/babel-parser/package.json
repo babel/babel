@@ -1,9 +1,10 @@
 {
   "name": "@babel/parser",
-  "version": "7.10.2",
+  "version": "7.12.15",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babel.dev/docs/en/next/babel-parser",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A+parser+%28babylon%29%22+is%3Aopen",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -32,12 +33,10 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
-    "@babel/code-frame": "^7.10.1",
-    "@babel/helper-fixtures": "^7.10.1",
-    "@babel/helper-validator-identifier": "^7.10.1",
+    "@babel/code-frame": "workspace:*",
+    "@babel/helper-fixtures": "workspace:*",
+    "@babel/helper-validator-identifier": "workspace:*",
     "charcodes": "^0.2.0"
   },
-  "bin": {
-    "parser": "./bin/babel-parser.js"
-  }
+  "bin": "./bin/babel-parser.js"
 }

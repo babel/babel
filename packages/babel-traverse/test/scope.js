@@ -351,6 +351,13 @@ describe("scope", () => {
 
       expect(path.scope.generateUid("Cls")).toBe("_Cls2");
     });
+
+    it("re-exports are not references", () => {
+      const path = getPath("export { x } from 'y'", {
+        sourceType: "module",
+      });
+      expect(path.scope.hasGlobal("x")).toBe(false);
+    });
   });
 
   describe("duplicate bindings", () => {
@@ -471,7 +478,7 @@ describe("scope", () => {
         });
 
         if (kind1 !== kind2) {
-          //todo: remove the if whitelist
+          // todo: remove the if allowed
           if (kind1 === "const" && (kind2 === "function" || kind2 === "var")) {
             continue;
           }

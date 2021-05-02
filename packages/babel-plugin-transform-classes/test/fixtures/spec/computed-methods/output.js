@@ -7,10 +7,9 @@ var Foo = /*#__PURE__*/function () {
 
   babelHelpers.createClass(Foo, [{
     key: "foo",
-    value: function foo() {}
-  }, {
-    key: "foo",
-    value: function foo() {}
+    value: function foo() {
+      "second";
+    }
   }, {
     key: bar,
     value: function value() {}

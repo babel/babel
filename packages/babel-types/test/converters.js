@@ -14,6 +14,10 @@ function generateCode(node) {
 describe("converters", function () {
   it("toIdentifier", function () {
     expect(t.toIdentifier("swag-lord")).toBe("swagLord");
+    expect(t.toIdentifier("ɵ2")).toBe("ɵ2");
+    expect(t.toIdentifier("ℬ1")).toBe("ℬ1");
+    expect(t.toIdentifier("1bc")).toBe("bc");
+    expect(t.toIdentifier("\u0487a")).toBe("_\u0487a");
   });
 
   describe("valueToNode", function () {
@@ -317,10 +321,10 @@ describe("converters", function () {
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
     });
-    it("gathers empty statements", function () {
+    it("gathers empty statements if first element", function () {
       const node = parseCode(";");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
-      expect(generateCode(sequence.expressions[1])).toBe("undefined");
+      expect(generateCode(sequence)).toBe("undefined");
     });
     it("skips empty statement if expression afterwards", function () {
       const node = parseCode("{ ; true }");

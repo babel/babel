@@ -7,7 +7,7 @@ export default declare(api => {
 
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
-    if (id) return id;
+    if (id) return t.cloneNode(id);
 
     id = scope.generateDeclaredUidIdentifier("context");
     return scope.path.setData("functionBind", id);
@@ -15,7 +15,10 @@ export default declare(api => {
 
   function getStaticContext(bind, scope) {
     const object = bind.object || bind.callee.object;
-    return scope.isStatic(object) && object;
+    return (
+      scope.isStatic(object) &&
+      (t.isSuper(object) ? t.thisExpression() : object)
+    );
   }
 
   function inferBindContext(bind, scope) {
@@ -35,7 +38,7 @@ export default declare(api => {
         bind.callee.object,
       );
     }
-    return tempId;
+    return t.cloneNode(tempId);
   }
 
   return {

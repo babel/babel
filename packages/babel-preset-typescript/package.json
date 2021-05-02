@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.10.1",
+  "version": "7.12.13",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -17,14 +17,17 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.1",
-    "@babel/plugin-transform-typescript": "^7.10.1"
+    "@babel/helper-plugin-utils": "workspace:^7.12.13",
+    "@babel/helper-validator-option": "workspace:^7.12.11",
+    "@babel/plugin-transform-typescript": "workspace:^7.12.13"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
-  }
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-preset-typescript",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20typescript%22+is%3Aopen"
 }

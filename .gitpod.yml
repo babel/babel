@@ -24,7 +24,7 @@ tasks:
 github:
   # https://www.gitpod.io/docs/prebuilds/#configure-prebuilds
   prebuilds:
-    master: true
+    master: true # enable for the default branch (even if it's not named "master")
     branches: true
     pullRequests: true
     pullRequestsFromForks: true

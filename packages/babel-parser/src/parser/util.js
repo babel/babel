@@ -6,7 +6,6 @@ import State from "../tokenizer/state";
 import type { Node } from "../types";
 import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
-import * as charCodes from "charcodes";
 import { Errors } from "./error";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
@@ -33,18 +32,6 @@ export default class UtilParser extends Tokenizer {
 
   isRelational(op: "<" | ">"): boolean {
     return this.match(tt.relational) && this.state.value === op;
-  }
-
-  isLookaheadRelational(op: "<" | ">"): boolean {
-    const next = this.nextTokenStart();
-    if (this.input.charAt(next) === op) {
-      if (next + 1 === this.input.length) {
-        return true;
-      }
-      const afterNext = this.input.charCodeAt(next + 1);
-      return afterNext !== op.charCodeAt(0) && afterNext !== charCodes.equalsTo;
-    }
-    return false;
   }
 
   // TODO
@@ -109,6 +96,12 @@ export default class UtilParser extends Tokenizer {
     );
   }
 
+  hasFollowingLineBreak(): boolean {
+    return lineBreak.test(
+      this.input.slice(this.state.end, this.nextTokenStart()),
+    );
+  }
+
   // TODO
 
   isLineTerminator(): boolean {
@@ -118,8 +111,9 @@ export default class UtilParser extends Tokenizer {
   // Consume a semicolon, or, failing that, see if we are allowed to
   // pretend that there is a semicolon at this position.
 
-  semicolon(): void {
-    if (!this.isLineTerminator()) this.unexpected(null, tt.semi);
+  semicolon(allowAsi: boolean = true): void {
+    if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
+    this.raise(this.state.lastTokEnd, Errors.MissingSemicolon);
   }
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -132,7 +126,9 @@ export default class UtilParser extends Tokenizer {
   // Throws if the current token and the prev one are separated by a space.
   assertNoSpace(message: string = "Unexpected space."): void {
     if (this.state.start > this.state.lastTokEnd) {
+      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(this.state.lastTokEnd, message);
+      /* eslint-enable @babel/development-internal/dry-error-messages */
     }
   }
 
@@ -146,7 +142,9 @@ export default class UtilParser extends Tokenizer {
     if (typeof messageOrType !== "string") {
       messageOrType = `Unexpected token, expected "${messageOrType.label}"`;
     }
+    /* eslint-disable @babel/development-internal/dry-error-messages */
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
+    /* eslint-enable @babel/development-internal/dry-error-messages */
   }
 
   expectPlugin(name: string, pos?: ?number): true {
@@ -169,24 +167,6 @@ export default class UtilParser extends Tokenizer {
         `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
           ", ",
         )}'`,
-      );
-    }
-  }
-
-  checkYieldAwaitInDefaultParams() {
-    if (
-      this.state.yieldPos !== -1 &&
-      (this.state.awaitPos === -1 || this.state.yieldPos < this.state.awaitPos)
-    ) {
-      this.raise(
-        this.state.yieldPos,
-        "Yield cannot be used as name inside a generator function",
-      );
-    }
-    if (this.state.awaitPos !== -1) {
-      this.raise(
-        this.state.awaitPos,
-        "Await cannot be used as name inside an async function",
       );
     }
   }
@@ -275,8 +255,54 @@ export default class UtilParser extends Tokenizer {
       !!this.state.type.keyword ||
       this.match(tt.string) ||
       this.match(tt.num) ||
-      this.match(tt.bigint)
+      this.match(tt.bigint) ||
+      this.match(tt.decimal)
     );
+  }
+
+  /*
+   * Test if given node is a PrivateName
+   * will be overridden in ESTree plugin
+   */
+  isPrivateName(node: Node): boolean {
+    return node.type === "PrivateName";
+  }
+
+  /*
+   * Return the string value of a given private name
+   * WITHOUT `#`
+   * @see {@link https://tc39.es/proposal-class-fields/#sec-private-names-static-semantics-stringvalue}
+   */
+  getPrivateNameSV(node: Node): string {
+    return node.id.name;
+  }
+
+  /*
+   * Return whether the given node is a member/optional chain that
+   * contains a private name as its property
+   * It is overridden in ESTree plugin
+   */
+  hasPropertyAsPrivateName(node: Node): boolean {
+    return (
+      (node.type === "MemberExpression" ||
+        node.type === "OptionalMemberExpression") &&
+      this.isPrivateName(node.property)
+    );
+  }
+
+  isOptionalChain(node: Node): boolean {
+    return (
+      node.type === "OptionalMemberExpression" ||
+      node.type === "OptionalCallExpression"
+    );
+  }
+
+  isObjectProperty(node: Node): boolean {
+    return node.type === "ObjectProperty";
+  }
+
+  isObjectMethod(node: Node): boolean {
+    return node.type === "ObjectMethod";
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.10.1",
+  "version": "7.12.13",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -14,11 +14,12 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "main": "lib/index.js",
   "browser": {
-    "./lib/node.js": "./lib/browser.js"
+    "./lib/nodeWrapper.js": "./lib/browser.js"
   },
   "dependencies": {
-    "find-cache-dir": "^2.0.0",
-    "lodash": "^4.17.13",
+    "escape-string-regexp": "condition:BABEL_8_BREAKING ? ^4.0.0 : ",
+    "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
+    "lodash": "^4.17.19",
     "make-dir": "^2.1.0",
     "pirates": "^4.0.0",
     "source-map-support": "^0.5.16"
@@ -27,9 +28,10 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
-    "browserify": "16.5.0",
-    "default-require-extensions": "^2.0.0"
-  }
+    "@babel/core": "workspace:*",
+    "@babel/plugin-transform-modules-commonjs": "workspace:*",
+    "browserify": "^16.5.2"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-register",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20register%22+is%3Aopen"
 }

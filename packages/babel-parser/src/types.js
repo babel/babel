@@ -360,6 +360,12 @@ export type Directive = NodeBase & {
 
 export type DirectiveLiteral = StringLiteral & { type: "DirectiveLiteral" };
 
+export type ImportAttribute = NodeBase & {
+  type: "ImportAttribute",
+  key: Identifier | StringLiteral,
+  value: StringLiteral,
+};
+
 // Expressions
 
 export type Super = NodeBase & { type: "Super" };
@@ -387,6 +393,11 @@ export type AwaitExpression = NodeBase & {
 export type ArrayExpression = NodeBase & {
   type: "ArrayExpression",
   elements: $ReadOnlyArray<?(Expression | SpreadElement)>,
+};
+
+export type DoExpression = NodeBase & {
+  type: "DoExpression",
+  body: ?BlockStatement,
 };
 
 export type TupleExpression = NodeBase & {
@@ -700,7 +711,7 @@ export type ClassBase = HasDecorators & {
 
 export type ClassBody = NodeBase & {
   type: "ClassBody",
-  body: Array<ClassMember | TsIndexSignature>, // TODO: $ReadOnlyArray
+  body: Array<ClassMember | StaticBlock | TsIndexSignature>, // TODO: $ReadOnlyArray
 };
 // | Placeholder<"ClassBody">;
 
@@ -713,6 +724,11 @@ export type ClassMemberBase = NodeBase &
     abstract?: ?true,
     optional?: ?true,
   };
+
+export type StaticBlock = NodeBase & {
+  type: "StaticBlock",
+  body: Array<Statement>,
+};
 
 export type ClassMember =
   | ClassMethod
@@ -837,7 +853,7 @@ export type ImportDeclaration = NodeBase & {
 
 export type ImportSpecifier = ModuleSpecifier & {
   type: "ImportSpecifier",
-  imported: Identifier,
+  imported: Identifier | StringLiteral,
 };
 
 export type ImportDefaultSpecifier = ModuleSpecifier & {
@@ -857,11 +873,13 @@ export type ExportNamedDeclaration = NodeBase & {
   source: ?Literal,
 
   exportKind?: "type" | "value", // TODO: Not in spec
+
+  assertions?: $ReadOnlyArray<ImportAttribute>,
 };
 
 export type ExportSpecifier = NodeBase & {
   type: "ExportSpecifier",
-  exported: Identifier,
+  exported: Identifier | StringLiteral,
   local: Identifier,
 };
 
@@ -1210,7 +1228,8 @@ export type TsKeywordTypeType =
   | "TSVoidKeyword"
   | "TSUndefinedKeyword"
   | "TSNullKeyword"
-  | "TSNeverKeyword";
+  | "TSNeverKeyword"
+  | "TSIntrinsicKeyword";
 export type TsKeywordType = TsTypeBase & {
   type: TsKeywordTypeType,
 };
@@ -1243,7 +1262,7 @@ export type TsTypePredicate = TsTypeBase & {
   type: "TSTypePredicate",
   parameterName: Identifier | TsThisType,
   typeAnnotation: TsTypeAnnotation,
-  asserts?: boolean,
+  asserts: boolean,
 };
 
 // `typeof` operator
@@ -1264,7 +1283,14 @@ export type TsArrayType = TsTypeBase & {
 
 export type TsTupleType = TsTypeBase & {
   type: "TSTupleType",
-  elementTypes: $ReadOnlyArray<TsType>,
+  elementTypes: $ReadOnlyArray<TsType | TsNamedTupleMember>,
+};
+
+export type TsNamedTupleMember = NodeBase & {
+  type: "TSNamedTupleMember",
+  label: Identifier,
+  optional: boolean,
+  elementType: TsType,
 };
 
 export type TsOptionalType = TsTypeBase & {
@@ -1274,7 +1300,7 @@ export type TsOptionalType = TsTypeBase & {
 
 export type TsRestType = TsTypeBase & {
   type: "TSRestType",
-  typeAnnotation: TsType,
+  typeAnnotation: TsType | TsNamedTupleMember,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;
@@ -1327,6 +1353,7 @@ export type TsMappedType = TsTypeBase & {
   typeParameter: TsTypeParameter,
   optional?: true | "+" | "-",
   typeAnnotation: ?TsType,
+  nameType: ?TsType,
 };
 
 export type TsLiteralType = TsTypeBase & {
@@ -1475,3 +1502,9 @@ export type ParseSubscriptState = {
   maybeAsyncArrow: boolean,
   stop: boolean,
 };
+
+export type ParseClassMemberState = {|
+  hadConstructor: boolean,
+  hadStaticBlock: boolean,
+  constructorAllowsSuper: boolean,
+|};

@@ -1,0 +1,38 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: 'abstract' modifier can only appear on a class, method, or property declaration. (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "exportKind": "type",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "TSInterfaceDeclaration",
+          "start":7,"end":32,"loc":{"start":{"line":1,"column":7},"end":{"line":3,"column":1}},
+          "abstract": true,
+          "id": {
+            "type": "Identifier",
+            "start":26,"end":27,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":27},"identifierName":"I"},
+            "name": "I"
+          },
+          "body": {
+            "type": "TSInterfaceBody",
+            "start":28,"end":32,"loc":{"start":{"line":1,"column":28},"end":{"line":3,"column":1}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

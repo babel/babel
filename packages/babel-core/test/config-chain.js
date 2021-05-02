@@ -1,8 +1,32 @@
+import cp from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import util from "util";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "../lib";
+
+// "minNodeVersion": "10.0.0" <-- For Ctrl+F when dropping node 10
+const supportsESM = parseInt(process.versions.node) >= 12;
+
+const isMJS = file => path.extname(file) === ".mjs";
+
+const skipUnsupportedESM = (esm, name) => {
+  if (esm && !supportsESM) {
+    console.warn(
+      `Skipping "${name}" because native ECMAScript modules are not supported.`,
+    );
+    return true;
+  }
+  // This can be removed when loadOptionsAsyncInSpawedProcess is removed.
+  if (esm && process.platform === "win32") {
+    console.warn(
+      `Skipping "${name}" because the ESM runner cannot be spawned on Windows.`,
+    );
+    return true;
+  }
+  return false;
+};
 
 // TODO: In Babel 8, we can directly uses fs.promises which is supported by
 // node 8+
@@ -47,8 +71,40 @@ function loadOptions(opts) {
   return babel.loadOptions({ cwd: __dirname, ...opts });
 }
 
-function loadOptionsAsync(opts) {
-  return babel.loadOptionsAsync({ cwd: __dirname, ...opts });
+function loadOptionsAsync({ filename, cwd = __dirname }, mjs) {
+  if (mjs) {
+    // import() crashes with jest
+    return loadOptionsAsyncInSpawedProcess({ filename, cwd });
+  }
+
+  return babel.loadOptionsAsync({ filename, cwd });
+}
+
+// !!!! hack is coming !!!!
+// Remove this function when https://github.com/nodejs/node/issues/35889 is resolved.
+// Jest supports dynamic import(), but Node.js segfaults when using it in our tests.
+async function loadOptionsAsyncInSpawedProcess({ filename, cwd }) {
+  const { stdout, stderr } = await util.promisify(cp.execFile)(
+    require.resolve("./fixtures/babel-load-options-async.mjs"),
+    // pass `cwd` as params as `process.cwd()` will normalize `cwd` on macOS
+    [filename, cwd],
+    {
+      cwd,
+      env: process.env,
+    },
+  );
+
+  const EXPERIMENTAL_WARNING = /\(node:\d+\) ExperimentalWarning: The ESM module loader is experimental\./;
+
+  if (stderr.replace(EXPERIMENTAL_WARNING, "").trim()) {
+    throw new Error(
+      "error is thrown in babel-load-options-async.mjs: stdout\n" +
+        stdout +
+        "\nstderr:\n" +
+        stderr,
+    );
+  }
+  return JSON.parse(stdout);
 }
 
 function pairs(items) {
@@ -984,6 +1040,7 @@ describe("buildConfigChain", function () {
       passPerPreset: false,
       plugins: [],
       presets: [],
+      cloneInputAst: true,
     });
     const realEnv = process.env.NODE_ENV;
     const realBabelEnv = process.env.BABEL_ENV;
@@ -1039,24 +1096,27 @@ describe("buildConfigChain", function () {
         "babel.config.cjs",
         "babel.config.mjs",
       ])("should load %s asynchronously", async name => {
+        const esm = isMJS(name);
+        if (skipUnsupportedESM(esm, `should load ${name} asynchronously`)) {
+          return;
+        }
+
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-async-${name}`,
         );
         const filename = tmp("src.js");
 
-        // We can't transpile import() while publishing, and it isn't supported
-        // by jest.
-        if (process.env.IS_PUBLISH && name === "babel.config.mjs") return;
-
         await config(name);
 
-        expect(await loadOptionsAsync({ filename, cwd })).toEqual({
-          ...getDefaults(),
-          filename,
-          cwd,
-          root: cwd,
-          comments: true,
-        });
+        await expect(loadOptionsAsync({ filename, cwd }, esm)).resolves.toEqual(
+          {
+            ...getDefaults(),
+            filename,
+            cwd,
+            root: cwd,
+            comments: true,
+          },
+        );
       });
 
       test.each(
@@ -1067,23 +1127,24 @@ describe("buildConfigChain", function () {
           "babel.config.mjs",
         ]),
       )("should throw if both %s and %s are used", async (name1, name2) => {
-        const { cwd, tmp, config } = await getTemp(
-          `babel-test-dup-config-${name1}-${name2}`,
-        );
-
-        // We can't transpile import() while publishing, and it isn't supported
-        // by jest.
+        const esm = isMJS(name1) || isMJS(name2);
         if (
-          process.env.IS_PUBLISH &&
-          (name1 === "babel.config.mjs" || name2 === "babel.config.mjs")
+          skipUnsupportedESM(
+            esm,
+            `should throw if both ${name1} and ${name2} are used`,
+          )
         ) {
           return;
         }
 
+        const { cwd, tmp, config } = await getTemp(
+          `babel-test-dup-config-${name1}-${name2}`,
+        );
+
         await Promise.all([config(name1), config(name2)]);
 
         await expect(
-          loadOptionsAsync({ filename: tmp("src.js"), cwd }),
+          loadOptionsAsync({ filename: tmp("src.js"), cwd }, esm),
         ).rejects.toThrow(/Multiple configuration files found/);
       });
     });
@@ -1125,31 +1186,36 @@ describe("buildConfigChain", function () {
         );
       });
 
-      test.each([
-        "package.json",
-        ".babelrc",
-        ".babelrc.js",
-        ".babelrc.cjs",
-        ".babelrc.mjs",
-      ])("should load %s asynchronously", async name => {
+      test.each(
+        [
+          "package.json",
+          ".babelrc",
+          ".babelrc.js",
+          ".babelrc.cjs",
+          ".babelrc.mjs",
+        ].filter(Boolean),
+      )("should load %s asynchronously", async name => {
+        const esm = isMJS(name);
+        if (skipUnsupportedESM(esm, `should load ${name} asynchronously`)) {
+          return;
+        }
+
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-${name}`,
         );
         const filename = tmp("src.js");
 
-        // We can't transpile import() while publishing, and it isn't supported
-        // by jest.
-        if (process.env.IS_PUBLISH && name === ".babelrc.mjs") return;
-
         await config(name);
 
-        expect(await loadOptionsAsync({ filename, cwd })).toEqual({
-          ...getDefaults(),
-          filename,
-          cwd,
-          root: cwd,
-          comments: true,
-        });
+        await expect(loadOptionsAsync({ filename, cwd }, esm)).resolves.toEqual(
+          {
+            ...getDefaults(),
+            filename,
+            cwd,
+            root: cwd,
+            comments: true,
+          },
+        );
       });
 
       it("should load .babelignore", () => {
@@ -1170,23 +1236,24 @@ describe("buildConfigChain", function () {
           ".babelrc.json",
         ]),
       )("should throw if both %s and %s are used", async (name1, name2) => {
-        const { cwd, tmp, config } = await getTemp(
-          `babel-test-dup-config-${name1}-${name2}`,
-        );
-
-        // We can't transpile import() while publishing, and it isn't supported
-        // by jest.
+        const esm = isMJS(name1) || isMJS(name2);
         if (
-          process.env.IS_PUBLISH &&
-          (name1 === ".babelrc.mjs" || name2 === ".babelrc.mjs")
+          skipUnsupportedESM(
+            esm,
+            `should throw if both ${name1} and ${name2} are used`,
+          )
         ) {
           return;
         }
 
+        const { cwd, tmp, config } = await getTemp(
+          `babel-test-dup-config-${name1}-${name2}`,
+        );
+
         await Promise.all([config(name1), config(name2)]);
 
         await expect(
-          loadOptionsAsync({ filename: tmp("src.js"), cwd }),
+          loadOptionsAsync({ filename: tmp("src.js"), cwd }, esm),
         ).rejects.toThrow(/Multiple configuration files found/);
       });
 
@@ -1210,16 +1277,92 @@ describe("buildConfigChain", function () {
         ${".babelrc.cjs"}  | ${"babelrc-cjs-error"}  | ${/Babelrc threw an error/}
         ${".babelrc.mjs"}  | ${"babelrc-mjs-error"}  | ${/Babelrc threw an error/}
         ${"package.json"}  | ${"pkg-error"}          | ${/Error while parsing JSON - /}
-      `("should show helpful errors for $config", async ({ dir, error }) => {
-        const filename = fixture("config-files", dir, "src.js");
+      `(
+        "should show helpful errors for $config",
+        async ({ config, dir, error }) => {
+          const esm = isMJS(config);
+          if (
+            skipUnsupportedESM(esm, `should show helpful errors for ${config}`)
+          ) {
+            return;
+          }
 
-        // We can't transpile import() while publishing, and it isn't supported
-        // by jest.
-        if (process.env.IS_PUBLISH && dir === "babelrc-mjs-error") return;
+          const filename = fixture("config-files", dir, "src.js");
 
-        await expect(
-          loadOptionsAsync({ filename, cwd: path.dirname(filename) }),
-        ).rejects.toThrow(error);
+          await expect(
+            loadOptionsAsync({ filename, cwd: path.dirname(filename) }, esm),
+          ).rejects.toThrow(error);
+        },
+      );
+
+      it("loadPartialConfig should return a list of files that were extended", () => {
+        const filename = fixture("config-files", "babelrc-extended", "src.js");
+
+        expect(
+          babel.loadPartialConfig({ filename, cwd: path.dirname(filename) }),
+        ).toEqual({
+          babelignore: fixture("config-files", ".babelignore"),
+          babelrc: fixture("config-files", "babelrc-extended", ".babelrc"),
+          config: undefined,
+          fileHandling: "transpile",
+          options: {
+            ...getDefaults(),
+            filename: filename,
+            cwd: path.dirname(filename),
+            root: path.dirname(filename),
+            comments: true,
+          },
+          files: new Set([
+            fixture("config-files", ".babelignore"),
+            fixture("config-files", "babelrc-extended", ".babelrc-extended"),
+            fixture("config-files", "babelrc-extended", ".babelrc"),
+          ]),
+        });
+      });
+
+      it("loadPartialConfig should return null when ignored", () => {
+        const filename = fixture("config-files", "babelignore", "src.js");
+
+        expect(
+          babel.loadPartialConfig({ filename, cwd: path.dirname(filename) }),
+        ).toBeNull();
+      });
+
+      it("loadPartialConfig should return a list of files when ignored with showIgnoredFiles option", () => {
+        const filename = fixture("config-files", "babelignore", "src.js");
+
+        expect(
+          babel.loadPartialConfig({
+            filename,
+            cwd: path.dirname(filename),
+            showIgnoredFiles: true,
+          }),
+        ).toEqual({
+          babelignore: fixture("config-files", "babelignore", ".babelignore"),
+          babelrc: undefined,
+          config: undefined,
+          fileHandling: "ignored",
+          options: {
+            ...getDefaults(),
+            filename: filename,
+            cwd: path.dirname(filename),
+            root: path.dirname(filename),
+          },
+          files: new Set([
+            fixture("config-files", "babelignore", ".babelignore"),
+          ]),
+        });
+      });
+
+      it("loadPartialConfig can be called with no arguments", () => {
+        const cwd = process.cwd();
+
+        try {
+          process.chdir(fixture("config-files", "babelrc-extended"));
+          expect(() => babel.loadPartialConfig()).not.toThrow();
+        } finally {
+          process.chdir(cwd);
+        }
       });
     });
 

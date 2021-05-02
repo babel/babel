@@ -8,6 +8,7 @@ import {
   SCOPE_PROGRAM,
   SCOPE_VAR,
   SCOPE_CLASS,
+  SCOPE_STATIC_BLOCK,
   BIND_SCOPE_FUNCTION,
   BIND_SCOPE_VAR,
   BIND_SCOPE_LEXICAL,
@@ -39,8 +40,8 @@ type raiseFunction = (number, string, ...any) => void;
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope: Scope = Scope> {
   scopeStack: Array<IScope> = [];
-  raise: raiseFunction;
-  inModule: boolean;
+  declare raise: raiseFunction;
+  declare inModule: boolean;
   undefinedExports: Map<string, number> = new Map();
   undefinedPrivateNames: Map<string, number> = new Map();
 
@@ -60,6 +61,9 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   }
   get inClass() {
     return (this.currentThisScope().flags & SCOPE_CLASS) > 0;
+  }
+  get inStaticBlock() {
+    return (this.currentThisScope().flags & SCOPE_STATIC_BLOCK) > 0;
   }
   get inNonArrowFunction() {
     return (this.currentThisScope().flags & SCOPE_FUNCTION) > 0;

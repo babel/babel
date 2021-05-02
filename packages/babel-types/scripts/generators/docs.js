@@ -1,10 +1,8 @@
-"use strict";
+import util from "util";
+import stringifyValidator from "../utils/stringifyValidator.js";
+import toFunctionName from "../utils/toFunctionName.js";
 
-const util = require("util");
-const stringifyValidator = require("../utils/stringifyValidator");
-const toFunctionName = require("../utils/toFunctionName");
-
-const types = require("../../");
+import t from "../../lib/index.js";
 
 const readme = [
   `# @babel/types
@@ -37,17 +35,13 @@ const customTypes = {
     key: "if computed then `Expression` else `Identifier | Literal`",
   },
 };
-Object.keys(types.BUILDER_KEYS)
+Object.keys(t.BUILDER_KEYS)
   .sort()
   .forEach(function (key) {
     readme.push("### " + key[0].toLowerCase() + key.substr(1));
     readme.push("```javascript");
     readme.push(
-      "t." +
-        toFunctionName(key) +
-        "(" +
-        types.BUILDER_KEYS[key].join(", ") +
-        ")"
+      "t." + toFunctionName(key) + "(" + t.BUILDER_KEYS[key].join(", ") + ")"
     );
     readme.push("```");
     readme.push("");
@@ -59,10 +53,10 @@ Object.keys(types.BUILDER_KEYS)
         "(node, opts)`."
     );
     readme.push("");
-    if (types.ALIAS_KEYS[key] && types.ALIAS_KEYS[key].length) {
+    if (t.ALIAS_KEYS[key] && t.ALIAS_KEYS[key].length) {
       readme.push(
         "Aliases: " +
-          types.ALIAS_KEYS[key]
+          t.ALIAS_KEYS[key]
             .map(function (key) {
               return "`" + key + "`";
             })
@@ -70,19 +64,19 @@ Object.keys(types.BUILDER_KEYS)
       );
       readme.push("");
     }
-    Object.keys(types.NODE_FIELDS[key])
+    Object.keys(t.NODE_FIELDS[key])
       .sort(function (fieldA, fieldB) {
-        const indexA = types.BUILDER_KEYS[key].indexOf(fieldA);
-        const indexB = types.BUILDER_KEYS[key].indexOf(fieldB);
+        const indexA = t.BUILDER_KEYS[key].indexOf(fieldA);
+        const indexB = t.BUILDER_KEYS[key].indexOf(fieldB);
         if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
         if (indexA === -1) return 1;
         if (indexB === -1) return -1;
         return indexA - indexB;
       })
       .forEach(function (field) {
-        const defaultValue = types.NODE_FIELDS[key][field].default;
+        const defaultValue = t.NODE_FIELDS[key][field].default;
         const fieldDescription = ["`" + field + "`"];
-        const validator = types.NODE_FIELDS[key][field].validate;
+        const validator = t.NODE_FIELDS[key][field].validate;
         if (customTypes[key] && customTypes[key][field]) {
           fieldDescription.push(`: ${customTypes[key][field]}`);
         } else if (validator) {
@@ -99,11 +93,11 @@ Object.keys(types.BUILDER_KEYS)
             }
           }
         }
-        if (defaultValue !== null || types.NODE_FIELDS[key][field].optional) {
+        if (defaultValue !== null || t.NODE_FIELDS[key][field].optional) {
           fieldDescription.push(
             " (default: `" + util.inspect(defaultValue) + "`"
           );
-          if (types.BUILDER_KEYS[key].indexOf(field) < 0) {
+          if (t.BUILDER_KEYS[key].indexOf(field) < 0) {
             fieldDescription.push(", excluded from builder function");
           }
           fieldDescription.push(")");

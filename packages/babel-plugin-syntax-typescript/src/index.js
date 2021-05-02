@@ -31,12 +31,12 @@ export default declare((api, { isTSX }) => {
       // in TS depends on the extensions, and is purely dependent on 'isTSX'.
       removePlugin(plugins, "jsx");
 
-      parserOpts.plugins.push(
-        "typescript",
-        "classProperties",
-        // TODO: This is enabled by default now, remove in Babel 8
-        "objectRestSpread",
-      );
+      parserOpts.plugins.push("typescript", "classProperties");
+
+      if (!process.env.BABEL_8_BREAKING) {
+        // This is enabled by default since @babel/parser 7.1.5
+        parserOpts.plugins.push("objectRestSpread");
+      }
 
       if (isTSX) {
         parserOpts.plugins.push("jsx");

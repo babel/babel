@@ -3,6 +3,7 @@ import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
+import { isIdentifierName } from "@babel/helper-validator-identifier";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -10,9 +11,7 @@ const buildTemplate = template(`
     BEFORE_BODY;
     return {
       setters: SETTERS,
-      execute: function () {
-        BODY;
-      }
+      execute: EXECUTE,
     };
   });
 `);
@@ -29,37 +28,88 @@ WARNING: Dynamic import() transformation must be enabled using the
          no longer transform import() without using that plugin.
 `;
 
+const MISSING_PLUGIN_ERROR = `\
+ERROR: Dynamic import() transformation must be enabled using the
+       @babel/plugin-proposal-dynamic-import plugin. Babel 8
+       no longer transforms import() without using that plugin.
+`;
+
+//todo: use getExportSpecifierName in `helper-module-transforms` when this library is refactored to NodePath usage.
+
+export function getExportSpecifierName(
+  node: Node,
+  stringSpecifiers: Set<string>,
+): string {
+  if (node.type === "Identifier") {
+    return node.name;
+  } else if (node.type === "StringLiteral") {
+    const stringValue = node.value;
+    // add specifier value to `stringSpecifiers` only when it can not be converted to an identifier name
+    // i.e In `import { "foo" as bar }`
+    // we do not consider `"foo"` to be a `stringSpecifier` because we can treat it as
+    // `import { foo as bar }`
+    // This helps minimize the size of `stringSpecifiers` and reduce overhead of checking valid identifier names
+    // when building transpiled code from metadata
+    if (!isIdentifierName(stringValue)) {
+      stringSpecifiers.add(stringValue);
+    }
+    return stringValue;
+  } else {
+    throw new Error(
+      `Expected export specifier to be either Identifier or StringLiteral, got ${node.type}`,
+    );
+  }
+}
+
+type PluginState = {|
+  contextIdent: string,
+
+  // List of names that should only be printed as string literals.
+  // i.e. `import { "any unicode" as foo } from "some-module"`
+  // `stringSpecifiers` is Set(1) ["any unicode"]
+  // In most cases `stringSpecifiers` is an empty Set
+  stringSpecifiers: Set<string>,
+|};
+
 function constructExportCall(
   path,
   exportIdent,
   exportNames,
   exportValues,
   exportStarTarget,
+  stringSpecifiers: Set<string>,
 ) {
   const statements = [];
-  if (exportNames.length === 1) {
-    statements.push(
-      t.expressionStatement(
-        t.callExpression(exportIdent, [
-          t.stringLiteral(exportNames[0]),
-          exportValues[0],
-        ]),
-      ),
-    );
-  } else if (!exportStarTarget) {
-    const objectProperties = [];
-    for (let i = 0; i < exportNames.length; i++) {
-      const exportName = exportNames[i];
-      const exportValue = exportValues[i];
-      objectProperties.push(
-        t.objectProperty(t.identifier(exportName), exportValue),
+  if (!exportStarTarget) {
+    if (exportNames.length === 1) {
+      statements.push(
+        t.expressionStatement(
+          t.callExpression(exportIdent, [
+            t.stringLiteral(exportNames[0]),
+            exportValues[0],
+          ]),
+        ),
+      );
+    } else {
+      const objectProperties = [];
+      for (let i = 0; i < exportNames.length; i++) {
+        const exportName = exportNames[i];
+        const exportValue = exportValues[i];
+        objectProperties.push(
+          t.objectProperty(
+            stringSpecifiers.has(exportName)
+              ? t.stringLiteral(exportName)
+              : t.identifier(exportName),
+            exportValue,
+          ),
+        );
+      }
+      statements.push(
+        t.expressionStatement(
+          t.callExpression(exportIdent, [t.objectExpression(objectProperties)]),
+        ),
       );
     }
-    statements.push(
-      t.expressionStatement(
-        t.callExpression(exportIdent, [t.objectExpression(objectProperties)]),
-      ),
-    );
   } else {
     const exportObj = path.scope.generateUid("exportObj");
 
@@ -179,10 +229,14 @@ export default declare((api, options) => {
     },
 
     visitor: {
-      CallExpression(path, state) {
+      CallExpression(path, state: PluginState) {
         if (t.isImport(path.node.callee)) {
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
-            console.warn(MISSING_PLUGIN_WARNING);
+            if (process.env.BABEL_8_BREAKING) {
+              throw new Error(MISSING_PLUGIN_ERROR);
+            } else {
+              console.warn(MISSING_PLUGIN_WARNING);
+            }
           }
 
           path.replaceWith(
@@ -197,7 +251,7 @@ export default declare((api, options) => {
         }
       },
 
-      MetaProperty(path, state) {
+      MetaProperty(path, state: PluginState) {
         if (
           path.node.meta.name === "import" &&
           path.node.property.name === "meta"
@@ -228,14 +282,15 @@ export default declare((api, options) => {
       Program: {
         enter(path, state) {
           state.contextIdent = path.scope.generateUid("context");
+          state.stringSpecifiers = new Set();
           if (!allowTopLevelThis) {
             rewriteThis(path);
           }
         },
-        exit(path, state) {
-          const undefinedIdent = path.scope.buildUndefinedNode();
-          const exportIdent = path.scope.generateUid("export");
-          const contextIdent = state.contextIdent;
+        exit(path, state: PluginState) {
+          const scope = path.scope;
+          const exportIdent = scope.generateUid("export");
+          const { contextIdent, stringSpecifiers } = state;
 
           const exportMap = Object.create(null);
           const modules = [];
@@ -285,7 +340,7 @@ export default declare((api, options) => {
               beforeBody.push(path.node);
               removedPaths.push(path);
             } else if (path.isClassDeclaration()) {
-              variableIds.push(path.node.id);
+              variableIds.push(t.cloneNode(path.node.id));
               path.replaceWith(
                 t.expressionStatement(
                   t.assignmentExpression(
@@ -299,7 +354,7 @@ export default declare((api, options) => {
               const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
               for (const name of Object.keys(path.getBindingIdentifiers())) {
-                path.scope.removeBinding(name);
+                scope.removeBinding(name);
                 variableIds.push(t.identifier(name));
               }
               path.remove();
@@ -312,8 +367,8 @@ export default declare((api, options) => {
               if (declar.isClassDeclaration()) {
                 if (id) {
                   exportNames.push("default");
-                  exportValues.push(undefinedIdent);
-                  variableIds.push(id);
+                  exportValues.push(scope.buildUndefinedNode());
+                  variableIds.push(t.cloneNode(id));
                   addExportName(id.name, "default");
                   path.replaceWith(
                     t.expressionStatement(
@@ -360,8 +415,8 @@ export default declare((api, options) => {
                 } else if (path.isClass()) {
                   const name = declar.node.id.name;
                   exportNames.push(name);
-                  exportValues.push(undefinedIdent);
-                  variableIds.push(declar.node.id);
+                  exportValues.push(scope.buildUndefinedNode());
+                  variableIds.push(t.cloneNode(declar.node.id));
                   path.replaceWith(
                     t.expressionStatement(
                       t.assignmentExpression(
@@ -389,30 +444,25 @@ export default declare((api, options) => {
                     const nodes = [];
 
                     for (const specifier of specifiers) {
-                      const binding = path.scope.getBinding(
-                        specifier.local.name,
+                      const { local, exported } = specifier;
+                      const binding = scope.getBinding(local.name);
+                      const exportedName = getExportSpecifierName(
+                        exported,
+                        stringSpecifiers,
                       );
                       // hoisted function export
                       if (
                         binding &&
                         t.isFunctionDeclaration(binding.path.node)
                       ) {
-                        exportNames.push(specifier.exported.name);
-                        exportValues.push(t.cloneNode(specifier.local));
+                        exportNames.push(exportedName);
+                        exportValues.push(t.cloneNode(local));
                       }
                       // only globals also exported this way
                       else if (!binding) {
-                        nodes.push(
-                          buildExportCall(
-                            specifier.exported.name,
-                            specifier.local,
-                          ),
-                        );
+                        nodes.push(buildExportCall(exportedName, local));
                       }
-                      addExportName(
-                        specifier.local.name,
-                        specifier.exported.name,
-                      );
+                      addExportName(local.name, exportedName);
                     }
 
                     path.replaceWithMultiple(nodes);
@@ -426,7 +476,7 @@ export default declare((api, options) => {
 
           modules.forEach(function (specifiers) {
             let setterBody = [];
-            const target = path.scope.generateUid(specifiers.key);
+            const target = scope.generateUid(specifiers.key);
 
             for (let specifier of specifiers.imports) {
               if (t.isImportNamespaceSpecifier(specifier)) {
@@ -447,6 +497,7 @@ export default declare((api, options) => {
               }
 
               if (t.isImportSpecifier(specifier)) {
+                const { imported } = specifier;
                 setterBody.push(
                   t.expressionStatement(
                     t.assignmentExpression(
@@ -455,6 +506,7 @@ export default declare((api, options) => {
                       t.memberExpression(
                         t.identifier(target),
                         specifier.imported,
+                        /* computed */ imported.type === "StringLiteral",
                       ),
                     ),
                   ),
@@ -471,9 +523,17 @@ export default declare((api, options) => {
                 if (t.isExportAllDeclaration(node)) {
                   hasExportStar = true;
                 } else if (t.isExportSpecifier(node)) {
-                  exportNames.push(node.exported.name);
+                  const exportedName = getExportSpecifierName(
+                    node.exported,
+                    stringSpecifiers,
+                  );
+                  exportNames.push(exportedName);
                   exportValues.push(
-                    t.memberExpression(t.identifier(target), node.local),
+                    t.memberExpression(
+                      t.identifier(target),
+                      node.local,
+                      t.isStringLiteral(node.local),
+                    ),
                   );
                 } else {
                   // todo
@@ -487,6 +547,7 @@ export default declare((api, options) => {
                   exportNames,
                   exportValues,
                   hasExportStar ? t.identifier(target) : null,
+                  stringSpecifiers,
                 ),
               );
             }
@@ -508,9 +569,11 @@ export default declare((api, options) => {
             path,
             (id, name, hasInit) => {
               variableIds.push(id);
-              if (!hasInit) {
-                exportNames.push(name);
-                exportValues.push(undefinedIdent);
+              if (!hasInit && name in exportMap) {
+                for (const exported of exportMap[name]) {
+                  exportNames.push(exported);
+                  exportValues.push(scope.buildUndefinedNode());
+                }
               }
             },
             null,
@@ -533,6 +596,7 @@ export default declare((api, options) => {
                 exportNames,
                 exportValues,
                 null,
+                stringSpecifiers,
               ),
             );
           }
@@ -540,12 +604,24 @@ export default declare((api, options) => {
           path.traverse(reassignmentVisitor, {
             exports: exportMap,
             buildCall: buildExportCall,
-            scope: path.scope,
+            scope,
           });
 
           for (const path of removedPaths) {
             path.remove();
           }
+
+          let hasTLA = false;
+          path.traverse({
+            AwaitExpression(path) {
+              hasTLA = true;
+              path.stop();
+            },
+            Function(path) {
+              path.skip();
+            },
+            noScope: true,
+          });
 
           path.node.body = [
             buildTemplate({
@@ -556,8 +632,14 @@ export default declare((api, options) => {
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
               SETTERS: t.arrayExpression(setters),
+              EXECUTE: t.functionExpression(
+                null,
+                [],
+                t.blockStatement(path.node.body),
+                false,
+                hasTLA,
+              ),
               SOURCES: t.arrayExpression(sources),
-              BODY: path.node.body,
               EXPORT_IDENTIFIER: t.identifier(exportIdent),
               CONTEXT_IDENTIFIER: t.identifier(contextIdent),
             }),

@@ -31,6 +31,22 @@ const pluginNameMap = {
       url: "https://git.io/JvpRG",
     },
   },
+  classStaticBlock: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-static-block",
+      url: "https://git.io/JTLB6",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-class-static-block",
+      url: "https://git.io/JTLBP",
+    },
+  },
+  decimal: {
+    syntax: {
+      name: "@babel/plugin-syntax-decimal",
+      url: "https://git.io/JfKOH",
+    },
+  },
   decorators: {
     syntax: {
       name: "@babel/plugin-syntax-decorators",
@@ -123,20 +139,16 @@ const pluginNameMap = {
       url: "https://git.io/JfeDR",
     },
   },
-  logicalAssignment: {
+  importAssertions: {
     syntax: {
-      name: "@babel/plugin-syntax-logical-assignment-operators",
-      url: "https://git.io/vAlBp",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-logical-assignment-operators",
-      url: "https://git.io/vAlRe",
+      name: "@babel/plugin-syntax-import-assertions",
+      url: "https://git.io/JUbkv",
     },
   },
-  moduleAttributes: {
+  moduleStringNames: {
     syntax: {
-      name: "@babel/plugin-syntax-module-attributes",
-      url: "https://git.io/JfK3k",
+      name: "@babel/plugin-syntax-module-string-names",
+      url: "https://git.io/JTL8G",
     },
   },
   numericSeparator: {
@@ -218,6 +230,16 @@ const pluginNameMap = {
     transform: {
       name: "@babel/plugin-proposal-async-generator-functions",
       url: "https://git.io/vb4yp",
+    },
+  },
+  logicalAssignment: {
+    syntax: {
+      name: "@babel/plugin-syntax-logical-assignment-operators",
+      url: "https://git.io/vAlBp",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-logical-assignment-operators",
+      url: "https://git.io/vAlRe",
     },
   },
   nullishCoalescingOperator: {

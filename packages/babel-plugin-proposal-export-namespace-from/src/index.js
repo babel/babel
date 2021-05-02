@@ -27,7 +27,9 @@ export default declare(api => {
 
         const specifier = specifiers.shift();
         const { exported } = specifier;
-        const uid = scope.generateUidIdentifier(exported.name);
+        const uid = scope.generateUidIdentifier(
+          exported.name ?? exported.value,
+        );
 
         nodes.push(
           t.importDeclaration(

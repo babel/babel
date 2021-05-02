@@ -8,21 +8,25 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "chrome":"71" }
   proposal-class-properties { "chrome":"71" }
   proposal-private-methods { "chrome":"71" }
+  proposal-numeric-separator { "chrome":"71" }
+  proposal-logical-assignment-operators { "chrome":"71" }
   proposal-nullish-coalescing-operator { "chrome":"71" }
   proposal-optional-chaining { "chrome":"71" }
   syntax-json-strings { "chrome":"71" }
   syntax-optional-catch-binding { "chrome":"71" }
   syntax-async-generators { "chrome":"71" }
   syntax-object-rest-spread { "chrome":"71" }
+  proposal-export-namespace-from { "chrome":"71" }
   transform-modules-commonjs { "chrome":"71" }
   proposal-dynamic-import { "chrome":"71" }
 
 Using polyfills with `entry` option:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-all-chrome-71/input.mjs] Replaced core-js entries with the following polyfills:
+  es.array.reduce { "chrome":"71" }
+  es.array.reduce-right { "chrome":"71" }
   es.array.unscopables.flat { "chrome":"71" }
   es.array.unscopables.flat-map { "chrome":"71" }
   es.math.hypot { "chrome":"71" }

@@ -1,5 +1,8 @@
 // @flow
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import * as charCodes from "charcodes";
 
 import XHTMLEntities from "./xhtml";
@@ -21,6 +24,8 @@ const JsxErrors = Object.freeze({
     "JSX attributes must only be assigned a non-empty expression",
   MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
   MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
+  UnexpectedSequenceExpression:
+    "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
   UnsupportedJsxValue:
     "JSX value should be either an expression or a quoted JSX text",
   UnterminatedJsxContent: "Unterminated JSX contents",
@@ -119,6 +124,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             out += this.jsxReadEntity();
             chunkStart = this.state.pos;
             break;
+
+          case charCodes.greaterThan:
+          case charCodes.rightCurlyBrace:
+            if (process.env.BABEL_8_BREAKING) {
+              const htmlEntity =
+                ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
+              const char = this.input[this.state.pos];
+              this.raise(
+                this.state.pos,
+                `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
+              );
+            }
+          /* falls through */
 
           default:
             if (isNewLine(ch)) {
@@ -341,9 +359,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
       } else {
-        node.expression = this.parseExpression();
+        const expression = this.parseExpression();
+
+        if (process.env.BABEL_8_BREAKING) {
+          if (
+            expression.type === "SequenceExpression" &&
+            !expression.extra?.parenthesized
+          ) {
+            this.raise(
+              expression.expressions[1].start,
+              JsxErrors.UnexpectedSequenceExpression,
+            );
+          }
+        }
+
+        node.expression = expression;
       }
       this.expect(tt.braceR);
+
       return this.finishNode(node, "JSXExpressionContainer");
     }
 
@@ -353,7 +386,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       if (this.eat(tt.braceL)) {
         this.expect(tt.ellipsis);
-        node.argument = this.parseMaybeAssign();
+        node.argument = this.parseMaybeAssignAllowIn();
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }

@@ -1,6 +1,8 @@
 // @flow
 import path from "path";
-import escapeRegExp from "lodash/escapeRegExp";
+
+// $FlowIgnore
+import escapeRegExp from "./helpers/escape-regexp";
 
 const sep = `\\${path.sep}`;
 const endSep = `(?:${sep}|$)`;

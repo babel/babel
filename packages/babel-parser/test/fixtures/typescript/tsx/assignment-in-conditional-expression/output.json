@@ -1,0 +1,163 @@
+{
+  "type": "File",
+  "start":0,"end":59,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":48}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":59,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":48}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":9,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":9}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}},
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":11,"end":59,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":48}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":11,"end":59,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":48}},
+          "test": {
+            "type": "BinaryExpression",
+            "start":11,"end":17,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":6}},
+            "left": {
+              "type": "Identifier",
+              "start":11,"end":12,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":1},"identifierName":"a"},
+              "name": "a"
+            },
+            "operator": "==",
+            "right": {
+              "type": "NumericLiteral",
+              "start":16,"end":17,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":6}},
+              "extra": {
+                "rawValue": 3,
+                "raw": "3"
+              },
+              "value": 3
+            }
+          },
+          "consequent": {
+            "type": "AssignmentExpression",
+            "start":21,"end":37,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":26}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 20
+            },
+            "operator": "=",
+            "left": {
+              "type": "Identifier",
+              "start":21,"end":22,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":11},"identifierName":"a"},
+              "name": "a"
+            },
+            "right": {
+              "type": "JSXElement",
+              "start":25,"end":37,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":26}},
+              "openingElement": {
+                "type": "JSXOpeningElement",
+                "start":25,"end":29,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":18}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":26,"end":28,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":17}},
+                  "name": "h1"
+                },
+                "attributes": [],
+                "selfClosing": false
+              },
+              "closingElement": {
+                "type": "JSXClosingElement",
+                "start":32,"end":37,"loc":{"start":{"line":3,"column":21},"end":{"line":3,"column":26}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":34,"end":36,"loc":{"start":{"line":3,"column":23},"end":{"line":3,"column":25}},
+                  "name": "h1"
+                }
+              },
+              "children": [
+                {
+                  "type": "JSXText",
+                  "start":29,"end":32,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":21}},
+                  "extra": {
+                    "rawValue": "123",
+                    "raw": "123"
+                  },
+                  "value": "123"
+                }
+              ]
+            }
+          },
+          "alternate": {
+            "type": "AssignmentExpression",
+            "start":42,"end":58,"loc":{"start":{"line":3,"column":31},"end":{"line":3,"column":47}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 41
+            },
+            "operator": "=",
+            "left": {
+              "type": "Identifier",
+              "start":42,"end":43,"loc":{"start":{"line":3,"column":31},"end":{"line":3,"column":32},"identifierName":"a"},
+              "name": "a"
+            },
+            "right": {
+              "type": "JSXElement",
+              "start":46,"end":58,"loc":{"start":{"line":3,"column":35},"end":{"line":3,"column":47}},
+              "openingElement": {
+                "type": "JSXOpeningElement",
+                "start":46,"end":50,"loc":{"start":{"line":3,"column":35},"end":{"line":3,"column":39}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":47,"end":49,"loc":{"start":{"line":3,"column":36},"end":{"line":3,"column":38}},
+                  "name": "h1"
+                },
+                "attributes": [],
+                "selfClosing": false
+              },
+              "closingElement": {
+                "type": "JSXClosingElement",
+                "start":53,"end":58,"loc":{"start":{"line":3,"column":42},"end":{"line":3,"column":47}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":55,"end":57,"loc":{"start":{"line":3,"column":44},"end":{"line":3,"column":46}},
+                  "name": "h1"
+                }
+              },
+              "children": [
+                {
+                  "type": "JSXText",
+                  "start":50,"end":53,"loc":{"start":{"line":3,"column":39},"end":{"line":3,"column":42}},
+                  "extra": {
+                    "rawValue": "abc",
+                    "raw": "abc"
+                  },
+                  "value": "abc"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

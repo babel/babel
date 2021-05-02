@@ -1,23 +1,13 @@
 version: 2.1
 
 aliases:
-  - &restore-node-modules-cache
-    keys:
-      - v1-yarn-deps-{{ checksum "yarn.lock" }}
-
   - &restore-yarn-cache
-    keys:
-      - v1-yarn-cache
-
-  - &save-node-modules-cache
-    paths:
-      - node_modules
-    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
+    key: v2-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &save-yarn-cache
     paths:
-      - ~/.yarn-cache
-    key: v1-yarn-cache
+      - ~/.yarn/berry/cache
+    key: v2-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
@@ -40,12 +30,17 @@ aliases:
 executors:
   node-executor:
     docker:
-      - image: circleci/node:latest
+      - image: cimg/node:current
     working_directory: ~/babel
   # e2e-vue-cli test requires chromium
   node-browsers-executor:
     docker:
-      - image: circleci/node:latest-browsers
+      - image: cimg/node:current-browsers
+    working_directory: ~/babel
+  # e2e-jest test requires python
+  node-python-executor:
+    docker:
+      - image: cimg/python:3.9-node
     working_directory: ~/babel
 
 jobs:
@@ -54,7 +49,6 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-yarn-cache
-      - restore_cache: *restore-node-modules-cache
         # Builds babel-standalone with the regular Babel config
         # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
       - run: IS_PUBLISH=true make -j build-standalone-ci
@@ -63,7 +57,6 @@ jobs:
       - run: yarn jest "\-standalone/test"
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
-      - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
 
   test262:
@@ -71,29 +64,30 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Sync with latest master branch (only on PRs)
+          name: Sync with latest main branch (only on PRs)
           command: |
             if [ -n "$CIRCLE_PULL_REQUEST" ]
             then
-              git fetch origin refs/pull/$CIRCLE_PR_NUMBER/merge
+              # $CIRCLE_PR_NUMBER is not always defined:
+              # https://support.circleci.com/hc/en-us/articles/360047521451-Why-is-CIRCLE-PR-NUMBER-empty-
+              git fetch origin refs/pull/${CIRCLE_PULL_REQUEST##*/}/merge
               git checkout -qf FETCH_HEAD
             fi
       - restore_cache: *restore-yarn-cache
-      - restore_cache: *restore-node-modules-cache
       - run:
           name: Build Babel
           command: BABEL_ENV=test make bootstrap
       - run:
           name: Setup Test Runner
           command: |
-            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            git clone --depth=1 --recurse-submodules https://github.com/babel/babel-test262-runner
             cd babel-test262-runner
             npm ci
             npm i tap-mocha-reporter --save-dev
             node lib/download-node
       - run:
-          name: Download master branch Test262 artifact
-          command: node lib/download-master-artifact ~/master.tap
+          name: Download main branch Test262 artifact
+          command: node lib/download-main-artifact ~/test262-main.tap
           <<: *test262_workdir
       - run:
           name: Run Test262
@@ -106,33 +100,46 @@ jobs:
             cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
           <<: *test262_workdir
       - run:
-          name: Compare previous master branch & current job results
+          name: Compare previous main branch & current job results
           command: |
             mkdir -p ~/test-results/test262
-            node lib/compare-results ~/master.tap ~/test262.tap | tee ~/diff.tap
+            node lib/compare-results ~/test262-main.tap ~/test262.tap | tee ~/diff.tap
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_diff_tap
       - run:
-          name: Output comparision results and report to CircleCI
+          name: Output comparison results and report to CircleCI
           command: |
             mkdir -p ~/test-results/test262
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
-      - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
 
   publish-verdaccio:
     executor: node-executor
     steps:
       - checkout
-      - run: yarn install
+      - restore_cache: *restore-yarn-cache
       - run: ./scripts/integration-tests/publish-local.sh
       - persist_to_workspace:
           root: /tmp/verdaccio-workspace
           paths:
             - storage
             - htpasswd
+      - save_cache: *save-yarn-cache
+
+  publish-verdaccio-babel-8-breaking:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache: *restore-yarn-cache
+      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/publish-local.sh
+      - persist_to_workspace:
+          root: /tmp/verdaccio-workspace
+          paths:
+            - storage
+            - htpasswd
+      - save_cache: *save-yarn-cache
 
   e2e-babel:
     executor: node-executor
@@ -141,6 +148,14 @@ jobs:
       - attach_workspace:
           at: /tmp/verdaccio-workspace
       - run: ./scripts/integration-tests/e2e-babel.sh
+
+  e2e-babel-breaking:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-babel.sh
 
   e2e-babel-old-version:
     executor: node-executor
@@ -164,35 +179,65 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/verdaccio-workspace
+      - run:
+          # vue-cli uses puppeteer, and it depends on the libXss.so.1 shared library
+          name: Install Headless Chrome dependencies
+          command: sudo apt-get install -yq libxss1
       - run: ./scripts/integration-tests/e2e-vue-cli.sh
+
+  e2e-jest:
+    executor: node-python-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-jest.sh
+
+  e2e-jest-breaking:
+    executor: node-python-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-jest.sh
 
 workflows:
   version: 2
   build-standalone:
     jobs:
       - build-standalone
-  test262-master:
+  test262:
     jobs:
       - test262:
           filters:
             branches:
               only:
-                - master
-  test262:
+                - main
+                - next-8-dev
+                - next-8-rebased
+          context: babel-test262
+  test262-pr:
     jobs:
       - approve-test262-run:
           type: approval
           filters:
             branches:
               ignore:
+                - main
                 - master
+                - next-8-dev
+                - next-8-rebased
       - test262:
           requires:
             - approve-test262-run
           filters:
             branches:
               ignore:
+                - main
                 - master
+                - next-8-dev
+                - next-8-rebased
+          context: babel-test262
   e2e:
     jobs:
       - publish-verdaccio
@@ -208,4 +253,49 @@ workflows:
       - e2e-vue-cli:
           requires:
             - publish-verdaccio
+      - e2e-jest:
+          requires:
+            - publish-verdaccio
+
+  e2e-breaking:
+    jobs:
+      - publish-verdaccio-babel-8-breaking:
+          filters:
+            branches:
+              only: [main, next-8-dev, next-8-rebased]
+      - e2e-babel-breaking:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-create-react-app:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-jest-breaking:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+
+  e2e-breaking-pr:
+    jobs:
+      - approve-e2e-breaking-run:
+          type: approval
+          filters:
+            branches:
+              ignore: [main, next-8-dev, next-8-rebased]
+      - publish-verdaccio-babel-8-breaking:
+          requires:
+            - approve-e2e-breaking-run
+      - e2e-babel-breaking:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-create-react-app:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-jest-breaking:
+          requires:
+            - publish-verdaccio-babel-8-breaking
 

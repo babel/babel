@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+  "errors": [
+    "SyntaxError: Missing semicolon (1:20)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+        "expression": {
+          "type": "FunctionExpression",
+          "start":1,"end":25,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":25}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":13,"end":25,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":25}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20}},
+                "expression": {
+                  "type": "Identifier",
+                  "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20},"identifierName":"yield"},
+                  "name": "yield"
+                }
+              },
+              {
+                "type": "ExpressionStatement",
+                "start":21,"end":23,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":23}},
+                "expression": {
+                  "type": "NumericLiteral",
+                  "start":21,"end":23,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":23}},
+                  "extra": {
+                    "rawValue": 10,
+                    "raw": "10"
+                  },
+                  "value": 10
+                }
+              }
+            ],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

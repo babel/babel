@@ -51,6 +51,14 @@ describe("conversion", function () {
       expect(generateCode(rootPath)).toBe("() => {\n  return false;\n};");
     });
 
+    it("preserves arrow function body's context", function () {
+      const rootPath = getPath("() => true").get("expression");
+      const body = rootPath.get("body");
+      rootPath.ensureBlock();
+      body.replaceWithMultiple([t.booleanLiteral(false), t.emptyStatement()]);
+      expect(generateCode(rootPath)).toBe("() => {\n  return false;\n};");
+    });
+
     it("converts for loop with statement body to block", function () {
       const rootPath = getPath("for (;;) true;");
       rootPath.ensureBlock();

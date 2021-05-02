@@ -4,7 +4,7 @@ import type { PluginObject } from "./validation/plugins";
 
 export default class Plugin {
   key: ?string;
-  manipulateOptions: Function | void;
+  manipulateOptions: ((options: mixed, parserOpts: mixed) => void) | void;
   post: Function | void;
   pre: Function | void;
   visitor: {};

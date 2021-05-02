@@ -1,6 +1,13 @@
 import { declare } from "@babel/helper-plugin-utils";
+import {
+  isTransparentExprWrapper,
+  skipTransparentExprWrappers,
+} from "@babel/helper-skip-transparent-expression-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
+import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
+
+const { ast } = template.expression;
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -8,6 +15,7 @@ export default declare((api, options) => {
   const { loose = false } = options;
 
   function isSimpleMemberExpression(expression) {
+    expression = skipTransparentExprWrappers(expression);
     return (
       t.isIdentifier(expression) ||
       t.isSuper(expression) ||
@@ -17,6 +25,31 @@ export default declare((api, options) => {
     );
   }
 
+  /**
+   * Test if a given optional chain `path` needs to be memoized
+   * @param {NodePath} path
+   * @returns {boolean}
+   */
+  function needsMemoize(path) {
+    let optionalPath = path;
+    const { scope } = path;
+    while (
+      optionalPath.isOptionalMemberExpression() ||
+      optionalPath.isOptionalCallExpression()
+    ) {
+      const { node } = optionalPath;
+      const childKey = optionalPath.isOptionalMemberExpression()
+        ? "object"
+        : "callee";
+      const childPath = skipTransparentExprWrappers(optionalPath.get(childKey));
+      if (node.optional) {
+        return !scope.isStatic(childPath.node);
+      }
+
+      optionalPath = childPath;
+    }
+  }
+
   return {
     name: "proposal-optional-chaining",
     inherits: syntaxOptionalChaining,
@@ -24,16 +57,16 @@ export default declare((api, options) => {
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
         const { scope } = path;
-        // maybeParenthesized points to the outermost parenthesizedExpression
+        // maybeWrapped points to the outermost transparent expression wrapper
         // or the path itself
-        let maybeParenthesized = path;
-        const parentPath = path.findParent(p => {
-          if (!p.isParenthesizedExpression()) return true;
-          maybeParenthesized = p;
-        });
+        const maybeWrapped = findOutermostTransparentParent(path);
+        const { parentPath } = maybeWrapped;
+        const willReplacementCastToBoolean = willPathCastToBoolean(
+          maybeWrapped,
+        );
         let isDeleteOperation = false;
         const parentIsCall =
-          parentPath.isCallExpression({ callee: maybeParenthesized.node }) &&
+          parentPath.isCallExpression({ callee: maybeWrapped.node }) &&
           // note that the first condition must implies that `path.optional` is `true`,
           // otherwise the parentPath should be an OptionalCallExpressioin
           path.isOptionalMemberExpression();
@@ -41,11 +74,16 @@ export default declare((api, options) => {
         const optionals = [];
 
         let optionalPath = path;
+        // Replace `function (a, x = a.b?.c) {}` to `function (a, x = (() => a.b?.c)() ){}`
+        // so the temporary variable can be injected in correct scope
+        if (scope.path.isPattern() && needsMemoize(optionalPath)) {
+          path.replaceWith(template.ast`(() => ${path.node})()`);
+          // The injected optional chain will be queued and eventually transformed when visited
+          return;
+        }
         while (
           optionalPath.isOptionalMemberExpression() ||
-          optionalPath.isOptionalCallExpression() ||
-          optionalPath.isParenthesizedExpression() ||
-          optionalPath.isTSNonNullExpression()
+          optionalPath.isOptionalCallExpression()
         ) {
           const { node } = optionalPath;
           if (node.optional) {
@@ -54,13 +92,14 @@ export default declare((api, options) => {
 
           if (optionalPath.isOptionalMemberExpression()) {
             optionalPath.node.type = "MemberExpression";
-            optionalPath = optionalPath.get("object");
+            optionalPath = skipTransparentExprWrappers(
+              optionalPath.get("object"),
+            );
           } else if (optionalPath.isOptionalCallExpression()) {
             optionalPath.node.type = "CallExpression";
-            optionalPath = optionalPath.get("callee");
-          } else {
-            // unwrap TSNonNullExpression/ParenthesizedExpression if needed
-            optionalPath = optionalPath.get("expression");
+            optionalPath = skipTransparentExprWrappers(
+              optionalPath.get("callee"),
+            );
           }
         }
 
@@ -74,28 +113,40 @@ export default declare((api, options) => {
 
           const isCall = t.isCallExpression(node);
           const replaceKey = isCall ? "callee" : "object";
-          const chain = node[replaceKey];
+
+          const chainWithTypes = node[replaceKey];
+          let chain = chainWithTypes;
+
+          while (isTransparentExprWrapper(chain)) {
+            chain = chain.expression;
+          }
 
           let ref;
           let check;
-          if (loose && isCall && isSimpleMemberExpression(chain)) {
+          if (isCall && t.isIdentifier(chain, { name: "eval" })) {
+            check = ref = chain;
+            // `eval?.()` is an indirect eval call transformed to `(0,eval)()`
+            node[replaceKey] = t.sequenceExpression([t.numericLiteral(0), ref]);
+          } else if (loose && isCall && isSimpleMemberExpression(chain)) {
             // If we are using a loose transform (avoiding a Function#call) and we are at the call,
             // we can avoid a needless memoize. We only do this if the callee is a simple member
             // expression, to avoid multiple calls to nested call expressions.
-            check = ref = chain;
+            check = ref = chainWithTypes;
           } else {
             ref = scope.maybeGenerateMemoised(chain);
             if (ref) {
               check = t.assignmentExpression(
                 "=",
                 t.cloneNode(ref),
-                // Here `chain` MUST NOT be cloned because it could be updated
-                // when generating the memoised context of a call espression
-                chain,
+                // Here `chainWithTypes` MUST NOT be cloned because it could be
+                // updated when generating the memoised context of a call
+                // expression
+                chainWithTypes,
               );
+
               node[replaceKey] = ref;
             } else {
-              check = ref = chain;
+              check = ref = chainWithTypes;
             }
           }
 
@@ -105,7 +156,7 @@ export default declare((api, options) => {
             if (loose && isSimpleMemberExpression(chain)) {
               // To avoid a Function#call, we can instead re-grab the property from the context object.
               // `a.?b.?()` translates roughly to `_a.b != null && _a.b()`
-              node.callee = chain;
+              node.callee = chainWithTypes;
             } else {
               // Otherwise, we need to memoize the context object, and change the call into a Function#call.
               // `a.?b.?()` translates roughly to `(_b = _a.b) != null && _b.call(_a)`
@@ -133,7 +184,9 @@ export default declare((api, options) => {
           // i.e. `?.b` in `(a?.b.c)()`
           if (i === 0 && parentIsCall) {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-            const { object } = replacement;
+            const object = skipTransparentExprWrappers(
+              replacementPath.get("object"),
+            ).node;
             let baseRef;
             if (!loose || !isSimpleMemberExpression(object)) {
               // memoize the context object in non-loose mode
@@ -152,31 +205,35 @@ export default declare((api, options) => {
               [t.cloneNode(baseRef ?? object)],
             );
           }
-          replacementPath.replaceWith(
-            t.conditionalExpression(
-              loose
-                ? t.binaryExpression("==", t.cloneNode(check), t.nullLiteral())
-                : t.logicalExpression(
-                    "||",
-                    t.binaryExpression(
-                      "===",
-                      t.cloneNode(check),
-                      t.nullLiteral(),
-                    ),
-                    t.binaryExpression(
-                      "===",
-                      t.cloneNode(ref),
-                      scope.buildUndefinedNode(),
-                    ),
-                  ),
-              isDeleteOperation
-                ? t.booleanLiteral(true)
-                : scope.buildUndefinedNode(),
-              replacement,
-            ),
-          );
 
-          replacementPath = replacementPath.get("alternate");
+          if (willReplacementCastToBoolean) {
+            // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
+            // we don't need to return `void 0` because the returned value will
+            // eveutally cast to boolean.
+            const nonNullishCheck = loose
+              ? ast`${t.cloneNode(check)} != null`
+              : ast`
+            ${t.cloneNode(check)} !== null && ${t.cloneNode(ref)} !== void 0`;
+            replacementPath.replaceWith(
+              t.logicalExpression("&&", nonNullishCheck, replacement),
+            );
+            replacementPath = skipTransparentExprWrappers(
+              replacementPath.get("right"),
+            );
+          } else {
+            const nullishCheck = loose
+              ? ast`${t.cloneNode(check)} == null`
+              : ast`
+            ${t.cloneNode(check)} === null || ${t.cloneNode(ref)} === void 0`;
+
+            const returnValue = isDeleteOperation ? ast`true` : ast`void 0`;
+            replacementPath.replaceWith(
+              t.conditionalExpression(nullishCheck, returnValue, replacement),
+            );
+            replacementPath = skipTransparentExprWrappers(
+              replacementPath.get("alternate"),
+            );
+          }
         }
       },
     },

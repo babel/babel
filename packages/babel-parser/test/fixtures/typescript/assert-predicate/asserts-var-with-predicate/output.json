@@ -54,7 +54,7 @@
                 "start":42,"end":67,"loc":{"start":{"line":2,"column":32},"end":{"line":2,"column":57}},
                 "typeAnnotation": {
                   "type": "TSTypePredicate",
-                  "start":42,"end":67,"loc":{"start":{"line":2,"column":32},"end":{"line":2,"column":57}},
+                  "start":44,"end":67,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":57}},
                   "parameterName": {
                     "type": "Identifier",
                     "start":52,"end":57,"loc":{"start":{"line":2,"column":42},"end":{"line":2,"column":47},"identifierName":"value"},

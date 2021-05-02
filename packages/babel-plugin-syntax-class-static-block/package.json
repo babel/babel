@@ -1,0 +1,28 @@
+{
+  "name": "@babel/plugin-syntax-class-static-block",
+  "version": "7.12.13",
+  "description": "Allow parsing of class static blocks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-syntax-class-static-block"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-class-static-block",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  }
+}

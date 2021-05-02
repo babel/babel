@@ -6,10 +6,6 @@
 import getV8Flags from "v8flags";
 import path from "path";
 
-// TODO: When support for node < 10.10 will be dropped, this package
-// can be replaced with process.allowedNodeEnvironmentFlags
-import allowedNodeEnvironmentFlags from "node-environment-flags";
-
 let args = [path.join(__dirname, "_babel-node")];
 
 let babelArgs = process.argv.slice(2);
@@ -59,7 +55,7 @@ getV8Flags(function (err, v8Flags) {
       flag === "debug" || // node debug foo.js
       flag === "inspect" ||
       v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 ||
-      allowedNodeEnvironmentFlags.has(flag)
+      process.allowedNodeEnvironmentFlags.has(flag)
     ) {
       args.unshift(arg);
     } else {

@@ -2,12 +2,15 @@
  * Basic declarations for the npm modules we use.
  */
 
-declare module "resolve" {
-  declare export default {
-    (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
-    sync: (string, {| basedir: string |}) => string;
-  };
+declare module "debug" {
+  declare export default (namespace: string) => (formatter: string, ...args: any[]) => void;
 }
+
+declare var require: {
+  resolve(specifier: string, opts?: {
+    paths: string[]
+  }): string,
+};
 
 declare module "json5" {
   declare export default {
@@ -25,6 +28,10 @@ declare module "lodash/clone" {
 
 declare module "lodash/merge" {
   declare export default <T: Object>(T, Object) => T;
+}
+
+declare module "lodash/escapeRegExp" {
+  declare export default (toEscape?: string) => string;
 }
 
 declare module "semver" {

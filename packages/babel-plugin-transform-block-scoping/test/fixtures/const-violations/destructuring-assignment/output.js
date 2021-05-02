@@ -1,4 +1,4 @@
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
 
 var a = 1,
     b = 2;

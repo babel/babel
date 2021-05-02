@@ -1,18 +1,8 @@
-/* eslint-disable-next-line @babel/development/plugin-name */
-import transformClassic from "./transform-classic";
-/* eslint-disable-next-line @babel/development/plugin-name */
-import transformAutomatic from "./transform-automatic";
-import { declare } from "@babel/helper-plugin-utils";
+/* eslint-disable @babel/development/plugin-name */
 
-export default declare((api, options) => {
-  const { runtime = "classic" } = options;
+import createPlugin from "./create-plugin";
 
-  // we throw a warning in helper-builder-react-jsx-experimental if runtime
-  // is neither automatic or classic because we will remove this file
-  // in v8.0.0
-  if (runtime === "classic") {
-    return transformClassic(api, options);
-  } else {
-    return transformAutomatic(api, options);
-  }
+export default createPlugin({
+  name: "transform-react-jsx",
+  development: false,
 });

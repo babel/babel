@@ -1,3 +1,4 @@
+import { types as t } from "@babel/core";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import {
@@ -19,15 +20,15 @@ import {
   isLoose,
 } from "./features";
 
-import pkg from "../package.json";
-
 export { FEATURES, injectInitialization };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
 //       package, but it breaks if we release x.y.z where x, y or z are
 //       greater than 99_999.
-const version = pkg.version.split(".").reduce((v, x) => v * 1e5 + +x, 0);
+const version = PACKAGE_JSON.version
+  .split(".")
+  .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
 export function createClassFeaturePlugin({
@@ -119,6 +120,18 @@ export function createClassFeaturePlugin({
           }
 
           if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
+
+          if (path.isStaticBlock?.()) {
+            throw path.buildCodeFrameError(`Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
+{
+  "plugins": [
+    "@babel/plugin-proposal-class-static-block",
+    "@babel/plugin-proposal-private-property-in-object",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-proposal-class-properties",
+  ]
+}`);
+          }
         }
 
         if (!props.length && !isDecorated) return;
@@ -129,7 +142,7 @@ export function createClassFeaturePlugin({
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
-          ref = path.node.id;
+          ref = t.cloneNode(path.node.id);
         }
 
         // NODE: These three functions don't support decorators yet,
@@ -187,7 +200,12 @@ export function createClassFeaturePlugin({
       },
 
       PrivateName(path) {
-        if (this.file.get(versionKey) !== version) return;
+        if (
+          this.file.get(versionKey) !== version ||
+          path.parentPath.isPrivate({ key: path.node })
+        ) {
+          return;
+        }
 
         throw path.buildCodeFrameError(`Unknown PrivateName "${path}"`);
       },

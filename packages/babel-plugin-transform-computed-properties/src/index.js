@@ -90,8 +90,6 @@ export default declare((api, options) => {
 
       if (prop.kind === "get" || prop.kind === "set") {
         pushMutatorDefine(info, prop);
-      } else if (t.isStringLiteral(key, { value: "__proto__" })) {
-        pushAssign(objId, prop, body);
       } else {
         if (computedProps.length === 1) {
           return t.callExpression(state.addHelper("defineProperty"), [

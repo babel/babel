@@ -6,7 +6,6 @@
         "targets": {
           "ie": 9
         },
-        "modules": false,
         "useBuiltIns": "entry",
         "corejs": 3,
         "modules": false

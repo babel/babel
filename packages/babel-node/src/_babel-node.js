@@ -8,9 +8,6 @@ import vm from "vm";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import register from "@babel/register";
-import resolve from "resolve";
-
-import pkg from "../package.json";
 
 const program = new commander.Command("babel-node");
 
@@ -62,7 +59,7 @@ program.option(
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
-program.version(pkg.version);
+program.version(PACKAGE_JSON.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
@@ -187,12 +184,7 @@ if (program.eval || program.print) {
     });
     args = args.slice(i);
 
-    // We have to handle require ourselves, as we want to require it in the context of babel-register
-    if (program.require) {
-      require(resolve.sync(program.require, {
-        basedir: process.cwd(),
-      }));
-    }
+    requireArgs();
 
     // make the filename absolute
     const filename = args[0];
@@ -202,22 +194,38 @@ if (program.eval || program.print) {
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);
-    process.execArgv.unshift(__filename);
+    process.execArgv.push(__filename);
 
     Module.runMain();
   } else {
+    requireArgs();
     replStart();
   }
 }
 
+// We have to handle require ourselves, as we want to require it in the context of babel-register
+function requireArgs() {
+  if (program.require) {
+    require(require.resolve(program.require, {
+      paths: [process.cwd()],
+    }));
+  }
+}
+
 function replStart() {
-  repl.start({
+  const replServer = repl.start({
     prompt: "babel > ",
     input: process.stdin,
     output: process.stdout,
     eval: replEval,
     useGlobal: true,
+    preview: true,
   });
+  if (process.env.BABEL_8_BREAKING) {
+    replServer.setupHistory(process.env.NODE_REPL_HISTORY, () => {});
+  } else {
+    replServer.setupHistory?.(process.env.NODE_REPL_HISTORY, () => {});
+  }
 }
 
 function replEval(code, context, filename, callback) {

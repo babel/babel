@@ -13,11 +13,11 @@ assignees: ''
 - [ ] I would like to work on this feature!
 
 **Is your feature request related to a problem?**
-A concise description of what the problem is. Ex. I have an issue when [...]
+<!-- A concise description of what the problem is. Ex. I have an issue when [...] -->
 
 **Describe the solution you'd like**
 
 **Describe alternatives you've considered**.
 
 **Documentation, Adoption, Migration Strategy**
-If you can, explain how users will be able to use this and how it might be documented. Maybe a mock-up?
+<!-- If you can, explain how users will be able to use this and how it might be documented. Maybe a mock-up? -->

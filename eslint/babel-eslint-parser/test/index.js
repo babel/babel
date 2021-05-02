@@ -1,12 +1,11 @@
 import path from "path";
-import { pathToFileURL } from "url";
 import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint } from "../src";
 
 const BABEL_OPTIONS = {
   configFile: require.resolve(
-    "@babel/eslint-shared-fixtures/config/babel.config.js",
+    "../../babel-eslint-shared-fixtures/config/babel.config.js",
   ),
 };
 const PROPS_TO_REMOVE = [
@@ -61,7 +60,7 @@ describe("Babel and Espree", () => {
       loc: true,
       range: true,
       comment: true,
-      ecmaVersion: 2020,
+      ecmaVersion: 2021,
       sourceType: "module",
     });
     const babelAST = parseForESLint(code, {
@@ -80,7 +79,7 @@ describe("Babel and Espree", () => {
       paths: [path.dirname(require.resolve("eslint"))],
     });
 
-    espree = await import(pathToFileURL(espreePath));
+    espree = require(espreePath);
   });
 
   describe("compatibility", () => {
@@ -253,6 +252,10 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('import "foo";');
   });
 
+  it("import meta", () => {
+    parseAndAssertSame("const url = import.meta.url");
+  });
+
   it("export default class declaration", () => {
     parseAndAssertSame("export default class Foo {}");
   });
@@ -273,15 +276,8 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('export * from "foo";');
   });
 
-  // Espree doesn't support `export * as ns` yet
   it("export * as ns", () => {
-    const code = 'export * as Foo from "foo";';
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+    parseAndAssertSame('export * as Foo from "foo";');
   });
 
   it("export named", () => {
@@ -292,26 +288,20 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("var foo = 1;export { foo as bar };");
   });
 
-  // Espree doesn't support the optional chaining operator yet
-  it("optional chaining operator (token)", () => {
-    const code = "foo?.bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  it("optional chaining operator", () => {
+    parseAndAssertSame("foo?.bar?.().qux()");
   });
 
-  // Espree doesn't support the nullish coalescing operator yet
-  it("nullish coalescing operator (token)", () => {
-    const code = "foo ?? bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  it("nullish coalescing operator", () => {
+    parseAndAssertSame("foo ?? bar");
+  });
+
+  it("logical assignment", () => {
+    parseAndAssertSame("foo ??= bar &&= qux ||= quux");
+  });
+
+  it("numeric separator", () => {
+    parseAndAssertSame("1_0.0_0e0_1");
   });
 
   // Espree doesn't support the pipeline operator yet
@@ -586,7 +576,7 @@ describe("Babel and Espree", () => {
 
     it("Dynamic Import", () => {
       parseAndAssertSame(`
-        const a = import('a');
+        const a = import(moduleName);
       `);
     });
   });

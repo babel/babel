@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":65,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":65}},
+  "errors": [
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:50)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":65,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":65}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":65,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":65}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":16,"end":26,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":26}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":36,"end":48,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":48}},
+            "key": {
+              "type": "Identifier",
+              "start":36,"end":40,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":40},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":42,"end":48,"loc":{"start":{"line":1,"column":42},"end":{"line":1,"column":48}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          },
+          {
+            "type": "ImportAttribute",
+            "start":50,"end":62,"loc":{"start":{"line":1,"column":50},"end":{"line":1,"column":62}},
+            "key": {
+              "type": "Identifier",
+              "start":50,"end":54,"loc":{"start":{"line":1,"column":50},"end":{"line":1,"column":54},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":56,"end":62,"loc":{"start":{"line":1,"column":56},"end":{"line":1,"column":62}},
+              "extra": {
+                "rawValue": "html",
+                "raw": "\"html\""
+              },
+              "value": "html"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

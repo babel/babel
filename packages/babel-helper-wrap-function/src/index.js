@@ -124,7 +124,7 @@ function plainFunction(path: NodePath, callId: Object) {
 }
 
 export default function wrapFunction(path: NodePath, callId: Object) {
-  if (path.isClassMethod() || path.isObjectMethod()) {
+  if (path.isMethod()) {
     classOrObjectMethod(path, callId);
   } else {
     plainFunction(path, callId);

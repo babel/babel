@@ -2,7 +2,7 @@
 
 > Helper function to define a map
 
-See our website [@babel/helper-define-map](https://babeljs.io/docs/en/next/babel-helper-define-map.html) for more information.
+See our website [@babel/helper-define-map](https://babeljs.io/docs/en/babel-helper-define-map) for more information.
 
 ## Install
 

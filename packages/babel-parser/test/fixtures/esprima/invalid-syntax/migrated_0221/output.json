@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":55}},
   "errors": [
-    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:36)"
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (1:36)"
   ],
   "program": {
     "type": "Program",
@@ -32,11 +32,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":19,"end":38,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":38}},
-                "value": "octal directive\\1",
                 "extra": {
                   "raw": "\"octal directive\\1\"",
                   "rawValue": "octal directive\\1"
-                }
+                },
+                "value": "octal directive\\1"
               }
             },
             {
@@ -45,11 +45,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":40,"end":52,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":52}},
-                "value": "use strict",
                 "extra": {
                   "raw": "\"use strict\"",
                   "rawValue": "use strict"
-                }
+                },
+                "value": "use strict"
               }
             }
           ]

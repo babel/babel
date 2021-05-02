@@ -1,0 +1,106 @@
+{
+  "type": "File",
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":39}},
+  "errors": [
+    "SyntaxError: Missing semicolon (2:14)",
+    "SyntaxError: Missing semicolon (2:21)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":39}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":13,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":13}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":15,"end":29,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":14}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":24,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12}},
+            "local": {
+              "type": "Identifier",
+              "start":24,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":24,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":30,"end":36,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21}},
+        "expression": {
+          "type": "Identifier",
+          "start":30,"end":36,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21},"identifierName":"assert"},
+          "name": "assert"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":37,"end":53,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":38}},
+        "body": [
+          {
+            "type": "LabeledStatement",
+            "start":39,"end":51,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":36}},
+            "body": {
+              "type": "ExpressionStatement",
+              "start":45,"end":51,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":36}},
+              "expression": {
+                "type": "StringLiteral",
+                "start":45,"end":51,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":36}},
+                "extra": {
+                  "rawValue": "json",
+                  "raw": "\"json\""
+                },
+                "value": "json"
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start":39,"end":43,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":28},"identifierName":"type"},
+              "name": "type"
+            }
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "EmptyStatement",
+        "start":53,"end":54,"loc":{"start":{"line":2,"column":38},"end":{"line":2,"column":39}}
+      }
+    ],
+    "directives": []
+  }
+}

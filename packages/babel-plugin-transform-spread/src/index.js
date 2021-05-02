@@ -1,4 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
+import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 import { types as t } from "@babel/core";
 
 export default declare((api, options) => {
@@ -94,8 +95,15 @@ export default declare((api, options) => {
         const args = node.arguments;
         if (!hasSpread(args)) return;
 
-        const calleePath = path.get("callee");
-        if (calleePath.isSuper()) return;
+        const calleePath = skipTransparentExprWrappers(path.get("callee"));
+
+        if (calleePath.isSuper()) {
+          // NOTE: spread and classes have almost the same compat data, so this is very unlikely to happen in practice.
+          throw path.buildCodeFrameError(
+            "It's not possible to compile spread arguments in `super()` without compiling classes.\n" +
+              "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
+          );
+        }
 
         let contextLiteral = scope.buildUndefinedNode();
 
@@ -120,7 +128,7 @@ export default declare((api, options) => {
           node.arguments.push(first);
         }
 
-        const callee = node.callee;
+        const callee = calleePath.node;
 
         if (calleePath.isMemberExpression()) {
           const temp = scope.maybeGenerateMemoised(callee.object);
@@ -130,10 +138,10 @@ export default declare((api, options) => {
           } else {
             contextLiteral = t.cloneNode(callee.object);
           }
-          t.appendToMemberExpression(callee, t.identifier("apply"));
-        } else {
-          node.callee = t.memberExpression(node.callee, t.identifier("apply"));
         }
+
+        // We use the original callee here, to preserve any types/parentheses
+        node.callee = t.memberExpression(node.callee, t.identifier("apply"));
 
         if (t.isSuper(contextLiteral)) {
           contextLiteral = t.thisExpression();

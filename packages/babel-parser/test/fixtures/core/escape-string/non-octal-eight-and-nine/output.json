@@ -1,0 +1,102 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (4:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (4:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":11,"end":49,"loc":{"start":{"line":2,"column":0},"end":{"line":5,"column":1}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":11,"end":49,"loc":{"start":{"line":2,"column":0},"end":{"line":5,"column":1}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":17,"end":49,"loc":{"start":{"line":2,"column":6},"end":{"line":5,"column":1}},
+            "body": [],
+            "directives": [
+              {
+                "type": "Directive",
+                "start":21,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":15}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":21,"end":33,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":14}},
+                  "extra": {
+                    "raw": "\"use strict\"",
+                    "rawValue": "use strict"
+                  },
+                  "value": "use strict"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":37,"end":42,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":7}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":37,"end":41,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":6}},
+                  "extra": {
+                    "raw": "\"\\8\"",
+                    "rawValue": "\\8"
+                  },
+                  "value": "\\8"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":42,"end":47,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":12}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":42,"end":46,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":11}},
+                  "extra": {
+                    "raw": "\"\\9\"",
+                    "rawValue": "\\9"
+                  },
+                  "value": "\\9"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+          "extra": {
+            "raw": "\"\\8\"",
+            "rawValue": "\\8"
+          },
+          "value": "\\8"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":5,"end":10,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":10}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":5,"end":9,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":9}},
+          "extra": {
+            "raw": "\"\\9\"",
+            "rawValue": "\\9"
+          },
+          "value": "\\9"
+        }
+      }
+    ]
+  }
+}
