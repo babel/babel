@@ -433,17 +433,49 @@ class BlockScoping {
         ]);
 
         if (violation.isAssignmentExpression()) {
-          violation
-            .get("right")
-            .replaceWith(
-              t.sequenceExpression([throwNode, violation.get("right").node]),
+          const { operator } = violation.node;
+          if (operator === "=") {
+            violation.replaceWith(
+              t.sequenceExpression([violation.get("right").node, throwNode]),
             );
+          } else if (["&&=", "||=", "??="].includes(operator)) {
+            violation.replaceWith(
+              t.logicalExpression(
+                operator.slice(0, -1),
+                violation.get("left").node,
+                t.sequenceExpression([violation.get("right").node, throwNode]),
+              ),
+            );
+          } else {
+            violation.replaceWith(
+              t.sequenceExpression([
+                t.binaryExpression(
+                  operator.slice(0, -1),
+                  violation.get("left").node,
+                  violation.get("right").node,
+                ),
+                throwNode,
+              ]),
+            );
+          }
         } else if (violation.isUpdateExpression()) {
           violation.replaceWith(
-            t.sequenceExpression([throwNode, violation.node]),
+            t.sequenceExpression([
+              t.unaryExpression("+", violation.get("argument").node),
+              throwNode,
+            ]),
           );
         } else if (violation.isForXStatement()) {
           violation.ensureBlock();
+          violation
+            .get("left")
+            .replaceWith(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(
+                  violation.scope.generateUidIdentifier(name),
+                ),
+              ]),
+            );
           violation.node.body.body.unshift(t.expressionStatement(throwNode));
         }
       }

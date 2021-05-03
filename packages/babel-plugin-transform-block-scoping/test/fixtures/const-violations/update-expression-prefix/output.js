@@ -1,2 +1,2 @@
 var a = "str";
-babelHelpers.readOnlyError("a"), --a;
++a, babelHelpers.readOnlyError("a");
