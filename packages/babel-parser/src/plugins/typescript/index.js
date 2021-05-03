@@ -2317,25 +2317,41 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.tsParseModifier(["public", "protected", "private"]);
     }
 
+    tsHasSomeModifiers(member: any, modifiers: TsModifier[]): boolean {
+      return modifiers.some(modifier => {
+        if (tsIsAccessModifier(modifier)) {
+          return member.accessibility === modifier;
+        }
+        return !!member[modifier];
+      });
+    }
+
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
       state: N.ParseClassMemberState,
     ): void {
-      this.tsParseModifiers(member, [
+      const invalidModifersForStaticBlocks = [
         "declare",
         "private",
         "public",
         "protected",
         "override",
-        "static",
         "abstract",
         "readonly",
-      ]);
+      ];
+      this.tsParseModifiers(
+        member,
+        invalidModifersForStaticBlocks.concat(["static"]),
+      );
 
       const callParseClassMemberWithIsStatic = () => {
         const isStatic = !!member.static;
-        if (isStatic && this.eat(tt.braceL)) {
+        if (
+          isStatic &&
+          !this.tsHasSomeModifiers(member, invalidModifersForStaticBlocks) &&
+          this.eat(tt.braceL)
+        ) {
           this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
         } else {
           this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
