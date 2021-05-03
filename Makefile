@@ -76,6 +76,7 @@ flowcheck-ci:
 code-quality: tscheck flow lint
 
 tscheck: generate-tsconfig
+	rm -rf dts
 	$(YARN) tsc -b .
 
 flow: build-flow-typings
@@ -108,13 +109,6 @@ clean: test-clean
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 	rm -rf node_modules/.cache
-
-clean-tsconfig:
-	rm -f tsconfig.json
-	git clean packages/*/tsconfig.json -xfq
-	git clean codemods/*/tsconfig.json -xfq
-	git clean eslint/*/tsconfig.json -xfq
-	rm -f */*/tsconfig.tsbuildinfo
 
 test-clean:
 	$(foreach source, $(SOURCES), \
@@ -182,12 +176,9 @@ prepublish-build: clean-lib clean-runtime-helpers
 	STRIP_BABEL_8_FLAG=true $(MAKE) prepublish-build-standalone clone-license prepublish-prepare-dts
 
 prepublish-prepare-dts:
-	$(MAKE) clean-tsconfig
 	$(MAKE) tscheck
 	$(YARN) gulp bundle-dts
-	$(YARN) gulp clean-dts
 	$(MAKE) build-typescript-legacy-typings
-	$(MAKE) clean-tsconfig
 
 prepublish:
 	$(MAKE) check-yarn-bug-1882
@@ -259,7 +250,7 @@ clean-runtime-helpers:
 	rm -f packages/babel-runtime-corejs3/helpers/**/*.mjs
 	rm -rf packages/babel-runtime-corejs2/core-js
 
-clean-all: clean-tsconfig
+clean-all:
 	rm -rf node_modules
 	rm -rf package-lock.json
 	rm -rf .changelog

@@ -2,16 +2,5 @@
   "extends": "../../tsconfig.base.json",
   "include": [
     "./typings"
-  ],
-  "references": [
-    {
-      "path": "../babel-code-frame"
-    },
-    {
-      "path": "../babel-helper-fixtures"
-    },
-    {
-      "path": "../babel-helper-validator-identifier"
-    }
   ]
 }

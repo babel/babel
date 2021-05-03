@@ -2,7 +2,6 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
-
 import plumber from "gulp-plumber";
 import through from "through2";
 import chalk from "chalk";
@@ -31,7 +30,6 @@ const monorepoRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
 const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
-const defaultDtsGlob = `${defaultPackagesGlob}/lib/**/*.d.ts{,.map}`;
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -59,6 +57,13 @@ function mapSrcToLib(srcPath) {
   const parts = srcPath.replace(/(?<!\.d)\.ts$/, ".js").split(path.sep);
   parts[2] = "lib";
   return parts.join(path.sep);
+}
+
+function mapToDts(packageName) {
+  return packageName.replace(
+    /(?<=\\|\/|^)(packages|eslint|codemods)(?=\\|\/)/,
+    "dts"
+  );
 }
 
 function getIndexFromPackage(name) {
@@ -191,12 +196,6 @@ export const all = {${allList}};`;
       })
     )
     .pipe(gulp.dest(dest));
-}
-
-function unlink() {
-  return through.obj(function (file, enc, callback) {
-    fs.unlink(file.path, () => callback());
-  });
 }
 
 function finish(stream) {
@@ -422,19 +421,20 @@ function buildRollupDts(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(async packageName => {
-      const input = `${packageName}/lib/index.d.ts`;
-      fancyLog(`Bundling '${chalk.cyan(input)}' with rollup ...`);
+      const input = `${mapToDts(packageName)}/src/index.d.ts`;
+      const output = `${packageName}/lib/index.d.ts`;
+      fancyLog(`Bundling '${chalk.cyan(output)}' with rollup ...`);
+
       const bundle = await rollup({
         input,
         plugins: [rollupDts()],
+        onwarn(warning, warn) {
+          if (warning.code !== "CIRCULAR_DEPENDENCY") warn(warning);
+        },
       });
 
-      await finish(
-        gulp.src(`${packageName}/lib/**/*.d.ts{,.map}`).pipe(unlink())
-      );
-
       await bundle.write({
-        file: `${packageName}/lib/index.d.ts`,
+        file: output,
         format: "es",
         sourcemap: sourcemap,
         exports: "named",
@@ -443,13 +443,9 @@ function buildRollupDts(packages) {
   );
 }
 
-function removeDts(exclude) {
-  return getFiles(defaultDtsGlob, { exclude }).pipe(unlink());
-}
-
 function copyDts(packages) {
   return getFiles(`${defaultPackagesGlob}/src/**/*.d.ts`, { include: packages })
-    .pipe(rename(file => path.resolve(file.base, mapSrcToLib(file.relative))))
+    .pipe(rename(file => path.resolve(file.base, mapToDts(file.relative))))
     .pipe(gulp.dest(monorepoRoot));
 }
 
@@ -516,7 +512,6 @@ gulp.task(
   "bundle-dts",
   gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
 );
-gulp.task("clean-dts", () => removeDts(/* exclude */ dtsBundles));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 
