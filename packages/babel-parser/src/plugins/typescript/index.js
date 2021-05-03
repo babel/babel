@@ -131,6 +131,8 @@ const TSErrors = makeErrorTemplates(
       "A 'set' accessor cannot have rest parameter.",
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
+    StaticBlockCannotHaveModifier:
+      "Static class blocks cannot have any modifier.",
     TypeAnnotationAfterAssign:
       "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     TypeImportCannotSpecifyDefaultAndNamed:
@@ -2317,34 +2319,49 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.tsParseModifier(["public", "protected", "private"]);
     }
 
+    tsHasSomeModifiers(member: any, modifiers: TsModifier[]): boolean {
+      return modifiers.some(modifier => {
+        if (tsIsAccessModifier(modifier)) {
+          return member.accessibility === modifier;
+        }
+        return !!member[modifier];
+      });
+    }
+
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
       state: N.ParseClassMemberState,
     ): void {
-      this.tsParseModifiers(member, [
+      const invalidModifersForStaticBlocks = [
         "declare",
         "private",
         "public",
         "protected",
         "override",
-        "static",
         "abstract",
         "readonly",
-      ]);
+      ];
+      this.tsParseModifiers(
+        member,
+        invalidModifersForStaticBlocks.concat(["static"]),
+      );
 
-      const callParseClassMember = () => {
-        this.parseClassMemberWithIsStatic(
-          classBody,
-          member,
-          state,
-          !!member.static,
-        );
+      const callParseClassMemberWithIsStatic = () => {
+        const isStatic = !!member.static;
+        if (isStatic && this.eat(tt.braceL)) {
+          if (this.tsHasSomeModifiers(member, invalidModifersForStaticBlocks)) {
+            this.raise(this.state.pos, TSErrors.StaticBlockCannotHaveModifier);
+          }
+          this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
+        } else {
+          this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
+        }
       };
       if (member.declare) {
-        this.tsInAmbientContext(callParseClassMember);
+        this.tsInAmbientContext(callParseClassMemberWithIsStatic);
       } else {
-        callParseClassMember();
+        callParseClassMemberWithIsStatic();
       }
     }
 
