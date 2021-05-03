@@ -1,4 +1,4 @@
 class Foo {
-  static foo;
+  static static;
   static {}
 }
