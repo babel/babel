@@ -131,6 +131,8 @@ const TSErrors = makeErrorTemplates(
       "A 'set' accessor cannot have rest parameter.",
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
+    StaticBlockCannotHaveanyModifier:
+      "Static class blocks cannot have any modifier.",
     TypeAnnotationAfterAssign:
       "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     TypeImportCannotSpecifyDefaultAndNamed:
@@ -2347,11 +2349,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       const callParseClassMemberWithIsStatic = () => {
         const isStatic = !!member.static;
-        if (
-          isStatic &&
-          !this.tsHasSomeModifiers(member, invalidModifersForStaticBlocks) &&
-          this.eat(tt.braceL)
-        ) {
+        if (isStatic && this.eat(tt.braceL)) {
+          if (this.tsHasSomeModifiers(member, invalidModifersForStaticBlocks)) {
+            this.raise(
+              this.state.pos,
+              TSErrors.StaticBlockCannotHaveanyModifier,
+            );
+          }
           this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
         } else {
           this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
