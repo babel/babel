@@ -36,6 +36,8 @@ import {
   newParameterDeclarationScope,
 } from "../util/expression-scope";
 import type { SourceType } from "../options";
+import { Token } from "../tokenizer";
+import { Position } from "../util/location";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -47,6 +49,48 @@ const FUNC_NO_FLAGS = 0b000,
 
 const loneSurrogate = /[\uD800-\uDFFF]/u;
 
+/**
+ * Convert tt.privateName to tt.hash + tt.name for backward Babel 7 compat.
+ * For performance reasons this routine mutates `tokens`, it is okay
+ * here since we execute `parseTopLevel` once for every file.
+ * @param {*} tokens
+ * @returns
+ */
+function babel7CompatTokens(tokens) {
+  if (!process.env.BABEL_8_BREAKING) {
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (token.type === tt.privateName) {
+        const { loc, start, value, end } = token;
+        const hashEndPos = start + 1;
+        const hashEndLoc = new Position(loc.start.line, loc.start.column + 1);
+        tokens.splice(
+          i,
+          1,
+          // $FlowIgnore: hacky way to create token
+          new Token({
+            type: tt.hash,
+            value: "#",
+            start: start,
+            end: hashEndPos,
+            startLoc: loc.start,
+            endLoc: hashEndLoc,
+          }),
+          // $FlowIgnore: hacky way to create token
+          new Token({
+            type: tt.name,
+            value: value,
+            start: hashEndPos,
+            end: end,
+            startLoc: hashEndLoc,
+            endLoc: loc.end,
+          }),
+        );
+      }
+    }
+  }
+  return tokens;
+}
 export default class StatementParser extends ExpressionParser {
   // ### Statement parsing
 
@@ -59,7 +103,7 @@ export default class StatementParser extends ExpressionParser {
     file.program = this.parseProgram(program);
     file.comments = this.state.comments;
 
-    if (this.options.tokens) file.tokens = this.tokens;
+    if (this.options.tokens) file.tokens = babel7CompatTokens(this.tokens);
 
     return this.finishNode(file, "File");
   }
