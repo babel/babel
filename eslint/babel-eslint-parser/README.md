@@ -93,7 +93,7 @@ module.exports = {
 
 **Monorepo configuration**
 
-This configuration is usefull for monorepo as it avoids to repeat the configuration of babel and eslint on every package.
+This configuration is useful for monorepo as it avoids to repeat the configuration of Babel and ESLint on every package.
 
 ```
 {
