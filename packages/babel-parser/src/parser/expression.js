@@ -1166,19 +1166,13 @@ export default class ExpressionParser extends LValParser {
         // RelationalExpression [In, Yield, Await]
         //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
         const start = this.state.start;
+        const value = this.state.value;
         node = this.parsePrivateName();
         if (this.match(tt._in)) {
           this.expectPlugin("privateIn");
-          this.classScope.usePrivateName(
-            this.getPrivateNameSV(node),
-            node.start,
-          );
+          this.classScope.usePrivateName(value, node.start);
         } else if (this.hasPlugin("privateIn")) {
-          this.raise(
-            this.state.start,
-            Errors.PrivateInExpectedIn,
-            this.getPrivateNameSV(node),
-          );
+          this.raise(this.state.start, Errors.PrivateInExpectedIn, value);
         } else {
           throw this.unexpected(start);
         }
