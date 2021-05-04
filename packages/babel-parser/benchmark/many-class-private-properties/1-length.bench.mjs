@@ -4,11 +4,13 @@ import current from "../../lib/index.js";
 import { report } from "../util.mjs";
 
 const suite = new Benchmark.Suite();
-// All codepoints in [0x4e00, 0x9ffc] is valid identifier name
+// All codepoints in [0x4e00, 0x9ffc] are valid identifier name per Unicode 13
 function createInput(length) {
   if (length > 0x9ffc - 0x4e00) {
     throw new Error(
-      "Does not support such big length, consider modify the `createInput`"
+      `Length greater than ${
+        0x9ffc - 0x4e00
+      } is not supported! Consider modify the \`createInput\`.`
     );
   }
   let source = "class C { ";
@@ -26,7 +28,7 @@ function benchCases(name, implementation, options) {
   }
 }
 
-benchCases("baseline", baseline, { plugins: ["classPrivateProperties"] });
+benchCases("baseline", baseline);
 benchCases("current", current);
 
 suite.on("cycle", report).run();
