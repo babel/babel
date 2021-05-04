@@ -354,8 +354,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
 
     if (!t.isVariableDeclaration(left)) {
       let didTransform = false;
-      const bodyPath = path.get("body");
-      const loopBodyScope = bodyPath.scope;
+      const loopBodyScope = path.get("body").scope;
       for (const name of Object.keys(t.getOuterBindingIdentifiers(left))) {
         if (
           exported.get(name) &&
@@ -370,6 +369,10 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       if (!didTransform) {
         return;
       }
+
+      path.ensureBlock();
+      const bodyPath = path.get("body");
+
       const newLoopId = scope.generateUidIdentifierBasedOnNode(left);
       bodyPath.unshiftContainer(
         "body",

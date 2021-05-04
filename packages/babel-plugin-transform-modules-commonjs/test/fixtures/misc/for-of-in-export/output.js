@@ -58,6 +58,11 @@ for (let _ref2 of []) {
   let _foo8;
 }
 
+for (let _foo9 of []) {
+  exports.bar = exports.foo = foo = _foo9;
+  ;
+}
+
 {
   let foo;
 

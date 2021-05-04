@@ -16,6 +16,8 @@ for ([foo, [...foo]] of []) {
     let foo;
 }
 
+for (foo of []) ;
+
 {
     let foo;
     for(foo of []) {}
