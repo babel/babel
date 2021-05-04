@@ -706,18 +706,18 @@ export default class ExpressionParser extends LValParser {
     const computed = this.eat(tt.bracketL);
     node.object = base;
     node.computed = computed;
+    const privateName = this.match(tt.privateName) && this.state.value;
     const property = computed
       ? this.parseExpression()
-      : this.parseMaybePrivateName(true);
+      : privateName
+      ? this.parsePrivateName()
+      : this.parseIdentifier(true);
 
-    if (this.isPrivateName(property)) {
+    if (privateName !== false) {
       if (node.object.type === "Super") {
         this.raise(startPos, Errors.SuperPrivateField);
       }
-      this.classScope.usePrivateName(
-        this.getPrivateNameSV(property),
-        property.start,
-      );
+      this.classScope.usePrivateName(privateName, property.start);
     }
     node.property = property;
 
@@ -1981,15 +1981,16 @@ export default class ExpressionParser extends LValParser {
       const oldInPropertyName = this.state.inPropertyName;
       this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
+      const type = this.state.type;
       (prop: $FlowFixMe).key =
-        this.match(tt.num) ||
-        this.match(tt.string) ||
-        this.match(tt.bigint) ||
-        this.match(tt.decimal)
+        type === tt.num ||
+        type === tt.string ||
+        type === tt.bigint ||
+        type === tt.decimal
           ? this.parseExprAtom()
           : this.parseMaybePrivateName(isPrivateNameAllowed);
 
-      if (!this.isPrivateName(prop.key)) {
+      if (type !== tt.privateName) {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
         prop.computed = false;
       }
