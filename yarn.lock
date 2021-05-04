@@ -325,7 +325,7 @@ __metadata:
   dependencies:
     "@babel/helper-fixtures": "workspace:*"
     "@babel/parser": "workspace:*"
-    "@babel/types": "workspace:^7.14.0"
+    "@babel/types": "workspace:^7.14.1"
     "@types/jsesc": ^2.5.0
     "@types/source-map": ^0.5.0
     jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
@@ -2042,7 +2042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-block-scoping@workspace:*, @babel/plugin-transform-block-scoping@workspace:^7.13.16, @babel/plugin-transform-block-scoping@workspace:packages/babel-plugin-transform-block-scoping":
+"@babel/plugin-transform-block-scoping@workspace:*, @babel/plugin-transform-block-scoping@workspace:^7.14.1, @babel/plugin-transform-block-scoping@workspace:packages/babel-plugin-transform-block-scoping":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-block-scoping@workspace:packages/babel-plugin-transform-block-scoping"
   dependencies:
@@ -3188,7 +3188,7 @@ __metadata:
     "@babel/plugin-transform-arrow-functions": "workspace:^7.13.0"
     "@babel/plugin-transform-async-to-generator": "workspace:^7.13.0"
     "@babel/plugin-transform-block-scoped-functions": "workspace:^7.12.13"
-    "@babel/plugin-transform-block-scoping": "workspace:^7.13.16"
+    "@babel/plugin-transform-block-scoping": "workspace:^7.14.1"
     "@babel/plugin-transform-classes": "workspace:^7.13.0"
     "@babel/plugin-transform-computed-properties": "workspace:^7.13.0"
     "@babel/plugin-transform-destructuring": "workspace:^7.13.17"
@@ -3218,7 +3218,7 @@ __metadata:
     "@babel/plugin-transform-unicode-escapes": "workspace:^7.12.13"
     "@babel/plugin-transform-unicode-regex": "workspace:^7.12.13"
     "@babel/preset-modules": ^0.1.4
-    "@babel/types": "workspace:^7.14.0"
+    "@babel/types": "workspace:^7.14.1"
     babel-plugin-polyfill-corejs2: ^0.2.0
     babel-plugin-polyfill-corejs3: ^0.2.0
     babel-plugin-polyfill-regenerator: ^0.2.0
@@ -3561,7 +3561,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@workspace:*, @babel/types@workspace:^7.12.1, @babel/types@workspace:^7.12.13, @babel/types@workspace:^7.13.0, @babel/types@workspace:^7.13.12, @babel/types@workspace:^7.13.16, @babel/types@workspace:^7.14.0, @babel/types@workspace:packages/babel-types":
+"@babel/types@workspace:*, @babel/types@workspace:^7.12.1, @babel/types@workspace:^7.12.13, @babel/types@workspace:^7.13.0, @babel/types@workspace:^7.13.12, @babel/types@workspace:^7.13.16, @babel/types@workspace:^7.14.0, @babel/types@workspace:^7.14.1, @babel/types@workspace:packages/babel-types":
   version: 0.0.0-use.local
   resolution: "@babel/types@workspace:packages/babel-types"
   dependencies:
