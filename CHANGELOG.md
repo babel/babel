@@ -19,6 +19,30 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.1 (2021-05-04)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13243](https://github.com/babel/babel/pull/13243) Parse static blocks with typescript plugin ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-plugin-transform-block-scoping`
+  * [#13248](https://github.com/babel/babel/pull/13248) Fix plugin-transform-block-scoping const violations ([@overlookmotel](https://github.com/overlookmotel))
+* `babel-generator`, `babel-parser`
+  * [#13244](https://github.com/babel/babel/pull/13244) Parse `for await (async of ...)` ([@Zalathar](https://github.com/Zalathar))
+* `babel-helper-create-class-features-plugin`
+  * [#13237](https://github.com/babel/babel/pull/13237) fix: Typo in `@babel/helper-create-class-features-plugin` ([@aancer-rca](https://github.com/aancer-rca))
+
+#### :memo: Documentation
+* `babel-types`
+  * [#13151](https://github.com/babel/babel/pull/13151) Add alias docs for @babel/types ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-parser`
+  * [#13242](https://github.com/babel/babel/pull/13242) Don't use `"composite": true` in tsc (until it supports cycles)  ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13241](https://github.com/babel/babel/pull/13241) chore: remove duplicated test262 parser tests ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-export-namespace-from`, `babel-plugin-syntax-module-string-names`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`
+  * [#13246](https://github.com/babel/babel/pull/13246) Archive `@babel/plugin-syntax-module-string-names` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-syntax-class-properties`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-typescript`, `babel-plugin-transform-unicode-escapes`, `babel-preset-env`, `babel-standalone`
+  * [#13232](https://github.com/babel/babel/pull/13232) Archive `@babel/plugin-syntax-class-properties` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.14.0 (2021-04-29)
 
 #### :eyeglasses: Spec Compliance
