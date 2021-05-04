@@ -95,8 +95,8 @@ module.exports = {
 
 This configuration is useful for monorepo as it avoids to repeat the configuration of Babel and ESLint on every package.
 
-```
-{
+```js
+module.exports = {
   "parser": "@babel/eslint-parser",
   "parserOptions": {
     "babelOptions": {
