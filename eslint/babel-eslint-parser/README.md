@@ -91,6 +91,20 @@ module.exports = {
 };
 ```
 
+**Monorepo configuration**
+
+This configuration is usefull for monorepo as it avoids to repeat the configuration of babel and eslint on every package.
+
+```
+{
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "babelOptions": {
+      "rootMode": "upward"
+    }
+  }
+}
+```
 ### Run
 
 ```sh
