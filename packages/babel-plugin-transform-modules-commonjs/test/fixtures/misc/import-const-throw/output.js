@@ -6,8 +6,6 @@ var Bar = _interopRequireDefault(require("bar"));
 
 var _baz = require("baz");
 
-var _Baz;
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _foo.default = (42, function () {
@@ -91,6 +89,46 @@ _foo.default = (_foo.default + 1, function () {
 Bar = (Bar + 1, function () {
   throw new Error('"' + "Bar" + '" is read-only.');
 }());
-_Baz = +_baz.Baz, _baz.Baz = (_Baz + 1, function () {
+_baz.Baz = (_baz.Baz + 1, function () {
   throw new Error('"' + "Baz" + '" is read-only.');
-}()), _Baz;
+}());
+
+for (let _Foo in {}) {
+  (function () {
+    throw new Error('"' + "Foo" + '" is read-only.');
+  })();
+
+  ;
+}
+
+for (let _Bar in {}) {
+  (function () {
+    throw new Error('"' + "Bar" + '" is read-only.');
+  })();
+}
+
+for (let _Baz of []) {
+  (function () {
+    throw new Error('"' + "Baz" + '" is read-only.');
+  })();
+
+  let Baz;
+}
+
+for (let _Foo2 in {}) {
+  (function () {
+    throw new Error('"' + "Foo" + '" is read-only.');
+  })();
+}
+
+for (let _ref in {}) {
+  (function () {
+    throw new Error('"' + "Bar" + '" is read-only.');
+  })();
+}
+
+for (let _ref2 in {}) {
+  (function () {
+    throw new Error('"' + "Baz" + '" is read-only.');
+  })();
+}

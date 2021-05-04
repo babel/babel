@@ -350,23 +350,26 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
   ) {
     const { scope, node } = path;
     const { left } = node;
-    const { exported, scope: programScope } = this;
+    const { exported, imported, scope: programScope } = this;
 
     if (!t.isVariableDeclaration(left)) {
-      let didTransform = false;
+      let didTransformExport = false,
+        importConstViolationName;
       const loopBodyScope = path.get("body").scope;
       for (const name of Object.keys(t.getOuterBindingIdentifiers(left))) {
-        if (
-          exported.get(name) &&
-          programScope.getBinding(name) === scope.getBinding(name)
-        ) {
-          didTransform = true;
-          if (loopBodyScope.hasOwnBinding(name)) {
-            loopBodyScope.rename(name);
+        if (programScope.getBinding(name) === scope.getBinding(name)) {
+          if (exported.get(name)) {
+            didTransformExport = true;
+            if (loopBodyScope.hasOwnBinding(name)) {
+              loopBodyScope.rename(name);
+            }
+          }
+          if (imported.get(name) && !importConstViolationName) {
+            importConstViolationName = name;
           }
         }
       }
-      if (!didTransform) {
+      if (!didTransformExport && !importConstViolationName) {
         return;
       }
 
@@ -374,10 +377,6 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       const bodyPath = path.get("body");
 
       const newLoopId = scope.generateUidIdentifierBasedOnNode(left);
-      bodyPath.unshiftContainer(
-        "body",
-        t.expressionStatement(t.assignmentExpression("=", left, newLoopId)),
-      );
       path
         .get("left")
         .replaceWith(
@@ -386,6 +385,19 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
           ]),
         );
       scope.registerDeclaration(path.get("left"));
+
+      if (didTransformExport) {
+        bodyPath.unshiftContainer(
+          "body",
+          t.expressionStatement(t.assignmentExpression("=", left, newLoopId)),
+        );
+      }
+      if (importConstViolationName) {
+        bodyPath.unshiftContainer(
+          "body",
+          t.expressionStatement(buildImportThrow(importConstViolationName)),
+        );
+      }
     }
   },
 };

@@ -35,3 +35,13 @@ Baz &&= 4;
 Foo++;
 Bar++;
 Baz++;
+
+for (Foo in {}) ;
+for (Bar in {}) {}
+for (Baz of []) {
+	let Baz;
+}
+
+for ({Foo} in {}) {}
+for ([Bar] in {}) {}
+for ([...Baz] in {}) {}
