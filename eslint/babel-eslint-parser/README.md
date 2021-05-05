@@ -93,7 +93,7 @@ module.exports = {
 
 **Monorepo configuration**
 
-This configuration is useful for monorepo as it avoids to repeat the configuration of Babel and ESLint on every package.
+This configuration is useful for monorepo, when you are running ESLint on every package and not from the monorepo root folder, as it avoids to repeat the Babel and ESLint configuration on every package.
 
 ```js
 module.exports = {
