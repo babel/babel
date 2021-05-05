@@ -2219,6 +2219,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    isIterator(word: string): boolean {
+      return word === "iterator" || word === "asyncIterator";
+    }
+
+    readIterator(): void {
+      const word = super.readWord1();
+      const fullWord = "@@" + word;
+
+      // Allow @@iterator and @@asyncIterator as a identifier only inside type
+      if (!this.isIterator(word) || !this.state.inType) {
+        this.raise(this.state.pos, Errors.InvalidIdentifier, fullWord);
+      }
+
+      this.finishToken(tt.name, fullWord);
+    }
+
     // ensure that inside flow types, we bypass the jsx parser plugin
     getTokenFromCode(code: number): void {
       const next = this.input.charCodeAt(this.state.pos + 1);
@@ -2236,8 +2252,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // allow double nullable types in Flow: ??string
         return this.finishOp(tt.question, 1);
       } else if (isIteratorStart(code, next)) {
-        this.state.isIterator = true;
-        return super.readWord();
+        this.state.pos += 2; // eat "@@"
+        return this.readIterator();
       } else {
         return super.getTokenFromCode(code);
       }

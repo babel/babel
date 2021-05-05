@@ -64,7 +64,6 @@ export default class State {
   noAnonFunctionType: boolean = false;
   inPropertyName: boolean = false;
   hasFlowComment: boolean = false;
-  isIterator: boolean = false;
   isAmbientContext: boolean = false;
   inAbstractClass: boolean = false;
 

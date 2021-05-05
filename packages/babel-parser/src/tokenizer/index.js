@@ -453,7 +453,10 @@ export default class Tokenizer extends ParserErrors {
         this.finishToken(tt.bracketHashL);
       }
       this.state.pos += 2;
-    } else if (isIdentifierStart(next) || next === charCodes.backslash) {
+    } else if (isIdentifierStart(next)) {
+      ++this.state.pos;
+      this.finishToken(tt.privateName, this.readWord1(next));
+    } else if (next === charCodes.backslash) {
       ++this.state.pos;
       this.finishToken(tt.privateName, this.readWord1());
     } else {
@@ -920,7 +923,7 @@ export default class Tokenizer extends ParserErrors {
 
       default:
         if (isIdentifierStart(code)) {
-          this.readWord();
+          this.readWord(code);
           return;
         }
     }
@@ -1457,19 +1460,23 @@ export default class Tokenizer extends ParserErrors {
   //
   // Incrementally adds only escaped chars, adding other chunks as-is
   // as a micro-optimization.
+  //
+  // When `firstCode` is given, it assumes it is always an identifier start and
+  // will skip reading start position again
 
-  readWord1(): string {
-    let word = "";
+  readWord1(firstCode: number | void): string {
     this.state.containsEsc = false;
+    let word = "";
     const start = this.state.pos;
     let chunkStart = this.state.pos;
+    if (firstCode !== undefined) {
+      this.state.pos += firstCode <= 0xffff ? 1 : 2;
+    }
 
     while (this.state.pos < this.length) {
       const ch = this.codePointAtPos(this.state.pos);
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
-      } else if (this.state.isIterator && ch === charCodes.atSign) {
-        ++this.state.pos;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
@@ -1501,25 +1508,12 @@ export default class Tokenizer extends ParserErrors {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
-  isIterator(word: string): boolean {
-    return word === "@@iterator" || word === "@@asyncIterator";
-  }
-
   // Read an identifier or keyword token. Will check for reserved
   // words when necessary.
 
-  readWord(): void {
-    const word = this.readWord1();
+  readWord(firstCode: number | void): void {
+    const word = this.readWord1(firstCode);
     const type = keywordTypes.get(word) || tt.name;
-
-    // Allow @@iterator and @@asyncIterator as a identifier only inside type
-    if (
-      this.state.isIterator &&
-      (!this.isIterator(word) || !this.state.inType)
-    ) {
-      this.raise(this.state.pos, Errors.InvalidIdentifier, word);
-    }
-
     this.finishToken(type, word);
   }
 
