@@ -1462,6 +1462,7 @@ export default class Tokenizer extends ParserErrors {
 
         if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
           this.raise(this.state.pos, Errors.MissingUnicodeEscape);
+          chunkStart = this.state.pos - 1;
           continue;
         }
 
