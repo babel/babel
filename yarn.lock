@@ -10,9 +10,9 @@ __metadata:
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
   dependencies:
     "@babel/runtime": "workspace:*"
-    "@rollup/plugin-commonjs": ^17.1.0
-    "@rollup/plugin-node-resolve": ^11.2.0
-    rollup: ^2.39.1
+    "@rollup/plugin-commonjs": ^18.1.0
+    "@rollup/plugin-node-resolve": ^13.0.0
+    rollup: ^2.47.0
   languageName: unknown
   linkType: soft
 
@@ -3890,9 +3890,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-babel@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "@rollup/plugin-babel@npm:5.2.0"
+"@rollup/plugin-babel@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@rollup/plugin-babel@npm:5.3.0"
   dependencies:
     "@babel/helper-module-imports": ^7.10.4
     "@rollup/pluginutils": ^3.1.0
@@ -3903,13 +3903,13 @@ __metadata:
   peerDependenciesMeta:
     "@types/babel__core":
       optional: true
-  checksum: 22404ced65f1f83c854c2325d467241e5912c0ca28ab667e7799d0be9d1cbc489de3345f8049ea29b8934d92b25eee3b3e3fa057de8da102eb33c64675c35f2b
+  checksum: 44efa786f256b46bc4b51866278586306b12eba1b68738f4535ee013cd2fd3b6baed7a7adebf1f179019f054c5c10e9c202360b117851f612cd7e7f5cb4be3e7
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@^17.1.0":
-  version: 17.1.0
-  resolution: "@rollup/plugin-commonjs@npm:17.1.0"
+"@rollup/plugin-commonjs@^18.1.0":
+  version: 18.1.0
+  resolution: "@rollup/plugin-commonjs@npm:18.1.0"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -3920,13 +3920,13 @@ __metadata:
     resolve: ^1.17.0
   peerDependencies:
     rollup: ^2.30.0
-  checksum: 9b162f93090e5bf544c85bb835a29f65371726d2e6161aa1a048bbb708b77433184e5836e7118e2c6277f9a9a7b5835f56e420d2040b1b623b03ca76db4b5d10
+  checksum: e476ae379d205049476da5b19bea58581722846ce9be61ed5316cf2f43e6d2a514a3199447b6f0c9ef259fd97b3d494c89cdbe0b76c91a71c686df343e19009a
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@^17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::locator=babel%40workspace%3A.":
-  version: 17.1.0
-  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::version=17.1.0&hash=a0d076&locator=babel%40workspace%3A."
+"@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@^18.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::locator=babel%40workspace%3A.":
+  version: 18.1.0
+  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A18.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::version=18.1.0&hash=6f70f1&locator=babel%40workspace%3A."
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -3937,7 +3937,7 @@ __metadata:
     resolve: ^1.17.0
   peerDependencies:
     rollup: ^2.30.0
-  checksum: ccf44f300b5b7b9fcc72e22c414bd86ce461e412a0980fb2f73d6d2b562466409ecaae270a54028c4584650c7d1a0718a6af0d15c5a5b41d6cd20a2159ba34fb
+  checksum: a6826d2e03d4fc952bd6bab57c0acd0eb412dbf9a8e1bd47ce0647eac2c2d2f94aa129b9d0e29dee0d8da819e38651ee7f11e2d330a9acb0dbee35c0cba1ff91
   languageName: node
   linkType: hard
 
@@ -3952,9 +3952,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:^11.2.0, @rollup/plugin-node-resolve@npm:^11.2.1":
-  version: 11.2.1
-  resolution: "@rollup/plugin-node-resolve@npm:11.2.1"
+"@rollup/plugin-node-resolve@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "@rollup/plugin-node-resolve@npm:13.0.0"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     "@types/resolve": 1.17.1
@@ -3963,20 +3963,20 @@ __metadata:
     is-module: ^1.0.0
     resolve: ^1.19.0
   peerDependencies:
-    rollup: ^1.20.0||^2.0.0
-  checksum: ae1bed46a949a1d8c077e021751c0140a523f731bea464ed0bfc3d335096493d1638be2a756f72d96f1f3a00fbdad8ba8fad8e86381d3eafce5ea2dffd62f175
+    rollup: ^2.42.0
+  checksum: 4b323e8ad5f1245449cd44b4857ed94a8dd3b998178ce139e74542c216a5abeb5a9e44885f3809ac747296a108f0562f986f9561055e76d1b0b268cf788a5c83
   languageName: node
   linkType: hard
 
-"@rollup/plugin-replace@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "@rollup/plugin-replace@npm:2.4.0"
+"@rollup/plugin-replace@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "@rollup/plugin-replace@npm:2.4.2"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     magic-string: ^0.25.7
   peerDependencies:
     rollup: ^1.20.0 || ^2.0.0
-  checksum: 5151bed6479eeddfb0368f21e4ebc9a872f46e0443f17e32fc9362164ab9a4fd996b0703361190d085b46fc911e5d6ae757866a318e5651583af7019b2ee533e
+  checksum: b8532ce34011d6384b697e351c6ca6863aeb08b02dfc968efde84dc397d77c7efdff7623c4d05562d21ef62c8a598e765deb9608d6a6bf65835a956325ef20e7
   languageName: node
   linkType: hard
 
@@ -5614,11 +5614,11 @@ __metadata:
     "@babel/preset-typescript": ^7.13.0
     "@babel/register": ^7.13.16
     "@babel/runtime": ^7.14.0
-    "@rollup/plugin-babel": ^5.2.0
-    "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^17.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch"
+    "@rollup/plugin-babel": ^5.3.0
+    "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^18.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch"
     "@rollup/plugin-json": ^4.1.0
-    "@rollup/plugin-node-resolve": ^11.2.1
-    "@rollup/plugin-replace": ^2.4.0
+    "@rollup/plugin-node-resolve": ^13.0.0
+    "@rollup/plugin-replace": ^2.4.2
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
     babel-plugin-transform-charcodes: ^0.2.0
@@ -5644,10 +5644,10 @@ __metadata:
     lodash: ^4.17.20
     mergeiterator: ^1.2.5
     prettier: ^2.2.1
-    rollup: ^2.36.2
+    rollup: ^2.47.0
     rollup-plugin-dts: ^2.0.0
     rollup-plugin-node-polyfills: ^0.2.1
-    rollup-plugin-terser: ^7.0.0
+    rollup-plugin-terser: ^7.0.2
     test262-stream: ^1.3.0
     through2: ^2.0.0
     typescript: ~4.2.3
@@ -13174,9 +13174,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup-plugin-terser@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "rollup-plugin-terser@npm:7.0.0"
+"rollup-plugin-terser@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "rollup-plugin-terser@npm:7.0.2"
   dependencies:
     "@babel/code-frame": ^7.10.4
     jest-worker: ^26.2.1
@@ -13184,7 +13184,7 @@ fsevents@^1.2.7:
     terser: ^5.0.0
   peerDependencies:
     rollup: ^2.0.0
-  checksum: 56e22420ea4ce735a3779f4ee0ad4d33d0c2bc15a9c276772b53cd0fe5fb7a59184aa8de8ee2b90261de8357b26e8f7c374e92ece53654efd6932c643aeb76c3
+  checksum: 553cc21efcea3e4d46c61fbd41cb4a82a3ab8e02ae4ce7c03f9248dea93e5a91c3624e2271490ee05b2bb481568305733b496d968d3ac9c99b777a588a336f01
   languageName: node
   linkType: hard
 
@@ -13197,9 +13197,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.36.2, rollup@npm:^2.39.1":
-  version: 2.39.1
-  resolution: "rollup@npm:2.39.1"
+"rollup@npm:^2.47.0":
+  version: 2.47.0
+  resolution: "rollup@npm:2.47.0"
   dependencies:
     fsevents: ~2.3.1
   dependenciesMeta:
@@ -13207,7 +13207,7 @@ fsevents@^1.2.7:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: c2d33255949d1cb86f8119f2457e81cdd7f7e6406532080cba63390183140759b5705e7a0602fca1415e1df7a575df1947c94dde2c334b87fd0e004757d4dda2
+  checksum: bab2079fea72ebb6457e88717f64f3bd8ff52556827f77485708274aa94f2dfa19f555c022643957d604ff7329be5d010234346d28e13dcfed33d742d3e468b0
   languageName: node
   linkType: hard
 

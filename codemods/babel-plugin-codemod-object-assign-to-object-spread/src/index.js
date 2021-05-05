@@ -2,7 +2,7 @@ import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 
 export default function ({ types: t }) {
   return {
-    inherits: syntaxObjectRestSpread,
+    inherits: syntaxObjectRestSpread.default,
 
     visitor: {
       CallExpression(path) {

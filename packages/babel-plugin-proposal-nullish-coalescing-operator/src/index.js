@@ -8,7 +8,7 @@ export default declare((api, { loose = false }) => {
 
   return {
     name: "proposal-nullish-coalescing-operator",
-    inherits: syntaxNullishCoalescingOperator,
+    inherits: syntaxNullishCoalescingOperator.default,
 
     visitor: {
       LogicalExpression(path) {

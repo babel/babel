@@ -159,7 +159,7 @@ module.exports = function (api) {
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM
         ? ["@babel/transform-modules-commonjs", { importInterop }]
-        : pluginNodeImportInteropRollup,
+        : null,
       convertESM ? pluginImportMetaUrl : null,
 
       pluginPackageJsonMacro,
@@ -219,19 +219,24 @@ module.exports = function (api) {
   return config;
 };
 
+const monorepoPackages = ["codemods", "eslint", "packages"]
+  .map(folder => fs.readdirSync(__dirname + "/" + folder))
+  .reduce((a, b) => a.concat(b))
+  .map(name => name.replace(/^babel-/, "@babel/"));
+
 function importInterop(source) {
   if (
     // These internal files are "real CJS" (whose default export is
     // on module.exports) and not compiled ESM.
     source.startsWith("@babel/compat-data/") ||
-    source.includes("babel-eslint-shared-fixtures/utils") ||
-    // @babel/preset-modules is an external package, and it uses
-    // module.exports for the default export
-    source.startsWith("@babel/preset-modules/")
+    source.includes("babel-eslint-shared-fixtures/utils")
   ) {
     return "node";
   }
-  if (source[0] === "." || source.startsWith("@babel/")) {
+  if (
+    source[0] === "." ||
+    monorepoPackages.some(name => source.startsWith(name))
+  ) {
     // We don't need to worry about interop for internal files, since we know
     // for sure that they are ESM modules compiled to CJS
     return "none";
@@ -441,29 +446,6 @@ function pluginPackageJsonMacro({ types: t }) {
 
         const value = JSON.parse(pkg)[field];
         path.replaceWith(t.valueToNode(value));
-      },
-    },
-  };
-}
-
-function pluginNodeImportInteropRollup({ types: t }) {
-  const depsUsing__esModuleAndDefaultExport = src =>
-    src.startsWith("babel-plugin-polyfill-") || src === "regenerator-transform";
-
-  return {
-    visitor: {
-      ImportDeclaration(path) {
-        const { value: source } = path.node.source;
-        if (!depsUsing__esModuleAndDefaultExport(source)) {
-          return;
-        }
-
-        const defImport = path
-          .get("specifiers")
-          .find(s => s.isImportDefaultSpecifier());
-        if (!defImport) return;
-
-        defImport.replaceWith(t.importNamespaceSpecifier(defImport.node.local));
       },
     },
   };

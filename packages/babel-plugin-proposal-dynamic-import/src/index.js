@@ -21,7 +21,7 @@ export default declare(api => {
 
   return {
     name: "proposal-dynamic-import",
-    inherits: syntaxDynamicImport,
+    inherits: syntaxDynamicImport.default,
 
     pre() {
       this.file.set(

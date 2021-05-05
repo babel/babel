@@ -8,9 +8,9 @@ import getRuntimePath from "./get-runtime-path";
 import _pluginCorejs2 from "babel-plugin-polyfill-corejs2";
 import _pluginCorejs3 from "babel-plugin-polyfill-corejs3";
 import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
-const pluginCorejs2 = _pluginCorejs2.default;
-const pluginCorejs3 = _pluginCorejs3.default;
-const pluginRegenerator = _pluginRegenerator.default;
+const pluginCorejs2 = _pluginCorejs2.default || _pluginCorejs2;
+const pluginCorejs3 = _pluginCorejs3.default || _pluginCorejs3;
+const pluginRegenerator = _pluginRegenerator.default || _pluginRegenerator;
 
 const pluginsCompat = "#__secret_key__@babel/runtime__compatibility";
 

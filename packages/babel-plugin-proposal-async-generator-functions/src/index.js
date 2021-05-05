@@ -81,7 +81,7 @@ export default declare(api => {
 
   return {
     name: "proposal-async-generator-functions",
-    inherits: syntaxAsyncGenerators,
+    inherits: syntaxAsyncGenerators.default,
 
     visitor: {
       Program(path, state) {

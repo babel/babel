@@ -7,7 +7,7 @@ export default declare(api => {
 
   return {
     name: "proposal-logical-assignment-operators",
-    inherits: syntaxLogicalAssignmentOperators,
+    inherits: syntaxLogicalAssignmentOperators.default,
 
     visitor: {
       AssignmentExpression(path) {

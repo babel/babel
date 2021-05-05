@@ -1,15 +1,15 @@
 See packages/babel-standalone/src/dynamic-require-entrypoint.cjs for the reason for this diff.
 
-diff --git a/dist/index.js b/dist/index.js
-index 712f6a7d81b115d468a764b4139caa00d6cfc358..73fbf004217f3d44b6420d3082a0846b53e00f4c 100644
---- a/dist/index.js
-+++ b/dist/index.js
-@@ -1626,7 +1626,7 @@ function commonjs(options = {}) {
+diff --git a/dist/index.es.js b/dist/index.es.js
+index 81cb408c8482fc7591a3381eb00b46abc9d21b14..1816113246e075ba7ae99638b64f004fd985ec74 100644
+--- a/dist/index.es.js
++++ b/dist/index.es.js
+@@ -1641,7 +1641,7 @@ function commonjs(options = {}) {
    const sourceMap = options.sourceMap !== false;
 
    function transformAndCheckExports(code, id) {
 -    if (isDynamicRequireModulesEnabled && this.getModuleInfo(id).isEntry) {
 +    if (isDynamicRequireModulesEnabled && (this.getModuleInfo(id).isEntry || id.endsWith("/dynamic-require-entrypoint.cjs"))) {
+       // eslint-disable-next-line no-param-reassign
        code =
          getDynamicPackagesEntryIntro(dynamicRequireModuleDirPaths, dynamicRequireModuleSet) + code;
-     }
