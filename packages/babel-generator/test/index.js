@@ -763,6 +763,18 @@ describe("programmatic generation", function () {
       expect(output).toBe("interface A {}");
     });
   });
+
+  describe("identifier let", () => {
+    it("detects open bracket from non-optional OptionalMemberExpression", () => {
+      const ast = parse(`for (let?.[x];;);`, {
+        sourceType: "script",
+        strictMode: "false",
+      });
+      ast.program.body[0].init.optional = false;
+      const output = generate(ast).code;
+      expect(output).toBe("for ((let)[x];;);");
+    });
+  });
 });
 
 describe("CodeGenerator", function () {

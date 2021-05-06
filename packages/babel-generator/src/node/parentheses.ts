@@ -302,10 +302,16 @@ export function Identifier(
   if (node.name === "let") {
     // Some contexts only forbid `let [`, so check if the next token would
     // be the left bracket of a computed member expression.
-    const isFollowedByBracket = t.isMemberExpression(parent, {
-      object: node,
-      computed: true,
-    });
+    const isFollowedByBracket =
+      t.isMemberExpression(parent, {
+        object: node,
+        computed: true,
+      }) ||
+      t.isOptionalMemberExpression(parent, {
+        object: node,
+        computed: true,
+        optional: false,
+      });
     return isFirstInContext(printStack, {
       expressionStatement: isFollowedByBracket,
       forHead: isFollowedByBracket,
