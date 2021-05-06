@@ -48,6 +48,9 @@ function isPlainObject(value): value is object {
     return false;
   }
   const proto = Object.getPrototypeOf(value);
+  // Object.prototype's __proto__ is null. Every other class's __proto__.__proto__ is
+  // not null by default. We cannot check if proto === Object.prototype because it
+  // could come from another realm.
   return proto === null || Object.getPrototypeOf(proto) === null;
 }
 
