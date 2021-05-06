@@ -1,6 +1,8 @@
 import { tokTypes } from "@babel/core";
 
-const tl = Object.fromEntries(
+const tl = (process.env.BABEL_8_BREAKING
+  ? Object.fromEntries
+  : p => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {}))(
   Object.keys(tokTypes).map(key => [key, tokTypes[key].label]),
 );
 
