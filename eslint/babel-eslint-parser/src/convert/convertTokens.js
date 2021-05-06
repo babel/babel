@@ -178,7 +178,7 @@ function convertToken(token, source) {
   } else if (label === tl.bigint) {
     token.type = "Numeric";
     token.value = `${token.value}n`;
-  } else if (type === tl.privateName) {
+  } else if (label === tl.privateName) {
     token.type = "PrivateIdentifier";
   }
 
