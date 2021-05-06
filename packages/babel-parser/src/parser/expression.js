@@ -706,7 +706,7 @@ export default class ExpressionParser extends LValParser {
     const computed = this.eat(tt.bracketL);
     node.object = base;
     node.computed = computed;
-    const privateName = this.match(tt.privateName) && this.state.value;
+    const privateName = !computed && this.match(tt.privateName) && this.state.value;
     const property = computed
       ? this.parseExpression()
       : privateName
