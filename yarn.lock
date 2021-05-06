@@ -5,7 +5,7 @@ __metadata:
   version: 4
   cacheKey: 7
 
-"@babel-baseline/parser@npm:@babel/parser@^7.14.0, @babel/parser@npm:^7.0.0, @babel/parser@npm:^7.12.13, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.14.0":
+"@babel-baseline/parser@npm:@babel/parser@^7.14.0, @babel/parser@npm:^7.0.0, @babel/parser@npm:^7.12.13, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.14.0, npm-babel-parser@npm:@babel/parser@^7.14.0":
   version: 7.14.0
   resolution: "@babel/parser@npm:7.14.0"
   bin:
@@ -314,6 +314,7 @@ __metadata:
     dedent: ^0.7.0
     eslint: ^7.5.0
     eslint-plugin-import: ^2.22.0
+    npm-babel-parser: "npm:@babel/parser@^7.14.0"
   languageName: unknown
   linkType: soft
 
