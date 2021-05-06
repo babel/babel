@@ -5,6 +5,15 @@ __metadata:
   version: 4
   cacheKey: 7
 
+"@babel-baseline/parser@npm:@babel/parser@^7.14.0, @babel/parser@npm:^7.0.0, @babel/parser@npm:^7.12.13, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.14.0":
+  version: 7.14.0
+  resolution: "@babel/parser@npm:7.14.0"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: ef6165f3038b9f8761a02768ab14034f4935baf2e050a2924aa093f54e3164732bce7fee81b3c8ff3be03048091e4ea208a72b23a3715debf7fd06b79495c9e9
+  languageName: node
+  linkType: hard
+
 "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup":
   version: 0.0.0-use.local
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
@@ -935,22 +944,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/parser@npm:^7.0.0, @babel/parser@npm:^7.12.13, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.14.0":
-  version: 7.14.0
-  resolution: "@babel/parser@npm:7.14.0"
-  bin:
-    parser: ./bin/babel-parser.js
-  checksum: ef6165f3038b9f8761a02768ab14034f4935baf2e050a2924aa093f54e3164732bce7fee81b3c8ff3be03048091e4ea208a72b23a3715debf7fd06b79495c9e9
-  languageName: node
-  linkType: hard
-
 "@babel/parser@workspace:*, @babel/parser@workspace:^7.12.13, @babel/parser@workspace:^7.14.0, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
+    "@babel-baseline/parser": "npm:@babel/parser@^7.14.0"
     "@babel/code-frame": "workspace:*"
     "@babel/helper-fixtures": "workspace:*"
     "@babel/helper-validator-identifier": "workspace:*"
+    benchmark: ^2.1.4
     charcodes: ^0.2.0
   bin:
     parser: ./bin/babel-parser.js

@@ -320,17 +320,30 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
 
-  // Espree doesn't support private fields yet
-  it("hash (token)", () => {
-    const code = "class A { #x }";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[3].type).toEqual("Punctuator");
-    expect(babylonAST.tokens[3].value).toEqual("#");
-  });
+  if (process.env.BABEL_8_BREAKING) {
+    it("hash (token)", () => {
+      const code = "class A { #x }";
+      const babylonAST = parseForESLint(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: BABEL_OPTIONS,
+      }).ast;
+      expect(babylonAST.tokens[3].type).toEqual("PrivateIdentifier");
+      expect(babylonAST.tokens[3].value).toEqual("x");
+    });
+  } else {
+    // Espree doesn't support private fields yet
+    it("hash (token)", () => {
+      const code = "class A { #x }";
+      const babylonAST = parseForESLint(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: BABEL_OPTIONS,
+      }).ast;
+      expect(babylonAST.tokens[3].type).toEqual("Punctuator");
+      expect(babylonAST.tokens[3].value).toEqual("#");
+    });
+  }
 
   it("parse to PropertyDeclaration when `classFeatures: true`", () => {
     const code = "class A { #x }";

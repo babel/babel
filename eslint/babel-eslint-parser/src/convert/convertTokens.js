@@ -173,6 +173,8 @@ function convertToken(token, source) {
   } else if (type === tt.bigint) {
     token.type = "Numeric";
     token.value = `${token.value}n`;
+  } else if (type === tt.privateName) {
+    token.type = "PrivateIdentifier";
   }
   if (typeof token.type !== "string") {
     // Acorn does not have rightAssociative

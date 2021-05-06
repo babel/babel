@@ -205,6 +205,21 @@ export default class Tokenizer extends ParserErrors {
     return this.input.charCodeAt(this.nextTokenStart());
   }
 
+  codePointAtPos(pos: number): number {
+    // The implementation is based on
+    // https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-string-gen.cc;l=1455;drc=221e331b49dfefadbc6fa40b0c68e6f97606d0b3;bpv=0;bpt=1
+    // We reimplement `codePointAt` because `codePointAt` is a V8 builtin which is not inlined by TurboFan (as of M91)
+    // since `input` is mostly ASCII, an inlined `charCodeAt` wins here
+    let cp = this.input.charCodeAt(pos);
+    if ((cp & 0xfc00) === 0xd800 && ++pos < this.input.length) {
+      const trail = this.input.charCodeAt(pos);
+      if ((trail & 0xfc00) === 0xdc00) {
+        cp = 0x10000 + ((cp & 0x3ff) << 10) + (trail & 0x3ff);
+      }
+    }
+    return cp;
+  }
+
   // Toggle strict mode. Re-reads the next number or string to please
   // pedantic tests (`"use strict"; 010;` should fail).
 
@@ -244,7 +259,7 @@ export default class Tokenizer extends ParserErrors {
     if (override) {
       override(this);
     } else {
-      this.getTokenFromCode(this.input.codePointAt(this.state.pos));
+      this.getTokenFromCode(this.codePointAtPos(this.state.pos));
     }
   }
 
@@ -407,7 +422,7 @@ export default class Tokenizer extends ParserErrors {
     }
 
     const nextPos = this.state.pos + 1;
-    const next = this.input.charCodeAt(nextPos);
+    const next = this.codePointAtPos(nextPos);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
       throw this.raise(this.state.pos, Errors.UnexpectedDigitAfterHash);
     }
@@ -438,6 +453,9 @@ export default class Tokenizer extends ParserErrors {
         this.finishToken(tt.bracketHashL);
       }
       this.state.pos += 2;
+    } else if (isIdentifierStart(next) || next === charCodes.backslash) {
+      ++this.state.pos;
+      this.finishToken(tt.privateName, this.readWord1());
     } else {
       this.finishOp(tt.hash, 1);
     }
@@ -952,7 +970,7 @@ export default class Tokenizer extends ParserErrors {
 
     while (this.state.pos < this.length) {
       const char = this.input[this.state.pos];
-      const charCode = this.input.codePointAt(this.state.pos);
+      const charCode = this.codePointAtPos(this.state.pos);
 
       if (VALID_REGEX_FLAGS.has(char)) {
         if (mods.indexOf(char) > -1) {
@@ -1090,7 +1108,7 @@ export default class Tokenizer extends ParserErrors {
       throw this.raise(start, Errors.InvalidDecimal);
     }
 
-    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
+    if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
       throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
@@ -1176,7 +1194,7 @@ export default class Tokenizer extends ParserErrors {
       isDecimal = true;
     }
 
-    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
+    if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
       throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
@@ -1447,7 +1465,7 @@ export default class Tokenizer extends ParserErrors {
     let chunkStart = this.state.pos;
 
     while (this.state.pos < this.length) {
-      const ch = this.input.codePointAt(this.state.pos);
+      const ch = this.codePointAtPos(this.state.pos);
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
       } else if (this.state.isIterator && ch === charCodes.atSign) {

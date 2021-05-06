@@ -210,7 +210,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.match(tt.braceL) ||
           this.match(tt.star) ||
           this.match(tt.ellipsis) ||
-          this.match(tt.hash) ||
+          this.match(tt.privateName) ||
           this.isLiteralPropertyName()) &&
         !this.hasPrecedingLineBreak()
       );

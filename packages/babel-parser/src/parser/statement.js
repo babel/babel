@@ -36,6 +36,8 @@ import {
   newParameterDeclarationScope,
 } from "../util/expression-scope";
 import type { SourceType } from "../options";
+import { Token } from "../tokenizer";
+import { Position } from "../util/location";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -47,6 +49,48 @@ const FUNC_NO_FLAGS = 0b000,
 
 const loneSurrogate = /[\uD800-\uDFFF]/u;
 
+/**
+ * Convert tt.privateName to tt.hash + tt.name for backward Babel 7 compat.
+ * For performance reasons this routine mutates `tokens`, it is okay
+ * here since we execute `parseTopLevel` once for every file.
+ * @param {*} tokens
+ * @returns
+ */
+function babel7CompatTokens(tokens) {
+  if (!process.env.BABEL_8_BREAKING) {
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (token.type === tt.privateName) {
+        const { loc, start, value, end } = token;
+        const hashEndPos = start + 1;
+        const hashEndLoc = new Position(loc.start.line, loc.start.column + 1);
+        tokens.splice(
+          i,
+          1,
+          // $FlowIgnore: hacky way to create token
+          new Token({
+            type: tt.hash,
+            value: "#",
+            start: start,
+            end: hashEndPos,
+            startLoc: loc.start,
+            endLoc: hashEndLoc,
+          }),
+          // $FlowIgnore: hacky way to create token
+          new Token({
+            type: tt.name,
+            value: value,
+            start: hashEndPos,
+            end: end,
+            startLoc: hashEndLoc,
+            endLoc: loc.end,
+          }),
+        );
+      }
+    }
+  }
+  return tokens;
+}
 export default class StatementParser extends ExpressionParser {
   // ### Statement parsing
 
@@ -59,7 +103,7 @@ export default class StatementParser extends ExpressionParser {
     file.program = this.parseProgram(program);
     file.comments = this.state.comments;
 
-    if (this.options.tokens) file.tokens = this.tokens;
+    if (this.options.tokens) file.tokens = babel7CompatTokens(this.tokens);
 
     return this.finishNode(file, "File");
   }
@@ -1366,9 +1410,10 @@ export default class StatementParser extends ExpressionParser {
     if (this.eat(tt.star)) {
       // a generator
       method.kind = "method";
+      const isPrivateName = this.match(tt.privateName);
       this.parseClassElementName(method);
 
-      if (this.isPrivateName(method.key)) {
+      if (isPrivateName) {
         // Private generator method
         this.pushClassPrivateMethod(classBody, privateMethod, true, false);
         return;
@@ -1391,8 +1436,8 @@ export default class StatementParser extends ExpressionParser {
     }
 
     const containsEsc = this.state.containsEsc;
+    const isPrivate = this.match(tt.privateName);
     const key = this.parseClassElementName(member);
-    const isPrivate = this.isPrivateName(key);
     // Check the key is not a computed expression or string literal.
     const isSimple = key.type === "Identifier";
     const maybeQuestionTokenStart = this.state.start;
@@ -1453,10 +1498,11 @@ export default class StatementParser extends ExpressionParser {
 
       method.kind = "method";
       // The so-called parsed name would have been "async": get the real name.
+      const isPrivate = this.match(tt.privateName);
       this.parseClassElementName(method);
       this.parsePostMemberNameModifiers(publicMember);
 
-      if (this.isPrivateName(method.key)) {
+      if (isPrivate) {
         // private async method
         this.pushClassPrivateMethod(
           classBody,
@@ -1488,9 +1534,10 @@ export default class StatementParser extends ExpressionParser {
       // a getter or setter
       method.kind = key.name;
       // The so-called parsed name would have been "get/set": get the real name.
+      const isPrivate = this.match(tt.privateName);
       this.parseClassElementName(publicMethod);
 
-      if (this.isPrivateName(method.key)) {
+      if (isPrivate) {
         // private getter/setter
         this.pushClassPrivateMethod(classBody, privateMethod, false, false);
       } else {
@@ -1522,25 +1569,20 @@ export default class StatementParser extends ExpressionParser {
 
   // https://tc39.es/proposal-class-fields/#prod-ClassElementName
   parseClassElementName(member: N.ClassMember): N.Expression | N.Identifier {
-    const key = this.parsePropertyName(member, /* isPrivateNameAllowed */ true);
-
+    const { type, value, start } = this.state;
     if (
-      !member.computed &&
+      (type === tt.name || type === tt.string) &&
       member.static &&
-      ((key: $FlowSubtype<N.Identifier>).name === "prototype" ||
-        (key: $FlowSubtype<N.StringLiteral>).value === "prototype")
+      value === "prototype"
     ) {
-      this.raise(key.start, Errors.StaticPrototype);
+      this.raise(start, Errors.StaticPrototype);
     }
 
-    if (
-      this.isPrivateName(key) &&
-      this.getPrivateNameSV(key) === "constructor"
-    ) {
-      this.raise(key.start, Errors.ConstructorClassPrivateField);
+    if (type === tt.privateName && value === "constructor") {
+      this.raise(start, Errors.ConstructorClassPrivateField);
     }
 
-    return key;
+    return this.parsePropertyName(member, /* isPrivateNameAllowed */ true);
   }
 
   parseClassStaticBlock(
