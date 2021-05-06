@@ -6,7 +6,7 @@ export default declare(api => {
 
   return {
     name: "proposal-optional-catch-binding",
-    inherits: syntaxOptionalCatchBinding,
+    inherits: syntaxOptionalCatchBinding.default,
 
     visitor: {
       CatchClause(path) {

@@ -351,6 +351,10 @@ function buildRollup(packages, targetBrowsers) {
                   "regenerate-unicode-properties"
                 ) + "/**/*.js",
               ],
+              // Never delegate to the native require()
+              ignoreDynamicRequires: true,
+              // Align with the Node.js behavior
+              defaultIsModuleExports: true,
             }),
             rollupBabel({
               envName,

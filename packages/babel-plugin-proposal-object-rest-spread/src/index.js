@@ -225,7 +225,7 @@ export default declare((api, opts) => {
 
   return {
     name: "proposal-object-rest-spread",
-    inherits: syntaxObjectRestSpread,
+    inherits: syntaxObjectRestSpread.default,
 
     visitor: {
       // function a({ b, ...c }) {}

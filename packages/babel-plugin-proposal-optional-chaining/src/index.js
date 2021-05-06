@@ -11,7 +11,7 @@ export default declare((api, options) => {
 
   return {
     name: "proposal-optional-chaining",
-    inherits: syntaxOptionalChaining,
+    inherits: syntaxOptionalChaining.default,
 
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {

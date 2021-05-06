@@ -7,7 +7,7 @@ export default declare(api => {
 
   return {
     name: "proposal-export-namespace-from",
-    inherits: syntaxExportNamespaceFrom,
+    inherits: syntaxExportNamespaceFrom.default,
 
     visitor: {
       ExportNamedDeclaration(path) {
