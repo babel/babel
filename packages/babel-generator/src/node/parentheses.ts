@@ -74,7 +74,10 @@ export function ObjectExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack, { considerArrow: true });
+  return isFirstInContext(printStack, {
+    expressionStatement: true,
+    arrowBody: true,
+  });
 }
 
 export function DoExpression(
@@ -83,7 +86,9 @@ export function DoExpression(
   printStack: Array<any>,
 ): boolean {
   // `async do` can start an expression statement
-  return !node.async && isFirstInStatement(printStack);
+  return (
+    !node.async && isFirstInContext(printStack, { expressionStatement: true })
+  );
 }
 
 export function Binary(node: any, parent: any): boolean {
@@ -214,7 +219,10 @@ export function ClassExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack, { considerDefaultExports: true });
+  return isFirstInContext(printStack, {
+    expressionStatement: true,
+    exportDefault: true,
+  });
 }
 
 export function UnaryLike(node: any, parent: any): boolean {
@@ -230,7 +238,10 @@ export function FunctionExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack, { considerDefaultExports: true });
+  return isFirstInContext(printStack, {
+    expressionStatement: true,
+    exportDefault: true,
+  });
 }
 
 export function ArrowFunctionExpression(node: any, parent: any): boolean {
@@ -296,10 +307,10 @@ export function Identifier(node: t.Identifier, parent: t.Node): boolean {
 }
 
 // Walk up the print stack to determine if our node can come first
-// in statement.
-function isFirstInStatement(
-  printStack: Array<any>,
-  { considerArrow = false, considerDefaultExports = false } = {},
+// in a particular context.
+function isFirstInContext(
+  printStack: Array<t.Node>,
+  { expressionStatement = false, arrowBody = false, exportDefault = false },
 ): boolean {
   let i = printStack.length - 1;
   let node = printStack[i];
@@ -307,10 +318,11 @@ function isFirstInStatement(
   let parent = printStack[i];
   while (i >= 0) {
     if (
-      t.isExpressionStatement(parent, { expression: node }) ||
-      (considerDefaultExports &&
+      (expressionStatement &&
+        t.isExpressionStatement(parent, { expression: node })) ||
+      (exportDefault &&
         t.isExportDefaultDeclaration(parent, { declaration: node })) ||
-      (considerArrow && t.isArrowFunctionExpression(parent, { body: node }))
+      (arrowBody && t.isArrowFunctionExpression(parent, { body: node }))
     ) {
       return true;
     }
