@@ -1,4 +1,10 @@
-import { tokTypes as tt } from "@babel/core";
+import { tokTypes } from "@babel/core";
+
+const tl = (process.env.BABEL_8_BREAKING
+  ? Object.fromEntries
+  : p => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {}))(
+  Object.keys(tokTypes).map(key => [key, tokTypes[key].label]),
+);
 
 function convertTemplateType(tokens) {
   let curlyBrace = null;
@@ -12,7 +18,7 @@ function convertTemplateType(tokens) {
     const value = templateTokens.reduce((result, token) => {
       if (token.value) {
         result += token.value;
-      } else if (token.type !== tt.template) {
+      } else if (token.type.label !== tl.template) {
         result += token.type.label;
       }
 
@@ -34,8 +40,8 @@ function convertTemplateType(tokens) {
   }
 
   tokens.forEach(token => {
-    switch (token.type) {
-      case tt.backQuote:
+    switch (token.type.label) {
+      case tl.backQuote:
         if (curlyBrace) {
           result.push(curlyBrace);
           curlyBrace = null;
@@ -49,12 +55,12 @@ function convertTemplateType(tokens) {
 
         break;
 
-      case tt.dollarBraceL:
+      case tl.dollarBraceL:
         templateTokens.push(token);
         addTemplateType();
         break;
 
-      case tt.braceR:
+      case tl.braceR:
         if (curlyBrace) {
           result.push(curlyBrace);
         }
@@ -62,7 +68,7 @@ function convertTemplateType(tokens) {
         curlyBrace = token;
         break;
 
-      case tt.template:
+      case tl.template:
         if (curlyBrace) {
           templateTokens.push(curlyBrace);
           curlyBrace = null;
@@ -71,7 +77,7 @@ function convertTemplateType(tokens) {
         templateTokens.push(token);
         break;
 
-      case tt.eof:
+      case tl.eof:
         if (curlyBrace) {
           result.push(curlyBrace);
         }
@@ -92,63 +98,64 @@ function convertTemplateType(tokens) {
 }
 
 function convertToken(token, source) {
-  const type = token.type;
+  const { type } = token;
+  const { label } = type;
   token.range = [token.start, token.end];
 
-  if (type === tt.name) {
+  if (label === tl.name) {
     token.type = "Identifier";
   } else if (
-    type === tt.semi ||
-    type === tt.comma ||
-    type === tt.parenL ||
-    type === tt.parenR ||
-    type === tt.braceL ||
-    type === tt.braceR ||
-    type === tt.slash ||
-    type === tt.dot ||
-    type === tt.bracketL ||
-    type === tt.bracketR ||
-    type === tt.ellipsis ||
-    type === tt.arrow ||
-    type === tt.pipeline ||
-    type === tt.star ||
-    type === tt.incDec ||
-    type === tt.colon ||
-    type === tt.question ||
-    type === tt.template ||
-    type === tt.backQuote ||
-    type === tt.dollarBraceL ||
-    type === tt.at ||
-    type === tt.logicalOR ||
-    type === tt.logicalAND ||
-    type === tt.nullishCoalescing ||
-    type === tt.bitwiseOR ||
-    type === tt.bitwiseXOR ||
-    type === tt.bitwiseAND ||
-    type === tt.equality ||
-    type === tt.relational ||
-    type === tt.bitShift ||
-    type === tt.plusMin ||
-    type === tt.modulo ||
-    type === tt.exponent ||
-    type === tt.bang ||
-    type === tt.tilde ||
-    type === tt.doubleColon ||
-    type === tt.hash ||
-    type === tt.questionDot ||
+    label === tl.semi ||
+    label === tl.comma ||
+    label === tl.parenL ||
+    label === tl.parenR ||
+    label === tl.braceL ||
+    label === tl.braceR ||
+    label === tl.slash ||
+    label === tl.dot ||
+    label === tl.bracketL ||
+    label === tl.bracketR ||
+    label === tl.ellipsis ||
+    label === tl.arrow ||
+    label === tl.pipeline ||
+    label === tl.star ||
+    label === tl.incDec ||
+    label === tl.colon ||
+    label === tl.question ||
+    label === tl.template ||
+    label === tl.backQuote ||
+    label === tl.dollarBraceL ||
+    label === tl.at ||
+    label === tl.logicalOR ||
+    label === tl.logicalAND ||
+    label === tl.nullishCoalescing ||
+    label === tl.bitwiseOR ||
+    label === tl.bitwiseXOR ||
+    label === tl.bitwiseAND ||
+    label === tl.equality ||
+    label === tl.relational ||
+    label === tl.bitShift ||
+    label === tl.plusMin ||
+    label === tl.modulo ||
+    label === tl.exponent ||
+    label === tl.bang ||
+    label === tl.tilde ||
+    label === tl.doubleColon ||
+    label === tl.hash ||
+    label === tl.questionDot ||
     type.isAssign
   ) {
     token.type = "Punctuator";
-    if (!token.value) token.value = type.label;
-  } else if (type === tt.jsxTagStart) {
+    token.value ??= label;
+  } else if (label === tl.jsxTagStart) {
     token.type = "Punctuator";
     token.value = "<";
-  } else if (type === tt.jsxTagEnd) {
+  } else if (label === tl.jsxTagEnd) {
     token.type = "Punctuator";
     token.value = ">";
-  } else if (type === tt.jsxName) {
+  } else if (label === tl.jsxName) {
     token.type = "JSXIdentifier";
-  } else if (type === tt.jsxText) {
+  } else if (label === tl.jsxText) {
     token.type = "JSXText";
   } else if (type.keyword === "null") {
     token.type = "Null";
@@ -156,13 +163,13 @@ function convertToken(token, source) {
     token.type = "Boolean";
   } else if (type.keyword) {
     token.type = "Keyword";
-  } else if (type === tt.num) {
+  } else if (label === tl.num) {
     token.type = "Numeric";
     token.value = source.slice(token.start, token.end);
-  } else if (type === tt.string) {
+  } else if (label === tl.string) {
     token.type = "String";
     token.value = source.slice(token.start, token.end);
-  } else if (type === tt.regexp) {
+  } else if (label === tl.regexp) {
     token.type = "RegularExpression";
     const value = token.value;
     token.regex = {
@@ -170,12 +177,13 @@ function convertToken(token, source) {
       flags: value.flags,
     };
     token.value = `/${value.pattern}/${value.flags}`;
-  } else if (type === tt.bigint) {
+  } else if (label === tl.bigint) {
     token.type = "Numeric";
     token.value = `${token.value}n`;
-  } else if (type === tt.privateName) {
+  } else if (label === tl.privateName) {
     token.type = "PrivateIdentifier";
   }
+
   if (typeof token.type !== "string") {
     // Acorn does not have rightAssociative
     delete token.type.rightAssociative;
