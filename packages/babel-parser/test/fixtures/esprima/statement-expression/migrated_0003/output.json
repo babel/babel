@@ -15,8 +15,8 @@
         "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}},
         "expression": {
           "type": "Identifier",
-          "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8},"identifierName":"aa\\a"},
-          "name": "aa\\a"
+          "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8},"identifierName":"a\\a"},
+          "name": "a\\a"
         }
       }
     ],
