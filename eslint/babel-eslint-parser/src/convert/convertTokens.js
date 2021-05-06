@@ -184,8 +184,10 @@ function convertToken(token, source) {
     token.type = "PrivateIdentifier";
   }
 
-  // Acorn does not have rightAssociative
-  delete token.type.rightAssociative;
+  if (typeof token.type !== "string") {
+    // Acorn does not have rightAssociative
+    delete token.type.rightAssociative;
+  }
 
   return token;
 }
