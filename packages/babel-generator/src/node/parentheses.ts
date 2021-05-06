@@ -292,7 +292,28 @@ export function LogicalExpression(node: any, parent: any): boolean {
   }
 }
 
-export function Identifier(node: t.Identifier, parent: t.Node): boolean {
+export function Identifier(
+  node: t.Identifier,
+  parent: t.Node,
+  printStack: Array<t.Node>,
+): boolean {
+  // Non-strict code allows the identifier `let`, but it cannot occur as-is in
+  // certain contexts to avoid ambiguity with contextual keyword `let`.
+  if (node.name === "let") {
+    // Some contexts only forbid `let [`, so check if the next token would
+    // be the left bracket of a computed member expression.
+    const isFollowedByBracket = t.isMemberExpression(parent, {
+      object: node,
+      computed: true,
+    });
+    return isFirstInContext(printStack, {
+      expressionStatement: isFollowedByBracket,
+      forHead: isFollowedByBracket,
+      forInHead: isFollowedByBracket,
+      forOfHead: true,
+    });
+  }
+
   // ECMAScript specifically forbids a for-of loop from starting with the
   // token sequence `for (async of`, because it would be ambiguous with
   // `for (async of => {};;)`, so we need to add extra parentheses.
@@ -310,7 +331,14 @@ export function Identifier(node: t.Identifier, parent: t.Node): boolean {
 // in a particular context.
 function isFirstInContext(
   printStack: Array<t.Node>,
-  { expressionStatement = false, arrowBody = false, exportDefault = false },
+  {
+    expressionStatement = false,
+    arrowBody = false,
+    exportDefault = false,
+    forHead = false,
+    forInHead = false,
+    forOfHead = false,
+  },
 ): boolean {
   let i = printStack.length - 1;
   let node = printStack[i];
@@ -322,7 +350,10 @@ function isFirstInContext(
         t.isExpressionStatement(parent, { expression: node })) ||
       (exportDefault &&
         t.isExportDefaultDeclaration(parent, { declaration: node })) ||
-      (arrowBody && t.isArrowFunctionExpression(parent, { body: node }))
+      (arrowBody && t.isArrowFunctionExpression(parent, { body: node })) ||
+      (forHead && t.isForStatement(parent, { init: node })) ||
+      (forInHead && t.isForInStatement(parent, { left: node })) ||
+      (forOfHead && t.isForOfStatement(parent, { left: node }))
     ) {
       return true;
     }
