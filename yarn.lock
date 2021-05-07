@@ -311,6 +311,7 @@ __metadata:
   resolution: "@babel/eslint-tests@workspace:eslint/babel-eslint-tests"
   dependencies:
     "@babel/eslint-parser": "workspace:^7.14.2"
+    "@babel/preset-react": "workspace:^7.13.13"
     dedent: ^0.7.0
     eslint: ^7.5.0
     eslint-plugin-import: ^2.22.0
@@ -3278,7 +3279,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-react@workspace:*, @babel/preset-react@workspace:^7.12.13, @babel/preset-react@workspace:packages/babel-preset-react":
+"@babel/preset-react@workspace:*, @babel/preset-react@workspace:^7.12.13, @babel/preset-react@workspace:^7.13.13, @babel/preset-react@workspace:packages/babel-preset-react":
   version: 0.0.0-use.local
   resolution: "@babel/preset-react@workspace:packages/babel-preset-react"
   dependencies:

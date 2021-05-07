@@ -1,5 +1,4 @@
 const babel = require("./babel-core.cjs");
-const normalizeBabelParseConfig = require("./configuration.cjs");
 const convert = require("../convert/index.cjs");
 const { getVisitorKeys, getTokLabels } = require("./ast-info.cjs");
 const extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");
@@ -10,19 +9,17 @@ let extractParserOptionsConfigItem;
 const MULTIPLE_OVERRIDES = /More than one plugin attempted to override parsing/;
 
 module.exports = function maybeParse(code, options) {
-  const resolvedOptions = normalizeBabelParseConfig(options);
-
   if (!extractParserOptionsConfigItem) {
     extractParserOptionsConfigItem = babel.createConfigItem(
       [extractParserOptionsPlugin, ref],
       { dirname: __dirname, type: "plugin" }
     );
   }
-  resolvedOptions.plugins.push(extractParserOptionsConfigItem);
+  options.plugins.push(extractParserOptionsConfigItem);
 
   try {
     return {
-      parserOptions: babel.parseSync(code, resolvedOptions),
+      parserOptions: babel.parseSync(code, options),
       ast: null,
     };
   } catch (err) {
@@ -34,7 +31,7 @@ module.exports = function maybeParse(code, options) {
   let ast;
 
   try {
-    ast = babel.parseSync(code, resolvedOptions);
+    ast = babel.parseSync(code, options);
   } catch (err) {
     throw convert.error(err);
   }

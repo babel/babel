@@ -20,8 +20,8 @@ function getParserPlugins(babelOptions) {
   return [["estree", estreeOptions], ...babelParserPlugins];
 }
 
-module.exports = function normalizeBabelParseConfig(options) {
-  const parseOptions = {
+function normalizeParserOptions(options) {
+  return {
     sourceType: options.sourceType,
     filename: options.filePath,
     ...options.babelOptions,
@@ -39,9 +39,9 @@ module.exports = function normalizeBabelParseConfig(options) {
       ...options.babelOptions.caller,
     },
   };
+}
 
-  const config = babel.loadPartialConfigSync(parseOptions);
-
+function validateResolvedConfig(config, options) {
   if (config !== null) {
     if (options.requireConfigFile !== false) {
       if (!config.hasFilesystemConfig()) {
@@ -56,6 +56,17 @@ module.exports = function normalizeBabelParseConfig(options) {
     }
     return config.options;
   }
+}
 
-  return parseOptions;
+module.exports = function normalizeBabelParseConfig(options) {
+  const parseOptions = normalizeParserOptions(options);
+
+  if (process.env.BABEL_8_BREAKING) {
+    return babel
+      .loadPartialConfigAsync(parseOptions)
+      .then(config => validateResolvedConfig(config, options) || parseOptions);
+  } else {
+    const config = babel.loadPartialConfigSync(parseOptions);
+    return validateResolvedConfig(config, options) || parseOptions;
+  }
 };

@@ -1,6 +1,7 @@
 const babel = require("./babel-core.cjs");
 const maybeParse = require("./maybeParse.cjs");
 const { getVisitorKeys, getTokLabels } = require("./ast-info.cjs");
+const normalizeBabelParseConfig = require("./configuration.cjs");
 
 function handleMessage(action, payload) {
   switch (action) {
@@ -16,7 +17,16 @@ function handleMessage(action, payload) {
     case "GET_VISITOR_KEYS":
       return getVisitorKeys();
     case "MAYBE_PARSE":
-      return maybeParse(payload.code, payload.options);
+      if (process.env.BABEL_8_BREAKING) {
+        return normalizeBabelParseConfig(payload.options).then(options =>
+          maybeParse(payload.code, options)
+        );
+      } else {
+        return maybeParse(
+          payload.code,
+          normalizeBabelParseConfig(payload.options)
+        );
+      }
   }
 
   throw new Error(`Unknown internal parser worker action: ${action}`);
@@ -33,7 +43,7 @@ if (process.env.BABEL_8_BREAKING) {
       try {
         if (babel.init) await babel.init;
 
-        response = { result: handleMessage(action, payload) };
+        response = { result: await handleMessage(action, payload) };
       } catch (error) {
         response = { error, errorData: { ...error } };
       }

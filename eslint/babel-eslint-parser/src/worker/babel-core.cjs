@@ -6,6 +6,7 @@ function initialize(babel) {
   exports.tokTypes = babel.tokTypes;
   exports.parseSync = babel.parseSync;
   exports.loadPartialConfigSync = babel.loadPartialConfigSync;
+  exports.loadPartialConfigAsync = babel.loadPartialConfigAsync;
   exports.createConfigItem = babel.createConfigItem;
 }
 
