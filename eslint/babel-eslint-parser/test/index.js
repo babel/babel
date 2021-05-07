@@ -3,7 +3,7 @@ import escope from "eslint-scope";
 import unpad from "dedent";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
-import { parseForESLint } from "../src";
+import { parseForESLint } from "../lib/index.cjs";
 
 const BABEL_OPTIONS = {
   configFile: path.resolve(

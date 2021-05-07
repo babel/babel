@@ -6,6 +6,7 @@ function initialize(babel) {
   exports.tokTypes = babel.tokTypes;
   exports.parseSync = babel.parseSync;
   exports.loadPartialConfigSync = babel.loadPartialConfigSync;
+  exports.createConfigItem = babel.createConfigItem;
 }
 
 if (process.env.BABEL_8_BREAKING) {

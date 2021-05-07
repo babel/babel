@@ -37,9 +37,9 @@ module.exports = {
     },
     {
       files: [
-        "packages/*/src/**/*.{js,ts}",
-        "codemods/*/src/**/*.{js,ts}",
-        "eslint/*/src/**/*.{js,ts}",
+        "packages/*/src/**/*.{js,ts,cjs}",
+        "codemods/*/src/**/*.{js,ts,cjs}",
+        "eslint/*/src/**/*.{js,ts,cjs}",
       ],
       rules: {
         "@babel/development/no-undefined-identifier": "error",

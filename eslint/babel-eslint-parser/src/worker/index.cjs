@@ -1,5 +1,5 @@
 const babel = require("./babel-core.cjs");
-const parse = require("./parse.cjs");
+const maybeParse = require("./maybeParse.cjs");
 const { getVisitorKeys, getTokLabels } = require("./ast-info.cjs");
 
 function handleMessage(action, payload) {
@@ -15,8 +15,8 @@ function handleMessage(action, payload) {
       return getTokLabels();
     case "GET_VISITOR_KEYS":
       return getVisitorKeys();
-    case "PARSE":
-      return parse(payload.code, payload.options);
+    case "MAYBE_PARSE":
+      return maybeParse(payload.code, payload.options);
   }
 
   throw new Error(`Unknown internal parser worker action: ${action}`);

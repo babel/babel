@@ -40,10 +40,10 @@ module.exports = function normalizeBabelParseConfig(options) {
     },
   };
 
-  if (options.requireConfigFile !== false) {
-    const config = babel.loadPartialConfigSync(parseOptions);
+  const config = babel.loadPartialConfigSync(parseOptions);
 
-    if (config !== null) {
+  if (config !== null) {
+    if (options.requireConfigFile !== false) {
       if (!config.hasFilesystemConfig()) {
         let error = `No Babel config file detected for ${config.options.filename}. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`;
 
@@ -53,9 +53,8 @@ module.exports = function normalizeBabelParseConfig(options) {
 
         throw new Error(error);
       }
-
-      return config.options;
     }
+    return config.options;
   }
 
   return parseOptions;

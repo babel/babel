@@ -19,10 +19,10 @@
   "engines": {
     "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },
-  "main": "./lib/index.js",
+  "main": "./lib/index.cjs",
   "type": "commonjs",
   "exports": {
-    ".": "./lib/index.js",
+    ".": "./lib/index.cjs",
     "./package.json": "./package.json"
   },
   "peerDependencies": {

@@ -1,10 +1,10 @@
-import escope from "eslint-scope";
-import { Definition } from "eslint-scope/lib/definition";
-import OriginalPatternVisitor from "eslint-scope/lib/pattern-visitor";
-import OriginalReferencer from "eslint-scope/lib/referencer";
-import { getKeys as fallback } from "eslint-visitor-keys";
+const escope = require("eslint-scope");
+const { Definition } = require("eslint-scope/lib/definition");
+const OriginalPatternVisitor = require("eslint-scope/lib/pattern-visitor");
+const OriginalReferencer = require("eslint-scope/lib/referencer");
+const { getKeys: fallback } = require("eslint-visitor-keys");
 
-import { getTypesInfo, getVisitorKeys } from "./client.cjs";
+const { getTypesInfo, getVisitorKeys } = require("./client.cjs");
 
 let visitorKeysMap;
 function getVisitorValues(nodeType) {
@@ -101,7 +101,7 @@ class Referencer extends OriginalReferencer {
     // Flow super types.
     this._visitTypeAnnotation(node.implements);
     this._visitTypeAnnotation(
-      node.superTypeParameters && node.superTypeParameters.params,
+      node.superTypeParameters && node.superTypeParameters.params
     );
 
     // Basic.
@@ -221,7 +221,7 @@ class Referencer extends OriginalReferencer {
   _createScopeVariable(node, name) {
     this.currentScope().variableScope.__define(
       name,
-      new Definition("Variable", name, node, null, null, null),
+      new Definition("Variable", name, node, null, null, null)
     );
   }
 
@@ -236,7 +236,7 @@ class Referencer extends OriginalReferencer {
       "type-parameters",
       parentScope,
       node,
-      false,
+      false
     );
 
     this.scopeManager.__nestScope(scope);
@@ -328,7 +328,7 @@ class Referencer extends OriginalReferencer {
   }
 }
 
-export default function analyzeScope(ast, parserOptions) {
+module.exports = function analyzeScope(ast, parserOptions) {
   const options = {
     ignoreEval: true,
     optimistic: false,
@@ -351,4 +351,4 @@ export default function analyzeScope(ast, parserOptions) {
   referencer.visit(ast);
 
   return scopeManager;
-}
+};
