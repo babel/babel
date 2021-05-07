@@ -1095,6 +1095,7 @@ export type EstreeMethodDefinition = NodeBase & {
 export type EstreeImportExpression = NodeBase & {
   type: "ImportExpression",
   source: Expression,
+  attributes?: Expression | null,
 };
 
 export type EstreePrivateIdentifier = NodeBase & {
