@@ -377,6 +377,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.callee.type === "Import") {
         ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
         ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
+        if (this.hasPlugin("importAssertions")) {
+          ((node: N.Node): N.EstreeImportExpression).attributes =
+            node.arguments[1] ?? null;
+        }
         // $FlowIgnore - arguments isn't optional in the type definition
         delete node.arguments;
         // $FlowIgnore - callee isn't optional in the type definition
