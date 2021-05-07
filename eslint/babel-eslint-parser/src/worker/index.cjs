@@ -48,10 +48,17 @@ if (process.env.BABEL_8_BREAKING) {
         response = { error, errorData: { ...error } };
       }
 
-      port.postMessage(response);
-      port.close();
-      Atomics.store(signal, 0, 1);
-      Atomics.notify(signal, 0);
+      try {
+        port.postMessage(response);
+      } catch {
+        port.postMessage({
+          error: new Error("Cannot serialize worker response"),
+        });
+      } finally {
+        port.close();
+        Atomics.store(signal, 0, 1);
+        Atomics.notify(signal, 0);
+      }
     }
   );
 } else {

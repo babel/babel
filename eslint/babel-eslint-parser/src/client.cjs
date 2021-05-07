@@ -29,6 +29,14 @@ if (process.env.BABEL_8_BREAKING) {
     SHARE_ENV,
   } = require("worker_threads");
 
+  // We need to run Babel in a worker for two reasons:
+  // 1. ESLint workers must be CJS files, and this is a problem
+  //    since Babel 8+ uses native ESM
+  // 2. ESLint parsers must run synchronously, but many steps
+  //    of Babel's config loading (which is done for each file)
+  //    can be asynchronous
+  // If ESLint starts supporting async parsers, we can move
+  // everything back to the main thread.
   const worker = new Worker(
     path.resolve(__dirname, "../lib/worker/index.cjs"),
     { env: SHARE_ENV }

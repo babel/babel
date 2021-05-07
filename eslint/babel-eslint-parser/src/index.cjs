@@ -1,5 +1,5 @@
 const semver = require("semver");
-const { normalizeESLintConfig } = require("./configuration");
+const { normalizeESLintConfig } = require("./configuration.cjs");
 const analyzeScope = require("./analyze-scope.cjs");
 const {
   getVersion,
