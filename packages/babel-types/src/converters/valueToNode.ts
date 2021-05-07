@@ -40,11 +40,18 @@ function isRegExp(value): value is RegExp {
 }
 
 function isPlainObject(value): value is object {
-  if (typeof value !== "object" || value === null) {
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    Object.prototype.toString.call(value) !== "[object Object]"
+  ) {
     return false;
   }
   const proto = Object.getPrototypeOf(value);
-  return proto === null || proto === Object.prototype;
+  // Object.prototype's __proto__ is null. Every other class's __proto__.__proto__ is
+  // not null by default. We cannot check if proto === Object.prototype because it
+  // could come from another realm.
+  return proto === null || Object.getPrototypeOf(proto) === null;
 }
 
 function valueToNode(value: unknown): t.Expression {
