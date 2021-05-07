@@ -9,6 +9,7 @@
 
 /* global VERSION */
 /* eslint-disable max-len */
+/// <reference lib="dom" />
 
 // $FlowIgnore
 import "./dynamic-require-entrypoint.cjs";
