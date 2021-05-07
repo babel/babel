@@ -15,11 +15,10 @@ describe("regressions", () => {
     const script = new vm.Script(`this.obj = { foo: 2 }`);
     script.runInNewContext(context);
 
-    expect(t.valueToNode(context.obj)).toEqual({
+    expect(t.valueToNode(context.obj)).toMatchObject({
       properties: [
         {
           computed: false,
-          decorators: null,
           key: { name: "foo", type: "Identifier" },
           shorthand: false,
           type: "ObjectProperty",
