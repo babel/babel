@@ -1,7 +1,9 @@
 function wrapper(fn) {
   return function () {
+    var _arguments = arguments;
+
     var _loop = function () {
-      var val = fn(...arguments);
+      var val = fn(..._arguments);
       return {
         v: val.test(function () {
           console.log(val);

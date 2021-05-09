@@ -64,14 +64,6 @@ function nine() {
 }
 nine();
 
-var arguments = 1;
-function ten() {
-  var foo = () => {
-    return arguments;
-  };
-}
-ten();
-
 var eleven = () => {
   var arguments = 2;
   return function () {
