@@ -205,9 +205,7 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
     // @ts-expect-error - if we want to make it possible to use async configs
     yield* [];
 
-    options = ((options as any) as (api: ConfigAPI) => {})(
-      makeConfigAPI(cache),
-    );
+    options = (options as any as (api: ConfigAPI) => {})(makeConfigAPI(cache));
 
     assertCache = true;
   }
@@ -256,32 +254,30 @@ const packageToBabelConfig = makeWeakCacheSync(
   },
 );
 
-const readConfigJSON5 = makeStaticFileCache(
-  (filepath, content): ConfigFile => {
-    let options;
-    try {
-      options = json5.parse(content);
-    } catch (err) {
-      err.message = `${filepath}: Error while parsing config - ${err.message}`;
-      throw err;
-    }
+const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
+  let options;
+  try {
+    options = json5.parse(content);
+  } catch (err) {
+    err.message = `${filepath}: Error while parsing config - ${err.message}`;
+    throw err;
+  }
 
-    if (!options) throw new Error(`${filepath}: No config detected`);
+  if (!options) throw new Error(`${filepath}: No config detected`);
 
-    if (typeof options !== "object") {
-      throw new Error(`${filepath}: Config returned typeof ${typeof options}`);
-    }
-    if (Array.isArray(options)) {
-      throw new Error(`${filepath}: Expected config object but found array`);
-    }
+  if (typeof options !== "object") {
+    throw new Error(`${filepath}: Config returned typeof ${typeof options}`);
+  }
+  if (Array.isArray(options)) {
+    throw new Error(`${filepath}: Expected config object but found array`);
+  }
 
-    return {
-      filepath,
-      dirname: path.dirname(filepath),
-      options,
-    };
-  },
-);
+  return {
+    filepath,
+    dirname: path.dirname(filepath),
+    options,
+  };
+});
 
 const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignoreDir = path.dirname(filepath);

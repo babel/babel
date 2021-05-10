@@ -76,7 +76,7 @@ export default function* normalizeFile(
           } else {
             inputMap = convertSourceMap.fromJSON(
               // todo:
-              (inputMapContent as unknown) as string,
+              inputMapContent as unknown as string,
             );
           }
         } catch (err) {
@@ -99,8 +99,10 @@ export default function* normalizeFile(
 // but without // or /* at the beginning of the comment.
 
 // eslint-disable-next-line max-len
-const INLINE_SOURCEMAP_REGEX = /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
-const EXTERNAL_SOURCEMAP_REGEX = /^[@#][ \t]+sourceMappingURL=([^\s'"`]+)[ \t]*$/;
+const INLINE_SOURCEMAP_REGEX =
+  /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
+const EXTERNAL_SOURCEMAP_REGEX =
+  /^[@#][ \t]+sourceMappingURL=([^\s'"`]+)[ \t]*$/;
 
 function extractCommentsFromList(regex, comments, lastComment) {
   if (comments) {

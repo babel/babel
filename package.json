@@ -63,7 +63,7 @@
     "lint-staged": "^9.2.0",
     "lodash": "^4.17.21",
     "mergeiterator": "^1.2.5",
-    "prettier": "^2.2.1",
+    "prettier": "2.3.0",
     "rollup": "^2.47.0",
     "rollup-plugin-dts": "^2.0.0",
     "rollup-plugin-node-polyfills": "^0.2.1",

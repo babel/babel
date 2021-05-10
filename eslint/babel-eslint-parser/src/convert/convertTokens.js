@@ -1,10 +1,10 @@
 import { tokTypes } from "@babel/core";
 
-const tl = (process.env.BABEL_8_BREAKING
-  ? Object.fromEntries
-  : p => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {}))(
-  Object.keys(tokTypes).map(key => [key, tokTypes[key].label]),
-);
+const tl = (
+  process.env.BABEL_8_BREAKING
+    ? Object.fromEntries
+    : p => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {})
+)(Object.keys(tokTypes).map(key => [key, tokTypes[key].label]));
 
 function convertTemplateType(tokens) {
   let curlyBrace = null;

@@ -197,13 +197,8 @@ const buildImportThrow = localName => {
 
 const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
   ReferencedIdentifier(path) {
-    const {
-      seen,
-      buildImportReference,
-      scope,
-      imported,
-      requeueInParent,
-    } = this;
+    const { seen, buildImportReference, scope, imported, requeueInParent } =
+      this;
     if (seen.has(path.node)) return;
     seen.add(path.node);
 

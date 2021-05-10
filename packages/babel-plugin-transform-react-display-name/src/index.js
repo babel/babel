@@ -25,9 +25,8 @@ export default declare(api => {
     }
   }
 
-  const isCreateClassCallExpression = t.buildMatchMemberExpression(
-    "React.createClass",
-  );
+  const isCreateClassCallExpression =
+    t.buildMatchMemberExpression("React.createClass");
   const isCreateClassAddon = callee => callee.name === "createReactClass";
 
   function isCreateClass(node) {

@@ -191,13 +191,8 @@ function hoistFunctionEnvironment(
     );
   }
 
-  const {
-    thisPaths,
-    argumentsPaths,
-    newTargetPaths,
-    superProps,
-    superCalls,
-  } = getScopeInformation(fnPath);
+  const { thisPaths, argumentsPaths, newTargetPaths, superProps, superCalls } =
+    getScopeInformation(fnPath);
 
   // Convert all super() calls in the constructor, if super is used in an arrow.
   if (inConstructor && superCalls.length > 0) {

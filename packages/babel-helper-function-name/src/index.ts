@@ -80,16 +80,20 @@ function wrap(state, method, id, scope) {
         build = buildGeneratorPropertyMethodAssignmentWrapper;
       }
 
-      const template = (build({
-        FUNCTION: method,
-        FUNCTION_ID: id,
-        FUNCTION_KEY: scope.generateUidIdentifier(id.name),
-      }) as t.ExpressionStatement).expression as t.CallExpression;
+      const template = (
+        build({
+          FUNCTION: method,
+          FUNCTION_ID: id,
+          FUNCTION_KEY: scope.generateUidIdentifier(id.name),
+        }) as t.ExpressionStatement
+      ).expression as t.CallExpression;
 
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
-      const params = (((template.callee as t.FunctionExpression).body
-        .body[0] as any) as t.FunctionExpression).params;
+      const params = (
+        (template.callee as t.FunctionExpression).body
+          .body[0] as any as t.FunctionExpression
+      ).params;
 
       for (let i = 0, len = getFunctionArity(method); i < len; i++) {
         params.push(scope.generateUidIdentifier("x"));

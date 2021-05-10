@@ -169,8 +169,9 @@ export function transform(
     // i.e. `?.b` in `(a?.b.c)()`
     if (i === 0 && parentIsCall) {
       // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-      const object = skipTransparentExprWrappers(replacementPath.get("object"))
-        .node;
+      const object = skipTransparentExprWrappers(
+        replacementPath.get("object"),
+      ).node;
       let baseRef;
       if (!pureGetters || !isSimpleMemberExpression(object)) {
         // memoize the context object when getters are not always pure

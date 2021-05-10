@@ -1350,9 +1350,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "FunctionTypeParam");
     }
 
-    flowParseFunctionTypeParams(
-      params: N.FlowFunctionTypeParam[] = [],
-    ): {
+    flowParseFunctionTypeParams(params: N.FlowFunctionTypeParam[] = []): {
       params: N.FlowFunctionTypeParam[],
       rest: ?N.FlowFunctionTypeParam,
       _this: ?N.FlowFunctionTypeParam,
@@ -3131,7 +3129,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.callee = base;
 
         const result = this.tryParse(() => {
-          node.typeArguments = this.flowParseTypeParameterInstantiationCallOrNew();
+          node.typeArguments =
+            this.flowParseTypeParameterInstantiationCallOrNew();
           this.expect(tt.parenL);
           node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
           if (subscriptState.optionalChainMember) node.optional = false;

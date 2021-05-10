@@ -210,21 +210,17 @@ export function createClassFeaturePlugin({
           ));
         } else {
           keysNodes = extractComputedKeys(ref, path, computedPaths, this.file);
-          ({
-            staticNodes,
-            pureStaticNodes,
-            instanceNodes,
-            wrapClass,
-          } = buildFieldsInitNodes(
-            ref,
-            path.node.superClass,
-            props,
-            privateNamesMap,
-            state,
-            setPublicClassFields ?? loose,
-            privateFieldsAsProperties ?? loose,
-            constantSuper ?? loose,
-          ));
+          ({ staticNodes, pureStaticNodes, instanceNodes, wrapClass } =
+            buildFieldsInitNodes(
+              ref,
+              path.node.superClass,
+              props,
+              privateNamesMap,
+              state,
+              setPublicClassFields ?? loose,
+              privateFieldsAsProperties ?? loose,
+              constantSuper ?? loose,
+            ));
         }
 
         if (instanceNodes.length > 0) {

@@ -537,13 +537,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt.parenL);
       signature.parameters = this.tsParseBindingListForSignature();
       if (returnTokenRequired) {
-        signature.typeAnnotation = this.tsParseTypeOrTypePredicateAnnotation(
-          returnToken,
-        );
+        signature.typeAnnotation =
+          this.tsParseTypeOrTypePredicateAnnotation(returnToken);
       } else if (this.match(returnToken)) {
-        signature.typeAnnotation = this.tsParseTypeOrTypePredicateAnnotation(
-          returnToken,
-        );
+        signature.typeAnnotation =
+          this.tsParseTypeOrTypePredicateAnnotation(returnToken);
       }
     }
 
