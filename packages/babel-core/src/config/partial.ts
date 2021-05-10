@@ -169,10 +169,8 @@ export const loadPartialConfig = gensync<
     ({ showIgnoredFiles, ...opts } = opts);
   }
 
-  const result:
-    | PrivPartialConfig
-    | undefined
-    | null = yield* loadPrivatePartialConfig(opts);
+  const result: PrivPartialConfig | undefined | null =
+    yield* loadPrivatePartialConfig(opts);
   if (!result) return null;
 
   const { options, babelrc, ignore, config, fileHandling, files } = result;

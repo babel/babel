@@ -150,6 +150,5 @@ export const mixinPlugins: { [name: string]: MixinPlugin } = {
   placeholders,
 };
 
-export const mixinPluginNames: $ReadOnlyArray<string> = Object.keys(
-  mixinPlugins,
-);
+export const mixinPluginNames: $ReadOnlyArray<string> =
+  Object.keys(mixinPlugins);

@@ -175,9 +175,9 @@ export function referencesImport(
         ? t.isStringLiteral(this.node.property, { value: importName })
         : (this.node.property as t.Identifier).name === importName)
     ) {
-      const object = (this as NodePath<
-        t.MemberExpression | t.OptionalMemberExpression
-      >).get("object");
+      const object = (
+        this as NodePath<t.MemberExpression | t.OptionalMemberExpression>
+      ).get("object");
       return (
         object.isReferencedIdentifier() &&
         object.referencesImport(moduleSource, "*")

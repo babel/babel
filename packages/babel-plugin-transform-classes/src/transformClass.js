@@ -610,9 +610,8 @@ export default function transformClass(
         annotateAsPure(arg);
       }
 
-      const param = classState.scope.generateUidIdentifierBasedOnNode(
-        superName,
-      );
+      const param =
+        classState.scope.generateUidIdentifierBasedOnNode(superName);
 
       closureParams.push(param);
       closureArgs.push(arg);

@@ -81,13 +81,8 @@ export default class Buffer {
 
   append(str: string): void {
     this._flush();
-    const {
-      line,
-      column,
-      filename,
-      identifierName,
-      force,
-    } = this._sourcePosition;
+    const { line, column, filename, identifierName, force } =
+      this._sourcePosition;
     this._append(str, line, column, identifierName, filename, force);
   }
 
@@ -103,13 +98,8 @@ export default class Buffer {
       }
     }
 
-    const {
-      line,
-      column,
-      filename,
-      identifierName,
-      force,
-    } = this._sourcePosition;
+    const { line, column, filename, identifierName, force } =
+      this._sourcePosition;
     this._queue.unshift([str, line, column, identifierName, filename, force]);
   }
 

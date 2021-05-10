@@ -3,7 +3,7 @@ type indexType = typeof import("./index");
 
 // Kind of gross, but essentially asserting that the exports of this module are the same as the
 // exports of index-browser, since this file may be replaced at bundle time with index-browser.
-((({} as any) as indexBrowserType) as indexType);
+({} as any as indexBrowserType as indexType);
 
 export { findPackageData } from "./package";
 

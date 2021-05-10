@@ -68,9 +68,8 @@ export default declare(api => {
       if (!state.fileNameIdentifier) {
         const fileName = state.filename || "";
 
-        const fileNameIdentifier = path.scope.generateUidIdentifier(
-          FILE_NAME_VAR,
-        );
+        const fileNameIdentifier =
+          path.scope.generateUidIdentifier(FILE_NAME_VAR);
         const scope = path.hub.getScope();
         if (scope) {
           scope.push({

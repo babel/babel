@@ -12,7 +12,7 @@ export default function is<T extends t.Node["type"]>(
 
 export default function is<
   T extends t.Node["type"],
-  P extends Extract<t.Node, { type: T }>
+  P extends Extract<t.Node, { type: T }>,
 >(type: T, n: t.Node | null | undefined, required: Partial<P>): n is P;
 
 export default function is<P extends t.Node>(

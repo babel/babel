@@ -262,7 +262,8 @@ export const all = {
   "transform-new-target": transformNewTarget,
   "transform-object-assign": transformObjectAssign,
   "transform-object-super": transformObjectSuper,
-  "transform-object-set-prototype-of-to-assign": transformObjectSetPrototypeOfToAssign,
+  "transform-object-set-prototype-of-to-assign":
+    transformObjectSetPrototypeOfToAssign,
   "transform-parameters": transformParameters,
   "transform-property-literals": transformPropertyLiterals,
   "transform-property-mutators": transformPropertyMutators,

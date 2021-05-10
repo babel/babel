@@ -202,8 +202,7 @@ const aliasDescriptions = {
   FlowDeclaration: "A cover of Flow declarations.",
   FlowPredicate: "A cover of Flow predicates.",
   FlowType: "A cover of Flow type annotations.",
-  For:
-    "A cover of [ForStatement](https://tc39.es/ecma262/#sec-for-statement)s and [ForXStatement](#forxstatement)s.",
+  For: "A cover of [ForStatement](https://tc39.es/ecma262/#sec-for-statement)s and [ForXStatement](#forxstatement)s.",
   ForXStatement:
     "A cover of [ForInStatements and ForOfStatements](https://tc39.es/ecma262/#sec-for-in-and-for-of-statements).",
   Function:
@@ -212,10 +211,8 @@ const aliasDescriptions = {
     "A cover of AST nodes that start an execution context with new [VariableEnvironment](https://tc39.es/ecma262/#table-additional-state-components-for-ecmascript-code-execution-contexts). In other words, they define the scope of `var` declarations. FunctionParent did not include `Program` since Babel 7.",
   Immutable:
     "A cover of immutable objects and JSX elements. An object is [immutable](https://tc39.es/ecma262/#immutable-prototype-exotic-object) if no other properties can be defined once created.",
-  JSX:
-    "A cover of AST nodes defined for [JSX](https://facebook.github.io/jsx/).",
-  LVal:
-    "A cover of left hand side expressions used in the `left` of assignment expressions and [ForXStatement](#forxstatement)s. ",
+  JSX: "A cover of AST nodes defined for [JSX](https://facebook.github.io/jsx/).",
+  LVal: "A cover of left hand side expressions used in the `left` of assignment expressions and [ForXStatement](#forxstatement)s. ",
   Literal:
     "A cover of [Literal](https://tc39.es/ecma262/#sec-primary-expression-literals)s, [Regular Expression Literal](https://tc39.es/ecma262/#sec-primary-expression-regular-expression-literals)s and [Template Literal](https://tc39.es/ecma262/#sec-template-literals)s.",
   Loop: "A cover of loop statements.",

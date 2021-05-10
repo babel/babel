@@ -373,9 +373,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   takeDecorators(node: N.HasDecorators): void {
-    const decorators = this.state.decoratorStack[
-      this.state.decoratorStack.length - 1
-    ];
+    const decorators =
+      this.state.decoratorStack[this.state.decoratorStack.length - 1];
     if (decorators.length) {
       node.decorators = decorators;
       this.resetStartLocationFromNode(node, decorators[0]);
@@ -388,9 +387,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorators(allowExport?: boolean): void {
-    const currentContextDecorators = this.state.decoratorStack[
-      this.state.decoratorStack.length - 1
-    ];
+    const currentContextDecorators =
+      this.state.decoratorStack[this.state.decoratorStack.length - 1];
     while (this.match(tt.at)) {
       const decorator = this.parseDecorator();
       currentContextDecorators.push(decorator);
@@ -2067,9 +2065,8 @@ export default class StatementParser extends ExpressionParser {
       }
     }
 
-    const currentContextDecorators = this.state.decoratorStack[
-      this.state.decoratorStack.length - 1
-    ];
+    const currentContextDecorators =
+      this.state.decoratorStack[this.state.decoratorStack.length - 1];
     // If node.declaration is a class, it will take all decorators in the current context.
     // Thus we should throw if we see non-empty decorators here.
     if (currentContextDecorators.length) {

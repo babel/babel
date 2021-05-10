@@ -1176,9 +1176,10 @@ export type TsSignatureDeclarationOrIndexSignatureBase = NodeBase & {
   typeAnnotation: ?TsTypeAnnotation,
 };
 
-export type TsSignatureDeclarationBase = TsSignatureDeclarationOrIndexSignatureBase & {
-  typeParameters: ?TsTypeParameterDeclaration,
-};
+export type TsSignatureDeclarationBase =
+  TsSignatureDeclarationOrIndexSignatureBase & {
+    typeParameters: ?TsTypeParameterDeclaration,
+  };
 
 // ================
 // TypeScript type members (for type literal / interface / class)
