@@ -61,7 +61,7 @@
     "husky": "^3.0.0",
     "jest": "^26.6.1",
     "lint-staged": "^9.2.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "mergeiterator": "^1.2.5",
     "prettier": "^2.2.1",
     "rollup": "^2.47.0",
