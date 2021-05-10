@@ -10,11 +10,11 @@ exports.getVisitorKeys = function getVisitorKeys() {
       ImportExpression: ESLINT_VISITOR_KEYS.ImportExpression,
       Literal: ESLINT_VISITOR_KEYS.Literal,
       MethodDefinition: ["decorators"].concat(
-        ESLINT_VISITOR_KEYS.MethodDefinition
+        ESLINT_VISITOR_KEYS.MethodDefinition,
       ),
       Property: ["decorators"].concat(ESLINT_VISITOR_KEYS.Property),
       PropertyDefinition: ["decorators"].concat(
-        ESLINT_VISITOR_KEYS.PropertyDefinition
+        ESLINT_VISITOR_KEYS.PropertyDefinition,
       ),
     };
 
@@ -22,7 +22,7 @@ exports.getVisitorKeys = function getVisitorKeys() {
     const conflictTypes = {
       // todo: remove this when we drop Babel 7 support
       ClassPrivateMethod: ["decorators"].concat(
-        ESLINT_VISITOR_KEYS.MethodDefinition
+        ESLINT_VISITOR_KEYS.MethodDefinition,
       ),
       ExportAllDeclaration: ESLINT_VISITOR_KEYS.ExportAllDeclaration,
     };

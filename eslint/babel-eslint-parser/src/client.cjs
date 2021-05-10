@@ -39,7 +39,7 @@ if (process.env.BABEL_8_BREAKING) {
   // everything back to the main thread.
   const worker = new Worker(
     path.resolve(__dirname, "../lib/worker/index.cjs"),
-    { env: SHARE_ENV }
+    { env: SHARE_ENV },
   );
 
   // The worker will never exit by itself. Prevent it from keeping

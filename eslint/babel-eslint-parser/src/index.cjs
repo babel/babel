@@ -22,7 +22,7 @@ function baseParse(code, options) {
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(
       getVersion(),
-      minSupportedCoreVersion
+      minSupportedCoreVersion,
     );
   }
 
@@ -30,7 +30,7 @@ function baseParse(code, options) {
     throw new Error(
       `@babel/eslint-parser@${
         PACKAGE_JSON.version
-      } does not support @babel/core@${getVersion()}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`
+      } does not support @babel/core@${getVersion()}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
     );
   }
 
@@ -43,7 +43,7 @@ function baseParse(code, options) {
       babelParser.parse(code, parserOptions),
       code,
       getTokLabels(),
-      getVisitorKeys()
+      getVisitorKeys(),
     );
   } catch (err) {
     throw convert.error(err);

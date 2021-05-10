@@ -19,12 +19,12 @@ function handleMessage(action, payload) {
     case "MAYBE_PARSE":
       if (process.env.BABEL_8_BREAKING) {
         return normalizeBabelParseConfig(payload.options).then(options =>
-          maybeParse(payload.code, options)
+          maybeParse(payload.code, options),
         );
       } else {
         return maybeParse(
           payload.code,
-          normalizeBabelParseConfig(payload.options)
+          normalizeBabelParseConfig(payload.options),
         );
       }
   }
@@ -59,7 +59,7 @@ if (process.env.BABEL_8_BREAKING) {
         Atomics.store(signal, 0, 1);
         Atomics.notify(signal, 0);
       }
-    }
+    },
   );
 } else {
   module.exports = handleMessage;

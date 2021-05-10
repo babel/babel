@@ -10,7 +10,7 @@
   "printWidth": 80,
   "overrides": [{
     "files": [
-      "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts}"
+      "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts,cjs}"
     ],
     "excludeFiles": ["**/packages/babel-helpers/src/helpers/**/*.js"],
     "options": {
