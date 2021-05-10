@@ -5644,7 +5644,7 @@ __metadata:
     husky: ^3.0.0
     jest: ^26.6.1
     lint-staged: ^9.2.0
-    lodash: ^4.17.20
+    lodash: ^4.17.21
     mergeiterator: ^1.2.5
     prettier: ^2.2.1
     rollup: ^2.47.0
@@ -10942,7 +10942,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.4":
+"lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 4983720b9abca930a4a46f18db163d7dad8dd00dbed6db0cc7b499b33b717cce69f80928b27bbb1ff2cbd3b19d251ee90669a8b5ea466072ca81c2ebe91e7468
