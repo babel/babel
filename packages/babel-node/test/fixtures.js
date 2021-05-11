@@ -44,7 +44,7 @@ const saveInFiles = function (files) {
   });
 };
 
-const assertTest = function (stdout, stderr, message, opts) {
+const assertTest = function (stdout, stderr, ipcMessage, opts) {
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
@@ -73,7 +73,7 @@ const assertTest = function (stdout, stderr, message, opts) {
   }
 
   if (opts.ipc) {
-    expect(message).toEqual(opts.message);
+    expect(ipcMessage).toEqual(opts.ipcMessage);
   }
 
   if (opts.outFiles) {
@@ -114,7 +114,7 @@ const buildTest = function (testName, opts) {
 
     let stderr = "";
     let stdout = "";
-    let message;
+    let ipcMessage;
 
     spawn.stderr.on("data", function (chunk) {
       stderr += chunk;
@@ -125,8 +125,8 @@ const buildTest = function (testName, opts) {
     });
 
     if (opts.ipc) {
-      spawn.on("message", function (childMessage) {
-        message = childMessage;
+      spawn.on("message", function (message) {
+        ipcMessage = message;
       });
     }
 
@@ -134,7 +134,7 @@ const buildTest = function (testName, opts) {
       let err;
 
       try {
-        assertTest(stdout, stderr, message, opts);
+        assertTest(stdout, stderr, ipcMessage, opts);
       } catch (e) {
         err = e;
       }
