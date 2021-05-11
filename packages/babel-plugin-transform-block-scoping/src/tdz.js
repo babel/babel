@@ -27,6 +27,8 @@ function isReference(node, scope, state) {
   return scope.getBindingIdentifier(node.name) === declared;
 }
 
+const visitedMaybeTDZNodes = new WeakSet();
+
 export const visitor = {
   ReferencedIdentifier(path, state) {
     if (!state.tdzEnabled) return;
@@ -44,12 +46,14 @@ export const visitor = {
     if (status === "outside") return;
 
     if (status === "maybe") {
+      if (visitedMaybeTDZNodes.has(node)) {
+        return;
+      }
+      visitedMaybeTDZNodes.add(node);
       const assert = buildTDZAssert(node, state);
 
       // add tdzThis to parent variable declarator so it's exploded
       bindingPath.parent._tdzThis = true;
-
-      path.skip();
 
       if (path.parentPath.isUpdateExpression()) {
         if (parent._ignoreBlockScopingTDZ) return;
