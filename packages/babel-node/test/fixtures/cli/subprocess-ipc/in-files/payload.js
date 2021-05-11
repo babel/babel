@@ -1,2 +1,2 @@
 process.send({ hello: "world" });
-console.log("sent");
+console.log("ipc enabled");

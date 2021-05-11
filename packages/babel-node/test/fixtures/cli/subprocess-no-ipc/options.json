@@ -1,4 +1,4 @@
 {
   "args": ["payload.js"],
-  "stdout": "sent"
+  "stdout": "ipc disabled"
 }
