@@ -154,15 +154,10 @@ export function createClassFeaturePlugin({
           if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
 
           if (path.isStaticBlock?.()) {
-            throw path.buildCodeFrameError(`Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
-{
-  "plugins": [
-    "@babel/plugin-proposal-class-static-block",
-    "@babel/plugin-proposal-private-property-in-object",
-    "@babel/plugin-proposal-private-methods",
-    "@babel/plugin-proposal-class-properties",
-  ]
-}`);
+            throw path.buildCodeFrameError(
+              "Compiling class fields and private methods requires compiling class static blocks." +
+                " Please add `@babel/plugin-proposal-class-static-block` to your Babel configuration.",
+            );
           }
         }
 

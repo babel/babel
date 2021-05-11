@@ -26,32 +26,39 @@ export default declare(({ types: t, template, assertVersion }) => {
     name: "proposal-class-static-block",
     inherits: syntaxClassStaticBlock,
     visitor: {
-      Class(path: NodePath<Class>) {
-        const { scope } = path;
-        const classBody = path.get("body");
-        const privateNames = new Set();
-        const body = classBody.get("body");
-        for (const path of body) {
-          if (path.isPrivate()) {
-            privateNames.add(path.get("key.id").node.name);
-          }
-        }
-        for (const path of body) {
-          if (!path.isStaticBlock()) continue;
-          const staticBlockPrivateId = generateUid(scope, privateNames);
-          privateNames.add(staticBlockPrivateId);
-          const staticBlockRef = t.privateName(
-            t.identifier(staticBlockPrivateId),
-          );
-          path.replaceWith(
-            t.classPrivateProperty(
-              staticBlockRef,
-              template.expression.ast`(() => { ${path.node.body} })()`,
-              [],
-              /* static */ true,
-            ),
-          );
-        }
+      Program(path) {
+        // We run this from the program visitor, so that when transforming private elements
+        // we are sure that static blocks have already been transformed regarless of the
+        // plugins order in the user config.
+        path.traverse({
+          Class(path: NodePath<Class>) {
+            const { scope } = path;
+            const classBody = path.get("body");
+            const privateNames = new Set();
+            const body = classBody.get("body");
+            for (const path of body) {
+              if (path.isPrivate()) {
+                privateNames.add(path.get("key.id").node.name);
+              }
+            }
+            for (const path of body) {
+              if (!path.isStaticBlock()) continue;
+              const staticBlockPrivateId = generateUid(scope, privateNames);
+              privateNames.add(staticBlockPrivateId);
+              const staticBlockRef = t.privateName(
+                t.identifier(staticBlockPrivateId),
+              );
+              path.replaceWith(
+                t.classPrivateProperty(
+                  staticBlockRef,
+                  template.expression.ast`(() => { ${path.node.body} })()`,
+                  [],
+                  /* static */ true,
+                ),
+              );
+            }
+          },
+        });
       },
     },
   };
