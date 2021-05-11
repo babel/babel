@@ -1,4 +1,6 @@
 {
   "args": ["payload.js"],
-  "stdout": "sent"
+  "stdout": "sent",
+  "message": { "hello": "world" },
+  "ipc": true
 }
