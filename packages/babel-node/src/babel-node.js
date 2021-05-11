@@ -85,7 +85,7 @@ getV8Flags(async function (err, v8Flags) {
     }
 
     // passthrough IPC only if babel-node itself has an IPC channel
-    const shouldPassthroughIPC = process.send != null;
+    const shouldPassthroughIPC = process.send !== undefined;
     const proc = child_process.spawn(process.argv[0], args, {
       stdio: shouldPassthroughIPC
         ? ["inherit", "inherit", "inherit", "ipc"]
