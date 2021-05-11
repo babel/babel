@@ -189,6 +189,20 @@ function getExportSpecifierName(
   }
 }
 
+function assertExportSpecifier(
+  path: NodePath,
+): asserts path is NodePath<t.ExportSpecifier> {
+  if (path.isExportSpecifier()) {
+    return;
+  } else if (path.isExportNamespaceSpecifier()) {
+    throw path.buildCodeFrameError(
+      "Export namespace should be first transformed by `@babel/plugin-proposal-export-namespace-from`.",
+    );
+  } else {
+    throw path.buildCodeFrameError("Unexpected export specifier type");
+  }
+}
+
 /**
  * Get metadata about the imports and exports present in this module.
  */
@@ -307,9 +321,7 @@ function getModuleMetadata(
       if (!data.loc) data.loc = child.node.loc;
 
       child.get("specifiers").forEach(spec => {
-        if (!spec.isExportSpecifier()) {
-          throw spec.buildCodeFrameError("Unexpected export specifier type");
-        }
+        assertExportSpecifier(spec);
         const importName = getExportSpecifierName(
           spec.get("local"),
           stringSpecifiers,
@@ -415,8 +427,9 @@ function getLocalExportMetadata(
           child.node.source &&
           child.get("source").isStringLiteral()
         ) {
-          child.node.specifiers.forEach(specifier => {
-            bindingKindLookup.set(specifier.local.name, "block");
+          child.get("specifiers").forEach(spec => {
+            assertExportSpecifier(spec);
+            bindingKindLookup.set(spec.get("local").node.name, "block");
           });
           return;
         }
