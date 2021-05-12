@@ -74,7 +74,7 @@ export default declare((api, options) => {
         if (path.isCallExpression()) {
           annotateAsPure(path);
           // todo: improve babel types
-          const callee = (path.get("callee") as unknown) as NodePath;
+          const callee = path.get("callee") as unknown as NodePath;
           if (callee.isArrowFunctionExpression()) {
             // This is an IIFE, so we don't need to worry about the noNewArrows assumption
             callee.arrowFunctionToExpression();
