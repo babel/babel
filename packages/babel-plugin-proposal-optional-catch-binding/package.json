@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-optional-catch-binding",
-  "version": "7.13.8",
+  "version": "7.14.2",
   "description": "Compile optional catch bindings",
   "repository": {
     "type": "git",
