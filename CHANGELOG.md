@@ -19,6 +19,38 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.2 (2021-05-12)
+
+#### :bug: Bug Fix
+* `babel-node`
+  * [#13295](https://github.com/babel/babel/pull/13295) Fix: Only create `@babel/node` IPC channel when needed ([@quickgiant](https://github.com/quickgiant))
+* `babel-parser`
+  * [#13284](https://github.com/babel/babel/pull/13284) Parse attributes of import expression with estree plugin ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13261](https://github.com/babel/babel/pull/13261) Fix invalid identifier name on unfinished escape ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#13275](https://github.com/babel/babel/pull/13275) Support objects from other contexts in `t.valueToNode` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#13274](https://github.com/babel/babel/pull/13274) [eslint] Don't crash on multiple `@babel/parser` copies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#13269](https://github.com/babel/babel/pull/13269) Print parentheses around identifier `let` where necessary ([@Zalathar](https://github.com/Zalathar))
+
+#### :nail_care: Polish
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#13296](https://github.com/babel/babel/pull/13296) Better error for `export * as ns` without the correct plugin ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* [#13253](https://github.com/babel/babel/pull/13253) [DOC] Add missing Monorepo configuration ([@serut](https://github.com/serut))
+
+#### :house: Internal
+* Other
+  * [#13289](https://github.com/babel/babel/pull/13289) Update lodash version for fixing security vulnerability ([@trinangkur](https://github.com/trinangkur))
+* `babel-types`
+  * [#13264](https://github.com/babel/babel/pull/13264) [babel-types] Update `matchesPattern` to account for `this` ([@liuyenwei](https://github.com/liuyenwei))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#13262](https://github.com/babel/babel/pull/13262) Faster identifier tokenizing ([@JLHwung](https://github.com/JLHwung))
+  * [#13256](https://github.com/babel/babel/pull/13256) Refactor private name tokenizing ([@JLHwung](https://github.com/JLHwung))
 ## v7.14.1 (2021-05-04)
 
 #### :bug: Bug Fix
