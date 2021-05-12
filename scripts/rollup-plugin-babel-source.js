@@ -35,25 +35,17 @@ export default function () {
             );
 
             const browserFileAsTs = browserFileAsJs.replace(/.js$/, ".ts");
-            let browserFile;
-            try {
-              fs.statSync(browserFileAsTs);
-              browserFile = browserFileAsTs;
-            } catch {
-              browserFile = browserFileAsJs;
-            }
+            const browserFile = fs.existsSync(browserFileAsTs)
+              ? browserFileAsTs
+              : browserFileAsJs;
 
             const nodeFileSrcAsJs = path.normalize(
               nodeFile.replace(/^(\.\/)?lib\//, "src/")
             );
             const nodeFileSrcAsTs = nodeFileSrcAsJs.replace(/.js$/, ".ts");
-            let nodeFileSrc;
-            try {
-              fs.statSync(nodeFileSrcAsTs);
-              nodeFileSrc = nodeFileSrcAsTs;
-            } catch {
-              nodeFileSrc = nodeFileSrcAsJs;
-            }
+            const nodeFileSrc = fs.existsSync(nodeFileSrcAsTs)
+              ? nodeFileSrcAsTs
+              : nodeFileSrcAsJs;
 
             if (id.endsWith(nodeFileSrc)) {
               if (browserFile === false) {
@@ -117,12 +109,7 @@ export default function () {
       if (!/\.[a-z]+$/.test(asJS)) asJS += ".js";
       const asTS = asJS.replace(/\.js$/, ".ts");
 
-      try {
-        fs.statSync(asTS);
-        return asTS;
-      } catch {
-        return asJS;
-      }
+      return fs.existsSync(asTS) ? asTS : asJS;
     },
   };
 }
