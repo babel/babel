@@ -99,7 +99,9 @@ function enumFill(path, t, id) {
  *     Z = X | Y,
  *   }
  */
-type PreviousEnumMembers = { [name: string]: number | string };
+type PreviousEnumMembers = {
+  [name: string]: number | string;
+};
 
 function translateEnumValues(path, t) {
   const seen: PreviousEnumMembers = Object.create(null);
