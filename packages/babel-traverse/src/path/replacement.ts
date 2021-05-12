@@ -256,7 +256,7 @@ export function replaceExpressionWithStatements(
   callee.arrowFunctionToExpression();
   // Fixme: we can not `assert this is NodePath<t.FunctionExpression>` in `arrowFunctionToExpression`
   // because it is not a class method known at compile time.
-  const newCallee = (callee as unknown) as NodePath<t.FunctionExpression>;
+  const newCallee = callee as unknown as NodePath<t.FunctionExpression>;
 
   // (() => await xxx)() -> await (async () => await xxx)();
   const needToAwaitFunction =
