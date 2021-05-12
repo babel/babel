@@ -149,7 +149,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             let pragmaFragSet = !!options.pragmaFrag;
 
             if (file.ast.comments) {
-              for (const comment of (file.ast.comments: Array<Object>)) {
+              for (const comment of file.ast.comments as Array<any>) {
                 const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(
                   comment.value,
                 );
