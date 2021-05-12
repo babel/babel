@@ -102,11 +102,11 @@ function processOptions(options) {
   };
 }
 
-export function transform(code: string, options: Object) {
+export function transform(code: string, options: any) {
   return babelTransform(code, processOptions(options));
 }
 
-export function transformFromAst(ast: Object, code: string, options: Object) {
+export function transformFromAst(ast: any, code: string, options: any) {
   return babelTransformFromAst(ast, code, processOptions(options));
 }
 export const availablePlugins = {};
@@ -115,7 +115,7 @@ export const buildExternalHelpers = babelBuildExternalHelpers;
 /**
  * Registers a named plugin for use with Babel.
  */
-export function registerPlugin(name: string, plugin: Object | Function): void {
+export function registerPlugin(name: string, plugin: any | Function): void {
   if (Object.prototype.hasOwnProperty.call(availablePlugins, name)) {
     console.warn(
       `A plugin named "${name}" is already registered, it will be overridden`,
@@ -128,7 +128,7 @@ export function registerPlugin(name: string, plugin: Object | Function): void {
  * is the name of the plugin, and the value is the plugin itself.
  */
 export function registerPlugins(newPlugins: {
-  [string]: Object | Function,
+  [x: string]: any | Function;
 }): void {
   Object.keys(newPlugins).forEach(name =>
     registerPlugin(name, newPlugins[name]),
@@ -138,7 +138,7 @@ export function registerPlugins(newPlugins: {
 /**
  * Registers a named preset for use with Babel.
  */
-export function registerPreset(name: string, preset: Object | Function): void {
+export function registerPreset(name: string, preset: any | Function): void {
   if (Object.prototype.hasOwnProperty.call(availablePresets, name)) {
     if (name === "env") {
       console.warn(
@@ -157,7 +157,7 @@ export function registerPreset(name: string, preset: Object | Function): void {
  * is the name of the preset, and the value is the preset itself.
  */
 export function registerPresets(newPresets: {
-  [string]: Object | Function,
+  [x: string]: any | Function;
 }): void {
   Object.keys(newPresets).forEach(name =>
     registerPreset(name, newPresets[name]),

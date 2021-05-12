@@ -1,8 +1,7 @@
-// @flow
 import presetStage3 from "./preset-stage-3";
 import * as babelPlugins from "./generated/plugins";
 
-export default (_: any, opts: Object = {}) => {
+export default (_: any, opts: any = {}) => {
   const {
     loose = false,
     useBuiltIns = false,

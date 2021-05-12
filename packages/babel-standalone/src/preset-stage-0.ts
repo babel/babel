@@ -1,8 +1,7 @@
-// @flow
 import presetStage1 from "./preset-stage-1";
 import { proposalFunctionBind } from "./generated/plugins";
 
-export default (_: any, opts: Object = {}) => {
+export default (_: any, opts: any = {}) => {
   const {
     loose = false,
     useBuiltIns = false,
