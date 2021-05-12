@@ -27,6 +27,7 @@
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-transform-react-jsx/src/**/*.ts",
+    "./packages/babel-plugin-transform-typescript/src/**/*.ts",
     "./packages/babel-template/src/**/*.ts",
     "./packages/babel-traverse/src/**/*.ts",
     "./packages/babel-types/src/**/*.ts"
@@ -107,6 +108,9 @@
       ],
       "@babel/plugin-transform-react-jsx": [
         "./packages/babel-plugin-transform-react-jsx/src"
+      ],
+      "@babel/plugin-transform-typescript": [
+        "./packages/babel-plugin-transform-typescript/src"
       ],
       "@babel/template": [
         "./packages/babel-template/src"
