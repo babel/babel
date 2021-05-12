@@ -128,6 +128,10 @@ commander.option(
   "Do not compile files before watching.",
 );
 commander.option(
+  "--incremental",
+  "Only compile files with modification time before corresponding output file",
+);
+commander.option(
   "-o, --out-file [out]",
   "Compile all input files into a single file.",
 );
@@ -227,6 +231,9 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   if (commander.skipInitialBuild && !commander.watch) {
     errors.push("--skip-initial-build requires --watch");
   }
+  if (commander.incremental && !commander.outDir) {
+    errors.push("--incremental requires --out-dir");
+  }
   if (commander.deleteDirOnStart && !commander.outDir) {
     errors.push("--delete-dir-on-start requires --out-dir");
   }
@@ -317,6 +324,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       outFileExtension: opts.outFileExtension,
       watch: opts.watch,
       skipInitialBuild: opts.skipInitialBuild,
+      incremental: opts.incremental,
       outFile: opts.outFile,
       outDir: opts.outDir,
       relative: opts.relative,
