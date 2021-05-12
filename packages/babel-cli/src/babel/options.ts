@@ -1,5 +1,3 @@
-// @flow
-
 import fs from "fs";
 
 import commander from "commander";
@@ -178,8 +176,8 @@ commander.usage("[options] <files ...>");
 commander.action(() => {});
 
 export type CmdOptions = {
-  babelOptions: Object,
-  cliOptions: Object,
+  babelOptions: any;
+  cliOptions: any;
 };
 
 export default function parseArgv(args: Array<string>): CmdOptions | null {
