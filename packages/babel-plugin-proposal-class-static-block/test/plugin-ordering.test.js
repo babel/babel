@@ -26,12 +26,9 @@ describe("plugin ordering", () => {
 
       class Foo {}
 
-      var _ = {
-        writable: true,
-        value: (() => {
-          Foo.foo = Foo.bar;
-        })()
-      };
+      (() => {
+        Foo.foo = Foo.bar;
+      })();
 
       _defineProperty(Foo, \\"bar\\", 42);"
     `);

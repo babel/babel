@@ -146,19 +146,16 @@ export function createClassFeaturePlugin({
             constructor = path;
           } else {
             elements.push(path);
-            if (path.isProperty() || path.isPrivate()) {
+            if (
+              path.isProperty() ||
+              path.isPrivate() ||
+              path.isStaticBlock?.()
+            ) {
               props.push(path);
             }
           }
 
           if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
-
-          if (path.isStaticBlock?.()) {
-            throw path.buildCodeFrameError(
-              "Compiling class fields and private methods requires compiling class static blocks." +
-                " Please add `@babel/plugin-proposal-class-static-block` to your Babel configuration.",
-            );
-          }
         }
 
         if (!props.length && !isDecorated) return;

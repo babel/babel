@@ -10,9 +10,6 @@ class A {
 
 }
 
-var _ = {
-  writable: true,
-  value: (() => {
-    register(A, _foo.has(A));
-  })()
-};
+(() => {
+  register(A, _foo.has(A));
+})();

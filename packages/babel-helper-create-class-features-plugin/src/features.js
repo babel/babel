@@ -6,6 +6,7 @@ export const FEATURES = Object.freeze({
   privateMethods: 1 << 2,
   decorators: 1 << 3,
   privateIn: 1 << 4,
+  staticBlocks: 1 << 5,
 });
 
 const featuresSameLoose = new Map([
@@ -144,8 +145,8 @@ export function verifyUsedFeatures(path, file) {
     }
   }
 
-  // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0
-  if (path.isPrivate() && path.isMethod()) {
+  // NOTE: path.isPrivateMethod() it isn't supported in <7.2.0
+  if (path.isPrivateMethod?.()) {
     if (!hasFeature(file, FEATURES.privateMethods)) {
       throw path.buildCodeFrameError("Class private methods are not enabled.");
     }
@@ -168,6 +169,15 @@ export function verifyUsedFeatures(path, file) {
   if (path.isProperty()) {
     if (!hasFeature(file, FEATURES.fields)) {
       throw path.buildCodeFrameError("Class fields are not enabled.");
+    }
+  }
+
+  if (path.isStaticBlock?.()) {
+    if (!hasFeature(file, FEATURES.staticBlocks)) {
+      throw path.buildCodeFrameError(
+        "Static class blocks are not enabled. " +
+          "Please add `@babel/plugin-proposal-class-static-block` to your configuration.",
+      );
     }
   }
 }
