@@ -206,22 +206,20 @@ const looseHandlers = {
   },
 
   get(superMember) {
-    const { isStatic, superRef } = this;
+    const { isStatic, getSuperRef } = this;
     const { computed } = superMember.node;
     const prop = this.prop(superMember);
 
     let object;
     if (isStatic) {
-      object = superRef
-        ? t.cloneNode(superRef)
-        : t.memberExpression(
-            t.identifier("Function"),
-            t.identifier("prototype"),
-          );
+      object =
+        getSuperRef() ??
+        t.memberExpression(t.identifier("Function"), t.identifier("prototype"));
     } else {
-      object = superRef
-        ? t.memberExpression(t.cloneNode(superRef), t.identifier("prototype"))
-        : t.memberExpression(t.identifier("Object"), t.identifier("prototype"));
+      object = t.memberExpression(
+        getSuperRef() ?? t.identifier("Object"),
+        t.identifier("prototype"),
+      );
     }
 
     return t.memberExpression(object, prop, computed);
@@ -264,15 +262,15 @@ type ReplaceSupersOptionsBase = {
   refToPreserve?: t.Identifier;
 };
 
-type ReplaceSupersOptions =
-  | ({
-      objectRef?: undefined;
-      getObjectRef: () => t.Node;
-    } & ReplaceSupersOptionsBase)
-  | ({
-      objectRef: t.Node;
-      getObjectRef?: () => t.Node;
-    } & ReplaceSupersOptionsBase);
+type ReplaceSupersOptions = ReplaceSupersOptionsBase &
+  (
+    | { objectRef?: undefined; getObjectRef: () => t.Node }
+    | { objectRef: t.Node; getObjectRef?: undefined }
+  ) &
+  (
+    | { superRef?: undefined; getSuperRef: () => t.Node }
+    | { superRef: t.Node; getSuperRef?: undefined }
+  );
 
 export default class ReplaceSupers {
   constructor(opts: ReplaceSupersOptions) {
@@ -286,7 +284,6 @@ export default class ReplaceSupers {
     this.isPrivateMethod = path.isPrivate() && path.isMethod();
 
     this.file = opts.file;
-    this.superRef = opts.superRef;
     this.constantSuper = process.env.BABEL_8_BREAKING
       ? opts.constantSuper
       : // Fallback to isLoose for backward compatibility
@@ -301,10 +298,14 @@ export default class ReplaceSupers {
   declare isStatic: boolean;
   declare methodPath: NodePath;
   declare opts: ReplaceSupersOptions;
-  declare superRef: any;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
+  }
+
+  getSuperRef() {
+    if (this.opts.superRef) return t.cloneNode(this.opts.superRef);
+    if (this.opts.getSuperRef) return t.cloneNode(this.opts.getSuperRef());
   }
 
   replace() {
@@ -324,7 +325,7 @@ export default class ReplaceSupers {
       isStatic: this.isStatic,
       isPrivateMethod: this.isPrivateMethod,
       getObjectRef: this.getObjectRef.bind(this),
-      superRef: this.superRef,
+      getSuperRef: this.getSuperRef.bind(this),
       ...handler,
     });
   }
