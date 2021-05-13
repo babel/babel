@@ -246,7 +246,7 @@ export default function generate(
   ast: t.Node,
   opts?: GeneratorOptions,
   code?: string | { [filename: string]: string },
-): any {
+) {
   const gen = new Generator(ast, opts, code);
   return gen.generate();
 }
