@@ -67,10 +67,14 @@ function handleVariableDeclaration(
     );
   }
   const { declarations } = node;
-  if (declarations.every(declarator => t.isIdentifier(declarator.id))) {
+  if (
+    declarations.every((declarator): declarator is t.VariableDeclarator & {
+      id: t.Identifier;
+    } => t.isIdentifier(declarator.id))
+  ) {
     // `export const a = 1` transforms to `const a = N.a = 1`, the output
     // is smaller than `const a = 1; N.a = a`;
-    for (const declarator of node.declarations) {
+    for (const declarator of declarations) {
       declarator.init = t.assignmentExpression(
         "=",
         getMemberExpression(t, name, declarator.id.name),
@@ -97,7 +101,7 @@ function handleVariableDeclaration(
   return [node, t.expressionStatement(t.sequenceExpression(assignments))];
 }
 
-function handleNested(path, t, node, parentExport) {
+function handleNested(path, t, node, parentExport?) {
   const names = new Set();
   const realName = node.id;
   const name = path.scope.generateUid(realName.name);

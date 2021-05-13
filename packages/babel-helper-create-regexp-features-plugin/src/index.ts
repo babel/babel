@@ -24,6 +24,8 @@ function pullFlag(node, flag: RegExpFlags): void {
   node.flags = node.flags.replace(flag, "");
 }
 
+declare const PACKAGE_JSON: { name: string; version: string };
+
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
 //       package, but it breaks if we release x.y.z where x, y or z are
@@ -33,7 +35,11 @@ const version = PACKAGE_JSON.version
   .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-regexp-features/version";
 
-export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
+export function createRegExpFeaturePlugin({
+  name,
+  feature,
+  options = {} as any,
+}) {
   return {
     name,
     pre() {

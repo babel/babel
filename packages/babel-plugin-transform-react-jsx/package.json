@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*"
   }
 }
