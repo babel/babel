@@ -2751,6 +2751,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-jsx": "workspace:^7.12.13"
+    "@babel/traverse": "workspace:*"
     "@babel/types": "workspace:^7.13.12"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -3011,6 +3012,8 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-typescript": "workspace:^7.12.13"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown

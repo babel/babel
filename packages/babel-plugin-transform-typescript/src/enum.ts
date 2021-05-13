@@ -1,5 +1,7 @@
 import assert from "assert";
 import { template } from "@babel/core";
+import type * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
 export default function transpileEnum(path, t) {
   const { node } = path;
@@ -35,7 +37,7 @@ export default function transpileEnum(path, t) {
       throw new Error(`Unexpected enum parent '${path.parent.type}`);
   }
 
-  function seen(parentPath: Path<Node>) {
+  function seen(parentPath: NodePath<t.Node>) {
     if (parentPath.isExportDeclaration()) {
       return seen(parentPath.parentPath);
     }
@@ -49,7 +51,7 @@ export default function transpileEnum(path, t) {
   }
 }
 
-function makeVar(id, t, kind): VariableDeclaration {
+function makeVar(id, t, kind) {
   return t.variableDeclaration(kind, [t.variableDeclarator(id)]);
 }
 
@@ -99,7 +101,9 @@ function enumFill(path, t, id) {
  *     Z = X | Y,
  *   }
  */
-type PreviousEnumMembers = { [name: string]: number | string };
+type PreviousEnumMembers = {
+  [name: string]: number | string;
+};
 
 function translateEnumValues(path, t) {
   const seen: PreviousEnumMembers = Object.create(null);
@@ -108,7 +112,7 @@ function translateEnumValues(path, t) {
   return path.node.members.map(member => {
     const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
     const initializer = member.initializer;
-    let value: Expression;
+    let value: t.Expression;
     if (initializer) {
       const constValue = evaluate(initializer, seen);
       if (constValue !== undefined) {

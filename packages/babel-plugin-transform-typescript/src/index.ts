@@ -5,6 +5,7 @@ import { injectInitialization } from "@babel/helper-create-class-features-plugin
 
 import transpileEnum from "./enum";
 import transpileNamespace from "./namespace";
+import type { NodePath } from "@babel/traverse";
 
 function isInType(path) {
   switch (path.parent.type) {
@@ -184,7 +185,7 @@ export default declare((api, opts) => {
         }
 
         if (file.ast.comments) {
-          for (const comment of (file.ast.comments: Array<Object>)) {
+          for (const comment of file.ast.comments) {
             const jsxMatches = JSX_PRAGMA_REGEX.exec(comment.value);
             if (jsxMatches) {
               if (jsxMatches[1]) {
@@ -209,7 +210,7 @@ export default declare((api, opts) => {
 
         // remove type imports
         for (let stmt of path.get("body")) {
-          if (t.isImportDeclaration(stmt)) {
+          if (stmt.isImportDeclaration()) {
             if (stmt.node.importKind === "type") {
               stmt.remove();
               continue;
@@ -225,7 +226,7 @@ export default declare((api, opts) => {
               }
 
               let allElided = true;
-              const importsToRemove: Path<Node>[] = [];
+              const importsToRemove: NodePath<t.Node>[] = [];
 
               for (const specifier of stmt.node.specifiers) {
                 const binding = stmt.scope.getBinding(specifier.local.name);
@@ -373,13 +374,13 @@ export default declare((api, opts) => {
             if (child.node.kind === "constructor") {
               classMemberVisitors.constructor(child, path);
             } else {
-              classMemberVisitors.method(child, path);
+              classMemberVisitors.method(child);
             }
           } else if (
             child.isClassProperty() ||
             child.isClassPrivateProperty()
           ) {
-            classMemberVisitors.field(child, path);
+            classMemberVisitors.field(child);
           }
         });
       },

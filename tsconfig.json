@@ -6,6 +6,7 @@
     "./packages/babel-core/src/**/*.ts",
     "./packages/babel-generator/src/**/*.ts",
     "./packages/babel-helper-annotate-as-pure/src/**/*.ts",
+    "./packages/babel-helper-create-regexp-features-plugin/src/**/*.ts",
     "./packages/babel-helper-explode-assignable-expression/src/**/*.ts",
     "./packages/babel-helper-fixtures/src/**/*.ts",
     "./packages/babel-helper-function-name/src/**/*.ts",
@@ -25,7 +26,9 @@
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
+    "./packages/babel-plugin-transform-react-jsx/src/**/*.ts",
     "./packages/babel-plugin-transform-runtime/src/**/*.ts",
+    "./packages/babel-plugin-transform-typescript/src/**/*.ts",
     "./packages/babel-template/src/**/*.ts",
     "./packages/babel-traverse/src/**/*.ts",
     "./packages/babel-types/src/**/*.ts"
@@ -43,6 +46,9 @@
       ],
       "@babel/helper-annotate-as-pure": [
         "./packages/babel-helper-annotate-as-pure/src"
+      ],
+      "@babel/helper-create-regexp-features-plugin": [
+        "./packages/babel-helper-create-regexp-features-plugin/src"
       ],
       "@babel/helper-explode-assignable-expression": [
         "./packages/babel-helper-explode-assignable-expression/src"
@@ -101,8 +107,14 @@
       "@babel/plugin-syntax-async-do-expressions": [
         "./packages/babel-plugin-syntax-async-do-expressions/src"
       ],
+      "@babel/plugin-transform-react-jsx": [
+        "./packages/babel-plugin-transform-react-jsx/src"
+      ],
       "@babel/plugin-transform-runtime": [
         "./packages/babel-plugin-transform-runtime/src"
+      ],
+      "@babel/plugin-transform-typescript": [
+        "./packages/babel-plugin-transform-typescript/src"
       ],
       "@babel/template": [
         "./packages/babel-template/src"
