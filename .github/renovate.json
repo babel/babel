@@ -1,0 +1,6 @@
+{
+  "github-actions": {
+    "fileMatch": ["^\.github\/workflows\/[^/]+\.ya?ml$"], 
+    "schedule": ["before 3am on the first day of the month"] 
+  } 
+}
