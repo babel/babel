@@ -857,8 +857,6 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (node.callee.type === "Import") {
       if (node.arguments.length === 2) {
-        // todo(Babel 8): remove the if condition,
-        // moduleAttributes is renamed to importAssertions
         if (process.env.BABEL_8_BREAKING) {
           this.expectPlugin("importAssertions");
         } else {
