@@ -204,15 +204,15 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   this.print(node.source, node);
 
   this.printAssertions(node);
-  // todo(Babel 8): remove this if branch
-  // `module-attributes` support is discontinued, use `import-assertions` instead.
-  // @ts-expect-error
-  if (node.attributes?.length) {
-    this.space();
-    this.word("with");
-    this.space();
+  if (!process.env.BABEL_8_BREAKING) {
     // @ts-expect-error
-    this.printList(node.attributes, node);
+    if (node.attributes?.length) {
+      this.space();
+      this.word("with");
+      this.space();
+      // @ts-expect-error
+      this.printList(node.attributes, node);
+    }
   }
 
   this.semicolon();

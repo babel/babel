@@ -2197,9 +2197,7 @@ export default class StatementParser extends ExpressionParser {
     const assertions = this.maybeParseImportAssertions();
     if (assertions) {
       node.assertions = assertions;
-    }
-    // todo(Babel 8): remove module attributes support
-    else {
+    } else if (!process.env.BABEL_8_BREAKING) {
       const attributes = this.maybeParseModuleAttributes();
       if (attributes) {
         node.attributes = attributes;

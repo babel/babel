@@ -87,6 +87,11 @@ export function validatePlugins(plugins: PluginList) {
   }
 
   if (hasPlugin(plugins, "moduleAttributes")) {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "`moduleAttributes` has been removed in Babel 8, please use `importAssertions` parser plugin, or `@babel/plugin-syntax-import-assertions`.",
+      );
+    }
     if (hasPlugin(plugins, "importAssertions")) {
       throw new Error(
         "Cannot combine importAssertions and moduleAttributes plugins.",

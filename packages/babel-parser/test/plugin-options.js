@@ -65,4 +65,13 @@ describe("plugin options", function () {
       expect(getParser(SYNTAX_2, [OPT_1, OPT_2])).toThrow();
     });
   });
+  describe("'moduleAttributes' plugin", () => {
+    (process.env.BABEL_8_BREAKING ? it : it.skip)("removed in Babel 8", () => {
+      expect(
+        getParser("", ["moduleAttributes"]),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAssertions\` parser plugin, or \`@babel/plugin-syntax-import-assertions\`."`,
+      );
+    });
+  });
 });
