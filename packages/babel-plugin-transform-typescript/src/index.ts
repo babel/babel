@@ -185,7 +185,7 @@ export default declare((api, opts) => {
         }
 
         if (file.ast.comments) {
-          for (const comment of file.ast.comments as Array<any>) {
+          for (const comment of file.ast.comments) {
             const jsxMatches = JSX_PRAGMA_REGEX.exec(comment.value);
             if (jsxMatches) {
               if (jsxMatches[1]) {
