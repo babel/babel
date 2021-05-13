@@ -643,6 +643,7 @@ __metadata:
   resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.14.2#5131c1"
   dependencies:
     "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.14.2"
+  checksum: 99b7a76ae03cc33a6d7a2e970aa72831e096f15bc2c58be10fb297e3fa411d9ba344cd0f93590c1b802a1b4450b7ea29db9aeeb7aeb7b2f9241e751c20a5079c
   languageName: node
   linkType: hard
 
@@ -2750,6 +2751,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-jsx": "workspace:^7.12.13"
+    "@babel/traverse": "workspace:*"
     "@babel/types": "workspace:^7.13.12"
   peerDependencies:
     "@babel/core": ^7.0.0-0

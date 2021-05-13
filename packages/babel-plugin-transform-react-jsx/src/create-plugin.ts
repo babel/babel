@@ -149,7 +149,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             let pragmaFragSet = !!options.pragmaFrag;
 
             if (file.ast.comments) {
-              for (const comment of (file.ast.comments: Array<Object>)) {
+              for (const comment of file.ast.comments) {
                 const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(
                   comment.value,
                 );
@@ -313,6 +313,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         if (node.name === "this" && t.isReferenced(node, parent)) {
           return t.thisExpression();
         } else if (t.isValidIdentifier(node.name, false)) {
+          // @ts-expect-error todo(flow->ts)
           node.type = "Identifier";
         } else {
           return t.stringLiteral(node.name);
@@ -416,7 +417,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       const openingPath = path.get("openingElement");
       const args = [getTag(openingPath)];
 
-      let attribs = [];
+      const attribsArray = [];
       const extracted = Object.create(null);
 
       // for React.jsx, key, __source (dev), and __self (dev) is passed in as
@@ -443,17 +444,23 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               break;
             }
             default:
-              attribs.push(attr);
+              attribsArray.push(attr);
           }
         } else {
-          attribs.push(attr);
+          attribsArray.push(attr);
         }
       }
 
       const children = t.react.buildChildren(path.node);
 
-      if (attribs.length || children.length) {
-        attribs = buildJSXOpeningElementAttributes(attribs, file, children);
+      let attribs: t.ObjectExpression;
+
+      if (attribsArray.length || children.length) {
+        attribs = buildJSXOpeningElementAttributes(
+          attribsArray,
+          file,
+          children,
+        );
       } else {
         // attributes should never be null
         attribs = t.objectExpression([]);
@@ -555,6 +562,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       if (t.isIdentifier(tagExpr)) {
         tagName = tagExpr.name;
       } else if (t.isLiteral(tagExpr)) {
+        // @ts-expect-error todo(flow->ts) value in missing for NullLiteral
         tagName = tagExpr.value;
       }
 
