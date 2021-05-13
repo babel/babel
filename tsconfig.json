@@ -6,6 +6,7 @@
     "./packages/babel-core/src/**/*.ts",
     "./packages/babel-generator/src/**/*.ts",
     "./packages/babel-helper-annotate-as-pure/src/**/*.ts",
+    "./packages/babel-helper-create-regexp-features-plugin/src/**/*.ts",
     "./packages/babel-helper-explode-assignable-expression/src/**/*.ts",
     "./packages/babel-helper-fixtures/src/**/*.ts",
     "./packages/babel-helper-function-name/src/**/*.ts",
@@ -43,6 +44,9 @@
       ],
       "@babel/helper-annotate-as-pure": [
         "./packages/babel-helper-annotate-as-pure/src"
+      ],
+      "@babel/helper-create-regexp-features-plugin": [
+        "./packages/babel-helper-create-regexp-features-plugin/src"
       ],
       "@babel/helper-explode-assignable-expression": [
         "./packages/babel-helper-explode-assignable-expression/src"

@@ -1,4 +1,3 @@
-// @flow
 export const FEATURES = Object.freeze({
   unicodeFlag: 1 << 0,
   dotAllFlag: 1 << 1,
@@ -16,7 +15,7 @@ export const FEATURES = Object.freeze({
 export const featuresKey = "@babel/plugin-regexp-features/featuresKey";
 export const runtimeKey = "@babel/plugin-regexp-features/runtimeKey";
 
-type FeatureType = $Values<typeof FEATURES>;
+type FeatureType = typeof FEATURES[keyof typeof FEATURES];
 
 export function enableFeature(features: number, feature: FeatureType): number {
   return features | feature;
