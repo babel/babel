@@ -1,0 +1,5 @@
+{
+  "github-actions": {
+    "fileMatch": ["^\.github\/workflows\/[^/]+\.ya?ml$"]
+  }
+}
