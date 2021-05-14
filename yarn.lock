@@ -432,7 +432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@workspace:^7.13.0, @babel/helper-create-class-features-plugin@workspace:^7.14.0, @babel/helper-create-class-features-plugin@workspace:^7.14.2, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
+"@babel/helper-create-class-features-plugin@workspace:^7.13.0, @babel/helper-create-class-features-plugin@workspace:^7.13.11, @babel/helper-create-class-features-plugin@workspace:^7.14.0, @babel/helper-create-class-features-plugin@workspace:^7.14.2, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
   version: 0.0.0-use.local
   resolution: "@babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin"
   dependencies:
