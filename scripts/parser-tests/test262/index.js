@@ -16,6 +16,7 @@ const ignoredFeatures = [
   "Array.prototype.values",
   "ArrayBuffer",
   "align-detached-buffer-semantics-with-web-reality",
+  "arbitrary-module-namespace-names",
   "async-functions",
   "async-iteration",
   "arrow-function",
@@ -24,6 +25,12 @@ const ignoredFeatures = [
   "BigInt",
   "caller",
   "class",
+  "class-fields-private",
+  "class-fields-public",
+  "class-methods-private",
+  "class-static-fields-private",
+  "class-static-fields-public",
+  "class-static-methods-private",
   "cleanupSome",
   "coalesce-expression",
   "computed-property-names",
@@ -145,14 +152,8 @@ const ignoredFeatures = [
 const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
 const featuresToPlugins = {
-  "arbitrary-module-namespace-names": "moduleStringNames",
-  "class-fields-private": "classPrivateProperties",
   "class-fields-private-in": "privateIn",
-  "class-fields-public": "classProperties",
-  "class-methods-private": "classPrivateMethods",
-  "class-static-fields-public": "classProperties",
-  "class-static-fields-private": "classPrivateProperties",
-  "class-static-methods-private": "classPrivateMethods",
+  "class-static-block": "classStaticBlock",
   "top-level-await": "topLevelAwait",
 };
 
