@@ -1,0 +1,94 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"C"},
+              "name": "C"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":55,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":47}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":8,"end":54,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":46}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":8,"end":9,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":12,"end":54,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":46}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":18,"end":54,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":46}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":20,"end":52,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":44}},
+                  "body": [
+                    {
+                      "type": "ClassDeclaration",
+                      "start":29,"end":50,"loc":{"start":{"line":3,"column":21},"end":{"line":3,"column":42}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":35,"end":36,"loc":{"start":{"line":3,"column":27},"end":{"line":3,"column":28},"identifierName":"D"},
+                        "name": "D"
+                      },
+                      "superClass": null,
+                      "body": {
+                        "type": "ClassBody",
+                        "start":37,"end":50,"loc":{"start":{"line":3,"column":29},"end":{"line":3,"column":42}},
+                        "body": [
+                          {
+                            "type": "ClassProperty",
+                            "start":39,"end":48,"loc":{"start":{"line":3,"column":31},"end":{"line":3,"column":40}},
+                            "static": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start":39,"end":40,"loc":{"start":{"line":3,"column":31},"end":{"line":3,"column":32},"identifierName":"x"},
+                              "name": "x"
+                            },
+                            "computed": false,
+                            "value": {
+                              "type": "Identifier",
+                              "start":43,"end":48,"loc":{"start":{"line":3,"column":35},"end":{"line":3,"column":40},"identifierName":"await"},
+                              "name": "await"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

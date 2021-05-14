@@ -2393,7 +2393,7 @@ export default class ExpressionParser extends LValParser {
       if (this.prodParam.hasAwait) {
         this.raise(startLoc, Errors.AwaitBindingIdentifier);
         return;
-      } else if (this.scope.inStaticBlock && !this.scope.inNonArrowFunction) {
+      } else if (this.scope.inStaticBlock && !this.scope.inFunction) {
         this.raise(startLoc, Errors.AwaitBindingIdentifierInStaticBlock);
         return;
       } else {
