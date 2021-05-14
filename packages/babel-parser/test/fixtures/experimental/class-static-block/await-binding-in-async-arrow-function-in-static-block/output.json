@@ -1,0 +1,251 @@
+{
+  "type": "File",
+  "start":0,"end":198,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":54}},
+  "errors": [
+    "SyntaxError: Can not use 'await' as identifier inside a static block. (3:28)",
+    "SyntaxError: Can not use 'await' as identifier inside a static block. (5:32)",
+    "SyntaxError: Can not use 'await' as identifier inside a static block. (7:31)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":198,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":54}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await is not allowed in async arrow",
+            "start":7,"end":45,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":38}}
+          }
+        ],
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"C"},
+              "name": "C"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":46,"end":91,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":45}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await is not allowed in async arrow",
+            "start":7,"end":45,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":38}}
+          }
+        ],
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":46,"end":90,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":44}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":46,"end":47,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":50,"end":90,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":44}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":56,"end":90,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":44}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":58,"end":88,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":42}},
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":67,"end":86,"loc":{"start":{"line":3,"column":21},"end":{"line":3,"column":40}},
+                      "expression": {
+                        "type": "ArrowFunctionExpression",
+                        "start":67,"end":86,"loc":{"start":{"line":3,"column":21},"end":{"line":3,"column":40}},
+                        "id": null,
+                        "generator": false,
+                        "async": true,
+                        "params": [
+                          {
+                            "type": "Identifier",
+                            "start":74,"end":79,"loc":{"start":{"line":3,"column":28},"end":{"line":3,"column":33},"identifierName":"await"},
+                            "name": "await"
+                          }
+                        ],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start":84,"end":86,"loc":{"start":{"line":3,"column":38},"end":{"line":3,"column":40}},
+                          "body": [],
+                          "directives": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":93,"end":142,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":49}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":93,"end":141,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":48}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":93,"end":94,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":97,"end":141,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":48}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":103,"end":141,"loc":{"start":{"line":5,"column":10},"end":{"line":5,"column":48}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":105,"end":139,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":46}},
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":114,"end":137,"loc":{"start":{"line":5,"column":21},"end":{"line":5,"column":44}},
+                      "expression": {
+                        "type": "ArrowFunctionExpression",
+                        "start":114,"end":137,"loc":{"start":{"line":5,"column":21},"end":{"line":5,"column":44}},
+                        "id": null,
+                        "generator": false,
+                        "async": true,
+                        "params": [
+                          {
+                            "type": "AssignmentPattern",
+                            "start":121,"end":130,"loc":{"start":{"line":5,"column":28},"end":{"line":5,"column":37}},
+                            "left": {
+                              "type": "Identifier",
+                              "start":121,"end":122,"loc":{"start":{"line":5,"column":28},"end":{"line":5,"column":29},"identifierName":"x"},
+                              "name": "x"
+                            },
+                            "right": {
+                              "type": "Identifier",
+                              "start":125,"end":130,"loc":{"start":{"line":5,"column":32},"end":{"line":5,"column":37},"identifierName":"await"},
+                              "name": "await"
+                            }
+                          }
+                        ],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start":135,"end":137,"loc":{"start":{"line":5,"column":42},"end":{"line":5,"column":44}},
+                          "body": [],
+                          "directives": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":144,"end":198,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":54}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":144,"end":197,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":53}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":144,"end":145,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":148,"end":197,"loc":{"start":{"line":7,"column":4},"end":{"line":7,"column":53}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":154,"end":197,"loc":{"start":{"line":7,"column":10},"end":{"line":7,"column":53}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":156,"end":195,"loc":{"start":{"line":7,"column":12},"end":{"line":7,"column":51}},
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":165,"end":193,"loc":{"start":{"line":7,"column":21},"end":{"line":7,"column":49}},
+                      "expression": {
+                        "type": "ArrowFunctionExpression",
+                        "start":165,"end":193,"loc":{"start":{"line":7,"column":21},"end":{"line":7,"column":49}},
+                        "id": null,
+                        "generator": false,
+                        "async": true,
+                        "params": [
+                          {
+                            "type": "ObjectPattern",
+                            "start":172,"end":186,"loc":{"start":{"line":7,"column":28},"end":{"line":7,"column":42}},
+                            "properties": [
+                              {
+                                "type": "ObjectProperty",
+                                "start":174,"end":184,"loc":{"start":{"line":7,"column":30},"end":{"line":7,"column":40}},
+                                "method": false,
+                                "computed": true,
+                                "key": {
+                                  "type": "Identifier",
+                                  "start":175,"end":180,"loc":{"start":{"line":7,"column":31},"end":{"line":7,"column":36},"identifierName":"await"},
+                                  "name": "await"
+                                },
+                                "shorthand": false,
+                                "value": {
+                                  "type": "Identifier",
+                                  "start":183,"end":184,"loc":{"start":{"line":7,"column":39},"end":{"line":7,"column":40},"identifierName":"x"},
+                                  "name": "x"
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start":191,"end":193,"loc":{"start":{"line":7,"column":47},"end":{"line":7,"column":49}},
+                          "body": [],
+                          "directives": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " await is not allowed in async arrow",
+      "start":7,"end":45,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":38}}
+    }
+  ]
+}
