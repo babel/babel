@@ -87,22 +87,28 @@ export function validatePlugins(plugins: PluginList) {
   }
 
   if (hasPlugin(plugins, "moduleAttributes")) {
-    if (hasPlugin(plugins, "importAssertions")) {
+    if (process.env.BABEL_8_BREAKING) {
       throw new Error(
-        "Cannot combine importAssertions and moduleAttributes plugins.",
+        "`moduleAttributes` has been removed in Babel 8, please use `importAssertions` parser plugin, or `@babel/plugin-syntax-import-assertions`.",
       );
-    }
-    const moduleAttributesVerionPluginOption = getPluginOption(
-      plugins,
-      "moduleAttributes",
-      "version",
-    );
-    if (moduleAttributesVerionPluginOption !== "may-2020") {
-      throw new Error(
-        "The 'moduleAttributes' plugin requires a 'version' option," +
-          " representing the last proposal update. Currently, the" +
-          " only supported value is 'may-2020'.",
+    } else {
+      if (hasPlugin(plugins, "importAssertions")) {
+        throw new Error(
+          "Cannot combine importAssertions and moduleAttributes plugins.",
+        );
+      }
+      const moduleAttributesVerionPluginOption = getPluginOption(
+        plugins,
+        "moduleAttributes",
+        "version",
       );
+      if (moduleAttributesVerionPluginOption !== "may-2020") {
+        throw new Error(
+          "The 'moduleAttributes' plugin requires a 'version' option," +
+            " representing the last proposal update. Currently, the" +
+            " only supported value is 'may-2020'.",
+        );
+      }
     }
   }
 
