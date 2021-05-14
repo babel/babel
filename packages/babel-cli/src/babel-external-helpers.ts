@@ -1,5 +1,3 @@
-// @flow
-
 import commander from "commander";
 import { buildExternalHelpers } from "@babel/core";
 

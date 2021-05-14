@@ -1,5 +1,3 @@
-// @flow
-
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import path from "path";
@@ -47,7 +45,7 @@ export function readdirForCompilable(
  */
 export function isCompilableExtension(
   filename: string,
-  altExts?: Array<string>,
+  altExts?: readonly string[],
 ): boolean {
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
@@ -65,8 +63,8 @@ const CALLER = {
 export function transform(
   filename: string,
   code: string,
-  opts: Object,
-): Promise<Object> {
+  opts: any,
+): Promise<any> {
   opts = {
     ...opts,
     caller: CALLER,
@@ -81,10 +79,7 @@ export function transform(
   });
 }
 
-export function compile(
-  filename: string,
-  opts: Object | Function,
-): Promise<Object> {
+export function compile(filename: string, opts: any | Function): Promise<any> {
   opts = {
     ...opts,
     caller: CALLER,
@@ -119,7 +114,7 @@ process.on("uncaughtException", function (err) {
   process.exitCode = 1;
 });
 
-export function requireChokidar(): Object {
+export function requireChokidar(): any {
   // $FlowIgnore - https://github.com/facebook/flow/issues/6913#issuecomment-662787504
   const require = createRequire(import /*::("")*/.meta.url);
 

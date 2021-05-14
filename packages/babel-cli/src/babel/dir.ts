@@ -1,18 +1,16 @@
-// @flow
-
 import slash from "slash";
 import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
-import { type CmdOptions } from "./options";
+import type { CmdOptions } from "./options";
 
 const FILE_TYPE = Object.freeze({
   NON_COMPILABLE: "NON_COMPILABLE",
   COMPILED: "COMPILED",
   IGNORED: "IGNORED",
   ERR_COMPILATION: "ERR_COMPILATION",
-});
+} as const);
 
 function outputFileSync(filePath: string, data: string | Buffer): void {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -28,7 +26,7 @@ export default async function ({
   async function write(
     src: string,
     base: string,
-  ): Promise<$Keys<typeof FILE_TYPE>> {
+  ): Promise<keyof typeof FILE_TYPE> {
     let relative = path.relative(base, src);
 
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {

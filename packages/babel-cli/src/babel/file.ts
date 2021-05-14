@@ -1,5 +1,3 @@
-// @flow
-
 import convertSourceMap from "convert-source-map";
 import sourceMap from "source-map";
 import slash from "slash";
@@ -7,18 +5,18 @@ import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
-import { type CmdOptions } from "./options";
+import type { CmdOptions } from "./options";
 
 type CompilationOutput = {
-  code: string,
-  map: Object,
+  code: string;
+  map: any;
 };
 
 export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
-  function buildResult(fileResults: Array<Object>): CompilationOutput {
+  function buildResult(fileResults: Array<any>): CompilationOutput {
     const map = new sourceMap.SourceMapGenerator({
       file:
         cliOptions.sourceMapTarget ||
@@ -37,7 +35,7 @@ export default async function ({
 
       if (result.map) {
         const consumer = new sourceMap.SourceMapConsumer(result.map);
-        const sources = new Set();
+        const sources = new Set<string>();
 
         consumer.eachMapping(function (mapping) {
           if (mapping.source != null) sources.add(mapping.source);
@@ -104,7 +102,7 @@ export default async function ({
   }
 
   function readStdin(): Promise<string> {
-    return new Promise((resolve: Function, reject: Function): void => {
+    return new Promise((resolve, reject): void => {
       let code = "";
 
       process.stdin.setEncoding("utf8");
@@ -158,7 +156,7 @@ export default async function ({
     });
 
     const results = await Promise.all(
-      _filenames.map(async function (filename: string): Promise<Object> {
+      _filenames.map(async function (filename: string): Promise<any> {
         let sourceFilename = filename;
         if (cliOptions.outFile) {
           sourceFilename = path.relative(
