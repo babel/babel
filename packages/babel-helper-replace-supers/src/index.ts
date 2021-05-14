@@ -281,7 +281,8 @@ export default class ReplaceSupers {
     this.methodPath = path;
     this.isDerivedConstructor =
       path.isClassMethod({ kind: "constructor" }) && !!opts.superRef;
-    this.isStatic = path.isObjectMethod() || path.node.static;
+    this.isStatic =
+      path.isObjectMethod() || path.node.static || path.isStaticBlock?.();
     this.isPrivateMethod = path.isPrivate() && path.isMethod();
 
     this.file = opts.file;

@@ -1111,6 +1111,7 @@ __metadata:
   resolution: "@babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block"
   dependencies:
     "@babel/core": "workspace:*"
+    "@babel/helper-create-class-features-plugin": "workspace:^7.13.11"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-class-static-block": "workspace:^7.12.13"

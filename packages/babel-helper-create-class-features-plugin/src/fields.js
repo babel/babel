@@ -669,7 +669,14 @@ const thisContextVisitor = traverse.visitors.merge([
   environmentVisitor,
 ]);
 
-function replaceThisContext(path, ref, superRef, file, constantSuper) {
+function replaceThisContext(
+  path,
+  ref,
+  superRef,
+  file,
+  isStaticBlock,
+  constantSuper,
+) {
   const state = { classRef: ref, needsClassRef: false };
 
   const replacer = new ReplaceSupers({
@@ -680,13 +687,13 @@ function replaceThisContext(path, ref, superRef, file, constantSuper) {
     refToPreserve: ref,
     getObjectRef() {
       state.needsClassRef = true;
-      return path.node.static
+      return isStaticBlock || path.node.static
         ? ref
         : t.memberExpression(ref, t.identifier("prototype"));
     },
   });
   replacer.replace();
-  if (path.isProperty()) {
+  if (isStaticBlock || path.isProperty()) {
     path.traverse(thisContextVisitor, state);
   }
   return state.needsClassRef;
@@ -717,19 +724,26 @@ export function buildFieldsInitNodes(
     const isPublic = !isPrivate;
     const isField = prop.isProperty();
     const isMethod = !isField;
+    const isStaticBlock = prop.isStaticBlock?.();
 
-    if (isStatic || (isMethod && isPrivate)) {
+    if (isStatic || (isMethod && isPrivate) || isStaticBlock) {
       const replaced = replaceThisContext(
         prop,
         ref,
         superRef,
         state,
+        isStaticBlock,
         constantSuper,
       );
       needsClassRef = needsClassRef || replaced;
     }
 
     switch (true) {
+      case isStaticBlock:
+        staticNodes.push(
+          template.statement.ast`(() => ${t.blockStatement(prop.node.body)})()`,
+        );
+        break;
       case isStatic && isPrivate && isField && privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(

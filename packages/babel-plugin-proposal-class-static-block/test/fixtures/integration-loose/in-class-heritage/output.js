@@ -1,23 +1,13 @@
-var _class, _2, _temp, _class2, _3, _temp2;
+var _class, _temp, _class2, _temp2;
 
-var _ = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("_");
+class Foo extends (_temp = _class = class extends (_temp2 = _class2 = class Base {}, (() => {
+  _class2.qux = 21;
+})(), _temp2) {}, (() => {
+  _class.bar = 21;
+})(), _temp) {}
 
-class Foo extends (_temp = (_2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("_"), _class = class extends (_temp2 = (_3 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("_"), _class2 = class Base {}), Object.defineProperty(_class2, _3, {
-  writable: true,
-  value: (() => {
-    _class2.qux = 21;
-  })()
-}), _temp2) {}), Object.defineProperty(_class, _2, {
-  writable: true,
-  value: (() => {
-    _class.bar = 21;
-  })()
-}), _temp) {}
+(() => {
+  Foo.foo = Foo.bar + Foo.qux;
+})();
 
-Object.defineProperty(Foo, _, {
-  writable: true,
-  value: (() => {
-    Foo.foo = Foo.bar + Foo.qux;
-  })()
-});
 expect(Foo.foo).toBe(42);

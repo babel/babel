@@ -1,6 +1,11 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 
+import {
+  enableFeature,
+  FEATURES,
+} from "@babel/helper-create-class-features-plugin";
+
 /**
  * Generate a uid that is not in `denyList`
  *
@@ -25,10 +30,19 @@ export default declare(({ types: t, template, assertVersion }) => {
   return {
     name: "proposal-class-static-block",
     inherits: syntaxClassStaticBlock,
+
+    pre() {
+      // Enable this in @babel/helper-create-class-features-plugin, so that it
+      // can be handled by the private fields and methods transform.
+      enableFeature(this.file, FEATURES.staticBlocks, /* loose */ false);
+    },
+
     visitor: {
-      Class(path: NodePath<Class>) {
-        const { scope } = path;
-        const classBody = path.get("body");
+      // Run on ClassBody and not on class so that if @babel/helper-create-class-features-plugin
+      // is enabled it can generte optimized output without passing from the intermediate
+      // private fields representation.
+      ClassBody(classBody: NodePath<Class>) {
+        const { scope } = classBody;
         const privateNames = new Set();
         const body = classBody.get("body");
         for (const path of body) {
