@@ -1,6 +1,6 @@
 var _scopedFunctionWithThis = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("scopedFunctionWithThis");
 
-var Child = /*#__PURE__*/function (_Parent) {
+let Child = /*#__PURE__*/function (_Parent) {
   "use strict";
 
   babelHelpers.inherits(Child, _Parent);
@@ -14,7 +14,7 @@ var Child = /*#__PURE__*/function (_Parent) {
     _this = _super.call(this);
     Object.defineProperty(babelHelpers.assertThisInitialized(_this), _scopedFunctionWithThis, {
       writable: true,
-      value: function value() {
+      value: function () {
         _this.name = {};
       }
     });

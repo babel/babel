@@ -1,8 +1,10 @@
 {
+  "assumptions": {
+    "setPublicClassFields": true
+  },
   "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
   "plugins": [
     ["proposal-decorators", { "legacy": true }],
-    ["proposal-class-properties", { "loose": true }],
     ["babel-plugin-polyfill-es-shims", { "method": "usage-global", "targets": {
       "node": "current"
     }}]
