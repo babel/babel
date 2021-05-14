@@ -192,7 +192,7 @@ export {
   transformUnicodeEscapes,
   transformUnicodeRegex,
 };
-export const all = {
+export const all: { [k: string]: any } = {
   "external-helpers": externalHelpers,
   "syntax-async-generators": syntaxAsyncGenerators,
   "syntax-class-properties": syntaxClassProperties,

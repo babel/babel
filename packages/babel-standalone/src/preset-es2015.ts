@@ -1,7 +1,6 @@
-// @flow
 import * as babelPlugins from "./generated/plugins";
 
-export default (_: any, opts: Object): Object => {
+export default (_: any, opts: any): any => {
   let loose = false;
   let modules = "commonjs";
   let spec = false;

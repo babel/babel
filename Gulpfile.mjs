@@ -189,8 +189,8 @@ function generateStandalone() {
  */
 ${imports}
 export {${list}};
-export const all = {${allList}};`;
-        file.path = "plugins.js";
+export const all: { [k: string]: any } = {${allList}};`;
+        file.path = "plugins.ts";
         file.contents = Buffer.from(formatCode(fileContents, dest));
         callback(null, file);
       })

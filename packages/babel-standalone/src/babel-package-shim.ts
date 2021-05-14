@@ -3,6 +3,5 @@
  * Babel requires the entire package.json file just to get the version number.
  */
 
-/* global BABEL_VERSION */
-
+declare const BABEL_VERSION: string;
 export const version = BABEL_VERSION;

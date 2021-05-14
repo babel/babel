@@ -29,6 +29,7 @@
     "./packages/babel-plugin-transform-react-jsx/src/**/*.ts",
     "./packages/babel-plugin-transform-runtime/src/**/*.ts",
     "./packages/babel-plugin-transform-typescript/src/**/*.ts",
+    "./packages/babel-standalone/src/**/*.ts",
     "./packages/babel-template/src/**/*.ts",
     "./packages/babel-traverse/src/**/*.ts",
     "./packages/babel-types/src/**/*.ts"
@@ -115,6 +116,9 @@
       ],
       "@babel/plugin-transform-typescript": [
         "./packages/babel-plugin-transform-typescript/src"
+      ],
+      "@babel/standalone": [
+        "./packages/babel-standalone/src"
       ],
       "@babel/template": [
         "./packages/babel-template/src"
