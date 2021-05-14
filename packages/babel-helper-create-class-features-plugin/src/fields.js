@@ -672,7 +672,7 @@ const thisContextVisitor = traverse.visitors.merge([
 function replaceThisContext(
   path,
   ref,
-  superRef,
+  getSuperRef,
   file,
   isStaticBlock,
   constantSuper,
@@ -682,9 +682,9 @@ function replaceThisContext(
   const replacer = new ReplaceSupers({
     methodPath: path,
     constantSuper,
-    superRef,
     file,
     refToPreserve: ref,
+    getSuperRef,
     getObjectRef() {
       state.needsClassRef = true;
       return isStaticBlock || path.node.static
@@ -710,10 +710,19 @@ export function buildFieldsInitNodes(
   constantSuper,
 ) {
   let needsClassRef = false;
+  let injectSuperRef;
   const staticNodes = [];
   const instanceNodes = [];
   // These nodes are pure and can be moved to the closest statement position
   const pureStaticNodes = [];
+
+  const getSuperRef = t.isIdentifier(superRef)
+    ? () => superRef
+    : () => {
+        injectSuperRef ??=
+          props[0].scope.generateUidIdentifierBasedOnNode(superRef);
+        return injectSuperRef;
+      };
 
   for (const prop of props) {
     ts.assertFieldTransformed(prop);
@@ -730,7 +739,7 @@ export function buildFieldsInitNodes(
       const replaced = replaceThisContext(
         prop,
         ref,
-        superRef,
+        getSuperRef,
         state,
         isStaticBlock,
         constantSuper,
@@ -863,6 +872,14 @@ export function buildFieldsInitNodes(
     wrapClass(path) {
       for (const prop of props) {
         prop.remove();
+      }
+
+      if (injectSuperRef) {
+        path.scope.push({ id: t.cloneNode(injectSuperRef) });
+        path.set(
+          "superClass",
+          t.assignmentExpression("=", injectSuperRef, path.node.superClass),
+        );
       }
 
       if (!needsClassRef) return path;
