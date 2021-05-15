@@ -26,6 +26,7 @@
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
+    "./packages/babel-plugin-transform-classes/src/**/*.ts",
     "./packages/babel-plugin-transform-react-jsx/src/**/*.ts",
     "./packages/babel-plugin-transform-runtime/src/**/*.ts",
     "./packages/babel-plugin-transform-typescript/src/**/*.ts",
@@ -107,6 +108,9 @@
       ],
       "@babel/plugin-syntax-async-do-expressions": [
         "./packages/babel-plugin-syntax-async-do-expressions/src"
+      ],
+      "@babel/plugin-transform-classes": [
+        "./packages/babel-plugin-transform-classes/src"
       ],
       "@babel/plugin-transform-react-jsx": [
         "./packages/babel-plugin-transform-react-jsx/src"
