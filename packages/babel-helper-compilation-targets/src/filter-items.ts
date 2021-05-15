@@ -1,5 +1,3 @@
-// @flow
-
 import semver from "semver";
 
 import pluginsCompatData from "@babel/compat-data/plugins";
@@ -65,9 +63,11 @@ export function isRequired(
     includes,
     excludes,
   }: {
-    compatData?: { [feature: string]: Targets },
-    includes?: Set<string>,
-    excludes?: Set<string>,
+    compatData?: {
+      [feature: string]: Targets;
+    };
+    includes?: Set<string>;
+    excludes?: Set<string>;
   } = {},
 ) {
   if (excludes?.has(name)) return false;
@@ -76,7 +76,9 @@ export function isRequired(
 }
 
 export default function filterItems(
-  list: { [feature: string]: Targets },
+  list: {
+    [feature: string]: Targets;
+  },
   includes: Set<string>,
   excludes: Set<string>,
   targets: Targets,

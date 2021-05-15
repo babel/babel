@@ -1,4 +1,3 @@
-// @flow
 import semver from "semver";
 import { OptionValidator } from "@babel/helper-validator-option";
 import { unreleasedLabels } from "./targets";
@@ -8,7 +7,10 @@ const versionRegExp = /^(\d+|\d+.\d+)$/;
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 
-export function semverMin(first: ?string, second: string): string {
+export function semverMin(
+  first: string | undefined | null,
+  second: string,
+): string {
   return first && semver.lt(first, second) ? first : second;
 }
 

@@ -1,5 +1,3 @@
-// @flow
-
 import browserslist from "browserslist";
 import { findSuggestion } from "@babel/helper-validator-option";
 import browserModulesData from "@babel/compat-data/native-modules";
@@ -39,10 +37,10 @@ function validateTargetNames(targets: Targets): TargetsTuple {
     }
   }
 
-  return (targets: any);
+  return targets as any;
 }
 
-export function isBrowsersQueryValid(browsers: mixed): boolean %checks {
+export function isBrowsersQueryValid(browsers: unknown): boolean {
   return (
     typeof browsers === "string" ||
     (Array.isArray(browsers) && browsers.every(b => typeof b === "string"))
@@ -59,7 +57,7 @@ function validateBrowsers(browsers: Browsers | void) {
 }
 
 function getLowestVersions(browsers: Array<string>): Targets {
-  return browsers.reduce((all: Object, browser: string): Object => {
+  return browsers.reduce((all: any, browser: string): any => {
     const [browserName, browserVersion] = browser.split(" ");
     const normalizedBrowserName = browserNameMap[browserName];
 
@@ -102,7 +100,10 @@ function getLowestVersions(browsers: Array<string>): Targets {
 }
 
 function outputDecimalWarning(
-  decimalTargets: Array<{| target: string, value: string |}>,
+  decimalTargets: Array<{
+    target: string;
+    value: string;
+  }>,
 ): void {
   if (!decimalTargets.length) {
     return;
@@ -152,7 +153,7 @@ function generateTargets(inputTargets: InputTargets): Targets {
   const input = { ...inputTargets };
   delete input.esmodules;
   delete input.browsers;
-  return ((input: any): Targets);
+  return input as any as Targets;
 }
 
 function resolveTargets(queries: Browsers): Targets {
@@ -162,16 +163,13 @@ function resolveTargets(queries: Browsers): Targets {
 
 type GetTargetsOption = {
   // This is not the path of the config file, but the path where start searching it from
-  configPath?: string,
-
+  configPath?: string;
   // The path of the config file
-  configFile?: string,
-
+  configFile?: string;
   // The env to pass to browserslist
-  browserslistEnv?: string,
-
+  browserslistEnv?: string;
   // true to disable config loading
-  ignoreBrowserslistConfig?: boolean,
+  ignoreBrowserslistConfig?: boolean;
 };
 
 export default function getTargets(

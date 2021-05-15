@@ -1,5 +1,3 @@
-// @flow
-
 import semver from "semver";
 import { prettifyVersion } from "./pretty";
 import {
@@ -12,7 +10,9 @@ import type { Targets } from "./types";
 export function getInclusionReasons(
   item: string,
   targetVersions: Targets,
-  list: { [key: string]: Targets },
+  list: {
+    [key: string]: Targets;
+  },
 ) {
   const minVersions = list[item] || {};
 
