@@ -9,12 +9,6 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import addCreateSuperHelper from "./inline-createSuper-helpers";
 
-type ReadonlySet<T> =
-  | Set<T>
-  | {
-      has(val: T): boolean;
-    };
-
 type ClassAssumptions = {
   setClassMethods: boolean;
   constantSuper: boolean;
