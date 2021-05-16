@@ -214,6 +214,7 @@ __metadata:
     "@babel/helper-transform-fixture-test-runner": "workspace:*"
     "@babel/helpers": "workspace:^7.14.0"
     "@babel/parser": "workspace:^7.14.2"
+    "@babel/plugin-transform-modules-commonjs": "workspace:*"
     "@babel/template": "workspace:^7.12.13"
     "@babel/traverse": "workspace:^7.14.2"
     "@babel/types": "workspace:^7.14.2"
