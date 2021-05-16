@@ -66,6 +66,7 @@
   },
   "devDependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:*",
+    "@babel/plugin-transform-modules-commonjs": "workspace:*",
     "@types/convert-source-map": "^1.5.1",
     "@types/debug": "^4.1.0",
     "@types/resolve": "^1.3.2",
