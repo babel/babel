@@ -4,11 +4,7 @@ import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
 import { Errors, SourceTypeModuleErrors } from "./error";
-import {
-  isIdentifierChar,
-  isIdentifierStart,
-  keywordRelationalOperator,
-} from "../util/identifier";
+import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
 import { lineBreak } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
@@ -48,6 +44,8 @@ const FUNC_NO_FLAGS = 0b000,
   FUNC_NULLABLE_ID = 0b100;
 
 const loneSurrogate = /[\uD800-\uDFFF]/u;
+
+const keywordRelationalOperator = /in(?:stanceof)?/y;
 
 /**
  * Convert tt.privateName to tt.hash + tt.name for backward Babel 7 compat.
@@ -200,12 +198,18 @@ export default class StatementParser extends ExpressionParser {
     if (nextCh === charCodes.leftCurlyBrace) return true;
 
     if (isIdentifierStart(nextCh)) {
-      let pos = next + 1;
-      while (isIdentifierChar(this.input.charCodeAt(pos))) {
-        ++pos;
+      keywordRelationalOperator.lastIndex = next;
+      const matched = keywordRelationalOperator.exec(this.input);
+      if (
+        matched !== null &&
+        // We have seen `in` or `instanceof` so far, now check if the identfier
+        // ends here
+        !isIdentifierChar(this.input.charCodeAt(next + matched[0].length))
+      ) {
+        return false;
+      } else {
+        return true;
       }
-      const ident = this.input.slice(next, pos);
-      if (!keywordRelationalOperator.test(ident)) return true;
     }
     return false;
   }
