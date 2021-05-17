@@ -208,12 +208,12 @@ __metadata:
   resolution: "@babel/core@workspace:packages/babel-core"
   dependencies:
     "@babel/code-frame": "workspace:^7.12.13"
-    "@babel/generator": "workspace:^7.14.2"
+    "@babel/generator": "workspace:^7.14.3"
     "@babel/helper-compilation-targets": "workspace:^7.13.16"
     "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.14.2"
     "@babel/helper-transform-fixture-test-runner": "workspace:*"
     "@babel/helpers": "workspace:^7.14.0"
-    "@babel/parser": "workspace:^7.14.2"
+    "@babel/parser": "workspace:^7.14.3"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
     "@babel/template": "workspace:^7.12.13"
     "@babel/traverse": "workspace:^7.14.2"
@@ -241,7 +241,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-parser@workspace:*, @babel/eslint-parser@workspace:^7.14.2, @babel/eslint-parser@workspace:eslint/babel-eslint-parser":
+"@babel/eslint-parser@workspace:*, @babel/eslint-parser@workspace:^7.14.3, @babel/eslint-parser@workspace:eslint/babel-eslint-parser":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-parser@workspace:eslint/babel-eslint-parser"
   dependencies:
@@ -311,7 +311,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-tests@workspace:eslint/babel-eslint-tests"
   dependencies:
-    "@babel/eslint-parser": "workspace:^7.14.2"
+    "@babel/eslint-parser": "workspace:^7.14.3"
     "@babel/preset-react": "workspace:^7.13.13"
     dedent: ^0.7.0
     eslint: ^7.5.0
@@ -331,7 +331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@workspace:*, @babel/generator@workspace:^7.12.13, @babel/generator@workspace:^7.14.2, @babel/generator@workspace:packages/babel-generator":
+"@babel/generator@workspace:*, @babel/generator@workspace:^7.12.13, @babel/generator@workspace:^7.14.2, @babel/generator@workspace:^7.14.3, @babel/generator@workspace:packages/babel-generator":
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
@@ -434,7 +434,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@workspace:^7.13.0, @babel/helper-create-class-features-plugin@workspace:^7.13.11, @babel/helper-create-class-features-plugin@workspace:^7.14.0, @babel/helper-create-class-features-plugin@workspace:^7.14.2, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
+"@babel/helper-create-class-features-plugin@workspace:^7.13.0, @babel/helper-create-class-features-plugin@workspace:^7.14.0, @babel/helper-create-class-features-plugin@workspace:^7.14.2, @babel/helper-create-class-features-plugin@workspace:^7.14.3, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
   version: 0.0.0-use.local
   resolution: "@babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin"
   dependencies:
@@ -444,7 +444,7 @@ __metadata:
     "@babel/helper-member-expression-to-functions": "workspace:^7.13.12"
     "@babel/helper-optimise-call-expression": "workspace:^7.12.13"
     "@babel/helper-plugin-test-runner": "workspace:*"
-    "@babel/helper-replace-supers": "workspace:^7.13.12"
+    "@babel/helper-replace-supers": "workspace:^7.14.3"
     "@babel/helper-split-export-declaration": "workspace:^7.12.13"
     "@babel/preset-env": "workspace:*"
   peerDependencies:
@@ -739,14 +739,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-replace-supers@workspace:^7.12.13, @babel/helper-replace-supers@workspace:^7.13.12, @babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers":
+"@babel/helper-replace-supers@workspace:^7.12.13, @babel/helper-replace-supers@workspace:^7.13.12, @babel/helper-replace-supers@workspace:^7.14.3, @babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers":
   version: 0.0.0-use.local
   resolution: "@babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers"
   dependencies:
     "@babel/helper-member-expression-to-functions": "workspace:^7.13.12"
     "@babel/helper-optimise-call-expression": "workspace:^7.12.13"
-    "@babel/traverse": "workspace:^7.13.0"
-    "@babel/types": "workspace:^7.13.12"
+    "@babel/traverse": "workspace:^7.14.2"
+    "@babel/types": "workspace:^7.14.2"
   languageName: unknown
   linkType: soft
 
@@ -947,7 +947,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/parser@workspace:*, @babel/parser@workspace:^7.12.13, @babel/parser@workspace:^7.14.2, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:*, @babel/parser@workspace:^7.12.13, @babel/parser@workspace:^7.14.2, @babel/parser@workspace:^7.14.3, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
@@ -1113,7 +1113,7 @@ __metadata:
   resolution: "@babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block"
   dependencies:
     "@babel/core": "workspace:*"
-    "@babel/helper-create-class-features-plugin": "workspace:^7.13.11"
+    "@babel/helper-create-class-features-plugin": "workspace:^7.14.3"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-class-static-block": "workspace:^7.12.13"
@@ -2755,7 +2755,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-jsx": "workspace:^7.12.13"
     "@babel/traverse": "workspace:*"
-    "@babel/types": "workspace:^7.13.12"
+    "@babel/types": "workspace:^7.14.2"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3011,7 +3011,7 @@ __metadata:
   resolution: "@babel/plugin-transform-typescript@workspace:packages/babel-plugin-transform-typescript"
   dependencies:
     "@babel/core": "workspace:*"
-    "@babel/helper-create-class-features-plugin": "workspace:^7.13.0"
+    "@babel/helper-create-class-features-plugin": "workspace:^7.14.3"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/plugin-syntax-typescript": "workspace:^7.12.13"
