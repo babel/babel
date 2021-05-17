@@ -188,7 +188,13 @@ export default class StatementParser extends ExpressionParser {
     // Statement) is allowed here. If context is not empty then only a Statement
     // is allowed. However, `let [` is an explicit negative lookahead for
     // ExpressionStatement, so special-case it first.
-    if (nextCh === charCodes.leftSquareBracket) return true;
+    // Also, `let \` is never valid as an expression so this must be a keyword.
+    if (
+      nextCh === charCodes.backslash ||
+      nextCh === charCodes.leftSquareBracket
+    ) {
+      return true;
+    }
     if (context) return false;
 
     if (nextCh === charCodes.leftCurlyBrace) return true;
