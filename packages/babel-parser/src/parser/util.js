@@ -216,6 +216,10 @@ export default class UtilParser extends Tokenizer {
       if (this.state.errors.length > oldState.errors.length) {
         const failState = this.state;
         this.state = oldState;
+        // tokensLength should be preserved during error recovery mode
+        // since the parser does not halt and will instead parse the
+        // remaining tokens
+        this.state.tokensLength = failState.tokensLength;
         return {
           node,
           error: (failState.errors[oldState.errors.length]: SyntaxError),
