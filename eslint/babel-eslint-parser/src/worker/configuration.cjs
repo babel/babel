@@ -1,25 +1,4 @@
-import { loadPartialConfig } from "@babel/core";
-
-export function normalizeESLintConfig(options) {
-  const {
-    babelOptions = {},
-    // ESLint sets ecmaVersion: undefined when ecmaVersion is not set in the config.
-    ecmaVersion = 2020,
-    sourceType = "module",
-    allowImportExportEverywhere = false,
-    requireConfigFile = true,
-    ...otherOptions
-  } = options;
-
-  return {
-    babelOptions,
-    ecmaVersion,
-    sourceType,
-    allowImportExportEverywhere,
-    requireConfigFile,
-    ...otherOptions,
-  };
-}
+const babel = require("./babel-core.cjs");
 
 /**
  * Merge user supplied estree plugin options to default estree plugin options
@@ -41,8 +20,8 @@ function getParserPlugins(babelOptions) {
   return [["estree", estreeOptions], ...babelParserPlugins];
 }
 
-export function normalizeBabelParseConfig(options) {
-  const parseOptions = {
+function normalizeParserOptions(options) {
+  return {
     sourceType: options.sourceType,
     filename: options.filePath,
     ...options.babelOptions,
@@ -60,11 +39,11 @@ export function normalizeBabelParseConfig(options) {
       ...options.babelOptions.caller,
     },
   };
+}
 
-  if (options.requireConfigFile !== false) {
-    const config = loadPartialConfig(parseOptions);
-
-    if (config !== null) {
+function validateResolvedConfig(config, options) {
+  if (config !== null) {
+    if (options.requireConfigFile !== false) {
       if (!config.hasFilesystemConfig()) {
         let error = `No Babel config file detected for ${config.options.filename}. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`;
 
@@ -74,10 +53,20 @@ export function normalizeBabelParseConfig(options) {
 
         throw new Error(error);
       }
-
-      return config.options;
     }
+    return config.options;
   }
-
-  return parseOptions;
 }
+
+module.exports = function normalizeBabelParseConfig(options) {
+  const parseOptions = normalizeParserOptions(options);
+
+  if (process.env.BABEL_8_BREAKING) {
+    return babel
+      .loadPartialConfigAsync(parseOptions)
+      .then(config => validateResolvedConfig(config, options) || parseOptions);
+  } else {
+    const config = babel.loadPartialConfigSync(parseOptions);
+    return validateResolvedConfig(config, options) || parseOptions;
+  }
+};

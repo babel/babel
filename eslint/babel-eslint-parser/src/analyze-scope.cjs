@@ -1,31 +1,37 @@
-import { types as t } from "@babel/core";
-import escope from "eslint-scope";
-import { Definition } from "eslint-scope/lib/definition";
-import OriginalPatternVisitor from "eslint-scope/lib/pattern-visitor";
-import OriginalReferencer from "eslint-scope/lib/referencer";
-import { getKeys as fallback } from "eslint-visitor-keys";
-import childVisitorKeys from "./visitor-keys";
+const escope = require("eslint-scope");
+const { Definition } = require("eslint-scope/lib/definition");
+const OriginalPatternVisitor = require("eslint-scope/lib/pattern-visitor");
+const OriginalReferencer = require("eslint-scope/lib/referencer");
+const { getKeys: fallback } = require("eslint-visitor-keys");
 
-const flowFlippedAliasKeys = t.FLIPPED_ALIAS_KEYS.Flow.concat([
-  "ArrayPattern",
-  "ClassDeclaration",
-  "ClassExpression",
-  "FunctionDeclaration",
-  "FunctionExpression",
-  "Identifier",
-  "ObjectPattern",
-  "RestElement",
-]);
+const { getTypesInfo, getVisitorKeys } = require("./client.cjs");
 
-const visitorKeysMap = Object.entries(t.VISITOR_KEYS).reduce(
-  (acc, [key, value]) => {
+let visitorKeysMap;
+function getVisitorValues(nodeType) {
+  if (visitorKeysMap) return visitorKeysMap[nodeType];
+
+  const { FLOW_FLIPPED_ALIAS_KEYS, VISITOR_KEYS } = getTypesInfo();
+
+  const flowFlippedAliasKeys = FLOW_FLIPPED_ALIAS_KEYS.concat([
+    "ArrayPattern",
+    "ClassDeclaration",
+    "ClassExpression",
+    "FunctionDeclaration",
+    "FunctionExpression",
+    "Identifier",
+    "ObjectPattern",
+    "RestElement",
+  ]);
+
+  visitorKeysMap = Object.entries(VISITOR_KEYS).reduce((acc, [key, value]) => {
     if (!flowFlippedAliasKeys.includes(value)) {
       acc[key] = value;
     }
     return acc;
-  },
-  {},
-);
+  }, {});
+
+  return visitorKeysMap[nodeType];
+}
 
 const propertyTypes = {
   // loops
@@ -65,7 +71,7 @@ class Referencer extends OriginalReferencer {
 
     // Visit type annotations.
     this._checkIdentifierOrVisit(node.typeAnnotation);
-    if (t.isAssignmentPattern(node)) {
+    if (node.type === "AssignmentPattern") {
       this._checkIdentifierOrVisit(node.left.typeAnnotation);
     }
 
@@ -258,7 +264,7 @@ class Referencer extends OriginalReferencer {
     }
 
     // get property to check (params, id, etc...)
-    const visitorValues = visitorKeysMap[node.type];
+    const visitorValues = getVisitorValues(node.type);
     if (!visitorValues) {
       return;
     }
@@ -322,7 +328,7 @@ class Referencer extends OriginalReferencer {
   }
 }
 
-export default function analyzeScope(ast, parserOptions) {
+module.exports = function analyzeScope(ast, parserOptions) {
   const options = {
     ignoreEval: true,
     optimistic: false,
@@ -337,7 +343,7 @@ export default function analyzeScope(ast, parserOptions) {
     fallback,
   };
 
-  options.childVisitorKeys = childVisitorKeys;
+  options.childVisitorKeys = getVisitorKeys();
 
   const scopeManager = new escope.ScopeManager(options);
   const referencer = new Referencer(options, scopeManager);
@@ -345,4 +351,4 @@ export default function analyzeScope(ast, parserOptions) {
   referencer.visit(ast);
 
   return scopeManager;
-}
+};

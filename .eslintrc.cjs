@@ -37,9 +37,9 @@ module.exports = {
     },
     {
       files: [
-        "packages/*/src/**/*.{js,ts}",
-        "codemods/*/src/**/*.{js,ts}",
-        "eslint/*/src/**/*.{js,ts}",
+        "packages/*/src/**/*.{js,ts,cjs}",
+        "codemods/*/src/**/*.{js,ts,cjs}",
+        "eslint/*/src/**/*.{js,ts,cjs}",
       ],
       rules: {
         "@babel/development/no-undefined-identifier": "error",
@@ -128,6 +128,12 @@ module.exports = {
           "error",
           { packageDir: "./packages/babel-traverse" },
         ],
+      },
+    },
+    {
+      files: ["eslint/babel-eslint-parser/src/**/*.js"],
+      rules: {
+        "no-restricted-imports": ["error", "@babel/core"],
       },
     },
     {

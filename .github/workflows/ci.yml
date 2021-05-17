@@ -196,6 +196,12 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
+      - name: Lint
+        run: make lint
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
       - name: Test
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
