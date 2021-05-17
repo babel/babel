@@ -19,6 +19,26 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.3 (2021-05-17)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#13321](https://github.com/babel/babel/pull/13321) Pass assumptions set in presets to plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#13326](https://github.com/babel/babel/pull/13326) fix: preserve tokensLength in tryParse ([@JLHwung](https://github.com/JLHwung))
+  * [#13325](https://github.com/babel/babel/pull/13325) Parse `let` declarations whose id starts with `\` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helper-replace-supers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`
+  * [#13303](https://github.com/babel/babel/pull/13303) Don't duplicate the base class when using `constantSuper` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#13313](https://github.com/babel/babel/pull/13313) chore: add class-static-block test262 mapping ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`
+  * [#13304](https://github.com/babel/babel/pull/13304) Add test for fixed block scoping issue ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-helper-replace-supers`, `babel-plugin-proposal-class-static-block`, `babel-preset-env`
+  * [#13297](https://github.com/babel/babel/pull/13297) Compile static blocks without the intermediate priv field step ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.14.2 (2021-05-12)
 
 #### :bug: Bug Fix
