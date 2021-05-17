@@ -108,21 +108,37 @@ describe("assumptions", () => {
       return { assumptions: { enumerableModuleMeta: true } };
     }
 
-    it("unit", () => {
-      let enumerableModuleMeta;
+    function pluginExtractEnumerableModuleMeta(api, options) {
+      options.enumerableModuleMeta = api.assumption("enumerableModuleMeta");
+      return { visitor: {} };
+    }
+
+    it("plugin defined outside preset", () => {
+      const ref = {};
 
       loadOptions({
         configFile: false,
         presets: [presetEnumerableModuleMeta],
-        plugins: [
-          function extractEnumerableModuleMeta(api) {
-            enumerableModuleMeta = api.assumption("enumerableModuleMeta");
-            return { visitor: {} };
-          },
+        plugins: [[pluginExtractEnumerableModuleMeta, ref]],
+      });
+
+      expect(ref.enumerableModuleMeta).toBe(true);
+    });
+
+    it("plugin defined inside preset", () => {
+      const ref = {};
+
+      loadOptions({
+        configFile: false,
+        presets: [
+          () => ({
+            assumptions: { enumerableModuleMeta: true },
+            plugins: [[pluginExtractEnumerableModuleMeta, ref]],
+          }),
         ],
       });
 
-      expect(enumerableModuleMeta).toBe(true);
+      expect(ref.enumerableModuleMeta).toBe(true);
     });
 
     it("integration", () => {
