@@ -37,6 +37,7 @@ describe("normalize options", () => {
           "jsxPragma": "React",
           "jsxPragmaFrag": "React.Fragment",
           "onlyRemoveTypeImports": true,
+          "optimizeConstEnums": true
         }
       `);
     });
@@ -47,12 +48,14 @@ describe("normalize options", () => {
         normalizeOptions({ allowNamespace: true }),
       ).not.toThrowError();
     });
-    it.each(["allowDeclareFields", "allowNamespaces", "onlyRemoveTypeImports"])(
-      "should not throw when `%p` is not a boolean",
-      optionName => {
-        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrowError();
-      },
-    );
+    it.each([
+      "allowDeclareFields",
+      "allowNamespaces",
+      "onlyRemoveTypeImports",
+      "optimizeConstEnums",
+    ])("should not throw when `%p` is not a boolean", optionName => {
+      expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrowError();
+    });
     it.each(["jsxPragma"])(
       "should throw when `%p` is not a string",
       optionName => {
