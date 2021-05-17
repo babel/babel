@@ -102,7 +102,10 @@ type PreviousEnumMembers = {
   [name: string]: number | string;
 };
 
-function translateEnumValues(path, t) {
+export function translateEnumValues(
+  path: NodePath<t.TSEnumDeclaration>,
+  t: typeof import("@babel/types"),
+): Array<[name: string, value: t.Expression]> {
   const seen: PreviousEnumMembers = Object.create(null);
   // Start at -1 so the first enum member is its increment, 0.
   let prev: number | typeof undefined = -1;
