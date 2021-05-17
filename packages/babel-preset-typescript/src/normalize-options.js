@@ -2,7 +2,12 @@ import { OptionValidator } from "@babel/helper-validator-option";
 const v = new OptionValidator("@babel/preset-typescript");
 
 export default function normalizeOptions(options = {}) {
-  let { allowNamespaces = true, jsxPragma, onlyRemoveTypeImports } = options;
+  let {
+    allowNamespaces = true,
+    jsxPragma,
+    onlyRemoveTypeImports,
+    optimizeConstEnums,
+  } = options;
 
   if (process.env.BABEL_8_BREAKING) {
     const TopLevelOptions = {
@@ -12,6 +17,7 @@ export default function normalizeOptions(options = {}) {
       jsxPragma: "jsxPragma",
       jsxPragmaFrag: "jsxPragmaFrag",
       onlyRemoveTypeImports: "onlyRemoveTypeImports",
+      optimizeConstEnums: "optimizeConstEnums",
     };
     v.validateTopLevelOptions(options, TopLevelOptions);
     allowNamespaces = v.validateBooleanOption(
@@ -27,6 +33,11 @@ export default function normalizeOptions(options = {}) {
     onlyRemoveTypeImports = v.validateBooleanOption(
       TopLevelOptions.onlyRemoveTypeImports,
       options.onlyRemoveTypeImports,
+      true,
+    );
+    optimizeConstEnums = v.validateBooleanOption(
+      TopLevelOptions.optimizeConstEnums,
+      options.optimizeConstEnums,
       true,
     );
   }
@@ -56,5 +67,6 @@ export default function normalizeOptions(options = {}) {
     jsxPragma,
     jsxPragmaFrag,
     onlyRemoveTypeImports,
+    optimizeConstEnums,
   };
 }

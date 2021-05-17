@@ -11,6 +11,7 @@ describe("normalize options", () => {
       "allowNamespaces",
       "isTSX",
       "onlyRemoveTypeImports",
+      "optimizeConstEnums",
     ])("should throw when `%p` is not a boolean", optionName => {
       expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
         `@babel/preset-typescript: '${optionName}' option must be a boolean.`,
@@ -83,6 +84,7 @@ describe("normalize options", () => {
           "jsxPragma": undefined,
           "jsxPragmaFrag": "React.Fragment",
           "onlyRemoveTypeImports": undefined,
+          "optimizeConstEnums": undefined,
         }
       `);
     });
