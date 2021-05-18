@@ -39,6 +39,10 @@ const buildTypingsWatchGlob = [
   "./packages/babel-types/scripts/generators/*.js",
 ];
 
+function bool(val) {
+  return !val && val !== "0" && val !== "false";
+}
+
 /**
  * map source code path to the generated artifacts path
  * @example
@@ -466,7 +470,10 @@ const libBundles = [
   dest: "lib",
 }));
 
-const dtsBundles = ["packages/babel-types"];
+const dtsBundles = [
+  "packages/babel-types",
+  bool(process.env.BABEL_8_BREAKING) && "packages/babel-traverse",
+].filter(Boolean);
 
 const standaloneBundle = [
   {
