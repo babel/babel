@@ -30,6 +30,13 @@ export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
+// TODO: When TS supports defining the variance of type parameters ([1]), T
+// should be marked as contravariant.
+// It would make `NodePath<A | B>` and `NodePath<A> | NodePath<B>` equivalent, making
+// them work better with type refinement where we migth have multiple checks
+// such as `path.isIfStatement() || path.isConditionalExpression()`.
+//
+// [1]: https://github.com/microsoft/TypeScript/issues/10717#issuecomment-246726793
 class NodePath<T extends t.Node = t.Node> {
   constructor(hub: HubInterface, parent: t.Node) {
     this.parent = parent;
@@ -123,7 +130,7 @@ class NodePath<T extends t.Node = t.Node> {
 
   buildCodeFrameError(
     msg: string,
-    Error: new () => Error = SyntaxError,
+    Error: ErrorConstructor = SyntaxError,
   ): Error {
     return this.hub.buildError(this.node, msg, Error);
   }
@@ -259,13 +266,42 @@ type NodePathMixins = typeof NodePath_ancestry &
   typeof NodePath_context &
   typeof NodePath_removal &
   typeof NodePath_modification &
-  typeof NodePath_family &
-  typeof NodePath_comments;
+  typeof NodePath_comments &
+  typeof NodePath_family;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodePath<T>
   extends NodePathAssetions,
     NodePathValidators,
-    NodePathMixins {}
+    NodePathMixins {
+  // Sometimes it's necessary to help TypeScript by specifying a value for `K` even when
+  // the `key` parameter is a string literal. For example, in this code:
+  //   function f<T extends t.Node>(expr: NodePath<T>) {
+  //     if (!expr.isCallExpression()) return null;
+  //     const a = expr.get("callee");
+  //     const b = expr.get<"callee">("callee");
+  //   }
+  // as of TS 4.3 the first gget() call uses the `key: string` signature and returns
+  // `NodePath | NodePath[]`, while the second .get() call correctly returns
+  // `NodePath<t.Expression | t.V8IntrinsicIdentifier>`.
+  // I (@nicolo-ribaudo) don't understand why TypeScript's inference fails here so I
+  // cannot fix it, but I can at least make it easier to specify the `K` type argument
+  // by removing the `T` type argument when calling `get()` as a method on `NodePath`,
+  // so that users of our type definitions (and ourselves!) don't have to manually
+  // specify it.
+  // This function is implemented as a standalone function in `family.ts`, and its type
+  // arguments there are still `<T extends t.Node, K extends keyof T>`.
+  get<K extends keyof T>(
+    key: K,
+    context?: boolean | TraversalContext,
+  ): /* prettier-ignore */ (
+      T[K] extends Array<t.Node>        ? Array<NodePath<T[K][number]>>
+    : T[K] extends Array<t.Node | null> ? Array<NodePath<Exclude<T[K][number], null & T[K][number]>> | null>
+    : T[K] extends t.Node               ? NodePath<T[K]>
+    : T[K] extends t.Node | null        ? null
+    : never
+  );
+  get(key: string, context?: boolean | TraversalContext): NodePath | NodePath[];
+}
 
 export default NodePath;

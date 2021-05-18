@@ -316,11 +316,13 @@ function get<T extends t.Node, K extends keyof T>(
   this: NodePath<T>,
   key: K,
   context?: boolean | TraversalContext,
-): T[K] extends Array<t.Node | null | undefined>
-  ? Array<NodePath<T[K][number]>>
-  : T[K] extends t.Node | null | undefined
-  ? NodePath<T[K]>
-  : never;
+): /* prettier-ignore */ (
+    T[K] extends Array<t.Node>        ? Array<NodePath<T[K][number]>>
+  : T[K] extends Array<t.Node | null> ? Array<NodePath<Exclude<T[K][number], null & T[K][number]>> | null>
+  : T[K] extends t.Node               ? NodePath<T[K]>
+  : T[K] extends t.Node | null        ? null
+  : never
+);
 
 function get<T extends t.Node>(
   this: NodePath<T>,

@@ -512,7 +512,6 @@ function getLocalExportMetadata(
         declaration.isFunctionDeclaration() ||
         declaration.isClassDeclaration()
       ) {
-        // @ts-expect-error todo(flow->ts): improve babel-types
         getLocalMetadata(declaration.get("id")).names.push("default");
       } else {
         // These should have been removed by the nameAnonymousExports() call.
