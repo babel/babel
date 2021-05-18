@@ -181,7 +181,7 @@ export default class StatementParser extends ExpressionParser {
    */
   isLetKeyword(context: ?string): boolean {
     const next = this.nextTokenStart();
-    const nextCh = this.input.charCodeAt(next);
+    const nextCh = this.codePointAtPos(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
     // Statement) is allowed here. If context is not empty then only a Statement
     // is allowed. However, `let [` is an explicit negative lookahead for
@@ -200,16 +200,15 @@ export default class StatementParser extends ExpressionParser {
     if (isIdentifierStart(nextCh)) {
       keywordRelationalOperator.lastIndex = next;
       const matched = keywordRelationalOperator.exec(this.input);
-      if (
-        matched !== null &&
+      if (matched !== null) {
         // We have seen `in` or `instanceof` so far, now check if the identfier
         // ends here
-        !isIdentifierChar(this.input.charCodeAt(next + matched[0].length))
-      ) {
-        return false;
-      } else {
-        return true;
+        const endCh = this.codePointAtPos(next + matched[0].length);
+        if (!isIdentifierChar(endCh) && endCh !== charCodes.backslash) {
+          return false;
+        }
       }
+      return true;
     }
     return false;
   }
