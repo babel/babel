@@ -1068,33 +1068,28 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt.regexp: {
-        const value = this.state.value;
-        node = this.parseLiteral(value.value, "RegExpLiteral");
-        node.pattern = value.pattern;
-        node.flags = value.flags;
-        return node;
+        return this.parseRegExpLiteral(this.state.value);
       }
 
       case tt.num:
-        return this.parseLiteral(this.state.value, "NumericLiteral");
+        return this.parseNumericLiteral(this.state.value);
 
       case tt.bigint:
-        return this.parseLiteral(this.state.value, "BigIntLiteral");
+        return this.parseBigIntLiteral(this.state.value);
 
       case tt.decimal:
-        return this.parseLiteral(this.state.value, "DecimalLiteral");
+        return this.parseDecimalLiteral(this.state.value);
 
       case tt.string:
-        return this.parseLiteral(this.state.value, "StringLiteral");
+        return this.parseStringLiteral(this.state.value);
 
       case tt._null:
-        node = this.startNode();
-        this.next();
-        return this.finishNode(node, "NullLiteral");
+        return this.parseNullLiteral();
 
       case tt._true:
+        return this.parseBooleanLiteral(true);
       case tt._false:
-        return this.parseBooleanLiteral();
+        return this.parseBooleanLiteral(false);
 
       case tt.parenL:
         return this.parseParenAndDistinguishExpression(canBeArrow);
@@ -1290,13 +1285,6 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "Super");
   }
 
-  parseBooleanLiteral(): N.BooleanLiteral {
-    const node = this.startNode();
-    node.value = this.match(tt._true);
-    this.next();
-    return this.finishNode(node, "BooleanLiteral");
-  }
-
   parseMaybePrivateName(
     isPrivateNameAllowed: boolean,
   ): N.PrivateName | N.Identifier {
@@ -1413,6 +1401,46 @@ export default class ExpressionParser extends LValParser {
   parseLiteral<T: N.Literal>(value: any, type: /*T["kind"]*/ string): T {
     const node = this.startNode();
     return this.parseLiteralAtNode(value, type, node);
+  }
+
+  parseStringLiteral(value: any): any {
+    return this.parseLiteral(value, "StringLiteral");
+  }
+
+  parseNumericLiteral(value: any): any {
+    return this.parseLiteral(value, "NumericLiteral");
+  }
+
+  parseBigIntLiteral(value: any): any {
+    return this.parseLiteral(value, "BigIntLiteral");
+  }
+
+  parseDecimalLiteral(value: any): any {
+    return this.parseLiteral(value, "DecimalLiteral");
+  }
+
+  parseRegExpLiteral(value: {
+    value: any,
+    pattern: string,
+    flags: string,
+  }): N.RegExpLiteral {
+    const node = this.parseLiteral(value.value, "RegExpLiteral");
+    node.pattern = value.pattern;
+    node.flags = value.flags;
+    return node;
+  }
+
+  parseBooleanLiteral(value: boolean): N.BooleanLiteral {
+    const node = this.startNode();
+    node.value = value;
+    this.next();
+    return this.finishNode(node, "BooleanLiteral");
+  }
+
+  parseNullLiteral(): N.NullLiteral {
+    const node = this.startNode();
+    this.next();
+    return this.finishNode(node, "NullLiteral");
   }
 
   // https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList

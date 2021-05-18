@@ -3387,14 +3387,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const endOfInit = () => this.match(tt.comma) || this.match(tt.braceR);
       switch (this.state.type) {
         case tt.num: {
-          const literal = this.parseLiteral(this.state.value, "NumericLiteral");
+          const literal = this.parseNumericLiteral(this.state.value);
           if (endOfInit()) {
             return { type: "number", pos: literal.start, value: literal };
           }
           return { type: "invalid", pos: startPos };
         }
         case tt.string: {
-          const literal = this.parseLiteral(this.state.value, "StringLiteral");
+          const literal = this.parseStringLiteral(this.state.value);
           if (endOfInit()) {
             return { type: "string", pos: literal.start, value: literal };
           }
@@ -3402,7 +3402,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         case tt._true:
         case tt._false: {
-          const literal = this.parseBooleanLiteral();
+          const literal = this.parseBooleanLiteral(this.match(tt._true));
           if (endOfInit()) {
             return {
               type: "boolean",

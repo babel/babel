@@ -1,6 +1,6 @@
 // @flow
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import { TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
@@ -9,7 +9,7 @@ import { Errors } from "../parser/error";
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
-    estreeParseRegExpLiteral({ pattern, flags }: N.RegExpLiteral): N.Node {
+    parseRegExpLiteral({ pattern, flags }): N.Node {
       let regex = null;
       try {
         regex = new RegExp(pattern, flags);
@@ -23,7 +23,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    estreeParseBigIntLiteral(value: any): N.Node {
+    parseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
       let bigInt;
       try {
@@ -38,7 +38,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    estreeParseDecimalLiteral(value: any): N.Node {
+    parseDecimalLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/experimental/decimal.md
       // todo: use BigDecimal when node supports it.
       const decimal = null;
@@ -50,6 +50,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     estreeParseLiteral(value: any): N.Node {
       return this.parseLiteral(value, "Literal");
+    }
+
+    parseStringLiteral(value: any): N.Node {
+      return this.estreeParseLiteral(value);
+    }
+
+    parseNumericLiteral(value: any): any {
+      return this.estreeParseLiteral(value);
+    }
+
+    parseNullLiteral(): N.Node {
+      return this.estreeParseLiteral(null);
+    }
+
+    parseBooleanLiteral(value: boolean): N.BooleanLiteral {
+      return this.estreeParseLiteral(value);
     }
 
     directiveToStmt(directive: N.Directive): N.ExpressionStatement {
@@ -163,35 +179,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         delete method.typeParameters;
       }
       classBody.body.push(method);
-    }
-
-    parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
-      switch (this.state.type) {
-        case tt.num:
-        case tt.string:
-          return this.estreeParseLiteral(this.state.value);
-
-        case tt.regexp:
-          return this.estreeParseRegExpLiteral(this.state.value);
-
-        case tt.bigint:
-          return this.estreeParseBigIntLiteral(this.state.value);
-
-        case tt.decimal:
-          return this.estreeParseDecimalLiteral(this.state.value);
-
-        case tt._null:
-          return this.estreeParseLiteral(null);
-
-        case tt._true:
-          return this.estreeParseLiteral(true);
-
-        case tt._false:
-          return this.estreeParseLiteral(false);
-
-        default:
-          return super.parseExprAtom(refExpressionErrors);
-      }
     }
 
     parseMaybePrivateName(...args: [boolean]): any {

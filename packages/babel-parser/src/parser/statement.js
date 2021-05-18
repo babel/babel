@@ -2157,10 +2157,7 @@ export default class StatementParser extends ExpressionParser {
   // https://tc39.es/ecma262/#prod-ModuleExportName
   parseModuleExportName(): N.StringLiteral | N.Identifier {
     if (this.match(tt.string)) {
-      const result = this.parseLiteral<N.StringLiteral>(
-        this.state.value,
-        "StringLiteral",
-      );
+      const result = this.parseStringLiteral(this.state.value);
       const surrogate = result.value.match(loneSurrogate);
       if (surrogate) {
         this.raise(
@@ -2259,7 +2256,7 @@ export default class StatementParser extends ExpressionParser {
       // parse AssertionKey : IdentifierName, StringLiteral
       const keyName = this.state.value;
       if (this.match(tt.string)) {
-        node.key = this.parseLiteral<N.StringLiteral>(keyName, "StringLiteral");
+        node.key = this.parseStringLiteral(keyName);
       } else {
         node.key = this.parseIdentifier(true);
       }
@@ -2291,10 +2288,7 @@ export default class StatementParser extends ExpressionParser {
           Errors.ModuleAttributeInvalidValue,
         );
       }
-      node.value = this.parseLiteral<N.StringLiteral>(
-        this.state.value,
-        "StringLiteral",
-      );
+      node.value = this.parseStringLiteral(this.state.value);
       this.finishNode<N.ImportAttribute>(node, "ImportAttribute");
       attrs.push(node);
     } while (this.eat(tt.comma));
@@ -2345,7 +2339,7 @@ export default class StatementParser extends ExpressionParser {
           Errors.ModuleAttributeInvalidValue,
         );
       }
-      node.value = this.parseLiteral(this.state.value, "StringLiteral");
+      node.value = this.parseStringLiteral(this.state.value);
       this.finishNode(node, "ImportAttribute");
       attrs.push(node);
     } while (this.eat(tt.comma));
