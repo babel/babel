@@ -59,6 +59,7 @@ export default function transformClass(
     staticPropBody: [],
     body: [],
     superThises: [],
+    jsxThises: [],
     pushedConstructor: false,
     pushedInherits: false,
     protoAlias: null,
@@ -90,6 +91,11 @@ export default function transformClass(
     {
       ThisExpression(path) {
         classState.superThises.push(path);
+      },
+      JSXIdentifier(path) {
+        if (path.node.name === "this") {
+          classState.jsxThises.push(path);
+        }
       },
     },
   ]);
@@ -328,6 +334,15 @@ export default function transformClass(
           thisRef(),
         ]),
       );
+    }
+
+    for (const thisPath of classState.jsxThises) {
+      const { node, parentPath } = thisPath;
+      if (parentPath.isJSXMemberExpression({ object: node })) {
+        const ref = thisRef();
+        ref.type = "JSXIdentifier";
+        thisPath.replaceWith(ref);
+      }
     }
 
     const bareSupers = new Set();
