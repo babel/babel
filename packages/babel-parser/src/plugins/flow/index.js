@@ -1549,22 +1549,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         case tt.plusMin:
           if (this.state.value === "-") {
+            const node = this.startNode();
             this.next();
             if (this.match(tt.num)) {
-              return this.parseLiteral(
+              return this.parseLiteralAtNode(
                 -this.state.value,
                 "NumberLiteralTypeAnnotation",
-                node.start,
-                node.loc.start,
+                node,
               );
             }
 
             if (this.match(tt.bigint)) {
-              return this.parseLiteral(
+              return this.parseLiteralAtNode(
                 -this.state.value,
                 "BigIntLiteralTypeAnnotation",
-                node.start,
-                node.loc.start,
+                node,
               );
             }
 

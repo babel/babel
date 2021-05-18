@@ -230,13 +230,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node.name;
     }
 
-    parseLiteral<T: N.Literal>(
-      value: any,
-      type: /*T["kind"]*/ string,
-      startPos?: number,
-      startLoc?: Position,
-    ): T {
-      const node = super.parseLiteral(value, type, startPos, startLoc);
+    parseLiteral<T: N.Literal>(value: any, type: /*T["kind"]*/ string): T {
+      const node = super.parseLiteral(value, type);
       node.raw = node.extra.raw;
       delete node.extra;
 
