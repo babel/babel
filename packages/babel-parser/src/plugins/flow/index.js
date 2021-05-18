@@ -1549,7 +1549,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         case tt.plusMin:
           if (this.state.value === "-") {
-            const node = this.startNode();
             this.next();
             if (this.match(tt.num)) {
               return this.parseLiteralAtNode(
