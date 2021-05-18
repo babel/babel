@@ -2041,7 +2041,7 @@ export default class StatementParser extends ExpressionParser {
           // $FlowIgnore
           if (!isFrom && specifier.local) {
             const { local } = specifier;
-            if (local.type === "StringLiteral") {
+            if (local.type !== "Identifier") {
               this.raise(
                 specifier.start,
                 Errors.ExportBindingIsString,
@@ -2418,12 +2418,13 @@ export default class StatementParser extends ExpressionParser {
   // https://tc39.es/ecma262/#prod-ImportSpecifier
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
+    const importedIsString = this.match(tt.string);
     specifier.imported = this.parseModuleExportName();
     if (this.eatContextual("as")) {
       specifier.local = this.parseIdentifier();
     } else {
       const { imported } = specifier;
-      if (imported.type === "StringLiteral") {
+      if (importedIsString) {
         throw this.raise(
           specifier.start,
           Errors.ImportBindingIsString,

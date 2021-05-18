@@ -2668,7 +2668,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // parse import-type/typeof shorthand
     parseImportSpecifier(node: N.ImportDeclaration): void {
       const specifier = this.startNode();
-      const firstIdentLoc = this.state.start;
+      const fistIdentIsString = this.match(tt.string);
       const firstIdent = this.parseModuleExportName();
 
       let specifierTypeKind = null;
@@ -2712,13 +2712,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = specifier.imported.__clone();
         }
       } else {
-        if (firstIdent.type === "StringLiteral") {
+        if (fistIdentIsString) {
+          /*:: invariant(firstIdent instanceof N.StringLiteral) */
           throw this.raise(
             specifier.start,
             Errors.ImportBindingIsString,
             firstIdent.value,
           );
         }
+        /*:: invariant(firstIdent instanceof N.Node) */
         isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
@@ -2730,7 +2732,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (nodeIsTypeImport && specifierIsTypeImport) {
         this.raise(
-          firstIdentLoc,
+          specifier.start,
           FlowErrors.ImportTypeShorthandOnlyInPureImport,
         );
       }
