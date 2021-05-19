@@ -2667,7 +2667,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // parse import-type/typeof shorthand
     parseImportSpecifier(node: N.ImportDeclaration): void {
       const specifier = this.startNode();
-      const fistIdentIsString = this.match(tt.string);
+      const firstIdentIsString = this.match(tt.string);
       const firstIdent = this.parseModuleExportName();
 
       let specifierTypeKind = null;
@@ -2711,7 +2711,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = specifier.imported.__clone();
         }
       } else {
-        if (fistIdentIsString) {
+        if (firstIdentIsString) {
           /*:: invariant(firstIdent instanceof N.StringLiteral) */
           throw this.raise(
             specifier.start,
