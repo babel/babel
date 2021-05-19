@@ -98,7 +98,8 @@ export type Literal =
   | StringLiteral
   | BooleanLiteral
   | NumericLiteral
-  | BigIntLiteral;
+  | BigIntLiteral
+  | DecimalLiteral;
 
 export type RegExpLiteral = NodeBase & {
   type: "RegExpLiteral",
@@ -127,6 +128,11 @@ export type NumericLiteral = NodeBase & {
 
 export type BigIntLiteral = NodeBase & {
   type: "BigIntLiteral",
+  value: number,
+};
+
+export type DecimalLiteral = NodeBase & {
+  type: "DecimalLiteral",
   value: number,
 };
 
@@ -1066,7 +1072,44 @@ export type FlowOptionalIndexedAccessType = Node & {
   optional: boolean,
 };
 
+export type StringLiteralTypeAnnotation = NodeBase & {
+  type: "StringLiteralTypeAnnotation",
+  value: string,
+};
+
+export type BooleanLiteralTypeAnnotation = NodeBase & {
+  type: "BooleanLiteralTypeAnnotation",
+  value: boolean,
+};
+export type NumberLiteralTypeAnnotation = NodeBase & {
+  type: "NumberLiteralTypeAnnotation",
+  value: number,
+};
+
+export type BigIntLiteralTypeAnnotation = NodeBase & {
+  type: "BigIntLiteralTypeAnnotation",
+  //todo(flow): use bigint when Flow supports BigInt
+  value: number,
+};
+
 // ESTree
+export type EstreeLiteral = NodeBase & {
+  type: "Literal",
+  value: any,
+};
+
+type EstreeRegExpLiteralRegex = {
+  pattern: string,
+  flags: string,
+};
+export type EstreeRegExpLiteral = EstreeLiteral & {
+  regex: EstreeRegExpLiteralRegex,
+};
+
+export type EstreeBigIntLiteral = EstreeLiteral & {
+  value: number | null,
+  bigint: string,
+};
 
 export type EstreeProperty = NodeBase & {
   type: "Property",

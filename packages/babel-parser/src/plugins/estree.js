@@ -17,7 +17,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // In environments that don't support these flags value will
         // be null as the regex can't be represented natively.
       }
-      const node = this.estreeParseLiteral(regex);
+      const node = this.estreeParseLiteral<N.EstreeRegExpLiteral>(regex);
       node.regex = { pattern, flags };
 
       return node;
@@ -32,7 +32,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } catch {
         bigInt = null;
       }
-      const node = this.estreeParseLiteral(bigInt);
+      const node = this.estreeParseLiteral<N.EstreeBigIntLiteral>(bigInt);
       node.bigint = String(node.value || value);
 
       return node;
@@ -48,8 +48,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    estreeParseLiteral(value: any): N.Node {
-      return this.parseLiteral(value, "Literal");
+    estreeParseLiteral<T: N.Node>(value: any) {
+      return this.parseLiteral<T>(value, "Literal");
     }
 
     parseStringLiteral(value: any): N.Node {
@@ -217,8 +217,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node.name;
     }
 
-    parseLiteral<T: N.Literal>(value: any, type: /*T["kind"]*/ string): T {
-      const node = super.parseLiteral(value, type);
+    parseLiteral<T: N.Node>(value: any, type: $ElementType<T, "type">): T {
+      const node = super.parseLiteral<T>(value, type);
       node.raw = node.extra.raw;
       delete node.extra;
 

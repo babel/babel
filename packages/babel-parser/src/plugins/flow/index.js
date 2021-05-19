@@ -1536,7 +1536,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.finishNode(node, "FunctionTypeAnnotation");
 
         case tt.string:
-          return this.parseLiteral(
+          return this.parseLiteral<N.StringLiteralTypeAnnotation>(
             this.state.value,
             "StringLiteralTypeAnnotation",
           );
@@ -1545,13 +1545,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt._false:
           node.value = this.match(tt._true);
           this.next();
-          return this.finishNode(node, "BooleanLiteralTypeAnnotation");
+          return this.finishNode<N.BooleanLiteralTypeAnnotation>(
+            node,
+            "BooleanLiteralTypeAnnotation",
+          );
 
         case tt.plusMin:
           if (this.state.value === "-") {
             this.next();
             if (this.match(tt.num)) {
-              return this.parseLiteralAtNode(
+              return this.parseLiteralAtNode<N.NumberLiteralTypeAnnotation>(
                 -this.state.value,
                 "NumberLiteralTypeAnnotation",
                 node,
@@ -1559,7 +1562,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             }
 
             if (this.match(tt.bigint)) {
-              return this.parseLiteralAtNode(
+              return this.parseLiteralAtNode<N.BigIntLiteralTypeAnnotation>(
                 -this.state.value,
                 "BigIntLiteralTypeAnnotation",
                 node,

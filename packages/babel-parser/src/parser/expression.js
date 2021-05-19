@@ -1386,9 +1386,9 @@ export default class ExpressionParser extends LValParser {
     return this.parseMetaProperty(node, id, "meta");
   }
 
-  parseLiteralAtNode<T: N.Literal>(
+  parseLiteralAtNode<T: N.Node>(
     value: any,
-    type: /*T["kind"]*/ string,
+    type: $ElementType<T, "type">,
     node: any,
   ): T {
     this.addExtra(node, "rawValue", value);
@@ -1398,49 +1398,48 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode<T>(node, type);
   }
 
-  parseLiteral<T: N.Literal>(value: any, type: /*T["kind"]*/ string): T {
+  parseLiteral<T: N.Node>(value: any, type: $ElementType<T, "type">): T {
     const node = this.startNode();
     return this.parseLiteralAtNode(value, type, node);
   }
 
-  parseStringLiteral(value: any): any {
-    return this.parseLiteral(value, "StringLiteral");
+  parseStringLiteral(value: any) {
+    return this.parseLiteral<N.StringLiteral>(value, "StringLiteral");
   }
 
-  parseNumericLiteral(value: any): any {
-    return this.parseLiteral(value, "NumericLiteral");
+  parseNumericLiteral(value: any) {
+    return this.parseLiteral<N.NumericLiteral>(value, "NumericLiteral");
   }
 
-  parseBigIntLiteral(value: any): any {
-    return this.parseLiteral(value, "BigIntLiteral");
+  parseBigIntLiteral(value: any) {
+    return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
   }
 
-  parseDecimalLiteral(value: any): any {
-    return this.parseLiteral(value, "DecimalLiteral");
+  parseDecimalLiteral(value: any) {
+    return this.parseLiteral<N.DecimalLiteral>(value, "DecimalLiteral");
   }
 
-  parseRegExpLiteral(value: {
-    value: any,
-    pattern: string,
-    flags: string,
-  }): N.RegExpLiteral {
-    const node = this.parseLiteral(value.value, "RegExpLiteral");
+  parseRegExpLiteral(value: { value: any, pattern: string, flags: string }) {
+    const node = this.parseLiteral<N.RegExpLiteral>(
+      value.value,
+      "RegExpLiteral",
+    );
     node.pattern = value.pattern;
     node.flags = value.flags;
     return node;
   }
 
-  parseBooleanLiteral(value: boolean): N.BooleanLiteral {
+  parseBooleanLiteral(value: boolean) {
     const node = this.startNode();
     node.value = value;
     this.next();
-    return this.finishNode(node, "BooleanLiteral");
+    return this.finishNode<N.BooleanLiteral>(node, "BooleanLiteral");
   }
 
-  parseNullLiteral(): N.NullLiteral {
+  parseNullLiteral() {
     const node = this.startNode();
     this.next();
-    return this.finishNode(node, "NullLiteral");
+    return this.finishNode<N.NullLiteral>(node, "NullLiteral");
   }
 
   // https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList
