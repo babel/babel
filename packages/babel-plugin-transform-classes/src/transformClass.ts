@@ -1,4 +1,4 @@
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers, {
   environmentVisitor,
@@ -9,13 +9,11 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import addCreateSuperHelper from "./inline-createSuper-helpers";
 
-type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
-
 type ClassAssumptions = {
-  setClassMethods: boolean,
-  constantSuper: boolean,
-  superIsCallableConstructor: boolean,
-  noClassCalls: boolean,
+  setClassMethods: boolean;
+  constantSuper: boolean;
+  superIsCallableConstructor: boolean;
+  noClassCalls: boolean;
 };
 
 function buildConstructor(classRef, constructorBody, node) {
@@ -113,7 +111,7 @@ export default function transformClass(
         (function () {
           super(...arguments);
         })
-      `;
+      ` as t.FunctionExpression;
       params = constructor.params;
       body = constructor.body;
     } else {
@@ -147,7 +145,7 @@ export default function transformClass(
   }
 
   function pushBody() {
-    const classBodyPaths: Array<Object> = classState.path.get("body.body");
+    const classBodyPaths: Array<any> = classState.path.get("body.body");
 
     for (const path of classBodyPaths) {
       const node = path.node;
@@ -282,6 +280,7 @@ export default function transformClass(
         t.cloneNode(classState.superFnId),
         t.thisExpression(),
         bareSuperNode.arguments,
+        false,
       );
     }
 
@@ -330,7 +329,7 @@ export default function transformClass(
       );
     }
 
-    const bareSupers = new Set();
+    const bareSupers = new Set<NodePath<t.CallExpression>>();
     path.traverse(
       traverse.visitors.merge([
         environmentVisitor,
@@ -341,7 +340,7 @@ export default function transformClass(
               bareSupers.add(parentPath);
             }
           },
-        },
+        } as Visitor,
       ]),
     );
 
@@ -411,7 +410,7 @@ export default function transformClass(
   /**
    * Push a method to its respective mutatorMap.
    */
-  function pushMethod(node: { type: "ClassMethod" }, path?: NodePath) {
+  function pushMethod(node: t.ClassMethod, path?: NodePath) {
     const scope = path ? path.scope : classState.scope;
 
     if (node.kind === "method") {
@@ -435,12 +434,16 @@ export default function transformClass(
         fn = nameFunction({ id: key, node: node, scope });
       }
     } else {
+      // todo(flow->ts) find a way to avoid "key as t.StringLiteral" below which relies on this assignment
       methods.hasComputed = true;
     }
 
     let descriptor;
-    if (!methods.hasComputed && methods.map.has(key.value)) {
-      descriptor = methods.map.get(key.value);
+    if (
+      !methods.hasComputed &&
+      methods.map.has((key as t.StringLiteral).value)
+    ) {
+      descriptor = methods.map.get((key as t.StringLiteral).value);
       descriptor[descKey] = fn;
 
       if (descKey === "value") {
@@ -454,7 +457,7 @@ export default function transformClass(
       methods.list.push(descriptor);
 
       if (!methods.hasComputed) {
-        methods.map.set(key.value, descriptor);
+        methods.map.set((key as t.StringLiteral).value, descriptor);
       }
     }
   }
@@ -522,7 +525,7 @@ export default function transformClass(
    */
   function pushConstructor(
     superReturns,
-    method: { type: "ClassMethod" },
+    method: t.ClassMethod,
     path: NodePath,
   ) {
     setState({
@@ -549,6 +552,7 @@ export default function transformClass(
     classState.pushedConstructor = true;
 
     // we haven't pushed any descriptors yet
+    // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere esle
     if (classState.hasInstanceDescriptors || classState.hasStaticDescriptors) {
       pushDescriptors();
     }

@@ -212,3 +212,7 @@ declare module "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining" 
 declare module "@babel/helper-module-transforms" {
   declare module.exports: any;
 }
+
+declare module "@babel/plugin-transform-classes" {
+  declare module.exports: any;
+}

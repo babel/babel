@@ -2089,6 +2089,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.13.0"
     "@babel/helper-replace-supers": "workspace:^7.13.12"
     "@babel/helper-split-export-declaration": "workspace:^7.12.13"
+    "@babel/traverse": "workspace:*"
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
