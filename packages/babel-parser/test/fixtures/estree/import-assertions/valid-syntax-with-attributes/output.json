@@ -1,13 +1,10 @@
 {
   "type": "File",
   "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":51}},
-  "errors": [
-    "SyntaxError: 'import' and 'export' may appear only with 'sourceType: \"module\"' (1:0)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":51}},
-    "sourceType": "script",
+    "sourceType": "module",
     "interpreter": null,
     "body": [
       {

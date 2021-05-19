@@ -1,3 +1,4 @@
 {
-  "plugins": ["flow", "jsx", "estree", "importAssertions"]
+  "plugins": ["flow", "jsx", "estree", "importAssertions"],
+  "sourceType": "module"
 }
