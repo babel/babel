@@ -409,6 +409,7 @@ __metadata:
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
   dependencies:
     "@babel/compat-data": "workspace:^7.13.15"
+    "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-validator-option": "workspace:^7.12.17"
     "@types/semver": ^5.5.0
