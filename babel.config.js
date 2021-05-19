@@ -94,7 +94,8 @@ module.exports = function (api) {
       ignoreLib ? "packages/*/lib" : null,
       "packages/babel-standalone/babel.js",
     ].filter(Boolean),
-    presets: [["@babel/env", envOpts]],
+    presets: [ ['@babel/preset-env', {targets: {node: 'current'}}],
+    ['@babel/preset-react', {targets: {node: 'current'}}], ["@babel/env", envOpts]],
     plugins: [
       // TODO: Use @babel/preset-flow when
       // https://github.com/babel/babel/issues/7233 is fixed
