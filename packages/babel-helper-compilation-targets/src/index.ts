@@ -101,10 +101,7 @@ function getLowestVersions(browsers: Array<string>): Targets {
 }
 
 function outputDecimalWarning(
-  decimalTargets: Array<{
-    target: string;
-    value: string;
-  }>,
+  decimalTargets: Array<{ target: string; value: string }>,
 ): void {
   if (!decimalTargets.length) {
     return;

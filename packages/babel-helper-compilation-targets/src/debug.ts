@@ -10,9 +10,7 @@ import type { Target, Targets } from "./types";
 export function getInclusionReasons(
   item: string,
   targetVersions: Targets,
-  list: {
-    [key: string]: Targets;
-  },
+  list: { [key: string]: Targets },
 ) {
   const minVersions = list[item] || ({} as Targets);
 
