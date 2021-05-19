@@ -58,15 +58,37 @@ function validateResolvedConfig(config, options) {
   }
 }
 
+function getDefaultParserOptions(options) {
+  return {
+    plugins: [],
+    ...options,
+    babelrc: false,
+    configFile: false,
+    browserslistConfigFile: false,
+    ignore: null,
+    only: null,
+  };
+}
+
 module.exports = function normalizeBabelParseConfig(options) {
   const parseOptions = normalizeParserOptions(options);
 
   if (process.env.BABEL_8_BREAKING) {
     return babel
       .loadPartialConfigAsync(parseOptions)
-      .then(config => validateResolvedConfig(config, options) || parseOptions);
+      .then(config => validateConfigWithFallback(config));
   } else {
     const config = babel.loadPartialConfigSync(parseOptions);
-    return validateResolvedConfig(config, options) || parseOptions;
+    return validateConfigWithFallback(config);
+  }
+
+  function validateConfigWithFallback(inputConfig) {
+    const result = validateResolvedConfig(inputConfig, options);
+    if (result) {
+      return result;
+    } else {
+      // Fallback when `loadPartialConfig` returns `null` (e.g.: when the file is ignored)
+      return getDefaultParserOptions(parseOptions);
+    }
   }
 };
