@@ -1,6 +1,6 @@
 // @flow
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import { TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
@@ -9,7 +9,7 @@ import { Errors } from "../parser/error";
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
-    estreeParseRegExpLiteral({ pattern, flags }: N.RegExpLiteral): N.Node {
+    parseRegExpLiteral({ pattern, flags }): N.Node {
       let regex = null;
       try {
         regex = new RegExp(pattern, flags);
@@ -17,13 +17,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // In environments that don't support these flags value will
         // be null as the regex can't be represented natively.
       }
-      const node = this.estreeParseLiteral(regex);
+      const node = this.estreeParseLiteral<N.EstreeRegExpLiteral>(regex);
       node.regex = { pattern, flags };
 
       return node;
     }
 
-    estreeParseBigIntLiteral(value: any): N.Node {
+    parseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
       let bigInt;
       try {
@@ -32,13 +32,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } catch {
         bigInt = null;
       }
-      const node = this.estreeParseLiteral(bigInt);
+      const node = this.estreeParseLiteral<N.EstreeBigIntLiteral>(bigInt);
       node.bigint = String(node.value || value);
 
       return node;
     }
 
-    estreeParseDecimalLiteral(value: any): N.Node {
+    parseDecimalLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/experimental/decimal.md
       // todo: use BigDecimal when node supports it.
       const decimal = null;
@@ -48,8 +48,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    estreeParseLiteral(value: any): N.Node {
-      return this.parseLiteral(value, "Literal");
+    estreeParseLiteral<T: N.Node>(value: any) {
+      return this.parseLiteral<T>(value, "Literal");
+    }
+
+    parseStringLiteral(value: any): N.Node {
+      return this.estreeParseLiteral(value);
+    }
+
+    parseNumericLiteral(value: any): any {
+      return this.estreeParseLiteral(value);
+    }
+
+    parseNullLiteral(): N.Node {
+      return this.estreeParseLiteral(null);
+    }
+
+    parseBooleanLiteral(value: boolean): N.BooleanLiteral {
+      return this.estreeParseLiteral(value);
     }
 
     directiveToStmt(directive: N.Directive): N.ExpressionStatement {
@@ -165,35 +181,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       classBody.body.push(method);
     }
 
-    parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
-      switch (this.state.type) {
-        case tt.num:
-        case tt.string:
-          return this.estreeParseLiteral(this.state.value);
-
-        case tt.regexp:
-          return this.estreeParseRegExpLiteral(this.state.value);
-
-        case tt.bigint:
-          return this.estreeParseBigIntLiteral(this.state.value);
-
-        case tt.decimal:
-          return this.estreeParseDecimalLiteral(this.state.value);
-
-        case tt._null:
-          return this.estreeParseLiteral(null);
-
-        case tt._true:
-          return this.estreeParseLiteral(true);
-
-        case tt._false:
-          return this.estreeParseLiteral(false);
-
-        default:
-          return super.parseExprAtom(refExpressionErrors);
-      }
-    }
-
     parseMaybePrivateName(...args: [boolean]): any {
       const node = super.parseMaybePrivateName(...args);
       if (
@@ -230,13 +217,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node.name;
     }
 
-    parseLiteral<T: N.Literal>(
-      value: any,
-      type: /*T["kind"]*/ string,
-      startPos?: number,
-      startLoc?: Position,
-    ): T {
-      const node = super.parseLiteral(value, type, startPos, startLoc);
+    parseLiteral<T: N.Node>(value: any, type: $ElementType<T, "type">): T {
+      const node = super.parseLiteral<T>(value, type);
       node.raw = node.extra.raw;
       delete node.extra;
 

@@ -1536,7 +1536,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.finishNode(node, "FunctionTypeAnnotation");
 
         case tt.string:
-          return this.parseLiteral(
+          return this.parseLiteral<N.StringLiteralTypeAnnotation>(
             this.state.value,
             "StringLiteralTypeAnnotation",
           );
@@ -1545,26 +1545,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt._false:
           node.value = this.match(tt._true);
           this.next();
-          return this.finishNode(node, "BooleanLiteralTypeAnnotation");
+          return this.finishNode<N.BooleanLiteralTypeAnnotation>(
+            node,
+            "BooleanLiteralTypeAnnotation",
+          );
 
         case tt.plusMin:
           if (this.state.value === "-") {
             this.next();
             if (this.match(tt.num)) {
-              return this.parseLiteral(
+              return this.parseLiteralAtNode<N.NumberLiteralTypeAnnotation>(
                 -this.state.value,
                 "NumberLiteralTypeAnnotation",
-                node.start,
-                node.loc.start,
+                node,
               );
             }
 
             if (this.match(tt.bigint)) {
-              return this.parseLiteral(
+              return this.parseLiteralAtNode<N.BigIntLiteralTypeAnnotation>(
                 -this.state.value,
                 "BigIntLiteralTypeAnnotation",
-                node.start,
-                node.loc.start,
+                node,
               );
             }
 
@@ -2669,7 +2670,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // parse import-type/typeof shorthand
     parseImportSpecifier(node: N.ImportDeclaration): void {
       const specifier = this.startNode();
-      const firstIdentLoc = this.state.start;
+      const firstIdentIsString = this.match(tt.string);
       const firstIdent = this.parseModuleExportName();
 
       let specifierTypeKind = null;
@@ -2713,13 +2714,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = specifier.imported.__clone();
         }
       } else {
-        if (firstIdent.type === "StringLiteral") {
+        if (firstIdentIsString) {
+          /*:: invariant(firstIdent instanceof N.StringLiteral) */
           throw this.raise(
             specifier.start,
             Errors.ImportBindingIsString,
             firstIdent.value,
           );
         }
+        /*:: invariant(firstIdent instanceof N.Node) */
         isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
@@ -2731,7 +2734,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (nodeIsTypeImport && specifierIsTypeImport) {
         this.raise(
-          firstIdentLoc,
+          specifier.start,
           FlowErrors.ImportTypeShorthandOnlyInPureImport,
         );
       }
@@ -3388,14 +3391,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const endOfInit = () => this.match(tt.comma) || this.match(tt.braceR);
       switch (this.state.type) {
         case tt.num: {
-          const literal = this.parseLiteral(this.state.value, "NumericLiteral");
+          const literal = this.parseNumericLiteral(this.state.value);
           if (endOfInit()) {
             return { type: "number", pos: literal.start, value: literal };
           }
           return { type: "invalid", pos: startPos };
         }
         case tt.string: {
-          const literal = this.parseLiteral(this.state.value, "StringLiteral");
+          const literal = this.parseStringLiteral(this.state.value);
           if (endOfInit()) {
             return { type: "string", pos: literal.start, value: literal };
           }
@@ -3403,7 +3406,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         case tt._true:
         case tt._false: {
-          const literal = this.parseBooleanLiteral();
+          const literal = this.parseBooleanLiteral(this.match(tt._true));
           if (endOfInit()) {
             return {
               type: "boolean",
