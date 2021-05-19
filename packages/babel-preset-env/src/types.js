@@ -32,7 +32,7 @@ export type Options = {
   modules: ModuleOption,
   shippedProposals: boolean,
   spec: boolean,
-  targets: { ...InputTargets, uglify?: boolean },
+  targets: { ...InputTargets, uglify?: boolean, esmodules?: boolean },
   useBuiltIns: BuiltInsOption,
   browserslistEnv: string,
 };

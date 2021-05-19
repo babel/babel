@@ -249,11 +249,11 @@ function getLocalTargets(
 `);
   }
 
-  return getTargets(
-    // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
-    (optionsTargets: InputTargets),
-    { ignoreBrowserslistConfig, configPath, browserslistEnv },
-  );
+  return getTargets((optionsTargets: InputTargets), {
+    ignoreBrowserslistConfig,
+    configPath,
+    browserslistEnv,
+  });
 }
 
 function supportsStaticESM(caller) {
