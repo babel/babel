@@ -247,17 +247,16 @@ export default class Tokenizer extends ParserErrors {
 
   nextToken(): void {
     const curContext = this.curContext();
-    if (!curContext?.preserveSpace) this.skipSpace();
+    if (!curContext.preserveSpace) this.skipSpace();
     this.state.start = this.state.pos;
-    this.state.startLoc = this.state.curPosition();
+    if (!this.isLookahead) this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
       this.finishToken(tt.eof);
       return;
     }
 
-    const override = curContext?.override;
-    if (override) {
-      override(this);
+    if (curContext === ct.template) {
+      this.readTmplToken();
     } else {
       this.getTokenFromCode(this.codePointAtPos(this.state.pos));
     }

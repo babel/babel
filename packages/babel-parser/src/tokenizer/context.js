@@ -10,19 +10,16 @@ export class TokContext {
   constructor(
     token: string,
     isExpr?: boolean,
-    preserveSpace?: boolean,
-    override?: ?Function, // Takes a Tokenizer as a this-parameter, and returns void.
+    preserveSpace?: boolean, // Takes a Tokenizer as a this-parameter, and returns void.
   ) {
     this.token = token;
     this.isExpr = !!isExpr;
     this.preserveSpace = !!preserveSpace;
-    this.override = override;
   }
 
   token: string;
   isExpr: boolean;
   preserveSpace: boolean;
-  override: ?Function;
 }
 
 export const types: {
@@ -34,7 +31,7 @@ export const types: {
   templateQuasi: new TokContext("${", false),
   parenStatement: new TokContext("(", false),
   parenExpression: new TokContext("(", true),
-  template: new TokContext("`", true, true, p => p.readTmplToken()),
+  template: new TokContext("`", true, true),
   functionExpression: new TokContext("function", true),
   functionStatement: new TokContext("function", false),
 };
