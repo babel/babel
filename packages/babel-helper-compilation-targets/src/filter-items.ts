@@ -1,5 +1,3 @@
-// @flow
-
 import semver from "semver";
 
 import pluginsCompatData from "@babel/compat-data/plugins";
@@ -12,7 +10,7 @@ import {
 } from "./utils";
 
 export function targetsSupported(target: Targets, support: Targets) {
-  const targetEnvironments = Object.keys(target);
+  const targetEnvironments = Object.keys(target) as Array<keyof Targets>;
 
   if (targetEnvironments.length === 0) {
     return false;
@@ -65,9 +63,9 @@ export function isRequired(
     includes,
     excludes,
   }: {
-    compatData?: { [feature: string]: Targets },
-    includes?: Set<string>,
-    excludes?: Set<string>,
+    compatData?: { [feature: string]: Targets };
+    includes?: Set<string>;
+    excludes?: Set<string>;
   } = {},
 ) {
   if (excludes?.has(name)) return false;

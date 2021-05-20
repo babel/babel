@@ -1,5 +1,6 @@
 import semver from "semver";
 import { unreleasedLabels } from "./targets";
+import type { Targets } from "./types";
 
 export function prettifyVersion(version: string) {
   if (typeof version !== "string") {
@@ -32,5 +33,5 @@ export function prettifyTargets(targets: Targets): Targets {
 
     results[target] = value;
     return results;
-  }, {});
+  }, {} as Targets);
 }

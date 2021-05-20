@@ -1,14 +1,18 @@
-// @flow
 import semver from "semver";
 import { OptionValidator } from "@babel/helper-validator-option";
 import { unreleasedLabels } from "./targets";
 import type { Target, Targets } from "./types";
 
+declare const PACKAGE_JSON: { name: string; version: string };
+
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 
-export function semverMin(first: ?string, second: string): string {
+export function semverMin(
+  first: string | undefined | null,
+  second: string,
+): string {
   return first && semver.lt(first, second) ? first : second;
 }
 
@@ -46,6 +50,7 @@ export function getLowestUnreleased(a: string, b: string, env: string): string {
   const unreleasedLabel = unreleasedLabels[env];
   const hasUnreleased = [a, b].some(item => item === unreleasedLabel);
   if (hasUnreleased) {
+    // @ts-expect-error todo(flow->ts): probably a bug - types of a hasUnreleased to not overlap
     return a === hasUnreleased ? b : a || b;
   }
   return semverMin(a, b);

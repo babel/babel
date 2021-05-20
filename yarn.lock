@@ -410,7 +410,9 @@ __metadata:
   dependencies:
     "@babel/compat-data": "workspace:^7.13.15"
     "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-validator-option": "workspace:^7.12.17"
+    "@types/semver": ^5.5.0
     browserslist: ^4.14.5
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
@@ -4243,7 +4245,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^5.4.0":
+"@types/semver@npm:^5.4.0, @types/semver@npm:^5.5.0":
   version: 5.5.0
   resolution: "@types/semver@npm:5.5.0"
   checksum: df74589466e171c36dd868b760609e518830f212134c238674ddd6eb83653368c59f4510aa6523b7692ec99c5d8ab40b818e30f9d65e0df97c56bdbacef06661

@@ -30,6 +30,8 @@
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@types/semver": "^5.5.0"
   }
 }

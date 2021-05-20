@@ -1,5 +1,3 @@
-// @flow
-
 // Targets
 export type Target =
   | "node"
@@ -15,24 +13,21 @@ export type Target =
   | "samsung";
 
 export type Targets = {
-  [target: Target]: string,
+  [target in Target]: string;
 };
 
-export type TargetsTuple = {|
-  [target: Target]: string,
-|};
+export type TargetsTuple = {
+  [target in Target]: string;
+};
 
-export type Browsers = string | $ReadOnlyArray<string>;
+export type Browsers = string | ReadonlyArray<string>;
 
 export type InputTargets = {
-  ...Targets,
-
-  browsers?: Browsers,
-
+  browsers?: Browsers;
   // When `true`, this completely replaces the `browsers` option.
   // When `intersect`, this is intersected with the `browsers`
   // option (giving the higher browsers as the result).
   // TODO(Babel 8): Make `true` behave like `intersect` and
   // remove `intersect`.
-  esmodules?: boolean | "intersect",
-};
+  esmodules?: boolean | "intersect";
+} & Targets;

@@ -1,5 +1,3 @@
-// @flow
-
 export const TargetNames = {
   node: "node",
   chrome: "chrome",

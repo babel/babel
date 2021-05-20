@@ -216,3 +216,7 @@ declare module "@babel/helper-module-transforms" {
 declare module "@babel/plugin-transform-classes" {
   declare module.exports: any;
 }
+
+declare module "@babel/helper-compilation-targets" {
+  declare module.exports: any;
+}
