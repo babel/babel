@@ -51,7 +51,7 @@ jobs:
           git commit -am "chore: update test262 to ${{ steps.test262.outputs.sha1 }}"
           git push --force origin update-test262-parser
       - name: Create Pull Request
-        uses: actions/github-script@v3
+        uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
