@@ -9,7 +9,6 @@ import type Parser from "../../parser";
 import { types as tt, type TokenType } from "../../tokenizer/types";
 import * as N from "../../types";
 import type { Pos, Position } from "../../util/location";
-import type State from "../../tokenizer/state";
 import { types as tc } from "../../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart, isKeyword } from "../../util/identifier";
@@ -154,7 +153,7 @@ function hasTypeImportKind(node: N.Node): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
 
-function isMaybeDefaultImport(state: State): boolean {
+function isMaybeDefaultImport(state: { type: TokenType, value: any }): boolean {
   return (
     (state.type === tt.name || !!state.type.keyword) && state.value !== "from"
   );

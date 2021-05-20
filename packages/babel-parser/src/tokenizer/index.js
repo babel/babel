@@ -19,6 +19,7 @@ import {
   skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
+import type { LookaheadState } from "./state";
 
 const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
 
@@ -144,11 +145,9 @@ export default class Tokenizer extends ParserErrors {
   // Move to the next token
 
   next(): void {
-    if (!this.isLookahead) {
-      this.checkKeywordEscapes();
-      if (this.options.tokens) {
-        this.pushToken(new Token(this.state));
-      }
+    this.checkKeywordEscapes();
+    if (this.options.tokens) {
+      this.pushToken(new Token(this.state));
     }
 
     this.state.lastTokEnd = this.state.end;
@@ -175,14 +174,51 @@ export default class Tokenizer extends ParserErrors {
     return this.state.type === type;
   }
 
-  // TODO
+  /**
+   * Create a LookaheadState from current parser state
+   *
+   * @param {State} state
+   * @returns {LookaheadState}
+   * @memberof Tokenizer
+   */
+  createLookaheadState(state: State): LookaheadState {
+    return {
+      pos: state.pos,
+      value: null,
+      type: state.type,
+      start: state.start,
+      end: state.end,
+      lastTokEnd: state.end,
+      context: [this.curContext()],
+      exprAllowed: state.exprAllowed,
+      inType: state.inType,
+    };
+  }
 
-  lookahead(): State {
+  /**
+   * lookahead peeks the next token, skipping changes to token context and
+   * comment statck. For performance it returns a limited LookaheadState
+   * instead of full parser state.
+   *
+   * The { column, line } Loc info is not included in lookahead since such usage
+   * is rare. Although it may return other location properties e.g. `curLine` and
+   * `lineStart`, these properties are not listed in the LookaheadState interface
+   * and thus the returned value is _NOT_ reliable.
+   *
+   * The tokenizer should make best efforts to avoid using on parser states
+   * other than those defined in LookaheadState
+   *
+   * @returns {LookaheadState}
+   * @memberof Tokenizer
+   */
+  lookahead(): LookaheadState {
     const old = this.state;
-    this.state = old.clone(true);
+    // For performance we use a simpified tokenizer state structure
+    // $FlowIgnore
+    this.state = this.createLookaheadState(old);
 
     this.isLookahead = true;
-    this.next();
+    this.nextToken();
     this.isLookahead = false;
 
     const curr = this.state;
@@ -397,12 +433,14 @@ export default class Tokenizer extends ParserErrors {
 
   finishToken(type: TokenType, val: any): void {
     this.state.end = this.state.pos;
-    this.state.endLoc = this.state.curPosition();
     const prevType = this.state.type;
     this.state.type = type;
     this.state.value = val;
 
-    if (!this.isLookahead) this.updateContext(prevType);
+    if (!this.isLookahead) {
+      this.state.endLoc = this.state.curPosition();
+      this.updateContext(prevType);
+    }
   }
 
   // ### Token reading

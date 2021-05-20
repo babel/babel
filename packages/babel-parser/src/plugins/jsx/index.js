@@ -15,6 +15,10 @@ import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
 import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
+import type { LookaheadState } from "../../tokenizer/state";
+import State from "../../tokenizer/state";
+
+type JSXLookaheadState = LookaheadState & { inPropertyName: boolean };
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
@@ -571,6 +575,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         return super.parseExprAtom(refExpressionErrors);
       }
+    }
+
+    createLookaheadState(state: State): JSXLookaheadState {
+      const lookaheadState = ((super.createLookaheadState(
+        state,
+      ): any): JSXLookaheadState);
+      lookaheadState.inPropertyName = state.inPropertyName;
+      return lookaheadState;
     }
 
     getTokenFromCode(code: number): void {
