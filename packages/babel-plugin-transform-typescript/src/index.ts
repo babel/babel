@@ -21,8 +21,12 @@ function isInType(path) {
   }
 }
 
-const PARSED_PARAMS = new WeakSet();
 const GLOBAL_TYPES = new WeakMap();
+// Track programs which contain imports/exports of values, so that we can include
+// empty exports for programs that do not, but were parsed as modules. This allows
+// tools to infer unamibiguously that results are ESM.
+const NEEDS_EXPLICIT_ESM = new WeakMap();
+const PARSED_PARAMS = new WeakSet();
 
 function isGlobalType(path, name) {
   const program = path.find(path => path.isProgram()).node;
@@ -175,118 +179,143 @@ export default declare((api, opts) => {
       Identifier: visitPattern,
       RestElement: visitPattern,
 
-      Program(path, state) {
-        const { file } = state;
-        let fileJsxPragma = null;
-        let fileJsxPragmaFrag = null;
+      Program: {
+        enter(path, state) {
+          const { file } = state;
+          let fileJsxPragma = null;
+          let fileJsxPragmaFrag = null;
 
-        if (!GLOBAL_TYPES.has(path.node)) {
-          GLOBAL_TYPES.set(path.node, new Set());
-        }
+          if (!GLOBAL_TYPES.has(path.node)) {
+            GLOBAL_TYPES.set(path.node, new Set());
+          }
 
-        if (file.ast.comments) {
-          for (const comment of file.ast.comments) {
-            const jsxMatches = JSX_PRAGMA_REGEX.exec(comment.value);
-            if (jsxMatches) {
-              if (jsxMatches[1]) {
-                // isFragment
-                fileJsxPragmaFrag = jsxMatches[2];
-              } else {
-                fileJsxPragma = jsxMatches[2];
+          if (file.ast.comments) {
+            for (const comment of file.ast.comments) {
+              const jsxMatches = JSX_PRAGMA_REGEX.exec(comment.value);
+              if (jsxMatches) {
+                if (jsxMatches[1]) {
+                  // isFragment
+                  fileJsxPragmaFrag = jsxMatches[2];
+                } else {
+                  fileJsxPragma = jsxMatches[2];
+                }
               }
             }
           }
-        }
 
-        let pragmaImportName = fileJsxPragma || jsxPragma;
-        if (pragmaImportName) {
-          [pragmaImportName] = pragmaImportName.split(".");
-        }
+          let pragmaImportName = fileJsxPragma || jsxPragma;
+          if (pragmaImportName) {
+            [pragmaImportName] = pragmaImportName.split(".");
+          }
 
-        let pragmaFragImportName = fileJsxPragmaFrag || jsxPragmaFrag;
-        if (pragmaFragImportName) {
-          [pragmaFragImportName] = pragmaFragImportName.split(".");
-        }
+          let pragmaFragImportName = fileJsxPragmaFrag || jsxPragmaFrag;
+          if (pragmaFragImportName) {
+            [pragmaFragImportName] = pragmaFragImportName.split(".");
+          }
 
-        // remove type imports
-        for (let stmt of path.get("body")) {
-          if (stmt.isImportDeclaration()) {
-            if (stmt.node.importKind === "type") {
-              stmt.remove();
-              continue;
-            }
+          // remove type imports
+          for (let stmt of path.get("body")) {
+            if (stmt.isImportDeclaration()) {
+              if (!NEEDS_EXPLICIT_ESM.has(state.file.ast.program)) {
+                NEEDS_EXPLICIT_ESM.set(state.file.ast.program, true);
+              }
 
-            // If onlyRemoveTypeImports is `true`, only remove type-only imports
-            // and exports introduced in TypeScript 3.8.
-            if (!onlyRemoveTypeImports) {
-              // Note: this will allow both `import { } from "m"` and `import "m";`.
-              // In TypeScript, the former would be elided.
-              if (stmt.node.specifiers.length === 0) {
+              if (stmt.node.importKind === "type") {
+                stmt.remove();
                 continue;
               }
 
-              let allElided = true;
-              const importsToRemove: NodePath<t.Node>[] = [];
-
-              for (const specifier of stmt.node.specifiers) {
-                const binding = stmt.scope.getBinding(specifier.local.name);
-
-                // The binding may not exist if the import node was explicitly
-                // injected by another plugin. Currently core does not do a good job
-                // of keeping scope bindings synchronized with the AST. For now we
-                // just bail if there is no binding, since chances are good that if
-                // the import statement was injected then it wasn't a typescript type
-                // import anyway.
-                if (
-                  binding &&
-                  isImportTypeOnly({
-                    binding,
-                    programPath: path,
-                    pragmaImportName,
-                    pragmaFragImportName,
-                  })
-                ) {
-                  importsToRemove.push(binding.path);
-                } else {
-                  allElided = false;
-                }
-              }
-
-              if (allElided) {
-                stmt.remove();
+              // If onlyRemoveTypeImports is `true`, only remove type-only imports
+              // and exports introduced in TypeScript 3.8.
+              if (onlyRemoveTypeImports) {
+                NEEDS_EXPLICIT_ESM.set(path.node, false);
               } else {
-                for (const importPath of importsToRemove) {
-                  importPath.remove();
+                // Note: this will allow both `import { } from "m"` and `import "m";`.
+                // In TypeScript, the former would be elided.
+                if (stmt.node.specifiers.length === 0) {
+                  NEEDS_EXPLICIT_ESM.set(path.node, false);
+                  continue;
+                }
+
+                let allElided = true;
+                const importsToRemove: NodePath<t.Node>[] = [];
+
+                for (const specifier of stmt.node.specifiers) {
+                  const binding = stmt.scope.getBinding(specifier.local.name);
+
+                  // The binding may not exist if the import node was explicitly
+                  // injected by another plugin. Currently core does not do a good job
+                  // of keeping scope bindings synchronized with the AST. For now we
+                  // just bail if there is no binding, since chances are good that if
+                  // the import statement was injected then it wasn't a typescript type
+                  // import anyway.
+                  if (
+                    binding &&
+                    isImportTypeOnly({
+                      binding,
+                      programPath: path,
+                      pragmaImportName,
+                      pragmaFragImportName,
+                    })
+                  ) {
+                    importsToRemove.push(binding.path);
+                  } else {
+                    allElided = false;
+                    NEEDS_EXPLICIT_ESM.set(path.node, false);
+                  }
+                }
+
+                if (allElided) {
+                  stmt.remove();
+                } else {
+                  for (const importPath of importsToRemove) {
+                    importPath.remove();
+                  }
                 }
               }
+
+              continue;
             }
 
-            continue;
-          }
-
-          if (stmt.isExportDeclaration()) {
-            stmt = stmt.get("declaration");
-          }
-
-          if (stmt.isVariableDeclaration({ declare: true })) {
-            for (const name of Object.keys(stmt.getBindingIdentifiers())) {
-              registerGlobalType(path.scope, name);
+            if (stmt.isExportDeclaration()) {
+              stmt = stmt.get("declaration");
             }
-          } else if (
-            stmt.isTSTypeAliasDeclaration() ||
-            stmt.isTSDeclareFunction() ||
-            stmt.isTSInterfaceDeclaration() ||
-            stmt.isClassDeclaration({ declare: true }) ||
-            stmt.isTSEnumDeclaration({ declare: true }) ||
-            (stmt.isTSModuleDeclaration({ declare: true }) &&
-              stmt.get("id").isIdentifier())
+
+            if (stmt.isVariableDeclaration({ declare: true })) {
+              for (const name of Object.keys(stmt.getBindingIdentifiers())) {
+                registerGlobalType(path.scope, name);
+              }
+            } else if (
+              stmt.isTSTypeAliasDeclaration() ||
+              stmt.isTSDeclareFunction() ||
+              stmt.isTSInterfaceDeclaration() ||
+              stmt.isClassDeclaration({ declare: true }) ||
+              stmt.isTSEnumDeclaration({ declare: true }) ||
+              (stmt.isTSModuleDeclaration({ declare: true }) &&
+                stmt.get("id").isIdentifier())
+            ) {
+              registerGlobalType(path.scope, stmt.node.id.name);
+            }
+          }
+        },
+        exit(path) {
+          if (
+            path.node.sourceType === "module" &&
+            NEEDS_EXPLICIT_ESM.get(path.node)
           ) {
-            registerGlobalType(path.scope, stmt.node.id.name);
+            // If there are no remaining value exports, this file can no longer
+            // be inferred to be ESM. Leave behind an empty export declaration
+            // so it can be.
+            path.pushContainer("body", t.exportNamedDeclaration());
           }
-        }
+        },
       },
 
-      ExportNamedDeclaration(path) {
+      ExportNamedDeclaration(path, state) {
+        if (!NEEDS_EXPLICIT_ESM.has(state.file.ast.program)) {
+          NEEDS_EXPLICIT_ESM.set(state.file.ast.program, true);
+        }
+
         if (path.node.exportKind === "type") {
           path.remove();
           return;
@@ -307,7 +336,10 @@ export default declare((api, opts) => {
           )
         ) {
           path.remove();
+          return;
         }
+
+        NEEDS_EXPLICIT_ESM.set(state.file.ast.program, false);
       },
 
       ExportSpecifier(path) {
@@ -317,14 +349,22 @@ export default declare((api, opts) => {
         }
       },
 
-      ExportDefaultDeclaration(path) {
+      ExportDefaultDeclaration(path, state) {
+        if (!NEEDS_EXPLICIT_ESM.has(state.file.ast.program)) {
+          NEEDS_EXPLICIT_ESM.set(state.file.ast.program, true);
+        }
+
         // remove whole declaration if it's exporting a TS type
         if (
           t.isIdentifier(path.node.declaration) &&
           isGlobalType(path, path.node.declaration.name)
         ) {
           path.remove();
+
+          return;
         }
+
+        NEEDS_EXPLICIT_ESM.set(state.file.ast.program, false);
       },
 
       TSDeclareFunction(path) {
