@@ -155,6 +155,7 @@ const featuresToPlugins = {
   "class-fields-private-in": "privateIn",
   "class-static-block": "classStaticBlock",
   "top-level-await": "topLevelAwait",
+  "import-assertions": "importAssertions",
 };
 
 const unmappedFeatures = new Set();
