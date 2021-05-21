@@ -115,6 +115,7 @@ export const checkDuplicateIncludeExcludes = (
 const normalizeTargets = (targets): Options["targets"] => {
   // TODO: Allow to use only query or strings as a targets from next breaking change.
   if (typeof targets === "string" || Array.isArray(targets)) {
+    // @ts-expect-error
     return { browsers: targets };
   }
   return { ...targets };
