@@ -7,11 +7,7 @@
 import { types as tt } from "./types";
 
 export class TokContext {
-  constructor(
-    token: string,
-    isExpr?: boolean,
-    preserveSpace?: boolean, // Takes a Tokenizer as a this-parameter, and returns void.
-  ) {
+  constructor(token: string, isExpr?: boolean, preserveSpace?: boolean) {
     this.token = token;
     this.isExpr = !!isExpr;
     this.preserveSpace = !!preserveSpace;
