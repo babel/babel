@@ -1,4 +1,3 @@
-// @flow
 /* eslint sort-keys: "error" */
 
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";

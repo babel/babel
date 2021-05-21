@@ -1,16 +1,15 @@
-// @flow
+import { getInclusionReasons } from "@babel/helper-compilation-targets";
 
-import {
-  getInclusionReasons,
-  type Targets,
-} from "@babel/helper-compilation-targets";
+import type { Targets } from "@babel/helper-compilation-targets";
 
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
 export const logPlugin = (
   item: string,
   targetVersions: Targets,
-  list: { [key: string]: Targets },
+  list: {
+    [key: string]: Targets;
+  },
 ) => {
   const filteredList = getInclusionReasons(item, targetVersions, list);
 

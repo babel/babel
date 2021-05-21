@@ -1,5 +1,3 @@
-// @flow
-
 import plugins from "@babel/compat-data/plugins";
 import bugfixPlugins from "@babel/compat-data/plugin-bugfixes";
 import availablePlugins from "./available-plugins";

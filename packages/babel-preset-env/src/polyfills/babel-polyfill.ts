@@ -1,5 +1,3 @@
-// @flow
-
 import { getImportSource, getRequireSource, isPolyfillSource } from "./utils";
 
 import type { NodePath } from "@babel/traverse";
