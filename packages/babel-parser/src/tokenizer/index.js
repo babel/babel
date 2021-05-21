@@ -197,7 +197,7 @@ export default class Tokenizer extends ParserErrors {
 
   /**
    * lookahead peeks the next token, skipping changes to token context and
-   * comment statck. For performance it returns a limited LookaheadState
+   * comment stack. For performance it returns a limited LookaheadState
    * instead of full parser state.
    *
    * The { column, line } Loc info is not included in lookahead since such usage
