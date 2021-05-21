@@ -205,7 +205,7 @@ export default class Tokenizer extends ParserErrors {
    * `lineStart`, these properties are not listed in the LookaheadState interface
    * and thus the returned value is _NOT_ reliable.
    *
-   * The tokenizer should make best efforts to avoid using on parser states
+   * The tokenizer should make best efforts to avoid using any parser state
    * other than those defined in LookaheadState
    *
    * @returns {LookaheadState}
