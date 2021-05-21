@@ -3,7 +3,8 @@
     "config:base"
   ],
   "dependencyDashboardApproval": true,
-  "labels": ["PR: Dependency ⬆️"],
+  "labels": ["PR: Dependency ⬆️", "repo automation 🤖" ],
+  "postUpdateOptions": ["yarnDedupeHighest"],
   "packageRules": [
     {
       "matchDepTypes": ["dependencies", "devDependencies"],
