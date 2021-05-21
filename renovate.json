@@ -4,6 +4,7 @@
   ],
   "dependencyDashboardApproval": true,
   "labels": ["PR: Dependency ⬆️"],
+  "postUpdateOptions": ["yarnDedupeHighest"],
   "packageRules": [
     {
       "matchDepTypes": ["dependencies", "devDependencies"],
