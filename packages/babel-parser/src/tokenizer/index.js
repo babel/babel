@@ -320,7 +320,8 @@ export default class Tokenizer extends ParserErrors {
   }
 
   skipBlockComment(): void {
-    const startLoc = this.state.curPosition();
+    let startLoc;
+    if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
     const end = this.input.indexOf("*/", this.state.pos + 2);
     if (end === -1) throw this.raise(start, Errors.UnterminatedComment);
@@ -339,6 +340,7 @@ export default class Tokenizer extends ParserErrors {
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
+    /*:: invariant(startLoc) */
 
     this.pushComment(
       true,
@@ -352,7 +354,8 @@ export default class Tokenizer extends ParserErrors {
 
   skipLineComment(startSkip: number): void {
     const start = this.state.pos;
-    const startLoc = this.state.curPosition();
+    let startLoc;
+    if (!this.isLookahead) startLoc = this.state.curPosition();
     let ch = this.input.charCodeAt((this.state.pos += startSkip));
     if (this.state.pos < this.length) {
       while (!isNewLine(ch) && ++this.state.pos < this.length) {
@@ -363,6 +366,7 @@ export default class Tokenizer extends ParserErrors {
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
+    /*:: invariant(startLoc) */
 
     this.pushComment(
       false,
