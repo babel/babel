@@ -1533,11 +1533,11 @@ export default abstract class StatementParser extends ExpressionParser {
     state: N.ParseClassMemberState,
     isStatic: boolean,
   ) {
-    const publicMethod: N.ClassMethod = member;
-    const privateMethod: N.ClassPrivateMethod = member;
-    const publicProp: N.ClassProperty = member;
-    const privateProp: N.ClassPrivateProperty = member;
-    const accessorProp: N.ClassAccessorProperty = member;
+    const publicMethod = member as N.ClassMethod;
+    const privateMethod = member as N.ClassPrivateMethod;
+    const publicProp = member as N.ClassProperty;
+    const privateProp = member as N.ClassPrivateProperty;
+    const accessorProp = member as N.ClassAccessorProperty;
 
     const method: typeof publicMethod | typeof privateMethod = publicMethod;
     const publicMember: typeof publicMethod | typeof publicProp = publicMethod;

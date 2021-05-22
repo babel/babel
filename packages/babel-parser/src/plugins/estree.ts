@@ -29,7 +29,7 @@ export default (superClass: typeof Parser) =>
       return file;
     }
 
-    parseRegExpLiteral({ pattern, flags }): N.Node {
+    parseRegExpLiteral({ pattern, flags }): any {
       let regex = null;
       try {
         regex = new RegExp(pattern, flags);
@@ -43,7 +43,7 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    parseBigIntLiteral(value: any): N.Node {
+    parseBigIntLiteral(value: any): any {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
       let bigInt;
       try {
@@ -58,7 +58,7 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    parseDecimalLiteral(value: any): N.Node {
+    parseDecimalLiteral(value: any): any {
       // https://github.com/estree/estree/blob/master/experimental/decimal.md
       // todo: use BigDecimal when node supports it.
       const decimal = null;
@@ -72,7 +72,7 @@ export default (superClass: typeof Parser) =>
       return this.parseLiteral<T>(value, "Literal");
     }
 
-    parseStringLiteral(value: any): N.Node {
+    parseStringLiteral(value: any): any {
       return this.estreeParseLiteral(value);
     }
 
@@ -80,7 +80,7 @@ export default (superClass: typeof Parser) =>
       return this.estreeParseLiteral(value);
     }
 
-    parseNullLiteral(): N.Node {
+    parseNullLiteral(): any {
       return this.estreeParseLiteral(null);
     }
 
@@ -107,7 +107,7 @@ export default (superClass: typeof Parser) =>
       );
       stmt.directive = directiveLiteral.extra.raw.slice(1, -1);
 
-      return this.finishNodeAt(stmt, "ExpressionStatement", directive.loc.end);
+      return this.finishNodeAt(stmt, "ExpressionStatement", directive.loc.end)  as N.ExpressionStatement;
     }
 
     // ==================================
@@ -124,6 +124,7 @@ export default (superClass: typeof Parser) =>
 
     checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
       if (node != null && this.isObjectProperty(node)) {
+        // @ts-expect-error todo(flow->ts) node types
         this.checkDeclaration((node as any as N.EstreeProperty).value);
       } else {
         super.checkDeclaration(node);
