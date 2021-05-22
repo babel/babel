@@ -804,7 +804,7 @@ export type MethodLike =
   | TSDeclareMethod;
 
 export type MethodBase = FunctionBase & {
-  readonly kind: MethodKind;
+  kind: MethodKind;
 };
 
 export type MethodKind = "constructor" | "method" | "get" | "set";
@@ -1262,7 +1262,7 @@ export type TSDeclareFunction = OptTSDeclareFunction & {
 export type TSDeclareMethod = BodilessFunctionOrMethodBase &
   ClassMethodOrDeclareMethodCommon & {
     type: "TSDeclareMethod";
-    readonly kind: MethodKind;
+    kind: MethodKind;
   };
 
 export type TsQualifiedName = NodeBase & {
