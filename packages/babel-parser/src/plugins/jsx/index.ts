@@ -518,18 +518,18 @@ export default (superClass: {
           });
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
           this.raise(JsxErrors.MissingClosingTagElement, {
-            // $FlowIgnore
+            // @ts-expect-error todo(flow->ts) $FlowIgnore
             at: closingElement,
             openingTagName: getQualifiedJSXName(openingElement.name),
           });
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
           if (
-            // $FlowIgnore
+            // @ts-expect-error todo(flow->ts) $FlowIgnore
             getQualifiedJSXName(closingElement.name) !==
             getQualifiedJSXName(openingElement.name)
           ) {
             this.raise(JsxErrors.MissingClosingTagElement, {
-              // $FlowIgnore
+              // @ts-expect-error todo(flow->ts) $FlowIgnore
               at: closingElement,
               openingTagName: getQualifiedJSXName(openingElement.name),
             });

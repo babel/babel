@@ -117,9 +117,9 @@ export default class State {
   end: number = 0;
 
   // Position information for the previous token
-  // $FlowIgnore this is initialized when generating the second token.
+  // @ts-expect-error todo(flow->ts) $FlowIgnore this is initialized when generating the second token.
   lastTokEndLoc: Position = null;
-  // $FlowIgnore this is initialized when generating the second token.
+  // @ts-expect-error todo(flow->ts) $FlowIgnore this is initialized when generating the second token.
   lastTokStartLoc: Position = null;
   lastTokStart: number = 0;
 
@@ -156,14 +156,14 @@ export default class State {
     const keys = Object.keys(this);
     for (let i = 0, length = keys.length; i < length; i++) {
       const key = keys[i];
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       let val = this[key];
 
       if (!skipArrays && Array.isArray(val)) {
         val = val.slice();
       }
 
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       state[key] = val;
     }
 

@@ -180,7 +180,7 @@ export default class Tokenizer extends CommentsParser {
   lookahead(): LookaheadState {
     const old = this.state;
     // For performance we use a simplified tokenizer state structure
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     this.state = this.createLookaheadState(old);
 
     this.isLookahead = true;
@@ -453,7 +453,7 @@ export default class Tokenizer extends CommentsParser {
     this.state.type = type;
     // the prevType of updateContext is required
     // only when the new type is tt.slash/tt.jsxTagEnd
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     this.updateContext();
   }
 

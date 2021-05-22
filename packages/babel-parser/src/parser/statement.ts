@@ -76,7 +76,7 @@ function babel7CompatTokens(tokens, input) {
           tokens.splice(
             i,
             1,
-            // $FlowIgnore: hacky way to create token
+            // @ts-expect-error todo(flow->ts) $FlowIgnore: hacky way to create token
             new Token({
               type: getExportedToken(tt.hash),
               value: "#",
@@ -85,7 +85,7 @@ function babel7CompatTokens(tokens, input) {
               startLoc: loc.start,
               endLoc: hashEndLoc,
             }),
-            // $FlowIgnore: hacky way to create token
+            // @ts-expect-error todo(flow->ts) $FlowIgnore: hacky way to create token
             new Token({
               type: getExportedToken(tt.name),
               value: value,
@@ -105,7 +105,7 @@ function babel7CompatTokens(tokens, input) {
           const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
           let startToken;
           if (input.charCodeAt(start) === charCodes.graveAccent) {
-            // $FlowIgnore: hacky way to create token
+            // @ts-expect-error todo(flow->ts) $FlowIgnore: hacky way to create token
             startToken = new Token({
               type: getExportedToken(tt.backQuote),
               value: "`",
@@ -115,7 +115,7 @@ function babel7CompatTokens(tokens, input) {
               endLoc: backquoteEndLoc,
             });
           } else {
-            // $FlowIgnore: hacky way to create token
+            // @ts-expect-error todo(flow->ts) $FlowIgnore: hacky way to create token
             startToken = new Token({
               type: getExportedToken(tt.braceR),
               value: "}",
@@ -134,7 +134,7 @@ function babel7CompatTokens(tokens, input) {
             templateElementEnd = end - 1;
             templateElementEndLoc = createPositionWithColumnOffset(loc.end, -1);
             templateValue = value === null ? null : value.slice(1, -1);
-            // $FlowIgnore: hacky way to create token
+            // @ts-expect-error todo(flow->ts) $FlowIgnore: hacky way to create token
             endToken = new Token({
               type: getExportedToken(tt.backQuote),
               value: "`",
@@ -148,7 +148,7 @@ function babel7CompatTokens(tokens, input) {
             templateElementEnd = end - 2;
             templateElementEndLoc = createPositionWithColumnOffset(loc.end, -2);
             templateValue = value === null ? null : value.slice(1, -2);
-            // $FlowIgnore: hacky way to create token
+            // @ts-expect-error todo(flow->ts) $FlowIgnore: hacky way to create token
             endToken = new Token({
               type: getExportedToken(tt.dollarBraceL),
               value: "${",
@@ -162,7 +162,7 @@ function babel7CompatTokens(tokens, input) {
             i,
             1,
             startToken,
-            // $FlowIgnore: hacky way to create token
+            // @ts-expect-error todo(flow->ts) $FlowIgnore: hacky way to create token
             new Token({
               type: getExportedToken(tt.template),
               value: templateValue,
@@ -177,7 +177,7 @@ function babel7CompatTokens(tokens, input) {
           continue;
         }
       }
-      // $FlowIgnore: we manipulate `token` for performance reasons
+      // @ts-expect-error todo(flow->ts) $FlowIgnore: we manipulate `token` for performance reasons
       token.type = getExportedToken(type);
     }
   }
@@ -2253,7 +2253,7 @@ export default class StatementParser extends ExpressionParser {
           const exportName =
             exported.type === "Identifier" ? exported.name : exported.value;
           this.checkDuplicateExports(specifier, exportName);
-          // $FlowIgnore
+          // @ts-expect-error todo(flow->ts) $FlowIgnore
           if (!isFrom && specifier.local) {
             const { local } = specifier;
             if (local.type !== "Identifier") {

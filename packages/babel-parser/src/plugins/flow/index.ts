@@ -123,7 +123,7 @@ const FlowErrors = ParseErrorEnum`flow`(_ => ({
     explicitType: EnumExplicitType;
   }>(
     ({ enumName, memberName, explicitType }) =>
-      // $FlowIgnore (coercing null which never actually happens)
+      // @ts-expect-error todo(flow->ts) $FlowIgnore (coercing null which never actually happens)
       `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of \`${memberName}\` needs to be a ${explicitType} literal.`,
   ),
   EnumInvalidMemberInitializerSymbolType: _<{
@@ -461,9 +461,9 @@ export default (superClass: {
       this.expect(tt.parenR);
 
       [
-        // $FlowFixMe (destructuring not supported yet)
+        // @ts-expect-error todo(flow->ts) $FlowFixMe (destructuring not supported yet)
         typeNode.returnType,
-        // $FlowFixMe (destructuring not supported yet)
+        // @ts-expect-error todo(flow->ts) $FlowFixMe (destructuring not supported yet)
         node.predicate,
       ] = this.flowParseTypeAndPredicateInitialiser();
 
@@ -657,14 +657,14 @@ export default (superClass: {
           node = this.parseExport(node);
           if (node.type === "ExportNamedDeclaration") {
             // flow does not support the ExportNamedDeclaration
-            // $FlowIgnore
+            // @ts-expect-error todo(flow->ts) $FlowIgnore
             node.type = "ExportDeclaration";
-            // $FlowFixMe
+            // @ts-expect-error todo(flow->ts) $FlowFixMe
             node.default = false;
             delete node.exportKind;
           }
 
-          // $FlowIgnore
+          // @ts-expect-error todo(flow->ts) $FlowIgnore
           node.type = "Declare" + node.type;
 
           return node;
@@ -1930,9 +1930,9 @@ export default (superClass: {
         const typeNode = this.startNode();
 
         [
-          // $FlowFixMe (destructuring not supported yet)
+          // @ts-expect-error todo(flow->ts) $FlowFixMe (destructuring not supported yet)
           typeNode.typeAnnotation,
-          // $FlowFixMe (destructuring not supported yet)
+          // @ts-expect-error todo(flow->ts) $FlowFixMe (destructuring not supported yet)
           node.predicate,
         ] = this.flowParseTypeAndPredicateInitialiser();
 
@@ -2546,7 +2546,7 @@ export default (superClass: {
         }
         // estree support
       } else if (
-        // $FlowFixMe flow does not know about the face that estree can replace ClassMethod with MethodDefinition
+        // @ts-expect-error todo(flow->ts) $FlowFixMe flow does not know about the face that estree can replace ClassMethod with MethodDefinition
         method.type === "MethodDefinition" &&
         isConstructor &&
         method.value.params
@@ -2863,7 +2863,7 @@ export default (superClass: {
 
     // parse function type parameters - function foo<T>() {}
     parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
-      // $FlowFixMe
+      // @ts-expect-error todo(flow->ts) $FlowFixMe
       const kind = node.kind;
       if (kind !== "get" && kind !== "set" && this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -3054,9 +3054,9 @@ export default (superClass: {
           const typeNode = this.startNode();
 
           [
-            // $FlowFixMe (destructuring not supported yet)
+            // @ts-expect-error todo(flow->ts) $FlowFixMe (destructuring not supported yet)
             typeNode.typeAnnotation,
-            // $FlowFixMe (destructuring not supported yet)
+            // @ts-expect-error todo(flow->ts) $FlowFixMe (destructuring not supported yet)
             node.predicate,
           ] = this.flowParseTypeAndPredicateInitialiser();
 
@@ -3202,7 +3202,7 @@ export default (superClass: {
         node.callee = base;
         node.typeArguments = this.flowParseTypeParameterInstantiation();
         this.expect(tt.parenL);
-        // $FlowFixMe
+        // @ts-expect-error todo(flow->ts) $FlowFixMe
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
         return this.finishCallExpression(node, /* optional */ true);

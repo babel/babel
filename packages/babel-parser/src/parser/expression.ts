@@ -127,7 +127,7 @@ export default class ExpressionParser extends LValParser {
       prop.type === "SpreadElement" ||
       this.isObjectMethod(prop) ||
       prop.computed ||
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       prop.shorthand
     ) {
       return;
@@ -1979,7 +1979,7 @@ export default class ExpressionParser extends LValParser {
         this.raise(Errors.InvalidRecordProperty, { at: prop });
       }
 
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       if (prop.shorthand) {
         this.addExtra(prop, "shorthand", true);
       }
@@ -2262,7 +2262,7 @@ export default class ExpressionParser extends LValParser {
 
     if (!node) this.unexpected();
 
-    // $FlowFixMe
+    // @ts-expect-error todo(flow->ts) $FlowFixMe
     return node;
   }
 
@@ -2445,7 +2445,7 @@ export default class ExpressionParser extends LValParser {
     type: string,
     isMethod: boolean = false,
   ): void {
-    // $FlowIgnore (node is not bodiless if we get here)
+    // @ts-expect-error todo(flow->ts) $FlowIgnore (node is not bodiless if we get here)
     this.parseFunctionBody(node, false, isMethod);
     this.finishNode(node, type);
   }
@@ -2484,9 +2484,9 @@ export default class ExpressionParser extends LValParser {
             // This logic is here to align the error location with the ESTree plugin.
             this.raise(Errors.IllegalLanguageModeDirective, {
               at:
-                // $FlowIgnore
+                // @ts-expect-error todo(flow->ts) $FlowIgnore
                 (node.kind === "method" || node.kind === "constructor") &&
-                // $FlowIgnore
+                // @ts-expect-error todo(flow->ts) $FlowIgnore
                 !!node.key
                   ? node.key.loc.end
                   : node,

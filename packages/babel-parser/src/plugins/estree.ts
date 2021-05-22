@@ -51,7 +51,7 @@ export default (superClass: {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
       let bigInt;
       try {
-        // $FlowIgnore
+        // @ts-expect-error todo(flow->ts) $FlowIgnore
         bigInt = BigInt(value);
       } catch {
         bigInt = null;
@@ -163,7 +163,7 @@ export default (superClass: {
         this.directiveToStmt(d),
       );
       node.body = directiveStatements.concat(node.body);
-      // $FlowIgnore - directives isn't optional in the type definition
+      // @ts-expect-error todo(flow->ts) $FlowIgnore - directives isn't optional in the type definition
       delete node.directives;
     }
 
@@ -185,7 +185,7 @@ export default (superClass: {
         true,
       );
       if (method.typeParameters) {
-        // $FlowIgnore
+        // @ts-expect-error todo(flow->ts) $FlowIgnore
         method.value.typeParameters = method.typeParameters;
         delete method.typeParameters;
       }
@@ -270,10 +270,10 @@ export default (superClass: {
       );
       funcNode.type = "FunctionExpression";
       delete funcNode.kind;
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       node.value = funcNode;
       if (type === "ClassPrivateMethod") {
-        // $FlowIgnore
+        // @ts-expect-error todo(flow->ts) $FlowIgnore
         node.computed = false;
       }
       type = "MethodDefinition";
@@ -401,9 +401,9 @@ export default (superClass: {
           (node as N.Node as N.EstreeImportExpression).attributes =
             node.arguments[1] ?? null;
         }
-        // $FlowIgnore - arguments isn't optional in the type definition
+        // @ts-expect-error todo(flow->ts) $FlowIgnore - arguments isn't optional in the type definition
         delete node.arguments;
-        // $FlowIgnore - callee isn't optional in the type definition
+        // @ts-expect-error todo(flow->ts) $FlowIgnore - callee isn't optional in the type definition
         delete node.callee;
       }
 

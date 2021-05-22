@@ -389,7 +389,7 @@ export default class LValParser extends NodeUtils {
         this.expect(tt.comma);
       }
       if (allowEmpty && this.match(tt.comma)) {
-        // $FlowFixMe This method returns `$ReadOnlyArray<?Pattern>` if `allowEmpty` is set.
+        // @ts-expect-error todo(flow->ts) $FlowFixMe This method returns `$ReadOnlyArray<?Pattern>` if `allowEmpty` is set.
         elts.push(null);
       } else if (this.eat(close)) {
         break;
@@ -479,7 +479,7 @@ export default class LValParser extends NodeUtils {
   ): Pattern {
     startLoc = startLoc ?? this.state.startLoc;
     startPos = startPos ?? this.state.start;
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     left = left ?? this.parseBindingAtom();
     if (!this.eat(tt.eq)) return left;
 
@@ -656,7 +656,7 @@ export default class LValParser extends NodeUtils {
 
     // Flow has difficulty tracking `key` and `expression`, but only if we use
     // null-proto objects. If we use normal objects, everything works fine.
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     for (const child of [].concat(expression[key])) {
       if (child) {
         this.checkLVal(child, {

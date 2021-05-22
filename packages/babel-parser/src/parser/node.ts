@@ -29,9 +29,9 @@ class Node implements NodeBase {
 const NodePrototype = Node.prototype;
 
 if (!process.env.BABEL_8_BREAKING) {
-  // $FlowIgnore
+  // @ts-expect-error todo(flow->ts) $FlowIgnore
   NodePrototype.__clone = function (): Node {
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     const newNode: any = new Node();
     const keys = Object.keys(this);
     for (let i = 0, length = keys.length; i < length; i++) {
@@ -96,12 +96,12 @@ export function cloneStringLiteral(node: any): any {
 
 export class NodeUtils extends UtilParser {
   startNode<T extends NodeType>(): T {
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     return new Node(this, this.state.start, this.state.startLoc);
   }
 
   startNodeAt<T extends NodeType>(pos: number, loc: Position): T {
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     return new Node(this, pos, loc);
   }
 

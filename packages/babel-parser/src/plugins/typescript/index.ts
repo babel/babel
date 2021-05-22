@@ -51,7 +51,7 @@ type TsModifier =
 
 function nonNull<T>(x?: T | null): T {
   if (x == null) {
-    // $FlowIgnore
+    // @ts-expect-error todo(flow->ts) $FlowIgnore
     throw new Error(`Unexpected ${x} value.`);
   }
   return x;
@@ -1161,7 +1161,7 @@ export default (superClass: {
           this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
           // This produces an invalid AST, but at least we don't drop
           // nodes representing the invalid source.
-          // $FlowIgnore
+          // @ts-expect-error todo(flow->ts) $FlowIgnore
           labeledNode.label = type;
         }
 
@@ -1196,7 +1196,7 @@ export default (superClass: {
     ): N.TsFunctionOrConstructorType {
       const node: N.TsFunctionOrConstructorType = this.startNode();
       if (type === "TSConstructorType") {
-        // $FlowIgnore
+        // @ts-expect-error todo(flow->ts) $FlowIgnore
         node.abstract = !!abstract;
         if (abstract) this.next();
         this.next(); // eat `new`
@@ -2373,7 +2373,7 @@ export default (superClass: {
       if (bodilessType === "TSDeclareFunction" && this.state.isAmbientContext) {
         this.raise(TSErrors.DeclareFunctionHasImplementation, { at: node });
         if (
-          // $FlowIgnore
+          // @ts-expect-error todo(flow->ts) $FlowIgnore
           node.declare
         ) {
           super.parseFunctionBodyAndFinish(node, bodilessType, isMethod);
@@ -2506,7 +2506,7 @@ export default (superClass: {
             const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
             node.callee = base;
             // possibleAsync always false here, because we would have handled it above.
-            // $FlowIgnore (won't be any undefined arguments)
+            // @ts-expect-error todo(flow->ts) $FlowIgnore (won't be any undefined arguments)
             node.arguments = this.parseCallExpressionArguments(
               tt.parenR,
               /* possibleAsync */ false,
@@ -2517,7 +2517,7 @@ export default (superClass: {
 
             node.typeParameters = typeArguments;
             if (state.optionalChainMember) {
-              // $FlowIgnore
+              // @ts-expect-error todo(flow->ts) $FlowIgnore
               node.optional = isOptionalCall;
             }
 
@@ -3141,12 +3141,12 @@ export default (superClass: {
     parseClassPrivateProperty(
       node: N.ClassPrivateProperty,
     ): N.ClassPrivateProperty {
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       if (node.abstract) {
         this.raise(TSErrors.PrivateElementHasAbstract, { at: node });
       }
 
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       if (node.accessibility) {
         this.raise(TSErrors.PrivateElementHasAccessibility, {
           at: node,
@@ -3173,7 +3173,7 @@ export default (superClass: {
         });
       }
 
-      // $FlowIgnore
+      // @ts-expect-error todo(flow->ts) $FlowIgnore
       const { declare = false, kind } = method;
 
       if (declare && (kind === "get" || kind === "set")) {

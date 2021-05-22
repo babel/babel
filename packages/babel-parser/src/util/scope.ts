@@ -207,7 +207,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     return this.scopeStack[this.scopeStack.length - 1];
   }
 
-  // $FlowIgnore
+  // @ts-expect-error todo(flow->ts) $FlowIgnore
   currentVarScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const { flags } = this.scopeStack[i];
@@ -218,7 +218,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   }
 
   // Could be useful for `arguments`, `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
-  // $FlowIgnore
+  // @ts-expect-error todo(flow->ts) $FlowIgnore
   currentThisScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const { flags } = this.scopeStack[i];
