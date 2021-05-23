@@ -1347,7 +1347,7 @@ export type TsTypeReference = TsTypeBase & {
 export type TsTypePredicate = TsTypeBase & {
   type: "TSTypePredicate",
   parameterName: Identifier | TsThisType,
-  typeAnnotation: TsTypeAnnotation,
+  typeAnnotation: TsTypeAnnotation | null,
   asserts: boolean,
 };
 

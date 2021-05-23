@@ -97,7 +97,8 @@
               "start":108,"end":113,"loc":{"start":{"line":2,"column":44},"end":{"line":2,"column":49},"identifierName":"value"},
               "name": "value"
             },
-            "asserts": true
+            "asserts": true,
+            "typeAnnotation": null
           }
         },
         "body": {

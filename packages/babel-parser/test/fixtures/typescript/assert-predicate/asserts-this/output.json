@@ -45,7 +45,8 @@
                     "type": "TSThisType",
                     "start":25,"end":29,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":19}}
                   },
-                  "asserts": true
+                  "asserts": true,
+                  "typeAnnotation": null
                 }
               },
               "body": {
