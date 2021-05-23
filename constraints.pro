@@ -9,3 +9,13 @@ gen_enforced_field(WorkspaceCwd, 'license', 'MIT') :-
   \+ workspace_field(WorkspaceCwd, 'private', true).
 gen_enforced_field(WorkspaceCwd, 'license', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
+
+% Enforces the repository field for all public workspaces while removing it from private workspaces
+gen_enforced_field(WorkspaceCwd, 'repository.type', 'git') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true).
+gen_enforced_field(WorkspaceCwd, 'repository.url', 'https://github.com/babel/babel.git') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true).
+gen_enforced_field(WorkspaceCwd, 'repository.directory', WorkspaceCwd) :-
+  \+ workspace_field(WorkspaceCwd, 'private', true).
+gen_enforced_field(WorkspaceCwd, 'repository', null) :-
+  workspace_field(WorkspaceCwd, 'private', true).
