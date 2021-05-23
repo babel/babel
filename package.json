@@ -2,7 +2,6 @@
   "name": "babel",
   "version": "7.14.3",
   "private": true,
-  "license": "MIT",
   "type": "commonjs",
   "scripts": {
     "bootstrap": "make bootstrap",

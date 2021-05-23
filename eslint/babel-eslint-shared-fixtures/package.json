@@ -2,7 +2,6 @@
   "name": "@babel/eslint-shared-fixtures",
   "version": "7.12.13",
   "description": "Shared fixtures for testing @babel/eslint-* packages",
-  "license": "MIT",
   "private": true,
   "dependencies": {
     "@babel/core": "workspace:^7.12.13",

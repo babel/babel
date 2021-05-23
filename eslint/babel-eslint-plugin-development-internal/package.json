@@ -16,7 +16,6 @@
     "babel-eslint"
   ],
   "author": "Kai Cataldo <kai@kaicataldo.com>",
-  "license": "MIT",
   "private": true,
   "bugs": {
     "url": "https://github.com/babel/babel/issues"

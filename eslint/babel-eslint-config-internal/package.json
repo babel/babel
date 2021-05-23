@@ -3,7 +3,6 @@
   "version": "7.12.13",
   "description": "The Babel Team's ESLint configuration. Since it's internal, it might not respect semver.",
   "author": "The Babel Team (https://babel.dev/team)",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
