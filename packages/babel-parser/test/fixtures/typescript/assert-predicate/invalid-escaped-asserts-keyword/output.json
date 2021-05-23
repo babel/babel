@@ -47,7 +47,8 @@
               "start":62,"end":67,"loc":{"start":{"line":1,"column":62},"end":{"line":1,"column":67},"identifierName":"value"},
               "name": "value"
             },
-            "asserts": true
+            "asserts": true,
+            "typeAnnotation": null
           }
         }
       }
