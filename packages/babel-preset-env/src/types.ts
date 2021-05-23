@@ -5,7 +5,8 @@ import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 // Options
 // Use explicit modules to prevent typo errors.
 export type ModuleOption = typeof ModulesOption[keyof typeof ModulesOption];
-export type BuiltInsOption = typeof UseBuiltInsOption[keyof typeof UseBuiltInsOption];
+export type BuiltInsOption =
+  typeof UseBuiltInsOption[keyof typeof UseBuiltInsOption];
 
 type CorejsVersion = 2 | 3 | string;
 

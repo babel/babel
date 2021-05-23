@@ -30,7 +30,8 @@ import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
 import { declare } from "@babel/helper-plugin-utils";
 
-type ModuleTransformationsType = typeof import("./module-transformations").default;
+type ModuleTransformationsType =
+  typeof import("./module-transformations").default;
 import type { BuiltInsOption, ModuleOption } from "./types";
 
 // TODO: Remove in Babel 8
@@ -41,9 +42,7 @@ export function isPluginRequired(targets: Targets, support: Targets) {
 }
 
 function filterStageFromList(
-  list: {
-    [feature: string]: Targets;
-  },
+  list: { [feature: string]: Targets },
   stageList: Set<string>,
 ) {
   return Object.keys(list).reduce((result, item) => {

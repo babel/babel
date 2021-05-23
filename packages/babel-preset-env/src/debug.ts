@@ -7,9 +7,7 @@ import type { Targets } from "@babel/helper-compilation-targets";
 export const logPlugin = (
   item: string,
   targetVersions: Targets,
-  list: {
-    [key: string]: Targets;
-  },
+  list: { [key: string]: Targets },
 ) => {
   const filteredList = getInclusionReasons(item, targetVersions, list);
 
