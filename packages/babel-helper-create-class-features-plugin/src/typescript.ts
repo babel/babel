@@ -1,5 +1,3 @@
-// @flow
-
 import type { NodePath } from "@babel/traverse";
 
 export function assertFieldTransformed(path: NodePath) {
