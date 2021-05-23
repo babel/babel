@@ -1,4 +1,5 @@
-import { SemVer, lt } from "semver";
+import { lt } from "semver";
+import type { SemVer } from "semver";
 import { logPlugin } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import { removeUnnecessaryItems, removeUnsupportedItems } from "./filter-items";
@@ -172,7 +173,7 @@ export const getPolyfillPlugins = ({
   debug,
 }: {
   useBuiltIns: BuiltInsOption;
-  corejs: typeof SemVer | null | false;
+  corejs: SemVer | null | false;
   polyfillTargets: Targets;
   include: Set<string>;
   exclude: Set<string>;

@@ -1,5 +1,6 @@
 import corejs3Polyfills from "core-js-compat/data.json";
-import { coerce, SemVer } from "semver";
+import { coerce } from "semver";
+import type { SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
@@ -153,7 +154,7 @@ export const validateUseBuiltInsOption = (
 
 export type NormalizedCorejsOption = {
   proposals: boolean;
-  version: typeof SemVer | null | false;
+  version: SemVer | null | false;
 };
 
 export function normalizeCoreJSOption(
