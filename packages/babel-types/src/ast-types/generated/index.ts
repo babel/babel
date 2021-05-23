@@ -481,7 +481,7 @@ export interface ForStatement extends BaseNode {
 export interface FunctionDeclaration extends BaseNode {
   type: "FunctionDeclaration";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   generator?: boolean;
   async?: boolean;
@@ -497,7 +497,7 @@ export interface FunctionDeclaration extends BaseNode {
 export interface FunctionExpression extends BaseNode {
   type: "FunctionExpression";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   generator?: boolean;
   async?: boolean;
@@ -616,7 +616,7 @@ export interface ObjectMethod extends BaseNode {
   type: "ObjectMethod";
   kind: "method" | "get" | "set";
   key: Expression | Identifier | StringLiteral | NumericLiteral;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   computed: boolean;
   generator?: boolean;
@@ -756,7 +756,7 @@ export interface ArrayPattern extends BaseNode {
 
 export interface ArrowFunctionExpression extends BaseNode {
   type: "ArrowFunctionExpression";
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement | Expression;
   async?: boolean;
   expression: boolean;
@@ -1658,7 +1658,7 @@ export interface TSDeclareFunction extends BaseNode {
   type: "TSDeclareFunction";
   id?: Identifier | null;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   returnType?: TSTypeAnnotation | Noop | null;
   async?: boolean;
   declare?: boolean | null;
