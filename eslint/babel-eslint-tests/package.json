@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@babel/core": "workspace:^7.14.3",
     "@babel/eslint-parser": "workspace:^7.14.3",
     "@babel/preset-react": "workspace:^7.13.13",
     "dedent": "^0.7.0",
