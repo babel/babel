@@ -19,3 +19,9 @@ gen_enforced_field(WorkspaceCwd, 'repository.directory', WorkspaceCwd) :-
   \+ workspace_field(WorkspaceCwd, 'private', true).
 gen_enforced_field(WorkspaceCwd, 'repository', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
+
+% Enforces 'publishConfig.access' is set to public for public workspaces while removing it from private workspaces
+gen_enforced_field(WorkspaceCwd, 'publishConfig.access', 'public') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true).
+gen_enforced_field(WorkspaceCwd, 'publishConfig.access', null) :-
+  workspace_field(WorkspaceCwd, 'private', true).
