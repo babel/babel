@@ -1242,6 +1242,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (thisTypePredicate.type === "TSThisType") {
             node.parameterName = (thisTypePredicate: N.TsThisType);
             node.asserts = true;
+            (node: N.TsTypePredicate).typeAnnotation = null;
             thisTypePredicate = this.finishNode(node, "TSTypePredicate");
           } else {
             this.resetStartLocationFromNode(thisTypePredicate, node);
@@ -1264,6 +1265,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // : asserts foo
           node.parameterName = this.parseIdentifier();
           node.asserts = asserts;
+          (node: N.TsTypePredicate).typeAnnotation = null;
           t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
           return this.finishNode(t, "TSTypeAnnotation");
         }
