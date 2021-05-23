@@ -79,6 +79,7 @@ export function push(
   } else if (isObjectMethod(node) || isClassMethod(node)) {
     value = functionExpression(
       null,
+      // @ts-expect-error todo(flow->ts) TSParameterProperty is not assignable to parameter of type 'Identifier | RestElement | Pattern'.
       node.params,
       node.body,
       node.generator,
