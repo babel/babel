@@ -129,7 +129,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
       .map(extractElementDescriptor.bind(file, node.id, superId)),
   );
 
-  let replacement: any = template.expression.ast`
+  const wrapperCall = template.expression.ast`
     ${addDecorateHelper(file)}(
       ${classDecorators || t.nullLiteral()},
       function (${initializeId}, ${superClass ? t.cloneNode(superId) : null}) {
@@ -138,17 +138,18 @@ export function buildDecoratedClass(ref, path, elements, file) {
       },
       ${superClass}
     )
-  `;
-  let classPathDesc = "arguments.1.body.body.0";
+  ` as t.CallExpression & { arguments: [unknown, t.FunctionExpression] };
 
   if (!isStrict) {
-    replacement.arguments[1].body.directives.push(
+    wrapperCall.arguments[1].body.directives.push(
       t.directive(t.directiveLiteral("use strict")),
     );
   }
 
+  let replacement: t.Node = wrapperCall;
+  let classPathDesc = "arguments.1.body.body.0";
   if (isDeclaration) {
-    replacement = template.ast`let ${ref} = ${replacement}`;
+    replacement = template.statement.ast`let ${ref} = ${wrapperCall}`;
     classPathDesc = "declarations.0.init." + classPathDesc;
   }
 
