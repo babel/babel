@@ -7,11 +7,7 @@
     "eslintplugin",
     "eslint-plugin"
   ],
-  "author": {
-    "name": "Nicolò Ribaudo",
-    "email": "nicolo.ribaudo@gmail.com",
-    "url": "https://github.com/nicolo-ribaudo"
-  },
+  "author": "The Babel Team (https://babel.dev/team)",
   "main": "./lib/index.js",
   "type": "commonjs",
   "exports": {

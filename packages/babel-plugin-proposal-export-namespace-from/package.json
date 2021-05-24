@@ -29,5 +29,6 @@
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-export-namespace-from",
   "engines": {
     "node": ">=6.9.0"
-  }
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

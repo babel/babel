@@ -35,5 +35,6 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
-  }
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

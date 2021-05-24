@@ -2,7 +2,7 @@
   "name": "@babel/preset-flow",
   "version": "7.13.13",
   "description": "Babel preset for all Flow plugins.",
-  "author": "James Kyle <me@thejameskyle.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",

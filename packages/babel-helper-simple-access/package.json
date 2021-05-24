@@ -2,7 +2,7 @@
   "name": "@babel/helper-simple-access",
   "version": "7.13.12",
   "description": "Babel helper for ensuring that access to a given value is performed through simple accesses",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-simple-access",
   "license": "MIT",
   "publishConfig": {

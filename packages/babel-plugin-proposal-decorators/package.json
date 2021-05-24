@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-proposal-decorators",
   "version": "7.14.2",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

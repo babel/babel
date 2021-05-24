@@ -13,7 +13,7 @@
     "access": "public"
   },
   "main": "lib/index.js",
-  "author": "Justin Ridgewell <justin@ridgewell.name>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
     "@babel/types": "workspace:^7.13.12"
   },

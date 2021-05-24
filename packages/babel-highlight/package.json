@@ -2,7 +2,7 @@
   "name": "@babel/highlight",
   "version": "7.14.0",
   "description": "Syntax highlight JavaScript strings for output in terminals.",
-  "author": "suchipi <me@suchipi.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-highlight",
   "license": "MIT",
   "publishConfig": {

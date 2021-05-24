@@ -28,5 +28,6 @@
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-sticky-regex",
   "engines": {
     "node": ">=6.9.0"
-  }
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

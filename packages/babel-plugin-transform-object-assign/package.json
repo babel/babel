@@ -8,7 +8,7 @@
     "directory": "packages/babel-plugin-transform-object-assign"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-object-assign",
-  "author": "Jed Watson",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

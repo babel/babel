@@ -2,7 +2,7 @@
   "name": "@babel/helper-module-transforms",
   "version": "7.14.2",
   "description": "Babel helper functions for implementing ES6 module transformations",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
   "license": "MIT",
   "publishConfig": {

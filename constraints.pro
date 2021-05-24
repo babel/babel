@@ -51,3 +51,8 @@ gen_enforced_field(WorkspaceCwd, 'engines.node', '^10.13.0 || ^12.13.0 || >=14.0
 gen_enforced_field(WorkspaceCwd, 'engines.node', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
 
+% Enforces the author field to be consistent
+gen_enforced_field(WorkspaceCwd, 'author', 'The Babel Team (https://babel.dev/team)') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true).
+gen_enforced_field(WorkspaceCwd, 'author', null) :-
+  workspace_field(WorkspaceCwd, 'private', true).

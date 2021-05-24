@@ -115,7 +115,7 @@
     "transpile",
     "transpiler"
   ],
-  "author": "Daniel Lo Nigro <daniel@dan.cx> (http://dan.cx/)",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
