@@ -25,3 +25,29 @@ gen_enforced_field(WorkspaceCwd, 'publishConfig.access', 'public') :-
   \+ workspace_field(WorkspaceCwd, 'private', true).
 gen_enforced_field(WorkspaceCwd, 'publishConfig.access', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
+
+% Enforces the engines.node field for all workspaces except '@babel/eslint*'
+gen_enforced_field(WorkspaceCwd, 'engines.node', '>=6.9.0') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true),
+  % Get the workspace name
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  % Exempt from the rule as it supports '>=4'. TODO: remove with the next major
+  WorkspaceIdent \= '@babel/plugin-proposal-unicode-property-regex',
+  % Exempt from the rule as it supports '>=6.0.0'. TODO: remove with the next major
+  WorkspaceIdent \= '@babel/parser',
+  % Skip '@babel/eslint*' workspaces. TODO: remove with the next major
+  \+ atom_concat('@babel/eslint', _, WorkspaceIdent).
+
+% Enforces the engines.node field for '@babel/eslint*' workspaces
+% TODO: remove with the next major
+gen_enforced_field(WorkspaceCwd, 'engines.node', '^10.13.0 || ^12.13.0 || >=14.0.0') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true),
+  % Get the workspace name
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  % Only target '@babel/eslint*' workspaces
+  atom_concat('@babel/eslint', _, WorkspaceIdent).
+
+% Removes the 'engines.node' field from private workspaces
+gen_enforced_field(WorkspaceCwd, 'engines.node', null) :-
+  workspace_field(WorkspaceCwd, 'private', true).
+

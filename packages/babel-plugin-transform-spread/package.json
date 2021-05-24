@@ -26,5 +26,8 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-spread"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-spread",
+  "engines": {
+    "node": ">=6.9.0"
+  }
 }

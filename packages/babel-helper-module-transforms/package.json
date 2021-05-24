@@ -23,5 +23,8 @@
     "@babel/template": "workspace:^7.12.13",
     "@babel/traverse": "workspace:^7.14.2",
     "@babel/types": "workspace:^7.14.2"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

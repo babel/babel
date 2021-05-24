@@ -27,5 +27,8 @@
   "devDependencies": {
     "@babel/core": "workspace:*"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-async-do-expressions"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-async-do-expressions",
+  "engines": {
+    "node": ">=6.9.0"
+  }
 }

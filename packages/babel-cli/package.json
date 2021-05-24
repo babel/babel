@@ -47,5 +47,8 @@
   "bin": {
     "babel": "./bin/babel.js",
     "babel-external-helpers": "./bin/babel-external-helpers.js"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

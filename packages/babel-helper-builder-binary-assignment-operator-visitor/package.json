@@ -16,5 +16,8 @@
   "dependencies": {
     "@babel/helper-explode-assignable-expression": "workspace:^7.12.13",
     "@babel/types": "workspace:^7.12.13"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

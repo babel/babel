@@ -909,5 +909,8 @@
     "./core-js/reflect/set-prototype-of": "./core-js/reflect/set-prototype-of.js",
     "./core-js/reflect/set": "./core-js/reflect/set.js",
     "./core-js/date/now": "./core-js/date/now.js"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

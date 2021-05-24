@@ -28,5 +28,8 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
     "@babel/plugin-transform-block-scoping": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

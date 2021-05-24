@@ -42,5 +42,8 @@
     "@babel/types": "workspace:*",
     "make-dir": "^2.1.0"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",
+  "engines": {
+    "node": ">=6.9.0"
+  }
 }

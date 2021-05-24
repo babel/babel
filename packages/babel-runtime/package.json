@@ -814,5 +814,8 @@
     "./regenerator": "./regenerator/index.js",
     "./regenerator/*.js": "./regenerator/*.js",
     "./regenerator/": "./regenerator/"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

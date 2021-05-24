@@ -128,5 +128,8 @@
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-standalone"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

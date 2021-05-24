@@ -43,5 +43,8 @@
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

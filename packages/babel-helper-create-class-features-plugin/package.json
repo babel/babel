@@ -32,5 +32,8 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
     "@babel/preset-env": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

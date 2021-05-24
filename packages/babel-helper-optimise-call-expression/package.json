@@ -19,5 +19,8 @@
   "devDependencies": {
     "@babel/generator": "workspace:*",
     "@babel/parser": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }
