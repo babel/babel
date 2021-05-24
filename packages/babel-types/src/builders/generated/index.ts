@@ -1466,30 +1466,30 @@ export function tsTypeParameter(
 }
 export { tsTypeParameter as tSTypeParameter };
 /** @deprecated */
-function NumberLiteral(...args: Array<any>): any {
+function NumberLiteral(...args: Parameters<typeof numericLiteral>): any {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return builder("NumberLiteral", ...args);
+  return numericLiteral(...args);
 }
 export { NumberLiteral as numberLiteral };
 /** @deprecated */
-function RegexLiteral(...args: Array<any>): any {
+function RegexLiteral(...args: Parameters<typeof regExpLiteral>): any {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return builder("RegexLiteral", ...args);
+  return regExpLiteral(...args);
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
-function RestProperty(...args: Array<any>): any {
+function RestProperty(...args: Parameters<typeof restElement>): any {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return builder("RestProperty", ...args);
+  return restElement(...args);
 }
 export { RestProperty as restProperty };
 /** @deprecated */
-function SpreadProperty(...args: Array<any>): any {
+function SpreadProperty(...args: Parameters<typeof spreadElement>): any {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return builder("SpreadProperty", ...args);
+  return spreadElement(...args);
 }
 export { SpreadProperty as spreadProperty };
