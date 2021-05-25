@@ -12,7 +12,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-explode-assignable-expression": "workspace:^7.12.13",
     "@babel/types": "workspace:^7.12.13"

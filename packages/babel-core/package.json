@@ -2,7 +2,7 @@
   "name": "@babel/core",
   "version": "7.14.3",
   "description": "Babel compiler core.",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {

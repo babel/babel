@@ -56,3 +56,12 @@ gen_enforced_field(WorkspaceCwd, 'author', 'The Babel Team (https://babel.dev/te
   \+ workspace_field(WorkspaceCwd, 'private', true).
 gen_enforced_field(WorkspaceCwd, 'author', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
+
+% Enforces the main field to start with ./
+gen_enforced_field(WorkspaceCwd, 'main', ExpectedValue) :-
+  % Get current value
+  workspace_field(WorkspaceCwd, 'main', CurrentValue),
+  % Must not start with ./ already
+  \+ atom_concat('./', _, CurrentValue),
+  % Store './' + CurrentValue in ExpectedValue
+  atom_concat('./', CurrentValue, ExpectedValue).
