@@ -82,7 +82,7 @@ function generateLowercaseBuilders() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import builder from "../builder";
+import validateNode from "../validateNode";
 import type * as t from "../..";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -96,11 +96,47 @@ import type * as t from "../..";
     const formatedBuilderNameLocal = reservedNames.has(formatedBuilderName)
       ? `_${formatedBuilderName}`
       : formatedBuilderName;
+
+    const fieldNames = sortFieldNames(
+      Object.keys(definitions.NODE_FIELDS[type]),
+      type
+    );
+    const builderNames = definitions.BUILDER_KEYS[type];
+    const objectFields = [["type", JSON.stringify(type)]];
+    fieldNames.forEach(fieldName => {
+      const field = definitions.NODE_FIELDS[type][fieldName];
+
+      function defaultExpression() {
+        return Array.isArray(field.default)
+          ? "[]"
+          : JSON.stringify(field.default);
+      }
+
+      if (builderNames.includes(fieldName)) {
+        const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
+        if (isNullable(field)) {
+          objectFields.push([
+            fieldName,
+            `${bindingIdentifierName} === undefined ? ${defaultExpression()} : ${bindingIdentifierName}`,
+          ]);
+        } else {
+          objectFields.push([fieldName, bindingIdentifierName]);
+        }
+      } else {
+        objectFields.push([fieldName, defaultExpression()]);
+      }
+    });
+
     output += `${
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
     }function ${formatedBuilderNameLocal}(${defArgs.join(
       ", "
-    )}): t.${type} { return builder("${type}", ...arguments); }\n`;
+    )}) {\n  const node = {\n${objectFields
+      .map(([k, v]) => `    ${k}: ${v},`)
+      .join(
+        "\n"
+      )}  } as t.${type};\n  validateNode(node);\n  return node;\n}\n`;
+
     if (formatedBuilderNameLocal !== formatedBuilderName) {
       output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
     }
