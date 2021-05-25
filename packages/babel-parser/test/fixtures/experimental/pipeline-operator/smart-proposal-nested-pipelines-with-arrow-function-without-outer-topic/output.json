@@ -52,12 +52,11 @@
                 },
                 "operator": "|>",
                 "right": {
-                  "type": "PipelineBareFunction",
+                  "type": "PipelineTopicExpression",
                   "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17}},
-                  "callee": {
-                    "type": "Identifier",
-                    "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"f"},
-                    "name": "f"
+                  "expression": {
+                    "type": "PipelinePrimaryTopicReference",
+                    "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17}}
                   }
                 }
               }
