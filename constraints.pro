@@ -57,10 +57,12 @@ gen_enforced_field(WorkspaceCwd, 'author', 'The Babel Team (https://babel.dev/te
 gen_enforced_field(WorkspaceCwd, 'author', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
 
-% Enforces the main field to start with ./
-gen_enforced_field(WorkspaceCwd, 'main', ExpectedValue) :-
+% Enforces the main and types field to start with ./
+gen_enforced_field(WorkspaceCwd, FieldName, ExpectedValue) :-
+  % Fields the rule applies to
+  member(FieldName, ['main', 'types']),
   % Get current value
-  workspace_field(WorkspaceCwd, 'main', CurrentValue),
+  workspace_field(WorkspaceCwd, FieldName, CurrentValue),
   % Must not start with ./ already
   \+ atom_concat('./', _, CurrentValue),
   % Store './' + CurrentValue in ExpectedValue

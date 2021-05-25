@@ -15,7 +15,7 @@
     "directory": "packages/babel-types"
   },
   "main": "./lib/index.js",
-  "types": "lib/index-legacy.d.ts",
+  "types": "./lib/index-legacy.d.ts",
   "typesVersions": {
     ">=3.7": {
       "lib/index-legacy.d.ts": [
