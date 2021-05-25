@@ -1186,30 +1186,31 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt.hash: {
-        if (this.state.inPipeline) {
+        const pipeProposal = this.getPluginOption(
+          "pipelineOperator",
+          "proposal",
+        );
+
+        if (pipeProposal) {
           node = this.startNode();
-
-          const throwPipeTopicRequiresHackPipesError = () => {
-            throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
-          };
-
-          const proposal =
-            this.getPluginOption("pipelineOperator", "proposal") ??
-            throwPipeTopicRequiresHackPipesError();
 
           const proposalToNodeType = {
             hack: "TopicReference",
             smart: "PipelinePrimaryTopicReference",
           };
 
+          const throwPipeTopicRequiresHackPipesError = () => {
+            throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
+          };
+
           const nodeType =
-            proposalToNodeType[proposal] ??
+            proposalToNodeType[pipeProposal] ??
             throwPipeTopicRequiresHackPipesError();
 
           this.next();
 
           if (!this.topicReferenceIsAllowedInCurrentContext()) {
-            switch (proposal) {
+            switch (pipeProposal) {
               case "hack":
                 this.raise(node.start, Errors.PipeTopicUnbound);
                 break;
