@@ -7248,7 +7248,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.3.723, electron-to-chromium@npm:^1.3.738":
+"electron-to-chromium@npm:1.3.738":
   version: 1.3.738
   resolution: "electron-to-chromium@npm:1.3.738"
   checksum: efaab265c28df8ffa0741441ec7c9e53f03562af3453584eaeac53fa695ec169b3de1ab6698b2e0e54c3fed19558459ef0960672f94f32811c724a7c1c03417e
