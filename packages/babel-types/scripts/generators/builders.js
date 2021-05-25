@@ -51,12 +51,20 @@ function generateBuilderArgs(type) {
     }
 
     if (builderNames.includes(fieldName)) {
+      const field = definitions.NODE_FIELDS[type][fieldName];
+
+      const def =
+        field.default !== undefined
+          ? Array.isArray(field.default)
+            ? "[]"
+            : JSON.stringify(field.default)
+          : undefined;
       const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
       if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
         args.push(
           `${bindingIdentifierName}${
-            isNullable(field) ? "?:" : ":"
-          } ${typeAnnotation}`
+            isNullable(field) && !def ? "?:" : ":"
+          } ${typeAnnotation}${def ? `= ${def}` : ""}`
         );
       } else {
         args.push(
@@ -114,14 +122,7 @@ import type * as t from "../..";
 
       if (builderNames.includes(fieldName)) {
         const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
-        if (isNullable(field)) {
-          objectFields.push([
-            fieldName,
-            `${bindingIdentifierName} === undefined ? ${defaultExpression()} : ${bindingIdentifierName}`,
-          ]);
-        } else {
-          objectFields.push([fieldName, bindingIdentifierName]);
-        }
+        objectFields.push([fieldName, bindingIdentifierName]);
       } else {
         objectFields.push([fieldName, defaultExpression()]);
       }
