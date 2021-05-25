@@ -1,5 +1,3 @@
-import "core-js/modules/es.array.reduce.js";
-import "core-js/modules/es.array.reduce-right.js";
 import "core-js/modules/es.string.replace.js";
 import "core-js/modules/es.typed-array.float32-array.js";
 import "core-js/modules/es.typed-array.float64-array.js";

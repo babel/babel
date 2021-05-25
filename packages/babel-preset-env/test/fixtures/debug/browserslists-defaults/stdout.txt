@@ -3,24 +3,24 @@
 Using targets:
 {
   "android": "89",
-  "chrome": "87",
-  "edge": "88",
+  "chrome": "88",
+  "edge": "89",
   "firefox": "78",
   "ie": "11",
   "ios": "13.4",
   "opera": "74",
-  "safari": "13.1",
-  "samsung": "12"
+  "safari": "14",
+  "samsung": "13"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties { firefox, ie, ios, safari, samsung }
-  proposal-private-methods { firefox, ie, ios, safari, samsung }
+  proposal-class-properties { firefox < 90, ie, ios, safari < tp, samsung }
+  proposal-private-methods { firefox < 90, ie, ios, safari < tp, samsung }
   proposal-numeric-separator { ie }
-  proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, safari < 14, samsung }
-  proposal-nullish-coalescing-operator { ie, samsung < 13 }
+  proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, samsung }
+  proposal-nullish-coalescing-operator { ie }
   proposal-optional-chaining { android, chrome, edge, ie, opera, samsung }
   proposal-json-strings { ie }
   proposal-optional-catch-binding { ie }
