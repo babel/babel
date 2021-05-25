@@ -135,7 +135,15 @@ export const ErrorMessages = makeErrorTemplates(
     PatternHasAccessor: "Object pattern can't contain getter or setter.",
     PatternHasMethod: "Object pattern can't contain methods.",
     PipeBodyCannotBeArrow:
-      'Unexpected arrow "=>" after pipeline body; arrow function acting as pipe body must be parenthesized due to operator precedence.',
+      'Unexpected arrow "=>" after pipeline body; arrow function acting as Hack-style pipe body must be parenthesized due to operator precedence.',
+    // The `PipeSmartMix` error messages are retained for backwards compatibility
+    // with the deprecated smart-mix pipe operator proposal plugin.
+    PipeSmartMixBodyCannotBeArrow:
+      'Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized.',
+    PipeSmartMixPrimaryTopicNotAllowed:
+      "Topic reference was used in a lexical context without topic binding.",
+    PipeSmartMixTopicUnused:
+      "Pipeline is in topic style but does not use topic reference.",
     PipeTopicRequiresHackPipes:
       'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
     PipeTopicUnbound:

@@ -1209,7 +1209,17 @@ export default class ExpressionParser extends LValParser {
           this.next();
 
           if (!this.topicReferenceIsAllowedInCurrentContext()) {
-            this.raise(node.start, Errors.PipeTopicUnbound);
+            switch (proposal) {
+              case "hack":
+                this.raise(node.start, Errors.PipeTopicUnbound);
+                break;
+              case "smart":
+                this.raise(
+                  node.start,
+                  Errors.PipeSmartMixPrimaryTopicNotAllowed,
+                );
+                break;
+            }
           }
 
           this.registerTopicReference();
@@ -2568,7 +2578,7 @@ export default class ExpressionParser extends LValParser {
       bodyNode.callee = childExpr;
       return this.finishNode(bodyNode, "PipelineBareFunction");
     } else {
-      this.checkHackPipeBodyEarlyErrors(startPos);
+      this.checkSmartPipeTopicBodyEarlyErrors(startPos);
       bodyNode.expression = childExpr;
       return this.finishNode(bodyNode, "PipelineTopicExpression");
     }
@@ -2584,6 +2594,27 @@ export default class ExpressionParser extends LValParser {
         return true;
       default:
         return false;
+    }
+  }
+
+  // This helper method is to be called immediately
+  // after a topic-style smart-mix pipe body is parsed.
+  // The `startPos` is the starting position of the pipe body.
+
+  checkSmartPipeTopicBodyEarlyErrors(startPos: number): void {
+    // If the following token is invalidly `=>`, then throw a human-friendly error
+    // instead of something like 'Unexpected token, expected ";"'.
+    // For example, `x => x |> y => #` (assuming `#` is the topic reference)
+    // groups into `x => (x |> y) => #`,
+    // and `(x |> y) => #` is an invalid arrow function.
+    // This is because smart-mix `|>` has tighter precedence than `=>`.
+    if (this.match(tt.arrow)) {
+      throw this.raise(this.state.start, Errors.PipeSmartMixBodyCannotBeArrow);
+    }
+
+    // A topic-style smart-mix pipe body must use the topic reference at least once.
+    else if (!this.topicReferenceWasUsedInCurrentContext()) {
+      this.raise(startPos, Errors.PipeSmartMixTopicUnused);
     }
   }
 

@@ -2,8 +2,11 @@
   "plugins": [
     [
       "pipelineOperator",
-      { "proposal": "hack", "topicToken": "#" }
+      {
+        "proposal": "hack",
+        "topicToken": "#"
+      }
     ]
   ],
-  "throws": "Unexpected arrow \"=>\" after pipeline body; arrow function acting as pipe body must be parenthesized due to operator precedence. (1:8)"
+  "throws": "Unexpected arrow \"=>\" after pipeline body; arrow function acting as Hack-style pipe body must be parenthesized due to operator precedence. (1:8)"
 }
