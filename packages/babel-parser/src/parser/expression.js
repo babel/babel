@@ -1184,20 +1184,26 @@ export default class ExpressionParser extends LValParser {
         }
         return node;
       }
+
       case tt.hash: {
         if (this.state.inPipeline) {
           node = this.startNode();
 
-          const proposal = this.getPluginOption("pipelineOperator", "proposal");
+          const throwPipeTopicRequiresHackPipesError = () => {
+            throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
+          };
+
+          const proposal =
+            this.getPluginOption("pipelineOperator", "proposal") ??
+            throwPipeTopicRequiresHackPipesError();
+
           const proposalToNodeType = {
             hack: "TopicReference",
             smart: "PipelinePrimaryTopicReference",
           };
-          const throwPipeTopicRequiresHackPipesError = () => {
-            throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
-          };
+
           const nodeType =
-            proposalToNodeType[proposal] ||
+            proposalToNodeType[proposal] ??
             throwPipeTopicRequiresHackPipesError();
 
           this.next();
@@ -1211,6 +1217,7 @@ export default class ExpressionParser extends LValParser {
           return this.finishNode(node, nodeType);
         }
       }
+
       // fall through
       case tt.relational: {
         if (this.state.value === "<") {
@@ -1223,6 +1230,7 @@ export default class ExpressionParser extends LValParser {
           }
         }
       }
+
       // fall through
       default:
         throw this.unexpected();
