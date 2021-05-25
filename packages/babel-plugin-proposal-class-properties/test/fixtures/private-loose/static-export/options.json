@@ -1,7 +1,6 @@
 {
   "plugins": [
     ["proposal-class-properties", { "loose": true }],
-    "transform-block-scoping",
-    "syntax-class-properties"
+    "transform-block-scoping"
   ]
 }

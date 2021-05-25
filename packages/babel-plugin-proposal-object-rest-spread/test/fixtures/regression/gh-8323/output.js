@@ -3,7 +3,7 @@ const get = () => {
   return 3;
 };
 
-const f = (_ref) => {
+const f = _ref => {
   let {
     a = get(),
     b

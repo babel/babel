@@ -71,8 +71,7 @@ packages/babel-standalone/babel.min.js
 !/packages/babel-eslint-plugin/LICENSE
 /.vscode
 
-tsconfig.json
-tsconfig.tsbuildinfo
+/dts
 
 /test/runtime-integration/*/output.js
 /test/runtime-integration/*/absolute-output.js

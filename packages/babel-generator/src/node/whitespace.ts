@@ -200,16 +200,19 @@ export const nodes: {
  * Test if Property needs whitespace.
  */
 
-nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function (
-  node: t.ObjectProperty | t.ObjectTypeProperty | t.ObjectMethod,
-  parent: any,
-): WhitespaceObject | undefined | null {
-  if (parent.properties[0] === node) {
-    return {
-      before: true,
+nodes.ObjectProperty =
+  nodes.ObjectTypeProperty =
+  nodes.ObjectMethod =
+    function (
+      node: t.ObjectProperty | t.ObjectTypeProperty | t.ObjectMethod,
+      parent: any,
+    ): WhitespaceObject | undefined | null {
+      if (parent.properties[0] === node) {
+        return {
+          before: true,
+        };
+      }
     };
-  }
-};
 
 nodes.ObjectTypeCallProperty = function (
   node: t.ObjectTypeCallProperty,
@@ -287,14 +290,16 @@ export const list = {
  * Add whitespace tests for nodes and their aliases.
  */
 
-([
-  ["Function", true],
-  ["Class", true],
-  ["Loop", true],
-  ["LabeledStatement", true],
-  ["SwitchStatement", true],
-  ["TryStatement", true],
-] as Array<[string, any]>).forEach(function ([type, amounts]) {
+(
+  [
+    ["Function", true],
+    ["Class", true],
+    ["Loop", true],
+    ["LabeledStatement", true],
+    ["SwitchStatement", true],
+    ["TryStatement", true],
+  ] as Array<[string, any]>
+).forEach(function ([type, amounts]) {
   if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }

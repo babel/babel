@@ -2,7 +2,7 @@ import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-bind
 
 export default function ({ types: t }) {
   return {
-    inherits: syntaxOptionalCatchBinding,
+    inherits: syntaxOptionalCatchBinding.default,
 
     visitor: {
       CatchClause(path) {

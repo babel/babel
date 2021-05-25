@@ -66,7 +66,8 @@ async function spawn(runner, filename, cwd = process.cwd()) {
     { cwd, env: process.env },
   );
 
-  const EXPERIMENTAL_WARNING = /\(node:\d+\) ExperimentalWarning: The ESM module loader is experimental\./;
+  const EXPERIMENTAL_WARNING =
+    /\(node:\d+\) ExperimentalWarning: The ESM module loader is experimental\./;
 
   if (stderr.replace(EXPERIMENTAL_WARNING, "").trim()) {
     throw new Error(

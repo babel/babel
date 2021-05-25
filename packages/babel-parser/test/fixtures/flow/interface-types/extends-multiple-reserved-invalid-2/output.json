@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":32}},
   "errors": [
-    "SyntaxError: Unexpected reserved type bool (2:23)"
+    "SyntaxError: Unexpected reserved type bool. (2:23)"
   ],
   "program": {
     "type": "Program",
@@ -13,6 +13,13 @@
       {
         "type": "InterfaceDeclaration",
         "start":9,"end":41,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":32}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ],
         "id": {
           "type": "Identifier",
           "start":19,"end":20,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"I"},
@@ -60,14 +67,7 @@
           "indexers": [],
           "internalSlots": [],
           "exact": false
-        },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " @flow",
-            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
-          }
-        ]
+        }
       }
     ],
     "directives": []

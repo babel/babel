@@ -164,10 +164,15 @@ defineType("Decorator", {
 
 defineType("DoExpression", {
   visitor: ["body"],
+  builder: ["body", "async"],
   aliases: ["Expression"],
   fields: {
     body: {
       validate: assertNodeType("BlockStatement"),
+    },
+    async: {
+      validate: assertValueType("boolean"),
+      default: false,
     },
   },
 });

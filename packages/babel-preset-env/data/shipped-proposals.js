@@ -3,14 +3,15 @@
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
 const proposalPlugins = new Set([
-  "proposal-class-properties",
-  "proposal-private-methods"
+  "proposal-class-static-block",
+  "proposal-private-property-in-object",
 ]);
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = {
   "proposal-async-generator-functions": "syntax-async-generators",
   "proposal-class-properties": "syntax-class-properties",
+  "proposal-class-static-block": "syntax-class-static-block",
   "proposal-json-strings": "syntax-json-strings",
   "proposal-nullish-coalescing-operator": "syntax-nullish-coalescing-operator",
   "proposal-numeric-separator": "syntax-numeric-separator",
@@ -19,6 +20,7 @@ const pluginSyntaxObject = {
   "proposal-optional-chaining": "syntax-optional-chaining",
   // note: we don't have syntax-private-methods
   "proposal-private-methods": "syntax-class-properties",
+  "proposal-private-property-in-object": "syntax-private-property-in-object",
   "proposal-unicode-property-regex": null,
 };
 

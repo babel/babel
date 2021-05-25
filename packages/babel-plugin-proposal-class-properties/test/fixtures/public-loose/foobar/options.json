@@ -1,4 +1,7 @@
 {
-  "plugins": [["proposal-class-properties", { "loose": true }]],
-  "presets": [["env", { "targets": { "browsers": "ie 6" } }]]
+  "plugins": [
+    ["proposal-class-properties", { "loose": true }],
+    "transform-classes",
+    "transform-arrow-functions"
+  ]
 }

@@ -20,7 +20,7 @@ import {
   isLoose,
 } from "./features";
 
-export { FEATURES, injectInitialization };
+export { FEATURES, enableFeature, injectInitialization };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
@@ -146,24 +146,16 @@ export function createClassFeaturePlugin({
             constructor = path;
           } else {
             elements.push(path);
-            if (path.isProperty() || path.isPrivate()) {
+            if (
+              path.isProperty() ||
+              path.isPrivate() ||
+              path.isStaticBlock?.()
+            ) {
               props.push(path);
             }
           }
 
           if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
-
-          if (path.isStaticBlock?.()) {
-            throw path.buildCodeFrameError(`Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
-{
-  "plugins": [
-    "@babel/plugin-proposal-class-static-block",
-    "@babel/plugin-proposal-private-property-in-object",
-    "@babel/plugin-proposal-private-methods",
-    "@babel/plugin-proposal-class-properties",
-  ]
-}`);
-          }
         }
 
         if (!props.length && !isDecorated) return;
@@ -210,21 +202,17 @@ export function createClassFeaturePlugin({
           ));
         } else {
           keysNodes = extractComputedKeys(ref, path, computedPaths, this.file);
-          ({
-            staticNodes,
-            pureStaticNodes,
-            instanceNodes,
-            wrapClass,
-          } = buildFieldsInitNodes(
-            ref,
-            path.node.superClass,
-            props,
-            privateNamesMap,
-            state,
-            setPublicClassFields ?? loose,
-            privateFieldsAsProperties ?? loose,
-            constantSuper ?? loose,
-          ));
+          ({ staticNodes, pureStaticNodes, instanceNodes, wrapClass } =
+            buildFieldsInitNodes(
+              ref,
+              path.node.superClass,
+              props,
+              privateNamesMap,
+              state,
+              setPublicClassFields ?? loose,
+              privateFieldsAsProperties ?? loose,
+              constantSuper ?? loose,
+            ));
         }
 
         if (instanceNodes.length > 0) {

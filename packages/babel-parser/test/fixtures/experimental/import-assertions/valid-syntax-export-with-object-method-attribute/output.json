@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":79,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":79}},
   "errors": [
-    "SyntaxError: The only accepted module attribute is `type` (1:54)"
+    "SyntaxError: The only accepted module attribute is `type`. (1:54)"
   ],
   "program": {
     "type": "Program",

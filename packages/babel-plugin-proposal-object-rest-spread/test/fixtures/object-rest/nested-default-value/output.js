@@ -1,7 +1,7 @@
 var _ref2;
 
 const {
-  a = (_ref) => {
+  a = _ref => {
     let rest = babelHelpers.extends({}, _ref);
     let b = babelHelpers.extends({}, {});
   },

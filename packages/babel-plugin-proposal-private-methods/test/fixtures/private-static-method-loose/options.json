@@ -2,7 +2,6 @@
   "plugins": [
     ["proposal-private-methods", { "loose": true }],
     ["proposal-class-properties", { "loose": true }],
-    "transform-block-scoping",
-    "syntax-class-properties"
+    "transform-block-scoping"
   ]
 }

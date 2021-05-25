@@ -738,3 +738,23 @@ export function Variance(this: Printer, node: t.Variance) {
 export function VoidTypeAnnotation(this: Printer) {
   this.word("void");
 }
+
+export function IndexedAccessType(this: Printer, node: t.IndexedAccessType) {
+  this.print(node.objectType, node);
+  this.token("[");
+  this.print(node.indexType, node);
+  this.token("]");
+}
+
+export function OptionalIndexedAccessType(
+  this: Printer,
+  node: t.OptionalIndexedAccessType,
+) {
+  this.print(node.objectType, node);
+  if (node.optional) {
+    this.token("?.");
+  }
+  this.token("[");
+  this.print(node.indexType, node);
+  this.token("]");
+}

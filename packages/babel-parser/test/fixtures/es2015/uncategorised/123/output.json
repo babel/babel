@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":51}},
   "errors": [
-    "SyntaxError: super() is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (1:40)"
+    "SyntaxError: `super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (1:40)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "ClassExpression",
           "start":15,"end":50,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":50}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
+          },
           "id": {
             "type": "Identifier",
             "start":21,"end":22,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":22},"identifierName":"A"},
@@ -63,10 +67,6 @@
                 }
               }
             ]
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 14
           }
         }
       }
@@ -78,11 +78,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
             "raw": "\"use strict\"",
             "rawValue": "use strict"
-          }
+          },
+          "value": "use strict"
         }
       }
     ]

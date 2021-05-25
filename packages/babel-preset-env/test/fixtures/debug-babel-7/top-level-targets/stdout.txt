@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-properties { chrome < 84 }
+  proposal-private-methods { chrome < 84 }
   syntax-numeric-separator
   proposal-logical-assignment-operators { chrome < 85 }
   syntax-nullish-coalescing-operator

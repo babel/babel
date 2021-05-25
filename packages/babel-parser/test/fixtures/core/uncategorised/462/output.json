@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":50}},
   "errors": [
-    "SyntaxError: Unsyntactic continue (1:33)"
+    "SyntaxError: Unsyntactic continue. (1:33)"
   ],
   "program": {
     "type": "Program",
@@ -31,6 +31,10 @@
                 "expression": {
                   "type": "FunctionExpression",
                   "start":19,"end":46,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":46}},
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 18
+                  },
                   "id": null,
                   "generator": false,
                   "async": false,
@@ -50,10 +54,6 @@
                       }
                     ],
                     "directives": []
-                  },
-                  "extra": {
-                    "parenthesized": true,
-                    "parenStart": 18
                   }
                 }
               }

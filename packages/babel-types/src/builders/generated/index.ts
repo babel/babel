@@ -133,9 +133,7 @@ export function forStatement(
 }
 export function functionDeclaration(
   id: t.Identifier | null | undefined,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement,
   generator?: boolean,
   async?: boolean,
@@ -144,9 +142,7 @@ export function functionDeclaration(
 }
 export function functionExpression(
   id: t.Identifier | null | undefined,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement,
   generator?: boolean,
   async?: boolean,
@@ -226,9 +222,7 @@ export function objectExpression(
 export function objectMethod(
   kind: "method" | "get" | "set" | undefined,
   key: t.Expression | t.Identifier | t.StringLiteral | t.NumericLiteral,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement,
   computed?: boolean,
   generator?: boolean,
@@ -338,9 +332,7 @@ export function arrayPattern(
   return builder("ArrayPattern", ...arguments);
 }
 export function arrowFunctionExpression(
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement | t.Expression,
   async?: boolean,
 ): t.ArrowFunctionExpression {
@@ -854,6 +846,18 @@ export function enumStringMember(
 export function enumDefaultedMember(id: t.Identifier): t.EnumDefaultedMember {
   return builder("EnumDefaultedMember", ...arguments);
 }
+export function indexedAccessType(
+  objectType: t.FlowType,
+  indexType: t.FlowType,
+): t.IndexedAccessType {
+  return builder("IndexedAccessType", ...arguments);
+}
+export function optionalIndexedAccessType(
+  objectType: t.FlowType,
+  indexType: t.FlowType,
+): t.OptionalIndexedAccessType {
+  return builder("OptionalIndexedAccessType", ...arguments);
+}
 export function jsxAttribute(
   name: t.JSXIdentifier | t.JSXNamespacedName,
   value?:
@@ -1026,7 +1030,10 @@ export function importAttribute(
 export function decorator(expression: t.Expression): t.Decorator {
   return builder("Decorator", ...arguments);
 }
-export function doExpression(body: t.BlockStatement): t.DoExpression {
+export function doExpression(
+  body: t.BlockStatement,
+  async?: boolean,
+): t.DoExpression {
   return builder("DoExpression", ...arguments);
 }
 export function exportDefaultSpecifier(
@@ -1081,9 +1088,7 @@ export { tsParameterProperty as tSParameterProperty };
 export function tsDeclareFunction(
   id: t.Identifier | null | undefined,
   typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.Identifier | t.Pattern | t.RestElement>,
   returnType?: t.TSTypeAnnotation | t.Noop | null,
 ): t.TSDeclareFunction {
   return builder("TSDeclareFunction", ...arguments);

@@ -1,6 +1,6 @@
 {
   "name": "@babel/parser",
-  "version": "7.13.15",
+  "version": "7.14.3",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babel.dev/docs/en/next/babel-parser",
@@ -33,9 +33,11 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
+    "@babel-baseline/parser": "npm:@babel/parser@^7.14.0",
     "@babel/code-frame": "workspace:*",
     "@babel/helper-fixtures": "workspace:*",
     "@babel/helper-validator-identifier": "workspace:*",
+    "benchmark": "^2.1.4",
     "charcodes": "^0.2.0"
   },
   "bin": "./bin/babel-parser.js"

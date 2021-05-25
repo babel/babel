@@ -84,8 +84,12 @@ getV8Flags(async function (err, v8Flags) {
       throw err;
     }
 
+    // passthrough IPC only if babel-node itself has an IPC channel
+    const shouldPassthroughIPC = process.send !== undefined;
     const proc = child_process.spawn(process.argv[0], args, {
-      stdio: ["inherit", "inherit", "inherit", "ipc"],
+      stdio: shouldPassthroughIPC
+        ? ["inherit", "inherit", "inherit", "ipc"]
+        : "inherit",
     });
     proc.on("exit", function (code, signal) {
       process.on("exit", function () {
@@ -96,7 +100,9 @@ getV8Flags(async function (err, v8Flags) {
         }
       });
     });
-    proc.on("message", message => process.send && process.send(message));
+    if (shouldPassthroughIPC) {
+      proc.on("message", message => process.send(message));
+    }
     process.on("SIGINT", () => proc.kill("SIGINT"));
   }
 });

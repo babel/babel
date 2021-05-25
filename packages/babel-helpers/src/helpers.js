@@ -2,7 +2,9 @@
 
 import template from "@babel/template";
 
-const helpers = Object.create(null);
+import * as generated from "./helpers-generated";
+
+const helpers = { __proto__: null, ...generated };
 export default helpers;
 
 const helper = (minVersion: string) => tpl => ({
@@ -10,91 +12,17 @@ const helper = (minVersion: string) => tpl => ({
   ast: () => template.program.ast(tpl),
 });
 
-helpers.typeof = helper("7.0.0-beta.0")`
-  export default function _typeof(obj) {
-    "@babel/helpers - typeof";
-
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) { return typeof obj; };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype
-          ? "symbol"
-          : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
-  }
-`;
-
-// "for" is a reserved keyword in ES3 so escaping it here for backward compatibility
-helpers.jsx = helper("7.0.0-beta.0")`
-  var REACT_ELEMENT_TYPE;
-
-  export default function _createRawReactElement(type, props, key, children) {
-    if (!REACT_ELEMENT_TYPE) {
-      REACT_ELEMENT_TYPE = (
-        typeof Symbol === "function" && Symbol["for"] && Symbol["for"]("react.element")
-      ) || 0xeac7;
-    }
-
-    var defaultProps = type && type.defaultProps;
-    var childrenLength = arguments.length - 3;
-
-    if (!props && childrenLength !== 0) {
-      // If we're going to assign props.children, we create a new object now
-      // to avoid mutating defaultProps.
-      props = {
-        children: void 0,
-      };
-    }
-
-    if (childrenLength === 1) {
-      props.children = children;
-    } else if (childrenLength > 1) {
-      var childArray = new Array(childrenLength);
-      for (var i = 0; i < childrenLength; i++) {
-        childArray[i] = arguments[i + 3];
-      }
-      props.children = childArray;
-    }
-
-    if (props && defaultProps) {
-      for (var propName in defaultProps) {
-        if (props[propName] === void 0) {
-          props[propName] = defaultProps[propName];
-        }
-      }
-    } else if (!props) {
-      props = defaultProps || {};
-    }
-
-    return {
-      $$typeof: REACT_ELEMENT_TYPE,
-      type: type,
-      key: key === undefined ? null : '' + key,
-      ref: null,
-      props: props,
-      _owner: null,
-    };
-  }
-`;
-
 helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
-    var method
+    var method;
     if (typeof Symbol !== "undefined") {
-      if (Symbol.asyncIterator) {
-        method = iterable[Symbol.asyncIterator]
-        if (method != null) return method.call(iterable);
-      }
-      if (Symbol.iterator) {
-        method = iterable[Symbol.iterator]
-        if (method != null) return method.call(iterable);
-      }
+      if (Symbol.asyncIterator) method = iterable[Symbol.asyncIterator];
+      if (method == null && Symbol.iterator) method = iterable[Symbol.iterator];
     }
-    throw new TypeError("Object is not async iterable");
+    if (method == null) method = iterable["@@asyncIterator"];
+    if (method == null) method = iterable["@@iterator"]
+    if (method == null) throw new TypeError("Object is not async iterable");
+    return method.call(iterable);
   }
 `;
 
@@ -179,9 +107,7 @@ helpers.AsyncGenerator = helper("7.0.0-beta.0")`
     }
   }
 
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () { return this; };
-  }
+  AsyncGenerator.prototype[typeof Symbol === "function" && Symbol.asyncIterator || "@@asyncIterator"] = function () { return this; };
 
   AsyncGenerator.prototype.next = function (arg) { return this._invoke("next", arg); };
   AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", arg); };
@@ -216,9 +142,7 @@ helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
       return { done: false, value: awaitWrap(value) };
     };
 
-    if (typeof Symbol === "function" && Symbol.iterator) {
-      iter[Symbol.iterator] = function () { return this; };
-    }
+    iter[typeof Symbol !== "undefined" && Symbol.iterator || "@@iterator"] = function () { return this; };
 
     iter.next = function (value) {
       if (waiting) {
@@ -413,48 +337,6 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.objectSpread2 = helper("7.5.0")`
-  import defineProperty from "defineProperty";
-
-  // This function is different to "Reflect.ownKeys". The enumerableOnly
-  // filters on symbol properties only. Returned string properties are always
-  // enumerable. It is good to use in objectSpread.
-
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-    return keys;
-  }
-
-  export default function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = (arguments[i] != null) ? arguments[i] : {};
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(
-            target,
-            key,
-            Object.getOwnPropertyDescriptor(source, key)
-          );
-        });
-      }
-    }
-    return target;
-  }
-`;
-
 helpers.inherits = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
 
@@ -618,17 +500,19 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
-  function _getRequireWildcardCache() {
+helpers.interopRequireWildcard = helper("7.14.0")`
+  function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
 
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function () { return cache; };
-    return cache;
+    var cacheBabelInterop = new WeakMap();
+    var cacheNodeInterop = new WeakMap();
+    return (_getRequireWildcardCache = function (nodeInterop) {
+      return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    })(nodeInterop);
   }
 
-  export default function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
+  export default function _interopRequireWildcard(obj, nodeInterop) {
+    if (!nodeInterop && obj && obj.__esModule) {
       return obj;
     }
 
@@ -636,7 +520,7 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       return { default: obj }
     }
 
-    var cache = _getRequireWildcardCache();
+    var cache = _getRequireWildcardCache(nodeInterop);
     if (cache && cache.has(obj)) {
       return cache.get(obj);
     }
@@ -644,7 +528,7 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
     var newObj = {};
     var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
     for (var key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
         var desc = hasPropertyDescriptor
           ? Object.getOwnPropertyDescriptor(obj, key)
           : null;
@@ -1003,7 +887,7 @@ helpers.maybeArrayLike = helper("7.9.0")`
 
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 `;
 
@@ -1019,14 +903,15 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     // _i = _iterator
     // _s = _step
 
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+    if (_i == null) return;
 
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _e = undefined;
+    var _s, _e;
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
         if (i && _arr.length === i) break;
       }
@@ -1046,10 +931,11 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
 
 helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+    if (_i == null) return;
 
     var _arr = [];
-    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+    for (_i = _i.call(arr), _step; !(_step = _i.next()).done;) {
       _arr.push(_step.value);
       if (i && _arr.length === i) break;
     }
@@ -1104,8 +990,9 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
   // f: finish (always called at the end)
 
   export default function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it;
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+
+    if (!it) {
       // Fallback for engines without symbol support
       if (
         Array.isArray(o) ||
@@ -1133,7 +1020,7 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
 
     return {
       s: function() {
-        it = o[Symbol.iterator]();
+        it = it.call(o);
       },
       n: function() {
         var step = it.next();
@@ -1159,28 +1046,25 @@ helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
   import unsupportedIterableToArray from "unsupportedIterableToArray";
 
   export default function _createForOfIteratorHelperLoose(o, allowArrayLike) {
-    var it;
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
 
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-      // Fallback for engines without symbol support
-      if (
-        Array.isArray(o) ||
-        (it = unsupportedIterableToArray(o)) ||
-        (allowArrayLike && o && typeof o.length === "number")
-      ) {
-        if (it) o = it;
-        var i = 0;
-        return function() {
-          if (i >= o.length) return { done: true };
-          return { done: false, value: o[i++] };
-        }
+    if (it) return (it = it.call(o)).next.bind(it);
+
+    // Fallback for engines without symbol support
+    if (
+      Array.isArray(o) ||
+      (it = unsupportedIterableToArray(o)) ||
+      (allowArrayLike && o && typeof o.length === "number")
+    ) {
+      if (it) o = it;
+      var i = 0;
+      return function() {
+        if (i >= o.length) return { done: true };
+        return { done: false, value: o[i++] };
       }
-
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
 
-    it = o[Symbol.iterator]();
-    return it.next.bind(it);
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 `;
 
@@ -2139,76 +2023,3 @@ if (!process.env.BABEL_8_BREAKING) {
     }
   `;
 }
-
-helpers.wrapRegExp = helper("7.2.6")`
-  import wrapNativeSuper from "wrapNativeSuper";
-  import getPrototypeOf from "getPrototypeOf";
-  import possibleConstructorReturn from "possibleConstructorReturn";
-  import inherits from "inherits";
-
-  export default function _wrapRegExp(re, groups) {
-    _wrapRegExp = function(re, groups) {
-      return new BabelRegExp(re, undefined, groups);
-    };
-
-    var _RegExp = wrapNativeSuper(RegExp);
-    var _super = RegExp.prototype;
-    var _groups = new WeakMap();
-
-    function BabelRegExp(re, flags, groups) {
-      var _this = _RegExp.call(this, re, flags);
-      // if the regex is recreated with 'g' flag
-      _groups.set(_this, groups || _groups.get(re));
-      return _this;
-    }
-    inherits(BabelRegExp, _RegExp);
-
-    BabelRegExp.prototype.exec = function(str) {
-      var result = _super.exec.call(this, str);
-      if (result) result.groups = buildGroups(result, this);
-      return result;
-    };
-    BabelRegExp.prototype[Symbol.replace] = function(str, substitution) {
-      if (typeof substitution === "string") {
-        var groups = _groups.get(this);
-        return _super[Symbol.replace].call(
-          this,
-          str,
-          substitution.replace(/\\$<([^>]+)>/g, function(_, name) {
-            return "$" + groups[name];
-          })
-        );
-      } else if (typeof substitution === "function") {
-        var _this = this;
-        return _super[Symbol.replace].call(
-          this,
-          str,
-          function() {
-            var args = [];
-            args.push.apply(args, arguments);
-            if (typeof args[args.length - 1] !== "object") {
-              // Modern engines already pass result.groups as the last arg.
-              args.push(buildGroups(args, _this));
-            }
-            return substitution.apply(this, args);
-          }
-        );
-      } else {
-        return _super[Symbol.replace].call(this, str, substitution);
-      }
-    }
-
-    function buildGroups(result, re) {
-      // NOTE: This function should return undefined if there are no groups,
-      // but in that case Babel doesn't add the wrapper anyway.
-
-      var g = _groups.get(re);
-      return Object.keys(g).reduce(function(groups, name) {
-        groups[name] = result[g[name]];
-        return groups;
-      }, Object.create(null));
-    }
-
-    return _wrapRegExp.apply(this, arguments);
-  }
-`;

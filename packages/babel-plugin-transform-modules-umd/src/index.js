@@ -48,6 +48,7 @@ export default declare((api, options) => {
     strict,
     strictMode,
     noInterop,
+    importInterop,
   } = options;
 
   const constantReexports =
@@ -157,6 +158,7 @@ export default declare((api, options) => {
               strictMode,
               allowTopLevelThis,
               noInterop,
+              importInterop,
             },
           );
 

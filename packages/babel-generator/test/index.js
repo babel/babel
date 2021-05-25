@@ -348,6 +348,20 @@ describe("generation", function () {
     const output = generate(type).code;
     expect(output).toBe("(infer T)[]");
   });
+
+  it("should not deduplicate comments with same start index", () => {
+    const code1 = "/*#__PURE__*/ a();";
+    const code2 = "/*#__PURE__*/ b();";
+
+    const ast1 = parse(code1).program;
+    const ast2 = parse(code2).program;
+
+    const ast = t.program([...ast1.body, ...ast2.body]);
+
+    expect(generate(ast).code).toBe(
+      "/*#__PURE__*/\na();\n\n/*#__PURE__*/\nb();",
+    );
+  });
 });
 
 describe("programmatic generation", function () {
@@ -747,6 +761,18 @@ describe("programmatic generation", function () {
       );
       const output = generate(tsInterfaceDeclaration).code;
       expect(output).toBe("interface A {}");
+    });
+  });
+
+  describe("identifier let", () => {
+    it("detects open bracket from non-optional OptionalMemberExpression", () => {
+      const ast = parse(`for (let?.[x];;);`, {
+        sourceType: "script",
+        strictMode: "false",
+      });
+      ast.program.body[0].init.optional = false;
+      const output = generate(ast).code;
+      expect(output).toBe("for ((let)[x];;);");
     });
   });
 });

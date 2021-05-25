@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Get Pull Request branch
-        uses: actions/github-script@v3
+        uses: actions/github-script@v4
         id: pr-meta
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,6 @@
+{
+  "args": ["payload.js"],
+  "ipcMessage": { "hello": "world" },
+  "ipc": true,
+  "stdout": "ipc enabled"
+}

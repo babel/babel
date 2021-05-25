@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
   "errors": [
-    "SyntaxError: Identifier 'foo' has already been declared (1:35)"
+    "SyntaxError: Identifier 'foo' has already been declared. (1:35)"
   ],
   "program": {
     "type": "Program",

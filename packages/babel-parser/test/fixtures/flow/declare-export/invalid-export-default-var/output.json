@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
   "errors": [
-    "SyntaxError: Missing semicolon (1:26)"
+    "SyntaxError: Missing semicolon. (1:26)"
   ],
   "program": {
     "type": "Program",

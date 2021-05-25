@@ -4,6 +4,7 @@ import ReplaceSupers, {
 } from "@babel/helper-replace-supers";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import * as ts from "./typescript";
 
@@ -53,20 +54,23 @@ export function buildPrivateNamesNodes(
     const { static: isStatic, method: isMethod, getId, setId } = value;
     const isAccessor = getId || setId;
     const id = t.cloneNode(value.id);
+
+    let init;
+
     if (privateFieldsAsProperties) {
-      initNodes.push(
-        template.statement.ast`
-          var ${id} = ${state.addHelper("classPrivateFieldLooseKey")}("${name}")
-        `,
-      );
-    } else if (isMethod && !isStatic) {
-      if (isAccessor) {
-        initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
-      } else {
-        initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
-      }
+      init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
+        t.stringLiteral(name),
+      ]);
     } else if (!isStatic) {
-      initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
+      init = t.newExpression(
+        t.identifier(!isMethod || isAccessor ? "WeakMap" : "WeakSet"),
+        [],
+      );
+    }
+
+    if (init) {
+      annotateAsPure(init);
+      initNodes.push(template.statement.ast`var ${id} = ${init}`);
     }
   }
 
@@ -665,24 +669,31 @@ const thisContextVisitor = traverse.visitors.merge([
   environmentVisitor,
 ]);
 
-function replaceThisContext(path, ref, superRef, file, constantSuper) {
+function replaceThisContext(
+  path,
+  ref,
+  getSuperRef,
+  file,
+  isStaticBlock,
+  constantSuper,
+) {
   const state = { classRef: ref, needsClassRef: false };
 
   const replacer = new ReplaceSupers({
     methodPath: path,
     constantSuper,
-    superRef,
     file,
     refToPreserve: ref,
+    getSuperRef,
     getObjectRef() {
       state.needsClassRef = true;
-      return path.node.static
+      return isStaticBlock || path.node.static
         ? ref
         : t.memberExpression(ref, t.identifier("prototype"));
     },
   });
   replacer.replace();
-  if (path.isProperty()) {
+  if (isStaticBlock || path.isProperty()) {
     path.traverse(thisContextVisitor, state);
   }
   return state.needsClassRef;
@@ -699,10 +710,19 @@ export function buildFieldsInitNodes(
   constantSuper,
 ) {
   let needsClassRef = false;
+  let injectSuperRef;
   const staticNodes = [];
   const instanceNodes = [];
   // These nodes are pure and can be moved to the closest statement position
   const pureStaticNodes = [];
+
+  const getSuperRef = t.isIdentifier(superRef)
+    ? () => superRef
+    : () => {
+        injectSuperRef ??=
+          props[0].scope.generateUidIdentifierBasedOnNode(superRef);
+        return injectSuperRef;
+      };
 
   for (const prop of props) {
     ts.assertFieldTransformed(prop);
@@ -713,19 +733,26 @@ export function buildFieldsInitNodes(
     const isPublic = !isPrivate;
     const isField = prop.isProperty();
     const isMethod = !isField;
+    const isStaticBlock = prop.isStaticBlock?.();
 
-    if (isStatic || (isMethod && isPrivate)) {
+    if (isStatic || (isMethod && isPrivate) || isStaticBlock) {
       const replaced = replaceThisContext(
         prop,
         ref,
-        superRef,
+        getSuperRef,
         state,
+        isStaticBlock,
         constantSuper,
       );
       needsClassRef = needsClassRef || replaced;
     }
 
     switch (true) {
+      case isStaticBlock:
+        staticNodes.push(
+          template.statement.ast`(() => ${t.blockStatement(prop.node.body)})()`,
+        );
+        break;
       case isStatic && isPrivate && isField && privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(
@@ -845,6 +872,14 @@ export function buildFieldsInitNodes(
     wrapClass(path) {
       for (const prop of props) {
         prop.remove();
+      }
+
+      if (injectSuperRef) {
+        path.scope.push({ id: t.cloneNode(injectSuperRef) });
+        path.set(
+          "superClass",
+          t.assignmentExpression("=", injectSuperRef, path.node.superClass),
+        );
       }
 
       if (!needsClassRef) return path;

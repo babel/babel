@@ -9,7 +9,7 @@ import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
-import ParserErrors, { Errors } from "../parser/error";
+import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
 import { SourceLocation } from "../util/location";
 import {
   lineBreak,
@@ -115,7 +115,7 @@ export default class Tokenizer extends ParserErrors {
   // parser/util.js
   /*::
   +hasPrecedingLineBreak: () => boolean;
-  +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  +unexpected: (pos?: ?number, messageOrType?: ErrorTemplate | TokenType) => empty;
   +expectPlugin: (name: string, pos?: ?number) => true;
   */
 
@@ -205,6 +205,21 @@ export default class Tokenizer extends ParserErrors {
     return this.input.charCodeAt(this.nextTokenStart());
   }
 
+  codePointAtPos(pos: number): number {
+    // The implementation is based on
+    // https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-string-gen.cc;l=1455;drc=221e331b49dfefadbc6fa40b0c68e6f97606d0b3;bpv=0;bpt=1
+    // We reimplement `codePointAt` because `codePointAt` is a V8 builtin which is not inlined by TurboFan (as of M91)
+    // since `input` is mostly ASCII, an inlined `charCodeAt` wins here
+    let cp = this.input.charCodeAt(pos);
+    if ((cp & 0xfc00) === 0xd800 && ++pos < this.input.length) {
+      const trail = this.input.charCodeAt(pos);
+      if ((trail & 0xfc00) === 0xdc00) {
+        cp = 0x10000 + ((cp & 0x3ff) << 10) + (trail & 0x3ff);
+      }
+    }
+    return cp;
+  }
+
   // Toggle strict mode. Re-reads the next number or string to please
   // pedantic tests (`"use strict"; 010;` should fail).
 
@@ -244,7 +259,7 @@ export default class Tokenizer extends ParserErrors {
     if (override) {
       override(this);
     } else {
-      this.getTokenFromCode(this.input.codePointAt(this.state.pos));
+      this.getTokenFromCode(this.codePointAtPos(this.state.pos));
     }
   }
 
@@ -407,7 +422,7 @@ export default class Tokenizer extends ParserErrors {
     }
 
     const nextPos = this.state.pos + 1;
-    const next = this.input.charCodeAt(nextPos);
+    const next = this.codePointAtPos(nextPos);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
       throw this.raise(this.state.pos, Errors.UnexpectedDigitAfterHash);
     }
@@ -438,6 +453,12 @@ export default class Tokenizer extends ParserErrors {
         this.finishToken(tt.bracketHashL);
       }
       this.state.pos += 2;
+    } else if (isIdentifierStart(next)) {
+      ++this.state.pos;
+      this.finishToken(tt.privateName, this.readWord1(next));
+    } else if (next === charCodes.backslash) {
+      ++this.state.pos;
+      this.finishToken(tt.privateName, this.readWord1());
     } else {
       this.finishOp(tt.hash, 1);
     }
@@ -902,7 +923,7 @@ export default class Tokenizer extends ParserErrors {
 
       default:
         if (isIdentifierStart(code)) {
-          this.readWord();
+          this.readWord(code);
           return;
         }
     }
@@ -952,7 +973,7 @@ export default class Tokenizer extends ParserErrors {
 
     while (this.state.pos < this.length) {
       const char = this.input[this.state.pos];
-      const charCode = this.input.codePointAt(this.state.pos);
+      const charCode = this.codePointAtPos(this.state.pos);
 
       if (VALID_REGEX_FLAGS.has(char)) {
         if (mods.indexOf(char) > -1) {
@@ -1090,7 +1111,7 @@ export default class Tokenizer extends ParserErrors {
       throw this.raise(start, Errors.InvalidDecimal);
     }
 
-    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
+    if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
       throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
@@ -1176,7 +1197,7 @@ export default class Tokenizer extends ParserErrors {
       isDecimal = true;
     }
 
-    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
+    if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
       throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
@@ -1321,7 +1342,7 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  recordStrictModeErrors(pos: number, message: string) {
+  recordStrictModeErrors(pos: number, message: ErrorTemplate) {
     if (this.state.strict && !this.state.strictErrors.has(pos)) {
       this.raise(pos, message);
     } else {
@@ -1439,19 +1460,23 @@ export default class Tokenizer extends ParserErrors {
   //
   // Incrementally adds only escaped chars, adding other chunks as-is
   // as a micro-optimization.
+  //
+  // When `firstCode` is given, it assumes it is always an identifier start and
+  // will skip reading start position again
 
-  readWord1(): string {
-    let word = "";
+  readWord1(firstCode: number | void): string {
     this.state.containsEsc = false;
+    let word = "";
     const start = this.state.pos;
     let chunkStart = this.state.pos;
+    if (firstCode !== undefined) {
+      this.state.pos += firstCode <= 0xffff ? 1 : 2;
+    }
 
     while (this.state.pos < this.length) {
-      const ch = this.input.codePointAt(this.state.pos);
+      const ch = this.codePointAtPos(this.state.pos);
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
-      } else if (this.state.isIterator && ch === charCodes.atSign) {
-        ++this.state.pos;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
@@ -1462,6 +1487,7 @@ export default class Tokenizer extends ParserErrors {
 
         if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
           this.raise(this.state.pos, Errors.MissingUnicodeEscape);
+          chunkStart = this.state.pos - 1;
           continue;
         }
 
@@ -1482,25 +1508,12 @@ export default class Tokenizer extends ParserErrors {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
-  isIterator(word: string): boolean {
-    return word === "@@iterator" || word === "@@asyncIterator";
-  }
-
   // Read an identifier or keyword token. Will check for reserved
   // words when necessary.
 
-  readWord(): void {
-    const word = this.readWord1();
+  readWord(firstCode: number | void): void {
+    const word = this.readWord1(firstCode);
     const type = keywordTypes.get(word) || tt.name;
-
-    // Allow @@iterator and @@asyncIterator as a identifier only inside type
-    if (
-      this.state.isIterator &&
-      (!this.isIterator(word) || !this.state.inType)
-    ) {
-      this.raise(this.state.pos, Errors.InvalidIdentifier, word);
-    }
-
     this.finishToken(type, word);
   }
 

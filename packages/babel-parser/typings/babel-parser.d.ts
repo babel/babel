@@ -108,6 +108,7 @@ export interface ParserOptions {
 }
 
 export type ParserPlugin =
+  | "asyncDoExpressions"
   | "asyncGenerators"
   | "bigInt"
   | "classPrivateMethods"

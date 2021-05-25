@@ -21,6 +21,9 @@ const x = (n) => do {
       }
       { break; "l" }
     case 7:
+      { a: "m" }
+      break;
+    case 8:
   }
 }
 
@@ -31,4 +34,5 @@ expect(x(3)).toBeUndefined()
 expect(x(4)).toBe("g")
 expect(x(5)).toBe("j")
 expect(x(6)).toBe("k")
-expect(x(7)).toBeUndefined()
+expect(x(7)).toBe("m")
+expect(x(8)).toBeUndefined()

@@ -58,8 +58,9 @@ const require = createRequire(import.meta.url);
         ],
         sourceType: "script",
       };
-      const output = Babel.transformFromAst(ast, "42", { presets: ["es2015"] })
-        .code;
+      const output = Babel.transformFromAst(ast, "42", {
+        presets: ["es2015"],
+      }).code;
       expect(output).toBe("42;");
     });
 

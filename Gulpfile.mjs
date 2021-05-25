@@ -2,7 +2,6 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
-
 import plumber from "gulp-plumber";
 import through from "through2";
 import chalk from "chalk";
@@ -31,7 +30,6 @@ const monorepoRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
 const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
-const defaultDtsGlob = `${defaultPackagesGlob}/lib/**/*.d.ts{,.map}`;
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -59,6 +57,13 @@ function mapSrcToLib(srcPath) {
   const parts = srcPath.replace(/(?<!\.d)\.ts$/, ".js").split(path.sep);
   parts[2] = "lib";
   return parts.join(path.sep);
+}
+
+function mapToDts(packageName) {
+  return packageName.replace(
+    /(?<=\\|\/|^)(packages|eslint|codemods)(?=\\|\/)/,
+    "dts"
+  );
 }
 
 function getIndexFromPackage(name) {
@@ -108,7 +113,7 @@ function generateHelpers(generator, dest, filename, message) {
 
         file.path = filename;
         file.contents = Buffer.from(
-          formatCode(generateCode(filename), dest + file.path)
+          formatCode(await generateCode(filename), dest + file.path)
         );
         fancyLog(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
@@ -148,6 +153,15 @@ async function generateTraverseHelpers(helperKind) {
   );
 }
 
+async function generateRuntimeHelpers() {
+  return generateHelpers(
+    `./packages/babel-helpers/scripts/generate-helpers.js`,
+    `./packages/babel-helpers/src/`,
+    "helpers-generated.js",
+    "@babel/helpers"
+  );
+}
+
 function generateStandalone() {
   const dest = "./packages/babel-standalone/src/generated/";
   return gulp
@@ -175,19 +189,13 @@ function generateStandalone() {
  */
 ${imports}
 export {${list}};
-export const all = {${allList}};`;
-        file.path = "plugins.js";
+export const all: { [k: string]: any } = {${allList}};`;
+        file.path = "plugins.ts";
         file.contents = Buffer.from(formatCode(fileContents, dest));
         callback(null, file);
       })
     )
     .pipe(gulp.dest(dest));
-}
-
-function unlink() {
-  return through.obj(function (file, enc, callback) {
-    fs.unlink(file.path, () => callback());
-  });
 }
 
 function finish(stream) {
@@ -343,6 +351,10 @@ function buildRollup(packages, targetBrowsers) {
                   "regenerate-unicode-properties"
                 ) + "/**/*.js",
               ],
+              // Never delegate to the native require()
+              ignoreDynamicRequires: true,
+              // Align with the Node.js behavior
+              defaultIsModuleExports: true,
             }),
             rollupBabel({
               envName,
@@ -413,19 +425,20 @@ function buildRollupDts(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(async packageName => {
-      const input = `${packageName}/lib/index.d.ts`;
-      fancyLog(`Bundling '${chalk.cyan(input)}' with rollup ...`);
+      const input = `${mapToDts(packageName)}/src/index.d.ts`;
+      const output = `${packageName}/lib/index.d.ts`;
+      fancyLog(`Bundling '${chalk.cyan(output)}' with rollup ...`);
+
       const bundle = await rollup({
         input,
         plugins: [rollupDts()],
+        onwarn(warning, warn) {
+          if (warning.code !== "CIRCULAR_DEPENDENCY") warn(warning);
+        },
       });
 
-      await finish(
-        gulp.src(`${packageName}/lib/**/*.d.ts{,.map}`).pipe(unlink())
-      );
-
       await bundle.write({
-        file: `${packageName}/lib/index.d.ts`,
+        file: output,
         format: "es",
         sourcemap: sourcemap,
         exports: "named",
@@ -434,13 +447,9 @@ function buildRollupDts(packages) {
   );
 }
 
-function removeDts(exclude) {
-  return getFiles(defaultDtsGlob, { exclude }).pipe(unlink());
-}
-
 function copyDts(packages) {
   return getFiles(`${defaultPackagesGlob}/src/**/*.d.ts`, { include: packages })
-    .pipe(rename(file => path.resolve(file.base, mapSrcToLib(file.relative))))
+    .pipe(rename(file => path.resolve(file.base, mapToDts(file.relative))))
     .pipe(gulp.dest(monorepoRoot));
 }
 
@@ -487,6 +496,12 @@ gulp.task("generate-type-helpers", () => {
   ]);
 });
 
+gulp.task("generate-runtime-helpers", () => {
+  fancyLog("Generating @babel/helpers runtime helpers");
+
+  return generateRuntimeHelpers();
+});
+
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
@@ -501,14 +516,13 @@ gulp.task(
   "bundle-dts",
   gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
 );
-gulp.task("clean-dts", () => removeDts(/* exclude */ dtsBundles));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 
 gulp.task(
   "build",
   gulp.series(
-    gulp.parallel("build-rollup", "build-babel"),
+    gulp.parallel("build-rollup", "build-babel", "generate-runtime-helpers"),
     gulp.parallel(
       "generate-standalone",
       gulp.series(
@@ -548,5 +562,9 @@ gulp.task(
       gulp.task("generate-standalone")
     );
     gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
+    gulp.watch(
+      "./packages/babel-helpers/src/helpers/*.js",
+      gulp.task("generate-runtime-helpers")
+    );
   })
 );

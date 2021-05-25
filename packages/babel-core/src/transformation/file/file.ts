@@ -187,9 +187,8 @@ export default class File {
     // make sure that the helper exists
     helpers.ensure(name, File);
 
-    const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
-      name,
-    ));
+    const uid = (this.declarations[name] =
+      this.scope.generateUidIdentifier(name));
 
     const dependencies = {};
     for (const dep of helpers.getDependencies(name)) {

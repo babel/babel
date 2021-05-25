@@ -432,9 +432,7 @@ function evaluateQuasis(path, quasis: Array<any>, state, raw = false) {
  *
  */
 
-export function evaluate(
-  this: NodePath,
-): {
+export function evaluate(this: NodePath): {
   confident: boolean;
   value: any;
   deopt?: NodePath;

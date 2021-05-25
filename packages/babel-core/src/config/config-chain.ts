@@ -497,7 +497,7 @@ function buildOverrideEnvDescriptors(
 }
 
 function makeChainWalker<
-  ArgT extends { options: ValidatedOptions; dirname: string }
+  ArgT extends { options: ValidatedOptions; dirname: string },
 >({
   root,
   env,
@@ -582,8 +582,12 @@ function makeChainWalker<
     // that we don't do extra work loading extended configs if a file is
     // ignored.
     if (
-      flattenedConfigs.some(({ config: { options: { ignore, only } } }) =>
-        shouldIgnore(context, ignore, only, dirname),
+      flattenedConfigs.some(
+        ({
+          config: {
+            options: { ignore, only },
+          },
+        }) => shouldIgnore(context, ignore, only, dirname),
       )
     ) {
       return null;
@@ -713,10 +717,8 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
 function dedupDescriptors(
   items: Array<UnloadedDescriptor>,
 ): Array<UnloadedDescriptor> {
-  const map: Map<
-    Function,
-    Map<string | void, { value: UnloadedDescriptor }>
-  > = new Map();
+  const map: Map<Function, Map<string | void, { value: UnloadedDescriptor }>> =
+    new Map();
 
   const descriptors = [];
 

@@ -1,6 +1,6 @@
-var _privateField = babelHelpers.classPrivateFieldLooseKey("privateField");
+var _privateField = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateField");
 
-var _privateFieldValue = babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
+var _privateFieldValue = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
 
 class Cl {
   static publicGetPrivateField() {

@@ -44,7 +44,7 @@ const saveInFiles = function (files) {
   });
 };
 
-const assertTest = function (stdout, stderr, opts) {
+const assertTest = function (stdout, stderr, ipcMessage, opts) {
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
@@ -70,6 +70,10 @@ const assertTest = function (stdout, stderr, opts) {
     }
   } else if (stdout) {
     throw new Error("stdout:\n" + stdout);
+  }
+
+  if (opts.ipc) {
+    expect(ipcMessage).toEqual(opts.ipcMessage);
   }
 
   if (opts.outFiles) {
@@ -101,10 +105,16 @@ const buildTest = function (testName, opts) {
     args.push("--config-file", "../config.json");
     args = args.concat(opts.args);
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawnOpts = {};
+    if (opts.ipc) {
+      spawnOpts.stdio = ["pipe", "pipe", "pipe", "ipc"];
+    }
+
+    const spawn = child.spawn(process.execPath, args, spawnOpts);
 
     let stderr = "";
     let stdout = "";
+    let ipcMessage;
 
     spawn.stderr.on("data", function (chunk) {
       stderr += chunk;
@@ -114,11 +124,17 @@ const buildTest = function (testName, opts) {
       stdout += chunk;
     });
 
+    if (opts.ipc) {
+      spawn.on("message", function (message) {
+        ipcMessage = message;
+      });
+    }
+
     spawn.on("close", function () {
       let err;
 
       try {
-        assertTest(stdout, stderr, opts);
+        assertTest(stdout, stderr, ipcMessage, opts);
       } catch (e) {
         err = e;
       }

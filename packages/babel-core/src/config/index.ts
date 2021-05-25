@@ -24,9 +24,10 @@ const loadOptionsRunner = gensync<(opts: unknown) => any>(function* (opts) {
   return config?.options ?? null;
 });
 
-const createConfigItemRunner = gensync<
-  (...args: Parameters<typeof createConfigItemImpl>) => ConfigItem
->(createConfigItemImpl);
+const createConfigItemRunner =
+  gensync<(...args: Parameters<typeof createConfigItemImpl>) => ConfigItem>(
+    createConfigItemImpl,
+  );
 
 const maybeErrback = runner => (opts: unknown, callback?: Function) => {
   if (callback === undefined && typeof opts === "function") {

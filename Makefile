@@ -1,6 +1,6 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
-TEST262_COMMIT = 31126581e7290f9233c29cefd93f66c6ac78f1c9
-TYPESCRIPT_COMMIT = da8633212023517630de5f3620a23736b63234b1
+TEST262_COMMIT = 5e0fc43c6641e6655632ca73479c79f1dcb86a17
+TYPESCRIPT_COMMIT = 3de706a8525c2ded782fc032fa4afe2e485100d3
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -76,6 +76,7 @@ flowcheck-ci:
 code-quality: tscheck flow lint
 
 tscheck: generate-tsconfig
+	rm -rf dts
 	$(YARN) tsc -b .
 
 flow: build-flow-typings
@@ -108,13 +109,6 @@ clean: test-clean
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 	rm -rf node_modules/.cache
-
-clean-tsconfig:
-	rm -f tsconfig.json
-	git clean packages/*/tsconfig.json -xfq
-	git clean codemods/*/tsconfig.json -xfq
-	git clean eslint/*/tsconfig.json -xfq
-	rm -f */*/tsconfig.tsbuildinfo
 
 test-clean:
 	$(foreach source, $(SOURCES), \
@@ -182,12 +176,9 @@ prepublish-build: clean-lib clean-runtime-helpers
 	STRIP_BABEL_8_FLAG=true $(MAKE) prepublish-build-standalone clone-license prepublish-prepare-dts
 
 prepublish-prepare-dts:
-	$(MAKE) clean-tsconfig
 	$(MAKE) tscheck
 	$(YARN) gulp bundle-dts
-	$(YARN) gulp clean-dts
 	$(MAKE) build-typescript-legacy-typings
-	$(MAKE) clean-tsconfig
 
 prepublish:
 	$(MAKE) check-yarn-bug-1882
@@ -259,7 +250,7 @@ clean-runtime-helpers:
 	rm -f packages/babel-runtime-corejs3/helpers/**/*.mjs
 	rm -rf packages/babel-runtime-corejs2/core-js
 
-clean-all: clean-tsconfig
+clean-all:
 	rm -rf node_modules
 	rm -rf package-lock.json
 	rm -rf .changelog

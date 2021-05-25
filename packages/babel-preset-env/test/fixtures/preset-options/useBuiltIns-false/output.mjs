@@ -32,7 +32,7 @@ function H(WeakMap) {
 var asdf = 'copyWithin';
 i[asdf]; // computed with identifier
 
-j["copyWithin"]; // computed with template
+j[`copyWithin`]; // computed with template
 
 var {
   [asdf]: _a

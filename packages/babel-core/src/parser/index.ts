@@ -42,6 +42,7 @@ export default function* parser(
       }
       return results[0];
     }
+    // TODO: Add an error code
     throw new Error("More than one plugin attempted to override parsing.");
   } catch (err) {
     if (err.code === "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED") {

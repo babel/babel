@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":2}},
   "errors": [
-    "SyntaxError: Spread properties cannot have variance (3:1)"
+    "SyntaxError: Spread properties cannot have variance. (3:1)"
   ],
   "program": {
     "type": "Program",

@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":85,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":18}},
   "errors": [
-    "SyntaxError: setter must have exactly one formal parameter (3:3)",
-    "SyntaxError: getter must not have any formal parameters (4:3)"
+    "SyntaxError: A 'set' accesor must have exactly one formal parameter. (3:3)",
+    "SyntaxError: A 'get' accesor must not have any formal parameters. (4:3)"
   ],
   "program": {
     "type": "Program",

@@ -1,4 +1,10 @@
 {
+  "proposal-class-static-block": {
+    "chrome": "91"
+  },
+  "proposal-private-property-in-object": {
+    "chrome": "91"
+  },
   "proposal-class-properties": {
     "chrome": "74",
     "opera": "62",
@@ -28,6 +34,7 @@
   },
   "proposal-logical-assignment-operators": {
     "chrome": "85",
+    "opera": "71",
     "edge": "85",
     "firefox": "79",
     "safari": "14",

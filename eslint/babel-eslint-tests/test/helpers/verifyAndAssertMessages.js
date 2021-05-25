@@ -2,7 +2,7 @@ import eslint from "eslint";
 import unpad from "dedent";
 import path from "path";
 import { fileURLToPath } from "url";
-import * as parser from "../../../babel-eslint-parser";
+import * as parser from "../../../babel-eslint-parser/lib/index.cjs";
 
 export default function verifyAndAssertMessages(
   code,

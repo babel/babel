@@ -225,7 +225,7 @@ export default declare((api, opts) => {
 
   return {
     name: "proposal-object-rest-spread",
-    inherits: syntaxObjectRestSpread,
+    inherits: syntaxObjectRestSpread.default,
 
     visitor: {
       // function a({ b, ...c }) {}
@@ -371,11 +371,8 @@ export default declare((api, opts) => {
             path.isObjectPattern(),
           );
 
-          const [
-            impureComputedPropertyDeclarators,
-            argument,
-            callExpression,
-          ] = createObjectRest(objectPatternPath, file, ref);
+          const [impureComputedPropertyDeclarators, argument, callExpression] =
+            createObjectRest(objectPatternPath, file, ref);
 
           if (pureGetters) {
             removeUnusedExcludedKeys(objectPatternPath);
@@ -454,11 +451,8 @@ export default declare((api, opts) => {
             ]),
           );
 
-          const [
-            impureComputedPropertyDeclarators,
-            argument,
-            callExpression,
-          ] = createObjectRest(leftPath, file, t.identifier(refName));
+          const [impureComputedPropertyDeclarators, argument, callExpression] =
+            createObjectRest(leftPath, file, t.identifier(refName));
 
           if (impureComputedPropertyDeclarators.length > 0) {
             nodes.push(

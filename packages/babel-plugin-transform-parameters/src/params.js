@@ -37,8 +37,8 @@ const iifeVisitor = {
     }
   },
   // type annotations don't use or introduce "real" bindings
-  "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration": path =>
-    path.skip(),
+  "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration":
+    path => path.skip(),
 };
 
 // last 2 parameters are optional -- they are used by proposal-object-rest-spread/src/index.js

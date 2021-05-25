@@ -67,7 +67,7 @@ const withKind = gensync<(cb: (kind: "sync" | "async") => any) => any>({
 //     )
 export function forwardAsync<
   Action extends (...args: unknown[]) => any,
-  Return
+  Return,
 >(
   action: (...args: Parameters<Action>) => Handler<ReturnType<Action>>,
   cb: (

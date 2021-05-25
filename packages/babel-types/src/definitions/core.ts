@@ -353,14 +353,7 @@ export const functionCommon = {
   params: {
     validate: chain(
       assertValueType("array"),
-      assertEach(
-        assertNodeType(
-          "Identifier",
-          "Pattern",
-          "RestElement",
-          "TSParameterProperty",
-        ),
-      ),
+      assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
     ),
   },
   generator: {
@@ -1705,6 +1698,9 @@ export const classMethodOrPropertyCommon = {
   static: {
     default: false,
   },
+  override: {
+    default: false,
+  },
   computed: {
     default: false,
   },
@@ -1740,6 +1736,19 @@ export const classMethodOrPropertyCommon = {
 export const classMethodOrDeclareMethodCommon = {
   ...functionCommon,
   ...classMethodOrPropertyCommon,
+  params: {
+    validate: chain(
+      assertValueType("array"),
+      assertEach(
+        assertNodeType(
+          "Identifier",
+          "Pattern",
+          "RestElement",
+          "TSParameterProperty",
+        ),
+      ),
+    ),
+  },
   kind: {
     validate: assertOneOf("get", "set", "method", "constructor"),
     default: "method",

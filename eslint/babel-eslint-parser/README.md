@@ -31,7 +31,7 @@ $ yarn add eslint @babel/core @babel/eslint-parser -D
 
 ### Setup
 
-To use @babel/eslint-parser, `"@babel/eslint-parser"` must be specified as the `parser` in your ESLint configuration file (see [here](https://eslint.org/docs/user-guide/configuring#specifying-parser) for more detailed information).
+To use @babel/eslint-parser, `"@babel/eslint-parser"` must be specified as the `parser` in your ESLint configuration file (see [here](https://eslint.org/docs/user-guide/configuring/plugins#specifying-parser) for more detailed information).
 
 **.eslintrc.js**
 
@@ -43,13 +43,13 @@ module.exports = {
 
 With the parser set, your configuration can be configured as described in the [Configuring ESLint](https://eslint.org/docs/user-guide/configuring) documentation.
 
-**Note:** The `parserOptions` described in the [official documentation](https://eslint.org/docs/user-guide/configuring#specifying-parser-options) are for the default parser and are not necessarily supported by @babel/eslint-parser. Please see the section directly below for supported `parserOptions`.
+**Note:** The `parserOptions` described in the [official documentation](https://eslint.org/docs/user-guide/configuring/language-options#specifying-parser-options) are for the default parser and are not necessarily supported by @babel/eslint-parser. Please see the section directly below for supported `parserOptions`.
 
 ### Additional parser configuration
 
 Additional configuration options can be set in your ESLint configuration under the `parserOptions` key. Please note that the `ecmaFeatures` config property may still be required for ESLint to work properly with features not in ECMAScript 5 by default.
 
-- `requireConfigFile` (default `true`) can be set to `false` to allow @babel/eslint-parser to run on files that do not have a Babel configuration associated with them. This can be useful for linting files that are not transformed by Babel (such as tooling configuration files), though we recommend using the default parser via [glob-based configuration](https://eslint.org/docs/user-guide/configuring#configuration-based-on-glob-patterns). Note: @babel/eslint-parser will not parse any experimental syntax when no configuration file is found.
+- `requireConfigFile` (default `true`) can be set to `false` to allow @babel/eslint-parser to run on files that do not have a Babel configuration associated with them. This can be useful for linting files that are not transformed by Babel (such as tooling configuration files), though we recommend using the default parser via [glob-based configuration](https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-based-on-glob-patterns). Note: @babel/eslint-parser will not parse any experimental syntax when no configuration file is found.
 - `sourceType` can be set to `"module"`(default) or `"script"` if your code isn't using ECMAScript modules.
 - `allowImportExportEverywhere` (default `false`) can be set to `true` to allow import and export declarations to appear anywhere a statement is allowed if your build environment supports that. Otherwise import and export declarations can only appear at a program's top level.
 - `ecmaFeatures.globalReturn` (default `false`) allow return statements in the global scope when used with `sourceType: "script"`.
@@ -91,6 +91,21 @@ module.exports = {
 };
 ```
 
+**Monorepo configuration**
+
+This configuration is useful for monorepo, when you are running ESLint on every package and not from the monorepo root folder, as it avoids to repeat the Babel and ESLint configuration on every package.
+
+```js
+module.exports = {
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "babelOptions": {
+      "rootMode": "upward"
+    }
+  }
+}
+```
+
 ### Run
 
 ```sh
@@ -105,4 +120,4 @@ While [`@babel/eslint-parser`](https://github.com/babel/babel/tree/main/eslint/b
 
 If you have an issue, please first check if it can be reproduced with the default parser and with the latest versions of `eslint` and `@babel/eslint-parser`. If it is not reproducible with the default parser, it is most likely an issue with `@babel/eslint-parser`.
 
-For questions and support please visit the [`#discussion`](https://babeljs.slack.com/messages/discussion/) Babel Slack channel (sign up [here](https://github.com/babel/notes/issues/38)) or the ESLint [Gitter](https://gitter.im/eslint/eslint).
+For questions and support please visit the [`#discussion`](https://babeljs.slack.com/messages/discussion/) Babel Slack channel (sign up [here](https://slack.babeljs.io/)) or the [ESLint Discord server](https://eslint.org/chat).

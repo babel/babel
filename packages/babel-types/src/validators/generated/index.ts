@@ -2453,6 +2453,40 @@ export function isEnumDefaultedMember(
 
   return false;
 }
+export function isIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.IndexedAccessType {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "IndexedAccessType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isOptionalIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.OptionalIndexedAccessType {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "OptionalIndexedAccessType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isJSXAttribute(
   node: object | null | undefined,
   opts?: object | null,
@@ -5104,7 +5138,9 @@ export function isFlow(
     "TypeParameterInstantiation" === nodeType ||
     "UnionTypeAnnotation" === nodeType ||
     "Variance" === nodeType ||
-    "VoidTypeAnnotation" === nodeType
+    "VoidTypeAnnotation" === nodeType ||
+    "IndexedAccessType" === nodeType ||
+    "OptionalIndexedAccessType" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -5146,7 +5182,9 @@ export function isFlowType(
     "TupleTypeAnnotation" === nodeType ||
     "TypeofTypeAnnotation" === nodeType ||
     "UnionTypeAnnotation" === nodeType ||
-    "VoidTypeAnnotation" === nodeType
+    "VoidTypeAnnotation" === nodeType ||
+    "IndexedAccessType" === nodeType ||
+    "OptionalIndexedAccessType" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

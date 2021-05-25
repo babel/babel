@@ -19,7 +19,7 @@ export default declare(api => {
 
   return {
     name: "proposal-numeric-separator",
-    inherits: syntaxNumericSeparator,
+    inherits: syntaxNumericSeparator.default,
 
     visitor: {
       NumericLiteral: remover,

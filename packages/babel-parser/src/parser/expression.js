@@ -29,7 +29,8 @@ import {
   isStrictBindReservedWord,
   isIdentifierStart,
 } from "../util/identifier";
-import type { Pos, Position } from "../util/location";
+import type { Pos } from "../util/location";
+import { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -54,7 +55,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope";
-import { Errors } from "./error";
+import { Errors, SourceTypeModuleErrors } from "./error";
 
 /*::
 import type { SourceType } from "../options";
@@ -708,18 +709,19 @@ export default class ExpressionParser extends LValParser {
     const computed = this.eat(tt.bracketL);
     node.object = base;
     node.computed = computed;
+    const privateName =
+      !computed && this.match(tt.privateName) && this.state.value;
     const property = computed
       ? this.parseExpression()
-      : this.parseMaybePrivateName(true);
+      : privateName
+      ? this.parsePrivateName()
+      : this.parseIdentifier(true);
 
-    if (this.isPrivateName(property)) {
+    if (privateName !== false) {
       if (node.object.type === "Super") {
         this.raise(startPos, Errors.SuperPrivateField);
       }
-      this.classScope.usePrivateName(
-        this.getPrivateNameSV(property),
-        property.start,
-      );
+      this.classScope.usePrivateName(privateName, property.start);
     }
     node.property = property;
 
@@ -858,10 +860,12 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (node.callee.type === "Import") {
       if (node.arguments.length === 2) {
-        // todo(Babel 8): remove the if condition,
-        // moduleAttributes is renamed to importAssertions
-        if (!this.hasPlugin("moduleAttributes")) {
+        if (process.env.BABEL_8_BREAKING) {
           this.expectPlugin("importAssertions");
+        } else {
+          if (!this.hasPlugin("moduleAttributes")) {
+            this.expectPlugin("importAssertions");
+          }
         }
       }
       if (node.arguments.length === 0 || node.arguments.length > 2) {
@@ -1035,7 +1039,18 @@ export default class ExpressionParser extends LValParser {
               true,
             );
           } else if (this.match(tt.name)) {
-            return this.parseAsyncArrowUnaryFunction(id);
+            // If the next token begins with "=", commit to parsing an async
+            // arrow function. (Peeking ahead for "=" lets us avoid a more
+            // expensive full-token lookahead on this common path.)
+            if (this.lookaheadCharCode() === charCodes.equalsTo) {
+              return this.parseAsyncArrowUnaryFunction(id);
+            } else {
+              // Otherwise, treat "async" as an identifier and let calling code
+              // deal with the current tt.name token.
+              return id;
+            }
+          } else if (this.match(tt._do)) {
+            return this.parseDo(true);
           }
         }
 
@@ -1052,37 +1067,32 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt._do: {
-        return this.parseDo();
+        return this.parseDo(false);
       }
 
       case tt.regexp: {
-        const value = this.state.value;
-        node = this.parseLiteral(value.value, "RegExpLiteral");
-        node.pattern = value.pattern;
-        node.flags = value.flags;
-        return node;
+        return this.parseRegExpLiteral(this.state.value);
       }
 
       case tt.num:
-        return this.parseLiteral(this.state.value, "NumericLiteral");
+        return this.parseNumericLiteral(this.state.value);
 
       case tt.bigint:
-        return this.parseLiteral(this.state.value, "BigIntLiteral");
+        return this.parseBigIntLiteral(this.state.value);
 
       case tt.decimal:
-        return this.parseLiteral(this.state.value, "DecimalLiteral");
+        return this.parseDecimalLiteral(this.state.value);
 
       case tt.string:
-        return this.parseLiteral(this.state.value, "StringLiteral");
+        return this.parseStringLiteral(this.state.value);
 
       case tt._null:
-        node = this.startNode();
-        this.next();
-        return this.finishNode(node, "NullLiteral");
+        return this.parseNullLiteral();
 
       case tt._true:
+        return this.parseBooleanLiteral(true);
       case tt._false:
-        return this.parseBooleanLiteral();
+        return this.parseBooleanLiteral(false);
 
       case tt.parenL:
         return this.parseParenAndDistinguishExpression(canBeArrow);
@@ -1152,6 +1162,23 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
+      case tt.privateName: {
+        // https://tc39.es/proposal-private-fields-in-in
+        // RelationalExpression [In, Yield, Await]
+        //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
+        const start = this.state.start;
+        const value = this.state.value;
+        node = this.parsePrivateName();
+        if (this.match(tt._in)) {
+          this.expectPlugin("privateIn");
+          this.classScope.usePrivateName(value, node.start);
+        } else if (this.hasPlugin("privateIn")) {
+          this.raise(this.state.start, Errors.PrivateInExpectedIn, value);
+        } else {
+          throw this.unexpected(start);
+        }
+        return node;
+      }
       case tt.hash: {
         if (this.state.inPipeline) {
           node = this.startNode();
@@ -1177,32 +1204,6 @@ export default class ExpressionParser extends LValParser {
           this.registerTopicReference();
 
           return this.finishNode(node, nodeType);
-        }
-
-        // https://tc39.es/proposal-private-fields-in-in
-        // RelationalExpression [In, Yield, Await]
-        //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
-        const nextCh = this.input.codePointAt(this.state.end);
-        if (isIdentifierStart(nextCh) || nextCh === charCodes.backslash) {
-          const start = this.state.start;
-          // $FlowIgnore It'll either parse a PrivateName or throw.
-          node = (this.parseMaybePrivateName(true): N.PrivateName);
-          if (this.match(tt._in)) {
-            this.expectPlugin("privateIn");
-            this.classScope.usePrivateName(
-              this.getPrivateNameSV(node),
-              node.start,
-            );
-          } else if (this.hasPlugin("privateIn")) {
-            this.raise(
-              this.state.start,
-              Errors.PrivateInExpectedIn,
-              this.getPrivateNameSV(node),
-            );
-          } else {
-            throw this.unexpected(start);
-          }
-          return node;
         }
       }
       // fall through
@@ -1241,13 +1242,27 @@ export default class ExpressionParser extends LValParser {
   }
 
   // https://github.com/tc39/proposal-do-expressions
-  parseDo(): N.DoExpression {
+  // https://github.com/tc39/proposal-async-do-expressions
+  parseDo(isAsync: boolean): N.DoExpression {
     this.expectPlugin("doExpressions");
+    if (isAsync) {
+      this.expectPlugin("asyncDoExpressions");
+    }
     const node = this.startNode();
+    node.async = isAsync;
     this.next(); // eat `do`
     const oldLabels = this.state.labels;
     this.state.labels = [];
-    node.body = this.parseBlock();
+    if (isAsync) {
+      // AsyncDoExpression :
+      // async [no LineTerminator here] do Block[~Yield, +Await, ~Return]
+      this.prodParam.enter(PARAM_AWAIT);
+      node.body = this.parseBlock();
+      this.prodParam.exit();
+    } else {
+      node.body = this.parseBlock();
+    }
+
     this.state.labels = oldLabels;
     return this.finishNode(node, "DoExpression");
   }
@@ -1280,31 +1295,36 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "Super");
   }
 
-  parseBooleanLiteral(): N.BooleanLiteral {
-    const node = this.startNode();
-    node.value = this.match(tt._true);
-    this.next();
-    return this.finishNode(node, "BooleanLiteral");
-  }
-
   parseMaybePrivateName(
     isPrivateNameAllowed: boolean,
   ): N.PrivateName | N.Identifier {
-    const isPrivate = this.match(tt.hash);
+    const isPrivate = this.match(tt.privateName);
 
     if (isPrivate) {
-      this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       if (!isPrivateNameAllowed) {
-        this.raise(this.state.pos, Errors.UnexpectedPrivateField);
+        this.raise(this.state.start + 1, Errors.UnexpectedPrivateField);
       }
-      const node = this.startNode();
-      this.next();
-      this.assertNoSpace("Unexpected space between # and identifier");
-      node.id = this.parseIdentifier(true);
-      return this.finishNode(node, "PrivateName");
+      return this.parsePrivateName();
     } else {
       return this.parseIdentifier(true);
     }
+  }
+
+  parsePrivateName(): N.PrivateName {
+    const node = this.startNode();
+    const id = this.startNodeAt(
+      this.state.start + 1,
+      // The position is hardcoded because we merge `#` and name into a single
+      // tt.privateName token
+      new Position(
+        this.state.curLine,
+        this.state.start + 1 - this.state.lineStart,
+      ),
+    );
+    const name = this.state.value;
+    this.next(); // eat #name;
+    node.id = this.createIdentifier(id, name);
+    return this.finishNode(node, "PrivateName");
   }
 
   parseFunctionOrFunctionSent(): N.FunctionExpression | N.MetaProperty {
@@ -1368,11 +1388,7 @@ export default class ExpressionParser extends LValParser {
 
     if (this.isContextual("meta")) {
       if (!this.inModule) {
-        this.raiseWithData(
-          id.start,
-          { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
-          Errors.ImportMetaOutsideModule,
-        );
+        this.raise(id.start, SourceTypeModuleErrors.ImportMetaOutsideModule);
       }
       this.sawUnambiguousESM = true;
     }
@@ -1380,21 +1396,60 @@ export default class ExpressionParser extends LValParser {
     return this.parseMetaProperty(node, id, "meta");
   }
 
-  parseLiteral<T: N.Literal>(
+  parseLiteralAtNode<T: N.Node>(
     value: any,
-    type: /*T["kind"]*/ string,
-    startPos?: number,
-    startLoc?: Position,
+    type: $ElementType<T, "type">,
+    node: any,
   ): T {
-    startPos = startPos || this.state.start;
-    startLoc = startLoc || this.state.startLoc;
-
-    const node = this.startNodeAt(startPos, startLoc);
     this.addExtra(node, "rawValue", value);
-    this.addExtra(node, "raw", this.input.slice(startPos, this.state.end));
+    this.addExtra(node, "raw", this.input.slice(node.start, this.state.end));
     node.value = value;
     this.next();
-    return this.finishNode(node, type);
+    return this.finishNode<T>(node, type);
+  }
+
+  parseLiteral<T: N.Node>(value: any, type: $ElementType<T, "type">): T {
+    const node = this.startNode();
+    return this.parseLiteralAtNode(value, type, node);
+  }
+
+  parseStringLiteral(value: any) {
+    return this.parseLiteral<N.StringLiteral>(value, "StringLiteral");
+  }
+
+  parseNumericLiteral(value: any) {
+    return this.parseLiteral<N.NumericLiteral>(value, "NumericLiteral");
+  }
+
+  parseBigIntLiteral(value: any) {
+    return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
+  }
+
+  parseDecimalLiteral(value: any) {
+    return this.parseLiteral<N.DecimalLiteral>(value, "DecimalLiteral");
+  }
+
+  parseRegExpLiteral(value: { value: any, pattern: string, flags: string }) {
+    const node = this.parseLiteral<N.RegExpLiteral>(
+      value.value,
+      "RegExpLiteral",
+    );
+    node.pattern = value.pattern;
+    node.flags = value.flags;
+    return node;
+  }
+
+  parseBooleanLiteral(value: boolean) {
+    const node = this.startNode();
+    node.value = value;
+    this.next();
+    return this.finishNode<N.BooleanLiteral>(node, "BooleanLiteral");
+  }
+
+  parseNullLiteral() {
+    const node = this.startNode();
+    this.next();
+    return this.finishNode<N.NullLiteral>(node, "NullLiteral");
   }
 
   // https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList
@@ -1534,15 +1589,7 @@ export default class ExpressionParser extends LValParser {
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
       if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
-        let error = Errors.UnexpectedNewTarget;
-
-        if (this.hasPlugin("classProperties")) {
-          error += " or class properties";
-        }
-
-        /* eslint-disable @babel/development-internal/dry-error-messages */
-        this.raise(metaProp.start, error);
-        /* eslint-enable @babel/development-internal/dry-error-messages */
+        this.raise(metaProp.start, Errors.UnexpectedNewTarget);
       }
 
       return metaProp;
@@ -1974,15 +2021,16 @@ export default class ExpressionParser extends LValParser {
       const oldInPropertyName = this.state.inPropertyName;
       this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
+      const type = this.state.type;
       (prop: $FlowFixMe).key =
-        this.match(tt.num) ||
-        this.match(tt.string) ||
-        this.match(tt.bigint) ||
-        this.match(tt.decimal)
+        type === tt.num ||
+        type === tt.string ||
+        type === tt.bigint ||
+        type === tt.decimal
           ? this.parseExprAtom()
           : this.parseMaybePrivateName(isPrivateNameAllowed);
 
-      if (!this.isPrivateName(prop.key)) {
+      if (type !== tt.privateName) {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
         prop.computed = false;
       }

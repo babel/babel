@@ -16,7 +16,7 @@ export default declare(api => {
 
   return {
     name: "proposal-json-strings",
-    inherits: syntaxJsonStrings,
+    inherits: syntaxJsonStrings.default,
 
     visitor: {
       "DirectiveLiteral|StringLiteral"({ node }) {

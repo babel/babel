@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
   "errors": [
-    "SyntaxError: Deleting local variable in strict mode (1:29)"
+    "SyntaxError: Deleting local variable in strict mode. (1:29)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "CallExpression",
           "start":1,"end":42,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":42}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "callee": {
             "type": "FunctionExpression",
             "start":1,"end":40,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":40}},
@@ -50,21 +54,17 @@
                   "value": {
                     "type": "DirectiveLiteral",
                     "start":15,"end":27,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":27}},
-                    "value": "use strict",
                     "extra": {
                       "raw": "'use strict'",
                       "rawValue": "use strict"
-                    }
+                    },
+                    "value": "use strict"
                   }
                 }
               ]
             }
           },
-          "arguments": [],
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          }
+          "arguments": []
         }
       }
     ],

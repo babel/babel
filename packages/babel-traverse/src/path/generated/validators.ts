@@ -149,6 +149,7 @@ export interface NodePathValidators {
     opts?: object,
   ): this is NodePath<t.ImportNamespaceSpecifier>;
   isImportSpecifier(opts?: object): this is NodePath<t.ImportSpecifier>;
+  isIndexedAccessType(opts?: object): this is NodePath<t.IndexedAccessType>;
   isInferredPredicate(opts?: object): this is NodePath<t.InferredPredicate>;
   isInterfaceDeclaration(
     opts?: object,
@@ -233,6 +234,9 @@ export interface NodePathValidators {
   isOptionalCallExpression(
     opts?: object,
   ): this is NodePath<t.OptionalCallExpression>;
+  isOptionalIndexedAccessType(
+    opts?: object,
+  ): this is NodePath<t.OptionalIndexedAccessType>;
   isOptionalMemberExpression(
     opts?: object,
   ): this is NodePath<t.OptionalMemberExpression>;

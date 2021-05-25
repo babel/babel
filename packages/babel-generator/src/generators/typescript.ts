@@ -127,13 +127,22 @@ export function tsPrintPropertyOrMethodName(this: Printer, node) {
 }
 
 export function TSMethodSignature(this: Printer, node: t.TSMethodSignature) {
+  const { kind } = node;
+  if (kind === "set" || kind === "get") {
+    this.word(kind);
+    this.space();
+  }
   this.tsPrintPropertyOrMethodName(node);
   this.tsPrintSignatureDeclarationBase(node);
   this.token(";");
 }
 
 export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
-  const { readonly } = node;
+  const { readonly, static: isStatic } = node;
+  if (isStatic) {
+    this.word("static");
+    this.space();
+  }
   if (readonly) {
     this.word("readonly");
     this.space();
@@ -646,6 +655,10 @@ export function tsPrintClassMemberModifiers(this: Printer, node: any, isField) {
   }
   if (node.static) {
     this.word("static");
+    this.space();
+  }
+  if (node.override) {
+    this.word("override");
     this.space();
   }
   if (node.abstract) {

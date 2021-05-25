@@ -1,6 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import { loadOptions as loadOptionsOrig, transformSync } from "../lib";
+import pluginCommonJS from "@babel/plugin-transform-modules-commonjs";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -99,6 +100,63 @@ describe("assumptions", () => {
     });
 
     expect(assumptionFn).toBeUndefined();
+  });
+
+  // https://github.com/babel/babel/issues/13316
+  describe("assumptions set in presets are visible from plugins - #13316", () => {
+    function presetEnumerableModuleMeta() {
+      return { assumptions: { enumerableModuleMeta: true } };
+    }
+
+    function pluginExtractEnumerableModuleMeta(api, options) {
+      options.enumerableModuleMeta = api.assumption("enumerableModuleMeta");
+      return { visitor: {} };
+    }
+
+    it("plugin defined outside preset", () => {
+      const ref = {};
+
+      loadOptions({
+        configFile: false,
+        presets: [presetEnumerableModuleMeta],
+        plugins: [[pluginExtractEnumerableModuleMeta, ref]],
+      });
+
+      expect(ref.enumerableModuleMeta).toBe(true);
+    });
+
+    it("plugin defined inside preset", () => {
+      const ref = {};
+
+      loadOptions({
+        configFile: false,
+        presets: [
+          () => ({
+            assumptions: { enumerableModuleMeta: true },
+            plugins: [[pluginExtractEnumerableModuleMeta, ref]],
+          }),
+        ],
+      });
+
+      expect(ref.enumerableModuleMeta).toBe(true);
+    });
+
+    it("integration", () => {
+      const { code } = transformSync(`export const foo = 1;`, {
+        configFile: false,
+        presets: [presetEnumerableModuleMeta],
+        plugins: [pluginCommonJS],
+      });
+
+      expect(code).toMatchInlineSnapshot(`
+        "\\"use strict\\";
+
+        exports.__esModule = true;
+        exports.foo = void 0;
+        const foo = 1;
+        exports.foo = foo;"
+      `);
+    });
   });
 
   describe("plugin cache", () => {

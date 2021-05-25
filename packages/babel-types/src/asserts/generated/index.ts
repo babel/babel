@@ -878,6 +878,18 @@ export function assertEnumDefaultedMember(
 ): asserts node is t.EnumDefaultedMember {
   assert("EnumDefaultedMember", node, opts);
 }
+export function assertIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.IndexedAccessType {
+  assert("IndexedAccessType", node, opts);
+}
+export function assertOptionalIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.OptionalIndexedAccessType {
+  assert("OptionalIndexedAccessType", node, opts);
+}
 export function assertJSXAttribute(
   node: object | null | undefined,
   opts?: object | null,

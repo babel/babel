@@ -1036,6 +1036,7 @@ An expression wrapped by parentheses. By default `@babel/parser` does not create
 interface DoExpression <: Expression {
   type: "DoExpression";
   body: BlockStatement;
+  async: boolean;
 }
 ```
 

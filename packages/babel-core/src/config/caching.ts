@@ -208,7 +208,7 @@ function updateFunctionCache<
   ArgT,
   ResultT,
   SideChannel,
-  Cache extends CacheMap<ArgT, ResultT, SideChannel>
+  Cache extends CacheMap<ArgT, ResultT, SideChannel>,
 >(
   cache: Cache,
   config: CacheConfigurator<SideChannel>,

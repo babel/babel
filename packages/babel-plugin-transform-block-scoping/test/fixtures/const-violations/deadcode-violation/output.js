@@ -1,5 +1,5 @@
 (function () {
   var a = "foo";
-  if (false) a = (babelHelpers.readOnlyError("a"), "false");
+  if (false) "false", babelHelpers.readOnlyError("a");
   return a;
 })();

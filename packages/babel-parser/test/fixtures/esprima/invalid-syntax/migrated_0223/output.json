@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":76}},
   "errors": [
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (1:69)"
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:69)"
   ],
   "program": {
     "type": "Program",
@@ -47,11 +47,11 @@
                     "value": {
                       "type": "DirectiveLiteral",
                       "start":52,"end":71,"loc":{"start":{"line":1,"column":52},"end":{"line":1,"column":71}},
-                      "value": "octal directive\\1",
                       "extra": {
                         "raw": "\"octal directive\\1\"",
                         "rawValue": "octal directive\\1"
-                      }
+                      },
+                      "value": "octal directive\\1"
                     }
                   }
                 ]
@@ -65,11 +65,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":19,"end":31,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":31}},
-                "value": "use strict",
                 "extra": {
                   "raw": "\"use strict\"",
                   "rawValue": "use strict"
-                }
+                },
+                "value": "use strict"
               }
             }
           ]

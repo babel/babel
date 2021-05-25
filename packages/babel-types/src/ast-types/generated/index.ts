@@ -151,6 +151,7 @@ export type Node =
   | ImportDefaultSpecifier
   | ImportNamespaceSpecifier
   | ImportSpecifier
+  | IndexedAccessType
   | InferredPredicate
   | InterfaceDeclaration
   | InterfaceExtends
@@ -207,6 +208,7 @@ export type Node =
   | ObjectTypeSpreadProperty
   | OpaqueType
   | OptionalCallExpression
+  | OptionalIndexedAccessType
   | OptionalMemberExpression
   | ParenthesizedExpression
   | Pattern
@@ -480,7 +482,7 @@ export interface ForStatement extends BaseNode {
 export interface FunctionDeclaration extends BaseNode {
   type: "FunctionDeclaration";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   generator?: boolean;
   async?: boolean;
@@ -496,7 +498,7 @@ export interface FunctionDeclaration extends BaseNode {
 export interface FunctionExpression extends BaseNode {
   type: "FunctionExpression";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   generator?: boolean;
   async?: boolean;
@@ -615,7 +617,7 @@ export interface ObjectMethod extends BaseNode {
   type: "ObjectMethod";
   kind: "method" | "get" | "set";
   key: Expression | Identifier | StringLiteral | NumericLiteral;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   computed: boolean;
   generator?: boolean;
@@ -755,7 +757,7 @@ export interface ArrayPattern extends BaseNode {
 
 export interface ArrowFunctionExpression extends BaseNode {
   type: "ArrowFunctionExpression";
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement | Expression;
   async?: boolean;
   expression: boolean;
@@ -909,6 +911,7 @@ export interface ClassMethod extends BaseNode {
   accessibility?: "public" | "private" | "protected" | null;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
+  override?: boolean;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
     | TypeParameterDeclaration
@@ -1388,6 +1391,19 @@ export interface EnumDefaultedMember extends BaseNode {
   id: Identifier;
 }
 
+export interface IndexedAccessType extends BaseNode {
+  type: "IndexedAccessType";
+  objectType: FlowType;
+  indexType: FlowType;
+}
+
+export interface OptionalIndexedAccessType extends BaseNode {
+  type: "OptionalIndexedAccessType";
+  objectType: FlowType;
+  indexType: FlowType;
+  optional: boolean;
+}
+
 export interface JSXAttribute extends BaseNode {
   type: "JSXAttribute";
   name: JSXIdentifier | JSXNamespacedName;
@@ -1529,6 +1545,7 @@ export interface ClassProperty extends BaseNode {
   declare?: boolean | null;
   definite?: boolean | null;
   optional?: boolean | null;
+  override?: boolean;
   readonly?: boolean | null;
 }
 
@@ -1556,6 +1573,7 @@ export interface ClassPrivateMethod extends BaseNode {
   decorators?: Array<Decorator> | null;
   generator?: boolean;
   optional?: boolean | null;
+  override?: boolean;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
     | TypeParameterDeclaration
@@ -1578,6 +1596,7 @@ export interface Decorator extends BaseNode {
 export interface DoExpression extends BaseNode {
   type: "DoExpression";
   body: BlockStatement;
+  async: boolean;
 }
 
 export interface ExportDefaultSpecifier extends BaseNode {
@@ -1644,7 +1663,7 @@ export interface TSDeclareFunction extends BaseNode {
   type: "TSDeclareFunction";
   id?: Identifier | null;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<Identifier | Pattern | RestElement>;
   returnType?: TSTypeAnnotation | Noop | null;
   async?: boolean;
   declare?: boolean | null;
@@ -1666,6 +1685,7 @@ export interface TSDeclareMethod extends BaseNode {
   generator?: boolean;
   kind?: "get" | "set" | "method" | "constructor";
   optional?: boolean | null;
+  override?: boolean;
   static?: boolean;
 }
 
@@ -1706,6 +1726,7 @@ export interface TSMethodSignature extends BaseNode {
   parameters: Array<Identifier | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
   computed?: boolean | null;
+  kind: "method" | "get" | "set";
   optional?: boolean | null;
 }
 
@@ -1714,6 +1735,7 @@ export interface TSIndexSignature extends BaseNode {
   parameters: Array<Identifier>;
   typeAnnotation?: TSTypeAnnotation | null;
   readonly?: boolean | null;
+  static?: boolean | null;
 }
 
 export interface TSAnyKeyword extends BaseNode {
@@ -2356,7 +2378,9 @@ export type Flow =
   | TypeParameterInstantiation
   | UnionTypeAnnotation
   | Variance
-  | VoidTypeAnnotation;
+  | VoidTypeAnnotation
+  | IndexedAccessType
+  | OptionalIndexedAccessType;
 export type FlowType =
   | AnyTypeAnnotation
   | ArrayTypeAnnotation
@@ -2381,7 +2405,9 @@ export type FlowType =
   | TupleTypeAnnotation
   | TypeofTypeAnnotation
   | UnionTypeAnnotation
-  | VoidTypeAnnotation;
+  | VoidTypeAnnotation
+  | IndexedAccessType
+  | OptionalIndexedAccessType;
 export type FlowBaseAnnotation =
   | AnyTypeAnnotation
   | BooleanTypeAnnotation

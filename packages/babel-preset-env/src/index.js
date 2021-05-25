@@ -3,7 +3,7 @@
 import { SemVer, lt } from "semver";
 import { logPlugin } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import { removeUnnecessaryItems } from "./filter-items";
+import { removeUnnecessaryItems, removeUnsupportedItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
@@ -19,9 +19,9 @@ import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill";
 import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
-const pluginCoreJS2 = _pluginCoreJS2.default;
-const pluginCoreJS3 = _pluginCoreJS3.default;
-const pluginRegenerator = _pluginRegenerator.default;
+const pluginCoreJS2 = _pluginCoreJS2.default || _pluginCoreJS2;
+const pluginCoreJS3 = _pluginCoreJS3.default || _pluginCoreJS3;
+const pluginRegenerator = _pluginRegenerator.default || _pluginRegenerator;
 
 import getTargets, {
   prettifyTargets,
@@ -249,11 +249,11 @@ function getLocalTargets(
 `);
   }
 
-  return getTargets(
-    // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
-    (optionsTargets: InputTargets),
-    { ignoreBrowserslistConfig, configPath, browserslistEnv },
-  );
+  return getTargets((optionsTargets: InputTargets), {
+    ignoreBrowserslistConfig,
+    configPath,
+    browserslistEnv,
+  });
 }
 
 function supportsStaticESM(caller) {
@@ -374,6 +374,7 @@ option \`forceAllTransforms: true\` instead.
     pluginSyntaxMap,
   );
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
+  removeUnsupportedItems(pluginNames, api.version);
 
   const polyfillPlugins = getPolyfillPlugins({
     useBuiltIns,
@@ -393,8 +394,6 @@ option \`forceAllTransforms: true\` instead.
       if (
         pluginName === "proposal-class-properties" ||
         pluginName === "proposal-private-methods" ||
-        // This is not included in preset-env yet, but let's keep it here so we
-        // don't forget about it in the future.
         pluginName === "proposal-private-property-in-object"
       ) {
         return [

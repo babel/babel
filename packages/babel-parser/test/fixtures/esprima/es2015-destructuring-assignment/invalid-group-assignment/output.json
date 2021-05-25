@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
   "errors": [
-    "SyntaxError: Invalid parenthesized assignment pattern (1:1)",
-    "SyntaxError: Invalid left-hand side in assignment expression (1:1)"
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:1)",
+    "SyntaxError: Invalid left-hand side in assignment expression. (1:1)"
   ],
   "program": {
     "type": "Program",
@@ -21,6 +21,10 @@
           "left": {
             "type": "SequenceExpression",
             "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            },
             "expressions": [
               {
                 "type": "Identifier",
@@ -32,15 +36,15 @@
                 "start":3,"end":4,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":4},"identifierName":"b"},
                 "name": "b"
               }
-            ],
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
-            }
+            ]
           },
           "right": {
             "type": "SequenceExpression",
             "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10}},
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 6
+            },
             "expressions": [
               {
                 "type": "Identifier",
@@ -52,11 +56,7 @@
                 "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"d"},
                 "name": "d"
               }
-            ],
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 6
-            }
+            ]
           }
         }
       }

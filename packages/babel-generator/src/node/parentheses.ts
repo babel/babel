@@ -74,7 +74,10 @@ export function ObjectExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack, { considerArrow: true });
+  return isFirstInContext(printStack, {
+    expressionStatement: true,
+    arrowBody: true,
+  });
 }
 
 export function DoExpression(
@@ -82,7 +85,10 @@ export function DoExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack);
+  // `async do` can start an expression statement
+  return (
+    !node.async && isFirstInContext(printStack, { expressionStatement: true })
+  );
 }
 
 export function Binary(node: any, parent: any): boolean {
@@ -134,6 +140,10 @@ export function UnionTypeAnnotation(node: any, parent: any): boolean {
 }
 
 export { UnionTypeAnnotation as IntersectionTypeAnnotation };
+
+export function OptionalIndexedAccessType(node: any, parent: any): boolean {
+  return t.isIndexedAccessType(parent, { objectType: node });
+}
 
 export function TSAsExpression() {
   return true;
@@ -209,7 +219,10 @@ export function ClassExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack, { considerDefaultExports: true });
+  return isFirstInContext(printStack, {
+    expressionStatement: true,
+    exportDefault: true,
+  });
 }
 
 export function UnaryLike(node: any, parent: any): boolean {
@@ -225,7 +238,10 @@ export function FunctionExpression(
   parent: any,
   printStack: Array<any>,
 ): boolean {
-  return isFirstInStatement(printStack, { considerDefaultExports: true });
+  return isFirstInContext(printStack, {
+    expressionStatement: true,
+    exportDefault: true,
+  });
 }
 
 export function ArrowFunctionExpression(node: any, parent: any): boolean {
@@ -276,11 +292,59 @@ export function LogicalExpression(node: any, parent: any): boolean {
   }
 }
 
+export function Identifier(
+  node: t.Identifier,
+  parent: t.Node,
+  printStack: Array<t.Node>,
+): boolean {
+  // Non-strict code allows the identifier `let`, but it cannot occur as-is in
+  // certain contexts to avoid ambiguity with contextual keyword `let`.
+  if (node.name === "let") {
+    // Some contexts only forbid `let [`, so check if the next token would
+    // be the left bracket of a computed member expression.
+    const isFollowedByBracket =
+      t.isMemberExpression(parent, {
+        object: node,
+        computed: true,
+      }) ||
+      t.isOptionalMemberExpression(parent, {
+        object: node,
+        computed: true,
+        optional: false,
+      });
+    return isFirstInContext(printStack, {
+      expressionStatement: isFollowedByBracket,
+      forHead: isFollowedByBracket,
+      forInHead: isFollowedByBracket,
+      forOfHead: true,
+    });
+  }
+
+  // ECMAScript specifically forbids a for-of loop from starting with the
+  // token sequence `for (async of`, because it would be ambiguous with
+  // `for (async of => {};;)`, so we need to add extra parentheses.
+  //
+  // If the parent is a for-await-of loop (i.e. parent.await === true), the
+  // parentheses aren't strictly needed, but we add them anyway because
+  // some tools (including earlier Babel versions) can't parse
+  // `for await (async of [])` without them.
+  return (
+    node.name === "async" && t.isForOfStatement(parent) && node === parent.left
+  );
+}
+
 // Walk up the print stack to determine if our node can come first
-// in statement.
-function isFirstInStatement(
-  printStack: Array<any>,
-  { considerArrow = false, considerDefaultExports = false } = {},
+// in a particular context.
+function isFirstInContext(
+  printStack: Array<t.Node>,
+  {
+    expressionStatement = false,
+    arrowBody = false,
+    exportDefault = false,
+    forHead = false,
+    forInHead = false,
+    forOfHead = false,
+  },
 ): boolean {
   let i = printStack.length - 1;
   let node = printStack[i];
@@ -288,10 +352,14 @@ function isFirstInStatement(
   let parent = printStack[i];
   while (i >= 0) {
     if (
-      t.isExpressionStatement(parent, { expression: node }) ||
-      (considerDefaultExports &&
+      (expressionStatement &&
+        t.isExpressionStatement(parent, { expression: node })) ||
+      (exportDefault &&
         t.isExportDefaultDeclaration(parent, { declaration: node })) ||
-      (considerArrow && t.isArrowFunctionExpression(parent, { body: node }))
+      (arrowBody && t.isArrowFunctionExpression(parent, { body: node })) ||
+      (forHead && t.isForStatement(parent, { init: node })) ||
+      (forInHead && t.isForInStatement(parent, { left: node })) ||
+      (forOfHead && t.isForOfStatement(parent, { left: node }))
     ) {
       return true;
     }

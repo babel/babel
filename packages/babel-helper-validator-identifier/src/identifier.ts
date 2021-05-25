@@ -85,13 +85,23 @@ export function isIdentifierChar(code: number): boolean {
 
 export function isIdentifierName(name: string): boolean {
   let isFirst = true;
-  for (const char of Array.from(name)) {
-    const cp = char.codePointAt(0);
+  for (let i = 0; i < name.length; i++) {
+    // The implementation is based on
+    // https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-string-gen.cc;l=1455;drc=221e331b49dfefadbc6fa40b0c68e6f97606d0b3;bpv=0;bpt=1
+    // We reimplement `codePointAt` because `codePointAt` is a V8 builtin which is not inlined by TurboFan (as of M91)
+    // since `name` is mostly ASCII, an inlined `charCodeAt` wins here
+    let cp = name.charCodeAt(i);
+    if ((cp & 0xfc00) === 0xd800 && i + 1 < name.length) {
+      const trail = name.charCodeAt(++i);
+      if ((trail & 0xfc00) === 0xdc00) {
+        cp = 0x10000 + ((cp & 0x3ff) << 10) + (trail & 0x3ff);
+      }
+    }
     if (isFirst) {
+      isFirst = false;
       if (!isIdentifierStart(cp)) {
         return false;
       }
-      isFirst = false;
     } else if (!isIdentifierChar(cp)) {
       return false;
     }

@@ -96,6 +96,10 @@ export default function rewriteLiveReferences(
       let namespace: t.Expression = t.identifier(meta.name);
       if (meta.lazy) namespace = t.callExpression(namespace, []);
 
+      if (importName === "default" && meta.interop === "node-default") {
+        return namespace;
+      }
+
       const computed = metadata.stringSpecifiers.has(importName);
 
       return t.memberExpression(
@@ -193,13 +197,8 @@ const buildImportThrow = localName => {
 
 const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
   ReferencedIdentifier(path) {
-    const {
-      seen,
-      buildImportReference,
-      scope,
-      imported,
-      requeueInParent,
-    } = this;
+    const { seen, buildImportReference, scope, imported, requeueInParent } =
+      this;
     if (seen.has(path.node)) return;
     seen.add(path.node);
 

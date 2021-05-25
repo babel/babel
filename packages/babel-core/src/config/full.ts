@@ -68,10 +68,9 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
       throw new Error("Assertion failure - plugins and presets exist");
     }
 
-    const pluginContext: Context.FullPlugin = {
+    const presetContext: Context.FullPreset = {
       ...context,
       targets: options.targets,
-      assumptions: options.assumptions ?? {},
     };
 
     const toDescriptor = (item: PluginItem) => {
@@ -110,7 +109,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
                 presets.push({
                   preset: yield* loadPresetDescriptor(
                     descriptor,
-                    pluginContext,
+                    presetContext,
                   ),
                   pass: [],
                 });
@@ -118,7 +117,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
                 presets.unshift({
                   preset: yield* loadPresetDescriptor(
                     descriptor,
-                    pluginContext,
+                    presetContext,
                   ),
                   pass: pluginDescriptorsPass,
                 });
@@ -167,6 +166,11 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
 
     const opts: any = optionDefaults;
     mergeOptions(opts, options);
+
+    const pluginContext: Context.FullPlugin = {
+      ...presetContext,
+      assumptions: opts.assumptions ?? {},
+    };
 
     yield* enhanceError(context, function* loadPluginDescriptors() {
       pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
@@ -279,14 +283,10 @@ const makeDescriptorLoader = <Context, API>(
     return { value: item, options, dirname, alias };
   });
 
-const pluginDescriptorLoader = makeDescriptorLoader<
-  Context.SimplePlugin,
-  PluginAPI
->(makePluginAPI);
-const presetDescriptorLoader = makeDescriptorLoader<
-  Context.SimplePreset,
-  PresetAPI
->(makePresetAPI);
+const pluginDescriptorLoader =
+  makeDescriptorLoader<Context.SimplePlugin, PluginAPI>(makePluginAPI);
+const presetDescriptorLoader =
+  makeDescriptorLoader<Context.SimplePreset, PresetAPI>(makePresetAPI);
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.

@@ -1,8 +1,8 @@
 var foo = "bar";
 
-var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 
-var _baz = babelHelpers.classPrivateFieldLooseKey("baz");
+var _baz = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("baz");
 
 var Foo = function Foo(_foo) {
   "use strict";

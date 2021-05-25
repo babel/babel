@@ -44,7 +44,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "15"
+          node-version: "16"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -58,8 +58,6 @@ jobs:
           yarn test:esm
       - name: Upload coverage report
         uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     name: Build Babel Artifacts
@@ -198,6 +196,12 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
+      - name: Lint
+        run: make lint
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
       - name: Test
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
