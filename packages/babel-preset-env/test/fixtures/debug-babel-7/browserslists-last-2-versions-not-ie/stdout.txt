@@ -5,21 +5,21 @@ Using targets:
   "android": "89",
   "chrome": "89",
   "edge": "89",
-  "firefox": "86",
-  "ios": "13.4",
+  "firefox": "87",
+  "ios": "14",
   "opera": "74",
-  "safari": "13.1",
-  "samsung": "12"
+  "safari": "14",
+  "samsung": "13"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties { firefox, ios, safari, samsung }
-  proposal-private-methods { firefox, ios, safari, samsung }
+  proposal-class-properties { firefox < 90, ios, safari < tp, samsung }
+  proposal-private-methods { firefox < 90, ios, safari < tp, samsung }
   syntax-numeric-separator
-  proposal-logical-assignment-operators { ios < 14, safari < 14, samsung }
-  proposal-nullish-coalescing-operator { samsung < 13 }
+  proposal-logical-assignment-operators { samsung }
+  syntax-nullish-coalescing-operator
   proposal-optional-chaining { android, chrome, edge, opera, samsung }
   syntax-json-strings
   syntax-optional-catch-binding

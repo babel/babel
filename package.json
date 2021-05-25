@@ -80,8 +80,8 @@
     "test/runtime-integration/*"
   ],
   "resolutions": {
-    "browserslist": "npm:4.16.4",
-    "caniuse-lite": "npm:1.0.30001211",
+    "browserslist": "npm:4.16.6",
+    "caniuse-lite": "npm:1.0.30001230",
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
