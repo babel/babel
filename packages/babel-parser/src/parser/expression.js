@@ -456,6 +456,7 @@ export default class ExpressionParser extends LValParser {
 
   parseExprOpRightExpr(op: TokenType, prec: number): N.Expression {
     const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
     switch (op) {
       case tt.pipeline:
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
@@ -469,7 +470,11 @@ export default class ExpressionParser extends LValParser {
           case "smart":
             return this.withTopicBindingContext(() => {
               const childExpr = this.parseExprOpBaseRightExpr(op, prec);
-              return this.parseSmartPipelineBodyInStyle(childExpr);
+              return this.parseSmartPipelineBodyInStyle(
+                childExpr,
+                startPos,
+                startLoc,
+              );
             });
 
           case "fsharp":
@@ -477,8 +482,8 @@ export default class ExpressionParser extends LValParser {
               return this.parseFSharpPipelineBody(prec);
             });
         }
-      // Falls through.
 
+      // Falls through.
       default:
         return this.parseExprOpBaseRightExpr(op, prec);
     }

@@ -40,13 +40,7 @@
                   "operator": "|>",
                   "right": {
                     "type": "PipelineBareFunction",
-                    "end": 33,
-                    "loc": {
-                      "end": {
-                        "line": 2,
-                        "column": 12
-                      }
-                    },
+                    "start":24,"end":33,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":12}},
                     "callee": {
                       "type": "Identifier",
                       "start":24,"end":33,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":12},"identifierName":"doubleSay"},
@@ -57,13 +51,7 @@
                 "operator": "|>",
                 "right": {
                   "type": "PipelineBareFunction",
-                  "end": 52,
-                  "loc": {
-                    "end": {
-                      "line": 3,
-                      "column": 18
-                    }
-                  },
+                  "start":37,"end":52,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":18}},
                   "callee": {
                     "type": "MemberExpression",
                     "start":37,"end":52,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":18}},
@@ -84,13 +72,7 @@
               "operator": "|>",
               "right": {
                 "type": "PipelineBareFunction",
-                "end": 67,
-                "loc": {
-                  "end": {
-                    "line": 4,
-                    "column": 14
-                  }
-                },
+                "start":56,"end":67,"loc":{"start":{"line":4,"column":3},"end":{"line":4,"column":14}},
                 "callee": {
                   "type": "MemberExpression",
                   "start":56,"end":67,"loc":{"start":{"line":4,"column":3},"end":{"line":4,"column":14}},

@@ -37,13 +37,7 @@
               "operator": "|>",
               "right": {
                 "type": "PipelineBareFunction",
-                "end": 20,
-                "loc": {
-                  "end": {
-                    "line": 1,
-                    "column": 20
-                  }
-                },
+                "start":10,"end":20,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":20}},
                 "callee": {
                   "type": "MemberExpression",
                   "start":10,"end":20,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":20}},
@@ -64,13 +58,7 @@
             "operator": "|>",
             "right": {
               "type": "PipelineBareFunction",
-              "end": 30,
-              "loc": {
-                "end": {
-                  "line": 1,
-                  "column": 30
-                }
-              },
+              "start":24,"end":30,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":30}},
               "callee": {
                 "type": "Identifier",
                 "start":24,"end":30,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":30},"identifierName":"double"},
