@@ -19,6 +19,7 @@ import {
   skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
+import type { LookaheadState } from "./state";
 
 const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
 
@@ -144,11 +145,9 @@ export default class Tokenizer extends ParserErrors {
   // Move to the next token
 
   next(): void {
-    if (!this.isLookahead) {
-      this.checkKeywordEscapes();
-      if (this.options.tokens) {
-        this.pushToken(new Token(this.state));
-      }
+    this.checkKeywordEscapes();
+    if (this.options.tokens) {
+      this.pushToken(new Token(this.state));
     }
 
     this.state.lastTokEnd = this.state.end;
@@ -175,14 +174,51 @@ export default class Tokenizer extends ParserErrors {
     return this.state.type === type;
   }
 
-  // TODO
+  /**
+   * Create a LookaheadState from current parser state
+   *
+   * @param {State} state
+   * @returns {LookaheadState}
+   * @memberof Tokenizer
+   */
+  createLookaheadState(state: State): LookaheadState {
+    return {
+      pos: state.pos,
+      value: null,
+      type: state.type,
+      start: state.start,
+      end: state.end,
+      lastTokEnd: state.end,
+      context: [this.curContext()],
+      exprAllowed: state.exprAllowed,
+      inType: state.inType,
+    };
+  }
 
-  lookahead(): State {
+  /**
+   * lookahead peeks the next token, skipping changes to token context and
+   * comment stack. For performance it returns a limited LookaheadState
+   * instead of full parser state.
+   *
+   * The { column, line } Loc info is not included in lookahead since such usage
+   * is rare. Although it may return other location properties e.g. `curLine` and
+   * `lineStart`, these properties are not listed in the LookaheadState interface
+   * and thus the returned value is _NOT_ reliable.
+   *
+   * The tokenizer should make best efforts to avoid using any parser state
+   * other than those defined in LookaheadState
+   *
+   * @returns {LookaheadState}
+   * @memberof Tokenizer
+   */
+  lookahead(): LookaheadState {
     const old = this.state;
-    this.state = old.clone(true);
+    // For performance we use a simpified tokenizer state structure
+    // $FlowIgnore
+    this.state = this.createLookaheadState(old);
 
     this.isLookahead = true;
-    this.next();
+    this.nextToken();
     this.isLookahead = false;
 
     const curr = this.state;
@@ -247,17 +283,16 @@ export default class Tokenizer extends ParserErrors {
 
   nextToken(): void {
     const curContext = this.curContext();
-    if (!curContext?.preserveSpace) this.skipSpace();
+    if (!curContext.preserveSpace) this.skipSpace();
     this.state.start = this.state.pos;
-    this.state.startLoc = this.state.curPosition();
+    if (!this.isLookahead) this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
       this.finishToken(tt.eof);
       return;
     }
 
-    const override = curContext?.override;
-    if (override) {
-      override(this);
+    if (curContext === ct.template) {
+      this.readTmplToken();
     } else {
       this.getTokenFromCode(this.codePointAtPos(this.state.pos));
     }
@@ -285,7 +320,8 @@ export default class Tokenizer extends ParserErrors {
   }
 
   skipBlockComment(): void {
-    const startLoc = this.state.curPosition();
+    let startLoc;
+    if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
     const end = this.input.indexOf("*/", this.state.pos + 2);
     if (end === -1) throw this.raise(start, Errors.UnterminatedComment);
@@ -304,6 +340,7 @@ export default class Tokenizer extends ParserErrors {
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
+    /*:: invariant(startLoc) */
 
     this.pushComment(
       true,
@@ -317,7 +354,8 @@ export default class Tokenizer extends ParserErrors {
 
   skipLineComment(startSkip: number): void {
     const start = this.state.pos;
-    const startLoc = this.state.curPosition();
+    let startLoc;
+    if (!this.isLookahead) startLoc = this.state.curPosition();
     let ch = this.input.charCodeAt((this.state.pos += startSkip));
     if (this.state.pos < this.length) {
       while (!isNewLine(ch) && ++this.state.pos < this.length) {
@@ -328,6 +366,7 @@ export default class Tokenizer extends ParserErrors {
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
+    /*:: invariant(startLoc) */
 
     this.pushComment(
       false,
@@ -398,12 +437,14 @@ export default class Tokenizer extends ParserErrors {
 
   finishToken(type: TokenType, val: any): void {
     this.state.end = this.state.pos;
-    this.state.endLoc = this.state.curPosition();
     const prevType = this.state.type;
     this.state.type = type;
     this.state.value = val;
 
-    if (!this.isLookahead) this.updateContext(prevType);
+    if (!this.isLookahead) {
+      this.state.endLoc = this.state.curPosition();
+      this.updateContext(prevType);
+    }
   }
 
   // ### Token reading

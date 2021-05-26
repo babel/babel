@@ -178,3 +178,14 @@ export default class State {
     return state;
   }
 }
+
+export type LookaheadState = {
+  pos: number,
+  value: any,
+  type: TokenType,
+  start: number,
+  end: number,
+  /* Used only in readSlashToken */
+  exprAllowed: boolean,
+  inType: boolean,
+};
