@@ -5,7 +5,10 @@ const require = createRequire(import.meta.url);
 (process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
   "@babel/standalone",
   () => {
-    const Babel = require("../babel");
+    let Babel;
+    beforeAll(() => {
+      Babel = require("../babel");
+    });
 
     it("handles the es2015-no-commonjs preset", () => {
       const output = Babel.transform('const getMessage = () => "Hello World"', {
