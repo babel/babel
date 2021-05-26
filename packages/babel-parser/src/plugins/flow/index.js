@@ -1499,7 +1499,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           // See comment above
-          if (!process.env.BABEL_8_BREAKING) (_ => _)(isGroupedType);
+          console.log({ isGroupedType });
 
           if (isGroupedType) {
             this.state.noAnonFunctionType = false;
