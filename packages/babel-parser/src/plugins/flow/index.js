@@ -1486,7 +1486,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             if (this.match(tt.name) || this.match(tt._this)) {
               const token = this.lookahead().type;
               isGroupedType = token !== tt.question && token !== tt.colon;
-              (_ => _)(isGroupedType);
+
+              // Withuot this line, the flow/typecasts/3 test fails on Node.js 6.
+              // There is an evil demon silently setting `isGroupedType` to `true`
+              // when it should be `false`. The divine power of this IIFE without
+              // any side effect and whose result is completely ignored is enough
+              // to keep that demon away.
+              if (!process.env.BABEL_8_BREAKING) (_ => _)(isGroupedType);
             } else {
               isGroupedType = true;
             }
