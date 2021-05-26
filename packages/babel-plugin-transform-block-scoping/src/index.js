@@ -750,7 +750,7 @@ class BlockScoping {
   getLetReferences() {
     const block = this.block;
 
-    let declarators = [];
+    const declarators = [];
 
     if (this.loop) {
       const init = this.loop.left || this.loop.init;
