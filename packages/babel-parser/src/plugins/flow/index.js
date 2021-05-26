@@ -1489,7 +1489,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               const token = this.lookahead().type;
               console.log("LOOKAHEAD", this.lookahead());
               isGroupedType = token !== tt.question && token !== tt.colon;
-              isGroupedType;
+              (_ => _)(isGroupedType);
             } else {
               isGroupedType = true;
             }
