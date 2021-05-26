@@ -254,7 +254,6 @@ const looseHandlers = {
 
 type ReplaceSupersOptionsBase = {
   methodPath: NodePath<any>;
-  superRef: any;
   constantSuper?: boolean;
   file: any;
   // objectRef might have been shadowed in child scopes,

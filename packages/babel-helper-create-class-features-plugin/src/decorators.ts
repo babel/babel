@@ -59,21 +59,15 @@ function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
     );
   }
 
-  new ReplaceSupers(
-    {
-      methodPath: path,
-      methodNode: node,
-      objectRef: classRef,
-      isStatic: node.static,
-      superRef,
-      scope,
-      file: this,
-      refToPreserve: classRef,
-    },
-    true,
-  ).replace();
+  new ReplaceSupers({
+    methodPath: path,
+    objectRef: classRef,
+    superRef,
+    file: this,
+    refToPreserve: classRef,
+  }).replace();
 
-  const properties = [
+  const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
     prop("decorators", takeDecorators(node)),
     prop("static", node.static && t.booleanLiteral(true)),
@@ -135,7 +129,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
       .map(extractElementDescriptor.bind(file, node.id, superId)),
   );
 
-  let replacement = template.expression.ast`
+  const wrapperCall = template.expression.ast`
     ${addDecorateHelper(file)}(
       ${classDecorators || t.nullLiteral()},
       function (${initializeId}, ${superClass ? t.cloneNode(superId) : null}) {
@@ -144,17 +138,18 @@ export function buildDecoratedClass(ref, path, elements, file) {
       },
       ${superClass}
     )
-  `;
-  let classPathDesc = "arguments.1.body.body.0";
+  ` as t.CallExpression & { arguments: [unknown, t.FunctionExpression] };
 
   if (!isStrict) {
-    replacement.arguments[1].body.directives.push(
+    wrapperCall.arguments[1].body.directives.push(
       t.directive(t.directiveLiteral("use strict")),
     );
   }
 
+  let replacement: t.Node = wrapperCall;
+  let classPathDesc = "arguments.1.body.body.0";
   if (isDeclaration) {
-    replacement = template.ast`let ${ref} = ${replacement}`;
+    replacement = template.statement.ast`let ${ref} = ${wrapperCall}`;
     classPathDesc = "declarations.0.init." + classPathDesc;
   }
 

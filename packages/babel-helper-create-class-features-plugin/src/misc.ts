@@ -44,7 +44,7 @@ const classFieldDefinitionEvaluationTDZVisitor = {
   ReferencedIdentifier: handleClassTDZ,
 };
 
-export function injectInitialization(path, constructor, nodes, renamer) {
+export function injectInitialization(path, constructor, nodes, renamer?) {
   if (!nodes.length) return;
 
   const isDerived = !!path.node.superClass;
