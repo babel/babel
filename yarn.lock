@@ -150,9 +150,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
-    "@mdn/browser-compat-data": ^3.1.1
+    "@mdn/browser-compat-data": ^3.3.4
     core-js-compat: ^3.9.0
-    electron-to-chromium: 1.3.672
+    electron-to-chromium: ^1.3.738
   languageName: unknown
   linkType: soft
 
@@ -414,7 +414,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-validator-option": "workspace:^7.12.17"
     "@types/semver": ^5.5.0
-    browserslist: ^4.14.5
+    browserslist: ^4.16.6
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -3843,12 +3843,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdn/browser-compat-data@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@mdn/browser-compat-data@npm:3.1.1"
-  dependencies:
-    extend: 3.0.2
-  checksum: 1e98cab2a160a65edd8ee16c5f10fda9d27df22a159666faa5a57fa0f64a152ced3926ab81f512b3dfe66af82291b58c9cf4b64d4443b2cca05664a4454d7910
+"@mdn/browser-compat-data@npm:^3.3.4":
+  version: 3.3.4
+  resolution: "@mdn/browser-compat-data@npm:3.3.4"
+  checksum: 8f0b894401ce97eefac805f93b2b6891fddd6b95eb1823bbda91315d662279b8bf991d78a4827c8debb7a76939abeaefb6d91d1ad84344124f0720d21fa18d68
   languageName: node
   linkType: hard
 
@@ -6023,18 +6021,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:4.16.4":
-  version: 4.16.4
-  resolution: "browserslist@npm:4.16.4"
+"browserslist@npm:4.16.6":
+  version: 4.16.6
+  resolution: "browserslist@npm:4.16.6"
   dependencies:
-    caniuse-lite: ^1.0.30001208
+    caniuse-lite: ^1.0.30001219
     colorette: ^1.2.2
-    electron-to-chromium: ^1.3.712
+    electron-to-chromium: ^1.3.723
     escalade: ^3.1.1
     node-releases: ^1.1.71
   bin:
     browserslist: cli.js
-  checksum: 00071f51695eae0d33c6193f37af87c690e5049dc615aeebae32bd0a60ad64698f29b8a579667012a177bff532f6235f22d1a96bfb30bf6364631914e2d64294
+  checksum: ebb0ab279c5e61f882467f7ccd7d22c0edfcc01201eba06e85e835ca4d355e682f9aa3310bfa18c3a23bb244f0b8e498b3113dae3e9b0fa4908c5ffb4a26b3a2
   languageName: node
   linkType: hard
 
@@ -6227,10 +6225,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001211":
-  version: 1.0.30001211
-  resolution: "caniuse-lite@npm:1.0.30001211"
-  checksum: 7222b15450c8f8227be02a2c3c28981f6ba58374e309e04eec12036b4dbc31cfa904a13a28fe505771024c0bb701ec320a4eab50db5c5c996b4c34c8594dab03
+"caniuse-lite@npm:1.0.30001230":
+  version: 1.0.30001230
+  resolution: "caniuse-lite@npm:1.0.30001230"
+  checksum: bb319bedf33722a2d16e28a7e0d13fabde59be4fccd48d80939254228c7a49059b74bd99b313596f75c997480f9097cc3e7cda7c7687e5a096bb9c75260c145d
   languageName: node
   linkType: hard
 
@@ -7288,17 +7286,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.3.672":
-  version: 1.3.672
-  resolution: "electron-to-chromium@npm:1.3.672"
-  checksum: 99e374a0f3e0fc2dccb028133e7d02b820e3ada6d09fcde603082e679e6b999dd2f772273b7a2af46b926e5258f7dc2fcd7bef8f6ca8def568bf1a582254ce6f
-  languageName: node
-  linkType: hard
-
-"electron-to-chromium@npm:^1.3.712":
-  version: 1.3.717
-  resolution: "electron-to-chromium@npm:1.3.717"
-  checksum: 4ca745fa475cf2aef6877d31ad97a3adada13f04723a84f5954971052921dea5819c0cf0df9f2b7114521b8740ebfbe9b4e6ec86f995b056645f6267a8a4d42a
+"electron-to-chromium@npm:1.3.738":
+  version: 1.3.738
+  resolution: "electron-to-chromium@npm:1.3.738"
+  checksum: efaab265c28df8ffa0741441ec7c9e53f03562af3453584eaeac53fa695ec169b3de1ab6698b2e0e54c3fed19558459ef0960672f94f32811c724a7c1c03417e
   languageName: node
   linkType: hard
 
@@ -8064,7 +8055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"extend@npm:3.0.2, extend@npm:^3.0.0, extend@npm:~3.0.2":
+"extend@npm:^3.0.0, extend@npm:~3.0.2":
   version: 3.0.2
   resolution: "extend@npm:3.0.2"
   checksum: 1406da1f0c4b00b839497e4cdd0ec4303ce2ae349144b7c28064a5073c93ce8c08da4e8fb1bc5cb459ffcdff30a35fc0fe54344eb88320e70100c1baea6f195c

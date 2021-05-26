@@ -66,7 +66,6 @@ import "core-js/modules/esnext.set.symmetric-difference.js";
 import "core-js/modules/esnext.set.union.js";
 import "core-js/modules/esnext.string.at.js";
 import "core-js/modules/esnext.string.code-points.js";
-import "core-js/modules/esnext.string.match-all.js";
 import "core-js/modules/esnext.string.replace-all.js";
 import "core-js/modules/esnext.symbol.dispose.js";
 import "core-js/modules/esnext.symbol.observable.js";

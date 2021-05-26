@@ -8,8 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties { safari }
-  proposal-private-methods { safari }
+  proposal-class-properties { safari < tp }
+  proposal-private-methods { safari < tp }
   proposal-numeric-separator { safari < 13 }
   proposal-logical-assignment-operators { safari < 14 }
   proposal-nullish-coalescing-operator { safari < 13.1 }

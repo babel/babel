@@ -3,12 +3,14 @@
     "chrome": "91"
   },
   "proposal-private-property-in-object": {
-    "chrome": "91"
+    "chrome": "91",
+    "firefox": "90"
   },
   "proposal-class-properties": {
     "chrome": "74",
     "opera": "62",
     "edge": "79",
+    "firefox": "90",
     "safari": "14.1",
     "node": "12",
     "samsung": "11",
@@ -18,6 +20,8 @@
     "chrome": "84",
     "opera": "70",
     "edge": "84",
+    "firefox": "90",
+    "safari": "tp",
     "node": "14.6",
     "electron": "10.0"
   },

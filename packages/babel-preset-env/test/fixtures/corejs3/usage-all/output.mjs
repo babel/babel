@@ -1,4 +1,3 @@
-import "core-js/modules/es.string.match-all.js";
 Array.from; // static method
 
 Map; // built-in
