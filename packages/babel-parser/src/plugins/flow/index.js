@@ -1481,21 +1481,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.parenL:
           this.next();
 
-          console.log("STATE", this.state);
-
           // Check to see if this is actually a grouped type
           if (!this.match(tt.parenR) && !this.match(tt.ellipsis)) {
             if (this.match(tt.name) || this.match(tt._this)) {
               const token = this.lookahead().type;
-              console.log("LOOKAHEAD", this.lookahead());
               isGroupedType = token !== tt.question && token !== tt.colon;
               (_ => _)(isGroupedType);
             } else {
               isGroupedType = true;
             }
           }
-
-          console.log({ isGroupedType });
 
           if (isGroupedType) {
             this.state.noAnonFunctionType = false;
