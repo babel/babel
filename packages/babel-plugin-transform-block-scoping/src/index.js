@@ -750,7 +750,7 @@ class BlockScoping {
   getLetReferences() {
     const block = this.block;
 
-    let declarators = [];
+    const declarators = [];
 
     if (this.loop) {
       const init = this.loop.left || this.loop.init;
@@ -773,7 +773,13 @@ class BlockScoping {
         if (isBlockScoped(node)) {
           convertBlockScopedToVar(path, node, block, this.scope);
         }
-        declarators = declarators.concat(node.declarations || node);
+        if (node.declarations) {
+          for (let i = 0; i < node.declarations.length; i++) {
+            declarators.push(node.declarations[i]);
+          }
+        } else {
+          declarators.push(node);
+        }
       }
       if (t.isLabeledStatement(node)) {
         addDeclarationsFromChild(path.get("body"), node.body);
