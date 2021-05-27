@@ -119,11 +119,13 @@ export default declare((api, opts) => {
       if (node.typeAnnotation) node.typeAnnotation = null;
       if (node.definite) node.definite = null;
       if (node.declare) node.declare = null;
+      if (node.override) node.override = null;
     },
     method({ node }) {
       if (node.accessibility) node.accessibility = null;
       if (node.abstract) node.abstract = null;
       if (node.optional) node.optional = null;
+      if (node.override) node.override = null;
 
       // Rest handled by Function visitor
     },
