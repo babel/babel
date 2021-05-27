@@ -1186,46 +1186,9 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt.hash: {
-        const pipeProposal = this.getPluginOption(
-          "pipelineOperator",
-          "proposal",
-        );
-
-        if (pipeProposal) {
-          node = this.startNode();
-
-          const proposalToNodeType = {
-            hack: "TopicReference",
-            smart: "PipelinePrimaryTopicReference",
-          };
-
-          const throwPipeTopicRequiresHackPipesError = () => {
-            throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
-          };
-
-          const nodeType =
-            proposalToNodeType[pipeProposal] ??
-            throwPipeTopicRequiresHackPipesError();
-
-          this.next();
-
-          if (!this.topicReferenceIsAllowedInCurrentContext()) {
-            switch (pipeProposal) {
-              case "hack":
-                this.raise(node.start, Errors.PipeTopicUnbound);
-                break;
-              case "smart":
-                this.raise(
-                  node.start,
-                  Errors.PipeSmartMixPrimaryTopicNotAllowed,
-                );
-                break;
-            }
-          }
-
-          this.registerTopicReference();
-
-          return this.finishNode(node, nodeType);
+        node = this.parseTopicReference();
+        if (node) {
+          return node;
         }
       }
 
@@ -1245,6 +1208,45 @@ export default class ExpressionParser extends LValParser {
       // fall through
       default:
         throw this.unexpected();
+    }
+  }
+
+  // https://github.com/js-choi/proposal-hack-pipes
+  parseTopicReference() {
+    const pipeProposal = this.getPluginOption("pipelineOperator", "proposal");
+
+    if (pipeProposal) {
+      const node = this.startNode();
+
+      const proposalToNodeType = {
+        hack: "TopicReference",
+        smart: "PipelinePrimaryTopicReference",
+      };
+
+      const throwPipeTopicRequiresHackPipesError = () => {
+        throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
+      };
+
+      const nodeType =
+        proposalToNodeType[pipeProposal] ??
+        throwPipeTopicRequiresHackPipesError();
+
+      this.next();
+
+      if (!this.topicReferenceIsAllowedInCurrentContext()) {
+        switch (pipeProposal) {
+          case "hack":
+            this.raise(node.start, Errors.PipeTopicUnbound);
+            break;
+          case "smart":
+            this.raise(node.start, Errors.PipeSmartMixPrimaryTopicNotAllowed);
+            break;
+        }
+      }
+
+      this.registerTopicReference();
+
+      return this.finishNode(node, nodeType);
     }
   }
 
