@@ -1397,7 +1397,8 @@ An export batch declaration, e.g., `export * from "mod";`.
 
 ### Smart-mix pipelines
 
-They are used by the smart-mix pipe operator to determine
+These types are **deprecated**.
+They are used by the deprecated smart-mix pipe operator to determine
 the type of a pipe expression's the body expression.
 The Hack and F# pipe operators use simple `BinaryExpression`s.
 
