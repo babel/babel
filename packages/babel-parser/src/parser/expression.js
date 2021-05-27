@@ -462,14 +462,14 @@ export default class ExpressionParser extends LValParser {
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
           case "hack":
             return this.withTopicBindingContext(() => {
-              const bodyExpr = this.parseExprOpBaseRightExpr(op, prec);
+              const bodyExpr = this.parseHackPipeBody(op, prec);
               this.checkHackPipeBodyEarlyErrors(startPos);
               return bodyExpr;
             });
 
           case "smart":
             return this.withTopicBindingContext(() => {
-              const childExpr = this.parseExprOpBaseRightExpr(op, prec);
+              const childExpr = this.parseHackPipeBody(op, prec);
               return this.parseSmartPipelineBodyInStyle(
                 childExpr,
                 startPos,
@@ -502,6 +502,25 @@ export default class ExpressionParser extends LValParser {
       startLoc,
       op.rightAssociative ? prec - 1 : prec,
     );
+  }
+
+  // Helper function for `parseExprOpRightExpr` for the Hack-pipe operator
+  // (and the Hack-style smart-mix pipe operator).
+
+  parseHackPipeBody(op: TokenType, prec: number): N.Expression {
+    // A `yield` expression in a generator context (i.e., a [Yield] production)
+    // starts a YieldExpression.
+    // Outside of a generator context, any `yield` as a pipe body
+    // is considered simply an identifier.
+    const bodyIsInGeneratorContext = this.prodParam.hasYield;
+    const bodyIsYieldExpression =
+      bodyIsInGeneratorContext && this.isContextual("yield");
+
+    if (bodyIsYieldExpression) {
+      return this.parseYield();
+    } else {
+      return this.parseExprOpBaseRightExpr(op, prec);
+    }
   }
 
   checkExponentialAfterUnary(node: N.AwaitExpression | N.UnaryExpression) {
