@@ -462,14 +462,14 @@ export default class ExpressionParser extends LValParser {
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
           case "hack":
             return this.withTopicBindingContext(() => {
-              const bodyExpr = this.parseMaybeAssign();
+              const bodyExpr = this.parseHackPipeBody(op, prec);
               this.checkHackPipeBodyEarlyErrors(startPos);
               return bodyExpr;
             });
 
           case "smart":
             return this.withTopicBindingContext(() => {
-              const childExpr = this.parseMaybeAssign();
+              const childExpr = this.parseHackPipeBody(op, prec);
               return this.parseSmartPipelineBodyInStyle(
                 childExpr,
                 startPos,
@@ -502,6 +502,34 @@ export default class ExpressionParser extends LValParser {
       startLoc,
       op.rightAssociative ? prec - 1 : prec,
     );
+  }
+
+  // Helper function for `parseExprOpRightExpr` for the Hack-pipe operator
+  // (and the Hack-style smart-mix pipe operator).
+
+  parseHackPipeBody(op: TokenType, prec: number): N.Expression {
+    // A `yield` expression in a generator context (i.e., a [Yield] production)
+    // starts a YieldExpression.
+    // Outside of a generator context, any `yield` as a pipe body
+    // is considered simply an identifier.
+    // (Unparenthesized `=>`/`=` expressions are handled
+    // in `checkHackPipeBodyEarlyErrors`.
+    // This is because `yield`’s “not allowed
+    // as identifier in generator” error will immediately
+    // occur before the pipe body is fully parsed.)
+    const bodyIsInGeneratorContext = this.prodParam.hasYield;
+    const bodyIsYieldExpression =
+      bodyIsInGeneratorContext && this.isContextual("yield");
+
+    if (bodyIsYieldExpression) {
+      throw this.raise(
+        this.state.start,
+        Errors.PipeBodyIsTight,
+        this.state.value,
+      );
+    } else {
+      return this.parseExprOpBaseRightExpr(op, prec);
+    }
   }
 
   checkExponentialAfterUnary(node: N.AwaitExpression | N.UnaryExpression) {
@@ -2555,8 +2583,32 @@ export default class ExpressionParser extends LValParser {
   // The `startPos` is the starting position of the pipe body.
 
   checkHackPipeBodyEarlyErrors(startPos: number): void {
-    // A Hack pipe body must use the topic reference at least once.
-    if (!this.topicReferenceWasUsedInCurrentContext()) {
+    // If the following token is invalidly `=>`, `=`, etc.,
+    // then throw a human-friendly error
+    // instead of something like 'Unexpected token, expected ";"'.
+    // For example, `x => x |> y => #` (assuming `#` is the topic reference)
+    // groups into `x => (x |> y) => #`,
+    // and `(x |> y) => #` is an invalid arrow function.
+    // This is because Hack-style `|>` has tighter precedence than `=>`.
+    // (Unparenthesized `yield` expressions are handled
+    // in `parseHackPipeBody`.
+    // This is because `yield`’s “not allowed
+    // as identifier in generator” error will immediately
+    // occur before the pipe body is fully parsed.)
+    if (this.match(tt.arrow)) {
+      throw this.raise(
+        this.state.start,
+        Errors.PipeBodyIsTight,
+        tt.arrow.label,
+      );
+    } else if (this.match(tt.assign)) {
+      throw this.raise(
+        this.state.start,
+        Errors.PipeBodyIsTight,
+        tt.arrow.assign,
+      );
+    } else if (!this.topicReferenceWasUsedInCurrentContext()) {
+      // A Hack pipe body must use the topic reference at least once.
       this.raise(startPos, Errors.PipeTopicUnused);
     }
   }
@@ -2595,8 +2647,18 @@ export default class ExpressionParser extends LValParser {
   // The `startPos` is the starting position of the pipe body.
 
   checkSmartPipeTopicBodyEarlyErrors(startPos: number): void {
+    // If the following token is invalidly `=>`, then throw a human-friendly error
+    // instead of something like 'Unexpected token, expected ";"'.
+    // For example, `x => x |> y => #` (assuming `#` is the topic reference)
+    // groups into `x => (x |> y) => #`,
+    // and `(x |> y) => #` is an invalid arrow function.
+    // This is because smart-mix `|>` has tighter precedence than `=>`.
+    if (this.match(tt.arrow)) {
+      throw this.raise(this.state.start, Errors.PipeSmartMixBodyCannotBeArrow);
+    }
+
     // A topic-style smart-mix pipe body must use the topic reference at least once.
-    if (!this.topicReferenceWasUsedInCurrentContext()) {
+    else if (!this.topicReferenceWasUsedInCurrentContext()) {
       this.raise(startPos, Errors.PipeSmartMixTopicUnused);
     }
   }

@@ -1,6 +1,11 @@
 {
   "type": "File",
   "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+  "errors": [
+    "SyntaxError: Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once. (1:9)",
+    "SyntaxError: Invalid left-hand side in assignment expression. (1:0)",
+    "SyntaxError: Topic reference is unbound; it must be inside a Hack-style pipe body. (1:18)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
@@ -11,20 +16,20 @@
         "type": "ExpressionStatement",
         "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
         "expression": {
-          "type": "BinaryExpression",
+          "type": "AssignmentExpression",
           "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+          "operator": "=",
           "left": {
-            "type": "Identifier",
-            "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5},"identifierName":"value"},
-            "name": "value"
-          },
-          "operator": "|>",
-          "right": {
-            "type": "AssignmentExpression",
-            "start":9,"end":19,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":19}},
-            "operator": "=",
+            "type": "BinaryExpression",
+            "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
             "left": {
-              "type": "ArrayPattern",
+              "type": "Identifier",
+              "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5},"identifierName":"value"},
+              "name": "value"
+            },
+            "operator": "|>",
+            "right": {
+              "type": "ArrayExpression",
               "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15}},
               "elements": [
                 {
@@ -38,11 +43,11 @@
                   "name": "y"
                 }
               ]
-            },
-            "right": {
-              "type": "TopicReference",
-              "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}}
             }
+          },
+          "right": {
+            "type": "TopicReference",
+            "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}}
           }
         }
       }
