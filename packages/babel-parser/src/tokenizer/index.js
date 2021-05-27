@@ -182,17 +182,29 @@ export default class Tokenizer extends ParserErrors {
    * @memberof Tokenizer
    */
   createLookaheadState(state: State): LookaheadState {
-    return {
-      pos: state.pos,
-      value: null,
-      type: state.type,
-      start: state.start,
-      end: state.end,
-      lastTokEnd: state.end,
-      context: [this.curContext()],
-      exprAllowed: state.exprAllowed,
-      inType: state.inType,
-    };
+    if (process.env.BABEL_8_BREAKING) {
+      const { pos, type, start, end, exprAllowed, inType } = state;
+      return {
+        pos: pos,
+        value: null,
+        type: type,
+        start: start,
+        end: end,
+        lastTokEnd: end,
+        // exprAllowed and inType is only used in readToken_slash
+        exprAllowed: exprAllowed,
+        inType: inType,
+        context: [this.curContext()],
+      };
+    } else {
+      // We observe inconsistent behavior in
+      // https://github.com/babel/babel/pull/13374
+      // which is likely a crankshaft bug, we don't expect it
+      // will be fixed since Node.js 6 reaches EOL.
+      // Before we drop Node 6 support, we have to clone
+      // the complete parser state
+      return state.clone();
+    }
   }
 
   /**
@@ -213,7 +225,7 @@ export default class Tokenizer extends ParserErrors {
    */
   lookahead(): LookaheadState {
     const old = this.state;
-    // For performance we use a simpified tokenizer state structure
+    // In Babel 8 we use a simpified tokenizer state structure
     // $FlowIgnore
     this.state = this.createLookaheadState(old);
 
