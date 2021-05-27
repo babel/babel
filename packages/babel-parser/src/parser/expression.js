@@ -2829,8 +2829,8 @@ export default class ExpressionParser extends LValParser {
     return callback();
   }
 
-  // Register the use of a primary topic reference (`#`) within the current
-  // topic context.
+  // Register the use of a topic reference within the current
+  // topic-binding context.
   registerTopicReference(): void {
     this.state.topicContext.maxTopicIndex = 0;
   }
