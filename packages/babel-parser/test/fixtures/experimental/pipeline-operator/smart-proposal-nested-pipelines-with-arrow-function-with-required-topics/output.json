@@ -43,17 +43,17 @@
                 "type": "BinaryExpression",
                 "start":11,"end":32,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":32}},
                 "left": {
-                  "type": "BinaryExpression",
-                  "start":11,"end":23,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":23}},
-                  "left": {
-                    "type": "PipelinePrimaryTopicReference",
-                    "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12}}
-                  },
-                  "operator": "|>",
-                  "right": {
-                    "type": "PipelineTopicExpression",
-                    "start":16,"end":23,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":23}},
-                    "expression": {
+                  "type": "PipelinePrimaryTopicReference",
+                  "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12}}
+                },
+                "operator": "|>",
+                "right": {
+                  "type": "PipelineTopicExpression",
+                  "start":16,"end":32,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":32}},
+                  "expression": {
+                    "type": "BinaryExpression",
+                    "start":16,"end":32,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":32}},
+                    "left": {
                       "type": "CallExpression",
                       "start":16,"end":23,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":23}},
                       "callee": {
@@ -72,29 +72,29 @@
                           "name": "$"
                         }
                       ]
-                    }
-                  }
-                },
-                "operator": "|>",
-                "right": {
-                  "type": "PipelineTopicExpression",
-                  "start":27,"end":32,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":32}},
-                  "expression": {
-                    "type": "BinaryExpression",
-                    "start":27,"end":32,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":32}},
-                    "left": {
-                      "type": "PipelinePrimaryTopicReference",
-                      "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28}}
                     },
-                    "operator": ">",
+                    "operator": "|>",
                     "right": {
-                      "type": "NumericLiteral",
-                      "start":31,"end":32,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":32}},
-                      "extra": {
-                        "rawValue": 1,
-                        "raw": "1"
-                      },
-                      "value": 1
+                      "type": "PipelineTopicExpression",
+                      "start":27,"end":32,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":32}},
+                      "expression": {
+                        "type": "BinaryExpression",
+                        "start":27,"end":32,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":32}},
+                        "left": {
+                          "type": "PipelinePrimaryTopicReference",
+                          "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28}}
+                        },
+                        "operator": ">",
+                        "right": {
+                          "type": "NumericLiteral",
+                          "start":31,"end":32,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":32}},
+                          "extra": {
+                            "rawValue": 1,
+                            "raw": "1"
+                          },
+                          "value": 1
+                        }
+                      }
                     }
                   }
                 }

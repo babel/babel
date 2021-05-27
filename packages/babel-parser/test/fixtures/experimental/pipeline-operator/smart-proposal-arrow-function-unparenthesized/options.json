@@ -1,4 +1,10 @@
 {
-  "plugins": [[ "pipelineOperator", { "proposal": "smart" } ]],
-  "throws": "Unexpected token (1:8)"
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "smart"
+      }
+    ]
+  ]
 }

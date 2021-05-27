@@ -7,6 +7,5 @@
         "topicToken": "#"
       }
     ]
-  ],
-  "throws": "Unexpected arrow \"=>\" after pipeline body; arrow function acting as Hack-style pipe body must be parenthesized due to operator precedence. (1:8)"
+  ]
 }
