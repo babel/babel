@@ -180,6 +180,19 @@ export default declare((api, opts) => {
       keyExpression = t.arrayExpression(keys);
     }
 
+    // Hoist definition of excluded keys, so that it's not created each time.
+    if (!t.isProgram(path.scope.block)) {
+      const id = path.scope.generateUidIdentifier();
+
+      file.path.scope.push({
+        id,
+        init: keyExpression,
+        kind: "const",
+      });
+
+      keyExpression = t.cloneNode(id);
+    }
+
     return [
       impureComputedPropertyDeclarators,
       restElement.argument,

@@ -1,3 +1,5 @@
+const _temp = ["b"];
+
 const _foo = foo(),
       {
   s
@@ -19,6 +21,6 @@ const {
   let {
     b
   } = _ref,
-      c = babelHelpers.objectWithoutProperties(_ref, ["b"]);
+      c = babelHelpers.objectWithoutProperties(_ref, _temp);
   console.log(b, c);
 });
