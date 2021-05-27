@@ -71,11 +71,17 @@ export default class UtilParser extends Tokenizer {
 
   isUnparsedContextual(nameStart: number, name: string): boolean {
     const nameEnd = nameStart + name.length;
-    return (
-      this.input.slice(nameStart, nameEnd) === name &&
-      (nameEnd === this.input.length ||
-        !isIdentifierChar(this.input.charCodeAt(nameEnd)))
-    );
+    if (this.input.slice(nameStart, nameEnd) === name) {
+      const nextCh = this.input.charCodeAt(nameEnd);
+      return !(
+        isIdentifierChar(nextCh) ||
+        // check if `nextCh is between 0xd800 - 0xdbff,
+        // if `nextCh` is NaN, `NaN & 0xfc00` is 0, the function
+        // returns true
+        (nextCh & 0xfc00) === 0xd800
+      );
+    }
+    return false;
   }
 
   isLookaheadContextual(name: string): boolean {
