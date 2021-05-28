@@ -1214,7 +1214,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt.hash: {
-        node = this.parseTopicReference();
+        node = this.maybeParseTopicReference();
         if (node) {
           return node;
         }
@@ -1240,9 +1240,13 @@ export default class ExpressionParser extends LValParser {
   }
 
   // https://github.com/js-choi/proposal-hack-pipes
-  parseTopicReference() {
+  maybeParseTopicReference(): ?N.Expression {
     const pipeProposal = this.getPluginOption("pipelineOperator", "proposal");
 
+    // `pipeProposal` is falsy when an input program
+    // contains a topic reference on its own,
+    // outside of a pipe expression,
+    // and without having turned on the pipelineOperator plugin.
     if (pipeProposal) {
       const node = this.startNode();
 
