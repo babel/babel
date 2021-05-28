@@ -19,6 +19,33 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.4 (2021-05-28)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#13377](https://github.com/babel/babel/pull/13377) disallow surrogate in the end of contextual name ([@JLHwung](https://github.com/JLHwung))
+  * [#13328](https://github.com/babel/babel/pull/13328) perf: minimize identifier lookahead when parsing let ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-typescript`
+  * [#13314](https://github.com/babel/babel/pull/13314) [ts] Insert `export {}` when necessary to imply ESM ([@wbinnssmith](https://github.com/wbinnssmith))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#13381](https://github.com/babel/babel/pull/13381) [ts] Remove override modifier ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* Other
+  * [#13338](https://github.com/babel/babel/pull/13338) Fix error when parsing ignored files with `@babel/eslint-parser` ([@devfservant](https://github.com/devfservant))
+* `babel-parser`
+  * [#13333](https://github.com/babel/babel/pull/13333) refactor: add parse*Literal parser routines ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-plugin-transform-block-scoping`
+  * [#13376](https://github.com/babel/babel/pull/13376) Improve performance ([@sokra](https://github.com/sokra))
+* `babel-parser`
+  * [#13341](https://github.com/babel/babel/pull/13341) Faster tokenizer lookahead ([@JLHwung](https://github.com/JLHwung))
+  * [#13328](https://github.com/babel/babel/pull/13328) perf: minimize identifier lookahead when parsing let ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-react-constant-elements`, `babel-preset-env`
+  * [#13384](https://github.com/babel/babel/pull/13384) Hoist omitted keys from object spread operator ([@alanorozco](https://github.com/alanorozco))
 ## v7.14.3 (2021-05-17)
 
 #### :bug: Bug Fix
