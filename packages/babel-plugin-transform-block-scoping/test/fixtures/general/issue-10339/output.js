@@ -1,4 +1,4 @@
-var _exclude = ["foo"];
+var _excluded = ["foo"];
 
 var _loop = function (foo, bar) {
   () => foo;
@@ -14,7 +14,7 @@ for (var _ref of {}) {
   var {
     foo
   } = _ref,
-      bar = babelHelpers.objectWithoutPropertiesLoose(_ref, _exclude);
+      bar = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded);
 
   _loop(foo, bar);
 }

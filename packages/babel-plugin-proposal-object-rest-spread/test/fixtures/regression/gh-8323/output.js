@@ -1,4 +1,4 @@
-const _exclude = ["a", "b", "c"];
+const _excluded = ["a", "b", "c"];
 
 const get = () => {
   fireTheMissiles();
@@ -10,6 +10,6 @@ const f = _ref => {
     a = get(),
     b
   } = _ref,
-      z = babelHelpers.objectWithoutPropertiesLoose(_ref, _exclude);
+      z = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded);
   const v = b + 3;
 };

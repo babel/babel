@@ -182,7 +182,7 @@ export default declare((api, opts) => {
       if (!t.isProgram(path.scope.block)) {
         // Hoist definition of excluded keys, so that it's not created each time.
         const program = path.findParent(path => path.isProgram());
-        const id = path.scope.generateUidIdentifier("exclude");
+        const id = path.scope.generateUidIdentifier("excluded");
 
         program.scope.push({
           id,
