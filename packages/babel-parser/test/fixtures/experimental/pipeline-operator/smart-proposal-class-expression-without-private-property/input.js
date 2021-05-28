@@ -1,5 +1,1 @@
-value |> new (class Thing {
-  method () {
-    return # + this.property;
-  }
-});
+x |> class { constructor () { this.x = #; } }
