@@ -1275,33 +1275,83 @@ export default class ExpressionParser extends LValParser {
     // outside of a pipe expression,
     // and without having turned on the pipelineOperator plugin.
     if (pipeProposal) {
-      const node = this.startNode();
+      // A pipe-operator proposal is active.
 
-      let nodeType;
-      if (pipeProposal === "hack") {
-        nodeType = "TopicReference";
-      } else if (pipeProposal === "smart") {
-        nodeType = "PipelinePrimaryTopicReference";
-      } else {
-        throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
-      }
+      const tokenType = this.state.type;
 
-      this.next();
+      if (this.testTopicReferenceConfiguration(pipeProposal, tokenType)) {
+        // The token matches the plugin’s configuration.
+        // The token is therefore a topic reference.
 
-      if (!this.topicReferenceIsAllowedInCurrentContext()) {
-        switch (pipeProposal) {
-          case "hack":
-            this.raise(node.start, Errors.PipeTopicUnbound);
-            break;
-          case "smart":
-            this.raise(node.start, Errors.PrimaryTopicNotAllowed);
-            break;
+        if (this.topicReferenceIsAllowedInCurrentContext()) {
+          // The topic reference is allowed in the current context:
+          // it is inside a pipe body.
+
+          const node = this.startNode();
+
+          // Determine the node type for the topic reference
+          // that is appropriate for the active pipe-operator proposal.
+          let nodeType;
+          if (pipeProposal === "hack") {
+            nodeType = "TopicReference";
+          } else if (pipeProposal === "smart") {
+            nodeType = "PipelinePrimaryTopicReference";
+          }
+
+          // Consume the token.
+          this.next();
+
+          // Register the topic reference so that its pipe body knows
+          // that its topic was used at least once.
+          this.registerTopicReference();
+
+          return this.finishNode(node, nodeType);
+        } else {
+          // The topic reference is not allowed in the current context:
+          // it is outside of a pipe body.
+          switch (pipeProposal) {
+            case "hack":
+              throw this.raise(this.state.start, Errors.PipeTopicUnbound);
+            case "smart":
+              throw this.raise(this.state.start, Errors.PrimaryTopicNotAllowed);
+          }
         }
+      } else {
+        // The token does not match the plugin’s configuration.
+        throw this.raise(
+          this.state.start,
+          Errors.PipeTopicUnconfiguredToken,
+          tokenType.label,
+        );
       }
+    }
+  }
 
-      this.registerTopicReference();
-
-      return this.finishNode(node, nodeType);
+  // This helper method tests whether the given token type
+  // matches the pipelineOperator parser plugin’s configuration.
+  // If the active pipe proposal is Hack style,
+  // and if the given token is the same as the plugin configuration’s `topicToken`,
+  // then this is a valid topic reference.
+  // If the active pipe proposal is smart mix,
+  // then the topic token must always be `#`.
+  // If the active pipe proposal is neither (e.g., "minimal" or "fsharp"),
+  // then an error is thrown.
+  testTopicReferenceConfiguration(
+    pipeProposal: string,
+    tokenType: TokenType,
+  ): boolean {
+    switch (pipeProposal) {
+      case "hack": {
+        const pluginTopicToken = this.getPluginOption(
+          "pipelineOperator",
+          "topicToken",
+        );
+        return tokenType.label === pluginTopicToken;
+      }
+      case "smart":
+        return tokenType === tt.hash;
+      default:
+        throw this.raise(this.state.start, Errors.PipeTopicRequiresHackPipes);
     }
   }
 

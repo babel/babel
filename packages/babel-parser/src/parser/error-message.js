@@ -140,7 +140,7 @@ export const ErrorMessages = makeErrorTemplates(
     PipeTopicRequiresHackPipes:
       'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
     PipeTopicUnbound:
-      "Topic reference is unbound; it must be inside a Hack-style pipe body.",
+      "Topic reference is unbound; it must be inside a pipe body.",
     PipeTopicUnused:
       "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
 
