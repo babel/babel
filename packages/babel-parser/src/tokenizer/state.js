@@ -148,10 +148,6 @@ export default class State {
   // after a non-directive is parsed
   strictErrors: Map<number, ErrorTemplate> = new Map();
 
-  // Names of exports store. `default` is stored as a name for both
-  // `export default foo;` and `export { foo as default };`.
-  exportedIdentifiers: Array<string> = [];
-
   // Tokens length in token store
   tokensLength: number = 0;
 
