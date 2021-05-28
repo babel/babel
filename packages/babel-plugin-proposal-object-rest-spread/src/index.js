@@ -178,19 +178,20 @@ export default declare((api, opts) => {
       );
     } else {
       keyExpression = t.arrayExpression(keys);
-    }
 
-    // Hoist definition of excluded keys, so that it's not created each time.
-    if (!t.isProgram(path.scope.block)) {
-      const id = path.scope.generateUidIdentifier();
+      if (!t.isProgram(path.scope.block)) {
+        // Hoist definition of excluded keys, so that it's not created each time.
+        const program = path.findParent(path => path.isProgram());
+        const id = path.scope.generateUidIdentifier("exclude");
 
-      file.path.scope.push({
-        id,
-        init: keyExpression,
-        kind: "const",
-      });
+        program.scope.push({
+          id,
+          init: keyExpression,
+          kind: "const",
+        });
 
-      keyExpression = t.cloneNode(id);
+        keyExpression = t.cloneNode(id);
+      }
     }
 
     return [

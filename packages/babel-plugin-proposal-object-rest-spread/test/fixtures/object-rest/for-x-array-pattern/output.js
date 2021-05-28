@@ -1,6 +1,6 @@
-const _temp = ["a"],
-      _temp2 = ["a"],
-      _temp3 = ["a"];
+const _exclude = ["a"],
+      _exclude2 = ["a"],
+      _exclude3 = ["a"];
 
 // ForXStatement
 for (const _ref of []) {
@@ -8,7 +8,7 @@ for (const _ref of []) {
   const {
     a
   } = _ref2,
-        b = babelHelpers.objectWithoutProperties(_ref2, _temp);
+        b = babelHelpers.objectWithoutProperties(_ref2, _exclude);
 }
 
 for (var _ref3 of []) {
@@ -16,7 +16,7 @@ for (var _ref3 of []) {
   var {
     a
   } = _ref4,
-      b = babelHelpers.objectWithoutProperties(_ref4, _temp2);
+      b = babelHelpers.objectWithoutProperties(_ref4, _exclude2);
 }
 
 async function a() {
@@ -25,7 +25,7 @@ async function a() {
     var {
       a
     } = _ref6,
-        b = babelHelpers.objectWithoutProperties(_ref6, _temp3);
+        b = babelHelpers.objectWithoutProperties(_ref6, _exclude3);
   }
 } // skip
 

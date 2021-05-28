@@ -1,4 +1,4 @@
-const _temp = ["a"];
+const _exclude = ["a"];
 
 function fn0(obj0) {
   const {
@@ -8,7 +8,7 @@ function fn0(obj0) {
           const {
             a
           } = obj2,
-                rest = babelHelpers.objectWithoutProperties(obj2, _temp);
+                rest = babelHelpers.objectWithoutProperties(obj2, _exclude);
           console.log(rest);
         }
       } = obj1;

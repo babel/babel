@@ -1,5 +1,5 @@
-const _temp = ["excluded", "excluded2", "used", "used2"],
-      _temp2 = ["unused"];
+const _exclude = ["excluded", "excluded2", "used", "used2"],
+      _exclude2 = ["unused"];
 // should not remove when destructuring into existing bindings
 var _c = c2;
 ({
@@ -15,7 +15,7 @@ class Comp extends React.Component {
       used,
       used2: usedRenamed
     } = _this$props,
-          props = babelHelpers.objectWithoutPropertiesLoose(_this$props, _temp);
+          props = babelHelpers.objectWithoutPropertiesLoose(_this$props, _exclude);
     console.log(used, usedRenamed);
     return React.createElement("input", props);
   }
@@ -23,6 +23,6 @@ class Comp extends React.Component {
 }
 
 function smth(_ref) {
-  let rest = babelHelpers.objectWithoutPropertiesLoose(_ref, _temp2);
+  let rest = babelHelpers.objectWithoutPropertiesLoose(_ref, _exclude2);
   call(rest);
 }

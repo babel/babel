@@ -1,4 +1,4 @@
-const _temp = ["b"];
+const _exclude = ["b"];
 
 const _foo = foo(),
       {
@@ -21,6 +21,6 @@ const {
   let {
     b
   } = _ref,
-      c = babelHelpers.objectWithoutProperties(_ref, _temp);
+      c = babelHelpers.objectWithoutProperties(_ref, _exclude);
   console.log(b, c);
 });
