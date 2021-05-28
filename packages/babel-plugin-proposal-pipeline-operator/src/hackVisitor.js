@@ -15,10 +15,10 @@ export default {
   BinaryExpression: {
     exit(path) {
       const { scope, node } = path;
-      const { left, right } = path.node;
 
-      if (path.node.operator !== "|>") {
-        // The path node is not a pipe expression.
+      if (node.operator !== "|>") {
+        // The path node is a binary expression,
+        // but it is not a pipe expression.
         return;
       }
 
@@ -27,16 +27,22 @@ export default {
 
       scope.push({ id: topicVariable });
 
-      // Replace topic references with variables.
-      pipeBodyPath.traverse(topicReferenceReplacementVisitor, {
-        topicVariable,
-      });
+      if (pipeBodyPath.node.type === "TopicReference") {
+        // If the pipe body is itself a lone topic reference,
+        // then replace it with the topic variable.
+        pipeBodyPath.replaceWith(t.cloneNode(topicVariable));
+      } else {
+        // Replace topic references with the topic variable.
+        pipeBodyPath.traverse(topicReferenceReplacementVisitor, {
+          topicVariable,
+        });
+      }
 
-      // Replace the pipe expression with an assignment expression.
+      // Replace the pipe expression itself with an assignment expression.
       path.replaceWith(
         t.sequenceExpression([
-          t.assignmentExpression("=", t.cloneNode(topicVariable), left),
-          right,
+          t.assignmentExpression("=", t.cloneNode(topicVariable), node.left),
+          node.right,
         ]),
       );
     },
