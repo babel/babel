@@ -3,8 +3,6 @@ function area(rect) {
 }
 
 const result = -5
-  |> Math.abs(#)
+  |> Math.abs
   |> ({ width: #, height: # + 3 })
-  |> area(#);
-
-expect(result).toBe(40);
+  |> area;

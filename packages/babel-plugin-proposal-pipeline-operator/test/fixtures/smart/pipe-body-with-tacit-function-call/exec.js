@@ -1,9 +1,7 @@
-const foo = {
-  bar(value) {
-    return value.toUpperCase();
-  },
-};
+const abs = Math.abs;
 
-const result = 'Hello' |> foo.bar;
+const value = -5.9
+|> abs
+|> Math.floor;
 
-expect(result).toBe('HELLO');
+expect(value).toBe(5);

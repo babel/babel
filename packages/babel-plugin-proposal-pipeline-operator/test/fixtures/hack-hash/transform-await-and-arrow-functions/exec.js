@@ -2,10 +2,10 @@ const triple = (x) => x * 3;
 
 async function myFunction(n) {
   return n
-    |> Math.abs
+    |> Math.abs(#)
     |> Promise.resolve(#)
     |> await #
-    |> triple;
+    |> triple(#);
 }
 
 return myFunction(-7).then(result => {
