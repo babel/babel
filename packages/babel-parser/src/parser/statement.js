@@ -527,7 +527,14 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.push(loopLabel);
 
     // Parse the loop body's body.
-    node.body = this.parseStatement("do");
+    node.body =
+      // For the smartPipelines plugin: Disable topic references from outer
+      // contexts within the loop body. They are permitted in test expressions,
+      // outside of the loop body.
+      this.withSmartMixTopicForbiddingContext(() =>
+        // Parse the loop body's body.
+        this.parseStatement("do"),
+      );
 
     this.state.labels.pop();
 
@@ -753,7 +760,13 @@ export default class StatementParser extends ExpressionParser {
       }
 
       // Parse the catch clause's body.
-      clause.body = this.parseBlock(false, false);
+      clause.body =
+        // For the smartPipelines plugin: Disable topic references from outer
+        // contexts within the catch clause's body.
+        this.withSmartMixTopicForbiddingContext(() =>
+          // Parse the catch clause's body.
+          this.parseBlock(false, false),
+        );
 
       this.scope.exit();
       node.handler = this.finishNode(clause, "CatchClause");
@@ -784,7 +797,14 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.push(loopLabel);
 
     // Parse the loop body.
-    node.body = this.parseStatement("while");
+    node.body =
+      // For the smartPipelines plugin:
+      // Disable topic references from outer contexts within the loop body.
+      // They are permitted in test expressions, outside of the loop body.
+      this.withSmartMixTopicForbiddingContext(() =>
+        // Parse loop body.
+        this.parseStatement("while"),
+      );
 
     this.state.labels.pop();
 
@@ -799,7 +819,15 @@ export default class StatementParser extends ExpressionParser {
     node.object = this.parseHeaderExpression();
 
     // Parse the statement body.
-    node.body = this.parseStatement("with");
+    node.body =
+      // For the smartPipelines plugin:
+      // Disable topic references from outer contexts within the with statement's body.
+      // They are permitted in function default-parameter expressions, which are
+      // part of the outer context, outside of the with statement's body.
+      this.withSmartMixTopicForbiddingContext(() =>
+        // Parse the statement body.
+        this.parseStatement("with"),
+      );
 
     return this.finishNode(node, "WithStatement");
   }
@@ -985,7 +1013,14 @@ export default class StatementParser extends ExpressionParser {
     this.expect(tt.parenR);
 
     // Parse the loop body.
-    node.body = this.parseStatement("for");
+    node.body =
+      // For the smartPipelines plugin: Disable topic references from outer
+      // contexts within the loop body. They are permitted in test expressions,
+      // outside of the loop body.
+      this.withSmartMixTopicForbiddingContext(() =>
+        // Parse the loop body.
+        this.parseStatement("for"),
+      );
 
     this.scope.exit();
     this.state.labels.pop();
@@ -1034,7 +1069,14 @@ export default class StatementParser extends ExpressionParser {
     this.expect(tt.parenR);
 
     // Parse the loop body.
-    node.body = this.parseStatement("for");
+    node.body =
+      // For the smartPipelines plugin:
+      // Disable topic references from outer contexts within the loop body.
+      // They are permitted in test expressions, outside of the loop body.
+      this.withSmartMixTopicForbiddingContext(() =>
+        // Parse loop body.
+        this.parseStatement("for"),
+      );
 
     this.scope.exit();
     this.state.labels.pop();
@@ -1136,11 +1178,16 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseFunctionParams(node, /* allowModifiers */ false);
 
-    // Parse the function body.
-    this.parseFunctionBodyAndFinish(
-      node,
-      isStatement ? "FunctionDeclaration" : "FunctionExpression",
-    );
+    // For the smartPipelines plugin: Disable topic references from outer
+    // contexts within the function body. They are permitted in function
+    // default-parameter expressions, outside of the function body.
+    this.withSmartMixTopicForbiddingContext(() => {
+      // Parse the function body.
+      this.parseFunctionBodyAndFinish(
+        node,
+        isStatement ? "FunctionDeclaration" : "FunctionExpression",
+      );
+    });
 
     this.prodParam.exit();
     this.scope.exit();
@@ -1248,38 +1295,43 @@ export default class StatementParser extends ExpressionParser {
 
     this.expect(tt.braceL);
 
-    while (!this.match(tt.braceR)) {
-      if (this.eat(tt.semi)) {
-        if (decorators.length > 0) {
-          throw this.raise(this.state.lastTokEnd, Errors.DecoratorSemicolon);
+    // For the smartPipelines plugin: Disable topic references from outer
+    // contexts within the class body.
+    this.withSmartMixTopicForbiddingContext(() => {
+      // Parse the contents within the braces.
+      while (!this.match(tt.braceR)) {
+        if (this.eat(tt.semi)) {
+          if (decorators.length > 0) {
+            throw this.raise(this.state.lastTokEnd, Errors.DecoratorSemicolon);
+          }
+          continue;
         }
-        continue;
+
+        if (this.match(tt.at)) {
+          decorators.push(this.parseDecorator());
+          continue;
+        }
+
+        const member = this.startNode();
+
+        // steal the decorators if there are any
+        if (decorators.length) {
+          member.decorators = decorators;
+          this.resetStartLocationFromNode(member, decorators[0]);
+          decorators = [];
+        }
+
+        this.parseClassMember(classBody, member, state);
+
+        if (
+          member.kind === "constructor" &&
+          member.decorators &&
+          member.decorators.length > 0
+        ) {
+          this.raise(member.start, Errors.DecoratorConstructor);
+        }
       }
-
-      if (this.match(tt.at)) {
-        decorators.push(this.parseDecorator());
-        continue;
-      }
-
-      const member = this.startNode();
-
-      // steal the decorators if there are any
-      if (decorators.length) {
-        member.decorators = decorators;
-        this.resetStartLocationFromNode(member, decorators[0]);
-        decorators = [];
-      }
-
-      this.parseClassMember(classBody, member, state);
-
-      if (
-        member.kind === "constructor" &&
-        member.decorators &&
-        member.decorators.length > 0
-      ) {
-        this.raise(member.start, Errors.DecoratorConstructor);
-      }
-    }
+    });
 
     this.state.strict = oldStrict;
 

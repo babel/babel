@@ -2,5 +2,6 @@
   "plugins": [
     ["pipelineOperator", { "proposal": "smart" }],
     ["decorators", {"decoratorsBeforeExport": true}]
-  ]
+  ],
+  "throws": "Topic reference was used in a lexical context without topic binding. (6:13)"
 }

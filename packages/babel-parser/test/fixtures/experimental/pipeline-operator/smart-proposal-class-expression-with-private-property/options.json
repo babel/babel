@@ -3,5 +3,6 @@
     ["pipelineOperator", { "proposal": "smart" }],
     "classPrivateProperties",
     "classPrivateMethods"
-  ]
+  ],
+  "throws": "Topic reference was used in a lexical context without topic binding. (5:11)"
 }

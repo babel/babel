@@ -2756,6 +2756,40 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
+  // This helper method is used only with the deprecated smart-mix pipe proposal.
+  // Disables topic references from outer contexts within syntax constructs
+  // such as the bodies of iteration statements.
+  // The function modifies the parser's topic-context state to enable or disable
+  // the use of topic references with the smartPipelines plugin. They then run a
+  // callback, then they reset the parser to the old topic-context state that it
+  // had before the function was called.
+
+  withSmartMixTopicForbiddingContext<T>(callback: () => T): T {
+    const proposal = this.getPluginOption("pipelineOperator", "proposal");
+    if (proposal === "smart") {
+      // Reset the parser’s topic context only if the smart-mix pipe proposal is active.
+      const outerContextTopicState = this.state.topicContext;
+      this.state.topicContext = {
+        // Disable the use of the primary topic reference.
+        maxNumOfResolvableTopics: 0,
+        // Hide the use of any topic references from outer contexts.
+        maxTopicIndex: null,
+      };
+
+      try {
+        return callback();
+      } finally {
+        this.state.topicContext = outerContextTopicState;
+      }
+    } else {
+      // If the pipe proposal is "minimal", "fsharp", or "hack",
+      // or if no pipe proposal is active,
+      // then the callback result is returned
+      // without touching any extra parser state.
+      return callback();
+    }
+  }
+
   withSoloAwaitPermittingContext<T>(callback: () => T): T {
     const outerContextSoloAwaitState = this.state.soloAwait;
     this.state.soloAwait = true;
