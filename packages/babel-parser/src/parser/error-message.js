@@ -136,20 +136,31 @@ export const ErrorMessages = makeErrorTemplates(
     PatternHasMethod: "Object pattern can't contain methods.",
     PipeBodyIsTighter:
       "Unexpected %0 after pipeline body; any %0 expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.",
-    // The `PipeSmartMix` error messages are retained for backwards compatibility
-    // with the deprecated smart-mix pipe operator proposal plugin.
-    PipeSmartMixBodyCannotBeArrow:
-      'Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized.',
-    PipeSmartMixPrimaryTopicNotAllowed:
-      "Topic reference was used in a lexical context without topic binding.",
-    PipeSmartMixTopicUnused:
-      "Pipeline is in topic style but does not use topic reference.",
+
     PipeTopicRequiresHackPipes:
       'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
     PipeTopicUnbound:
       "Topic reference is unbound; it must be inside a Hack-style pipe body.",
     PipeTopicUnused:
       "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
+
+    // Messages whose codes start with “Pipeline” or “PrimaryTopic”
+    // are retained for backwards compatibility
+    // with the deprecated smart-mix pipe operator proposal plugin.
+    // They are subject to removal in a future major version.
+    PipelineBodyNoArrow:
+      'Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized.',
+    PipelineBodySequenceExpression:
+      "Pipeline body may not be a comma-separated sequence expression.",
+    PipelineHeadSequenceExpression:
+      "Pipeline head should not be a comma-separated sequence expression.",
+    PipelineTopicUnused:
+      "Pipeline is in topic style but does not use topic reference.",
+    PrimaryTopicNotAllowed:
+      "Topic reference was used in a lexical context without topic binding.",
+    PrimaryTopicRequiresSmartPipeline:
+      'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
+
     PrivateInExpectedIn:
       "Private names are only allowed in property accesses (`obj.#%0`) or in `in` expressions (`#%0 in obj`).",
     PrivateNameRedeclaration: "Duplicate private name #%0.",

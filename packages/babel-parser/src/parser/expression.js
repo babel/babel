@@ -1267,7 +1267,7 @@ export default class ExpressionParser extends LValParser {
             this.raise(node.start, Errors.PipeTopicUnbound);
             break;
           case "smart":
-            this.raise(node.start, Errors.PipeSmartMixPrimaryTopicNotAllowed);
+            this.raise(node.start, Errors.PrimaryTopicNotAllowed);
             break;
         }
       }
@@ -2648,12 +2648,12 @@ export default class ExpressionParser extends LValParser {
     // and `(x |> y) => #` is an invalid arrow function.
     // This is because smart-mix `|>` has tighter precedence than `=>`.
     if (this.match(tt.arrow)) {
-      throw this.raise(this.state.start, Errors.PipeSmartMixBodyCannotBeArrow);
+      throw this.raise(this.state.start, Errors.PipelineBodyNoArrow);
     }
 
     // A topic-style smart-mix pipe body must use the topic reference at least once.
     else if (!this.topicReferenceWasUsedInCurrentContext()) {
-      this.raise(startPos, Errors.PipeSmartMixTopicUnused);
+      this.raise(startPos, Errors.PipelineTopicUnused);
     }
   }
 
