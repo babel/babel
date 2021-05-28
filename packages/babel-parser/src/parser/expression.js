@@ -1292,10 +1292,12 @@ export default class ExpressionParser extends LValParser {
           // Determine the node type for the topic reference
           // that is appropriate for the active pipe-operator proposal.
           let nodeType;
-          if (pipeProposal === "hack") {
-            nodeType = "TopicReference";
-          } else if (pipeProposal === "smart") {
+          if (pipeProposal === "smart") {
             nodeType = "PipelinePrimaryTopicReference";
+          } else {
+            // The proposal must otherwise be "hack",
+            // as enforced by testTopicReferenceConfiguration.
+            nodeType = "TopicReference";
           }
 
           // Consume the token.
