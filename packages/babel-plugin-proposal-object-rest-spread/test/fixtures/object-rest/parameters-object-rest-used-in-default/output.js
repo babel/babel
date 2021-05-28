@@ -1,4 +1,4 @@
-const _exclude = ["X"];
+const _excluded = ["X"];
 
 _ref => {
   let R = babelHelpers.extends({}, _ref);
@@ -9,7 +9,7 @@ _ref => {
   let {
     X: Y
   } = _ref2,
-      R = babelHelpers.objectWithoutProperties(_ref2, _exclude);
+      R = babelHelpers.objectWithoutProperties(_ref2, _excluded);
   let {
     a = {
       Y
