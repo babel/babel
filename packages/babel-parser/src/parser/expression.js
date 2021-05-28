@@ -524,7 +524,7 @@ export default class ExpressionParser extends LValParser {
     if (bodyIsYieldExpression) {
       throw this.raise(
         this.state.start,
-        Errors.PipeBodyIsTight,
+        Errors.PipeBodyIsTighter,
         this.state.value,
       );
     } else {
@@ -2598,14 +2598,8 @@ export default class ExpressionParser extends LValParser {
     if (this.match(tt.arrow)) {
       throw this.raise(
         this.state.start,
-        Errors.PipeBodyIsTight,
+        Errors.PipeBodyIsTighter,
         tt.arrow.label,
-      );
-    } else if (this.match(tt.assign)) {
-      throw this.raise(
-        this.state.start,
-        Errors.PipeBodyIsTight,
-        tt.arrow.assign,
       );
     } else if (!this.topicReferenceWasUsedInCurrentContext()) {
       // A Hack pipe body must use the topic reference at least once.
