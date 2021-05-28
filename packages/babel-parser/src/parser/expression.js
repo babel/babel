@@ -2389,6 +2389,10 @@ export default class ExpressionParser extends LValParser {
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
+    // All JavaScript reserved words are not longer than 10 characters.
+    if (word.length > 10) {
+      return;
+    }
     if (this.prodParam.hasYield && word === "yield") {
       this.raise(startLoc, Errors.YieldBindingIdentifier);
       return;
