@@ -1,12 +1,12 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "7.14.3",
+  "version": "7.14.4",
   "description": "Tests for babel/eslint-* packages",
   "license": "MIT",
   "private": true,
   "dependencies": {
     "@babel/core": "workspace:^7.14.3",
-    "@babel/eslint-parser": "workspace:^7.14.3",
+    "@babel/eslint-parser": "workspace:^7.14.4",
     "@babel/preset-react": "workspace:^7.13.13",
     "dedent": "^0.7.0",
     "eslint": "^7.5.0",
