@@ -59,7 +59,6 @@ export default class State {
 
   // Flags to track
   maybeInArrowParameters: boolean = false;
-  inPipeline: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
   inPropertyName: boolean = false;

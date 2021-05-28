@@ -416,7 +416,6 @@ export default class ExpressionParser extends LValParser {
           if (this.state.inFSharpPipelineDirectBody) {
             return left;
           }
-          this.state.inPipeline = true;
         }
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
         node.left = left;
