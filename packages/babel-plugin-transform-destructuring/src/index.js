@@ -228,6 +228,18 @@ export default declare((api, options) => {
             t.memberExpression(keyExpression, t.identifier("map")),
             [this.addHelper("toPropertyKey")],
           );
+        } else if (!t.isProgram(this.scope.block)) {
+          // Hoist definition of excluded keys, so that it's not created each time.
+          const program = this.scope.path.findParent(path => path.isProgram());
+          const id = this.scope.generateUidIdentifier("excluded");
+
+          program.scope.push({
+            id,
+            init: keyExpression,
+            kind: "const",
+          });
+
+          keyExpression = t.cloneNode(id);
         }
 
         value = t.callExpression(
