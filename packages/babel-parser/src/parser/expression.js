@@ -1246,18 +1246,14 @@ export default class ExpressionParser extends LValParser {
     if (pipeProposal) {
       const node = this.startNode();
 
-      const proposalToNodeType = {
-        hack: "TopicReference",
-        smart: "PipelinePrimaryTopicReference",
-      };
-
-      const throwPipeTopicRequiresHackPipesError = () => {
+      let nodeType;
+      if (pipeProposal === "hack") {
+        nodeType = "TopicReference";
+      } else if (pipeProposal === "smart") {
+        nodeType = "PipelinePrimaryTopicReference";
+      } else {
         throw this.raise(node.start, Errors.PipeTopicRequiresHackPipes);
-      };
-
-      const nodeType =
-        proposalToNodeType[pipeProposal] ??
-        throwPipeTopicRequiresHackPipesError();
+      }
 
       this.next();
 
