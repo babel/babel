@@ -296,6 +296,28 @@ export default class ExpressionParser extends LValParser {
       const operator = this.state.value;
       node.operator = operator;
 
+      const leftIsHackPipeExpression =
+        left.type === "BinaryExpression" &&
+        left.operator === "|>" &&
+        this.getPluginOption("pipelineOperator", "proposal") === "hack";
+
+      if (leftIsHackPipeExpression) {
+        // If the pipelinePlugin is configured to use Hack pipes,
+        // and if an assignment expression’s LHS invalidly contains `|>`,
+        // then the user likely meant to parenthesize the assignment expression.
+        // Throw a human-friendly error
+        // instead of something like 'Invalid left-hand side'.
+        // For example, `x = x |> y = #` (assuming `#` is the topic reference)
+        // groups into `x = (x |> y) = #`,
+        // and `(x |> y)` is an invalid assignment LHS.
+        // This is because Hack-style `|>` has tighter precedence than `=>`.
+        // (Unparenthesized `yield` expressions are handled
+        // in `parseHackPipeBody`,
+        // and unparenthesized `=>` expressions are handled
+        // in `checkHackPipeBodyEarlyErrors`.)
+        throw this.raise(this.state.start, Errors.PipeBodyIsTighter, operator);
+      }
+
       if (this.match(tt.eq)) {
         node.left = this.toAssignable(left, /* isLHS */ true);
         refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
@@ -508,15 +530,20 @@ export default class ExpressionParser extends LValParser {
   // (and the Hack-style smart-mix pipe operator).
 
   parseHackPipeBody(op: TokenType, prec: number): N.Expression {
+    // If the following expression is invalidly a `yield` expression,
+    // then throw a human-friendly error.
     // A `yield` expression in a generator context (i.e., a [Yield] production)
     // starts a YieldExpression.
     // Outside of a generator context, any `yield` as a pipe body
     // is considered simply an identifier.
-    // (Unparenthesized `=>`/`=` expressions are handled
-    // in `checkHackPipeBodyEarlyErrors`.
-    // This is because `yield`’s “not allowed
-    // as identifier in generator” error will immediately
-    // occur before the pipe body is fully parsed.)
+    // This error is checked here, before actually parsing the body expression,
+    // because `yield`’s “not allowed as identifier in generator” error
+    // would otherwise have immediately
+    // occur before the pipe body is fully parsed.
+    // (Unparenthesized assignment expressions are handled
+    // in `parseMaybeAssign`,
+    // and unparenthesized `=>` expressions are handled
+    // in `checkHackPipeBodyEarlyErrors`.)
     const bodyIsInGeneratorContext = this.prodParam.hasYield;
     const bodyIsYieldExpression =
       bodyIsInGeneratorContext && this.isContextual("yield");
@@ -2583,7 +2610,7 @@ export default class ExpressionParser extends LValParser {
   // The `startPos` is the starting position of the pipe body.
 
   checkHackPipeBodyEarlyErrors(startPos: number): void {
-    // If the following token is invalidly `=>`, `=`, etc.,
+    // If the following token is invalidly `=>`,
     // then throw a human-friendly error
     // instead of something like 'Unexpected token, expected ";"'.
     // For example, `x => x |> y => #` (assuming `#` is the topic reference)
@@ -2591,10 +2618,9 @@ export default class ExpressionParser extends LValParser {
     // and `(x |> y) => #` is an invalid arrow function.
     // This is because Hack-style `|>` has tighter precedence than `=>`.
     // (Unparenthesized `yield` expressions are handled
-    // in `parseHackPipeBody`.
-    // This is because `yield`’s “not allowed
-    // as identifier in generator” error will immediately
-    // occur before the pipe body is fully parsed.)
+    // in `parseHackPipeBody`,
+    // and unparenthesized assignment expressions are handled
+    // in `parseMaybeAssign`.)
     if (this.match(tt.arrow)) {
       throw this.raise(
         this.state.start,
