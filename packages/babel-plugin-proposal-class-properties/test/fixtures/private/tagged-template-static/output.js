@@ -15,5 +15,7 @@ function _tag() {
 
 var _tag3 = {
   writable: true,
-  value: () => Foo
+  value: function () {
+    return this;
+  }
 };
