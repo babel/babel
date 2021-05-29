@@ -462,7 +462,7 @@ const handle = {
       return;
     }
 
-    if (t.isTaggedTemplateExpression(parent)) {
+    if (parentPath.isTaggedTemplateExpression()) {
       // MEMBER   ->   _get(MEMBER).bind(this)
       member.replaceWith(this.boundGet(member));
     } else {

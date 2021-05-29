@@ -1,13 +1,6 @@
 {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "shippedProposals": true,
-          "targets": {
-            "chrome": "75"
-          }
-        }
-      ]
-    ]
-  }
+  "plugins": [
+    "proposal-class-properties",
+    "proposal-private-methods"
+  ]
+}

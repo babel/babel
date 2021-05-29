@@ -8,7 +8,7 @@ class Foo {
 }
 
 function _tag2() {
-  return this;
+  babelHelpers.classPrivateMethodGet(this, _tag, _tag2).bind(this)``;
 }
 
 new Foo();

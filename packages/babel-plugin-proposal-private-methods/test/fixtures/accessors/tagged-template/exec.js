@@ -13,4 +13,4 @@ class Foo {
 }
 const instance = new Foo();
 
-expect(instance === instance.publicGetPrivateTagMethod()).toEqual(true)
+expect(instance.publicGetPrivateTagMethod()).toEqual(instance)
