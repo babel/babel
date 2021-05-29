@@ -627,10 +627,26 @@ export type PipelineBareFunctionBody = NodeBase & {
   callee: Expression,
 };
 
+export type PipelineBareConstructorBody = NodeBase & {
+  type: "PipelineBareConstructorBody",
+  callee: Expression,
+};
+
+export type PipelineBareAwaitedFunctionBody = NodeBase & {
+  type: "PipelineBareAwaitedFunctionBody",
+  callee: Expression,
+};
+
 export type PipelineTopicBody = NodeBase & {
   type: "PipelineTopicBody",
   expression: Expression,
 };
+
+export type PipelineStyle =
+  | "PipelineBareFunction"
+  | "PipelineBareConstructor"
+  | "PipelineBareAwaitedFunction"
+  | "PipelineTopicExpression";
 
 export type PipelinePrimaryTopicReference = NodeBase & {
   type: "PipelinePrimaryTopicReference",
