@@ -416,6 +416,7 @@ export default class ExpressionParser extends LValParser {
           if (this.state.inFSharpPipelineDirectBody) {
             return left;
           }
+          this.checkPipelineAtInfixOperator(left, leftStartPos);
         }
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
         node.left = left;
@@ -2652,6 +2653,19 @@ export default class ExpressionParser extends LValParser {
       node.argument = this.parseMaybeAssign();
     }
     return this.finishNode(node, "YieldExpression");
+  }
+
+  // Validates a pipeline (for any of the pipeline Babylon plugins) at the point
+  // of the infix operator `|>`.
+
+  checkPipelineAtInfixOperator(left: N.Expression, leftStartPos: number) {
+    if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
+      if (left.type === "SequenceExpression") {
+        // Ensure that the pipeline head is not a comma-delimited
+        // sequence expression.
+        this.raise(leftStartPos, Errors.PipelineHeadSequenceExpression);
+      }
+    }
   }
 
   // This helper method is to be called immediately
