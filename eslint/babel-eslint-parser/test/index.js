@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { parseForESLint } from "../lib/index.cjs";
 
+const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const BABEL_OPTIONS = {
@@ -78,8 +79,6 @@ describe("Babel and Espree", () => {
   }
 
   beforeAll(() => {
-    const require = createRequire(import.meta.url);
-
     // Use the version of Espree that is a dependency of
     // the version of ESLint we are testing against.
     const espreePath = require.resolve("espree", {
@@ -630,4 +629,14 @@ describe("Babel and Espree", () => {
       `);
     });
   });
+});
+
+describe("regressions", () => {
+  (process.env.BABEL_8_BREAKING ? it.skip : it)(
+    "has a ./lib/index.js entry point",
+    () => {
+      expect(() => require("../lib")).not.toThrow();
+      expect(() => require("../lib/index.js")).not.toThrow();
+    },
+  );
 });
