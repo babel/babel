@@ -1282,41 +1282,39 @@ export default class ExpressionParser extends LValParser {
         // The token matches the plugin’s configuration.
         // The token is therefore a topic reference.
 
-        if (this.topicReferenceIsAllowedInCurrentContext()) {
-          // The topic reference is allowed in the current context:
-          // it is inside a pipe body.
+        const node = this.startNode();
 
-          const node = this.startNode();
-
-          // Determine the node type for the topic reference
-          // that is appropriate for the active pipe-operator proposal.
-          let nodeType;
-          if (pipeProposal === "smart") {
-            nodeType = "PipelinePrimaryTopicReference";
-          } else {
-            // The proposal must otherwise be "hack",
-            // as enforced by testTopicReferenceConfiguration.
-            nodeType = "TopicReference";
-          }
-
-          // Consume the token.
-          this.next();
-
-          // Register the topic reference so that its pipe body knows
-          // that its topic was used at least once.
-          this.registerTopicReference();
-
-          return this.finishNode(node, nodeType);
+        // Determine the node type for the topic reference
+        // that is appropriate for the active pipe-operator proposal.
+        let nodeType;
+        if (pipeProposal === "smart") {
+          nodeType = "PipelinePrimaryTopicReference";
         } else {
+          // The proposal must otherwise be "hack",
+          // as enforced by testTopicReferenceConfiguration.
+          nodeType = "TopicReference";
+        }
+
+        // Consume the token.
+        this.next();
+
+        // Register the topic reference so that its pipe body knows
+        // that its topic was used at least once.
+        this.registerTopicReference();
+
+        if (!this.topicReferenceIsAllowedInCurrentContext()) {
           // The topic reference is not allowed in the current context:
           // it is outside of a pipe body.
-          switch (pipeProposal) {
-            case "hack":
-              throw this.raise(this.state.start, Errors.PipeTopicUnbound);
-            case "smart":
-              throw this.raise(this.state.start, Errors.PrimaryTopicNotAllowed);
+          // Raise recoverable errors.
+          if (pipeProposal === "smart") {
+            this.raise(this.state.start, Errors.PrimaryTopicNotAllowed);
+          } else {
+            // In this case, `pipeProposal === "hack"` is true.
+            this.raise(this.state.start, Errors.PipeTopicUnbound);
           }
         }
+
+        return this.finishNode(node, nodeType);
       } else {
         // The token does not match the plugin’s configuration.
         throw this.raise(
