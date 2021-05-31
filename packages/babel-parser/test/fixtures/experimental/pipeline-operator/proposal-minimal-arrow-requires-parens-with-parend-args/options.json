@@ -1,0 +1,4 @@
+{
+  "plugins": [["pipelineOperator", { "proposal": "minimal" }]],
+  "throws": "Unexpected token (1:10)"
+}

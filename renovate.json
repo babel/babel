@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "dependencyDashboardApproval": true,
+  "labels": ["PR: Dependency ⬆️", "repo automation 🤖" ],
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "rangeStrategy": "replace",
+      "ignoreDeps": ["@babel/core-7.12", "@babel/helper-validator-identifier-baseline"]
+    },
+    {
+      "matchPackagePatterns": ["^eslint"],
+      "groupName": "eslint packages"
+    },
+    {
+      "matchPackagePatterns": ["^rollup", "^@rollup"],
+      "groupName": "rollup packages"
+    },
+    {
+      "matchPackagePatterns": ["^gulp"],
+      "groupName": "gulp packages"
+    }
+  ]
+}

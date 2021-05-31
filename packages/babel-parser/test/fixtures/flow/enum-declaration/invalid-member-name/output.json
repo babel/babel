@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "errors": [
+    "SyntaxError: Enum member names cannot start with lowercase 'a' through 'z'. Instead of using `foo`, consider using `Foo`, in enum `E`. (2:2)",
+    "SyntaxError: Enum member names cannot start with lowercase 'a' through 'z'. Instead of using `bar`, consider using `Bar`, in enum `E`. (3:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "EnumDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"E"},
+          "name": "E"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":7,"end":24,"loc":{"start":{"line":1,"column":7},"end":{"line":4,"column":1}},
+          "explicitType": false,
+          "members": [
+            {
+              "type": "EnumDefaultedMember",
+              "start":11,"end":14,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5}},
+              "id": {
+                "type": "Identifier",
+                "start":11,"end":14,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5},"identifierName":"foo"},
+                "name": "foo"
+              }
+            },
+            {
+              "type": "EnumDefaultedMember",
+              "start":18,"end":21,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":5}},
+              "id": {
+                "type": "Identifier",
+                "start":18,"end":21,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":5},"identifierName":"bar"},
+                "name": "bar"
+              }
+            }
+          ],
+          "hasUnknownMembers": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "topLevelAwait"
+  ],
+  "sourceType": "module"
+}

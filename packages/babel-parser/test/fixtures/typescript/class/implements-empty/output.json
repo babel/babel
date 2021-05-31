@@ -1,0 +1,32 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+  "errors": [
+    "SyntaxError: 'implements' list cannot be empty. (1:21)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "implements": [],
+        "body": {
+          "type": "ClassBody",
+          "start":21,"end":24,"loc":{"start":{"line":1,"column":21},"end":{"line":2,"column":1}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "moduleAttributes",
+      {
+        "version": "may-2020"
+      }
+    ]
+  ],
+  "sourceType": "module",
+  "throws": "Only string literals are allowed as module attribute values. (1:52)"
+}

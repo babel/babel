@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+  "errors": [
+    "SyntaxError: Unexpected type cast in parameter position. (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [
+            {
+              "type": "TSTypeAssertion",
+              "start":7,"end":12,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":12}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9},"identifierName":"T"},
+                  "name": "T"
+                }
+              },
+              "expression": {
+                "type": "Identifier",
+                "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12},"identifierName":"a"},
+                "name": "a"
+              }
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":17,"end":19,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":19}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

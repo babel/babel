@@ -1,0 +1,84 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":10}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":10}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":23,"end":33,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":10}},
+        "expression": {
+          "type": "CallExpression",
+          "start":23,"end":32,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":9}},
+          "callee": {
+            "type": "Identifier",
+            "start":23,"end":26,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "typeArguments": {
+            "type": "TypeParameterInstantiation",
+            "start":26,"end":29,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":6}},
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start":27,"end":28,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":27,"end":28,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5},"identifierName":"x"},
+                  "name": "x"
+                }
+              }
+            ]
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":30,"end":31,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":8},"identifierName":"y"},
+              "name": "y"
+            }
+          ]
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":14,"end":22,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":8}}
+          }
+        ]
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+          "value": "use strict",
+          "extra": {
+            "raw": "'use strict'",
+            "rawValue": "use strict"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":14,"end":22,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":8}}
+          }
+        ]
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":14,"end":22,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":8}}
+    }
+  ]
+}

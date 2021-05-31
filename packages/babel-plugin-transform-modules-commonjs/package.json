@@ -1,0 +1,34 @@
+{
+  "name": "@babel/plugin-transform-modules-commonjs",
+  "version": "7.14.0",
+  "description": "This plugin transforms ES2015 modules to CommonJS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-modules-commonjs"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/helper-module-transforms": "workspace:^7.14.0",
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "@babel/helper-simple-access": "workspace:^7.13.12",
+    "babel-plugin-dynamic-import-node": "^2.3.3"
+  },
+  "keywords": [
+    "babel-plugin"
+  ],
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/plugin-external-helpers": "workspace:*",
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-commonjs"
+}

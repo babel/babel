@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "proposal-class-properties",
+    "transform-parameters",
+    "transform-destructuring"
+  ]
+}

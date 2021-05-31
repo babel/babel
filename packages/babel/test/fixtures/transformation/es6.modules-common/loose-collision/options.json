@@ -1,4 +1,0 @@
-{
-  "throws": "Duplicate module declarations with the same source but in different scopes",
-  "loose": "es6.modules"
-}

@@ -1,0 +1,12 @@
+{
+  "throws": "Unexpected token (1:15)",
+  "plugins": [
+    [
+      "moduleAttributes",
+      {
+        "version": "may-2020"
+      }
+    ]
+  ],
+  "sourceType": "module"
+}

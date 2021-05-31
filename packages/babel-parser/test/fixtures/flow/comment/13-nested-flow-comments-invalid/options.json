@@ -1,0 +1,15 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    [
+      "jsx"
+    ],
+    [
+      "flow"
+    ],
+    [
+      "flowComments"
+    ]
+  ],
+  "throws": "Cannot have a flow comment inside another flow comment. (1:0)"
+}

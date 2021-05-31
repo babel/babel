@@ -1,0 +1,18 @@
+declare module "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class" {
+  declare module.exports: Function;
+}
+declare module "@babel/preset-modules/lib/plugins/transform-edge-default-parameters" {
+  declare module.exports: Function;
+}
+declare module "@babel/preset-modules/lib/plugins/transform-edge-function-name" {
+  declare module.exports: Function;
+}
+declare module "@babel/preset-modules/lib/plugins/transform-tagged-template-caching" {
+  declare module.exports: Function;
+}
+declare module "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing" {
+  declare module.exports: Function;
+}
+declare module "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing" {
+  declare module.exports: Function;
+}

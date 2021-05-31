@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":7}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":7}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareVariable",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+        "id": {
+          "type": "Identifier",
+          "start":12,"end":14,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":14},"identifierName":"V1"},
+          "name": "V1"
+        }
+      },
+      {
+        "type": "DeclareVariable",
+        "start":16,"end":31,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":15}},
+        "id": {
+          "type": "Identifier",
+          "start":28,"end":30,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":14},"identifierName":"V1"},
+          "name": "V1"
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":32,"end":39,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":7}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":36,"end":38,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":6}},
+            "id": {
+              "type": "Identifier",
+              "start":36,"end":38,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":6},"identifierName":"V1"},
+              "name": "V1"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

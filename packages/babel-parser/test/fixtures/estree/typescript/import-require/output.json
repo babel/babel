@@ -1,0 +1,33 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
+        "importKind": "value",
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"x"},
+          "name": "x"
+        },
+        "moduleReference": {
+          "type": "TSExternalModuleReference",
+          "start":11,"end":31,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":31}},
+          "expression": {
+            "type": "Literal",
+            "start":20,"end":30,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":30}},
+            "value": "asdfasdf",
+            "raw": "\"asdfasdf\""
+          }
+        }
+      }
+    ]
+  }
+}

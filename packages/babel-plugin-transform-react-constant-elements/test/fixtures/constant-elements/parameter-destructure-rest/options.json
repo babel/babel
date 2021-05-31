@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "transform-destructuring",
+    "transform-parameters",
+    "transform-spread",
+    "transform-react-constant-elements",
+    "syntax-jsx"
+  ]
+}

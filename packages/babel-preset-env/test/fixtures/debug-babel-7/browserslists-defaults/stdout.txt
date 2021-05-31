@@ -1,0 +1,58 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "android": "89",
+  "chrome": "88",
+  "edge": "89",
+  "firefox": "78",
+  "ie": "11",
+  "ios": "13.4",
+  "opera": "74",
+  "safari": "14",
+  "samsung": "13"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-properties { firefox < 90, ie, ios, safari < tp, samsung }
+  proposal-private-methods { firefox < 90, ie, ios, safari < tp, samsung }
+  proposal-numeric-separator { ie }
+  proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, samsung }
+  proposal-nullish-coalescing-operator { ie }
+  proposal-optional-chaining { android, chrome, edge, ie, opera, samsung }
+  proposal-json-strings { ie }
+  proposal-optional-catch-binding { ie }
+  transform-parameters { ie }
+  proposal-async-generator-functions { ie }
+  proposal-object-rest-spread { ie }
+  transform-dotall-regex { ie }
+  proposal-unicode-property-regex { ie }
+  transform-named-capturing-groups-regex { ie }
+  transform-async-to-generator { ie }
+  transform-exponentiation-operator { ie }
+  transform-template-literals { ie }
+  transform-literals { ie }
+  transform-function-name { ie }
+  transform-arrow-functions { ie }
+  transform-classes { ie }
+  transform-object-super { ie }
+  transform-shorthand-properties { ie }
+  transform-duplicate-keys { ie }
+  transform-computed-properties { ie }
+  transform-for-of { ie }
+  transform-sticky-regex { ie }
+  transform-unicode-escapes { ie }
+  transform-unicode-regex { ie }
+  transform-spread { ie }
+  transform-destructuring { ie }
+  transform-block-scoping { ie }
+  transform-typeof-symbol { ie }
+  transform-new-target { ie }
+  transform-regenerator { ie }
+  proposal-export-namespace-from { firefox < 80, ie, ios, safari }
+  transform-modules-commonjs
+  proposal-dynamic-import
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

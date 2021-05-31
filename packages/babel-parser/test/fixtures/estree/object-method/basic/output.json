@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":24,"loc":{"start":{"line":1,"column":4},"end":{"line":3,"column":1}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":7},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":10,"end":24,"loc":{"start":{"line":1,"column":10},"end":{"line":3,"column":1}},
+              "properties": [
+                {
+                  "type": "Property",
+                  "start":14,"end":22,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":10}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":14,"end":17,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5},"identifierName":"foo"},
+                    "name": "foo"
+                  },
+                  "computed": false,
+                  "kind": "init",
+                  "value": {
+                    "type": "FunctionExpression",
+                    "start":17,"end":22,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":10}},
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "expression": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":20,"end":22,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":10}},
+                      "body": []
+                    }
+                  },
+                  "shorthand": false
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ]
+  }
+}

@@ -1,6 +1,0 @@
-{
-  "experimental": true,
-  "externalHelpers": true,
-  "blacklist": ["regenerator"],
-  "optional": ["minification.deadCodeElimination"]
-}

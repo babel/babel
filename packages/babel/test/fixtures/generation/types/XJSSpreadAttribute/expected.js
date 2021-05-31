@@ -1,1 +1,0 @@
-<Component {...x}></Component>;

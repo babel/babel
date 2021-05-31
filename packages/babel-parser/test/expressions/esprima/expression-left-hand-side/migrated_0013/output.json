@@ -1,0 +1,84 @@
+{
+  "type": "MemberExpression",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 38
+    }
+  },
+  "object": {
+    "type": "Identifier",
+    "start": 0,
+    "end": 8,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 8
+      },
+      "identifierName": "universe"
+    },
+    "name": "universe"
+  },
+  "property": {
+    "type": "SequenceExpression",
+    "start": 9,
+    "end": 37,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 9
+      },
+      "end": {
+        "line": 1,
+        "column": 37
+      }
+    },
+    "expressions": [
+      {
+        "type": "Identifier",
+        "start": 9,
+        "end": 19,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 9
+          },
+          "end": {
+            "line": 1,
+            "column": 19
+          },
+          "identifierName": "galaxyName"
+        },
+        "name": "galaxyName"
+      },
+      {
+        "type": "Identifier",
+        "start": 21,
+        "end": 37,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 21
+          },
+          "end": {
+            "line": 1,
+            "column": 37
+          },
+          "identifierName": "otherUselessName"
+        },
+        "name": "otherUselessName"
+      }
+    ]
+  },
+  "computed": true
+}

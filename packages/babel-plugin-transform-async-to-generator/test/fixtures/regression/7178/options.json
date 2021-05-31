@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-async-to-generator",
+    ["transform-react-jsx", { "runtime": "classic" }],
+    "transform-react-constant-elements"
+  ]
+}

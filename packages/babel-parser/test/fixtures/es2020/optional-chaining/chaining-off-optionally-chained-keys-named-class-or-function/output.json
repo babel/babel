@@ -1,0 +1,148 @@
+{
+  "type": "File",
+  "start":0,"end":71,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":18}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":71,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+          "object": {
+            "type": "OptionalMemberExpression",
+            "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
+            "object": {
+              "type": "Identifier",
+              "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "property": {
+              "type": "Identifier",
+              "start":5,"end":10,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":10},"identifierName":"class"},
+              "name": "class"
+            },
+            "computed": false,
+            "optional": true
+          },
+          "property": {
+            "type": "Identifier",
+            "start":11,"end":14,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":14},"identifierName":"bar"},
+            "name": "bar"
+          },
+          "computed": false,
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":15,"end":32,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":17}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":15,"end":32,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":17}},
+          "object": {
+            "type": "OptionalMemberExpression",
+            "start":15,"end":28,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":13}},
+            "object": {
+              "type": "Identifier",
+              "start":15,"end":18,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "property": {
+              "type": "Identifier",
+              "start":20,"end":28,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":13},"identifierName":"function"},
+              "name": "function"
+            },
+            "computed": false,
+            "optional": true
+          },
+          "property": {
+            "type": "Identifier",
+            "start":29,"end":32,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":17},"identifierName":"bar"},
+            "name": "bar"
+          },
+          "computed": false,
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":33,"end":52,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":19}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":33,"end":52,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":19}},
+          "object": {
+            "type": "OptionalMemberExpression",
+            "start":33,"end":48,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":15}},
+            "object": {
+              "type": "OptionalMemberExpression",
+              "start":33,"end":41,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":8}},
+              "object": {
+                "type": "Identifier",
+                "start":33,"end":36,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "property": {
+                "type": "Identifier",
+                "start":38,"end":41,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":8},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "optional": true
+            },
+            "property": {
+              "type": "Identifier",
+              "start":43,"end":48,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":15},"identifierName":"class"},
+              "name": "class"
+            },
+            "computed": false,
+            "optional": true
+          },
+          "property": {
+            "type": "Identifier",
+            "start":49,"end":52,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":19},"identifierName":"bar"},
+            "name": "bar"
+          },
+          "computed": false,
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":53,"end":71,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":18}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":53,"end":71,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":18}},
+          "object": {
+            "type": "OptionalMemberExpression",
+            "start":53,"end":66,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":13}},
+            "object": {
+              "type": "Identifier",
+              "start":53,"end":56,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":3},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "property": {
+              "type": "Identifier",
+              "start":58,"end":66,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":13},"identifierName":"function"},
+              "name": "function"
+            },
+            "computed": false,
+            "optional": true
+          },
+          "property": {
+            "type": "Identifier",
+            "start":68,"end":71,"loc":{"start":{"line":4,"column":15},"end":{"line":4,"column":18},"identifierName":"bar"},
+            "name": "bar"
+          },
+          "computed": false,
+          "optional": true
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":8}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":8}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+        "body": [
+          {
+            "type": "TSEnumDeclaration",
+            "start":2,"end":13,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":13}},
+            "id": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10},"identifierName":"Foo"},
+              "name": "Foo"
+            },
+            "members": []
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":16,"end":24,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":8}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":20,"end":23,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7}},
+            "id": {
+              "type": "Identifier",
+              "start":20,"end":23,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7},"identifierName":"Foo"},
+              "name": "Foo"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

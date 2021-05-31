@@ -1,0 +1,7 @@
+package.json
+packages/babel-preset-env/data
+packages/babel-compat-data/data
+packages/babel-compat-data/scripts/data/overlapping-plugins.js
+packages/*/test/fixtures/**/input.*
+packages/*/test/fixtures/**/exec.*
+packages/*/test/fixtures/**/output.*

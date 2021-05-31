@@ -1,0 +1,4 @@
+{
+  print("hello");
+  // comment
+}

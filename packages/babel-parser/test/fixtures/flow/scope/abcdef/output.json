@@ -1,0 +1,106 @@
+{
+  "type": "File",
+  "start":0,"end":73,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":73,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":73,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":13,"end":73,"loc":{"start":{"line":1,"column":13},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":17,"end":50,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":35}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":23,"end":49,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":34}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":23,"end":24,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"g"},
+                    "name": "g"
+                  },
+                  "init": {
+                    "type": "ConditionalExpression",
+                    "start":27,"end":49,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":34}},
+                    "test": {
+                      "type": "BooleanLiteral",
+                      "start":27,"end":31,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":16}},
+                      "value": true
+                    },
+                    "consequent": {
+                      "type": "ArrowFunctionExpression",
+                      "start":34,"end":43,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":28}},
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "start":34,"end":37,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":22},"identifierName":"foo"},
+                          "name": "foo"
+                        }
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start":41,"end":43,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":28}},
+                        "body": [],
+                        "directives": []
+                      }
+                    },
+                    "alternate": {
+                      "type": "NullLiteral",
+                      "start":45,"end":49,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":34}}
+                    }
+                  }
+                }
+              ],
+              "kind": "const"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":54,"end":71,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":19}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":60,"end":71,"loc":{"start":{"line":4,"column":8},"end":{"line":4,"column":19}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":60,"end":63,"loc":{"start":{"line":4,"column":8},"end":{"line":4,"column":11},"identifierName":"foo"},
+                    "name": "foo"
+                  },
+                  "init": {
+                    "type": "StringLiteral",
+                    "start":66,"end":71,"loc":{"start":{"line":4,"column":14},"end":{"line":4,"column":19}},
+                    "extra": {
+                      "rawValue": "foo",
+                      "raw": "'foo'"
+                    },
+                    "value": "foo"
+                  }
+                }
+              ],
+              "kind": "const"
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`option-manager config plugin/preset flattening and overriding should throw when an option is following a preset 1`] = `
+"[BABEL] unknown: Unknown option: .useSpread. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+- Maybe you meant to use
+\\"preset\\": [
+  [\\"./fixtures/option-manager/babel-preset-bar\\", {
+  \\"useSpread\\": true
+}]
+]
+To be a valid preset, its name and options should be wrapped in a pair of brackets"
+`;
+
+exports[`option-manager config plugin/preset flattening and overriding should throw when an option is provided as a plugin 1`] = `
+"[BABEL] unknown: .useSpread is not a valid Plugin property
+- Maybe you meant to use
+\\"plugin\\": [
+  [\\"./fixtures/option-manager/babel-plugin-foo\\", {
+  \\"useSpread\\": true
+}]
+]
+To be a valid plugin, its name and options should be wrapped in a pair of brackets"
+`;
+
+exports[`option-manager config plugin/preset flattening and overriding should throw when an option is provided as a preset 1`] = `
+"[BABEL] unknown: Unknown option: .useBuiltIns. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+- Maybe you meant to use
+\\"preset\\": [
+  [\\"./fixtures/option-manager/babel-preset-bar\\", {
+  \\"useBuiltIns\\": \\"entry\\"
+}]
+]
+To be a valid preset, its name and options should be wrapped in a pair of brackets"
+`;

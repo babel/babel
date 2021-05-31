@@ -1,3 +1,0 @@
-{
-  "whitelist": ["flow", "es7.asyncFunctions", "es7.classProperties"]
-}

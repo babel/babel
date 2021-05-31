@@ -1,0 +1,36 @@
+{
+  "name": "@babel/preset-flow",
+  "version": "7.13.13",
+  "description": "Babel preset for all Flow plugins.",
+  "author": "James Kyle <me@thejameskyle.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-preset-flow"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-preset",
+    "flowtype",
+    "flow",
+    "types"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "@babel/helper-validator-option": "workspace:^7.12.17",
+    "@babel/plugin-transform-flow-strip-types": "workspace:^7.13.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-preset-flow",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20flow%22+is%3Aopen"
+}

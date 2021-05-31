@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":11,"end":13,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":13}},
+            "body": [],
+            "directives": []
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4}},
+                "name": "div",
+                "variance": null
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

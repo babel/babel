@@ -1,0 +1,4 @@
+{
+  "plugins": ["topLevelAwati"],
+  "sourceType": "module"
+}

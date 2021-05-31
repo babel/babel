@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["transform-arrow-functions", { "spec": false }],
+    "transform-function-name"
+  ]
+}

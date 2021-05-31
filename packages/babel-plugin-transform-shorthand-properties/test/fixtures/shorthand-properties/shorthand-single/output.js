@@ -1,0 +1,3 @@
+var coords = {
+  x: x
+};

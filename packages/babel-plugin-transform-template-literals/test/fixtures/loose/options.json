@@ -1,0 +1,3 @@
+{
+  "plugins": [["transform-template-literals", { "loose": true }]]
+}

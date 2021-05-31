@@ -1,0 +1,59 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "android": "61",
+  "chrome": "61",
+  "edge": "16",
+  "firefox": "60",
+  "ios": "10.3",
+  "node": "13.2",
+  "opera": "48",
+  "safari": "10.1",
+  "samsung": "8.2"
+}
+
+Using modules transform: false
+
+Using plugins:
+  proposal-class-properties { android, chrome < 84, edge < 84, firefox < 90, ios, node < 14.6, opera < 70, safari < tp, samsung }
+  proposal-private-methods { android, chrome < 84, edge < 84, firefox < 90, ios, node < 14.6, opera < 70, safari < tp, samsung }
+  proposal-numeric-separator { android, chrome < 75, edge < 79, firefox < 70, ios < 13, opera < 62, safari < 13, samsung < 11 }
+  proposal-logical-assignment-operators { android, chrome < 85, edge < 85, firefox < 79, ios < 14, node < 15, opera < 71, safari < 14, samsung }
+  proposal-nullish-coalescing-operator { android, chrome < 80, edge < 80, firefox < 72, ios < 13.4, node < 14, opera < 67, safari < 13.1, samsung < 13 }
+  proposal-optional-chaining { android, chrome, edge, firefox < 74, ios < 13.4, node, opera, safari < 13.1, samsung }
+  proposal-json-strings { android, chrome < 66, edge < 79, firefox < 62, ios < 12, opera < 53, safari < 12, samsung < 9 }
+  proposal-optional-catch-binding { android, chrome < 66, edge < 79, ios < 11.3, opera < 53, safari < 11.1, samsung < 9 }
+  transform-parameters { edge < 18 }
+  proposal-async-generator-functions { android, chrome < 63, edge < 79, ios < 12, opera < 50, safari < 12 }
+  proposal-object-rest-spread { edge < 79, ios < 11.3, safari < 11.1 }
+  transform-dotall-regex { android, chrome < 62, edge < 79, firefox < 78, ios < 11.3, opera < 49, safari < 11.1 }
+  proposal-unicode-property-regex { android, chrome < 64, edge < 79, firefox < 78, ios < 11.3, opera < 51, safari < 11.1, samsung < 9 }
+  transform-named-capturing-groups-regex { android, chrome < 64, edge < 79, firefox < 78, ios < 11.3, opera < 51, safari < 11.1, samsung < 9 }
+  transform-async-to-generator { ios < 11, safari < 11 }
+  transform-template-literals { ios < 13, safari < 13 }
+  transform-function-name { edge < 79 }
+  transform-unicode-regex { ios < 12, safari < 12 }
+  transform-block-scoping { ios < 11, safari < 11 }
+  proposal-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios, opera < 60, safari, samsung < 11.0 }
+  syntax-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "android": "61",
+  "chrome": "61",
+  "edge": "16",
+  "firefox": "60",
+  "ios": "10.3",
+  "node": "13.2",
+  "opera": "48",
+  "safari": "10.1",
+  "samsung": "8.2"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/corejs2-babel-7/usage-browserslist-config-ignore/input.mjs]
+The corejs2 polyfill added the following polyfills:
+  es6.array.iterator { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  web.dom.iterable { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }

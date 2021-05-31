@@ -1,0 +1,255 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "54",
+  "electron": "0.36",
+  "ie": "10",
+  "node": "6.1"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-properties { chrome < 84, electron < 10.0, ie, node < 14.6 }
+  proposal-private-methods { chrome < 84, electron < 10.0, ie, node < 14.6 }
+  proposal-numeric-separator { chrome < 75, electron < 6.0, ie, node < 12.5 }
+  proposal-logical-assignment-operators { chrome < 85, electron < 10.0, ie, node < 15 }
+  proposal-nullish-coalescing-operator { chrome < 80, electron < 8.0, ie, node < 14 }
+  proposal-optional-chaining { chrome, electron, ie, node }
+  proposal-json-strings { chrome < 66, electron < 3.0, ie, node < 10 }
+  proposal-optional-catch-binding { chrome < 66, electron < 3.0, ie, node < 10 }
+  transform-parameters { electron < 0.37, ie }
+  proposal-async-generator-functions { chrome < 63, electron < 3.0, ie, node < 10 }
+  proposal-object-rest-spread { chrome < 60, electron < 2.0, ie, node < 8.3 }
+  transform-dotall-regex { chrome < 62, electron < 3.0, ie, node < 8.10 }
+  proposal-unicode-property-regex { chrome < 64, electron < 3.0, ie, node < 10 }
+  transform-named-capturing-groups-regex { chrome < 64, electron < 3.0, ie, node < 10 }
+  transform-async-to-generator { chrome < 55, electron < 1.6, ie, node < 7.6 }
+  transform-exponentiation-operator { electron < 1.3, ie, node < 7 }
+  transform-template-literals { ie }
+  transform-literals { ie }
+  transform-function-name { electron < 1.2, ie, node < 6.5 }
+  transform-arrow-functions { ie }
+  transform-block-scoped-functions { ie < 11 }
+  transform-classes { ie }
+  transform-object-super { ie }
+  transform-shorthand-properties { ie }
+  transform-duplicate-keys { ie }
+  transform-computed-properties { ie }
+  transform-for-of { electron < 1.2, ie, node < 6.5 }
+  transform-sticky-regex { electron < 0.37, ie }
+  transform-unicode-escapes { ie }
+  transform-unicode-regex { electron < 1.1, ie }
+  transform-spread { ie }
+  transform-destructuring { electron < 1.2, ie, node < 6.5 }
+  transform-block-scoping { electron < 0.37, ie }
+  transform-typeof-symbol { ie }
+  transform-new-target { ie }
+  transform-regenerator { electron < 1.1, ie }
+  proposal-export-namespace-from { chrome < 72, electron < 5.0, ie, node < 13.2 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs3: `DEBUG` option
+
+Using targets: {
+  "chrome": "54",
+  "electron": "0.36",
+  "ie": "10",
+  "node": "6.1"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/entry-corejs3-versions-decimals/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
+  es.symbol { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.description { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.async-iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.has-instance { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.is-concat-spreadable { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.match { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.replace { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.search { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.species { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.split { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.to-primitive { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.to-string-tag { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.unscopables { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.concat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.copy-within { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.fill { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.filter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.find { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.find-index { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.flat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.from { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.includes { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.index-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.join { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.last-index-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.reduce { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.reduce-right { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.slice { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.sort { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.species { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.splice { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.unscopables.flat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.unscopables.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array-buffer.constructor { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array-buffer.is-view { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array-buffer.slice { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.date.to-primitive { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.function.has-instance { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.function.name { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.json.to-string-tag { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.acosh { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.asinh { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.atanh { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.cbrt { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.clz32 { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.cosh { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.expm1 { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.fround { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.hypot { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.imul { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.log10 { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.log1p { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.log2 { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.sign { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.sinh { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.tanh { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.to-string-tag { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.math.trunc { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.constructor { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.epsilon { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.is-finite { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.is-integer { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.is-nan { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.is-safe-integer { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.max-safe-integer { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.min-safe-integer { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.parse-float { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.parse-int { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.number.to-fixed { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.assign { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.define-getter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.define-setter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.entries { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.freeze { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.from-entries { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.get-own-property-descriptor { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.get-own-property-descriptors { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.get-own-property-names { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.get-prototype-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.is { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.is-extensible { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.is-frozen { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.is-sealed { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.keys { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.lookup-getter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.lookup-setter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.prevent-extensions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.seal { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.set-prototype-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.to-string { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.object.values { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.promise { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.promise.finally { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.apply { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.construct { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.define-property { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.delete-property { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.get { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.get-own-property-descriptor { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.get-prototype-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.has { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.is-extensible { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.own-keys { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.prevent-extensions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.set { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.reflect.set-prototype-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.regexp.constructor { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.regexp.exec { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.regexp.flags { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.regexp.to-string { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.set { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.code-point-at { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.ends-with { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.from-code-point { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.includes { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.match { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.pad-end { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.pad-start { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.raw { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.repeat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.replace { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.search { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.split { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.starts-with { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.trim { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.trim-end { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.trim-start { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.anchor { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.big { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.blink { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.bold { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.fixed { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.fontcolor { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.fontsize { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.italics { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.link { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.small { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.strike { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.sub { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.string.sup { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.float32-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.float64-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.int8-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.int16-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.int32-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.uint8-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.uint8-clamped-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.uint16-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.uint32-array { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.copy-within { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.every { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.fill { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.filter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.find { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.find-index { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.for-each { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.from { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.includes { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.index-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.join { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.last-index-of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.of { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.reduce { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.reduce-right { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.reverse { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.set { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.slice { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.some { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.sort { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.subarray { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.to-locale-string { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.typed-array.to-string { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.weak-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.weak-set { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  web.dom-collections.for-each { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  web.dom-collections.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  web.immediate { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  web.queue-microtask { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  web.url { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  web.url.to-json { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  web.url-search-params { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }

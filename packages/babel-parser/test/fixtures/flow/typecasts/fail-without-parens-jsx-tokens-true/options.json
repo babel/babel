@@ -1,0 +1,4 @@
+{
+  "tokens": true,
+  "plugins": ["jsx", "flow"]
+}

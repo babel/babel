@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "EnumDeclaration",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"E"},
+          "name": "E"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":7,"end":26,"loc":{"start":{"line":1,"column":7},"end":{"line":5,"column":1}},
+          "explicitType": false,
+          "members": [
+            {
+              "type": "EnumDefaultedMember",
+              "start":11,"end":12,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":11,"end":12,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3},"identifierName":"A"},
+                "name": "A"
+              }
+            },
+            {
+              "type": "EnumDefaultedMember",
+              "start":16,"end":17,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":16,"end":17,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3},"identifierName":"B"},
+                "name": "B"
+              }
+            }
+          ],
+          "hasUnknownMembers": true
+        }
+      }
+    ],
+    "directives": []
+  }
+}

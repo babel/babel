@@ -1,5 +1,0 @@
-class Foo {
-  __initializeProperties() {
-
-  }
-}

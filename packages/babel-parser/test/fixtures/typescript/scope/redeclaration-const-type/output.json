@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":16}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":16}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":12,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":12}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"X"},
+              "name": "X"
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":10,"end":12,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":12}},
+              "extra": {
+                "rawValue": "",
+                "raw": "\"\""
+              },
+              "value": ""
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":14,"end":30,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":16}},
+        "id": {
+          "type": "Identifier",
+          "start":19,"end":20,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"X"},
+          "name": "X"
+        },
+        "typeAnnotation": {
+          "type": "TSNumberKeyword",
+          "start":23,"end":29,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

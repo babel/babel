@@ -1,1 +1,0 @@
-PROPERTY[Symbol.referenceGet](OBJECT)

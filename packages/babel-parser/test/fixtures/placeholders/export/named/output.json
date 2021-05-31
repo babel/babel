@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":17,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":17}},
+            "local": {
+              "type": "Placeholder",
+              "start":9,"end":17,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":17}},
+              "name": {
+                "type": "Identifier",
+                "start":11,"end":15,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":15},"identifierName":"NAME"},
+                "name": "NAME"
+              },
+              "expectedNode": "Identifier"
+            },
+            "exported": {
+              "type": "Placeholder",
+              "start":9,"end":17,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":17}},
+              "name": {
+                "type": "Identifier",
+                "start":11,"end":15,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":15},"identifierName":"NAME"},
+                "name": "NAME"
+              },
+              "expectedNode": "Identifier"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

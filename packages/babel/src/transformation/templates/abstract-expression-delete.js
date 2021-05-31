@@ -1,1 +1,0 @@
-PROPERTY[Symbol.referenceDelete](OBJECT)

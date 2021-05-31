@@ -1,6 +1,0 @@
-{
-  "features": {
-    "es7.decorators": true
-  },
-  "throws": "You have trailing decorators with no method (1:18)"
-}

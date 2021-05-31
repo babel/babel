@@ -1,3 +1,0 @@
-(function () {
-  super(...arguments);
-})

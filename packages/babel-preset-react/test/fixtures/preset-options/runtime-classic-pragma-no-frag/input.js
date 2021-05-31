@@ -1,0 +1,3 @@
+/** @jsx jsx */
+
+const Foo = <></>;

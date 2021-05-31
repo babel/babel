@@ -1,0 +1,75 @@
+name: Update Windows Fixtures
+
+on:
+  workflow_dispatch:
+    inputs:
+      pull_request:
+        description: Pull Request number
+        required: true
+
+jobs:
+  update-windows-fixtures:
+    runs-on: windows-latest
+    steps:
+      - name: Get Pull Request branch
+        uses: actions/github-script@v4
+        id: pr-meta
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ github.event.inputs.pull_request }},
+            });
+
+            const {
+              ref: branch,
+              repo: { full_name: repository }
+            } = pullRequest.head;
+
+            console.log(`::set-output name=branch::${branch}`);
+            console.log(`::set-output name=repository::${repository}`);
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ steps.pr-meta.outputs.repository }}
+          ref: ${{ steps.pr-meta.outputs.branch }}
+          fetch-depth: 0 # Otherwise we cannot push
+          persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
+
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Install and build
+        # make bootstrap modifies some files (babel-runtime-*/package.json), so we reset them
+        run: |
+          make -j bootstrap
+          git reset --hard HEAD
+
+      - name: Regenerate fixtures
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: |
+          yarn jest -u --ci --color || true
+        env:
+          BABEL_ENV: test
+          OVERWRITE: true
+
+      - name: Commit updates
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+          git add .
+          git commit -m "Update fixtures (Windows)" --no-verify --quiet
+          git push "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/${{ steps.pr-meta.outputs.repository }}.git" ${{ steps.pr-meta.outputs.branch }}

@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    [
+      "transform-react-jsx",
+      {
+        "runtime": "automatic",
+        "pragma": "foo"
+      }
+    ]
+  ],
+  "sourceType": "module",
+  "throws": "pragma and pragmaFrag cannot be set when runtime is automatic."
+}

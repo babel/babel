@@ -1,0 +1,128 @@
+import normalizeOptions from "../src/normalize-options";
+describe("normalize options", () => {
+  (process.env.BABEL_8_BREAKING ? describe : describe.skip)("Babel 8", () => {
+    it("should throw on unknown options", () => {
+      expect(() => normalizeOptions({ throwIfNamespaces: true })).toThrowError(
+        "@babel/preset-react: 'throwIfNamespaces' is not a valid top-level option.\n- Did you mean 'throwIfNamespace'?",
+      );
+    });
+    it.each(["development", "pure", "throwIfNamespace"])(
+      "should throw when `%p` is not a boolean",
+      optionName => {
+        expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
+          `@babel/preset-react: '${optionName}' option must be a boolean.`,
+        );
+      },
+    );
+    it.each(["importSource", "pragma", "pragmaFrag", "runtime"])(
+      "should throw when `%p` is not a string",
+      optionName => {
+        expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
+          `@babel/preset-react: '${optionName}' option must be a string.`,
+        );
+      },
+    );
+    it("should throw on Babel 7 'useBuiltIns' option", () => {
+      expect(() => normalizeOptions({ useBuiltIns: true }))
+        .toThrowErrorMatchingInlineSnapshot(`
+        "@babel/preset-react: Since \\"useBuiltIns\\" is removed in Babel 8, you can remove it from the config.
+        - Babel 8 now transforms JSX spread to object spread. If you need to transpile object spread with
+        \`useBuiltIns: true\`, you can use the following config
+        {
+          \\"plugins\\": [
+            [\\"@babel/plugin-proposal-object-rest-spread\\", { \\"loose\\": true, \\"useBuiltIns\\": true }]
+          ],
+          \\"presets\\": [\\"@babel/preset-react\\"]
+        }"
+      `);
+    });
+    it("should throw on Babel 7 'useSpread' option", () => {
+      expect(() =>
+        normalizeOptions({ useSpread: true }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"@babel/preset-react: Since Babel 8, an inline object with spread elements is always used, and the \\"useSpread\\" option is no longer available. Please remove it from your config."`,
+      );
+    });
+    it("should throw on unknown 'runtime' option", () => {
+      expect(() => normalizeOptions({ runtime: "classical" }))
+        .toThrowErrorMatchingInlineSnapshot(`
+        "@babel/preset-react: 'runtime' must be one of ['automatic', 'classic'] but we have 'classical'
+        - Did you mean 'classic'?"
+      `);
+    });
+    it("should not throw when options are not defined", () => {
+      expect(() => normalizeOptions()).not.toThrowError();
+    });
+    it("default values", () => {
+      expect(normalizeOptions({})).toMatchInlineSnapshot(`
+        Object {
+          "development": false,
+          "importSource": "react",
+          "pragma": undefined,
+          "pragmaFrag": undefined,
+          "pure": undefined,
+          "runtime": "automatic",
+          "throwIfNamespace": true,
+        }
+      `);
+      expect(normalizeOptions({ runtime: "classic" })).toMatchInlineSnapshot(`
+        Object {
+          "development": false,
+          "importSource": undefined,
+          "pragma": "React.createElement",
+          "pragmaFrag": "React.Fragment",
+          "pure": undefined,
+          "runtime": "classic",
+          "throwIfNamespace": true,
+        }
+      `);
+    });
+  });
+  (process.env.BABEL_8_BREAKING ? describe.skip : describe)("Babel 7", () => {
+    it("should not throw on unknown options", () => {
+      expect(() =>
+        normalizeOptions({ throwIfNamespaces: true }),
+      ).not.toThrowError();
+    });
+    it.each(["development", "pure", "throwIfNamespace"])(
+      "should not throw when `%p` is not a boolean",
+      optionName => {
+        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrowError();
+      },
+    );
+    it.each(["importSource", "pragma", "pragmaFrag", "runtime"])(
+      "should throw when `%p` is not a string",
+      optionName => {
+        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrowError();
+      },
+    );
+    it("default values", () => {
+      expect(normalizeOptions({})).toMatchInlineSnapshot(`
+        Object {
+          "development": false,
+          "importSource": undefined,
+          "pragma": "React.createElement",
+          "pragmaFrag": "React.Fragment",
+          "pure": undefined,
+          "runtime": "classic",
+          "throwIfNamespace": true,
+          "useBuiltIns": undefined,
+          "useSpread": undefined,
+        }
+      `);
+      expect(normalizeOptions({ runtime: "automatic" })).toMatchInlineSnapshot(`
+        Object {
+          "development": false,
+          "importSource": undefined,
+          "pragma": undefined,
+          "pragmaFrag": undefined,
+          "pure": undefined,
+          "runtime": "automatic",
+          "throwIfNamespace": true,
+          "useBuiltIns": undefined,
+          "useSpread": undefined,
+        }
+      `);
+    });
+  });
+});

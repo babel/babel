@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "bar"
+      }
+    ]
+  ],
+  "throws": "Tuple expressions starting with '#[' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'. (1:0)"
+}

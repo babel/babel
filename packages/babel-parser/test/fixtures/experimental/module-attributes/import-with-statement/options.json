@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "moduleAttributes",
+      {
+        "version": "may-2020"
+      }
+    ],
+    "estree"
+  ],
+  "sourceType": "module"
+}

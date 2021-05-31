@@ -1,0 +1,10 @@
+{
+  "minNodeVersion": "14.0.0",
+  "parserOpts": {
+    "plugins": [
+      "classPrivateMethods",
+      "classPrivateProperties",
+      "classProperties"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@babel/plugin-proposal-numeric-separator",
+  "version": "7.14.2",
+  "description": "Remove numeric separators from Decimal, Binary, Hex and Octal literals",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-numeric-separator"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-numeric-separator",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "@babel/plugin-syntax-numeric-separator": "^7.10.4"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
+  }
+}

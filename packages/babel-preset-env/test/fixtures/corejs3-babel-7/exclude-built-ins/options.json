@@ -1,0 +1,22 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "chrome": 63
+        },
+        "modules": false,
+        "useBuiltIns": "entry",
+        "corejs": 3,
+        "exclude": [
+          "es.string.pad-start",
+          "es.string.pad-end",
+          "web.timers",
+          "web.immediate",
+          "web.dom-collections.iterator"
+        ]
+      }
+    ]
+  ]
+}

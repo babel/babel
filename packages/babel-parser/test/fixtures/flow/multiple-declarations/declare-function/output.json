@@ -1,0 +1,83 @@
+{
+  "type": "File",
+  "start":0,"end":72,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":16}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":72,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":16}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareFunction",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
+        "id": {
+          "type": "Identifier",
+          "start":17,"end":27,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":27},"identifierName":"F1"},
+          "name": "F1",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":19,"end":27,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":27}},
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start":19,"end":27,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":27}},
+              "typeParameters": null,
+              "params": [],
+              "rest": null,
+              "this": null,
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start":23,"end":27,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":27}}
+              }
+            }
+          }
+        },
+        "predicate": null
+      },
+      {
+        "type": "DeclareFunction",
+        "start":28,"end":55,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":27}},
+        "id": {
+          "type": "Identifier",
+          "start":45,"end":55,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":27},"identifierName":"F1"},
+          "name": "F1",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":47,"end":55,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":27}},
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start":47,"end":55,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":27}},
+              "typeParameters": null,
+              "params": [],
+              "rest": null,
+              "this": null,
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start":51,"end":55,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":27}}
+              }
+            }
+          }
+        },
+        "predicate": null
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":56,"end":72,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":16}},
+        "id": {
+          "type": "Identifier",
+          "start":65,"end":67,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":11},"identifierName":"F1"},
+          "name": "F1"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":70,"end":72,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":16}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

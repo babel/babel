@@ -1,3 +1,3 @@
-class Test {
+(() => 42)
 
-}
+// some comments

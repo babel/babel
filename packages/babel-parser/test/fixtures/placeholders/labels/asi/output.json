@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "body": {
+          "type": "WhileStatement",
+          "start":6,"end":40,"loc":{"start":{"line":1,"column":6},"end":{"line":4,"column":1}},
+          "test": {
+            "type": "NumericLiteral",
+            "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":16,"end":40,"loc":{"start":{"line":1,"column":16},"end":{"line":4,"column":1}},
+            "body": [
+              {
+                "type": "BreakStatement",
+                "start":20,"end":25,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":7}},
+                "label": null
+              },
+              {
+                "type": "Placeholder",
+                "start":28,"end":38,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":12}},
+                "name": {
+                  "type": "Identifier",
+                  "start":30,"end":35,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":9},"identifierName":"LABEL"},
+                  "name": "LABEL"
+                },
+                "expectedNode": "Statement"
+              }
+            ],
+            "directives": []
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4},"identifierName":"loop"},
+          "name": "loop"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

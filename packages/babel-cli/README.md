@@ -1,5 +1,19 @@
-# babel-cli
+# @babel/cli
 
-Babel CLI
+> Babel command line.
 
-For more information please look at [babel](https://github.com/babel/babel).
+See our website [@babel/cli](https://babeljs.io/docs/en/babel-cli) for more information or the [issues](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20cli%22+is%3Aopen) associated with this package.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save-dev @babel/cli
+```
+
+or using yarn:
+
+```sh
+yarn add @babel/cli --dev
+```

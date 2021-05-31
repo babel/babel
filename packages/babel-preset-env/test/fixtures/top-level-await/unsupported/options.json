@@ -1,0 +1,10 @@
+{
+  "caller": {
+    "name": "test-fixture",
+    "supportsStaticESM": true,
+    "supportsDynamicImport": true,
+    "supportsTopLevelAwait": false
+  },
+  "presets": ["env"],
+  "throws": "Unexpected reserved word 'await'. (1:0)"
+}

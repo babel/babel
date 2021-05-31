@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "debug": true,
+        "targets": {
+          "safari": "10"
+        }
+      }
+    ]
+  ]
+}

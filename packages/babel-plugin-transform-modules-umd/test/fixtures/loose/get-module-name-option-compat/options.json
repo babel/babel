@@ -1,0 +1,7 @@
+{
+  "BABEL_8_BREAKING": false,
+  "sourceType": "module",
+  "moduleIds": true,
+  "moduleId": "my custom module name",
+  "plugins": [["transform-modules-umd", { "loose": true }]]
+}

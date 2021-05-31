@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-destructuring", "transform-modules-commonjs"]
+}

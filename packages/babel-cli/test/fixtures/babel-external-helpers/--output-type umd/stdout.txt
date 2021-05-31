@@ -8,4 +8,4 @@
   }
 })(this, function (global) {
   var babelHelpers = global;
-})
+});

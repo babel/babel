@@ -1,0 +1,1 @@
+Dynamic import can only be supported when transforming ES modules to AMD, CommonJS or SystemJS. Only the parser plugin will be enabled.

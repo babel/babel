@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-private-property-in-object", { "loose": true }],
+    ["proposal-class-properties", { "loose": true }],
+    ["proposal-private-methods", { "loose": true }],
+    "transform-classes"
+  ]
+}

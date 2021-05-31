@@ -1,0 +1,421 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  prepare-yarn-cache:
+    name: Prepare Cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-
+      - name: Check Yarn dedupe
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: |
+          yarn dedupe --check
+      - name: Check or update Yarn cache
+        env:
+          YARN_ENABLE_SCRIPTS: false # disable post-install scripts
+          YARN_NODE_LINKER: pnp # use pnp linker for better linking performance: it's meant to update yarn cache only
+        run: |
+          yarn install --immutable --skip-builds
+
+  test-coverage:
+    name: Test on Node.js Latest
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "16"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Generate coverage report
+        run: |
+          make -j test-ci-coverage
+          yarn test:esm
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1
+
+  build:
+    name: Build Babel Artifacts
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
+    # env:
+    #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-
+      - name: Build babel artifacts
+        run: |
+          BABEL_ENV=test-legacy make -j build-standalone-ci
+        env:
+          BABEL_8_BREAKING: false
+          STRIP_BABEL_8_FLAG: true
+      - uses: actions/upload-artifact@v2
+        with:
+          name: babel-artifact
+          path: |
+            codemods/*/lib/**/*
+            eslint/*/lib/**/*
+            packages/*/lib/**/*
+            packages/babel-standalone/*.js
+            !**/node_modules/**
+
+  lint:
+    name: Lint
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Lint
+        run: make -j tscheck flowcheck-ci lint-ci
+
+  test:
+    name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14, 12, 10, 8, 6]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest # Run yarn on latest node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*" # Build Babel on latest node LTS versions
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: |
+          yarn install
+      - name: Downgrade Jest for node <= 8
+        if: matrix.node-version == '6' || matrix.node-version == '8'
+        run: |
+          yarn remove jest
+          yarn add --dev jest@24
+          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
+          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
+          yarn dedupe
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
+      - name: Use Node.js ${{ matrix.node-version }} # Checkout node version for test executor
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Test on node.js ${{ matrix.node-version }}
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+
+        # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
+        run: |
+          BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
+
+  test-babel-8-breaking:
+    name: Test Babel 8 breaking changes
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12 # Node.js 12 is the first LTS supported by Babel 8
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install and build
+        run: make -j bootstrap
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          STRIP_BABEL_8_FLAG: true
+      - name: Lint
+        run: make lint
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
+      - name: Test
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: |
+          yarn jest --ci --color
+          yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
+
+  test-windows:
+    name: Test on Windows
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
+      - name: Test on Windows
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: yarn jest --ci --color
+        env:
+          BABEL_ENV: test
+
+  external-parser-tests:
+    name: Third-party Parser Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Download tests
+        run: make -j bootstrap-flow bootstrap-typescript bootstrap-test262
+      - name: Run Test262 Tests
+        run: make test-test262
+      - name: Run Flow Tests
+        run: make test-flow
+      - name: Run TypeScript Tests
+        run: make test-typescript
+
+  runtime-interop:
+    name: Test @babel/runtime integrations
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      # See https://github.com/babel/babel/pull/12906
+      - name: Support self-references on old Node.js
+        run: |
+          echo '{
+            "private": true,
+            "devDependencies": {
+              "@babel/runtime": "workspace:*",
+              "@babel/runtime-corejs3": "workspace:*"
+            }
+          }' > packages/package.json
+          node -e "
+            const pkg = require('./package.json');
+            pkg.workspaces.push('packages');
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
+          "
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
+      - name: Generate absoluteRuntime tests
+        run: yarn test:runtime:generate-absolute-runtime
+      - name: Test bundlers
+        run: yarn test:runtime:bundlers
+      - name: Test Node.js
+        run: yarn test:runtime:node
+      - name: Use Node.js 10
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 10
+      - name: Test Node.js 10
+        run: yarn test:runtime:node
+      - name: Use Node.js 12.0
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12.0" # quoted, otherwise it's just 13
+      - name: Test Node.js 12.0
+        run: yarn test:runtime:node
+      - name: Use Node.js 12.17
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12.17
+      - name: Test Node.js  12.17
+        run: yarn test:runtime:node
+      - name: Use Node.js 13.0
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "13.0" # quoted, otherwise it's just 13
+      - name: Test Node.js 13.0
+        run: yarn test:runtime:node
+      - name: Use Node.js 13.2
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 13.2
+      - name: Test Node.js 13.2
+        run: yarn test:runtime:node
+      - name: Use Node.js 13.6
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 13.6
+      - name: Test Node.js 13.6
+        run: yarn test:runtime:node
+      - name: Use Node.js 13.7
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 13.7
+      - name: Test Node.js 13.7
+        run: yarn test:runtime:node
+      - name: Use Node.js 14.2
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14.2
+      - name: Test Node.js 14.2
+        run: yarn test:runtime:node
+
+  e2e-publish:
+    name: Publish to local Verdaccio registry
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Setup Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Publish
+        run: ./scripts/integration-tests/publish-local.sh
+      - uses: actions/upload-artifact@v2
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+
+  e2e-tests:
+    name: E2E
+    needs: e2e-publish
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [babel, babel-old-version, create-react-app, vue-cli, jest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - uses: actions/download-artifact@v2
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+      - name: Test
+        run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh

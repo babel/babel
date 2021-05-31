@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 3,
+        "targets": {
+          "chrome": 55
+        },
+        "modules": false
+      }
+    ]
+  ]
+}

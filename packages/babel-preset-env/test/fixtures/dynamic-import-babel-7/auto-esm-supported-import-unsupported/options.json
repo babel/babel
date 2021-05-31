@@ -1,0 +1,9 @@
+{
+  "validateLogs": true,
+  "caller": {
+    "name": "test-fixture",
+    "supportsStaticESM": true,
+    "supportsDynamicImport": false
+  },
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]]
+}

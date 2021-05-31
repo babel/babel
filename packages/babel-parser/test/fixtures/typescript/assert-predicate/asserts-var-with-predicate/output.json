@@ -1,0 +1,87 @@
+{
+  "type": "File",
+  "start":0,"end":72,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":72,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":72,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":72,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":70,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":60}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":26,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":16},"identifierName":"assertIsString"},
+                "name": "assertIsString"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":27,"end":41,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":31},"identifierName":"value"},
+                  "name": "value",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":32,"end":41,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":31}},
+                    "typeAnnotation": {
+                      "type": "TSUnknownKeyword",
+                      "start":34,"end":41,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":31}}
+                    }
+                  }
+                }
+              ],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":42,"end":67,"loc":{"start":{"line":2,"column":32},"end":{"line":2,"column":57}},
+                "typeAnnotation": {
+                  "type": "TSTypePredicate",
+                  "start":44,"end":67,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":57}},
+                  "parameterName": {
+                    "type": "Identifier",
+                    "start":52,"end":57,"loc":{"start":{"line":2,"column":42},"end":{"line":2,"column":47},"identifierName":"value"},
+                    "name": "value"
+                  },
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":61,"end":67,"loc":{"start":{"line":2,"column":51},"end":{"line":2,"column":57}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":61,"end":67,"loc":{"start":{"line":2,"column":51},"end":{"line":2,"column":57}}
+                    }
+                  },
+                  "asserts": true
+                }
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start":68,"end":70,"loc":{"start":{"line":2,"column":58},"end":{"line":2,"column":60}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

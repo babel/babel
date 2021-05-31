@@ -1,1 +1,0 @@
-CLASS_NAME.prototype

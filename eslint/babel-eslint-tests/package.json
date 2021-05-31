@@ -1,0 +1,16 @@
+{
+  "name": "@babel/eslint-tests",
+  "version": "7.14.3",
+  "description": "Tests for babel/eslint-* packages",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@babel/core": "workspace:^7.14.3",
+    "@babel/eslint-parser": "workspace:^7.14.3",
+    "@babel/preset-react": "workspace:^7.13.13",
+    "dedent": "^0.7.0",
+    "eslint": "^7.5.0",
+    "eslint-plugin-import": "^2.22.0",
+    "npm-babel-parser": "npm:@babel/parser@^7.14.0"
+  }
+}

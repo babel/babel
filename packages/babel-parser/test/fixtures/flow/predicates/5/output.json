@@ -1,0 +1,75 @@
+{
+  "type": "File",
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Spaces between `%` and `checks` are not allowed here. (1:17)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14},"identifierName":"x"},
+            "name": "x"
+          }
+        ],
+        "predicate": {
+          "type": "InferredPredicate",
+          "start":17,"end":25,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":25}}
+        },
+        "returnType": null,
+        "body": {
+          "type": "BlockStatement",
+          "start":26,"end":61,"loc":{"start":{"line":1,"column":26},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "start":30,"end":59,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":31}},
+              "argument": {
+                "type": "BinaryExpression",
+                "start":37,"end":58,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":30}},
+                "left": {
+                  "type": "UnaryExpression",
+                  "start":37,"end":45,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":17}},
+                  "operator": "typeof",
+                  "prefix": true,
+                  "argument": {
+                    "type": "Identifier",
+                    "start":44,"end":45,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":17},"identifierName":"x"},
+                    "name": "x"
+                  }
+                },
+                "operator": "===",
+                "right": {
+                  "type": "StringLiteral",
+                  "start":50,"end":58,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":30}},
+                  "extra": {
+                    "rawValue": "string",
+                    "raw": "\"string\""
+                  },
+                  "value": "string"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

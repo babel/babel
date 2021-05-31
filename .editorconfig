@@ -6,6 +6,12 @@ charset = utf-8
 trim_trailing_whitespace = true
 end_of_line = lf
 
-[*.{js,json}]
+[*.{js,json,ts,tsx}]
 indent_style = space
 indent_size = 2
+
+[Makefile]
+indent_style = tab
+
+[*.{md,markdown}]
+trim_trailing_whitespace = false

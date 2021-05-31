@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
+  "errors": [
+    "SyntaxError: Type parameter declaration needs a default, since a preceding type parameter declaration has a default. (1:28)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start":6,"end":38,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":38}},
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start":7,"end":26,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":26}},
+              "name": "HasDefault",
+              "variance": null,
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start":20,"end":26,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":26}}
+              }
+            },
+            {
+              "type": "TypeParameter",
+              "start":28,"end":37,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":37}},
+              "name": "NoDefault",
+              "variance": null
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start":41,"end":42,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":42}},
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start":41,"end":42,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":42},"identifierName":"T"},
+            "name": "T"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

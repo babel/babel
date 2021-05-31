@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: The `declare` modifier can only appear on class fields. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":31,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateMethod",
+              "start":12,"end":29,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":19}},
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":20,"end":24,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":14}},
+                "id": {
+                  "type": "Identifier",
+                  "start":21,"end":24,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":14},"identifierName":"foo"},
+                  "name": "foo"
+                }
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":27,"end":29,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":19}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

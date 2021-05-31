@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`builders typescript tsTypeParameter accept name as argument for tsTypeParameter 1`] = `
+Object {
+  "constraint": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "bar",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "default": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "baz",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "name": "foo",
+  "type": "TSTypeParameter",
+}
+`;

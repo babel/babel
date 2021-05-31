@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":13}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":13}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+        "importKind": "value",
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"a"},
+          "name": "a"
+        },
+        "moduleReference": {
+          "type": "TSExternalModuleReference",
+          "start":11,"end":23,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":23}},
+          "expression": {
+            "type": "StringLiteral",
+            "start":19,"end":22,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":22}},
+            "extra": {
+              "rawValue": "a",
+              "raw": "\"a\""
+            },
+            "value": "a"
+          }
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":25,"end":38,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":13}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":34,"end":35,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10}},
+            "local": {
+              "type": "Identifier",
+              "start":34,"end":35,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10},"identifierName":"a"},
+              "name": "a"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":34,"end":35,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

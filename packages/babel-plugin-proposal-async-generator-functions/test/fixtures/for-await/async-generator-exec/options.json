@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-async-to-generator",
+    "proposal-async-generator-functions"
+  ],
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "NewExpression",
+  "start": 0,
+  "end": 10,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 10
+    }
+  },
+  "callee": {
+    "type": "Identifier",
+    "start": 4,
+    "end": 10,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 4
+      },
+      "end": {
+        "line": 1,
+        "column": 10
+      },
+      "identifierName": "Button"
+    },
+    "name": "Button"
+  },
+  "arguments": []
+}

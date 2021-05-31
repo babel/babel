@@ -1,0 +1,42 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"A"},
+          "name": "A"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":12,"end":14,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":14}},
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":15,"end":25,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":10}},
+        "id": {
+          "type": "Identifier",
+          "start":21,"end":22,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":23,"end":25,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":10}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "presets": [
+    "../../babel-preset-env",
+    ["../../babel-preset-react", { "runtime": "classic" }]
+  ],
+  "plugins": [
+    "../../babel-plugin-transform-strict-mode",
+    "../../babel-plugin-transform-modules-commonjs"
+  ],
+  "only": ["../../../packages/*/test"]
+}

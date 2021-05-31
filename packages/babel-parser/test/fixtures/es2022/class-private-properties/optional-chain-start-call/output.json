@@ -1,0 +1,110 @@
+{
+  "type": "File",
+  "start":0,"end":87,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":87,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":87,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":87,"loc":{"start":{"line":1,"column":10},"end":{"line":7,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":14,"end":40,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":28}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":21,"end":23,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":11}},
+                "id": {
+                  "type": "Identifier",
+                  "start":22,"end":23,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"m"},
+                  "name": "m"
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "start":26,"end":39,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":27}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":37,"end":39,"loc":{"start":{"line":2,"column":25},"end":{"line":2,"column":27}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":44,"end":85,"loc":{"start":{"line":4,"column":2},"end":{"line":6,"column":3}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":51,"end":55,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":13},"identifierName":"test"},
+                "name": "test"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":58,"end":85,"loc":{"start":{"line":4,"column":16},"end":{"line":6,"column":3}},
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start":64,"end":81,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":21}},
+                    "argument": {
+                      "type": "OptionalCallExpression",
+                      "start":71,"end":80,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":20}},
+                      "callee": {
+                        "type": "OptionalMemberExpression",
+                        "start":71,"end":78,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":18}},
+                        "object": {
+                          "type": "Identifier",
+                          "start":71,"end":74,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":14},"identifierName":"Foo"},
+                          "name": "Foo"
+                        },
+                        "property": {
+                          "type": "PrivateName",
+                          "start":76,"end":78,"loc":{"start":{"line":5,"column":16},"end":{"line":5,"column":18}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":77,"end":78,"loc":{"start":{"line":5,"column":17},"end":{"line":5,"column":18},"identifierName":"m"},
+                            "name": "m"
+                          }
+                        },
+                        "computed": false,
+                        "optional": true
+                      },
+                      "optional": false,
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

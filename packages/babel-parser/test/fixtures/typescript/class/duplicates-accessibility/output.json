@@ -1,0 +1,102 @@
+{
+  "type": "File",
+  "start":0,"end":127,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+  "errors": [
+    "SyntaxError: Accessibility modifier already seen. (2:9)",
+    "SyntaxError: Accessibility modifier already seen. (3:10)",
+    "SyntaxError: Accessibility modifier already seen. (4:12)",
+    "SyntaxError: Accessibility modifier already seen. (5:9)",
+    "SyntaxError: Accessibility modifier already seen. (6:9)",
+    "SyntaxError: Accessibility modifier already seen. (6:19)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":127,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":127,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":127,"loc":{"start":{"line":1,"column":10},"end":{"line":7,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":14,"end":30,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":18}},
+              "accessibility": "public",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":28,"end":29,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":17},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":33,"end":50,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":19}},
+              "accessibility": "private",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":48,"end":49,"loc":{"start":{"line":3,"column":17},"end":{"line":3,"column":18},"identifierName":"b"},
+                "name": "b"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":53,"end":73,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":22}},
+              "accessibility": "protected",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":71,"end":72,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":21},"identifierName":"c"},
+                "name": "c"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":76,"end":95,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":21}},
+              "accessibility": "public",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":93,"end":94,"loc":{"start":{"line":5,"column":19},"end":{"line":5,"column":20},"identifierName":"d"},
+                "name": "d"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":98,"end":125,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":29}},
+              "accessibility": "public",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":123,"end":124,"loc":{"start":{"line":6,"column":27},"end":{"line":6,"column":28},"identifierName":"e"},
+                "name": "e"
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

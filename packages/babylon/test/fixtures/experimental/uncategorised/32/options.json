@@ -1,6 +1,0 @@
-{
-  "sourceType": "module",
-  "features": {
-    "es7.asyncFunctions": true
-  }
-}

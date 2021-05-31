@@ -1,0 +1,4 @@
+{
+  "plugins": [["flow", { "enums": true }]],
+  "throws": "Symbol enum members cannot be initialized. Use `A,` in enum `E`. (2:6)"
+}

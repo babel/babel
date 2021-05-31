@@ -1,0 +1,4 @@
+{
+  "plugins": [["transform-for-of", { "assumeArray": true, "loose": true }]],
+  "throws": "The loose and assumeArray options cannot be used together in @babel/plugin-transform-for-of"
+}

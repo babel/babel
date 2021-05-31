@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-runtime",
+    "transform-modules-commonjs",
+    "transform-classes"
+  ]
+}

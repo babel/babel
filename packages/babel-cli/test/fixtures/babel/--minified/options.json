@@ -1,0 +1,9 @@
+{
+  "args": [
+    "--out-file",
+    "script2.js",
+    "--no-comments",
+    "--minified",
+    "script.js"
+  ]
+}

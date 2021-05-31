@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":6}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":6}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "expression": {
+          "type": "Literal",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+          "value": "use strict",
+          "raw": "\"use strict\""
+        },
+        "directive": "use strict"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":26,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":12}},
+        "expression": {
+          "type": "Literal",
+          "start":14,"end":25,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":11}},
+          "value": "use loose",
+          "raw": "\"use loose\""
+        },
+        "directive": "use loose"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":27,"end":33,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":6}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":31,"end":32,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5}},
+            "id": {
+              "type": "Identifier",
+              "start":31,"end":32,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ]
+  }
+}

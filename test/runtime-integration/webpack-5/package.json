@@ -1,0 +1,10 @@
+{
+  "name": "@babel-internal/runtime-integration-webpack-5",
+  "private": true,
+  "exports": "./index.js",
+  "devDependencies": {
+    "@babel/runtime": "workspace:*",
+    "webpack": "^5.24.1",
+    "webpack-cli": "^4.5.0"
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "type": "File",
+  "start":0,"end":184,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":48}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":184,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":48}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":36,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":36}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":36,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":36},"identifierName":"map1"},
+              "name": "map1",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":8,"end":36,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":36}},
+                "typeAnnotation": {
+                  "type": "TSMappedType",
+                  "start":10,"end":36,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":36}},
+                  "typeParameter": {
+                    "type": "TSTypeParameter",
+                    "start":13,"end":24,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":24}},
+                    "name": "P",
+                    "constraint": {
+                      "type": "TSStringKeyword",
+                      "start":18,"end":24,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":24}}
+                    }
+                  },
+                  "nameType": null,
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "start":27,"end":33,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":33}}
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":38,"end":85,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":47}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":42,"end":84,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":46}},
+            "id": {
+              "type": "Identifier",
+              "start":42,"end":84,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":46},"identifierName":"map2"},
+              "name": "map2",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":46,"end":84,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":46}},
+                "typeAnnotation": {
+                  "type": "TSMappedType",
+                  "start":48,"end":84,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":46}},
+                  "readonly": true,
+                  "typeParameter": {
+                    "type": "TSTypeParameter",
+                    "start":60,"end":71,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":33}},
+                    "name": "P",
+                    "constraint": {
+                      "type": "TSStringKeyword",
+                      "start":65,"end":71,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":33}}
+                    }
+                  },
+                  "nameType": null,
+                  "optional": true,
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "start":75,"end":81,"loc":{"start":{"line":2,"column":37},"end":{"line":2,"column":43}}
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":86,"end":135,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":49}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":90,"end":134,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":48}},
+            "id": {
+              "type": "Identifier",
+              "start":90,"end":134,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":48},"identifierName":"map3"},
+              "name": "map3",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":94,"end":134,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":48}},
+                "typeAnnotation": {
+                  "type": "TSMappedType",
+                  "start":96,"end":134,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":48}},
+                  "readonly": "+",
+                  "typeParameter": {
+                    "type": "TSTypeParameter",
+                    "start":109,"end":120,"loc":{"start":{"line":3,"column":23},"end":{"line":3,"column":34}},
+                    "name": "P",
+                    "constraint": {
+                      "type": "TSStringKeyword",
+                      "start":114,"end":120,"loc":{"start":{"line":3,"column":28},"end":{"line":3,"column":34}}
+                    }
+                  },
+                  "nameType": null,
+                  "optional": "+",
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "start":125,"end":131,"loc":{"start":{"line":3,"column":39},"end":{"line":3,"column":45}}
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":136,"end":184,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":48}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":140,"end":183,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":47}},
+            "id": {
+              "type": "Identifier",
+              "start":140,"end":183,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":47},"identifierName":"map4"},
+              "name": "map4",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":144,"end":183,"loc":{"start":{"line":4,"column":8},"end":{"line":4,"column":47}},
+                "typeAnnotation": {
+                  "type": "TSMappedType",
+                  "start":146,"end":183,"loc":{"start":{"line":4,"column":10},"end":{"line":4,"column":47}},
+                  "readonly": "-",
+                  "typeParameter": {
+                    "type": "TSTypeParameter",
+                    "start":159,"end":170,"loc":{"start":{"line":4,"column":23},"end":{"line":4,"column":34}},
+                    "name": "P",
+                    "constraint": {
+                      "type": "TSStringKeyword",
+                      "start":164,"end":170,"loc":{"start":{"line":4,"column":28},"end":{"line":4,"column":34}}
+                    }
+                  },
+                  "nameType": null,
+                  "optional": "-",
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "start":175,"end":181,"loc":{"start":{"line":4,"column":39},"end":{"line":4,"column":45}}
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

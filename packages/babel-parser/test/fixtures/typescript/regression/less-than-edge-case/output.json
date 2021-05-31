@@ -1,0 +1,120 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "init": {
+          "type": "VariableDeclaration",
+          "start":5,"end":14,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":14}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
+              "id": {
+                "type": "Identifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"i"},
+                "name": "i"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ],
+          "kind": "let"
+        },
+        "test": {
+          "type": "BinaryExpression",
+          "start":16,"end":38,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":38}},
+          "left": {
+            "type": "Identifier",
+            "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"i"},
+            "name": "i"
+          },
+          "operator": "<",
+          "right": {
+            "type": "MemberExpression",
+            "start":20,"end":38,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":38}},
+            "object": {
+              "type": "CallExpression",
+              "start":20,"end":34,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":34}},
+              "callee": {
+                "type": "Identifier",
+                "start":20,"end":27,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":27},"identifierName":"require"},
+                "name": "require"
+              },
+              "arguments": [
+                {
+                  "type": "StringLiteral",
+                  "start":28,"end":33,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":33}},
+                  "extra": {
+                    "rawValue": "foo",
+                    "raw": "'foo'"
+                  },
+                  "value": "foo"
+                }
+              ]
+            },
+            "property": {
+              "type": "Identifier",
+              "start":35,"end":38,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":38},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "computed": false
+          }
+        },
+        "update": {
+          "type": "UpdateExpression",
+          "start":40,"end":43,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":43}},
+          "operator": "++",
+          "prefix": false,
+          "argument": {
+            "type": "Identifier",
+            "start":40,"end":41,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":41},"identifierName":"i"},
+            "name": "i"
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":45,"end":58,"loc":{"start":{"line":1,"column":45},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":51,"end":56,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":9}},
+              "expression": {
+                "type": "CallExpression",
+                "start":51,"end":55,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":8}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":51,"end":52,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5},"identifierName":"x"},
+                  "name": "x"
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "start":53,"end":54,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"i"},
+                    "name": "i"
+                  }
+                ]
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

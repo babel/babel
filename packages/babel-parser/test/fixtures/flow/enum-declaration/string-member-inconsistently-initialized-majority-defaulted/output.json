@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "errors": [
+    "SyntaxError: String enum members need to consistently either all use initializers, or use no initializers, in enum `E`. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "EnumDeclaration",
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"E"},
+          "name": "E"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":7,"end":41,"loc":{"start":{"line":1,"column":7},"end":{"line":5,"column":1}},
+          "explicitType": true,
+          "members": [
+            {
+              "type": "EnumDefaultedMember",
+              "start":32,"end":33,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":32,"end":33,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3},"identifierName":"B"},
+                "name": "B"
+              }
+            },
+            {
+              "type": "EnumDefaultedMember",
+              "start":37,"end":38,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":37,"end":38,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":3},"identifierName":"C"},
+                "name": "C"
+              }
+            }
+          ],
+          "hasUnknownMembers": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

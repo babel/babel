@@ -1,0 +1,33 @@
+{
+  "name": "@babel/preset-react",
+  "version": "7.13.13",
+  "description": "Babel preset for all React plugins.",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babel.dev/docs/en/next/babel-preset-react",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20react%22+is%3Aopen",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-preset-react"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "@babel/helper-validator-option": "workspace:^7.12.17",
+    "@babel/plugin-transform-react-display-name": "workspace:^7.12.13",
+    "@babel/plugin-transform-react-jsx": "workspace:^7.13.12",
+    "@babel/plugin-transform-react-jsx-development": "workspace:^7.12.17",
+    "@babel/plugin-transform-react-pure-annotations": "workspace:^7.12.1"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
+  }
+}

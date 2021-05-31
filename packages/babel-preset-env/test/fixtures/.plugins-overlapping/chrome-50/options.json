@@ -1,0 +1,11 @@
+{
+  "plugins": [],
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": { "chrome": "50" }
+      }
+    ]
+  ]
+}

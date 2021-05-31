@@ -1,0 +1,27 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":23}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":23}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportAllDeclaration",
+        "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":23}},
+        "source": {
+          "type": "Placeholder",
+          "start":14,"end":22,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":22}},
+          "name": {
+            "type": "Identifier",
+            "start":16,"end":20,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":20},"identifierName":"FILE"},
+            "name": "FILE"
+          },
+          "expectedNode": "StringLiteral"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

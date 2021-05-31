@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    [
+      "decorators",
+      {
+        "decoratorsBeforeExport": false
+      }
+    ]
+  ]
+}

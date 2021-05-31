@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "transform-modules-commonjs",
+      { "strict": true, "mjsStrictNamespace": false }
+    ]
+  ]
+}

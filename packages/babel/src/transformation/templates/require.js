@@ -1,1 +1,0 @@
-require(MODULE_NAME);

@@ -1,0 +1,157 @@
+{
+  "type": "File",
+  "start":0,"end":131,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":131,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":11,"end":16,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":16}},
+          "literal": {
+            "type": "Literal",
+            "start":11,"end":16,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":16}},
+            "value": false,
+            "raw": "false"
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":18,"end":35,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":17}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":27,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":9},"identifierName":"Foo2"},
+          "name": "Foo2"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":30,"end":34,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":16}},
+          "literal": {
+            "type": "Literal",
+            "start":30,"end":34,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":16}},
+            "value": true,
+            "raw": "true"
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":36,"end":57,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":21}},
+        "id": {
+          "type": "Identifier",
+          "start":41,"end":45,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":9},"identifierName":"Foo3"},
+          "name": "Foo3"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":48,"end":56,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":20}},
+          "literal": {
+            "type": "Literal",
+            "start":48,"end":56,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":20}},
+            "value": "string",
+            "raw": "\"string\""
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":58,"end":74,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":16}},
+        "id": {
+          "type": "Identifier",
+          "start":63,"end":67,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":9},"identifierName":"Foo4"},
+          "name": "Foo4"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":70,"end":73,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15}},
+          "literal": {
+            "type": "Literal",
+            "start":70,"end":73,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15}},
+            "value": 123,
+            "raw": "123"
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":75,"end":93,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":18}},
+        "id": {
+          "type": "Identifier",
+          "start":80,"end":84,"loc":{"start":{"line":5,"column":5},"end":{"line":5,"column":9},"identifierName":"Foo5"},
+          "name": "Foo5"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":87,"end":92,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":17}},
+          "literal": {
+            "type": "Literal",
+            "start":87,"end":92,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":17}},
+            "value": 123.4,
+            "raw": "123.4"
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":94,"end":111,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":17}},
+        "id": {
+          "type": "Identifier",
+          "start":99,"end":103,"loc":{"start":{"line":6,"column":5},"end":{"line":6,"column":9},"identifierName":"Foo6"},
+          "name": "Foo6"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":106,"end":110,"loc":{"start":{"line":6,"column":12},"end":{"line":6,"column":16}},
+          "literal": {
+            "type": "UnaryExpression",
+            "start":106,"end":110,"loc":{"start":{"line":6,"column":12},"end":{"line":6,"column":16}},
+            "operator": "-",
+            "prefix": true,
+            "argument": {
+              "type": "Literal",
+              "start":107,"end":110,"loc":{"start":{"line":6,"column":13},"end":{"line":6,"column":16}},
+              "value": 123,
+              "raw": "123"
+            }
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":112,"end":131,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":19}},
+        "id": {
+          "type": "Identifier",
+          "start":117,"end":121,"loc":{"start":{"line":7,"column":5},"end":{"line":7,"column":9},"identifierName":"Foo7"},
+          "name": "Foo7"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":124,"end":130,"loc":{"start":{"line":7,"column":12},"end":{"line":7,"column":18}},
+          "literal": {
+            "type": "UnaryExpression",
+            "start":124,"end":130,"loc":{"start":{"line":7,"column":12},"end":{"line":7,"column":18}},
+            "operator": "-",
+            "prefix": true,
+            "argument": {
+              "type": "Literal",
+              "start":125,"end":130,"loc":{"start":{"line":7,"column":13},"end":{"line":7,"column":18}},
+              "value": 123.5,
+              "raw": "123.5"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

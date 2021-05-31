@@ -1,0 +1,194 @@
+{
+  "type": "File",
+  "start":0,"end":313,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":58}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":313,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":58}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+        "abstract": true,
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":17},"identifierName":"C1"},
+          "name": "C1"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":20,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":20}},
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":21,"end":49,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":28}},
+        "abstract": true,
+        "id": {
+          "type": "Identifier",
+          "start":44,"end":46,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":25},"identifierName":"C2"},
+          "name": "C2"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":47,"end":49,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":28}},
+          "body": []
+        },
+        "declare": true
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":50,"end":77,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":27}},
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `export abstract class {}` is not valid TypeScript.",
+            "start":78,"end":132,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":54}}
+          }
+        ],
+        "exportKind": "value",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":57,"end":77,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":27}},
+          "abstract": true,
+          "id": {
+            "type": "Identifier",
+            "start":72,"end":74,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":24},"identifierName":"C3"},
+            "name": "C3"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":75,"end":77,"loc":{"start":{"line":3,"column":25},"end":{"line":3,"column":27}},
+            "body": []
+          }
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":133,"end":166,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":33}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `export abstract class {}` is not valid TypeScript.",
+            "start":78,"end":132,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":54}}
+          }
+        ],
+        "exportKind": "value",
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":148,"end":166,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":33}},
+          "abstract": true,
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":163,"end":166,"loc":{"start":{"line":5,"column":30},"end":{"line":5,"column":33}},
+            "body": []
+          }
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":167,"end":203,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":36}},
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `abstract class` is not valid as an expression.",
+            "start":204,"end":254,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":50}}
+          }
+        ],
+        "exportKind": "value",
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":182,"end":203,"loc":{"start":{"line":6,"column":15},"end":{"line":6,"column":36}},
+          "abstract": true,
+          "id": {
+            "type": "Identifier",
+            "start":197,"end":199,"loc":{"start":{"line":6,"column":30},"end":{"line":6,"column":32},"identifierName":"C4"},
+            "name": "C4"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":200,"end":203,"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":36}},
+            "body": []
+          }
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":255,"end":313,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":58}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `abstract class` is not valid as an expression.",
+            "start":204,"end":254,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":50}}
+          }
+        ],
+        "exportKind": "value",
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":270,"end":313,"loc":{"start":{"line":8,"column":15},"end":{"line":8,"column":58}},
+          "abstract": true,
+          "id": {
+            "type": "Identifier",
+            "start":285,"end":287,"loc":{"start":{"line":8,"column":30},"end":{"line":8,"column":32},"identifierName":"C5"},
+            "name": "C5"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":288,"end":313,"loc":{"start":{"line":8,"column":33},"end":{"line":8,"column":58}},
+            "body": [
+              {
+                "type": "TSDeclareMethod",
+                "start":290,"end":311,"loc":{"start":{"line":8,"column":35},"end":{"line":8,"column":56}},
+                "abstract": true,
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":299,"end":302,"loc":{"start":{"line":8,"column":44},"end":{"line":8,"column":47},"identifierName":"foo"},
+                  "name": "foo"
+                },
+                "computed": false,
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "returnType": {
+                  "type": "TSTypeAnnotation",
+                  "start":304,"end":310,"loc":{"start":{"line":8,"column":49},"end":{"line":8,"column":55}},
+                  "typeAnnotation": {
+                    "type": "TSVoidKeyword",
+                    "start":306,"end":310,"loc":{"start":{"line":8,"column":51},"end":{"line":8,"column":55}}
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " `export abstract class {}` is not valid TypeScript.",
+      "start":78,"end":132,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":54}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " `abstract class` is not valid as an expression.",
+      "start":204,"end":254,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":50}}
+    }
+  ]
+}

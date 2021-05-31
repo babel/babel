@@ -1,0 +1,4 @@
+{
+  "args": ["-gc", "--eval", "console.log(typeof global.gc)"],
+  "stdout": "function"
+}

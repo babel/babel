@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":6}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":6}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":16}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeAnnotation": {
+          "type": "TSNumberKeyword",
+          "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15}}
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":17,"end":23,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":6}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":21,"end":22,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5}},
+            "id": {
+              "type": "Identifier",
+              "start":21,"end":22,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

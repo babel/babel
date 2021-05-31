@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "errors": [
+    "SyntaxError: String enum members need to consistently either all use initializers, or use no initializers, in enum `E`. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "EnumDeclaration",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"E"},
+          "name": "E"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":7,"end":47,"loc":{"start":{"line":1,"column":7},"end":{"line":5,"column":1}},
+          "explicitType": true,
+          "members": [
+            {
+              "type": "EnumStringMember",
+              "start":26,"end":33,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":9}},
+              "id": {
+                "type": "Identifier",
+                "start":26,"end":27,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3},"identifierName":"B"},
+                "name": "B"
+              },
+              "init": {
+                "type": "StringLiteral",
+                "start":30,"end":33,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":9}},
+                "extra": {
+                  "rawValue": "b",
+                  "raw": "\"b\""
+                },
+                "value": "b"
+              }
+            },
+            {
+              "type": "EnumStringMember",
+              "start":37,"end":44,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":9}},
+              "id": {
+                "type": "Identifier",
+                "start":37,"end":38,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":3},"identifierName":"C"},
+                "name": "C"
+              },
+              "init": {
+                "type": "StringLiteral",
+                "start":41,"end":44,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":9}},
+                "extra": {
+                  "rawValue": "c",
+                  "raw": "\"c\""
+                },
+                "value": "c"
+              }
+            }
+          ],
+          "hasUnknownMembers": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

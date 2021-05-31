@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":17}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":18,"end":30,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":12}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":22,"end":29,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":11}},
+            "id": {
+              "type": "Identifier",
+              "start":22,"end":25,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":28,"end":29,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

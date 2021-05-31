@@ -1,0 +1,36 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+  "errors": [
+    "SyntaxError: 'implements' list cannot be empty. (1:33)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":18,"end":21,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":21},"identifierName":"Bar"},
+          "name": "Bar"
+        },
+        "implements": [],
+        "body": {
+          "type": "ClassBody",
+          "start":33,"end":36,"loc":{"start":{"line":1,"column":33},"end":{"line":2,"column":1}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

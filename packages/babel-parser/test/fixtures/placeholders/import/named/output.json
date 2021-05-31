@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18}},
+            "imported": {
+              "type": "Placeholder",
+              "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18}},
+              "name": {
+                "type": "Identifier",
+                "start":11,"end":16,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":16},"identifierName":"NAMED"},
+                "name": "NAMED"
+              },
+              "expectedNode": "Identifier"
+            },
+            "local": {
+              "type": "Placeholder",
+              "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18}},
+              "name": {
+                "type": "Identifier",
+                "start":11,"end":16,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":16},"identifierName":"NAMED"},
+                "name": "NAMED"
+              },
+              "expectedNode": "Identifier"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":26,"end":32,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":32}},
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

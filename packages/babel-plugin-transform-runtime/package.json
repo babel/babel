@@ -1,0 +1,46 @@
+{
+  "name": "@babel/plugin-transform-runtime",
+  "version": "7.14.3",
+  "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-runtime"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "browser": {
+    "./lib/get-runtime-path/index.js": "./lib/get-runtime-path/browser.js",
+    "./src/get-runtime-path/index.ts": "./src/get-runtime-path/browser.ts"
+  },
+  "dependencies": {
+    "@babel/helper-module-imports": "workspace:^7.13.12",
+    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "babel-plugin-polyfill-corejs2": "^0.2.0",
+    "babel-plugin-polyfill-corejs3": "^0.2.0",
+    "babel-plugin-polyfill-regenerator": "^0.2.0",
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/helpers": "workspace:*",
+    "@babel/plugin-transform-typeof-symbol": "workspace:*",
+    "@babel/preset-env": "workspace:*",
+    "@babel/runtime": "workspace:*",
+    "@babel/runtime-corejs3": "workspace:*",
+    "@babel/template": "workspace:*",
+    "@babel/types": "workspace:*",
+    "make-dir": "^2.1.0"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime"
+}

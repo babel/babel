@@ -1,0 +1,27 @@
+{
+  "name": "@babel/helper-module-transforms",
+  "version": "7.14.2",
+  "description": "Babel helper functions for implementing ES6 module transformations",
+  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-module-transforms"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/helper-module-imports": "workspace:^7.13.12",
+    "@babel/helper-replace-supers": "workspace:^7.13.12",
+    "@babel/helper-simple-access": "workspace:^7.13.12",
+    "@babel/helper-split-export-declaration": "workspace:^7.12.13",
+    "@babel/helper-validator-identifier": "workspace:^7.14.0",
+    "@babel/template": "workspace:^7.12.13",
+    "@babel/traverse": "workspace:^7.14.2",
+    "@babel/types": "workspace:^7.14.2"
+  }
+}

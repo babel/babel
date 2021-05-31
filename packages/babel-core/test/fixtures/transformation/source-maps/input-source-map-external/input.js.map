@@ -1,0 +1,1 @@
+{"version":3,"sources":["original.js"],"names":[],"mappings":"AAAA,UAAU,Y;SAAM,C;CAAC","sourcesContent":["var foo = () => 4;"]}

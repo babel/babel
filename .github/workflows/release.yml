@@ -1,0 +1,172 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        # This input isn't actually used as an input, but it's a reminder that
+        # this workflow can only automatically push patch versions.
+        # This is because often minor versions require human intervention, so
+        # it's safer if we force ourselves to always create them locally.
+        description: ⚠️ This workflow can only automatically release patch versions
+        required: true
+        default: patch
+
+jobs:
+  log-updates:
+    name: Log packages to publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the new tag
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: This release will publish the following packages
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            yarn release-tool version --dry patch
+          else
+            git diff --name-only HEAD^..HEAD
+          fi;
+
+  git-version:
+    name: Create git tag and commit
+    runs-on: ubuntu-latest
+    needs: log-updates
+    if: github.event_name == 'workflow_dispatch'
+    outputs:
+      branch: ${{ steps.push.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set @babel-bot as committer
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+
+      - name: Create new version
+        run: |
+          make new-version-checklist
+          yarn release-tool version -f @babel/standalone --yes patch
+
+      - name: Push to GitHub
+        id: push
+        run: |
+          branch="release/temp/$(git describe --abbrev=0)"
+          echo $branch
+          echo "::set-output name=branch::$branch"
+
+          git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"$branch" --follow-tags
+
+  npm-release:
+    name: Build, Test and Publish
+    runs-on: ubuntu-latest
+    needs: git-version
+    environment: npm
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped')
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Checkout the temporary branch
+        if: needs.git-version.result == 'success'
+        run: git checkout ${{ needs.git-version.outputs.branch }}
+
+      - name: Build and Test
+        run: make prepublish
+
+      - name: Publish to npm
+        run: yarn release-tool publish --yes
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  github-release:
+    name: Create GitHub release draft
+    runs-on: ubuntu-latest
+    needs: git-version
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped')
+    outputs:
+      is-main: ${{ steps.is-main.outputs.result == 1 }}
+      changelog: ${{ steps.changelog.outputs.changelog }}
+      version: ${{ steps.tags.outputs.new }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Check if releasing from main
+        id: is-main
+        uses: babel/actions/ref-matches-branch@v2
+        with:
+          name: main
+
+      - name: Checkout the temporary branch
+        if: needs.git-version.result == 'success'
+        run: git checkout ${{ needs.git-version.outputs.branch }}
+
+      - name: Get tag info
+        id: tags
+        uses: babel/actions/get-release-tags@v2
+
+      - name: Generate the changelog
+        id: changelog
+        uses: babel/actions/generate-lerna-changelog@v2
+        with:
+          from: ${{ steps.tags.outputs.old }}
+          to: ${{ steps.tags.outputs.new }}
+        env:
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a draft GitHub release
+        uses: babel/actions/publish-github-release@v2
+        with:
+          tag: ${{ steps.tags.outputs.new }}
+          changelog: ${{ steps.changelog.outputs.changelog }}
+          token: ${{ secrets.BOT_TOKEN }}
+
+  github-push:
+    name: Push release commit to "main"
+    runs-on: ubuntu-latest
+    needs: [npm-release, github-release, git-version]
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      needs.npm-release.result == 'success' &&
+      needs.github-release.result == 'success' &&
+      needs.github-release.outputs.is-main
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Checkout the temporary branch
+        if: needs.git-version.result == 'success'
+        run: git checkout ${{ needs.git-version.outputs.branch }}
+
+      - name: Update CHANGELOG.md
+        uses: babel/actions/update-changelog@v2
+        with:
+          changelog: ${{ needs.github-release.outputs.changelog }}
+
+      - name: Commit CHANGELOG.md
+        run: |
+          git add CHANGELOG.md
+          git -c user.name="Babel Bot" -c user.email="babel-bot@users.noreply.github.com" \
+            commit -m "Add ${{ needs.github-release.outputs.version }} to CHANGELOG.md [skip ci]" --no-verify --quiet
+
+      - name: Push to GitHub
+        run: |
+          git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main --follow-tags
+
+      - name: Delete temporary branch from GitHub
+        if: needs.git-version.result == 'success'
+        run: git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" :${{ needs.git-version.outputs.branch }}

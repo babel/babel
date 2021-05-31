@@ -1,3 +1,0 @@
-{
-  "blacklist": ["strict", "es6.tailCall"]
-}

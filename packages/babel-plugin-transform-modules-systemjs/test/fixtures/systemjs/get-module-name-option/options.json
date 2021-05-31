@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "transform-modules-systemjs",
+      {
+        "moduleIds": true,
+        "moduleId": "my custom module name"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":24}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":24}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":16}},
+        "specifiers": [],
+        "source": null,
+        "exportKind": "value",
+        "declaration": {
+          "type": "EnumDeclaration",
+          "start":7,"end":16,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":16}},
+          "id": {
+            "type": "Identifier",
+            "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13},"identifierName":"A"},
+            "name": "A"
+          },
+          "body": {
+            "type": "EnumStringBody",
+            "start":14,"end":16,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":16}},
+            "explicitType": false,
+            "members": [],
+            "hasUnknownMembers": false
+          }
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":18,"end":42,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":24}},
+        "declaration": {
+          "type": "EnumDeclaration",
+          "start":33,"end":42,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":24}},
+          "id": {
+            "type": "Identifier",
+            "start":38,"end":39,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":21},"identifierName":"B"},
+            "name": "B"
+          },
+          "body": {
+            "type": "EnumStringBody",
+            "start":40,"end":42,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":24}},
+            "explicitType": false,
+            "members": [],
+            "hasUnknownMembers": false
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

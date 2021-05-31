@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "syntax-jsx",
+    "transform-react-inline-elements",
+    ["transform-react-jsx", { "runtime": "classic" }],
+    "transform-modules-commonjs"
+  ]
+}

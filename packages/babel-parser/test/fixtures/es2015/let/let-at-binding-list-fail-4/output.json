@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+  "errors": [
+    "SyntaxError: 'let' is not allowed to be used as a name in 'let' or 'const' declarations. (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":16,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":16}},
+            "id": {
+              "type": "ArrayPattern",
+              "start":6,"end":11,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":11}},
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10},"identifierName":"let"},
+                  "name": "let"
+                }
+              ]
+            },
+            "init": {
+              "type": "ArrayExpression",
+              "start":14,"end":16,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":16}},
+              "elements": []
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

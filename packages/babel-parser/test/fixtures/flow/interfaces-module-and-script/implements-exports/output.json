@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":19}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":16}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":13},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":14,"end":16,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":16}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":18,"end":37,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":19}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":32,"end":35,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":17}},
+            "local": {
+              "type": "Identifier",
+              "start":32,"end":35,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":17},"identifierName":"Foo"},
+              "name": "Foo"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":32,"end":35,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":17},"identifierName":"Foo"},
+              "name": "Foo"
+            }
+          }
+        ],
+        "source": null,
+        "exportKind": "type",
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

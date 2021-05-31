@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":22}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareFunction",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
+        "id": {
+          "type": "Identifier",
+          "start":17,"end":26,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":26},"identifierName":"A"},
+          "name": "A",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":18,"end":26,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":26}},
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start":18,"end":26,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":26}},
+              "typeParameters": null,
+              "params": [],
+              "rest": null,
+              "this": null,
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start":22,"end":26,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":26}}
+              }
+            }
+          }
+        },
+        "predicate": null
+      },
+      {
+        "type": "DeclareVariable",
+        "start":28,"end":50,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":22}},
+        "id": {
+          "type": "Identifier",
+          "start":40,"end":49,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":21},"identifierName":"A"},
+          "name": "A",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":41,"end":49,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":21}},
+            "typeAnnotation": {
+              "type": "NumberTypeAnnotation",
+              "start":43,"end":49,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21}}
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

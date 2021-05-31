@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-parameters",
+    "transform-react-constant-elements",
+    "transform-block-scoping",
+    "syntax-jsx"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "mappings": "AAAAA,GAAG;AACHA,GAAG;AACHA,GAAG,GAAGC,GAAN;AACAC,GAAG,CAACF,GAAJ;AACAE,GAAG,CAACF,GAAJ;AACAE,GAAG,CAACF,GAAJ,CAAQC,GAAR;AACAC,GAAG,CAACF,GAAJ,GAAUC,GAAV;AACA;AACED,EAAAA,GAAG;AACHA,EAAAA,GAAG;AACHA,EAAAA,GAAG,GAAGC,GAAN;AACAC,EAAAA,GAAG,CAACF,GAAJ;AACAE,EAAAA,GAAG,CAACF,GAAJ;AACAE,EAAAA,GAAG,CAACF,GAAJ,CAAQC,GAAR;AACAC,EAAAA,GAAG,CAACF,GAAJ,GAAUC,GAAV;AACD",
+  "names": ["foo", "bar", "obj"],
+  "sources": ["fixtures/sourcemaps/call-identifiers/input.js"],
+  "sourcesContent": [
+    "foo;\nfoo();\nfoo().bar;\nobj.foo;\nobj.foo();\nobj.foo.bar;\nobj.foo().bar;\n{\n  foo;\n  foo();\n  foo().bar;\n  obj.foo;\n  obj.foo();\n  obj.foo.bar;\n  obj.foo().bar;\n}"
+  ],
+  "version": 3
+}

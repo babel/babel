@@ -1,0 +1,3 @@
+function x () {
+  "use strict";
+}

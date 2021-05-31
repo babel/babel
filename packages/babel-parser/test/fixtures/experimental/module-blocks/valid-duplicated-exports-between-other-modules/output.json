@@ -1,0 +1,164 @@
+{
+  "type": "File",
+  "start":0,"end":121,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":121,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":47}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":7,"end":25,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":25}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":13,"end":24,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":24}},
+              "id": {
+                "type": "Identifier",
+                "start":13,"end":16,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":16},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "init": {
+                "type": "StringLiteral",
+                "start":19,"end":24,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":24}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":26,"end":73,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":47}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":32,"end":72,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":46}},
+            "id": {
+              "type": "Identifier",
+              "start":32,"end":34,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":8},"identifierName":"m1"},
+              "name": "m1"
+            },
+            "init": {
+              "type": "ModuleExpression",
+              "start":37,"end":72,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":46}},
+              "body": {
+                "type": "Program",
+                "start":46,"end":72,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":46}},
+                "sourceType": "module",
+                "interpreter": null,
+                "body": [
+                  {
+                    "type": "ExportNamedDeclaration",
+                    "start":46,"end":70,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":44}},
+                    "specifiers": [],
+                    "source": null,
+                    "declaration": {
+                      "type": "VariableDeclaration",
+                      "start":53,"end":70,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":44}},
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start":59,"end":70,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":44}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":59,"end":62,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":36},"identifierName":"foo"},
+                            "name": "foo"
+                          },
+                          "init": {
+                            "type": "StringLiteral",
+                            "start":65,"end":70,"loc":{"start":{"line":2,"column":39},"end":{"line":2,"column":44}},
+                            "extra": {
+                              "rawValue": "foo",
+                              "raw": "\"foo\""
+                            },
+                            "value": "foo"
+                          }
+                        }
+                      ],
+                      "kind": "const"
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":74,"end":121,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":47}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":80,"end":120,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":46}},
+            "id": {
+              "type": "Identifier",
+              "start":80,"end":82,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":8},"identifierName":"m2"},
+              "name": "m2"
+            },
+            "init": {
+              "type": "ModuleExpression",
+              "start":85,"end":120,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":46}},
+              "body": {
+                "type": "Program",
+                "start":94,"end":120,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":46}},
+                "sourceType": "module",
+                "interpreter": null,
+                "body": [
+                  {
+                    "type": "ExportNamedDeclaration",
+                    "start":94,"end":118,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":44}},
+                    "specifiers": [],
+                    "source": null,
+                    "declaration": {
+                      "type": "VariableDeclaration",
+                      "start":101,"end":118,"loc":{"start":{"line":3,"column":27},"end":{"line":3,"column":44}},
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start":107,"end":118,"loc":{"start":{"line":3,"column":33},"end":{"line":3,"column":44}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":107,"end":110,"loc":{"start":{"line":3,"column":33},"end":{"line":3,"column":36},"identifierName":"foo"},
+                            "name": "foo"
+                          },
+                          "init": {
+                            "type": "StringLiteral",
+                            "start":113,"end":118,"loc":{"start":{"line":3,"column":39},"end":{"line":3,"column":44}},
+                            "extra": {
+                              "rawValue": "foo",
+                              "raw": "\"foo\""
+                            },
+                            "value": "foo"
+                          }
+                        }
+                      ],
+                      "kind": "const"
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "jsx",
+    "flow"
+  ],
+  "throws": "`declare export type` is not supported. Use `export type` instead. (1:15)"
+}

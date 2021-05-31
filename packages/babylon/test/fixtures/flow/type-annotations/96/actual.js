@@ -1,1 +1,0 @@
-import typeof * as namespace from "bar";

@@ -1,0 +1,60 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "samsung": "8.2"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { samsung }
+  proposal-private-property-in-object { samsung }
+  proposal-class-properties { samsung }
+  proposal-private-methods { samsung }
+  proposal-numeric-separator { samsung < 11 }
+  proposal-logical-assignment-operators { samsung }
+  proposal-nullish-coalescing-operator { samsung < 13 }
+  proposal-optional-chaining { samsung }
+  proposal-json-strings { samsung < 9 }
+  proposal-optional-catch-binding { samsung < 9 }
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-unicode-property-regex { samsung < 9 }
+  transform-named-capturing-groups-regex { samsung < 9 }
+  proposal-export-namespace-from { samsung < 11.0 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs3: `DEBUG` option
+
+Using targets: {
+  "samsung": "8.2"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable-samsung-8.2/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
+  es.symbol.description { "samsung":"8.2" }
+  es.array.flat { "samsung":"8.2" }
+  es.array.flat-map { "samsung":"8.2" }
+  es.array.iterator { "samsung":"8.2" }
+  es.array.reduce { "samsung":"8.2" }
+  es.array.reduce-right { "samsung":"8.2" }
+  es.array.unscopables.flat { "samsung":"8.2" }
+  es.array.unscopables.flat-map { "samsung":"8.2" }
+  es.math.hypot { "samsung":"8.2" }
+  es.object.from-entries { "samsung":"8.2" }
+  es.promise { "samsung":"8.2" }
+  es.promise.finally { "samsung":"8.2" }
+  es.string.replace { "samsung":"8.2" }
+  es.string.trim-end { "samsung":"8.2" }
+  es.string.trim-start { "samsung":"8.2" }
+  web.dom-collections.iterator { "samsung":"8.2" }
+  web.immediate { "samsung":"8.2" }
+  web.queue-microtask { "samsung":"8.2" }
+  web.url { "samsung":"8.2" }
+  web.url.to-json { "samsung":"8.2" }
+  web.url-search-params { "samsung":"8.2" }
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable-samsung-8.2/input.mjs] Based on your targets, regenerator-runtime import excluded.

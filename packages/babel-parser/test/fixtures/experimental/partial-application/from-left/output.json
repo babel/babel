@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":12}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":12}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":10,"end":22,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":12}},
+        "expression": {
+          "type": "CallExpression",
+          "start":10,"end":22,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":12}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":10,"end":17,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":7}},
+            "object": {
+              "type": "Identifier",
+              "start":10,"end":13,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "property": {
+              "type": "Identifier",
+              "start":14,"end":17,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "computed": false
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":18,"end":19,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":9},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":20,"end":21,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":11}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

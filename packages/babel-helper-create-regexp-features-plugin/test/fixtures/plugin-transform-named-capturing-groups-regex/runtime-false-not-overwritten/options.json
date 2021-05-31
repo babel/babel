@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["transform-named-capturing-groups-regex", { "runtime": false }, "name 1"],
+    ["transform-named-capturing-groups-regex", { "runtime": true }, "name 2"]
+  ]
+}

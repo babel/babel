@@ -1,0 +1,8 @@
+{
+  "externalHelpers": false,
+  "plugins": [
+    "transform-runtime",
+    "transform-template-literals",
+    "transform-modules-commonjs"
+  ]
+}

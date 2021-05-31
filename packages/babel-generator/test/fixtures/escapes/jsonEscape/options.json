@@ -1,0 +1,5 @@
+{
+  "BABEL_8_BREAKING": true,
+  "minified": true,
+  "jsescOption": { "json": true }
+}

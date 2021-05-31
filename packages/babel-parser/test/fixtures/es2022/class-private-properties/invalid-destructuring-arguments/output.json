@@ -1,0 +1,110 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "errors": [
+    "SyntaxError: Private names can only be used as the name of a class element (i.e. class C { #p = 42; #m() {} } )\n or a property of member expression (i.e. this.#p). (3:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":46,"loc":{"start":{"line":1,"column":8},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":12,"end":19,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":9}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":12,"end":14,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":4}},
+                "id": {
+                  "type": "Identifier",
+                  "start":13,"end":14,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":4},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":22,"end":44,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":24}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":22,"end":24,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":4}},
+                "id": {
+                  "type": "Identifier",
+                  "start":23,"end":24,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":4},"identifierName":"p"},
+                  "name": "p"
+                }
+              },
+              "value": {
+                "type": "ArrowFunctionExpression",
+                "start":27,"end":44,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":24}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "ObjectPattern",
+                    "start":28,"end":37,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":17}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":30,"end":35,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":15}},
+                        "method": false,
+                        "key": {
+                          "type": "PrivateName",
+                          "start":30,"end":32,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":12}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":31,"end":32,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":12},"identifierName":"x"},
+                            "name": "x"
+                          }
+                        },
+                        "shorthand": false,
+                        "value": {
+                          "type": "Identifier",
+                          "start":34,"end":35,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":15},"identifierName":"x"},
+                          "name": "x"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":42,"end":44,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":24}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

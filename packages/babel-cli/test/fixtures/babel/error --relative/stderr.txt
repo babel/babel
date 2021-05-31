@@ -1,0 +1,1 @@
+--relative requires --out-dir usage

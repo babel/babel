@@ -1,0 +1,269 @@
+{
+  "type": "File",
+  "start":0,"end":112,"loc":{"start":{"line":1,"column":0},"end":{"line":16,"column":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":112,"loc":{"start":{"line":1,"column":0},"end":{"line":16,"column":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}},
+        "expression": {
+          "type": "RecordExpression",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+          "properties": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":7,"end":30,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":23}},
+        "expression": {
+          "type": "RecordExpression",
+          "start":7,"end":29,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":22}},
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":10,"end":14,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":7}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":10,"end":11,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":4},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":13,"end":14,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":7}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ObjectProperty",
+              "start":16,"end":20,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":13}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":16,"end":17,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":10},"identifierName":"b"},
+                "name": "b"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":19,"end":20,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":13}},
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "2"
+                },
+                "value": 2
+              }
+            },
+            {
+              "type": "ObjectProperty",
+              "start":22,"end":26,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":19}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":23,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":16},"identifierName":"c"},
+                "name": "c"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":25,"end":26,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":19}},
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "3"
+                },
+                "value": 3
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":32,"end":70,"loc":{"start":{"line":5,"column":0},"end":{"line":10,"column":3}},
+        "expression": {
+          "type": "RecordExpression",
+          "start":32,"end":69,"loc":{"start":{"line":5,"column":0},"end":{"line":10,"column":2}},
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":37,"end":41,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":6}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":37,"end":38,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":3},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":40,"end":41,"loc":{"start":{"line":6,"column":5},"end":{"line":6,"column":6}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ObjectProperty",
+              "start":45,"end":65,"loc":{"start":{"line":7,"column":2},"end":{"line":9,"column":4}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":45,"end":46,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":3},"identifierName":"b"},
+                "name": "b"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "RecordExpression",
+                "start":48,"end":65,"loc":{"start":{"line":7,"column":5},"end":{"line":9,"column":4}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":55,"end":59,"loc":{"start":{"line":8,"column":4},"end":{"line":8,"column":8}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":55,"end":56,"loc":{"start":{"line":8,"column":4},"end":{"line":8,"column":5},"identifierName":"c"},
+                      "name": "c"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":58,"end":59,"loc":{"start":{"line":8,"column":7},"end":{"line":8,"column":8}},
+                      "extra": {
+                        "rawValue": 3,
+                        "raw": "3"
+                      },
+                      "value": 3
+                    }
+                  }
+                ],
+                "extra": {
+                  "trailingComma": 59
+                }
+              }
+            }
+          ],
+          "extra": {
+            "trailingComma": 65
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":72,"end":77,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":5}},
+        "expression": {
+          "type": "TupleExpression",
+          "start":72,"end":76,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":4}},
+          "elements": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":79,"end":91,"loc":{"start":{"line":14,"column":0},"end":{"line":14,"column":12}},
+        "expression": {
+          "type": "TupleExpression",
+          "start":79,"end":90,"loc":{"start":{"line":14,"column":0},"end":{"line":14,"column":11}},
+          "elements": [
+            {
+              "type": "NumericLiteral",
+              "start":81,"end":82,"loc":{"start":{"line":14,"column":2},"end":{"line":14,"column":3}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            },
+            {
+              "type": "NumericLiteral",
+              "start":84,"end":85,"loc":{"start":{"line":14,"column":5},"end":{"line":14,"column":6}},
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
+            },
+            {
+              "type": "NumericLiteral",
+              "start":87,"end":88,"loc":{"start":{"line":14,"column":8},"end":{"line":14,"column":9}},
+              "extra": {
+                "rawValue": 3,
+                "raw": "3"
+              },
+              "value": 3
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":93,"end":112,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":19}},
+        "expression": {
+          "type": "TupleExpression",
+          "start":93,"end":111,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":18}},
+          "elements": [
+            {
+              "type": "NumericLiteral",
+              "start":95,"end":96,"loc":{"start":{"line":16,"column":2},"end":{"line":16,"column":3}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            },
+            {
+              "type": "TupleExpression",
+              "start":98,"end":106,"loc":{"start":{"line":16,"column":5},"end":{"line":16,"column":13}},
+              "elements": [
+                {
+                  "type": "NumericLiteral",
+                  "start":100,"end":101,"loc":{"start":{"line":16,"column":7},"end":{"line":16,"column":8}},
+                  "extra": {
+                    "rawValue": 2,
+                    "raw": "2"
+                  },
+                  "value": 2
+                },
+                {
+                  "type": "NumericLiteral",
+                  "start":103,"end":104,"loc":{"start":{"line":16,"column":10},"end":{"line":16,"column":11}},
+                  "extra": {
+                    "rawValue": 3,
+                    "raw": "3"
+                  },
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "type": "NumericLiteral",
+              "start":108,"end":109,"loc":{"start":{"line":16,"column":15},"end":{"line":16,"column":16}},
+              "extra": {
+                "rawValue": 4,
+                "raw": "4"
+              },
+              "value": 4
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

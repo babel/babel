@@ -1,0 +1,11 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "modules": "umd"
+      }
+    ]
+  ]
+}

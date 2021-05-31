@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "proposal-private-methods",
+    "proposal-class-properties",
+    "transform-block-scoping"
+  ],
+  "assumptions": {
+    "constantSuper": true
+  }
+}

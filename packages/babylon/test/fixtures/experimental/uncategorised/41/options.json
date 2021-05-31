@@ -1,6 +1,0 @@
-{
-  "features": {
-    "es7.decorators": true
-  },
-  "throws": "Leading decorators must be attached to a class declaration (1:5)"
-}

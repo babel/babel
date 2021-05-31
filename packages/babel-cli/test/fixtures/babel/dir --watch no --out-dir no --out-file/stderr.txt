@@ -1,0 +1,2 @@
+babel:
+  --watch requires --out-file or --out-dir

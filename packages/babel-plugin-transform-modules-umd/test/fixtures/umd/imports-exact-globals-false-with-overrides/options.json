@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    [
+      "transform-modules-umd",
+      {
+        "globals": {
+          "foo-bar": "fooBAR",
+          "./mylib/foo-bar": "mylib.fooBar",
+          "fizzbuzz": "fizz.buzz"
+        }
+      }
+    ]
+  ]
+}

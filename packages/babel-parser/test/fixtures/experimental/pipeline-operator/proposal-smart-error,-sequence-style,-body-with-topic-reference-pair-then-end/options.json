@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "smart"
+      }
+    ]
+  ]
+}

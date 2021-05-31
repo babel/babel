@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "proposal-private-property-in-object",
+    "proposal-class-properties",
+    "proposal-private-methods",
+    "transform-classes"
+  ]
+}

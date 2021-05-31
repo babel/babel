@@ -1,0 +1,19 @@
+{
+  "name": "@babel/helper-plugin-test-runner",
+  "version": "7.13.10",
+  "description": "Helper function to support test runner",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-plugin-test-runner"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-plugin-test-runner",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/helper-transform-fixture-test-runner": "workspace:^7.13.10"
+  }
+}
