@@ -84,9 +84,9 @@
     "@babel/plugin-transform-unicode-regex": "workspace:^7.12.13",
     "@babel/preset-modules": "^0.1.4",
     "@babel/types": "workspace:^7.14.4",
-    "babel-plugin-polyfill-corejs2": "^0.2.0",
-    "babel-plugin-polyfill-corejs3": "^0.2.0",
-    "babel-plugin-polyfill-regenerator": "^0.2.0",
+    "babel-plugin-polyfill-corejs2": "^0.2.2",
+    "babel-plugin-polyfill-corejs3": "^0.2.2",
+    "babel-plugin-polyfill-regenerator": "^0.2.2",
     "core-js-compat": "^3.9.0",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
