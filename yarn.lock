@@ -604,7 +604,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-member-expression-to-functions@workspace:packages/babel-helper-member-expression-to-functions"
   dependencies:
-    "@babel/traverse": "workspace:^7.12.17"
+    "@babel/traverse": "workspace:*"
     "@babel/types": "workspace:^7.13.12"
   languageName: unknown
   linkType: soft
@@ -766,7 +766,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-simple-access@workspace:packages/babel-helper-simple-access"
   dependencies:
-    "@babel/traverse": "workspace:^7.12.17"
+    "@babel/traverse": "workspace:*"
     "@babel/types": "workspace:^7.13.12"
   languageName: unknown
   linkType: soft
@@ -3557,7 +3557,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.12.17, @babel/traverse@workspace:^7.13.0, @babel/traverse@workspace:^7.13.15, @babel/traverse@workspace:^7.14.0, @babel/traverse@workspace:^7.14.2, @babel/traverse@workspace:packages/babel-traverse":
+"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.13.0, @babel/traverse@workspace:^7.13.15, @babel/traverse@workspace:^7.14.0, @babel/traverse@workspace:^7.14.2, @babel/traverse@workspace:packages/babel-traverse":
   version: 0.0.0-use.local
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:

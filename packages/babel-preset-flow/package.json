@@ -2,7 +2,7 @@
   "name": "@babel/preset-flow",
   "version": "7.13.13",
   "description": "Babel preset for all Flow plugins.",
-  "author": "James Kyle <me@thejameskyle.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
@@ -12,7 +12,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-preset",
     "flowtype",
@@ -32,5 +32,8 @@
     "@babel/helper-plugin-test-runner": "workspace:*"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-preset-flow",
-  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20flow%22+is%3Aopen"
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20flow%22+is%3Aopen",
+  "engines": {
+    "node": ">=6.9.0"
+  }
 }

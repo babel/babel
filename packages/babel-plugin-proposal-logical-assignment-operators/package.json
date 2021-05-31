@@ -11,7 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
@@ -28,5 +28,9 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:*",
     "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.3"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-logical-assignment-operators"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-logical-assignment-operators",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

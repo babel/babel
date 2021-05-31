@@ -12,10 +12,14 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-get-function-arity": "workspace:^7.12.13",
     "@babel/template": "workspace:^7.12.13",
     "@babel/types": "workspace:^7.14.2"
-  }
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

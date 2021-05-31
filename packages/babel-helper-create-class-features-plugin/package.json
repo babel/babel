@@ -9,7 +9,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-create-class-features-plugin"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "publishConfig": {
     "access": "public"
   },
@@ -32,5 +32,8 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
     "@babel/preset-env": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

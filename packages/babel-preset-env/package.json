@@ -2,7 +2,7 @@
   "name": "@babel/preset-env",
   "version": "7.14.4",
   "description": "A Babel preset for each environment.",
-  "author": "Henry Zhu <hi@henryzoo.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-env",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20preset-env%22+is%3Aopen",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-preset-env"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
     "@babel/compat-data": "workspace:^7.14.4",
     "@babel/helper-compilation-targets": "workspace:^7.14.4",
@@ -98,5 +98,8 @@
     "@babel/core-7.12": "npm:@babel/core@7.12.9",
     "@babel/helper-plugin-test-runner": "workspace:*",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

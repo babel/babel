@@ -12,9 +12,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-function-name": "workspace:^7.12.13",
     "@babel/types": "workspace:^7.13.12"
-  }
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

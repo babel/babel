@@ -9,7 +9,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-compilation-targets"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "exports": {
     ".": "./lib/index.js"
   },
@@ -33,5 +33,8 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
     "@types/semver": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

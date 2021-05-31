@@ -2,7 +2,7 @@
   "name": "@babel/preset-react",
   "version": "7.13.13",
   "description": "Babel preset for all React plugins.",
-  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-react",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20react%22+is%3Aopen",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-preset-react"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^7.13.0",
     "@babel/helper-validator-option": "workspace:^7.12.17",
@@ -29,5 +29,8 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

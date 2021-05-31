@@ -2,7 +2,7 @@
   "name": "@babel/helper-plugin-utils",
   "version": "7.13.0",
   "description": "General utilities for plugins to use",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-plugin-utils",
   "license": "MIT",
   "publishConfig": {
@@ -13,5 +13,8 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-plugin-utils"
   },
-  "main": "lib/index.js"
+  "main": "./lib/index.js",
+  "engines": {
+    "node": ">=6.9.0"
+  }
 }

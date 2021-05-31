@@ -2,7 +2,7 @@
   "name": "@babel/cli",
   "version": "7.14.3",
   "description": "Babel command line.",
-  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-cli",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20cli%22+is%3Aopen",
   "license": "MIT",
@@ -47,5 +47,8 @@
   "bin": {
     "babel": "./bin/babel.js",
     "babel-external-helpers": "./bin/babel-external-helpers.js"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

@@ -2,7 +2,7 @@
   "name": "@babel/standalone",
   "version": "7.14.4",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
-  "main": "babel.js",
+  "main": "./babel.js",
   "files": [
     "babel.js",
     "babel.min.js"
@@ -115,7 +115,7 @@
     "transpile",
     "transpiler"
   ],
-  "author": "Daniel Lo Nigro <daniel@dan.cx> (http://dan.cx/)",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -128,5 +128,8 @@
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-standalone"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

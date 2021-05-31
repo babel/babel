@@ -12,7 +12,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^7.12.13",
     "@babel/helper-function-name": "workspace:^7.14.2",
@@ -32,5 +32,9 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
     "@babel/traverse": "workspace:*"
-  }
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

@@ -12,7 +12,7 @@
     "directory": "packages/babel-runtime-corejs2"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-runtime-corejs2",
-  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
     "core-js": "^2.6.5",
     "regenerator-runtime": "^0.13.4"
@@ -909,5 +909,8 @@
     "./core-js/reflect/set-prototype-of": "./core-js/reflect/set-prototype-of.js",
     "./core-js/reflect/set": "./core-js/reflect/set.js",
     "./core-js/date/now": "./core-js/date/now.js"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

@@ -12,12 +12,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
-  "author": "Justin Ridgewell <justin@ridgewell.name>",
+  "main": "./lib/index.js",
+  "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
     "@babel/types": "workspace:^7.13.12"
   },
   "devDependencies": {
-    "@babel/traverse": "workspace:^7.12.17"
+    "@babel/traverse": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

@@ -32,5 +32,9 @@
     "@babel/traverse": "workspace:*",
     "@babel/types": "workspace:*"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-async-do-expressions"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-async-do-expressions",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

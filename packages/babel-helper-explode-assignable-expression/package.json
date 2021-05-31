@@ -12,11 +12,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
     "@babel/types": "workspace:^7.13.0"
   },
   "devDependencies": {
     "@babel/traverse": "workspace:*"
-  }
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

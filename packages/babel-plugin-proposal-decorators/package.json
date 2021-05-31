@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-proposal-decorators",
   "version": "7.14.2",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -13,7 +13,7 @@
     "directory": "packages/babel-plugin-proposal-decorators"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-decorators",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel",
     "babel-plugin",
@@ -32,5 +32,8 @@
     "@babel/helper-plugin-test-runner": "workspace:*",
     "babel-plugin-polyfill-es-shims": "^0.2.0",
     "object.getownpropertydescriptors": "^2.1.1"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

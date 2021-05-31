@@ -11,7 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
@@ -26,5 +26,9 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-regex"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-regex",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

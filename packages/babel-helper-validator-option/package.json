@@ -12,5 +12,9 @@
     "access": "public"
   },
   "main": "./lib/index.js",
-  "exports": "./lib/index.js"
+  "exports": "./lib/index.js",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

@@ -2,7 +2,7 @@
   "name": "@babel/node",
   "version": "7.14.2",
   "description": "Babel command line",
-  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-node",
   "license": "MIT",
   "publishConfig": {
@@ -43,5 +43,8 @@
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

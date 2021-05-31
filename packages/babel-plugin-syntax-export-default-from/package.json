@@ -11,7 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
@@ -24,5 +24,9 @@
   "devDependencies": {
     "@babel/core": "workspace:*"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-export-default-from"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-export-default-from",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

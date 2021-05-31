@@ -2,7 +2,6 @@
   "name": "@babel/eslint-tests",
   "version": "7.14.4",
   "description": "Tests for babel/eslint-* packages",
-  "license": "MIT",
   "private": true,
   "dependencies": {
     "@babel/core": "workspace:^7.14.3",

@@ -9,7 +9,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-create-regexp-features-plugin"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "publishConfig": {
     "access": "public"
   },
@@ -27,5 +27,8 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

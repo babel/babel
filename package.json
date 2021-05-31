@@ -2,7 +2,6 @@
   "name": "babel",
   "version": "7.14.4",
   "private": true,
-  "license": "MIT",
   "type": "commonjs",
   "scripts": {
     "bootstrap": "make bootstrap",
@@ -90,7 +89,6 @@
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
   },
   "engines": {
-    "node": ">= 6.9.0",
     "yarn": ">=1.4.0"
   },
   "lint-staged": {

@@ -12,7 +12,7 @@
     "directory": "packages/babel-runtime"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-runtime",
-  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
     "regenerator-runtime": "^0.13.4"
   },
@@ -814,5 +814,8 @@
     "./regenerator": "./regenerator/index.js",
     "./regenerator/*.js": "./regenerator/*.js",
     "./regenerator/": "./regenerator/"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }
