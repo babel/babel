@@ -21,7 +21,7 @@ import {
 import State from "./state";
 import type { LookaheadState } from "./state";
 
-const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
+const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u", "d"]);
 
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
