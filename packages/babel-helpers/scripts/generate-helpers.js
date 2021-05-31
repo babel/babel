@@ -1,6 +1,6 @@
 import fs from "fs";
 import { join } from "path";
-import { URL } from "url";
+import { URL, fileURLToPath } from "url";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json"]);
@@ -23,7 +23,7 @@ import template from "@babel/template";
     const varName = isValidId ? helperName : `_${helperName}`;
 
     const fileContents = await fs.promises.readFile(
-      join(HELPERS_FOLDER.pathname, file),
+      join(fileURLToPath(HELPERS_FOLDER), file),
       "utf8"
     );
     const { minVersion } = fileContents.match(
