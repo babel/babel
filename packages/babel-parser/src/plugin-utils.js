@@ -85,6 +85,10 @@ export function validatePlugins(plugins: PluginList) {
       );
     }
 
+    const tupleSyntaxIsHash =
+      hasPlugin(plugins, "recordAndTuple") &&
+      getPluginOption(plugins, "recordAndTuple", "syntaxType") === "hash";
+
     if (proposal === "hack") {
       const topicToken = getPluginOption(
         plugins,
@@ -99,6 +103,16 @@ export function validatePlugins(plugins: PluginList) {
           `"pipelineOperator" in "proposal": "hack" mode also requires a "topicToken" option whose value must be one of: ${tokenList}.`,
         );
       }
+
+      if (topicToken === "#" && tupleSyntaxIsHash) {
+        throw new Error(
+          'Plugin conflict between `["pipelineOperator", { proposal: "hack", topicToken: "#" }]` and `["recordAndtuple", { syntaxType: "hash"}]`.',
+        );
+      }
+    } else if (proposal === "smart" && tupleSyntaxIsHash) {
+      throw new Error(
+        'Plugin conflict between `["pipelineOperator", { proposal: "smart" }]` and `["recordAndtuple", { syntaxType: "hash"}]`.',
+      );
     }
   }
 

@@ -136,7 +136,6 @@ export const ErrorMessages = makeErrorTemplates(
     PatternHasMethod: "Object pattern can't contain methods.",
     PipeBodyIsTighter:
       "Unexpected %0 after pipeline body; any %0 expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.",
-
     PipeTopicRequiresHackPipes:
       'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
     PipeTopicUnbound:
