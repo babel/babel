@@ -2391,7 +2391,7 @@ export default class ExpressionParser extends LValParser {
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
-    // All JavaScript reserved words are not longer than 10 characters.
+    // Every JavaScript reserved word is 10 characters or less.
     if (word.length > 10) {
       return;
     }
