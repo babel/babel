@@ -33,7 +33,7 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
-    "@babel-baseline/parser": "npm:@babel/parser@^7.14.0",
+    "@babel-baseline/parser": "npm:@babel/parser@^7.14.4",
     "@babel/code-frame": "workspace:*",
     "@babel/helper-fixtures": "workspace:*",
     "@babel/helper-validator-identifier": "workspace:*",

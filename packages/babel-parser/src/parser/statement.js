@@ -2114,7 +2114,7 @@ export default class StatementParser extends ExpressionParser {
       | N.ExportDefaultSpecifier,
     name: string,
   ): void {
-    if (this.state.exportedIdentifiers.indexOf(name) > -1) {
+    if (this.exportedIdentifiers.has(name)) {
       this.raise(
         node.start,
         name === "default"
@@ -2123,7 +2123,7 @@ export default class StatementParser extends ExpressionParser {
         name,
       );
     }
-    this.state.exportedIdentifiers.push(name);
+    this.exportedIdentifiers.add(name);
   }
 
   // Parses a comma-separated list of module exports.

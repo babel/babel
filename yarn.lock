@@ -5,12 +5,12 @@ __metadata:
   version: 4
   cacheKey: 7
 
-"@babel-baseline/parser@npm:@babel/parser@^7.14.0, npm-babel-parser@npm:@babel/parser@^7.14.0":
-  version: 7.14.0
-  resolution: "@babel/parser@npm:7.14.0"
+"@babel-baseline/parser@npm:@babel/parser@^7.14.4":
+  version: 7.14.4
+  resolution: "@babel/parser@npm:7.14.4"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: ef6165f3038b9f8761a02768ab14034f4935baf2e050a2924aa093f54e3164732bce7fee81b3c8ff3be03048091e4ea208a72b23a3715debf7fd06b79495c9e9
+  checksum: 3bc067c1ee0e0178d365e1b2988ea1a0d6d37af37870ea1a7e80729b3bdc40acda083cac44ce72f63a5b31a489e35120f617bd41f312dec4c86cf814cff8e64a
   languageName: node
   linkType: hard
 
@@ -963,7 +963,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
-    "@babel-baseline/parser": "npm:@babel/parser@^7.14.0"
+    "@babel-baseline/parser": "npm:@babel/parser@^7.14.4"
     "@babel/code-frame": "workspace:*"
     "@babel/helper-fixtures": "workspace:*"
     "@babel/helper-validator-identifier": "workspace:*"
@@ -11638,6 +11638,15 @@ fsevents@^1.2.7:
   dependencies:
     once: ^1.3.2
   checksum: c3130e565f3ac4b8d3b6b329d2f8a8391c844a7c8718bc4747b77d1b431fa5259be92d8e88ba1dd0f79963539146dae735f46d48540e079367a917a9adad7488
+  languageName: node
+  linkType: hard
+
+"npm-babel-parser@npm:@babel/parser@^7.14.0":
+  version: 7.14.0
+  resolution: "@babel/parser@npm:7.14.0"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: ef6165f3038b9f8761a02768ab14034f4935baf2e050a2924aa093f54e3164732bce7fee81b3c8ff3be03048091e4ea208a72b23a3715debf7fd06b79495c9e9
   languageName: node
   linkType: hard
 
