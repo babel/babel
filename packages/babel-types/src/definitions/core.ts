@@ -641,7 +641,12 @@ defineType("LogicalExpression", {
 });
 
 defineType("MemberExpression", {
-  builder: ["object", "property", "computed", "optional"],
+  builder: [
+    "object",
+    "property",
+    "computed",
+    ...(!process.env.BABEL_TYPES_8_BREAKING ? ["optional"] : []),
+  ],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal"],
   fields: {
