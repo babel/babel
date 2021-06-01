@@ -11,7 +11,7 @@ import * as N from "../../types";
 // Reference implementation: https://github.com/facebook/flow/blob/23aeb2a2ef6eb4241ce178fde5d8f17c5f747fb5/src/typing/env.ml#L536-L584
 class FlowScope extends Scope {
   // declare function foo(): type;
-  declareFunctions: string[] = [];
+  declareFunctions: Set<string> = new Set();
 }
 
 export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
@@ -24,7 +24,7 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
     if (bindingType & BIND_FLAGS_FLOW_DECLARE_FN) {
       this.checkRedeclarationInScope(scope, name, bindingType, pos);
       this.maybeExportDefined(scope, name);
-      scope.declareFunctions.push(name);
+      scope.declareFunctions.add(name);
       return;
     }
 
@@ -40,8 +40,8 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
 
     if (bindingType & BIND_FLAGS_FLOW_DECLARE_FN) {
       return (
-        !scope.declareFunctions.includes(name) &&
-        (scope.lexical.includes(name) || scope.functions.includes(name))
+        !scope.declareFunctions.has(name) &&
+        (scope.lexical.has(name) || scope.functions.has(name))
       );
     }
 
@@ -49,7 +49,7 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
   }
 
   checkLocalExport(id: N.Identifier) {
-    if (this.scopeStack[0].declareFunctions.indexOf(id.name) === -1) {
+    if (!this.scopeStack[0].declareFunctions.has(id.name)) {
       super.checkLocalExport(id);
     }
   }
