@@ -49,22 +49,26 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   }
 
   get inFunction() {
-    return (this.currentVarScope().flags & SCOPE_FUNCTION) > 0;
+    return (this.currentVarScopeFlags() & SCOPE_FUNCTION) > 0;
   }
   get allowSuper() {
-    return (this.currentThisScope().flags & SCOPE_SUPER) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_SUPER) > 0;
   }
   get allowDirectSuper() {
-    return (this.currentThisScope().flags & SCOPE_DIRECT_SUPER) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_DIRECT_SUPER) > 0;
   }
   get inClass() {
-    return (this.currentThisScope().flags & SCOPE_CLASS) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_CLASS) > 0;
+  }
+  get inClassAndNotInNonArrowFunction() {
+    const flags = this.currentThisScopeFlags();
+    return (flags & SCOPE_CLASS) > 0 && (flags & SCOPE_FUNCTION) === 0;
   }
   get inStaticBlock() {
-    return (this.currentThisScope().flags & SCOPE_STATIC_BLOCK) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_STATIC_BLOCK) > 0;
   }
   get inNonArrowFunction() {
-    return (this.currentThisScope().flags & SCOPE_FUNCTION) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_FUNCTION) > 0;
   }
   get treatFunctionsAsVar() {
     return this.treatFunctionsAsVarInScope(this.currentScope());
@@ -189,25 +193,22 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   }
 
   // $FlowIgnore
-  currentVarScope(): IScope {
+  currentVarScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
-      const scope = this.scopeStack[i];
-      if (scope.flags & SCOPE_VAR) {
-        return scope;
+      const { flags } = this.scopeStack[i];
+      if (flags & SCOPE_VAR) {
+        return flags;
       }
     }
   }
 
   // Could be useful for `arguments`, `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
   // $FlowIgnore
-  currentThisScope(): IScope {
+  currentThisScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
-      const scope = this.scopeStack[i];
-      if (
-        (scope.flags & SCOPE_VAR || scope.flags & SCOPE_CLASS) &&
-        !(scope.flags & SCOPE_ARROW)
-      ) {
-        return scope;
+      const { flags } = this.scopeStack[i];
+      if (flags & (SCOPE_VAR | SCOPE_CLASS) && !(flags & SCOPE_ARROW)) {
+        return flags;
       }
     }
   }

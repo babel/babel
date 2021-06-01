@@ -28,6 +28,7 @@ import {
   isStrictReservedWord,
   isStrictBindReservedWord,
   isIdentifierStart,
+  canBeReservedWord,
 } from "../util/identifier";
 import type { Pos } from "../util/location";
 import { Position } from "../util/location";
@@ -2358,13 +2359,14 @@ export default class ExpressionParser extends LValParser {
       // `class` and `function` keywords push function-type token context into this.context.
       // But there is no chance to pop the context if the keyword is consumed
       // as an identifier such as a property name.
-      const curContext = this.curContext();
-      if (
-        (type === tt._class || type === tt._function) &&
-        (curContext === ct.functionStatement ||
-          curContext === ct.functionExpression)
-      ) {
-        this.state.context.pop();
+      if (type === tt._class || type === tt._function) {
+        const curContext = this.curContext();
+        if (
+          curContext === ct.functionStatement ||
+          curContext === ct.functionExpression
+        ) {
+          this.state.context.pop();
+        }
       }
     } else {
       throw this.unexpected();
@@ -2389,12 +2391,22 @@ export default class ExpressionParser extends LValParser {
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
-    if (this.prodParam.hasYield && word === "yield") {
-      this.raise(startLoc, Errors.YieldBindingIdentifier);
+    // Every JavaScript reserved word is 10 characters or less.
+    if (word.length > 10) {
+      return;
+    }
+    // Most identifiers are not reservedWord-like, they don't need special
+    // treatments afterward, which very likely ends up throwing errors
+    if (!canBeReservedWord(word)) {
       return;
     }
 
-    if (word === "await") {
+    if (word === "yield") {
+      if (this.prodParam.hasYield) {
+        this.raise(startLoc, Errors.YieldBindingIdentifier);
+        return;
+      }
+    } else if (word === "await") {
       if (this.prodParam.hasAwait) {
         this.raise(startLoc, Errors.AwaitBindingIdentifier);
         return;
@@ -2407,16 +2419,13 @@ export default class ExpressionParser extends LValParser {
           Errors.AwaitBindingIdentifier,
         );
       }
+    } else if (word === "arguments") {
+      if (this.scope.inClassAndNotInNonArrowFunction) {
+        this.raise(startLoc, Errors.ArgumentsInClass);
+        return;
+      }
     }
 
-    if (
-      this.scope.inClass &&
-      !this.scope.inNonArrowFunction &&
-      word === "arguments"
-    ) {
-      this.raise(startLoc, Errors.ArgumentsInClass);
-      return;
-    }
     if (checkKeywords && isKeyword(word)) {
       this.raise(startLoc, Errors.UnexpectedKeyword, word);
       return;
