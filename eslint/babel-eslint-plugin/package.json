@@ -41,6 +41,6 @@
   },
   "devDependencies": {
     "clone-deep": "^4.0.1",
-    "eslint": "^7.5.0"
+    "eslint": "^7.27.0"
   }
 }
