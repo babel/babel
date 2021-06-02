@@ -766,6 +766,7 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+    const refExpressionErrors = new ExpressionErrors();
     this.state.maybeInArrowParameters = true;
 
     this.next(); // eat `(`
@@ -788,6 +789,7 @@ export default class ExpressionParser extends LValParser {
         base.type === "Import",
         base.type !== "Super",
         node,
+        refExpressionErrors,
       );
     }
     this.finishCallExpression(node, state.optionalChainMember);
@@ -801,6 +803,7 @@ export default class ExpressionParser extends LValParser {
         node,
       );
     } else {
+      this.checkExpressionErrors(refExpressionErrors, true);
       if (state.maybeAsyncArrow) {
         this.expressionScope.exit();
       }
@@ -894,6 +897,7 @@ export default class ExpressionParser extends LValParser {
     dynamicImport?: boolean,
     allowPlaceholder?: boolean,
     nodeForExtra?: ?N.Node,
+    refExpressionErrors?: ?ExpressionErrors,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let first = true;
@@ -931,7 +935,7 @@ export default class ExpressionParser extends LValParser {
       elts.push(
         this.parseExprListItem(
           false,
-          possibleAsyncArrow ? new ExpressionErrors() : undefined,
+          refExpressionErrors || new ExpressionErrors(),
           possibleAsyncArrow ? { start: 0 } : undefined,
           allowPlaceholder,
         ),
