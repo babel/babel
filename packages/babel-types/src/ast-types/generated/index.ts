@@ -316,6 +316,7 @@ export type Node =
   | ThisExpression
   | ThisTypeAnnotation
   | ThrowStatement
+  | TopicReference
   | TryStatement
   | TupleExpression
   | TupleTypeAnnotation
@@ -1548,20 +1549,6 @@ export interface ClassProperty extends BaseNode {
   readonly?: boolean | null;
 }
 
-export interface PipelineTopicExpression extends BaseNode {
-  type: "PipelineTopicExpression";
-  expression: Expression;
-}
-
-export interface PipelineBareFunction extends BaseNode {
-  type: "PipelineBareFunction";
-  callee: Expression;
-}
-
-export interface PipelinePrimaryTopicReference extends BaseNode {
-  type: "PipelinePrimaryTopicReference";
-}
-
 export interface ClassPrivateProperty extends BaseNode {
   type: "ClassPrivateProperty";
   key: PrivateName;
@@ -1645,6 +1632,24 @@ export interface StaticBlock extends BaseNode {
 export interface ModuleExpression extends BaseNode {
   type: "ModuleExpression";
   body: Program;
+}
+
+export interface TopicReference extends BaseNode {
+  type: "TopicReference";
+}
+
+export interface PipelineTopicExpression extends BaseNode {
+  type: "PipelineTopicExpression";
+  expression: Expression;
+}
+
+export interface PipelineBareFunction extends BaseNode {
+  type: "PipelineBareFunction";
+  callee: Expression;
+}
+
+export interface PipelinePrimaryTopicReference extends BaseNode {
+  type: "PipelinePrimaryTopicReference";
 }
 
 export interface TSParameterProperty extends BaseNode {
@@ -2070,12 +2075,15 @@ export type Expression =
   | JSXElement
   | JSXFragment
   | BindExpression
-  | PipelinePrimaryTopicReference
   | DoExpression
   | RecordExpression
   | TupleExpression
   | DecimalLiteral
   | ModuleExpression
+  | TopicReference
+  | PipelineTopicExpression
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference
   | TSAsExpression
   | TSTypeAssertion
   | TSNonNullExpression;
