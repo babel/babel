@@ -34,13 +34,13 @@ function addDeoptTest(code, type, expectedType) {
 
 describe("evaluation", function () {
   describe("evaluateTruthy", function () {
-    it("it should work with null", function () {
+    it("should work with null", function () {
       expect(
         getPath("false || a.length === 0;").get("body")[0].evaluateTruthy(),
       ).toBeUndefined();
     });
 
-    it("it should not mistake lack of confidence for falsy", function () {
+    it("should not mistake lack of confidence for falsy", function () {
       expect(
         getPath("foo || 'bar'").get("body")[0].evaluate().value,
       ).toBeUndefined();
@@ -117,7 +117,7 @@ describe("evaluation", function () {
     expect(eval_invalid_call.confident).toBe(false);
   });
 
-  it("it should not deopt vars in different scope", function () {
+  it("should not deopt vars in different scope", function () {
     const input =
       "var a = 5; function x() { var a = 5; var b = a + 1; } var b = a + 2";
     expect(
@@ -129,7 +129,7 @@ describe("evaluation", function () {
     ).toBe(7);
   });
 
-  it("it should not deopt let/const inside blocks", function () {
+  it("should not deopt let/const inside blocks", function () {
     expect(
       getPath("let x = 5; { let x = 1; } let y = x + 5")
         .get("body.2.declarations.0.init")

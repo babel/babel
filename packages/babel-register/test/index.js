@@ -145,7 +145,7 @@ describe("@babel/register", function () {
     expect(sourceMapSupport).toBe(false);
   });
 
-  it("returns concatenatable sourceRoot and sources", callback => {
+  it("returns concatenatable sourceRoot and sources", () => {
     // The Source Maps R3 standard https://sourcemaps.info/spec.html states
     // that `sourceRoot` is “prepended to the individual entries in the
     // ‘source’ field.” If `sources` contains file names, and `sourceRoot`
@@ -156,20 +156,18 @@ describe("@babel/register", function () {
     // requires() another with @babel/register active, and I couldn’t get
     // that working inside a test, possibly because of jest’s mocking
     // hooks, so we spawn a separate process.
-
-    spawnNode(["-r", registerFile, sourceMapTestFile], output => {
-      let err;
-
-      try {
-        const sourceMap = JSON.parse(output);
-        expect(sourceMap.map.sourceRoot + sourceMap.map.sources[0]).toBe(
-          sourceMapNestedTestFile,
-        );
-      } catch (e) {
-        err = e;
-      }
-
-      callback(err);
+    return new Promise((resolve, reject) => {
+      spawnNode(["-r", registerFile, sourceMapTestFile], output => {
+        try {
+          const sourceMap = JSON.parse(output);
+          expect(sourceMap.map.sourceRoot + sourceMap.map.sources[0]).toBe(
+            sourceMapNestedTestFile,
+          );
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      });
     });
   });
 
@@ -196,21 +194,20 @@ describe("@babel/register", function () {
     expect(result).toBe('"use strict";\n\nrequire("assert");');
   });
 
-  test("transforms modules used within register", callback => {
+  test("transforms modules used within register", () => {
     // Need a clean environment without `convert-source-map`
     // already in the require cache, so we spawn a separate process
 
-    spawnNode([internalModulesTestFile], output => {
-      let err;
-
-      try {
-        const { convertSourceMap } = JSON.parse(output);
-        expect(convertSourceMap).toMatch("/* transformed */");
-      } catch (e) {
-        err = e;
-      }
-
-      callback(err);
+    return new Promise((resolve, reject) => {
+      spawnNode([internalModulesTestFile], output => {
+        try {
+          const { convertSourceMap } = JSON.parse(output);
+          expect(convertSourceMap).toMatch("/* transformed */");
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      });
     });
   });
 });

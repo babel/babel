@@ -93,14 +93,15 @@ describe("@babel/register - caching", () => {
       expect(get()).toEqual({});
     });
 
-    it("should create the cache after dirty", cb => {
+    it("should create the cache after dirty", () => {
       load();
       setDirty();
-
-      process.nextTick(() => {
-        expect(fs.existsSync(testCacheFilename)).toBe(true);
-        expect(get()).toEqual({});
-        cb();
+      return new Promise(resolve => {
+        process.nextTick(() => {
+          expect(fs.existsSync(testCacheFilename)).toBe(true);
+          expect(get()).toEqual({});
+          resolve();
+        });
       });
     });
 
@@ -117,20 +118,22 @@ describe("@babel/register - caching", () => {
       });
     }
 
-    it("should be disabled when CACHE_PATH is not allowed to write", cb => {
+    it("should be disabled when CACHE_PATH is not allowed to write", () => {
       writeCache({ foo: "bar" }, 0o466);
 
       load();
       setDirty();
 
       expect(get()).toEqual({ foo: "bar" });
-      process.nextTick(() => {
-        load();
-        expect(get()).toEqual({});
-        expect(consoleWarnSpy.mock.calls[0][0]).toContain(
-          "Babel could not write cache to file",
-        );
-        cb();
+      return new Promise(resolve => {
+        process.nextTick(() => {
+          load();
+          expect(get()).toEqual({});
+          expect(consoleWarnSpy.mock.calls[0][0]).toContain(
+            "Babel could not write cache to file",
+          );
+          resolve();
+        });
       });
     });
   });

@@ -205,6 +205,7 @@ describe("bin/babel-node", function () {
       opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
     }
 
+    // eslint-disable-next-line jest/valid-title
     it(testName, buildTest(testName, opts), 20000);
   });
 });

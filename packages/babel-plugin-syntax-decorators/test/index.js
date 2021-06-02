@@ -53,17 +53,17 @@ describe("'decoratorsBeforeExport' option", function () {
   run(AFTER, false, false);
 
   function run(code, before, throws) {
-    const name =
-      (before === undefined ? "default" : before) +
-      " - decorators " +
-      (code === BEFORE ? "before" : "after") +
-      "export";
-
-    test(name, function () {
-      const expectTheParser = expect(
-        makeParser(code, { decoratorsBeforeExport: before }),
-      );
-      throws ? expectTheParser.toThrow() : expectTheParser.not.toThrow();
-    });
+    const codeTitle = code === BEFORE ? "before" : "after";
+    if (throws) {
+      test(`${before} - decorators ${codeTitle} export should throw`, function () {
+        expect(makeParser(code, { decoratorsBeforeExport: before })).toThrow();
+      });
+    } else {
+      test(`${before} - decorators ${codeTitle} export should not throw`, function () {
+        expect(
+          makeParser(code, { decoratorsBeforeExport: before }),
+        ).not.toThrow();
+      });
+    }
   }
 });

@@ -91,7 +91,7 @@ describe("normalize-options", () => {
       ).toThrow();
     });
 
-    it("allows exclusion of module plugins ", () => {
+    it("allows exclusion of module plugins", () => {
       expect(() =>
         normalizeOptions({ exclude: ["proposal-dynamic-import"] }),
       ).not.toThrow();

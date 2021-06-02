@@ -273,7 +273,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         // copy .babelignore file to tmp directory
         opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
       }
-
+      // eslint-disable-next-line jest/valid-title
       it(testName, buildTest(binName, testName, opts), 20000);
     });
   });
