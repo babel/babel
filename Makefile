@@ -232,7 +232,7 @@ endif
 	$(MAKE) clean
 
 bootstrap-only: clean-all
-	yarn install
+	$(YARN) install
 
 bootstrap: bootstrap-only
 	$(MAKE) generate-tsconfig build
