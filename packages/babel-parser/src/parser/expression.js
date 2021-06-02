@@ -781,11 +781,10 @@ export default class ExpressionParser extends LValParser {
       node.optional = optional;
     }
     if (optional) {
-      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      node.arguments = this.parseCallExpressionArguments(tt.parenR);
     } else {
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
-        state.maybeAsyncArrow,
         base.type === "Import",
         base.type !== "Super",
         node,
@@ -893,7 +892,6 @@ export default class ExpressionParser extends LValParser {
 
   parseCallExpressionArguments(
     close: TokenType,
-    possibleAsyncArrow: boolean,
     dynamicImport?: boolean,
     allowPlaceholder?: boolean,
     nodeForExtra?: ?N.Node,
@@ -936,7 +934,7 @@ export default class ExpressionParser extends LValParser {
         this.parseExprListItem(
           false,
           refExpressionErrors || new ExpressionErrors(),
-          possibleAsyncArrow ? { start: 0 } : undefined,
+          { start: 0 },
           allowPlaceholder,
         ),
       );
