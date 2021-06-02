@@ -83,30 +83,6 @@ defineType("ClassProperty", {
   },
 });
 
-defineType("PipelineTopicExpression", {
-  builder: ["expression"],
-  visitor: ["expression"],
-  fields: {
-    expression: {
-      validate: assertNodeType("Expression"),
-    },
-  },
-});
-
-defineType("PipelineBareFunction", {
-  builder: ["callee"],
-  visitor: ["callee"],
-  fields: {
-    callee: {
-      validate: assertNodeType("Expression"),
-    },
-  },
-});
-
-defineType("PipelinePrimaryTopicReference", {
-  aliases: ["Expression"],
-});
-
 defineType("ClassPrivateProperty", {
   visitor: ["key", "value", "decorators"],
   builder: ["key", "value", "decorators", "static"],
@@ -280,5 +256,39 @@ defineType("ModuleExpression", {
       validate: assertNodeType("Program"),
     },
   },
+  aliases: ["Expression"],
+});
+
+// https://github.com/tc39/proposal-pipeline-operator
+// https://github.com/js-choi/proposal-hack-pipes
+defineType("TopicReference", {
+  aliases: ["Expression"],
+});
+
+// https://github.com/tc39/proposal-pipeline-operator
+// https://github.com/js-choi/proposal-smart-pipes
+defineType("PipelineTopicExpression", {
+  builder: ["expression"],
+  visitor: ["expression"],
+  fields: {
+    expression: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+  aliases: ["Expression"],
+});
+
+defineType("PipelineBareFunction", {
+  builder: ["callee"],
+  visitor: ["callee"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+  aliases: ["Expression"],
+});
+
+defineType("PipelinePrimaryTopicReference", {
   aliases: ["Expression"],
 });

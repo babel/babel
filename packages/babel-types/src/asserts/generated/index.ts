@@ -1016,24 +1016,6 @@ export function assertClassProperty(
 ): asserts node is t.ClassProperty {
   assert("ClassProperty", node, opts);
 }
-export function assertPipelineTopicExpression(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.PipelineTopicExpression {
-  assert("PipelineTopicExpression", node, opts);
-}
-export function assertPipelineBareFunction(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.PipelineBareFunction {
-  assert("PipelineBareFunction", node, opts);
-}
-export function assertPipelinePrimaryTopicReference(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.PipelinePrimaryTopicReference {
-  assert("PipelinePrimaryTopicReference", node, opts);
-}
 export function assertClassPrivateProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -1105,6 +1087,30 @@ export function assertModuleExpression(
   opts?: object | null,
 ): asserts node is t.ModuleExpression {
   assert("ModuleExpression", node, opts);
+}
+export function assertTopicReference(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.TopicReference {
+  assert("TopicReference", node, opts);
+}
+export function assertPipelineTopicExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.PipelineTopicExpression {
+  assert("PipelineTopicExpression", node, opts);
+}
+export function assertPipelineBareFunction(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.PipelineBareFunction {
+  assert("PipelineBareFunction", node, opts);
+}
+export function assertPipelinePrimaryTopicReference(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.PipelinePrimaryTopicReference {
+  assert("PipelinePrimaryTopicReference", node, opts);
 }
 export function assertTSParameterProperty(
   node: object | null | undefined,
