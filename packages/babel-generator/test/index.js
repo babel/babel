@@ -741,13 +741,13 @@ describe("programmatic generation", function () {
     });
 
     if (process.env.BABEL_8_BREAKING) {
-      it("default in Babel 8", () => {
+      it("default", () => {
         const output = generate(string).code;
 
         expect(output).toBe(`"表格_副本"`);
       });
     } else {
-      it("default", () => {
+      it("default in Babel 7", () => {
         const output = generate(string).code;
 
         expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);

@@ -33,6 +33,13 @@ function transformFile(filename, opts, cb) {
 function transformFileSync(filename, opts) {
   return babel.transformFileSync(filename, { cwd, configFile: false, ...opts });
 }
+function transformFileAsync(filename, opts) {
+  return babel.transformFileAsync(filename, {
+    cwd,
+    configFile: false,
+    ...opts,
+  });
+}
 
 function transformAsync(code, opts) {
   return babel.transformAsync(code, { cwd, configFile: false, ...opts });
@@ -165,6 +172,20 @@ describe("api", function () {
         },
       );
     });
+  });
+
+  it("transformFileAsync", async function () {
+    const options = {
+      babelrc: false,
+    };
+    Object.freeze(options);
+    const res = await transformFileAsync(
+      cwd + "/fixtures/api/file.js",
+      options,
+    );
+    expect(res.code).toBe("foo();");
+    // keep user options untouched
+    expect(options).toEqual({ babelrc: false });
   });
 
   it("transformFileSync", function () {
