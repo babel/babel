@@ -766,22 +766,23 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const refExpressionErrors = state.maybeAsyncArrow
-      ? new ExpressionErrors()
-      : null;
-    this.state.maybeInArrowParameters = true;
+    let refExpressionErrors = null;
 
+    this.state.maybeInArrowParameters = true;
     this.next(); // eat `(`
 
     let node = this.startNodeAt(startPos, startLoc);
     node.callee = base;
+
     if (state.maybeAsyncArrow) {
       this.expressionScope.enter(newAsyncArrowScope());
+      refExpressionErrors = new ExpressionErrors();
     }
 
     if (state.optionalChainMember) {
       node.optional = optional;
     }
+
     if (optional) {
       node.arguments = this.parseCallExpressionArguments(tt.parenR);
     } else {
@@ -804,11 +805,8 @@ export default class ExpressionParser extends LValParser {
         node,
       );
     } else {
-      if (refExpressionErrors !== null) {
-        this.checkExpressionErrors(refExpressionErrors, true);
-      }
-
       if (state.maybeAsyncArrow) {
+        this.checkExpressionErrors(refExpressionErrors, true);
         this.expressionScope.exit();
       }
       this.toReferencedArguments(node);
