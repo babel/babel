@@ -767,28 +767,32 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    this.state.maybeInArrowParameters = true;
+    let refExpressionErrors = null;
 
+    this.state.maybeInArrowParameters = true;
     this.next(); // eat `(`
 
     let node = this.startNodeAt(startPos, startLoc);
     node.callee = base;
+
     if (state.maybeAsyncArrow) {
       this.expressionScope.enter(newAsyncArrowScope());
+      refExpressionErrors = new ExpressionErrors();
     }
 
     if (state.optionalChainMember) {
       node.optional = optional;
     }
+
     if (optional) {
-      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      node.arguments = this.parseCallExpressionArguments(tt.parenR);
     } else {
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
-        state.maybeAsyncArrow,
         base.type === "Import",
         base.type !== "Super",
         node,
+        refExpressionErrors,
       );
     }
     this.finishCallExpression(node, state.optionalChainMember);
@@ -803,6 +807,7 @@ export default class ExpressionParser extends LValParser {
       );
     } else {
       if (state.maybeAsyncArrow) {
+        this.checkExpressionErrors(refExpressionErrors, true);
         this.expressionScope.exit();
       }
       this.toReferencedArguments(node);
@@ -891,10 +896,10 @@ export default class ExpressionParser extends LValParser {
 
   parseCallExpressionArguments(
     close: TokenType,
-    possibleAsyncArrow: boolean,
     dynamicImport?: boolean,
     allowPlaceholder?: boolean,
     nodeForExtra?: ?N.Node,
+    refExpressionErrors?: ?ExpressionErrors,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let first = true;
@@ -932,8 +937,8 @@ export default class ExpressionParser extends LValParser {
       elts.push(
         this.parseExprListItem(
           false,
-          possibleAsyncArrow ? new ExpressionErrors() : undefined,
-          possibleAsyncArrow ? { start: 0 } : undefined,
+          refExpressionErrors,
+          { start: 0 },
           allowPlaceholder,
         ),
       );
