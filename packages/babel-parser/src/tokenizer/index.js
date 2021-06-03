@@ -486,6 +486,7 @@ export default class Tokenizer extends ParserErrors {
         );
       }
 
+      this.state.pos += 2;
       if (next === charCodes.leftCurlyBrace) {
         // #{
         this.finishToken(tt.braceHashL);
@@ -493,7 +494,6 @@ export default class Tokenizer extends ParserErrors {
         // #[
         this.finishToken(tt.bracketHashL);
       }
-      this.state.pos += 2;
     } else if (isIdentifierStart(next)) {
       ++this.state.pos;
       this.finishToken(tt.privateName, this.readWord1(next));
