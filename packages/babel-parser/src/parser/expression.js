@@ -766,7 +766,9 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const refExpressionErrors = new ExpressionErrors();
+    const refExpressionErrors = state.maybeAsyncArrow
+      ? new ExpressionErrors()
+      : null;
     this.state.maybeInArrowParameters = true;
 
     this.next(); // eat `(`
@@ -802,7 +804,10 @@ export default class ExpressionParser extends LValParser {
         node,
       );
     } else {
-      this.checkExpressionErrors(refExpressionErrors, true);
+      if (refExpressionErrors !== null) {
+        this.checkExpressionErrors(refExpressionErrors, true);
+      }
+
       if (state.maybeAsyncArrow) {
         this.expressionScope.exit();
       }
