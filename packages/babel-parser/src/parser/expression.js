@@ -935,12 +935,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       elts.push(
-        this.parseExprListItem(
-          false,
-          refExpressionErrors,
-          { start: 0 },
-          allowPlaceholder,
-        ),
+        this.parseExprListItem(false, refExpressionErrors, allowPlaceholder),
       );
     }
 
@@ -2296,7 +2291,6 @@ export default class ExpressionParser extends LValParser {
   parseExprListItem(
     allowEmpty: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
-    refNeedsArrowPos: ?Pos,
     allowPlaceholder: ?boolean,
   ): ?N.Expression {
     let elt;
@@ -2308,6 +2302,7 @@ export default class ExpressionParser extends LValParser {
     } else if (this.match(tt.ellipsis)) {
       const spreadNodeStartPos = this.state.start;
       const spreadNodeStartLoc = this.state.startLoc;
+      const refNeedsArrowPos = { start: 0 };
       elt = this.parseParenItem(
         this.parseSpread(refExpressionErrors, refNeedsArrowPos),
         spreadNodeStartPos,
@@ -2322,6 +2317,7 @@ export default class ExpressionParser extends LValParser {
       this.next();
       elt = this.finishNode(node, "ArgumentPlaceholder");
     } else {
+      const refNeedsArrowPos = { start: 0 };
       elt = this.parseMaybeAssignAllowIn(
         refExpressionErrors,
         this.parseParenItem,
