@@ -933,7 +933,7 @@ export default class ExpressionParser extends LValParser {
       elts.push(
         this.parseExprListItem(
           false,
-          refExpressionErrors || new ExpressionErrors(),
+          refExpressionErrors,
           { start: 0 },
           allowPlaceholder,
         ),
