@@ -99,8 +99,6 @@ export default declare(api => {
               t.memberExpression(
                 t.cloneNode(receiverLVal),
                 node.callee.property,
-                false,
-                false,
               ),
             ),
             ...argsInitializers,
@@ -114,8 +112,6 @@ export default declare(api => {
                       t.memberExpression(
                         t.cloneNode(functionLVal),
                         t.identifier("call"),
-                        false,
-                        false,
                       ),
                       [t.cloneNode(receiverLVal), ...args],
                     ),
