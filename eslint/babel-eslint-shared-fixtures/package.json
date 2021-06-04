@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "workspace:^7.12.13",
+    "@babel/eslint-parser": "workspace:*",
     "@babel/plugin-proposal-class-properties": "workspace:^7.12.13",
     "@babel/plugin-proposal-decorators": "workspace:^7.12.13",
     "@babel/plugin-proposal-do-expressions": "workspace:^7.12.13",
