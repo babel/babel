@@ -21,6 +21,8 @@ import rollupReplace from "@rollup/plugin-replace";
 import { terser as rollupTerser } from "rollup-plugin-terser";
 import _rollupDts from "rollup-plugin-dts";
 const { default: rollupDts } = _rollupDts;
+import { Worker as JestWorker } from "jest-worker";
+import glob from "glob";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import formatCode from "./scripts/utils/formatCode.js";
@@ -249,6 +251,44 @@ function buildBabel(exclude) {
       rename(file => path.resolve(file.base, mapSrcToLib(file.relative)))
     )
     .pipe(gulp.dest(base));
+}
+
+function createWorker() {
+  const worker = new JestWorker(require.resolve("./babel-worker.cjs"), {
+    numWorkers: require("os").cpus().length / 2 - 1,
+    exposedMethods: ["transform"],
+  });
+  worker.getStdout().on("data", chunk => process.stdout.write(chunk));
+  worker.getStderr().on("data", chunk => process.stderr.write(chunk));
+  return worker;
+}
+
+async function buildBabel2(ignore = [], useWorker) {
+  const worker = useWorker ? createWorker() : require("./babel-worker.js");
+  const files = await new Promise((resolve, reject) => {
+    glob(
+      defaultSourcesGlob,
+      {
+        ignore: ignore.map(p => `./${p.src}/**`),
+      },
+      (err, files) => {
+        if (err) reject(err);
+        resolve(files);
+      }
+    );
+  });
+
+  const promises = [];
+  for (const file of files) {
+    // @example ./packages/babel-parser/src/index.js
+    const dest = "./" + mapSrcToLib(file.slice(2));
+    promises.push(worker.transform(file, dest));
+  }
+  return Promise.all(promises).finally(() => {
+    if (useWorker) {
+      worker.end();
+    }
+  });
 }
 
 /**
@@ -517,7 +557,7 @@ gulp.task(
   gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
 );
 
-gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
+gulp.task("build-babel", () => buildBabel2(/* exclude */ libBundles, true));
 
 gulp.task(
   "build",
@@ -536,7 +576,11 @@ gulp.task(
 
 gulp.task("default", gulp.series("build"));
 
-gulp.task("build-no-bundle", () => buildBabel());
+gulp.task("build-no-bundle1", () => buildBabel(undefined, true));
+// First complete build on workers for complilation speed
+gulp.task("build-no-bundle", () => buildBabel2(undefined, true));
+// Incremental builds is main thread for faster communication
+gulp.task("build-no-bundle-watch", () => buildBabel2(undefined, false));
 
 gulp.task(
   "build-dev",
@@ -556,7 +600,7 @@ gulp.task(
 gulp.task(
   "watch",
   gulp.series("build-dev", function watch() {
-    gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle"));
+    gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
     gulp.watch(
       babelStandalonePluginConfigGlob,
       gulp.task("generate-standalone")
