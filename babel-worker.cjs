@@ -6,7 +6,6 @@ const fancyLog = require("fancy-log");
 
 function needCompile(src, dest) {
   let destStat;
-  const srcStat = statSync(src);
   try {
     destStat = statSync(dest);
   } catch (err) {
@@ -16,6 +15,7 @@ function needCompile(src, dest) {
       throw err;
     }
   }
+  const srcStat = statSync(src);
   return srcStat.mtimeMs > destStat.mtimeMs;
 }
 
