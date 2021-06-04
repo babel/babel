@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":3}},
+  "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
   "program": {
     "type": "Program",
-    "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":3}},
+    "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -14,15 +14,6 @@
           "type": "RecordExpression",
           "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
           "properties": []
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":4,"end":7,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3}},
-        "expression": {
-          "type": "TupleExpression",
-          "start":4,"end":7,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3}},
-          "elements": []
         }
       }
     ],
@@ -59,36 +50,6 @@
     },
     {
       "type": {
-        "label": "#[",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start":4,"end":6,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":2}}
-    },
-    {
-      "type": {
-        "label": "]",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start":6,"end":7,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3}}
-    },
-    {
-      "type": {
         "label": "eof",
         "beforeExpr": false,
         "startsExpr": false,
@@ -100,7 +61,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":7,"end":7,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":3}}
+      "start":3,"end":3,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":3}}
     }
   ]
 }
