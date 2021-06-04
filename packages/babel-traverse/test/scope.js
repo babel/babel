@@ -578,12 +578,16 @@ describe("scope", () => {
           ),
         );
       };
-      ["let", "const"].forEach(name => {
-        it(name, () => {
-          const ast = createTryCatch(name);
+      it("let", () => {
+        const ast = createTryCatch("let");
 
-          expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
-        });
+        expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+      });
+
+      it("const", () => {
+        const ast = createTryCatch("const");
+
+        expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
       });
 
       it("var", () => {
@@ -666,30 +670,34 @@ describe("scope", () => {
       };
 
       for (const [kind1, kind2, success] of cases) {
-        it(`${kind1}/${kind2}`, () => {
-          const ast = createAST(kind1, kind2);
-
-          if (success) {
+        if (success) {
+          it(`${kind1}/${kind2} should succeed`, () => {
+            const ast = createAST(kind1, kind2);
             expect(() => getPath(ast)).not.toThrow();
-          } else {
+          });
+        } else {
+          it(`${kind1}/${kind2} should fail`, () => {
+            const ast = createAST(kind1, kind2);
             expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
-          }
-        });
+          });
+        }
 
         if (kind1 !== kind2) {
           // todo: remove the if allowed
           if (kind1 === "const" && (kind2 === "function" || kind2 === "var")) {
             continue;
           }
-          it(`${kind2}/${kind1}`, () => {
-            const ast = createAST(kind2, kind1);
-
-            if (success) {
+          if (success) {
+            it(`${kind2}/${kind1} should succeed`, () => {
+              const ast = createAST(kind2, kind1);
               expect(() => getPath(ast)).not.toThrow();
-            } else {
+            });
+          } else {
+            it(`${kind2}/${kind1} should fail`, () => {
+              const ast = createAST(kind2, kind1);
               expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
-            }
-          });
+            });
+          }
         }
       }
     });

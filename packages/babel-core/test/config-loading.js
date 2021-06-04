@@ -188,25 +188,20 @@ describe("@babel/core config loading", () => {
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 0) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options2.plugins[0]).not.toBe(options1.plugins[0]);
+      for (let i = 1; i < options1.plugins.length; i++) {
+        expect(options2.plugins[i]).toBe(options1.plugins[i]);
       }
 
       process.env.INVALIDATE_PLUGIN3 = true;
 
       const options3 = loadConfig(opts).options;
       expect(options3.plugins.length).toBe(options1.plugins.length);
-
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 0 || i === 5) {
-          expect(options3.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options3.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options3.plugins.length).toBe(6);
+      expect(options3.plugins[0]).not.toBe(options1.plugins[0]);
+      expect(options3.plugins[5]).not.toBe(options1.plugins[5]);
+      for (let i = 1; i < 5; i++) {
+        expect(options3.plugins[i]).toBe(options1.plugins[i]);
       }
     });
 
@@ -219,26 +214,21 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
-
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 5) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options2.plugins.length).toBe(6);
+      expect(options2.plugins[5]).not.toBe(options1.plugins[5]);
+      for (let i = 0; i < 5; i++) {
+        expect(options2.plugins[i]).toBe(options1.plugins[i]);
       }
 
       process.env.INVALIDATE_PRESET2 = true;
 
       const options3 = loadConfig(opts).options;
       expect(options3.plugins.length).toBe(options1.plugins.length);
-
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 4 || i === 5) {
-          expect(options3.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options3.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options3.plugins.length).toBe(6);
+      expect(options3.plugins[4]).not.toBe(options1.plugins[4]);
+      expect(options3.plugins[5]).not.toBe(options1.plugins[5]);
+      for (let i = 0; i < 4; i++) {
+        expect(options3.plugins[i]).toBe(options1.plugins[i]);
       }
     });
 
@@ -251,14 +241,14 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
+      expect(options2.plugins[0]).not.toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).not.toBe(options1.plugins[1]);
+      expect(options2.plugins[4]).not.toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).not.toBe(options1.plugins[5]);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 0 || i === 1 || i === 4 || i === 5 || i === 6) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[2]).toBe(options1.plugins[2]);
+      expect(options2.plugins[3]).toBe(options1.plugins[3]);
     });
   });
 
@@ -318,14 +308,15 @@ describe("@babel/core config loading", () => {
         plugins: opts.plugins.map(([plg, opt]) => [plg, { ...opt }]),
       }).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options2.plugins.length; i++) {
-        if (i === 2) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[2]).not.toBe(options1.plugins[2]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[3]).toBe(options1.plugins[3]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should invalidate the presets when given a fresh options", () => {
@@ -338,14 +329,15 @@ describe("@babel/core config loading", () => {
         presets: opts.presets.map(([plg, opt]) => [plg, { ...opt }]),
       }).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options2.plugins.length; i++) {
-        if (i === 3) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[3]).not.toBe(options1.plugins[3]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[2]).toBe(options1.plugins[2]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should invalidate the programmatic plugins", () => {
@@ -357,14 +349,15 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 2) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[2]).not.toBe(options1.plugins[2]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[3]).toBe(options1.plugins[3]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should invalidate the programmatic presets and their children", () => {
@@ -376,14 +369,15 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 3) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[3]).not.toBe(options1.plugins[3]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[2]).toBe(options1.plugins[2]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should thrown when plugin is not valid", () => {

@@ -740,15 +740,19 @@ describe("programmatic generation", function () {
       expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
     });
 
-    it("default", () => {
-      const output = generate(string).code;
+    if (process.env.BABEL_8_BREAKING) {
+      it("default", () => {
+        const output = generate(string).code;
 
-      if (process.env.BABEL_8_BREAKING) {
         expect(output).toBe(`"表格_副本"`);
-      } else {
+      });
+    } else {
+      it("default in Babel 7", () => {
+        const output = generate(string).code;
+
         expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
-      }
-    });
+      });
+    }
   });
 
   describe("typescript interface declaration", () => {

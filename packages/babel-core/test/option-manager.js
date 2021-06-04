@@ -229,38 +229,31 @@ describe("option-manager", () => {
   });
 
   describe("presets", function () {
-    function presetTest(name) {
-      it(name, function () {
-        const options = loadOptions({
+    it.each([
+      "es5_function",
+      "es5_object",
+      "es2015_default_function",
+      "es2015_default_object",
+    ])("%p should work", name => {
+      const options = loadOptions({
+        presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
+      });
+
+      expect(Array.isArray(options.plugins)).toBe(true);
+      expect(options.plugins).toHaveLength(1);
+      expect(options.presets).toHaveLength(0);
+    });
+
+    it.each([
+      ["es2015_named", /Must export a default export when using ES6 modules/],
+      ["es2015_invalid", /Unsupported format: string/],
+      ["es5_invalid", /Unsupported format: string/],
+    ])("%p should throw %p", (name, msg) => {
+      expect(() =>
+        loadOptions({
           presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
-        });
-
-        expect(Array.isArray(options.plugins)).toBe(true);
-        expect(options.plugins).toHaveLength(1);
-        expect(options.presets).toHaveLength(0);
-      });
-    }
-
-    function presetThrowsTest(name, msg) {
-      it(name, function () {
-        expect(() =>
-          loadOptions({
-            presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
-          }),
-        ).toThrow(msg);
-      });
-    }
-
-    presetTest("es5_function");
-    presetTest("es5_object");
-    presetTest("es2015_default_function");
-    presetTest("es2015_default_object");
-
-    presetThrowsTest(
-      "es2015_named",
-      /Must export a default export when using ES6 modules/,
-    );
-    presetThrowsTest("es2015_invalid", /Unsupported format: string/);
-    presetThrowsTest("es5_invalid", /Unsupported format: string/);
+        }),
+      ).toThrow(msg);
+    });
   });
 });

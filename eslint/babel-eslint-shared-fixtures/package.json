@@ -15,6 +15,6 @@
     "@babel/preset-env": "workspace:^7.12.13",
     "@babel/preset-flow": "workspace:^7.12.13",
     "@babel/preset-react": "workspace:^7.12.13",
-    "eslint": "^7.5.0"
+    "eslint": "^7.27.0"
   }
 }

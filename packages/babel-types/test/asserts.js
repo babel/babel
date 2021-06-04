@@ -15,7 +15,7 @@ describe("asserts", () => {
     if (k.startsWith("assert") && k !== "assertNode") {
       const nodeType = k.replace("assert", "");
 
-      it(nodeType, () => {
+      it(`${nodeType} on unknown AST type should throw`, () => {
         expect(() => {
           t[k]({ type: "FlavorTownDeclaration" }, {});
         }).toThrow(

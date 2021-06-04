@@ -22,7 +22,7 @@ describe("builders", function () {
 
       for (const name in values) {
         const value = values[name];
-        it(name, function () {
+        it(`${name} is valid`, function () {
           const result = createTypeAnnotationBasedOnTypeof(value);
           expect(result).toMatchSnapshot();
         });

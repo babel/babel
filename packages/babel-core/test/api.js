@@ -33,6 +33,13 @@ function transformFile(filename, opts, cb) {
 function transformFileSync(filename, opts) {
   return babel.transformFileSync(filename, { cwd, configFile: false, ...opts });
 }
+function transformFileAsync(filename, opts) {
+  return babel.transformFileAsync(filename, {
+    cwd,
+    configFile: false,
+    ...opts,
+  });
+}
 
 function transformAsync(code, opts) {
   return babel.transformAsync(code, { cwd, configFile: false, ...opts });
@@ -147,18 +154,38 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
-  it("transformFile", function (done) {
+  it("transformFile", function () {
     const options = {
       babelrc: false,
     };
     Object.freeze(options);
-    transformFile(cwd + "/fixtures/api/file.js", options, function (err, res) {
-      if (err) return done(err);
-      expect(res.code).toBe("foo();");
-      // keep user options untouched
-      expect(options).toEqual({ babelrc: false });
-      done();
+    return new Promise((resolve, reject) => {
+      transformFile(
+        cwd + "/fixtures/api/file.js",
+        options,
+        function (err, res) {
+          if (err) return reject(err);
+          expect(res.code).toBe("foo();");
+          // keep user options untouched
+          expect(options).toEqual({ babelrc: false });
+          resolve();
+        },
+      );
     });
+  });
+
+  it("transformFileAsync", async function () {
+    const options = {
+      babelrc: false,
+    };
+    Object.freeze(options);
+    const res = await transformFileAsync(
+      cwd + "/fixtures/api/file.js",
+      options,
+    );
+    expect(res.code).toBe("foo();");
+    // keep user options untouched
+    expect(options).toEqual({ babelrc: false });
   });
 
   it("transformFileSync", function () {
@@ -759,38 +786,42 @@ describe("api", function () {
       babelrc: false,
     };
 
-    it("only syntax plugin available", function (done) {
-      transformFile(
-        cwd + "/fixtures/api/parsing-errors/only-syntax/file.js",
-        options,
-        function (err) {
-          expect(err.message).toMatch(
-            "Support for the experimental syntax 'pipelineOperator' isn't currently enabled (1:3):",
-          );
-          expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-pipeline-operator (https://git.io/vb4SU) to the " +
-              "'plugins' section of your Babel config to enable transformation.",
-          );
-          done();
-        },
-      );
+    it("only syntax plugin available", function () {
+      return new Promise(resolve => {
+        transformFile(
+          cwd + "/fixtures/api/parsing-errors/only-syntax/file.js",
+          options,
+          function (err) {
+            expect(err.message).toMatch(
+              "Support for the experimental syntax 'pipelineOperator' isn't currently enabled (1:3):",
+            );
+            expect(err.message).toMatch(
+              "Add @babel/plugin-proposal-pipeline-operator (https://git.io/vb4SU) to the " +
+                "'plugins' section of your Babel config to enable transformation.",
+            );
+            resolve();
+          },
+        );
+      });
     });
 
-    it("both syntax and transform plugin available", function (done) {
-      transformFile(
-        cwd + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
-        options,
-        function (err) {
-          expect(err.message).toMatch(
-            "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
-          );
-          expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
-              "'plugins' section of your Babel config to enable transformation.",
-          );
-          done();
-        },
-      );
+    it("both syntax and transform plugin available", function () {
+      return new Promise(resolve => {
+        transformFile(
+          cwd + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
+          options,
+          function (err) {
+            expect(err.message).toMatch(
+              "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
+            );
+            expect(err.message).toMatch(
+              "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
+                "'plugins' section of your Babel config to enable transformation.",
+            );
+            resolve();
+          },
+        );
+      });
     });
   });
 
