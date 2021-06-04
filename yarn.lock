@@ -5763,6 +5763,7 @@ __metadata:
     eslint-plugin-prettier: ^3.4.0
     fancy-log: ^1.3.3
     flow-bin: ^0.123.0
+    glob: ^7.1.7
     gulp: ^4.0.2
     gulp-babel: ^8.0.0
     gulp-filter: ^5.1.0
@@ -5771,6 +5772,7 @@ __metadata:
     gulp-revert-path: ^2.0.0
     husky: ^3.0.0
     jest: ^27.0.0
+    jest-worker: ^27.0.2
     lint-staged: ^9.2.0
     lodash: ^4.17.21
     mergeiterator: ^1.2.5
@@ -8835,9 +8837,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.0.0, glob@npm:^7.0.3, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6":
-  version: 7.1.6
-  resolution: "glob@npm:7.1.6"
+"glob@npm:^7.0.0, glob@npm:^7.0.3, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.1.7":
+  version: 7.1.7
+  resolution: "glob@npm:7.1.7"
   dependencies:
     fs.realpath: ^1.0.0
     inflight: ^1.0.4
@@ -8845,7 +8847,7 @@ fsevents@^1.2.7:
     minimatch: ^3.0.4
     once: ^1.3.0
     path-is-absolute: ^1.0.0
-  checksum: 789977b52432865bd63846da5c75a6efc2c56abdc0cb5ffcdb8e91eeb67a58fa5594c1195d18b2b4aff99675b0739ed6bd61024b26562e0cca18c8f993efdc82
+  checksum: 352f74f08247db5420161a2f68f2bd84b53228b5fcfc9dcc37cd54d3f19ec0232495d84aeff1286d0727059e9fdc1031400e00b971bdc59e30f8f82b199c9d02
   languageName: node
   linkType: hard
 
@@ -10530,14 +10532,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-worker@npm:^27.0.1":
-  version: 27.0.1
-  resolution: "jest-worker@npm:27.0.1"
+"jest-worker@npm:^27.0.1, jest-worker@npm:^27.0.2":
+  version: 27.0.2
+  resolution: "jest-worker@npm:27.0.2"
   dependencies:
     "@types/node": "*"
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
-  checksum: c99fcfd6bf2ef0c9fef30e08fb00d7fe951be84d2cff37a3d8983d683857b150a7ac60829ed30893c69277a1d74b57fc2b8aae83ded208fd574985fd9b04162f
+  checksum: bfbfd3d0af94a5505e841719bba4f57823305a3333b3dcecad333eea517c18ee3ba528e8fab017444ad93666ca15b73f1969b71fe0ba9f9abec8843a74b081e7
   languageName: node
   linkType: hard
 
