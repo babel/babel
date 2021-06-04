@@ -3565,6 +3565,7 @@ __metadata:
     "@babel/code-frame": "workspace:^7.12.13"
     "@babel/generator": "workspace:^7.14.2"
     "@babel/helper-function-name": "workspace:^7.14.2"
+    "@babel/helper-hoist-variables": "workspace:^7.13.0"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-split-export-declaration": "workspace:^7.12.13"
     "@babel/parser": "workspace:^7.14.2"

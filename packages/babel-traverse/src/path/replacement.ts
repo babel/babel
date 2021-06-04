@@ -6,35 +6,7 @@ import NodePath from "./index";
 import { path as pathCache } from "../cache";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
-
-const hoistVariablesVisitor = {
-  Function(path) {
-    path.skip();
-  },
-
-  VariableDeclaration(path) {
-    if (path.node.kind !== "var") return;
-
-    const bindings = path.getBindingIdentifiers();
-    for (const key of Object.keys(bindings)) {
-      path.scope.push({ id: bindings[key] });
-    }
-
-    const exprs = [];
-
-    for (const declar of path.node.declarations as Array<any>) {
-      if (declar.init) {
-        exprs.push(
-          t.expressionStatement(
-            t.assignmentExpression("=", declar.id, declar.init),
-          ),
-        );
-      }
-    }
-
-    path.replaceWithMultiple(exprs);
-  },
-};
+import hoistVariables from "@babel/helper-hoist-variables";
 
 /**
  * Replace a node with an array of multiple. This method performs the following steps:
@@ -238,7 +210,16 @@ export function replaceExpressionWithStatements(
     t.CallExpression & { callee: t.ArrowFunctionExpression }
   >;
 
-  this.traverse(hoistVariablesVisitor);
+  // hoist variable declaration in do block
+  // `(do { var x = 1; x;})` -> `var x; (() => { x = 1; return x; })()`
+  const callee = (this as ThisType).get("callee");
+  hoistVariables(
+    callee.get("body"),
+    (id: t.Identifier) => {
+      this.scope.push({ id });
+    },
+    "var",
+  );
 
   // add implicit returns to all ending expression statements
   const completionRecords: Array<NodePath> = (this as ThisType)
@@ -252,7 +233,6 @@ export function replaceExpressionWithStatements(
       let uid = loop.getData("expressionReplacementReturnUid");
 
       if (!uid) {
-        const callee = (this as ThisType).get("callee");
         uid = callee.scope.generateDeclaredUidIdentifier("ret");
         callee
           .get("body")
@@ -272,10 +252,11 @@ export function replaceExpressionWithStatements(
     }
   }
 
-  const callee = this.get("callee") as NodePath<t.FunctionExpression>;
-
   // This is an IIFE, so we don't need to worry about the noNewArrows assumption
   callee.arrowFunctionToExpression();
+  // Fixme: we can not `assert this is NodePath<t.FunctionExpression>` in `arrowFunctionToExpression`
+  // because it is not a class method known at compile time.
+  const newCallee = callee as unknown as NodePath<t.FunctionExpression>;
 
   // (() => await xxx)() -> await (async () => await xxx)();
   const needToAwaitFunction =
@@ -293,18 +274,18 @@ export function replaceExpressionWithStatements(
       t.FUNCTION_TYPES,
     );
   if (needToAwaitFunction) {
-    callee.set("async", true);
+    newCallee.set("async", true);
     // yield* will await the generator return result
     if (!needToYieldFunction) {
       this.replaceWith(t.awaitExpression((this as ThisType).node));
     }
   }
   if (needToYieldFunction) {
-    callee.set("generator", true);
+    newCallee.set("generator", true);
     this.replaceWith(t.yieldExpression((this as ThisType).node, true));
   }
 
-  return callee.get("body.body");
+  return newCallee.get("body.body");
 }
 
 export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {
