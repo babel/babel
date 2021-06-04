@@ -250,7 +250,7 @@ async function buildBabel(useWorker, ignore = []) {
     promises.push(worker.transform(file, dest));
   }
   return Promise.all(promises).finally(() => {
-    if (useWorker) {
+    if (worker.end !== undefined) {
       worker.end();
     }
   });
