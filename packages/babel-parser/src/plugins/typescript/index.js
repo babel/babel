@@ -1927,8 +1927,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       let accessibility: ?N.Accessibility;
       let readonly = false;
+      let override = false;
       if (allowModifiers !== undefined) {
         accessibility = this.parseAccessModifier();
+        override = !!this.tsParseModifier(["override"]);
         readonly = !!this.tsParseModifier(["readonly"]);
         if (allowModifiers === false && (accessibility || readonly)) {
           this.raise(startPos, TSErrors.UnexpectedParameterModifier);
@@ -1945,6 +1947,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         if (accessibility) pp.accessibility = accessibility;
         if (readonly) pp.readonly = readonly;
+        if (override) pp.override = override;
         if (elt.type !== "Identifier" && elt.type !== "AssignmentPattern") {
           this.raise(pp.start, TSErrors.UnsupportedParameterPropertyKind);
         }
