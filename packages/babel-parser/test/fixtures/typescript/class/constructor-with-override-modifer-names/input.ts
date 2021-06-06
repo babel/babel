@@ -1,5 +1,5 @@
 class D extends B {
-  constructor(protected override readonly foo: string) {
+  constructor(override foo: string) {
     super(foo);
   }
 }
