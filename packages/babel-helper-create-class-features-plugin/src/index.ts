@@ -168,13 +168,16 @@ export function createClassFeaturePlugin({
 
         if (!props.length && !isDecorated) return;
 
-        let ref;
-
+        let ref = undefined;
         if (path.isClassExpression() || !path.node.id) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
           ref = t.cloneNode(path.node.id);
+        }
+
+        if (ref !== undefined) {
+          ref.innerBinding = path.node.id;
         }
 
         // NODE: These three functions don't support decorators yet,
