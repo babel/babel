@@ -1,0 +1,96 @@
+{
+  "type": "File",
+  "start":0,"end":98,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":98,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":98,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"D"},
+          "name": "D"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":98,"loc":{"start":{"line":1,"column":18},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":22,"end":96,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":33,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":13},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":34,"end":73,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":53}},
+                  "accessibility": "protected",
+                  "readonly": true,
+                  "override": true,
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":62,"end":73,"loc":{"start":{"line":2,"column":42},"end":{"line":2,"column":53},"identifierName":"foo"},
+                    "name": "foo",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":65,"end":73,"loc":{"start":{"line":2,"column":45},"end":{"line":2,"column":53}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":67,"end":73,"loc":{"start":{"line":2,"column":47},"end":{"line":2,"column":53}}
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":75,"end":96,"loc":{"start":{"line":2,"column":55},"end":{"line":4,"column":3}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":81,"end":92,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":15}},
+                    "expression": {
+                      "type": "CallExpression",
+                      "start":81,"end":91,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":14}},
+                      "callee": {
+                        "type": "Super",
+                        "start":81,"end":86,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":9}}
+                      },
+                      "arguments": [
+                        {
+                          "type": "Identifier",
+                          "start":87,"end":90,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":13},"identifierName":"foo"},
+                          "name": "foo"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
