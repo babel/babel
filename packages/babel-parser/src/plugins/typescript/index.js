@@ -2043,7 +2043,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseSubscriptState,
     ): N.Expression {
       if (!this.hasPrecedingLineBreak() && this.match(tt.bang)) {
-        this.state.exprAllowed = false;
         this.next();
 
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(

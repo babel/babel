@@ -558,7 +558,6 @@ export default class Tokenizer extends ParserErrors {
     let type = code === charCodes.asterisk ? tt.star : tt.modulo;
     let width = 1;
     let next = this.input.charCodeAt(this.state.pos + 1);
-    const exprAllowed = this.state.exprAllowed;
 
     // Exponentiation operator **
     if (code === charCodes.asterisk && next === charCodes.asterisk) {
@@ -567,7 +566,7 @@ export default class Tokenizer extends ParserErrors {
       type = tt.exponent;
     }
 
-    if (next === charCodes.equalsTo && !exprAllowed) {
+    if (next === charCodes.equalsTo && !this.state.inType) {
       width++;
       type = tt.assign;
     }
