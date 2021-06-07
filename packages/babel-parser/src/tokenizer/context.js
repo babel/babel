@@ -25,8 +25,6 @@ export const types: {
   braceExpression: new TokContext("{", true),
   recordExpression: new TokContext("#{", true),
   templateQuasi: new TokContext("${", false),
-  parenStatement: new TokContext("(", false),
-  parenExpression: new TokContext("(", true),
   template: new TokContext("`", true, true),
 };
 
@@ -40,7 +38,7 @@ export const types: {
 // When `=>` is eaten, the context update of `yield` is executed, however,
 // `this.prodParam` still has `[Yield]` production because it is not yet updated
 
-tt.parenR.updateContext = tt.braceR.updateContext = function () {
+tt.braceR.updateContext = function () {
   if (this.state.context.length === 1) {
     this.state.exprAllowed = true;
     return;
@@ -74,18 +72,6 @@ tt.braceL.updateContext = function (prevType) {
 
 tt.dollarBraceL.updateContext = function () {
   this.state.context.push(types.templateQuasi);
-  this.state.exprAllowed = true;
-};
-
-tt.parenL.updateContext = function (prevType) {
-  const statementParens =
-    prevType === tt._if ||
-    prevType === tt._for ||
-    prevType === tt._with ||
-    prevType === tt._while;
-  this.state.context.push(
-    statementParens ? types.parenStatement : types.parenExpression,
-  );
   this.state.exprAllowed = true;
 };
 
