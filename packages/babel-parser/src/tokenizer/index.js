@@ -1558,58 +1558,6 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  braceIsBlock(prevType: TokenType): boolean {
-    const parent = this.curContext();
-    if (parent === ct.functionExpression || parent === ct.functionStatement) {
-      return true;
-    }
-    if (
-      prevType === tt.colon &&
-      (parent === ct.braceStatement || parent === ct.braceExpression)
-    ) {
-      return !parent.isExpr;
-    }
-
-    // The check for `tt.name && exprAllowed` detects whether we are
-    // after a `yield` or `of` construct. See the `updateContext` for
-    // `tt.name`.
-    if (
-      prevType === tt._return ||
-      (prevType === tt.name && this.state.exprAllowed)
-    ) {
-      return this.hasPrecedingLineBreak();
-    }
-
-    if (
-      prevType === tt._else ||
-      prevType === tt.semi ||
-      prevType === tt.eof ||
-      prevType === tt.parenR ||
-      prevType === tt.arrow
-    ) {
-      return true;
-    }
-
-    if (prevType === tt.braceL) {
-      return parent === ct.braceStatement;
-    }
-
-    if (
-      prevType === tt._var ||
-      prevType === tt._const ||
-      prevType === tt.name
-    ) {
-      return false;
-    }
-
-    if (prevType === tt.relational) {
-      // `class C<T> { ... }`
-      return true;
-    }
-
-    return !this.state.exprAllowed;
-  }
-
   updateContext(prevType: TokenType): void {
     const type = this.state.type;
     let update;

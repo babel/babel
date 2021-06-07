@@ -628,7 +628,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.braceL)) {
         const curContext = this.curContext();
         if (curContext === tc.j_oTag) {
-          this.state.context.push(tc.braceExpression);
+          this.state.context.push(tc.brace);
         } else if (curContext === tc.j_expr) {
           this.state.context.push(tc.templateQuasi);
         } else {

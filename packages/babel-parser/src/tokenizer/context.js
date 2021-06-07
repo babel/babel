@@ -21,8 +21,7 @@ export class TokContext {
 export const types: {
   [key: string]: TokContext,
 } = {
-  braceStatement: new TokContext("{", false),
-  braceExpression: new TokContext("{", true),
+  brace: new TokContext("{", false),
   recordExpression: new TokContext("#{", true),
   templateQuasi: new TokContext("${", false),
   template: new TokContext("`", true, true),
@@ -63,10 +62,8 @@ tt.name.updateContext = function (prevType) {
   this.state.exprAllowed = allowed;
 };
 
-tt.braceL.updateContext = function (prevType) {
-  this.state.context.push(
-    this.braceIsBlock(prevType) ? types.braceStatement : types.braceExpression,
-  );
+tt.braceL.updateContext = function () {
+  this.state.context.push(types.brace);
   this.state.exprAllowed = true;
 };
 
