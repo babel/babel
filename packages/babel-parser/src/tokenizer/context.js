@@ -22,7 +22,6 @@ export const types: {
   [key: string]: TokContext,
 } = {
   brace: new TokContext("{", false),
-  recordExpression: new TokContext("#{", true),
   templateQuasi: new TokContext("${", false),
   template: new TokContext("`", true, true),
 };
@@ -47,7 +46,8 @@ tt.braceR.updateContext = function () {
   this.state.exprAllowed = !out.isExpr;
 };
 
-tt.braceL.updateContext = function () {
+// we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
+tt.braceL.updateContext = tt.braceHashL.updateContext = function () {
   this.state.context.push(types.brace);
   this.state.exprAllowed = true;
 };
@@ -72,10 +72,4 @@ tt.backQuote.updateContext = function () {
     this.state.context.push(types.template);
   }
   this.state.exprAllowed = false;
-};
-
-// we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
-tt.braceHashL.updateContext = function () {
-  this.state.context.push(types.recordExpression);
-  this.state.exprAllowed = true; /* tt.braceHashL.beforeExpr */
 };
