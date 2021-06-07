@@ -3706,20 +3706,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "EnumDeclaration");
     }
 
-    updateContext(prevType: TokenType): void {
-      if (
-        this.match(tt.name) &&
-        this.state.value === "of" &&
-        prevType === tt.name &&
-        this.input.slice(this.state.lastTokStart, this.state.lastTokEnd) ===
-          "interface"
-      ) {
-        this.state.exprAllowed = false;
-      } else {
-        super.updateContext(prevType);
-      }
-    }
-
     // check if the next token is a tt.relation("<")
     isLookaheadToken_lt(): boolean {
       const next = this.nextTokenStart();

@@ -47,21 +47,6 @@ tt.braceR.updateContext = function () {
   this.state.exprAllowed = !out.isExpr;
 };
 
-tt.name.updateContext = function (prevType) {
-  let allowed = false;
-  if (prevType !== tt.dot) {
-    if (
-      this.state.value === "of" &&
-      !this.state.exprAllowed &&
-      prevType !== tt._function &&
-      prevType !== tt._class
-    ) {
-      allowed = true;
-    }
-  }
-  this.state.exprAllowed = allowed;
-};
-
 tt.braceL.updateContext = function () {
   this.state.context.push(types.brace);
   this.state.exprAllowed = true;
