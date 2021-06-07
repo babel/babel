@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":130,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":2}},
   "errors": [
-    "SyntaxError: Topic reference was used in a lexical context without topic binding. (6:15)",
+    "SyntaxError: Topic reference was used in a lexical context without topic binding. (6:13)",
     "SyntaxError: Pipeline is in topic style but does not use topic reference. (1:9)"
   ],
   "program": {
