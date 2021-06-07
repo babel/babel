@@ -1264,7 +1264,7 @@ export default class ExpressionParser extends LValParser {
     if (pipeProposal) {
       // A pipe-operator proposal is active.
 
-      const tokenType = this.state.type;
+      const { type: tokenType, start } = this.state;
 
       if (this.testTopicReferenceConfiguration(pipeProposal, tokenType)) {
         // The token matches the plugin’s configuration.
@@ -1295,10 +1295,10 @@ export default class ExpressionParser extends LValParser {
           // it is outside of a pipe body.
           // Raise recoverable errors.
           if (pipeProposal === "smart") {
-            this.raise(this.state.start, Errors.PrimaryTopicNotAllowed);
+            this.raise(start, Errors.PrimaryTopicNotAllowed);
           } else {
             // In this case, `pipeProposal === "hack"` is true.
-            this.raise(this.state.start, Errors.PipeTopicUnbound);
+            this.raise(start, Errors.PipeTopicUnbound);
           }
         }
 
@@ -1306,7 +1306,7 @@ export default class ExpressionParser extends LValParser {
       } else {
         // The token does not match the plugin’s configuration.
         throw this.raise(
-          this.state.start,
+          start,
           Errors.PipeTopicUnconfiguredToken,
           tokenType.label,
         );
