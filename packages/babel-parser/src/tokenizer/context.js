@@ -35,12 +35,10 @@ export const types: {
 // `this.prodParam` still has `[Yield]` production because it is not yet updated
 
 tt.braceR.updateContext = function () {
-  if (this.state.context.length === 1) {
-    this.state.exprAllowed = true;
-    return;
+  if (this.state.context.length > 1) {
+    this.state.context.pop();
   }
 
-  this.state.context.pop();
   this.state.exprAllowed = true;
 };
 
