@@ -181,7 +181,6 @@ export type LookaheadState = {
   type: TokenType,
   start: number,
   end: number,
-  /* Used only in readSlashToken */
-  exprAllowed: boolean,
+  /* Used only in readToken_mult_modulo */
   inType: boolean,
 };

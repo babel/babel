@@ -190,7 +190,6 @@ export default class Tokenizer extends ParserErrors {
       end: state.end,
       lastTokEnd: state.end,
       context: [this.curContext()],
-      exprAllowed: state.exprAllowed,
       inType: state.inType,
     };
   }
