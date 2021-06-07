@@ -28,8 +28,6 @@ export const types: {
   parenStatement: new TokContext("(", false),
   parenExpression: new TokContext("(", true),
   template: new TokContext("`", true, true),
-  functionExpression: new TokContext("function", true),
-  functionStatement: new TokContext("function", false),
 };
 
 // Token-specific context update code
@@ -48,11 +46,7 @@ tt.parenR.updateContext = tt.braceR.updateContext = function () {
     return;
   }
 
-  let out = this.state.context.pop();
-  if (out === types.braceStatement && this.curContext().token === "function") {
-    out = this.state.context.pop();
-  }
-
+  const out = this.state.context.pop();
   this.state.exprAllowed = !out.isExpr;
 };
 
@@ -99,22 +93,7 @@ tt.incDec.updateContext = function () {
   // tokExprAllowed stays unchanged
 };
 
-tt._function.updateContext = tt._class.updateContext = function (prevType) {
-  if (
-    prevType.beforeExpr &&
-    prevType !== tt.semi &&
-    prevType !== tt._else &&
-    !(prevType === tt._return && this.hasPrecedingLineBreak()) &&
-    !(
-      (prevType === tt.colon || prevType === tt.braceL) &&
-      this.curContext() === types.braceStatement
-    )
-  ) {
-    this.state.context.push(types.functionExpression);
-  } else {
-    this.state.context.push(types.functionStatement);
-  }
-
+tt._function.updateContext = tt._class.updateContext = function () {
   this.state.exprAllowed = false;
 };
 

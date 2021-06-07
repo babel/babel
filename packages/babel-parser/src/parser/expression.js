@@ -1018,19 +1018,6 @@ export default class ExpressionParser extends LValParser {
 
         if (!containsEsc && id.name === "async" && !this.canInsertSemicolon()) {
           if (this.match(tt._function)) {
-            const last = this.state.context.length - 1;
-            if (this.state.context[last] !== ct.functionStatement) {
-              // Since "async" is an identifier and normally identifiers
-              // can't be followed by expression, the tokenizer assumes
-              // that "function" starts a statement.
-              // Fixing it in the tokenizer would mean tracking not only the
-              // previous token ("async"), but also the one before to know
-              // its beforeExpr value.
-              // It's easier and more efficient to adjust the context here.
-              throw new Error("Internal error");
-            }
-            this.state.context[last] = ct.functionExpression;
-
             this.next();
             return this.parseFunction(
               this.startNodeAtNode(id),
