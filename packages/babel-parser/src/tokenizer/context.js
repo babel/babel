@@ -7,23 +7,21 @@
 import { types as tt } from "./types";
 
 export class TokContext {
-  constructor(token: string, isExpr?: boolean, preserveSpace?: boolean) {
+  constructor(token: string, preserveSpace?: boolean) {
     this.token = token;
-    this.isExpr = !!isExpr;
     this.preserveSpace = !!preserveSpace;
   }
 
   token: string;
-  isExpr: boolean;
   preserveSpace: boolean;
 }
 
 export const types: {
   [key: string]: TokContext,
 } = {
-  brace: new TokContext("{", false),
-  templateQuasi: new TokContext("${", false),
-  template: new TokContext("`", true, true),
+  brace: new TokContext("{"),
+  templateQuasi: new TokContext("${"),
+  template: new TokContext("`", true),
 };
 
 // Token-specific context update code
@@ -42,8 +40,8 @@ tt.braceR.updateContext = function () {
     return;
   }
 
-  const out = this.state.context.pop();
-  this.state.exprAllowed = !out.isExpr;
+  this.state.context.pop();
+  this.state.exprAllowed = true;
 };
 
 // we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR

@@ -45,9 +45,9 @@ const JsxErrors = makeErrorTemplates(
 
 // Be aware that this file is always executed and not only when the plugin is enabled.
 // Therefore this contexts and tokens do always exist.
-tc.j_oTag = new TokContext("<tag", false);
-tc.j_cTag = new TokContext("</tag", false);
-tc.j_expr = new TokContext("<tag>...</tag>", true, true);
+tc.j_oTag = new TokContext("<tag");
+tc.j_cTag = new TokContext("</tag");
+tc.j_expr = new TokContext("<tag>...</tag>", true);
 
 tt.jsxName = new TokenType("jsxName");
 tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
