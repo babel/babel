@@ -20,6 +20,7 @@ import "core-js/modules/es.string.replace.js";
 import "core-js/modules/es.string.trim.js";
 import "core-js/modules/es.string.trim-end.js";
 import "core-js/modules/es.string.trim-start.js";
+import "core-js/modules/es.typed-array.sort.js";
 import "core-js/modules/web.queue-microtask.js";
 import "core-js/modules/web.url.js";
 import "core-js/modules/web.url.to-json.js";
