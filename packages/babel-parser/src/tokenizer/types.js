@@ -140,6 +140,7 @@ export const types: { [name: string]: TokenType } = {
 
   eq: new TokenType("=", { beforeExpr, isAssign }),
   assign: new TokenType("_=", { beforeExpr, isAssign }),
+  slashAssign: new TokenType("_=", { beforeExpr, isAssign }),
   incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
   bang: new TokenType("!", { beforeExpr, prefix, startsExpr }),
   tilde: new TokenType("~", { beforeExpr, prefix, startsExpr }),

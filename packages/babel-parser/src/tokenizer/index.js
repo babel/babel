@@ -525,16 +525,9 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readToken_slash(): void {
-    // '/'
-    if (this.state.exprAllowed && !this.state.inType) {
-      ++this.state.pos;
-      this.readRegexp();
-      return;
-    }
-
     const next = this.input.charCodeAt(this.state.pos + 1);
     if (next === charCodes.equalsTo) {
-      this.finishOp(tt.assign, 2);
+      this.finishOp(tt.slashAssign, 2);
     } else {
       this.finishOp(tt.slash, 1);
     }
@@ -983,7 +976,7 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readRegexp(): void {
-    const start = this.state.pos;
+    const start = this.state.start + 1;
     let escaped, inClass;
     for (;;) {
       if (this.state.pos >= this.length) {

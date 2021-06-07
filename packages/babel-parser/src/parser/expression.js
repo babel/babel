@@ -988,11 +988,6 @@ export default class ExpressionParser extends LValParser {
   // AsyncArrowFunction
 
   parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
-    // If a division operator appears in an expression position, the
-    // tokenizer got confused, and we force it to read a regexp instead.
-    if (this.state.type === tt.slash) this.readRegexp();
-
-    const canBeArrow = this.state.potentialArrowAt === this.state.start;
     let node;
 
     switch (this.state.type) {
@@ -1017,6 +1012,7 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "ThisExpression");
 
       case tt.name: {
+        const canBeArrow = this.state.potentialArrowAt === this.state.start;
         const containsEsc = this.state.containsEsc;
         const id = this.parseIdentifier();
 
@@ -1073,7 +1069,9 @@ export default class ExpressionParser extends LValParser {
         return this.parseDo(false);
       }
 
-      case tt.regexp: {
+      case tt.slash:
+      case tt.slashAssign: {
+        this.readRegexp();
         return this.parseRegExpLiteral(this.state.value);
       }
 
@@ -1097,8 +1095,10 @@ export default class ExpressionParser extends LValParser {
       case tt._false:
         return this.parseBooleanLiteral(false);
 
-      case tt.parenL:
+      case tt.parenL: {
+        const canBeArrow = this.state.potentialArrowAt === this.state.start;
         return this.parseParenAndDistinguishExpression(canBeArrow);
+      }
 
       case tt.bracketBarL:
       case tt.bracketHashL: {
