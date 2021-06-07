@@ -28,7 +28,7 @@
     "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
     "babel-plugin-polyfill-corejs3": "^0.2.2",
-    "core-js-pure": "^3.8.1"
+    "core-js-pure": "^3.14.0"
   },
   "engines": {
     "node": ">=6.9.0"

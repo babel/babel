@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/register": "workspace:^7.13.16",
     "commander": "^4.0.1",
-    "core-js": "^3.2.1",
+    "core-js": "^3.14.0",
     "node-environment-flags": "^1.0.5",
     "regenerator-runtime": "^0.13.4",
     "v8flags": "^3.1.1"
