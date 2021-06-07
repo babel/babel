@@ -152,7 +152,7 @@ __metadata:
   dependencies:
     "@mdn/browser-compat-data": ^3.3.4
     core-js-compat: ^3.14.0
-    electron-to-chromium: ^1.3.738
+    electron-to-chromium: ^1.3.749
   languageName: unknown
   linkType: soft
 
@@ -6225,10 +6225,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001230":
-  version: 1.0.30001230
-  resolution: "caniuse-lite@npm:1.0.30001230"
-  checksum: bb319bedf33722a2d16e28a7e0d13fabde59be4fccd48d80939254228c7a49059b74bd99b313596f75c997480f9097cc3e7cda7c7687e5a096bb9c75260c145d
+"caniuse-lite@npm:1.0.30001235":
+  version: 1.0.30001235
+  resolution: "caniuse-lite@npm:1.0.30001235"
+  checksum: 4951fd24c07f6e1c5b05e4b2e121564eb0f50eca4aceb6901e60764a5fa5361c79721e2ccc60fb2134312f3b46ae8dda622e325e2f2ed5b864d844640e5bf8b9
   languageName: node
   linkType: hard
 
@@ -7286,10 +7286,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.3.738":
-  version: 1.3.738
-  resolution: "electron-to-chromium@npm:1.3.738"
-  checksum: efaab265c28df8ffa0741441ec7c9e53f03562af3453584eaeac53fa695ec169b3de1ab6698b2e0e54c3fed19558459ef0960672f94f32811c724a7c1c03417e
+"electron-to-chromium@npm:1.3.749":
+  version: 1.3.749
+  resolution: "electron-to-chromium@npm:1.3.749"
+  checksum: 7140caa32d93b8377280263aefae18aa27abddcac5426cd1c487f615ff3b0c99e5a8f474b7d27cb6d7f70de1c5872b89ea3d3f6476f052d6ddb24b567d39143c
   languageName: node
   linkType: hard
 
