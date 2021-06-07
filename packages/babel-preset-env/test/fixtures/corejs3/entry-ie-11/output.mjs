@@ -27,6 +27,7 @@ import "core-js/modules/es.array.join.js";
 import "core-js/modules/es.array.map.js";
 import "core-js/modules/es.array.of.js";
 import "core-js/modules/es.array.slice.js";
+import "core-js/modules/es.array.sort.js";
 import "core-js/modules/es.array.species.js";
 import "core-js/modules/es.array.splice.js";
 import "core-js/modules/es.array.unscopables.flat.js";
