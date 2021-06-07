@@ -1707,11 +1707,6 @@ export default class ExpressionParser extends LValParser {
       node.properties.push(prop);
     }
 
-    // The tokenizer uses `braceIsBlock` to detect whether `{` starts a block statement.
-    // If `{` is a block statement, `exprAllowed` will be `true`.
-    // However the tokenizer can not handle edge cases like `0 ? a : { a : 1 } / 2`, here
-    // we update `exprAllowed` when an object-like is parsed.
-    this.state.exprAllowed = false;
     this.next();
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
