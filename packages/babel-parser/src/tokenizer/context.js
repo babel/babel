@@ -34,38 +34,29 @@ export const types: {
 // When `=>` is eaten, the context update of `yield` is executed, however,
 // `this.prodParam` still has `[Yield]` production because it is not yet updated
 
-tt.braceR.updateContext = function () {
-  if (this.state.context.length > 1) {
-    this.state.context.pop();
+tt.braceR.updateContext = function (context) {
+  if (context.length > 1) {
+    context.pop();
   }
-
-  this.state.exprAllowed = true;
 };
 
 // we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
-tt.braceL.updateContext = tt.braceHashL.updateContext = function () {
-  this.state.context.push(types.brace);
-  this.state.exprAllowed = true;
+tt.braceL.updateContext = tt.braceHashL.updateContext = function (context) {
+  context.push(types.brace);
 };
 
-tt.dollarBraceL.updateContext = function () {
-  this.state.context.push(types.templateQuasi);
-  this.state.exprAllowed = true;
+tt.dollarBraceL.updateContext = function (context) {
+  context.push(types.templateQuasi);
 };
 
 tt.incDec.updateContext = function () {
   // tokExprAllowed stays unchanged
 };
 
-tt._function.updateContext = tt._class.updateContext = function () {
-  this.state.exprAllowed = false;
-};
-
-tt.backQuote.updateContext = function () {
-  if (this.curContext() === types.template) {
-    this.state.context.pop();
+tt.backQuote.updateContext = function (context) {
+  if (context[context.length - 1] === types.template) {
+    context.pop();
   } else {
-    this.state.context.push(types.template);
+    context.push(types.template);
   }
-  this.state.exprAllowed = false;
 };

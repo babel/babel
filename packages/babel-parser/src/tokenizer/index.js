@@ -1562,9 +1562,10 @@ export default class Tokenizer extends ParserErrors {
 
     if (type.keyword && (prevType === tt.dot || prevType === tt.questionDot)) {
       this.state.exprAllowed = false;
-    } else if ((update = type.updateContext)) {
-      update.call(this, prevType);
     } else {
+      if ((update = type.updateContext)) {
+        update(this.state.context);
+      }
       this.state.exprAllowed = type.beforeExpr;
     }
   }

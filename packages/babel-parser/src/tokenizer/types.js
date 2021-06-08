@@ -102,7 +102,7 @@ export const types: { [name: string]: TokenType } = {
   braceL: new TokenType("{", { beforeExpr, startsExpr }),
   braceBarL: new TokenType("{|", { beforeExpr, startsExpr }),
   braceHashL: new TokenType("#{", { beforeExpr, startsExpr }),
-  braceR: new TokenType("}"),
+  braceR: new TokenType("}", { beforeExpr }),
   braceBarR: new TokenType("|}"),
   parenL: new TokenType("(", { beforeExpr, startsExpr }),
   parenR: new TokenType(")"),
