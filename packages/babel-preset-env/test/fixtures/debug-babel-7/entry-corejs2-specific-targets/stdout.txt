@@ -13,8 +13,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties { chrome < 84, edge < 84, firefox < 90, ie, ios, safari < tp }
-  proposal-private-methods { chrome < 84, edge < 84, firefox < 90, ie, ios, safari < tp }
+  proposal-class-properties { chrome < 84, edge < 84, firefox < 90, ie, ios, safari < 15 }
+  proposal-private-methods { chrome < 84, edge < 84, firefox < 90, ie, ios, safari < 15 }
   proposal-numeric-separator { chrome < 75, edge < 79, firefox < 70, ie, ios < 13, safari < 13 }
   proposal-logical-assignment-operators { chrome < 85, edge < 85, firefox < 79, ie, ios < 14, safari < 14 }
   proposal-nullish-coalescing-operator { chrome < 80, edge < 80, firefox < 72, ie, ios < 13.4, safari < 13.1 }

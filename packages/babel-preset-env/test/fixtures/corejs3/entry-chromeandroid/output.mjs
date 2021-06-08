@@ -19,6 +19,7 @@ import "core-js/modules/es.promise.finally.js";
 import "core-js/modules/es.string.replace.js";
 import "core-js/modules/es.string.trim-end.js";
 import "core-js/modules/es.string.trim-start.js";
+import "core-js/modules/es.typed-array.sort.js";
 import "core-js/modules/web.dom-collections.iterator.js";
 import "core-js/modules/web.immediate.js";
 import "core-js/modules/web.queue-microtask.js";

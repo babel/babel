@@ -132,6 +132,7 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.typed-array.from { "electron":"0.36" }
   es.typed-array.includes { "electron":"0.36" }
   es.typed-array.of { "electron":"0.36" }
+  es.typed-array.sort { "electron":"0.36" }
   es.typed-array.to-string { "electron":"0.36" }
   es.weak-map { "electron":"0.36" }
   es.weak-set { "electron":"0.36" }

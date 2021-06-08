@@ -83,6 +83,7 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.string.trim { "chrome":"55" }
   es.string.trim-end { "chrome":"55" }
   es.string.trim-start { "chrome":"55" }
+  es.typed-array.sort { "chrome":"55" }
   web.dom-collections.for-each { "chrome":"55" }
   web.dom-collections.iterator { "chrome":"55" }
   web.immediate { "chrome":"55" }

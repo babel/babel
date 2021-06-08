@@ -39,6 +39,7 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.array.unscopables.flat-map { "chrome":"71" }
   es.math.hypot { "chrome":"71" }
   es.object.from-entries { "chrome":"71" }
+  es.typed-array.sort { "chrome":"71" }
   esnext.aggregate-error { "chrome":"71" }
   esnext.array.last-index { "chrome":"71" }
   esnext.array.last-item { "chrome":"71" }

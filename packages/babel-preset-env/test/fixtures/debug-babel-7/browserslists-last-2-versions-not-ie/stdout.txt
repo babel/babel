@@ -2,12 +2,12 @@
 
 Using targets:
 {
-  "android": "89",
-  "chrome": "89",
-  "edge": "89",
-  "firefox": "87",
+  "android": "90",
+  "chrome": "90",
+  "edge": "90",
+  "firefox": "88",
   "ios": "14",
-  "opera": "74",
+  "opera": "75",
   "safari": "14",
   "samsung": "13"
 }
@@ -15,8 +15,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties { firefox < 90, ios, safari < tp, samsung }
-  proposal-private-methods { firefox < 90, ios, safari < tp, samsung }
+  proposal-class-properties { firefox < 90, ios, safari < 15, samsung }
+  proposal-private-methods { firefox < 90, ios, safari < 15, samsung }
   syntax-numeric-separator
   proposal-logical-assignment-operators { samsung }
   syntax-nullish-coalescing-operator

@@ -10,6 +10,7 @@ import "core-js/modules/es.typed-array.uint16-array.js";
 import "core-js/modules/es.typed-array.uint32-array.js";
 import "core-js/modules/es.typed-array.from.js";
 import "core-js/modules/es.typed-array.of.js";
+import "core-js/modules/es.typed-array.sort.js";
 import "core-js/modules/esnext.aggregate-error.js";
 import "core-js/modules/esnext.array.last-index.js";
 import "core-js/modules/esnext.array.last-item.js";

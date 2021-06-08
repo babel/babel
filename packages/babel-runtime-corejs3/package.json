@@ -13,7 +13,7 @@
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
-    "core-js-pure": "^3.0.0",
+    "core-js-pure": "^3.14.0",
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {

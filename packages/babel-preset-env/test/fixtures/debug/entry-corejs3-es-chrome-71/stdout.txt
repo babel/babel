@@ -39,5 +39,6 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.array.unscopables.flat-map { "chrome":"71" }
   es.math.hypot { "chrome":"71" }
   es.object.from-entries { "chrome":"71" }
+  es.typed-array.sort { "chrome":"71" }
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-es-chrome-71/input.mjs] Based on your targets, regenerator-runtime import excluded.

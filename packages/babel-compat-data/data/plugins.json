@@ -1,10 +1,12 @@
 {
   "proposal-class-static-block": {
-    "chrome": "91"
+    "chrome": "91",
+    "electron": "13.0"
   },
   "proposal-private-property-in-object": {
     "chrome": "91",
-    "firefox": "90"
+    "firefox": "90",
+    "electron": "13.0"
   },
   "proposal-class-properties": {
     "chrome": "74",
@@ -21,7 +23,7 @@
     "opera": "70",
     "edge": "84",
     "firefox": "90",
-    "safari": "tp",
+    "safari": "15",
     "node": "14.6",
     "electron": "10.0"
   },
