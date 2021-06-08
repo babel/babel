@@ -615,8 +615,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     updateContext(prevType: TokenType): void {
       super.updateContext(prevType);
-      const context = this.state.context;
-      const { type } = this.state;
+      const { context, type } = this.state;
       if (type === tt.braceL) {
         const curContext = context[context.length - 1];
         if (curContext === tc.j_oTag) {
