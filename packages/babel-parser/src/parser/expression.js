@@ -2496,17 +2496,30 @@ export default class ExpressionParser extends LValParser {
     );
 
     this.next();
-    if (
-      this.match(tt.semi) ||
-      (!this.match(tt.star) && !this.state.type.startsExpr) ||
-      this.hasPrecedingLineBreak()
-    ) {
-      node.delegate = false;
-      node.argument = null;
-    } else {
-      node.delegate = this.eat(tt.star);
-      node.argument = this.parseMaybeAssign();
+    let delegating = false;
+    let argument = null;
+    if (!this.hasPrecedingLineBreak()) {
+      delegating = this.eat(tt.star);
+      switch (this.state.type) {
+        case tt.semi:
+        case tt.eof:
+        case tt.braceR:
+        case tt.parenR:
+        case tt.bracketR:
+        case tt.braceBarR:
+        case tt.colon:
+        case tt.comma:
+          // The above is the complete set of tokens that can
+          // follow an AssignmentExpression, and none of them
+          // can start an AssignmentExpression
+          if (!delegating) break;
+        /* fallthrough */
+        default:
+          argument = this.parseMaybeAssign();
+      }
     }
+    node.delegate = delegating;
+    node.argument = argument;
     return this.finishNode(node, "YieldExpression");
   }
 

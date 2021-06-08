@@ -1,0 +1,87 @@
+{
+  "type": "File",
+  "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":31}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":31}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":31}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":12,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":12},"identifierName":"f1"},
+          "name": "f1"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":31,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":31}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":17,"end":29,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":29}},
+              "expression": {
+                "type": "YieldExpression",
+                "start":17,"end":29,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":29}},
+                "delegate": false,
+                "argument": {
+                  "type": "RegExpLiteral",
+                  "start":23,"end":29,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":29}},
+                  "extra": {
+                    "raw": "/ 1 /g"
+                  },
+                  "pattern": " 1 ",
+                  "flags": "g"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":32,"end":63,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":31}},
+        "id": {
+          "type": "Identifier",
+          "start":42,"end":44,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":12},"identifierName":"f2"},
+          "name": "f2"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":47,"end":63,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":31}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":49,"end":61,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":29}},
+              "expression": {
+                "type": "YieldExpression",
+                "start":49,"end":61,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":29}},
+                "delegate": false,
+                "argument": {
+                  "type": "RegExpLiteral",
+                  "start":55,"end":61,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":29}},
+                  "extra": {
+                    "raw": "/=2 /i"
+                  },
+                  "pattern": "=2 ",
+                  "flags": "i"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
