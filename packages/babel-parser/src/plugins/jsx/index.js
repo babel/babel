@@ -614,6 +614,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     updateContext(prevType: TokenType): void {
+      super.updateContext(prevType);
       const context = this.state.context;
       const { type } = this.state;
       if (type === tt.braceL) {
@@ -622,8 +623,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           context.push(tc.brace);
         } else if (curContext === tc.j_expr) {
           context.push(tc.templateQuasi);
-        } else {
-          super.updateContext(prevType);
         }
         this.state.exprAllowed = true;
       } else if (type === tt.slash && prevType === tt.jsxTagStart) {
@@ -638,8 +637,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           this.state.exprAllowed = true;
         }
+      } else if (
+        type.keyword &&
+        (prevType === tt.dot || prevType === tt.questionDot)
+      ) {
+        this.state.exprAllowed = false;
       } else {
-        return super.updateContext(prevType);
+        this.state.exprAllowed = type.beforeExpr;
       }
     }
   };

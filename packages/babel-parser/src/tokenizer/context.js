@@ -1,8 +1,8 @@
 // @flow
 
-// The algorithm used to determine whether a regexp can appear at a
-// given point in the program is loosely based on sweet.js' approach.
-// See https://github.com/mozilla/sweet.js/wiki/design
+// The token context is used to track whether `}` matches
+// a template quasi `${` or other tokens containing `{`:
+// namely tt.braceL and tt.dollarBraceL
 
 import { types as tt } from "./types";
 
@@ -47,10 +47,6 @@ tt.braceL.updateContext = tt.braceHashL.updateContext = function (context) {
 
 tt.dollarBraceL.updateContext = function (context) {
   context.push(types.templateQuasi);
-};
-
-tt.incDec.updateContext = function () {
-  // tokExprAllowed stays unchanged
 };
 
 tt.backQuote.updateContext = function (context) {

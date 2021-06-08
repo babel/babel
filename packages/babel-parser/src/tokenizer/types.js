@@ -1,5 +1,5 @@
 // @flow
-
+import type { TokContext } from "./context";
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects
@@ -53,7 +53,7 @@ export class TokenType {
   prefix: boolean;
   postfix: boolean;
   binop: ?number;
-  updateContext: ?(prevType: TokenType) => void;
+  updateContext: ?(context: Array<TokContext>) => void;
 
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
