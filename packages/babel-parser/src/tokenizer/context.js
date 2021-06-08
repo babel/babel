@@ -107,7 +107,7 @@ tt._function.updateContext = tt._class.updateContext = function (prevType) {
     !(prevType === tt._return && this.hasPrecedingLineBreak()) &&
     !(
       (prevType === tt.colon || prevType === tt.braceL) &&
-      this.curContext() === types.b_stat
+      this.curContext() === types.braceStatement
     )
   ) {
     this.state.context.push(types.functionExpression);
