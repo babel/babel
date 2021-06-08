@@ -34,22 +34,22 @@ export const types: {
 // When `=>` is eaten, the context update of `yield` is executed, however,
 // `this.prodParam` still has `[Yield]` production because it is not yet updated
 
-tt.braceR.updateContext = function (context) {
+tt.braceR.updateContext = context => {
   if (context.length > 1) {
     context.pop();
   }
 };
 
 // we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
-tt.braceL.updateContext = tt.braceHashL.updateContext = function (context) {
+tt.braceL.updateContext = tt.braceHashL.updateContext = context => {
   context.push(types.brace);
 };
 
-tt.dollarBraceL.updateContext = function (context) {
+tt.dollarBraceL.updateContext = context => {
   context.push(types.templateQuasi);
 };
 
-tt.backQuote.updateContext = function (context) {
+tt.backQuote.updateContext = context => {
   if (context[context.length - 1] === types.template) {
     context.pop();
   } else {
