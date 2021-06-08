@@ -615,8 +615,8 @@ export default class Tokenizer extends ParserErrors {
             Errors.RecordExpressionBarIncorrectEndSyntaxType,
           );
         }
-
-        this.finishOp(tt.braceBarR, 2);
+        this.state.pos += 2;
+        this.finishToken(tt.braceBarR);
         return;
       }
 
@@ -631,8 +631,8 @@ export default class Tokenizer extends ParserErrors {
             Errors.TupleExpressionBarIncorrectEndSyntaxType,
           );
         }
-
-        this.finishOp(tt.bracketBarR, 2);
+        this.state.pos += 2;
+        this.finishToken(tt.bracketBarR);
         return;
       }
     }
