@@ -9,10 +9,9 @@ import type { TokContext } from "./context";
 // All token type variables start with an underscore, to make them
 // easy to recognize.
 
-// The `beforeExpr` property is used to disambiguate between regular
-// expressions and divisions. It is set on all token types that can
-// be followed by an expression (thus, a slash after them would be a
-// regular expression).
+// The `beforeExpr` property is used to disambiguate between 1) binary
+// expression (<) and JSX Tag start (<name>); 2) object literal and JSX
+// texts. It is set on the `updateContext` function in the JSX plugin.
 
 // The `startsExpr` property is used to determine whether an expression
 // may be the “argument” subexpression of a `yield` expression or
