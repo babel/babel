@@ -283,6 +283,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           } else {
             enforceOrder(startPos, modifier, modifier, "override");
             enforceOrder(startPos, modifier, modifier, "static");
+            enforceOrder(startPos, modifier, modifier, "readonly");
 
             modified.accessibility = modifier;
           }
@@ -1929,9 +1930,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let readonly = false;
       let override = false;
       if (allowModifiers !== undefined) {
-        accessibility = this.parseAccessModifier();
-        override = !!this.tsParseModifier(["override"]);
-        readonly = !!this.tsParseModifier(["readonly"]);
+        const modified = {};
+        this.tsParseModifiers(modified, [
+          "public",
+          "private",
+          "protected",
+          "override",
+          "readonly",
+        ]);
+        accessibility = modified.accessibility;
+        override = modified.override;
+        readonly = modified.readonly;
         if (
           allowModifiers === false &&
           (accessibility || readonly || override)
