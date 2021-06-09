@@ -1,8 +1,4 @@
-function wrapper(wc) {
-  return wc
-}
-
-const f = wrapper(class Foo {
+const f = class Foo {
   static #bar() {
     return Foo;
   }
@@ -27,7 +23,7 @@ const f = wrapper(class Foo {
       method_shadowed: Foo.#method_shadowed
     }
   }
-});
+};
 
 const { bar, method, method_shadowed } = f.extract();
 expect(bar()).toBe(f)

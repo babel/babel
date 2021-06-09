@@ -1,8 +1,4 @@
-function wrapper(wc) {
-  return wc
-}
-
-wrapper(class Foo {
+const f = class Foo {
   static #bar() {
     return Foo;
   }
@@ -19,4 +15,4 @@ wrapper(class Foo {
       return Foo;
     }
   }
-});
+}

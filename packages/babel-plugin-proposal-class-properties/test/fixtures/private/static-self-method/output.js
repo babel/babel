@@ -1,10 +1,6 @@
 var _class;
 
-function wrapper(wc) {
-  return wc;
-}
-
-wrapper(_class = class Foo {});
+var f = _class = class Foo {};
 
 function _bar() {
   return _class;
