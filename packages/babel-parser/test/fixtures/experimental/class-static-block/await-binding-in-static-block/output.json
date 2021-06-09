@@ -1,6 +1,6 @@
 {
   "type": "File",
-  "start":0,"end":884,"loc":{"start":{"line":1,"column":0},"end":{"line":27,"column":48}},
+  "start":0,"end":921,"loc":{"start":{"line":1,"column":0},"end":{"line":29,"column":35}},
   "errors": [
     "SyntaxError: Can not use 'await' as identifier inside a static block. (3:21)",
     "SyntaxError: Can not use 'await' as identifier inside a static block. (5:22)",
@@ -14,11 +14,12 @@
     "SyntaxError: Can not use 'await' as identifier inside a static block. (21:28)",
     "SyntaxError: Can not use 'await' as identifier inside a static block. (23:22)",
     "SyntaxError: Can not use 'await' as identifier inside a static block. (25:26)",
-    "SyntaxError: Can not use 'await' as identifier inside a static block. (27:25)"
+    "SyntaxError: Can not use 'await' as identifier inside a static block. (27:25)",
+    "SyntaxError: Can not use 'await' as identifier inside a static block. (29:23)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":884,"loc":{"start":{"line":1,"column":0},"end":{"line":27,"column":48}},
+    "start":0,"end":921,"loc":{"start":{"line":1,"column":0},"end":{"line":29,"column":35}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -839,6 +840,54 @@
                           "directives": []
                         }
                       }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":886,"end":921,"loc":{"start":{"line":29,"column":0},"end":{"line":29,"column":35}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":886,"end":920,"loc":{"start":{"line":29,"column":0},"end":{"line":29,"column":34}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":886,"end":887,"loc":{"start":{"line":29,"column":0},"end":{"line":29,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":890,"end":920,"loc":{"start":{"line":29,"column":4},"end":{"line":29,"column":34}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":896,"end":920,"loc":{"start":{"line":29,"column":10},"end":{"line":29,"column":34}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":898,"end":918,"loc":{"start":{"line":29,"column":12},"end":{"line":29,"column":32}},
+                  "body": [
+                    {
+                      "type": "BlockStatement",
+                      "start":907,"end":916,"loc":{"start":{"line":29,"column":21},"end":{"line":29,"column":30}},
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start":909,"end":914,"loc":{"start":{"line":29,"column":23},"end":{"line":29,"column":28}},
+                          "expression": {
+                            "type": "Identifier",
+                            "start":909,"end":914,"loc":{"start":{"line":29,"column":23},"end":{"line":29,"column":28},"identifierName":"await"},
+                            "name": "await"
+                          }
+                        }
+                      ],
+                      "directives": []
                     }
                   ]
                 }

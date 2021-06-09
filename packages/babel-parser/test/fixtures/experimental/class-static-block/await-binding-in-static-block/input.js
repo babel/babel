@@ -25,3 +25,5 @@ C = class { static { (await) => {} } };
 C = class { static { (x = await) => {} } };
 
 C = class { static { ({ [await]: x }) => {} } };
+
+C = class { static { { await } } };
