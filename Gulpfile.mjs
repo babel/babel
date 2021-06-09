@@ -223,8 +223,8 @@ function createWorker(useWorker) {
     numWorkers,
     exposedMethods: ["transform"],
   });
-  worker.getStdout().on("data", chunk => process.stdout.write(chunk));
-  worker.getStderr().on("data", chunk => process.stderr.write(chunk));
+  worker.getStdout().pipe(process.stdout);
+  worker.getStderr().pipe(process.stderr);
   return worker;
 }
 
