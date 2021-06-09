@@ -21,13 +21,7 @@ export default declare((api, options) => {
   }
 
   function hasHole(spread) {
-    const elements = spread.elements;
-    for (let i = 0; i < elements.length; i++) {
-      if (elements[i] === null) {
-        return true;
-      }
-    }
-    return false;
+    return spread.elements.some(el => el === null);
   }
 
   function hasSpread(nodes) {
@@ -53,12 +47,14 @@ export default declare((api, options) => {
       if (t.isSpreadElement(prop)) {
         _props = push(_props, nodes);
         let spreadLiteral = getSpreadLiteral(prop, scope);
+
         if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
           spreadLiteral = t.callExpression(
-            file.addHelper("toConsumableArray"),
+            file.addHelper("arrayWithoutHoles"),
             [spreadLiteral],
           );
         }
+
         nodes.push(spreadLiteral);
       } else {
         _props.push(prop);
