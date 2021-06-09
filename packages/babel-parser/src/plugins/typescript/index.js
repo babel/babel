@@ -1932,7 +1932,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         accessibility = this.parseAccessModifier();
         override = !!this.tsParseModifier(["override"]);
         readonly = !!this.tsParseModifier(["readonly"]);
-        if (allowModifiers === false && (accessibility || readonly)) {
+        if (
+          allowModifiers === false &&
+          (accessibility || readonly || override)
+        ) {
           this.raise(startPos, TSErrors.UnexpectedParameterModifier);
         }
       }
@@ -1940,7 +1943,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const left = this.parseMaybeDefault();
       this.parseAssignableListItemTypes(left);
       const elt = this.parseMaybeDefault(left.start, left.loc.start, left);
-      if (accessibility || readonly) {
+      if (accessibility || readonly || override) {
         const pp: N.TSParameterProperty = this.startNodeAt(startPos, startLoc);
         if (decorators.length) {
           pp.decorators = decorators;

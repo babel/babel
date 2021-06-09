@@ -40,15 +40,20 @@
               "async": false,
               "params": [
                 {
-                  "type": "Identifier",
-                  "start":43,"end":54,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":34},"identifierName":"foo"},
-                  "name": "foo",
-                  "typeAnnotation": {
-                    "type": "TSTypeAnnotation",
-                    "start":46,"end":54,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":34}},
+                  "type": "TSParameterProperty",
+                  "start":34,"end":54,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":34}},
+                  "override": true,
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":43,"end":54,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":34},"identifierName":"foo"},
+                    "name": "foo",
                     "typeAnnotation": {
-                      "type": "TSStringKeyword",
-                      "start":48,"end":54,"loc":{"start":{"line":2,"column":28},"end":{"line":2,"column":34}}
+                      "type": "TSTypeAnnotation",
+                      "start":46,"end":54,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":34}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":48,"end":54,"loc":{"start":{"line":2,"column":28},"end":{"line":2,"column":34}}
+                      }
                     }
                   }
                 }
