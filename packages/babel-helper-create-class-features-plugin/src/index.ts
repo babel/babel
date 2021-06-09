@@ -168,16 +168,13 @@ export function createClassFeaturePlugin({
 
         if (!props.length && !isDecorated) return;
 
-        let ref = undefined;
+        const innerBinding = path.node.id;
+        let ref;
         if (path.isClassExpression() || !path.node.id) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
           ref = t.cloneNode(path.node.id);
-        }
-
-        if (ref !== undefined) {
-          ref.innerBinding = path.node.id;
         }
 
         // NODE: These three functions don't support decorators yet,
@@ -223,6 +220,7 @@ export function createClassFeaturePlugin({
               setPublicClassFields ?? loose,
               privateFieldsAsProperties ?? loose,
               constantSuper ?? loose,
+              innerBinding,
             ));
         }
 

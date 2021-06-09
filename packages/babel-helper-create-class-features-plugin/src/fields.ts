@@ -674,7 +674,7 @@ const innerReferencesVisitor = {
     const { name } = path.node;
     if (path.scope.bindingIdentifierEquals(name, state.innerBinding)) {
       state.needsClassRef = true;
-      path.replaceWith(t.cloneNode(state.classRef));
+      path.node.name = state.classRef.name;
     }
   },
 };
@@ -686,9 +686,13 @@ function replaceThisContext(
   file,
   isStaticBlock,
   constantSuper,
+  innerBindingRef,
 ) {
-  const { innerBinding, ...classRef } = ref;
-  const state = { classRef, needsClassRef: false, innerBinding };
+  const state = {
+    classRef: ref,
+    needsClassRef: false,
+    innerBinding: innerBindingRef,
+  };
 
   const replacer = new ReplaceSupers({
     methodPath: path,
@@ -708,7 +712,7 @@ function replaceThisContext(
     path.traverse(thisContextVisitor, state);
   }
 
-  if (state.classRef?.name !== innerBinding?.name) {
+  if (state.classRef?.name && state.classRef.name !== innerBindingRef?.name) {
     path.traverse(innerReferencesVisitor, state);
   }
 
@@ -724,6 +728,7 @@ export function buildFieldsInitNodes(
   setPublicClassFields,
   privateFieldsAsProperties,
   constantSuper,
+  innerBindingRef,
 ) {
   let needsClassRef = false;
   let injectSuperRef;
@@ -759,6 +764,7 @@ export function buildFieldsInitNodes(
         state,
         isStaticBlock,
         constantSuper,
+        innerBindingRef,
       );
       needsClassRef = needsClassRef || replaced;
     }

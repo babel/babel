@@ -1,8 +1,4 @@
-function wrapper(wc) {
-  return wc
-}
-
-const f = wrapper(class Foo {
+const f = class Foo {
   static #x = Foo;
   static y = Foo;
 
@@ -12,7 +8,7 @@ const f = wrapper(class Foo {
       y: Foo.y,
     }
   }
-});
+};
 
 const { x, y } = f.extract();
 expect(x).toBe(f)
