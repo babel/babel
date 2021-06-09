@@ -65,7 +65,16 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     return (flags & SCOPE_CLASS) > 0 && (flags & SCOPE_FUNCTION) === 0;
   }
   get inStaticBlock() {
-    return (this.currentThisScopeFlags() & SCOPE_STATIC_BLOCK) > 0;
+    for (let i = this.scopeStack.length - 1; ; i--) {
+      const { flags } = this.scopeStack[i];
+      if (flags & SCOPE_STATIC_BLOCK) {
+        return true;
+      }
+      if (flags & (SCOPE_VAR | SCOPE_CLASS)) {
+        // function body, module body, class property initializers
+        return false;
+      }
+    }
   }
   get inNonArrowFunction() {
     return (this.currentThisScopeFlags() & SCOPE_FUNCTION) > 0;
