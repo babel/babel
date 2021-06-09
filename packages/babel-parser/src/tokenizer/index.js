@@ -486,6 +486,7 @@ export default class Tokenizer extends ParserErrors {
         );
       }
 
+      this.state.pos += 2;
       if (next === charCodes.leftCurlyBrace) {
         // #{
         this.finishToken(tt.braceHashL);
@@ -493,7 +494,6 @@ export default class Tokenizer extends ParserErrors {
         // #[
         this.finishToken(tt.bracketHashL);
       }
-      this.state.pos += 2;
     } else if (isIdentifierStart(next)) {
       ++this.state.pos;
       this.finishToken(tt.privateName, this.readWord1(next));
@@ -615,8 +615,8 @@ export default class Tokenizer extends ParserErrors {
             Errors.RecordExpressionBarIncorrectEndSyntaxType,
           );
         }
-
-        this.finishOp(tt.braceBarR, 2);
+        this.state.pos += 2;
+        this.finishToken(tt.braceBarR);
         return;
       }
 
@@ -631,8 +631,8 @@ export default class Tokenizer extends ParserErrors {
             Errors.TupleExpressionBarIncorrectEndSyntaxType,
           );
         }
-
-        this.finishOp(tt.bracketBarR, 2);
+        this.state.pos += 2;
+        this.finishToken(tt.bracketBarR);
         return;
       }
     }
@@ -812,8 +812,8 @@ export default class Tokenizer extends ParserErrors {
           }
 
           // [|
-          this.finishToken(tt.bracketBarL);
           this.state.pos += 2;
+          this.finishToken(tt.bracketBarL);
         } else {
           ++this.state.pos;
           this.finishToken(tt.bracketL);
@@ -836,8 +836,8 @@ export default class Tokenizer extends ParserErrors {
           }
 
           // {|
-          this.finishToken(tt.braceBarL);
           this.state.pos += 2;
+          this.finishToken(tt.braceBarL);
         } else {
           ++this.state.pos;
           this.finishToken(tt.braceL);
