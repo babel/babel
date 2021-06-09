@@ -37,7 +37,7 @@
     {
       "type": {
         "label": "}",
-        "beforeExpr": false,
+        "beforeExpr": true,
         "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
