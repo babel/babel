@@ -50,7 +50,11 @@ export default declare((api, options) => {
 
         if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
           spreadLiteral = t.callExpression(
-            file.addHelper("arrayWithoutHoles"),
+            file.addHelper(
+              process.env.BABEL_8_BREAKING
+                ? "arrayLikeToArray"
+                : "arrayWithoutHoles",
+            ),
             [spreadLiteral],
           );
         }
