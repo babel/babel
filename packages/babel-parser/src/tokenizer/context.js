@@ -2,7 +2,7 @@
 
 // The token context is used to track whether `}` matches
 // a template quasi `${` or other tokens containing `{`:
-// namely tt.braceL and tt.dollarBraceL
+// namely tt.braceL `{` and tt.braceHashL `#{`
 
 import { types as tt } from "./types";
 
