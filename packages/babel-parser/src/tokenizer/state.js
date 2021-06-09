@@ -130,7 +130,7 @@ export default class State {
   // The context stack is used to superficially track syntactic
   // context to predict whether a regular expression is allowed in a
   // given position.
-  context: Array<TokContext> = [ct.braceStatement];
+  context: Array<TokContext> = [ct.brace];
   exprAllowed: boolean = true;
 
   // Used to signal to callers of `readWord1` whether the word
@@ -181,7 +181,6 @@ export type LookaheadState = {
   type: TokenType,
   start: number,
   end: number,
-  /* Used only in readSlashToken */
-  exprAllowed: boolean,
+  /* Used only in readToken_mult_modulo */
   inType: boolean,
 };

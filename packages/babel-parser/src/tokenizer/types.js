@@ -1,5 +1,5 @@
 // @flow
-
+import type { TokContext } from "./context";
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects
@@ -9,10 +9,9 @@
 // All token type variables start with an underscore, to make them
 // easy to recognize.
 
-// The `beforeExpr` property is used to disambiguate between regular
-// expressions and divisions. It is set on all token types that can
-// be followed by an expression (thus, a slash after them would be a
-// regular expression).
+// The `beforeExpr` property is used to disambiguate between 1) binary
+// expression (<) and JSX Tag start (<name>); 2) object literal and JSX
+// texts. It is set on the `updateContext` function in the JSX plugin.
 
 // The `startsExpr` property is used to determine whether an expression
 // may be the “argument” subexpression of a `yield` expression or
@@ -53,7 +52,7 @@ export class TokenType {
   prefix: boolean;
   postfix: boolean;
   binop: ?number;
-  updateContext: ?(prevType: TokenType) => void;
+  updateContext: ?(context: Array<TokContext>) => void;
 
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
@@ -102,7 +101,7 @@ export const types: { [name: string]: TokenType } = {
   braceL: new TokenType("{", { beforeExpr, startsExpr }),
   braceBarL: new TokenType("{|", { beforeExpr, startsExpr }),
   braceHashL: new TokenType("#{", { beforeExpr, startsExpr }),
-  braceR: new TokenType("}"),
+  braceR: new TokenType("}", { beforeExpr }),
   braceBarR: new TokenType("|}"),
   parenL: new TokenType("(", { beforeExpr, startsExpr }),
   parenR: new TokenType(")"),
@@ -140,6 +139,7 @@ export const types: { [name: string]: TokenType } = {
 
   eq: new TokenType("=", { beforeExpr, isAssign }),
   assign: new TokenType("_=", { beforeExpr, isAssign }),
+  slashAssign: new TokenType("_=", { beforeExpr, isAssign }),
   incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
   bang: new TokenType("!", { beforeExpr, prefix, startsExpr }),
   tilde: new TokenType("~", { beforeExpr, prefix, startsExpr }),

@@ -261,10 +261,6 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     if (this.isContextual("yield")) {
       if (this.prodParam.hasYield) {
-        // If we have [Yield] production, `yield` will start a YieldExpression thus
-        // regex is allowed following. Otherwise `yield` is an identifier and regex
-        // is disallowed in tt.name.updateContext
-        this.state.exprAllowed = true;
         let left = this.parseYield();
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startPos, startLoc);
@@ -988,11 +984,6 @@ export default class ExpressionParser extends LValParser {
   // AsyncArrowFunction
 
   parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
-    // If a division operator appears in an expression position, the
-    // tokenizer got confused, and we force it to read a regexp instead.
-    if (this.state.type === tt.slash) this.readRegexp();
-
-    const canBeArrow = this.state.potentialArrowAt === this.state.start;
     let node;
 
     switch (this.state.type) {
@@ -1017,24 +1008,12 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "ThisExpression");
 
       case tt.name: {
+        const canBeArrow = this.state.potentialArrowAt === this.state.start;
         const containsEsc = this.state.containsEsc;
         const id = this.parseIdentifier();
 
         if (!containsEsc && id.name === "async" && !this.canInsertSemicolon()) {
           if (this.match(tt._function)) {
-            const last = this.state.context.length - 1;
-            if (this.state.context[last] !== ct.functionStatement) {
-              // Since "async" is an identifier and normally identifiers
-              // can't be followed by expression, the tokenizer assumes
-              // that "function" starts a statement.
-              // Fixing it in the tokenizer would mean tracking not only the
-              // previous token ("async"), but also the one before to know
-              // its beforeExpr value.
-              // It's easier and more efficient to adjust the context here.
-              throw new Error("Internal error");
-            }
-            this.state.context[last] = ct.functionExpression;
-
             this.next();
             return this.parseFunction(
               this.startNodeAtNode(id),
@@ -1073,7 +1052,9 @@ export default class ExpressionParser extends LValParser {
         return this.parseDo(false);
       }
 
-      case tt.regexp: {
+      case tt.slash:
+      case tt.slashAssign: {
+        this.readRegexp();
         return this.parseRegExpLiteral(this.state.value);
       }
 
@@ -1097,8 +1078,10 @@ export default class ExpressionParser extends LValParser {
       case tt._false:
         return this.parseBooleanLiteral(false);
 
-      case tt.parenL:
+      case tt.parenL: {
+        const canBeArrow = this.state.potentialArrowAt === this.state.start;
         return this.parseParenAndDistinguishExpression(canBeArrow);
+      }
 
       case tt.bracketBarL:
       case tt.bracketHashL: {
@@ -1720,11 +1703,6 @@ export default class ExpressionParser extends LValParser {
       node.properties.push(prop);
     }
 
-    // The tokenizer uses `braceIsBlock` to detect whether `{` starts a block statement.
-    // If `{` is a block statement, `exprAllowed` will be `true`.
-    // However the tokenizer can not handle edge cases like `0 ? a : { a : 1 } / 2`, here
-    // we update `exprAllowed` when an object-like is parsed.
-    this.state.exprAllowed = false;
     this.next();
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
@@ -2514,17 +2492,30 @@ export default class ExpressionParser extends LValParser {
     );
 
     this.next();
-    if (
-      this.match(tt.semi) ||
-      (!this.match(tt.star) && !this.state.type.startsExpr) ||
-      this.hasPrecedingLineBreak()
-    ) {
-      node.delegate = false;
-      node.argument = null;
-    } else {
-      node.delegate = this.eat(tt.star);
-      node.argument = this.parseMaybeAssign();
+    let delegating = false;
+    let argument = null;
+    if (!this.hasPrecedingLineBreak()) {
+      delegating = this.eat(tt.star);
+      switch (this.state.type) {
+        case tt.semi:
+        case tt.eof:
+        case tt.braceR:
+        case tt.parenR:
+        case tt.bracketR:
+        case tt.braceBarR:
+        case tt.colon:
+        case tt.comma:
+          // The above is the complete set of tokens that can
+          // follow an AssignmentExpression, and none of them
+          // can start an AssignmentExpression
+          if (!delegating) break;
+        /* fallthrough */
+        default:
+          argument = this.parseMaybeAssign();
+      }
     }
+    node.delegate = delegating;
+    node.argument = argument;
     return this.finishNode(node, "YieldExpression");
   }
 

@@ -53,7 +53,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "class",
       "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}}
@@ -68,7 +69,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "C",
       "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}}
@@ -106,7 +108,7 @@
     {
       "type": {
         "label": "}",
-        "beforeExpr": false,
+        "beforeExpr": true,
         "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,

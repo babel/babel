@@ -1710,10 +1710,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.state.inType = true;
       const type = this.flowParseUnionType();
       this.state.inType = oldInType;
-      // Ensure that a brace after a function generic type annotation is a
-      // statement, except in arrow functions (noAnonFunctionType)
-      this.state.exprAllowed =
-        this.state.exprAllowed || this.state.noAnonFunctionType;
       return type;
     }
 
@@ -3704,20 +3700,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         nameLoc: id.start,
       });
       return this.finishNode(node, "EnumDeclaration");
-    }
-
-    updateContext(prevType: TokenType): void {
-      if (
-        this.match(tt.name) &&
-        this.state.value === "of" &&
-        prevType === tt.name &&
-        this.input.slice(this.state.lastTokStart, this.state.lastTokEnd) ===
-          "interface"
-      ) {
-        this.state.exprAllowed = false;
-      } else {
-        super.updateContext(prevType);
-      }
     }
 
     // check if the next token is a tt.relation("<")

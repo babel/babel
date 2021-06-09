@@ -1887,9 +1887,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.params.length === 0) {
         this.raise(node.start, TSErrors.EmptyTypeArguments);
       }
-      // This reads the next token after the `>` too, so do this in the enclosing context.
-      // But be sure not to parse a regex in the jsx expression `<C<number> />`, so set exprAllowed = false
-      this.state.exprAllowed = false;
       this.expectRelational(">");
       return this.finishNode(node, "TSTypeParameterInstantiation");
     }
@@ -2046,7 +2043,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseSubscriptState,
     ): N.Expression {
       if (!this.hasPrecedingLineBreak() && this.match(tt.bang)) {
-        this.state.exprAllowed = false;
         this.next();
 
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(

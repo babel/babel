@@ -45,29 +45,18 @@ const JsxErrors = makeErrorTemplates(
 
 // Be aware that this file is always executed and not only when the plugin is enabled.
 // Therefore this contexts and tokens do always exist.
-tc.j_oTag = new TokContext("<tag", false);
-tc.j_cTag = new TokContext("</tag", false);
-tc.j_expr = new TokContext("<tag>...</tag>", true, true);
+tc.j_oTag = new TokContext("<tag");
+tc.j_cTag = new TokContext("</tag");
+tc.j_expr = new TokContext("<tag>...</tag>", true);
 
 tt.jsxName = new TokenType("jsxName");
 tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
 tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
 tt.jsxTagEnd = new TokenType("jsxTagEnd");
 
-tt.jsxTagStart.updateContext = function () {
-  this.state.context.push(tc.j_expr); // treat as beginning of JSX expression
-  this.state.context.push(tc.j_oTag); // start opening tag context
-  this.state.exprAllowed = false;
-};
-
-tt.jsxTagEnd.updateContext = function (prevType) {
-  const out = this.state.context.pop();
-  if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
-    this.state.context.pop();
-    this.state.exprAllowed = this.curContext() === tc.j_expr;
-  } else {
-    this.state.exprAllowed = true;
-  }
+tt.jsxTagStart.updateContext = context => {
+  context.push(tc.j_expr); // treat as beginning of JSX expression
+  context.push(tc.j_oTag); // start opening tag context
 };
 
 function isFragment(object: ?N.JSXElement): boolean {
@@ -625,22 +614,35 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     updateContext(prevType: TokenType): void {
-      if (this.match(tt.braceL)) {
-        const curContext = this.curContext();
+      super.updateContext(prevType);
+      const { context, type } = this.state;
+      if (type === tt.braceL) {
+        const curContext = context[context.length - 1];
         if (curContext === tc.j_oTag) {
-          this.state.context.push(tc.braceExpression);
+          context.push(tc.brace);
         } else if (curContext === tc.j_expr) {
-          this.state.context.push(tc.templateQuasi);
-        } else {
-          super.updateContext(prevType);
+          context.push(tc.templateQuasi);
         }
         this.state.exprAllowed = true;
-      } else if (this.match(tt.slash) && prevType === tt.jsxTagStart) {
-        this.state.context.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
-        this.state.context.push(tc.j_cTag); // reconsider as closing tag context
+      } else if (type === tt.slash && prevType === tt.jsxTagStart) {
+        context.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
+        context.push(tc.j_cTag); // reconsider as closing tag context
+        this.state.exprAllowed = false;
+      } else if (type === tt.jsxTagEnd) {
+        const out = context.pop();
+        if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
+          context.pop();
+          this.state.exprAllowed = context[context.length - 1] === tc.j_expr;
+        } else {
+          this.state.exprAllowed = true;
+        }
+      } else if (
+        type.keyword &&
+        (prevType === tt.dot || prevType === tt.questionDot)
+      ) {
         this.state.exprAllowed = false;
       } else {
-        return super.updateContext(prevType);
+        this.state.exprAllowed = type.beforeExpr;
       }
     }
   };

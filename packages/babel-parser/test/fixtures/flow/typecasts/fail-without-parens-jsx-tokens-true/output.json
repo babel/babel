@@ -179,7 +179,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "key",
       "start":13,"end":16,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":16}}
@@ -209,7 +210,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "value",
       "start":18,"end":23,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":23}}
@@ -232,7 +234,7 @@
     {
       "type": {
         "label": "}",
-        "beforeExpr": false,
+        "beforeExpr": true,
         "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
@@ -269,7 +271,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28}}
     },

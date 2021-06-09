@@ -98,7 +98,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "a",
       "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5}}
@@ -177,7 +178,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "b",
       "start":16,"end":17,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5}}
@@ -208,7 +210,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "a",
       "start":20,"end":21,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":9}}
