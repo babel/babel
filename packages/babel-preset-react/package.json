@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-react",
-  "version": "7.13.13",
+  "version": "7.14.5",
   "description": "Babel preset for all React plugins.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-react",
@@ -16,12 +16,12 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.13.0",
-    "@babel/helper-validator-option": "workspace:^7.12.17",
-    "@babel/plugin-transform-react-display-name": "workspace:^7.12.13",
-    "@babel/plugin-transform-react-jsx": "workspace:^7.13.12",
-    "@babel/plugin-transform-react-jsx-development": "workspace:^7.12.17",
-    "@babel/plugin-transform-react-pure-annotations": "workspace:^7.12.1"
+    "@babel/helper-plugin-utils": "workspace:^7.14.5",
+    "@babel/helper-validator-option": "workspace:^7.14.5",
+    "@babel/plugin-transform-react-display-name": "workspace:^7.14.5",
+    "@babel/plugin-transform-react-jsx": "workspace:^7.14.5",
+    "@babel/plugin-transform-react-jsx-development": "workspace:^7.14.5",
+    "@babel/plugin-transform-react-pure-annotations": "workspace:^7.14.5"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

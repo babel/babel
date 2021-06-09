@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-set-prototype-of-to-assign",
-  "version": "7.12.13",
+  "version": "7.14.5",
   "description": "Turn Object.setPrototypeOf to assignments",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+    "@babel/helper-plugin-utils": "workspace:^7.14.5"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

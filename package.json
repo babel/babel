@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "7.14.4",
+  "version": "7.14.5",
   "private": true,
   "type": "commonjs",
   "scripts": {

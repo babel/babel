@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-module-imports",
-  "version": "7.13.12",
+  "version": "7.14.5",
   "description": "Babel helper functions for inserting module loads",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-module-imports",
@@ -15,7 +15,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.13.12"
+    "@babel/types": "workspace:^7.14.5"
   },
   "devDependencies": {
     "@babel/core": "workspace:*",

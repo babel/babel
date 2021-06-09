@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-parameters",
-  "version": "7.14.2",
+  "version": "7.14.5",
   "description": "Compile ES2015 default and rest parameters to ES5",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.13.0"
+    "@babel/helper-plugin-utils": "workspace:^7.14.5"
   },
   "keywords": [
     "babel-plugin"

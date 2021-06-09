@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-hoist-variables",
-  "version": "7.13.16",
+  "version": "7.14.5",
   "description": "Helper function to hoist variables",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.13.16"
+    "@babel/types": "workspace:^7.14.5"
   },
   "TODO": "The @babel/traverse dependency is only needed for the NodePath TS type. We can consider exporting it from @babel/core.",
   "devDependencies": {

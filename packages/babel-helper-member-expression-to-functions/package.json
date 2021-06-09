@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-member-expression-to-functions",
-  "version": "7.13.12",
+  "version": "7.14.5",
   "description": "Helper function to replace certain member expressions with function calls",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
-    "@babel/types": "workspace:^7.13.12"
+    "@babel/types": "workspace:^7.14.5"
   },
   "devDependencies": {
     "@babel/traverse": "workspace:*"

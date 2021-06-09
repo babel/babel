@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-json-strings",
-  "version": "7.14.2",
+  "version": "7.14.5",
   "description": "Escape U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "@babel/helper-plugin-utils": "workspace:^7.14.5",
     "@babel/plugin-syntax-json-strings": "^7.8.3"
   },
   "peerDependencies": {

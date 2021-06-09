@@ -1,12 +1,12 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "7.14.4",
+  "version": "7.14.5",
   "description": "Tests for babel/eslint-* packages",
   "private": true,
   "dependencies": {
-    "@babel/core": "workspace:^7.14.3",
-    "@babel/eslint-parser": "workspace:^7.14.4",
-    "@babel/preset-react": "workspace:^7.13.13",
+    "@babel/core": "workspace:^7.14.5",
+    "@babel/eslint-parser": "workspace:^7.14.5",
+    "@babel/preset-react": "workspace:^7.14.5",
     "dedent": "^0.7.0",
     "eslint": "^7.27.0",
     "eslint-plugin-import": "^2.23.4",

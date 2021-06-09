@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-explode-assignable-expression",
-  "version": "7.13.0",
+  "version": "7.14.5",
   "description": "Helper function to explode an assignable expression",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.13.0"
+    "@babel/types": "workspace:^7.14.5"
   },
   "devDependencies": {
     "@babel/traverse": "workspace:*"

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-dynamic-import",
-  "version": "7.14.2",
+  "version": "7.14.5",
   "description": "Transform import() expressions",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.13.0",
+    "@babel/helper-plugin-utils": "workspace:^7.14.5",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3"
   },
   "peerDependencies": {

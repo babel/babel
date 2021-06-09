@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-fixtures",
-  "version": "7.13.13",
+  "version": "7.14.5",
   "description": "Helper function to support fixtures",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",

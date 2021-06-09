@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-simple-access",
-  "version": "7.13.12",
+  "version": "7.14.5",
   "description": "Babel helper for ensuring that access to a given value is performed through simple accesses",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-simple-access",
@@ -15,7 +15,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.13.12"
+    "@babel/types": "workspace:^7.14.5"
   },
   "devDependencies": {
     "@babel/traverse": "workspace:*"

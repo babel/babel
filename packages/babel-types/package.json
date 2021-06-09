@@ -1,6 +1,6 @@
 {
   "name": "@babel/types",
-  "version": "7.14.4",
+  "version": "7.14.5",
   "description": "Babel Types is a Lodash-esque utility library for AST nodes",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-types",
@@ -24,7 +24,7 @@
     }
   },
   "dependencies": {
-    "@babel/helper-validator-identifier": "workspace:^7.14.0",
+    "@babel/helper-validator-identifier": "workspace:^7.14.5",
     "to-fast-properties": "^2.0.0"
   },
   "devDependencies": {

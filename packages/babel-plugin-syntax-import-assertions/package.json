@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-assertions",
-  "version": "7.12.1",
+  "version": "7.14.5",
   "description": "Allow parsing of the module assertion attributes in the import statement",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
+    "@babel/helper-plugin-utils": "workspace:^7.14.5"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
