@@ -20,7 +20,15 @@ import {
 import State from "./state";
 import type { LookaheadState } from "./state";
 
-const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u", "d"]);
+const VALID_REGEX_FLAGS = new Set([
+  charCodes.lowercaseG,
+  charCodes.lowercaseM,
+  charCodes.lowercaseS,
+  charCodes.lowercaseI,
+  charCodes.lowercaseY,
+  charCodes.lowercaseU,
+  charCodes.lowercaseD,
+]);
 
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
@@ -1003,17 +1011,15 @@ export default class Tokenizer extends ParserErrors {
     let mods = "";
 
     while (pos < this.length) {
-      const char = this.input[pos];
-      const charCode = this.codePointAtPos(pos);
+      const cp = this.codePointAtPos(pos);
+      // It doesn't matter if cp > 0xffff, the loop will either throw or break because we check on cp
+      const char = String.fromCharCode(cp);
 
-      if (VALID_REGEX_FLAGS.has(char)) {
-        if (mods.indexOf(char) > -1) {
+      if (VALID_REGEX_FLAGS.has(cp)) {
+        if (mods.includes(char)) {
           this.raise(pos + 1, Errors.DuplicateRegExpFlags);
         }
-      } else if (
-        isIdentifierChar(charCode) ||
-        charCode === charCodes.backslash
-      ) {
+      } else if (isIdentifierChar(cp) || cp === charCodes.backslash) {
         this.raise(pos + 1, Errors.MalformedRegExpFlags);
       } else {
         break;
