@@ -10,6 +10,4 @@ require("core-js/modules/es.math.hypot.js");
 
 require("core-js/modules/es.object.from-entries.js");
 
-require("core-js/modules/es.typed-array.sort.js");
-
 1 ** 2;

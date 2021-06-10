@@ -2,12 +2,12 @@
 
 Using targets:
 {
-  "android": "90",
-  "chrome": "90",
-  "edge": "90",
-  "firefox": "88",
+  "android": "89",
+  "chrome": "89",
+  "edge": "89",
+  "firefox": "87",
   "ios": "14",
-  "opera": "75",
+  "opera": "74",
   "safari": "14",
   "samsung": "13"
 }
