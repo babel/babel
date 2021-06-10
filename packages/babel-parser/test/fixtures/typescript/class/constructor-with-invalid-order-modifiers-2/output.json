@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":67,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: 'public' modifier must precede 'readonly' modifier. (2:23)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":67,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":67,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"D"},
+          "name": "D"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":67,"loc":{"start":{"line":1,"column":18},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":22,"end":65,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":45}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":33,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":13},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":34,"end":61,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":41}},
+                  "accessibility": "public",
+                  "readonly": true,
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":50,"end":61,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":41},"identifierName":"foo"},
+                    "name": "foo",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":53,"end":61,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":41}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":55,"end":61,"loc":{"start":{"line":2,"column":35},"end":{"line":2,"column":41}}
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":63,"end":65,"loc":{"start":{"line":2,"column":43},"end":{"line":2,"column":45}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

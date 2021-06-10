@@ -1178,6 +1178,7 @@ export type TSParameterProperty = HasDecorators & {
   // At least one of `accessibility` or `readonly` must be set.
   accessibility?: ?Accessibility,
   readonly?: ?true,
+  override?: ?true,
   parameter: Identifier | AssignmentPattern,
 };
 
