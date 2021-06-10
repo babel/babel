@@ -12,7 +12,6 @@ import { type TokContext, types as ct } from "./context";
 import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
 import { SourceLocation } from "../util/location";
 import {
-  lineBreak,
   lineBreakG,
   isNewLine,
   isWhitespace,
@@ -21,7 +20,15 @@ import {
 import State from "./state";
 import type { LookaheadState } from "./state";
 
-const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u", "d"]);
+const VALID_REGEX_FLAGS = new Set([
+  charCodes.lowercaseG,
+  charCodes.lowercaseM,
+  charCodes.lowercaseS,
+  charCodes.lowercaseI,
+  charCodes.lowercaseY,
+  charCodes.lowercaseU,
+  charCodes.lowercaseD,
+]);
 
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
@@ -976,53 +983,52 @@ export default class Tokenizer extends ParserErrors {
   readRegexp(): void {
     const start = this.state.start + 1;
     let escaped, inClass;
-    for (;;) {
-      if (this.state.pos >= this.length) {
+    let { pos } = this.state;
+    for (; ; ++pos) {
+      if (pos >= this.length) {
         throw this.raise(start, Errors.UnterminatedRegExp);
       }
-      const ch = this.input.charAt(this.state.pos);
-      if (lineBreak.test(ch)) {
+      const ch = this.input.charCodeAt(pos);
+      if (isNewLine(ch)) {
         throw this.raise(start, Errors.UnterminatedRegExp);
       }
       if (escaped) {
         escaped = false;
       } else {
-        if (ch === "[") {
+        if (ch === charCodes.leftSquareBracket) {
           inClass = true;
-        } else if (ch === "]" && inClass) {
+        } else if (ch === charCodes.rightSquareBracket && inClass) {
           inClass = false;
-        } else if (ch === "/" && !inClass) {
+        } else if (ch === charCodes.slash && !inClass) {
           break;
         }
-        escaped = ch === "\\";
+        escaped = ch === charCodes.backslash;
       }
-      ++this.state.pos;
     }
-    const content = this.input.slice(start, this.state.pos);
-    ++this.state.pos;
+    const content = this.input.slice(start, pos);
+    ++pos;
 
     let mods = "";
 
-    while (this.state.pos < this.length) {
-      const char = this.input[this.state.pos];
-      const charCode = this.codePointAtPos(this.state.pos);
+    while (pos < this.length) {
+      const cp = this.codePointAtPos(pos);
+      // It doesn't matter if cp > 0xffff, the loop will either throw or break because we check on cp
+      const char = String.fromCharCode(cp);
 
-      if (VALID_REGEX_FLAGS.has(char)) {
-        if (mods.indexOf(char) > -1) {
-          this.raise(this.state.pos + 1, Errors.DuplicateRegExpFlags);
+      if (VALID_REGEX_FLAGS.has(cp)) {
+        if (mods.includes(char)) {
+          this.raise(pos + 1, Errors.DuplicateRegExpFlags);
         }
-      } else if (
-        isIdentifierChar(charCode) ||
-        charCode === charCodes.backslash
-      ) {
-        this.raise(this.state.pos + 1, Errors.MalformedRegExpFlags);
+      } else if (isIdentifierChar(cp) || cp === charCodes.backslash) {
+        this.raise(pos + 1, Errors.MalformedRegExpFlags);
       } else {
         break;
       }
 
-      ++this.state.pos;
+      ++pos;
       mods += char;
     }
+    this.state.pos = pos;
 
     this.finishToken(tt.regexp, {
       pattern: content,
