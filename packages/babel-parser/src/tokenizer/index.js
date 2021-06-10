@@ -975,11 +975,12 @@ export default class Tokenizer extends ParserErrors {
   readRegexp(): void {
     const start = this.state.start + 1;
     let escaped, inClass;
-    for (;;) {
-      if (this.state.pos >= this.length) {
+    let { pos } = this.state;
+    for (; ; ++pos) {
+      if (pos >= this.length) {
         throw this.raise(start, Errors.UnterminatedRegExp);
       }
-      const ch = this.input.charCodeAt(this.state.pos);
+      const ch = this.input.charCodeAt(pos);
       if (isNewLine(ch)) {
         throw this.raise(start, Errors.UnterminatedRegExp);
       }
@@ -995,33 +996,33 @@ export default class Tokenizer extends ParserErrors {
         }
         escaped = ch === charCodes.backslash;
       }
-      ++this.state.pos;
     }
-    const content = this.input.slice(start, this.state.pos);
-    ++this.state.pos;
+    const content = this.input.slice(start, pos);
+    ++pos;
 
     let mods = "";
 
-    while (this.state.pos < this.length) {
-      const char = this.input[this.state.pos];
-      const charCode = this.codePointAtPos(this.state.pos);
+    while (pos < this.length) {
+      const char = this.input[pos];
+      const charCode = this.codePointAtPos(pos);
 
       if (VALID_REGEX_FLAGS.has(char)) {
         if (mods.indexOf(char) > -1) {
-          this.raise(this.state.pos + 1, Errors.DuplicateRegExpFlags);
+          this.raise(pos + 1, Errors.DuplicateRegExpFlags);
         }
       } else if (
         isIdentifierChar(charCode) ||
         charCode === charCodes.backslash
       ) {
-        this.raise(this.state.pos + 1, Errors.MalformedRegExpFlags);
+        this.raise(pos + 1, Errors.MalformedRegExpFlags);
       } else {
         break;
       }
 
-      ++this.state.pos;
+      ++pos;
       mods += char;
     }
+    this.state.pos = pos;
 
     this.finishToken(tt.regexp, {
       pattern: content,
