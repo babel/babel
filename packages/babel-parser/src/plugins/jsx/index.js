@@ -616,15 +616,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     updateContext(prevType: TokenType): void {
       super.updateContext(prevType);
       const { context, type } = this.state;
-      if (type === tt.braceL) {
-        const curContext = context[context.length - 1];
-        if (curContext === tc.j_oTag) {
-          context.push(tc.brace);
-        } else if (curContext === tc.j_expr) {
-          context.push(tc.templateQuasi);
-        }
-        this.state.exprAllowed = true;
-      } else if (type === tt.slash && prevType === tt.jsxTagStart) {
+      if (type === tt.slash && prevType === tt.jsxTagStart) {
         context.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
         context.push(tc.j_cTag); // reconsider as closing tag context
         this.state.exprAllowed = false;
