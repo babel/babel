@@ -1,3 +1,3 @@
 let [a] = '';
 
-expect(undefined).toBe(a)
+expect(a).toBe(undefined)
