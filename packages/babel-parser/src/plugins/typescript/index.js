@@ -2043,6 +2043,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseSubscriptState,
     ): N.Expression {
       if (!this.hasPrecedingLineBreak() && this.match(tt.bang)) {
+        // When ! is consumed as a postfix operator (non-null assertion),
+        // disallow JSX tag forming after. e.g. When parsing `p! < n.p!`
+        // `<n.p` can not be a start of JSX tag
+        this.state.exprAllowed = false;
         this.next();
 
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(
