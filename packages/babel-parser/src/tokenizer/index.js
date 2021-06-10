@@ -12,7 +12,6 @@ import { type TokContext, types as ct } from "./context";
 import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
 import { SourceLocation } from "../util/location";
 import {
-  lineBreak,
   lineBreakG,
   isNewLine,
   isWhitespace,
@@ -980,21 +979,21 @@ export default class Tokenizer extends ParserErrors {
       if (this.state.pos >= this.length) {
         throw this.raise(start, Errors.UnterminatedRegExp);
       }
-      const ch = this.input.charAt(this.state.pos);
-      if (lineBreak.test(ch)) {
+      const ch = this.input.charCodeAt(this.state.pos);
+      if (isNewLine(ch)) {
         throw this.raise(start, Errors.UnterminatedRegExp);
       }
       if (escaped) {
         escaped = false;
       } else {
-        if (ch === "[") {
+        if (ch === charCodes.leftSquareBracket) {
           inClass = true;
-        } else if (ch === "]" && inClass) {
+        } else if (ch === charCodes.rightSquareBracket && inClass) {
           inClass = false;
-        } else if (ch === "/" && !inClass) {
+        } else if (ch === charCodes.slash && !inClass) {
           break;
         }
-        escaped = ch === "\\";
+        escaped = ch === charCodes.backslash;
       }
       ++this.state.pos;
     }
