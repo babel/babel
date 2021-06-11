@@ -2471,10 +2471,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (!result.node) {
         if (refExpressionErrors) {
-          if (refExpressionErrors) {
-            super.setRefExpressionErrors(refExpressionErrors, result.error);
-          }
+          super.setOptionalParametersError(refExpressionErrors, result.error);
         }
+
         return expr;
       }
       if (result.error) this.state = result.failState;

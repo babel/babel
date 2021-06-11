@@ -1918,13 +1918,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // and if we come from inside parens
       if (this.state.maybeInArrowParameters) {
         const result = this.tryParse(() =>
-          super.parseConditional(expr, startPos, startLoc, refExpressionErrors),
+          super.parseConditional(expr, startPos, startLoc),
         );
 
         if (!result.node) {
           if (refExpressionErrors) {
-            super.setRefExpressionErrors(refExpressionErrors, result.error);
+            super.setOptionalParametersError(refExpressionErrors, result.error);
           }
+
           return expr;
         }
 

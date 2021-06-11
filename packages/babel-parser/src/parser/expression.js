@@ -241,7 +241,7 @@ export default class ExpressionParser extends LValParser {
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
-  setRefExpressionErrors(
+  setOptionalParametersError(
     refExpressionErrors: ExpressionErrors,
     resultError?: ?EnrichedSyntaxError,
   ) {
@@ -1466,8 +1466,7 @@ export default class ExpressionParser extends LValParser {
           tt.comma,
           refExpressionErrors.optionalParameters === -1
             ? null
-            : // $FlowIgnore
-              refExpressionErrors.optionalParameters,
+            : refExpressionErrors.optionalParameters,
         );
         if (this.match(tt.parenR)) {
           optionalCommaStart = this.state.start;

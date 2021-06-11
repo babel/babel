@@ -417,5 +417,6 @@ export default class UtilParser extends Tokenizer {
 export class ExpressionErrors {
   shorthandAssign = -1;
   doubleProto = -1;
+  //
   optionalParameters = -1;
 }
