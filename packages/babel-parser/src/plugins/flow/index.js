@@ -2843,7 +2843,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
         /*:: invariant(!jsx.aborted) */
 
-        if (!jsx.error) return jsx.node;
+        if (!jsx.error && jsx.node) return jsx.node;
 
         // Remove `tc.j_expr` and `tc.j_oTag` from context added
         // by parsing `jsxTagStart` to stop the JSX plugin from
@@ -3063,7 +3063,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           state,
         );
 
-        if (!arrow.error && !arrow.aborted) return arrow.node;
+        if (!arrow.error && !arrow.aborted && arrow.node) return arrow.node;
 
         const result = this.tryParse(
           () => super.parseSubscripts(base, startPos, startLoc, noCalls),

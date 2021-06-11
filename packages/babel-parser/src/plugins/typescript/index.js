@@ -2723,7 +2723,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         jsx = this.tryParse(() => super.parseMaybeAssign(...args), state);
         /*:: invariant(!jsx.aborted) */
 
-        if (!jsx.error) return jsx.node;
+        if (!jsx.error && jsx.node) return jsx.node;
 
         // Remove `tc.j_expr` and `tc.j_oTag` from context added
         // by parsing `jsxTagStart` to stop the JSX plugin from
@@ -2765,7 +2765,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return expr;
       }, state);
 
-      if (!arrow.error && !arrow.aborted) return arrow.node;
+      if (!arrow.error && !arrow.aborted && arrow.node) return arrow.node;
 
       if (!jsx) {
         // Try parsing a type cast instead of an arrow function.
@@ -2777,7 +2777,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // But don't directly call `this.tsParseTypeAssertion` because we want to handle any binary after it.
         typeCast = this.tryParse(() => super.parseMaybeAssign(...args), state);
         /*:: invariant(!typeCast.aborted) */
-        if (!typeCast.error) return typeCast.node;
+        if (!typeCast.error && typeCast.node) return typeCast.node;
       }
 
       if (jsx?.node) {

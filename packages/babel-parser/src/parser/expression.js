@@ -43,7 +43,6 @@ import {
   SCOPE_PROGRAM,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
-import type { EnrichedSyntaxError } from "./util";
 import {
   PARAM_AWAIT,
   PARAM_IN,
@@ -57,6 +56,7 @@ import {
   newExpressionScope,
 } from "../util/expression-scope";
 import { Errors, SourceTypeModuleErrors } from "./error";
+import type { ParsingError } from "./error";
 
 /*::
 import type { SourceType } from "../options";
@@ -238,20 +238,18 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
-  // Parse an assignment expression. This includes applications of
-  // operators like `+=`.
-
+  // This method is only used by
+  // the typescript and flow plugins.
   setOptionalParametersError(
     refExpressionErrors: ExpressionErrors,
-    resultError?: ?EnrichedSyntaxError,
+    resultError?: ?ParsingError,
   ) {
-    if (resultError && resultError.pos) {
-      refExpressionErrors.optionalParameters = resultError.pos;
-    } else {
-      refExpressionErrors.optionalParameters = this.state.start;
-    }
+    refExpressionErrors.optionalParameters =
+      resultError?.pos || this.state.start;
   }
 
+  // Parse an assignment expression. This includes applications of
+  // operators like `+=`.
   // https://tc39.es/ecma262/#prod-AssignmentExpression
   parseMaybeAssign(
     refExpressionErrors?: ?ExpressionErrors,

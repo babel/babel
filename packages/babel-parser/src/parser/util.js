@@ -14,6 +14,7 @@ import ProductionParameterHandler, {
   PARAM,
 } from "../util/production-parameter";
 import { Errors, type ErrorTemplate, ErrorCodes } from "./error";
+import type { ParsingError } from "./error";
 /*::
 import type ScopeHandler from "../util/scope";
 */
@@ -25,8 +26,6 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   aborted: Aborted,
   failState: FailState,
 };
-
-export type EnrichedSyntaxError = SyntaxError & { pos?: ?number };
 
 // ## Parser utilities
 
@@ -213,7 +212,7 @@ export default class UtilParser extends Tokenizer {
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
-    | TryParse<T | null, EnrichedSyntaxError, boolean, false, State>
+    | TryParse<T | null, ParsingError, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
     const abortSignal: { node: T | null } = { node: null };
     try {
@@ -230,7 +229,7 @@ export default class UtilParser extends Tokenizer {
         this.state.tokensLength = failState.tokensLength;
         return {
           node,
-          error: (failState.errors[oldState.errors.length]: SyntaxError),
+          error: (failState.errors[oldState.errors.length]: ParsingError),
           thrown: false,
           aborted: false,
           failState,
@@ -404,19 +403,19 @@ export default class UtilParser extends Tokenizer {
 }
 
 /**
- * The ExpressionErrors is a context struct used to track
- * - **shorthandAssign**: track initializer `=` position when parsing ambiguous
- *   patterns. When we are sure the parsed pattern is a RHS, which means it is
- *   not a pattern, we will throw on this position on invalid assign syntax,
- *   otherwise it will be reset to -1
- * - **doubleProto**: track the duplicate `__proto__` key position when parsing
- *   ambiguous object patterns. When we are sure the parsed pattern is a RHS,
- *   which means it is an object literal, we will throw on this position for
- *   __proto__ redefinition, otherwise it will be reset to -1
+ * The ExpressionErrors is a context struct used to track ambiguous patterns
+ * When we are sure the parsed pattern is a RHS, which means it is not a pattern,
+ * we will throw on this position on invalid assign syntax, otherwise it will be reset to -1
+ *
+ * Types of ExpressionErrors:
+ *
+ * - **shorthandAssign**: track initializer `=` position
+ * - **doubleProto**: track the duplicate `__proto__` key position
+ * - **optionalParameters**: track the optional paramter (`?`).
+ * It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
   shorthandAssign = -1;
   doubleProto = -1;
-  //
   optionalParameters = -1;
 }
