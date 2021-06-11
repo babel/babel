@@ -541,7 +541,7 @@ gulp.task(
 
 gulp.task("default", gulp.series("build"));
 
-// First build on worker processes for complilation speed
+// First build on worker processes for compilation speed
 gulp.task("build-no-bundle", () => buildBabel(true));
 // Incremental builds take place in main process
 gulp.task("build-no-bundle-watch", () => buildBabel(false));
