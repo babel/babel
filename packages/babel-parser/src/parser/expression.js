@@ -336,7 +336,13 @@ export default class ExpressionParser extends LValParser {
       return expr;
     }
 
-    return this.parseConditional(expr, startPos, startLoc, refNeedsArrowPos);
+    return this.parseConditional(
+      expr,
+      startPos,
+      startLoc,
+      refNeedsArrowPos,
+      refExpressionErrors,
+    );
   }
 
   parseConditional(
@@ -346,6 +352,8 @@ export default class ExpressionParser extends LValParser {
     // FIXME: Disabling this for now since can't seem to get it to play nicely
     // eslint-disable-next-line no-unused-vars
     refNeedsArrowPos?: ?Pos,
+    // eslint-disable-next-line no-unused-vars
+    refExpressionErrors?: ?ExpressionErrors,
   ): N.Expression {
     if (this.eat(tt.question)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -1470,7 +1478,12 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma, refNeedsArrowPos.start || null);
+        this.expect(
+          tt.comma,
+          refExpressionErrors.optionalParameters === -1
+            ? null
+            : refExpressionErrors.optionalParameters,
+        );
         if (this.match(tt.parenR)) {
           optionalCommaStart = this.state.start;
           break;
@@ -1529,7 +1542,6 @@ export default class ExpressionParser extends LValParser {
     if (optionalCommaStart) this.unexpected(optionalCommaStart);
     if (spreadStart) this.unexpected(spreadStart);
     this.checkExpressionErrors(refExpressionErrors, true);
-    if (refNeedsArrowPos.start) this.unexpected(refNeedsArrowPos.start);
 
     this.toReferencedListDeep(exprList, /* isParenthesizedExpr */ true);
     if (exprList.length > 1) {

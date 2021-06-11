@@ -175,9 +175,9 @@ export default class UtilParser extends Tokenizer {
         template: `Unexpected token, expected "${messageOrType.label}"`,
       };
     }
+
     /* eslint-disable @babel/development-internal/dry-error-messages */
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
-    /* eslint-enable @babel/development-internal/dry-error-messages */
   }
 
   expectPlugin(name: string, pos?: ?number): true {
@@ -267,13 +267,21 @@ export default class UtilParser extends Tokenizer {
     andThrow: boolean,
   ) {
     if (!refExpressionErrors) return false;
-    const { shorthandAssign, doubleProto } = refExpressionErrors;
-    if (!andThrow) return shorthandAssign >= 0 || doubleProto >= 0;
+    const { shorthandAssign, doubleProto, optionalParameters } =
+      refExpressionErrors;
+    if (!andThrow) {
+      return (
+        shorthandAssign >= 0 || doubleProto >= 0 || optionalParameters >= 0
+      );
+    }
     if (shorthandAssign >= 0) {
       this.unexpected(shorthandAssign);
     }
     if (doubleProto >= 0) {
       this.raise(doubleProto, Errors.DuplicateProto);
+    }
+    if (optionalParameters >= 0) {
+      this.unexpected(optionalParameters);
     }
   }
 
@@ -407,4 +415,5 @@ export default class UtilParser extends Tokenizer {
 export class ExpressionErrors {
   shorthandAssign = -1;
   doubleProto = -1;
+  optionalParameters = -1;
 }

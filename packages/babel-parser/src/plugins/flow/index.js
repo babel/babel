@@ -1911,6 +1911,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: number,
       startLoc: Position,
       refNeedsArrowPos?: ?Pos,
+      refExpressionErrors?: ?ExpressionErrors,
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
@@ -1918,12 +1919,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // and if we come from inside parens
       if (refNeedsArrowPos) {
         const result = this.tryParse(() =>
-          super.parseConditional(expr, startPos, startLoc),
+          super.parseConditional(
+            expr,
+            startPos,
+            startLoc,
+            null,
+            refExpressionErrors,
+          ),
         );
 
         if (!result.node) {
           // $FlowIgnore
-          refNeedsArrowPos.start = result.error.pos || this.state.start;
+          refExpressionErrors.optionalParameters =
+            // $FlowIgnore
+            result.error.pos || this.state.start;
           return expr;
         }
 
