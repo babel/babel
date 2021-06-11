@@ -5763,14 +5763,13 @@ __metadata:
     eslint-plugin-prettier: ^3.4.0
     fancy-log: ^1.3.3
     flow-bin: ^0.123.0
+    glob: ^7.1.7
     gulp: ^4.0.2
-    gulp-babel: ^8.0.0
     gulp-filter: ^5.1.0
-    gulp-newer: ^1.0.0
     gulp-plumber: ^1.2.1
-    gulp-revert-path: ^2.0.0
     husky: ^3.0.0
     jest: ^27.0.0
+    jest-worker: ^27.0.2
     lint-staged: ^9.2.0
     lodash: ^4.17.21
     mergeiterator: ^1.2.5
@@ -8835,9 +8834,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.0.0, glob@npm:^7.0.3, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6":
-  version: 7.1.6
-  resolution: "glob@npm:7.1.6"
+"glob@npm:^7.0.0, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.1.7":
+  version: 7.1.7
+  resolution: "glob@npm:7.1.7"
   dependencies:
     fs.realpath: ^1.0.0
     inflight: ^1.0.4
@@ -8845,7 +8844,7 @@ fsevents@^1.2.7:
     minimatch: ^3.0.4
     once: ^1.3.0
     path-is-absolute: ^1.0.0
-  checksum: 789977b52432865bd63846da5c75a6efc2c56abdc0cb5ffcdb8e91eeb67a58fa5594c1195d18b2b4aff99675b0739ed6bd61024b26562e0cca18c8f993efdc82
+  checksum: 352f74f08247db5420161a2f68f2bd84b53228b5fcfc9dcc37cd54d3f19ec0232495d84aeff1286d0727059e9fdc1031400e00b971bdc59e30f8f82b199c9d02
   languageName: node
   linkType: hard
 
@@ -8963,20 +8962,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"gulp-babel@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "gulp-babel@npm:8.0.0"
-  dependencies:
-    plugin-error: ^1.0.1
-    replace-ext: ^1.0.0
-    through2: ^2.0.0
-    vinyl-sourcemaps-apply: ^0.2.0
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  checksum: d4589095f5de3f9b823e119186966550a713d4aa5868e4efd094c84054e0864f336d5140fb9418d0b17d27c18224fc982be70e8ae53ad60c9c64915b080e817f
-  languageName: node
-  linkType: hard
-
 "gulp-cli@npm:^2.2.0":
   version: 2.3.0
   resolution: "gulp-cli@npm:2.3.0"
@@ -9016,17 +9001,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"gulp-newer@npm:^1.0.0":
-  version: 1.4.0
-  resolution: "gulp-newer@npm:1.4.0"
-  dependencies:
-    glob: ^7.0.3
-    kew: ^0.7.0
-    plugin-error: ^0.1.2
-  checksum: 4bdcc14ef83a8cf27e4e8eadde76c607f1af0096e446c77ad9ea72518a326f31aa623c79c3b3f26138bc91012f9c3f58a9167d907fdcfbed9b0a19e721d432d2
-  languageName: node
-  linkType: hard
-
 "gulp-plumber@npm:^1.2.1":
   version: 1.2.1
   resolution: "gulp-plumber@npm:1.2.1"
@@ -9036,15 +9010,6 @@ fsevents@^1.2.7:
     plugin-error: ^0.1.2
     through2: ^2.0.3
   checksum: 1c1cad8ddc0c578784641684e9dd4cad3b35a102a358e15fe04a1cd82fb1d0c88bf9ed44e3cbf1abadad7d2c8f402b23570e923283522a08e61843d07d4fdf6a
-  languageName: node
-  linkType: hard
-
-"gulp-revert-path@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "gulp-revert-path@npm:2.0.0"
-  dependencies:
-    through2: ^2.0.0
-  checksum: c2b01db2942c084f8cb11cecff22663a3ab894cdf43daed601bdaa9c713797e11739415b46f18342171fb0c65c1fe57d18dd40f93da403002e99f453b5661d77
   languageName: node
   linkType: hard
 
@@ -10530,14 +10495,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-worker@npm:^27.0.1":
-  version: 27.0.1
-  resolution: "jest-worker@npm:27.0.1"
+"jest-worker@npm:^27.0.1, jest-worker@npm:^27.0.2":
+  version: 27.0.2
+  resolution: "jest-worker@npm:27.0.2"
   dependencies:
     "@types/node": "*"
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
-  checksum: c99fcfd6bf2ef0c9fef30e08fb00d7fe951be84d2cff37a3d8983d683857b150a7ac60829ed30893c69277a1d74b57fc2b8aae83ded208fd574985fd9b04162f
+  checksum: bfbfd3d0af94a5505e841719bba4f57823305a3333b3dcecad333eea517c18ee3ba528e8fab017444ad93666ca15b73f1969b71fe0ba9f9abec8843a74b081e7
   languageName: node
   linkType: hard
 
@@ -10798,13 +10763,6 @@ fsevents@^1.2.7:
   version: 1.0.0
   resolution: "just-debounce@npm:1.0.0"
   checksum: 579b3a5508e1f96e71b46104af0f872e0c9318ab2a5c551b921bb44108e0763b50d11a3fc2b4d82ec75a54888d8669ff1f968af6168a5c15df9b9ac9eddfb16f
-  languageName: node
-  linkType: hard
-
-"kew@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "kew@npm:0.7.0"
-  checksum: be928d4248c934f38edda580144533bc93751f6b81d34e01cb1ff4196e63faf8957f5d54e7ef5c6529cbfdcc8f63a1acd53511e20955744b27c7eae965445775
   languageName: node
   linkType: hard
 
@@ -12617,18 +12575,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"plugin-error@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "plugin-error@npm:1.0.1"
-  dependencies:
-    ansi-colors: ^1.0.1
-    arr-diff: ^4.0.0
-    arr-union: ^3.1.0
-    extend-shallow: ^3.0.2
-  checksum: d2e48e6b1884eb02dccb295213607a6a3da60156f5dc1b77a342577a4eb80195fb1194026dc3dd571591e678644947e56e944b21cf70568c49f18a2e375fd1df
-  languageName: node
-  linkType: hard
-
 "posix-character-classes@npm:^0.1.0":
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
@@ -13874,7 +13820,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"source-map@npm:^0.5.0, source-map@npm:^0.5.1, source-map@npm:^0.5.3, source-map@npm:^0.5.6, source-map@npm:~0.5.1, source-map@npm:~0.5.3":
+"source-map@npm:^0.5.0, source-map@npm:^0.5.3, source-map@npm:^0.5.6, source-map@npm:~0.5.1, source-map@npm:~0.5.3":
   version: 0.5.7
   resolution: "source-map@npm:0.5.7"
   checksum: 737face96577a2184a42f141607fcc2c9db5620cb8517ae8ab3924476defa138fc26b0bab31e98cbd6f19211ecbf78400b59f801ff7a0f87aa9faa79f7433e10
@@ -15221,15 +15167,6 @@ typescript@~4.2.3:
     remove-bom-buffer: ^3.0.0
     vinyl: ^2.0.0
   checksum: 372d6f0797596bb7d86a3c86029a93f08a98816a615e418d482c77a2de95de5f65f46f6b488a56994d8dcb639b16b1e680b19e41e993479ef4729fc65cc45fb4
-  languageName: node
-  linkType: hard
-
-"vinyl-sourcemaps-apply@npm:^0.2.0":
-  version: 0.2.1
-  resolution: "vinyl-sourcemaps-apply@npm:0.2.1"
-  dependencies:
-    source-map: ^0.5.1
-  checksum: c1d826acf474831a58609e0d19f0f7e907cd6f2a347a67c2879aa44e149491f0b47449bfe906e9da54f026806196b3ac92f8ae4dfe3d3a44353baab1885a03b4
   languageName: node
   linkType: hard
 
