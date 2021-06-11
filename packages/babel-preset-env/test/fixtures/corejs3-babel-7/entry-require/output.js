@@ -46,6 +46,8 @@ require("core-js/modules/es.string.trim-end.js");
 
 require("core-js/modules/es.string.trim-start.js");
 
+require("core-js/modules/es.typed-array.sort.js");
+
 require("core-js/modules/web.dom-collections.for-each.js");
 
 require("core-js/modules/web.dom-collections.iterator.js");

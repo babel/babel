@@ -85,6 +85,7 @@ import "core-js/modules/es.typed-array.uint32-array.js";
 import "core-js/modules/es.typed-array.from.js";
 import "core-js/modules/es.typed-array.includes.js";
 import "core-js/modules/es.typed-array.of.js";
+import "core-js/modules/es.typed-array.sort.js";
 import "core-js/modules/es.typed-array.to-string.js";
 import "core-js/modules/es.weak-map.js";
 import "core-js/modules/es.weak-set.js";
