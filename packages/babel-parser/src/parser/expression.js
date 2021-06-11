@@ -30,7 +30,6 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import type { Pos } from "../util/location";
 import { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import {
@@ -245,8 +244,6 @@ export default class ExpressionParser extends LValParser {
   parseMaybeAssign(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
-    // eslint-disable-next-line no-unused-vars
-    refNeedsArrowPos?: ?Pos,
   ): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
@@ -1446,7 +1443,6 @@ export default class ExpressionParser extends LValParser {
     const innerStartLoc = this.state.startLoc;
     const exprList = [];
     const refExpressionErrors = new ExpressionErrors();
-    // const refNeedsArrowPos = { start: 0 };
     let first = true;
     let spreadStart;
     let optionalCommaStart;
