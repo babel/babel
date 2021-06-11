@@ -10,7 +10,7 @@ import type State from "../../tokenizer/state";
 import { types as tt } from "../../tokenizer/types";
 import { types as ct } from "../../tokenizer/context";
 import * as N from "../../types";
-import type { Pos, Position } from "../../util/location";
+import type { Position } from "../../util/location";
 import type Parser from "../../parser";
 import {
   type BindingTypes,
@@ -2452,16 +2452,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       expr: N.Expression,
       startPos: number,
       startLoc: Position,
-      refNeedsArrowPos?: ?Pos,
+      refExpressionErrors?: ?ExpressionErrors,
     ): N.Expression {
       // only do the expensive clone if there is a question mark
       // and if we come from inside parens
-      if (!refNeedsArrowPos || !this.match(tt.question)) {
+      if (!this.state.maybeInArrowParameters || !this.match(tt.question)) {
         return super.parseConditional(
           expr,
           startPos,
           startLoc,
-          refNeedsArrowPos,
+          refExpressionErrors,
         );
       }
 
@@ -2471,7 +2471,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (!result.node) {
         // $FlowIgnore
-        refNeedsArrowPos.start = result.error.pos || this.state.start;
+        refExpressionErrors.optionalParameters =
+          // $FlowIgnore
+          result.error.pos || this.state.start;
         return expr;
       }
       if (result.error) this.state = result.failState;

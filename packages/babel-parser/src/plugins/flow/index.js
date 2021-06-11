@@ -1910,22 +1910,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       expr: N.Expression,
       startPos: number,
       startLoc: Position,
-      refNeedsArrowPos?: ?Pos,
       refExpressionErrors?: ?ExpressionErrors,
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
       // only use the expensive "tryParse" method if there is a question mark
       // and if we come from inside parens
-      if (refNeedsArrowPos) {
+      if (this.state.maybeInArrowParameters) {
         const result = this.tryParse(() =>
-          super.parseConditional(
-            expr,
-            startPos,
-            startLoc,
-            null,
-            refExpressionErrors,
-          ),
+          super.parseConditional(expr, startPos, startLoc, refExpressionErrors),
         );
 
         if (!result.node) {

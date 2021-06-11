@@ -222,14 +222,9 @@ export default class ExpressionParser extends LValParser {
   parseMaybeAssignDisallowIn(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: ?Pos,
   ) {
     return this.disallowInAnd(() =>
-      this.parseMaybeAssign(
-        refExpressionErrors,
-        afterLeftParse,
-        refNeedsArrowPos,
-      ),
+      this.parseMaybeAssign(refExpressionErrors, afterLeftParse),
     );
   }
 
@@ -237,14 +232,9 @@ export default class ExpressionParser extends LValParser {
   parseMaybeAssignAllowIn(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: ?Pos,
   ) {
     return this.allowInAnd(() =>
-      this.parseMaybeAssign(
-        refExpressionErrors,
-        afterLeftParse,
-        refNeedsArrowPos,
-      ),
+      this.parseMaybeAssign(refExpressionErrors, afterLeftParse),
     );
   }
 
@@ -255,6 +245,7 @@ export default class ExpressionParser extends LValParser {
   parseMaybeAssign(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
+    // eslint-disable-next-line no-unused-vars
     refNeedsArrowPos?: ?Pos,
   ): N.Expression {
     const startPos = this.state.start;
@@ -285,10 +276,7 @@ export default class ExpressionParser extends LValParser {
       this.state.potentialArrowAt = this.state.start;
     }
 
-    let left = this.parseMaybeConditional(
-      refExpressionErrors,
-      refNeedsArrowPos,
-    );
+    let left = this.parseMaybeConditional(refExpressionErrors);
     if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startPos, startLoc);
     }
@@ -323,10 +311,7 @@ export default class ExpressionParser extends LValParser {
   // Parse a ternary conditional (`?:`) operator.
   // https://tc39.es/ecma262/#prod-ConditionalExpression
 
-  parseMaybeConditional(
-    refExpressionErrors: ExpressionErrors,
-    refNeedsArrowPos?: ?Pos,
-  ): N.Expression {
+  parseMaybeConditional(refExpressionErrors: ExpressionErrors): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
@@ -336,13 +321,7 @@ export default class ExpressionParser extends LValParser {
       return expr;
     }
 
-    return this.parseConditional(
-      expr,
-      startPos,
-      startLoc,
-      refNeedsArrowPos,
-      refExpressionErrors,
-    );
+    return this.parseConditional(expr, startPos, startLoc, refExpressionErrors);
   }
 
   parseConditional(
@@ -350,8 +329,6 @@ export default class ExpressionParser extends LValParser {
     startPos: number,
     startLoc: Position,
     // FIXME: Disabling this for now since can't seem to get it to play nicely
-    // eslint-disable-next-line no-unused-vars
-    refNeedsArrowPos?: ?Pos,
     // eslint-disable-next-line no-unused-vars
     refExpressionErrors?: ?ExpressionErrors,
   ): N.Expression {
@@ -1469,7 +1446,7 @@ export default class ExpressionParser extends LValParser {
     const innerStartLoc = this.state.startLoc;
     const exprList = [];
     const refExpressionErrors = new ExpressionErrors();
-    const refNeedsArrowPos = { start: 0 };
+    // const refNeedsArrowPos = { start: 0 };
     let first = true;
     let spreadStart;
     let optionalCommaStart;
@@ -1482,7 +1459,8 @@ export default class ExpressionParser extends LValParser {
           tt.comma,
           refExpressionErrors.optionalParameters === -1
             ? null
-            : refExpressionErrors.optionalParameters,
+            : // $FlowIgnore
+              refExpressionErrors.optionalParameters,
         );
         if (this.match(tt.parenR)) {
           optionalCommaStart = this.state.start;
@@ -1510,7 +1488,6 @@ export default class ExpressionParser extends LValParser {
           this.parseMaybeAssignAllowIn(
             refExpressionErrors,
             this.parseParenItem,
-            refNeedsArrowPos,
           ),
         );
       }
@@ -2329,11 +2306,9 @@ export default class ExpressionParser extends LValParser {
       this.next();
       elt = this.finishNode(node, "ArgumentPlaceholder");
     } else {
-      const refNeedsArrowPos = { start: 0 };
       elt = this.parseMaybeAssignAllowIn(
         refExpressionErrors,
         this.parseParenItem,
-        refNeedsArrowPos,
       );
     }
     return elt;
