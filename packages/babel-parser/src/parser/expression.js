@@ -43,6 +43,7 @@ import {
   SCOPE_PROGRAM,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
+import type { EnrichedSyntaxError } from "./util";
 import {
   PARAM_AWAIT,
   PARAM_IN,
@@ -239,6 +240,17 @@ export default class ExpressionParser extends LValParser {
 
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
+
+  setRefExpressionErrors(
+    refExpressionErrors: ExpressionErrors,
+    resultError?: ?EnrichedSyntaxError,
+  ) {
+    if (resultError && resultError.pos) {
+      refExpressionErrors.optionalParameters = resultError.pos;
+    } else {
+      refExpressionErrors.optionalParameters = this.state.start;
+    }
+  }
 
   // https://tc39.es/ecma262/#prod-AssignmentExpression
   parseMaybeAssign(

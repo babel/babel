@@ -2470,10 +2470,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
 
       if (!result.node) {
-        // $FlowIgnore
-        refExpressionErrors.optionalParameters =
-          // $FlowIgnore
-          result.error.pos || this.state.start;
+        if (refExpressionErrors) {
+          if (refExpressionErrors) {
+            super.setRefExpressionErrors(refExpressionErrors, result.error);
+          }
+        }
         return expr;
       }
       if (result.error) this.state = result.failState;

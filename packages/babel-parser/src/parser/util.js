@@ -26,6 +26,8 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   failState: FailState,
 };
 
+export type EnrichedSyntaxError = SyntaxError & { pos?: ?number };
+
 // ## Parser utilities
 
 export default class UtilParser extends Tokenizer {
@@ -211,7 +213,7 @@ export default class UtilParser extends Tokenizer {
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
-    | TryParse<T | null, SyntaxError, boolean, false, State>
+    | TryParse<T | null, EnrichedSyntaxError, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
     const abortSignal: { node: T | null } = { node: null };
     try {
