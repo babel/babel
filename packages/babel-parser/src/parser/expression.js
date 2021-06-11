@@ -337,7 +337,6 @@ export default class ExpressionParser extends LValParser {
     expr: N.Expression,
     startPos: number,
     startLoc: Position,
-    // FIXME: Disabling this for now since can't seem to get it to play nicely
     // eslint-disable-next-line no-unused-vars
     refExpressionErrors?: ?ExpressionErrors,
   ): N.Expression {
