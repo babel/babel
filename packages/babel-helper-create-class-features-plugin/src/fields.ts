@@ -672,7 +672,7 @@ const thisContextVisitor = traverse.visitors.merge([
 const innerReferencesVisitor = {
   ReferencedIdentifier(path, state) {
     const { name } = path.node;
-    if (path.scope.bindingIdentifierEquals(name, state.innerBinding)) {
+    if (path.scope.bindingIdentifierEquals(path.node.name, state.innerBinding)) {
       state.needsClassRef = true;
       path.node.name = state.classRef.name;
     }
