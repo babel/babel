@@ -1,8 +1,9 @@
 class Foo {
-    #tag() {
-      return this;
-    }
-    
-    #tag2 = this.#tag;
+  #tag;
+
+  test() {
+    this.#tag``;
   }
-  new Foo();
+}
+
+new Foo();

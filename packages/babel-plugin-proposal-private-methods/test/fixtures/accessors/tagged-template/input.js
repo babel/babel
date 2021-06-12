@@ -1,14 +1,7 @@
 class Foo {
-    #tag() {
-      return this;
-    }
-  
-    get #privateTagMethod(){
-        return this.#tag``
-    }
-  
-    publicGetPrivateTagMethod(){
-        return this.#privateTagMethod
-    }
+  get #tag() {
+    return () => this;
   }
-  const instance = new Foo();
+}
+
+new Foo();

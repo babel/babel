@@ -1,16 +1,10 @@
 class Foo {
-  #tag() {
-    return this;
+  get #tag() {
+    return () => this;
   }
-
-  get #privateTagMethod(){
-      return this.#tag``
-  }
-
-  publicGetPrivateTagMethod(){
-      return this.#privateTagMethod
+  
+  constructor() {
+    const receiver = this.#tag``;
+    expect(receiver).toBe(this);
   }
 }
-const instance = new Foo();
-
-expect(instance.publicGetPrivateTagMethod()).toEqual(instance)

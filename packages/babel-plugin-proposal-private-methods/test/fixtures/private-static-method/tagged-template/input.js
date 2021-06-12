@@ -1,6 +1,6 @@
 class Foo {
-  #tag() {
-    return this;
+  static #tag() {
+    this.#tag``;
   }
 }
 new Foo();

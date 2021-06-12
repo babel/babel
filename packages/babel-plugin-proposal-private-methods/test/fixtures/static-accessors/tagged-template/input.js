@@ -1,9 +1,10 @@
 class Foo {
-    static #tag() {
-      return this;
-    }
+  static get #tag() {
+    return () => this;
+  }
   
-    static get privateTagMethod() {
-      return this.#tag``;
-    }
+  static test() {
+    const receiver = this.#tag``;
+    expect(receiver).toBe(this);
+  }
 }
