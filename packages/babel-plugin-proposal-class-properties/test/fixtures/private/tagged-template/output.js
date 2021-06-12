@@ -1,22 +1,24 @@
-var _tag = /*#__PURE__*/new WeakSet();
+var _tag = /*#__PURE__*/new WeakMap();
 
-var _tag3 = /*#__PURE__*/new WeakMap();
-
-var Foo = function Foo() {
+var Foo = /*#__PURE__*/function () {
   "use strict";
 
-  babelHelpers.classCallCheck(this, Foo);
+  function Foo() {
+    babelHelpers.classCallCheck(this, Foo);
 
-  _tag.add(this);
+    _tag.set(this, {
+      writable: true,
+      value: void 0
+    });
+  }
 
-  _tag3.set(this, {
-    writable: true,
-    value: babelHelpers.classPrivateMethodGet(this, _tag, _tag2)
-  });
-};
-
-function _tag2() {
-  return this;
-}
+  babelHelpers.createClass(Foo, [{
+    key: "test",
+    value: function test() {
+      babelHelpers.classPrivateFieldGet(this, _tag).bind(this)``;
+    }
+  }]);
+  return Foo;
+}();
 
 new Foo();

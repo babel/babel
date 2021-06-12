@@ -1,14 +1,7 @@
-var _tag = /*#__PURE__*/new WeakSet();
+class Foo {}
 
-class Foo {
-  constructor() {
-    _tag.add(this);
-  }
-
-}
-
-function _tag2() {
-  return this;
+function _tag() {
+  babelHelpers.classStaticPrivateMethodGet(this, Foo, _tag).bind(this)``;
 }
 
 new Foo();
