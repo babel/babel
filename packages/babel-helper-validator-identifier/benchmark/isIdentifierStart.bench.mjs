@@ -16,12 +16,13 @@ function benchCases(implementation, name) {
 
   suite.add(name + "#isIdentifierStart on 4 non-ASCII characters", () => {
     isIdentifierStart(0x80);
+    isIdentifierStart(0x0800);
     isIdentifierStart(0x4e00);
     isIdentifierStart(0xffff);
-    isIdentifierStart(0x10000);
   });
 
-  suite.add(name + "#isIdentifierStart on TIP character", () => {
+  suite.add(name + "#isIdentifierStart on 2 Astral characters", () => {
+    isIdentifierStart(0x10000);
     isIdentifierStart(0x30000);
   });
 }
