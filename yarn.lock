@@ -221,8 +221,8 @@ __metadata:
     "@babel/helper-compilation-targets": "workspace:^7.14.5"
     "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.14.5"
     "@babel/helper-transform-fixture-test-runner": "workspace:*"
-    "@babel/helpers": "workspace:^7.14.5"
-    "@babel/parser": "workspace:^7.14.5"
+    "@babel/helpers": "workspace:^7.14.6"
+    "@babel/parser": "workspace:^7.14.6"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
     "@babel/template": "workspace:^7.14.5"
     "@babel/traverse": "workspace:^7.14.5"
@@ -447,7 +447,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@workspace:^7.14.5, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
+"@babel/helper-create-class-features-plugin@workspace:^7.14.5, @babel/helper-create-class-features-plugin@workspace:^7.14.6, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
   version: 0.0.0-use.local
   resolution: "@babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin"
   dependencies:
@@ -903,7 +903,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@workspace:*, @babel/helpers@workspace:^7.14.5, @babel/helpers@workspace:packages/babel-helpers":
+"@babel/helpers@workspace:*, @babel/helpers@workspace:^7.14.6, @babel/helpers@workspace:packages/babel-helpers":
   version: 0.0.0-use.local
   resolution: "@babel/helpers@workspace:packages/babel-helpers"
   dependencies:
@@ -969,7 +969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@workspace:*, @babel/parser@workspace:^7.14.5, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:*, @babel/parser@workspace:^7.14.5, @babel/parser@workspace:^7.14.6, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
@@ -3034,7 +3034,7 @@ __metadata:
   resolution: "@babel/plugin-transform-typescript@workspace:packages/babel-plugin-transform-typescript"
   dependencies:
     "@babel/core": "workspace:*"
-    "@babel/helper-create-class-features-plugin": "workspace:^7.14.5"
+    "@babel/helper-create-class-features-plugin": "workspace:^7.14.6"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
     "@babel/plugin-syntax-typescript": "workspace:^7.14.5"
