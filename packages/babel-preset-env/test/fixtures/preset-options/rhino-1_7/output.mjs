@@ -1,3 +1,3 @@
 var a = function a() {
-    return 1;
+  return 1;
 };
