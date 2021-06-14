@@ -283,10 +283,14 @@ const makeDescriptorLoader = <Context, API>(
     return { value: item, options, dirname, alias };
   });
 
-const pluginDescriptorLoader =
-  makeDescriptorLoader<Context.SimplePlugin, PluginAPI>(makePluginAPI);
-const presetDescriptorLoader =
-  makeDescriptorLoader<Context.SimplePreset, PresetAPI>(makePresetAPI);
+const pluginDescriptorLoader = makeDescriptorLoader<
+  Context.SimplePlugin,
+  PluginAPI
+>(makePluginAPI);
+const presetDescriptorLoader = makeDescriptorLoader<
+  Context.SimplePreset,
+  PresetAPI
+>(makePresetAPI);
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.

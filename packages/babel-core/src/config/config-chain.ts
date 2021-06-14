@@ -717,8 +717,10 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
 function dedupDescriptors(
   items: Array<UnloadedDescriptor>,
 ): Array<UnloadedDescriptor> {
-  const map: Map<Function, Map<string | void, { value: UnloadedDescriptor }>> =
-    new Map();
+  const map: Map<
+    Function,
+    Map<string | void, { value: UnloadedDescriptor }>
+  > = new Map();
 
   const descriptors = [];
 
