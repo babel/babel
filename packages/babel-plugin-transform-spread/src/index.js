@@ -135,7 +135,7 @@ export default declare((api, options) => {
         if (args.length === 1 && args[0].argument.name === "arguments") {
           nodes = [args[0].argument];
         } else {
-          nodes = build(args, scope);
+          nodes = build(args, scope, this);
         }
 
         const first = nodes.shift();
@@ -177,7 +177,7 @@ export default declare((api, options) => {
         let args = node.arguments;
         if (!hasSpread(args)) return;
 
-        const nodes = build(args, scope);
+        const nodes = build(args, scope, this);
 
         const first = nodes.shift();
 
