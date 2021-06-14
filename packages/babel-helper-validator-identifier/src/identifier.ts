@@ -22,11 +22,32 @@ let astralIdentifierStartChars = "[\ud80c\ud81c-\ud820\ud822\ud840-\ud868\ud86a-
 /* prettier-ignore */
 let astralIdentifierTailChars = "\ud800[\uddfd\udee0\udf76-\udf7a]|\ud801[\udca0-\udca9]|\ud802[\ude01-\ude03\ude05\ude06\ude0c-\ude0f\ude38-\ude3a\ude3f\udee5\udee6]|\ud803[\udd24-\udd27\udd30-\udd39\udeab\udeac\udf46-\udf50]|\ud804[\udc00-\udc02\udc38-\udc46\udc66-\udc6f\udc7f-\udc82\udcb0-\udcba\udcf0-\udcf9\udd00-\udd02\udd27-\udd34\udd36-\udd3f\udd45\udd46\udd73\udd80-\udd82\uddb3-\uddc0\uddc9-\uddcc\uddce-\uddd9\ude2c-\ude37\ude3e\udedf-\udeea\udef0-\udef9\udf00-\udf03\udf3b\udf3c\udf3e-\udf44\udf47\udf48\udf4b-\udf4d\udf57\udf62\udf63\udf66-\udf6c\udf70-\udf74]|\ud805[\udc35-\udc46\udc50-\udc59\udc5e\udcb0-\udcc3\udcd0-\udcd9\uddaf-\uddb5\uddb8-\uddc0\udddc\udddd\ude30-\ude40\ude50-\ude59\udeab-\udeb7\udec0-\udec9\udf1d-\udf2b\udf30-\udf39]|\ud806[\udc2c-\udc3a\udce0-\udce9\udd30-\udd35\udd37\udd38\udd3b-\udd3e\udd40\udd42\udd43\udd50-\udd59\uddd1-\uddd7\uddda-\udde0\udde4\ude01-\ude0a\ude33-\ude39\ude3b-\ude3e\ude47\ude51-\ude5b\ude8a-\ude99]|\ud807[\udc2f-\udc36\udc38-\udc3f\udc50-\udc59\udc92-\udca7\udca9-\udcb6\udd31-\udd36\udd3a\udd3c\udd3d\udd3f-\udd45\udd47\udd50-\udd59\udd8a-\udd8e\udd90\udd91\udd93-\udd97\udda0-\udda9\udef3-\udef6]|\ud81a[\ude60-\ude69\udef0-\udef4\udf30-\udf36\udf50-\udf59]|\ud81b[\udf4f\udf51-\udf87\udf8f-\udf92\udfe4\udff0\udff1]|\ud82f[\udc9d\udc9e]|\ud834[\udd65-\udd69\udd6d-\udd72\udd7b-\udd82\udd85-\udd8b\uddaa-\uddad\ude42-\ude44]|\ud835[\udfce-\udfff]|\ud836[\ude00-\ude36\ude3b-\ude6c\ude75\ude84\ude9b-\ude9f\udea1-\udeaf]|\ud838[\udc00-\udc06\udc08-\udc18\udc1b-\udc21\udc23\udc24\udc26-\udc2a\udd30-\udd36\udd40-\udd49\udeec-\udef9]|\ud83a[\udcd0-\udcd6\udd44-\udd4a\udd50-\udd59]|\ud83e[\udff0-\udff9]|\udb40[\udd00-\uddef]";
 
-const basicIdentifierStart = new RegExp("[" + basicIdentifierStartChars + "]");
+// Create a 64k-bit array with a 1 bit for each BMP
+// character that can start an identifier.
 
-const basicIdentifierChar = new RegExp(
-  "[" + basicIdentifierStartChars + basicIdentifierTailChars + "]",
-);
+const basicIdentifierStartBits = new Uint32Array(2048);
+addBitsFromChars(basicIdentifierStartBits, basicIdentifierStartChars);
+
+// Create a 64k-bit array with a 1 bit for each BMP
+// character that can appear in an identifier.
+
+const basicIdentifierCharBits = basicIdentifierStartBits.slice();
+addBitsFromChars(basicIdentifierCharBits, basicIdentifierTailChars);
+
+function addBitsFromChars(bitArray: Uint32Array, charClass: string): void {
+  for (let i = 0, len = charClass.length; i < len; ) {
+    const from = charClass.charCodeAt(i++);
+    let to = from;
+    if (i < len && charClass.charCodeAt(i) === charCodes.dash) {
+      to = charClass.charCodeAt(i + 1);
+      i += 2;
+    }
+    for (let code = from; code <= to; ++code) {
+      const mask = 1 << (code & 31);
+      bitArray[code >>> 5] |= mask;
+    }
+  }
+}
 
 const astralIdentifierStart = new RegExp(astralIdentifierStartChars);
 
@@ -52,7 +73,9 @@ export function isIdentifierStart(code: number): boolean {
   if (code < charCodes.lowercaseA) return code === charCodes.underscore;
   if (code <= charCodes.lowercaseZ) return true;
   if (code <= 0xffff) {
-    return code >= 0xaa && basicIdentifierStart.test(String.fromCharCode(code));
+    const bits = basicIdentifierStartBits[code >>> 5];
+    const mask = 1 << (code & 31);
+    return Boolean(bits & mask);
   }
   return (
     code <= 0x10ffff && astralIdentifierStart.test(String.fromCodePoint(code))
@@ -69,7 +92,9 @@ export function isIdentifierChar(code: number): boolean {
   if (code < charCodes.lowercaseA) return code === charCodes.underscore;
   if (code <= charCodes.lowercaseZ) return true;
   if (code <= 0xffff) {
-    return code >= 0xaa && basicIdentifierChar.test(String.fromCharCode(code));
+    const bits = basicIdentifierCharBits[code >>> 5];
+    const mask = 1 << (code & 31);
+    return Boolean(bits & mask);
   }
   return (
     code <= 0x10ffff && astralIdentifierChar.test(String.fromCodePoint(code))
