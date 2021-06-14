@@ -168,9 +168,9 @@ export function createClassFeaturePlugin({
 
         if (!props.length && !isDecorated) return;
 
+        const innerBinding = path.node.id;
         let ref;
-
-        if (path.isClassExpression() || !path.node.id) {
+        if (!innerBinding || path.isClassExpression()) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
@@ -220,6 +220,7 @@ export function createClassFeaturePlugin({
               setPublicClassFields ?? loose,
               privateFieldsAsProperties ?? loose,
               constantSuper ?? loose,
+              innerBinding,
             ));
         }
 
