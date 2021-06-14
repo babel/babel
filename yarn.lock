@@ -5773,7 +5773,7 @@ __metadata:
     lint-staged: ^9.2.0
     lodash: ^4.17.21
     mergeiterator: ^1.2.5
-    prettier: 2.3.0
+    prettier: 2.3.1
     rollup: ^2.47.0
     rollup-plugin-dts: ^2.0.0
     rollup-plugin-node-polyfills: ^0.2.1
@@ -12605,12 +12605,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.3.0":
-  version: 2.3.0
-  resolution: "prettier@npm:2.3.0"
+"prettier@npm:2.3.1":
+  version: 2.3.1
+  resolution: "prettier@npm:2.3.1"
   bin:
     prettier: bin-prettier.js
-  checksum: 652640cc8b71bc5277cfb8bf6f161783ca588efcf683c3d630837b39da8d57fef35c9e00ae5855a8e3c75136c42274046c913cc2b2d2968558315f31c6a26981
+  checksum: 9b4a695b87ce5f510fc20feec01cce7371f0fa0b92ffe79d543f6be52e2004c532861629de4d7ab1c577e1f649dce3cfccd62cb2ca6526b1da8d9c63eb84bf36
   languageName: node
   linkType: hard
 
