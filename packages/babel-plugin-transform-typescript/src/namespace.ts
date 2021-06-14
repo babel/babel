@@ -69,11 +69,8 @@ function handleVariableDeclaration(
   const { declarations } = node;
   if (
     declarations.every(
-      (
-        declarator,
-      ): declarator is t.VariableDeclarator & {
-        id: t.Identifier;
-      } => t.isIdentifier(declarator.id),
+      (declarator): declarator is t.VariableDeclarator & { id: t.Identifier } =>
+        t.isIdentifier(declarator.id),
     )
   ) {
     // `export const a = 1` transforms to `const a = N.a = 1`, the output
