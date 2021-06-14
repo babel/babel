@@ -170,7 +170,7 @@ export function createClassFeaturePlugin({
 
         const innerBinding = path.node.id;
         let ref;
-        if (path.isClassExpression() || !innerBinding) {
+        if (!innerBinding || path.isClassExpression()) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
