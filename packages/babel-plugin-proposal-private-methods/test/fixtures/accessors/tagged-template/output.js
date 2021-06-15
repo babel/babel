@@ -6,6 +6,8 @@ class Foo {
       get: _get_tag,
       set: void 0
     });
+
+    babelHelpers.classPrivateFieldGet(this, _tag).bind(this)``;
   }
 
 }

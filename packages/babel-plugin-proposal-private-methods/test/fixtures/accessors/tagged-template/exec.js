@@ -1,6 +1,6 @@
 class Foo {
   get #tag() {
-    return () => this;
+    return function() { return this; };
   }
   
   constructor() {

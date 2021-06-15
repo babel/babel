@@ -7,7 +7,9 @@ class Foo {
 }
 
 function _get_tag() {
-  return () => this;
+  return function () {
+    return this;
+  };
 }
 
 var _tag = {

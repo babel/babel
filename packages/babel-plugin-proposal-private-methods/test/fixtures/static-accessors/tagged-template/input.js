@@ -1,6 +1,6 @@
 class Foo {
   static get #tag() {
-    return () => this;
+    return function() { return this; };
   }
   
   static test() {
