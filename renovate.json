@@ -61,7 +61,7 @@
     {
       "matchPackageNames": ["tests-test262", "tests-flow", "tests-typescript"],
       "groupName": "third-party parser tests",
-      "schedule": ["before 00:05am on Friday"],
+      "schedule": ["before 00:05 on Friday"],
       "postUpgradeTasks": {
         "commands": [
           "yarn install --immutable --skip-builds",
