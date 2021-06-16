@@ -2,8 +2,6 @@ import NodePath from "./path";
 import * as t from "@babel/types";
 import type Scope from "./scope";
 
-const testing = process.env.NODE_ENV === "test";
-
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
     this.parentPath = parentPath;
@@ -18,7 +16,6 @@ export default class TraversalContext {
   declare opts;
   queue: Array<NodePath> | null = null;
   priorityQueue: Array<NodePath> | null = null;
-  declare trap?: boolean;
 
   /**
    * This method does a simple check to determine whether or not we really need to attempt
@@ -57,10 +54,6 @@ export default class TraversalContext {
   }
 
   maybeQueue(path, notPriority?: boolean) {
-    if (this.trap) {
-      throw new Error("Infinite cycle detected");
-    }
-
     if (this.queue) {
       if (notPriority) {
         this.queue.push(path);
@@ -119,10 +112,6 @@ export default class TraversalContext {
 
       // this path no longer belongs to the tree
       if (path.key === null) continue;
-
-      if (testing && queue.length >= 10_000) {
-        this.trap = true;
-      }
 
       // ensure we don't visit the same node twice
       const { node } = path;
