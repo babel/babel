@@ -245,7 +245,9 @@ export default class ExpressionParser extends LValParser {
     resultError?: ?ParsingError,
   ) {
     refExpressionErrors.optionalParameters =
-      resultError?.pos || this.state.start;
+      resultError?.pos && resultError?.pos >= 0
+        ? resultError?.pos
+        : this.state.start;
   }
 
   // Parse an assignment expression. This includes applications of
@@ -2295,9 +2297,9 @@ export default class ExpressionParser extends LValParser {
     } else if (this.match(tt.ellipsis)) {
       const spreadNodeStartPos = this.state.start;
       const spreadNodeStartLoc = this.state.startLoc;
-      const refNeedsArrowPos = { start: 0 };
+
       elt = this.parseParenItem(
-        this.parseSpread(refExpressionErrors, refNeedsArrowPos),
+        this.parseSpread(refExpressionErrors),
         spreadNodeStartPos,
         spreadNodeStartLoc,
       );

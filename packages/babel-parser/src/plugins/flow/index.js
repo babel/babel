@@ -1922,9 +1922,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
 
         if (!result.node) {
-          if (refExpressionErrors) {
-            super.setOptionalParametersError(refExpressionErrors, result.error);
-          }
+          /*:: invariant(refExpressionErrors != null) */
+          super.setOptionalParametersError(refExpressionErrors, result.error);
 
           return expr;
         }
