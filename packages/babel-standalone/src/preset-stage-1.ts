@@ -27,7 +27,6 @@ export default (_: any, opts: any = {}) => {
     ],
     plugins: [
       babelPlugins.syntaxDecimal,
-      babelPlugins.syntaxModuleBlocks,
       babelPlugins.proposalExportDefaultFrom,
       [
         babelPlugins.proposalPipelineOperator,
