@@ -1922,8 +1922,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
 
         if (!result.node) {
-          /*:: invariant(refExpressionErrors != null) */
-          super.setOptionalParametersError(refExpressionErrors, result.error);
+          if (result.error) {
+            /*:: invariant(refExpressionErrors != null) */
+            super.setOptionalParametersError(refExpressionErrors, result.error);
+          }
 
           return expr;
         }

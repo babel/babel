@@ -179,6 +179,7 @@ export default class UtilParser extends Tokenizer {
 
     /* eslint-disable @babel/development-internal/dry-error-messages */
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
+    /* eslint-disable @babel/development-internal/dry-error-messages */
   }
 
   expectPlugin(name: string, pos?: ?number): true {

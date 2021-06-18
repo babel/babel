@@ -242,12 +242,10 @@ export default class ExpressionParser extends LValParser {
   // the typescript and flow plugins.
   setOptionalParametersError(
     refExpressionErrors: ExpressionErrors,
-    resultError?: ?ParsingError,
+    resultError?: ParsingError,
   ) {
     refExpressionErrors.optionalParameters =
-      resultError?.pos && resultError?.pos >= 0
-        ? resultError.pos
-        : this.state.start;
+      resultError?.pos ?? this.state.start;
   }
 
   // Parse an assignment expression. This includes applications of
