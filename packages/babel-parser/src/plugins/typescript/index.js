@@ -2720,9 +2720,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         state = this.state.clone();
 
         jsx = this.tryParse(() => super.parseMaybeAssign(...args), state);
-        /*:: invariant(!jsx.aborted) */
 
-        if (!jsx.error && jsx.node) return jsx.node;
+        /*:: invariant(!jsx.aborted) */
+        /*:: invariant(jsx.node != null) */
+        if (!jsx.error) return jsx.node;
 
         // Remove `tc.j_expr` and `tc.j_oTag` from context added
         // by parsing `jsxTagStart` to stop the JSX plugin from

@@ -246,7 +246,7 @@ export default class ExpressionParser extends LValParser {
   ) {
     refExpressionErrors.optionalParameters =
       resultError?.pos && resultError?.pos >= 0
-        ? resultError?.pos
+        ? resultError.pos
         : this.state.start;
   }
 
