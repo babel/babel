@@ -5,10 +5,9 @@
   var _iteratorError;
 
   try {
-    for (var _iterator = babelHelpers.asyncIterator(iterable), _step, _value; _step = await _iterator.next(), _iteratorNormalCompletion = _step.done, _value = await _step.value, !_iteratorNormalCompletion; _iteratorNormalCompletion = true) {
-      const _value2 = _value,
-            _value3 = babelHelpers.slicedToArray(_value2, 1),
-            value = _value3[0];
+    for (var _iterator = babelHelpers.asyncIterator(iterable), _step; !(_iteratorNormalCompletion = (_step = await _iterator.next()).done); _iteratorNormalCompletion = true) {
+      const _step$value = babelHelpers.slicedToArray(_step.value, 1),
+            value = _step$value[0];
     }
   } catch (err) {
     _didIteratorError = true;

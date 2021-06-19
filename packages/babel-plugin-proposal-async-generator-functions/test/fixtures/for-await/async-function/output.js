@@ -10,8 +10,8 @@ function _f() {
     var _iteratorError;
 
     try {
-      for (var _iterator = babelHelpers.asyncIterator(y), _step, _value; _step = yield _iterator.next(), _iteratorNormalCompletion = _step.done, _value = yield _step.value, !_iteratorNormalCompletion; _iteratorNormalCompletion = true) {
-        let x = _value;
+      for (var _iterator = babelHelpers.asyncIterator(y), _step; !(_iteratorNormalCompletion = (_step = yield _iterator.next()).done); _iteratorNormalCompletion = true) {
+        let x = _step.value;
         g(x);
       }
     } catch (err) {

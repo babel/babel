@@ -7,14 +7,10 @@ const buildForAwait = template(`
     var ITERATOR_ERROR_KEY;
     try {
       for (
-        var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY, STEP_VALUE;
-        (
-          STEP_KEY = await ITERATOR_KEY.next(),
-          ITERATOR_COMPLETION = STEP_KEY.done,
-          STEP_VALUE = await STEP_KEY.value,
-          !ITERATOR_COMPLETION
-        );
-        ITERATOR_COMPLETION = true) {
+        var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY;
+        !(ITERATOR_COMPLETION = (STEP_KEY = await ITERATOR_KEY.next()).done);
+        ITERATOR_COMPLETION = true
+      ) {
       }
     } catch (err) {
       ITERATOR_HAD_ERROR_KEY = true;
@@ -37,7 +33,7 @@ export default function (path, { getAsyncIterator }) {
   const { node, scope, parent } = path;
 
   const stepKey = scope.generateUidIdentifier("step");
-  const stepValue = scope.generateUidIdentifier("value");
+  const stepValue = t.memberExpression(stepKey, t.identifier("value"));
   const left = node.left;
   let declar;
 
@@ -61,8 +57,7 @@ export default function (path, { getAsyncIterator }) {
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
     GET_ITERATOR: getAsyncIterator,
     OBJECT: node.right,
-    STEP_VALUE: t.cloneNode(stepValue),
-    STEP_KEY: stepKey,
+    STEP_KEY: t.cloneNode(stepKey),
   });
 
   // remove async function wrapper
