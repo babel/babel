@@ -2,5 +2,6 @@
   "plugins": [
     ["pipelineOperator", { "proposal": "smart" }],
     "v8intrinsic"
-  ]
+  ],
+  "BABEL_8_BREAKING": false
 }
