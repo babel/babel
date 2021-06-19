@@ -1,11 +1,11 @@
 (async function () {
-  var _iteratorNormalCompletion = true;
+  var _iteratorAbruptCompletion = false;
   var _didIteratorError = false;
 
   var _iteratorError;
 
   try {
-    for (var _iterator = babelHelpers.asyncIterator(y), _step; !(_iteratorNormalCompletion = (_step = await _iterator.next()).done); _iteratorNormalCompletion = true) {
+    for (var _iterator = babelHelpers.asyncIterator(y), _step; _iteratorAbruptCompletion = !(_step = await _iterator.next()).done; _iteratorAbruptCompletion = false) {
       obj.x = _step.value;
     }
   } catch (err) {
@@ -13,7 +13,7 @@
     _iteratorError = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator.return != null) {
+      if (_iteratorAbruptCompletion && _iterator.return != null) {
         await _iterator.return();
       }
     } finally {

@@ -2,14 +2,14 @@ import { types as t, template } from "@babel/core";
 
 const buildForAwait = template(`
   async function wrapper() {
-    var ITERATOR_COMPLETION = true;
+    var ITERATOR_ABRUPT_COMPLETION = false;
     var ITERATOR_HAD_ERROR_KEY = false;
     var ITERATOR_ERROR_KEY;
     try {
       for (
         var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY;
-        !(ITERATOR_COMPLETION = (STEP_KEY = await ITERATOR_KEY.next()).done);
-        ITERATOR_COMPLETION = true
+        ITERATOR_ABRUPT_COMPLETION = !(STEP_KEY = await ITERATOR_KEY.next()).done;
+        ITERATOR_ABRUPT_COMPLETION = false
       ) {
       }
     } catch (err) {
@@ -17,7 +17,7 @@ const buildForAwait = template(`
       ITERATOR_ERROR_KEY = err;
     } finally {
       try {
-        if (!ITERATOR_COMPLETION && ITERATOR_KEY.return != null) {
+        if (ITERATOR_ABRUPT_COMPLETION && ITERATOR_KEY.return != null) {
           await ITERATOR_KEY.return();
         }
       } finally {
@@ -50,8 +50,8 @@ export default function (path, { getAsyncIterator }) {
   }
   let template = buildForAwait({
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
-    ITERATOR_COMPLETION: scope.generateUidIdentifier(
-      "iteratorNormalCompletion",
+    ITERATOR_ABRUPT_COMPLETION: scope.generateUidIdentifier(
+      "iteratorAbruptCompletion",
     ),
     ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
