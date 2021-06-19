@@ -30,7 +30,6 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import type { Pos } from "../util/location";
 import { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import {
@@ -57,6 +56,7 @@ import {
   newExpressionScope,
 } from "../util/expression-scope";
 import { Errors, SourceTypeModuleErrors } from "./error";
+import type { ParsingError } from "./error";
 
 /*::
 import type { SourceType } from "../options";
@@ -222,14 +222,9 @@ export default class ExpressionParser extends LValParser {
   parseMaybeAssignDisallowIn(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: ?Pos,
   ) {
     return this.disallowInAnd(() =>
-      this.parseMaybeAssign(
-        refExpressionErrors,
-        afterLeftParse,
-        refNeedsArrowPos,
-      ),
+      this.parseMaybeAssign(refExpressionErrors, afterLeftParse),
     );
   }
 
@@ -237,25 +232,28 @@ export default class ExpressionParser extends LValParser {
   parseMaybeAssignAllowIn(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: ?Pos,
   ) {
     return this.allowInAnd(() =>
-      this.parseMaybeAssign(
-        refExpressionErrors,
-        afterLeftParse,
-        refNeedsArrowPos,
-      ),
+      this.parseMaybeAssign(refExpressionErrors, afterLeftParse),
     );
+  }
+
+  // This method is only used by
+  // the typescript and flow plugins.
+  setOptionalParametersError(
+    refExpressionErrors: ExpressionErrors,
+    resultError?: ParsingError,
+  ) {
+    refExpressionErrors.optionalParameters =
+      resultError?.pos ?? this.state.start;
   }
 
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
-
   // https://tc39.es/ecma262/#prod-AssignmentExpression
   parseMaybeAssign(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: ?Pos,
   ): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
@@ -281,10 +279,7 @@ export default class ExpressionParser extends LValParser {
       this.state.potentialArrowAt = this.state.start;
     }
 
-    let left = this.parseMaybeConditional(
-      refExpressionErrors,
-      refNeedsArrowPos,
-    );
+    let left = this.parseMaybeConditional(refExpressionErrors);
     if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startPos, startLoc);
     }
@@ -319,10 +314,7 @@ export default class ExpressionParser extends LValParser {
   // Parse a ternary conditional (`?:`) operator.
   // https://tc39.es/ecma262/#prod-ConditionalExpression
 
-  parseMaybeConditional(
-    refExpressionErrors: ExpressionErrors,
-    refNeedsArrowPos?: ?Pos,
-  ): N.Expression {
+  parseMaybeConditional(refExpressionErrors: ExpressionErrors): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
@@ -332,16 +324,15 @@ export default class ExpressionParser extends LValParser {
       return expr;
     }
 
-    return this.parseConditional(expr, startPos, startLoc, refNeedsArrowPos);
+    return this.parseConditional(expr, startPos, startLoc, refExpressionErrors);
   }
 
   parseConditional(
     expr: N.Expression,
     startPos: number,
     startLoc: Position,
-    // FIXME: Disabling this for now since can't seem to get it to play nicely
     // eslint-disable-next-line no-unused-vars
-    refNeedsArrowPos?: ?Pos,
+    refExpressionErrors?: ?ExpressionErrors,
   ): N.Expression {
     if (this.eat(tt.question)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -931,12 +922,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       elts.push(
-        this.parseExprListItem(
-          false,
-          refExpressionErrors,
-          { start: 0 },
-          allowPlaceholder,
-        ),
+        this.parseExprListItem(false, refExpressionErrors, allowPlaceholder),
       );
     }
 
@@ -1449,7 +1435,6 @@ export default class ExpressionParser extends LValParser {
     const innerStartLoc = this.state.startLoc;
     const exprList = [];
     const refExpressionErrors = new ExpressionErrors();
-    const refNeedsArrowPos = { start: 0 };
     let first = true;
     let spreadStart;
     let optionalCommaStart;
@@ -1458,7 +1443,12 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma, refNeedsArrowPos.start || null);
+        this.expect(
+          tt.comma,
+          refExpressionErrors.optionalParameters === -1
+            ? null
+            : refExpressionErrors.optionalParameters,
+        );
         if (this.match(tt.parenR)) {
           optionalCommaStart = this.state.start;
           break;
@@ -1485,7 +1475,6 @@ export default class ExpressionParser extends LValParser {
           this.parseMaybeAssignAllowIn(
             refExpressionErrors,
             this.parseParenItem,
-            refNeedsArrowPos,
           ),
         );
       }
@@ -1517,7 +1506,6 @@ export default class ExpressionParser extends LValParser {
     if (optionalCommaStart) this.unexpected(optionalCommaStart);
     if (spreadStart) this.unexpected(spreadStart);
     this.checkExpressionErrors(refExpressionErrors, true);
-    if (refNeedsArrowPos.start) this.unexpected(refNeedsArrowPos.start);
 
     this.toReferencedListDeep(exprList, /* isParenthesizedExpr */ true);
     if (exprList.length > 1) {
@@ -2274,7 +2262,6 @@ export default class ExpressionParser extends LValParser {
   parseExprListItem(
     allowEmpty: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
-    refNeedsArrowPos: ?Pos,
     allowPlaceholder: ?boolean,
   ): ?N.Expression {
     let elt;
@@ -2286,8 +2273,9 @@ export default class ExpressionParser extends LValParser {
     } else if (this.match(tt.ellipsis)) {
       const spreadNodeStartPos = this.state.start;
       const spreadNodeStartLoc = this.state.startLoc;
+
       elt = this.parseParenItem(
-        this.parseSpread(refExpressionErrors, refNeedsArrowPos),
+        this.parseSpread(refExpressionErrors),
         spreadNodeStartPos,
         spreadNodeStartLoc,
       );
@@ -2303,7 +2291,6 @@ export default class ExpressionParser extends LValParser {
       elt = this.parseMaybeAssignAllowIn(
         refExpressionErrors,
         this.parseParenItem,
-        refNeedsArrowPos,
       );
     }
     return elt;
