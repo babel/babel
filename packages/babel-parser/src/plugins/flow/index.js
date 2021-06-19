@@ -3065,7 +3065,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           state,
         );
 
-        if (!arrow.error && !arrow.aborted && arrow.node) return arrow.node;
+        /*:: invariant(arrow.node != null) */
+        if (!arrow.error && !arrow.aborted) return arrow.node;
 
         const result = this.tryParse(
           () => super.parseSubscripts(base, startPos, startLoc, noCalls),
