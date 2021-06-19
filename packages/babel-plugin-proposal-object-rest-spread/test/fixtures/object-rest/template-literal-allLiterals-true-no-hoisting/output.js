@@ -1,8 +1,10 @@
 const example = () => {
   const input = {};
   const foo = 'foo';
-  const {
+  var _input = input;
+  ({
     [`${foo}_bar`]: country
-  } = input,
-        rest = babelHelpers.objectWithoutProperties(input, [`${foo}_bar`]);
+  } = _input);
+  rest = babelHelpers.objectWithoutProperties(_input, [`${foo}_bar`]);
+  _input;
 };
