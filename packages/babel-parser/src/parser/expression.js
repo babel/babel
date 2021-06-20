@@ -1298,8 +1298,6 @@ export default class ExpressionParser extends LValParser {
   // into a topic-reference node for the given `pipeProposal`.
   // See <https://github.com/js-choi/proposal-hack-pipes>.
   //
-  // This helper method attempts to finish the given `node`
-  // into a topic-reference node for the given `pipeProposal`.
   // The method assumes that any topic token was consumed before it was called.
   //
   // If the `pipelineOperator` plugin is active,
