@@ -135,6 +135,12 @@ function convertToken(token, source, tl) {
     label === tl.doubleColon ||
     label === tl.hash ||
     label === tl.questionDot ||
+    label === tl.braceHashL ||
+    label === tl.braceBarL ||
+    label === tl.braceBarR ||
+    label === tl.bracketHashL ||
+    label === tl.bracketBarL ||
+    label === tl.bracketBarR ||
     type.isAssign
   ) {
     token.type = "Punctuator";

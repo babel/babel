@@ -190,7 +190,7 @@ export default declare((api, options) => {
 
       const keys = [];
       let allLiteral = true;
-
+      let hasTemplateLiteral = false;
       for (let i = 0; i < pattern.properties.length; i++) {
         const prop = pattern.properties[i];
 
@@ -204,8 +204,9 @@ export default declare((api, options) => {
         const key = prop.key;
         if (t.isIdentifier(key) && !prop.computed) {
           keys.push(t.stringLiteral(key.name));
-        } else if (t.isTemplateLiteral(prop.key)) {
-          keys.push(t.cloneNode(prop.key));
+        } else if (t.isTemplateLiteral(key)) {
+          keys.push(t.cloneNode(key));
+          hasTemplateLiteral = true;
         } else if (t.isLiteral(key)) {
           keys.push(t.stringLiteral(String(key.value)));
         } else {
@@ -228,7 +229,7 @@ export default declare((api, options) => {
             t.memberExpression(keyExpression, t.identifier("map")),
             [this.addHelper("toPropertyKey")],
           );
-        } else if (!t.isProgram(this.scope.block)) {
+        } else if (!hasTemplateLiteral && !t.isProgram(this.scope.block)) {
           // Hoist definition of excluded keys, so that it's not created each time.
           const program = this.scope.path.findParent(path => path.isProgram());
           const id = this.scope.generateUidIdentifier("excluded");

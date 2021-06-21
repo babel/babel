@@ -462,8 +462,13 @@ const handle = {
       return;
     }
 
-    // MEMBER   ->   _get(MEMBER)
-    member.replaceWith(this.get(member));
+    if (parentPath.isTaggedTemplateExpression()) {
+      // MEMBER   ->   _get(MEMBER).bind(this)
+      member.replaceWith(this.boundGet(member));
+    } else {
+      // MEMBER   ->   _get(MEMBER)
+      member.replaceWith(this.get(member));
+    }
   },
 };
 

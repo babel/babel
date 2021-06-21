@@ -19,6 +19,26 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.6 (2021-06-14)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-spread`
+  * [#13459](https://github.com/babel/babel/pull/13459) babel-plugin-transform-spread add missing argument in build calls ([@zxbodya](https://github.com/zxbodya))
+  * [#13439](https://github.com/babel/babel/pull/13439) Correctly transform spreads of arrays with holes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-modules-commonjs`
+  * [#13444](https://github.com/babel/babel/pull/13444) fix destructuring of empty string ([@lala7573](https://github.com/lala7573))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`
+  * [#13429](https://github.com/babel/babel/pull/13429) fix: reference to class expression in private method ([@lala7573](https://github.com/lala7573))
+* `babel-parser`
+  * [#13428](https://github.com/babel/babel/pull/13428) [ts] Support override modifiers for parameter properties ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13449](https://github.com/babel/babel/pull/13449) Disallow JSX tag forming after TS non-null assertion ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* [#13423](https://github.com/babel/babel/pull/13423) Faster babel build ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#13453](https://github.com/babel/babel/pull/13453) Faster readRegexp ([@JLHwung](https://github.com/JLHwung))
 ## v7.14.5 (2021-06-09)
 
 #### :eyeglasses: Spec Compliance

@@ -20,6 +20,10 @@ export default declare((api, options) => {
     }
   }
 
+  function hasHole(spread) {
+    return spread.elements.some(el => el === null);
+  }
+
   function hasSpread(nodes) {
     for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
@@ -35,14 +39,27 @@ export default declare((api, options) => {
     return [];
   }
 
-  function build(props: Array, scope) {
+  function build(props: Array, scope, file) {
     const nodes = [];
     let _props = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
         _props = push(_props, nodes);
-        nodes.push(getSpreadLiteral(prop, scope));
+        let spreadLiteral = getSpreadLiteral(prop, scope);
+
+        if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
+          spreadLiteral = t.callExpression(
+            file.addHelper(
+              process.env.BABEL_8_BREAKING
+                ? "arrayLikeToArray"
+                : "arrayWithoutHoles",
+            ),
+            [spreadLiteral],
+          );
+        }
+
+        nodes.push(spreadLiteral);
       } else {
         _props.push(prop);
       }
@@ -62,7 +79,7 @@ export default declare((api, options) => {
         const elements = node.elements;
         if (!hasSpread(elements)) return;
 
-        const nodes = build(elements, scope);
+        const nodes = build(elements, scope, this);
         let first = nodes[0];
 
         // If there is only one element in the ArrayExpression and
@@ -118,7 +135,7 @@ export default declare((api, options) => {
         if (args.length === 1 && args[0].argument.name === "arguments") {
           nodes = [args[0].argument];
         } else {
-          nodes = build(args, scope);
+          nodes = build(args, scope, this);
         }
 
         const first = nodes.shift();
@@ -160,7 +177,7 @@ export default declare((api, options) => {
         let args = node.arguments;
         if (!hasSpread(args)) return;
 
-        const nodes = build(args, scope);
+        const nodes = build(args, scope, this);
 
         const first = nodes.shift();
 

@@ -5,11 +5,8 @@ import { fileURLToPath } from "url";
 import plumber from "gulp-plumber";
 import through from "through2";
 import chalk from "chalk";
-import newer from "gulp-newer";
-import babel from "gulp-babel";
 import fancyLog from "fancy-log";
 import filter from "gulp-filter";
-import revertPath from "gulp-revert-path";
 import gulp from "gulp";
 import { rollup } from "rollup";
 import { babel as rollupBabel } from "@rollup/plugin-babel";
@@ -21,6 +18,8 @@ import rollupReplace from "@rollup/plugin-replace";
 import { terser as rollupTerser } from "rollup-plugin-terser";
 import _rollupDts from "rollup-plugin-dts";
 const { default: rollupDts } = _rollupDts;
+import { Worker as JestWorker } from "jest-worker";
+import glob from "glob";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import formatCode from "./scripts/utils/formatCode.js";
@@ -73,13 +72,6 @@ function getIndexFromPackage(name) {
   } catch {
     return `${name}/src/index.js`;
   }
-}
-
-function compilationLogger() {
-  return through.obj(function (file, enc, callback) {
-    fancyLog(`Compiling '${chalk.cyan(file.relative)}'...`);
-    callback(null, file);
-  });
 }
 
 function errorsLogger() {
@@ -222,33 +214,46 @@ function getFiles(glob, { include, exclude }) {
   return stream;
 }
 
-function buildBabel(exclude) {
-  const base = monorepoRoot;
+function createWorker(useWorker) {
+  const numWorkers = require("os").cpus().length / 2 - 1;
+  if (numWorkers === 0 || !useWorker) {
+    return require("./babel-worker.cjs");
+  }
+  const worker = new JestWorker(require.resolve("./babel-worker.cjs"), {
+    numWorkers,
+    exposedMethods: ["transform"],
+  });
+  worker.getStdout().pipe(process.stdout);
+  worker.getStderr().pipe(process.stderr);
+  return worker;
+}
 
-  return getFiles(defaultSourcesGlob, {
-    exclude: exclude && exclude.map(p => p.src),
-  })
-    .pipe(errorsLogger())
-    .pipe(newer({ dest: base, map: mapSrcToLib }))
-    .pipe(compilationLogger())
-    .pipe(
-      babel({
-        caller: {
-          // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
-          supportsDynamicImport: true,
-        },
-      })
-    )
-    .pipe(
-      // gulp-babel always converts the extension to .js, but we want to keep the original one
-      revertPath()
-    )
-    .pipe(
-      // Passing 'file.relative' because newer() above uses a relative
-      // path and this keeps it consistent.
-      rename(file => path.resolve(file.base, mapSrcToLib(file.relative)))
-    )
-    .pipe(gulp.dest(base));
+async function buildBabel(useWorker, ignore = []) {
+  const worker = createWorker(useWorker);
+  const files = await new Promise((resolve, reject) => {
+    glob(
+      defaultSourcesGlob,
+      {
+        ignore: ignore.map(p => `./${p.src}/**`),
+      },
+      (err, files) => {
+        if (err) reject(err);
+        resolve(files);
+      }
+    );
+  });
+
+  const promises = [];
+  for (const file of files) {
+    // @example ./packages/babel-parser/src/index.js
+    const dest = "./" + mapSrcToLib(file.slice(2));
+    promises.push(worker.transform(file, dest));
+  }
+  return Promise.all(promises).finally(() => {
+    if (worker.end !== undefined) {
+      worker.end();
+    }
+  });
 }
 
 /**
@@ -517,7 +522,7 @@ gulp.task(
   gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
 );
 
-gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
+gulp.task("build-babel", () => buildBabel(true, /* exclude */ libBundles));
 
 gulp.task(
   "build",
@@ -536,7 +541,10 @@ gulp.task(
 
 gulp.task("default", gulp.series("build"));
 
-gulp.task("build-no-bundle", () => buildBabel());
+// First build on worker processes for compilation speed
+gulp.task("build-no-bundle", () => buildBabel(true));
+// Incremental builds take place in main process
+gulp.task("build-no-bundle-watch", () => buildBabel(false));
 
 gulp.task(
   "build-dev",
@@ -556,7 +564,7 @@ gulp.task(
 gulp.task(
   "watch",
   gulp.series("build-dev", function watch() {
-    gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle"));
+    gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
     gulp.watch(
       babelStandalonePluginConfigGlob,
       gulp.task("generate-standalone")

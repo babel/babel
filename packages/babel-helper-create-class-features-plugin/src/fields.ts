@@ -669,6 +669,17 @@ const thisContextVisitor = traverse.visitors.merge([
   environmentVisitor,
 ]);
 
+const innerReferencesVisitor = {
+  ReferencedIdentifier(path, state) {
+    if (
+      path.scope.bindingIdentifierEquals(path.node.name, state.innerBinding)
+    ) {
+      state.needsClassRef = true;
+      path.node.name = state.classRef.name;
+    }
+  },
+};
+
 function replaceThisContext(
   path,
   ref,
@@ -676,8 +687,13 @@ function replaceThisContext(
   file,
   isStaticBlock,
   constantSuper,
+  innerBindingRef,
 ) {
-  const state = { classRef: ref, needsClassRef: false };
+  const state = {
+    classRef: ref,
+    needsClassRef: false,
+    innerBinding: innerBindingRef,
+  };
 
   const replacer = new ReplaceSupers({
     methodPath: path,
@@ -696,6 +712,11 @@ function replaceThisContext(
   if (isStaticBlock || path.isProperty()) {
     path.traverse(thisContextVisitor, state);
   }
+
+  if (state.classRef?.name && state.classRef.name !== innerBindingRef?.name) {
+    path.traverse(innerReferencesVisitor, state);
+  }
+
   return state.needsClassRef;
 }
 
@@ -708,6 +729,7 @@ export function buildFieldsInitNodes(
   setPublicClassFields,
   privateFieldsAsProperties,
   constantSuper,
+  innerBindingRef,
 ) {
   let needsClassRef = false;
   let injectSuperRef;
@@ -743,6 +765,7 @@ export function buildFieldsInitNodes(
         state,
         isStaticBlock,
         constantSuper,
+        innerBindingRef,
       );
       needsClassRef = needsClassRef || replaced;
     }

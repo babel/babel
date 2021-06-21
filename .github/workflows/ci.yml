@@ -23,6 +23,24 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             yarn-
+      - name: 'Check or update Yarn cache (fix w/ "yarn install")'
+        env:
+          YARN_ENABLE_SCRIPTS: false # disable post-install scripts
+          YARN_NODE_LINKER: pnp # use pnp linker for better linking performance: it's meant to update yarn cache only
+        run: |
+          yarn install --immutable --skip-builds
+
+  yarn-validate:
+    name: Validate Yarn dependencies and constraints
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
         run: |
           yarn constraints
@@ -30,12 +48,6 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: |
           yarn dedupe --check
-      - name: 'Check or update Yarn cache (fix w/ "yarn install")'
-        env:
-          YARN_ENABLE_SCRIPTS: false # disable post-install scripts
-          YARN_NODE_LINKER: pnp # use pnp linker for better linking performance: it's meant to update yarn cache only
-        run: |
-          yarn install --immutable --skip-builds
       - name: Check for dependency cycles
         run: |
           yarn release-tool check-cycles
