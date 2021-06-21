@@ -34,6 +34,12 @@ require("core-js/modules/es.promise.js");
 
 require("core-js/modules/es.promise.finally.js");
 
+require("core-js/modules/es.regexp.constructor.js");
+
+require("core-js/modules/es.regexp.exec.js");
+
+require("core-js/modules/es.regexp.flags.js");
+
 require("core-js/modules/es.string.pad-end.js");
 
 require("core-js/modules/es.string.pad-start.js");

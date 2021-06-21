@@ -105,6 +105,7 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.reflect.set { "electron":"0.36" }
   es.reflect.set-prototype-of { "electron":"0.36" }
   es.regexp.constructor { "electron":"0.36" }
+  es.regexp.exec { "electron":"0.36" }
   es.regexp.flags { "electron":"0.36" }
   es.regexp.to-string { "electron":"0.36" }
   es.set { "electron":"0.36" }

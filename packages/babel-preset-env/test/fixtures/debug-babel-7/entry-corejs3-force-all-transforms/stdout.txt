@@ -77,6 +77,9 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.object.lookup-setter { "chrome":"55" }
   es.promise { "chrome":"55" }
   es.promise.finally { "chrome":"55" }
+  es.regexp.constructor { "chrome":"55" }
+  es.regexp.exec { "chrome":"55" }
+  es.regexp.flags { "chrome":"55" }
   es.string.pad-end { "chrome":"55" }
   es.string.pad-start { "chrome":"55" }
   es.string.replace { "chrome":"55" }
