@@ -11,6 +11,8 @@ import "core-js/modules/es.math.hypot.js";
 import "core-js/modules/es.object.from-entries.js";
 import "core-js/modules/es.promise.js";
 import "core-js/modules/es.promise.finally.js";
+import "core-js/modules/es.regexp.constructor.js";
+import "core-js/modules/es.regexp.exec.js";
 import "core-js/modules/es.string.replace.js";
 import "core-js/modules/es.string.trim-end.js";
 import "core-js/modules/es.string.trim-start.js";
