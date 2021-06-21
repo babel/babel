@@ -371,7 +371,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "3",
-    "rhino": "1.7",
+    "rhino": "1.7.13",
     "electron": "0.20"
   },
   "transform-new-target": {
@@ -408,7 +408,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "rhino": "1.7",
+    "rhino": "1.7.13",
     "electron": "0.20"
   },
   "transform-property-literals": {
@@ -423,7 +423,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "rhino": "1.7",
+    "rhino": "1.7.13",
     "electron": "0.20"
   },
   "transform-reserved-words": {
@@ -438,7 +438,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "rhino": "1.7",
+    "rhino": "1.7.13",
     "electron": "0.20"
   },
   "proposal-export-namespace-from": {
