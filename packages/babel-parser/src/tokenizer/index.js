@@ -1171,8 +1171,9 @@ export default class Tokenizer extends ParserErrors {
     let isDecimal = false;
     let hasExponent = false;
     let isOctal = false;
+    let val;
 
-    if (!startsWithDot && this.readInt(10) === null) {
+    if (!startsWithDot && (val = this.readInt(10)) === null) {
       this.raise(start, Errors.InvalidNumber);
     }
     const hasLeadingZero =
@@ -1189,7 +1190,7 @@ export default class Tokenizer extends ParserErrors {
           this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
         }
       }
-      isOctal = hasLeadingZero && !/[89]/.test(integer);
+      isOctal = !/[89]/.test(integer);
     }
 
     let next = this.input.charCodeAt(this.state.pos);
@@ -1215,6 +1216,7 @@ export default class Tokenizer extends ParserErrors {
       hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);
     }
+    let str;
 
     if (next === charCodes.lowercaseN) {
       // disallow floats, legacy octal syntax and non octal decimals
@@ -1222,6 +1224,8 @@ export default class Tokenizer extends ParserErrors {
       if (isFloat || hasLeadingZero) {
         this.raise(start, Errors.InvalidBigIntLiteral);
       }
+      // remove "_" for numeric literal separator
+      str = this.input.slice(start, this.state.pos).replace(/_/g, "");
       ++this.state.pos;
       isBigInt = true;
     }
@@ -1231,6 +1235,7 @@ export default class Tokenizer extends ParserErrors {
       if (hasExponent || hasLeadingZero) {
         this.raise(start, Errors.InvalidDecimal);
       }
+      str = this.input.slice(start, this.state.pos).replace(/_/g, "");
       ++this.state.pos;
       isDecimal = true;
     }
@@ -1239,20 +1244,19 @@ export default class Tokenizer extends ParserErrors {
       throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
-    // remove "_" for numeric literal separator, and trailing `m` or `n`
-    const str = this.input.slice(start, this.state.pos).replace(/[_mn]/g, "");
-
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
       return;
-    }
-
-    if (isDecimal) {
+    } else if (isDecimal) {
       this.finishToken(tt.decimal, str);
       return;
+    } else if (isOctal) {
+      str = this.input.slice(start, this.state.pos).replace(/_/g, "");
+      val = parseInt(str, 8);
+    } else if (isFloat) {
+      str = this.input.slice(start, this.state.pos).replace(/_/g, "");
+      val = parseFloat(str);
     }
-
-    const val = isOctal ? parseInt(str, 8) : parseFloat(str);
     this.finishToken(tt.num, val);
   }
 
