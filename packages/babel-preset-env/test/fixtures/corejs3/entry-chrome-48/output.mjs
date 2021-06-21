@@ -58,6 +58,7 @@ import "core-js/modules/es.reflect.prevent-extensions.js";
 import "core-js/modules/es.reflect.set.js";
 import "core-js/modules/es.reflect.set-prototype-of.js";
 import "core-js/modules/es.regexp.constructor.js";
+import "core-js/modules/es.regexp.exec.js";
 import "core-js/modules/es.regexp.flags.js";
 import "core-js/modules/es.regexp.to-string.js";
 import "core-js/modules/es.set.js";

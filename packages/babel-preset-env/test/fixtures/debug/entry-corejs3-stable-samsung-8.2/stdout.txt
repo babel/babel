@@ -48,6 +48,8 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.object.from-entries { "samsung":"8.2" }
   es.promise { "samsung":"8.2" }
   es.promise.finally { "samsung":"8.2" }
+  es.regexp.constructor { "samsung":"8.2" }
+  es.regexp.exec { "samsung":"8.2" }
   es.string.replace { "samsung":"8.2" }
   es.string.trim-end { "samsung":"8.2" }
   es.string.trim-start { "samsung":"8.2" }

@@ -41,6 +41,8 @@ import "core-js/modules/es.object.values.js";
 import "core-js/modules/es.promise.js";
 import "core-js/modules/es.promise.finally.js";
 import "core-js/modules/es.regexp.constructor.js";
+import "core-js/modules/es.regexp.exec.js";
+import "core-js/modules/es.regexp.flags.js";
 import "core-js/modules/es.regexp.to-string.js";
 import "core-js/modules/es.set.js";
 import "core-js/modules/es.string.ends-with.js";
