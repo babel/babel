@@ -1,7 +1,7 @@
 let gotValue = false;
 
 let iterable = {
-  [Symbol.asyncIterator]() {
+  [Symbol.asyncIterator || "@@asyncIterator"]() {
     return {
       next: () => Promise.resolve({
         get value() { gotValue = true },

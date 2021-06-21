@@ -4,7 +4,7 @@ let steps = [
 ];
 
 let iterable = {
-  [Symbol.asyncIterator]() {
+  [Symbol.asyncIterator || "@@asyncIterator"]() {
     return {
       next: () => steps.shift(),
     };

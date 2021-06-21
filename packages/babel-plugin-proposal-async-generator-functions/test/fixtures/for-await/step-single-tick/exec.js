@@ -1,7 +1,7 @@
 let resolve;
 let promise = new Promise((r) => (resolve = r));
 let iterable = {
-  [Symbol.asyncIterator]() {
+  [Symbol.asyncIterator || "@@asyncIterator"]() {
     return {
       next: () => promise,
     };
