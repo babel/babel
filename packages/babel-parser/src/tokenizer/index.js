@@ -514,7 +514,7 @@ export default class Tokenizer extends ParserErrors {
   readToken_dot(): void {
     const next = this.input.charCodeAt(this.state.pos + 1);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
-      this.readNumber(true);
+      this.readNumber(charCodes.dot);
       return;
     }
 
@@ -896,7 +896,7 @@ export default class Tokenizer extends ParserErrors {
       case charCodes.digit7:
       case charCodes.digit8:
       case charCodes.digit9:
-        this.readNumber(false);
+        this.readNumber(code);
         return;
 
       // Quotes produce strings.
@@ -1164,7 +1164,7 @@ export default class Tokenizer extends ParserErrors {
 
   // Read an integer, octal integer, or floating-point number.
 
-  readNumber(startsWithDot: boolean): void {
+  readNumber(next: number): void {
     const start = this.state.pos;
     let isFloat = false;
     let isBigInt = false;
@@ -1173,12 +1173,11 @@ export default class Tokenizer extends ParserErrors {
     let isOctal = false;
     let val;
 
-    if (!startsWithDot && (val = this.readInt(10)) === null) {
+    if (next !== charCodes.dot && (val = this.readInt(10)) === null) {
       this.raise(start, Errors.InvalidNumber);
     }
     const hasLeadingZero =
-      this.state.pos - start >= 2 &&
-      this.input.charCodeAt(start) === charCodes.digit0;
+      this.state.pos - start >= 2 && next === charCodes.digit0;
 
     if (hasLeadingZero) {
       const integer = this.input.slice(start, this.state.pos);
@@ -1193,7 +1192,7 @@ export default class Tokenizer extends ParserErrors {
       isOctal = !/[89]/.test(integer);
     }
 
-    let next = this.input.charCodeAt(this.state.pos);
+    next = this.input.charCodeAt(this.state.pos);
     if (next === charCodes.dot && !isOctal) {
       ++this.state.pos;
       this.readInt(10);
