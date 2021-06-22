@@ -24,7 +24,7 @@ function addDisplayNameInCreateClass(id, call) {
 
 function getDisplayNameReferenceIdentifier(
   path: NodePath<t.CallExpression>,
-): ?t.Node {
+): ?t.Identifier {
   let id;
 
   // crawl up the ancestry looking for possible candidates for displayName inference
@@ -52,6 +52,9 @@ function getDisplayNameReferenceIdentifier(
     id = id.property;
   }
 
+  // identifiers are the only thing we can reliably get a name from
+  if (!t.isIdentifier(id)) return;
+
   return id;
 }
 
@@ -61,7 +64,8 @@ function isCreateContext(node) {
     t.isCallExpression(node) &&
     t.isMemberExpression((callee = node.callee)) &&
     t.isIdentifier(callee.object, { name: "React" }) &&
-    (t.isIdentifier(callee.property, { name: "createContext" }) ||
+    ((!callee.computed &&
+      t.isIdentifier(callee.property, { name: "createContext" })) ||
       t.isStringLiteral(callee.property, { value: "createContext" }))
   );
 }
@@ -158,8 +162,7 @@ export default declare(api => {
         const { node } = path;
         if (isCreateClass(node)) {
           const id = getDisplayNameReferenceIdentifier(path);
-          // identifiers are the only thing we can reliably get a name from
-          if (t.isIdentifier(id)) {
+          if (id) {
             addDisplayNameInCreateClass(id.name, node);
           }
         } else if (isCreateContext(node)) {
@@ -168,8 +171,8 @@ export default declare(api => {
           }
           createContextVisited.add(node);
           const id = getDisplayNameReferenceIdentifier(path);
-          // identifiers are the only thing we can reliably get a name from
-          if (t.isIdentifier(id)) {
+
+          if (id) {
             addDisplayNameAfterCreateContext(id.name, path);
           }
         }
