@@ -55,6 +55,55 @@ function getDisplayNameReferenceIdentifier(
   return id;
 }
 
+function isCreateContext(node) {
+  let callee;
+  return (
+    t.isCallExpression(node) &&
+    t.isMemberExpression((callee = node.callee)) &&
+    t.isIdentifier(callee.object, { name: "React" }) &&
+    (t.isIdentifier(callee.property, { name: "createContext" }) ||
+      t.isStringLiteral(callee.property, { value: "createContext" }))
+  );
+}
+
+function buildDisplayNameAssignment(ref, displayName) {
+  return t.assignmentExpression(
+    "=",
+    t.memberExpression(t.cloneNode(ref), t.identifier("displayName")),
+    t.stringLiteral(displayName),
+  );
+}
+
+function addDisplayNameAfterCreateContext(
+  id,
+  path: t.NodePath<t.CallExpression>,
+) {
+  const { parentPath } = path;
+  if (parentPath.isVariableDeclarator()) {
+    // FooContext = React.createContext()
+    const ref = parentPath.node.id;
+    // parentPath.parentPath must be a VariableDeclaration because getDisplayNameReferenceIdentifier
+    // does not support patterns
+    parentPath.parentPath.insertAfter(buildDisplayNameAssignment(ref, id));
+  } else if (parentPath.isAssignmentExpression()) {
+    // var FooContext = React.createContext()
+    const ref = parentPath.node.left;
+    parentPath.insertAfter(buildDisplayNameAssignment(ref, id));
+  } else {
+    // (ref = React.createContext(), ref.displayName = "id", ref)
+    const ref = path.scope.generateUidIdentifier("ref");
+    path.replaceWith(
+      t.sequenceExpression([
+        t.assignmentExpression("=", ref, path.node),
+        buildDisplayNameAssignment(ref, id),
+        t.cloneNode(ref),
+      ]),
+    );
+  }
+}
+
+const createContextVisited = new WeakSet();
+
 export default declare(api => {
   api.assertVersion(7);
 
@@ -110,6 +159,16 @@ export default declare(api => {
           // identifiers are the only thing we can reliably get a name from
           if (t.isIdentifier(id)) {
             addDisplayNameInCreateClass(id.name, node);
+          }
+        } else if (isCreateContext(node)) {
+          if (createContextVisited.has(node)) {
+            return;
+          }
+          createContextVisited.add(node);
+          const id = getDisplayNameReferenceIdentifier(path);
+          // identifiers are the only thing we can reliably get a name from
+          if (t.isIdentifier(id)) {
+            addDisplayNameAfterCreateContext(id.name, path);
           }
         }
       },
