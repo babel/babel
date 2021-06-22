@@ -358,13 +358,13 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       const loopBodyScope = path.get("body").scope;
       for (const name of Object.keys(t.getOuterBindingIdentifiers(left))) {
         if (programScope.getBinding(name) === scope.getBinding(name)) {
-          if (exported.get(name)) {
+          if (exported.has(name)) {
             didTransformExport = true;
             if (loopBodyScope.hasOwnBinding(name)) {
               loopBodyScope.rename(name);
             }
           }
-          if (imported.get(name) && !importConstViolationName) {
+          if (imported.has(name) && !importConstViolationName) {
             importConstViolationName = name;
           }
         }
