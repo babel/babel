@@ -1,8 +1,7 @@
-// @flow
-
 import { getImportSource, getRequireSource, isPolyfillSource } from "./utils";
 
 import type { NodePath } from "@babel/traverse";
+import * as t from "@babel/types";
 
 const BABEL_POLYFILL_DEPRECATION = `
   \`@babel/polyfill\` is deprecated. Please, use required parts of \`core-js\`
@@ -19,7 +18,7 @@ export default function (
   return {
     name: "preset-env/replace-babel-polyfill",
     visitor: {
-      ImportDeclaration(path: NodePath) {
+      ImportDeclaration(path: NodePath<t.ImportDeclaration>) {
         const src = getImportSource(path);
         if (usage && isPolyfillSource(src)) {
           // $FlowIgnore
@@ -40,7 +39,7 @@ export default function (
           }
         }
       },
-      Program(path: NodePath) {
+      Program(path: NodePath<t.Program>) {
         path.get("body").forEach(bodyPath => {
           const src = getRequireSource(bodyPath);
           if (usage && isPolyfillSource(src)) {

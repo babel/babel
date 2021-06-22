@@ -1,6 +1,6 @@
-// @flow
 import corejs3Polyfills from "core-js-compat/data.json";
-import { coerce, SemVer } from "semver";
+import { coerce } from "semver";
+import type { SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
@@ -21,6 +21,8 @@ import type {
   PluginListItem,
   PluginListOption,
 } from "./types";
+
+declare const PACKAGE_JSON: { name: string; version: string };
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 
@@ -111,9 +113,10 @@ export const checkDuplicateIncludeExcludes = (
   );
 };
 
-const normalizeTargets = (targets): $PropertyType<Options, "targets"> => {
+const normalizeTargets = (targets): Options["targets"] => {
   // TODO: Allow to use only query or strings as a targets from next breaking change.
   if (typeof targets === "string" || Array.isArray(targets)) {
+    // @ts-expect-error
     return { browsers: targets };
   }
   return { ...targets };
@@ -150,12 +153,12 @@ export const validateUseBuiltInsOption = (
 };
 
 export type NormalizedCorejsOption = {
-  proposals: boolean,
-  version: typeof SemVer | null | false,
+  proposals: boolean;
+  version: SemVer | null | false;
 };
 
 export function normalizeCoreJSOption(
-  corejs?: CorejsOption,
+  corejs: CorejsOption | undefined | null,
   useBuiltIns: BuiltInsOption,
 ): NormalizedCorejsOption {
   let proposals = false;
@@ -249,7 +252,7 @@ export default function normalizeOptions(opts: Options) {
       opts.ignoreBrowserslistConfig,
       false,
     ),
-    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose),
+    loose: v.validateBooleanOption<boolean>(TopLevelOptions.loose, opts.loose),
     modules: validateModulesOption(opts.modules),
     shippedProposals: v.validateBooleanOption(
       TopLevelOptions.shippedProposals,

@@ -1,5 +1,3 @@
-// @flow
-
 import { lt } from "semver";
 import { minVersions } from "./available-plugins";
 

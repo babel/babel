@@ -1,12 +1,10 @@
-// @flow
+type AvailablePlugins = typeof import("./available-plugins").default;
 
-import typeof AvailablePlugins from "./available-plugins";
-
-export default ({
+export default {
   auto: "transform-modules-commonjs",
   amd: "transform-modules-amd",
   commonjs: "transform-modules-commonjs",
   cjs: "transform-modules-commonjs",
   systemjs: "transform-modules-systemjs",
   umd: "transform-modules-umd",
-}: { [transform: string]: $Keys<AvailablePlugins> });
+} as { [transform: string]: keyof AvailablePlugins };

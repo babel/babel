@@ -3,5 +3,4 @@
 export {
   default,
   isBrowsersQueryValid,
-  semverMin,
 } from "@babel/helper-compilation-targets";
