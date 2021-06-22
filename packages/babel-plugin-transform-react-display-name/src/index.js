@@ -91,10 +91,12 @@ function addDisplayNameAfterCreateContext(
     parentPath.insertAfter(buildDisplayNameAssignment(ref, id));
   } else {
     // (ref = React.createContext(), ref.displayName = "id", ref)
-    const ref = path.scope.generateUidIdentifier("ref");
+    const { scope } = path;
+    const ref = scope.generateUidIdentifier("ref");
+    scope.push({ id: ref });
     path.replaceWith(
       t.sequenceExpression([
-        t.assignmentExpression("=", ref, path.node),
+        t.assignmentExpression("=", t.cloneNode(ref), path.node),
         buildDisplayNameAssignment(ref, id),
         t.cloneNode(ref),
       ]),
