@@ -2847,9 +2847,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // by parsing `jsxTagStart` to stop the JSX plugin from
         // messing with the tokens
         const { context } = this.state;
-        if (context[context.length - 1] === tc.j_oTag) {
+        const curContext = context[context.length - 1];
+        if (curContext === tc.j_oTag) {
           context.length -= 2;
-        } else if (context[context.length - 1] === tc.j_expr) {
+        } else if (curContext === tc.j_expr) {
           context.length -= 1;
         }
       }

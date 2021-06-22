@@ -95,6 +95,7 @@ export default declare((api, opts) => {
     const props = path.node.properties;
     const keys = [];
     let allLiteral = true;
+    let hasTemplateLiteral = false;
 
     for (const prop of props) {
       if (t.isIdentifier(prop.key) && !prop.computed) {
@@ -102,6 +103,7 @@ export default declare((api, opts) => {
         keys.push(t.stringLiteral(prop.key.name));
       } else if (t.isTemplateLiteral(prop.key)) {
         keys.push(t.cloneNode(prop.key));
+        hasTemplateLiteral = true;
       } else if (t.isLiteral(prop.key)) {
         keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
@@ -110,7 +112,7 @@ export default declare((api, opts) => {
       }
     }
 
-    return { keys, allLiteral };
+    return { keys, allLiteral, hasTemplateLiteral };
   }
 
   // replaces impure computed keys with new identifiers
@@ -156,7 +158,8 @@ export default declare((api, opts) => {
       path.get("properties"),
       path.scope,
     );
-    const { keys, allLiteral } = extractNormalizedKeys(path);
+    const { keys, allLiteral, hasTemplateLiteral } =
+      extractNormalizedKeys(path);
 
     if (keys.length === 0) {
       return [
@@ -179,7 +182,7 @@ export default declare((api, opts) => {
     } else {
       keyExpression = t.arrayExpression(keys);
 
-      if (!t.isProgram(path.scope.block)) {
+      if (!hasTemplateLiteral && !t.isProgram(path.scope.block)) {
         // Hoist definition of excluded keys, so that it's not created each time.
         const program = path.findParent(path => path.isProgram());
         const id = path.scope.generateUidIdentifier("excluded");

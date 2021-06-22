@@ -19,7 +19,6 @@
 // [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
 
 import { types as tt, type TokenType } from "../tokenizer/types";
-import { types as ct } from "../tokenizer/context";
 import * as N from "../types";
 import LValParser from "./lval";
 import {
@@ -2325,19 +2324,6 @@ export default class ExpressionParser extends LValParser {
       name = this.state.value;
     } else if (type.keyword) {
       name = type.keyword;
-
-      // `class` and `function` keywords push function-type token context into this.context.
-      // But there is no chance to pop the context if the keyword is consumed
-      // as an identifier such as a property name.
-      if (type === tt._class || type === tt._function) {
-        const curContext = this.curContext();
-        if (
-          curContext === ct.functionStatement ||
-          curContext === ct.functionExpression
-        ) {
-          this.state.context.pop();
-        }
-      }
     } else {
       throw this.unexpected();
     }

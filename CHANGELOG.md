@@ -19,6 +19,26 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.7 (2021-06-21)
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-object-rest-spread`
+  * [#13483](https://github.com/babel/babel/pull/13483) Don't hoist template literal keys in `object-rest-spread` ([@lala7573](https://github.com/lala7573))
+* `babel-plugin-transform-destructuring`
+  * [#13482](https://github.com/babel/babel/pull/13482) Don't hoist template strings from destructuring keys ([@lala7573](https://github.com/lala7573))
+* `babel-traverse`
+  * [#13475](https://github.com/babel/babel/pull/13475) fix: remove traverse trap on `NODE_ENV == "test"` ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#13477](https://github.com/babel/babel/pull/13477) Add record and tuple tokens to eslint parser ([@plourenco](https://github.com/plourenco))
+* `babel-helper-member-expression-to-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`
+  * [#13395](https://github.com/babel/babel/pull/13395) fix: tagged template incorrect receiver ([@sag1v](https://github.com/sag1v))
+
+#### :house: Internal
+* `babel-parser`
+  * [#13450](https://github.com/babel/babel/pull/13450) Simplify token context ([@JLHwung](https://github.com/JLHwung))
+  * [#13419](https://github.com/babel/babel/pull/13419) refactor(parser): remove refNeedsArrowPos ([@tony-go](https://github.com/tony-go))
+* Other
+  * [#13485](https://github.com/babel/babel/pull/13485) chore: fix comment typo ([@hyaocuk](https://github.com/hyaocuk))
 ## v7.14.6 (2021-06-14)
 
 #### :bug: Bug Fix
