@@ -2,28 +2,61 @@ import { declare } from "@babel/helper-plugin-utils";
 import path from "path";
 import { types as t } from "@babel/core";
 
-export default declare(api => {
-  api.assertVersion(7);
+function addDisplayNameInCreateClass(id, call) {
+  const props = call.arguments[0].properties;
+  let safe = true;
 
-  function addDisplayName(id, call) {
-    const props = call.arguments[0].properties;
-    let safe = true;
-
-    for (let i = 0; i < props.length; i++) {
-      const prop = props[i];
-      const key = t.toComputedKey(prop);
-      if (t.isLiteral(key, { value: "displayName" })) {
-        safe = false;
-        break;
-      }
-    }
-
-    if (safe) {
-      props.unshift(
-        t.objectProperty(t.identifier("displayName"), t.stringLiteral(id)),
-      );
+  for (let i = 0; i < props.length; i++) {
+    const prop = props[i];
+    const key = t.toComputedKey(prop);
+    if (t.isLiteral(key, { value: "displayName" })) {
+      safe = false;
+      break;
     }
   }
+
+  if (safe) {
+    props.unshift(
+      t.objectProperty(t.identifier("displayName"), t.stringLiteral(id)),
+    );
+  }
+}
+
+function getDisplayNameReferenceIdentifier(
+  path: NodePath<t.CallExpression>,
+): ?t.Node {
+  let id;
+
+  // crawl up the ancestry looking for possible candidates for displayName inference
+  path.find(function (path) {
+    if (path.isAssignmentExpression()) {
+      id = path.node.left;
+    } else if (path.isObjectProperty()) {
+      id = path.node.key;
+    } else if (path.isVariableDeclarator()) {
+      id = path.node.id;
+    } else if (path.isStatement()) {
+      // we've hit a statement, we should stop crawling up
+      return true;
+    }
+
+    // we've got an id! no need to continue
+    if (id) return true;
+  });
+
+  // ensure that we have an identifier we can inherit from
+  if (!id) return;
+
+  // foo.bar -> bar
+  if (t.isMemberExpression(id)) {
+    id = id.property;
+  }
+
+  return id;
+}
+
+export default declare(api => {
+  api.assertVersion(7);
 
   const isCreateClassCallExpression =
     t.buildMatchMemberExpression("React.createClass");
@@ -66,44 +99,18 @@ export default declare(api => {
             displayName = path.basename(path.dirname(filename));
           }
 
-          addDisplayName(displayName, node.declaration);
+          addDisplayNameInCreateClass(displayName, node.declaration);
         }
       },
 
       CallExpression(path) {
         const { node } = path;
-        if (!isCreateClass(node)) return;
-
-        let id;
-
-        // crawl up the ancestry looking for possible candidates for displayName inference
-        path.find(function (path) {
-          if (path.isAssignmentExpression()) {
-            id = path.node.left;
-          } else if (path.isObjectProperty()) {
-            id = path.node.key;
-          } else if (path.isVariableDeclarator()) {
-            id = path.node.id;
-          } else if (path.isStatement()) {
-            // we've hit a statement, we should stop crawling up
-            return true;
+        if (isCreateClass(node)) {
+          const id = getDisplayNameReferenceIdentifier(path);
+          // identifiers are the only thing we can reliably get a name from
+          if (t.isIdentifier(id)) {
+            addDisplayNameInCreateClass(id.name, node);
           }
-
-          // we've got an id! no need to continue
-          if (id) return true;
-        });
-
-        // ensure that we have an identifier we can inherit from
-        if (!id) return;
-
-        // foo.bar -> bar
-        if (t.isMemberExpression(id)) {
-          id = id.property;
-        }
-
-        // identifiers are the only thing we can reliably get a name from
-        if (t.isIdentifier(id)) {
-          addDisplayName(id.name, node);
         }
       },
     },
