@@ -55,7 +55,6 @@ const es2015 = {
       "super",
       'arrow functions / lexical "super" binding in constructors',
       'arrow functions / lexical "super" binding in methods',
-      'arrow functions / lexical "new.target" binding',
     ],
   },
   "transform-object-super": {
@@ -108,12 +107,7 @@ const es2015 = {
     features: ["Symbol / typeof support"],
   },
   "transform-new-target": {
-    features: [
-      "new.target",
-      'arrow functions / lexical "super" binding in constructors',
-      'arrow functions / lexical "super" binding in methods',
-      'arrow functions / lexical "new.target" binding',
-    ],
+    features: ["new.target", 'arrow functions / lexical "new.target" binding'],
   },
   "transform-regenerator": {
     features: ["generators"],
