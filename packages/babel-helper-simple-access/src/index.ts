@@ -101,7 +101,8 @@ const simpleAssignmentVisitor = {
       }
 
       const operator = path.node.operator.slice(0, -1);
-      if (["&&", "||", "??"].includes(operator)) {
+      if (t.LOGICAL_OPERATORS.includes(operator)) {
+        // &&, ||, ??
         // (foo &&= bar) => (foo && foo = bar)
         path.replaceWith(
           t.logicalExpression(
