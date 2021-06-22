@@ -1382,6 +1382,74 @@ export function isOptionalCallExpression(
 
   return false;
 }
+export function isClassProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassProperty {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "ClassProperty") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isClassPrivateProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassPrivateProperty {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "ClassPrivateProperty") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isClassPrivateMethod(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassPrivateMethod {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "ClassPrivateMethod") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isPrivateName(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PrivateName {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "PrivateName") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isAnyTypeAnnotation(
   node: object | null | undefined,
   opts?: object | null,
@@ -2827,23 +2895,6 @@ export function isBindExpression(
 
   return false;
 }
-export function isClassProperty(
-  node: object | null | undefined,
-  opts?: object | null,
-): node is t.ClassProperty {
-  if (!node) return false;
-
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isPipelineTopicExpression(
   node: object | null | undefined,
   opts?: object | null,
@@ -2886,40 +2937,6 @@ export function isPipelinePrimaryTopicReference(
 
   const nodeType = (node as t.Node).type;
   if (nodeType === "PipelinePrimaryTopicReference") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isClassPrivateProperty(
-  node: object | null | undefined,
-  opts?: object | null,
-): node is t.ClassPrivateProperty {
-  if (!node) return false;
-
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassPrivateProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isClassPrivateMethod(
-  node: object | null | undefined,
-  opts?: object | null,
-): node is t.ClassPrivateMethod {
-  if (!node) return false;
-
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassPrivateMethod") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2988,23 +3005,6 @@ export function isExportDefaultSpecifier(
 
   const nodeType = (node as t.Node).type;
   if (nodeType === "ExportDefaultSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isPrivateName(
-  node: object | null | undefined,
-  opts?: object | null,
-): node is t.PrivateName {
-  if (!node) return false;
-
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "PrivateName") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -5057,6 +5057,27 @@ export function isModuleSpecifier(
 
   return false;
 }
+export function isPrivate(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Private {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (
+    "ClassPrivateProperty" === nodeType ||
+    "ClassPrivateMethod" === nodeType ||
+    "PrivateName" === nodeType
+  ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isFlow(
   node: object | null | undefined,
   opts?: object | null,
@@ -5318,27 +5339,6 @@ export function isJSX(
     "JSXFragment" === nodeType ||
     "JSXOpeningFragment" === nodeType ||
     "JSXClosingFragment" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isPrivate(
-  node: object | null | undefined,
-  opts?: object | null,
-): node is t.Private {
-  if (!node) return false;
-
-  const nodeType = (node as t.Node).type;
-  if (
-    "ClassPrivateProperty" === nodeType ||
-    "ClassPrivateMethod" === nodeType ||
-    "PrivateName" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

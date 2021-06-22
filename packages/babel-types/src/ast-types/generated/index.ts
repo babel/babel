@@ -1009,6 +1009,61 @@ export interface OptionalCallExpression extends BaseNode {
   typeParameters?: TSTypeParameterInstantiation | null;
 }
 
+export interface ClassProperty extends BaseNode {
+  type: "ClassProperty";
+  key: Identifier | StringLiteral | NumericLiteral | Expression;
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  decorators?: Array<Decorator> | null;
+  computed?: boolean;
+  static?: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean;
+  readonly?: boolean | null;
+}
+
+export interface ClassPrivateProperty extends BaseNode {
+  type: "ClassPrivateProperty";
+  key: PrivateName;
+  value?: Expression | null;
+  decorators?: Array<Decorator> | null;
+  static: any;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+}
+
+export interface ClassPrivateMethod extends BaseNode {
+  type: "ClassPrivateMethod";
+  kind?: "get" | "set" | "method" | "constructor";
+  key: PrivateName;
+  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  body: BlockStatement;
+  static?: boolean;
+  abstract?: boolean | null;
+  access?: "public" | "private" | "protected" | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  async?: boolean;
+  computed?: boolean;
+  decorators?: Array<Decorator> | null;
+  generator?: boolean;
+  optional?: boolean | null;
+  override?: boolean;
+  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeParameters?:
+    | TypeParameterDeclaration
+    | TSTypeParameterDeclaration
+    | Noop
+    | null;
+}
+
+export interface PrivateName extends BaseNode {
+  type: "PrivateName";
+  id: Identifier;
+}
+
 export interface AnyTypeAnnotation extends BaseNode {
   type: "AnyTypeAnnotation";
 }
@@ -1531,23 +1586,6 @@ export interface BindExpression extends BaseNode {
   callee: Expression;
 }
 
-export interface ClassProperty extends BaseNode {
-  type: "ClassProperty";
-  key: Identifier | StringLiteral | NumericLiteral | Expression;
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  decorators?: Array<Decorator> | null;
-  computed?: boolean;
-  static?: boolean;
-  abstract?: boolean | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  declare?: boolean | null;
-  definite?: boolean | null;
-  optional?: boolean | null;
-  override?: boolean;
-  readonly?: boolean | null;
-}
-
 export interface PipelineTopicExpression extends BaseNode {
   type: "PipelineTopicExpression";
   expression: Expression;
@@ -1560,39 +1598,6 @@ export interface PipelineBareFunction extends BaseNode {
 
 export interface PipelinePrimaryTopicReference extends BaseNode {
   type: "PipelinePrimaryTopicReference";
-}
-
-export interface ClassPrivateProperty extends BaseNode {
-  type: "ClassPrivateProperty";
-  key: PrivateName;
-  value?: Expression | null;
-  decorators?: Array<Decorator> | null;
-  static: any;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-}
-
-export interface ClassPrivateMethod extends BaseNode {
-  type: "ClassPrivateMethod";
-  kind?: "get" | "set" | "method" | "constructor";
-  key: PrivateName;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
-  body: BlockStatement;
-  static?: boolean;
-  abstract?: boolean | null;
-  access?: "public" | "private" | "protected" | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  async?: boolean;
-  computed?: boolean;
-  decorators?: Array<Decorator> | null;
-  generator?: boolean;
-  optional?: boolean | null;
-  override?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
 }
 
 export interface ImportAttribute extends BaseNode {
@@ -1615,11 +1620,6 @@ export interface DoExpression extends BaseNode {
 export interface ExportDefaultSpecifier extends BaseNode {
   type: "ExportDefaultSpecifier";
   exported: Identifier;
-}
-
-export interface PrivateName extends BaseNode {
-  type: "PrivateName";
-  id: Identifier;
 }
 
 export interface RecordExpression extends BaseNode {
@@ -2316,6 +2316,7 @@ export type ModuleSpecifier =
   | ImportSpecifier
   | ExportNamespaceSpecifier
   | ExportDefaultSpecifier;
+export type Private = ClassPrivateProperty | ClassPrivateMethod | PrivateName;
 export type Flow =
   | AnyTypeAnnotation
   | ArrayTypeAnnotation
@@ -2452,7 +2453,6 @@ export type JSX =
   | JSXFragment
   | JSXOpeningFragment
   | JSXClosingFragment;
-export type Private = ClassPrivateProperty | ClassPrivateMethod | PrivateName;
 export type TSTypeElement =
   | TSCallSignatureDeclaration
   | TSConstructSignatureDeclaration
@@ -2546,6 +2546,7 @@ export interface Aliases {
   ModuleDeclaration: ModuleDeclaration;
   ExportDeclaration: ExportDeclaration;
   ModuleSpecifier: ModuleSpecifier;
+  Private: Private;
   Flow: Flow;
   FlowType: FlowType;
   FlowBaseAnnotation: FlowBaseAnnotation;
@@ -2554,7 +2555,6 @@ export interface Aliases {
   EnumBody: EnumBody;
   EnumMember: EnumMember;
   JSX: JSX;
-  Private: Private;
   TSTypeElement: TSTypeElement;
   TSType: TSType;
   TSBaseType: TSBaseType;
