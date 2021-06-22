@@ -515,6 +515,38 @@ export function optionalCallExpression(
 ): t.OptionalCallExpression {
   return builder("OptionalCallExpression", ...arguments);
 }
+export function classProperty(
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: boolean,
+  _static?: boolean,
+): t.ClassProperty {
+  return builder("ClassProperty", ...arguments);
+}
+export function classPrivateProperty(
+  key: t.PrivateName,
+  value: t.Expression | null | undefined,
+  decorators: Array<t.Decorator> | null | undefined,
+  _static: any,
+): t.ClassPrivateProperty {
+  return builder("ClassPrivateProperty", ...arguments);
+}
+export function classPrivateMethod(
+  kind: "get" | "set" | "method" | "constructor" | undefined,
+  key: t.PrivateName,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  body: t.BlockStatement,
+  _static?: boolean,
+): t.ClassPrivateMethod {
+  return builder("ClassPrivateMethod", ...arguments);
+}
+export function privateName(id: t.Identifier): t.PrivateName {
+  return builder("PrivateName", ...arguments);
+}
 export function anyTypeAnnotation(): t.AnyTypeAnnotation {
   return builder("AnyTypeAnnotation", ...arguments);
 }
@@ -992,16 +1024,6 @@ export function bindExpression(
 ): t.BindExpression {
   return builder("BindExpression", ...arguments);
 }
-export function classProperty(
-  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
-  value?: t.Expression | null,
-  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
-  decorators?: Array<t.Decorator> | null,
-  computed?: boolean,
-  _static?: boolean,
-): t.ClassProperty {
-  return builder("ClassProperty", ...arguments);
-}
 export function pipelineTopicExpression(
   expression: t.Expression,
 ): t.PipelineTopicExpression {
@@ -1014,25 +1036,6 @@ export function pipelineBareFunction(
 }
 export function pipelinePrimaryTopicReference(): t.PipelinePrimaryTopicReference {
   return builder("PipelinePrimaryTopicReference", ...arguments);
-}
-export function classPrivateProperty(
-  key: t.PrivateName,
-  value: t.Expression | null | undefined,
-  decorators: Array<t.Decorator> | null | undefined,
-  _static: any,
-): t.ClassPrivateProperty {
-  return builder("ClassPrivateProperty", ...arguments);
-}
-export function classPrivateMethod(
-  kind: "get" | "set" | "method" | "constructor" | undefined,
-  key: t.PrivateName,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
-  body: t.BlockStatement,
-  _static?: boolean,
-): t.ClassPrivateMethod {
-  return builder("ClassPrivateMethod", ...arguments);
 }
 export function importAttribute(
   key: t.Identifier | t.StringLiteral,
@@ -1053,9 +1056,6 @@ export function exportDefaultSpecifier(
   exported: t.Identifier,
 ): t.ExportDefaultSpecifier {
   return builder("ExportDefaultSpecifier", ...arguments);
-}
-export function privateName(id: t.Identifier): t.PrivateName {
-  return builder("PrivateName", ...arguments);
 }
 export function recordExpression(
   properties: Array<t.ObjectProperty | t.SpreadElement>,
