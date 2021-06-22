@@ -2099,7 +2099,7 @@ defineType("ClassProperty", {
 });
 
 defineType("ClassPrivateProperty", {
-  visitor: ["key", "value", "decorators"],
+  visitor: ["key", "value", "decorators", "typeAnnotation"],
   builder: ["key", "value", "decorators", "static"],
   aliases: ["Property", "Private"],
   fields: {
