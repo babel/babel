@@ -1838,7 +1838,8 @@ defineType("Super", {
 });
 
 defineType("TaggedTemplateExpression", {
-  visitor: ["tag", "quasi"],
+  visitor: ["tag", "quasi", "typeParameters"],
+  builder: ["tag", "quasi"],
   aliases: ["Expression"],
   fields: {
     tag: {
