@@ -100,12 +100,30 @@ const simpleAssignmentVisitor = {
         return;
       }
 
-      path.node.right = t.binaryExpression(
-        path.node.operator.slice(0, -1),
-        t.cloneNode(path.node.left),
-        path.node.right,
-      );
-      path.node.operator = "=";
+      const operator = path.node.operator.slice(0, -1);
+      if (t.LOGICAL_OPERATORS.includes(operator)) {
+        // &&, ||, ??
+        // (foo &&= bar) => (foo && foo = bar)
+        path.replaceWith(
+          t.logicalExpression(
+            operator,
+            path.node.left,
+            t.assignmentExpression(
+              "=",
+              t.cloneNode(path.node.left),
+              path.node.right,
+            ),
+          ),
+        );
+      } else {
+        // (foo += bar) => (foo = foo + bar)
+        path.node.right = t.binaryExpression(
+          operator,
+          t.cloneNode(path.node.left),
+          path.node.right,
+        );
+        path.node.operator = "=";
+      }
     },
   },
 };
