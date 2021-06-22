@@ -211,11 +211,12 @@
     "chrome": "47",
     "opera": "34",
     "edge": "13",
-    "firefox": "45",
+    "firefox": "43",
     "safari": "10",
     "node": "6",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.7.13",
     "electron": "0.36"
   },
   "transform-block-scoped-functions": {
@@ -378,7 +379,7 @@
     "chrome": "46",
     "opera": "33",
     "edge": "14",
-    "firefox": "41",
+    "firefox": "45",
     "safari": "10",
     "node": "5",
     "ios": "10",
