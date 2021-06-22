@@ -2050,3 +2050,117 @@ defineType("OptionalCallExpression", {
     },
   },
 });
+
+// --- ES2022 ---
+defineType("ClassProperty", {
+  visitor: ["key", "value", "typeAnnotation", "decorators"],
+  builder: [
+    "key",
+    "value",
+    "typeAnnotation",
+    "decorators",
+    "computed",
+    "static",
+  ],
+  aliases: ["Property"],
+  fields: {
+    ...classMethodOrPropertyCommon,
+    value: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+    definite: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    typeAnnotation: {
+      validate: process.env.BABEL_8_BREAKING
+        ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
+        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
+    },
+    readonly: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    declare: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+  },
+});
+
+defineType("ClassPrivateProperty", {
+  visitor: ["key", "value", "decorators"],
+  builder: ["key", "value", "decorators", "static"],
+  aliases: ["Property", "Private"],
+  fields: {
+    key: {
+      validate: assertNodeType("PrivateName"),
+    },
+    value: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+    typeAnnotation: {
+      validate: process.env.BABEL_8_BREAKING
+        ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
+        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
+    },
+  },
+});
+
+defineType("ClassPrivateMethod", {
+  builder: ["kind", "key", "params", "body", "static"],
+  visitor: [
+    "key",
+    "params",
+    "body",
+    "decorators",
+    "returnType",
+    "typeParameters",
+  ],
+  aliases: [
+    "Function",
+    "Scopable",
+    "BlockParent",
+    "FunctionParent",
+    "Method",
+    "Private",
+  ],
+  fields: {
+    ...classMethodOrDeclareMethodCommon,
+    ...functionTypeAnnotationCommon,
+    key: {
+      validate: assertNodeType("PrivateName"),
+    },
+    body: {
+      validate: assertNodeType("BlockStatement"),
+    },
+  },
+});
+
+defineType("PrivateName", {
+  visitor: ["id"],
+  aliases: ["Private"],
+  fields: {
+    id: {
+      validate: assertNodeType("Identifier"),
+    },
+  },
+});
