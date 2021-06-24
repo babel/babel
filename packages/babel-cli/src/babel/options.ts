@@ -1,7 +1,7 @@
 import fs from "fs";
 
 import commander from "commander";
-import { version } from "@babel/core";
+import { version, DEFAULT_EXTENSIONS } from "@babel/core";
 import glob from "glob";
 
 // Standard Babel input configs.
@@ -113,7 +113,9 @@ if (!process.env.BABEL_8_BREAKING) {
 // "babel" command specific arguments that are not passed to @babel/core.
 commander.option(
   "-x, --extensions [extensions]",
-  "List of extensions to compile when a directory has been the input. [.es6,.js,.es,.jsx,.mjs]",
+  "List of extensions to compile when a directory has been the input. [" +
+    DEFAULT_EXTENSIONS.join() +
+    "]",
   collect,
 );
 commander.option(
