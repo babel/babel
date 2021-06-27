@@ -1,4 +1,4 @@
 var _z = z,
-    _fn = fn(),
+    _fn = babelHelpers.toPropertyKey(fn()),
     x = _z[_fn],
-    y = babelHelpers.objectWithoutProperties(_z, [_fn].map(babelHelpers.toPropertyKey));
+    y = babelHelpers.objectWithoutProperties(_z, [_fn]);
