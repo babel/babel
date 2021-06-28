@@ -99,6 +99,8 @@ export const ErrorMessages = makeErrorTemplates(
     LabelRedeclaration: "Label '%0' is already declared.",
     LetInLexicalBinding:
       "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
+    LineTerminatorAfterMatchPattern:
+      "No line terminator allowed after match pattern.",
     LineTerminatorBeforeArrow: "No line break is allowed before '=>'.",
     MalformedRegExpFlags: "Invalid regular expression flag.",
     MissingClassName: "A class name is required.",

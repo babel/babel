@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "patternMatching"
+    ]
+  ],
+  "throws": "No line terminator allowed after match pattern. (2:12)"
+}
