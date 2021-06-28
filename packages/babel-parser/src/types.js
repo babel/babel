@@ -16,13 +16,23 @@ import type { ParsingError } from "./parser/error";
  *   - packages/babel-generators/src/generators
  */
 
-export type Comment = {
+type CommentBase = {
   type: "CommentBlock" | "CommentLine",
   value: string,
   start: number,
   end: number,
   loc: SourceLocation,
 };
+
+export type CommentBlock = CommentBase & {
+  type: "CommentBlock",
+};
+
+export type CommentLine = CommentBase & {
+  type: "CommentLine",
+};
+
+export type Comment = CommentBlock | CommentLine;
 
 export interface NodeBase {
   start: number;

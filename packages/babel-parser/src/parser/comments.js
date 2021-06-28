@@ -34,6 +34,7 @@ function last<T>(stack: $ReadOnlyArray<T>): T {
 export default class CommentsParser extends BaseParser {
   addComment(comment: Comment): void {
     if (this.filename) comment.loc.filename = this.filename;
+    this.state.comments.push(comment);
     this.state.trailingComments.push(comment);
     this.state.leadingComments.push(comment);
   }
@@ -101,8 +102,6 @@ export default class CommentsParser extends BaseParser {
   }
 
   processComment(node: Node): void {
-    if (node.type === "Program" && node.body.length > 0) return;
-
     const stack = this.state.commentStack;
 
     let firstChild, lastChild, trailingComments, i, j;

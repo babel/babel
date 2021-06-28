@@ -3212,7 +3212,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return fileNode;
     }
 
-    skipBlockComment(): void {
+    skipBlockComment(): N.CommentBlock | void {
       if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
           this.unexpected(null, FlowErrors.NestedFlowComment);
@@ -3232,7 +3232,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      super.skipBlockComment();
+      return super.skipBlockComment();
     }
 
     skipFlowComment(): number | boolean {
