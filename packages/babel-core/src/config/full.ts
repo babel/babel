@@ -124,7 +124,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
               }
             } catch (e) {
               if (e.code === "BABEL_UNKNOWN_OPTION") {
-                checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
+                checkNoUnwrappedItemOptionPairs(rawPresets, i, "presets", e);
               }
               throw e;
             }
@@ -187,7 +187,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
             } catch (e) {
               if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
                 // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
-                checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e);
+                checkNoUnwrappedItemOptionPairs(descs, i, "plugins", e);
               }
               throw e;
             }

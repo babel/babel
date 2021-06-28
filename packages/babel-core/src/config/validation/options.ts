@@ -440,7 +440,7 @@ function assertOverridesList(
 export function checkNoUnwrappedItemOptionPairs(
   items: Array<UnloadedDescriptor>,
   index: number,
-  type: "plugin" | "preset",
+  type: "plugins" | "presets",
   e: Error,
 ): void {
   if (index === 0) return;
