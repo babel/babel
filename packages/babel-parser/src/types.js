@@ -34,6 +34,16 @@ export type CommentLine = CommentBase & {
 
 export type Comment = CommentBlock | CommentLine;
 
+// A whitespace containing comments
+export type CommentWhitespace = {
+  start: number,
+  end: number,
+  comments: Array<Comment>,
+  leadingNode: Node,
+  trailingNode: Node,
+  containerNode: Node,
+};
+
 export interface NodeBase {
   start: number;
   end: number;

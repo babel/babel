@@ -4,7 +4,6 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
-import type { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
@@ -289,7 +288,7 @@ export default class Tokenizer extends ParserErrors {
 
   nextToken(): void {
     const curContext = this.curContext();
-    if (!curContext.preserveSpace) this.skipSpace();
+    if (!curContext.preserveSpace) this.skipSpace([], this.state.pos);
     this.state.start = this.state.pos;
     if (!this.isLookahead) this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
@@ -372,8 +371,7 @@ export default class Tokenizer extends ParserErrors {
   // Called at the start of the parse and after every token. Skips
   // whitespace and comments, and.
 
-  skipSpace(): void {
-    const comments = [];
+  skipSpace(comments, spaceStart): void {
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
@@ -399,13 +397,23 @@ export default class Tokenizer extends ParserErrors {
 
         case charCodes.slash:
           switch (this.input.charCodeAt(this.state.pos + 1)) {
-            case charCodes.asterisk:
-              comments.push(this.skipBlockComment());
+            case charCodes.asterisk: {
+              const comment = this.skipBlockComment();
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
               break;
+            }
 
-            case charCodes.slash:
-              comments.push(this.skipLineComment(2));
+            case charCodes.slash: {
+              const comment = this.skipLineComment(2);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
               break;
+            }
 
             default:
               break loop;
@@ -420,9 +428,19 @@ export default class Tokenizer extends ParserErrors {
           }
       }
     }
-    for (let i = 0; i < comments.length; i++) {
-      const comment = comments[i];
-      if (comment !== undefined) this.addComment(comment);
+
+    if (comments.length > 0) {
+      const end = this.state.pos;
+      const CommentWhitespace = {
+        start: spaceStart,
+        end,
+        comments,
+        leadingNode: null,
+        trailingNode: null,
+        containerNode: null,
+      };
+      this.state.commentStack.push(CommentWhitespace);
+      this.state.unattachedCommentStack.push(CommentWhitespace);
     }
   }
 
@@ -658,9 +676,14 @@ export default class Tokenizer extends ParserErrors {
         (this.state.lastTokEnd === 0 || this.hasPrecedingLineBreak())
       ) {
         // A `-->` line comment
+        const whitespaceStart = this.state.lastTokEnd;
         const comment = this.skipLineComment(3);
-        if (comment !== undefined) this.addComment(comment);
-        this.skipSpace();
+        const comments = [];
+        if (comment !== undefined) {
+          this.addComment(comment);
+          comments.push(comment);
+        }
+        this.skipSpace(comments, whitespaceStart);
         this.nextToken();
         return;
       }
@@ -702,9 +725,14 @@ export default class Tokenizer extends ParserErrors {
       this.input.charCodeAt(this.state.pos + 3) === charCodes.dash
     ) {
       // `<!--`, an XML-style comment that should be interpreted as a line comment
+      const whitespaceStart = this.state.lastTokEnd;
       const comment = this.skipLineComment(4);
-      if (comment !== undefined) this.addComment(comment);
-      this.skipSpace();
+      const comments = [];
+      if (comment !== undefined) {
+        this.addComment(comment);
+        comments.push(comment);
+      }
+      this.skipSpace(comments, whitespaceStart);
       this.nextToken();
       return;
     }

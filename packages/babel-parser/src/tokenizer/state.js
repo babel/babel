@@ -95,12 +95,8 @@ export default class State {
   // Comment attachment store
   trailingComments: Array<N.Comment> = [];
   leadingComments: Array<N.Comment> = [];
-  commentStack: Array<{
-    start: number,
-    leadingComments: ?Array<N.Comment>,
-    trailingComments: ?Array<N.Comment>,
-    type: string,
-  }> = [];
+  unattachedCommentStack: Array<N.CommentWhitespace> = [];
+  commentStack: Array<N.CommentWhitespace> = [];
   // $FlowIgnore this is initialized when the parser starts.
   commentPreviousNode: N.Node = null;
 
