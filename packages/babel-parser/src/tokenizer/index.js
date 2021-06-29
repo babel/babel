@@ -288,7 +288,7 @@ export default class Tokenizer extends ParserErrors {
 
   nextToken(): void {
     const curContext = this.curContext();
-    if (!curContext.preserveSpace) this.skipSpace([], this.state.pos);
+    if (!curContext.preserveSpace) this.skipSpace();
     this.state.start = this.state.pos;
     if (!this.isLookahead) this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
@@ -371,7 +371,9 @@ export default class Tokenizer extends ParserErrors {
   // Called at the start of the parse and after every token. Skips
   // whitespace and comments, and.
 
-  skipSpace(comments: Array<N.Comment>, spaceStart: number): void {
+  skipSpace(): void {
+    const spaceStart = this.state.pos;
+    const comments = [];
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
@@ -423,6 +425,38 @@ export default class Tokenizer extends ParserErrors {
         default:
           if (isWhitespace(ch)) {
             ++this.state.pos;
+          } else if (ch === charCodes.dash && !this.inModule) {
+            const pos = this.state.pos;
+            if (
+              this.input.charCodeAt(pos + 1) === charCodes.dash &&
+              this.input.charCodeAt(pos + 2) === charCodes.greaterThan &&
+              (spaceStart === 0 || this.state.lineStart > spaceStart)
+            ) {
+              // A `-->` line comment
+              const comment = this.skipLineComment(3);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
+            } else {
+              break loop;
+            }
+          } else if (ch === charCodes.lessThan && !this.inModule) {
+            const pos = this.state.pos;
+            if (
+              this.input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
+              this.input.charCodeAt(pos + 2) === charCodes.dash &&
+              this.input.charCodeAt(pos + 3) === charCodes.dash
+            ) {
+              // `<!--`, an XML-style comment that should be interpreted as a line comment
+              const comment = this.skipLineComment(4);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
+            } else {
+              break loop;
+            }
           } else {
             break loop;
           }
@@ -669,24 +703,6 @@ export default class Tokenizer extends ParserErrors {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
-      if (
-        next === charCodes.dash &&
-        !this.inModule &&
-        this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        (this.state.lastTokEnd === 0 || this.hasPrecedingLineBreak())
-      ) {
-        // A `-->` line comment
-        const whitespaceStart = this.state.lastTokEnd;
-        const comment = this.skipLineComment(3);
-        const comments = [];
-        if (comment !== undefined) {
-          this.addComment(comment);
-          comments.push(comment);
-        }
-        this.skipSpace(comments, whitespaceStart);
-        this.nextToken();
-        return;
-      }
       this.finishOp(tt.incDec, 2);
       return;
     }
@@ -714,26 +730,6 @@ export default class Tokenizer extends ParserErrors {
         return;
       }
       this.finishOp(tt.bitShift, size);
-      return;
-    }
-
-    if (
-      next === charCodes.exclamationMark &&
-      code === charCodes.lessThan &&
-      !this.inModule &&
-      this.input.charCodeAt(this.state.pos + 2) === charCodes.dash &&
-      this.input.charCodeAt(this.state.pos + 3) === charCodes.dash
-    ) {
-      // `<!--`, an XML-style comment that should be interpreted as a line comment
-      const whitespaceStart = this.state.lastTokEnd;
-      const comment = this.skipLineComment(4);
-      const comments = [];
-      if (comment !== undefined) {
-        this.addComment(comment);
-        comments.push(comment);
-      }
-      this.skipSpace(comments, whitespaceStart);
-      this.nextToken();
       return;
     }
 
