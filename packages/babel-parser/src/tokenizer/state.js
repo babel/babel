@@ -89,16 +89,12 @@ export default class State {
   // where @foo belongs to the outer class and @bar to the inner
   decoratorStack: Array<Array<N.Decorator>> = [[]];
 
-  // Comment store.
+  // Comment store for Program.comments
   comments: Array<N.Comment> = [];
 
   // Comment attachment store
-  trailingComments: Array<N.Comment> = [];
-  leadingComments: Array<N.Comment> = [];
   unattachedCommentStack: Array<N.CommentWhitespace> = [];
   commentStack: Array<N.CommentWhitespace> = [];
-  // $FlowIgnore this is initialized when the parser starts.
-  commentPreviousNode: N.Node = null;
 
   // The current position of the tokenizer in the input.
   pos: number = 0;

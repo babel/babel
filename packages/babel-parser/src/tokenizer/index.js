@@ -371,7 +371,7 @@ export default class Tokenizer extends ParserErrors {
   // Called at the start of the parse and after every token. Skips
   // whitespace and comments, and.
 
-  skipSpace(comments, spaceStart): void {
+  skipSpace(comments: Array<N.Comment>, spaceStart: number): void {
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {

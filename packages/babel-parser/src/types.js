@@ -39,9 +39,9 @@ export type CommentWhitespace = {
   start: number,
   end: number,
   comments: Array<Comment>,
-  leadingNode: Node,
-  trailingNode: Node,
-  containerNode: Node,
+  leadingNode: Node | null,
+  trailingNode: Node | null,
+  containerNode: Node | null,
 };
 
 export interface NodeBase {
