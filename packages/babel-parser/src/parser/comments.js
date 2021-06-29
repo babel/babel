@@ -6,7 +6,18 @@ import BaseParser from "./base";
 import type { Comment, Node } from "../types";
 import * as charCodes from "charcodes";
 
-// A whitespace containing comments
+/**
+ * A whitespace token containing comments
+ * @typedef CommentWhitespace
+ * @type {object}
+ * @property {number} start - the start of the whitespace token.
+ * @property {number} end - the end of the whitespace token.
+ * @property {Array<Comment>} comments - the containing comments
+ * @property {Node | null} leadingNode - the immediately preceding AST node of the whitespace token
+ * @property {Node | null} trailingNode - the immediately following AST node of the whitespace token
+ * @property {Node | null} containerNode - the outermost AST node containing the whitespace
+ *                                         with minimal size (|end - start|)
+ */
 export type CommentWhitespace = {
   start: number,
   end: number,
@@ -71,6 +82,7 @@ function adjustInnerComments(
   }
 }
 
+/** @class CommentsParser */
 export default class CommentsParser extends BaseParser {
   addComment(comment: Comment): void {
     if (this.filename) comment.loc.filename = this.filename;
@@ -78,9 +90,8 @@ export default class CommentsParser extends BaseParser {
   }
 
   /**
-   * Given a newly created AST node _n_, attach _n_ to a comment whitespace _w_ if
-   * _n_ immediately precedes or follows _w_, or _n_ is the outermost AST node containing
-   * _w_ with minimal length (|end - start|)
+   * Given a newly created AST node _n_, attach _n_ to a comment whitespace _w_ if applicable
+   * {@see {@link CommentWhitespace}}
    *
    * @param {Node} node
    * @returns {void}
@@ -187,8 +198,9 @@ export default class CommentsParser extends BaseParser {
   }
 
   /**
-   * Drains remaning commentStack and applies {@link CommentParser#finalizeComment}
+   * Drains remaning commentStack and applies finalizeComment
    * to each comment whitespace.
+   * {@see {@link CommentsParser#finalizeComment}}
    *
    * @memberof CommentsParser
    */
