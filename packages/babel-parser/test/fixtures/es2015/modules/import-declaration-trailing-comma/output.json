@@ -10,20 +10,17 @@
       {
         "type": "ImportDeclaration",
         "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":24}},
+        "innerComments": [
+          {
+            "type": "CommentBlock",
+            "value": " Four ",
+            "start":54,"end":64,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":12}}
+          }
+        ],
         "specifiers": [
           {
             "type": "ImportSpecifier",
             "start":21,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15}},
-            "imported": {
-              "type": "Identifier",
-              "start":21,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15},"identifierName":"Foo"},
-              "name": "Foo"
-            },
-            "local": {
-              "type": "Identifier",
-              "start":21,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15},"identifierName":"Foo"},
-              "name": "Foo"
-            },
             "leadingComments": [
               {
                 "type": "CommentBlock",
@@ -41,13 +38,18 @@
                 "type": "CommentBlock",
                 "value": " Three ",
                 "start":40,"end":51,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":13}}
-              },
-              {
-                "type": "CommentBlock",
-                "value": " Four ",
-                "start":54,"end":64,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":12}}
               }
-            ]
+            ],
+            "imported": {
+              "type": "Identifier",
+              "start":21,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15},"identifierName":"Foo"},
+              "name": "Foo"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":21,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15},"identifierName":"Foo"},
+              "name": "Foo"
+            }
           }
         ],
         "source": {
