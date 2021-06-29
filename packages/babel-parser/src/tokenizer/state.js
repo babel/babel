@@ -2,6 +2,7 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
+import type { CommentWhitespace } from "../parser/comments";
 import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
@@ -93,7 +94,7 @@ export default class State {
   comments: Array<N.Comment> = [];
 
   // Comment attachment store
-  commentStack: Array<N.CommentWhitespace> = [];
+  commentStack: Array<CommentWhitespace> = [];
 
   // The current position of the tokenizer in the input.
   pos: number = 0;

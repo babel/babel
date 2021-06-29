@@ -3,9 +3,18 @@
 /*:: declare var invariant; */
 
 import BaseParser from "./base";
-import type { Comment, Node, CommentWhitespace } from "../types";
+import type { Comment, Node } from "../types";
 import * as charCodes from "charcodes";
 
+// A whitespace containing comments
+export type CommentWhitespace = {
+  start: number,
+  end: number,
+  comments: Array<Comment>,
+  leadingNode: Node | null,
+  trailingNode: Node | null,
+  containerNode: Node | null,
+};
 /**
  * Merge comments with node's trailingComments or assign comments to be
  * trailingComments.
