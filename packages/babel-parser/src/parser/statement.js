@@ -99,7 +99,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseTopLevel(file: N.File, program: N.Program): N.File {
     file.program = this.parseProgram(program);
-    this.finalizeComment();
+    this.finalizeRemainingComments();
     file.comments = this.state.comments;
 
     if (this.options.tokens) file.tokens = babel7CompatTokens(this.tokens);

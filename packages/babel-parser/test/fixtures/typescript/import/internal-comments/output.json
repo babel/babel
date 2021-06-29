@@ -27,6 +27,11 @@
         "innerComments": [
           {
             "type": "CommentBlock",
+            "value": "4",
+            "start":28,"end":33,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":33}}
+          },
+          {
+            "type": "CommentBlock",
             "value": "11",
             "start":85,"end":91,"loc":{"start":{"line":1,"column":85},"end":{"line":1,"column":91}}
           }

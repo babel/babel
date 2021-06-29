@@ -474,7 +474,6 @@ export default class Tokenizer extends ParserErrors {
         containerNode: null,
       };
       this.state.commentStack.push(CommentWhitespace);
-      this.state.unattachedCommentStack.push(CommentWhitespace);
     }
   }
 

@@ -93,7 +93,6 @@ export default class State {
   comments: Array<N.Comment> = [];
 
   // Comment attachment store
-  unattachedCommentStack: Array<N.CommentWhitespace> = [];
   commentStack: Array<N.CommentWhitespace> = [];
 
   // The current position of the tokenizer in the input.

@@ -3,33 +3,62 @@
 /*:: declare var invariant; */
 
 import BaseParser from "./base";
-import type { Comment, Node } from "../types";
+import type { Comment, Node, CommentWhitespace } from "../types";
 import * as charCodes from "charcodes";
 
+/**
+ * Merge comments with node's trailingComments or assign comments to be
+ * trailingComments.
+ *
+ * @param {Node} node
+ * @param {Array<Comment>} comments
+ */
+function setTrailingComments(node: Node, comments: Array<Comment>) {
+  if (node.trailingComments === undefined) {
+    node.trailingComments = comments;
+  } else {
+    node.trailingComments.unshift(...comments);
+  }
+}
+
+/**
+ * Merge comments with node's innerComments or assign comments to be
+ * innerComments.
+ *
+ * @param {Node} node
+ * @param {Array<Comment>} comments
+ */
 function setInnerComments(node: Node, comments: Array<Comment>) {
   if (node.innerComments === undefined) {
     node.innerComments = comments;
   } else {
-    node.innerComments.push(...comments);
+    node.innerComments.unshift(...comments);
   }
 }
 
+/**
+ * Given node and elements array, if elements has non-null element,
+ * merge comments to its trailingComments, otherwise merge comments
+ * to node's innerComments
+ *
+ * @param {Node} node
+ * @param {Array<Node>} elements
+ * @param {Array<Comment>} comments
+ */
 function adjustInnerComments(
   node: Node,
   elements: Array<Node>,
-  comments: Array<Comment>,
+  commentWS: CommentWhitespace,
 ) {
   let lastElement = null;
   let i = elements.length;
   while (lastElement === null && i > 0) {
     lastElement = elements[--i];
   }
-  if (lastElement === null) {
-    setInnerComments(node, comments);
-  } else if (lastElement.trailingComments === undefined) {
-    lastElement.trailingComments = comments;
+  if (lastElement === null || lastElement.start > commentWS.start) {
+    setInnerComments(node, commentWS.comments);
   } else {
-    lastElement.trailingComments.push(...comments);
+    setTrailingComments(lastElement, commentWS.comments);
   }
 }
 
@@ -39,21 +68,32 @@ export default class CommentsParser extends BaseParser {
     this.state.comments.push(comment);
   }
 
+  /**
+   * Given a newly created AST node _n_, attach _n_ to a comment whitespace _w_ if
+   * _n_ immediately precedes or follows _w_, or _n_ is the outermost AST node containing
+   * _w_ with minimal length (|end - start|)
+   *
+   * @param {Node} node
+   * @returns {void}
+   * @memberof CommentsParser
+   */
   processComment(node: Node): void {
-    const { unattachedCommentStack } = this.state;
-    const commentStackLength = unattachedCommentStack.length;
+    const { commentStack } = this.state;
+    const commentStackLength = commentStack.length;
     if (commentStackLength === 0) return;
     let i = commentStackLength - 1;
-    const lastComments = unattachedCommentStack[i];
+    const lastCommentWS = commentStack[i];
 
-    if (lastComments.start === node.end) {
-      lastComments.leadingNode = node;
+    const nodeEnd = node.end;
+    if (lastCommentWS.start === nodeEnd) {
+      lastCommentWS.leadingNode = node;
       i--;
     }
-    // invariant: for all 0 <= j <= i, c = commentStack[j] satisfies c.end < node.end
+
+    // invariant: for all 0 <= j <= i, let c = commentStack[j], c must satisfy c.end < node.end
     const nodeStart = node.start;
     for (; i >= 0; i--) {
-      const commentWS = unattachedCommentStack[i];
+      const commentWS = commentStack[i];
       const commentEnd = commentWS.end;
       if (commentEnd > nodeStart) {
         // by definition of commentWhiteSpace, this implies commentWS.start > nodeStart
@@ -62,8 +102,17 @@ export default class CommentsParser extends BaseParser {
         if (containerNode === null) {
           commentWS.containerNode = node;
         } else {
-          if (containerNode.end - containerNode.start < node.end - nodeStart) {
-            unattachedCommentStack.splice(i, 1);
+          if (containerNode.end - containerNode.start < nodeEnd - nodeStart) {
+            // a commentWhitespace is considered _attached_ if
+            // 1) its leadingNode or trailingNode, if exists, will not change
+            // 2) its containerNode have the minimum node length among all other
+            //    nodes containing the commentWhitespace
+            // In other words, an attached comment whitespace have fixed associated
+            // AST node and thus we can finalize the comment whitespace
+            // Note that there could be remaining commentWS after the Program node is finished,
+            // in this case they will be handled by {@link CommentParser#finalizeRemainingComments}
+            this.finalizeComment(commentWS);
+            commentStack.splice(i, 1);
           } else if (node.type !== "Program") {
             // we have a node with the same length of containerNode, but its finishNode is invoked later
             // than containerNode, so this node is the outer node and should replace the inner node.
@@ -71,57 +120,74 @@ export default class CommentsParser extends BaseParser {
             commentWS.containerNode = node;
           }
         }
-      } else if (commentEnd === nodeStart) {
-        commentWS.trailingNode = node;
+      } else {
+        if (commentEnd === nodeStart) {
+          commentWS.trailingNode = node;
+        }
         break;
       }
     }
   }
 
-  finalizeComment() {
-    const { commentStack } = this.state;
-    const commentStackLength = commentStack.length;
-    for (let i = 0; i < commentStackLength; i++) {
-      const commentWS = commentStack[i];
-      if (commentWS.leadingNode !== null || commentWS.trailingNode !== null) {
-        if (commentWS.leadingNode !== null) {
-          commentWS.leadingNode.trailingComments = commentWS.comments;
-        }
-        if (commentWS.trailingNode !== null) {
-          commentWS.trailingNode.leadingComments = commentWS.comments;
+  /**
+   * Assign the comments of comment whitespaces to related AST nodes.
+   * Also adjust innerComments following trailing comma.
+   *
+   * @memberof CommentsParser
+   */
+  finalizeComment(commentWS: CommentWhitespace) {
+    const { comments } = commentWS;
+    if (commentWS.leadingNode !== null || commentWS.trailingNode !== null) {
+      if (commentWS.leadingNode !== null) {
+        setTrailingComments(commentWS.leadingNode, comments);
+      }
+      if (commentWS.trailingNode !== null) {
+        commentWS.trailingNode.leadingComments = comments;
+      }
+    } else {
+      /*:: invariant(commentWS.containerNode !== null) */
+      const { containerNode: node, start: commentStart } = commentWS;
+      if (this.input.charCodeAt(commentStart - 1) === charCodes.comma) {
+        // If a commentWhitespace follows a comma and the containerNode allows
+        // list structures with trailing comma, merge it to the trailingComment
+        // of the last non-null list element
+        switch (node.type) {
+          case "ObjectExpression":
+          case "ObjectPattern":
+            adjustInnerComments(node, node.properties, commentWS);
+            break;
+          case "CallExpression":
+            adjustInnerComments(node, node.arguments, commentWS);
+            break;
+          case "ArrayExpression":
+          case "ArrayPattern":
+            adjustInnerComments(node, node.elements, commentWS);
+            break;
+          case "ExportNamedDeclaration":
+          case "ImportDeclaration":
+            adjustInnerComments(node, node.specifiers, commentWS);
+            break;
+          default: {
+            setInnerComments(node, comments);
+          }
         }
       } else {
-        /*:: invariant(commentWS.containerNode !== null) */
-        const {
-          containerNode: node,
-          comments,
-          start: commentStart,
-        } = commentWS;
-        if (this.input.charCodeAt(commentStart - 1) === charCodes.comma) {
-          switch (node.type) {
-            case "ObjectExpression":
-            case "ObjectPattern":
-              adjustInnerComments(node, node.properties, comments);
-              break;
-            case "CallExpression":
-              adjustInnerComments(node, node.arguments, comments);
-              break;
-            case "ArrayExpression":
-            case "ArrayPattern":
-              adjustInnerComments(node, node.elements, comments);
-              break;
-            case "ExportNamedDeclaration":
-            case "ImportDeclaration":
-              adjustInnerComments(node, node.specifiers, comments);
-              break;
-            default: {
-              setInnerComments(node, comments);
-            }
-          }
-        } else {
-          setInnerComments(node, comments);
-        }
+        setInnerComments(node, comments);
       }
     }
+  }
+
+  /**
+   * Drains remaning commentStack and applies {@link CommentParser#finalizeComment}
+   * to each comment whitespace.
+   *
+   * @memberof CommentsParser
+   */
+  finalizeRemainingComments() {
+    const { commentStack } = this.state;
+    for (let i = commentStack.length - 1; i >= 0; i--) {
+      this.finalizeComment(commentStack[i]);
+    }
+    this.state.commentStack = [];
   }
 }

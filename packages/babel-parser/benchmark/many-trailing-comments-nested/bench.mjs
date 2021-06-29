@@ -10,7 +10,7 @@ function createInput(length) {
 function benchCases(name, implementation, options) {
   for (const length of [128, 256, 512, 1024]) {
     const input = createInput(length);
-    suite.add(`${name} ${length} trailing comments`, () => {
+    suite.add(`${name} ${length} nested trailing comments`, () => {
       implementation.parse(input, options);
     });
   }
