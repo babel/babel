@@ -455,7 +455,7 @@ export function checkNoUnwrappedItemOptionPairs(
   ) {
     e.message +=
       `\n- Maybe you meant to use\n` +
-      `"${type}": [\n  ["${lastItem.file.request}", ${JSON.stringify(
+      `"${type}s": [\n  ["${lastItem.file.request}", ${JSON.stringify(
         thisItem.value,
         undefined,
         2,
