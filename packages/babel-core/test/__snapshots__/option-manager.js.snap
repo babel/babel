@@ -8,7 +8,7 @@ exports[`option-manager config plugin/preset flattening and overriding should th
   \\"useSpread\\": true
 }]
 ]
-To be a valid presets, its name and options should be wrapped in a pair of brackets"
+To be a valid preset, its name and options should be wrapped in a pair of brackets"
 `;
 
 exports[`option-manager config plugin/preset flattening and overriding should throw when an option is provided as a plugin 1`] = `
@@ -19,7 +19,7 @@ exports[`option-manager config plugin/preset flattening and overriding should th
   \\"useSpread\\": true
 }]
 ]
-To be a valid plugins, its name and options should be wrapped in a pair of brackets"
+To be a valid plugin, its name and options should be wrapped in a pair of brackets"
 `;
 
 exports[`option-manager config plugin/preset flattening and overriding should throw when an option is provided as a preset 1`] = `
@@ -30,5 +30,5 @@ exports[`option-manager config plugin/preset flattening and overriding should th
   \\"useBuiltIns\\": \\"entry\\"
 }]
 ]
-To be a valid presets, its name and options should be wrapped in a pair of brackets"
+To be a valid preset, its name and options should be wrapped in a pair of brackets"
 `;

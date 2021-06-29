@@ -440,7 +440,7 @@ function assertOverridesList(
 export function checkNoUnwrappedItemOptionPairs(
   items: Array<UnloadedDescriptor>,
   index: number,
-  type: "plugins" | "presets",
+  type: "plugin" | "preset",
   e: Error,
 ): void {
   if (index === 0) return;
@@ -455,7 +455,7 @@ export function checkNoUnwrappedItemOptionPairs(
   ) {
     e.message +=
       `\n- Maybe you meant to use\n` +
-      `"${type}": [\n  ["${lastItem.file.request}", ${JSON.stringify(
+      `"${type}s": [\n  ["${lastItem.file.request}", ${JSON.stringify(
         thisItem.value,
         undefined,
         2,
