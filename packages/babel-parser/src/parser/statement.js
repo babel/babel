@@ -130,26 +130,27 @@ export default class StatementParser extends ExpressionParser {
 
   // TODO
 
+  /**
+   * cast a Statement to a Directive. This method mutates input statement.
+   *
+   * @param {N.Statement} stmt
+   * @returns {N.Directive}
+   * @memberof StatementParser
+   */
   stmtToDirective(stmt: N.Statement): N.Directive {
-    const expr = stmt.expression;
+    const directive = (stmt: any);
+    directive.type = "Directive";
+    directive.value = directive.expression;
+    delete directive.expression;
 
-    const directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
-    const directive = this.startNodeAt(stmt.start, stmt.loc.start);
-
-    const raw = this.input.slice(expr.start, expr.end);
+    const directiveLiteral = directive.value;
+    const raw = this.input.slice(directiveLiteral.start, directiveLiteral.end);
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
     this.addExtra(directiveLiteral, "raw", raw);
     this.addExtra(directiveLiteral, "rawValue", val);
-
-    directive.value = this.finishNodeAt(
-      directiveLiteral,
-      "DirectiveLiteral",
-      expr.end,
-      expr.loc.end,
-    );
-
-    return this.finishNodeAt(directive, "Directive", stmt.end, stmt.loc.end);
+    directiveLiteral.type = "DirectiveLiteral";
+    return directive;
   }
 
   parseInterpreterDirective(): N.InterpreterDirective | null {
