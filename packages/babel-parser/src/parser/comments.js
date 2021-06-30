@@ -111,25 +111,21 @@ export default class CommentsParser extends BaseParser {
       i--;
     }
 
+    const { start: nodeStart } = node;
     // invariant: for all 0 <= j <= i, let c = commentStack[j], c must satisfy c.end < node.end
-    const nodeStart = node.start;
     for (; i >= 0; i--) {
       const commentWS = commentStack[i];
       const commentEnd = commentWS.end;
       if (commentEnd > nodeStart) {
         // by definition of commentWhiteSpace, this implies commentWS.start > nodeStart
-        // so node can be a containingNode candidate
-        if (commentWS.containingNode === null) {
-          // We can not finalize comment here, because at this time we have not set `trailingNode`
-          commentWS.containingNode = node;
-        } else {
-          // At this time we can finalize the comment whitespace, because
-          // 1) its leadingNode or trailingNode, if exists, will not change
-          // 2) its containingNode have been assigned and will not change because it is the
-          //    innermost minimal-sized AST node
-          this.finalizeComment(commentWS);
-          commentStack.splice(i, 1);
-        }
+        // so node can be a containingNode candidate. At this time we can finalize the comment
+        // whitespace, because
+        // 1) its leadingNode or trailingNode, if exists, will not change
+        // 2) its containingNode have been assigned and will not change because it is the
+        //    innermost minimal-sized AST node
+        commentWS.containingNode = node;
+        this.finalizeComment(commentWS);
+        commentStack.splice(i, 1);
       } else {
         if (commentEnd === nodeStart) {
           commentWS.trailingNode = node;
