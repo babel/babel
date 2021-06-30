@@ -28,7 +28,8 @@ export type CommentWhitespace = {
 };
 /**
  * Merge comments with node's trailingComments or assign comments to be
- * trailingComments.
+ * trailingComments. New comments will be placed before old comments
+ * because the commentStack is enumerated reversely.
  *
  * @param {Node} node
  * @param {Array<Comment>} comments
@@ -43,7 +44,8 @@ function setTrailingComments(node: Node, comments: Array<Comment>) {
 
 /**
  * Merge comments with node's innerComments or assign comments to be
- * innerComments.
+ * innerComments. New comments will be placed before old comments
+ * because the commentStack is enumerated reversely.
  *
  * @param {Node} node
  * @param {Array<Comment>} comments
@@ -117,16 +119,14 @@ export default class CommentsParser extends BaseParser {
       if (commentEnd > nodeStart) {
         // by definition of commentWhiteSpace, this implies commentWS.start > nodeStart
         // so node can be a containerNode candidate
-        const { containerNode } = commentWS;
-        if (containerNode === null) {
+        if (commentWS.containerNode === null) {
+          // We can not finalize comment here, because at this time we have not set `trailingNode`
           commentWS.containerNode = node;
         } else {
-          // a commentWhitespace is considered _attached_ if
+          // At this time we can finalize the comment whitespace, because
           // 1) its leadingNode or trailingNode, if exists, will not change
-          // 2) its containerNode have the minimum node length among all other
-          //    nodes containing the commentWhitespace
-          // In other words, an attached comment whitespace have fixed associated
-          // AST node and thus we can finalize the comment whitespace
+          // 2) its containerNode have been assigned and will not change because it is the
+          //    innermost minimal-sized AST node
           this.finalizeComment(commentWS);
           commentStack.splice(i, 1);
         }
@@ -134,6 +134,7 @@ export default class CommentsParser extends BaseParser {
         if (commentEnd === nodeStart) {
           commentWS.trailingNode = node;
         }
+        // stop the loop when commentEnd <= nodeStart
         break;
       }
     }
