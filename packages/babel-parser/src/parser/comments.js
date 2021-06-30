@@ -15,7 +15,7 @@ import * as charCodes from "charcodes";
  * @property {Array<Comment>} comments - the containing comments
  * @property {Node | null} leadingNode - the immediately preceding AST node of the whitespace token
  * @property {Node | null} trailingNode - the immediately following AST node of the whitespace token
- * @property {Node | null} containerNode - the innermost AST node containing the whitespace
+ * @property {Node | null} containingNode - the innermost AST node containing the whitespace
  *                                         with minimal size (|end - start|)
  */
 export type CommentWhitespace = {
@@ -24,7 +24,7 @@ export type CommentWhitespace = {
   comments: Array<Comment>,
   leadingNode: Node | null,
   trailingNode: Node | null,
-  containerNode: Node | null,
+  containingNode: Node | null,
 };
 /**
  * Merge comments with node's trailingComments or assign comments to be
@@ -118,14 +118,14 @@ export default class CommentsParser extends BaseParser {
       const commentEnd = commentWS.end;
       if (commentEnd > nodeStart) {
         // by definition of commentWhiteSpace, this implies commentWS.start > nodeStart
-        // so node can be a containerNode candidate
-        if (commentWS.containerNode === null) {
+        // so node can be a containingNode candidate
+        if (commentWS.containingNode === null) {
           // We can not finalize comment here, because at this time we have not set `trailingNode`
-          commentWS.containerNode = node;
+          commentWS.containingNode = node;
         } else {
           // At this time we can finalize the comment whitespace, because
           // 1) its leadingNode or trailingNode, if exists, will not change
-          // 2) its containerNode have been assigned and will not change because it is the
+          // 2) its containingNode have been assigned and will not change because it is the
           //    innermost minimal-sized AST node
           this.finalizeComment(commentWS);
           commentStack.splice(i, 1);
@@ -156,10 +156,10 @@ export default class CommentsParser extends BaseParser {
         commentWS.trailingNode.leadingComments = comments;
       }
     } else {
-      /*:: invariant(commentWS.containerNode !== null) */
-      const { containerNode: node, start: commentStart } = commentWS;
+      /*:: invariant(commentWS.containingNode !== null) */
+      const { containingNode: node, start: commentStart } = commentWS;
       if (this.input.charCodeAt(commentStart - 1) === charCodes.comma) {
-        // If a commentWhitespace follows a comma and the containerNode allows
+        // If a commentWhitespace follows a comma and the containingNode allows
         // list structures with trailing comma, merge it to the trailingComment
         // of the last non-null list element
         switch (node.type) {
