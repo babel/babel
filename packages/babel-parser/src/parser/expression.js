@@ -161,6 +161,9 @@ export default class ExpressionParser extends LValParser {
     if (!this.match(tt.eof)) {
       this.unexpected();
     }
+    // Unlike parseTopLevel, we need to drain remaining commentStacks
+    // because the top level node is _not_ Program.
+    this.finalizeRemainingComments();
     expr.comments = this.state.comments;
     expr.errors = this.state.errors;
     if (this.options.tokens) {

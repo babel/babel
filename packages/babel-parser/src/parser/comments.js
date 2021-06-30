@@ -189,4 +189,20 @@ export default class CommentsParser extends BaseParser {
       }
     }
   }
+
+  /**
+   * Drains remaning commentStack and applies finalizeComment
+   * to each comment whitespace. Used only in parseExpression
+   * where the top level AST node is _not_ Program
+   * {@see {@link CommentsParser#finalizeComment}}
+   *
+   * @memberof CommentsParser
+   */
+  finalizeRemainingComments() {
+    const { commentStack } = this.state;
+    for (let i = commentStack.length - 1; i >= 0; i--) {
+      this.finalizeComment(commentStack[i]);
+    }
+    this.state.commentStack = [];
+  }
 }
