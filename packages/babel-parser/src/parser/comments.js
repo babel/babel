@@ -164,13 +164,16 @@ export default class CommentsParser extends BaseParser {
         switch (node.type) {
           case "ObjectExpression":
           case "ObjectPattern":
+          case "RecordExpression":
             adjustInnerComments(node, node.properties, commentWS);
             break;
           case "CallExpression":
+          case "OptionalCallExpression":
             adjustInnerComments(node, node.arguments, commentWS);
             break;
           case "ArrayExpression":
           case "ArrayPattern":
+          case "TupleExpression":
             adjustInnerComments(node, node.elements, commentWS);
             break;
           case "ExportNamedDeclaration":
