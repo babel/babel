@@ -22,13 +22,15 @@ import template from "@babel/template";
     const isValidId = isValidBindingIdentifier(helperName);
     const varName = isValidId ? helperName : `_${helperName}`;
 
-    const fileContents = await fs.promises.readFile(
-      join(fileURLToPath(HELPERS_FOLDER), file),
-      "utf8"
-    );
-    const { minVersion } = fileContents.match(
+    const filePath = join(fileURLToPath(HELPERS_FOLDER), file);
+    const fileContents = await fs.promises.readFile(filePath, "utf8");
+    const minVersionMatch = fileContents.match(
       /^\s*\/\*\s*@minVersion\s+(?<minVersion>\S+)\s*\*\/\s*$/m
-    ).groups;
+    );
+    if (!minVersionMatch) {
+      throw new Error(`@minVersion number missing in ${filePath}`);
+    }
+    const { minVersion } = minVersionMatch.groups;
 
     // TODO: We can minify the helpers in production
     const source = fileContents
