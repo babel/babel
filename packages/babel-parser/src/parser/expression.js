@@ -1512,7 +1512,10 @@ export default class ExpressionParser extends LValParser {
     if (exprList.length > 1) {
       val = this.startNodeAt(innerStartPos, innerStartLoc);
       val.expressions = exprList;
-      this.finishNodeAt(val, "SequenceExpression", innerEndPos, innerEndLoc);
+      // finish node at current location so it can pick up comments after `)`
+      this.finishNode(val, "SequenceExpression");
+      val.end = innerEndPos;
+      val.loc.end = innerEndLoc;
     } else {
       val = exprList[0];
     }
