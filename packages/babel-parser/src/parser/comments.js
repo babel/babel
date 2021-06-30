@@ -15,7 +15,7 @@ import * as charCodes from "charcodes";
  * @property {Array<Comment>} comments - the containing comments
  * @property {Node | null} leadingNode - the immediately preceding AST node of the whitespace token
  * @property {Node | null} trailingNode - the immediately following AST node of the whitespace token
- * @property {Node | null} containerNode - the outermost AST node containing the whitespace
+ * @property {Node | null} containerNode - the innermost AST node containing the whitespace
  *                                         with minimal size (|end - start|)
  */
 export type CommentWhitespace = {
@@ -104,8 +104,7 @@ export default class CommentsParser extends BaseParser {
     let i = commentStackLength - 1;
     const lastCommentWS = commentStack[i];
 
-    const nodeEnd = node.end;
-    if (lastCommentWS.start === nodeEnd) {
+    if (lastCommentWS.start === node.end) {
       lastCommentWS.leadingNode = node;
       i--;
     }
@@ -122,23 +121,14 @@ export default class CommentsParser extends BaseParser {
         if (containerNode === null) {
           commentWS.containerNode = node;
         } else {
-          if (containerNode.end - containerNode.start < nodeEnd - nodeStart) {
-            // a commentWhitespace is considered _attached_ if
-            // 1) its leadingNode or trailingNode, if exists, will not change
-            // 2) its containerNode have the minimum node length among all other
-            //    nodes containing the commentWhitespace
-            // In other words, an attached comment whitespace have fixed associated
-            // AST node and thus we can finalize the comment whitespace
-            // Note that there could be remaining commentWS after the Program node is finished,
-            // in this case they will be handled by {@link CommentParser#finalizeRemainingComments}
-            this.finalizeComment(commentWS);
-            commentStack.splice(i, 1);
-          } else if (node.type !== "Program") {
-            // we have a node with the same length of containerNode, but its finishNode is invoked later
-            // than containerNode, so this node is the outer node and should replace the inner node.
-            // E.g. ExpressionStatement contains a VariableDeclaration
-            commentWS.containerNode = node;
-          }
+          // a commentWhitespace is considered _attached_ if
+          // 1) its leadingNode or trailingNode, if exists, will not change
+          // 2) its containerNode have the minimum node length among all other
+          //    nodes containing the commentWhitespace
+          // In other words, an attached comment whitespace have fixed associated
+          // AST node and thus we can finalize the comment whitespace
+          this.finalizeComment(commentWS);
+          commentStack.splice(i, 1);
         }
       } else {
         if (commentEnd === nodeStart) {
@@ -195,20 +185,5 @@ export default class CommentsParser extends BaseParser {
         setInnerComments(node, comments);
       }
     }
-  }
-
-  /**
-   * Drains remaning commentStack and applies finalizeComment
-   * to each comment whitespace.
-   * {@see {@link CommentsParser#finalizeComment}}
-   *
-   * @memberof CommentsParser
-   */
-  finalizeRemainingComments() {
-    const { commentStack } = this.state;
-    for (let i = commentStack.length - 1; i >= 0; i--) {
-      this.finalizeComment(commentStack[i]);
-    }
-    this.state.commentStack = [];
   }
 }

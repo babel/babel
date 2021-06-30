@@ -161,7 +161,6 @@ export default class ExpressionParser extends LValParser {
     if (!this.match(tt.eof)) {
       this.unexpected();
     }
-    this.finalizeRemainingComments();
     expr.comments = this.state.comments;
     expr.errors = this.state.errors;
     if (this.options.tokens) {
