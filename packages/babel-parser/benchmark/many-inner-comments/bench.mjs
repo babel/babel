@@ -5,13 +5,15 @@ import { report } from "../util.mjs";
 
 const suite = new Benchmark.Suite();
 function createInput(length) {
-  return "[,\n// c\n".repeat(length) + "\n]".repeat(length);
+  return "[" + "// c\n".repeat(length) + "]";
 }
+current.parse(createInput(256), {});
 function benchCases(name, implementation, options) {
   for (const length of [128, 256, 512, 1024]) {
     const input = createInput(length);
-    suite.add(`${name} ${length} nested inner comments`, () => {
-      implementation.parse(input, options);
+    const { parse } = implementation;
+    suite.add(`${name} ${length} inner comments`, () => {
+      parse(input, options);
     });
   }
 }
