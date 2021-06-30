@@ -17,6 +17,7 @@ import template from "@babel/template";
 
   for (const file of (await fs.promises.readdir(HELPERS_FOLDER)).sort()) {
     if (IGNORED_FILES.has(file)) continue;
+    if (file.startsWith(".")) continue; // ignore e.g. vim swap files
 
     const [helperName] = file.split(".");
     const isValidId = isValidBindingIdentifier(helperName);
