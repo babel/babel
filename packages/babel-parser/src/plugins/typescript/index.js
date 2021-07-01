@@ -92,7 +92,6 @@ const TSErrors = makeErrorTemplates(
     EmptyTypeParameters: "Type parameter list cannot be empty.",
     ExpectedAmbientAfterExportDeclare:
       "'export declare' must be followed by an ambient declaration.",
-    IdentifierExpected: "Identifier expected.",
     ImportAliasHasImportType: "An import alias can not use 'import type'.",
     IncompatibleModifiers: "'%0' modifier cannot be used with '%1' modifier.",
     IndexSignatureHasAbstract:
@@ -2148,12 +2147,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             }
           }
 
-          if (isOptionalCall) {
-            return this.raise(node.start, TSErrors.IdentifierExpected);
-          }
-
           this.unexpected();
         });
+
+        if (!result && isOptionalCall) {
+          this.unexpected(this.state.pos, tt.parenL);
+        }
 
         if (result) return result;
       }
