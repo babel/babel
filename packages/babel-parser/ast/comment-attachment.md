@@ -42,7 +42,7 @@ and
   end: 28, // position of '2'
   comments: [
     CommentLine { start: 17, end: 23},
-    CommentBlock { start: 24, end: 27 }
+    CommentLine { start: 24, end: 27 }
   ],
   leadingNode: null,
   trailingNode: NumericLiteral(2),
@@ -72,7 +72,7 @@ w.start ≤ c.start < c.end ≤ w.end
 
 We can also say `w` encompasses `c`.
 
-**Monotonicity** (Corollary from P1 and P2): Given a list of comment whitespaces orderred by `start`, denoted by `{ w1, w2, ... w_n }`, they must satisify
+**Monotonicity** (Corollary from P1 and P2): Given a non-empty list of comment whitespaces orderred by `start`, denoted by `{ w1, w2, ... w_n }`, they must satisify
 
 ```
 w1.start < w1.end < w2.start < w2.end < ... < w_n.start < w_n.end
