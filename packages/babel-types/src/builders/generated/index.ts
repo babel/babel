@@ -1323,7 +1323,14 @@ export function tsMappedType(
   return builder("TSMappedType", ...arguments);
 }
 export { tsMappedType as tSMappedType };
-export function tsLiteralType(literal: any): t.TSLiteralType {
+export function tsLiteralType(
+  literal:
+    | "NumericLiteral"
+    | "StringLiteral"
+    | "BooleanLiteral"
+    | "BigIntLiteral"
+    | "UnaryExpression",
+): t.TSLiteralType {
   return builder("TSLiteralType", ...arguments);
 }
 export { tsLiteralType as tSLiteralType };

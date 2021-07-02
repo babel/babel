@@ -350,7 +350,7 @@ defineType("TSLiteralType", {
           "BooleanLiteral",
           "BigIntLiteral",
         );
-        return function validator(parent, key: string, node) {
+        function validator(parent, key: string, node) {
           // type A = -1 | 1;
           if (is("UnaryExpression", node)) {
             // check operator first
@@ -360,7 +360,17 @@ defineType("TSLiteralType", {
             // type A = 'foo' | 'bar' | false | 1;
             literal(parent, key, node);
           }
-        };
+        }
+
+        validator.oneOf = [
+          "NumericLiteral",
+          "StringLiteral",
+          "BooleanLiteral",
+          "BigIntLiteral",
+          "UnaryExpression",
+        ];
+
+        return validator;
       })(),
     },
   },
