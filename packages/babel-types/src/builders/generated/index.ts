@@ -1328,7 +1328,8 @@ export function tsLiteralType(
     | t.NumericLiteral
     | t.StringLiteral
     | t.BooleanLiteral
-    | t.BigIntLiteral,
+    | t.BigIntLiteral
+    | t.UnaryExpression,
 ): t.TSLiteralType {
   return builder("TSLiteralType", ...arguments);
 }

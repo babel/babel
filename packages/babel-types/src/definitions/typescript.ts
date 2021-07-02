@@ -15,6 +15,7 @@ import {
   functionDeclarationCommon,
   classMethodOrDeclareMethodCommon,
 } from "./core";
+import is from "../validators/is";
 
 const bool = assertValueType("boolean");
 
@@ -335,12 +336,43 @@ defineType("TSLiteralType", {
   aliases: ["TSType", "TSBaseType"],
   visitor: ["literal"],
   fields: {
-    literal: validateType([
-      "NumericLiteral",
-      "StringLiteral",
-      "BooleanLiteral",
-      "BigIntLiteral",
-    ]),
+    literal: {
+      validate: (function () {
+        const unaryExpression = assertNodeType(
+          "NumericLiteral",
+          "BigIntLiteral",
+        );
+        const unaryOperator = assertOneOf("-");
+
+        const literal = assertNodeType(
+          "NumericLiteral",
+          "StringLiteral",
+          "BooleanLiteral",
+          "BigIntLiteral",
+        );
+        function validator(parent, key: string, node) {
+          // type A = -1 | 1;
+          if (is("UnaryExpression", node)) {
+            // check operator first
+            unaryOperator(node, "operator", node.operator);
+            unaryExpression(node, "argument", node.argument);
+          } else {
+            // type A = 'foo' | 'bar' | false | 1;
+            literal(parent, key, node);
+          }
+        }
+
+        validator.oneOfNodeTypes = [
+          "NumericLiteral",
+          "StringLiteral",
+          "BooleanLiteral",
+          "BigIntLiteral",
+          "UnaryExpression",
+        ];
+
+        return validator;
+      })(),
+    },
   },
 });
 
