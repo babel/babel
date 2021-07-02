@@ -485,7 +485,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeParameter(): N.TsTypeParameter {
       const node: N.TsTypeParameter = this.startNode();
-      node.name = this.parseIdentifierName(node.start);
+      node.name = this.tsParseTypeParameterName();
       node.constraint = this.tsEatThenParseType(tt._extends);
       node.default = this.tsEatThenParseType(tt.eq);
       return this.finishNode(node, "TSTypeParameter");
@@ -777,7 +777,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseMappedTypeParameter(): N.TsTypeParameter {
       const node: N.TsTypeParameter = this.startNode();
-      node.name = this.parseIdentifierName(node.start);
+      node.name = this.tsParseTypeParameterName();
       node.constraint = this.tsExpectThenParseType(tt._in);
       return this.finishNode(node, "TSTypeParameter");
     }
@@ -1091,7 +1091,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       this.expectContextual("infer");
       const typeParameter = this.startNode();
-      typeParameter.name = this.parseIdentifierName(typeParameter.start);
+      typeParameter.name = this.tsParseTypeParameterName();
       node.typeParameter = this.finishNode(typeParameter, "TSTypeParameter");
       return this.finishNode(node, "TSInferType");
     }
@@ -3189,6 +3189,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
       return method;
+    }
+
+    tsParseTypeParameterName(): N.Identifier | string {
+      const typeName: N.Identifier = this.parseIdentifier();
+      return process.env.BABEL_8_BREAKING ? typeName : typeName.name;
     }
 
     shouldParseAsAmbientContext(): boolean {

@@ -39,7 +39,11 @@
                   {
                     "type": "TSTypeParameter",
                     "start":26,"end":27,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9}},
-                    "name": "T"
+                    "name": {
+                      "type": "Identifier",
+                      "start":26,"end":27,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"T"},
+                      "name": "T"
+                    }
                   }
                 ]
               },

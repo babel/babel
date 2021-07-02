@@ -40,7 +40,11 @@
                       {
                         "type": "TSTypeParameter",
                         "start":22,"end":46,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":30}},
-                        "name": "T",
+                        "name": {
+                          "type": "Identifier",
+                          "start":22,"end":23,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"T"},
+                          "name": "T"
+                        },
                         "constraint": {
                           "type": "TSTypeLiteral",
                           "start":32,"end":46,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":30}},
@@ -95,15 +99,15 @@
                   "body": {
                     "type": "BlockStatement",
                     "start":58,"end":84,"loc":{"start":{"line":2,"column":42},"end":{"line":4,"column":3}},
-                    "body": [],
-                    "directives": [],
                     "innerComments": [
                       {
                         "type": "CommentLine",
                         "value": " actually put.",
                         "start":64,"end":80,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":20}}
                       }
-                    ]
+                    ],
+                    "body": [],
+                    "directives": []
                   }
                 }
               ]

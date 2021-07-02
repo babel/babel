@@ -1,0 +1,4 @@
+{
+  "plugins": ["typescript", "classProperties"],
+  "BABEL_8_BREAKING": false
+}

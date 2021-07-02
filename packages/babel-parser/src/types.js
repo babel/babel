@@ -960,7 +960,7 @@ export type TsTypeAnnotation = NodeBase & {
 };
 
 export type TypeParameterDeclarationBase = NodeBase & {
-  params: $ReadOnlyArray<TypeParameterBase>,
+  params: $ReadOnlyArray<TypeParameter | TsTypeParameter>,
 };
 
 export type TypeParameterDeclaration = TypeParameterDeclarationBase & {
@@ -973,17 +973,16 @@ export type TsTypeParameterDeclaration = TypeParameterDeclarationBase & {
   params: $ReadOnlyArray<TsTypeParameter>,
 };
 
-export type TypeParameterBase = NodeBase & {
-  name: string,
-};
-
-export type TypeParameter = TypeParameterBase & {
+export type TypeParameter = NodeBase & {
   type: "TypeParameter",
+  name: string,
   default?: TypeAnnotation,
 };
 
-export type TsTypeParameter = TypeParameterBase & {
+export type TsTypeParameter = NodeBase & {
   type: "TSTypeParameter",
+  // TODO(Babel-8): remove string type support
+  name: string | Identifier,
   constraint?: TsType,
   default?: TsType,
 };

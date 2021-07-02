@@ -22,7 +22,11 @@
             {
               "type": "TSTypeParameter",
               "start":8,"end":40,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":40}},
-              "name": "T",
+              "name": {
+                "type": "Identifier",
+                "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9},"identifierName":"T"},
+                "name": "T"
+              },
               "constraint": {
                 "type": "TSObjectKeyword",
                 "start":18,"end":24,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":24}}
