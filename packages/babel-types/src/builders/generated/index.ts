@@ -1325,11 +1325,11 @@ export function tsMappedType(
 export { tsMappedType as tSMappedType };
 export function tsLiteralType(
   literal:
-    | "NumericLiteral"
-    | "StringLiteral"
-    | "BooleanLiteral"
-    | "BigIntLiteral"
-    | "UnaryExpression",
+    | t.NumericLiteral
+    | t.StringLiteral
+    | t.BooleanLiteral
+    | t.BigIntLiteral
+    | t.UnaryExpression,
 ): t.TSLiteralType {
   return builder("TSLiteralType", ...arguments);
 }

@@ -362,7 +362,7 @@ defineType("TSLiteralType", {
           }
         }
 
-        validator.oneOf = [
+        validator.oneOfNodeTypes = [
           "NumericLiteral",
           "StringLiteral",
           "BooleanLiteral",

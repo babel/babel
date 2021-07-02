@@ -1906,11 +1906,11 @@ export interface TSMappedType extends BaseNode {
 export interface TSLiteralType extends BaseNode {
   type: "TSLiteralType";
   literal:
-    | "NumericLiteral"
-    | "StringLiteral"
-    | "BooleanLiteral"
-    | "BigIntLiteral"
-    | "UnaryExpression";
+    | NumericLiteral
+    | StringLiteral
+    | BooleanLiteral
+    | BigIntLiteral
+    | UnaryExpression;
 }
 
 export interface TSExpressionWithTypeArguments extends BaseNode {
