@@ -1788,6 +1788,7 @@ export default class ExpressionParser extends LValParser {
       // https://tc39.es/ecma262/#prod-AsyncGeneratorMethod
       if (keyName === "async" && !this.hasPrecedingLineBreak()) {
         isAsync = true;
+        this.resetPreviousNodeTrailingComments(key);
         isGenerator = this.eat(tt.star);
         this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
       }
@@ -1795,6 +1796,7 @@ export default class ExpressionParser extends LValParser {
       // set PropertyName[?Yield, ?Await] ( PropertySetParameterList ) { FunctionBody[~Yield, ~Await] }
       if (keyName === "get" || keyName === "set") {
         isAccessor = true;
+        this.resetPreviousNodeTrailingComments(key);
         prop.kind = keyName;
         if (this.match(tt.star)) {
           isGenerator = true;

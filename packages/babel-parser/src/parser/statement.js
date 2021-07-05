@@ -1495,6 +1495,7 @@ export default class StatementParser extends ExpressionParser {
       !this.isLineTerminator()
     ) {
       // an async method
+      this.resetPreviousNodeTrailingComments(key);
       const isGenerator = this.eat(tt.star);
 
       if (publicMember.optional) {
@@ -1536,6 +1537,7 @@ export default class StatementParser extends ExpressionParser {
     ) {
       // `get\n*` is an uninitialized property named 'get' followed by a generator.
       // a getter or setter
+      this.resetPreviousNodeTrailingComments(key);
       method.kind = key.name;
       // The so-called parsed name would have been "get/set": get the real name.
       const isPrivate = this.match(tt.privateName);

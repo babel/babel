@@ -210,4 +210,35 @@ export default class CommentsParser extends BaseParser {
     }
     this.state.commentStack = [];
   }
+
+  /**
+   * Reset previous node trailing comments. Used in object / class
+   * property parsing. We parse `async`, `set` and `get` as an identifier
+   * but may reinterepret it into an async/accessor method later. In this case
+   * the identifier is not part of the AST and we should sync the knowledge
+   * to commentStacks
+   *
+   * For performance we do not check trailing node and we assume `node` is the
+   * last finished node before current token.
+   *
+   * @param {N.Node} node the last finished AST node _before_ current token
+   * @returns
+   * @memberof CommentsParser
+   */
+  resetPreviousNodeTrailingComments(node: N.Node) {
+    const { commentStack } = this.state;
+    let i = commentStack.length - 1;
+    if (i < 0) return;
+    let commentWS = commentStack[i];
+    if (commentWS.leadingNode === node) {
+      commentWS.leadingNode = null;
+      return;
+    }
+    i--;
+    if (i < 0) return;
+    commentWS = commentStack[i];
+    if (commentWS.leadingNode === node) {
+      commentWS.leadingNode = null;
+    }
+  }
 }
