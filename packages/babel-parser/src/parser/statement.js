@@ -1442,11 +1442,9 @@ export default class StatementParser extends ExpressionParser {
       return;
     }
 
-    const containsEsc = this.state.containsEsc;
+    const isContextual = this.match(tt.name) && !this.state.containsEsc;
     const isPrivate = this.match(tt.privateName);
     const key = this.parseClassElementName(member);
-    // Check the key is not a computed expression or string literal.
-    const isSimple = key.type === "Identifier";
     const maybeQuestionTokenStart = this.state.start;
 
     this.parsePostMemberNameModifiers(publicMember);
@@ -1491,9 +1489,8 @@ export default class StatementParser extends ExpressionParser {
         this.pushClassProperty(classBody, publicProp);
       }
     } else if (
-      isSimple &&
+      isContextual &&
       key.name === "async" &&
-      !containsEsc &&
       !this.isLineTerminator()
     ) {
       // an async method
@@ -1532,9 +1529,8 @@ export default class StatementParser extends ExpressionParser {
         );
       }
     } else if (
-      isSimple &&
+      isContextual &&
       (key.name === "get" || key.name === "set") &&
-      !containsEsc &&
       !(this.match(tt.star) && this.isLineTerminator())
     ) {
       // `get\n*` is an uninitialized property named 'get' followed by a generator.
