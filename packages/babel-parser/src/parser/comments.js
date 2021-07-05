@@ -225,7 +225,7 @@ export default class CommentsParser extends BaseParser {
    * @returns
    * @memberof CommentsParser
    */
-  resetPreviousNodeTrailingComments(node: N.Node) {
+  resetPreviousNodeTrailingComments(node: Node) {
     const { commentStack } = this.state;
     let i = commentStack.length - 1;
     if (i < 0) return;
