@@ -202,7 +202,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     // delegate block scope handling to the `BlockScoped` method
     if (path.isBlockScoped()) return;
 
-    // import handing to the `ImportDeclaration` method
+    // delegate import handing to the `ImportDeclaration` method
     if (path.isImportDeclaration()) return;
 
     // this will be hit again once we traverse into it after this iteration
