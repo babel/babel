@@ -226,9 +226,22 @@ function hoistFunctionEnvironment(
 
   // Convert all "arguments" references in the arrow to point at the alias.
   if (argumentsPaths.length > 0) {
-    const argumentsBinding = getBinding(thisEnvFn, "arguments", () =>
-      t.identifier("arguments"),
-    );
+    const argumentsBinding = getBinding(thisEnvFn, "arguments", () => {
+      const args = () => t.identifier("arguments");
+      if (thisEnvFn.scope.path.isProgram()) {
+        return t.conditionalExpression(
+          t.binaryExpression(
+            "===",
+            t.unaryExpression("typeof", args()),
+            t.stringLiteral("undefined"),
+          ),
+          thisEnvFn.scope.buildUndefinedNode(),
+          args(),
+        );
+      } else {
+        return args();
+      }
+    });
 
     argumentsPaths.forEach(argumentsChild => {
       const argsRef = t.identifier(argumentsBinding);
@@ -582,6 +595,17 @@ function getScopeInformation(fnPath) {
     },
     ReferencedIdentifier(child) {
       if (child.node.name !== "arguments") return;
+
+      let curr = child.scope;
+      do {
+        if (curr.hasOwnBinding("arguments")) {
+          curr.rename("arguments");
+          return;
+        }
+        if (curr.path.isFunction() && !curr.path.isArrowFunctionExpression()) {
+          break;
+        }
+      } while ((curr = curr.parent));
 
       argumentsPaths.push(child);
     },
