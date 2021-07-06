@@ -30,7 +30,7 @@
               "start":20,"end":55,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
               "argument": {
                 "type": "DoExpression",
-                "start":33,"end":55,"loc":{"start":{"line":2,"column":15},"end":{"line":4,"column":3}},
+                "start":27,"end":55,"loc":{"start":{"line":2,"column":9},"end":{"line":4,"column":3}},
                 "async": true,
                 "body": {
                   "type": "BlockStatement",

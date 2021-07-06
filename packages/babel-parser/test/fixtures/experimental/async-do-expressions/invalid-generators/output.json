@@ -33,7 +33,7 @@
                 "start":27,"end":60,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
                 "argument": {
                   "type": "DoExpression",
-                  "start":39,"end":60,"loc":{"start":{"line":2,"column":14},"end":{"line":4,"column":3}},
+                  "start":33,"end":60,"loc":{"start":{"line":2,"column":8},"end":{"line":4,"column":3}},
                   "async": true,
                   "body": {
                     "type": "BlockStatement",
