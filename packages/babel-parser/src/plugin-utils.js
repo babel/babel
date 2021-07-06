@@ -90,6 +90,18 @@ export function validatePlugins(plugins: PluginList) {
       getPluginOption(plugins, "recordAndTuple", "syntaxType") === "hash";
 
     if (proposal === "hack") {
+      if (hasPlugin(plugins, "placeholders")) {
+        throw new Error(
+          "Cannot combine placeholders plugin and Hack-style pipes.",
+        );
+      }
+
+      if (hasPlugin(plugins, "v8intrinsic")) {
+        throw new Error(
+          "Cannot combine v8intrinsic plugin and Hack-style pipes.",
+        );
+      }
+
       const topicToken = getPluginOption(
         plugins,
         "pipelineOperator",
