@@ -56,6 +56,7 @@ import {
 } from "../util/expression-scope";
 import { Errors, SourceTypeModuleErrors } from "./error";
 import type { ParsingError } from "./error";
+import { setInnerComments } from "./comments";
 
 /*::
 import type { SourceType } from "../options";
@@ -941,6 +942,7 @@ export default class ExpressionParser extends LValParser {
     node: N.ArrowFunctionExpression,
     call: N.CallExpression,
   ): N.ArrowFunctionExpression {
+    this.resetPreviousNodeTrailingComments(call);
     this.expect(tt.arrow);
     this.parseArrowExpression(
       node,
@@ -948,6 +950,10 @@ export default class ExpressionParser extends LValParser {
       true,
       call.extra?.trailingComma,
     );
+    // mark inner comments of `async()` as inner comments of `async () =>`
+    setInnerComments(node, call.innerComments);
+    // mark trailing comments of `async` to be inner comments
+    setInnerComments(node, call.callee.trailingComments);
     return node;
   }
 
