@@ -1375,6 +1375,7 @@ export default class StatementParser extends ExpressionParser {
       classBody.body.push(this.parseClassProperty(prop));
       return true;
     }
+    this.resetPreviousNodeTrailingComments(key);
     return false;
   }
 

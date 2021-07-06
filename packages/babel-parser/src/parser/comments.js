@@ -213,10 +213,10 @@ export default class CommentsParser extends BaseParser {
 
   /**
    * Reset previous node trailing comments. Used in object / class
-   * property parsing. We parse `async`, `set` and `get` as an identifier
-   * but may reinterepret it into an async/accessor method later. In this case
-   * the identifier is not part of the AST and we should sync the knowledge
-   * to commentStacks
+   * property parsing. We parse `async`, `static`, `set` and `get`
+   * as an identifier but may reinterepret it into an async/static/accessor
+   * method later. In this case the identifier is not part of the AST and we
+   * should sync the knowledge to commentStacks
    *
    * For performance we do not check trailing node and we assume `node` is the
    * last finished node before current token.
