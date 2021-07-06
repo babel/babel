@@ -202,12 +202,22 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     // delegate block scope handling to the `BlockScoped` method
     if (path.isBlockScoped()) return;
 
+    // delegate import handing to the `ImportDeclaration` method
+    if (path.isImportDeclaration()) return;
+
     // this will be hit again once we traverse into it after this iteration
     if (path.isExportDeclaration()) return;
 
     // we've ran into a declaration!
     const parent =
       path.scope.getFunctionParent() || path.scope.getProgramParent();
+    parent.registerDeclaration(path);
+  },
+
+  ImportDeclaration(path) {
+    // import may only appear in the top level or inside a module/namespace (for TS/flow)
+    const parent = path.scope.getBlockParent();
+
     parent.registerDeclaration(path);
   },
 
