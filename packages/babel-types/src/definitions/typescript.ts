@@ -566,7 +566,7 @@ defineType("TSTypeParameter", {
   visitor: ["constraint", "default"],
   fields: {
     name: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
+      validate: !process.env.BABEL_8_BREAKING
         ? assertValueType("string")
         : assertNodeType("Identifier"),
     },
