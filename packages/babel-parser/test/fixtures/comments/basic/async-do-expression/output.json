@@ -26,8 +26,8 @@
         ],
         "expression": {
           "type": "DoExpression",
-          "start":19,"end":37,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":37}},
-          "leadingComments": [
+          "start":7,"end":37,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":37}},
+          "innerComments": [
             {
               "type": "CommentBlock",
               "value": " 2 ",
