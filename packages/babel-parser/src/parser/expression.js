@@ -1008,6 +1008,7 @@ export default class ExpressionParser extends LValParser {
 
         if (!containsEsc && id.name === "async" && !this.canInsertSemicolon()) {
           if (this.match(tt._function)) {
+            this.resetPreviousNodeTrailingComments(id);
             this.next();
             return this.parseFunction(
               this.startNodeAtNode(id),
@@ -1019,13 +1020,19 @@ export default class ExpressionParser extends LValParser {
             // arrow function. (Peeking ahead for "=" lets us avoid a more
             // expensive full-token lookahead on this common path.)
             if (this.lookaheadCharCode() === charCodes.equalsTo) {
-              return this.parseAsyncArrowUnaryFunction(id);
+              // although `id` is not used in async arrow unary function,
+              // we don't need to reset `async`'s trailing comments because
+              // it will be attached to the upcoming async arrow binding identifier
+              return this.parseAsyncArrowUnaryFunction(
+                this.startNodeAtNode(id),
+              );
             } else {
               // Otherwise, treat "async" as an identifier and let calling code
               // deal with the current tt.name token.
               return id;
             }
           } else if (this.match(tt._do)) {
+            this.resetPreviousNodeTrailingComments(id);
             return this.parseDo(this.startNodeAtNode(id), true);
           }
         }
@@ -1198,8 +1205,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // async [no LineTerminator here] AsyncArrowBindingIdentifier[?Yield] [no LineTerminator here] => AsyncConciseBody[?In]
-  parseAsyncArrowUnaryFunction(id: N.Expression): N.ArrowFunctionExpression {
-    const node = this.startNodeAtNode(id);
+  parseAsyncArrowUnaryFunction(node: N.Node): N.ArrowFunctionExpression {
     // We don't need to push a new ParameterDeclarationScope here since we are sure
     // 1) it is an async arrow, 2) no biding pattern is allowed in params
     this.prodParam.enter(functionFlags(true, this.prodParam.hasYield));
