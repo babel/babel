@@ -1017,7 +1017,7 @@ export default class ExpressionParser extends LValParser {
               return id;
             }
           } else if (this.match(tt._do)) {
-            return this.parseDo(true);
+            return this.parseDo(this.startNodeAtNode(id), true);
           }
         }
 
@@ -1034,7 +1034,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt._do: {
-        return this.parseDo(false);
+        return this.parseDo(this.startNode(), false);
       }
 
       case tt.slash:
@@ -1207,12 +1207,11 @@ export default class ExpressionParser extends LValParser {
 
   // https://github.com/tc39/proposal-do-expressions
   // https://github.com/tc39/proposal-async-do-expressions
-  parseDo(isAsync: boolean): N.DoExpression {
+  parseDo(node: N.Node, isAsync: boolean): N.DoExpression {
     this.expectPlugin("doExpressions");
     if (isAsync) {
       this.expectPlugin("asyncDoExpressions");
     }
-    const node = this.startNode();
     node.async = isAsync;
     this.next(); // eat `do`
     const oldLabels = this.state.labels;
