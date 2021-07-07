@@ -218,8 +218,12 @@ export default class CommentsParser extends BaseParser {
    * method later. In this case the identifier is not part of the AST and we
    * should sync the knowledge to commentStacks
    *
-   * For performance we do not check trailing node and we assume `node` is the
-   * last finished node before current token.
+   * For example, when parsing */
+  // async /* 1 */ function f() {}
+  /*
+   * the comment whitespace "* 1 *" has leading node Identifier(async). When
+   * we see the function token, we create a Function node and mark "* 1 *" as
+   * inner comments. So "* 1 *" should be detached from the Identifier node.
    *
    * @param {N.Node} node the last finished AST node _before_ current token
    * @returns
@@ -227,16 +231,9 @@ export default class CommentsParser extends BaseParser {
    */
   resetPreviousNodeTrailingComments(node: Node) {
     const { commentStack } = this.state;
-    let i = commentStack.length - 1;
-    if (i < 0) return;
-    let commentWS = commentStack[i];
-    if (commentWS.leadingNode === node) {
-      commentWS.leadingNode = null;
-      return;
-    }
-    i--;
-    if (i < 0) return;
-    commentWS = commentStack[i];
+    const { length } = commentStack;
+    if (length === 0) return;
+    const commentWS = commentStack[length - 1];
     if (commentWS.leadingNode === node) {
       commentWS.leadingNode = null;
     }
