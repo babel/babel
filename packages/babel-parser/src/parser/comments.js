@@ -1,288 +1,241 @@
 // @flow
 
-/**
- * Based on the comment attachment algorithm used in espree and estraverse.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+/*:: declare var invariant; */
 
 import BaseParser from "./base";
 import type { Comment, Node } from "../types";
+import * as charCodes from "charcodes";
 
-function last<T>(stack: $ReadOnlyArray<T>): T {
-  return stack[stack.length - 1];
+/**
+ * A whitespace token containing comments
+ * @typedef CommentWhitespace
+ * @type {object}
+ * @property {number} start - the start of the whitespace token.
+ * @property {number} end - the end of the whitespace token.
+ * @property {Array<Comment>} comments - the containing comments
+ * @property {Node | null} leadingNode - the immediately preceding AST node of the whitespace token
+ * @property {Node | null} trailingNode - the immediately following AST node of the whitespace token
+ * @property {Node | null} containingNode - the innermost AST node containing the whitespace
+ *                                         with minimal size (|end - start|)
+ */
+export type CommentWhitespace = {
+  start: number,
+  end: number,
+  comments: Array<Comment>,
+  leadingNode: Node | null,
+  trailingNode: Node | null,
+  containingNode: Node | null,
+};
+/**
+ * Merge comments with node's trailingComments or assign comments to be
+ * trailingComments. New comments will be placed before old comments
+ * because the commentStack is enumerated reversely.
+ *
+ * @param {Node} node
+ * @param {Array<Comment>} comments
+ */
+function setTrailingComments(node: Node, comments: Array<Comment>) {
+  if (node.trailingComments === undefined) {
+    node.trailingComments = comments;
+  } else {
+    node.trailingComments.unshift(...comments);
+  }
 }
 
+/**
+ * Merge comments with node's innerComments or assign comments to be
+ * innerComments. New comments will be placed before old comments
+ * because the commentStack is enumerated reversely.
+ *
+ * @param {Node} node
+ * @param {Array<Comment>} comments
+ */
+export function setInnerComments(node: Node, comments: Array<Comment> | void) {
+  if (node.innerComments === undefined) {
+    node.innerComments = comments;
+  } else if (comments !== undefined) {
+    node.innerComments.unshift(...comments);
+  }
+}
+
+/**
+ * Given node and elements array, if elements has non-null element,
+ * merge comments to its trailingComments, otherwise merge comments
+ * to node's innerComments
+ *
+ * @param {Node} node
+ * @param {Array<Node>} elements
+ * @param {Array<Comment>} comments
+ */
+function adjustInnerComments(
+  node: Node,
+  elements: Array<Node>,
+  commentWS: CommentWhitespace,
+) {
+  let lastElement = null;
+  let i = elements.length;
+  while (lastElement === null && i > 0) {
+    lastElement = elements[--i];
+  }
+  if (lastElement === null || lastElement.start > commentWS.start) {
+    setInnerComments(node, commentWS.comments);
+  } else {
+    setTrailingComments(lastElement, commentWS.comments);
+  }
+}
+
+/** @class CommentsParser */
 export default class CommentsParser extends BaseParser {
   addComment(comment: Comment): void {
     if (this.filename) comment.loc.filename = this.filename;
-    this.state.trailingComments.push(comment);
-    this.state.leadingComments.push(comment);
+    this.state.comments.push(comment);
   }
 
-  adjustCommentsAfterTrailingComma(
-    node: Node,
-    elements: (Node | null)[],
-    // When the current node is followed by a token which hasn't a respective AST node, we
-    // need to take all the trailing comments to prevent them from being attached to an
-    // unrelated node. e.g. in
-    //     var { x } /* cmt */ = { y }
-    // we don't want /* cmt */ to be attached to { y }.
-    // On the other hand, in
-    //     fn(x) [new line] /* cmt */ [new line] y
-    // /* cmt */ is both a trailing comment of fn(x) and a leading comment of y
-    takeAllComments?: boolean,
-  ) {
-    if (this.state.leadingComments.length === 0) {
-      return;
-    }
-
-    let lastElement = null;
-    let i = elements.length;
-    while (lastElement === null && i > 0) {
-      lastElement = elements[--i];
-    }
-    if (lastElement === null) {
-      return;
-    }
-
-    for (let j = 0; j < this.state.leadingComments.length; j++) {
-      if (
-        this.state.leadingComments[j].end < this.state.commentPreviousNode.end
-      ) {
-        this.state.leadingComments.splice(j, 1);
-        j--;
-      }
-    }
-
-    const newTrailingComments = [];
-    for (let i = 0; i < this.state.leadingComments.length; i++) {
-      const leadingComment = this.state.leadingComments[i];
-      if (leadingComment.end < node.end) {
-        newTrailingComments.push(leadingComment);
-
-        // Perf: we don't need to splice if we are going to reset the array anyway
-        if (!takeAllComments) {
-          this.state.leadingComments.splice(i, 1);
-          i--;
-        }
-      } else {
-        if (node.trailingComments === undefined) {
-          node.trailingComments = [];
-        }
-        node.trailingComments.push(leadingComment);
-      }
-    }
-    if (takeAllComments) this.state.leadingComments = [];
-
-    if (newTrailingComments.length > 0) {
-      lastElement.trailingComments = newTrailingComments;
-    } else if (lastElement.trailingComments !== undefined) {
-      lastElement.trailingComments = [];
-    }
-  }
-
+  /**
+   * Given a newly created AST node _n_, attach _n_ to a comment whitespace _w_ if applicable
+   * {@see {@link CommentWhitespace}}
+   *
+   * @param {Node} node
+   * @returns {void}
+   * @memberof CommentsParser
+   */
   processComment(node: Node): void {
-    if (node.type === "Program" && node.body.length > 0) return;
+    const { commentStack } = this.state;
+    const commentStackLength = commentStack.length;
+    if (commentStackLength === 0) return;
+    let i = commentStackLength - 1;
+    const lastCommentWS = commentStack[i];
 
-    const stack = this.state.commentStack;
+    if (lastCommentWS.start === node.end) {
+      lastCommentWS.leadingNode = node;
+      i--;
+    }
 
-    let firstChild, lastChild, trailingComments, i, j;
-
-    if (this.state.trailingComments.length > 0) {
-      // If the first comment in trailingComments comes after the
-      // current node, then we're good - all comments in the array will
-      // come after the node and so it's safe to add them as official
-      // trailingComments.
-      if (this.state.trailingComments[0].start >= node.end) {
-        trailingComments = this.state.trailingComments;
-        this.state.trailingComments = [];
+    const { start: nodeStart } = node;
+    // invariant: for all 0 <= j <= i, let c = commentStack[j], c must satisfy c.end < node.end
+    for (; i >= 0; i--) {
+      const commentWS = commentStack[i];
+      const commentEnd = commentWS.end;
+      if (commentEnd > nodeStart) {
+        // by definition of commentWhiteSpace, this implies commentWS.start > nodeStart
+        // so node can be a containingNode candidate. At this time we can finalize the comment
+        // whitespace, because
+        // 1) its leadingNode or trailingNode, if exists, will not change
+        // 2) its containingNode have been assigned and will not change because it is the
+        //    innermost minimal-sized AST node
+        commentWS.containingNode = node;
+        this.finalizeComment(commentWS);
+        commentStack.splice(i, 1);
       } else {
-        // Otherwise, if the first comment doesn't come after the
-        // current node, that means we have a mix of leading and trailing
-        // comments in the array and that leadingComments contains the
-        // same items as trailingComments. Reset trailingComments to
-        // zero items and we'll handle this by evaluating leadingComments
-        // later.
-        this.state.trailingComments.length = 0;
-      }
-    } else if (stack.length > 0) {
-      const lastInStack = last(stack);
-      if (
-        lastInStack.trailingComments &&
-        lastInStack.trailingComments[0].start >= node.end
-      ) {
-        trailingComments = lastInStack.trailingComments;
-        delete lastInStack.trailingComments;
-      }
-    }
-
-    // Eating the stack.
-    if (stack.length > 0 && last(stack).start >= node.start) {
-      firstChild = stack.pop();
-    }
-
-    while (stack.length > 0 && last(stack).start >= node.start) {
-      lastChild = stack.pop();
-    }
-
-    if (!lastChild && firstChild) lastChild = firstChild;
-
-    // Adjust comments that follow a trailing comma on the last element in a
-    // comma separated list of nodes to be the trailing comments on the last
-    // element
-    if (firstChild) {
-      switch (node.type) {
-        case "ObjectExpression":
-          this.adjustCommentsAfterTrailingComma(node, node.properties);
-          break;
-        case "ObjectPattern":
-          this.adjustCommentsAfterTrailingComma(node, node.properties, true);
-          break;
-        case "CallExpression":
-          this.adjustCommentsAfterTrailingComma(node, node.arguments);
-          break;
-        case "ArrayExpression":
-          this.adjustCommentsAfterTrailingComma(node, node.elements);
-          break;
-        case "ArrayPattern":
-          this.adjustCommentsAfterTrailingComma(node, node.elements, true);
-          break;
-      }
-    } else if (
-      this.state.commentPreviousNode &&
-      ((this.state.commentPreviousNode.type === "ImportSpecifier" &&
-        node.type !== "ImportSpecifier") ||
-        (this.state.commentPreviousNode.type === "ExportSpecifier" &&
-          node.type !== "ExportSpecifier"))
-    ) {
-      this.adjustCommentsAfterTrailingComma(node, [
-        this.state.commentPreviousNode,
-      ]);
-    }
-
-    if (lastChild) {
-      if (lastChild.leadingComments) {
-        if (
-          lastChild !== node &&
-          lastChild.leadingComments.length > 0 &&
-          last(lastChild.leadingComments).end <= node.start
-        ) {
-          node.leadingComments = lastChild.leadingComments;
-          delete lastChild.leadingComments;
-        } else {
-          // A leading comment for an anonymous class had been stolen by its first ClassMethod,
-          // so this takes back the leading comment.
-          // See also: https://github.com/eslint/espree/issues/158
-          for (i = lastChild.leadingComments.length - 2; i >= 0; --i) {
-            if (lastChild.leadingComments[i].end <= node.start) {
-              node.leadingComments = lastChild.leadingComments.splice(0, i + 1);
-              break;
-            }
-          }
+        if (commentEnd === nodeStart) {
+          commentWS.trailingNode = node;
         }
+        // stop the loop when commentEnd <= nodeStart
+        break;
       }
-    } else if (this.state.leadingComments.length > 0) {
-      if (last(this.state.leadingComments).end <= node.start) {
-        if (this.state.commentPreviousNode) {
-          for (j = 0; j < this.state.leadingComments.length; j++) {
-            if (
-              this.state.leadingComments[j].end <
-              this.state.commentPreviousNode.end
-            ) {
-              this.state.leadingComments.splice(j, 1);
-              j--;
-            }
-          }
-        }
-        if (this.state.leadingComments.length > 0) {
-          node.leadingComments = this.state.leadingComments;
-          this.state.leadingComments = [];
-        }
-      } else {
-        // https://github.com/eslint/espree/issues/2
-        //
-        // In special cases, such as return (without a value) and
-        // debugger, all comments will end up as leadingComments and
-        // will otherwise be eliminated. This step runs when the
-        // commentStack is empty and there are comments left
-        // in leadingComments.
-        //
-        // This loop figures out the stopping point between the actual
-        // leading and trailing comments by finding the location of the
-        // first comment that comes after the given node.
-        for (i = 0; i < this.state.leadingComments.length; i++) {
-          if (this.state.leadingComments[i].end > node.start) {
+    }
+  }
+
+  /**
+   * Assign the comments of comment whitespaces to related AST nodes.
+   * Also adjust innerComments following trailing comma.
+   *
+   * @memberof CommentsParser
+   */
+  finalizeComment(commentWS: CommentWhitespace) {
+    const { comments } = commentWS;
+    if (commentWS.leadingNode !== null || commentWS.trailingNode !== null) {
+      if (commentWS.leadingNode !== null) {
+        setTrailingComments(commentWS.leadingNode, comments);
+      }
+      if (commentWS.trailingNode !== null) {
+        commentWS.trailingNode.leadingComments = comments;
+      }
+    } else {
+      /*:: invariant(commentWS.containingNode !== null) */
+      const { containingNode: node, start: commentStart } = commentWS;
+      if (this.input.charCodeAt(commentStart - 1) === charCodes.comma) {
+        // If a commentWhitespace follows a comma and the containingNode allows
+        // list structures with trailing comma, merge it to the trailingComment
+        // of the last non-null list element
+        switch (node.type) {
+          case "ObjectExpression":
+          case "ObjectPattern":
+          case "RecordExpression":
+            adjustInnerComments(node, node.properties, commentWS);
             break;
+          case "CallExpression":
+          case "OptionalCallExpression":
+            adjustInnerComments(node, node.arguments, commentWS);
+            break;
+          case "FunctionDeclaration":
+          case "FunctionExpression":
+          case "ArrowFunctionExpression":
+          case "ObjectMethod":
+          case "ClassMethod":
+          case "ClassPrivateMethod":
+            adjustInnerComments(node, node.params, commentWS);
+            break;
+          case "ArrayExpression":
+          case "ArrayPattern":
+          case "TupleExpression":
+            adjustInnerComments(node, node.elements, commentWS);
+            break;
+          case "ExportNamedDeclaration":
+          case "ImportDeclaration":
+            adjustInnerComments(node, node.specifiers, commentWS);
+            break;
+          default: {
+            setInnerComments(node, comments);
           }
         }
-
-        // Split the array based on the location of the first comment
-        // that comes after the node. Keep in mind that this could
-        // result in an empty array, and if so, the array must be
-        // deleted.
-        const leadingComments = this.state.leadingComments.slice(0, i);
-
-        if (leadingComments.length) {
-          node.leadingComments = leadingComments;
-        }
-
-        // Similarly, trailing comments are attached later. The variable
-        // must be reset to null if there are no trailing comments.
-        trailingComments = this.state.leadingComments.slice(i);
-        if (trailingComments.length === 0) {
-          trailingComments = null;
-        }
-      }
-    }
-
-    this.state.commentPreviousNode = node;
-
-    if (trailingComments) {
-      if (
-        trailingComments.length &&
-        trailingComments[0].start >= node.start &&
-        last(trailingComments).end <= node.end
-      ) {
-        node.innerComments = trailingComments;
       } else {
-        // TrailingComments maybe contain innerComments
-        const firstTrailingCommentIndex = trailingComments.findIndex(
-          comment => comment.end >= node.end,
-        );
-
-        if (firstTrailingCommentIndex > 0) {
-          node.innerComments = trailingComments.slice(
-            0,
-            firstTrailingCommentIndex,
-          );
-          node.trailingComments = trailingComments.slice(
-            firstTrailingCommentIndex,
-          );
-        } else {
-          node.trailingComments = trailingComments;
-        }
+        setInnerComments(node, comments);
       }
     }
+  }
 
-    stack.push(node);
+  /**
+   * Drains remaning commentStack and applies finalizeComment
+   * to each comment whitespace. Used only in parseExpression
+   * where the top level AST node is _not_ Program
+   * {@see {@link CommentsParser#finalizeComment}}
+   *
+   * @memberof CommentsParser
+   */
+  finalizeRemainingComments() {
+    const { commentStack } = this.state;
+    for (let i = commentStack.length - 1; i >= 0; i--) {
+      this.finalizeComment(commentStack[i]);
+    }
+    this.state.commentStack = [];
+  }
+
+  /**
+   * Reset previous node trailing comments. Used in object / class
+   * property parsing. We parse `async`, `static`, `set` and `get`
+   * as an identifier but may reinterepret it into an async/static/accessor
+   * method later. In this case the identifier is not part of the AST and we
+   * should sync the knowledge to commentStacks
+   *
+   * For example, when parsing */
+  // async /* 1 */ function f() {}
+  /*
+   * the comment whitespace "* 1 *" has leading node Identifier(async). When
+   * we see the function token, we create a Function node and mark "* 1 *" as
+   * inner comments. So "* 1 *" should be detached from the Identifier node.
+   *
+   * @param {N.Node} node the last finished AST node _before_ current token
+   * @returns
+   * @memberof CommentsParser
+   */
+  resetPreviousNodeTrailingComments(node: Node) {
+    const { commentStack } = this.state;
+    const { length } = commentStack;
+    if (length === 0) return;
+    const commentWS = commentStack[length - 1];
+    if (commentWS.leadingNode === node) {
+      commentWS.leadingNode = null;
+    }
   }
 }

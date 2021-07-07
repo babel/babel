@@ -131,8 +131,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     stmtToDirective(stmt: N.Statement): N.Directive {
-      const directive = super.stmtToDirective(stmt);
       const value = stmt.expression.value;
+      const directive = super.stmtToDirective(stmt);
 
       // Record the expression value as in estree mode we want
       // the stmt to have the real value e.g. ("use strict") and

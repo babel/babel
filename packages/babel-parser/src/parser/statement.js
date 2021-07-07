@@ -130,26 +130,27 @@ export default class StatementParser extends ExpressionParser {
 
   // TODO
 
+  /**
+   * cast a Statement to a Directive. This method mutates input statement.
+   *
+   * @param {N.Statement} stmt
+   * @returns {N.Directive}
+   * @memberof StatementParser
+   */
   stmtToDirective(stmt: N.Statement): N.Directive {
-    const expr = stmt.expression;
+    const directive = (stmt: any);
+    directive.type = "Directive";
+    directive.value = directive.expression;
+    delete directive.expression;
 
-    const directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
-    const directive = this.startNodeAt(stmt.start, stmt.loc.start);
-
-    const raw = this.input.slice(expr.start, expr.end);
+    const directiveLiteral = directive.value;
+    const raw = this.input.slice(directiveLiteral.start, directiveLiteral.end);
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
     this.addExtra(directiveLiteral, "raw", raw);
     this.addExtra(directiveLiteral, "rawValue", val);
-
-    directive.value = this.finishNodeAt(
-      directiveLiteral,
-      "DirectiveLiteral",
-      expr.end,
-      expr.loc.end,
-    );
-
-    return this.finishNodeAt(directive, "Directive", stmt.end, stmt.loc.end);
+    directiveLiteral.type = "DirectiveLiteral";
+    return directive;
   }
 
   parseInterpreterDirective(): N.InterpreterDirective | null {
@@ -1374,6 +1375,7 @@ export default class StatementParser extends ExpressionParser {
       classBody.body.push(this.parseClassProperty(prop));
       return true;
     }
+    this.resetPreviousNodeTrailingComments(key);
     return false;
   }
 
@@ -1494,6 +1496,7 @@ export default class StatementParser extends ExpressionParser {
       !this.isLineTerminator()
     ) {
       // an async method
+      this.resetPreviousNodeTrailingComments(key);
       const isGenerator = this.eat(tt.star);
 
       if (publicMember.optional) {
@@ -1535,6 +1538,7 @@ export default class StatementParser extends ExpressionParser {
     ) {
       // `get\n*` is an uninitialized property named 'get' followed by a generator.
       // a getter or setter
+      this.resetPreviousNodeTrailingComments(key);
       method.kind = key.name;
       // The so-called parsed name would have been "get/set": get the real name.
       const isPrivate = this.match(tt.privateName);

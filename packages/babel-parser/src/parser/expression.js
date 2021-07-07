@@ -56,6 +56,7 @@ import {
 } from "../util/expression-scope";
 import { Errors, SourceTypeModuleErrors } from "./error";
 import type { ParsingError } from "./error";
+import { setInnerComments } from "./comments";
 
 /*::
 import type { SourceType } from "../options";
@@ -161,6 +162,9 @@ export default class ExpressionParser extends LValParser {
     if (!this.match(tt.eof)) {
       this.unexpected();
     }
+    // Unlike parseTopLevel, we need to drain remaining commentStacks
+    // because the top level node is _not_ Program.
+    this.finalizeRemainingComments();
     expr.comments = this.state.comments;
     expr.errors = this.state.errors;
     if (this.options.tokens) {
@@ -938,6 +942,7 @@ export default class ExpressionParser extends LValParser {
     node: N.ArrowFunctionExpression,
     call: N.CallExpression,
   ): N.ArrowFunctionExpression {
+    this.resetPreviousNodeTrailingComments(call);
     this.expect(tt.arrow);
     this.parseArrowExpression(
       node,
@@ -945,6 +950,10 @@ export default class ExpressionParser extends LValParser {
       true,
       call.extra?.trailingComma,
     );
+    // mark inner comments of `async()` as inner comments of `async () =>`
+    setInnerComments(node, call.innerComments);
+    // mark trailing comments of `async` to be inner comments
+    setInnerComments(node, call.callee.trailingComments);
     return node;
   }
 
@@ -999,6 +1008,7 @@ export default class ExpressionParser extends LValParser {
 
         if (!containsEsc && id.name === "async" && !this.canInsertSemicolon()) {
           if (this.match(tt._function)) {
+            this.resetPreviousNodeTrailingComments(id);
             this.next();
             return this.parseFunction(
               this.startNodeAtNode(id),
@@ -1010,13 +1020,19 @@ export default class ExpressionParser extends LValParser {
             // arrow function. (Peeking ahead for "=" lets us avoid a more
             // expensive full-token lookahead on this common path.)
             if (this.lookaheadCharCode() === charCodes.equalsTo) {
-              return this.parseAsyncArrowUnaryFunction(id);
+              // although `id` is not used in async arrow unary function,
+              // we don't need to reset `async`'s trailing comments because
+              // it will be attached to the upcoming async arrow binding identifier
+              return this.parseAsyncArrowUnaryFunction(
+                this.startNodeAtNode(id),
+              );
             } else {
               // Otherwise, treat "async" as an identifier and let calling code
               // deal with the current tt.name token.
               return id;
             }
           } else if (this.match(tt._do)) {
+            this.resetPreviousNodeTrailingComments(id);
             return this.parseDo(this.startNodeAtNode(id), true);
           }
         }
@@ -1189,8 +1205,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // async [no LineTerminator here] AsyncArrowBindingIdentifier[?Yield] [no LineTerminator here] => AsyncConciseBody[?In]
-  parseAsyncArrowUnaryFunction(id: N.Expression): N.ArrowFunctionExpression {
-    const node = this.startNodeAtNode(id);
+  parseAsyncArrowUnaryFunction(node: N.Node): N.ArrowFunctionExpression {
     // We don't need to push a new ParameterDeclarationScope here since we are sure
     // 1) it is an async arrow, 2) no biding pattern is allowed in params
     this.prodParam.enter(functionFlags(true, this.prodParam.hasYield));
@@ -1509,7 +1524,10 @@ export default class ExpressionParser extends LValParser {
     if (exprList.length > 1) {
       val = this.startNodeAt(innerStartPos, innerStartLoc);
       val.expressions = exprList;
-      this.finishNodeAt(val, "SequenceExpression", innerEndPos, innerEndLoc);
+      // finish node at current location so it can pick up comments after `)`
+      this.finishNode(val, "SequenceExpression");
+      val.end = innerEndPos;
+      val.loc.end = innerEndLoc;
     } else {
       val = exprList[0];
     }
@@ -1782,6 +1800,7 @@ export default class ExpressionParser extends LValParser {
       // https://tc39.es/ecma262/#prod-AsyncGeneratorMethod
       if (keyName === "async" && !this.hasPrecedingLineBreak()) {
         isAsync = true;
+        this.resetPreviousNodeTrailingComments(key);
         isGenerator = this.eat(tt.star);
         this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
       }
@@ -1789,6 +1808,7 @@ export default class ExpressionParser extends LValParser {
       // set PropertyName[?Yield, ?Await] ( PropertySetParameterList ) { FunctionBody[~Yield, ~Await] }
       if (keyName === "get" || keyName === "set") {
         isAccessor = true;
+        this.resetPreviousNodeTrailingComments(key);
         prop.kind = keyName;
         if (this.match(tt.star)) {
           isGenerator = true;

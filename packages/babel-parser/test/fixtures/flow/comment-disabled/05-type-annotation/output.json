@@ -34,20 +34,15 @@
         "body": {
           "type": "BlockStatement",
           "start":51,"end":54,"loc":{"start":{"line":1,"column":51},"end":{"line":2,"column":1}},
-          "body": [],
-          "directives": [],
           "leadingComments": [
-            {
-              "type": "CommentBlock",
-              "value": ": string ",
-              "start":22,"end":35,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":35}}
-            },
             {
               "type": "CommentBlock",
               "value": ": number ",
               "start":37,"end":50,"loc":{"start":{"line":1,"column":37},"end":{"line":1,"column":50}}
             }
-          ]
+          ],
+          "body": [],
+          "directives": []
         }
       }
     ],

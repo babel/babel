@@ -2,6 +2,7 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
+import type { CommentWhitespace } from "../parser/comments";
 import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
@@ -89,20 +90,11 @@ export default class State {
   // where @foo belongs to the outer class and @bar to the inner
   decoratorStack: Array<Array<N.Decorator>> = [[]];
 
-  // Comment store.
+  // Comment store for Program.comments
   comments: Array<N.Comment> = [];
 
   // Comment attachment store
-  trailingComments: Array<N.Comment> = [];
-  leadingComments: Array<N.Comment> = [];
-  commentStack: Array<{
-    start: number,
-    leadingComments: ?Array<N.Comment>,
-    trailingComments: ?Array<N.Comment>,
-    type: string,
-  }> = [];
-  // $FlowIgnore this is initialized when the parser starts.
-  commentPreviousNode: N.Node = null;
+  commentStack: Array<CommentWhitespace> = [];
 
   // The current position of the tokenizer in the input.
   pos: number = 0;

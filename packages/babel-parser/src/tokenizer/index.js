@@ -4,7 +4,6 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
-import type { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
@@ -304,28 +303,7 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  pushComment(
-    block: boolean,
-    text: string,
-    start: number,
-    end: number,
-    startLoc: Position,
-    endLoc: Position,
-  ): void {
-    const comment = {
-      type: block ? "CommentBlock" : "CommentLine",
-      value: text,
-      start: start,
-      end: end,
-      loc: new SourceLocation(startLoc, endLoc),
-    };
-
-    if (this.options.tokens) this.pushToken(comment);
-    this.state.comments.push(comment);
-    this.addComment(comment);
-  }
-
-  skipBlockComment(): void {
+  skipBlockComment(): N.CommentBlock | void {
     let startLoc;
     if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
@@ -348,17 +326,19 @@ export default class Tokenizer extends ParserErrors {
     if (this.isLookahead) return;
     /*:: invariant(startLoc) */
 
-    this.pushComment(
-      true,
-      this.input.slice(start + 2, end),
-      start,
-      this.state.pos,
-      startLoc,
-      this.state.curPosition(),
-    );
+    const value = this.input.slice(start + 2, end);
+    const comment = {
+      type: "CommentBlock",
+      value: value,
+      start: start,
+      end: end + 2,
+      loc: new SourceLocation(startLoc, this.state.curPosition()),
+    };
+    if (this.options.tokens) this.pushToken(comment);
+    return comment;
   }
 
-  skipLineComment(startSkip: number): void {
+  skipLineComment(startSkip: number): N.CommentLine | void {
     const start = this.state.pos;
     let startLoc;
     if (!this.isLookahead) startLoc = this.state.curPosition();
@@ -374,20 +354,26 @@ export default class Tokenizer extends ParserErrors {
     if (this.isLookahead) return;
     /*:: invariant(startLoc) */
 
-    this.pushComment(
-      false,
-      this.input.slice(start + startSkip, this.state.pos),
+    const end = this.state.pos;
+    const value = this.input.slice(start + startSkip, end);
+
+    const comment = {
+      type: "CommentLine",
+      value,
       start,
-      this.state.pos,
-      startLoc,
-      this.state.curPosition(),
-    );
+      end,
+      loc: new SourceLocation(startLoc, this.state.curPosition()),
+    };
+    if (this.options.tokens) this.pushToken(comment);
+    return comment;
   }
 
   // Called at the start of the parse and after every token. Skips
   // whitespace and comments, and.
 
   skipSpace(): void {
+    const spaceStart = this.state.pos;
+    const comments = [];
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
@@ -413,13 +399,23 @@ export default class Tokenizer extends ParserErrors {
 
         case charCodes.slash:
           switch (this.input.charCodeAt(this.state.pos + 1)) {
-            case charCodes.asterisk:
-              this.skipBlockComment();
+            case charCodes.asterisk: {
+              const comment = this.skipBlockComment();
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
               break;
+            }
 
-            case charCodes.slash:
-              this.skipLineComment(2);
+            case charCodes.slash: {
+              const comment = this.skipLineComment(2);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
               break;
+            }
 
             default:
               break loop;
@@ -429,10 +425,55 @@ export default class Tokenizer extends ParserErrors {
         default:
           if (isWhitespace(ch)) {
             ++this.state.pos;
+          } else if (ch === charCodes.dash && !this.inModule) {
+            const pos = this.state.pos;
+            if (
+              this.input.charCodeAt(pos + 1) === charCodes.dash &&
+              this.input.charCodeAt(pos + 2) === charCodes.greaterThan &&
+              (spaceStart === 0 || this.state.lineStart > spaceStart)
+            ) {
+              // A `-->` line comment
+              const comment = this.skipLineComment(3);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
+            } else {
+              break loop;
+            }
+          } else if (ch === charCodes.lessThan && !this.inModule) {
+            const pos = this.state.pos;
+            if (
+              this.input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
+              this.input.charCodeAt(pos + 2) === charCodes.dash &&
+              this.input.charCodeAt(pos + 3) === charCodes.dash
+            ) {
+              // `<!--`, an XML-style comment that should be interpreted as a line comment
+              const comment = this.skipLineComment(4);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                comments.push(comment);
+              }
+            } else {
+              break loop;
+            }
           } else {
             break loop;
           }
       }
+    }
+
+    if (comments.length > 0) {
+      const end = this.state.pos;
+      const CommentWhitespace = {
+        start: spaceStart,
+        end,
+        comments,
+        leadingNode: null,
+        trailingNode: null,
+        containingNode: null,
+      };
+      this.state.commentStack.push(CommentWhitespace);
     }
   }
 
@@ -661,18 +702,6 @@ export default class Tokenizer extends ParserErrors {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
-      if (
-        next === charCodes.dash &&
-        !this.inModule &&
-        this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        (this.state.lastTokEnd === 0 || this.hasPrecedingLineBreak())
-      ) {
-        // A `-->` line comment
-        this.skipLineComment(3);
-        this.skipSpace();
-        this.nextToken();
-        return;
-      }
       this.finishOp(tt.incDec, 2);
       return;
     }
@@ -700,20 +729,6 @@ export default class Tokenizer extends ParserErrors {
         return;
       }
       this.finishOp(tt.bitShift, size);
-      return;
-    }
-
-    if (
-      next === charCodes.exclamationMark &&
-      code === charCodes.lessThan &&
-      !this.inModule &&
-      this.input.charCodeAt(this.state.pos + 2) === charCodes.dash &&
-      this.input.charCodeAt(this.state.pos + 3) === charCodes.dash
-    ) {
-      // `<!--`, an XML-style comment that should be interpreted as a line comment
-      this.skipLineComment(4);
-      this.skipSpace();
-      this.nextToken();
       return;
     }
 
