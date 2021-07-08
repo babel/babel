@@ -1234,6 +1234,7 @@ export default class ExpressionParser extends LValParser {
         }
 
       // falls through
+      case tt._var:
       case tt.modulo:
       case tt.hash: {
         const pipeProposal = this.getPluginOption(
