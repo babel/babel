@@ -1214,9 +1214,8 @@ export default class ExpressionParser extends LValParser {
         return node;
       }
 
-      case tt.assign:
+      case tt.moduloAssign:
         if (
-          this.state.value === "%=" &&
           this.getPluginOption("pipelineOperator", "proposal") === "hack" &&
           this.getPluginOption("pipelineOperator", "topicToken") === "%"
         ) {
