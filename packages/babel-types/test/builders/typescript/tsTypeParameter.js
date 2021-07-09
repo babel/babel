@@ -7,7 +7,7 @@ describe("builders", function () {
         const tsTypeParameter = t.tsTypeParameter(
           t.tsTypeReference(t.identifier("bar")),
           t.tsTypeReference(t.identifier("baz")),
-          !process.env.BABEL_TYPES_8_BREAKING ? "foo" : t.identifier("foo"),
+          !process.env.BABEL_8_BREAKING ? "foo" : t.identifier("foo"),
         );
         expect(tsTypeParameter).toMatchSnapshot({
           name: expect.anything(),
@@ -15,7 +15,7 @@ describe("builders", function () {
         // TODO(babel-8): move this check to the snapshot
         expect(tsTypeParameter).toEqual(
           expect.objectContaining({
-            name: !process.env.BABEL_TYPES_8_BREAKING
+            name: !process.env.BABEL_8_BREAKING
               ? "foo"
               : expect.objectContaining({
                   name: "foo",
@@ -31,7 +31,7 @@ describe("builders", function () {
             t.tsTypeReference(t.identifier("baz")),
           );
         }).toThrow(
-          !process.env.BABEL_TYPES_8_BREAKING
+          !process.env.BABEL_8_BREAKING
             ? "Property name expected type of string but got null"
             : 'Property name of TSTypeParameter expected node to be of a type ["Identifier"] but instead got undefined',
         );
