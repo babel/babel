@@ -2,21 +2,13 @@ import type SourceMap from "./source-map";
 import type * as t from "@babel/types";
 
 const SPACES_RE = /^[ \t]+$/;
-
-/**
- * The Buffer class exists to manage the queue of tokens being pushed onto the output string
- * in such a way that the final string buffer is treated as write-only until the final .get()
- * call. This allows V8 to optimize the output efficiently by not requiring it to store the
- * string in contiguous memory.
- */
-
 export default class Buffer {
   constructor(map?: SourceMap | null) {
     this._map = map;
   }
 
   _map: SourceMap = null;
-  _buf: Array<any> = [];
+  _buf: String = "";
   _last: string = "";
   _queue: Array<
     [
@@ -52,7 +44,7 @@ export default class Buffer {
     const result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
-      code: this._buf.join("").trimRight(),
+      code: this._buf.trimRight(),
       map: null,
       rawMappings: map?.getRawMappings(),
     };
@@ -125,7 +117,7 @@ export default class Buffer {
     filename?: string | null,
     force?: boolean,
   ): void {
-    this._buf.push(str);
+    this._buf += str;
     this._last = str[str.length - 1];
 
     // Search for newline chars. We search only for `\n`, since both `\r` and
