@@ -5760,7 +5760,7 @@ __metadata:
     rollup-plugin-dts: ^2.0.0
     rollup-plugin-node-polyfills: ^0.2.1
     rollup-plugin-terser: ^7.0.2
-    test262-stream: ^1.3.0
+    test262-stream: ^1.4.0
     through2: ^2.0.0
     typescript: ~4.2.3
   dependenciesMeta:
@@ -14433,13 +14433,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"test262-stream@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "test262-stream@npm:1.3.0"
+"test262-stream@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "test262-stream@npm:1.4.0"
   dependencies:
     js-yaml: ^3.2.1
     klaw: ^2.1.0
-  checksum: 19957e245241f3c843830dee72c49f8b57351fae092b0fdd73f9ef14342cd332ad5c0c7cc113d929bdf45bf782ee431aabc35c1d6a508f5febb2dd31b7f004fe
+  checksum: a60b9da6a0b95a9574c79799f6838a7256a225c3be6f759d02f4c2de2beefec8fe41b3b380c46a03b372132512ec82116d512dedcc42e4d5df509ad9afb0867b
   languageName: node
   linkType: hard
 
