@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":213,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":55}},
+  "start":0,"end":304,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":47}},
   "program": {
     "type": "Program",
-    "start":0,"end":213,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":55}},
+    "start":0,"end":304,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":47}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -208,6 +208,13 @@
       {
         "type": "ExpressionStatement",
         "start":158,"end":213,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":55}},
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await in function expression is allowed",
+            "start":214,"end":256,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":42}}
+          }
+        ],
         "expression": {
           "type": "AssignmentExpression",
           "start":158,"end":212,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":54}},
@@ -278,8 +285,80 @@
             }
           }
         }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":257,"end":304,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":47}},
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await in function expression is allowed",
+            "start":214,"end":256,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":42}}
+          }
+        ],
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":257,"end":303,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":46}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":257,"end":258,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":1},"identifierName":"C"},
+            "name": "C"
+          },
+          "right": {
+            "type": "ClassExpression",
+            "start":261,"end":303,"loc":{"start":{"line":11,"column":4},"end":{"line":11,"column":46}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":267,"end":303,"loc":{"start":{"line":11,"column":10},"end":{"line":11,"column":46}},
+              "body": [
+                {
+                  "type": "StaticBlock",
+                  "start":269,"end":301,"loc":{"start":{"line":11,"column":12},"end":{"line":11,"column":44}},
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":278,"end":299,"loc":{"start":{"line":11,"column":21},"end":{"line":11,"column":42}},
+                      "expression": {
+                        "type": "FunctionExpression",
+                        "start":279,"end":298,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":41}},
+                        "extra": {
+                          "parenthesized": true,
+                          "parenStart": 278
+                        },
+                        "id": {
+                          "type": "Identifier",
+                          "start":288,"end":293,"loc":{"start":{"line":11,"column":31},"end":{"line":11,"column":36},"identifierName":"await"},
+                          "name": "await"
+                        },
+                        "generator": false,
+                        "async": false,
+                        "params": [],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start":296,"end":298,"loc":{"start":{"line":11,"column":39},"end":{"line":11,"column":41}},
+                          "body": [],
+                          "directives": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
       }
     ],
     "directives": []
-  }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " await in function expression is allowed",
+      "start":214,"end":256,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":42}}
+    }
+  ]
 }
