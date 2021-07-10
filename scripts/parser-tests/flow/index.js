@@ -38,6 +38,9 @@ function getPlugins(test) {
     if (!enabled) {
       const idx = plugins.indexOf(flowOptionsMapping[option]);
       if (idx !== -1) plugins.splice(idx, 1);
+      if (option === "types") {
+        flowOptions.all = false;
+      }
     } else if (option === "enums") {
       flowOptions.enums = true;
     } else if (!(option in flowOptionsMapping)) {

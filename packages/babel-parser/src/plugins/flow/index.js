@@ -3052,6 +3052,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else if (
         base.type === "Identifier" &&
         base.name === "async" &&
+        this.shouldParseTypes() &&
         this.isRelational("<")
       ) {
         const state = this.state.clone();
