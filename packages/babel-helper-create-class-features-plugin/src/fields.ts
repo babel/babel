@@ -771,7 +771,7 @@ export function buildFieldsInitNodes(
       needsClassRef = needsClassRef || replaced;
     }
 
-    // if there are `new.target` in static filed
+    // if there are `new.target` in static field
     // we should replace it with `undefined`
     if (isStatic && isField) {
       // fix issue #12737
