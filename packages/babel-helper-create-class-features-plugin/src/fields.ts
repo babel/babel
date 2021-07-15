@@ -785,7 +785,19 @@ export function buildFieldsInitNodes(
             meta.isIdentifier({ name: "new" }) &&
             property.isIdentifier({ name: "target" })
           ) {
-            path.replaceWith(scope.buildUndefinedNode());
+            const func = path.findParent(path => {
+              if (path.isClass()) return true;
+              if (path.isFunction() && !path.isArrowFunctionExpression()) {
+                return true;
+              }
+              return false;
+            });
+            if (!func.findParent(path => path === prop)) {
+              // if func is not child of prop, which means
+              // `new.target` is leaked to the upper `new.target` values.
+              // thus we should replace it with `undefined` (`void 0` here)
+              path.replaceWith(scope.buildUndefinedNode());
+            }
           }
         },
       });
