@@ -1,4 +1,5 @@
 import { template, traverse, types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
@@ -768,6 +769,26 @@ export function buildFieldsInitNodes(
         innerBindingRef,
       );
       needsClassRef = needsClassRef || replaced;
+    }
+
+    // if there are `new.target` in static filed
+    // we should replace it with `undefined`
+    if (isStatic && isField) {
+      // fix issue #12737
+      prop.traverse({
+        MetaProperty(path: NodePath<t.MetaProperty>) {
+          const meta = path.get("meta");
+          const property = path.get("property");
+          const { scope } = path;
+
+          if (
+            meta.isIdentifier({ name: "new" }) &&
+            property.isIdentifier({ name: "target" })
+          ) {
+            path.replaceWith(scope.buildUndefinedNode());
+          }
+        },
+      });
     }
 
     switch (true) {
