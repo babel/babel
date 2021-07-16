@@ -204,6 +204,33 @@ export default class Buffer {
     return false;
   }
 
+  /**
+   * check if current _last + queue ends with newline, return the character before newline
+   *
+   * @param {*} ch
+   * @memberof Buffer
+   */
+  endsWithCharAndNewline(): number {
+    const queue = this._queue;
+    if (queue.length > 0) {
+      const last = queue[0][0];
+      // every element in queue is one-length whitespace string
+      const lastCp = last.charCodeAt(0);
+      if (lastCp !== 0xa) return;
+      if (queue.length > 1) {
+        const secondLast = queue[1][0];
+        return secondLast.charCodeAt(0);
+      } else {
+        return this._last.charCodeAt(this._last.length - 1);
+      }
+    } else {
+      const last = this._last;
+      if (last.charCodeAt(last.length - 1) === 0xa) {
+        return last.charCodeAt(last.length - 2);
+      }
+    }
+  }
+
   hasContent(): boolean {
     return this._queue.length > 0 || !!this._last;
   }

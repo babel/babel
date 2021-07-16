@@ -172,7 +172,7 @@ class Printer {
    * Add a newline (or many newlines), maintaining formatting.
    */
 
-  newline(i?: number): void {
+  newline(i: number = 1): void {
     if (this.format.retainLines || this.format.compact) return;
 
     if (this.format.concise) {
@@ -180,13 +180,13 @@ class Printer {
       return;
     }
 
+    const charBeforeNewline = this.endsWithCharAndNewline();
     // never allow more than two lines
-    if (this.endsWith("\n\n")) return;
+    if (charBeforeNewline === 0xa) return;
 
-    if (typeof i !== "number") i = 1;
-
-    i = Math.min(2, i);
-    if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
+    if (charBeforeNewline === 0x7b /* { */ || charBeforeNewline === 0x3a) {
+      i--;
+    }
     if (i <= 0) return;
 
     for (let j = 0; j < i; j++) {
@@ -196,6 +196,10 @@ class Printer {
 
   endsWith(str: string): boolean {
     return this._buf.endsWith(str);
+  }
+
+  endsWithCharAndNewline(): number {
+    return this._buf.endsWithCharAndNewline();
   }
 
   removeTrailingNewline(): void {
@@ -576,7 +580,7 @@ class Printer {
       if (needs(node, parent)) lines++;
     }
 
-    this.newline(lines);
+    this.newline(Math.min(2, lines));
   }
 
   _getComments(leading, node) {
