@@ -666,6 +666,24 @@ const thisContextVisitor = traverse.visitors.merge([
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
     },
+    Function(path: NodePath<t.Function>, state) {
+      // only `() => { new.target }` needs to be replaced
+      state.shouldReplaceNewTarget = path.isArrowFunctionExpression();
+    },
+    MetaProperty(path: NodePath<t.MetaProperty>, state) {
+      const meta = path.get("meta");
+      const property = path.get("property");
+      const { scope } = path;
+      // if there are `new.target` in static field
+      // we should replace it with `undefined`
+      if (
+        state.shouldReplaceNewTarget &&
+        meta.isIdentifier({ name: "new" }) &&
+        property.isIdentifier({ name: "target" })
+      ) {
+        path.replaceWith(scope.buildUndefinedNode());
+      }
+    },
   },
   environmentVisitor,
 ]);
@@ -694,6 +712,7 @@ function replaceThisContext(
     classRef: ref,
     needsClassRef: false,
     innerBinding: innerBindingRef,
+    shouldReplaceNewTarget: true,
   };
 
   const replacer = new ReplaceSupers({
@@ -769,38 +788,6 @@ export function buildFieldsInitNodes(
         innerBindingRef,
       );
       needsClassRef = needsClassRef || replaced;
-    }
-
-    // if there are `new.target` in static field
-    // we should replace it with `undefined`
-    if (isStatic && isField) {
-      // fix issue #12737
-      prop.traverse({
-        MetaProperty(path: NodePath<t.MetaProperty>) {
-          const meta = path.get("meta");
-          const property = path.get("property");
-          const { scope } = path;
-
-          if (
-            meta.isIdentifier({ name: "new" }) &&
-            property.isIdentifier({ name: "target" })
-          ) {
-            const func = path.findParent(path => {
-              if (path.isClass()) return true;
-              if (path.isFunction() && !path.isArrowFunctionExpression()) {
-                return true;
-              }
-              return false;
-            });
-            if (!func.findParent(path => path === prop)) {
-              // if func is not child of prop, which means
-              // `new.target` is leaked to the upper `new.target` values.
-              // thus we should replace it with `undefined` (`void 0` here)
-              path.replaceWith(scope.buildUndefinedNode());
-            }
-          }
-        },
-      });
     }
 
     switch (true) {
