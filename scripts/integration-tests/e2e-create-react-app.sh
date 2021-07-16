@@ -30,7 +30,7 @@ sed -i 's/useBuiltIns: true/runtime: "classic"/' packages/babel-preset-react-app
 
 # create-react-app throws if `@babel/eslint-parser` is not pinned, but we
 # must upgrade it for test purposes
-sed -i "s/'@babel\/eslint-parser',/" packages/react-scripts/scripts/utils/verifyPackageTree.js
+sed -i "s#'@babel/eslint-parser',##" packages/react-scripts/scripts/utils/verifyPackageTree.js
 
 bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
 node "$bump_deps"
