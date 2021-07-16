@@ -32,6 +32,9 @@ sed -i 's/useBuiltIns: true/runtime: "classic"/' packages/babel-preset-react-app
 # must upgrade it for test purposes
 sed -i "s#'@babel/eslint-parser',##" packages/react-scripts/scripts/utils/verifyPackageTree.js
 
+# remove this line when https://github.com/facebook/create-react-app/pull/11216 gets merged
+sed -i "s#isESLintPluginEnabled && 'babel-eslint',##" packages/react-scripts/scripts/utils/verifyPackageTree.js
+
 bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
 node "$bump_deps"
 for d in ./packages/*/
