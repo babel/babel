@@ -1,5 +1,6 @@
 import type Printer from "../printer";
 import * as t from "@babel/types";
+import * as charCodes from "charcodes";
 
 export function WithStatement(this: Printer, node: t.WithStatement) {
   this.word("with");
@@ -35,7 +36,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
   }
 
   if (node.alternate) {
-    if (this.endsWith("}")) this.space();
+    if (this.endsWith(charCodes.rightCurlyBrace)) this.space();
     this.word("else");
     this.space();
     this.printAndIndentOnComments(node.alternate, node);
@@ -229,14 +230,18 @@ function variableDeclarationIndent() {
   // "let " or "var " indentation.
   this.token(",");
   this.newline();
-  if (this.endsWith("\n")) for (let i = 0; i < 4; i++) this.space(true);
+  if (this.endsWith(charCodes.lineFeed)) {
+    for (let i = 0; i < 4; i++) this.space(true);
+  }
 }
 
 function constDeclarationIndent() {
   // "const " indentation.
   this.token(",");
   this.newline();
-  if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
+  if (this.endsWith(charCodes.lineFeed)) {
+    for (let i = 0; i < 6; i++) this.space(true);
+  }
 }
 
 export function VariableDeclaration(

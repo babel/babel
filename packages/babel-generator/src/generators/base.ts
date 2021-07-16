@@ -1,5 +1,6 @@
 import type Printer from "../printer";
 import * as t from "@babel/types";
+import * as charCodes from "charcodes";
 
 export function File(this: Printer, node: t.File) {
   if (node.program) {
@@ -37,7 +38,7 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
 
     this.source("end", node.loc);
 
-    if (!this.endsWith("\n")) this.newline();
+    if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
     this.rightBrace();
   } else {

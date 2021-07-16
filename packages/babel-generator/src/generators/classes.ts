@@ -1,5 +1,6 @@
 import type Printer from "../printer";
 import * as t from "@babel/types";
+import * as charCodes from "charcodes";
 
 export function ClassDeclaration(
   this: Printer,
@@ -68,7 +69,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
     this.printSequence(node.body, node);
     this.dedent();
 
-    if (!this.endsWith("\n")) this.newline();
+    if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
     this.rightBrace();
   }

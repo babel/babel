@@ -4,6 +4,7 @@ import * as t from "@babel/types";
 
 import * as generatorFunctions from "./generators";
 import type SourceMap from "./source-map";
+import * as charCodes from "charcodes";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
@@ -105,11 +106,13 @@ class Printer {
   space(force: boolean = false): void {
     if (this.format.compact) return;
 
-    if (
-      (this._buf.hasContent() && !this.endsWith(" ") && !this.endsWith("\n")) ||
-      force
-    ) {
+    if (force) {
       this._space();
+    } else if (this._buf.hasContent()) {
+      const lastCp = this.getLastChar();
+      if (lastCp !== charCodes.space && lastCp !== charCodes.lineFeed) {
+        this._space();
+      }
     }
   }
 
@@ -119,7 +122,10 @@ class Printer {
 
   word(str: string): void {
     // prevent concatenating words and creating // comment out of division and regex
-    if (this._endsWithWord || (this.endsWith("/") && str.indexOf("/") === 0)) {
+    if (
+      this._endsWithWord ||
+      (this.endsWith(charCodes.slash) && str.indexOf("/") === 0)
+    ) {
       this._space();
     }
 
@@ -143,7 +149,7 @@ class Printer {
       !NON_DECIMAL_LITERAL.test(str) &&
       !SCIENTIFIC_NOTATION.test(str) &&
       !ZERO_DECIMAL_INTEGER.test(str) &&
-      str[str.length - 1] !== ".";
+      str.charCodeAt(str.length - 1) !== charCodes.dot;
   }
 
   /**
@@ -153,13 +159,15 @@ class Printer {
   token(str: string): void {
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
+    const lastChar = this.getLastChar();
+    const strFirst = str.charCodeAt(0);
     if (
-      (str === "--" && this.endsWith("!")) ||
+      (str === "--" && lastChar === charCodes.exclamationMark) ||
       // Need spaces for operators of the same kind to avoid: `a+++b`
-      (str[0] === "+" && this.endsWith("+")) ||
-      (str[0] === "-" && this.endsWith("-")) ||
+      (strFirst === charCodes.plusSign && lastChar === charCodes.plusSign) ||
+      (strFirst === charCodes.dash && lastChar === charCodes.dash) ||
       // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
-      (str[0] === "." && this._endsWithInteger)
+      (strFirst === charCodes.dot && this._endsWithInteger)
     ) {
       this._space();
     }
@@ -182,9 +190,12 @@ class Printer {
 
     const charBeforeNewline = this.endsWithCharAndNewline();
     // never allow more than two lines
-    if (charBeforeNewline === 0xa) return;
+    if (charBeforeNewline === charCodes.lineFeed) return;
 
-    if (charBeforeNewline === 0x7b /* { */ || charBeforeNewline === 0x3a) {
+    if (
+      charBeforeNewline === charCodes.leftCurlyBrace ||
+      charBeforeNewline === charCodes.colon
+    ) {
       i--;
     }
     if (i <= 0) return;
@@ -194,8 +205,12 @@ class Printer {
     }
   }
 
-  endsWith(str: string): boolean {
-    return this._buf.endsWith(str);
+  endsWith(char: number): boolean {
+    return this.getLastChar() === char;
+  }
+
+  getLastChar(): number {
+    return this._buf.getLastChar();
   }
 
   endsWithCharAndNewline(): number {
@@ -245,7 +260,11 @@ class Printer {
 
   _maybeIndent(str: string): void {
     // we've got a newline before us so prepend on the indentation
-    if (this._indent && this.endsWith("\n") && str[0] !== "\n") {
+    if (
+      this._indent &&
+      this.endsWith(charCodes.lineFeed) &&
+      str.charCodeAt(0) !== charCodes.lineFeed
+    ) {
       this._buf.queue(this._getIndent());
     }
   }
@@ -610,7 +629,13 @@ class Printer {
 
     if (printNewLines && this._buf.hasContent()) this.newline(1);
 
-    if (!this.endsWith("[") && !this.endsWith("{")) this.space();
+    const lastCharCode = this.getLastChar();
+    if (
+      lastCharCode !== charCodes.leftSquareBracket &&
+      lastCharCode !== charCodes.leftCurlyBrace
+    ) {
+      this.space();
+    }
 
     let val =
       !isBlockComment && !this._noLineTerminator
@@ -632,7 +657,7 @@ class Printer {
     }
 
     // Avoid creating //* comments
-    if (this.endsWith("/")) this._space();
+    if (this.endsWith(charCodes.slash)) this._space();
 
     this.withSource("start", comment.loc, () => {
       this._append(val);
@@ -652,7 +677,7 @@ class Printer {
       this._printComment(
         comments[0],
         // Keep newlines if the comment marks a standalone call
-        this._buf.hasContent() && !this.endsWith("\n"),
+        this._buf.hasContent() && !this.endsWith(charCodes.lineFeed),
       );
     } else {
       for (const comment of comments) {

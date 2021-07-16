@@ -1,5 +1,6 @@
 import type SourceMap from "./source-map";
 import type * as t from "@babel/types";
+import * as charcodes from "charcodes";
 
 const SPACES_RE = /^[ \t]+$/;
 export default class Buffer {
@@ -9,7 +10,7 @@ export default class Buffer {
 
   _map: SourceMap = null;
   _buf: String = "";
-  _last: string = "";
+  _last: number = 0;
   _queue: Array<
     [
       str: string,
@@ -118,7 +119,7 @@ export default class Buffer {
     force?: boolean,
   ): void {
     this._buf += str;
-    this._last = str[str.length - 1];
+    this._last = str.charCodeAt(str.length - 1);
 
     // Search for newline chars. We search only for `\n`, since both `\r` and
     // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and
@@ -179,29 +180,15 @@ export default class Buffer {
     }
   }
 
-  endsWith(suffix: string): boolean {
-    // Fast path to avoid iterating over this._queue.
-    if (suffix.length === 1) {
-      let last;
-      if (this._queue.length > 0) {
-        const str = this._queue[0][0];
-        last = str[str.length - 1];
-      } else {
-        last = this._last;
-      }
-
-      return last === suffix;
+  getLastChar(): number {
+    let last;
+    if (this._queue.length > 0) {
+      const str = this._queue[0][0];
+      last = str.charCodeAt(0);
+    } else {
+      last = this._last;
     }
-
-    const end =
-      this._last + this._queue.reduce((acc, item) => item[0] + acc, "");
-    if (suffix.length <= end.length) {
-      return end.slice(-suffix.length) === suffix;
-    }
-
-    // We assume that everything being matched is at most a single token plus some whitespace,
-    // which everything currently is, but otherwise we'd have to expand _last or check _buf.
-    return false;
+    return last;
   }
 
   /**
@@ -216,19 +203,16 @@ export default class Buffer {
       const last = queue[0][0];
       // every element in queue is one-length whitespace string
       const lastCp = last.charCodeAt(0);
-      if (lastCp !== 0xa) return;
+      if (lastCp !== charcodes.lineFeed) return;
       if (queue.length > 1) {
         const secondLast = queue[1][0];
         return secondLast.charCodeAt(0);
       } else {
-        return this._last.charCodeAt(this._last.length - 1);
-      }
-    } else {
-      const last = this._last;
-      if (last.charCodeAt(last.length - 1) === 0xa) {
-        return last.charCodeAt(last.length - 2);
+        return this._last;
       }
     }
+    // We assume that everything being matched is at most a single token plus some whitespace,
+    // which everything currently is, but otherwise we'd have to expand _last or check _buf.
   }
 
   hasContent(): boolean {
