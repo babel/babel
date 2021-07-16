@@ -124,7 +124,7 @@ class Printer {
     // prevent concatenating words and creating // comment out of division and regex
     if (
       this._endsWithWord ||
-      (this.endsWith(charCodes.slash) && str.indexOf("/") === 0)
+      (this.endsWith(charCodes.slash) && str.charCodeAt(0) === charCodes.slash)
     ) {
       this._space();
     }
