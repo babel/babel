@@ -666,18 +666,13 @@ const thisContextVisitor = traverse.visitors.merge([
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
     },
-    Function(path: NodePath<t.Function>, state) {
-      // only `() => { new.target }` needs to be replaced
-      state.shouldReplaceNewTarget = path.isArrowFunctionExpression();
-    },
-    MetaProperty(path: NodePath<t.MetaProperty>, state) {
+    MetaProperty(path: NodePath<t.MetaProperty>) {
       const meta = path.get("meta");
       const property = path.get("property");
       const { scope } = path;
       // if there are `new.target` in static field
       // we should replace it with `undefined`
       if (
-        state.shouldReplaceNewTarget &&
         meta.isIdentifier({ name: "new" }) &&
         property.isIdentifier({ name: "target" })
       ) {
@@ -712,7 +707,6 @@ function replaceThisContext(
     classRef: ref,
     needsClassRef: false,
     innerBinding: innerBindingRef,
-    shouldReplaceNewTarget: true,
   };
 
   const replacer = new ReplaceSupers({
