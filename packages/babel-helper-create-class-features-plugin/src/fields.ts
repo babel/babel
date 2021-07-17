@@ -1,5 +1,5 @@
 import { template, traverse, types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
@@ -9,15 +9,26 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import * as ts from "./typescript";
 
+interface PrivateNamesUpdate {
+  id: t.Identifier;
+  static: boolean;
+  method: boolean;
+  getId?: string;
+  setId?: string;
+  methodId?: string;
+}
+
+type PrivateNamesMap = Map<string, PrivateNamesUpdate>;
+
 export function buildPrivateNamesMap(props) {
-  const privateNamesMap = new Map();
+  const privateNamesMap: PrivateNamesMap = new Map();
   for (const prop of props) {
     const isPrivate = prop.isPrivate();
     const isMethod = !prop.isProperty();
     const isInstance = !prop.node.static;
     if (isPrivate) {
       const { name } = prop.node.key.id;
-      const update = privateNamesMap.has(name)
+      const update: PrivateNamesUpdate = privateNamesMap.has(name)
         ? privateNamesMap.get(name)
         : {
             id: prop.scope.generateUidIdentifier(name),
@@ -38,11 +49,11 @@ export function buildPrivateNamesMap(props) {
 }
 
 export function buildPrivateNamesNodes(
-  privateNamesMap,
-  privateFieldsAsProperties,
+  privateNamesMap: PrivateNamesMap,
+  privateFieldsAsProperties: boolean,
   state,
 ) {
-  const initNodes = [];
+  const initNodes: t.Statement[] = [];
 
   for (const [name, value] of privateNamesMap) {
     // When the privateFieldsAsProperties assumption is enabled,
@@ -56,7 +67,7 @@ export function buildPrivateNamesNodes(
     const isAccessor = getId || setId;
     const id = t.cloneNode(value.id);
 
-    let init;
+    let init: t.Expression;
 
     if (privateFieldsAsProperties) {
       init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
@@ -78,16 +89,26 @@ export function buildPrivateNamesNodes(
   return initNodes;
 }
 
+interface PrivateNameVisitorState {
+  privateNamesMap: PrivateNamesMap;
+  privateFieldsAsProperties: boolean;
+  redeclared?: string[];
+}
+
 // Traverses the class scope, handling private name references. If an inner
 // class redeclares the same private name, it will hand off traversal to the
 // restricted visitor (which doesn't traverse the inner class's inner scope).
-function privateNameVisitorFactory(visitor) {
-  const privateNameVisitor = {
+function privateNameVisitorFactory<S>(
+  visitor: Visitor<PrivateNameVisitorState & S>,
+) {
+  const privateNameVisitor: Visitor<PrivateNameVisitorState & S> = {
     ...visitor,
 
     Class(path) {
       const { privateNamesMap } = this;
-      const body = path.get("body.body");
+      // not using body.body since it will loose typing
+      const classBody = path.get("body");
+      const body = classBody.get("body");
 
       const visiblePrivateNames = new Map(privateNamesMap);
       const redeclared = [];
@@ -134,7 +155,10 @@ function privateNameVisitorFactory(visitor) {
   return privateNameVisitor;
 }
 
-const privateNameVisitor = privateNameVisitorFactory({
+const privateNameVisitor = privateNameVisitorFactory<{
+  handle(path: NodePath, noDocumentAll: boolean): void;
+  noDocumentAll: boolean;
+}>({
   PrivateName(path, { noDocumentAll }) {
     const { privateNamesMap, redeclared } = this;
     const { node, parentPath } = path;
@@ -153,13 +177,17 @@ const privateNameVisitor = privateNameVisitorFactory({
   },
 });
 
-const privateInVisitor = privateNameVisitorFactory({
+const privateInVisitor = privateNameVisitorFactory<{
+  classRef: t.Identifier;
+  file: unknown;
+}>({
   BinaryExpression(path) {
     const { operator, left, right } = path.node;
     if (operator !== "in") return;
-    if (!path.get("left").isPrivateName()) return;
+    if (!t.isPrivateName(left)) return;
 
     const { privateFieldsAsProperties, privateNamesMap, redeclared } = this;
+
     const { name } = left.id;
 
     if (!privateNamesMap.has(name)) return;
@@ -408,9 +436,9 @@ const privateNameHandlerLoose = {
 };
 
 export function transformPrivateNamesUsage(
-  ref,
-  path,
-  privateNamesMap,
+  ref: t.Identifier,
+  path: NodePath<t.Class>,
+  privateNamesMap: PrivateNamesMap,
   { privateFieldsAsProperties, noDocumentAll },
   state,
 ) {

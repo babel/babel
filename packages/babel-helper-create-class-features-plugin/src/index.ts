@@ -102,7 +102,7 @@ export function createClassFeaturePlugin({
         const props = [];
         const elements = [];
         const computedPaths = [];
-        const privateNames = new Set();
+        const privateNames = new Set<string>();
         const body = path.get("body");
 
         for (const path of body.get("body")) {
@@ -169,7 +169,7 @@ export function createClassFeaturePlugin({
         if (!props.length && !isDecorated) return;
 
         const innerBinding = path.node.id;
-        let ref;
+        let ref: t.Identifier;
         if (!innerBinding || path.isClassExpression()) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
