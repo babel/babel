@@ -1,4 +1,5 @@
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import {
@@ -6,6 +7,7 @@ import {
   buildPrivateNamesMap,
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
+  PropPath,
 } from "./fields";
 import {
   hasOwnDecorators,
@@ -33,20 +35,24 @@ const version = PACKAGE_JSON.version
   .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
+interface Options {
+  name: string;
+  feature: number;
+  loose?: boolean;
+  // same as PluginObject.manipulateOptions
+  manipulateOptions: (options: unknown, parserOpts: unknown) => void;
+  // TODO(flow->ts): change to babel api
+  api?: { assumption: (key?: string) => boolean | undefined };
+}
+
 export function createClassFeaturePlugin({
   name,
   feature,
   loose,
   manipulateOptions,
   // TODO(Babel 8): Remove the default falue
-  api = { assumption: () => {} },
-}: {
-  name;
-  feature;
-  loose?;
-  manipulateOptions;
-  api?;
-}) {
+  api = { assumption: () => void 0 },
+}: Options) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
   const constantSuper = api.assumption("constantSuper");
@@ -90,25 +96,25 @@ export function createClassFeaturePlugin({
     },
 
     visitor: {
-      Class(path, state) {
+      Class(path: NodePath<t.Class>, state) {
         if (this.file.get(versionKey) !== version) return;
 
         verifyUsedFeatures(path, this.file);
 
         const loose = isLoose(this.file, feature);
 
-        let constructor;
+        let constructor: NodePath<t.ClassMethod>;
         let isDecorated = hasOwnDecorators(path.node);
-        const props = [];
+        const props: PropPath[] = [];
         const elements = [];
-        const computedPaths = [];
+        const computedPaths: NodePath<t.ClassProperty>[] = [];
         const privateNames = new Set<string>();
         const body = path.get("body");
 
         for (const path of body.get("body")) {
           verifyUsedFeatures(path, this.file);
 
-          if (path.node.computed) {
+          if (path.isClassProperty() && path.node.computed) {
             computedPaths.push(path);
           }
 
@@ -117,7 +123,7 @@ export function createClassFeaturePlugin({
             const getName = `get ${name}`;
             const setName = `set ${name}`;
 
-            if (path.node.kind === "get") {
+            if (path.isClassPrivateMethod() && path.node.kind === "get") {
               if (
                 privateNames.has(getName) ||
                 (privateNames.has(name) && !privateNames.has(setName))
@@ -126,7 +132,10 @@ export function createClassFeaturePlugin({
               }
 
               privateNames.add(getName).add(name);
-            } else if (path.node.kind === "set") {
+            } else if (
+              path.isClassPrivateMethod() &&
+              path.node.kind === "set"
+            ) {
               if (
                 privateNames.has(setName) ||
                 (privateNames.has(name) && !privateNames.has(getName))
@@ -198,7 +207,11 @@ export function createClassFeaturePlugin({
           state,
         );
 
-        let keysNodes, staticNodes, pureStaticNodes, instanceNodes, wrapClass;
+        let keysNodes: t.Statement[],
+          staticNodes: t.Statement[],
+          instanceNodes: t.Statement[],
+          pureStaticNodes: t.FunctionDeclaration[],
+          wrapClass: (path: NodePath<t.Class>) => NodePath<t.Class>;
 
         if (isDecorated) {
           staticNodes = pureStaticNodes = keysNodes = [];
@@ -232,7 +245,7 @@ export function createClassFeaturePlugin({
             (referenceVisitor, state) => {
               if (isDecorated) return;
               for (const prop of props) {
-                if (prop.node.static) continue;
+                if (prop.isStatic()) continue;
                 prop.traverse(referenceVisitor, state);
               }
             },
@@ -251,7 +264,7 @@ export function createClassFeaturePlugin({
         }
       },
 
-      PrivateName(path) {
+      PrivateName(path: NodePath<t.PrivateName>) {
         if (
           this.file.get(versionKey) !== version ||
           path.parentPath.isPrivate({ key: path.node })
@@ -262,7 +275,7 @@ export function createClassFeaturePlugin({
         throw path.buildCodeFrameError(`Unknown PrivateName "${path}"`);
       },
 
-      ExportDefaultDeclaration(path) {
+      ExportDefaultDeclaration(path: NodePath<t.ExportDefaultDeclaration>) {
         if (this.file.get(versionKey) !== version) return;
 
         const decl = path.get("declaration");
@@ -276,6 +289,7 @@ export function createClassFeaturePlugin({
           } else {
             // Annyms class declarations can be
             // transformed as if they were expressions
+            // @ts-expect-error
             decl.node.type = "ClassExpression";
           }
         }
