@@ -7,8 +7,8 @@ import {
   buildPrivateNamesMap,
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
-  PropPath,
 } from "./fields";
+import type { PropPath } from "./fields";
 import {
   hasOwnDecorators,
   buildDecoratedClass,
