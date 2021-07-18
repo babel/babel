@@ -3,22 +3,25 @@ import type { NodePath, Visitor } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
-import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
+import memberExpressionToFunctions, {
+  Handler,
+  HandlerState,
+} from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import * as ts from "./typescript";
 
-interface PrivateNamesUpdate {
+interface PrivateNameMetadata {
   id: t.Identifier;
   static: boolean;
   method: boolean;
-  getId?: string;
-  setId?: string;
-  methodId?: string;
+  getId?: t.Identifier;
+  setId?: t.Identifier;
+  methodId?: t.Identifier;
 }
 
-type PrivateNamesMap = Map<string, PrivateNamesUpdate>;
+type PrivateNamesMap = Map<string, PrivateNameMetadata>;
 
 export function buildPrivateNamesMap(props) {
   const privateNamesMap: PrivateNamesMap = new Map();
@@ -28,7 +31,7 @@ export function buildPrivateNamesMap(props) {
     const isInstance = !prop.node.static;
     if (isPrivate) {
       const { name } = prop.node.key.id;
-      const update: PrivateNamesUpdate = privateNamesMap.has(name)
+      const update: PrivateNameMetadata = privateNamesMap.has(name)
         ? privateNamesMap.get(name)
         : {
             id: prop.scope.generateUidIdentifier(name),
@@ -155,10 +158,16 @@ function privateNameVisitorFactory<S>(
   return privateNameVisitor;
 }
 
-const privateNameVisitor = privateNameVisitorFactory<{
-  handle(path: NodePath, noDocumentAll: boolean): void;
+interface PrivateNameState {
+  privateNamesMap: PrivateNamesMap;
+  classRef: t.Identifier;
+  file: any;
   noDocumentAll: boolean;
-}>({
+}
+
+const privateNameVisitor = privateNameVisitorFactory<
+  HandlerState<PrivateNameState> & PrivateNameState
+>({
   PrivateName(path, { noDocumentAll }) {
     const { privateNamesMap, redeclared } = this;
     const { node, parentPath } = path;
@@ -212,203 +221,216 @@ const privateInVisitor = privateNameVisitorFactory<{
   },
 });
 
-const privateNameHandlerSpec = {
-  memoise(member, count) {
-    const { scope } = member;
-    const { object } = member.node;
+interface Receiver {
+  receiver(
+    this: HandlerState<PrivateNameState> & PrivateNameState,
+    member: NodePath<t.MemberExpression | t.OptionalMemberExpression>,
+  ): t.Expression;
+}
 
-    const memo = scope.maybeGenerateMemoised(object);
-    if (!memo) {
-      return;
-    }
+const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
+  {
+    memoise(member, count) {
+      const { scope } = member;
+      const { object } = member.node;
 
-    this.memoiser.set(object, memo, count);
-  },
+      const memo = scope.maybeGenerateMemoised(object);
+      if (!memo) {
+        return;
+      }
 
-  receiver(member) {
-    const { object } = member.node;
+      this.memoiser.set(object, memo, count);
+    },
 
-    if (this.memoiser.has(object)) {
-      return t.cloneNode(this.memoiser.get(object));
-    }
+    receiver(member) {
+      const { object } = member.node;
 
-    return t.cloneNode(object);
-  },
+      if (this.memoiser.has(object)) {
+        return t.cloneNode(this.memoiser.get(object) as t.Expression);
+      }
 
-  get(member) {
-    const { classRef, privateNamesMap, file } = this;
-    const { name } = member.node.property.id;
-    const {
-      id,
-      static: isStatic,
-      method: isMethod,
-      methodId,
-      getId,
-      setId,
-    } = privateNamesMap.get(name);
-    const isAccessor = getId || setId;
+      return t.cloneNode(object);
+    },
 
-    if (isStatic) {
-      const helperName =
-        isMethod && !isAccessor
-          ? "classStaticPrivateMethodGet"
-          : "classStaticPrivateFieldSpecGet";
+    get(member) {
+      const { classRef, privateNamesMap, file } = this;
+      const { name } = (member.node.property as t.PrivateName).id;
+      const {
+        id,
+        static: isStatic,
+        method: isMethod,
+        methodId,
+        getId,
+        setId,
+      } = privateNamesMap.get(name);
+      const isAccessor = getId || setId;
 
-      return t.callExpression(file.addHelper(helperName), [
-        this.receiver(member),
-        t.cloneNode(classRef),
-        t.cloneNode(id),
-      ]);
-    }
+      if (isStatic) {
+        const helperName =
+          isMethod && !isAccessor
+            ? "classStaticPrivateMethodGet"
+            : "classStaticPrivateFieldSpecGet";
 
-    if (isMethod) {
-      if (isAccessor) {
-        if (!getId && setId) {
-          if (file.availableHelper("writeOnlyError")) {
-            return t.sequenceExpression([
-              this.receiver(member),
-              t.callExpression(file.addHelper("writeOnlyError"), [
-                t.stringLiteral(`#${name}`),
-              ]),
-            ]);
-          }
-          console.warn(
-            `@babel/helpers is outdated, update it to silence this warning.`,
-          );
-        }
-        return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+        return t.callExpression(file.addHelper(helperName), [
           this.receiver(member),
+          t.cloneNode(classRef),
           t.cloneNode(id),
         ]);
       }
-      return t.callExpression(file.addHelper("classPrivateMethodGet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-        t.cloneNode(methodId),
-      ]);
-    }
-    return t.callExpression(file.addHelper("classPrivateFieldGet"), [
-      this.receiver(member),
-      t.cloneNode(id),
-    ]);
-  },
 
-  boundGet(member) {
-    this.memoise(member, 1);
-
-    return t.callExpression(
-      t.memberExpression(this.get(member), t.identifier("bind")),
-      [this.receiver(member)],
-    );
-  },
-
-  set(member, value) {
-    const { classRef, privateNamesMap, file } = this;
-    const { name } = member.node.property.id;
-    const {
-      id,
-      static: isStatic,
-      method: isMethod,
-      setId,
-      getId,
-    } = privateNamesMap.get(name);
-    const isAccessor = getId || setId;
-
-    if (isStatic) {
-      const helperName =
-        isMethod && !isAccessor
-          ? "classStaticPrivateMethodSet"
-          : "classStaticPrivateFieldSpecSet";
-
-      return t.callExpression(file.addHelper(helperName), [
-        this.receiver(member),
-        t.cloneNode(classRef),
-        t.cloneNode(id),
-        value,
-      ]);
-    }
-    if (isMethod) {
-      if (setId) {
-        return t.callExpression(file.addHelper("classPrivateFieldSet"), [
+      if (isMethod) {
+        if (isAccessor) {
+          if (!getId && setId) {
+            if (file.availableHelper("writeOnlyError")) {
+              return t.sequenceExpression([
+                this.receiver(member),
+                t.callExpression(file.addHelper("writeOnlyError"), [
+                  t.stringLiteral(`#${name}`),
+                ]),
+              ]);
+            }
+            console.warn(
+              `@babel/helpers is outdated, update it to silence this warning.`,
+            );
+          }
+          return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+            this.receiver(member),
+            t.cloneNode(id),
+          ]);
+        }
+        return t.callExpression(file.addHelper("classPrivateMethodGet"), [
           this.receiver(member),
+          t.cloneNode(id),
+          t.cloneNode(methodId),
+        ]);
+      }
+      return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+        this.receiver(member),
+        t.cloneNode(id),
+      ]);
+    },
+
+    boundGet(member) {
+      this.memoise(member, 1);
+
+      return t.callExpression(
+        t.memberExpression(this.get(member), t.identifier("bind")),
+        [this.receiver(member)],
+      );
+    },
+
+    set(member, value) {
+      const { classRef, privateNamesMap, file } = this;
+      const { name } = (member.node.property as t.PrivateName).id;
+      const {
+        id,
+        static: isStatic,
+        method: isMethod,
+        setId,
+        getId,
+      } = privateNamesMap.get(name);
+      const isAccessor = getId || setId;
+
+      if (isStatic) {
+        const helperName =
+          isMethod && !isAccessor
+            ? "classStaticPrivateMethodSet"
+            : "classStaticPrivateFieldSpecSet";
+
+        return t.callExpression(file.addHelper(helperName), [
+          this.receiver(member),
+          t.cloneNode(classRef),
           t.cloneNode(id),
           value,
         ]);
       }
-      return t.sequenceExpression([
+      if (isMethod) {
+        if (setId) {
+          return t.callExpression(file.addHelper("classPrivateFieldSet"), [
+            this.receiver(member),
+            t.cloneNode(id),
+            value,
+          ]);
+        }
+        return t.sequenceExpression([
+          this.receiver(member),
+          value,
+          t.callExpression(file.addHelper("readOnlyError"), [
+            t.stringLiteral(`#${name}`),
+          ]),
+        ]);
+      }
+      return t.callExpression(file.addHelper("classPrivateFieldSet"), [
         this.receiver(member),
+        t.cloneNode(id),
         value,
-        t.callExpression(file.addHelper("readOnlyError"), [
-          t.stringLiteral(`#${name}`),
-        ]),
       ]);
-    }
-    return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-      this.receiver(member),
-      t.cloneNode(id),
-      value,
-    ]);
-  },
+    },
 
-  destructureSet(member) {
-    const { classRef, privateNamesMap, file } = this;
-    const { name } = member.node.property.id;
-    const { id, static: isStatic } = privateNamesMap.get(name);
-    if (isStatic) {
-      try {
-        // classStaticPrivateFieldDestructureSet was introduced in 7.13.10
-        // eslint-disable-next-line no-var
-        var helper = file.addHelper("classStaticPrivateFieldDestructureSet");
-      } catch {
-        throw new Error(
-          "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.13.10, \n" +
-            "please update @babel/helpers to the latest version.",
+    destructureSet(member) {
+      const { classRef, privateNamesMap, file } = this;
+      const { name } = (member.node.property as t.PrivateName).id;
+      const { id, static: isStatic } = privateNamesMap.get(name);
+      if (isStatic) {
+        try {
+          // classStaticPrivateFieldDestructureSet was introduced in 7.13.10
+          // eslint-disable-next-line no-var
+          var helper = file.addHelper("classStaticPrivateFieldDestructureSet");
+        } catch {
+          throw new Error(
+            "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.13.10, \n" +
+              "please update @babel/helpers to the latest version.",
+          );
+        }
+        return t.memberExpression(
+          t.callExpression(helper, [
+            this.receiver(member),
+            t.cloneNode(classRef),
+            t.cloneNode(id),
+          ]),
+          t.identifier("value"),
         );
       }
+
       return t.memberExpression(
-        t.callExpression(helper, [
+        t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
           this.receiver(member),
-          t.cloneNode(classRef),
           t.cloneNode(id),
         ]),
         t.identifier("value"),
       );
-    }
+    },
 
-    return t.memberExpression(
-      t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-      ]),
-      t.identifier("value"),
-    );
-  },
+    call(member, args: (t.Expression | t.SpreadElement)[]) {
+      // The first access (the get) should do the memo assignment.
+      this.memoise(member, 1);
 
-  call(member, args) {
-    // The first access (the get) should do the memo assignment.
-    this.memoise(member, 1);
+      return optimiseCall(this.get(member), this.receiver(member), args, false);
+    },
 
-    return optimiseCall(this.get(member), this.receiver(member), args, false);
-  },
+    optionalCall(member, args: (t.Expression | t.SpreadElement)[]) {
+      this.memoise(member, 1);
 
-  optionalCall(member, args) {
-    this.memoise(member, 1);
+      return optimiseCall(this.get(member), this.receiver(member), args, true);
+    },
+  };
 
-    return optimiseCall(this.get(member), this.receiver(member), args, true);
-  },
-};
-
-const privateNameHandlerLoose = {
+const privateNameHandlerLoose: Handler<PrivateNameState> = {
   get(member) {
     const { privateNamesMap, file } = this;
     const { object } = member.node;
-    const { name } = member.node.property.id;
+    const { name } = (member.node.property as t.PrivateName).id;
 
     return template.expression`BASE(REF, PROP)[PROP]`({
       BASE: file.addHelper("classPrivateFieldLooseBase"),
       REF: t.cloneNode(object),
       PROP: t.cloneNode(privateNamesMap.get(name).id),
     });
+  },
+
+  set() {
+    // noop
+    throw new Error("private name handler with loose = true don't need set()");
   },
 
   boundGet(member) {
@@ -449,7 +471,7 @@ export function transformPrivateNamesUsage(
     ? privateNameHandlerLoose
     : privateNameHandlerSpec;
 
-  memberExpressionToFunctions(body, privateNameVisitor, {
+  memberExpressionToFunctions<PrivateNameState>(body, privateNameVisitor, {
     privateNamesMap,
     classRef: ref,
     file: state,
