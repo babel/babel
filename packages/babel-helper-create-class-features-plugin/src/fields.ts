@@ -111,8 +111,7 @@ function privateNameVisitorFactory<S>(
     Class(path) {
       const { privateNamesMap } = this;
       // not using body.body since it will loose typing
-      const classBody = path.get("body");
-      const body = classBody.get("body");
+      const body = path.get("body").get("body");
 
       const visiblePrivateNames = new Map(privateNamesMap);
       const redeclared = [];
