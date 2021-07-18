@@ -3,7 +3,8 @@ import type { NodePath, Visitor } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
-import memberExpressionToFunctions, {
+import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
+import type {
   Handler,
   HandlerState,
 } from "@babel/helper-member-expression-to-functions";
