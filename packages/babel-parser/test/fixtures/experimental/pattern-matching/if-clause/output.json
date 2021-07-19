@@ -102,7 +102,6 @@
                   {
                     "type": "ObjectProperty",
                     "start":67,"end":75,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":17}},
-                    "kind": "init",
                     "method": false,
                     "key": {
                       "type": "Identifier",

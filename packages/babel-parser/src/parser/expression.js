@@ -697,6 +697,7 @@ export default class ExpressionParser extends LValParser {
     noCalls: ?boolean,
     state: N.ParseSubscriptState,
   ): N.Expression {
+    // debugger;
     if (!noCalls && this.eat(tt.doubleColon)) {
       return this.parseBind(base, startPos, startLoc, noCalls, state);
     } else if (this.match(tt.backQuote)) {
@@ -2947,9 +2948,9 @@ export default class ExpressionParser extends LValParser {
   parseMaybeMatchExpression(): N.MatchExpression {
     const node = this.startNode<N.MatchExpression>();
     this.next(); // skip "match"
-    this.eat(tt.parenL);
+    this.expect(tt.parenL);
     node.discriminant = this.parseExpression();
-    this.eat(tt.parenR);
+    this.expect(tt.parenR);
 
     node.clauses = this.parseMatchClauses();
     return this.finishNode(node, "MatchExpression");
@@ -3053,14 +3054,13 @@ export default class ExpressionParser extends LValParser {
         break;
       }
       const node = this.startNode<N.AssignmentMatchProperty>();
-      node.kind = "init";
       node.method = false;
       this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
       if (this.eat(tt.colon)) {
         node.value = this.parseMaybeBinaryMatchPattern();
-        this.finishNode(node, "ObjectProperty");
-        properties.push(node);
       }
+      this.finishNode(node, "ObjectProperty");
+      properties.push(node);
       this.eat(tt.comma);
     }
 

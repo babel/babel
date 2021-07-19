@@ -44,7 +44,6 @@
                   {
                     "type": "ObjectProperty",
                     "start":36,"end":44,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":18}},
-                    "kind": "init",
                     "method": false,
                     "key": {
                       "type": "Identifier",
@@ -57,6 +56,17 @@
                       "start":41,"end":44,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":18},"identifierName":"bar"},
                       "name": "bar"
                     }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":46,"end":49,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":23}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":46,"end":49,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":23},"identifierName":"baz"},
+                      "name": "baz"
+                    },
+                    "computed": false
                   }
                 ]
               },
