@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "patternMatching"
+    ]
+  ],
+  "throws": "Unexpected token, expected \")\" (2:8)"
+}

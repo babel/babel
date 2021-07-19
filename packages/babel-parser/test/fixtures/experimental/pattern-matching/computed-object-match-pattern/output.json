@@ -1,0 +1,84 @@
+{
+  "type": "File",
+  "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "expression": {
+          "type": "MatchExpression",
+          "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+          "discriminant": {
+            "type": "Identifier",
+            "start":7,"end":13,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":13},"identifierName":"action"},
+            "name": "action"
+          },
+          "clauses": [
+            {
+              "type": "MatchClause",
+              "start":19,"end":61,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":44}},
+              "test": {
+                "type": "ArrayMatchPattern",
+                "start":25,"end":57,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":40}},
+                "elements": [
+                  {
+                    "type": "StringLiteral",
+                    "start":26,"end":32,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15}},
+                    "extra": {
+                      "rawValue": "take",
+                      "raw": "\"take\""
+                    },
+                    "value": "take"
+                  },
+                  {
+                    "type": "RestMatchElement",
+                    "start":34,"end":56,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":39}},
+                    "argument": {
+                      "type": "ObjectMatchPattern",
+                      "start":37,"end":56,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":39}},
+                      "properties": [
+                        {
+                          "type": "ObjectProperty",
+                          "start":39,"end":54,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":37}},
+                          "kind": "init",
+                          "method": false,
+                          "computed": true,
+                          "key": {
+                            "type": "Identifier",
+                            "start":40,"end":48,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":31},"identifierName":"computed"},
+                            "name": "computed"
+                          },
+                          "value": {
+                            "type": "NumericLiteral",
+                            "start":51,"end":54,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":37}},
+                            "extra": {
+                              "rawValue": 200,
+                              "raw": "200"
+                            },
+                            "value": 200
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "start":59,"end":61,"loc":{"start":{"line":2,"column":42},"end":{"line":2,"column":44}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

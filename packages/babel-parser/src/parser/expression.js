@@ -2985,7 +2985,7 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNode<N.MatchClause>();
     this.next(); // skip "when"
     this.expect(tt.parenL);
-    node.test = this.parseMatchPattern();
+    node.test = this.parseMaybeBinaryMatchPattern();
     this.expect(tt.parenR);
 
     if (this.isLineTerminator()) {
@@ -3027,6 +3027,20 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
+  parseMaybeBinaryMatchPattern(): N.BinaryMatchPattern | N.MatchPattern {
+    const node = this.startNode<N.BinaryMatchPattern>();
+    const lhs = this.parseMatchPattern();
+    if (this.match(tt.bitwiseOR) || this.match(tt.bitwiseAND)) {
+      node.left = lhs;
+      node.operator = this.match(tt.bitwiseOR) ? "or" : "and";
+      this.next();
+      node.right = this.parseMaybeBinaryMatchPattern();
+      return this.finishNode(node, "BinaryMatchPattern");
+    } else {
+      return lhs;
+    }
+  }
+
   parseObjectMatchPattern(): N.ObjectMatchPattern {
     const node = this.startNode<N.ObjectMatchPattern>();
     this.expect(tt.braceL);
@@ -3043,7 +3057,7 @@ export default class ExpressionParser extends LValParser {
       node.method = false;
       this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
       if (this.eat(tt.colon)) {
-        node.value = this.parseMatchPattern();
+        node.value = this.parseMaybeBinaryMatchPattern();
         this.finishNode(node, "ObjectProperty");
         properties.push(node);
       }
@@ -3066,7 +3080,7 @@ export default class ExpressionParser extends LValParser {
       } else if (this.isContextual("_")) {
         elements.push(this.parseNullMatchPattern());
       } else {
-        elements.push(this.parseMatchPattern());
+        elements.push(this.parseMaybeBinaryMatchPattern());
       }
       this.eat(tt.comma);
     }
@@ -3084,7 +3098,7 @@ export default class ExpressionParser extends LValParser {
   parseRestMatchElement(): N.RestMatchElement {
     const node = this.startNode();
     this.expect(tt.ellipsis);
-    node.argument = this.parseMatchPattern();
+    node.argument = this.parseMaybeBinaryMatchPattern();
     return this.finishNode(node, "RestMatchElement");
   }
 }
