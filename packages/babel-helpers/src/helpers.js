@@ -616,9 +616,9 @@ helpers.possibleConstructorReturn = helper("7.0.0-beta.0")`
 
   export default function _possibleConstructorReturn(self, call) {
     if (call) {
-      if(typeof call === "object" || typeof call === "function"){
+      if (typeof call === "object" || typeof call === "function") {
         return call;
-      }else{
+      } else {
         throw new TypeError("Invalid attempt to return primitive value");
       }
     }
