@@ -512,13 +512,6 @@ export default class ExpressionParser extends LValParser {
       if (!sawUnary) this.checkExponentialAfterUnary(expr);
       return expr;
     }
-    if (
-      this.isContextual("module") &&
-      this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
-      !this.hasFollowingLineBreak()
-    ) {
-      return this.parseModuleExpression();
-    }
     const update = this.match(tt.incDec);
     const node = this.startNode();
     if (this.state.type.prefix) {
@@ -1002,6 +995,13 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "ThisExpression");
 
       case tt.name: {
+        if (
+          this.isContextual("module") &&
+          this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
+          !this.hasFollowingLineBreak()
+        ) {
+          return this.parseModuleExpression();
+        }
         const canBeArrow = this.state.potentialArrowAt === this.state.start;
         const containsEsc = this.state.containsEsc;
         const id = this.parseIdentifier();
