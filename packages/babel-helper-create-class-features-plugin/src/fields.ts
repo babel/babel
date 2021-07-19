@@ -1,4 +1,5 @@
 import { template, traverse, types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
@@ -664,6 +665,19 @@ const thisContextVisitor = traverse.visitors.merge([
     ThisExpression(path, state) {
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
+    },
+    MetaProperty(path: NodePath<t.MetaProperty>) {
+      const meta = path.get("meta");
+      const property = path.get("property");
+      const { scope } = path;
+      // if there are `new.target` in static field
+      // we should replace it with `undefined`
+      if (
+        meta.isIdentifier({ name: "new" }) &&
+        property.isIdentifier({ name: "target" })
+      ) {
+        path.replaceWith(scope.buildUndefinedNode());
+      }
     },
   },
   environmentVisitor,

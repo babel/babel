@@ -341,7 +341,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
   - [ ] Add `@babel/syntax-new-syntax` package. You can copy `packages/babel-plugin-syntax-decimal` and replace `decimal` to `new-syntax`.
   - [ ] Add `@babel/syntax-new-syntax` to `@babel/standalone`.
     - [ ] Add `@babel/syntax-new-syntax` to `package.json`
-    - [ ] Add `@babel/syntax-new-syntax` to [`pluginsConfig.json`](https://github.com/babel/babel/blob/master/packages/babel-standalone/scripts/pluginConfig.json), run `make generate-standalone`.
+    - [ ] Add `@babel/syntax-new-syntax` to [`pluginsConfig.json`](https://github.com/babel/babel/blob/master/packages/babel-standalone/scripts/pluginConfig.json), run `make build-standalone`.
     - [ ] Add `@babel/syntax-new-syntax` to `src/preset-stage-x`.
   - [ ] Add `"newSyntax"` to parser [typings](https://github.com/babel/babel/blob/master/packages/babel-parser/typings/babel-parser.d.ts)
 - [ ] Implement generator support in `packages/babel-generator/src/generators`. The generator converts AST to source code.
