@@ -107,14 +107,18 @@ export function createClassFeaturePlugin({
         let isDecorated = hasOwnDecorators(path.node);
         const props: PropPath[] = [];
         const elements = [];
-        const computedPaths: NodePath<t.ClassProperty>[] = [];
+        const computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[] = [];
         const privateNames = new Set<string>();
         const body = path.get("body");
 
         for (const path of body.get("body")) {
           verifyUsedFeatures(path, this.file);
 
-          if (path.isClassProperty() && path.node.computed) {
+          if (
+            // check path.node.computed is enough, but ts will complain
+            (path.isClassProperty() || path.isClassMethod()) &&
+            path.node.computed
+          ) {
             computedPaths.push(path);
           }
 
@@ -245,7 +249,7 @@ export function createClassFeaturePlugin({
             (referenceVisitor, state) => {
               if (isDecorated) return;
               for (const prop of props) {
-                if (prop.isStatic()) continue;
+                if (prop.node.static) continue;
                 prop.traverse(referenceVisitor, state);
               }
             },

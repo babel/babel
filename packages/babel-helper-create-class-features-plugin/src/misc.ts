@@ -107,7 +107,7 @@ export function injectInitialization(
 export function extractComputedKeys(
   ref: t.Identifier,
   path: NodePath<t.Class>,
-  computedPaths: NodePath<t.ClassProperty>[],
+  computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[],
   file,
 ) {
   const declarations: t.Statement[] = [];

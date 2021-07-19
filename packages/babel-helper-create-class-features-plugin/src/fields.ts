@@ -36,7 +36,7 @@ export function buildPrivateNamesMap(props: PropPath[]) {
         ? privateNamesMap.get(name)
         : {
             id: prop.scope.generateUidIdentifier(name),
-            static: prop.isStatic(),
+            static: prop.node.static,
             method: !prop.isProperty(),
           };
       if (prop.isClassPrivateMethod()) {
@@ -654,7 +654,7 @@ function buildPublicFieldInitSpec(
       ref,
       computed || t.isLiteral(key)
         ? key
-        : t.stringLiteral(t.isIdentifier(key) ? key.name : ""),
+        : t.stringLiteral((key as t.Identifier).name),
       value,
     ]),
   );
@@ -803,7 +803,7 @@ function replaceThisContext(
     getSuperRef,
     getObjectRef() {
       state.needsClassRef = true;
-      return isStaticBlock || path.isStatic()
+      return isStaticBlock || path.node.static
         ? ref
         : t.memberExpression(ref, t.identifier("prototype"));
     },
@@ -823,8 +823,7 @@ function replaceThisContext(
 export type PropNode =
   | t.ClassProperty
   | t.ClassPrivateMethod
-  | t.ClassPrivateProperty
-  | t.StaticBlock;
+  | t.ClassPrivateProperty;
 export type PropPath = NodePath<PropNode>;
 
 export function buildFieldsInitNodes(
@@ -856,7 +855,7 @@ export function buildFieldsInitNodes(
   for (const prop of props) {
     prop.isClassProperty() && ts.assertFieldTransformed(prop);
 
-    const isStatic = prop.isStatic();
+    const isStatic = prop.node.static;
     const isInstance = !isStatic;
     const isPrivate = prop.isPrivate();
     const isPublic = !isPrivate;
@@ -905,10 +904,8 @@ export function buildFieldsInitNodes(
         break;
       case isStatic && isPublic && isField && setPublicClassFields:
         needsClassRef = true;
-        staticNodes.push(
-          // @ts-expect-error checked in switch
-          buildPublicFieldInitLoose(t.cloneNode(ref), prop),
-        );
+        // @ts-expect-error checked in switch
+        staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
         break;
       case isStatic && isPublic && isField && !setPublicClassFields:
         needsClassRef = true;
