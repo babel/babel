@@ -9,11 +9,7 @@ import {
   buildFieldsInitNodes,
 } from "./fields";
 import type { PropPath } from "./fields";
-import {
-  hasOwnDecorators,
-  buildDecoratedClass,
-  hasDecorators,
-} from "./decorators";
+import { buildDecoratedClass, hasDecorators } from "./decorators";
 import { injectInitialization, extractComputedKeys } from "./misc";
 import {
   enableFeature,
@@ -104,7 +100,7 @@ export function createClassFeaturePlugin({
         const loose = isLoose(this.file, feature);
 
         let constructor: NodePath<t.ClassMethod>;
-        let isDecorated = hasOwnDecorators(path.node);
+        const isDecorated = hasDecorators(path.node);
         const props: PropPath[] = [];
         const elements = [];
         const computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[] = [];
@@ -175,8 +171,6 @@ export function createClassFeaturePlugin({
               props.push(path);
             }
           }
-
-          if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
         }
 
         if (!props.length && !isDecorated) return;
@@ -215,7 +209,7 @@ export function createClassFeaturePlugin({
           staticNodes: t.Statement[],
           instanceNodes: t.Statement[],
           pureStaticNodes: t.FunctionDeclaration[],
-          wrapClass: (path: NodePath<t.Class>) => NodePath<t.Class>;
+          wrapClass: (path: NodePath<t.Class>) => NodePath;
 
         if (isDecorated) {
           staticNodes = pureStaticNodes = keysNodes = [];
@@ -256,13 +250,14 @@ export function createClassFeaturePlugin({
           );
         }
 
-        path = wrapClass(path);
-        path.insertBefore([...privateNamesNodes, ...keysNodes]);
+        // rename to make ts happy
+        const wrappedPath = wrapClass(path);
+        wrappedPath.insertBefore([...privateNamesNodes, ...keysNodes]);
         if (staticNodes.length > 0) {
-          path.insertAfter(staticNodes);
+          wrappedPath.insertAfter(staticNodes);
         }
         if (pureStaticNodes.length > 0) {
-          path
+          wrappedPath
             .find(parent => parent.isStatement() || parent.isDeclaration())
             .insertAfter(pureStaticNodes);
         }
