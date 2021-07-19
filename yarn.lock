@@ -535,6 +535,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-fixtures@npm:^7.14.5":
+  version: 7.14.5
+  resolution: "@babel/helper-fixtures@npm:7.14.5"
+  dependencies:
+    semver: ^6.3.0
+  checksum: 8f0520d79230069d2706d2515010c184b399fda32fd11882d85dd1d9cbcea98826460e5e6db9b981b525b55de5ca9d54bf6e7f3082c9117b0fbf167e145a5f75
+  languageName: node
+  linkType: hard
+
 "@babel/helper-fixtures@workspace:*, @babel/helper-fixtures@workspace:^7.14.5, @babel/helper-fixtures@workspace:packages/babel-helper-fixtures":
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
@@ -974,7 +983,7 @@ __metadata:
   dependencies:
     "@babel-baseline/parser": "npm:@babel/parser@^7.14.5"
     "@babel/code-frame": "workspace:*"
-    "@babel/helper-fixtures": "workspace:*"
+    "@babel/helper-fixtures": ^7.14.5
     "@babel/helper-validator-identifier": "workspace:*"
     benchmark: ^2.1.4
     charcodes: ^0.2.0
