@@ -615,9 +615,14 @@ helpers.possibleConstructorReturn = helper("7.0.0-beta.0")`
   import assertThisInitialized from "assertThisInitialized";
 
   export default function _possibleConstructorReturn(self, call) {
-    if (call && (typeof call === "object" || typeof call === "function")) {
-      return call;
+    if (call) {
+      if(typeof call === "object" || typeof call === "function"){
+        return call;
+      }else{
+        throw new TypeError("Invalid attempt to return primitive value");
+      }
     }
+
     return assertThisInitialized(self);
   }
 `;
