@@ -34,5 +34,26 @@ const require = createRequire(import.meta.url);
 _ref = x, _ref;"
 `);
     });
+
+    it("should support hack pipeline with `#` topic token", () => {
+      const output = Babel.transform("x |> #", {
+        presets: [
+          [
+            "stage-1",
+            {
+              pipelineProposal: "hack",
+              pipelineTopicToken: "#",
+              recordAndTupleSyntax: "bar",
+              decoratorsBeforeExport: true,
+            },
+          ],
+        ],
+      }).code;
+      expect(output).toMatchInlineSnapshot(`
+"var _ref;
+
+_ref = x, _ref;"
+`);
+    });
   },
 );
