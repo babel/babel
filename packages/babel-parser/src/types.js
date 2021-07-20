@@ -324,7 +324,7 @@ export type AssignmentMatchProperty = ObjectProperty & {
 
 export type ObjectMatchPattern = NodeBase & {
   type: "ObjectMatchPattern",
-  properties: $ReadOnlyArray<AssignmentMatchProperty>,
+  properties: $ReadOnlyArray<AssignmentMatchProperty | RestMatchElement>,
 };
 
 export type RestMatchElement = NodeBase & {

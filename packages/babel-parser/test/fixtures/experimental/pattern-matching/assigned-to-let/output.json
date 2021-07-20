@@ -1,0 +1,171 @@
+{
+  "type": "File",
+  "start":0,"end":104,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":5}},
+  "errors": [
+    "SyntaxError: Identifier 'a' has already been declared. (5:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":104,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":5}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":45,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":45,"loc":{"start":{"line":1,"column":4},"end":{"line":3,"column":1}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": {
+              "type": "MatchExpression",
+              "start":8,"end":45,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+              "discriminant": {
+                "type": "Identifier",
+                "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"x"},
+                "name": "x"
+              },
+              "clauses": [
+                {
+                  "type": "MatchClause",
+                  "start":22,"end":43,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":23}},
+                  "test": {
+                    "type": "ObjectMatchPattern",
+                    "start":27,"end":32,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":12}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":29,"end":30,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10}},
+                        "method": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start":29,"end":30,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10},"identifierName":"z"},
+                          "name": "z"
+                        },
+                        "computed": false
+                      }
+                    ]
+                  },
+                  "consequent": {
+                    "type": "BlockStatement",
+                    "start":34,"end":43,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":23}},
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start":36,"end":41,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":21}},
+                        "expression": {
+                          "type": "BooleanLiteral",
+                          "start":36,"end":41,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":21}},
+                          "value": false
+                        }
+                      }
+                    ],
+                    "directives": []
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":47,"end":104,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":5}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":53,"end":104,"loc":{"start":{"line":5,"column":6},"end":{"line":7,"column":5}},
+            "id": {
+              "type": "Identifier",
+              "start":53,"end":54,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":7},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": {
+              "type": "BinaryExpression",
+              "start":57,"end":104,"loc":{"start":{"line":5,"column":10},"end":{"line":7,"column":5}},
+              "left": {
+                "type": "MatchExpression",
+                "start":57,"end":100,"loc":{"start":{"line":5,"column":10},"end":{"line":7,"column":1}},
+                "discriminant": {
+                  "type": "Identifier",
+                  "start":64,"end":65,"loc":{"start":{"line":5,"column":17},"end":{"line":5,"column":18},"identifierName":"z"},
+                  "name": "z"
+                },
+                "clauses": [
+                  {
+                    "type": "MatchClause",
+                    "start":71,"end":98,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":29}},
+                    "test": {
+                      "type": "ObjectMatchPattern",
+                      "start":76,"end":86,"loc":{"start":{"line":6,"column":7},"end":{"line":6,"column":17}},
+                      "properties": [
+                        {
+                          "type": "ObjectProperty",
+                          "start":78,"end":84,"loc":{"start":{"line":6,"column":9},"end":{"line":6,"column":15}},
+                          "method": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start":78,"end":79,"loc":{"start":{"line":6,"column":9},"end":{"line":6,"column":10},"identifierName":"n"},
+                            "name": "n"
+                          },
+                          "computed": false,
+                          "value": {
+                            "type": "NumericLiteral",
+                            "start":81,"end":84,"loc":{"start":{"line":6,"column":12},"end":{"line":6,"column":15}},
+                            "extra": {
+                              "rawValue": 200,
+                              "raw": "200"
+                            },
+                            "value": 200
+                          }
+                        }
+                      ]
+                    },
+                    "consequent": {
+                      "type": "BlockStatement",
+                      "start":88,"end":98,"loc":{"start":{"line":6,"column":19},"end":{"line":6,"column":29}},
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start":90,"end":96,"loc":{"start":{"line":6,"column":21},"end":{"line":6,"column":27}},
+                          "expression": {
+                            "type": "StringLiteral",
+                            "start":90,"end":96,"loc":{"start":{"line":6,"column":21},"end":{"line":6,"column":27}},
+                            "extra": {
+                              "rawValue": "true",
+                              "raw": "\"true\""
+                            },
+                            "value": "true"
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  }
+                ]
+              },
+              "operator": "+",
+              "right": {
+                "type": "NumericLiteral",
+                "start":103,"end":104,"loc":{"start":{"line":7,"column":4},"end":{"line":7,"column":5}},
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "3"
+                },
+                "value": 3
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

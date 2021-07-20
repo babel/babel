@@ -264,12 +264,6 @@ export default class ExpressionParser extends LValParser {
         }
         return left;
       }
-    } else if (
-      this.isContextual("match") &&
-      this.hasPlugin("patternMatching") &&
-      !this.hasFollowingLineBreak()
-    ) {
-      return this.parseMaybeMatchExpression();
     }
 
     let ownExpressionErrors;
@@ -1067,6 +1061,15 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "ThisExpression");
 
       case tt.name: {
+        if (
+          this.isContextual("match") &&
+          this.hasPlugin("patternMatching") &&
+          this.lookaheadCharCode() === charCodes.leftParenthesis &&
+          !this.hasFollowingLineBreak()
+        ) {
+          return this.parseMaybeMatchExpression();
+        }
+
         if (
           this.isContextual("module") &&
           this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
