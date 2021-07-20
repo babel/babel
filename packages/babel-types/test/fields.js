@@ -2,10 +2,19 @@ import * as t from "../lib";
 import glob from "glob";
 import path from "path";
 import fs from "fs";
-import { promisify, inspect } from "util";
+import { inspect } from "util";
 
 // eslint-disable-next-line no-restricted-globals
 const packages = path.resolve(__dirname, "..", "..");
+
+function readJson(file) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file, "utf8", (err, data) => {
+      if (err) reject(err);
+      else resolve(JSON.parse(data));
+    });
+  });
+}
 
 function traverse(thing, visitor) {
   if (Array.isArray(thing)) {
@@ -52,9 +61,7 @@ function isEmpty(obj) {
 describe("NODE_FIELDS contains all fields in", function () {
   files.forEach(file =>
     it(`${file}`, async function () {
-      const ast = await JSON.parse(
-        await promisify(fs.readFile)(path.resolve(packages, file), "utf8"),
-      );
+      const ast = await readJson(path.resolve(packages, file));
       if (ast.type === "File" && ast.errors && ast.errors.length) return;
       t[`assert${ast.type}`](ast);
       const missingFields = {};
