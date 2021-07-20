@@ -1,17 +1,15 @@
 ---
-
 <p align="center" class="toc">
-   <strong><a href="#setup">Setup</a></strong>
-   |
-   <strong><a href="#running-lintingtests">Running linting/tests</a></strong>
-   |
-   <strong><a href="#writing-tests">Writing tests</a></strong>
-   |
-   <strong><a href="#debugging-code">Debugging code</a></strong>
-   |
-   <strong><a href="#internals">Internals</a></strong>
+<strong><a href="#setup">Setup</a></strong>
+|
+<strong><a href="#running-lintingtests">Running linting/tests</a></strong>
+|
+<strong><a href="#writing-tests">Writing tests</a></strong>
+|
+<strong><a href="#debugging-code">Debugging code</a></strong>
+|
+<strong><a href="#internals">Internals</a></strong>
 </p>
-
 ---
 
 # Contributing
@@ -39,14 +37,14 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 ## Developing
 
-*Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version `^12.16 || >= 14`. You can check this with `node -v`.
+_Node_: Check that Node is [installed](https://nodejs.org/en/download/) with version `^12.20 || >= 14.13`. You can check this with `node -v`.
 
-*Yarn*: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `1.19.0`.
+_Yarn_: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `1.19.0`.
 
-*Make*: If you are running Windows 10, you'll need to do one of the following:
+_Make_: If you are running Windows 10, you'll need to do one of the following:
 
-* Clone the repository and run the commands inside [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
-* Install [Make for Windows](http://gnuwin32.sourceforge.net/packages/make.htm).
+- Clone the repository and run the commands inside [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+- Install [Make for Windows](http://gnuwin32.sourceforge.net/packages/make.htm).
 
 ### Setup
 
@@ -224,7 +222,12 @@ Other than normal Babel options, `options.json` can contain other properties to 
   ```jsonc
   // options.json example
   {
-    "plugins": [["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-object-rest-spread",
+        { "useBuiltIns": "invalidOption" }
+      ]
+    ],
     "throws": "@babel/plugin-proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
   }
   ```
