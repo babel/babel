@@ -19,6 +19,48 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.8 (2021-07-20)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-static-block`, `babel-plugin-transform-new-target`
+  * [#13560](https://github.com/babel/babel/pull/13560) fix(class-properties): replace `new.target` in static properties with `undefined` ([@colinaaa](https://github.com/colinaaa))
+* `babel-parser`
+  * [#13088](https://github.com/babel/babel/pull/13088) Fix await binding error within static block ([@JLHwung](https://github.com/JLHwung))
+  * [#13531](https://github.com/babel/babel/pull/13531) fix: disallow computed `async`/`get`/`set` keyword ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-module-transforms`, `babel-helper-simple-access`, `babel-plugin-transform-modules-commonjs`
+  * [#13258](https://github.com/babel/babel/pull/13258) Fix const violations in ESM imports when transformed to CJS ([@overlookmotel](https://github.com/overlookmotel))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13575](https://github.com/babel/babel/pull/13575) Update babel-parser.d.ts ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13548](https://github.com/babel/babel/pull/13548) Fix  parser `strictMode` option ([@overlookmotel](https://github.com/overlookmotel))
+  * [#13573](https://github.com/babel/babel/pull/13573) Fix issue to allow module block in member expression ([@nme077](https://github.com/nme077))
+  * [#13521](https://github.com/babel/babel/pull/13521) Overhaul comment attachment ([@JLHwung](https://github.com/JLHwung))
+  * [#13534](https://github.com/babel/babel/pull/13534) Async do expression should start at async ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-arrow-functions`, `babel-traverse`
+  * [#12344](https://github.com/babel/babel/pull/12344) Fix arrow transformation when `arguments` is defined as variable ([@snitin315](https://github.com/snitin315))
+* `babel-traverse`
+  * [#13527](https://github.com/babel/babel/pull/13527) fix: accept duplicated import/variable in different module ([@colinaaa](https://github.com/colinaaa))
+* `babel-types`
+  * [#13525](https://github.com/babel/babel/pull/13525) fix(babel-types): accept `UnaryExpression` in `TSLiteralType` ([@colinaaa](https://github.com/colinaaa))
+  * [#13500](https://github.com/babel/babel/pull/13500) Add typeParameters to tagged template visitor keys ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#13515](https://github.com/babel/babel/pull/13515) Fix config validation message typo ([@jaeseokk](https://github.com/jaeseokk))
+* `babel-cli`
+  * [#13508](https://github.com/babel/babel/pull/13508) fix: sync default_extensions to babel-cli usage ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* [#13562](https://github.com/babel/babel/pull/13562) Fix `make generate-standalone` -> `make build-standalone` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+
+#### :house: Internal
+* `babel-helpers`
+  * [#13522](https://github.com/babel/babel/pull/13522) minor improvement to gulp generate-runtime-helpers error message ([@lightmare](https://github.com/lightmare))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#13521](https://github.com/babel/babel/pull/13521) Overhaul comment attachment ([@JLHwung](https://github.com/JLHwung))
 ## v7.14.7 (2021-06-21)
 
 #### :bug: Bug Fix
