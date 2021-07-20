@@ -3082,7 +3082,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node.expression;
     }
 
-    shouldParseArrow(params) {
+    shouldParseArrow(params: Array<N.Node>) {
       if (this.match(tt.colon)) {
         return params.every(expr => this.isAssignable(expr, true));
       }

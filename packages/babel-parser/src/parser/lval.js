@@ -229,7 +229,7 @@ export default class LValParser extends NodeUtils {
     return exprList;
   }
 
-  isAssignable(node: N.Node, isBinding?: boolean): boolean {
+  isAssignable(node: Node, isBinding?: boolean): boolean {
     switch (node.type) {
       case "Identifier":
       case "ObjectPattern":

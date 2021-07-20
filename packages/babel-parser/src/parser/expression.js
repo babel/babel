@@ -1545,7 +1545,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // eslint-disable-next-line no-unused-vars
-  shouldParseArrow(params): boolean {
+  shouldParseArrow(params: Array<N.Node>): boolean {
     return !this.canInsertSemicolon();
   }
 

@@ -2953,7 +2953,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseArrow(node);
     }
 
-    shouldParseArrow(params): boolean {
+    shouldParseArrow(params: Array<N.Node>): boolean {
       return this.match(tt.colon) || super.shouldParseArrow(params);
     }
 
