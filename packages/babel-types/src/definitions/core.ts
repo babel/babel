@@ -900,6 +900,11 @@ defineType("RestElement", {
         ? assertNodeType("LVal")
         : assertNodeType("Identifier", "Pattern", "MemberExpression"),
     },
+    // For Flow
+    optional: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
   },
   validate(parent, key) {
     if (!process.env.BABEL_TYPES_8_BREAKING) return;
@@ -1206,6 +1211,10 @@ defineType("ArrayPattern", {
       ),
       optional: true,
     },
+    optional: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
   },
 });
 
@@ -1440,6 +1449,7 @@ defineType("ExportDefaultDeclaration", {
         "Expression",
       ),
     },
+    exportKind: validateOptional(assertOneOf("value")),
   },
 });
 
@@ -2095,6 +2105,10 @@ defineType("ClassProperty", {
       validate: assertValueType("boolean"),
       optional: true,
     },
+    variance: {
+      validate: assertNodeType("Variance"),
+      optional: true,
+    },
   },
 });
 
@@ -2121,6 +2135,18 @@ defineType("ClassPrivateProperty", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      optional: true,
+    },
+    readonly: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    definite: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    variance: {
+      validate: assertNodeType("Variance"),
       optional: true,
     },
   },

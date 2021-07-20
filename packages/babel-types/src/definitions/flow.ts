@@ -121,6 +121,7 @@ defineType("DeclareOpaqueType", {
     id: validateType("Identifier"),
     typeParameters: validateOptionalType("TypeParameterDeclaration"),
     supertype: validateOptionalType("FlowType"),
+    impltype: validateOptionalType("FlowType"),
   },
 });
 
