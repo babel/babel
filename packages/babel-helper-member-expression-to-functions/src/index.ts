@@ -222,10 +222,7 @@ const handle = {
       let regular: t.Expression = member.node;
       for (let current: NodePath = member; current !== endPath; ) {
         const { parentPath } = current;
-        if (!parentPath.isExpression()) {
-          // should not happen, just for type check
-          break;
-        }
+        parentPath.assertExpression();
         // skip transforming `Foo.#BAR?.call(FOO)`
         if (
           parentPath === endPath &&
