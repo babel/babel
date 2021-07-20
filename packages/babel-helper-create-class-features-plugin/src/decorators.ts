@@ -4,7 +4,7 @@ import type { NodePath } from "@babel/traverse";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import nameFunction from "@babel/helper-function-name";
 
-type Decoratable = Extract<t.Node, { decorators?: t.Decorator[] | null }>;
+type Decorable = Extract<t.Node, { decorators?: t.Decorator[] | null }>;
 
 export function hasOwnDecorators(node: t.Node) {
   // @ts-expect-error(flow->ts) TODO: maybe we could add t.isDecoratable to make ts happy
@@ -29,7 +29,7 @@ function method(key: string, body: t.Statement[]) {
   );
 }
 
-function takeDecorators(node: Decoratable) {
+function takeDecorators(node: Decorable) {
   let result: t.ArrayExpression | undefined;
   if (node.decorators && node.decorators.length > 0) {
     result = t.arrayExpression(
@@ -53,14 +53,13 @@ function getKey(node) {
 // NOTE: This function can be easily bound as .bind(file, classRef, superRef)
 //       to make it easier to use it in a loop.
 function extractElementDescriptor(
-  /* this: File, */
+  this: File,
   classRef: t.Identifier,
   superRef: t.Identifier,
   path: ClassElementPath,
 ) {
   const { node, scope } = path;
   const isMethod = path.isClassMethod();
-  const isMethodNode = (node: t.Node): node is t.ClassMethod => isMethod;
 
   if (path.isPrivate()) {
     throw path.buildCodeFrameError(
@@ -79,13 +78,13 @@ function extractElementDescriptor(
   }).replace();
 
   const properties: t.ObjectExpression["properties"] = [
-    prop("kind", t.stringLiteral(isMethodNode(node) ? node.kind : "field")),
-    prop("decorators", takeDecorators(node as Decoratable)),
+    prop("kind", t.stringLiteral(t.isClassMethod(node) ? node.kind : "field")),
+    prop("decorators", takeDecorators(node as Decorable)),
     prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
   ].filter(Boolean);
 
-  if (isMethodNode(node)) {
+  if (t.isClassMethod(node)) {
     const id = node.computed ? null : node.key;
     t.toExpression(node);
     properties.push(prop("value", nameFunction({ node, id, scope }) || node));

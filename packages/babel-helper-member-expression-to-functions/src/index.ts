@@ -200,6 +200,7 @@ const handle = {
       });
       // here we use a function to wrap `parentIsOptionalCall` to get type
       // for parent, do not use it anywhere else
+      // See https://github.com/microsoft/TypeScript/issues/10421
       const isOptionalCall = (
         parent: t.Node,
       ): parent is t.OptionalCallExpression => parentIsOptionalCall;
@@ -221,7 +222,9 @@ const handle = {
 
       let regular: t.Expression = member.node;
       for (let current: NodePath = member; current !== endPath; ) {
-        const { parentPath } = current;
+        // Assertions require every name in the call target
+        // to be declared with an explicit type annotation
+        const parentPath: NodePath = current.parentPath;
         parentPath.assertExpression();
         // skip transforming `Foo.#BAR?.call(FOO)`
         if (

@@ -66,8 +66,8 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
     }
   }
 
-  let resolvedLoose: boolean;
-  let higherPriorityPluginName: string;
+  let resolvedLoose: boolean | undefined;
+  let higherPriorityPluginName: string | undefined;
 
   for (const [mask, name] of featuresSameLoose) {
     if (!hasFeature(file, mask)) continue;
@@ -149,7 +149,7 @@ export function verifyUsedFeatures(path: NodePath, file: File) {
     }
   }
 
-  // NOTE: path.isPrivateMethod() it isn't supported in <7.2.0
+  // NOTE: path.isClassPrivateMethod() it isn't supported in <7.2.0
   if (path.isClassPrivateMethod?.()) {
     if (!hasFeature(file, FEATURES.privateMethods)) {
       throw path.buildCodeFrameError("Class private methods are not enabled.");

@@ -1,4 +1,5 @@
 import { template, traverse, types as t } from "@babel/core";
+import type { File } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
@@ -163,7 +164,7 @@ function privateNameVisitorFactory<S>(
 interface PrivateNameState {
   privateNamesMap: PrivateNamesMap;
   classRef: t.Identifier;
-  file: any;
+  file: File;
   noDocumentAll: boolean;
 }
 
@@ -190,7 +191,7 @@ const privateNameVisitor = privateNameVisitorFactory<
 
 const privateInVisitor = privateNameVisitorFactory<{
   classRef: t.Identifier;
-  file: unknown;
+  file: File;
 }>({
   BinaryExpression(path) {
     const { operator, left, right } = path.node;
@@ -784,7 +785,7 @@ function replaceThisContext(
   path: PropPath,
   ref: t.Identifier,
   getSuperRef: () => t.Identifier,
-  file,
+  file: File,
   isStaticBlock: boolean,
   constantSuper: boolean,
   innerBindingRef: t.Identifier,
