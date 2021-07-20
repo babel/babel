@@ -53,9 +53,7 @@ describe("NODE_FIELDS contains all fields in", function () {
   files.forEach(file =>
     it(`${file}`, async function () {
       const ast = await JSON.parse(
-        await promisify(cb =>
-          fs.readFile(path.resolve(packages, file), "utf8", cb),
-        )(),
+        await promisify(fs.readFile)(path.resolve(packages, file), "utf8"),
       );
       if (ast.type === "File" && ast.errors && ast.errors.length) return;
       t[`assert${ast.type}`](ast);
