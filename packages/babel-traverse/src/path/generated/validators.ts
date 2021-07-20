@@ -416,22 +416,28 @@ export interface NodePathValidators {
   isWhileStatement(opts?: object): this is NodePath<t.WhileStatement>;
   isWithStatement(opts?: object): this is NodePath<t.WithStatement>;
   isYieldExpression(opts?: object): this is NodePath<t.YieldExpression>;
-  isReferencedIdentifier(opts?: object): boolean;
-  isReferencedMemberExpression(opts?: object): boolean;
-  isBindingIdentifier(opts?: object): boolean;
+  isReferencedIdentifier(opts?: object): this is NodePath<t.Identifier>;
+  isReferencedMemberExpression(
+    opts?: object,
+  ): this is NodePath<t.MemberExpression>;
+  isBindingIdentifier(opts?: object): this is NodePath<t.Identifier>;
   isStatement(opts?: object): this is NodePath<t.Statement>;
   isExpression(opts?: object): this is NodePath<t.Expression>;
-  isScope(opts?: object): boolean;
+  isScope(opts?: object): this is NodePath<t.Scopable>;
   isReferenced(opts?: object): boolean;
   isBlockScoped(opts?: object): boolean;
-  isVar(opts?: object): boolean;
+  isVar(opts?: object): this is NodePath<t.VariableDeclaration>;
   isUser(opts?: object): boolean;
   isGenerated(opts?: object): boolean;
   isPure(opts?: object): boolean;
   isFlow(opts?: object): this is NodePath<t.Flow>;
-  isRestProperty(opts?: object): boolean;
-  isSpreadProperty(opts?: object): boolean;
-  isExistentialTypeParam(opts?: object): boolean;
-  isNumericLiteralTypeAnnotation(opts?: object): boolean;
-  isForAwaitStatement(opts?: object): boolean;
+  isRestProperty(opts?: object): this is NodePath<t.RestElement>;
+  isSpreadProperty(opts?: object): this is NodePath<t.RestElement>;
+  isExistentialTypeParam(
+    opts?: object,
+  ): this is NodePath<t.ExistsTypeAnnotation>;
+  isNumericLiteralTypeAnnotation(
+    opts?: object,
+  ): this is NodePath<t.NumberLiteralTypeAnnotation>;
+  isForAwaitStatement(opts?: object): this is NodePath<t.ForOfStatement>;
 }

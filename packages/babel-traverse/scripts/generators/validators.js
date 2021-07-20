@@ -18,9 +18,12 @@ export interface NodePathValidators {
   }
 
   for (const type of Object.keys(virtualTypes)) {
+    const { types = [] } = virtualTypes[type];
     if (type[0] === "_") continue;
     if (definitions.NODE_FIELDS[type] || definitions.FLIPPED_ALIAS_KEYS[type]) {
       output += `is${type}(opts?: object): this is NodePath<t.${type}>;`;
+    } else if (types.length > 0) {
+      output += `is${type}(opts?: object): this is NodePath<t.${types[0]}>;`;
     } else {
       output += `is${type}(opts?: object): boolean;`;
     }
