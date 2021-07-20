@@ -131,6 +131,7 @@ export type ParserPlugin =
   | "jsx"
   | "logicalAssignment"
   | "importAssertions"
+  | "moduleBlocks"
   | "moduleStringNames"
   | "nullishCoalescingOperator"
   | "numericSeparator"
@@ -151,7 +152,8 @@ export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
-  | ["flow", FlowPluginOptions];
+  | ["flow", FlowPluginOptions]
+  | ["typescript", TypeScriptPluginOptions];
 
 export interface DecoratorsPluginOptions {
   decoratorsBeforeExport?: boolean;
@@ -167,6 +169,10 @@ export interface RecordAndTuplePluginOptions {
 
 export interface FlowPluginOptions {
   all?: boolean;
+}
+
+export interface TypeScriptPluginOptions {
+  dts?: boolean;
 }
 
 export const tokTypes: {
