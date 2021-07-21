@@ -312,15 +312,58 @@ export function getAllPrevSiblings(this: NodePath): NodePath[] {
   return siblings;
 }
 
-function get<T extends t.Node, K extends keyof T>(
+type digitalWithoutZero = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+type digital = "0" | digitalWithoutZero;
+
+// only support 0 to 999 (since we won't use too large number in path.get())
+type Num =
+  | `${digital}`
+  | `${digitalWithoutZero}${digital}`
+  | `${digitalWithoutZero}${digital}${digital}`;
+
+// convert "1" to 0 (string index to number index)
+type ToNumber<T extends string> = T extends Num ? 0 : T;
+
+type Pattern<Obj extends string, Prop extends string> = `${Obj}.${Prop}`;
+
+// split "body.body.1" to ["body", "body", 1]
+type Split<P extends string> = P extends Pattern<infer O, infer U>
+  ? [ToNumber<O>, ...Split<U>]
+  : [ToNumber<P>];
+
+// get all K with Node[K] is t.Node
+type NodeKeyOf<Node extends t.Node | t.Node[]> = keyof Pick<
+  Node,
+  {
+    [Key in keyof Node]-?: Node[Key] extends t.Node | t.Node[] ? Key : never;
+  }[keyof Node]
+>;
+
+// traverse the Node with tuple path ["body", "body", 1]
+// Path should be created with Split
+type Trav<
+  Node extends t.Node | t.Node[],
+  Path extends unknown[],
+> = Path extends [infer K, ...infer R]
+  ? K extends NodeKeyOf<Node>
+    ? R extends []
+      ? Node[K]
+      : // @ts-ignore ignore since TS is not smart enough
+        Trav<Node[K], R>
+    : never
+  : never;
+
+type ToNodePath<T> = T extends Array<t.Node | null | undefined>
+  ? Array<NodePath<T[number]>>
+  : T extends t.Node | null | undefined
+  ? NodePath<T>
+  : never;
+
+function get<T extends t.Node, K extends string>(
   this: NodePath<T>,
   key: K,
   context?: boolean | TraversalContext,
-): T[K] extends Array<t.Node | null | undefined>
-  ? Array<NodePath<T[K][number]>>
-  : T[K] extends t.Node | null | undefined
-  ? NodePath<T[K]>
-  : never;
+): ToNodePath<Trav<T, Split<K>>>;
 
 function get<T extends t.Node>(
   this: NodePath<T>,
