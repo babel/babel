@@ -335,11 +335,8 @@ export default class ReplaceSupers {
       isPrivateMethod: this.isPrivateMethod,
       getObjectRef: this.getObjectRef.bind(this),
       getSuperRef: this.getSuperRef.bind(this),
-      boundGet() {
-        // noop
-        // we dont need boundGet here, but memberExpressionToFunctions handler needs it.
-        throw new Error("");
-      },
+      // we dont need boundGet here, but memberExpressionToFunctions handler needs it.
+      boundGet: handler.get,
       ...handler,
     });
   }

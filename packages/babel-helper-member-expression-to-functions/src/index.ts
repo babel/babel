@@ -36,8 +36,9 @@ function toNonOptional(
   path: NodePath<t.Expression>,
   base: t.Expression,
 ): t.Expression {
-  if (path.isOptionalMemberExpression()) {
-    return t.memberExpression(base, path.node.property, path.node.computed);
+  const { node } = path;
+  if (t.isOptionalMemberExpression(node)) {
+    return t.memberExpression(base, node.property, node.computed);
   }
 
   if (path.isOptionalCallExpression()) {
@@ -222,10 +223,7 @@ const handle = {
 
       let regular: t.Expression = member.node;
       for (let current: NodePath = member; current !== endPath; ) {
-        // Assertions require every name in the call target
-        // to be declared with an explicit type annotation
-        const parentPath: NodePath = current.parentPath;
-        parentPath.assertExpression();
+        const parentPath = current.parentPath as NodePath<t.Expression>;
         // skip transforming `Foo.#BAR?.call(FOO)`
         if (
           parentPath === endPath &&
@@ -344,13 +342,13 @@ const handle = {
 
     // MEMBER++   ->   _set(MEMBER, (_ref = (+_get(MEMBER))) + 1), _ref
     // ++MEMBER   ->   _set(MEMBER, (+_get(MEMBER)) + 1)
-    if (parentPath.isUpdateExpression({ argument: node })) {
+    if (t.isUpdateExpression(parent, { argument: node })) {
       if (this.simpleSet) {
         member.replaceWith(this.simpleSet(member));
         return;
       }
 
-      const { operator, prefix } = parentPath.node;
+      const { operator, prefix } = parent;
 
       // Give the state handler a chance to memoise the member, since we'll
       // reference it twice. The second access (the set) should do the memo
