@@ -1,5 +1,6 @@
 import t from "@babel/types";
 import virtualTypes from "../../lib/path/lib/virtual-types.js";
+import definitions from "@babel/types/lib/definitions/index.js";
 
 export default function generateValidators() {
   let output = `/*
@@ -18,8 +19,20 @@ export interface NodePathValidators {
   }
 
   for (const type of Object.keys(virtualTypes)) {
+    const { types } = virtualTypes[type];
     if (type[0] === "_") continue;
-    output += `is${type}(opts?: object): this is NodePath<VirtualTypeAliases["${type}"]>;`;
+    if (definitions.NODE_FIELDS[type] || definitions.FLIPPED_ALIAS_KEYS[type]) {
+      output += `is${type}(opts?: object): this is NodePath<t.${type}>;`;
+    } else if (!types) {
+      // if it don't have types, then VirtualTypeAliases[type] is t.Node
+      // which TS marked as always true
+      // eg. if (path.isBlockScope()) return;
+      //     path resolved to `never` here
+      // so we have to return boolean instead of this is NodePath<t.Node> here
+      output += `is${type}(opts?: object): boolean;`;
+    } else {
+      output += `is${type}(opts?: object): this is NodePath<VirtualTypeAliases["${type}"]>;`;
+    }
   }
 
   output += `

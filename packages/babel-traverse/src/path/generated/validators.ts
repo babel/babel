@@ -426,22 +426,16 @@ export interface NodePathValidators {
   isBindingIdentifier(
     opts?: object,
   ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
-  isStatement(opts?: object): this is NodePath<VirtualTypeAliases["Statement"]>;
-  isExpression(
-    opts?: object,
-  ): this is NodePath<VirtualTypeAliases["Expression"]>;
+  isStatement(opts?: object): this is NodePath<t.Statement>;
+  isExpression(opts?: object): this is NodePath<t.Expression>;
   isScope(opts?: object): this is NodePath<VirtualTypeAliases["Scope"]>;
-  isReferenced(
-    opts?: object,
-  ): this is NodePath<VirtualTypeAliases["Referenced"]>;
-  isBlockScoped(
-    opts?: object,
-  ): this is NodePath<VirtualTypeAliases["BlockScoped"]>;
+  isReferenced(opts?: object): boolean;
+  isBlockScoped(opts?: object): boolean;
   isVar(opts?: object): this is NodePath<VirtualTypeAliases["Var"]>;
-  isUser(opts?: object): this is NodePath<VirtualTypeAliases["User"]>;
-  isGenerated(opts?: object): this is NodePath<VirtualTypeAliases["Generated"]>;
-  isPure(opts?: object): this is NodePath<VirtualTypeAliases["Pure"]>;
-  isFlow(opts?: object): this is NodePath<VirtualTypeAliases["Flow"]>;
+  isUser(opts?: object): boolean;
+  isGenerated(opts?: object): boolean;
+  isPure(opts?: object): boolean;
+  isFlow(opts?: object): this is NodePath<t.Flow>;
   isRestProperty(
     opts?: object,
   ): this is NodePath<VirtualTypeAliases["RestProperty"]>;
