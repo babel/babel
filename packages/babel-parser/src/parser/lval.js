@@ -100,6 +100,7 @@ export default class LValParser extends NodeUtils {
       case "ObjectPattern":
       case "ArrayPattern":
       case "AssignmentPattern":
+      case "RestElement":
         break;
 
       case "ObjectExpression":
@@ -235,6 +236,7 @@ export default class LValParser extends NodeUtils {
       case "ObjectPattern":
       case "ArrayPattern":
       case "AssignmentPattern":
+      case "RestElement":
         return true;
 
       case "ObjectExpression": {

@@ -1544,7 +1544,7 @@ export default class ExpressionParser extends LValParser {
     return parenExpression;
   }
 
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars -- `params` is used in typescript plugin
   shouldParseArrow(params: Array<N.Node>): boolean {
     return !this.canInsertSemicolon();
   }
