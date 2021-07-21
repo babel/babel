@@ -359,6 +359,16 @@ type ToNodePath<T> = T extends Array<t.Node | null | undefined>
   ? NodePath<T>
   : never;
 
+function get<T extends t.Node, K extends keyof T>(
+  this: NodePath<T>,
+  key: K,
+  context?: boolean | TraversalContext,
+): T[K] extends Array<t.Node | null | undefined>
+  ? Array<NodePath<T[K][number]>>
+  : T[K] extends t.Node | null | undefined
+  ? NodePath<T[K]>
+  : never;
+
 function get<T extends t.Node, K extends string>(
   this: NodePath<T>,
   key: K,
