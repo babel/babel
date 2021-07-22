@@ -12,6 +12,7 @@ const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 
 const { isProgram, isFile, isEmptyStatement } = t;
+const { needsParens, needsWhitespaceAfter, needsWhitespaceBefore } = n;
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
@@ -416,16 +417,16 @@ class Printer {
     this._insideAux = !node.loc;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
-    let needsParens = n.needsParens(node, parent, this._printStack);
+    let shouldPrintParens = needsParens(node, parent, this._printStack);
     if (
       this.format.retainFunctionParens &&
       node.type === "FunctionExpression" &&
       node.extra &&
       node.extra.parenthesized
     ) {
-      needsParens = true;
+      shouldPrintParens = true;
     }
-    if (needsParens) this.token("(");
+    if (shouldPrintParens) this.token("(");
 
     this._printLeadingComments(node);
 
@@ -436,7 +437,7 @@ class Printer {
 
     this._printTrailingComments(node);
 
-    if (needsParens) this.token(")");
+    if (shouldPrintParens) this.token(")");
 
     // end
     this._printStack.pop();
@@ -597,7 +598,7 @@ class Printer {
       if (!leading) lines++; // always include at least a single line after
       if (opts.addNewlines) lines += opts.addNewlines(leading, node) || 0;
 
-      const needs = leading ? n.needsWhitespaceBefore : n.needsWhitespaceAfter;
+      const needs = leading ? needsWhitespaceBefore : needsWhitespaceAfter;
       if (needs(node, parent)) lines++;
     }
 
