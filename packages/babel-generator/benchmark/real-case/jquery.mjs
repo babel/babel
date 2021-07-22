@@ -15,7 +15,6 @@ function createInput(length) {
   );
 }
 
-current.default(createInput(1));
 function benchCases(name, implementation, options) {
   for (const length of [1, 2]) {
     const input = createInput(length);
