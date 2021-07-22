@@ -9,7 +9,7 @@ export default class Buffer {
   }
 
   _map: SourceMap = null;
-  _buf: String = "";
+  _buf: string = "";
   _last: number = 0;
   _queue: Array<
     [
