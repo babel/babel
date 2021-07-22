@@ -18,7 +18,14 @@ exports.transform = function transform(node, options) {
   var result = require("@babel/core").transformFromAstSync(node, null, {
     presets: [require("regenerator-preset")],
     code: false,
-    ast: true
+    ast: true,
+    // The deep-clone utility that Babel uses (based on V8's Serialization API
+    // https://nodejs.org/api/v8.html#v8_serialization_api in Node.js) removes
+    // the prototypes from the cloned node.loc.lines objects that Recast uses
+    // internally, leading to _blockHoist test failures in tests.transform.js.
+    // Also, unless cloning is somehow truly necessary, it should be faster to
+    // skip this step.
+    cloneInputAst: false
   });
 
   node = result.ast;
