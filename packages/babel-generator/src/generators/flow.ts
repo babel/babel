@@ -2,6 +2,7 @@ import type Printer from "../printer";
 import * as t from "@babel/types";
 import { ExportAllDeclaration } from "./modules";
 
+const { isDeclareExportDeclaration, isStatement } = t;
 export function AnyTypeAnnotation(this: Printer) {
   this.word("any");
 }
@@ -35,7 +36,7 @@ export function DeclareClass(
   node: t.DeclareClass,
   parent: t.Node,
 ) {
-  if (!t.isDeclareExportDeclaration(parent)) {
+  if (!isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
   }
@@ -49,7 +50,7 @@ export function DeclareFunction(
   node: t.DeclareFunction,
   parent: any,
 ) {
-  if (!t.isDeclareExportDeclaration(parent)) {
+  if (!isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
   }
@@ -119,7 +120,7 @@ export function DeclareOpaqueType(
   node: t.DeclareOpaqueType,
   parent: any,
 ) {
-  if (!t.isDeclareExportDeclaration(parent)) {
+  if (!isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
   }
@@ -131,7 +132,7 @@ export function DeclareVariable(
   node: t.DeclareVariable,
   parent: any,
 ) {
-  if (!t.isDeclareExportDeclaration(parent)) {
+  if (!isDeclareExportDeclaration(parent)) {
     this.word("declare");
     this.space();
   }
@@ -261,7 +262,7 @@ function FlowExportDeclaration(node: any) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);
-    if (!t.isStatement(declar)) this.semicolon();
+    if (!isStatement(declar)) this.semicolon();
   } else {
     this.token("{");
     if (node.specifiers.length) {

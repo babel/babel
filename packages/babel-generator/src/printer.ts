@@ -11,6 +11,8 @@ const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 
+const { isProgram, isFile, isEmptyStatement } = t;
+
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
   retainLines: boolean;
@@ -427,7 +429,7 @@ class Printer {
 
     this._printLeadingComments(node);
 
-    const loc = t.isProgram(node) || t.isFile(node) ? null : node.loc;
+    const loc = isProgram(node) || isFile(node) ? null : node.loc;
     this.withSource("start", loc, () => {
       printMethod.call(this, node, parent);
     });
@@ -527,7 +529,7 @@ class Printer {
   printBlock(parent) {
     const node = parent.body;
 
-    if (!t.isEmptyStatement(node)) {
+    if (!isEmptyStatement(node)) {
       this.space();
     }
 

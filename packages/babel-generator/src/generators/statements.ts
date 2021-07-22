@@ -2,6 +2,7 @@ import type Printer from "../printer";
 import * as t from "@babel/types";
 import * as charCodes from "charcodes";
 
+const { isFor, isForStatement, isIfStatement, isStatement } = t;
 export function WithStatement(this: Printer, node: t.WithStatement) {
   this.word("with");
   this.space();
@@ -20,7 +21,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
   this.space();
 
   const needsBlock =
-    node.alternate && t.isIfStatement(getLastStatement(node.consequent));
+    node.alternate && isIfStatement(getLastStatement(node.consequent));
   if (needsBlock) {
     this.token("{");
     this.newline();
@@ -45,7 +46,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
 
 // Recursively get the last statement.
 function getLastStatement(statement) {
-  if (!t.isStatement(statement.body)) return statement;
+  if (!isStatement(statement.body)) return statement;
   return getLastStatement(statement.body);
 }
 
@@ -260,7 +261,7 @@ export function VariableDeclaration(
 
   let hasInits = false;
   // don't add whitespace to loop heads
-  if (!t.isFor(parent)) {
+  if (!isFor(parent)) {
     for (const declar of node.declarations as Array<any>) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
@@ -293,9 +294,9 @@ export function VariableDeclaration(
 
   this.printList(node.declarations, node, { separator });
 
-  if (t.isFor(parent)) {
+  if (isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator
-    if (t.isForStatement(parent)) {
+    if (isForStatement(parent)) {
       if (parent.init === node) return;
     } else {
       if (parent.left === node) return;

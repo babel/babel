@@ -1,7 +1,12 @@
 import * as whitespace from "./whitespace";
 import * as parens from "./parentheses";
 import * as t from "@babel/types";
-
+const {
+  isCallExpression,
+  isExpressionStatement,
+  isMemberExpression,
+  isNewExpression,
+} = t;
 function expandAliases(obj) {
   const newObj = {};
 
@@ -42,17 +47,17 @@ function find(obj, node, parent, printStack?) {
 }
 
 function isOrHasCallExpression(node) {
-  if (t.isCallExpression(node)) {
+  if (isCallExpression(node)) {
     return true;
   }
 
-  return t.isMemberExpression(node) && isOrHasCallExpression(node.object);
+  return isMemberExpression(node) && isOrHasCallExpression(node.object);
 }
 
 export function needsWhitespace(node, parent, type) {
   if (!node) return 0;
 
-  if (t.isExpressionStatement(node)) {
+  if (isExpressionStatement(node)) {
     node = node.expression;
   }
 
@@ -86,7 +91,7 @@ export function needsWhitespaceAfter(node, parent) {
 export function needsParens(node, parent, printStack?) {
   if (!parent) return false;
 
-  if (t.isNewExpression(parent) && parent.callee === node) {
+  if (isNewExpression(parent) && parent.callee === node) {
     if (isOrHasCallExpression(node)) return true;
   }
 

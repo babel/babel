@@ -2,6 +2,8 @@ import type Printer from "../printer";
 import * as t from "@babel/types";
 import * as charCodes from "charcodes";
 
+const { isExportDefaultDeclaration, isExportNamedDeclaration } = t;
+
 export function ClassDeclaration(
   this: Printer,
   node: t.ClassDeclaration,
@@ -9,8 +11,7 @@ export function ClassDeclaration(
 ) {
   if (
     !this.format.decoratorsBeforeExport ||
-    (!t.isExportDefaultDeclaration(parent) &&
-      !t.isExportNamedDeclaration(parent))
+    (!isExportDefaultDeclaration(parent) && !isExportNamedDeclaration(parent))
   ) {
     this.printJoin(node.decorators, node);
   }
