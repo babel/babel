@@ -312,26 +312,19 @@ export function getAllPrevSiblings(this: NodePath): NodePath[] {
   return siblings;
 }
 
-type digitalWithoutZero = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-type digital = "0" | digitalWithoutZero;
+type digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 
-// only support 0 to 999 (since we won't use too large number in path.get())
-type Num =
-  | `${digital}`
-  | `${digitalWithoutZero}${digital}`
-  | `${digitalWithoutZero}${digital}${digital}`;
-
-// convert "1" to 0 (string index to number index)
-type ToNumber<T extends string> = T extends Num ? 0 : T;
+// convert "1" to 1 (string index to number index)
+type MaybeToIndex<T extends string> = T extends digit ? number : T;
 
 type Pattern<Obj extends string, Prop extends string> = `${Obj}.${Prop}`;
 
 // split "body.body.1" to ["body", "body", 1]
 type Split<P extends string> = P extends Pattern<infer O, infer U>
-  ? [ToNumber<O>, ...Split<U>]
-  : [ToNumber<P>];
+  ? [MaybeToIndex<O>, ...Split<U>]
+  : [MaybeToIndex<P>];
 
-// get all K with Node[K] is t.Node
+// get all K with Node[K] is t.Node | t.Node[]
 type NodeKeyOf<Node extends t.Node | t.Node[]> = keyof Pick<
   Node,
   {
