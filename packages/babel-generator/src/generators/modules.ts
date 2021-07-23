@@ -1,6 +1,15 @@
 import type Printer from "../printer";
 import * as t from "@babel/types";
 
+const {
+  isClassDeclaration,
+  isExportDefaultSpecifier,
+  isExportNamespaceSpecifier,
+  isImportDefaultSpecifier,
+  isImportNamespaceSpecifier,
+  isStatement,
+} = t;
+
 export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   if (node.importKind === "type" || node.importKind === "typeof") {
     this.word(node.importKind);
@@ -78,7 +87,7 @@ export function ExportNamedDeclaration(
 ) {
   if (
     this.format.decoratorsBeforeExport &&
-    t.isClassDeclaration(node.declaration)
+    isClassDeclaration(node.declaration)
   ) {
     this.printJoin(node.declaration.decorators, node);
   }
@@ -94,7 +103,7 @@ export function ExportDefaultDeclaration(
 ) {
   if (
     this.format.decoratorsBeforeExport &&
-    t.isClassDeclaration(node.declaration)
+    isClassDeclaration(node.declaration)
   ) {
     this.printJoin(node.declaration.decorators, node);
   }
@@ -110,7 +119,7 @@ function ExportDeclaration(node: any) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);
-    if (!t.isStatement(declar)) this.semicolon();
+    if (!isStatement(declar)) this.semicolon();
   } else {
     if (node.exportKind === "type") {
       this.word("type");
@@ -124,8 +133,8 @@ function ExportDeclaration(node: any) {
     for (;;) {
       const first = specifiers[0];
       if (
-        t.isExportDefaultSpecifier(first) ||
-        t.isExportNamespaceSpecifier(first)
+        isExportDefaultSpecifier(first) ||
+        isExportNamespaceSpecifier(first)
       ) {
         hasSpecial = true;
         this.print(specifiers.shift(), node);
@@ -175,8 +184,8 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     for (;;) {
       const first = specifiers[0];
       if (
-        t.isImportDefaultSpecifier(first) ||
-        t.isImportNamespaceSpecifier(first)
+        isImportDefaultSpecifier(first) ||
+        isImportNamespaceSpecifier(first)
       ) {
         this.print(specifiers.shift(), node);
         if (specifiers.length) {

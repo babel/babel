@@ -5,6 +5,17 @@ __metadata:
   version: 4
   cacheKey: 7
 
+"@babel-baseline/generator@npm:@babel/generator@7.14.5, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.14.5, @babel/generator@npm:^7.7.2":
+  version: 7.14.5
+  resolution: "@babel/generator@npm:7.14.5"
+  dependencies:
+    "@babel/types": ^7.14.5
+    jsesc: ^2.5.1
+    source-map: ^0.5.0
+  checksum: 3ba48b75f7680d17b4c3657063339252cf63ea0038b05e24d1611dff2c8f136fc8ca5cb1c293fbc1abc79b153e264bc23a01dc5f440030282e4da0631f12e0b7
+  languageName: node
+  linkType: hard
+
 "@babel-baseline/parser@npm:@babel/parser@^7.14.5":
   version: 7.14.5
   resolution: "@babel/parser@npm:7.14.5"
@@ -331,26 +342,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/generator@npm:^7.12.5, @babel/generator@npm:^7.14.5, @babel/generator@npm:^7.7.2":
-  version: 7.14.5
-  resolution: "@babel/generator@npm:7.14.5"
-  dependencies:
-    "@babel/types": ^7.14.5
-    jsesc: ^2.5.1
-    source-map: ^0.5.0
-  checksum: 3ba48b75f7680d17b4c3657063339252cf63ea0038b05e24d1611dff2c8f136fc8ca5cb1c293fbc1abc79b153e264bc23a01dc5f440030282e4da0631f12e0b7
-  languageName: node
-  linkType: hard
-
 "@babel/generator@workspace:*, @babel/generator@workspace:^7.14.5, @babel/generator@workspace:^7.14.8, @babel/generator@workspace:packages/babel-generator":
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
+    "@babel-baseline/generator": "npm:@babel/generator@7.14.5"
     "@babel/helper-fixtures": "workspace:*"
     "@babel/parser": "workspace:*"
     "@babel/types": "workspace:^7.14.8"
     "@types/jsesc": ^2.5.0
     "@types/source-map": ^0.5.0
+    benchmark: ^2.1.4
+    charcodes: ^0.2.0
     jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
     source-map: ^0.5.0
   languageName: unknown
@@ -657,6 +660,7 @@ __metadata:
   resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.14.8#d03fdb"
   dependencies:
     "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.14.8"
+  checksum: dc554f178a54829c3510a740ff36c3bd4f29967c3daa7e22ee91eab4db892becafb538e433bcfada2cf82c57576c25ae7700fa29e5c780b7cc661697bd16de56
   languageName: node
   linkType: hard
 

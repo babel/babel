@@ -1,23 +1,16 @@
 import type SourceMap from "./source-map";
 import type * as t from "@babel/types";
+import * as charcodes from "charcodes";
 
 const SPACES_RE = /^[ \t]+$/;
-
-/**
- * The Buffer class exists to manage the queue of tokens being pushed onto the output string
- * in such a way that the final string buffer is treated as write-only until the final .get()
- * call. This allows V8 to optimize the output efficiently by not requiring it to store the
- * string in contiguous memory.
- */
-
 export default class Buffer {
   constructor(map?: SourceMap | null) {
     this._map = map;
   }
 
   _map: SourceMap = null;
-  _buf: Array<any> = [];
-  _last: string = "";
+  _buf: string = "";
+  _last: number = 0;
   _queue: Array<
     [
       str: string,
@@ -52,7 +45,7 @@ export default class Buffer {
     const result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
-      code: this._buf.join("").trimRight(),
+      code: this._buf.trimRight(),
       map: null,
       rawMappings: map?.getRawMappings(),
     };
@@ -125,8 +118,8 @@ export default class Buffer {
     filename?: string | null,
     force?: boolean,
   ): void {
-    this._buf.push(str);
-    this._last = str[str.length - 1];
+    this._buf += str;
+    this._last = str.charCodeAt(str.length - 1);
 
     // Search for newline chars. We search only for `\n`, since both `\r` and
     // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and
@@ -187,29 +180,39 @@ export default class Buffer {
     }
   }
 
-  endsWith(suffix: string): boolean {
-    // Fast path to avoid iterating over this._queue.
-    if (suffix.length === 1) {
-      let last;
-      if (this._queue.length > 0) {
-        const str = this._queue[0][0];
-        last = str[str.length - 1];
+  getLastChar(): number {
+    let last;
+    if (this._queue.length > 0) {
+      const str = this._queue[0][0];
+      last = str.charCodeAt(0);
+    } else {
+      last = this._last;
+    }
+    return last;
+  }
+
+  /**
+   * check if current _last + queue ends with newline, return the character before newline
+   *
+   * @param {*} ch
+   * @memberof Buffer
+   */
+  endsWithCharAndNewline(): number {
+    const queue = this._queue;
+    if (queue.length > 0) {
+      const last = queue[0][0];
+      // every element in queue is one-length whitespace string
+      const lastCp = last.charCodeAt(0);
+      if (lastCp !== charcodes.lineFeed) return;
+      if (queue.length > 1) {
+        const secondLast = queue[1][0];
+        return secondLast.charCodeAt(0);
       } else {
-        last = this._last;
+        return this._last;
       }
-
-      return last === suffix;
     }
-
-    const end =
-      this._last + this._queue.reduce((acc, item) => item[0] + acc, "");
-    if (suffix.length <= end.length) {
-      return end.slice(-suffix.length) === suffix;
-    }
-
     // We assume that everything being matched is at most a single token plus some whitespace,
     // which everything currently is, but otherwise we'd have to expand _last or check _buf.
-    return false;
   }
 
   hasContent(): boolean {

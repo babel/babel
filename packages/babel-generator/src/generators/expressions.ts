@@ -2,6 +2,7 @@ import type Printer from "../printer";
 import * as t from "@babel/types";
 import * as n from "../node";
 
+const { isCallExpression, isLiteral, isMemberExpression, isNewExpression } = t;
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   if (
     node.operator === "void" ||
@@ -77,9 +78,9 @@ export function NewExpression(
     this.format.minified &&
     node.arguments.length === 0 &&
     !node.optional &&
-    !t.isCallExpression(parent, { callee: node }) &&
-    !t.isMemberExpression(parent) &&
-    !t.isNewExpression(parent)
+    !isCallExpression(parent, { callee: node }) &&
+    !isMemberExpression(parent) &&
+    !isNewExpression(parent)
   ) {
     return;
   }
@@ -119,13 +120,13 @@ export function OptionalMemberExpression(
 ) {
   this.print(node.object, node);
 
-  if (!node.computed && t.isMemberExpression(node.property)) {
+  if (!node.computed && isMemberExpression(node.property)) {
     throw new TypeError("Got a MemberExpression for MemberExpression property");
   }
 
   let computed = node.computed;
   // @ts-expect-error todo(flow->ts) maybe instead of typeof check specific literal types?
-  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
+  if (isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
   if (node.optional) {
@@ -266,13 +267,13 @@ export {
 export function MemberExpression(this: Printer, node: t.MemberExpression) {
   this.print(node.object, node);
 
-  if (!node.computed && t.isMemberExpression(node.property)) {
+  if (!node.computed && isMemberExpression(node.property)) {
     throw new TypeError("Got a MemberExpression for MemberExpression property");
   }
 
   let computed = node.computed;
   // @ts-expect-error todo(flow->ts) maybe use specific literal types
-  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
+  if (isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
 
