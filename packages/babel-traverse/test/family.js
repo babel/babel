@@ -109,6 +109,44 @@ describe("path/family", function () {
       expect(consequentHasScope).toBe(true);
     });
   });
+  describe("getCompletionRecords", function () {
+    it("should skip variable declarations", function () {
+      const ast = parse("'foo' + 'bar'; var a = 10; let b = 20; const c = 30;");
+      let records = [];
+      traverse(ast, {
+        Program(path) {
+          records = path.getCompletionRecords();
+        },
+      });
+      expect(records).toHaveLength(1);
+      expect(records[0].node.type).toBe("ExpressionStatement");
+      expect(records[0].node.expression.type).toBe("BinaryExpression");
+    });
+
+    it("should skip variable declarations in a BlockStatement", function () {
+      const ast = parse("'foo' + 'bar'; { var a = 10; }");
+      let records = [];
+      traverse(ast, {
+        Program(path) {
+          records = path.getCompletionRecords();
+        },
+      });
+      expect(records).toHaveLength(1);
+      expect(records[0].node.type).toBe("ExpressionStatement");
+      expect(records[0].node.expression.type).toBe("BinaryExpression");
+    });
+
+    it("should be empty if there are only variable declarations", function () {
+      const ast = parse("var a = 10; let b = 20; const c = 30;");
+      let records = [];
+      traverse(ast, {
+        Program(path) {
+          records = path.getCompletionRecords();
+        },
+      });
+      expect(records).toHaveLength(0);
+    });
+  });
 });
 
 function hop(o, key) {
