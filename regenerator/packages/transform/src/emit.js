@@ -965,10 +965,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
     t.assertExpression(expr);
     if (ignoreResult) {
       self.emit(expr);
-      return expr;
-    } else {
-      return expr;
     }
+    return expr;
   }
 
   // If the expression does not contain a leap, then we either emit the
