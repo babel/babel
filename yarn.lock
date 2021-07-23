@@ -657,6 +657,7 @@ __metadata:
   resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.14.8#d03fdb"
   dependencies:
     "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.14.8"
+  checksum: dc554f178a54829c3510a740ff36c3bd4f29967c3daa7e22ee91eab4db892becafb538e433bcfada2cf82c57576c25ae7700fa29e5c780b7cc661697bd16de56
   languageName: node
   linkType: hard
 
