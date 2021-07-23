@@ -22,6 +22,6 @@
     "@babel/plugin-transform-block-scoping": "^7.8.3",
     "@babel/plugin-transform-classes": "^7.8.3",
     "@babel/plugin-transform-for-of": "^7.8.4",
-    "regenerator-transform": "^0.14.2"
+    "regenerator-transform": "^0.15.0"
   }
 }
