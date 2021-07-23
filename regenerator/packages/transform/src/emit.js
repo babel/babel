@@ -1276,12 +1276,15 @@ Ep.explodeClass = function(path) {
   if (path.node.superClass) {
     explodingChildren.push(path.get("superClass"));
   }
-  for (let i = 0; i < path.node.body.body.length; i++) {
-    const member = path.get("body.body")[i];
+
+  path.get("body.body").forEach(member => {
     if (member.node.computed) {
       explodingChildren.push(member.get("key"));
     }
-  }
+  });
+
+  const hasLeapingChildren = explodingChildren.some(
+    child => meta.containsLeap(child));
 
   for (let i = 0; i < explodingChildren.length; i++) {
     const child = explodingChildren[i];
@@ -1290,7 +1293,7 @@ Ep.explodeClass = function(path) {
     if (isLast) {
       child.replaceWith(this.explodeExpression(child));
     } else {
-      child.replaceWith(this.explodeViaTempVar(null, child, true));
+      child.replaceWith(this.explodeViaTempVar(null, child, hasLeapingChildren));
     }
   }
 
