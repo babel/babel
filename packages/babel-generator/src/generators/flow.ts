@@ -548,12 +548,10 @@ export function OpaqueType(
     this.print(node.supertype, node);
   }
 
-  // @ts-expect-error todo(flow->ts) `.impltype` does not exist on t.DeclareOpaqueType
   if (node.impltype) {
     this.space();
     this.token("=");
     this.space();
-    // @ts-expect-error todo(flow->ts) `.impltype` does not exist on t.DeclareOpaqueType
     this.print(node.impltype, node);
   }
   this.semicolon();

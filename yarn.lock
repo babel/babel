@@ -3606,6 +3606,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^7.14.8"
     "@babel/parser": "workspace:*"
     chalk: ^4.1.0
+    glob: ^7.1.7
     to-fast-properties: ^2.0.0
   languageName: unknown
   linkType: soft

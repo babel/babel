@@ -49,6 +49,17 @@ defineType("TSParameterProperty", {
     parameter: {
       validate: assertNodeType("Identifier", "AssignmentPattern"),
     },
+    override: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
+    },
   },
 });
 
@@ -110,6 +121,9 @@ defineType("TSPropertySignature", {
     readonly: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     initializer: validateOptionalType("Expression"),
+    kind: {
+      validate: assertOneOf("get", "set"),
+    },
   },
 });
 
@@ -494,6 +508,10 @@ defineType("TSImportEqualsDeclaration", {
       "TSEntityName",
       "TSExternalModuleReference",
     ]),
+    importKind: {
+      validate: assertOneOf("type", "value"),
+      optional: true,
+    },
   },
 });
 
