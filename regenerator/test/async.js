@@ -7,6 +7,11 @@
 
 var assert = require("assert");
 
+assert(
+  function*() {}.toString().indexOf("regenerator") !== -1,
+  "regenerator-transform should be enabled"
+);
+
 describe("async functions and await expressions", function() {
   Promise = require("promise");
 

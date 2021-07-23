@@ -764,6 +764,10 @@ Ep.explodeStatement = function(path, labelId) {
 
     break;
 
+  case "ClassDeclaration":
+    self.emit(self.explodeClass(path));
+    break;
+
   default:
     throw new Error(
       "unknown Statement of type " +
@@ -900,6 +904,50 @@ Ep.updateContextPrevLoc = function(loc) {
   this.emitAssign(this.contextProperty("prev"), loc);
 };
 
+
+// In order to save the rest of explodeExpression from a combinatorial
+// trainwreck of special cases, explodeViaTempVar is responsible for
+// deciding when a subexpression needs to be "exploded," which is my
+// very technical term for emitting the subexpression as an assignment
+// to a temporary variable and the substituting the temporary variable
+// for the original subexpression. Think of exploded view diagrams, not
+// Michael Bay movies. The point of exploding subexpressions is to
+// control the precise order in which the generated code realizes the
+// side effects of those subexpressions.
+Ep.explodeViaTempVar = function(tempVar, childPath, hasLeapingChildren, ignoreChildResult) {
+  assert.ok(
+    !ignoreChildResult || !tempVar,
+    "Ignoring the result of a child expression but forcing it to " +
+      "be assigned to a temporary variable?"
+  );
+  const t = util.getTypes();
+
+  let result = this.explodeExpression(childPath, ignoreChildResult);
+
+  if (ignoreChildResult) {
+    // Side effects already emitted above.
+
+  } else if (tempVar || (hasLeapingChildren &&
+                          !t.isLiteral(result))) {
+    // If tempVar was provided, then the result will always be assigned
+    // to it, even if the result does not otherwise need to be assigned
+    // to a temporary variable.  When no tempVar is provided, we have
+    // the flexibility to decide whether a temporary variable is really
+    // necessary.  Unfortunately, in general, a temporary variable is
+    // required whenever any child contains a yield expression, since it
+    // is difficult to prove (at all, let alone efficiently) whether
+    // this result would evaluate to the same value before and after the
+    // yield (see #206).  One narrow case where we can prove it doesn't
+    // matter (and thus we do not need a temporary variable) is when the
+    // result in question is a Literal value.
+    result = this.emitAssign(
+      tempVar || this.makeTempVar(),
+      result
+    );
+  }
+  return result;
+};
+
 Ep.explodeExpression = function(path, ignoreResult) {
   const t = util.getTypes();
   let expr = path.node;
@@ -917,9 +965,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
     t.assertExpression(expr);
     if (ignoreResult) {
       self.emit(expr);
-    } else {
-      return expr;
     }
+    return expr;
   }
 
   // If the expression does not contain a leap, then we either emit the
@@ -934,48 +981,6 @@ Ep.explodeExpression = function(path, ignoreResult) {
   // side effects relative to the leaping child(ren).
   let hasLeapingChildren = meta.containsLeap.onlyChildren(expr);
 
-  // In order to save the rest of explodeExpression from a combinatorial
-  // trainwreck of special cases, explodeViaTempVar is responsible for
-  // deciding when a subexpression needs to be "exploded," which is my
-  // very technical term for emitting the subexpression as an assignment
-  // to a temporary variable and the substituting the temporary variable
-  // for the original subexpression. Think of exploded view diagrams, not
-  // Michael Bay movies. The point of exploding subexpressions is to
-  // control the precise order in which the generated code realizes the
-  // side effects of those subexpressions.
-  function explodeViaTempVar(tempVar, childPath, ignoreChildResult) {
-    assert.ok(
-      !ignoreChildResult || !tempVar,
-      "Ignoring the result of a child expression but forcing it to " +
-        "be assigned to a temporary variable?"
-    );
-
-    let result = self.explodeExpression(childPath, ignoreChildResult);
-
-    if (ignoreChildResult) {
-      // Side effects already emitted above.
-
-    } else if (tempVar || (hasLeapingChildren &&
-                           !t.isLiteral(result))) {
-      // If tempVar was provided, then the result will always be assigned
-      // to it, even if the result does not otherwise need to be assigned
-      // to a temporary variable.  When no tempVar is provided, we have
-      // the flexibility to decide whether a temporary variable is really
-      // necessary.  Unfortunately, in general, a temporary variable is
-      // required whenever any child contains a yield expression, since it
-      // is difficult to prove (at all, let alone efficiently) whether
-      // this result would evaluate to the same value before and after the
-      // yield (see #206).  One narrow case where we can prove it doesn't
-      // matter (and thus we do not need a temporary variable) is when the
-      // result in question is a Literal value.
-      result = self.emitAssign(
-        tempVar || self.makeTempVar(),
-        result
-      );
-    }
-    return result;
-  }
-
   // If ignoreResult is true, then we must take full responsibility for
   // emitting the expression with all its side effects, and we should not
   // return a result.
@@ -985,7 +990,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
     return finish(t.memberExpression(
       self.explodeExpression(path.get("object")),
       expr.computed
-        ? explodeViaTempVar(null, path.get("property"))
+        ? self.explodeViaTempVar(null, path.get("property"), hasLeapingChildren)
         : expr.property,
       expr.computed
     ));
@@ -1011,15 +1016,16 @@ Ep.explodeExpression = function(path, ignoreResult) {
         // expression, then we must be careful that the object of the
         // member expression still gets bound to `this` for the call.
 
-        let newObject = explodeViaTempVar(
+        let newObject = self.explodeViaTempVar(
           // Assign the exploded callee.object expression to a temporary
           // variable so that we can use it twice without reevaluating it.
           self.makeTempVar(),
-          calleePath.get("object")
+          calleePath.get("object"),
+          hasLeapingChildren
         );
 
         let newProperty = calleePath.node.computed
-          ? explodeViaTempVar(null, calleePath.get("property"))
+          ? self.explodeViaTempVar(null, calleePath.get("property"), hasLeapingChildren)
           : calleePath.node.property;
 
         injectFirstArg = newObject;
@@ -1039,7 +1045,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
       }
 
     } else {
-      newCallee = explodeViaTempVar(null, calleePath);
+      newCallee = self.explodeViaTempVar(null, calleePath, hasLeapingChildren);
 
       if (t.isMemberExpression(newCallee)) {
         // If the callee was not previously a MemberExpression, then the
@@ -1058,7 +1064,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
     }
 
     if (hasLeapingArgs) {
-      newArgs = argsPath.map(argPath => explodeViaTempVar(null, argPath));
+      newArgs = argsPath.map(argPath => self.explodeViaTempVar(null, argPath, hasLeapingChildren));
       if (injectFirstArg) newArgs.unshift(injectFirstArg);
 
       newArgs = newArgs.map(arg => t.cloneDeep(arg));
@@ -1070,9 +1076,9 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
   case "NewExpression":
     return finish(t.newExpression(
-      explodeViaTempVar(null, path.get("callee")),
-      path.get("arguments").map(function(argPath) {
-        return explodeViaTempVar(null, argPath);
+     self.explodeViaTempVar(null, path.get("callee"), hasLeapingChildren),
+       path.get("arguments").map(function(argPath) {
+        return self.explodeViaTempVar(null, argPath, hasLeapingChildren);
       })
     ));
 
@@ -1082,7 +1088,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
         if (propPath.isObjectProperty()) {
           return t.objectProperty(
             propPath.node.key,
-            explodeViaTempVar(null, propPath.get("value")),
+            self.explodeViaTempVar(null, propPath.get("value"), hasLeapingChildren),
             propPath.node.computed
           );
         } else {
@@ -1096,10 +1102,10 @@ Ep.explodeExpression = function(path, ignoreResult) {
       path.get("elements").map(function(elemPath) {
         if (elemPath.isSpreadElement()) {
           return t.spreadElement(
-            explodeViaTempVar(null, elemPath.get("argument"))
+            self.explodeViaTempVar(null, elemPath.get("argument"), hasLeapingChildren)
           );
         } else {
-          return explodeViaTempVar(null, elemPath);
+          return self.explodeViaTempVar(null, elemPath, hasLeapingChildren);
         }
       })
     ));
@@ -1124,7 +1130,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
       result = self.makeTempVar();
     }
 
-    let left = explodeViaTempVar(result, path.get("left"));
+    let left = self.explodeViaTempVar(result, path.get("left"), hasLeapingChildren);
 
     if (expr.operator === "&&") {
       self.jumpIfNot(left, after);
@@ -1133,7 +1139,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
       self.jumpIf(left, after);
     }
 
-    explodeViaTempVar(result, path.get("right"), ignoreResult);
+    self.explodeViaTempVar(result, path.get("right"), hasLeapingChildren, ignoreResult);
 
     self.mark(after);
 
@@ -1150,11 +1156,11 @@ Ep.explodeExpression = function(path, ignoreResult) {
       result = self.makeTempVar();
     }
 
-    explodeViaTempVar(result, path.get("consequent"), ignoreResult);
+    self.explodeViaTempVar(result, path.get("consequent"), hasLeapingChildren, ignoreResult);
     self.jump(after);
 
     self.mark(elseLoc);
-    explodeViaTempVar(result, path.get("alternate"), ignoreResult);
+    self.explodeViaTempVar(result, path.get("alternate"), hasLeapingChildren, ignoreResult);
 
     self.mark(after);
 
@@ -1172,8 +1178,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
   case "BinaryExpression":
     return finish(t.binaryExpression(
       expr.operator,
-      explodeViaTempVar(null, path.get("left")),
-      explodeViaTempVar(null, path.get("right"))
+      self.explodeViaTempVar(null, path.get("left"), hasLeapingChildren),
+      self.explodeViaTempVar(null, path.get("right"), hasLeapingChildren)
     ));
 
   case "AssignmentExpression":
@@ -1254,9 +1260,42 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
     return self.contextProperty("sent");
 
+  case "ClassExpression":
+    return finish(self.explodeClass(path));
+
   default:
     throw new Error(
       "unknown Expression of type " +
         JSON.stringify(expr.type));
   }
+};
+
+Ep.explodeClass = function(path) {
+  const explodingChildren = [];
+
+  if (path.node.superClass) {
+    explodingChildren.push(path.get("superClass"));
+  }
+
+  path.get("body.body").forEach(member => {
+    if (member.node.computed) {
+      explodingChildren.push(member.get("key"));
+    }
+  });
+
+  const hasLeapingChildren = explodingChildren.some(
+    child => meta.containsLeap(child));
+
+  for (let i = 0; i < explodingChildren.length; i++) {
+    const child = explodingChildren[i];
+    const isLast = i === explodingChildren.length - 1;
+
+    if (isLast) {
+      child.replaceWith(this.explodeExpression(child));
+    } else {
+      child.replaceWith(this.explodeViaTempVar(null, child, hasLeapingChildren));
+    }
+  }
+
+  return path.node;
 };

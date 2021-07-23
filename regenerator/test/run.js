@@ -97,56 +97,6 @@ function makeMochaCopyFunction(fileName) {
   };
 }
 
-if (semver.gte(process.version, "0.11.2")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/tests.es6.js",
-  ]);
-}
-
-if (semver.gte(process.version, "8.10.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/async.js",
-  ]);
-}
-
-if (semver.gte(process.version, "6.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/class.js",
-  ]);
-}
-
-if (semver.gte(process.version, "4.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/tests-node4.es6.js",
-  ]);
-}
-
-if (semver.gte(process.version, "4.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "./test/non-writable-tostringtag-property.js",
-  ]);
-}
-
-enqueue("mocha", [
-  "--harmony",
-  "--reporter", "spec",
-  "./test/frozen-intrinsics.js",
-]);
-
 enqueue(convert, [
   "./test/tests.es6.js",
   "./test/tests.es5.js"
@@ -178,6 +128,47 @@ enqueue(convert, [
   "./test/class.js",
   "./test/class.es5.js"
 ]);
+
+enqueue(convertWithRegeneratorPluginOnly, [
+  "./test/class.js",
+  "./test/class.regenerator.js"
+]);
+
+Error.stackTraceLimit = 1000;
+
+/**
+ * Comvert without using the preset (which also transforms things like classes and arrows)
+ */
+function convertWithRegeneratorPluginOnly(inputFile, outputFile, callback) {
+  var transformOptions = {
+    plugins:[require("regenerator-transform")],
+    parserOpts: {
+      sourceType: "module",
+      allowImportExportEverywhere: true,
+      allowReturnOutsideFunction: true,
+      allowSuperOutsideMethod: true,
+      strictMode: false,
+      plugins: ["*", "jsx", "flow"]
+    },
+    ast: true
+  };
+
+  fs.readFile(inputFile, "utf-8", function(err, input) {
+    if (err) {
+      return callback(err);
+    }
+
+    var { code: output, ast } = babel.transformSync(input, transformOptions);
+    fs.writeFileSync(outputFile, output);
+    try {
+      checkDuplicatedNodes(babel, ast);
+    } catch (err) {
+      err.message = "Occured while transforming: " + inputFile + "\n" + err.message;
+      throw err;
+    }
+    callback();
+  });
+}
 
 function convertWithParamsTransform(es6File, es5File, callback) {
   var transformOptions = {
@@ -378,5 +369,57 @@ enqueue("./bin/regenerator", [
   "--disable-async",
   "./test/replaceWith-falsy.js"
 ], true);
+
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "--require", "./test/runtime.js",
+  "./test/tests.es5.js",
+]);
+
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "--require", "./test/runtime.js",
+  "./test/async.es5.js",
+]);
+
+if (semver.gte(process.version, "6.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "--require", "./test/runtime.js",
+    "./test/class.regenerator.js",
+  ]);
+}
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "--require", "./test/runtime.js",
+  "./test/class.es5.js",
+]);
+
+if (semver.gte(process.version, "4.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "--require", "./test/runtime.js",
+    "./test/tests-node4.es6.js",
+  ]);
+}
+
+if (semver.gte(process.version, "4.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "./test/non-writable-tostringtag-property.js",
+  ]);
+}
+
+enqueue("mocha", [
+  "--harmony",
+  "--reporter", "spec",
+  "./test/frozen-intrinsics.js",
+]);
 
 flush();
