@@ -83,6 +83,20 @@ describe("class methods", function () {
     assert.ok(new res instanceof B);
   });
 
+  it("should allow yield as super expression with argument", function () {
+    function* gen() {
+      return class extends (yield 123) {}
+    }
+
+    class B {}
+
+    const it = gen();
+    assert.deepEqual(it.next(), { value: 123, done: false });
+    const res = it.next(B).value;
+
+    assert.ok(new res instanceof B);
+  });
+
   it("should allow yield as computed key", function () {
     if (class {}.toString().indexOf("class") !== 0) {
       return;
