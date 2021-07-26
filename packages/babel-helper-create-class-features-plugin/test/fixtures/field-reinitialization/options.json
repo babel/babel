@@ -1,7 +1,0 @@
-{
-  "shippedProposals": true,
-  "targets": {
-    "chrome": "75"
-  },
-  "throws": "Error"
-}

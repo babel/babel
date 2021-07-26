@@ -4,10 +4,10 @@ class Base {
   }
 }
 
-let counter = 1;
+let counter = 0;
 class Derived extends Base {
-  #field = counter;
+  #foo = ++counter;
   static get(obj) {
-    return obj.#field;
+    return obj.#foo;
   }
 }
