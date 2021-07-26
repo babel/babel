@@ -1,4 +1,4 @@
-let A = /*#__PURE__*/function () {
+let A = /*#__PURE__*/function (_x, _ref, _x2) {
   "use strict";
 
   function A() {
@@ -6,14 +6,14 @@ let A = /*#__PURE__*/function () {
   }
 
   babelHelpers.createClass(A, [{
-    key: x,
+    key: _x,
     get: function () {}
   }, {
-    key: (x = 2, 3),
+    key: _ref,
     value: function () {}
   }, {
-    key: x,
+    key: _x2,
     set: function (_) {}
   }]);
   return A;
-}();
+}(x, (x = 2, 3), x);

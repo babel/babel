@@ -25,19 +25,19 @@ var Outer = /*#__PURE__*/function (_Hello) {
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
 
-    var Inner = /*#__PURE__*/function () {
+    var Inner = /*#__PURE__*/function (_babelHelpers$get$cal) {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
       }
 
       babelHelpers.createClass(Inner, [{
-        key: babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper),
+        key: _babelHelpers$get$cal,
         value: function value() {
           return 'hello';
         }
       }]);
       return Inner;
-    }();
+    }(babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper));
 
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }

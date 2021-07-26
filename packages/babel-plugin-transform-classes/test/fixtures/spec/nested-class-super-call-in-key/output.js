@@ -16,25 +16,23 @@ var Outer = /*#__PURE__*/function (_Hello) {
   var _super = babelHelpers.createSuper(Outer);
 
   function Outer() {
-    var _this2 = this;
-
     var _this;
 
     babelHelpers.classCallCheck(this, Outer);
 
-    var Inner = /*#__PURE__*/function () {
+    var Inner = /*#__PURE__*/function (_this2) {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
       }
 
       babelHelpers.createClass(Inner, [{
-        key: _this = _super.call(_this2),
+        key: _this2,
         value: function value() {
           return 'hello';
         }
       }]);
       return Inner;
-    }();
+    }(_this = _super.call(this));
 
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
