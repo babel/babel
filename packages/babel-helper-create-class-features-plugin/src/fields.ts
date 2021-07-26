@@ -449,16 +449,26 @@ function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
   `;
 }
 
+function buildPrivateInstaceFieldCheckInitSpec(ref, prop, privateNamesMap) {
+  const { id } = privateNamesMap.get(prop.node.key.id.name);
+  const newNode = t.cloneNode(id);
+
+  return template.statement
+    .ast`_checkPrivateFieldInitSpec(${ref}, ${newNode});`;
+}
+
 function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const newNode = t.cloneNode(id);
 
-  return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
-    // configurable is always false for private elements
-    // enumerable is always false for private elements
-    writable: true,
-    value: ${value},
-  })`;
+  return template.statement.ast`
+    ${newNode}.set(${ref}, {
+      // configurable is always false for private elements
+      // enumerable is always false for private elements
+      writable: true,
+      value: ${value},
+    })`;
 }
 
 function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
@@ -804,6 +814,13 @@ export function buildFieldsInitNodes(
         );
         break;
       case isInstance && isPrivate && isField && !privateFieldsAsProperties:
+        instanceNodes.push(
+          buildPrivateInstaceFieldCheckInitSpec(
+            t.thisExpression(),
+            prop,
+            privateNamesMap,
+          ),
+        );
         instanceNodes.push(
           buildPrivateInstanceFieldInitSpec(
             t.thisExpression(),
