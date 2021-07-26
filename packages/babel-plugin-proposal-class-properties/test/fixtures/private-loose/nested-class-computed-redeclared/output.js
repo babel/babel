@@ -20,7 +20,7 @@ var Foo = /*#__PURE__*/function () {
 
       _babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo2)[_foo2];
 
-      var Nested = /*#__PURE__*/function () {
+      var Nested = /*#__PURE__*/function (_babelHelpers$classPr2) {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
           Object.defineProperty(this, _foo2, {
@@ -30,11 +30,11 @@ var Foo = /*#__PURE__*/function () {
         }
 
         babelHelpers.createClass(Nested, [{
-          key: _babelHelpers$classPr,
+          key: _babelHelpers$classPr2,
           value: function () {}
         }]);
         return Nested;
-      }();
+      }(_babelHelpers$classPr);
 
       babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
     }
