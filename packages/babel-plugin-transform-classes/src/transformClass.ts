@@ -609,7 +609,7 @@ export default function transformClass(
       scope: NodePath["scope"];
     };
 
-    node.body.body.forEach(elem => {
+    for (const elem of node.body.body) {
       if (!t.isClassMethod(elem) || !elem.computed) return;
       if (scope.isPure(elem.key, /* constatns only*/ true)) return;
 
@@ -617,7 +617,7 @@ export default function transformClass(
       dynamicKeys.set(id.name, elem.key);
 
       elem.key = id;
-    });
+    }
   }
 
   function setupClosureParamsArgs() {
