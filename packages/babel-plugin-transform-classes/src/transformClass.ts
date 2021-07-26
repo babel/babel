@@ -610,8 +610,8 @@ export default function transformClass(
     };
 
     for (const elem of node.body.body) {
-      if (!t.isClassMethod(elem) || !elem.computed) return;
-      if (scope.isPure(elem.key, /* constatns only*/ true)) return;
+      if (!t.isClassMethod(elem) || !elem.computed) continue;
+      if (scope.isPure(elem.key, /* constatns only*/ true)) continue;
 
       const id = scope.generateUidIdentifierBasedOnNode(elem.key);
       dynamicKeys.set(id.name, elem.key);
