@@ -1,5 +1,5 @@
 // #1649
-var Foo = /*#__PURE__*/function () {
+var Foo = /*#__PURE__*/function (_Symbol, _Symbol2) {
   "use strict";
 
   function Foo() {
@@ -7,11 +7,11 @@ var Foo = /*#__PURE__*/function () {
   }
 
   babelHelpers.createClass(Foo, [{
-    key: Symbol(),
+    key: _Symbol,
     value: function value() {}
   }, {
-    key: Symbol(),
+    key: _Symbol2,
     value: function value() {}
   }]);
   return Foo;
-}();
+}(Symbol(), Symbol());
