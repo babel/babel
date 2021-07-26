@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["proposal-class-elements", { "targetSyntax": "classes" }],
+    "proposal-optional-chaining"
+  ]
+}

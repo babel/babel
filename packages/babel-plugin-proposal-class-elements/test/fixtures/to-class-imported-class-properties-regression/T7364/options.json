@@ -1,0 +1,9 @@
+{
+  "assumptions": {
+    "setPublicClassFields": true
+  },
+  "plugins": [
+    "transform-async-to-generator",
+    ["proposal-class-elements", { "targetSyntax": "classes" }]
+  ]
+}

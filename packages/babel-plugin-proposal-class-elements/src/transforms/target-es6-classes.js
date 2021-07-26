@@ -13,6 +13,7 @@ import {
   injectInitialization,
   injectPureStatics,
   injectStaticInitialization,
+  extractComputedKeys,
 } from "../utils/misc";
 import {
   getClassRefs,
@@ -47,6 +48,7 @@ export default function classElementsToES6(api) {
       const staticFields = [];
       const instancePrivMethods = [];
       const staticPrivMethods = [];
+      const computedPaths = [];
       let constructorPath;
 
       const {
@@ -57,6 +59,10 @@ export default function classElementsToES6(api) {
       } = getClassRefs(path);
 
       for (const el of path.get("body.body")) {
+        if (el.node.computed) {
+          computedPaths.push(el);
+        }
+
         const isStatic = el.node.static;
         if (el.isPrivate()) {
           pushPrivateName(privateNamesMap, el);
@@ -89,6 +95,11 @@ export default function classElementsToES6(api) {
         }
       }
 
+      if (eltsToRemove.length === 0) {
+        // No class elements to transform
+        return;
+      }
+
       transformPrivateNamesUsage(
         internalClassRef,
         path,
@@ -106,6 +117,8 @@ export default function classElementsToES6(api) {
         state,
         constantSuper,
       );
+
+      const keysNodes = extractComputedKeys(path, computedPaths, this.file);
 
       const initInstanceFields = map(node => {
         if (t.isPrivate(node)) {
@@ -157,6 +170,13 @@ export default function classElementsToES6(api) {
           path,
           constructorPath,
           instanceInit.map(p => t.expressionStatement(p)),
+          (referenceVisitor, state) => {
+            for (const el of eltsToRemove) {
+              if (el.isClassProperty() || el.isClassPrivateProperty()) {
+                el.traverse(referenceVisitor, state);
+              }
+            }
+          },
         );
       }
 
@@ -171,6 +191,7 @@ export default function classElementsToES6(api) {
 
       injectStaticInitialization(
         path,
+        keysNodes.map(n => t.expressionStatement(n)),
         [
           ...ifPFAP(() =>
             initPrivMethods(staticPrivMethods, getExternalClassRef),

@@ -1,8 +1,8 @@
-var _priv;
+var _priv = babelHelpers.temporalUndefined;
 
 class A {
   static test() {
-    [babelHelpers.classStaticPrivateFieldDestructureSet2(this, A, _ => _priv = _)._] = [3];
+    [babelHelpers.classStaticPrivateFieldDestructureSet2(this, A, _priv, _ => _priv = _)._] = [3];
   }
 
 }

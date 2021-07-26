@@ -1,4 +1,4 @@
-var _PRIVATE_STATIC_FIELD;
+var _PRIVATE_STATIC_FIELD = babelHelpers.temporalUndefined;
 
 class Cl {
   static setPrivateStaticFieldValue() {
@@ -10,5 +10,5 @@ class Cl {
 _PRIVATE_STATIC_FIELD = 0;
 
 function _get_privateStaticFieldValue() {
-  return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl), _PRIVATE_STATIC_FIELD;
+  return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _PRIVATE_STATIC_FIELD);
 }

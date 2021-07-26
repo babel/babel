@@ -49,13 +49,17 @@ export function buildPrivateNamesNodes(
       init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
         t.stringLiteral(name),
       ]);
+      annotateAsPure(init);
     } else if (isMethod) {
       if (isStatic) continue;
       init = t.newExpression(t.identifier("WeakSet"), []);
-    } else if (!isStatic) {
+      annotateAsPure(init);
+    } else if (isStatic) {
+      init = state.addHelper("temporalUndefined");
+    } else {
       init = t.newExpression(t.identifier("WeakMap"), []);
+      annotateAsPure(init);
     }
-    if (init) annotateAsPure(init);
     initNodes.push(t.variableDeclarator(t.cloneNode(value.id), init));
   }
 
@@ -219,16 +223,17 @@ const privateNameHandlerSpec = {
         );
       }
       if (isStatic) {
-        return t.sequenceExpression([
-          t.callExpression(file.addHelper("classCheckPrivateStaticAccess"), [
-            this.receiver(member),
-            t.cloneNode(classRef),
-          ]),
-          t.callExpression(
-            t.memberExpression(t.cloneNode(getId), t.identifier("call")),
-            [t.cloneNode(classRef)],
+        return t.callExpression(
+          t.memberExpression(
+            t.callExpression(file.addHelper("classCheckPrivateStaticAccess"), [
+              this.receiver(member),
+              t.cloneNode(classRef),
+              t.cloneNode(getId),
+            ]),
+            t.identifier("call"),
           ),
-        ]);
+          [t.cloneNode(classRef)],
+        );
       } else {
         return t.callExpression(file.addHelper("classPrivateAccessorGet2"), [
           this.receiver(member),
@@ -239,11 +244,9 @@ const privateNameHandlerSpec = {
     }
 
     if (isStatic) {
-      return t.sequenceExpression([
-        t.callExpression(file.addHelper("classCheckPrivateStaticAccess"), [
-          this.receiver(member),
-          t.cloneNode(classRef),
-        ]),
+      return t.callExpression(file.addHelper("classCheckPrivateStaticAccess"), [
+        this.receiver(member),
+        t.cloneNode(classRef),
         t.cloneNode(id),
       ]);
     }
@@ -292,16 +295,17 @@ const privateNameHandlerSpec = {
         ]);
       }
       if (isStatic) {
-        return t.sequenceExpression([
-          t.callExpression(file.addHelper("classCheckPrivateStaticAccess"), [
-            this.receiver(member),
-            t.cloneNode(classRef),
-          ]),
-          t.callExpression(
-            t.memberExpression(t.cloneNode(setId), t.identifier("call")),
-            [t.cloneNode(classRef), value],
+        return t.callExpression(
+          t.memberExpression(
+            t.callExpression(file.addHelper("classCheckPrivateStaticAccess"), [
+              this.receiver(member),
+              t.cloneNode(classRef),
+              t.cloneNode(setId),
+            ]),
+            t.identifier("call"),
           ),
-        ]);
+          [t.cloneNode(classRef), value],
+        );
       } else {
         return t.callExpression(file.addHelper("classPrivateAccessorSet2"), [
           this.receiver(member),
@@ -326,6 +330,7 @@ const privateNameHandlerSpec = {
         t.callExpression(file.addHelper("classCheckPrivateStaticAccess"), [
           this.receiver(member),
           t.cloneNode(classRef),
+          t.cloneNode(id),
         ]),
         t.assignmentExpression("=", t.cloneNode(id), value),
       ]);
@@ -371,6 +376,7 @@ const privateNameHandlerSpec = {
         ${file.addHelper("classStaticPrivateFieldDestructureSet2")}(
           ${this.receiver(member)},
           ${t.cloneNode(classRef)},
+          ${t.cloneNode(id)},
           _ => ${t.cloneNode(id)} = _
         )._
       `;
@@ -487,9 +493,7 @@ export function buildPrivateInstanceFieldInitSpec(
 }
 
 export function buildPrivateStaticFieldInitSpec(node, scope, privateNamesMap) {
-  const { value } = node;
-  if (!value) return;
-
+  const value = node.value ?? scope.buildUndefinedNode();
   const { id } = privateNamesMap.get(node.key.id.name);
   return t.assignmentExpression("=", t.cloneNode(id), value);
 }

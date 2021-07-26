@@ -105,6 +105,7 @@ export default function privateToFields(api) {
       };
 
       const eltsToRemove = [];
+      let lastPrivInstanceFieldsPaths = [];
       let constructorPath;
 
       const {
@@ -124,6 +125,9 @@ export default function privateToFields(api) {
         if (el.isClassPrivateProperty()) {
           meta.privFields.push(el.node);
           eltsToRemove.push(el);
+          if (meta === instanceMeta) {
+            lastPrivInstanceFieldsPaths.push(el);
+          }
           continue;
         }
 
@@ -152,12 +156,20 @@ export default function privateToFields(api) {
             unshiftFieldInit(el, meta.initPrivFields(meta.privFields));
             meta.privFields = [];
           }
+          if (meta === instanceMeta) {
+            lastPrivInstanceFieldsPaths = [];
+          }
           continue;
         }
 
         if (el.isClassMethod({ kind: "constructor" })) {
           constructorPath = el;
         }
+      }
+
+      if (eltsToRemove.length === 0) {
+        // No class elements to transform
+        return;
       }
 
       transformPrivateNamesUsage(
@@ -187,6 +199,11 @@ export default function privateToFields(api) {
           path,
           constructorPath,
           instanceInit.map(p => t.expressionStatement(p)),
+          (referenceVisitor, state) => {
+            for (const el of lastPrivInstanceFieldsPaths) {
+              el.traverse(referenceVisitor, state);
+            }
+          },
         );
       }
 
@@ -218,6 +235,7 @@ export default function privateToFields(api) {
 
       injectStaticInitialization(
         path,
+        [],
         [
           ...ifPFAP(() =>
             initPrivMethods(staticMeta.privMethods, getExternalClassRef),

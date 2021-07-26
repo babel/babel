@@ -1,0 +1,4 @@
+{
+  "plugins": [["proposal-class-elements", { "targetSyntax": "classes" }]],
+  "minNodeVersion": "14.0.0"
+}

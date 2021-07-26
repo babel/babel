@@ -3,7 +3,7 @@ let exfiltrated;
 class Cl {
   constructor() {
     if (exfiltrated === undefined) {
-      exfiltrated = (babelHelpers.classCheckPrivateStaticAccess(Cl, Cl), _privateStaticMethod);
+      exfiltrated = babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _privateStaticMethod);
     }
   }
 

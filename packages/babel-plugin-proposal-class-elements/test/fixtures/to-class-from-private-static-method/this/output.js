@@ -11,7 +11,7 @@ class B extends A {
   }
 
   static extract() {
-    return [(babelHelpers.classCheckPrivateStaticAccess(this, B), _getA), (babelHelpers.classCheckPrivateStaticAccess(this, B), _getB)];
+    return [babelHelpers.classCheckPrivateStaticAccess(this, B, _getA), babelHelpers.classCheckPrivateStaticAccess(this, B, _getB)];
   }
 
 }

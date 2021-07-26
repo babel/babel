@@ -1,0 +1,6 @@
+{
+  "assumptions": {
+    "setPublicClassFields": true
+  },
+  "plugins": [["proposal-class-elements", { "targetSyntax": "classes" }]]
+}

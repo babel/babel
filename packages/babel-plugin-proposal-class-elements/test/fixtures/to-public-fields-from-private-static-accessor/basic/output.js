@@ -1,12 +1,12 @@
-var _PRIVATE_STATIC_FIELD;
+var _PRIVATE_STATIC_FIELD = babelHelpers.temporalUndefined;
 
 class Cl {
   static getValue() {
-    return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl), _get_privateStaticFieldValue.call(Cl);
+    return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _get_privateStaticFieldValue).call(Cl);
   }
 
   static setValue() {
-    babelHelpers.classCheckPrivateStaticAccess(Cl, Cl), _set_privateStaticFieldValue.call(Cl, "dank");
+    babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _set_privateStaticFieldValue).call(Cl, "dank");
   }
 
 }
@@ -14,9 +14,9 @@ class Cl {
 _PRIVATE_STATIC_FIELD = "top secret string"
 
 function _get_privateStaticFieldValue() {
-  return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl), _PRIVATE_STATIC_FIELD;
+  return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _PRIVATE_STATIC_FIELD);
 }
 
 function _set_privateStaticFieldValue(newValue) {
-  babelHelpers.classCheckPrivateStaticAccess(Cl, Cl), _PRIVATE_STATIC_FIELD = `Updated: ${newValue}`;
+  babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _PRIVATE_STATIC_FIELD), _PRIVATE_STATIC_FIELD = `Updated: ${newValue}`;
 }

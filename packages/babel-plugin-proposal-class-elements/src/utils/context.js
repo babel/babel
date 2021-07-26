@@ -2,8 +2,11 @@ import { types as t, traverse } from "@babel/core";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
+import nameFunction from "@babel/helper-function-name";
 
 export function getClassRefs(path) {
+  nameFunction(path, true);
+
   const originalClassRef = path.node.id;
   let internalClassRef = originalClassRef;
 

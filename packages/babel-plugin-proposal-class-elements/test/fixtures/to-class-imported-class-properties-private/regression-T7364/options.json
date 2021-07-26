@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["proposal-class-elements", { "targetSyntax": "classes" }],
+    "transform-block-scoping",
+    "transform-async-to-generator"
+  ]
+}

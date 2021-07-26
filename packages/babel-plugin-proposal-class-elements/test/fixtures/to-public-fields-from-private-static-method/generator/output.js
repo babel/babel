@@ -1,6 +1,6 @@
 class Cl {
   test() {
-    return (babelHelpers.classCheckPrivateStaticAccess(Cl, Cl), _foo).call(Cl);
+    return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _foo).call(Cl);
   }
 
 }

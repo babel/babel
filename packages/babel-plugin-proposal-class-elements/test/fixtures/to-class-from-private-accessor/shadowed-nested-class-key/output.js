@@ -12,8 +12,14 @@ class A {
   }
 
   test() {
+    let _babelHelpers$classPr, _babelHelpers$classPr2, _babelHelpers$classPr3;
+
     var _foo2 = /*#__PURE__*/new WeakMap(),
         _baz2 = /*#__PURE__*/new WeakSet();
+
+    _babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(this, _foo2);
+    _babelHelpers$classPr2 = babelHelpers.classPrivateAccessorGet2(this, _bar, _get_bar);
+    _babelHelpers$classPr3 = babelHelpers.classPrivateAccessorGet2(this, _baz2, _get_baz);
 
     class B {
       constructor() {
@@ -22,19 +28,19 @@ class A {
         _foo2.set(this, void 0);
       }
 
-      [babelHelpers.classPrivateFieldGet2(this, _foo2)]() {
+      [_babelHelpers$classPr]() {
         babelHelpers.classPrivateFieldSet2(this, _foo2, 1);
         babelHelpers.classPrivateAccessorSet2(this, _bar, _set_bar, 2);
         babelHelpers.classPrivateAccessorSet2(this, _baz2, _set_baz, 1.2);
       }
 
-      [babelHelpers.classPrivateAccessorGet2(this, _bar, _get_bar)]() {
+      [_babelHelpers$classPr2]() {
         babelHelpers.classPrivateFieldSet2(this, _foo2, 3);
         babelHelpers.classPrivateAccessorSet2(this, _bar, _set_bar, 4);
         babelHelpers.classPrivateAccessorSet2(this, _baz2, _set_baz, 3.4);
       }
 
-      [babelHelpers.classPrivateAccessorGet2(this, _baz2, _get_baz)]() {
+      [_babelHelpers$classPr3]() {
         babelHelpers.classPrivateFieldSet2(this, _foo2, 5);
         babelHelpers.classPrivateAccessorSet2(this, _bar, _set_bar, 6);
         babelHelpers.classPrivateAccessorSet2(this, _baz2, _set_baz, 5.6);

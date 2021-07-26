@@ -1317,10 +1317,16 @@ helpers.classStaticPrivateFieldDestructureSet = helper("7.13.10")`
 `;
 
 helpers.classCheckPrivateStaticAccess = helper("7.13.10")`
-  export default function _classCheckPrivateStaticAccess(receiver, classConstructor) {
+  import temporalUndefined from "temporalUndefined";
+
+  export default function _classCheckPrivateStaticAccess(receiver, classConstructor, value) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
+    if (value === temporalUndefined) {
+      throw new TypeError("Cannot access private static field before its declaration");
+    }
+    return value;
   }
 `;
 
@@ -2095,8 +2101,8 @@ helpers.classInstancePrivateAccessorDestructureSet2 = helper("7.15.0")`
 helpers.classStaticPrivateFieldDestructureSet2 = helper("7.15.0")`
   import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
 
-  export default function _classStaticPrivateFieldDestructureSet2(receiver, classConstructor, setter) {
-    classCheckPrivateStaticAccess(receiver, classConstructor);
+  export default function _classStaticPrivateFieldDestructureSet2(receiver, classConstructor, value, setter) {
+    classCheckPrivateStaticAccess(receiver, classConstructor, value);
     return Object.defineProperty({}, "_", { set: setter });
   }
 `;

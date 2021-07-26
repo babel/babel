@@ -1,0 +1,10 @@
+{
+  "assumptions": {
+    "setPublicClassFields": true
+  },
+  "plugins": [
+    ["proposal-decorators", { "legacy": true }],
+    ["proposal-class-elements", { "targetSyntax": "classes" }],
+    "transform-classes"
+  ]
+}

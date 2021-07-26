@@ -1,4 +1,4 @@
-var _priv;
+var _priv = babelHelpers.temporalUndefined;
 
 class A {}
 

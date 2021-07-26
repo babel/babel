@@ -11,7 +11,7 @@ class Sub extends Base {
   }
 
   static check() {
-    (babelHelpers.classCheckPrivateStaticAccess(Sub, Sub), _subStaticPrivateMethod).call(Sub);
+    babelHelpers.classCheckPrivateStaticAccess(Sub, Sub, _subStaticPrivateMethod).call(Sub);
   }
 
 }

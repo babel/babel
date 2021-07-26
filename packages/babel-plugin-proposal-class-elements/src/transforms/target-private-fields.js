@@ -154,7 +154,10 @@ export default function privateToFields(api) {
         }
       }
 
-      if (methods.size === 0 && accessors.size === 0) return;
+      if (methods.size === 0 && accessors.size === 0) {
+        // No class elements to transform
+        return;
+      }
 
       path.traverse(privateUsageInnerEnvironmentVisitor, {
         methods: new Set(methods.keys()),
