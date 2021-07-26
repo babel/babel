@@ -2877,6 +2877,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return param;
     }
 
+    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+      switch (node.type) {
+        case "TSTypeCastExpression":
+          return this.isAssignable(node.expression, isBinding);
+        case "TSParameterProperty":
+          return true;
+        default:
+          return super.isAssignable(node, isBinding);
+      }
+    }
+
     toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       switch (node.type) {
         case "TSTypeCastExpression":
@@ -3071,8 +3082,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node.expression;
     }
 
-    shouldParseArrow() {
-      return this.match(tt.colon) || super.shouldParseArrow();
+    shouldParseArrow(params: Array<N.Node>) {
+      if (this.match(tt.colon)) {
+        return params.every(expr => this.isAssignable(expr, true));
+      }
+      return super.shouldParseArrow(params);
     }
 
     shouldParseAsyncArrow(): boolean {

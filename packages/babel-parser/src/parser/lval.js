@@ -60,7 +60,7 @@ export default class LValParser extends NodeUtils {
    - RestElement is not the last element
    - Missing `=` in assignment pattern
 
-   NOTE: There is a corresponding "isAssignable" method in flow.js.
+   NOTE: There is a corresponding "isAssignable" method.
    When this one is updated, please check if also that one needs to be updated.
 
    * @param {Node} node The expression atom
@@ -100,6 +100,7 @@ export default class LValParser extends NodeUtils {
       case "ObjectPattern":
       case "ArrayPattern":
       case "AssignmentPattern":
+      case "RestElement":
         break;
 
       case "ObjectExpression":
@@ -227,6 +228,50 @@ export default class LValParser extends NodeUtils {
       }
     }
     return exprList;
+  }
+
+  isAssignable(node: Node, isBinding?: boolean): boolean {
+    switch (node.type) {
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+      case "RestElement":
+        return true;
+
+      case "ObjectExpression": {
+        const last = node.properties.length - 1;
+        return node.properties.every((prop, i) => {
+          return (
+            prop.type !== "ObjectMethod" &&
+            (i === last || prop.type !== "SpreadElement") &&
+            this.isAssignable(prop)
+          );
+        });
+      }
+
+      case "ObjectProperty":
+        return this.isAssignable(node.value);
+
+      case "SpreadElement":
+        return this.isAssignable(node.argument);
+
+      case "ArrayExpression":
+        return node.elements.every(element => this.isAssignable(element));
+
+      case "AssignmentExpression":
+        return node.operator === "=";
+
+      case "ParenthesizedExpression":
+        return this.isAssignable(node.expression);
+
+      case "MemberExpression":
+      case "OptionalMemberExpression":
+        return !isBinding;
+
+      default:
+        return false;
+    }
   }
 
   // Convert list of expression atoms to a list of

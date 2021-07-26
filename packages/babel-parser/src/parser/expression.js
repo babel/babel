@@ -1503,7 +1503,7 @@ export default class ExpressionParser extends LValParser {
     let arrowNode = this.startNodeAt(startPos, startLoc);
     if (
       canBeArrow &&
-      this.shouldParseArrow() &&
+      this.shouldParseArrow(exprList) &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
       this.expressionScope.validateAsPattern();
@@ -1544,7 +1544,8 @@ export default class ExpressionParser extends LValParser {
     return parenExpression;
   }
 
-  shouldParseArrow(): boolean {
+  // eslint-disable-next-line no-unused-vars -- `params` is used in typescript plugin
+  shouldParseArrow(params: Array<N.Node>): boolean {
     return !this.canInsertSemicolon();
   }
 

@@ -2257,46 +2257,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isAssignable(node: N.Node, isBinding?: boolean): boolean {
-      switch (node.type) {
-        case "Identifier":
-        case "ObjectPattern":
-        case "ArrayPattern":
-        case "AssignmentPattern":
-          return true;
-
-        case "ObjectExpression": {
-          const last = node.properties.length - 1;
-          return node.properties.every((prop, i) => {
-            return (
-              prop.type !== "ObjectMethod" &&
-              (i === last || prop.type === "SpreadElement") &&
-              this.isAssignable(prop)
-            );
-          });
-        }
-
-        case "ObjectProperty":
-          return this.isAssignable(node.value);
-
-        case "SpreadElement":
-          return this.isAssignable(node.argument);
-
-        case "ArrayExpression":
-          return node.elements.every(element => this.isAssignable(element));
-
-        case "AssignmentExpression":
-          return node.operator === "=";
-
-        case "ParenthesizedExpression":
-        case "TypeCastExpression":
-          return this.isAssignable(node.expression);
-
-        case "MemberExpression":
-        case "OptionalMemberExpression":
-          return !isBinding;
-
-        default:
-          return false;
+      if (node.type === "TypeCastExpression") {
+        return this.isAssignable(node.expression, isBinding);
+      } else {
+        return super.isAssignable(node, isBinding);
       }
     }
 
@@ -2989,8 +2953,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseArrow(node);
     }
 
-    shouldParseArrow(): boolean {
-      return this.match(tt.colon) || super.shouldParseArrow();
+    shouldParseArrow(params: Array<N.Node>): boolean {
+      return this.match(tt.colon) || super.shouldParseArrow(params);
     }
 
     setArrowFunctionParameters(
