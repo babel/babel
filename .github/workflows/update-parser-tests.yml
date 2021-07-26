@@ -38,7 +38,7 @@ jobs:
           echo ${{ steps.test262.outputs.sha1 }} | ./scripts/parser-tests/bump-test262-version.sh
       - name: Build babel parser
         run: |
-          yarn install --immutable --skip-builds
+          yarn install --immutable --mode=skip-build
           yarn gulp build-rollup
       - name: Update test262 allow list
         run: |
