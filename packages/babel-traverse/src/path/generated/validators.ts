@@ -4,7 +4,7 @@
  */
 import * as t from "@babel/types";
 import NodePath from "../index";
-import { VirtualTypeAliases } from "./virtual-types";
+import type { VirtualTypeAliases } from "./virtual-types";
 
 export interface NodePathValidators {
   isAnyTypeAnnotation(opts?: object): this is NodePath<t.AnyTypeAnnotation>;

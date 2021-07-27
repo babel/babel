@@ -9,7 +9,7 @@ export default function generateValidators() {
  */
 import * as t from "@babel/types";
 import NodePath from "../index";
-import { VirtualTypeAliases } from "./virtual-types";
+import type { VirtualTypeAliases } from "./virtual-types";
 
 export interface NodePathValidators {
 `;
@@ -23,15 +23,15 @@ export interface NodePathValidators {
     if (type[0] === "_") continue;
     if (definitions.NODE_FIELDS[type] || definitions.FLIPPED_ALIAS_KEYS[type]) {
       output += `is${type}(opts?: object): this is NodePath<t.${type}>;`;
-    } else if (!types) {
+    } else if (types /* in VirtualTypeAliases */) {
+      output += `is${type}(opts?: object): this is NodePath<VirtualTypeAliases["${type}"]>;`;
+    } else {
       // if it don't have types, then VirtualTypeAliases[type] is t.Node
       // which TS marked as always true
       // eg. if (path.isBlockScope()) return;
       //     path resolved to `never` here
       // so we have to return boolean instead of this is NodePath<t.Node> here
       output += `is${type}(opts?: object): boolean;`;
-    } else {
-      output += `is${type}(opts?: object): this is NodePath<VirtualTypeAliases["${type}"]>;`;
     }
   }
 
