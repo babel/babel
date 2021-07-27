@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: 'private' modifier must precede 'readonly' modifier. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":46,"loc":{"start":{"line":1,"column":10},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":14,"end":35,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":23}},
+              "readonly": true,
+              "accessibility": "private",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":31,"end":34,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":22},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "value": null,
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " Error",
+                  "start":36,"end":44,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":32}}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":36,"end":44,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":32}}
+    }
+  ]
+}

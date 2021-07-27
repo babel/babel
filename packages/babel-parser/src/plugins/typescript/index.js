@@ -71,6 +71,7 @@ const TSErrors = Object.freeze({
   IndexSignatureHasAccessibility:
     "Index signatures cannot have an accessibility modifier ('%0')",
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
+  InvalidModifierOrder: "'%0' modifier must precede '%1' modifier.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
   PatternIsOptional:
@@ -1989,9 +1990,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: { hadConstructor: boolean },
       constructorAllowsSuper: boolean,
     ): void {
-      this.tsParseModifiers(member, ["declare"]);
+      this.tsParseModifiers(member, ["declare", "readonly"]);
       const accessibility = this.parseAccessModifier();
-      if (accessibility) member.accessibility = accessibility;
+
+      if (accessibility) {
+        if (member.readonly) {
+          this.raise(
+            member.start,
+            TSErrors.InvalidModifierOrder,
+            accessibility,
+            "readonly",
+          );
+        }
+        member.accessibility = accessibility;
+      }
       this.tsParseModifiers(member, ["declare"]);
 
       super.parseClassMember(classBody, member, state, constructorAllowsSuper);
