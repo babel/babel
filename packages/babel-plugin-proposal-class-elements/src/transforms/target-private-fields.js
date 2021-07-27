@@ -27,10 +27,30 @@ function hasSideEffects(path) {
   return !(path.isThisExpression() || path.isSuper() || path.isPure());
 }
 
-function readOnlyError(member, file) {
-  return t.callExpression(file.addHelper("readOnlyError"), [
+function readOnlyError(member, file, helper = "readOnlyError") {
+  return t.callExpression(file.addHelper(helper), [
     t.stringLiteral(`#${member.property.id.name}`),
   ]);
+}
+
+function isAssignmentTarget(path) {
+  if (
+    // Special case: it depends on the grandparent node
+    path.parent.type === "ObjectProperty" &&
+    path.parentPath.parent.type === "ObjectExpression"
+  ) {
+    return false;
+  }
+
+  const keys = t.getBindingIdentifiers.keys[path.parent.type];
+  if (!keys) return false;
+
+  return keys.some(key => {
+    const parentChild = path.parent[key];
+    return Array.isArray(parentChild)
+      ? parentChild.includes(path.node)
+      : parentChild === path.node;
+  });
 }
 
 const privateUsageVisitor = {
@@ -60,6 +80,23 @@ const privateUsageVisitor = {
     }
   },
   "MemberExpression|OptionalMemberExpression": {
+    enter(path, { methods, file }) {
+      if (isKnownPrivate(path.node, methods) && isAssignmentTarget(path)) {
+        const seq = [];
+
+        if (hasSideEffects(path.get("object"))) {
+          seq.push(path.node.object);
+        }
+        seq.push(readOnlyError(path.node, file, "readOnlyErrorSet"));
+
+        path.replaceWith(
+          t.memberExpression(
+            seq.length === 1 ? seq[0] : t.memberExpression(seq),
+            t.identifier("_"),
+          ),
+        );
+      }
+    },
     exit(path, { accessors }) {
       if (isKnownPrivate(path.node, accessors)) {
         path.replaceWith(

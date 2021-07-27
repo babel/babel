@@ -1,0 +1,6 @@
+{
+  "plugins": [["proposal-class-elements", { "targetSyntax": "privateFields" }]],
+  "assumptions": {
+    "constantSuper": true
+  }
+}
