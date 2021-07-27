@@ -75,7 +75,8 @@
     "eslint/*",
     "packages/*",
     "test/esm",
-    "test/runtime-integration/*"
+    "test/runtime-integration/*",
+    "benchmark"
   ],
   "resolutions": {
     "browserslist": "npm:4.16.6",
