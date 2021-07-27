@@ -4,6 +4,7 @@
  */
 import * as t from "@babel/types";
 import NodePath from "../index";
+import type { VirtualTypeAliases } from "./virtual-types";
 
 export interface NodePathValidators {
   isAnyTypeAnnotation(opts?: object): this is NodePath<t.AnyTypeAnnotation>;
@@ -416,22 +417,38 @@ export interface NodePathValidators {
   isWhileStatement(opts?: object): this is NodePath<t.WhileStatement>;
   isWithStatement(opts?: object): this is NodePath<t.WithStatement>;
   isYieldExpression(opts?: object): this is NodePath<t.YieldExpression>;
-  isReferencedIdentifier(opts?: object): boolean;
-  isReferencedMemberExpression(opts?: object): boolean;
-  isBindingIdentifier(opts?: object): boolean;
+  isReferencedIdentifier(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"]>;
+  isReferencedMemberExpression(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]>;
+  isBindingIdentifier(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
   isStatement(opts?: object): this is NodePath<t.Statement>;
   isExpression(opts?: object): this is NodePath<t.Expression>;
-  isScope(opts?: object): boolean;
+  isScope(opts?: object): this is NodePath<VirtualTypeAliases["Scope"]>;
   isReferenced(opts?: object): boolean;
   isBlockScoped(opts?: object): boolean;
-  isVar(opts?: object): boolean;
+  isVar(opts?: object): this is NodePath<VirtualTypeAliases["Var"]>;
   isUser(opts?: object): boolean;
   isGenerated(opts?: object): boolean;
   isPure(opts?: object): boolean;
   isFlow(opts?: object): this is NodePath<t.Flow>;
-  isRestProperty(opts?: object): boolean;
-  isSpreadProperty(opts?: object): boolean;
-  isExistentialTypeParam(opts?: object): boolean;
-  isNumericLiteralTypeAnnotation(opts?: object): boolean;
-  isForAwaitStatement(opts?: object): boolean;
+  isRestProperty(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["RestProperty"]>;
+  isSpreadProperty(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["SpreadProperty"]>;
+  isExistentialTypeParam(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ExistentialTypeParam"]>;
+  isNumericLiteralTypeAnnotation(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
+  isForAwaitStatement(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]>;
 }
