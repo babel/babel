@@ -341,7 +341,7 @@ type Trav<
   ? K extends NodeKeyOf<Node>
     ? R extends []
       ? Node[K]
-      : // @ts-ignore ignore since TS is not smart enough
+      : // @ts-expect-error ignore since TS is not smart enough
         Trav<Node[K], R>
     : never
   : never;
