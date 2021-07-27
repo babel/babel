@@ -289,6 +289,7 @@ const privateNameHandlerSpec = {
       if (!setId) {
         return t.sequenceExpression([
           this.receiver(member),
+          value,
           t.callExpression(file.addHelper("readOnlyError"), [
             t.stringLiteral(`#${name}`),
           ]),
@@ -354,8 +355,11 @@ const privateNameHandlerSpec = {
 
     if (isMethod && !setId) {
       return t.memberExpression(
-        t.callExpression(file.addHelper("readOnlyError"), [
-          t.stringLiteral(`#${name}`),
+        t.sequenceExpression([
+          this.receiver(member),
+          t.callExpression(file.addHelper("readOnlyErrorSet"), [
+            t.stringLiteral(`#${name}`),
+          ]),
         ]),
         t.identifier("_"),
       );

@@ -2,7 +2,7 @@ var _PRIVATE_STATIC_FIELD = babelHelpers.temporalUndefined;
 
 class Cl {
   static setPrivateStaticFieldValue() {
-    Cl, babelHelpers.readOnlyError("#privateStaticFieldValue");
+    Cl, 1, babelHelpers.readOnlyError("#privateStaticFieldValue");
   }
 
 }

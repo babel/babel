@@ -6,7 +6,7 @@ class A {
   }
 
   test() {
-    [babelHelpers.readOnlyError("#priv")._] = [3];
+    [(this, babelHelpers.readOnlyErrorSet("#priv"))._] = [3];
   }
 
 }

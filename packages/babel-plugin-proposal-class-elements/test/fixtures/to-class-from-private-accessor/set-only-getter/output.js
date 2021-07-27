@@ -7,7 +7,7 @@ class Cl {
 
     _privateField.set(this, 0);
 
-    this, babelHelpers.readOnlyError("#privateFieldValue");
+    this, 1, babelHelpers.readOnlyError("#privateFieldValue");
   }
 
 }
