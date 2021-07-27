@@ -1,0 +1,4 @@
+{
+  "plugins": [["proposal-class-elements", { "targetSyntax": "publicFields" }]],
+  "minNodeVersion": "14.0.0"
+}

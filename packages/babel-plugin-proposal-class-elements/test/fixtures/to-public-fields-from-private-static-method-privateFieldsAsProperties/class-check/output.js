@@ -9,6 +9,6 @@ class Cl {
 
 Object.defineProperty(Cl, _privateStaticMethod, {
   value: _privateStaticMethod2
-})
+});
 
 function _privateStaticMethod2() {}

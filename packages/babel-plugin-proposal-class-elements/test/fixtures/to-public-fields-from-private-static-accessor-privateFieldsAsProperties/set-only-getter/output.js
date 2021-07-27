@@ -11,11 +11,11 @@ class Cl {
 Object.defineProperty(Cl, _privateStaticFieldValue, {
   get: _get_privateStaticFieldValue,
   set: void 0
-})
+});
 Object.defineProperty(Cl, _PRIVATE_STATIC_FIELD, {
   writable: true,
   value: 0
-})
+});
 
 function _get_privateStaticFieldValue() {
   return babelHelpers.classPrivateFieldLooseBase(Cl, _PRIVATE_STATIC_FIELD)[_PRIVATE_STATIC_FIELD];

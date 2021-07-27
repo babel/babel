@@ -13,8 +13,8 @@ class A {
 Object.defineProperty(A, _foo, {
   writable: true,
   value: void 0
-})
+});
 Object.defineProperty(A, _bar, {
   writable: true,
   value: 1
-})
+});

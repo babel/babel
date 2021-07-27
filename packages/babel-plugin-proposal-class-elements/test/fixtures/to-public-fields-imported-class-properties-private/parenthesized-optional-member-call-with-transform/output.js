@@ -1,0 +1,40 @@
+var _x = babelHelpers.temporalUndefined,
+    _m = babelHelpers.temporalUndefined;
+
+class Foo {
+  static self = (_x = 1, Foo);
+
+  static getSelf() {
+    return Foo;
+  }
+
+  test() {
+    var _o$Foo, _o$Foo2, _o$Foo3, _o$Foo$self$getSelf, _o$Foo$self$getSelf2, _fn$Foo$self$getSelf, _fn$Foo$self$getSelf2, _o$Foo4, _o$Foo4$self, _o$Foo$self, _fn, _fn$Foo, _fn$Foo$self, _fn$Foo$self2;
+
+    const o = {
+      Foo: Foo
+    };
+
+    const fn = function () {
+      return o;
+    };
+
+    (Foo === null || Foo === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(Foo, Foo, _m).bind(Foo))();
+    (Foo === null || Foo === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(Foo, Foo, _m).bind(Foo))().toString;
+    (Foo === null || Foo === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(Foo, Foo, _m).bind(Foo))().toString();
+    (o === null || o === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(_o$Foo = o.Foo, Foo, _m).bind(_o$Foo))();
+    (o === null || o === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(_o$Foo2 = o.Foo, Foo, _m).bind(_o$Foo2))().toString;
+    (o === null || o === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(_o$Foo3 = o.Foo, Foo, _m).bind(_o$Foo3))().toString();
+    ((_o$Foo$self$getSelf = ((_o$Foo4 = o.Foo) === null || _o$Foo4 === void 0 ? void 0 : (_o$Foo4$self = _o$Foo4.self).getSelf.bind(_o$Foo4$self))()) === null || _o$Foo$self$getSelf === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(_o$Foo$self$getSelf, Foo, _m).bind(_o$Foo$self$getSelf))();
+    ((_o$Foo$self$getSelf2 = ((_o$Foo$self = o.Foo.self) === null || _o$Foo$self === void 0 ? void 0 : _o$Foo$self.getSelf.bind(_o$Foo$self))()) === null || _o$Foo$self$getSelf2 === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(_o$Foo$self$getSelf2, Foo, _m).bind(_o$Foo$self$getSelf2))();
+    ((_fn$Foo$self$getSelf = ((_fn = fn()) === null || _fn === void 0 ? void 0 : (_fn$Foo = _fn.Foo) === null || _fn$Foo === void 0 ? void 0 : (_fn$Foo$self = _fn$Foo.self).getSelf.bind(_fn$Foo$self))()) === null || _fn$Foo$self$getSelf === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(_fn$Foo$self$getSelf, Foo, _m).bind(_fn$Foo$self$getSelf))();
+    ((_fn$Foo$self$getSelf2 = (fn === null || fn === void 0 ? void 0 : (_fn$Foo$self2 = fn().Foo.self) === null || _fn$Foo$self2 === void 0 ? void 0 : _fn$Foo$self2.getSelf.bind(_fn$Foo$self2))()) === null || _fn$Foo$self$getSelf2 === void 0 ? void 0 : babelHelpers.classCheckPrivateStaticAccess(_fn$Foo$self$getSelf2, Foo, _m).bind(_fn$Foo$self$getSelf2))();
+  }
+
+}
+
+_m = function () {
+  return babelHelpers.classCheckPrivateStaticAccess(this, Foo, _x);
+};
+
+new Foo().test();

@@ -11,7 +11,7 @@ class Cl {
 
 }
 
-_PRIVATE_STATIC_FIELD = "top secret string"
+_PRIVATE_STATIC_FIELD = "top secret string";
 
 function _get_privateStaticFieldValue() {
   return babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _PRIVATE_STATIC_FIELD);

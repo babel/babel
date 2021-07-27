@@ -9,6 +9,6 @@ class A {
 
 Object.defineProperty(A, _priv, {
   value: _priv2
-})
+});
 
 function _priv2() {}

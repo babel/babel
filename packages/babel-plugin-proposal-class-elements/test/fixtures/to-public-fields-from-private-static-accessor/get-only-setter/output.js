@@ -7,7 +7,7 @@ class Cl {
 
 }
 
-_PRIVATE_STATIC_FIELD = 0
+_PRIVATE_STATIC_FIELD = 0;
 
 function _set_privateStaticFieldValue(newValue) {
   babelHelpers.classCheckPrivateStaticAccess(Cl, Cl, _PRIVATE_STATIC_FIELD), _PRIVATE_STATIC_FIELD = newValue;

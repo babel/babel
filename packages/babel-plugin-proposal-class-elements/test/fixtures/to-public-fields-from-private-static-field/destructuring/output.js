@@ -7,4 +7,4 @@ class A {
 
 }
 
-_priv = 2
+_priv = 2;

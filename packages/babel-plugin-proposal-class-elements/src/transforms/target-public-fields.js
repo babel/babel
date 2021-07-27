@@ -241,7 +241,7 @@ export default function privateToFields(api) {
             initPrivMethods(staticMeta.privMethods, getExternalClassRef),
           ),
           ...initStaticPrivFields(staticMeta.privFields, getExternalClassRef),
-        ],
+        ].map(n => t.expressionStatement(n)),
         getExternalClassRef,
         needsExternalClassRef(),
       );

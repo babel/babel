@@ -9,7 +9,7 @@ class Cl {
 
 Object.defineProperty(Cl, _foo, {
   value: _foo2
-})
+});
 
 function* _foo2() {
   yield 2;

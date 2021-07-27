@@ -7,5 +7,5 @@ class A {
   static pub2 = (_priv = 0, 2);
 }
 
-_foo = void 0
-_bar = 1
+_foo = void 0;
+_bar = 1;

@@ -15,11 +15,11 @@ class A {
 Object.defineProperty(A, _priv, {
   get: void 0,
   set: _set_priv
-})
+});
 Object.defineProperty(A, _priv2, {
   get: _get_priv,
   set: void 0
-})
+});
 
 function _set_priv(_) {}
 

@@ -21,10 +21,10 @@ class B extends A {
 
 Object.defineProperty(B, _getA, {
   value: _getA2
-})
+});
 Object.defineProperty(B, _getB, {
   value: _getB2
-})
+});
 
 function _getA2() {
   return babelHelpers.get(babelHelpers.getPrototypeOf(B), "a", this);

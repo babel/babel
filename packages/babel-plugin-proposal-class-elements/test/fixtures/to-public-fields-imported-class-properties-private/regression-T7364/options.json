@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["proposal-class-elements", { "targetSyntax": "publicFields" }],
+    "transform-block-scoping",
+    "transform-async-to-generator"
+  ]
+}

@@ -10,4 +10,4 @@ class A {
 Object.defineProperty(A, _priv, {
   writable: true,
   value: 2
-})
+});

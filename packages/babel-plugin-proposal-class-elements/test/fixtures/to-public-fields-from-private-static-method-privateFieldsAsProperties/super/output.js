@@ -20,7 +20,7 @@ class Sub extends Base {
 
 Object.defineProperty(Sub, _subStaticPrivateMethod, {
   value: _subStaticPrivateMethod2
-})
+});
 
 function _subStaticPrivateMethod2() {
   return babelHelpers.get(babelHelpers.getPrototypeOf(Sub), "basePublicStaticMethod", this).call(this);
