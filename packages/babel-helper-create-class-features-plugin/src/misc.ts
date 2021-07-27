@@ -118,7 +118,6 @@ export function extractComputedKeys(
   for (const computedPath of computedPaths) {
     const computedKey = computedPath.get("key");
     if (computedKey.isReferencedIdentifier()) {
-      // @ts-expect-error TODO: make isReferencedIdentifier return path is Identifier
       handleClassTDZ(computedKey, state);
     } else {
       computedKey.traverse(classFieldDefinitionEvaluationTDZVisitor, state);

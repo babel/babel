@@ -91,7 +91,6 @@ const handle = {
     // noop.
   },
 
-  // todo(flow->ts) member:NodePath<t.Expression>, refactor function body to avoid too many typecasts
   handle(this: HandlerState, member: Member, noDocumentAll: boolean) {
     const { node, parent, parentPath, scope } = member;
 
