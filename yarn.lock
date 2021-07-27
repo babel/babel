@@ -368,6 +368,7 @@ __metadata:
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
     "@babel/helper-fixtures": "workspace:*"
+    "@babel/parser": "workspace:*"
     "@babel/types": "workspace:^7.14.8"
     "@types/jsesc": ^2.5.0
     "@types/source-map": ^0.5.0
