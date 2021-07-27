@@ -193,11 +193,19 @@ function getStatementListCompletion(
     }
   } else if (paths.length) {
     // When we are in a context where `break` must not exist, we can skip linear
-    // search on statement lists and assume that the last statement determines
-    // the completion
-    completions = completions.concat(
-      _getCompletionRecords(paths[paths.length - 1], context),
-    );
+    // search on statement lists and assume that the last
+    // non-variable-declaration statement determines the completion.
+    for (let i = paths.length - 1; i >= 0; i--) {
+      const pathCompletions = _getCompletionRecords(paths[i], context);
+      if (
+        pathCompletions.length > 1 ||
+        (pathCompletions.length === 1 &&
+          !pathCompletions[0].path.isVariableDeclaration())
+      ) {
+        completions = completions.concat(pathCompletions);
+        break;
+      }
+    }
   }
   return completions;
 }
