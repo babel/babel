@@ -125,13 +125,19 @@ $ TEST_ONLY=babel-plugin-transform-classes make test
 Or you can use Jest:
 
 ```sh
-yarn jest babel-cli --watch
+yarn jest babel-cli
 ```
 
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
 ```sh
 $ TEST_GREP=transformation make test
+```
+
+Or you can use Jest:
+
+```sh
+yarn jest -t transformation
 ```
 
 Substitute spaces for hyphens and forward slashes when targeting specific test names:
@@ -144,6 +150,12 @@ To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment
 
 ```sh
 $ TEST_DEBUG=true make test
+```
+
+Or you can use Node
+
+```sh
+yarn node --inspect-brk node_modules/jest/bin/jest.js --runInBand
 ```
 
 You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/testSetupFile.js](https://github.com/babel/babel/blob/main/test/testSetupFile.js).
