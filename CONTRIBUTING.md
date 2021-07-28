@@ -122,6 +122,12 @@ $ TEST_ONLY=babel-cli make test
 $ TEST_ONLY=babel-plugin-transform-classes make test
 ```
 
+Or you can use Jest:
+
+```sh
+yarn jest babel-cli --watch
+```
+
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
 ```sh
