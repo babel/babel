@@ -880,7 +880,7 @@ export function buildFieldsInitNodes(
     // TODO(ts): there are so many `ts-expect-error` inside cases since
     // ts can not infer type from pre-computed values (or a case test)
     // even change `isStaticBlock` to `t.isStaticBlock(prop)` will not make prop
-    // a `NodePath<t.StaticBlock`
+    // a `NodePath<t.StaticBlock>`
     // this maybe a bug for ts
     switch (true) {
       case isStaticBlock:
