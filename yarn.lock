@@ -4008,9 +4008,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "@rollup/plugin-node-resolve@npm:13.0.0"
+"@rollup/plugin-node-resolve@npm:^13.0.0, @rollup/plugin-node-resolve@npm:^13.0.4":
+  version: 13.0.4
+  resolution: "@rollup/plugin-node-resolve@npm:13.0.4"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     "@types/resolve": 1.17.1
@@ -4020,7 +4020,7 @@ __metadata:
     resolve: ^1.19.0
   peerDependencies:
     rollup: ^2.42.0
-  checksum: 4b323e8ad5f1245449cd44b4857ed94a8dd3b998178ce139e74542c216a5abeb5a9e44885f3809ac747296a108f0562f986f9561055e76d1b0b268cf788a5c83
+  checksum: 3a45d28966dc690695f5a5923692f3eafbf81d43f38be6c68b20998950711b0cfb705ad271fe3ff8e0571d507c32b0915512822404f9b3a3cfb89a3027d428eb
   languageName: node
   linkType: hard
 
@@ -5742,7 +5742,7 @@ __metadata:
     "@rollup/plugin-babel": ^5.3.0
     "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^18.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch"
     "@rollup/plugin-json": ^4.1.0
-    "@rollup/plugin-node-resolve": ^13.0.0
+    "@rollup/plugin-node-resolve": ^13.0.4
     "@rollup/plugin-replace": ^2.4.2
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
@@ -5768,7 +5768,7 @@ __metadata:
     lodash: ^4.17.21
     mergeiterator: ^1.2.5
     prettier: 2.3.1
-    rollup: ^2.47.0
+    rollup: ^2.55.0
     rollup-plugin-dts: ^2.0.0
     rollup-plugin-node-polyfills: ^0.2.1
     rollup-plugin-terser: ^7.0.2
@@ -8603,7 +8603,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"fsevents@^2.3.2, fsevents@~2.3.1":
+"fsevents@^2.3.2, fsevents@~2.3.1, fsevents@~2.3.2":
   version: 2.3.2
   resolution: "fsevents@npm:2.3.2"
   dependencies:
@@ -8622,7 +8622,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"fsevents@patch:fsevents@^2.3.2#builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.1#builtin<compat/fsevents>":
+"fsevents@patch:fsevents@^2.3.2#builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.1#builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#builtin<compat/fsevents>":
   version: 2.3.2
   resolution: "fsevents@patch:fsevents@npm%3A2.3.2#builtin<compat/fsevents>::version=2.3.2&hash=11e9ea"
   dependencies:
@@ -13371,17 +13371,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.47.0":
-  version: 2.47.0
-  resolution: "rollup@npm:2.47.0"
+"rollup@npm:^2.47.0, rollup@npm:^2.55.0":
+  version: 2.55.0
+  resolution: "rollup@npm:2.55.0"
   dependencies:
-    fsevents: ~2.3.1
+    fsevents: ~2.3.2
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: bab2079fea72ebb6457e88717f64f3bd8ff52556827f77485708274aa94f2dfa19f555c022643957d604ff7329be5d010234346d28e13dcfed33d742d3e468b0
+  checksum: 9269671325aff6e887419838326a9d5e86f725ddc89d114c20fc4942d25eca8fcdd8869a566d8b6636fd62942d23873b9e0384d07db8ec829000581ea7986bdb
   languageName: node
   linkType: hard
 
