@@ -1219,6 +1219,14 @@ helpers.classExtractFieldDescriptor = helper("7.13.10")`
   }
 `;
 
+helpers.classCheckPrivateFieldInitSpec = helper("7.14.1")`
+  export default function _classCheckPrivateFieldInitSpec(obj, privateMap) {
+    if (privateMap.has(obj)) {
+      throw new TypeError("Identifier has already been declared");
+    }
+  }
+`;
+
 helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
   import classApplyDescriptorGet from "classApplyDescriptorGet";
   import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";

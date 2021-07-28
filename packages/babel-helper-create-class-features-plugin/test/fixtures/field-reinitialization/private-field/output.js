@@ -42,10 +42,9 @@ class Derived extends Base {
   constructor(...args) {
     super(...args);
 
-    _checkPrivateFieldInitSpec(this, _foo);
-    _foo.set(this, {
+    _privateFieldInitSpec(this, _foo, {
       writable: true,
-      value: ++counter
+      value: ++counter,
     });
   }
 
