@@ -8,6 +8,7 @@ export default (_: any, opts: any = {}) => {
     decoratorsLegacy = false,
     decoratorsBeforeExport,
     pipelineProposal = "minimal",
+    pipelineTopicToken = "%",
     recordAndTupleSyntax: recordAndTupleSyntax = "hash",
   } = opts;
 
@@ -23,7 +24,10 @@ export default (_: any, opts: any = {}) => {
       [babelPlugins.syntaxRecordAndTuple, { syntaxType: recordAndTupleSyntax }],
       babelPlugins.syntaxModuleBlocks,
       babelPlugins.proposalExportDefaultFrom,
-      [babelPlugins.proposalPipelineOperator, { proposal: pipelineProposal }],
+      [
+        babelPlugins.proposalPipelineOperator,
+        { proposal: pipelineProposal, topicToken: pipelineTopicToken },
+      ],
       babelPlugins.proposalDoExpressions,
     ],
   };
