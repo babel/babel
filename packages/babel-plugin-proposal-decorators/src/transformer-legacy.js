@@ -157,7 +157,7 @@ function applyTargetDecorators(path, state, decoratedProps) {
 
       WARNING_CALLS.add(node.value);
 
-      acc = acc.concat([
+      acc.push(
         t.assignmentExpression(
           "=",
           t.cloneNode(descriptor),
@@ -184,9 +184,9 @@ function applyTargetDecorators(path, state, decoratedProps) {
             ]),
           ]),
         ),
-      ]);
+      );
     } else {
-      acc = acc.concat(
+      acc.push(
         t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
           t.cloneNode(target),
           t.cloneNode(property),

@@ -305,7 +305,8 @@ export default function convertFunctionRest(path) {
     return true;
   }
 
-  state.references = state.references.concat(
+  Array.prototype.push.apply(
+    state.references,
     state.candidates.map(({ path }) => path),
   );
 

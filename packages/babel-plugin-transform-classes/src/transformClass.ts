@@ -136,7 +136,8 @@ export default function transformClass(
 
     if (classState.userConstructor) {
       const { constructorBody, userConstructor, construct } = classState;
-      constructorBody.body = constructorBody.body.concat(
+      Array.prototype.push.apply(
+        constructorBody.body,
         userConstructor.body.body,
       );
       t.inherits(construct, userConstructor);
@@ -695,7 +696,7 @@ export default function transformClass(
 
     extractDynamicKeys();
 
-    let { body } = classState;
+    const { body } = classState;
     const { closureParams, closureArgs } = setupClosureParamsArgs();
 
     buildBody();
@@ -712,7 +713,8 @@ export default function transformClass(
       );
     }
 
-    body = body.concat(
+    Array.prototype.push.apply(
+      body,
       classState.staticPropBody.map(fn => fn(t.cloneNode(classState.classRef))),
     );
 
