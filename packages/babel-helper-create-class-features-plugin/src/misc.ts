@@ -1,4 +1,5 @@
 import { template, traverse, types as t } from "@babel/core";
+import type { File } from "@babel/core";
 import type { NodePath, Scope, Visitor, Binding } from "@babel/traverse";
 import { environmentVisitor } from "@babel/helper-replace-supers";
 
@@ -30,7 +31,7 @@ function handleClassTDZ(
   path: NodePath<t.Identifier>,
   state: {
     classBinding: Binding;
-    file;
+    file: File;
   },
 ) {
   if (
@@ -108,7 +109,7 @@ export function extractComputedKeys(
   ref: t.Identifier,
   path: NodePath<t.Class>,
   computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[],
-  file,
+  file: File,
 ) {
   const declarations: t.Statement[] = [];
   const state = {
