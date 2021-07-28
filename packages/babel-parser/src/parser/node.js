@@ -26,9 +26,12 @@ class Node implements NodeBase {
   trailingComments: Array<Comment>;
   innerComments: Array<Comment>;
   extra: { [key: string]: any };
+}
+const NodePrototype = Node.prototype;
 
-  // todo(Babel 8): remove this method in Babel 8
-  __clone(): this {
+if (!process.env.BABEL_8_BREAKING) {
+  // $FlowIgnore
+  NodePrototype.__clone = function (): Node {
     // $FlowIgnore
     const newNode: any = new Node();
     const keys = Object.keys(this);
@@ -40,15 +43,13 @@ class Node implements NodeBase {
         key !== "trailingComments" &&
         key !== "innerComments"
       ) {
-        // $FlowIgnore
         newNode[key] = this[key];
       }
     }
 
     return newNode;
-  }
+  };
 }
-const NodePrototype = Node.prototype;
 
 function clonePlaceholder(node: any): any {
   return cloneIdentifier(node);
