@@ -33,7 +33,7 @@
 Babel (pronounced ["babble"](https://soundcloud.com/sebmck/how-to-pronounce-babel))  is a community-driven project used by many companies and projects, and is maintained by a group of [volunteers](https://babeljs.io/team). If you'd like to help support the future of the project, please consider:
 
 - Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](https://slack.babeljs.io/) for guidance!)
-- Giving funds by becoming a sponsor on [Open Collective](https://opencollective.com/babel) or [Patreon](https://www.patreon.com/henryzhu)!
+- Giving funds by becoming a sponsor on [Open Collective](https://opencollective.com/babel) or [GitHub](https://github.com/sponsors/babel/) (which goes to our Open Collective account)!
 
 ## Sponsors
 
