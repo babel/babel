@@ -25,6 +25,7 @@ import {
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
 import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
+import { cloneIdentifier } from "../../parser/node";
 
 const reservedTypes = new Set([
   "_",
@@ -2655,7 +2656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
           specifier.importKind = specifierTypeKind;
-          specifier.local = as_ident.__clone();
+          specifier.local = cloneIdentifier(as_ident);
         } else {
           // `import {type as foo`
           specifier.imported = firstIdent;
@@ -2673,7 +2674,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = this.parseIdentifier();
         } else {
           isBinding = true;
-          specifier.local = specifier.imported.__clone();
+          specifier.local = cloneIdentifier(specifier.imported);
         }
       } else {
         if (firstIdentIsString) {
@@ -2688,7 +2689,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
-        specifier.local = specifier.imported.__clone();
+        specifier.local = cloneIdentifier(specifier.imported);
       }
 
       const nodeIsTypeImport = hasTypeImportKind(node);

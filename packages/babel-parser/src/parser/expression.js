@@ -57,6 +57,7 @@ import {
 import { Errors, SourceTypeModuleErrors } from "./error";
 import type { ParsingError } from "./error";
 import { setInnerComments } from "./comments";
+import { cloneIdentifier } from "./node";
 
 /*::
 import type { SourceType } from "../options";
@@ -1938,7 +1939,7 @@ export default class ExpressionParser extends LValParser {
         prop.value = this.parseMaybeDefault(
           startPos,
           startLoc,
-          prop.key.__clone(),
+          cloneIdentifier(prop.key),
         );
       } else if (this.match(tt.eq) && refExpressionErrors) {
         if (refExpressionErrors.shorthandAssign === -1) {
@@ -1947,10 +1948,10 @@ export default class ExpressionParser extends LValParser {
         prop.value = this.parseMaybeDefault(
           startPos,
           startLoc,
-          prop.key.__clone(),
+          cloneIdentifier(prop.key),
         );
       } else {
-        prop.value = prop.key.__clone();
+        prop.value = cloneIdentifier(prop.key);
       }
       prop.shorthand = true;
 

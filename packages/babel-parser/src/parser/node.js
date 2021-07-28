@@ -27,6 +27,7 @@ class Node implements NodeBase {
   innerComments: Array<Comment>;
   extra: { [key: string]: any };
 
+  // todo(Babel 8): remove this method in Babel 8
   __clone(): this {
     // $FlowIgnore
     const newNode: any = new Node();
@@ -46,6 +47,46 @@ class Node implements NodeBase {
 
     return newNode;
   }
+}
+const NodePrototype = Node.prototype;
+
+function clonePlaceholder(node: any): any {
+  return cloneIdentifier(node);
+}
+
+export function cloneIdentifier(node: any): any {
+  // We don't need to clone `typeAnnotations` and `optional`: because
+  // cloneIdentifier is only used in object shorthand and named import/export.
+  // Neither of them allow type annotations after the identifier or optional identifier
+  const { type, start, end, loc, range, extra, name } = node;
+  const cloned = Object.create(NodePrototype);
+  cloned.type = type;
+  cloned.start = start;
+  cloned.end = end;
+  cloned.loc = loc;
+  cloned.range = range;
+  cloned.extra = extra;
+  cloned.name = name;
+  if (type === "Placeholder") {
+    cloned.expectedNode = node.expectedNode;
+  }
+  return cloned;
+}
+
+export function cloneStringLiteral(node: any): any {
+  const { type, start, end, loc, range, extra } = node;
+  if (type === "Placeholder") {
+    return clonePlaceholder(node);
+  }
+  const cloned = Object.create(NodePrototype);
+  cloned.type = "StringLiteral";
+  cloned.start = start;
+  cloned.end = end;
+  cloned.loc = loc;
+  cloned.range = range;
+  cloned.extra = extra;
+  cloned.value = node.value;
+  return cloned;
 }
 
 export class NodeUtils extends UtilParser {
