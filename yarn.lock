@@ -37,9 +37,9 @@ __metadata:
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
   dependencies:
     "@babel/runtime": "workspace:*"
-    "@rollup/plugin-commonjs": ^18.1.0
-    "@rollup/plugin-node-resolve": ^13.0.0
-    rollup: ^2.47.0
+    "@rollup/plugin-commonjs": ^19.0.2
+    "@rollup/plugin-node-resolve": ^13.0.4
+    rollup: ^2.55.0
   languageName: unknown
   linkType: soft
 
@@ -3963,23 +3963,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@^18.1.0":
-  version: 18.1.0
-  resolution: "@rollup/plugin-commonjs@npm:18.1.0"
-  dependencies:
-    "@rollup/pluginutils": ^3.1.0
-    commondir: ^1.0.1
-    estree-walker: ^2.0.1
-    glob: ^7.1.6
-    is-reference: ^1.2.1
-    magic-string: ^0.25.7
-    resolve: ^1.17.0
-  peerDependencies:
-    rollup: ^2.30.0
-  checksum: e476ae379d205049476da5b19bea58581722846ce9be61ed5316cf2f43e6d2a514a3199447b6f0c9ef259fd97b3d494c89cdbe0b76c91a71c686df343e19009a
-  languageName: node
-  linkType: hard
-
 "@rollup/plugin-commonjs@^19.0.2":
   version: 19.0.2
   resolution: "@rollup/plugin-commonjs@npm:19.0.2"
@@ -4025,7 +4008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:^13.0.0, @rollup/plugin-node-resolve@npm:^13.0.4":
+"@rollup/plugin-node-resolve@npm:^13.0.4":
   version: 13.0.4
   resolution: "@rollup/plugin-node-resolve@npm:13.0.4"
   dependencies:
@@ -13388,7 +13371,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.47.0, rollup@npm:^2.55.0":
+"rollup@npm:^2.55.0":
   version: 2.55.0
   resolution: "rollup@npm:2.55.0"
   dependencies:
