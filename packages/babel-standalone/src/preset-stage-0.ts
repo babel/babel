@@ -7,7 +7,8 @@ export default (_: any, opts: any = {}) => {
     useBuiltIns = false,
     decoratorsLegacy = false,
     decoratorsBeforeExport,
-    pipelineProposal = "minimal",
+    pipelineProposal,
+    pipelineTopicToken,
     importAssertionsVersion = "september-2020",
   } = opts;
 
@@ -21,6 +22,7 @@ export default (_: any, opts: any = {}) => {
           decoratorsLegacy,
           decoratorsBeforeExport,
           pipelineProposal,
+          pipelineTopicToken,
           importAssertionsVersion,
         },
       ],
