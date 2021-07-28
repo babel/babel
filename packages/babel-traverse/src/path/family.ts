@@ -312,10 +312,8 @@ export function getAllPrevSiblings(this: NodePath): NodePath[] {
   return siblings;
 }
 
-type digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-
 // convert "1" to 1 (string index to number index)
-type MaybeToIndex<T extends string> = T extends digit ? number : T;
+type MaybeToIndex<T extends string> = T extends `${bigint}` ? number : T;
 
 type Pattern<Obj extends string, Prop extends string> = `${Obj}.${Prop}`;
 
