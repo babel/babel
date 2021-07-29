@@ -180,8 +180,8 @@ You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset o
 
 To overwrite any test fixtures when fixing a bug or anything, add the env variable `OVERWRITE=true`
 
-  ```sh
-  $ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
+```sh
+$ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
 ```
 
 #### Test coverage
