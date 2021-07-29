@@ -82,32 +82,34 @@ $ make build-dist
 
 ### Running linting/tests
 
-You can run lint via:
+#### You can run lint via:
 
-```sh
-# ~6 sec on a MacBook Pro (Mid 2015)
-$ make lint
-```
+  ```sh
+  # ~6 sec on a MacBook Pro (Mid 2015)
+  $ make lint
+  ```
 
-You can run eslint's autofix via:
+- You can run eslint's autofix via:
 
-```sh
-$ make fix
-```
+  ```sh
+  $ make fix
+  ```
 
-You can run tests + lint for all packages (slow) via:
+#### You can run tests + lint for all packages (slow) via:
 
-```sh
-# ~46 sec on a MacBook Pro (Mid 2015)
-$ make test
-```
+  ```sh
+  # ~46 sec on a MacBook Pro (Mid 2015)
+  $ make test
+  ```
 
-If you just want to run all tests:
+#### If you just want to run all tests:
 
-```sh
-# ~40 sec on a MacBook Pro (Mid 2015)
-$ make test-only
-```
+  ```sh
+  # ~40 sec on a MacBook Pro (Mid 2015)
+  $ make test-only
+  ```
+
+#### Run tests for a specific package
 
 When working on an issue, you will most likely want to focus on a particular [packages](https://github.com/babel/babel/tree/main/packages). Using `TEST_ONLY` will only run tests for that specific package.
 
@@ -115,18 +117,24 @@ When working on an issue, you will most likely want to focus on a particular [pa
 $ TEST_ONLY=babel-cli make test
 ```
 
-`TEST_ONLY` will also match substrings of the package name:
+<details>
+  <summary>More options</summary>
+  `TEST_ONLY` will also match substrings of the package name:
 
-```sh
-# Run tests for the @babel/plugin-transform-classes package.
-$ TEST_ONLY=babel-plugin-transform-classes make test
-```
+  ```sh
+  # Run tests for the @babel/plugin-transform-classes package.
+  $ TEST_ONLY=babel-plugin-transform-classes make test
+  ```
 
-Or you can use Yarn:
+  Or you can use Yarn: 
 
-```sh
-$ yarn jest babel-cli
-```
+  ```sh
+  $ yarn jest babel-cli
+  ```
+</details>
+<br>
+
+#### Run a subset of tests
 
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
@@ -134,17 +142,23 @@ Use the `TEST_GREP` variable to run a subset of tests by name:
 $ TEST_GREP=transformation make test
 ```
 
-Or you can use Yarn:
+<details>
+  <summary>More options</summary>
+  Or you can use Yarn:
 
-```sh
-$ yarn jest -t transformation
-```
+  ```sh
+  $ yarn jest -t transformation
+  ```
 
-Substitute spaces for hyphens and forward slashes when targeting specific test names:
+  Substitute spaces for hyphens and forward slashes when targeting specific test names:
 
-```sh
-$ TEST_GREP="arrow functions destructuring parameters" make test
-```
+  ```sh
+  $ TEST_GREP="arrow functions destructuring parameters" make test
+  ```
+</details>
+<br>
+
+#### Run test with Node debugger
 
 To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
 
@@ -152,19 +166,25 @@ To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment
 $ TEST_DEBUG=true make test
 ```
 
-Or you can use Yarn
+<details>
+  <summary>More options</summary>
+  Or you can use Yarn
 
-```sh
-$ yarn node --inspect-brk node_modules/jest/bin/jest.js --runInBand
-```
+  ```sh
+  $ yarn node --inspect-brk node_modules/jest/bin/jest.js --runInBand
+  ```
 
-You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/testSetupFile.js](https://github.com/babel/babel/blob/main/test/testSetupFile.js).
+  You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/testSetupFile.js](https://github.com/babel/babel/blob/main/test/testSetupFile.js).
+</details>
+<br>
 
 To overwrite any test fixtures when fixing a bug or anything, add the env variable `OVERWRITE=true`
 
-```sh
-$ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
+  ```sh
+  $ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
 ```
+
+#### Test coverage
 
 To test the code coverage, use:
 
