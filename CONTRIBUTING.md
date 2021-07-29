@@ -82,7 +82,7 @@ $ make build-dist
 
 ### Running linting/tests
 
-#### You can run lint via:
+#### Lint
 
 ```sh
 # ~6 sec on a MacBook Pro (Mid 2015)
@@ -95,14 +95,14 @@ $ make lint
 $ make fix
 ```
 
-#### You can run tests + lint for all packages (slow) via:
+#### Tests + lint for all packages (slow) via:
 
 ```sh
 # ~46 sec on a MacBook Pro (Mid 2015)
 $ make test
 ```
 
-#### If you just want to run all tests:
+#### All tests:
 
 ```sh
 # ~40 sec on a MacBook Pro (Mid 2015)
@@ -146,12 +146,17 @@ $ TEST_GREP=transformation make test
   <summary>More options</summary>
   Substitute spaces for hyphens and forward slashes when targeting specific test names:
 
+  For example, for the following path:
+  ```sh
+  packages/babel-plugin-transform-arrow-functions/test/fixtures/arrow-functions/destructuring-parameters
+  ```
+
+  You can use:
   ```sh
   $ TEST_GREP="arrow functions destructuring parameters" make test
   ```
 
-  Or you can use Yarn:
-
+  Or you can directly use Yarn:
   ```sh
   $ yarn jest -t transformation
   ```
@@ -160,7 +165,7 @@ $ TEST_GREP=transformation make test
 
 #### Run test with Node debugger
 
-To enable the Node.js debugger added in v6.3.0, set the <code>TEST_DEBUG</code> environment variable:
+To enable the Node.js debugger, set the <code>TEST_DEBUG</code> environment variable:
 
 ```sh
 $ TEST_DEBUG=true make test
@@ -168,7 +173,7 @@ $ TEST_DEBUG=true make test
 
 <details>
   <summary>More options</summary>
-  Or you can use Yarn
+  Or you can directly use Yarn
 
   ```sh
   $ yarn node --inspect-brk node_modules/jest/bin/jest.js --runInBand
