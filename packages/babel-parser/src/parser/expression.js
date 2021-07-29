@@ -3026,9 +3026,33 @@ export default class ExpressionParser extends LValParser {
         return this.parseObjectMatchPattern();
       case tt.bracketL:
         return this.parseArrayMatchPattern();
+      case tt.plusMin:
+        return this.parseSimpleUnaryExpression();
       default:
-        return;
+        throw this.unexpected();
     }
+  }
+
+  parseSimpleUnaryExpression(): N.UnaryExpression {
+    const node = this.startNode<N.UnaryExpression>();
+    node.operator = this.state.value;
+    this.next(); // skip operator (+/-)
+    node.prefix = true;
+    switch (this.state.type) {
+      case tt.num:
+        node.argument = this.parseNumericLiteral(this.state.value);
+        break;
+      case tt.bigint:
+        node.argument = this.parseBigIntLiteral(this.state.value);
+        break;
+      default:
+        if (this.isContextual("Infinity")) {
+          node.argument = this.parseIdentifier();
+          break;
+        }
+        throw this.unexpected();
+    }
+    return this.finishNode(node, "UnaryExpression");
   }
 
   parseMaybeBinaryMatchPattern(): N.BinaryMatchPattern | N.MatchPattern {
