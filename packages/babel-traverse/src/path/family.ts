@@ -522,7 +522,7 @@ export function getBindingIdentifierPaths(
 
     if (id.isExportDeclaration()) {
       const declaration = id.get("declaration");
-      if (declaration.isDeclaration()) {
+      if (t.isDeclaration(declaration)) {
         search.push(declaration);
       }
       continue;
