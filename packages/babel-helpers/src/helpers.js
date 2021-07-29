@@ -325,7 +325,7 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
       var source = (arguments[i] != null) ? Object(arguments[i]) : {};
       var ownKeys = Object.keys(source);
       if (typeof Object.getOwnPropertySymbols === 'function') {
-        Array.prototype.push.apply(ownKeys, Object.getOwnPropertySymbols(source).filter(function(sym) {
+        ownKeys.push.apply(ownKeys, Object.getOwnPropertySymbols(source).filter(function(sym) {
           return Object.getOwnPropertyDescriptor(source, sym).enumerable;
         }));
       }
