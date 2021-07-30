@@ -692,6 +692,15 @@
       "./helpers/classExtractFieldDescriptor.js"
     ],
     "./helpers/esm/classExtractFieldDescriptor": "./helpers/esm/classExtractFieldDescriptor.js",
+    "./helpers/classPrivateFieldInitSpec": [
+      {
+        "node": "./helpers/classPrivateFieldInitSpec.js",
+        "import": "./helpers/esm/classPrivateFieldInitSpec.js",
+        "default": "./helpers/classPrivateFieldInitSpec.js"
+      },
+      "./helpers/classPrivateFieldInitSpec.js"
+    ],
+    "./helpers/esm/classPrivateFieldInitSpec": "./helpers/esm/classPrivateFieldInitSpec.js",
     "./helpers/classStaticPrivateFieldSpecGet": [
       {
         "node": "./helpers/classStaticPrivateFieldSpecGet.js",

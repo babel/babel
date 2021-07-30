@@ -449,11 +449,23 @@ function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
   `;
 }
 
-function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
+function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap, state) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
-  const newNode = t.cloneNode(id);
 
+  const helper = state.addHelper("classPrivateFieldInitSpec");
+  const expr = t.callExpression(helper, [
+    t.thisExpression(),
+    t.cloneNode(id),
+    template.expression.ast`{
+        writable: true,
+        value: ${value}
+      }`,
+  ]);
+
+  return expr;
+
+  /*
   return template.statement.ast`
     _privateFieldInitSpec(${ref}, ${newNode}, {
       // configurable is always false for private elements
@@ -461,7 +473,7 @@ function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
       writable: true,
       value: ${value},
     });
-  `;
+  `;*/
 }
 
 function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
@@ -812,6 +824,7 @@ export function buildFieldsInitNodes(
             t.thisExpression(),
             prop,
             privateNamesMap,
+            state,
           ),
         );
         break;
