@@ -16,4 +16,5 @@ import "core-js/modules/esnext.set.reduce.js";
 import "core-js/modules/esnext.set.some.js";
 import "core-js/modules/esnext.set.symmetric-difference.js";
 import "core-js/modules/esnext.set.union.js";
+import "core-js/modules/es.string.replace.js";
 import "core-js/modules/esnext.string.replace-all.js";
