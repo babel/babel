@@ -34,6 +34,7 @@ import {
 import type { SourceType } from "../options";
 import { Token } from "../tokenizer";
 import { Position } from "../util/location";
+import { cloneStringLiteral, cloneIdentifier } from "./node";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -2144,10 +2145,16 @@ export default class StatementParser extends ExpressionParser {
       }
 
       const node = this.startNode();
-      node.local = this.parseModuleExportName();
-      node.exported = this.eatContextual("as")
-        ? this.parseModuleExportName()
-        : node.local.__clone();
+      const isString = this.match(tt.string);
+      const local = this.parseModuleExportName();
+      node.local = local;
+      if (this.eatContextual("as")) {
+        node.exported = this.parseModuleExportName();
+      } else if (isString) {
+        node.exported = cloneStringLiteral(local);
+      } else {
+        node.exported = cloneIdentifier(local);
+      }
       nodes.push(this.finishNode(node, "ExportSpecifier"));
     }
 
@@ -2423,7 +2430,7 @@ export default class StatementParser extends ExpressionParser {
         );
       }
       this.checkReservedWord(imported.name, specifier.start, true, true);
-      specifier.local = imported.__clone();
+      specifier.local = cloneIdentifier(imported);
     }
     this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));

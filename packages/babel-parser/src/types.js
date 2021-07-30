@@ -98,6 +98,7 @@ export type Identifier = PatternBase & {
   type: "Identifier",
   name: string,
 
+  // @deprecated
   __clone(): Identifier,
 
   // TypeScript only. Used in case of an optional parameter.
