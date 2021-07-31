@@ -107,6 +107,8 @@ const TSErrors = makeErrorTemplates(
     InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
+    MissingInterfaceName:
+      "'interface' declarations must be followed by an identifier.",
     MixedLabeledAndUnlabeledElements:
       "Tuple members must all have names or all not have names.",
     NonAbstractClassHasAbstractMethod:
@@ -1419,12 +1421,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseInterfaceDeclaration(
       node: N.TsInterfaceDeclaration,
     ): N.TsInterfaceDeclaration {
-      node.id = this.parseIdentifier();
-      this.checkLVal(
-        node.id,
-        "typescript interface declaration",
-        BIND_TS_INTERFACE,
-      );
+      if (this.match(tt.name)) {
+        node.id = this.parseIdentifier();
+        this.checkLVal(
+          node.id,
+          "typescript interface declaration",
+          BIND_TS_INTERFACE,
+        );
+      } else {
+        node.id = null;
+        this.raise(this.state.start, TSErrors.MissingInterfaceName);
+      }
+
       node.typeParameters = this.tsTryParseTypeParameters();
       if (this.eat(tt._extends)) {
         node.extends = this.tsParseHeritageClause("extends");
@@ -2305,12 +2313,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // export default interface allowed in:
       // https://github.com/Microsoft/TypeScript/pull/16040
       if (this.state.value === "interface") {
-        const result = this.tsParseDeclaration(
-          this.startNode(),
-          this.state.value,
-          true,
-        );
-
+        const interfaceNode = this.startNode();
+        this.next();
+        const result = this.tsParseInterfaceDeclaration(interfaceNode);
         if (result) return result;
       }
 
