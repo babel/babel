@@ -10,5 +10,6 @@
     "@babel/helper-validator-identifier": "workspace:*",
     "@babel/parser": "workspace:*",
     "benchmark": "^2.1.4"
-  }
+  },
+  "version": "7.14.9"
 }
