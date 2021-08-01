@@ -1,0 +1,7 @@
+{
+  "minNodeVersion": "6.0.0",
+  "plugins": [
+    ["proposal-class-elements", { "targetSyntax": "classes" }],
+    "transform-block-scoping"
+  ]
+}

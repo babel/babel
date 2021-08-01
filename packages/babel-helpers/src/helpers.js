@@ -762,6 +762,14 @@ helpers.readOnlyError = helper("7.0.0-beta.0")`
   }
 `;
 
+helpers.readOnlyErrorSet = helper("7.15.0")`
+  import readOnlyError from "readOnlyError";
+
+  export default function _readOnlyErrorSet(name) {
+    return { set _(_) { readOnlyError(name) } };
+  }
+`;
+
 helpers.writeOnlyError = helper("7.12.13")`
   export default function _writeOnlyError(name) {
     throw new TypeError("\\"" + name + "\\" is write-only");
@@ -1317,10 +1325,16 @@ helpers.classStaticPrivateFieldDestructureSet = helper("7.13.10")`
 `;
 
 helpers.classCheckPrivateStaticAccess = helper("7.13.10")`
-  export default function _classCheckPrivateStaticAccess(receiver, classConstructor) {
+  import temporalUndefined from "temporalUndefined";
+
+  export default function _classCheckPrivateStaticAccess(receiver, classConstructor, value) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
+    if (value === temporalUndefined) {
+      throw new TypeError("Cannot access private static field before its declaration");
+    }
+    return value;
   }
 `;
 
@@ -2023,3 +2037,91 @@ if (!process.env.BABEL_8_BREAKING) {
     }
   `;
 }
+
+helpers.classCheckPrivateInstanceAccess2 = helper("7.15.0")`
+export default function _classCheckPrivateInstanceAccess2(receiver, privateMapOrSet, action) {
+  if (!privateMapOrSet.has(receiver)) {
+    throw new TypeError("attempted to " + action + " private field on non-instance");
+  }
+}
+`;
+
+helpers.classPrivateFieldGet2 = helper("7.15.0")`
+  import classCheckPrivateInstanceAccess2 from "classCheckPrivateInstanceAccess2";
+
+  export default function _classPrivateFieldGet2(receiver, privateMap) {
+    classCheckPrivateInstanceAccess2(receiver, privateMap, "get");
+    return privateMap.get(receiver);
+  }
+`;
+
+helpers.classPrivateFieldSet2 = helper("7.15.0")`
+  import classCheckPrivateInstanceAccess2 from "classCheckPrivateInstanceAccess2";
+
+  export default function _classPrivateFieldSet2(receiver, privateMap, value) {
+    classCheckPrivateInstanceAccess2(receiver, privateMap, "set");
+    privateMap.set(receiver, value);
+    return value;
+  }
+`;
+
+helpers.classPrivateAccessorGet2 = helper("7.15.0")`
+  import classCheckPrivateInstanceAccess2 from "classCheckPrivateInstanceAccess2";
+
+  export default function _classPrivateAccessorGet2(receiver, privateSet, fn) {
+    classCheckPrivateInstanceAccess2(receiver, privateSet, "get");
+    return fn.call(receiver);
+  }
+`;
+
+helpers.classPrivateAccessorSet2 = helper("7.15.0")`
+  import classCheckPrivateInstanceAccess2 from "classCheckPrivateInstanceAccess2";
+
+  export default function _classPrivateAccessorSet2(receiver, privateSet, fn, value) {
+    classCheckPrivateInstanceAccess2(receiver, privateSet, "set");
+    fn.call(receiver, value);
+    return value;
+  }
+`;
+
+helpers.classInstancePrivateFieldDestructureSet2 = helper("7.15.0")`
+  import classCheckPrivateInstanceAccess2 from "classCheckPrivateInstanceAccess2";
+
+  export default function _classInstancePrivateFieldDestructureSet2(receiver, privateMap) {
+    classCheckPrivateInstanceAccess2(receiver, privateMap, "set");
+    return {
+      set _(value) { privateMap.set(receiver, value) }
+    }
+  }
+`;
+
+helpers.classInstancePrivateAccessorDestructureSet2 = helper("7.15.0")`
+  import classCheckPrivateInstanceAccess2 from "classCheckPrivateInstanceAccess2";
+
+  export default function _classInstancePrivateAccessorDestructureSet2(receiver, privateSet, setter) {
+    classCheckPrivateInstanceAccess2(receiver, privateSet, "set");
+    return {
+      set _(value) { setter.call(receiver, value) }
+    }
+  }
+`;
+
+helpers.classStaticPrivateFieldDestructureSet2 = helper("7.15.0")`
+  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+
+  export default function _classStaticPrivateFieldDestructureSet2(receiver, classConstructor, value, setter) {
+    classCheckPrivateStaticAccess(receiver, classConstructor, value);
+    return Object.defineProperty({}, "_", { set: setter });
+  }
+`;
+
+helpers.classStaticPrivateAccessorDestructureSet2 = helper("7.15.0")`
+  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+
+  export default function _classStaticPrivateAccessorDestructureSet2(receiver, classConstructor, setter) {
+    classCheckPrivateStaticAccess(receiver, classConstructor);
+    return {
+      set _(value) { setter.call(receiver, value) }
+    }
+  }
+`;

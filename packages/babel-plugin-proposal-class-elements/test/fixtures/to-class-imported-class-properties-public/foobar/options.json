@@ -1,0 +1,4 @@
+{
+  "plugins": [["proposal-class-elements", { "targetSyntax": "classes" }]],
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]]
+}

@@ -1,0 +1,10 @@
+{
+  "assumptions": {
+    "setPublicClassFields": true,
+    "noDocumentAll": true
+  },
+  "plugins": [
+    "proposal-optional-chaining",
+    ["proposal-class-elements", { "targetSyntax": "publicFields" }]
+  ]
+}
