@@ -19,6 +19,33 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.14.9 (2021-08-01)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#13596](https://github.com/babel/babel/pull/13596) Fix completion record for variable declarations ([@addaleax](https://github.com/addaleax))
+* `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`
+  * [#13600](https://github.com/babel/babel/pull/13600) Extract computed keys from the class closure ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx-self`, `babel-plugin-transform-react-jsx`
+  * [#13552](https://github.com/babel/babel/pull/13552) Don't insert `__self: this` within constructors of derived classes (#13550) ([@SCLeoX](https://github.com/SCLeoX))
+* `babel-parser`
+  * [#13581](https://github.com/babel/babel/pull/13581) [ts] Check if param is assignable when parsing arrow return type ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-traverse`, `babel-types`
+  * [#13577](https://github.com/babel/babel/pull/13577) add 12 missing NODE_FIELDS ([@jedwards1211](https://github.com/jedwards1211))
+* `babel-plugin-proposal-async-generator-functions`
+  * [#13491](https://github.com/babel/babel/pull/13491) Fix `_step.value` access in `for await` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#13614](https://github.com/babel/babel/pull/13614) Update Rollup to `~2.54.0` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-helper-validator-identifier`, `babel-parser`
+  * [#13606](https://github.com/babel/babel/pull/13606) chore: reorganize benchmarks ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-parser`, `babel-traverse`
+  * [#13611](https://github.com/babel/babel/pull/13611) Replace generic __clone call by specific methods ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#13593](https://github.com/babel/babel/pull/13593) Generator performance ([@JLHwung](https://github.com/JLHwung))
 ## v7.14.8 (2021-07-20)
 
 #### :eyeglasses: Spec Compliance
