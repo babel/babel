@@ -464,16 +464,6 @@ function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap, state) {
   ]);
 
   return expr;
-
-  /*
-  return template.statement.ast`
-    _privateFieldInitSpec(${ref}, ${newNode}, {
-      // configurable is always false for private elements
-      // enumerable is always false for private elements
-      writable: true,
-      value: ${value},
-    });
-  `;*/
 }
 
 function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
