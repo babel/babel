@@ -9,7 +9,7 @@ function startLocalRegistry {
   # Start local registry
   tmp_registry_log=`mktemp`
   echo "Registry output file: $tmp_registry_log"
-  (cd && nohup npx ${VERDACCIO_PACKAGE:-$default_verdaccio_package} -c $1 &>$tmp_registry_log &)
+  (cd && nohup npx verdaccio@~4.11.1 -c $1 &>$tmp_registry_log &)
   YARN_IGNORE_PATH=1 yarn global add verdaccio-memory@~9.7.2
   # Wait for Verdaccio to boot
   grep -q "http address" <(tail -f $tmp_registry_log)
