@@ -1481,7 +1481,7 @@ export type TsImportType = TsTypeBase & {
 
 export type TsInterfaceDeclaration = DeclarationBase & {
   type: "TSInterfaceDeclaration",
-  id: Identifier,
+  id: ?Identifier,
   typeParameters: ?TsTypeParameterDeclaration,
   // TS uses "heritageClauses", but want this to resemble ClassBase.
   extends?: $ReadOnlyArray<TsExpressionWithTypeArguments>,
