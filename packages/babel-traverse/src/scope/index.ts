@@ -317,6 +317,8 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
 
 let uid = 0;
 
+export type { Binding };
+
 export default class Scope {
   uid;
 

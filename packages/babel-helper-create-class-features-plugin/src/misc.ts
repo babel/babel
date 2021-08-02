@@ -1,9 +1,11 @@
 import { template, traverse, types as t } from "@babel/core";
+import type { File } from "@babel/core";
+import type { NodePath, Scope, Visitor, Binding } from "@babel/traverse";
 import { environmentVisitor } from "@babel/helper-replace-supers";
 
 const findBareSupers = traverse.visitors.merge([
   {
-    Super(path) {
+    Super(path: NodePath<t.Super>) {
       const { node, parentPath } = path;
       if (parentPath.isCallExpression({ callee: node })) {
         this.push(parentPath);
@@ -14,18 +16,24 @@ const findBareSupers = traverse.visitors.merge([
 ]);
 
 const referenceVisitor = {
-  "TSTypeAnnotation|TypeAnnotation"(path) {
+  "TSTypeAnnotation|TypeAnnotation"(path: NodePath) {
     path.skip();
   },
 
-  ReferencedIdentifier(path) {
+  ReferencedIdentifier(path: NodePath<t.Identifier>) {
     if (this.scope.hasOwnBinding(path.node.name)) {
       this.scope.rename(path.node.name);
       path.skip();
     }
   },
 };
-function handleClassTDZ(path, state) {
+function handleClassTDZ(
+  path: NodePath<t.Identifier>,
+  state: {
+    classBinding: Binding;
+    file: File;
+  },
+) {
   if (
     state.classBinding &&
     state.classBinding === path.scope.getBinding(path.node.name)
@@ -44,7 +52,16 @@ const classFieldDefinitionEvaluationTDZVisitor = {
   ReferencedIdentifier: handleClassTDZ,
 };
 
-export function injectInitialization(path, constructor, nodes, renamer?) {
+interface RenamerState {
+  scope: Scope;
+}
+
+export function injectInitialization(
+  path: NodePath<t.Class>,
+  constructor: NodePath<t.ClassMethod> | undefined,
+  nodes: t.Statement[],
+  renamer?: (visitor: Visitor<RenamerState>, state: RenamerState) => void,
+) {
   if (!nodes.length) return;
 
   const isDerived = !!path.node.superClass;
@@ -62,7 +79,9 @@ export function injectInitialization(path, constructor, nodes, renamer?) {
       newConstructor.body.body.push(template.statement.ast`super(...args)`);
     }
 
-    [constructor] = path.get("body").unshiftContainer("body", newConstructor);
+    [constructor] = path
+      .get("body")
+      .unshiftContainer("body", newConstructor) as NodePath<t.ClassMethod>[];
   }
 
   if (renamer) {
@@ -86,8 +105,13 @@ export function injectInitialization(path, constructor, nodes, renamer?) {
   }
 }
 
-export function extractComputedKeys(ref, path, computedPaths, file) {
-  const declarations = [];
+export function extractComputedKeys(
+  ref: t.Identifier,
+  path: NodePath<t.Class>,
+  computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[],
+  file: File,
+) {
+  const declarations: t.Statement[] = [];
   const state = {
     classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
     file,

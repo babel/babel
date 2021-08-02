@@ -3,10 +3,10 @@ import * as visitors from "./visitors";
 import * as t from "@babel/types";
 import * as cache from "./cache";
 import type NodePath from "./path";
-import type Scope from "./scope";
+import type { default as Scope, Binding } from "./scope";
 import type { Visitor } from "./types";
 
-export type { Visitor };
+export type { Visitor, Binding };
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
