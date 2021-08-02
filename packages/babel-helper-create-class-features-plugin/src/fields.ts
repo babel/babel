@@ -544,7 +544,7 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
   }
 }
 
-function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
+function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap, state) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const { id, getId, setId, initAdded } = privateName;
 
@@ -564,7 +564,14 @@ function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
       });
     `;
   }
-  return template.statement.ast`${id}.add(${ref})`;
+
+  if (!state.availableHelper("classPrivateMethodInitSpec")) {
+    template.statement.ast`${id}.add(${ref})`;
+  }
+
+  const helper = state.addHelper("classPrivateMethodInitSpec");
+  const expr = t.callExpression(helper, [t.thisExpression(), t.cloneNode(id)]);
+  return expr;
 }
 
 function buildPublicFieldInitLoose(ref, prop) {
@@ -849,6 +856,7 @@ export function buildFieldsInitNodes(
             t.thisExpression(),
             prop,
             privateNamesMap,
+            state,
           ),
         );
         pureStaticNodes.push(

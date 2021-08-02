@@ -1219,15 +1219,6 @@ helpers.classExtractFieldDescriptor = helper("7.13.10")`
   }
 `;
 
-helpers.classPrivateFieldInitSpec = helper("7.14.1")`
-  export default function _classPrivateFieldInitSpec(obj, privateMap, value) {
-    if (privateMap.has(obj)) {
-      throw new TypeError("redeclared identifier");
-    }
-    privateMap.set(obj, value);
-  }
-`;
-
 helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
   import classApplyDescriptorGet from "classApplyDescriptorGet";
   import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
@@ -2021,6 +2012,24 @@ helpers.classPrivateMethodGet = helper("7.1.6")`
       throw new TypeError("attempted to get private field on non-instance");
     }
     return fn;
+  }
+`;
+
+helpers.classPrivateFieldInitSpec = helper("7.14.1")`
+  export default function _classPrivateFieldInitSpec(obj, privateMap, value) {
+    if (privateMap.has(obj)) {
+      throw new TypeError("redeclared private field identifier");
+    }
+    privateMap.set(obj, value);
+  }
+`;
+
+helpers.classPrivateMethodInitSpec = helper("7.14.1")`
+  export default function _classPrivateMethodInitSpec(obj, privateSet) {
+    if (privateSet.has(obj)) {
+      throw new TypeError("redeclared private method identifier");
+    }
+    privateSet.add(obj);
   }
 `;
 
