@@ -1222,7 +1222,7 @@ helpers.classExtractFieldDescriptor = helper("7.13.10")`
 helpers.classPrivateFieldInitSpec = helper("7.14.1")`
   export default function _classPrivateFieldInitSpec(obj, privateMap, value) {
     if (privateMap.has(obj)) {
-      throw new TypeError();
+      throw new TypeError("the Identifier " + Object.keys({ privateMap }).pop() + " has already been declared");
     }
     privateMap.set(obj, value);
   }
