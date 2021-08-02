@@ -453,6 +453,15 @@ function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap, state) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
+  if (!state.availableHelper("classPrivateFieldInitSpec")) {
+    return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
+      // configurable is always false for private elements
+      // enumerable is always false for private elements
+      writable: true,
+      value: ${value},
+    })`;
+  }
+
   const helper = state.addHelper("classPrivateFieldInitSpec");
   const expr = t.callExpression(helper, [
     t.thisExpression(),
