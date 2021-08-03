@@ -291,7 +291,7 @@ export default declare((api, opts) => {
               }
             } else if (
               stmt.isTSTypeAliasDeclaration() ||
-              stmt.isTSDeclareFunction() ||
+              (stmt.isTSDeclareFunction() && stmt.get("id").isIdentifier()) ||
               stmt.isTSInterfaceDeclaration() ||
               stmt.isClassDeclaration({ declare: true }) ||
               stmt.isTSEnumDeclaration({ declare: true }) ||
