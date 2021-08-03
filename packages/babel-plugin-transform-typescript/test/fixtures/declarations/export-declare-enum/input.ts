@@ -1,3 +1,1 @@
 export declare enum A {}
-
-;
