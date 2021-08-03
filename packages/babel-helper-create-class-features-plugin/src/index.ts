@@ -46,7 +46,7 @@ export function createClassFeaturePlugin({
   feature,
   loose,
   manipulateOptions,
-  // TODO(Babel 8): Remove the default falue
+  // TODO(Babel 8): Remove the default value
   api = { assumption: () => void 0 },
 }: Options) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
