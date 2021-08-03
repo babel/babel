@@ -9,20 +9,24 @@ export default (_: any, opts: any = {}) => {
     decoratorsBeforeExport,
     pipelineProposal = "minimal",
     pipelineTopicToken = "%",
-    recordAndTupleSyntax: recordAndTupleSyntax = "hash",
+    recordAndTupleSyntax,
   } = opts;
 
   return {
     presets: [
       [
         presetStage2,
-        { loose, useBuiltIns, decoratorsLegacy, decoratorsBeforeExport },
+        {
+          loose,
+          useBuiltIns,
+          decoratorsLegacy,
+          decoratorsBeforeExport,
+          recordAndTupleSyntax,
+        },
       ],
     ],
     plugins: [
       babelPlugins.syntaxDecimal,
-      [babelPlugins.syntaxRecordAndTuple, { syntaxType: recordAndTupleSyntax }],
-      babelPlugins.syntaxModuleBlocks,
       babelPlugins.proposalExportDefaultFrom,
       [
         babelPlugins.proposalPipelineOperator,
