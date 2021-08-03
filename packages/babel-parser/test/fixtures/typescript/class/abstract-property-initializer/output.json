@@ -2,11 +2,11 @@
   "type": "File",
   "start":0,"end":124,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
   "errors": [
-    "SyntaxError: Property 'prop' cannot have a initializer because it is marked abstract. (2:16)",
-    "SyntaxError: Property '[Bar.foo]' cannot have a initializer because it is marked abstract. (3:21)",
-    "SyntaxError: Property '[Bar]' cannot have a initializer because it is marked abstract. (4:17)",
-    "SyntaxError: Property '[2]' cannot have a initializer because it is marked abstract. (5:13)",
-    "SyntaxError: Property '[\"c\"]' cannot have a initializer because it is marked abstract. (6:15)"
+    "SyntaxError: Property 'prop' cannot have an initializer because it is marked abstract. (2:16)",
+    "SyntaxError: Property '[Bar.foo]' cannot have an initializer because it is marked abstract. (3:21)",
+    "SyntaxError: Property '[Bar]' cannot have an initializer because it is marked abstract. (4:17)",
+    "SyntaxError: Property '[2]' cannot have an initializer because it is marked abstract. (5:13)",
+    "SyntaxError: Property '[\"c\"]' cannot have an initializer because it is marked abstract. (6:15)"
   ],
   "program": {
     "type": "Program",
