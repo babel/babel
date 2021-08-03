@@ -135,6 +135,7 @@ const ignoredFeatures = [
   "Symbol.unscopables",
   "tail-call-optimization",
   "template",
+  "top-level-await",
   "TypedArray",
   "TypedArray.prototype.at",
   "TypedArray.prototype.item",
@@ -153,7 +154,6 @@ const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
 const featuresToPlugins = {
   "class-static-block": "classStaticBlock",
-  "top-level-await": "topLevelAwait",
   "import-assertions": "importAssertions",
 };
 
