@@ -71,7 +71,7 @@ const TSErrors = makeErrorTemplates(
     AbstractMethodHasImplementation:
       "Method '%0' cannot have an implementation because it is marked abstract.",
     AbstractPropertyHasInitializer:
-      "Property '%0' cannot have a initializer because it is marked abstract.",
+      "Property '%0' cannot have an initializer because it is marked abstract.",
     AccesorCannotDeclareThisParameter:
       "'get' and 'set' accessors cannot declare 'this' parameters.",
     AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
