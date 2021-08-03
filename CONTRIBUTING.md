@@ -142,26 +142,22 @@ Use the `TEST_GREP` variable to run a subset of tests by name:
 $ TEST_GREP=transformation make test
 ```
 
-<details>
-  <summary>More options</summary>
-  Substitute spaces for hyphens and forward slashes when targeting specific test names:
+Substitute spaces for hyphens and forward slashes when targeting specific test names:
 
-  For example, for the following path:
-  ```sh
-  packages/babel-plugin-transform-arrow-functions/test/fixtures/arrow-functions/destructuring-parameters
-  ```
+For example, for the following path:
+```sh
+packages/babel-plugin-transform-arrow-functions/test/fixtures/arrow-functions/destructuring-parameters
+```
 
-  You can use:
-  ```sh
-  $ TEST_GREP="arrow functions destructuring parameters" make test
-  ```
+You can use:
+```sh
+$ TEST_GREP="arrow functions destructuring parameters" make test
+```
 
-  Or you can directly use Yarn:
-  ```sh
-  $ yarn jest -t transformation
-  ```
-</details>
-<br>
+Or you can directly use Yarn:
+```sh
+$ yarn jest -t "arrow functions destructuring parameters"
+```
 
 #### Run test with Node debugger
 
