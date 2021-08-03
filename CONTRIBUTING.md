@@ -82,32 +82,34 @@ $ make build-dist
 
 ### Running linting/tests
 
-You can run lint via:
+#### Lint
 
 ```sh
 # ~6 sec on a MacBook Pro (Mid 2015)
 $ make lint
 ```
 
-You can run eslint's autofix via:
+- You can run eslint's autofix via:
 
 ```sh
 $ make fix
 ```
 
-You can run tests + lint for all packages (slow) via:
+#### Tests + lint for all packages (slow) via:
 
 ```sh
 # ~46 sec on a MacBook Pro (Mid 2015)
 $ make test
 ```
 
-If you just want to run all tests:
+#### All tests:
 
 ```sh
 # ~40 sec on a MacBook Pro (Mid 2015)
 $ make test-only
 ```
+
+#### Run tests for a specific package
 
 When working on an issue, you will most likely want to focus on a particular [packages](https://github.com/babel/babel/tree/main/packages). Using `TEST_ONLY` will only run tests for that specific package.
 
@@ -115,12 +117,24 @@ When working on an issue, you will most likely want to focus on a particular [pa
 $ TEST_ONLY=babel-cli make test
 ```
 
-`TEST_ONLY` will also match substrings of the package name:
+<details>
+  <summary>More options</summary>
+  <code>TEST_ONLY</code> will also match substrings of the package name:
 
-```sh
-# Run tests for the @babel/plugin-transform-classes package.
-$ TEST_ONLY=babel-plugin-transform-classes make test
-```
+  ```sh
+  # Run tests for the @babel/plugin-transform-classes package.
+  $ TEST_ONLY=babel-plugin-transform-classes make test
+  ```
+
+  Or you can use Yarn: 
+
+  ```sh
+  $ yarn jest babel-cli
+  ```
+</details>
+<br>
+
+#### Run a subset of tests
 
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
@@ -130,15 +144,38 @@ $ TEST_GREP=transformation make test
 
 Substitute spaces for hyphens and forward slashes when targeting specific test names:
 
+For example, for the following path:
+```sh
+packages/babel-plugin-transform-arrow-functions/test/fixtures/arrow-functions/destructuring-parameters
+```
+
+You can use:
 ```sh
 $ TEST_GREP="arrow functions destructuring parameters" make test
 ```
 
-To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
+Or you can directly use Yarn:
+```sh
+$ yarn jest -t "arrow functions destructuring parameters"
+```
+
+#### Run test with Node debugger
+
+To enable the Node.js debugger, set the <code>TEST_DEBUG</code> environment variable:
 
 ```sh
 $ TEST_DEBUG=true make test
 ```
+
+<details>
+  <summary>More options</summary>
+  Or you can directly use Yarn
+
+  ```sh
+  $ yarn node --inspect-brk node_modules/jest/bin/jest.js --runInBand
+  ```
+</details>
+<br>
 
 You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/testSetupFile.js](https://github.com/babel/babel/blob/main/test/testSetupFile.js).
 
@@ -147,6 +184,8 @@ To overwrite any test fixtures when fixing a bug or anything, add the env variab
 ```sh
 $ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
 ```
+
+#### Test coverage
 
 To test the code coverage, use:
 
