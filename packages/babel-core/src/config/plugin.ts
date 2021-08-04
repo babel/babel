@@ -2,13 +2,13 @@ import type { PluginObject } from "./validation/plugins";
 
 export default class Plugin {
   key: string | undefined | null;
-  manipulateOptions: ((options: unknown, parserOpts: unknown) => void) | void;
-  post: Function | void;
-  pre: Function | void;
+  manipulateOptions?: (options: unknown, parserOpts: unknown) => void;
+  post?: Function;
+  pre?: Function;
   visitor: {};
 
-  parserOverride: Function | void;
-  generatorOverride: Function | void;
+  parserOverride?: Function;
+  generatorOverride?: Function;
 
   options: {};
 
