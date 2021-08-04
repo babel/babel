@@ -49,7 +49,6 @@ export default declare(({ types: t, template, assertVersion }) => {
         const body = classBody.get("body");
         for (const path of body) {
           if (path.isPrivate()) {
-            // @ts-expect-error todo(flow->ts) NodePath.get types
             privateNames.add(path.get("key.id").node.name);
           }
         }
