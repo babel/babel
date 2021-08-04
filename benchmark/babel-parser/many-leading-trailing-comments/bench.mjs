@@ -7,7 +7,7 @@ const suite = new Benchmark.Suite();
 function createInput(length) {
   return "\n// c\na".repeat(length);
 }
-current.parse(createInput(256), {});
+
 function benchCases(name, implementation, options) {
   for (const length of [128, 256, 512, 1024]) {
     const input = createInput(length);
