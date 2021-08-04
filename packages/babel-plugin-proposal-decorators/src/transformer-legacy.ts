@@ -290,7 +290,9 @@ export default {
             // @ts-expect-error todo(flow->ts) typesafe NodePath.get
             path.get("left.property").node.value,
         ),
+        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("right.arguments")[0].node),
+        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("right.arguments")[1].node),
       ]),
     );
@@ -311,7 +313,9 @@ export default {
       t.callExpression(state.addHelper("initializerDefineProperty"), [
         t.cloneNode(path.get("arguments")[0].node),
         t.cloneNode(path.get("arguments")[1].node),
+        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("arguments.2.arguments")[0].node),
+        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("arguments.2.arguments")[1].node),
       ]),
     );
