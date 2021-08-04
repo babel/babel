@@ -1,3 +1,4 @@
 {
+  "validateLogs": true,
   "plugins": [["proposal-pipeline-operator", { "proposal": "smart" }]]
 }

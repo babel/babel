@@ -196,6 +196,26 @@ export function runCodeInTestContext(
   }
 }
 
+function maybeMockConsole(validateLogs, run) {
+  const actualLogs = { stdout: "", stderr: "" };
+
+  if (!validateLogs) return { result: run(), actualLogs };
+
+  const spy1 = jest.spyOn(console, "log").mockImplementation(msg => {
+    actualLogs.stdout += `${msg}\n`;
+  });
+  const spy2 = jest.spyOn(console, "warn").mockImplementation(msg => {
+    actualLogs.stderr += `${msg}\n`;
+  });
+
+  try {
+    return { result: run(), actualLogs };
+  } finally {
+    spy1.mockRestore();
+    spy2.mockRestore();
+  }
+}
+
 function run(task) {
   const {
     actual,
@@ -234,7 +254,13 @@ function run(task) {
   if (execCode) {
     const context = createContext();
     const execOpts = getOpts(exec);
-    result = babel.transform(execCode, execOpts);
+
+    // Ignore Babel logs of exec.js files.
+    // They will be validated in input/output files.
+    ({ result } = maybeMockConsole(validateLogs, () =>
+      babel.transform(execCode, execOpts),
+    ));
+
     checkDuplicatedNodes(babel, result.ast);
     execCode = result.code;
 
@@ -251,24 +277,11 @@ function run(task) {
   const inputCode = actual.code;
   const expectedCode = expected.code;
   if (!execCode || inputCode) {
-    const actualLogs = { stdout: "", stderr: "" };
-    let restoreSpies = null;
-    if (validateLogs) {
-      const spy1 = jest.spyOn(console, "log").mockImplementation(msg => {
-        actualLogs.stdout += `${msg}\n`;
-      });
-      const spy2 = jest.spyOn(console, "warn").mockImplementation(msg => {
-        actualLogs.stderr += `${msg}\n`;
-      });
-      restoreSpies = () => {
-        spy1.mockRestore();
-        spy2.mockRestore();
-      };
-    }
+    let actualLogs;
 
-    result = babel.transform(inputCode, getOpts(actual));
-
-    if (restoreSpies) restoreSpies();
+    ({ result, actualLogs } = maybeMockConsole(validateLogs, () =>
+      babel.transform(inputCode, getOpts(actual)),
+    ));
 
     const outputCode = normalizeOutput(result.code);
 
