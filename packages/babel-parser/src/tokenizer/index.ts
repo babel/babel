@@ -256,7 +256,7 @@ export default abstract class Tokenizer extends CommentsParser {
     this.getTokenFromCode(this.codePointAtPos(this.state.pos));
   }
 
-  skipBlockComment(): N.CommentBlock | void {
+  skipBlockComment(): N.CommentBlock | undefined {
     let startLoc;
     if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
@@ -293,7 +293,7 @@ export default abstract class Tokenizer extends CommentsParser {
     return comment;
   }
 
-  skipLineComment(startSkip: number): N.CommentLine | void {
+  skipLineComment(startSkip: number): N.CommentLine | undefined {
     const start = this.state.pos;
     let startLoc;
     if (!this.isLookahead) startLoc = this.state.curPosition();
@@ -1380,7 +1380,7 @@ export default abstract class Tokenizer extends CommentsParser {
   // When `firstCode` is given, it assumes it is always an identifier start and
   // will skip reading start position again
 
-  readWord1(firstCode: number | void): string {
+  readWord1(firstCode?: number): string {
     this.state.containsEsc = false;
     let word = "";
     const start = this.state.pos;
@@ -1429,7 +1429,7 @@ export default abstract class Tokenizer extends CommentsParser {
   // Read an identifier or keyword token. Will check for reserved
   // words when necessary.
 
-  readWord(firstCode: number | void): void {
+  readWord(firstCode?: number): void {
     const word = this.readWord1(firstCode);
     const type = keywordTypes.get(word);
     if (type !== undefined) {

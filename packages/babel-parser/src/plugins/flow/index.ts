@@ -3310,7 +3310,7 @@ export default (superClass: typeof Parser) =>
       return fileNode;
     }
 
-    skipBlockComment(): N.CommentBlock | void {
+    skipBlockComment(): N.CommentBlock | undefined {
       if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
           throw this.raise(FlowErrors.NestedFlowComment, {
