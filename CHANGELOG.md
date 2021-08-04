@@ -19,6 +19,51 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.0 (2021-08-04)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#13523](https://github.com/babel/babel/pull/13523) feat(ts): raise error for abstract property with initializer ([@fedeci](https://github.com/fedeci))
+
+#### :rocket: New Feature
+* `babel-parser`
+  * [#13229](https://github.com/babel/babel/pull/13229) Add `attachComment` parser option to disable comment attachment ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#13476](https://github.com/babel/babel/pull/13476) standalone: update `preset-stage-*` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13555](https://github.com/babel/babel/pull/13555) feat: support hack pipeline in `@babel/standalone` ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-preset-env`
+  * [#13387](https://github.com/babel/babel/pull/13387) Enable top-level `await` parsing by default ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`, `babel-preset-typescript`
+  * [#13324](https://github.com/babel/babel/pull/13324) Support TypeScript const enums ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`
+  * [#13528](https://github.com/babel/babel/pull/13528) feat(typescript): implement namespace alias ([@colinaaa](https://github.com/colinaaa))
+* `babel-core`, `babel-helper-create-class-features-plugin`, `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#13290](https://github.com/babel/babel/pull/13290) feat: add `noIncompleteNsImportDetection` assumption to `plugin-transform-modules-commonjs` ([@fedeci](https://github.com/fedeci))
+* `babel-plugin-transform-react-display-name`
+  * [#13501](https://github.com/babel/babel/pull/13501) Add display name after create context ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`
+  * [#13416](https://github.com/babel/babel/pull/13416) Hack-pipe proposal with `%` topic token ([@js-choi](https://github.com/js-choi))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`, `babel-traverse`, `babel-types`
+  * [#13191](https://github.com/babel/babel/pull/13191) Add support for the "Hack" pipeline proposal ([@js-choi](https://github.com/js-choi))
+* `babel-plugin-transform-runtime`
+  * [#13398](https://github.com/babel/babel/pull/13398) Expose `@babel/eslint-parser/experimental-worker` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#13448](https://github.com/babel/babel/pull/13448) Add support for rhino as a compilation target ([@gausie](https://github.com/gausie))
+* `babel-compat-data`, `babel-parser`, `babel-preset-env`
+  * [#13554](https://github.com/babel/babel/pull/13554) Enable ergonomic brand checks (`#priv in`) by default ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#13513](https://github.com/babel/babel/pull/13513) [ts] support optional chain call with generic ([@lala7573](https://github.com/lala7573))
+* `babel-plugin-transform-typescript`
+  * [#13605](https://github.com/babel/babel/pull/13605) Handle typescript function overloading in a default export ([@tony-go](https://github.com/tony-go))
+* `babel-parser`
+  * [#13536](https://github.com/babel/babel/pull/13536) Fix `%==` parsing in hack pipes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13426](https://github.com/babel/babel/pull/13426) parser: Fix Hack/smart-pipe error positions ([@js-choi](https://github.com/js-choi))
+  * [#13622](https://github.com/babel/babel/pull/13622) fix(ts): raise error for `export default interface {}` ([@a-tarasyuk](https://github.com/a-tarasyuk))
+
+#### :memo: Documentation
+* [#13607](https://github.com/babel/babel/pull/13607) chore(doc): add jest specific pckg command ([@tony-go](https://github.com/tony-go))
 ## v7.14.9 (2021-08-01)
 
 #### :bug: Bug Fix
