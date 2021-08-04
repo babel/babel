@@ -2138,10 +2138,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               node.typeParameters = typeArguments;
               if (state.optionalChainMember) {
                 // $FlowIgnore
-                node.optional = false;
-              }
-              if (isOptionalCall) {
-                node.optional = true;
+                node.optional = isOptionalCall;
               }
 
               return this.finishCallExpression(node, state.optionalChainMember);
