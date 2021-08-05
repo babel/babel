@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.1 (2021-08-05)
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-plugin-transform-react-display-name`
+  * [#13637](https://github.com/babel/babel/pull/13637) Revert "Add display name after create context (#13501)" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.15.0 (2021-08-04)
 
 #### :eyeglasses: Spec Compliance
