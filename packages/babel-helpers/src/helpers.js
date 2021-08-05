@@ -2018,7 +2018,7 @@ helpers.classPrivateMethodGet = helper("7.1.6")`
 helpers.classPrivateFieldInitSpec = helper("7.14.1")`
   export default function _classPrivateFieldInitSpec(obj, privateMap, value) {
     if (privateMap.has(obj)) {
-      throw new TypeError("redeclared private field identifier");
+      throw new TypeError("Initializing an object twice is an error with private fields");
     }
     privateMap.set(obj, value);
   }
