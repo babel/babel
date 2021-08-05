@@ -22,7 +22,7 @@ function matchAffectedArguments(argumentNodes) {
 export function shouldTransform(
   path: NodePath<t.OptionalMemberExpression | t.OptionalCallExpression>,
 ): boolean {
-  let optionalPath = path;
+  let optionalPath: NodePath<t.Expression> = path;
   const chains = [];
   while (
     optionalPath.isOptionalMemberExpression() ||
