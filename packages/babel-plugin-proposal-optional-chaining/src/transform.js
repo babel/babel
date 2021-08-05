@@ -1,6 +1,6 @@
 import { types as t, template } from "@babel/core";
 import {
-  isTransparentExprWrapper,
+  skipTransparentExprWrapperNodes,
   skipTransparentExprWrappers,
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
@@ -8,7 +8,7 @@ import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
 const { ast } = template.expression;
 
 function isSimpleMemberExpression(expression) {
-  expression = skipTransparentExprWrappers(expression);
+  expression = skipTransparentExprWrapperNodes(expression);
   return (
     t.isIdentifier(expression) ||
     t.isSuper(expression) ||
@@ -103,11 +103,7 @@ export function transform(
     const replaceKey = isCall ? "callee" : "object";
 
     const chainWithTypes = node[replaceKey];
-    let chain = chainWithTypes;
-
-    while (isTransparentExprWrapper(chain)) {
-      chain = chain.expression;
-    }
+    const chain = skipTransparentExprWrapperNodes(chainWithTypes);
 
     let ref;
     let check;
@@ -169,9 +165,7 @@ export function transform(
     // i.e. `?.b` in `(a?.b.c)()`
     if (i === 0 && parentIsCall) {
       // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-      const object = skipTransparentExprWrappers(
-        replacementPath.get("object"),
-      ).node;
+      const object = skipTransparentExprWrapperNodes(replacement.object);
       let baseRef;
       if (!pureGetters || !isSimpleMemberExpression(object)) {
         // memoize the context object when getters are not always pure

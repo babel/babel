@@ -41,3 +41,12 @@ export function skipTransparentExprWrappers(
   }
   return path;
 }
+
+export function skipTransparentExprWrapperNodes(
+  node: t.Expression,
+): t.Expression {
+  while (isTransparentExprWrapper(node)) {
+    node = node.expression;
+  }
+  return node;
+}
