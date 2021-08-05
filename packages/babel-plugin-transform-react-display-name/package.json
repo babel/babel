@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-display-name",
-  "version": "7.15.0",
+  "version": "7.15.1",
   "description": "Add displayName to React.createClass calls",
   "repository": {
     "type": "git",
