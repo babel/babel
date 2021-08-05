@@ -1,1 +1,0 @@
-ThemeContext = React.createContext("light");

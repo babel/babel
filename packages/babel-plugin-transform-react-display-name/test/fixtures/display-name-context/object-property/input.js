@@ -1,3 +1,0 @@
-({
-  ThemeContext: React.createContext("light")
-});
