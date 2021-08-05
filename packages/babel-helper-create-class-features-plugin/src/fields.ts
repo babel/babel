@@ -865,8 +865,8 @@ export function buildFieldsInitNodes(
 ) {
   let needsClassRef = false;
   let injectSuperRef: t.Identifier;
-  const staticNodes: t.Statement[] = [];
-  const instanceNodes: t.Statement[] = [];
+  const staticNodes: Array<t.Expression | t.Statement> = [];
+  const instanceNodes: Array<t.Expression | t.Statement> = [];
   // These nodes are pure and can be moved to the closest statement position
   const pureStaticNodes: t.FunctionDeclaration[] = [];
 
