@@ -1,3 +1,4 @@
+import { NodePath } from "@babel/traverse";
 import {
   isParenthesizedExpression,
   isTSAsExpression,
@@ -7,7 +8,6 @@ import {
 } from "@babel/types";
 
 import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
 
 export type TransparentExprWrapper =
   | t.TSAsExpression
@@ -33,11 +33,25 @@ export function isTransparentExprWrapper(
   );
 }
 
+type ExprNodeOrPath = t.Expression | NodePath<t.Expression>;
+
+export function skipTransparentExprWrappers(expr: t.Expression): t.Expression;
+
 export function skipTransparentExprWrappers(
-  path: NodePath<t.Expression>,
-): NodePath<t.Expression> {
-  while (isTransparentExprWrapper(path.node)) {
-    path = path.get("expression");
+  expr: NodePath<t.Expression>,
+): NodePath<t.Expression>;
+
+export function skipTransparentExprWrappers(
+  expr: ExprNodeOrPath,
+): ExprNodeOrPath {
+  if (expr instanceof NodePath) {
+    while (isTransparentExprWrapper(expr.node)) {
+      expr = expr.get("expression");
+    }
+  } else {
+    while (isTransparentExprWrapper(expr)) {
+      expr = expr.expression;
+    }
   }
-  return path;
+  return expr;
 }
