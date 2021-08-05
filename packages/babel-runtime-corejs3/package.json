@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs3",
-  "version": "7.14.7",
+  "version": "7.14.9",
   "description": "babel's modular runtime helpers with core-js@3 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -13,7 +13,7 @@
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
-    "core-js-pure": "^3.15.0",
+    "core-js-pure": "^3.16.0",
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {

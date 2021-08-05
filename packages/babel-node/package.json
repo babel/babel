@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.14.7",
+  "version": "7.14.9",
   "description": "Babel command line",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-node",
@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/register": "workspace:^7.14.5",
     "commander": "^4.0.1",
-    "core-js": "^3.15.0",
+    "core-js": "^3.16.0",
     "node-environment-flags": "^1.0.5",
     "regenerator-runtime": "^0.13.4",
     "v8flags": "^3.1.1"

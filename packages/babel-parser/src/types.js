@@ -98,6 +98,7 @@ export type Identifier = PatternBase & {
   type: "Identifier",
   name: string,
 
+  // @deprecated
   __clone(): Identifier,
 
   // TypeScript only. Used in case of an optional parameter.
@@ -630,7 +631,13 @@ export type ParenthesizedExpression = NodeBase & {
   expression: Expression,
 };
 
-// Pipelines
+// Hack pipe operator
+
+export type TopicReference = NodeBase & {
+  type: "TopicReference",
+};
+
+// Smart-mix pipe operator
 
 export type PipelineBody = NodeBase & {
   type: "PipelineBody",
@@ -661,6 +668,10 @@ export type PipelineStyle =
   | "PipelineBareConstructor"
   | "PipelineBareAwaitedFunction"
   | "PipelineTopicExpression";
+
+export type PipelinePrimaryTopicReference = NodeBase & {
+  type: "PipelinePrimaryTopicReference",
+};
 
 // Template Literals
 
@@ -1480,7 +1491,7 @@ export type TsImportType = TsTypeBase & {
 
 export type TsInterfaceDeclaration = DeclarationBase & {
   type: "TSInterfaceDeclaration",
-  id: Identifier,
+  id: ?Identifier,
   typeParameters: ?TsTypeParameterDeclaration,
   // TS uses "heritageClauses", but want this to resemble ClassBase.
   extends?: $ReadOnlyArray<TsExpressionWithTypeArguments>,

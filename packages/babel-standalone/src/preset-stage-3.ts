@@ -1,15 +1,14 @@
 import * as babelPlugins from "./generated/plugins";
 
-export default (_: any, opts: any) => {
-  let loose = false;
+export default (_: any, { loose = false } = {}) => {
+  const plugins = [
+    babelPlugins.syntaxImportAssertions,
+    babelPlugins.proposalClassStaticBlock,
+  ];
 
-  if (opts !== undefined) {
-    if (opts.loose !== undefined) loose = opts.loose;
-  }
-
-  return {
-    plugins: [
-      babelPlugins.syntaxImportAssertions,
+  if (!process.env.BABEL_8_BREAKING) {
+    // These are Stage 4
+    plugins.push(
       babelPlugins.syntaxImportMeta,
       babelPlugins.syntaxTopLevelAwait,
       babelPlugins.proposalExportNamespaceFrom,
@@ -20,6 +19,9 @@ export default (_: any, opts: any) => {
       babelPlugins.proposalJsonStrings,
       babelPlugins.proposalNumericSeparator,
       [babelPlugins.proposalPrivateMethods, { loose }],
-    ],
-  };
+      babelPlugins.proposalPrivatePropertyInObject,
+    );
+  }
+
+  return { plugins };
 };

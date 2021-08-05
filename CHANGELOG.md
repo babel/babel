@@ -19,6 +19,125 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.1 (2021-08-05)
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-plugin-transform-react-display-name`
+  * [#13637](https://github.com/babel/babel/pull/13637) Revert "Add display name after create context (#13501)" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v7.15.0 (2021-08-04)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#13523](https://github.com/babel/babel/pull/13523) feat(ts): raise error for abstract property with initializer ([@fedeci](https://github.com/fedeci))
+
+#### :rocket: New Feature
+* `babel-parser`
+  * [#13229](https://github.com/babel/babel/pull/13229) Add `attachComment` parser option to disable comment attachment ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#13476](https://github.com/babel/babel/pull/13476) standalone: update `preset-stage-*` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13555](https://github.com/babel/babel/pull/13555) feat: support hack pipeline in `@babel/standalone` ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-preset-env`
+  * [#13387](https://github.com/babel/babel/pull/13387) Enable top-level `await` parsing by default ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`, `babel-preset-typescript`
+  * [#13324](https://github.com/babel/babel/pull/13324) Support TypeScript const enums ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`
+  * [#13528](https://github.com/babel/babel/pull/13528) feat(typescript): implement namespace alias ([@colinaaa](https://github.com/colinaaa))
+* `babel-core`, `babel-helper-create-class-features-plugin`, `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#13290](https://github.com/babel/babel/pull/13290) feat: add `noIncompleteNsImportDetection` assumption to `plugin-transform-modules-commonjs` ([@fedeci](https://github.com/fedeci))
+* `babel-plugin-transform-react-display-name`
+  * [#13501](https://github.com/babel/babel/pull/13501) Add display name after create context ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`
+  * [#13416](https://github.com/babel/babel/pull/13416) Hack-pipe proposal with `%` topic token ([@js-choi](https://github.com/js-choi))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`, `babel-traverse`, `babel-types`
+  * [#13191](https://github.com/babel/babel/pull/13191) Add support for the "Hack" pipeline proposal ([@js-choi](https://github.com/js-choi))
+* `babel-plugin-transform-runtime`
+  * [#13398](https://github.com/babel/babel/pull/13398) Expose `@babel/eslint-parser/experimental-worker` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#13448](https://github.com/babel/babel/pull/13448) Add support for rhino as a compilation target ([@gausie](https://github.com/gausie))
+* `babel-compat-data`, `babel-parser`, `babel-preset-env`
+  * [#13554](https://github.com/babel/babel/pull/13554) Enable ergonomic brand checks (`#priv in`) by default ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#13513](https://github.com/babel/babel/pull/13513) [ts] support optional chain call with generic ([@lala7573](https://github.com/lala7573))
+* `babel-plugin-transform-typescript`
+  * [#13605](https://github.com/babel/babel/pull/13605) Handle typescript function overloading in a default export ([@tony-go](https://github.com/tony-go))
+* `babel-parser`
+  * [#13536](https://github.com/babel/babel/pull/13536) Fix `%==` parsing in hack pipes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13426](https://github.com/babel/babel/pull/13426) parser: Fix Hack/smart-pipe error positions ([@js-choi](https://github.com/js-choi))
+  * [#13622](https://github.com/babel/babel/pull/13622) fix(ts): raise error for `export default interface {}` ([@a-tarasyuk](https://github.com/a-tarasyuk))
+
+#### :memo: Documentation
+* [#13607](https://github.com/babel/babel/pull/13607) chore(doc): add jest specific pckg command ([@tony-go](https://github.com/tony-go))
+## v7.14.9 (2021-08-01)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#13596](https://github.com/babel/babel/pull/13596) Fix completion record for variable declarations ([@addaleax](https://github.com/addaleax))
+* `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`
+  * [#13600](https://github.com/babel/babel/pull/13600) Extract computed keys from the class closure ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx-self`, `babel-plugin-transform-react-jsx`
+  * [#13552](https://github.com/babel/babel/pull/13552) Don't insert `__self: this` within constructors of derived classes (#13550) ([@SCLeoX](https://github.com/SCLeoX))
+* `babel-parser`
+  * [#13581](https://github.com/babel/babel/pull/13581) [ts] Check if param is assignable when parsing arrow return type ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-traverse`, `babel-types`
+  * [#13577](https://github.com/babel/babel/pull/13577) add 12 missing NODE_FIELDS ([@jedwards1211](https://github.com/jedwards1211))
+* `babel-plugin-proposal-async-generator-functions`
+  * [#13491](https://github.com/babel/babel/pull/13491) Fix `_step.value` access in `for await` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#13614](https://github.com/babel/babel/pull/13614) Update Rollup to `~2.54.0` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-helper-validator-identifier`, `babel-parser`
+  * [#13606](https://github.com/babel/babel/pull/13606) chore: reorganize benchmarks ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-parser`, `babel-traverse`
+  * [#13611](https://github.com/babel/babel/pull/13611) Replace generic __clone call by specific methods ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#13593](https://github.com/babel/babel/pull/13593) Generator performance ([@JLHwung](https://github.com/JLHwung))
+## v7.14.8 (2021-07-20)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-static-block`, `babel-plugin-transform-new-target`
+  * [#13560](https://github.com/babel/babel/pull/13560) fix(class-properties): replace `new.target` in static properties with `undefined` ([@colinaaa](https://github.com/colinaaa))
+* `babel-parser`
+  * [#13088](https://github.com/babel/babel/pull/13088) Fix await binding error within static block ([@JLHwung](https://github.com/JLHwung))
+  * [#13531](https://github.com/babel/babel/pull/13531) fix: disallow computed `async`/`get`/`set` keyword ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-module-transforms`, `babel-helper-simple-access`, `babel-plugin-transform-modules-commonjs`
+  * [#13258](https://github.com/babel/babel/pull/13258) Fix const violations in ESM imports when transformed to CJS ([@overlookmotel](https://github.com/overlookmotel))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13575](https://github.com/babel/babel/pull/13575) Update babel-parser.d.ts ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13548](https://github.com/babel/babel/pull/13548) Fix  parser `strictMode` option ([@overlookmotel](https://github.com/overlookmotel))
+  * [#13573](https://github.com/babel/babel/pull/13573) Fix issue to allow module block in member expression ([@nme077](https://github.com/nme077))
+  * [#13521](https://github.com/babel/babel/pull/13521) Overhaul comment attachment ([@JLHwung](https://github.com/JLHwung))
+  * [#13534](https://github.com/babel/babel/pull/13534) Async do expression should start at async ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-arrow-functions`, `babel-traverse`
+  * [#12344](https://github.com/babel/babel/pull/12344) Fix arrow transformation when `arguments` is defined as variable ([@snitin315](https://github.com/snitin315))
+* `babel-traverse`
+  * [#13527](https://github.com/babel/babel/pull/13527) fix: accept duplicated import/variable in different module ([@colinaaa](https://github.com/colinaaa))
+* `babel-types`
+  * [#13525](https://github.com/babel/babel/pull/13525) fix(babel-types): accept `UnaryExpression` in `TSLiteralType` ([@colinaaa](https://github.com/colinaaa))
+  * [#13500](https://github.com/babel/babel/pull/13500) Add typeParameters to tagged template visitor keys ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#13515](https://github.com/babel/babel/pull/13515) Fix config validation message typo ([@jaeseokk](https://github.com/jaeseokk))
+* `babel-cli`
+  * [#13508](https://github.com/babel/babel/pull/13508) fix: sync default_extensions to babel-cli usage ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* [#13562](https://github.com/babel/babel/pull/13562) Fix `make generate-standalone` -> `make build-standalone` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+
+#### :house: Internal
+* `babel-helpers`
+  * [#13522](https://github.com/babel/babel/pull/13522) minor improvement to gulp generate-runtime-helpers error message ([@lightmare](https://github.com/lightmare))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#13521](https://github.com/babel/babel/pull/13521) Overhaul comment attachment ([@JLHwung](https://github.com/JLHwung))
 ## v7.14.7 (2021-06-21)
 
 #### :bug: Bug Fix

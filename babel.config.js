@@ -179,6 +179,10 @@ module.exports = function (api) {
         plugins: ["babel-plugin-transform-charcodes"],
         assumptions: parserAssumptions,
       },
+      {
+        test: ["packages/babel-generator"].map(normalize),
+        plugins: ["babel-plugin-transform-charcodes"],
+      },
       convertESM && {
         test: [
           "./packages/babel-cli",

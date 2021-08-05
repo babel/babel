@@ -140,6 +140,9 @@ export const types: { [name: string]: TokenType } = {
   eq: new TokenType("=", { beforeExpr, isAssign }),
   assign: new TokenType("_=", { beforeExpr, isAssign }),
   slashAssign: new TokenType("_=", { beforeExpr, isAssign }),
+  // This is only needed to support % as a Hack-pipe topic token. If the proposal
+  // ends up choosing a different token, it can be merged with tt.assign.
+  moduloAssign: new TokenType("_=", { beforeExpr, isAssign }),
   incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
   bang: new TokenType("!", { beforeExpr, prefix, startsExpr }),
   tilde: new TokenType("~", { beforeExpr, prefix, startsExpr }),
@@ -155,7 +158,7 @@ export const types: { [name: string]: TokenType } = {
   bitShift: createBinop("<</>>/>>>", 8),
   plusMin: new TokenType("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
   // startsExpr: required by v8intrinsic plugin
-  modulo: new TokenType("%", { beforeExpr, binop: 10, startsExpr }),
+  modulo: new TokenType("%", { binop: 10, startsExpr }),
   // unset `beforeExpr` as it can be `function *`
   star: new TokenType("*", { binop: 10 }),
   slash: createBinop("/", 10),

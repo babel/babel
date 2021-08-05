@@ -2,6 +2,7 @@ import type Printer from "../printer";
 import * as t from "@babel/types";
 import jsesc from "jsesc";
 
+const { isAssignmentPattern, isIdentifier } = t;
 export function Identifier(this: Printer, node: t.Identifier) {
   this.exactSource(node.loc, () => {
     this.word(node.name);
@@ -53,8 +54,8 @@ export function ObjectProperty(this: Printer, node: t.ObjectProperty) {
   } else {
     // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
     if (
-      t.isAssignmentPattern(node.value) &&
-      t.isIdentifier(node.key) &&
+      isAssignmentPattern(node.value) &&
+      isIdentifier(node.key) &&
       // @ts-expect-error todo(flow->ts) `.name` does not exist on some types in union
       node.key.name === node.value.left.name
     ) {
@@ -67,8 +68,8 @@ export function ObjectProperty(this: Printer, node: t.ObjectProperty) {
     // shorthand!
     if (
       node.shorthand &&
-      t.isIdentifier(node.key) &&
-      t.isIdentifier(node.value) &&
+      isIdentifier(node.key) &&
+      isIdentifier(node.value) &&
       node.key.name === node.value.name
     ) {
       return;
@@ -236,6 +237,23 @@ export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
   this.word(node.value + "m");
 }
 
+// Hack pipe operator
+export function TopicReference(this: Printer) {
+  const { topicToken } = this.format;
+  switch (topicToken) {
+    case "#":
+      this.token("#");
+      break;
+
+    default: {
+      const givenTopicTokenJSON = JSON.stringify(topicToken);
+      const message = `The "topicToken" generator option must be "#" (${givenTopicTokenJSON} received instead).`;
+      throw new Error(message);
+    }
+  }
+}
+
+// Smart-mix pipe operator
 export function PipelineTopicExpression(
   this: Printer,
   node: t.PipelineTopicExpression,

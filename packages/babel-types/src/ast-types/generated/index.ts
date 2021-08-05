@@ -316,6 +316,7 @@ export type Node =
   | ThisExpression
   | ThisTypeAnnotation
   | ThrowStatement
+  | TopicReference
   | TryStatement
   | TupleExpression
   | TupleTypeAnnotation
@@ -643,6 +644,7 @@ export interface RestElement extends BaseNode {
   type: "RestElement";
   argument: LVal;
   decorators?: Array<Decorator> | null;
+  optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
@@ -653,6 +655,7 @@ export interface RestProperty extends BaseNode {
   type: "RestProperty";
   argument: LVal;
   decorators?: Array<Decorator> | null;
+  optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
@@ -751,6 +754,7 @@ export interface ArrayPattern extends BaseNode {
   type: "ArrayPattern";
   elements: Array<null | PatternLike>;
   decorators?: Array<Decorator> | null;
+  optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
@@ -835,6 +839,7 @@ export interface ExportDefaultDeclaration extends BaseNode {
     | TSDeclareFunction
     | ClassDeclaration
     | Expression;
+  exportKind?: "value" | null;
 }
 
 export interface ExportNamedDeclaration extends BaseNode {
@@ -1024,6 +1029,7 @@ export interface ClassProperty extends BaseNode {
   optional?: boolean | null;
   override?: boolean;
   readonly?: boolean | null;
+  variance?: Variance | null;
 }
 
 export interface ClassPrivateProperty extends BaseNode {
@@ -1032,7 +1038,10 @@ export interface ClassPrivateProperty extends BaseNode {
   value?: Expression | null;
   decorators?: Array<Decorator> | null;
   static: any;
+  definite?: boolean | null;
+  readonly?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  variance?: Variance | null;
 }
 
 export interface ClassPrivateMethod extends BaseNode {
@@ -1142,6 +1151,7 @@ export interface DeclareOpaqueType extends BaseNode {
   id: Identifier;
   typeParameters?: TypeParameterDeclaration | null;
   supertype?: FlowType | null;
+  impltype?: FlowType | null;
 }
 
 export interface DeclareVariable extends BaseNode {
@@ -1586,20 +1596,6 @@ export interface BindExpression extends BaseNode {
   callee: Expression;
 }
 
-export interface PipelineTopicExpression extends BaseNode {
-  type: "PipelineTopicExpression";
-  expression: Expression;
-}
-
-export interface PipelineBareFunction extends BaseNode {
-  type: "PipelineBareFunction";
-  callee: Expression;
-}
-
-export interface PipelinePrimaryTopicReference extends BaseNode {
-  type: "PipelinePrimaryTopicReference";
-}
-
 export interface ImportAttribute extends BaseNode {
   type: "ImportAttribute";
   key: Identifier | StringLiteral;
@@ -1647,10 +1643,30 @@ export interface ModuleExpression extends BaseNode {
   body: Program;
 }
 
+export interface TopicReference extends BaseNode {
+  type: "TopicReference";
+}
+
+export interface PipelineTopicExpression extends BaseNode {
+  type: "PipelineTopicExpression";
+  expression: Expression;
+}
+
+export interface PipelineBareFunction extends BaseNode {
+  type: "PipelineBareFunction";
+  callee: Expression;
+}
+
+export interface PipelinePrimaryTopicReference extends BaseNode {
+  type: "PipelinePrimaryTopicReference";
+}
+
 export interface TSParameterProperty extends BaseNode {
   type: "TSParameterProperty";
   parameter: Identifier | AssignmentPattern;
   accessibility?: "public" | "private" | "protected" | null;
+  decorators?: Array<Decorator> | null;
+  override?: boolean | null;
   readonly?: boolean | null;
 }
 
@@ -1710,6 +1726,7 @@ export interface TSPropertySignature extends BaseNode {
   typeAnnotation?: TSTypeAnnotation | null;
   initializer?: Expression | null;
   computed?: boolean | null;
+  kind: "get" | "set";
   optional?: boolean | null;
   readonly?: boolean | null;
 }
@@ -1992,6 +2009,7 @@ export interface TSImportEqualsDeclaration extends BaseNode {
   type: "TSImportEqualsDeclaration";
   id: Identifier;
   moduleReference: TSEntityName | TSExternalModuleReference;
+  importKind?: "type" | "value" | null;
   isExport: boolean;
 }
 
@@ -2075,12 +2093,15 @@ export type Expression =
   | JSXElement
   | JSXFragment
   | BindExpression
-  | PipelinePrimaryTopicReference
   | DoExpression
   | RecordExpression
   | TupleExpression
   | DecimalLiteral
   | ModuleExpression
+  | TopicReference
+  | PipelineTopicExpression
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference
   | TSAsExpression
   | TSTypeAssertion
   | TSNonNullExpression;

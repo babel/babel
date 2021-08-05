@@ -1,6 +1,7 @@
 import type Printer from "../printer";
 import * as t from "@babel/types";
 
+const { isIdentifier } = t;
 export function _params(this: Printer, node: any) {
   this.print(node.typeParameters, node);
   this.token("(");
@@ -120,7 +121,7 @@ export function ArrowFunctionExpression(
     !this.format.auxiliaryCommentBefore &&
     !this.format.auxiliaryCommentAfter &&
     node.params.length === 1 &&
-    t.isIdentifier(firstParam) &&
+    isIdentifier(firstParam) &&
     !hasTypesOrComments(node, firstParam)
   ) {
     this.print(firstParam, node);

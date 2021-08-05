@@ -1,4 +1,4 @@
-import type { HubInterface, NodePath } from "@babel/traverse";
+import type { HubInterface, NodePath, Scope } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
@@ -271,6 +271,16 @@ type ReplaceSupersOptions = ReplaceSupersOptionsBase &
     | { superRef: t.Node; getSuperRef?: undefined }
   );
 
+interface ReplaceState {
+  file: unknown;
+  scope: Scope;
+  isDerivedConstructor: boolean;
+  isStatic: boolean;
+  isPrivateMethod: boolean;
+  getObjectRef: ReplaceSupers["getObjectRef"];
+  getSuperRef: ReplaceSupers["getSuperRef"];
+}
+
 export default class ReplaceSupers {
   constructor(opts: ReplaceSupersOptions) {
     const path = opts.methodPath;
@@ -317,7 +327,7 @@ export default class ReplaceSupers {
 
     const handler = this.constantSuper ? looseHandlers : specHandlers;
 
-    memberExpressionToFunctions(this.methodPath, visitor, {
+    memberExpressionToFunctions<ReplaceState>(this.methodPath, visitor, {
       file: this.file,
       scope: this.methodPath.scope,
       isDerivedConstructor: this.isDerivedConstructor,
@@ -325,6 +335,8 @@ export default class ReplaceSupers {
       isPrivateMethod: this.isPrivateMethod,
       getObjectRef: this.getObjectRef.bind(this),
       getSuperRef: this.getSuperRef.bind(this),
+      // we dont need boundGet here, but memberExpressionToFunctions handler needs it.
+      boundGet: handler.get,
       ...handler,
     });
   }

@@ -62,6 +62,8 @@ export default function transformClass(
     protoAlias: null,
     isLoose: false,
 
+    dynamicKeys: new Map(),
+
     methods: {
       // 'list' is in the same order as the elements appear in the class body.
       // if there aren't computed keys, we can safely reorder class elements
@@ -600,8 +602,26 @@ export default function transformClass(
     );
   }
 
+  function extractDynamicKeys() {
+    const { dynamicKeys, node, scope } = classState as {
+      dynamicKeys: Map<string, t.Expression>;
+      node: t.Class;
+      scope: NodePath["scope"];
+    };
+
+    for (const elem of node.body.body) {
+      if (!t.isClassMethod(elem) || !elem.computed) continue;
+      if (scope.isPure(elem.key, /* constatns only*/ true)) continue;
+
+      const id = scope.generateUidIdentifierBasedOnNode(elem.key);
+      dynamicKeys.set(id.name, elem.key);
+
+      elem.key = id;
+    }
+  }
+
   function setupClosureParamsArgs() {
-    const { superName } = classState;
+    const { superName, dynamicKeys } = classState;
     const closureParams = [];
     const closureArgs = [];
 
@@ -621,6 +641,11 @@ export default function transformClass(
       closureArgs.push(arg);
 
       setState({ superName: t.cloneNode(param) });
+    }
+
+    for (const [name, value] of dynamicKeys) {
+      closureParams.push(t.identifier(name));
+      closureArgs.push(value);
     }
 
     return { closureParams, closureArgs };
@@ -667,6 +692,8 @@ export default function transformClass(
     setState({
       construct: buildConstructor(classRef, constructorBody, node),
     });
+
+    extractDynamicKeys();
 
     let { body } = classState;
     const { closureParams, closureArgs } = setupClosureParamsArgs();

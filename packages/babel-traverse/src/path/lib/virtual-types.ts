@@ -116,7 +116,6 @@ export const Flow = {
     } else if (t.isImportDeclaration(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
     } else if (t.isExportDeclaration(node)) {
-      // @ts-expect-error todo(flow->ts) `exportKind` does not exist on ExportAllDeclaration
       return node.exportKind === "type";
     } else if (t.isImportSpecifier(node)) {
       return node.importKind === "type" || node.importKind === "typeof";

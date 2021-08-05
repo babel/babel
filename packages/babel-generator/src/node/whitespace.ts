@@ -1,5 +1,20 @@
 import * as t from "@babel/types";
 
+const {
+  isArrayExpression,
+  isAssignmentExpression,
+  isBinary,
+  isBlockStatement,
+  isCallExpression,
+  isFunction,
+  isIdentifier,
+  isLiteral,
+  isMemberExpression,
+  isObjectExpression,
+  isOptionalCallExpression,
+  isOptionalMemberExpression,
+  isStringLiteral,
+} = t;
 type WhitespaceObject = {
   before?: boolean;
   after?: boolean;
@@ -17,18 +32,18 @@ function crawl(
   node: t.Node,
   state: { hasCall?: boolean; hasFunction?: boolean; hasHelper?: boolean } = {},
 ) {
-  if (t.isMemberExpression(node) || t.isOptionalMemberExpression(node)) {
+  if (isMemberExpression(node) || isOptionalMemberExpression(node)) {
     crawl(node.object, state);
     if (node.computed) crawl(node.property, state);
-  } else if (t.isBinary(node) || t.isAssignmentExpression(node)) {
+  } else if (isBinary(node) || isAssignmentExpression(node)) {
     crawl(node.left, state);
     crawl(node.right, state);
-  } else if (t.isCallExpression(node) || t.isOptionalCallExpression(node)) {
+  } else if (isCallExpression(node) || isOptionalCallExpression(node)) {
     state.hasCall = true;
     crawl(node.callee, state);
-  } else if (t.isFunction(node)) {
+  } else if (isFunction(node)) {
     state.hasFunction = true;
-  } else if (t.isIdentifier(node)) {
+  } else if (isIdentifier(node)) {
     // @ts-expect-error todo(flow->ts): node.callee is not really expected here…
     state.hasHelper = state.hasHelper || isHelper(node.callee);
   }
@@ -41,15 +56,15 @@ function crawl(
  */
 
 function isHelper(node: t.Node): boolean {
-  if (t.isMemberExpression(node)) {
+  if (isMemberExpression(node)) {
     return isHelper(node.object) || isHelper(node.property);
-  } else if (t.isIdentifier(node)) {
+  } else if (isIdentifier(node)) {
     return node.name === "require" || node.name[0] === "_";
-  } else if (t.isCallExpression(node)) {
+  } else if (isCallExpression(node)) {
     return isHelper(node.callee);
-  } else if (t.isBinary(node) || t.isAssignmentExpression(node)) {
+  } else if (isBinary(node) || isAssignmentExpression(node)) {
     return (
-      (t.isIdentifier(node.left) && isHelper(node.left)) || isHelper(node.right)
+      (isIdentifier(node.left) && isHelper(node.left)) || isHelper(node.right)
     );
   } else {
     return false;
@@ -58,11 +73,11 @@ function isHelper(node: t.Node): boolean {
 
 function isType(node) {
   return (
-    t.isLiteral(node) ||
-    t.isObjectExpression(node) ||
-    t.isArrayExpression(node) ||
-    t.isIdentifier(node) ||
-    t.isMemberExpression(node)
+    isLiteral(node) ||
+    isObjectExpression(node) ||
+    isArrayExpression(node) ||
+    isIdentifier(node) ||
+    isMemberExpression(node)
   );
 }
 
@@ -114,7 +129,7 @@ export const nodes: {
    */
 
   LogicalExpression(node: t.LogicalExpression): WhitespaceObject | undefined {
-    if (t.isFunction(node.left) || t.isFunction(node.right)) {
+    if (isFunction(node.left) || isFunction(node.right)) {
       return {
         after: true,
       };
@@ -126,7 +141,7 @@ export const nodes: {
    */
 
   Literal(node: t.Literal): WhitespaceObject | undefined | null {
-    if (t.isStringLiteral(node) && node.value === "use strict") {
+    if (isStringLiteral(node) && node.value === "use strict") {
       return {
         after: true,
       };
@@ -138,7 +153,7 @@ export const nodes: {
    */
 
   CallExpression(node: t.CallExpression): WhitespaceObject | undefined | null {
-    if (t.isFunction(node.callee) || isHelper(node)) {
+    if (isFunction(node.callee) || isHelper(node)) {
       return {
         before: true,
         after: true,
@@ -149,7 +164,7 @@ export const nodes: {
   OptionalCallExpression(
     node: t.OptionalCallExpression,
   ): WhitespaceObject | undefined | null {
-    if (t.isFunction(node.callee)) {
+    if (isFunction(node.callee)) {
       return {
         before: true,
         after: true,
@@ -187,7 +202,7 @@ export const nodes: {
    */
 
   IfStatement(node: t.IfStatement): WhitespaceObject | undefined | null {
-    if (t.isBlockStatement(node.consequent)) {
+    if (isBlockStatement(node.consequent)) {
       return {
         before: true,
         after: true,

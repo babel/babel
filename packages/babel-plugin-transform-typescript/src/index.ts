@@ -3,6 +3,7 @@ import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t, template } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 
+import transpileConstEnum from "./const-enum";
 import transpileEnum from "./enum";
 import transpileNamespace from "./namespace";
 import type { NodePath } from "@babel/traverse";
@@ -60,6 +61,7 @@ export default declare((api, opts) => {
     jsxPragma = "React.createElement",
     jsxPragmaFrag = "React.Fragment",
     onlyRemoveTypeImports = false,
+    optimizeConstEnums = false,
   } = opts;
 
   if (!process.env.BABEL_8_BREAKING) {
@@ -289,7 +291,7 @@ export default declare((api, opts) => {
               }
             } else if (
               stmt.isTSTypeAliasDeclaration() ||
-              stmt.isTSDeclareFunction() ||
+              (stmt.isTSDeclareFunction() && stmt.get("id").isIdentifier()) ||
               stmt.isTSInterfaceDeclaration() ||
               stmt.isClassDeclaration({ declare: true }) ||
               stmt.isTSEnumDeclaration({ declare: true }) ||
@@ -462,15 +464,33 @@ export default declare((api, opts) => {
       },
 
       TSEnumDeclaration(path) {
-        transpileEnum(path, t);
+        if (optimizeConstEnums && path.node.const) {
+          transpileConstEnum(path, t);
+        } else {
+          transpileEnum(path, t);
+        }
       },
 
-      TSImportEqualsDeclaration(path) {
-        throw path.buildCodeFrameError(
-          "`import =` is not supported by @babel/plugin-transform-typescript\n" +
-            "Please consider using " +
-            "`import <moduleName> from '<moduleName>';` alongside " +
-            "Typescript's --allowSyntheticDefaultImports option.",
+      TSImportEqualsDeclaration(path: NodePath<t.TSImportEqualsDeclaration>) {
+        if (t.isTSExternalModuleReference(path.node.moduleReference)) {
+          // import alias = require('foo');
+          throw path.buildCodeFrameError(
+            `\`import ${path.node.id.name} = require('${path.node.moduleReference.expression.value}')\` ` +
+              "is not supported by @babel/plugin-transform-typescript\n" +
+              "Please consider using " +
+              `\`import ${path.node.id.name} from '${path.node.moduleReference.expression.value}';\` alongside ` +
+              "Typescript's --allowSyntheticDefaultImports option.",
+          );
+        }
+
+        // import alias = Namespace;
+        path.replaceWith(
+          t.variableDeclaration("var", [
+            t.variableDeclarator(
+              path.node.id,
+              entityNameToExpr(path.node.moduleReference),
+            ),
+          ]),
         );
       },
 
@@ -518,6 +538,14 @@ export default declare((api, opts) => {
       },
     },
   };
+
+  function entityNameToExpr(node: t.TSEntityName): t.Expression {
+    if (t.isTSQualifiedName(node)) {
+      return t.memberExpression(entityNameToExpr(node.left), node.right);
+    }
+
+    return node;
+  }
 
   function visitPattern({ node }) {
     if (node.typeAnnotation) node.typeAnnotation = null;

@@ -9,7 +9,6 @@ import type { Comment, Node as NodeType, NodeBase } from "../types";
 
 class Node implements NodeBase {
   constructor(parser: Parser, pos: number, loc: Position) {
-    this.type = "";
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
@@ -17,17 +16,21 @@ class Node implements NodeBase {
     if (parser?.filename) this.loc.filename = parser.filename;
   }
 
-  type: string;
-  start: number;
-  end: number;
-  loc: SourceLocation;
-  range: [number, number];
-  leadingComments: Array<Comment>;
-  trailingComments: Array<Comment>;
-  innerComments: Array<Comment>;
-  extra: { [key: string]: any };
+  type: string = "";
+  declare start: number;
+  declare end: number;
+  declare loc: SourceLocation;
+  declare range: [number, number];
+  declare leadingComments: Array<Comment>;
+  declare trailingComments: Array<Comment>;
+  declare innerComments: Array<Comment>;
+  declare extra: { [key: string]: any };
+}
+const NodePrototype = Node.prototype;
 
-  __clone(): this {
+if (!process.env.BABEL_8_BREAKING) {
+  // $FlowIgnore
+  NodePrototype.__clone = function (): Node {
     // $FlowIgnore
     const newNode: any = new Node();
     const keys = Object.keys(this);
@@ -39,13 +42,51 @@ class Node implements NodeBase {
         key !== "trailingComments" &&
         key !== "innerComments"
       ) {
-        // $FlowIgnore
         newNode[key] = this[key];
       }
     }
 
     return newNode;
+  };
+}
+
+function clonePlaceholder(node: any): any {
+  return cloneIdentifier(node);
+}
+
+export function cloneIdentifier(node: any): any {
+  // We don't need to clone `typeAnnotations` and `optional`: because
+  // cloneIdentifier is only used in object shorthand and named import/export.
+  // Neither of them allow type annotations after the identifier or optional identifier
+  const { type, start, end, loc, range, extra, name } = node;
+  const cloned = Object.create(NodePrototype);
+  cloned.type = type;
+  cloned.start = start;
+  cloned.end = end;
+  cloned.loc = loc;
+  cloned.range = range;
+  cloned.extra = extra;
+  cloned.name = name;
+  if (type === "Placeholder") {
+    cloned.expectedNode = node.expectedNode;
   }
+  return cloned;
+}
+
+export function cloneStringLiteral(node: any): any {
+  const { type, start, end, loc, range, extra } = node;
+  if (type === "Placeholder") {
+    return clonePlaceholder(node);
+  }
+  const cloned = Object.create(NodePrototype);
+  cloned.type = "StringLiteral";
+  cloned.start = start;
+  cloned.end = end;
+  cloned.loc = loc;
+  cloned.range = range;
+  cloned.extra = extra;
+  cloned.value = node.value;
+  return cloned;
 }
 
 export class NodeUtils extends UtilParser {
@@ -93,7 +134,7 @@ export class NodeUtils extends UtilParser {
     node.end = pos;
     node.loc.end = loc;
     if (this.options.ranges) node.range[1] = pos;
-    this.processComment(node);
+    if (this.options.attachComment) this.processComment(node);
     return node;
   }
 

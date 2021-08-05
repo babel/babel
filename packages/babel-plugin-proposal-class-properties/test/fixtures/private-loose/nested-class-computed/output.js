@@ -14,19 +14,17 @@ var Foo = /*#__PURE__*/function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      var _this = this;
-
-      var Nested = /*#__PURE__*/function () {
+      var Nested = /*#__PURE__*/function (_babelHelpers$classPr) {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
         }
 
         babelHelpers.createClass(Nested, [{
-          key: babelHelpers.classPrivateFieldLooseBase(_this, _foo)[_foo],
+          key: _babelHelpers$classPr,
           value: function () {}
         }]);
         return Nested;
-      }();
+      }(babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]);
 
       babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
     }

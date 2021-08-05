@@ -330,6 +330,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
+    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+      if (node != null && this.isObjectProperty(node)) {
+        return this.isAssignable(node.value, isBinding);
+      }
+      return super.isAssignable(node, isBinding);
+    }
+
     toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       if (node != null && this.isObjectProperty(node)) {
         this.toAssignable(node.value, isLHS);

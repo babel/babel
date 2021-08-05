@@ -1,3 +1,5 @@
+import type { File } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import { hasOwnDecorators } from "./decorators";
 
 export const FEATURES = Object.freeze({
@@ -36,7 +38,7 @@ const looseKey = "@babel/plugin-class-features/looseKey";
 const looseLowPriorityKey =
   "@babel/plugin-class-features/looseLowPriorityKey/#__internal__@babel/preset-env__please-overwrite-loose-instead-of-throwing";
 
-export function enableFeature(file, feature, loose) {
+export function enableFeature(file: File, feature: number, loose: boolean) {
   // We can't blindly enable the feature because, if it was already set,
   // "loose" can't be changed, so that
   //   @babel/plugin-class-properties { loose: true }
@@ -46,12 +48,14 @@ export function enableFeature(file, feature, loose) {
   if (!hasFeature(file, feature) || canIgnoreLoose(file, feature)) {
     file.set(featuresKey, file.get(featuresKey) | feature);
     if (
+      // @ts-expect-error
       loose ===
       "#__internal__@babel/preset-env__prefer-true-but-false-is-ok-if-it-prevents-an-error"
     ) {
       setLoose(file, feature, true);
       file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) | feature);
     } else if (
+      // @ts-expect-error
       loose ===
       "#__internal__@babel/preset-env__prefer-false-but-true-is-ok-if-it-prevents-an-error"
     ) {
@@ -62,8 +66,8 @@ export function enableFeature(file, feature, loose) {
     }
   }
 
-  let resolvedLoose: void | true | false;
-  let higherPriorityPluginName: void | string;
+  let resolvedLoose: boolean | undefined;
+  let higherPriorityPluginName: string | undefined;
 
   for (const [mask, name] of featuresSameLoose) {
     if (!hasFeature(file, mask)) continue;
@@ -103,26 +107,26 @@ export function enableFeature(file, feature, loose) {
   }
 }
 
-function hasFeature(file, feature) {
+function hasFeature(file: File, feature: number) {
   return !!(file.get(featuresKey) & feature);
 }
 
-export function isLoose(file, feature) {
+export function isLoose(file: File, feature: number) {
   return !!(file.get(looseKey) & feature);
 }
 
-function setLoose(file, feature, loose) {
+function setLoose(file: File, feature: number, loose: boolean) {
   if (loose) file.set(looseKey, file.get(looseKey) | feature);
   else file.set(looseKey, file.get(looseKey) & ~feature);
 
   file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) & ~feature);
 }
 
-function canIgnoreLoose(file, feature) {
+function canIgnoreLoose(file: File, feature: number) {
   return !!(file.get(looseLowPriorityKey) & feature);
 }
 
-export function verifyUsedFeatures(path, file) {
+export function verifyUsedFeatures(path: NodePath, file: File) {
   if (hasOwnDecorators(path.node)) {
     if (!hasFeature(file, FEATURES.decorators)) {
       throw path.buildCodeFrameError(
@@ -145,8 +149,8 @@ export function verifyUsedFeatures(path, file) {
     }
   }
 
-  // NOTE: path.isPrivateMethod() it isn't supported in <7.2.0
-  if (path.isPrivateMethod?.()) {
+  // NOTE: path.isClassPrivateMethod() it isn't supported in <7.2.0
+  if (path.isClassPrivateMethod?.()) {
     if (!hasFeature(file, FEATURES.privateMethods)) {
       throw path.buildCodeFrameError("Class private methods are not enabled.");
     }

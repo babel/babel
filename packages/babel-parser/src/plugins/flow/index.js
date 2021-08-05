@@ -25,6 +25,7 @@ import {
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
 import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
+import { cloneIdentifier } from "../../parser/node";
 
 const reservedTypes = new Set([
   "_",
@@ -2257,46 +2258,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isAssignable(node: N.Node, isBinding?: boolean): boolean {
-      switch (node.type) {
-        case "Identifier":
-        case "ObjectPattern":
-        case "ArrayPattern":
-        case "AssignmentPattern":
-          return true;
-
-        case "ObjectExpression": {
-          const last = node.properties.length - 1;
-          return node.properties.every((prop, i) => {
-            return (
-              prop.type !== "ObjectMethod" &&
-              (i === last || prop.type === "SpreadElement") &&
-              this.isAssignable(prop)
-            );
-          });
-        }
-
-        case "ObjectProperty":
-          return this.isAssignable(node.value);
-
-        case "SpreadElement":
-          return this.isAssignable(node.argument);
-
-        case "ArrayExpression":
-          return node.elements.every(element => this.isAssignable(element));
-
-        case "AssignmentExpression":
-          return node.operator === "=";
-
-        case "ParenthesizedExpression":
-        case "TypeCastExpression":
-          return this.isAssignable(node.expression);
-
-        case "MemberExpression":
-        case "OptionalMemberExpression":
-          return !isBinding;
-
-        default:
-          return false;
+      if (node.type === "TypeCastExpression") {
+        return this.isAssignable(node.expression, isBinding);
+      } else {
+        return super.isAssignable(node, isBinding);
       }
     }
 
@@ -2691,7 +2656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
           specifier.importKind = specifierTypeKind;
-          specifier.local = as_ident.__clone();
+          specifier.local = cloneIdentifier(as_ident);
         } else {
           // `import {type as foo`
           specifier.imported = firstIdent;
@@ -2709,7 +2674,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = this.parseIdentifier();
         } else {
           isBinding = true;
-          specifier.local = specifier.imported.__clone();
+          specifier.local = cloneIdentifier(specifier.imported);
         }
       } else {
         if (firstIdentIsString) {
@@ -2724,7 +2689,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
-        specifier.local = specifier.imported.__clone();
+        specifier.local = cloneIdentifier(specifier.imported);
       }
 
       const nodeIsTypeImport = hasTypeImportKind(node);
@@ -2989,8 +2954,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseArrow(node);
     }
 
-    shouldParseArrow(): boolean {
-      return this.match(tt.colon) || super.shouldParseArrow();
+    shouldParseArrow(params: Array<N.Node>): boolean {
+      return this.match(tt.colon) || super.shouldParseArrow(params);
     }
 
     setArrowFunctionParameters(

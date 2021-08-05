@@ -131,6 +131,7 @@ export type ParserPlugin =
   | "jsx"
   | "logicalAssignment"
   | "importAssertions"
+  | "moduleBlocks"
   | "moduleStringNames"
   | "nullishCoalescingOperator"
   | "numericSeparator"
@@ -140,7 +141,7 @@ export type ParserPlugin =
   | "partialApplication"
   | "pipelineOperator"
   | "placeholders"
-  | "privateIn"
+  | "privateIn" // Enabled by default
   | "throwExpressions"
   | "topLevelAwait"
   | "typescript"
@@ -151,14 +152,16 @@ export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
-  | ["flow", FlowPluginOptions];
+  | ["flow", FlowPluginOptions]
+  | ["typescript", TypeScriptPluginOptions];
 
 export interface DecoratorsPluginOptions {
   decoratorsBeforeExport?: boolean;
 }
 
 export interface PipelineOperatorPluginOptions {
-  proposal: "fsharp" | "minimal" | "smart";
+  proposal: "minimal" | "fsharp" | "hack" | "smart";
+  topicToken?: "%" | "#";
 }
 
 export interface RecordAndTuplePluginOptions {
@@ -167,6 +170,10 @@ export interface RecordAndTuplePluginOptions {
 
 export interface FlowPluginOptions {
   all?: boolean;
+}
+
+export interface TypeScriptPluginOptions {
+  dts?: boolean;
 }
 
 export const tokTypes: {

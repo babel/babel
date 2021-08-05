@@ -33,13 +33,29 @@ const es2015 = {
     features: ['function "name" property'],
   },
   "transform-arrow-functions": {
-    features: ["arrow functions"],
+    features: [
+      "arrow functions / 0 parameters",
+      "arrow functions / 1 parameter, no brackets",
+      "arrow functions / multiple parameters",
+      'arrow functions / lexical "this" binding',
+      'arrow functions / "this" unchanged by call or apply',
+      "arrow functions / can't be bound, can be curried",
+      'arrow functions / lexical "arguments" binding',
+      "arrow functions / no line break between params and <code>=></code>",
+      "arrow functions / correct precedence",
+      'arrow functions / no "prototype" property',
+    ],
   },
   "transform-block-scoped-functions": {
     features: ["block-level function declaration"],
   },
   "transform-classes": {
-    features: ["class", "super"],
+    features: [
+      "class",
+      "super",
+      'arrow functions / lexical "super" binding in constructors',
+      'arrow functions / lexical "super" binding in methods',
+    ],
   },
   "transform-object-super": {
     features: ["super"],
@@ -91,7 +107,7 @@ const es2015 = {
     features: ["Symbol / typeof support"],
   },
   "transform-new-target": {
-    features: ["new.target"],
+    features: ["new.target", 'arrow functions / lexical "new.target" binding'],
   },
   "transform-regenerator": {
     features: ["generators"],
@@ -134,8 +150,7 @@ const es2021 = {
   "proposal-logical-assignment-operators": "Logical Assignment",
 };
 
-const shippedProposal = {
-  "proposal-class-static-block": "Class static initialization blocks",
+const es2022 = {
   "proposal-private-property-in-object":
     "Ergonomic brand checks for private fields",
   "proposal-class-properties": {
@@ -149,10 +164,15 @@ const shippedProposal = {
   "proposal-private-methods": "private class methods",
 };
 
+const shippedProposal = {
+  "proposal-class-static-block": "Class static initialization blocks",
+};
+
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2022,
   es2021,
   es2020,
   es2019,

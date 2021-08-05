@@ -153,7 +153,6 @@ function _evaluate(path: NodePath, state) {
   }
 
   if (path.isReferencedIdentifier()) {
-    // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
     const binding = path.scope.getBinding(path.node.name);
 
     if (binding && binding.constantViolations.length > 0) {
@@ -167,13 +166,10 @@ function _evaluate(path: NodePath, state) {
     if (binding?.hasValue) {
       return binding.value;
     } else {
-      // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       if (path.node.name === "undefined") {
         return binding ? deopt(binding.path, state) : undefined;
-        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       } else if (path.node.name === "Infinity") {
         return binding ? deopt(binding.path, state) : Infinity;
-        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       } else if (path.node.name === "NaN") {
         return binding ? deopt(binding.path, state) : NaN;
       }

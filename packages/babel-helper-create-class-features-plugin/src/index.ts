@@ -1,4 +1,5 @@
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import {
@@ -7,11 +8,8 @@ import {
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
 } from "./fields";
-import {
-  hasOwnDecorators,
-  buildDecoratedClass,
-  hasDecorators,
-} from "./decorators";
+import type { PropPath } from "./fields";
+import { buildDecoratedClass, hasDecorators } from "./decorators";
 import { injectInitialization, extractComputedKeys } from "./misc";
 import {
   enableFeature,
@@ -33,20 +31,24 @@ const version = PACKAGE_JSON.version
   .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
+interface Options {
+  name: string;
+  feature: number;
+  loose?: boolean;
+  // same as PluginObject.manipulateOptions
+  manipulateOptions: (options: unknown, parserOpts: unknown) => void;
+  // TODO(flow->ts): change to babel api
+  api?: { assumption: (key?: string) => boolean | undefined };
+}
+
 export function createClassFeaturePlugin({
   name,
   feature,
   loose,
   manipulateOptions,
-  // TODO(Babel 8): Remove the default falue
-  api = { assumption: () => {} },
-}: {
-  name;
-  feature;
-  loose?;
-  manipulateOptions;
-  api?;
-}) {
+  // TODO(Babel 8): Remove the default value
+  api = { assumption: () => void 0 },
+}: Options) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
   const constantSuper = api.assumption("constantSuper");
@@ -90,25 +92,29 @@ export function createClassFeaturePlugin({
     },
 
     visitor: {
-      Class(path, state) {
+      Class(path: NodePath<t.Class>, state) {
         if (this.file.get(versionKey) !== version) return;
 
         verifyUsedFeatures(path, this.file);
 
         const loose = isLoose(this.file, feature);
 
-        let constructor;
-        let isDecorated = hasOwnDecorators(path.node);
-        const props = [];
+        let constructor: NodePath<t.ClassMethod>;
+        const isDecorated = hasDecorators(path.node);
+        const props: PropPath[] = [];
         const elements = [];
-        const computedPaths = [];
-        const privateNames = new Set();
+        const computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[] = [];
+        const privateNames = new Set<string>();
         const body = path.get("body");
 
         for (const path of body.get("body")) {
           verifyUsedFeatures(path, this.file);
 
-          if (path.node.computed) {
+          if (
+            // check path.node.computed is enough, but ts will complain
+            (path.isClassProperty() || path.isClassMethod()) &&
+            path.node.computed
+          ) {
             computedPaths.push(path);
           }
 
@@ -117,24 +123,24 @@ export function createClassFeaturePlugin({
             const getName = `get ${name}`;
             const setName = `set ${name}`;
 
-            if (path.node.kind === "get") {
-              if (
-                privateNames.has(getName) ||
-                (privateNames.has(name) && !privateNames.has(setName))
-              ) {
-                throw path.buildCodeFrameError("Duplicate private field");
+            if (path.isClassPrivateMethod()) {
+              if (path.node.kind === "get") {
+                if (
+                  privateNames.has(getName) ||
+                  (privateNames.has(name) && !privateNames.has(setName))
+                ) {
+                  throw path.buildCodeFrameError("Duplicate private field");
+                }
+                privateNames.add(getName).add(name);
+              } else if (path.node.kind === "set") {
+                if (
+                  privateNames.has(setName) ||
+                  (privateNames.has(name) && !privateNames.has(getName))
+                ) {
+                  throw path.buildCodeFrameError("Duplicate private field");
+                }
+                privateNames.add(setName).add(name);
               }
-
-              privateNames.add(getName).add(name);
-            } else if (path.node.kind === "set") {
-              if (
-                privateNames.has(setName) ||
-                (privateNames.has(name) && !privateNames.has(getName))
-              ) {
-                throw path.buildCodeFrameError("Duplicate private field");
-              }
-
-              privateNames.add(setName).add(name);
             } else {
               if (
                 (privateNames.has(name) &&
@@ -162,14 +168,12 @@ export function createClassFeaturePlugin({
               props.push(path);
             }
           }
-
-          if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
         }
 
         if (!props.length && !isDecorated) return;
 
         const innerBinding = path.node.id;
-        let ref;
+        let ref: t.Identifier;
         if (!innerBinding || path.isClassExpression()) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
@@ -198,7 +202,11 @@ export function createClassFeaturePlugin({
           state,
         );
 
-        let keysNodes, staticNodes, pureStaticNodes, instanceNodes, wrapClass;
+        let keysNodes: t.Statement[],
+          staticNodes: t.Statement[],
+          instanceNodes: t.Statement[],
+          pureStaticNodes: t.FunctionDeclaration[],
+          wrapClass: (path: NodePath<t.Class>) => NodePath;
 
         if (isDecorated) {
           staticNodes = pureStaticNodes = keysNodes = [];
@@ -239,19 +247,20 @@ export function createClassFeaturePlugin({
           );
         }
 
-        path = wrapClass(path);
-        path.insertBefore([...privateNamesNodes, ...keysNodes]);
+        // rename to make ts happy
+        const wrappedPath = wrapClass(path);
+        wrappedPath.insertBefore([...privateNamesNodes, ...keysNodes]);
         if (staticNodes.length > 0) {
-          path.insertAfter(staticNodes);
+          wrappedPath.insertAfter(staticNodes);
         }
         if (pureStaticNodes.length > 0) {
-          path
+          wrappedPath
             .find(parent => parent.isStatement() || parent.isDeclaration())
             .insertAfter(pureStaticNodes);
         }
       },
 
-      PrivateName(path) {
+      PrivateName(path: NodePath<t.PrivateName>) {
         if (
           this.file.get(versionKey) !== version ||
           path.parentPath.isPrivate({ key: path.node })
@@ -262,7 +271,7 @@ export function createClassFeaturePlugin({
         throw path.buildCodeFrameError(`Unknown PrivateName "${path}"`);
       },
 
-      ExportDefaultDeclaration(path) {
+      ExportDefaultDeclaration(path: NodePath<t.ExportDefaultDeclaration>) {
         if (this.file.get(versionKey) !== version) return;
 
         const decl = path.get("declaration");
@@ -276,6 +285,7 @@ export function createClassFeaturePlugin({
           } else {
             // Annyms class declarations can be
             // transformed as if they were expressions
+            // @ts-expect-error
             decl.node.type = "ClassExpression";
           }
         }

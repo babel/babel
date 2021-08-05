@@ -193,11 +193,19 @@ function getStatementListCompletion(
     }
   } else if (paths.length) {
     // When we are in a context where `break` must not exist, we can skip linear
-    // search on statement lists and assume that the last statement determines
-    // the completion
-    completions = completions.concat(
-      _getCompletionRecords(paths[paths.length - 1], context),
-    );
+    // search on statement lists and assume that the last
+    // non-variable-declaration statement determines the completion.
+    for (let i = paths.length - 1; i >= 0; i--) {
+      const pathCompletions = _getCompletionRecords(paths[i], context);
+      if (
+        pathCompletions.length > 1 ||
+        (pathCompletions.length === 1 &&
+          !pathCompletions[0].path.isVariableDeclaration())
+      ) {
+        completions = completions.concat(pathCompletions);
+        break;
+      }
+    }
   }
   return completions;
 }
@@ -312,6 +320,44 @@ export function getAllPrevSiblings(this: NodePath): NodePath[] {
   return siblings;
 }
 
+// convert "1" to 1 (string index to number index)
+type MaybeToIndex<T extends string> = T extends `${bigint}` ? number : T;
+
+type Pattern<Obj extends string, Prop extends string> = `${Obj}.${Prop}`;
+
+// split "body.body.1" to ["body", "body", 1]
+type Split<P extends string> = P extends Pattern<infer O, infer U>
+  ? [MaybeToIndex<O>, ...Split<U>]
+  : [MaybeToIndex<P>];
+
+// get all K with Node[K] is t.Node | t.Node[]
+type NodeKeyOf<Node extends t.Node | t.Node[]> = keyof Pick<
+  Node,
+  {
+    [Key in keyof Node]-?: Node[Key] extends t.Node | t.Node[] ? Key : never;
+  }[keyof Node]
+>;
+
+// traverse the Node with tuple path ["body", "body", 1]
+// Path should be created with Split
+type Trav<
+  Node extends t.Node | t.Node[],
+  Path extends unknown[],
+> = Path extends [infer K, ...infer R]
+  ? K extends NodeKeyOf<Node>
+    ? R extends []
+      ? Node[K]
+      : // @ts-expect-error ignore since TS is not smart enough
+        Trav<Node[K], R>
+    : never
+  : never;
+
+type ToNodePath<T> = T extends Array<t.Node | null | undefined>
+  ? Array<NodePath<T[number]>>
+  : T extends t.Node | null | undefined
+  ? NodePath<T>
+  : never;
+
 function get<T extends t.Node, K extends keyof T>(
   this: NodePath<T>,
   key: K,
@@ -321,6 +367,12 @@ function get<T extends t.Node, K extends keyof T>(
   : T[K] extends t.Node | null | undefined
   ? NodePath<T[K]>
   : never;
+
+function get<T extends t.Node, K extends string>(
+  this: NodePath<T>,
+  key: K,
+  context?: boolean | TraversalContext,
+): ToNodePath<Trav<T, Split<K>>>;
 
 function get<T extends t.Node>(
   this: NodePath<T>,

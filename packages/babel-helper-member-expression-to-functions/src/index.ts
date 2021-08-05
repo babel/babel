@@ -1,17 +1,18 @@
+import type { NodePath, Visitor } from "@babel/traverse";
 import * as t from "@babel/types";
 import { willPathCastToBoolean } from "./util";
 
 class AssignmentMemoiser {
-  private _map: WeakMap<object, any>;
+  private _map: WeakMap<t.Expression, { count: number; value: t.LVal }>;
   constructor() {
     this._map = new WeakMap();
   }
 
-  has(key) {
+  has(key: t.Expression) {
     return this._map.has(key);
   }
 
-  get(key) {
+  get(key: t.Expression) {
     if (!this.has(key)) return;
 
     const record = this._map.get(key);
@@ -26,14 +27,17 @@ class AssignmentMemoiser {
     return value;
   }
 
-  set(key, value, count) {
+  set(key: t.Expression, value: t.LVal, count: number) {
     return this._map.set(key, { count, value });
   }
 }
 
-function toNonOptional(path, base) {
+function toNonOptional(
+  path: NodePath<t.Expression>,
+  base: t.Expression,
+): t.Expression {
   const { node } = path;
-  if (path.isOptionalMemberExpression()) {
+  if (t.isOptionalMemberExpression(node)) {
     return t.memberExpression(base, node.property, node.computed);
   }
 
@@ -44,15 +48,15 @@ function toNonOptional(path, base) {
       const context = path.scope.maybeGenerateMemoised(object) || object;
       callee
         .get("object")
-        .replaceWith(t.assignmentExpression("=", context, object));
+        .replaceWith(t.assignmentExpression("=", context as t.LVal, object));
 
       return t.callExpression(t.memberExpression(base, t.identifier("call")), [
         context,
-        ...node.arguments,
+        ...path.node.arguments,
       ]);
     }
 
-    return t.callExpression(base, node.arguments);
+    return t.callExpression(base, path.node.arguments);
   }
 
   return path.node;
@@ -62,7 +66,7 @@ function toNonOptional(path, base) {
 // we are iterating on a path, and replace an ancestor with a new node. Babel
 // doesn't always stop traversing the old node tree, and that can cause
 // inconsistencies.
-function isInDetachedTree(path) {
+function isInDetachedTree(path: NodePath) {
   while (path) {
     if (path.isProgram()) break;
 
@@ -80,13 +84,14 @@ function isInDetachedTree(path) {
   return false;
 }
 
+type Member = NodePath<t.OptionalMemberExpression | t.MemberExpression>;
+
 const handle = {
   memoise() {
     // noop.
   },
 
-  // todo(flow->ts) member:NodePath<t.Expression>, refactor function body to avoid too many typecasts
-  handle(member: any, noDocumentAll: boolean) {
+  handle(this: HandlerState, member: Member, noDocumentAll: boolean) {
     const { node, parent, parentPath, scope } = member;
 
     if (member.isOptionalMemberExpression()) {
@@ -102,14 +107,14 @@ const handle = {
       // Everything up to it could be skipped if it `FOO` were nullish. But
       // actually, we can consider the `baz` access to be the end. So we're
       // looking for the nearest optional chain that is `optional: true`.
-      const endPath = member.find(({ node, parent, parentPath }) => {
-        if (parentPath.isOptionalMemberExpression()) {
+      const endPath = member.find(({ node, parent }) => {
+        if (t.isOptionalMemberExpression(parent)) {
           // We need to check `parent.object` since we could be inside the
           // computed expression of a `bad?.[FOO?.BAR]`. In this case, the
           // endPath is the `FOO?.BAR` member itself.
           return parent.optional || parent.object !== node;
         }
-        if (parentPath.isOptionalCallExpression()) {
+        if (t.isOptionalCallExpression(parent)) {
           // Checking `parent.callee` since we could be in the arguments, eg
           // `bad?.(FOO?.BAR)`.
           // Also skip `FOO?.BAR` in `FOO?.BAR?.()` since we need to transform the optional call to ensure proper this
@@ -119,7 +124,7 @@ const handle = {
           );
         }
         return true;
-      });
+      }) as NodePath<t.OptionalMemberExpression>;
 
       // Replace `function (a, x = a.b?.#c) {}` to `function (a, x = (() => a.b?.#c)() ){}`
       // so the temporary variable can be injected in correct scope
@@ -164,7 +169,7 @@ const handle = {
       // But actually, we can consider the `bar` access to be the start. So
       // we're looking for the nearest optional chain that is `optional: true`,
       // which is guaranteed to be somewhere in the object/callee tree.
-      let startingOptional = member;
+      let startingOptional: NodePath<t.Expression> = member;
       for (;;) {
         if (startingOptional.isOptionalMemberExpression()) {
           if (startingOptional.node.optional) break;
@@ -193,10 +198,16 @@ const handle = {
       const parentIsOptionalCall = parentPath.isOptionalCallExpression({
         callee: node,
       });
+      // here we use a function to wrap `parentIsOptionalCall` to get type
+      // for parent, do not use it anywhere else
+      // See https://github.com/microsoft/TypeScript/issues/10421
+      const isOptionalCall = (
+        parent: t.Node,
+      ): parent is t.OptionalCallExpression => parentIsOptionalCall;
       // if parentIsCall is true, it implies that node.extra.parenthesized is always true
       const parentIsCall = parentPath.isCallExpression({ callee: node });
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
-      if (parentIsOptionalCall) {
+      if (isOptionalCall(parent)) {
         if (parent.optional) {
           parentPath.replaceWith(this.optionalCall(member, parent.arguments));
         } else {
@@ -209,11 +220,15 @@ const handle = {
         member.replaceWith(this.get(member));
       }
 
-      let regular = member.node;
-      for (let current = member; current !== endPath; ) {
-        const { parentPath } = current;
+      let regular: t.Expression = member.node;
+      for (let current: NodePath = member; current !== endPath; ) {
+        const parentPath = current.parentPath as NodePath<t.Expression>;
         // skip transforming `Foo.#BAR?.call(FOO)`
-        if (parentPath === endPath && parentIsOptionalCall && parent.optional) {
+        if (
+          parentPath === endPath &&
+          isOptionalCall(parent) &&
+          parent.optional
+        ) {
           regular = parentPath.node;
           break;
         }
@@ -221,8 +236,8 @@ const handle = {
         current = parentPath;
       }
 
-      let context;
-      const endParentPath = endPath.parentPath;
+      let context: t.Identifier;
+      const endParentPath = endPath.parentPath as NodePath<t.Expression>;
       if (
         t.isMemberExpression(regular) &&
         endParentPath.isOptionalCallExpression({
@@ -237,7 +252,7 @@ const handle = {
         }
       }
 
-      let replacementPath = endPath;
+      let replacementPath: NodePath = endPath;
       if (isDeleteOperation) {
         replacementPath = endParentPath;
         regular = endParentPath.node;
@@ -306,7 +321,7 @@ const handle = {
 
       // context and isDeleteOperation can not be both truthy
       if (context) {
-        const endParent = endParentPath.node;
+        const endParent = endParentPath.node as t.OptionalCallExpression;
         endParentPath.replaceWith(
           t.optionalCallExpression(
             t.optionalMemberExpression(
@@ -326,7 +341,7 @@ const handle = {
 
     // MEMBER++   ->   _set(MEMBER, (_ref = (+_get(MEMBER))) + 1), _ref
     // ++MEMBER   ->   _set(MEMBER, (+_get(MEMBER)) + 1)
-    if (parentPath.isUpdateExpression({ argument: node })) {
+    if (t.isUpdateExpression(parent, { argument: node })) {
       if (this.simpleSet) {
         member.replaceWith(this.simpleSet(member));
         return;
@@ -340,7 +355,7 @@ const handle = {
       this.memoise(member, 2);
 
       const value = t.binaryExpression(
-        operator[0],
+        operator[0] as "+" | "-",
         t.unaryExpression("+", this.get(member)),
         t.numericLiteral(1),
       );
@@ -375,7 +390,7 @@ const handle = {
         return;
       }
 
-      const { operator, right: value } = parent;
+      const { operator, right: value } = parentPath.node;
 
       if (operator === "=") {
         parentPath.replaceWith(this.set(member, value));
@@ -388,7 +403,7 @@ const handle = {
           this.memoise(member, 1);
           parentPath.replaceWith(
             t.logicalExpression(
-              operatorTrunc,
+              operatorTrunc as t.LogicalExpression["operator"],
               this.get(member),
               this.set(member, value),
             ),
@@ -399,7 +414,11 @@ const handle = {
           parentPath.replaceWith(
             this.set(
               member,
-              t.binaryExpression(operatorTrunc, this.get(member), value),
+              t.binaryExpression(
+                operatorTrunc as t.BinaryExpression["operator"],
+                this.get(member),
+                value,
+              ),
             ),
           );
         }
@@ -409,7 +428,7 @@ const handle = {
 
     // MEMBER(ARGS) -> _call(MEMBER, ARGS)
     if (parentPath.isCallExpression({ callee: node })) {
-      parentPath.replaceWith(this.call(member, parent.arguments));
+      parentPath.replaceWith(this.call(member, parentPath.node.arguments));
       return;
     }
 
@@ -425,7 +444,9 @@ const handle = {
         );
         return;
       }
-      parentPath.replaceWith(this.optionalCall(member, parent.arguments));
+      parentPath.replaceWith(
+        this.optionalCall(member, parentPath.node.arguments),
+      );
       return;
     }
 
@@ -472,6 +493,45 @@ const handle = {
   },
 };
 
+export interface Handler<State> {
+  memoise?(
+    this: HandlerState<State> & State,
+    member: Member,
+    count: number,
+  ): void;
+  destructureSet(
+    this: HandlerState<State> & State,
+    member: Member,
+  ): t.Expression;
+  boundGet(this: HandlerState<State> & State, member: Member): t.Expression;
+  simpleSet?(this: HandlerState<State> & State, member: Member): t.Expression;
+  get(this: HandlerState<State> & State, member: Member): t.Expression;
+  set(
+    this: HandlerState<State> & State,
+    member: Member,
+    value: t.Expression,
+  ): t.Expression;
+  call(
+    this: HandlerState<State> & State,
+    member: Member,
+    args: t.CallExpression["arguments"],
+  ): t.Expression;
+  optionalCall(
+    this: HandlerState<State> & State,
+    member: Member,
+    args: t.OptionalCallExpression["arguments"],
+  ): t.Expression;
+}
+
+export interface HandlerState<State = {}> extends Handler<State> {
+  handle(
+    this: HandlerState<State> & State,
+    member: Member,
+    noDocumentAll: boolean,
+  ): void;
+  memoiser: AssignmentMemoiser;
+}
+
 // We do not provide a default traversal visitor
 // Instead, caller passes one, and must call `state.handle` on the members
 // it wishes to be transformed.
@@ -479,7 +539,11 @@ const handle = {
 // get, set, and call methods.
 // Optionally, a memoise method may be defined on the state, which will be
 // called when the member is a self-referential update.
-export default function memberExpressionToFunctions(path, visitor, state) {
+export default function memberExpressionToFunctions<CustomState = {}>(
+  path: NodePath,
+  visitor: Visitor<HandlerState<CustomState>>,
+  state: Handler<CustomState> & CustomState,
+) {
   path.traverse(visitor, {
     ...handle,
     ...state,

@@ -15,7 +15,7 @@ _ref3 = /regex/;
 _baz = baz;
 _ref4 = `template${expression}`;
 
-var MyClass = /*#__PURE__*/function () {
+var MyClass = /*#__PURE__*/function (_computed3, _computed4, _ref5) {
   "use strict";
 
   function MyClass() {
@@ -36,20 +36,20 @@ var MyClass = /*#__PURE__*/function () {
     get: function () {},
     set: function (value) {}
   }, {
-    key: _computed,
+    key: _computed3,
     get: function () {}
   }, {
-    key: _computed2,
+    key: _computed4,
     set: function (value) {}
   }, {
-    key: _ref2,
+    key: _ref5,
     value: function () {}
   }], [{
     key: "10",
     value: function _() {}
   }]);
   return MyClass;
-}();
+}(_computed, _computed2, _ref2);
 
 babelHelpers.defineProperty(MyClass, _one, "test");
 babelHelpers.defineProperty(MyClass, 2 * 4 + 7, "247");

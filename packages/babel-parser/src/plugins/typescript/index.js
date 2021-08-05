@@ -70,6 +70,8 @@ const TSErrors = makeErrorTemplates(
   {
     AbstractMethodHasImplementation:
       "Method '%0' cannot have an implementation because it is marked abstract.",
+    AbstractPropertyHasInitializer:
+      "Property '%0' cannot have an initializer because it is marked abstract.",
     AccesorCannotDeclareThisParameter:
       "'get' and 'set' accessors cannot declare 'this' parameters.",
     AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
@@ -107,6 +109,8 @@ const TSErrors = makeErrorTemplates(
     InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
+    MissingInterfaceName:
+      "'interface' declarations must be followed by an identifier.",
     MixedLabeledAndUnlabeledElements:
       "Tuple members must all have names or all not have names.",
     NonAbstractClassHasAbstractMethod:
@@ -1419,12 +1423,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseInterfaceDeclaration(
       node: N.TsInterfaceDeclaration,
     ): N.TsInterfaceDeclaration {
-      node.id = this.parseIdentifier();
-      this.checkLVal(
-        node.id,
-        "typescript interface declaration",
-        BIND_TS_INTERFACE,
-      );
+      if (this.match(tt.name)) {
+        node.id = this.parseIdentifier();
+        this.checkLVal(
+          node.id,
+          "typescript interface declaration",
+          BIND_TS_INTERFACE,
+        );
+      } else {
+        node.id = null;
+        this.raise(this.state.start, TSErrors.MissingInterfaceName);
+      }
+
       node.typeParameters = this.tsTryParseTypeParameters();
       if (this.eat(tt._extends)) {
         node.extends = this.tsParseHeritageClause("extends");
@@ -2072,7 +2082,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(nonNullExpression, "TSNonNullExpression");
       }
 
+      let isOptionalCall = false;
+      if (
+        this.match(tt.questionDot) &&
+        this.lookaheadCharCode() === charCodes.lessThan
+      ) {
+        if (noCalls) {
+          state.stop = true;
+          return base;
+        }
+        state.optionalChainMember = isOptionalCall = true;
+        this.next();
+      }
+
       if (this.isRelational("<")) {
+        let missingParenErrorPos;
         // tsTryParseAndCatch is expensive, so avoid if not necessary.
         // There are number of things we are going to "maybe" parse, like type arguments on
         // tagged template expressions. If any of them fail, walk it back and continue.
@@ -2095,6 +2119,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const typeArguments = this.tsParseTypeArguments();
 
           if (typeArguments) {
+            if (isOptionalCall && !this.match(tt.parenL)) {
+              missingParenErrorPos = this.state.pos;
+              this.unexpected();
+            }
+
             if (!noCalls && this.eat(tt.parenL)) {
               // possibleAsync always false here, because we would have handled it above.
               // $FlowIgnore (won't be any undefined arguments)
@@ -2109,8 +2138,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               node.typeParameters = typeArguments;
               if (state.optionalChainMember) {
                 // $FlowIgnore
-                node.optional = false;
+                node.optional = isOptionalCall;
               }
+
               return this.finishCallExpression(node, state.optionalChainMember);
             } else if (this.match(tt.backQuote)) {
               const result = this.parseTaggedTemplateExpression(
@@ -2126,6 +2156,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
           this.unexpected();
         });
+
+        if (missingParenErrorPos) {
+          this.unexpected(missingParenErrorPos, tt.parenL);
+        }
 
         if (result) return result;
       }
@@ -2305,12 +2339,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // export default interface allowed in:
       // https://github.com/Microsoft/TypeScript/pull/16040
       if (this.state.value === "interface") {
-        const result = this.tsParseDeclaration(
-          this.startNode(),
-          this.state.value,
-          true,
-        );
-
+        const interfaceNode = this.startNode();
+        this.next();
+        const result = this.tsParseInterfaceDeclaration(interfaceNode);
         if (result) return result;
       }
 
@@ -2607,6 +2638,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.state.isAmbientContext && this.match(tt.eq)) {
         this.raise(this.state.start, TSErrors.DeclareClassFieldHasInitializer);
       }
+      if (node.abstract && this.match(tt.eq)) {
+        const { key } = node;
+        this.raise(
+          this.state.start,
+          TSErrors.AbstractPropertyHasInitializer,
+          key.type === "Identifier" && !node.computed
+            ? key.name
+            : `[${this.input.slice(key.start, key.end)}]`,
+        );
+      }
 
       return super.parseClassProperty(node);
     }
@@ -2877,6 +2918,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return param;
     }
 
+    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+      switch (node.type) {
+        case "TSTypeCastExpression":
+          return this.isAssignable(node.expression, isBinding);
+        case "TSParameterProperty":
+          return true;
+        default:
+          return super.isAssignable(node, isBinding);
+      }
+    }
+
     toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       switch (node.type) {
         case "TSTypeCastExpression":
@@ -3071,8 +3123,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node.expression;
     }
 
-    shouldParseArrow() {
-      return this.match(tt.colon) || super.shouldParseArrow();
+    shouldParseArrow(params: Array<N.Node>) {
+      if (this.match(tt.colon)) {
+        return params.every(expr => this.isAssignable(expr, true));
+      }
+      return super.shouldParseArrow(params);
     }
 
     shouldParseAsyncArrow(): boolean {
@@ -3182,7 +3237,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(
             method.start,
             TSErrors.AbstractMethodHasImplementation,
-            key.type === "Identifier"
+            key.type === "Identifier" && !method.computed
               ? key.name
               : `[${this.input.slice(key.start, key.end)}]`,
           );
