@@ -17,7 +17,7 @@ function getQualifiedName(node: t.GenericTypeAnnotation["id"]) {
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodes: ReadonlyArray<t.FlowType | false | null | undefined>,
+  nodes: (t.FlowType | false | null | undefined)[],
 ): t.FlowType[] {
   const generics = {};
   const bases = {};
@@ -48,7 +48,7 @@ export default function removeTypeDuplicates(
 
     if (isUnionTypeAnnotation(node)) {
       if (typeGroups.indexOf(node.types) < 0) {
-        Array.prototype.push.apply(nodes, node.types);
+        nodes.push(...node.types);
         typeGroups.push(node.types);
       }
       continue;

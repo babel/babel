@@ -47,7 +47,7 @@ function addCompletionRecords(
   context: CompletionContext,
 ): Completion[] {
   if (path) {
-    Array.prototype.push.apply(records, _getCompletionRecords(path, context));
+    records.push(..._getCompletionRecords(path, context));
   }
   return records;
 }
@@ -75,9 +75,9 @@ function completionRecordForSwitch(
     if (normalCompletions.length) {
       lastNormalCompletions = normalCompletions;
     }
-    Array.prototype.push.apply(records, breakCompletions);
+    records.push(...breakCompletions);
   }
-  Array.prototype.push.apply(records, lastNormalCompletions);
+  records.push(...lastNormalCompletions);
   return records;
 }
 
@@ -157,11 +157,11 @@ function getStatementListCompletion(
           // When we have seen normal completions from the last statement
           // it is safe to stop populating break and mark normal completions as break
           normalCompletionToBreak(lastNormalCompletions);
-          Array.prototype.push.apply(completions, lastNormalCompletions);
+          completions.push(...lastNormalCompletions);
           // Declarations have empty completion record, however they can not be nested
           // directly in return statement, i.e. `return (var a = 1)` is invalid.
           if (lastNormalCompletions.some(c => c.path.isDeclaration())) {
-            Array.prototype.push.apply(completions, statementCompletions);
+            completions.push(...statementCompletions);
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
               /* reachable */ true,
@@ -172,7 +172,7 @@ function getStatementListCompletion(
             /* reachable */ false,
           );
         } else {
-          Array.prototype.push.apply(completions, statementCompletions);
+          completions.push(...statementCompletions);
           if (!context.shouldPopulateBreak) {
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
@@ -183,11 +183,10 @@ function getStatementListCompletion(
         break;
       }
       if (i === paths.length - 1) {
-        Array.prototype.push.apply(completions, statementCompletions);
+        completions.push(...statementCompletions);
       } else {
-        Array.prototype.push.apply(
-          completions,
-          statementCompletions.filter(c => c.type === BREAK_COMPLETION),
+        completions.push(
+          ...statementCompletions.filter(c => c.type === BREAK_COMPLETION),
         );
         lastNormalCompletions = statementCompletions.filter(
           c => c.type === NORMAL_COMPLETION,
@@ -205,7 +204,7 @@ function getStatementListCompletion(
         (pathCompletions.length === 1 &&
           !pathCompletions[0].path.isVariableDeclaration())
       ) {
-        Array.prototype.push.apply(completions, pathCompletions);
+        completions.push(...pathCompletions);
         break;
       }
     }
@@ -230,10 +229,9 @@ function _getCompletionRecords(
     // @ts-expect-error(flow->ts): todo
     records = addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
-    Array.prototype.push.apply(
-      records,
+    records.push(
       // @ts-expect-error(flow->ts): todo
-      getStatementListCompletion(path.get("body"), context),
+      ...getStatementListCompletion(path.get("body"), context),
     );
   } else if (path.isFunction()) {
     return _getCompletionRecords(path.get("body"), context);
@@ -245,9 +243,8 @@ function _getCompletionRecords(
   } else if (path.isSwitchStatement()) {
     records = completionRecordForSwitch(path.get("cases"), records, context);
   } else if (path.isSwitchCase()) {
-    Array.prototype.push.apply(
-      records,
-      getStatementListCompletion(path.get("consequent"), {
+    records.push(
+      ...getStatementListCompletion(path.get("consequent"), {
         canHaveBreak: true,
         shouldPopulateBreak: false,
         inCaseClause: true,
@@ -543,7 +540,7 @@ export function getBindingIdentifierPaths(
         const key = keys[i];
         const child = id.get(key);
         if (Array.isArray(child)) {
-          Array.prototype.push.apply(search, child);
+          search.push(...child);
         } else if (child.node) {
           search.push(child);
         }

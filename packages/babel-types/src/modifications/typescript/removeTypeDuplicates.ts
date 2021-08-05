@@ -41,7 +41,7 @@ export default function removeTypeDuplicates(
 
     if (isTSUnionType(node)) {
       if (typeGroups.indexOf(node.types) < 0) {
-        Array.prototype.push.apply(nodes, node.types);
+        nodes.push(...node.types);
         typeGroups.push(node.types);
       }
       continue;

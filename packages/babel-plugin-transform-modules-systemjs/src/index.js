@@ -540,9 +540,8 @@ export default declare((api, options) => {
                 }
               }
 
-              Array.prototype.push.apply(
-                setterBody,
-                constructExportCall(
+              setterBody.push(
+                ...constructExportCall(
                   path,
                   t.identifier(exportIdent),
                   exportNames,
@@ -590,9 +589,8 @@ export default declare((api, options) => {
           }
 
           if (exportNames.length) {
-            Array.prototype.push.apply(
-              beforeBody,
-              constructExportCall(
+            beforeBody.push(
+              ...constructExportCall(
                 path,
                 t.identifier(exportIdent),
                 exportNames,

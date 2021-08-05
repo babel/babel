@@ -22,7 +22,7 @@ function collect(value, previousValue): Array<string> {
   const values = value.split(",");
 
   if (previousValue) {
-    Array.prototype.push.apply(previousValue, values);
+    previousValue.push(...values);
     return previousValue;
   }
   return values;

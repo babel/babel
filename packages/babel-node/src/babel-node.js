@@ -69,7 +69,7 @@ getV8Flags(async function (err, v8Flags) {
 
   // append arguments passed after --
   if (argSeparator > -1) {
-    Array.prototype.push.apply(args, userArgs);
+    args.push(...userArgs);
   }
 
   try {

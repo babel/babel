@@ -136,10 +136,8 @@ export default function transformClass(
 
     if (classState.userConstructor) {
       const { constructorBody, userConstructor, construct } = classState;
-      Array.prototype.push.apply(
-        constructorBody.body,
-        userConstructor.body.body,
-      );
+
+      constructorBody.body.push(...userConstructor.body.body);
       t.inherits(construct, userConstructor);
       t.inherits(constructorBody, userConstructor.body);
     }
@@ -713,9 +711,10 @@ export default function transformClass(
       );
     }
 
-    Array.prototype.push.apply(
-      body,
-      classState.staticPropBody.map(fn => fn(t.cloneNode(classState.classRef))),
+    body.push(
+      ...classState.staticPropBody.map(fn =>
+        fn(t.cloneNode(classState.classRef)),
+      ),
     );
 
     const isStrict = path.isInStrictMode();
