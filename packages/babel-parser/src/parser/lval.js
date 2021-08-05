@@ -257,7 +257,9 @@ export default class LValParser extends NodeUtils {
         return this.isAssignable(node.argument);
 
       case "ArrayExpression":
-        return node.elements.every(element => this.isAssignable(element));
+        return node.elements.every(
+          element => element === null || this.isAssignable(element),
+        );
 
       case "AssignmentExpression":
         return node.operator === "=";
