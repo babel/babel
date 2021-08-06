@@ -237,9 +237,7 @@ export default class Tokenizer extends ParserErrors {
 
   nextTokenStartSince(pos: number): number {
     skipWhiteSpace.lastIndex = pos;
-    const skip = skipWhiteSpace.exec(this.input);
-    // $FlowIgnore: The skipWhiteSpace ensures to match any string
-    return pos + skip[0].length;
+    return skipWhiteSpace.test(this.input) ? skipWhiteSpace.lastIndex : pos;
   }
 
   lookaheadCharCode(): number {
