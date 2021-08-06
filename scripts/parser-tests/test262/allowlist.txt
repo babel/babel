@@ -1,3 +1,5 @@
+language/expressions/in/private-field-in-nested.js(default)
+language/expressions/in/private-field-in-nested.js(strict mode)
 language/import/json-invalid.js(default)
 language/import/json-invalid.js(strict mode)
 language/import/json-named-bindings.js(default)
