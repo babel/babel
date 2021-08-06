@@ -515,16 +515,15 @@ function buildPrivateInstanceFieldInitSpec(
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  if (
-    !process.env.BABEL_8_BREAKING &&
-    !state.availableHelper("classPrivateFieldInitSpec")
-  ) {
-    return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!state.availableHelper("classPrivateFieldInitSpec")) {
+      return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
       // configurable is always false for private elements
       // enumerable is always false for private elements
       writable: true,
       value: ${value},
     })`;
+    }
   }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
@@ -537,7 +536,7 @@ function buildPrivateInstanceFieldInitSpec(
       }`,
   ]);
 
-  return expr;
+  return t.expressionStatement(expr);
 }
 
 function buildPrivateStaticFieldInitSpec(
@@ -648,7 +647,7 @@ function buildPrivateInstanceMethodInitSpec(
 
   const helper = state.addHelper("classPrivateMethodInitSpec");
   const expr = t.callExpression(helper, [t.thisExpression(), t.cloneNode(id)]);
-  return expr;
+  return t.expressionStatement(expr);
 }
 
 function buildPublicFieldInitLoose(
@@ -865,8 +864,8 @@ export function buildFieldsInitNodes(
 ) {
   let needsClassRef = false;
   let injectSuperRef: t.Identifier;
-  const staticNodes: Array<t.Expression | t.Statement> = [];
-  const instanceNodes: Array<t.Expression | t.Statement> = [];
+  const staticNodes: t.Statement[] = [];
+  const instanceNodes: t.Statement[] = [];
   // These nodes are pure and can be moved to the closest statement position
   const pureStaticNodes: t.FunctionDeclaration[] = [];
 
