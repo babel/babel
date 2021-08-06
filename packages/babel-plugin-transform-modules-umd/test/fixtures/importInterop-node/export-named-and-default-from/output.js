@@ -16,17 +16,17 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  Object.defineProperty(_exports, "default", {
-    enumerable: true,
-    get: function () {
-      return _dep.default;
-    }
-  });
-  Object.defineProperty(_exports, "name", {
-    enumerable: true,
-    get: function () {
-      return _dep.name;
-    }
-  });
+
+  function _export(key, get) {
+    Object.defineProperty(_exports, key, {
+      enumerable: true,
+      get
+    });
+  }
+
+  _export("default", () => _dep.default);
+
+  _export("name", () => _dep.name);
+
   _dep = babelHelpers.interopRequireWildcard(_dep, true);
 });

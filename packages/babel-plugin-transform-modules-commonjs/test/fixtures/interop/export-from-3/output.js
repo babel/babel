@@ -3,17 +3,16 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "foo", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo;
-  }
-});
-Object.defineProperty(exports, "bar", {
-  enumerable: true,
-  get: function () {
-    return _foo.bar;
-  }
-});
+
+function _export(key, get) {
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get
+  });
+}
+
+_export("foo", () => _foo.foo);
+
+_export("bar", () => _foo.bar);
 
 var _foo = require("foo");

@@ -4,10 +4,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+function _exportFromThis(key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === this[key]) return;
+  exports[key] = this[key];
+}
+
 var _foo = require("foo");
 
-Object.keys(_foo).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (key in exports && exports[key] === _foo[key]) return;
-  exports[key] = _foo[key];
-});
+Object.keys(_foo).forEach(_exportFromThis, _foo);
