@@ -622,24 +622,74 @@ function buildPrivateInstanceMethodInitSpec(
   state,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
-  const { id, getId, setId, initAdded } = privateName;
+  const { getId, setId, initAdded } = privateName;
 
   if (initAdded) return;
 
   const isAccessor = getId || setId;
   if (isAccessor) {
-    privateNamesMap.set(prop.node.key.id.name, {
-      ...privateName,
-      initAdded: true,
-    });
+    return buildPrivateAccessorInitialization(
+      ref,
+      prop,
+      privateNamesMap,
+      state,
+    );
+  }
 
-    return template.statement.ast`
+  return buildPrivateInstanceMethodInitalization(
+    ref,
+    prop,
+    privateNamesMap,
+    state,
+  );
+}
+
+function buildPrivateAccessorInitialization(
+  ref: t.Expression,
+  prop: NodePath<t.ClassPrivateMethod>,
+  privateNamesMap: PrivateNamesMap,
+  state,
+) {
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id, getId, setId } = privateName;
+
+  privateNamesMap.set(prop.node.key.id.name, {
+    ...privateName,
+    initAdded: true,
+  });
+
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!state.availableHelper("classPrivateFieldInitSpec")) {
+      return template.statement.ast`
       ${id}.set(${ref}, {
         get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
         set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       });
     `;
+    }
   }
+
+  const helper = state.addHelper("classPrivateFieldInitSpec");
+  const expr = t.callExpression(helper, [
+    t.thisExpression(),
+    t.cloneNode(id),
+    template.expression.ast`{
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+      }`,
+  ]);
+
+  return t.expressionStatement(expr);
+}
+
+function buildPrivateInstanceMethodInitalization(
+  ref: t.Expression,
+  prop: NodePath<t.ClassPrivateMethod>,
+  privateNamesMap: PrivateNamesMap,
+  state,
+) {
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id } = privateName;
 
   if (!process.env.BABEL_8_BREAKING) {
     if (!state.availableHelper("classPrivateMethodInitSpec")) {
