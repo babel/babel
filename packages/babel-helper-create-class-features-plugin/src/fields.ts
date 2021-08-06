@@ -641,8 +641,10 @@ function buildPrivateInstanceMethodInitSpec(
     `;
   }
 
-  if (!state.availableHelper("classPrivateMethodInitSpec")) {
-    template.statement.ast`${id}.add(${ref})`;
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!state.availableHelper("classPrivateMethodInitSpec")) {
+      return template.statement.ast`${id}.add(${ref})`;
+    }
   }
 
   const helper = state.addHelper("classPrivateMethodInitSpec");
