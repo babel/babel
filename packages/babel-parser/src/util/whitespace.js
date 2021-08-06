@@ -21,6 +21,12 @@ export function isNewLine(code: number): boolean {
   }
 }
 
+// Skip whitespace and single-line comments including /* no newline here */.
+// After this RegExp matches, its lastIndex points either to line terminator
+// or start of multi-line comment.
+export const skipToLineBreak =
+  /(?:[^\S\n\r\u2028\u2029]|\/\/.*|\/\*.*?\*\/)*(?=[\n\r\u2028\u2029]|\/\*)/y;
+
 export const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
 
 // https://tc39.github.io/ecma262/#sec-white-space
