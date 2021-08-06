@@ -2015,20 +2015,28 @@ helpers.classPrivateMethodGet = helper("7.1.6")`
   }
 `;
 
-helpers.classPrivateFieldInitSpec = helper("7.14.1")`
-  export default function _classPrivateFieldInitSpec(obj, privateMap, value) {
+helpers.checkPrivateRedeclaration = helper("7.14.1")`
+  export default function _checkPrivateRedeclaration(obj, privateMap) {
     if (privateMap.has(obj)) {
-      throw new TypeError("Initializing an object twice is an error with private fields");
+      throw new TypeError("redeclared identifier");
     }
+  }
+`;
+
+helpers.classPrivateFieldInitSpec = helper("7.14.1")`
+  import checkPrivateRedeclaration from "checkPrivateRedeclaration";
+
+  export default function _classPrivateFieldInitSpec(obj, privateMap, value) {
+    checkPrivateRedeclaration(obj, privateMap);
     privateMap.set(obj, value);
   }
 `;
 
 helpers.classPrivateMethodInitSpec = helper("7.14.1")`
+  import checkPrivateRedeclaration from "checkPrivateRedeclaration";
+
   export default function _classPrivateMethodInitSpec(obj, privateSet) {
-    if (privateSet.has(obj)) {
-      throw new TypeError("redeclared private method identifier");
-    }
+    checkPrivateRedeclaration(obj, privateSet);
     privateSet.add(obj);
   }
 `;
