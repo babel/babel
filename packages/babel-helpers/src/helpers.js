@@ -2016,8 +2016,8 @@ helpers.classPrivateMethodGet = helper("7.1.6")`
 `;
 
 helpers.checkPrivateRedeclaration = helper("7.14.1")`
-  export default function _checkPrivateRedeclaration(obj, privateMap) {
-    if (privateMap.has(obj)) {
+  export default function _checkPrivateRedeclaration(obj, privateCollection) {
+    if (privateCollection.has(obj)) {
       throw new TypeError("redeclared identifier");
     }
   }
