@@ -5,7 +5,7 @@ class Base {
 
 }
 
-var _foo = /*#__PURE__*/ new WeakSet();
+var _foo = /*#__PURE__*/new WeakSet();
 
 class Derived extends Base {
   constructor(...args) {
@@ -14,11 +14,11 @@ class Derived extends Base {
   }
 
   static get(obj) {
-    return _classPrivateMethodGet(obj, _foo, _foo2).call(obj);
+    return babelHelpers.classPrivateMethodGet(obj, _foo, _foo2).call(obj);
   }
 
 }
 
 function _foo2() {
-  return "bar";
+  return 'bar';
 }
