@@ -4,7 +4,7 @@ import { types as tt, TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
 import type { Node } from "../types";
-import { lineBreak, skipToLineBreak } from "../util/whitespace";
+import { lineBreak, skipWhiteSpaceToLineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import ClassScopeHandler from "../util/class-scope";
 import ExpressionScopeHandler from "../util/expression-scope";
@@ -119,8 +119,8 @@ export default class UtilParser extends Tokenizer {
   }
 
   hasFollowingLineBreak(): boolean {
-    skipToLineBreak.lastIndex = this.state.end;
-    return skipToLineBreak.test(this.input);
+    skipWhiteSpaceToLineBreak.lastIndex = this.state.end;
+    return skipWhiteSpaceToLineBreak.test(this.input);
   }
 
   // TODO
