@@ -185,12 +185,16 @@ function getStatementListCompletion(
       if (i === paths.length - 1) {
         completions.push(...statementCompletions);
       } else {
-        completions.push(
-          ...statementCompletions.filter(c => c.type === BREAK_COMPLETION),
-        );
-        lastNormalCompletions = statementCompletions.filter(
-          c => c.type === NORMAL_COMPLETION,
-        );
+        lastNormalCompletions = [];
+        for (let i = 0; i < statementCompletions.length; i++) {
+          const c = statementCompletions[i];
+          if (c.type === BREAK_COMPLETION) {
+            completions.push(c);
+          }
+          if (c.type === NORMAL_COMPLETION) {
+            lastNormalCompletions.push(c);
+          }
+        }
       }
     }
   } else if (paths.length) {
