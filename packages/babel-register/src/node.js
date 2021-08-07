@@ -56,9 +56,13 @@ function compile(code, filename) {
 
   if (env) cacheKey += `:${env}`;
 
-  let cached = cache && cache[cacheKey];
+  let cached, fileMtime;
+  if (cache) {
+    cached = cache[cacheKey];
+    fileMtime = mtime(filename);
+  }
 
-  if (!cached || cached.mtime !== mtime(filename)) {
+  if (!cached || cached.mtime !== fileMtime) {
     cached = babel.transform(code, {
       ...opts,
       sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
@@ -67,7 +71,7 @@ function compile(code, filename) {
 
     if (cache) {
       cache[cacheKey] = cached;
-      cached.mtime = mtime(filename);
+      cached.mtime = fileMtime;
       registerCache.setDirty();
     }
   }
