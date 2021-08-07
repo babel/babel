@@ -77,6 +77,8 @@ export const ErrorMessages = makeErrorTemplates(
     ImportCallNotNewExpression: "Cannot use new with import(...).",
     ImportCallSpreadArgument: "`...` is not allowed in `import()`.",
     InvalidBigIntLiteral: "Invalid BigIntLiteral.",
+    InvalidBinaryMatchPattern:
+      "Different binary match pattern operators cannot be at the same level.",
     InvalidCodePoint: "Code point out of bounds.",
     InvalidDecimal: "Invalid decimal.",
     InvalidDigit: "Expected number in radix %0.",

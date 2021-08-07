@@ -3083,14 +3083,20 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "UnaryExpression");
   }
 
-  parseMaybeBinaryMatchPattern(): N.BinaryMatchPattern | N.MatchPattern {
+  parseMaybeBinaryMatchPattern(
+    previousOp?: "and" | "or",
+  ): N.BinaryMatchPattern | N.MatchPattern {
     const node = this.startNode<N.BinaryMatchPattern>();
     const lhs = this.parseMatchPattern();
     if (this.match(tt.bitwiseOR) || this.match(tt.bitwiseAND)) {
+      const operator = this.match(tt.bitwiseOR) ? "or" : "and";
+      if (previousOp && previousOp !== operator) {
+        this.unexpected(this.state.start, Errors.InvalidBinaryMatchPattern);
+      }
+      this.next(); // skip "or" or "and"
       node.left = lhs;
-      node.operator = this.match(tt.bitwiseOR) ? "or" : "and";
-      this.next();
-      node.right = this.parseMaybeBinaryMatchPattern();
+      node.operator = operator;
+      node.right = this.parseMaybeBinaryMatchPattern(operator);
       return this.finishNode(node, "BinaryMatchPattern");
     } else {
       return lhs;
