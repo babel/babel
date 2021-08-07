@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "patternMatching"
+    ]
+  ],
+  "throws": "Spread elements are not allowed in match expressions. (1:7)"
+}

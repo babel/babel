@@ -177,6 +177,8 @@ export const ErrorMessages = makeErrorTemplates(
     RestTrailingComma: "Unexpected trailing comma after rest element.",
     SloppyFunction:
       "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement.",
+    SpreadElementInMatchExpression:
+      "Spread elements are not allowed in match expressions.",
     StaticPrototype: "Classes may not have static property named prototype.",
     StrictDelete: "Deleting local variable in strict mode.",
     StrictEvalArguments: "Assigning to '%0' in strict mode.",

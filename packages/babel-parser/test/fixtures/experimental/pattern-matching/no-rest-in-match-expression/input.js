@@ -1,0 +1,3 @@
+match (...foo) {
+  when ({ x }) { }
+}

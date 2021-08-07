@@ -691,7 +691,6 @@ export default class ExpressionParser extends LValParser {
     noCalls: ?boolean,
     state: N.ParseSubscriptState,
   ): N.Expression {
-    // debugger;
     if (!noCalls && this.eat(tt.doubleColon)) {
       return this.parseBind(base, startPos, startLoc, noCalls, state);
     } else if (this.match(tt.backQuote)) {
@@ -816,6 +815,7 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+    const lineTerminatorAfterId = this.isLineTerminator();
     let refExpressionErrors = null;
 
     this.state.maybeInArrowParameters = true;
@@ -852,6 +852,18 @@ export default class ExpressionParser extends LValParser {
       this.expressionScope.exit();
       node = this.parseAsyncArrowFromCallExpression(
         this.startNodeAt(startPos, startLoc),
+        node,
+      );
+    } else if (
+      base.name === "match" &&
+      this.hasPlugin("patternMatching") &&
+      !lineTerminatorAfterId &&
+      !this.isLineTerminator() &&
+      !optional &&
+      node.arguments.length > 0
+    ) {
+      node = this.parseMatchExpressionFromCallExpression(
+        this.startNodeAt<N.MatchExpression>(startPos, startLoc),
         node,
       );
     } else {
@@ -1061,15 +1073,6 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "ThisExpression");
 
       case tt.name: {
-        if (
-          this.isContextual("match") &&
-          this.hasPlugin("patternMatching") &&
-          this.lookaheadCharCode() === charCodes.leftParenthesis &&
-          !this.hasFollowingLineBreak()
-        ) {
-          return this.parseMaybeMatchExpression();
-        }
-
         if (
           this.isContextual("module") &&
           this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
@@ -2948,15 +2951,40 @@ export default class ExpressionParser extends LValParser {
   }
 
   // https://github.com/tc39/proposal-pattern-matching
-  parseMaybeMatchExpression(): N.MatchExpression {
-    const node = this.startNode<N.MatchExpression>();
-    this.next(); // skip "match"
-    this.expect(tt.parenL);
-    node.discriminant = this.parseExpression();
-    this.expect(tt.parenR);
-
+  parseMatchExpressionFromCallExpression(
+    node: N.MatchExpression,
+    callExpression: N.CallExpression,
+  ): N.MatchExpression {
+    const expressions = callExpression.arguments;
+    this.checkMatchExpressionDiscriminant(expressions);
+    if (expressions.length > 1) {
+      const sequence = this.startNodeAtNode(expressions[0]);
+      sequence.expressions = expressions;
+      const lastExpression = expressions[expressions.length - 1];
+      node.discriminant = this.finishNodeAt(
+        sequence,
+        "SequenceExpression",
+        lastExpression.end,
+        lastExpression.loc.end,
+      );
+    } else {
+      node.discriminant = expressions[0];
+    }
     node.clauses = this.parseMatchClauses();
     return this.finishNode(node, "MatchExpression");
+  }
+
+  checkMatchExpressionDiscriminant(
+    expressions: Array<N.Expression | N.SpreadElement>,
+  ) {
+    for (const expression of expressions) {
+      if (expression.type === "SpreadElement") {
+        this.unexpected(
+          expression.start,
+          Errors.SpreadElementInMatchExpression,
+        );
+      }
+    }
   }
 
   parseMatchClauses(): N.MatchClause[] {
