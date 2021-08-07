@@ -1911,24 +1911,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
-      // only use the expensive "tryParse" method if there is a question mark
-      // and if we come from inside parens
       if (this.state.maybeInArrowParameters) {
-        const result = this.tryParse(() =>
-          super.parseConditional(expr, startPos, startLoc),
-        );
-
-        if (!result.node) {
-          if (result.error) {
-            /*:: invariant(refExpressionErrors != null) */
-            super.setOptionalParametersError(refExpressionErrors, result.error);
-          }
-
+        const nextCh = this.lookaheadCharCode();
+        // These tokens cannot start an expression, so if one of them follows
+        // ? then we are probably in an arrow function parameters list and we
+        // don't parse the conditional expression.
+        if (
+          nextCh === charCodes.comma || // (a?, b) => c
+          nextCh === charCodes.equalsTo || // (a? = b) => c
+          nextCh === charCodes.colon || // (a?: b) => c
+          nextCh === charCodes.rightParenthesis // (a?) => c
+        ) {
+          /*:: invariant(refExpressionErrors != null) */
+          this.setOptionalParametersError(refExpressionErrors);
           return expr;
         }
-
-        if (result.error) this.state = result.failState;
-        return result.node;
       }
 
       this.expect(tt.question);
