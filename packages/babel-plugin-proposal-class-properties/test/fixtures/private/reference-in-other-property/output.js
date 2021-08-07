@@ -9,20 +9,16 @@ var Foo = function Foo() {
 
   babelHelpers.classCallCheck(this, Foo);
   babelHelpers.defineProperty(this, "one", babelHelpers.classPrivateFieldGet(this, _private));
-
-  _two.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _two, {
     writable: true,
     value: babelHelpers.classPrivateFieldGet(this, _private)
   });
-
-  _private.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _private, {
     writable: true,
     value: 0
   });
-
   babelHelpers.defineProperty(this, "three", babelHelpers.classPrivateFieldGet(this, _private));
-
-  _four.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _four, {
     writable: true,
     value: babelHelpers.classPrivateFieldGet(this, _private)
   });

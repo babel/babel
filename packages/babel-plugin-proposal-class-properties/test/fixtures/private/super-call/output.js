@@ -28,12 +28,10 @@ var B = /*#__PURE__*/function (_A) {
 
     babelHelpers.classCallCheck(this, B);
     _this = _super.call(this, ...args);
-
-    _foo.set(babelHelpers.assertThisInitialized(_this), {
+    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _foo, {
       writable: true,
       value: babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(B.prototype)), "foo", _thisSuper).call(_thisSuper)
     });
-
     return _this;
   }
 

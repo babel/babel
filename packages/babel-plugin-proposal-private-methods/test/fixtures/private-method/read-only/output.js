@@ -7,8 +7,7 @@ class A {
   }
 
   constructor() {
-    _method.add(this);
-
+    babelHelpers.classPrivateMethodInitSpec(this, _method);
     babelHelpers.defineProperty(this, "counter", 0);
     this.self(), 2, babelHelpers.readOnlyError("#method");
     [babelHelpers.classPrivateFieldDestructureSet(this, _method).value] = [2];

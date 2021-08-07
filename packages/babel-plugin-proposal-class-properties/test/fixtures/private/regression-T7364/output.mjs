@@ -4,7 +4,7 @@ class MyClass {
   constructor() {
     var _this = this;
 
-    _myAsyncMethod.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _myAsyncMethod, {
       writable: true,
       value: function () {
         var _ref = babelHelpers.asyncToGenerator(function* () {
@@ -26,7 +26,7 @@ var _myAsyncMethod2 = /*#__PURE__*/new WeakMap();
   constructor() {
     var _this2 = this;
 
-    _myAsyncMethod2.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _myAsyncMethod2, {
       writable: true,
       value: function () {
         var _ref2 = babelHelpers.asyncToGenerator(function* () {
@@ -48,7 +48,7 @@ export default class MyClass3 {
   constructor() {
     var _this3 = this;
 
-    _myAsyncMethod3.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _myAsyncMethod3, {
       writable: true,
       value: function () {
         var _ref3 = babelHelpers.asyncToGenerator(function* () {

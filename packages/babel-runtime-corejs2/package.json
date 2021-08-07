@@ -801,6 +801,15 @@
       "./helpers/classPrivateMethodGet.js"
     ],
     "./helpers/esm/classPrivateMethodGet": "./helpers/esm/classPrivateMethodGet.js",
+    "./helpers/checkPrivateRedeclaration": [
+      {
+        "node": "./helpers/checkPrivateRedeclaration.js",
+        "import": "./helpers/esm/checkPrivateRedeclaration.js",
+        "default": "./helpers/checkPrivateRedeclaration.js"
+      },
+      "./helpers/checkPrivateRedeclaration.js"
+    ],
+    "./helpers/esm/checkPrivateRedeclaration": "./helpers/esm/checkPrivateRedeclaration.js",
     "./helpers/classPrivateFieldInitSpec": [
       {
         "node": "./helpers/classPrivateFieldInitSpec.js",

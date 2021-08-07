@@ -2,8 +2,7 @@ var _privateMethod = /*#__PURE__*/new WeakSet();
 
 class Foo {
   constructor() {
-    _privateMethod.add(this);
-
+    babelHelpers.classPrivateMethodInitSpec(this, _privateMethod);
     this.publicField = babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2).call(this);
   }
 

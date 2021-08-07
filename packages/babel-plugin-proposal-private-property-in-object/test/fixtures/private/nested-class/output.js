@@ -5,8 +5,7 @@ let Foo = /*#__PURE__*/function () {
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-
-    _foo.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _foo, {
       writable: true,
       value: 1
     });

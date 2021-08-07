@@ -6,17 +6,15 @@ var _or = /*#__PURE__*/new WeakMap();
 
 class Foo {
   constructor() {
-    _nullish.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _nullish, {
       writable: true,
       value: 0
     });
-
-    _and.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _and, {
       writable: true,
       value: 0
     });
-
-    _or.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _or, {
       writable: true,
       value: 0
     });

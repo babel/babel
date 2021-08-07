@@ -4,11 +4,10 @@ class C {
   constructor() {
     var _babelHelpers$classPr;
 
-    _m.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _m, {
       writable: true,
       value: void 0
     });
-
     const o = null;
     const n = this;
     const p = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGet(o, _m).call(o, ...c, 1);

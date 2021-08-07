@@ -4,8 +4,7 @@ var _privateFieldValue = /*#__PURE__*/new WeakSet();
 
 class Foo {
   constructor() {
-    _privateFieldValue.add(this);
-
+    babelHelpers.classPrivateMethodInitSpec(this, _privateFieldValue);
     this.self, results.push(2), babelHelpers.readOnlyError("#privateFieldValue");
   }
 

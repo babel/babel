@@ -4,12 +4,10 @@ var Foo = function Foo(props) {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
-
-  _client.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _client, {
     writable: true,
     value: void 0
   });
-
   babelHelpers.classPrivateFieldSet(this, _client, 'foo');
   ({
     x: this.x = babelHelpers.classPrivateFieldGet(this, _client),

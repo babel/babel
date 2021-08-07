@@ -12,14 +12,12 @@ var Child = /*#__PURE__*/function (_Parent) {
 
     babelHelpers.classCallCheck(this, Child);
     _this = _super.call(this);
-
-    _scopedFunctionWithThis.set(babelHelpers.assertThisInitialized(_this), {
+    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _scopedFunctionWithThis, {
       writable: true,
       value: () => {
         _this.name = {};
       }
     });
-
     return _this;
   }
 

@@ -7,13 +7,11 @@ let Foo = /*#__PURE__*/function () {
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-
-    _foo.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _foo, {
       writable: true,
       value: 1
     });
-
-    _bar.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _bar, {
       writable: true,
       value: 1
     });
@@ -27,8 +25,7 @@ let Foo = /*#__PURE__*/function () {
       let Nested = /*#__PURE__*/function () {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
-
-          _bar2.set(this, {
+          babelHelpers.classPrivateFieldInitSpec(this, _bar2, {
             writable: true,
             value: 2
           });
