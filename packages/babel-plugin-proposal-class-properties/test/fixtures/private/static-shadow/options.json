@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-class-properties"],
+  "throws": "Shadowing class Test with private property"
+}

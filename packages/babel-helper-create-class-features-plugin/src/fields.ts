@@ -58,7 +58,7 @@ export function buildPrivateNamesMap(props: PropPath[]) {
 export function buildPrivateNamesNodes(
   privateNamesMap: PrivateNamesMap,
   privateFieldsAsProperties: boolean,
-  state,
+  state: File,
 ) {
   const initNodes: t.Statement[] = [];
 
@@ -165,6 +165,7 @@ interface PrivateNameState {
   classRef: t.Identifier;
   file: File;
   noDocumentAll: boolean;
+  innerBinding?: t.Identifier;
 }
 
 const privateNameVisitor = privateNameVisitorFactory<
@@ -255,7 +256,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
     },
 
     get(member) {
-      const { classRef, privateNamesMap, file } = this;
+      const { classRef, privateNamesMap, file, innerBinding } = this;
       const { name } = (member.node.property as t.PrivateName).id;
       const {
         id,
@@ -273,6 +274,13 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             ? "classStaticPrivateMethodGet"
             : "classStaticPrivateFieldSpecGet";
 
+        const binding = member.scope.getBinding(classRef.name);
+        if (innerBinding && binding && !(binding.identifier === innerBinding)) {
+          // the classRef has been shadowed
+          throw binding.path.buildCodeFrameError(
+            `Shadowing class ${classRef.name} with private property`,
+          );
+        }
         return t.callExpression(file.addHelper(helperName), [
           this.receiver(member),
           t.cloneNode(classRef),
@@ -463,8 +471,8 @@ export function transformPrivateNamesUsage(
   ref: t.Identifier,
   path: NodePath<t.Class>,
   privateNamesMap: PrivateNamesMap,
-  { privateFieldsAsProperties, noDocumentAll },
-  state,
+  { privateFieldsAsProperties, noDocumentAll, innerBinding },
+  state: File,
 ) {
   if (!privateNamesMap.size) return;
 
@@ -479,6 +487,7 @@ export function transformPrivateNamesUsage(
     file: state,
     ...handler,
     noDocumentAll,
+    innerBinding,
   });
   body.traverse(privateInVisitor, {
     privateNamesMap,
@@ -770,7 +779,7 @@ const thisContextVisitor = traverse.visitors.merge([
 ]);
 
 const innerReferencesVisitor = {
-  ReferencedIdentifier(path, state) {
+  ReferencedIdentifier(path: NodePath<t.Identifier>, state) {
     if (
       path.scope.bindingIdentifierEquals(path.node.name, state.innerBinding)
     ) {
@@ -831,7 +840,7 @@ export function buildFieldsInitNodes(
   superRef: t.Expression | undefined,
   props: PropPath[],
   privateNamesMap: PrivateNamesMap,
-  state,
+  state: File,
   setPublicClassFields: boolean,
   privateFieldsAsProperties: boolean,
   constantSuper: boolean,
