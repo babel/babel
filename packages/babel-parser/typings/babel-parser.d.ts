@@ -49,6 +49,17 @@ export interface ParserOptions {
   allowUndeclaredExports?: boolean;
 
   /**
+   * By default, Babel attaches comments to adjacent AST nodes.
+   * When this option is set to false, comments are not attached.
+   * It can provide up to 30% performance improvement when the input code has many comments.
+   * @babel/eslint-parser will set it for you.
+   * It is not recommended to use attachComment: false with Babel transform,
+   * as doing so removes all the comments in output code, and renders annotations such as
+   * /* istanbul ignore next *\/ nonfunctional.
+   */
+  attachComment?: boolean;
+
+  /**
    * By default, Babel always throws an error when it finds some invalid code.
    * When this option is set to true, it will store the parsing error and
    * try to continue parsing the invalid input file.
