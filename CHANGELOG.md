@@ -19,6 +19,12 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.2 (2021-08-08)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13653](https://github.com/babel/babel/pull/13653) Add `.errors` to the `@babel/parser` return type definitions ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13641](https://github.com/babel/babel/pull/13641) Fix array destructuring elision parsing in TS arrow functions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.15.1 (2021-08-05)
 
 #### :leftwards_arrow_with_hook: Revert
