@@ -203,15 +203,15 @@ export function buildNamespaceInitStatements(
     // Assign export to namespace object.
     statements.push(
       sourceMetadata.lazy
-        ? template.statement`REEXPORT(NAME, () => NAMESPACE);`({
-            REEXPORT: metadata.reexportByGetName,
-            NAME: t.stringLiteral(exportName),
-            NAMESPACE: t.cloneNode(srcNamespace),
+        ? ReexportTemplate.spec({
+            EXPORT_FUNC: metadata.reexportByGetName,
+            EXPORT_KEY: t.stringLiteral(exportName),
+            NAMESPACE_IMPORT: t.cloneNode(srcNamespace),
           })
-        : template.statement`EXPORTS.NAME = NAMESPACE;`({
+        : ReexportTemplate.constant({
             EXPORTS: metadata.exportName,
-            NAME: exportName,
-            NAMESPACE: t.cloneNode(srcNamespace),
+            EXPORT_NAME: exportName,
+            NAMESPACE_IMPORT: t.cloneNode(srcNamespace),
           }),
     );
   }
@@ -233,7 +233,7 @@ export function buildNamespaceInitStatements(
 const ReexportTemplate = {
   constant: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE_IMPORT;`,
   constantComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE_IMPORT;`,
-  spec: template.statement`EXPORT_FUNC(EXPORT_KEY, () => NAMESPACE_IMPORT);`,
+  spec: template.statement`EXPORT_FUNC(EXPORT_KEY, function() { return NAMESPACE_IMPORT });`,
 };
 
 const buildReexportsFromMeta = (
@@ -320,13 +320,14 @@ function buildReexportFromThis(
       : `(key === "default" || key === "__esModule")`,
   )();
 
-  const SET_EXPORTS_PROPERTY = template.statement(
+  const SET_EXPORTS_PROPERTY = template.statements(
     constantReexports
       ? `EXPORTS[key] = this[key];`
       : `
+        var imports = this;
         Object.defineProperty(EXPORTS, key, {
           enumerable: true,
-          get: () => this[key],
+          get: function() { return imports[key] },
         });
         `,
   )({
@@ -457,7 +458,7 @@ function buildExportInitializationStatements(
     const id = programPath.scope.generateUidIdentifier("export");
     const decl = template.statement`
       function REEXPORT(key, get) {
-        Object.defineProperty(EXPORTS, key, { enumerable: true, get });
+        Object.defineProperty(EXPORTS, key, { enumerable: true, get: get });
       }
     `({
       REEXPORT: id,
