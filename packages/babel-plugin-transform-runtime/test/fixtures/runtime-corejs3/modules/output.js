@@ -23,10 +23,13 @@ var _exportNames = {
 function _exportFromThis(key) {
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
   if (key in exports && exports[key] === this[key]) return;
+  var imports = this;
 
   _Object$defineProperty(exports, key, {
     enumerable: true,
-    get: () => this[key]
+    get: function () {
+      return imports[key];
+    }
   });
 }
 

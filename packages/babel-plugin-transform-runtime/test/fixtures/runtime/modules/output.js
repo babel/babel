@@ -9,9 +9,12 @@ Object.defineProperty(exports, "__esModule", {
 function _exportFromThis(key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === this[key]) return;
+  var imports = this;
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get: () => this[key]
+    get: function () {
+      return imports[key];
+    }
   });
 }
 
