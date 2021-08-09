@@ -2686,10 +2686,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
         }
         /*:: invariant(firstIdent instanceof N.Node) */
-        isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
-        specifier.local = cloneIdentifier(specifier.imported);
+        if (this.eatContextual("as")) {
+          specifier.local = this.parseIdentifier();
+        } else {
+          isBinding = true;
+          specifier.local = specifier.imported.__clone();
+        }
       }
 
       const nodeIsTypeImport = hasTypeImportKind(node);
