@@ -7,13 +7,17 @@ Object.defineProperty(exports, "__esModule", {
 function _export(key, get) {
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get
+    get: get
   });
 }
 
-_export("Foo", () => _moduleWithGetter.default);
+_export("Foo", function () {
+  return _moduleWithGetter.default;
+});
 
-_export("baz", () => _moduleWithGetter.baz);
+_export("baz", function () {
+  return _moduleWithGetter.baz;
+});
 
 var _moduleWithGetter = _interopRequireDefault(require("./moduleWithGetter"));
 

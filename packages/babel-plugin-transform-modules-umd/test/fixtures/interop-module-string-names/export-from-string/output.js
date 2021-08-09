@@ -20,9 +20,11 @@
   function _export(key, get) {
     Object.defineProperty(_exports, key, {
       enumerable: true,
-      get
+      get: get
     });
   }
 
-  _export("some exports", () => _foo["some exports"]);
+  _export("some exports", function () {
+    return _foo["some exports"];
+  });
 });

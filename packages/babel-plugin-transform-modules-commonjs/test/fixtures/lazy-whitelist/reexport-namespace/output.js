@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 function _export(key, get) {
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get
+    get: get
   });
 }
 
@@ -23,7 +23,9 @@ function namespace1() {
   return data;
 }
 
-_export("namespace1", () => namespace1());
+_export("namespace1", function () {
+  return namespace1();
+});
 
 var namespace2 = babelHelpers.interopRequireDefault(require("black"));
 exports.namespace2 = namespace2;

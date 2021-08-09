@@ -18,9 +18,12 @@ var _exportNames = {
 function _exportFromThis(key) {
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
   if (key in exports && exports[key] === this[key]) return;
+  var imports = this;
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get: () => this[key]
+    get: function () {
+      return imports[key];
+    }
   });
 }
 
@@ -30,11 +33,13 @@ exports.default = _default;
 function _export(key, get) {
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get
+    get: get
   });
 }
 
-_export("c", () => _mod.c);
+_export("c", function () {
+  return _mod.c;
+});
 
 exports.f = exports.e = exports.d = exports.a = exports.z = void 0;
 

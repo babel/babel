@@ -7,11 +7,13 @@ Object.defineProperty(exports, "__esModule", {
 function _export(key, get) {
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get
+    get: get
   });
 }
 
-_export("default", () => _white().default);
+_export("default", function () {
+  return _white().default;
+});
 
 function _white() {
   const data = babelHelpers.interopRequireDefault(require("white"));

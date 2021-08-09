@@ -7,11 +7,13 @@ Object.defineProperty(exports, "__esModule", {
 function _export(key, get) {
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get
+    get: get
   });
 }
 
-_export("named", () => _foo().named);
+_export("named", function () {
+  return _foo().named;
+});
 
 function _foo() {
   const data = require("foo");

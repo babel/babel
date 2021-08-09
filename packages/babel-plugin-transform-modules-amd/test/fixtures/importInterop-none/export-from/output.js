@@ -8,9 +8,11 @@ define(["exports", "foo"], function (_exports, _foo) {
   function _export(key, get) {
     Object.defineProperty(_exports, key, {
       enumerable: true,
-      get
+      get: get
     });
   }
 
-  _export("default", () => _foo.default);
+  _export("default", function () {
+    return _foo.default;
+  });
 });

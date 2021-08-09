@@ -20,13 +20,17 @@
   function _export(key, get) {
     Object.defineProperty(_exports, key, {
       enumerable: true,
-      get
+      get: get
     });
   }
 
-  _export("default", () => _dep.default);
+  _export("default", function () {
+    return _dep.default;
+  });
 
-  _export("name", () => _dep.name);
+  _export("name", function () {
+    return _dep.name;
+  });
 
   _dep = babelHelpers.interopRequireWildcard(_dep, true);
 });

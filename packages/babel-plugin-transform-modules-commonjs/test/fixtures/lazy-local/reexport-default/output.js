@@ -7,10 +7,12 @@ Object.defineProperty(exports, "__esModule", {
 function _export(key, get) {
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get
+    get: get
   });
 }
 
-_export("default", () => _foo.default);
+_export("default", function () {
+  return _foo.default;
+});
 
 var _foo = babelHelpers.interopRequireDefault(require("./foo"));

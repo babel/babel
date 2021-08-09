@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 function _export(key, get) {
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get
+    get: get
   });
 }
 
@@ -23,4 +23,6 @@ function namespace() {
   return data;
 }
 
-_export("namespace", () => namespace());
+_export("namespace", function () {
+  return namespace();
+});
