@@ -30,8 +30,8 @@ startLocalRegistry "$root"/verdaccio-config.yml
 
 # Create a React Native project
 cd /tmp
-npx react-native init react-native-babel
-cd react-native-babel
+npx react-native init rnbabel
+cd rnbabel
 
 # Build the project
 npx react-native bundle --entry-file index.js --bundle-output output.js
