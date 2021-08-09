@@ -201,11 +201,10 @@ export default class StatementParser extends ExpressionParser {
 
     if (isIdentifierStart(nextCh)) {
       keywordRelationalOperator.lastIndex = next;
-      const matched = keywordRelationalOperator.exec(this.input);
-      if (matched !== null) {
+      if (keywordRelationalOperator.test(this.input)) {
         // We have seen `in` or `instanceof` so far, now check if the identfier
         // ends here
-        const endCh = this.codePointAtPos(next + matched[0].length);
+        const endCh = this.codePointAtPos(keywordRelationalOperator.lastIndex);
         if (!isIdentifierChar(endCh) && endCh !== charCodes.backslash) {
           return false;
         }
