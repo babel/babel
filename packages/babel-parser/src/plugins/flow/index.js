@@ -2660,33 +2660,34 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.importKind = null;
           specifier.local = this.parseIdentifier();
         }
-      } else if (
-        specifierTypeKind !== null &&
-        (this.match(tt.name) || this.state.type.keyword)
-      ) {
-        // `import {type foo`
-        specifier.imported = this.parseIdentifier(true);
-        specifier.importKind = specifierTypeKind;
+      } else {
+        if (
+          specifierTypeKind !== null &&
+          (this.match(tt.name) || this.state.type.keyword)
+        ) {
+          // `import {type foo`
+          specifier.imported = this.parseIdentifier(true);
+          specifier.importKind = specifierTypeKind;
+        } else {
+          if (firstIdentIsString) {
+            /*:: invariant(firstIdent instanceof N.StringLiteral) */
+            throw this.raise(
+              specifier.start,
+              Errors.ImportBindingIsString,
+              firstIdent.value,
+            );
+          }
+          /*:: invariant(firstIdent instanceof N.Node) */
+          specifier.imported = firstIdent;
+          specifier.importKind = null;
+        }
+
         if (this.eatContextual("as")) {
           specifier.local = this.parseIdentifier();
         } else {
           isBinding = true;
           specifier.local = cloneIdentifier(specifier.imported);
         }
-      } else {
-        if (firstIdentIsString) {
-          /*:: invariant(firstIdent instanceof N.StringLiteral) */
-          throw this.raise(
-            specifier.start,
-            Errors.ImportBindingIsString,
-            firstIdent.value,
-          );
-        }
-        /*:: invariant(firstIdent instanceof N.Node) */
-        isBinding = true;
-        specifier.imported = firstIdent;
-        specifier.importKind = null;
-        specifier.local = cloneIdentifier(specifier.imported);
       }
 
       const nodeIsTypeImport = hasTypeImportKind(node);
