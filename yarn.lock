@@ -6838,7 +6838,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.16.0, core-js-compat@npm:^3.9.1":
+"core-js-compat@npm:3.16.0":
   version: 3.16.0
   resolution: "core-js-compat@npm:3.16.0"
   dependencies:
