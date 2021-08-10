@@ -1,6 +1,6 @@
 import { template, traverse, types as t } from "@babel/core";
 import type { File } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath, Visitor, Scope } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
@@ -189,9 +189,26 @@ const privateNameVisitor = privateNameVisitorFactory<
   },
 });
 
+// rename all bindings that shadows innerBinding
+function unshadow(
+  name: string,
+  scope: Scope,
+  innerBinding: t.Identifier | undefined,
+) {
+  const binding = scope.getBinding(name);
+  if (innerBinding && binding && innerBinding !== binding.identifier) {
+    // the classRef has been shadowed, rename the local variable
+    while (!scope.bindingIdentifierEquals(name, innerBinding)) {
+      scope.rename(name);
+      scope = scope.parent;
+    }
+  }
+}
+
 const privateInVisitor = privateNameVisitorFactory<{
   classRef: t.Identifier;
   file: File;
+  innerBinding?: t.Identifier;
 }>({
   BinaryExpression(path) {
     const { operator, left, right } = path.node;
@@ -204,6 +221,10 @@ const privateInVisitor = privateNameVisitorFactory<{
 
     if (!privateNamesMap.has(name)) return;
     if (redeclared && redeclared.includes(name)) return;
+
+    // if there are any local variable shadowing classRef, unshadow it
+    // see #12960
+    unshadow(this.classRef.name, path.scope, this.innerBinding);
 
     if (privateFieldsAsProperties) {
       const { id } = privateNamesMap.get(name);
@@ -274,17 +295,10 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             ? "classStaticPrivateMethodGet"
             : "classStaticPrivateFieldSpecGet";
 
-        const binding = member.scope.getBinding(classRef.name);
-        if (innerBinding && binding && innerBinding !== binding.identifier) {
-          // the classRef has been shadowed, rename the local variable
-          let local = binding.path;
-          while (
-            !local.scope.bindingIdentifierEquals(classRef.name, innerBinding)
-          ) {
-            local.scope.rename(classRef.name);
-            local = local.parentPath;
-          }
-        }
+        // if there are any local variable shadowing classRef, unshadow it
+        // see #12960
+        unshadow(classRef.name, member.scope, innerBinding);
+
         return t.callExpression(file.addHelper(helperName), [
           this.receiver(member),
           t.cloneNode(classRef),
@@ -498,6 +512,7 @@ export function transformPrivateNamesUsage(
     classRef: ref,
     file: state,
     privateFieldsAsProperties,
+    innerBinding,
   });
 }
 
