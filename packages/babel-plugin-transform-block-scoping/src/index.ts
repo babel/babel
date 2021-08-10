@@ -270,9 +270,9 @@ const loopLabelVisitor: Visitor<LoopVisitorState> = {
 };
 
 interface ContinuationVisitorState {
-  returnStatements: any[];
-  reassignments: any;
-  outsideReferences: any;
+  returnStatements: NodePath<t.ReturnStatement>[];
+  reassignments: { [k: string]: boolean | undefined };
+  outsideReferences: Map<string, t.Identifier>;
 }
 
 const continuationVisitor: Visitor<ContinuationVisitorState> = {
