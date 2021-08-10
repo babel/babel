@@ -103,6 +103,14 @@ function handleVariableDeclaration(
   return [node, t.expressionStatement(t.sequenceExpression(assignments))];
 }
 
+function buildNestedAmbiendModuleError(path: NodePath, node: t.Node) {
+  throw path.hub.buildError(
+    node,
+    "Ambient modules cannot be nested in other modules or namespaces.",
+    Error,
+  );
+}
+
 function handleNested(
   path: NodePath,
   t: typeof import("@babel/types"),
@@ -131,11 +139,7 @@ function handleNested(
     switch (subNode.type) {
       case "TSModuleDeclaration": {
         if (!t.isIdentifier(subNode.id)) {
-          throw path.hub.buildError(
-            subNode,
-            "Ambient modules cannot be nested in other modules or namespaces.",
-            Error,
-          );
+          throw buildNestedAmbiendModuleError(path, subNode);
         }
 
         const transformed = handleNested(path, t, subNode);
@@ -206,11 +210,7 @@ function handleNested(
       }
       case "TSModuleDeclaration": {
         if (!t.isIdentifier(subNode.declaration.id)) {
-          throw path.hub.buildError(
-            subNode,
-            "Ambient modules cannot be nested in other modules or namespaces.",
-            Error,
-          );
+          throw buildNestedAmbiendModuleError(path, subNode.declaration);
         }
 
         const transformed = handleNested(
