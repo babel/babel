@@ -2842,17 +2842,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             },
           );
 
+          // <T>(() => {});
           // <T>(() => {}: any);
-          if (
-            arrowExpression.type !== "ArrowFunctionExpression" &&
-            arrowExpression.extra?.parenthesized
-          ) {
-            abort();
-          }
+          if (arrowExpression.extra?.parenthesized) abort();
 
           // The above can return a TypeCastExpression when the arrow
           // expression is not wrapped in parens. See also `this.parseParenItem`.
+          // (<T>() => {}: any);
           const expr = this.maybeUnwrapTypeCastExpression(arrowExpression);
+
+          if (expr.type !== "ArrowFunctionExpression") abort();
+
           expr.typeParameters = typeParameters;
           this.resetStartLocationFromNode(expr, typeParameters);
 
