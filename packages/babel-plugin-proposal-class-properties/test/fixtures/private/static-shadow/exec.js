@@ -11,3 +11,5 @@ class Test {
     return func();
   }
 }
+
+expect(Test.method()).toBe(1)

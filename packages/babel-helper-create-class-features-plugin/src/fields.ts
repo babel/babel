@@ -275,11 +275,15 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             : "classStaticPrivateFieldSpecGet";
 
         const binding = member.scope.getBinding(classRef.name);
-        if (innerBinding && binding && !(binding.identifier === innerBinding)) {
-          // the classRef has been shadowed
-          throw binding.path.buildCodeFrameError(
-            `Shadowing class ${classRef.name} with private property`,
-          );
+        if (innerBinding && binding && innerBinding !== binding.identifier) {
+          // the classRef has been shadowed, rename the local variable
+          let local = binding.path;
+          while (
+            !local.scope.bindingIdentifierEquals(classRef.name, innerBinding)
+          ) {
+            local.scope.rename(classRef.name);
+            local = local.parentPath;
+          }
         }
         return t.callExpression(file.addHelper(helperName), [
           this.receiver(member),
