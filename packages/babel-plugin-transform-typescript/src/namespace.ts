@@ -1,5 +1,5 @@
 import { template, types as t } from "@babel/core";
-import { NodePath } from "@babel/traverse";
+import type { NodePath } from "@babel/traverse";
 
 export default function transpileNamespace(path, t, allowNamespaces) {
   if (path.node.declare || path.node.id.type === "StringLiteral") {
