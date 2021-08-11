@@ -30,13 +30,7 @@ function toKind(node: any) {
 
 const has = Function.prototype.call.bind(Object.prototype.hasOwnProperty);
 
-export function push(
-  mutatorMap: any,
-  node: any,
-  kind: string,
-  file,
-  scope?,
-): any {
+export function push(mutatorMap: any, node: any, kind: string, file, scope?) {
   const alias = toKeyAlias(node);
 
   //
@@ -120,7 +114,7 @@ export function hasComputed(mutatorMap: any): boolean {
   return false;
 }
 
-export function toComputedObjectFromClass(obj: any): any {
+export function toComputedObjectFromClass(obj: any) {
   const objExpr = arrayExpression([]);
 
   for (let i = 0; i < obj.properties.length; i++) {
@@ -135,7 +129,7 @@ export function toComputedObjectFromClass(obj: any): any {
   return objExpr;
 }
 
-export function toClassObject(mutatorMap: any): any {
+export function toClassObject(mutatorMap: any) {
   const objExpr = objectExpression([]);
 
   Object.keys(mutatorMap).forEach(function (mutatorMapKey) {
@@ -161,7 +155,7 @@ export function toClassObject(mutatorMap: any): any {
   return objExpr;
 }
 
-export function toDefineObject(mutatorMap: any): any {
+export function toDefineObject(mutatorMap: any) {
   Object.keys(mutatorMap).forEach(function (key) {
     const map = mutatorMap[key];
     if (map.value) map.writable = booleanLiteral(true);
