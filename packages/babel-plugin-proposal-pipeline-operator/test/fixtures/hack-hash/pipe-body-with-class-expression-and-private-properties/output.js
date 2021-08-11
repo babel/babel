@@ -1,10 +1,10 @@
 var _ref, _ref2, _ref3;
 
-const result = (_ref3 = (_ref2 = (_ref = 1, class {
+const result = (_ref3 = 1, (_ref2 = class {
   #baz;
 
   constructor() {
-    this.#baz = _ref;
+    this.#baz = _ref3;
   }
 
   #bar() {
@@ -15,5 +15,5 @@ const result = (_ref3 = (_ref2 = (_ref = 1, class {
     return this.#bar() + 3;
   }
 
-}), new _ref2()), _ref3.foo());
+}, (_ref = new _ref2(), _ref.foo())));
 expect(result).toBe(1 + 2 + 3);

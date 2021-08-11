@@ -531,11 +531,20 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
 
+    let { rightAssociative } = op;
+    if (
+      op === tt.pipeline &&
+      this.getPluginOption("pipelineOperator", "proposal") === "hack"
+    ) {
+      // Hack-style pipeline operator is right associative.
+      rightAssociative = true;
+    }
+
     return this.parseExprOp(
       this.parseMaybeUnaryOrPrivate(),
       startPos,
       startLoc,
-      op.rightAssociative ? prec - 1 : prec,
+      rightAssociative ? prec - 1 : prec,
     );
   }
 
