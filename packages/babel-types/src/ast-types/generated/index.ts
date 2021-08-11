@@ -2663,3 +2663,9 @@ export interface Aliases {
   TSType: TSType;
   TSBaseType: TSBaseType;
 }
+
+export type DeprecatedAliases =
+  | NumberLiteral
+  | RegexLiteral
+  | RestProperty
+  | SpreadProperty;

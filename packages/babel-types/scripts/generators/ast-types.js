@@ -115,6 +115,9 @@ export interface ${deprecatedAlias[type]} extends BaseNode {
     code += `  ${type}: ${type};\n`;
   }
   code += "}\n\n";
+  code += `export type DeprecatedAliases = ${Object.keys(
+    t.DEPRECATED_KEYS
+  ).join(" | ")}\n\n`;
 
   return code;
 }
