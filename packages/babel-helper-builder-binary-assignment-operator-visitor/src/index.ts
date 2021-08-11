@@ -1,15 +1,17 @@
 import explode from "@babel/helper-explode-assignable-expression";
 import { assignmentExpression, sequenceExpression } from "@babel/types";
+import type { Visitor } from "@babel/traverse";
 
-export default function (opts: { build: Function; operator: string }): any {
+export default function (opts: { build: Function; operator: string }) {
   const { build, operator } = opts;
 
-  return {
+  const visitor: Visitor = {
     AssignmentExpression(path) {
       const { node, scope } = path;
       if (node.operator !== operator + "=") return;
 
       const nodes = [];
+      // @ts-expect-error todo(flow->ts)
       const exploded = explode(node.left, nodes, this, scope);
       nodes.push(
         assignmentExpression(
@@ -28,4 +30,5 @@ export default function (opts: { build: Function; operator: string }): any {
       }
     },
   };
+  return visitor;
 }
