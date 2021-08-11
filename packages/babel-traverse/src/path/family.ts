@@ -231,29 +231,25 @@ function _getCompletionRecords(
     path.isLabeledStatement()
   ) {
     // @ts-expect-error(flow->ts): todo
-    records = addCompletionRecords(path.get("body"), records, context);
+    return addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
-    records.push(
-      // @ts-expect-error(flow->ts): todo
-      ...getStatementListCompletion(path.get("body"), context),
-    );
+    // @ts-expect-error(flow->ts): todo
+    return getStatementListCompletion(path.get("body"), context);
   } else if (path.isFunction()) {
     return _getCompletionRecords(path.get("body"), context);
   } else if (path.isTryStatement()) {
     records = addCompletionRecords(path.get("block"), records, context);
     records = addCompletionRecords(path.get("handler"), records, context);
   } else if (path.isCatchClause()) {
-    records = addCompletionRecords(path.get("body"), records, context);
+    return addCompletionRecords(path.get("body"), records, context);
   } else if (path.isSwitchStatement()) {
-    records = completionRecordForSwitch(path.get("cases"), records, context);
+    return completionRecordForSwitch(path.get("cases"), records, context);
   } else if (path.isSwitchCase()) {
-    records.push(
-      ...getStatementListCompletion(path.get("consequent"), {
-        canHaveBreak: true,
-        shouldPopulateBreak: false,
-        inCaseClause: true,
-      }),
-    );
+    return getStatementListCompletion(path.get("consequent"), {
+      canHaveBreak: true,
+      shouldPopulateBreak: false,
+      inCaseClause: true,
+    });
   } else if (path.isBreakStatement()) {
     records.push(BreakCompletion(path));
   } else {
