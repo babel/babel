@@ -1091,7 +1091,7 @@ export default class Scope {
    * Walks the scope tree and gathers all declarations of `kind`.
    */
 
-  getAllBindingsOfKind(...kinds: string[]): any {
+  getAllBindingsOfKind(...kinds: string[]): Record<string, Binding> {
     const ids = Object.create(null);
 
     for (const kind of kinds) {

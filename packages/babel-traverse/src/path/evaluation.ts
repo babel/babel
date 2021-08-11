@@ -139,8 +139,8 @@ function _evaluate(path: NodePath, state) {
     path.isMemberExpression() &&
     !path.parentPath.isCallExpression({ callee: path.node })
   ) {
-    const property = path.get("property") as NodePath;
-    const object = path.get("object") as NodePath;
+    const property = path.get("property");
+    const object = path.get("object");
 
     if (object.isLiteral() && property.isIdentifier()) {
       // @ts-expect-error todo(flow->ts): instead of typeof - would it be better to check type of ast node?
@@ -353,8 +353,7 @@ function _evaluate(path: NodePath, state) {
 
     if (callee.isMemberExpression()) {
       const object = callee.get("object");
-      // todo: improve babel-types
-      const property = callee.get("property") as NodePath;
+      const property = callee.get("property");
 
       // Math.min(1, 2)
       if (
