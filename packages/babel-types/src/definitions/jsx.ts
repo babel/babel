@@ -74,8 +74,7 @@ defineType("JSXElement", {
   },
 });
 
-defineType("JSXEmptyExpression", {
-});
+defineType("JSXEmptyExpression", {});
 
 defineType("JSXExpressionContainer", {
   visitor: ["expression"],

@@ -6,7 +6,7 @@ import {
 } from "./utils";
 import { PLACEHOLDERS } from "./placeholders";
 
-const defineType = defineAliasedType("Miscellaneous")
+const defineType = defineAliasedType("Miscellaneous");
 
 if (!process.env.BABEL_8_BREAKING) {
   defineType("Noop", {
