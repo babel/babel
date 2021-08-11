@@ -4,10 +4,10 @@ class Test {
 
     const func = () => {
       const _Test = 3;
-      return other === Test;
+      return other === Test && _Test;
     };
 
-    return func();
+    return func() + _Test2;
   }
 
 }

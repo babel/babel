@@ -6,8 +6,8 @@ class Test {
     const Test = 2;
     const func = () => {
       const Test = 3;
-      return #x in other;
+      return #x in other && Test;
     }
-    return func();
+    return func() + Test;
   }
 }

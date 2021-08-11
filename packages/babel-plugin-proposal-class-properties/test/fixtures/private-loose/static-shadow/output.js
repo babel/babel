@@ -4,10 +4,10 @@ class Test {
 
     const func = () => {
       const _Test = 3;
-      return babelHelpers.classStaticPrivateFieldSpecGet(this, Test, _x);
+      return babelHelpers.classStaticPrivateFieldSpecGet(this, Test, _x) + _Test;
     };
 
-    return func();
+    return func() + _Test2;
   }
 
 }
