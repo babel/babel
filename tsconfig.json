@@ -39,6 +39,7 @@
     "./packages/babel-helpers/src/**/*.ts",
     "./packages/babel-highlight/src/**/*.ts",
     "./packages/babel-node/src/**/*.ts",
+    "./packages/babel-parser/src/**/*.ts",
     "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/**/*.ts",
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-external-helpers/src/**/*.ts",
@@ -278,6 +279,9 @@
       ],
       "@babel/node": [
         "./packages/babel-node/src"
+      ],
+      "@babel/parser": [
+        "./packages/babel-parser/src"
       ],
       "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": [
         "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src"
