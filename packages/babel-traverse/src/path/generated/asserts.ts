@@ -328,6 +328,7 @@ export interface NodePathAssetions {
   ): asserts this is NodePath<t.MemberExpression>;
   assertMetaProperty(opts?: object): asserts this is NodePath<t.MetaProperty>;
   assertMethod(opts?: object): asserts this is NodePath<t.Method>;
+  assertMiscellaneous(opts?: object): asserts this is NodePath<t.Miscellaneous>;
   assertMixedTypeAnnotation(
     opts?: object,
   ): asserts this is NodePath<t.MixedTypeAnnotation>;
@@ -660,6 +661,7 @@ export interface NodePathAssetions {
   assertTypeParameterInstantiation(
     opts?: object,
   ): asserts this is NodePath<t.TypeParameterInstantiation>;
+  assertTypeScript(opts?: object): asserts this is NodePath<t.TypeScript>;
   assertTypeofTypeAnnotation(
     opts?: object,
   ): asserts this is NodePath<t.TypeofTypeAnnotation>;

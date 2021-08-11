@@ -182,6 +182,7 @@ export type Node =
   | MemberExpression
   | MetaProperty
   | Method
+  | Miscellaneous
   | MixedTypeAnnotation
   | ModuleDeclaration
   | ModuleExpression
@@ -326,6 +327,7 @@ export type Node =
   | TypeParameter
   | TypeParameterDeclaration
   | TypeParameterInstantiation
+  | TypeScript
   | TypeofTypeAnnotation
   | UnaryExpression
   | UnaryLike
@@ -2398,6 +2400,15 @@ export type Flow =
   | UnionTypeAnnotation
   | Variance
   | VoidTypeAnnotation
+  | EnumDeclaration
+  | EnumBooleanBody
+  | EnumNumberBody
+  | EnumStringBody
+  | EnumSymbolBody
+  | EnumBooleanMember
+  | EnumNumberMember
+  | EnumStringMember
+  | EnumDefaultedMember
   | IndexedAccessType
   | OptionalIndexedAccessType;
 export type FlowType =
@@ -2479,6 +2490,71 @@ export type JSX =
   | JSXFragment
   | JSXOpeningFragment
   | JSXClosingFragment;
+export type Miscellaneous = Noop | Placeholder | V8IntrinsicIdentifier;
+export type TypeScript =
+  | TSParameterProperty
+  | TSDeclareFunction
+  | TSDeclareMethod
+  | TSQualifiedName
+  | TSCallSignatureDeclaration
+  | TSConstructSignatureDeclaration
+  | TSPropertySignature
+  | TSMethodSignature
+  | TSIndexSignature
+  | TSAnyKeyword
+  | TSBooleanKeyword
+  | TSBigIntKeyword
+  | TSIntrinsicKeyword
+  | TSNeverKeyword
+  | TSNullKeyword
+  | TSNumberKeyword
+  | TSObjectKeyword
+  | TSStringKeyword
+  | TSSymbolKeyword
+  | TSUndefinedKeyword
+  | TSUnknownKeyword
+  | TSVoidKeyword
+  | TSThisType
+  | TSFunctionType
+  | TSConstructorType
+  | TSTypeReference
+  | TSTypePredicate
+  | TSTypeQuery
+  | TSTypeLiteral
+  | TSArrayType
+  | TSTupleType
+  | TSOptionalType
+  | TSRestType
+  | TSNamedTupleMember
+  | TSUnionType
+  | TSIntersectionType
+  | TSConditionalType
+  | TSInferType
+  | TSParenthesizedType
+  | TSTypeOperator
+  | TSIndexedAccessType
+  | TSMappedType
+  | TSLiteralType
+  | TSExpressionWithTypeArguments
+  | TSInterfaceDeclaration
+  | TSInterfaceBody
+  | TSTypeAliasDeclaration
+  | TSAsExpression
+  | TSTypeAssertion
+  | TSEnumDeclaration
+  | TSEnumMember
+  | TSModuleDeclaration
+  | TSModuleBlock
+  | TSImportType
+  | TSImportEqualsDeclaration
+  | TSExternalModuleReference
+  | TSNonNullExpression
+  | TSExportAssignment
+  | TSNamespaceExportDeclaration
+  | TSTypeAnnotation
+  | TSTypeParameterInstantiation
+  | TSTypeParameterDeclaration
+  | TSTypeParameter;
 export type TSTypeElement =
   | TSCallSignatureDeclaration
   | TSConstructSignatureDeclaration
@@ -2581,6 +2657,8 @@ export interface Aliases {
   EnumBody: EnumBody;
   EnumMember: EnumMember;
   JSX: JSX;
+  Miscellaneous: Miscellaneous;
+  TypeScript: TypeScript;
   TSTypeElement: TSTypeElement;
   TSType: TSType;
   TSBaseType: TSBaseType;

@@ -1742,6 +1742,18 @@ export function assertJSX(
 ): asserts node is t.JSX {
   assert("JSX", node, opts);
 }
+export function assertMiscellaneous(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.Miscellaneous {
+  assert("Miscellaneous", node, opts);
+}
+export function assertTypeScript(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.TypeScript {
+  assert("TypeScript", node, opts);
+}
 export function assertTSTypeElement(
   node: object | null | undefined,
   opts?: object | null,

@@ -191,6 +191,7 @@ export interface NodePathValidators {
   isMemberExpression(opts?: object): this is NodePath<t.MemberExpression>;
   isMetaProperty(opts?: object): this is NodePath<t.MetaProperty>;
   isMethod(opts?: object): this is NodePath<t.Method>;
+  isMiscellaneous(opts?: object): this is NodePath<t.Miscellaneous>;
   isMixedTypeAnnotation(opts?: object): this is NodePath<t.MixedTypeAnnotation>;
   isModuleDeclaration(opts?: object): this is NodePath<t.ModuleDeclaration>;
   isModuleExpression(opts?: object): this is NodePath<t.ModuleExpression>;
@@ -399,6 +400,7 @@ export interface NodePathValidators {
   isTypeParameterInstantiation(
     opts?: object,
   ): this is NodePath<t.TypeParameterInstantiation>;
+  isTypeScript(opts?: object): this is NodePath<t.TypeScript>;
   isTypeofTypeAnnotation(
     opts?: object,
   ): this is NodePath<t.TypeofTypeAnnotation>;
