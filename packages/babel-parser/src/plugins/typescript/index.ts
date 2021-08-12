@@ -28,7 +28,6 @@ import {
   BIND_TS_NAMESPACE,
   BIND_CLASS,
   BIND_LEXICAL,
-  BIND_NONE,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
@@ -3105,6 +3104,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: N.Class,
       isStatement: boolean,
       optionalId?: boolean | null,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      bindingType?: BindingTypes,
     ): void {
       if ((!isStatement || optionalId) && this.isContextual(tt._implements)) {
         return;
@@ -3459,11 +3460,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // Handle type assertions
     parseMaybeUnary(
       refExpressionErrors?: ExpressionErrors | null,
+      sawUnary?: boolean,
     ): N.Expression {
       if (!this.hasPlugin("jsx") && this.match(tt.lt)) {
         return this.tsParseTypeAssertion();
       } else {
-        return super.parseMaybeUnary(refExpressionErrors);
+        return super.parseMaybeUnary(refExpressionErrors, sawUnary);
       }
     }
 
