@@ -144,6 +144,8 @@ export const ErrorMessages = makeErrorTemplates(
       'Invalid topic token %0. In order to use %0 as a topic reference, the pipelineOperator plugin must be configured with { "proposal": "hack", "topicToken": "%0" }.',
     PipeTopicUnused:
       "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
+    PipeUnparenthesizedYield:
+      "Hack-style pipe body cannot be an unparenthesized yield expression; please wrap it in parentheses: x |> (yield y) |> z.",
 
     // Messages whose codes start with “Pipeline” or “PrimaryTopic”
     // are retained for backwards compatibility
