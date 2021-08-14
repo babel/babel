@@ -195,13 +195,15 @@ function unshadow(
   scope: Scope,
   innerBinding: t.Identifier | undefined,
 ) {
-  const binding = scope.getBinding(name);
-  if (innerBinding && binding && innerBinding !== binding.identifier) {
-    // the classRef has been shadowed, rename the local variable
-    while (!scope.bindingIdentifierEquals(name, innerBinding)) {
-      scope.rename(name);
-      scope = scope.parent;
-    }
+  // in some cases, scope.getBinding(name) === undefined
+  // so we check hasBinding to avoid keeping looping
+  // see: https://github.com/babel/babel/pull/13656#discussion_r686030715
+  while (
+    scope?.hasBinding(name) &&
+    !scope.bindingIdentifierEquals(name, innerBinding)
+  ) {
+    scope.rename(name);
+    scope = scope.parent;
   }
 }
 
