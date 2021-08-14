@@ -84,7 +84,7 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     }*/
 
     // add back on function constant violations since we can't track calls
-    constantViolations = constantViolations.concat(functionConstantViolations);
+    constantViolations.push(...functionConstantViolations);
 
     // push on inferred types of violated paths
     for (const violation of constantViolations) {

@@ -42,8 +42,8 @@ export function push(
   if (node.decorators) {
     const decorators = (map.decorators =
       map.decorators || t.arrayExpression([]));
-    decorators.elements = decorators.elements.concat(
-      node.decorators.map(dec => dec.expression).reverse(),
+    decorators.elements.push(
+      ...node.decorators.map(dec => dec.expression).reverse(),
     );
   }
 

@@ -10,7 +10,11 @@ function collect(
 
   const values = value.split(",");
 
-  return previousValue ? previousValue.concat(values) : values;
+  if (previousValue) {
+    previousValue.push(...values);
+    return previousValue;
+  }
+  return values;
 }
 
 commander.option(

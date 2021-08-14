@@ -21,7 +21,11 @@ function collect(value, previousValue): Array<string> {
 
   const values = value.split(",");
 
-  return previousValue ? previousValue.concat(values) : values;
+  if (previousValue) {
+    previousValue.push(...values);
+    return previousValue;
+  }
+  return values;
 }
 
 program.option("-e, --eval [script]", "Evaluate script");
@@ -197,7 +201,7 @@ if (program.eval || program.print) {
     }
 
     // add back on node and concat the sliced args
-    process.argv = ["node"].concat(args);
+    process.argv = ["node", ...args];
     process.execArgv.push(fileURLToPath(import.meta.url));
 
     Module.runMain();
