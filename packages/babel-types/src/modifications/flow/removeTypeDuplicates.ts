@@ -24,7 +24,7 @@ export default function removeTypeDuplicates(
   const bases = {};
 
   // store union type groups to circular references
-  const typeGroups = [];
+  const typeGroups = new Set<t.FlowType[]>();
 
   const types = [];
 
@@ -48,10 +48,10 @@ export default function removeTypeDuplicates(
     }
 
     if (isUnionTypeAnnotation(node)) {
-      if (typeGroups.indexOf(node.types) < 0) {
-        // todo(babel-8): remove type casting
-        (nodes as any).push(...node.types);
-        typeGroups.push(node.types);
+      if (!typeGroups.has(node.types)) {
+        // todo(babel-8): use .push when nodes is mutable
+        nodes = nodes.concat(node.types);
+        typeGroups.add(node.types);
       }
       continue;
     }
