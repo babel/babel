@@ -2396,6 +2396,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const callParseClassMemberWithIsStatic = () => {
         const isStatic = !!member.static;
         if (isStatic && this.eat(tt.braceL)) {
+          delete member.static;
           if (this.tsHasSomeModifiers(member, invalidModifersForStaticBlocks)) {
             this.raise(this.state.pos, TSErrors.StaticBlockCannotHaveModifier);
           }
