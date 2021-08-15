@@ -1,9 +1,12 @@
-import defineType, {
+import {
+  defineAliasedType,
   assertEach,
   assertNodeType,
   assertValueType,
   chain,
 } from "./utils";
+
+const defineType = defineAliasedType("Proposal", "StandardizedOrProposal");
 
 defineType("ArgumentPlaceholder", {});
 

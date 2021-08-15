@@ -416,6 +416,7 @@ export interface NodePathAssetions {
   assertPrivateName(opts?: object): asserts this is NodePath<t.PrivateName>;
   assertProgram(opts?: object): asserts this is NodePath<t.Program>;
   assertProperty(opts?: object): asserts this is NodePath<t.Property>;
+  assertProposal(opts?: object): asserts this is NodePath<t.Proposal>;
   assertPureish(opts?: object): asserts this is NodePath<t.Pureish>;
   assertQualifiedTypeIdentifier(
     opts?: object,
@@ -438,6 +439,10 @@ export interface NodePathAssetions {
   assertSpreadProperty(
     opts?: object,
   ): asserts this is NodePath<t.SpreadProperty>;
+  assertStandardized(opts?: object): asserts this is NodePath<t.Standardized>;
+  assertStandardizedOrProposal(
+    opts?: object,
+  ): asserts this is NodePath<t.StandardizedOrProposal>;
   assertStatement(opts?: object): asserts this is NodePath<t.Statement>;
   assertStaticBlock(opts?: object): asserts this is NodePath<t.StaticBlock>;
   assertStringLiteral(opts?: object): asserts this is NodePath<t.StringLiteral>;
