@@ -28,7 +28,6 @@
               "type": "StaticBlock",
               "start":14,"end":32,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":20}},
               "override": true,
-              "static": true,
               "body": []
             }
           ]
