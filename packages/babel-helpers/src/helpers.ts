@@ -1,13 +1,17 @@
-// @flow
-
 import template from "@babel/template";
+import type * as t from "@babel/types";
 
 import * as generated from "./helpers-generated";
 
-const helpers = { __proto__: null, ...generated };
+interface Helper {
+  minVersion: string;
+  ast: () => t.Program;
+}
+
+const helpers: Record<string, Helper> = { __proto__: null, ...generated };
 export default helpers;
 
-const helper = (minVersion: string) => tpl => ({
+const helper = (minVersion: string) => (tpl: TemplateStringsArray) => ({
   minVersion,
   ast: () => template.program.ast(tpl),
 });

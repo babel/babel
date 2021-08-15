@@ -1031,7 +1031,7 @@ export default class Scope {
    * Walks the scope tree and gathers **all** bindings.
    */
 
-  getAllBindings(): any {
+  getAllBindings(): Record<string, Binding> {
     const ids = Object.create(null);
 
     let scope: Scope = this;
