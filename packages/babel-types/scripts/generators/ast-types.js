@@ -49,7 +49,9 @@ interface BaseNode {
 
 export type CommentTypeShorthand = "leading" | "inner" | "trailing";
 
-export type Node = ${t.TYPES.sort().join(" | ")};\n\n`;
+export type Node = ${t.TYPES.filter(k => !t.FLIPPED_ALIAS_KEYS[k])
+    .sort()
+    .join(" | ")};\n\n`;
 
   const deprecatedAlias = {};
   for (const type in t.DEPRECATED_KEYS) {

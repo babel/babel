@@ -56,11 +56,8 @@ export type Node =
   | AssignmentPattern
   | AwaitExpression
   | BigIntLiteral
-  | Binary
   | BinaryExpression
   | BindExpression
-  | Block
-  | BlockParent
   | BlockStatement
   | BooleanLiteral
   | BooleanLiteralTypeAnnotation
@@ -68,7 +65,6 @@ export type Node =
   | BreakStatement
   | CallExpression
   | CatchClause
-  | Class
   | ClassBody
   | ClassDeclaration
   | ClassExpression
@@ -77,13 +73,10 @@ export type Node =
   | ClassPrivateMethod
   | ClassPrivateProperty
   | ClassProperty
-  | CompletionStatement
-  | Conditional
   | ConditionalExpression
   | ContinueStatement
   | DebuggerStatement
   | DecimalLiteral
-  | Declaration
   | DeclareClass
   | DeclareExportAllDeclaration
   | DeclareExportDeclaration
@@ -102,12 +95,10 @@ export type Node =
   | DoWhileStatement
   | EmptyStatement
   | EmptyTypeAnnotation
-  | EnumBody
   | EnumBooleanBody
   | EnumBooleanMember
   | EnumDeclaration
   | EnumDefaultedMember
-  | EnumMember
   | EnumNumberBody
   | EnumNumberMember
   | EnumStringBody
@@ -115,36 +106,23 @@ export type Node =
   | EnumSymbolBody
   | ExistsTypeAnnotation
   | ExportAllDeclaration
-  | ExportDeclaration
   | ExportDefaultDeclaration
   | ExportDefaultSpecifier
   | ExportNamedDeclaration
   | ExportNamespaceSpecifier
   | ExportSpecifier
-  | Expression
   | ExpressionStatement
-  | ExpressionWrapper
   | File
-  | Flow
-  | FlowBaseAnnotation
-  | FlowDeclaration
-  | FlowPredicate
-  | FlowType
-  | For
   | ForInStatement
   | ForOfStatement
   | ForStatement
-  | ForXStatement
-  | Function
   | FunctionDeclaration
   | FunctionExpression
-  | FunctionParent
   | FunctionTypeAnnotation
   | FunctionTypeParam
   | GenericTypeAnnotation
   | Identifier
   | IfStatement
-  | Immutable
   | Import
   | ImportAttribute
   | ImportDeclaration
@@ -158,7 +136,6 @@ export type Node =
   | InterfaceTypeAnnotation
   | InterpreterDirective
   | IntersectionTypeAnnotation
-  | JSX
   | JSXAttribute
   | JSXClosingElement
   | JSXClosingFragment
@@ -174,19 +151,12 @@ export type Node =
   | JSXSpreadAttribute
   | JSXSpreadChild
   | JSXText
-  | LVal
   | LabeledStatement
-  | Literal
   | LogicalExpression
-  | Loop
   | MemberExpression
   | MetaProperty
-  | Method
-  | Miscellaneous
   | MixedTypeAnnotation
-  | ModuleDeclaration
   | ModuleExpression
-  | ModuleSpecifier
   | NewExpression
   | Noop
   | NullLiteral
@@ -197,7 +167,6 @@ export type Node =
   | NumberTypeAnnotation
   | NumericLiteral
   | ObjectExpression
-  | ObjectMember
   | ObjectMethod
   | ObjectPattern
   | ObjectProperty
@@ -212,18 +181,12 @@ export type Node =
   | OptionalIndexedAccessType
   | OptionalMemberExpression
   | ParenthesizedExpression
-  | Pattern
-  | PatternLike
   | PipelineBareFunction
   | PipelinePrimaryTopicReference
   | PipelineTopicExpression
   | Placeholder
-  | Private
   | PrivateName
   | Program
-  | Property
-  | Proposal
-  | Pureish
   | QualifiedTypeIdentifier
   | RecordExpression
   | RegExpLiteral
@@ -231,13 +194,9 @@ export type Node =
   | RestElement
   | RestProperty
   | ReturnStatement
-  | Scopable
   | SequenceExpression
   | SpreadElement
   | SpreadProperty
-  | Standardized
-  | StandardizedOrProposal
-  | Statement
   | StaticBlock
   | StringLiteral
   | StringLiteralTypeAnnotation
@@ -249,7 +208,6 @@ export type Node =
   | TSAnyKeyword
   | TSArrayType
   | TSAsExpression
-  | TSBaseType
   | TSBigIntKeyword
   | TSBooleanKeyword
   | TSCallSignatureDeclaration
@@ -258,7 +216,6 @@ export type Node =
   | TSConstructorType
   | TSDeclareFunction
   | TSDeclareMethod
-  | TSEntityName
   | TSEnumDeclaration
   | TSEnumMember
   | TSExportAssignment
@@ -296,11 +253,9 @@ export type Node =
   | TSSymbolKeyword
   | TSThisType
   | TSTupleType
-  | TSType
   | TSTypeAliasDeclaration
   | TSTypeAnnotation
   | TSTypeAssertion
-  | TSTypeElement
   | TSTypeLiteral
   | TSTypeOperator
   | TSTypeParameter
@@ -316,7 +271,6 @@ export type Node =
   | TaggedTemplateExpression
   | TemplateElement
   | TemplateLiteral
-  | Terminatorless
   | ThisExpression
   | ThisTypeAnnotation
   | ThrowStatement
@@ -330,19 +284,15 @@ export type Node =
   | TypeParameter
   | TypeParameterDeclaration
   | TypeParameterInstantiation
-  | TypeScript
   | TypeofTypeAnnotation
   | UnaryExpression
-  | UnaryLike
   | UnionTypeAnnotation
   | UpdateExpression
-  | UserWhitespacable
   | V8IntrinsicIdentifier
   | VariableDeclaration
   | VariableDeclarator
   | Variance
   | VoidTypeAnnotation
-  | While
   | WhileStatement
   | WithStatement
   | YieldExpression;
