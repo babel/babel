@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import type Scope from "./scope";
 
 export default class TraversalContext {
-  constructor(scope, opts, state, parentPath) {
+  constructor(scope: Scope, opts, state, parentPath: NodePath) {
     this.parentPath = parentPath;
     this.scope = scope;
     this.state = state;
@@ -22,7 +22,7 @@ export default class TraversalContext {
    * visit a node. This will prevent us from constructing a NodePath.
    */
 
-  shouldVisit(node): boolean {
+  shouldVisit(node: t.Node): boolean {
     const opts = this.opts;
     if (opts.enter || opts.exit) return true;
 
@@ -41,19 +41,24 @@ export default class TraversalContext {
     return false;
   }
 
-  create(node, obj, key, listKey?): NodePath {
+  create(
+    parent: t.Node,
+    container: t.Node | t.Node[],
+    key: string | number,
+    listKey?: string,
+  ): NodePath {
     // We don't need to `.setContext()` here, since `.visitQueue()` already
     // calls `.pushContext`.
     return NodePath.get({
       parentPath: this.parentPath,
-      parent: node,
-      container: obj,
-      key: key,
+      parent,
+      container,
+      key,
       listKey,
     });
   }
 
-  maybeQueue(path, notPriority?: boolean) {
+  maybeQueue(path: NodePath, notPriority?: boolean) {
     if (this.queue) {
       if (notPriority) {
         this.queue.push(path);
@@ -63,7 +68,7 @@ export default class TraversalContext {
     }
   }
 
-  visitMultiple(container, parent, listKey) {
+  visitMultiple(container: t.Node[], parent: t.Node, listKey: string) {
     // nothing to traverse!
     if (container.length === 0) return false;
 
@@ -80,7 +85,7 @@ export default class TraversalContext {
     return this.visitQueue(queue);
   }
 
-  visitSingle(node, key): boolean {
+  visitSingle(node: t.Node, key: string | number): boolean {
     if (this.shouldVisit(node[key])) {
       return this.visitQueue([this.create(node, node, key)]);
     } else {
@@ -142,7 +147,7 @@ export default class TraversalContext {
     return stop;
   }
 
-  visit(node, key) {
+  visit(node: t.Node, key: string) {
     const nodes = node[key];
     if (!nodes) return false;
 

@@ -1,10 +1,16 @@
 // this file contains hooks that handle ancestry cleanup of parent nodes when removing children
+import * as t from "@babel/types";
+import type NodePath from "../index";
+
+interface Hook {
+  (self: NodePath, parent: NodePath): boolean;
+}
 
 /**
  * Pre hooks should be used for either rejecting removal or delegating removal
  */
 
-export const hooks = [
+export const hooks: Hook[] = [
   function (self, parent) {
     const removeParent =
       // while (NODE);
@@ -65,10 +71,7 @@ export const hooks = [
       (self.key === "body" &&
         (parent.isLoop() || parent.isArrowFunctionExpression()))
     ) {
-      self.replaceWith({
-        type: "BlockStatement",
-        body: [],
-      });
+      self.replaceWith(t.blockStatement([]));
       return true;
     }
   },

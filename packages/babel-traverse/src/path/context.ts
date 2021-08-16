@@ -1,5 +1,6 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
+import type * as t from "@babel/types";
 import traverse from "../index";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 import type TraversalContext from "../context";
@@ -234,7 +235,13 @@ export function pushContext(this: NodePath, context: TraversalContext) {
   this.setContext(context);
 }
 
-export function setup(this: NodePath, parentPath, container, listKey, key) {
+export function setup(
+  this: NodePath,
+  parentPath: NodePath,
+  container: t.Node | t.Node[],
+  listKey: string,
+  key: string | number,
+) {
   this.listKey = listKey;
   this.container = container;
 
@@ -242,7 +249,7 @@ export function setup(this: NodePath, parentPath, container, listKey, key) {
   this.setKey(key);
 }
 
-export function setKey(this: NodePath, key) {
+export function setKey(this: NodePath, key: string | number) {
   this.key = key;
   this.node = this.container[this.key];
   this.type = this.node?.type;

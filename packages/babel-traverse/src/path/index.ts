@@ -53,7 +53,7 @@ class NodePath<T extends t.Node = t.Node> {
   _traverseFlags: number = 0;
   skipKeys: any = null;
   parentPath: NodePath | null = null;
-  container: object | null | Array<any> = null;
+  container: t.Node | t.Node[] | null = null;
   listKey: string | null = null;
   key: string | number | null = null;
   node: T = null;
@@ -67,12 +67,12 @@ class NodePath<T extends t.Node = t.Node> {
     listKey,
     key,
   }: {
-    hub?;
-    parentPath;
-    parent;
-    container;
-    listKey?;
-    key;
+    hub?: HubInterface;
+    parentPath: NodePath;
+    parent: t.Node;
+    container: t.Node | t.Node[];
+    listKey?: string;
+    key: string | number;
   }): NodePath {
     if (!hub && parentPath) {
       hub = parentPath.hub;
@@ -82,7 +82,7 @@ class NodePath<T extends t.Node = t.Node> {
       throw new Error("To get a node path the parent needs to exist");
     }
 
-    const targetNode = container[key];
+    const targetNode: t.Node = container[key];
 
     let paths = pathCache.get(parent);
     if (!paths) {
@@ -150,7 +150,7 @@ class NodePath<T extends t.Node = t.Node> {
     return parts.join(".");
   }
 
-  debug(message) {
+  debug(message: string) {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }

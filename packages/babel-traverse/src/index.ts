@@ -82,7 +82,7 @@ traverse.node = function (
   scope?: Scope,
   state?: any,
   parentPath?: NodePath,
-  skipKeys?,
+  skipKeys?: Record<string, boolean>,
 ) {
   const keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;

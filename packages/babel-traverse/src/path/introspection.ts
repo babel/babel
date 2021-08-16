@@ -456,14 +456,18 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
 /**
  * Resolve a "pointer" `NodePath` to it's absolute path.
  */
-export function resolve(this: NodePath, dangerous?, resolved?) {
+export function resolve(
+  this: NodePath,
+  dangerous?: boolean,
+  resolved?: NodePath[],
+) {
   return this._resolve(dangerous, resolved) || this;
 }
 
 export function _resolve(
   this: NodePath,
-  dangerous?,
-  resolved?,
+  dangerous?: boolean,
+  resolved?: NodePath[],
 ): NodePath | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe

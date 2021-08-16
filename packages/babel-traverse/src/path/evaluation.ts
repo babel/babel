@@ -1,4 +1,5 @@
 import type NodePath from "./index";
+import type * as t from "@babel/types";
 
 // This file contains Babels metainterpreter that can evaluate static code.
 
@@ -28,10 +29,21 @@ export function evaluateTruthy(this: NodePath): boolean {
   if (res.confident) return !!res.value;
 }
 
+interface Cached {
+  resolved: boolean;
+  value?: unknown;
+}
+
+interface EvalState {
+  deoptPath: NodePath | null;
+  confident: boolean;
+  seen: Map<t.Node, Cached>;
+}
+
 /**
  * Deopts the evaluation
  */
-function deopt(path, state) {
+function deopt(path: NodePath, state: EvalState) {
   if (!state.confident) return;
   state.deoptPath = path;
   state.confident = false;
@@ -45,7 +57,7 @@ function deopt(path, state) {
  *   var g = a ? 1 : 2,
  *       a = g * this.foo
  */
-function evaluateCached(path: NodePath, state) {
+function evaluateCached(path: NodePath, state: EvalState) {
   const { node } = path;
   const { seen } = state;
 
@@ -58,8 +70,7 @@ function evaluateCached(path: NodePath, state) {
       return;
     }
   } else {
-    // todo: create type annotation for state instead
-    const item: { resolved: boolean; value?: any } = { resolved: false };
+    const item: Cached = { resolved: false };
     seen.set(node, item);
 
     const val = _evaluate(path, state);
@@ -71,7 +82,7 @@ function evaluateCached(path: NodePath, state) {
   }
 }
 
-function _evaluate(path: NodePath, state) {
+function _evaluate(path: NodePath, state: EvalState) {
   if (!state.confident) return;
 
   if (path.isSequenceExpression()) {
@@ -251,12 +262,11 @@ function _evaluate(path: NodePath, state) {
       }
       // todo(flow->ts): remove typecast
       const valuePath = prop.get("value") as NodePath;
-      let value = valuePath.evaluate();
+      const value = valuePath.evaluate();
       if (!value.confident) {
         return deopt(value.deopt, state);
       }
-      value = value.value;
-      obj[key] = value;
+      obj[key] = value.value;
     }
     return obj;
   }
@@ -390,7 +400,12 @@ function _evaluate(path: NodePath, state) {
   deopt(path, state);
 }
 
-function evaluateQuasis(path, quasis: Array<any>, state, raw = false) {
+function evaluateQuasis(
+  path: NodePath,
+  quasis: Array<any>,
+  state: EvalState,
+  raw = false,
+) {
   let str = "";
 
   let i = 0;
@@ -430,7 +445,7 @@ function evaluateQuasis(path, quasis: Array<any>, state, raw = false) {
 
 export function evaluate(this: NodePath): {
   confident: boolean;
-  value: any;
+  value: unknown;
   deopt?: NodePath;
 } {
   const state = {

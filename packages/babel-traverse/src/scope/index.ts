@@ -619,7 +619,7 @@ export default class Scope {
     }
 
     let helperName;
-    const args = [node];
+    const args: t.Node[] = [node];
     if (i === true) {
       // Used in array-spread to create an array.
       helperName = "toConsumableArray";

@@ -284,7 +284,7 @@ export function getSibling(this: NodePath, key: string | number): NodePath {
     parent: this.parent,
     container: this.container,
     listKey: this.listKey,
-    key: key,
+    key,
   }).setContext(this.context);
 }
 

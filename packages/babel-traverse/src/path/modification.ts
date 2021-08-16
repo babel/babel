@@ -10,7 +10,10 @@ import type Scope from "../scope";
  * Insert the provided nodes before the current one.
  */
 
-export function insertBefore(this: NodePath, nodes_: t.Node | t.Node[]) {
+export function insertBefore(
+  this: NodePath,
+  nodes_: t.Node | t.Node[],
+): NodePath[] {
   this._assertUnremoved();
 
   const nodes = this._verifyNodeList(nodes_);
@@ -50,7 +53,11 @@ export function insertBefore(this: NodePath, nodes_: t.Node | t.Node[]) {
   }
 }
 
-export function _containerInsert(this: NodePath, from, nodes) {
+export function _containerInsert(
+  this: NodePath,
+  from: number,
+  nodes: t.Node[],
+) {
   this.updateSiblingKeys(from, nodes.length);
 
   const paths = [];
@@ -81,13 +88,26 @@ export function _containerInsert(this: NodePath, from, nodes) {
   return paths;
 }
 
-export function _containerInsertBefore(this: NodePath, nodes) {
-  return this._containerInsert(this.key, nodes);
+export function _containerInsertBefore(
+  this: NodePath,
+  nodes: t.Node | t.Node[],
+) {
+  return this._containerInsert(
+    // @ts-expect-error todo(flow->ts): this.key could be a string
+    this.key,
+    Array.isArray(nodes) ? nodes : [nodes],
+  );
 }
 
-export function _containerInsertAfter(this: NodePath, nodes) {
-  // @ts-expect-error todo(flow->ts): this.key could be a string
-  return this._containerInsert(this.key + 1, nodes);
+export function _containerInsertAfter(
+  this: NodePath,
+  nodes: t.Node | t.Node[],
+) {
+  return this._containerInsert(
+    // @ts-expect-error todo(flow->ts): this.key could be a string
+    this.key + 1,
+    Array.isArray(nodes) ? nodes : [nodes],
+  );
 }
 
 /**
@@ -192,7 +212,7 @@ export function updateSiblingKeys(
   const paths = pathCache.get(this.parent);
   for (const [, path] of paths) {
     if (path.key >= fromIndex) {
-      path.key += incrementBy;
+      (path.key as number) += incrementBy;
     }
   }
 }
