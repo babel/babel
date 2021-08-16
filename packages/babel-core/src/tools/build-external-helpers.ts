@@ -126,7 +126,7 @@ function buildVar(allowlist?: Array<string>) {
 
 function buildHelpers(
   body: t.Statement[],
-  namespace: t.Expression,
+  namespace: t.Expression | null,
   allowlist?: Array<string>,
 ) {
   const getHelperReference = (name: string) => {
