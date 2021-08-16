@@ -518,11 +518,11 @@ function buildPrivateInstanceFieldInitSpec(
   if (!process.env.BABEL_8_BREAKING) {
     if (!state.availableHelper("classPrivateFieldInitSpec")) {
       return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
-      // configurable is always false for private elements
-      // enumerable is always false for private elements
-      writable: true,
-      value: ${value},
-    })`;
+        // configurable is always false for private elements
+        // enumerable is always false for private elements
+        writable: true,
+        value: ${value},
+      })`;
     }
   }
 
