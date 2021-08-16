@@ -271,7 +271,12 @@ const validFieldKeys = ["default", "optional", "validate"];
 // Wraps defineType to ensure these aliases are included.
 export function defineAliasedType(...aliases: string[]) {
   return (type: string, opts: DefineTypeOpts = {}) => {
-    const defined = (opts.aliases ??= []);
+    let defined = opts.aliases;
+    if (!defined) {
+      if (opts.inherits) defined = store[opts.inherits].aliases?.slice();
+      defined ??= [];
+      opts.aliases = defined;
+    }
     const additional = aliases.filter(a => !defined.includes(a));
     defined.unshift(...additional);
     return defineType(type, opts);

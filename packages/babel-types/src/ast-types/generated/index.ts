@@ -2234,9 +2234,6 @@ export type StandardizedOrProposal =
   | PrivateName
   | ArgumentPlaceholder
   | BindExpression
-  | PipelineTopicExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference
   | ImportAttribute
   | Decorator
   | DoExpression
@@ -2245,7 +2242,11 @@ export type StandardizedOrProposal =
   | TupleExpression
   | DecimalLiteral
   | StaticBlock
-  | ModuleExpression;
+  | ModuleExpression
+  | TopicReference
+  | PipelineTopicExpression
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference;
 export type Expression =
   | ArrayExpression
   | AssignmentExpression
@@ -2261,6 +2262,7 @@ export type Expression =
   | RegExpLiteral
   | LogicalExpression
   | MemberExpression
+  | NewExpression
   | ObjectExpression
   | SequenceExpression
   | ParenthesizedExpression
@@ -2682,9 +2684,6 @@ export type Miscellaneous = Noop | Placeholder | V8IntrinsicIdentifier;
 export type Proposal =
   | ArgumentPlaceholder
   | BindExpression
-  | PipelineTopicExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference
   | ImportAttribute
   | Decorator
   | DoExpression
@@ -2693,7 +2692,11 @@ export type Proposal =
   | TupleExpression
   | DecimalLiteral
   | StaticBlock
-  | ModuleExpression;
+  | ModuleExpression
+  | TopicReference
+  | PipelineTopicExpression
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference;
 export type TypeScript =
   | TSParameterProperty
   | TSDeclareFunction

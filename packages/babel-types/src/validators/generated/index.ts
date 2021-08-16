@@ -4390,9 +4390,6 @@ export function isStandardizedOrProposal(
     "PrivateName" === nodeType ||
     "ArgumentPlaceholder" === nodeType ||
     "BindExpression" === nodeType ||
-    "PipelineTopicExpression" === nodeType ||
-    "PipelineBareFunction" === nodeType ||
-    "PipelinePrimaryTopicReference" === nodeType ||
     "ImportAttribute" === nodeType ||
     "Decorator" === nodeType ||
     "DoExpression" === nodeType ||
@@ -4402,6 +4399,10 @@ export function isStandardizedOrProposal(
     "DecimalLiteral" === nodeType ||
     "StaticBlock" === nodeType ||
     "ModuleExpression" === nodeType ||
+    "TopicReference" === nodeType ||
+    "PipelineTopicExpression" === nodeType ||
+    "PipelineBareFunction" === nodeType ||
+    "PipelinePrimaryTopicReference" === nodeType ||
     (nodeType === "Placeholder" &&
       ("Identifier" === (node as t.Placeholder).expectedNode ||
         "StringLiteral" === (node as t.Placeholder).expectedNode ||
@@ -4439,6 +4440,7 @@ export function isExpression(
     "RegExpLiteral" === nodeType ||
     "LogicalExpression" === nodeType ||
     "MemberExpression" === nodeType ||
+    "NewExpression" === nodeType ||
     "ObjectExpression" === nodeType ||
     "SequenceExpression" === nodeType ||
     "ParenthesizedExpression" === nodeType ||
@@ -5638,9 +5640,6 @@ export function isProposal(
   if (
     "ArgumentPlaceholder" === nodeType ||
     "BindExpression" === nodeType ||
-    "PipelineTopicExpression" === nodeType ||
-    "PipelineBareFunction" === nodeType ||
-    "PipelinePrimaryTopicReference" === nodeType ||
     "ImportAttribute" === nodeType ||
     "Decorator" === nodeType ||
     "DoExpression" === nodeType ||
@@ -5649,7 +5648,11 @@ export function isProposal(
     "TupleExpression" === nodeType ||
     "DecimalLiteral" === nodeType ||
     "StaticBlock" === nodeType ||
-    "ModuleExpression" === nodeType
+    "ModuleExpression" === nodeType ||
+    "TopicReference" === nodeType ||
+    "PipelineTopicExpression" === nodeType ||
+    "PipelineBareFunction" === nodeType ||
+    "PipelinePrimaryTopicReference" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
