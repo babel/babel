@@ -277,7 +277,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   peerDependencies:
-    "@babel/eslint-parser": ^7.10.4
+    "@babel/eslint-parser": ^7.15.0
     eslint-plugin-flowtype: ^4.6.0
   languageName: unknown
   linkType: soft
@@ -932,8 +932,8 @@ __metadata:
   dependencies:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/template": "workspace:^7.14.5"
-    "@babel/traverse": "workspace:^7.14.8"
-    "@babel/types": "workspace:^7.14.8"
+    "@babel/traverse": "workspace:^7.15.0"
+    "@babel/types": "workspace:^7.15.0"
   languageName: unknown
   linkType: soft
 
@@ -2099,6 +2099,7 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3590,7 +3591,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.14.5, @babel/traverse@workspace:^7.14.8, @babel/traverse@workspace:^7.15.0, @babel/traverse@workspace:packages/babel-traverse":
+"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.14.5, @babel/traverse@workspace:^7.15.0, @babel/traverse@workspace:packages/babel-traverse":
   version: 0.0.0-use.local
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:
@@ -6838,7 +6839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.16.0, core-js-compat@npm:^3.9.1":
+"core-js-compat@npm:3.16.0":
   version: 3.16.0
   resolution: "core-js-compat@npm:3.16.0"
   dependencies:

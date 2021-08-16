@@ -1911,24 +1911,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
-      // only use the expensive "tryParse" method if there is a question mark
-      // and if we come from inside parens
       if (this.state.maybeInArrowParameters) {
-        const result = this.tryParse(() =>
-          super.parseConditional(expr, startPos, startLoc),
-        );
-
-        if (!result.node) {
-          if (result.error) {
-            /*:: invariant(refExpressionErrors != null) */
-            super.setOptionalParametersError(refExpressionErrors, result.error);
-          }
-
+        const nextCh = this.lookaheadCharCode();
+        // These tokens cannot start an expression, so if one of them follows
+        // ? then we are probably in an arrow function parameters list and we
+        // don't parse the conditional expression.
+        if (
+          nextCh === charCodes.comma || // (a?, b) => c
+          nextCh === charCodes.equalsTo || // (a? = b) => c
+          nextCh === charCodes.colon || // (a?: b) => c
+          nextCh === charCodes.rightParenthesis // (a?) => c
+        ) {
+          /*:: invariant(refExpressionErrors != null) */
+          this.setOptionalParametersError(refExpressionErrors);
           return expr;
         }
-
-        if (result.error) this.state = result.failState;
-        return result.node;
       }
 
       this.expect(tt.question);
@@ -1964,7 +1961,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (failed && valid.length === 1) {
           this.state = state;
-          this.state.noArrowAt = noArrowAt.concat(valid[0].start);
+          noArrowAt.push(valid[0].start);
+          this.state.noArrowAt = noArrowAt;
           ({ consequent, failed } = this.tryParseConditionalConsequent());
         }
       }
@@ -2663,33 +2661,34 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.importKind = null;
           specifier.local = this.parseIdentifier();
         }
-      } else if (
-        specifierTypeKind !== null &&
-        (this.match(tt.name) || this.state.type.keyword)
-      ) {
-        // `import {type foo`
-        specifier.imported = this.parseIdentifier(true);
-        specifier.importKind = specifierTypeKind;
+      } else {
+        if (
+          specifierTypeKind !== null &&
+          (this.match(tt.name) || this.state.type.keyword)
+        ) {
+          // `import {type foo`
+          specifier.imported = this.parseIdentifier(true);
+          specifier.importKind = specifierTypeKind;
+        } else {
+          if (firstIdentIsString) {
+            /*:: invariant(firstIdent instanceof N.StringLiteral) */
+            throw this.raise(
+              specifier.start,
+              Errors.ImportBindingIsString,
+              firstIdent.value,
+            );
+          }
+          /*:: invariant(firstIdent instanceof N.Node) */
+          specifier.imported = firstIdent;
+          specifier.importKind = null;
+        }
+
         if (this.eatContextual("as")) {
           specifier.local = this.parseIdentifier();
         } else {
           isBinding = true;
           specifier.local = cloneIdentifier(specifier.imported);
         }
-      } else {
-        if (firstIdentIsString) {
-          /*:: invariant(firstIdent instanceof N.StringLiteral) */
-          throw this.raise(
-            specifier.start,
-            Errors.ImportBindingIsString,
-            firstIdent.value,
-          );
-        }
-        /*:: invariant(firstIdent instanceof N.Node) */
-        isBinding = true;
-        specifier.imported = firstIdent;
-        specifier.importKind = null;
-        specifier.local = cloneIdentifier(specifier.imported);
       }
 
       const nodeIsTypeImport = hasTypeImportKind(node);
@@ -2842,17 +2841,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             },
           );
 
+          // <T>(() => {});
           // <T>(() => {}: any);
-          if (
-            arrowExpression.type !== "ArrowFunctionExpression" &&
-            arrowExpression.extra?.parenthesized
-          ) {
-            abort();
-          }
+          if (arrowExpression.extra?.parenthesized) abort();
 
           // The above can return a TypeCastExpression when the arrow
           // expression is not wrapped in parens. See also `this.parseParenItem`.
+          // (<T>() => {}: any);
           const expr = this.maybeUnwrapTypeCastExpression(arrowExpression);
+
+          if (expr.type !== "ArrowFunctionExpression") abort();
+
           expr.typeParameters = typeParameters;
           this.resetStartLocationFromNode(expr, typeParameters);
 

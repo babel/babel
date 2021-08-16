@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = {
-  parser: "@babel/eslint-parser",
+  parser: "@babel/eslint-parser/experimental-worker",
   extends: "eslint:recommended",
   plugins: ["flowtype"],
   parserOptions: {

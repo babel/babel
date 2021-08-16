@@ -237,9 +237,7 @@ export default class Tokenizer extends ParserErrors {
 
   nextTokenStartSince(pos: number): number {
     skipWhiteSpace.lastIndex = pos;
-    const skip = skipWhiteSpace.exec(this.input);
-    // $FlowIgnore: The skipWhiteSpace ensures to match any string
-    return pos + skip[0].length;
+    return skipWhiteSpace.test(this.input) ? skipWhiteSpace.lastIndex : pos;
   }
 
   lookaheadCharCode(): number {
@@ -307,18 +305,14 @@ export default class Tokenizer extends ParserErrors {
     let startLoc;
     if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
-    const end = this.input.indexOf("*/", this.state.pos + 2);
+    const end = this.input.indexOf("*/", start + 2);
     if (end === -1) throw this.raise(start, Errors.UnterminatedComment);
 
     this.state.pos = end + 2;
-    lineBreakG.lastIndex = start;
-    let match;
-    while (
-      (match = lineBreakG.exec(this.input)) &&
-      match.index < this.state.pos
-    ) {
+    lineBreakG.lastIndex = start + 2;
+    while (lineBreakG.test(this.input) && lineBreakG.lastIndex <= end) {
       ++this.state.curLine;
-      this.state.lineStart = match.index + match[0].length;
+      this.state.lineStart = lineBreakG.lastIndex;
     }
 
     // If we are doing a lookahead right now we need to advance the position (above code)
@@ -326,11 +320,10 @@ export default class Tokenizer extends ParserErrors {
     if (this.isLookahead) return;
     /*:: invariant(startLoc) */
 
-    const value = this.input.slice(start + 2, end);
     const comment = {
       type: "CommentBlock",
-      value: value,
-      start: start,
+      value: this.input.slice(start + 2, end),
+      start,
       end: end + 2,
       loc: new SourceLocation(startLoc, this.state.curPosition()),
     };

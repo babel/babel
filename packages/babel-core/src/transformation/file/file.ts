@@ -174,7 +174,7 @@ export default class File {
     );
   }
 
-  addHelper(name: string): any {
+  addHelper(name: string): t.Identifier {
     const declar = this.declarations[name];
     if (declar) return t.cloneNode(declar);
 
@@ -209,6 +209,7 @@ export default class File {
     });
 
     nodes.forEach(node => {
+      // @ts-expect-error
       node._compact = true;
     });
 

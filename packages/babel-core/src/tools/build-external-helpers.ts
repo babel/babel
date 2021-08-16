@@ -7,7 +7,7 @@ import File from "../transformation/file/file";
 // Wrapped to avoid wasting time parsing this when almost no-one uses
 // build-external-helpers.
 const buildUmdWrapper = replacements =>
-  template`
+  template.statement`
     (function (root, factory) {
       if (typeof define === "function" && define.amd) {
         define(AMD_ARGUMENTS, factory);
@@ -21,10 +21,10 @@ const buildUmdWrapper = replacements =>
     });
   `(replacements);
 
-function buildGlobal(allowlist) {
+function buildGlobal(allowlist?: Array<string>) {
   const namespace = t.identifier("babelHelpers");
 
-  const body = [];
+  const body: t.Statement[] = [];
   const container = t.functionExpression(
     null,
     [t.identifier("global")],
@@ -65,8 +65,8 @@ function buildGlobal(allowlist) {
   return tree;
 }
 
-function buildModule(allowlist) {
-  const body = [];
+function buildModule(allowlist?: Array<string>) {
+  const body: t.Statement[] = [];
   const refs = buildHelpers(body, null, allowlist);
 
   body.unshift(
@@ -81,10 +81,10 @@ function buildModule(allowlist) {
   return t.program(body, [], "module");
 }
 
-function buildUmd(allowlist) {
+function buildUmd(allowlist?: Array<string>) {
   const namespace = t.identifier("babelHelpers");
 
-  const body = [];
+  const body: t.Statement[] = [];
   body.push(
     t.variableDeclaration("var", [
       t.variableDeclarator(namespace, t.identifier("global")),
@@ -105,14 +105,14 @@ function buildUmd(allowlist) {
       AMD_ARGUMENTS: t.arrayExpression([t.stringLiteral("exports")]),
       FACTORY_BODY: body,
       UMD_ROOT: t.identifier("this"),
-    }) as t.Statement,
+    }),
   ]);
 }
 
-function buildVar(allowlist) {
+function buildVar(allowlist?: Array<string>) {
   const namespace = t.identifier("babelHelpers");
 
-  const body = [];
+  const body: t.Statement[] = [];
   body.push(
     t.variableDeclaration("var", [
       t.variableDeclarator(namespace, t.objectExpression([])),
@@ -124,8 +124,12 @@ function buildVar(allowlist) {
   return tree;
 }
 
-function buildHelpers(body, namespace, allowlist) {
-  const getHelperReference = name => {
+function buildHelpers(
+  body: t.Statement[],
+  namespace: t.Expression | null,
+  allowlist?: Array<string>,
+) {
+  const getHelperReference = (name: string) => {
     return namespace
       ? t.memberExpression(namespace, t.identifier(name))
       : t.identifier(`_${name}`);
@@ -148,7 +152,7 @@ export default function (
   allowlist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
-  let tree;
+  let tree: t.Program;
 
   const build = {
     global: buildGlobal,

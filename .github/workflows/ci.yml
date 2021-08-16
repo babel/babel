@@ -423,7 +423,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: [babel, babel-old-version, create-react-app, vue-cli, jest]
+        project:
+          - babel
+          - babel-old-version
+          - create-react-app
+          - vue-cli
+          - jest
+          - react-native
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

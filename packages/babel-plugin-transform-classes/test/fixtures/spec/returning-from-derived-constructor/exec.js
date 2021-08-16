@@ -43,16 +43,16 @@ expect(instance).toBe(singleton);
 instance = new Sub;
 expect(instance).toBe(singleton);
 
-class Null extends Foo {
+class Undefined extends Foo {
   constructor() {
     if (false) {
       super();
     }
-    return null;
+    return;
     super();
   }
 }
 
 expect(() => {
-  new Null();
+  new Undefined();
 }).toThrow("this");

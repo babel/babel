@@ -11,7 +11,7 @@
 export function parse(
   input: string,
   options?: ParserOptions
-): import("@babel/types").File;
+): ParseResult<import("@babel/types").File>;
 
 /**
  * Parse the provided code as a single expression.
@@ -19,7 +19,7 @@ export function parse(
 export function parseExpression(
   input: string,
   options?: ParserOptions
-): import("@babel/types").Expression;
+): ParseResult<import("@babel/types").Expression>;
 
 export interface ParserOptions {
   /**
@@ -47,6 +47,17 @@ export interface ParserOptions {
    * Set this to true to allow export statements to reference undeclared variables.
    */
   allowUndeclaredExports?: boolean;
+
+  /**
+   * By default, Babel attaches comments to adjacent AST nodes.
+   * When this option is set to false, comments are not attached.
+   * It can provide up to 30% performance improvement when the input code has many comments.
+   * @babel/eslint-parser will set it for you.
+   * It is not recommended to use attachComment: false with Babel transform,
+   * as doing so removes all the comments in output code, and renders annotations such as
+   * /* istanbul ignore next *\/ nonfunctional.
+   */
+  attachComment?: boolean;
 
   /**
    * By default, Babel always throws an error when it finds some invalid code.
@@ -179,4 +190,13 @@ export interface TypeScriptPluginOptions {
 export const tokTypes: {
   // todo(flow->ts) real token type
   [name: string]: any;
+};
+
+export interface ParseError {
+  code: string;
+  reasonCode: string;
+}
+
+type ParseResult<Result> = Result & {
+  errors: ParseError[];
 };

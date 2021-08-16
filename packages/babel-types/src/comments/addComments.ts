@@ -16,7 +16,7 @@ export default function addComments<T extends t.Node>(
     if (type === "leading") {
       node[key] = comments.concat(node[key]);
     } else {
-      node[key] = node[key].concat(comments);
+      node[key].push(...comments);
     }
   } else {
     node[key] = comments;

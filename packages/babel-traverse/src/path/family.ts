@@ -46,7 +46,9 @@ function addCompletionRecords(
   records: Completion[],
   context: CompletionContext,
 ): Completion[] {
-  if (path) return records.concat(_getCompletionRecords(path, context));
+  if (path) {
+    records.push(..._getCompletionRecords(path, context));
+  }
   return records;
 }
 
@@ -73,9 +75,9 @@ function completionRecordForSwitch(
     if (normalCompletions.length) {
       lastNormalCompletions = normalCompletions;
     }
-    records = records.concat(breakCompletions);
+    records.push(...breakCompletions);
   }
-  records = records.concat(lastNormalCompletions);
+  records.push(...lastNormalCompletions);
   return records;
 }
 
@@ -117,7 +119,7 @@ function getStatementListCompletion(
   paths: NodePath[],
   context: CompletionContext,
 ): Completion[] {
-  let completions = [];
+  const completions = [];
   if (context.canHaveBreak) {
     let lastNormalCompletions = [];
     for (let i = 0; i < paths.length; i++) {
@@ -155,11 +157,11 @@ function getStatementListCompletion(
           // When we have seen normal completions from the last statement
           // it is safe to stop populating break and mark normal completions as break
           normalCompletionToBreak(lastNormalCompletions);
-          completions = completions.concat(lastNormalCompletions);
+          completions.push(...lastNormalCompletions);
           // Declarations have empty completion record, however they can not be nested
           // directly in return statement, i.e. `return (var a = 1)` is invalid.
           if (lastNormalCompletions.some(c => c.path.isDeclaration())) {
-            completions = completions.concat(statementCompletions);
+            completions.push(...statementCompletions);
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
               /* reachable */ true,
@@ -170,7 +172,7 @@ function getStatementListCompletion(
             /* reachable */ false,
           );
         } else {
-          completions = completions.concat(statementCompletions);
+          completions.push(...statementCompletions);
           if (!context.shouldPopulateBreak) {
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
@@ -181,14 +183,18 @@ function getStatementListCompletion(
         break;
       }
       if (i === paths.length - 1) {
-        completions = completions.concat(statementCompletions);
+        completions.push(...statementCompletions);
       } else {
-        completions = completions.concat(
-          statementCompletions.filter(c => c.type === BREAK_COMPLETION),
-        );
-        lastNormalCompletions = statementCompletions.filter(
-          c => c.type === NORMAL_COMPLETION,
-        );
+        lastNormalCompletions = [];
+        for (let i = 0; i < statementCompletions.length; i++) {
+          const c = statementCompletions[i];
+          if (c.type === BREAK_COMPLETION) {
+            completions.push(c);
+          }
+          if (c.type === NORMAL_COMPLETION) {
+            lastNormalCompletions.push(c);
+          }
+        }
       }
     }
   } else if (paths.length) {
@@ -202,7 +208,7 @@ function getStatementListCompletion(
         (pathCompletions.length === 1 &&
           !pathCompletions[0].path.isVariableDeclaration())
       ) {
-        completions = completions.concat(pathCompletions);
+        completions.push(...pathCompletions);
         break;
       }
     }
@@ -225,29 +231,25 @@ function _getCompletionRecords(
     path.isLabeledStatement()
   ) {
     // @ts-expect-error(flow->ts): todo
-    records = addCompletionRecords(path.get("body"), records, context);
+    return addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
-    records = records.concat(
-      // @ts-expect-error(flow->ts): todo
-      getStatementListCompletion(path.get("body"), context),
-    );
+    // @ts-expect-error(flow->ts): todo
+    return getStatementListCompletion(path.get("body"), context);
   } else if (path.isFunction()) {
     return _getCompletionRecords(path.get("body"), context);
   } else if (path.isTryStatement()) {
     records = addCompletionRecords(path.get("block"), records, context);
     records = addCompletionRecords(path.get("handler"), records, context);
   } else if (path.isCatchClause()) {
-    records = addCompletionRecords(path.get("body"), records, context);
+    return addCompletionRecords(path.get("body"), records, context);
   } else if (path.isSwitchStatement()) {
-    records = completionRecordForSwitch(path.get("cases"), records, context);
+    return completionRecordForSwitch(path.get("cases"), records, context);
   } else if (path.isSwitchCase()) {
-    records = records.concat(
-      getStatementListCompletion(path.get("consequent"), {
-        canHaveBreak: true,
-        shouldPopulateBreak: false,
-        inCaseClause: true,
-      }),
-    );
+    return getStatementListCompletion(path.get("consequent"), {
+      canHaveBreak: true,
+      shouldPopulateBreak: false,
+      inCaseClause: true,
+    });
   } else if (path.isBreakStatement()) {
     records.push(BreakCompletion(path));
   } else {
@@ -495,7 +497,7 @@ export function getBindingIdentifierPaths(
   [x: string]: NodePath;
 } {
   const path = this;
-  let search = [].concat(path);
+  const search = [path];
   const ids = Object.create(null);
 
   while (search.length) {
@@ -517,7 +519,7 @@ export function getBindingIdentifierPaths(
 
     if (id.isExportDeclaration()) {
       const declaration = id.get("declaration");
-      if (declaration.isDeclaration()) {
+      if (t.isDeclaration(declaration)) {
         search.push(declaration);
       }
       continue;
@@ -537,8 +539,10 @@ export function getBindingIdentifierPaths(
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const child = id.get(key);
-        if (Array.isArray(child) || child.node) {
-          search = search.concat(child);
+        if (Array.isArray(child)) {
+          search.push(...child);
+        } else if (child.node) {
+          search.push(child);
         }
       }
     }
