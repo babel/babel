@@ -531,9 +531,9 @@ function buildPrivateInstanceFieldInitSpec(
     t.thisExpression(),
     t.cloneNode(id),
     template.expression.ast`{
-        writable: true,
-        value: ${value}
-      }`,
+      writable: true,
+      value: ${value}
+    }`,
   ]);
 
   return t.expressionStatement(expr);
