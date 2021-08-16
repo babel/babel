@@ -261,7 +261,6 @@ export interface NodePathValidators {
   isPrivateName(opts?: object): this is NodePath<t.PrivateName>;
   isProgram(opts?: object): this is NodePath<t.Program>;
   isProperty(opts?: object): this is NodePath<t.Property>;
-  isProposal(opts?: object): this is NodePath<t.Proposal>;
   isPureish(opts?: object): this is NodePath<t.Pureish>;
   isQualifiedTypeIdentifier(
     opts?: object,
@@ -277,9 +276,6 @@ export interface NodePathValidators {
   isSpreadElement(opts?: object): this is NodePath<t.SpreadElement>;
   isSpreadProperty(opts?: object): this is NodePath<t.SpreadProperty>;
   isStandardized(opts?: object): this is NodePath<t.Standardized>;
-  isStandardizedOrProposal(
-    opts?: object,
-  ): this is NodePath<t.StandardizedOrProposal>;
   isStatement(opts?: object): this is NodePath<t.Statement>;
   isStaticBlock(opts?: object): this is NodePath<t.StaticBlock>;
   isStringLiteral(opts?: object): this is NodePath<t.StringLiteral>;

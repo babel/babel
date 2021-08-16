@@ -1496,12 +1496,6 @@ export function assertStandardized(
 ): asserts node is t.Standardized {
   assert("Standardized", node, opts);
 }
-export function assertStandardizedOrProposal(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.StandardizedOrProposal {
-  assert("StandardizedOrProposal", node, opts);
-}
 export function assertExpression(
   node: object | null | undefined,
   opts?: object | null,
@@ -1759,12 +1753,6 @@ export function assertMiscellaneous(
   opts?: object | null,
 ): asserts node is t.Miscellaneous {
   assert("Miscellaneous", node, opts);
-}
-export function assertProposal(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.Proposal {
-  assert("Proposal", node, opts);
 }
 export function assertTypeScript(
   node: object | null | undefined,

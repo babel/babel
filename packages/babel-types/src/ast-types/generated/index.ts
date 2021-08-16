@@ -2096,107 +2096,6 @@ export type Standardized =
   | ClassPrivateProperty
   | ClassPrivateMethod
   | PrivateName;
-export type StandardizedOrProposal =
-  | ArrayExpression
-  | AssignmentExpression
-  | BinaryExpression
-  | InterpreterDirective
-  | Directive
-  | DirectiveLiteral
-  | BlockStatement
-  | BreakStatement
-  | CallExpression
-  | CatchClause
-  | ConditionalExpression
-  | ContinueStatement
-  | DebuggerStatement
-  | DoWhileStatement
-  | EmptyStatement
-  | ExpressionStatement
-  | File
-  | ForInStatement
-  | ForStatement
-  | FunctionDeclaration
-  | FunctionExpression
-  | Identifier
-  | IfStatement
-  | LabeledStatement
-  | StringLiteral
-  | NumericLiteral
-  | NullLiteral
-  | BooleanLiteral
-  | RegExpLiteral
-  | LogicalExpression
-  | MemberExpression
-  | NewExpression
-  | Program
-  | ObjectExpression
-  | ObjectMethod
-  | ObjectProperty
-  | RestElement
-  | ReturnStatement
-  | SequenceExpression
-  | ParenthesizedExpression
-  | SwitchCase
-  | SwitchStatement
-  | ThisExpression
-  | ThrowStatement
-  | TryStatement
-  | UnaryExpression
-  | UpdateExpression
-  | VariableDeclaration
-  | VariableDeclarator
-  | WhileStatement
-  | WithStatement
-  | AssignmentPattern
-  | ArrayPattern
-  | ArrowFunctionExpression
-  | ClassBody
-  | ClassExpression
-  | ClassDeclaration
-  | ExportAllDeclaration
-  | ExportDefaultDeclaration
-  | ExportNamedDeclaration
-  | ExportSpecifier
-  | ForOfStatement
-  | ImportDeclaration
-  | ImportDefaultSpecifier
-  | ImportNamespaceSpecifier
-  | ImportSpecifier
-  | MetaProperty
-  | ClassMethod
-  | ObjectPattern
-  | SpreadElement
-  | Super
-  | TaggedTemplateExpression
-  | TemplateElement
-  | TemplateLiteral
-  | YieldExpression
-  | AwaitExpression
-  | Import
-  | BigIntLiteral
-  | ExportNamespaceSpecifier
-  | OptionalMemberExpression
-  | OptionalCallExpression
-  | ClassProperty
-  | ClassPrivateProperty
-  | ClassPrivateMethod
-  | PrivateName
-  | ArgumentPlaceholder
-  | BindExpression
-  | ImportAttribute
-  | Decorator
-  | DoExpression
-  | ExportDefaultSpecifier
-  | RecordExpression
-  | TupleExpression
-  | DecimalLiteral
-  | StaticBlock
-  | ModuleExpression
-  | TopicReference
-  | PipelineTopicExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference;
 export type Expression =
   | ArrayExpression
   | AssignmentExpression
@@ -2631,22 +2530,6 @@ export type JSX =
   | JSXOpeningFragment
   | JSXClosingFragment;
 export type Miscellaneous = Noop | Placeholder | V8IntrinsicIdentifier;
-export type Proposal =
-  | ArgumentPlaceholder
-  | BindExpression
-  | ImportAttribute
-  | Decorator
-  | DoExpression
-  | ExportDefaultSpecifier
-  | RecordExpression
-  | TupleExpression
-  | DecimalLiteral
-  | StaticBlock
-  | ModuleExpression
-  | TopicReference
-  | PipelineTopicExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference;
 export type TypeScript =
   | TSParameterProperty
   | TSDeclareFunction
@@ -2772,7 +2655,6 @@ export type TSBaseType =
 
 export interface Aliases {
   Standardized: Standardized;
-  StandardizedOrProposal: StandardizedOrProposal;
   Expression: Expression;
   Binary: Binary;
   Scopable: Scopable;
@@ -2816,7 +2698,6 @@ export interface Aliases {
   EnumMember: EnumMember;
   JSX: JSX;
   Miscellaneous: Miscellaneous;
-  Proposal: Proposal;
   TypeScript: TypeScript;
   TSTypeElement: TSTypeElement;
   TSType: TSType;

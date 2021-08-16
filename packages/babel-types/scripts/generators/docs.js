@@ -231,16 +231,12 @@ const aliasDescriptions = {
     "A cover of [BindingPattern](https://tc39.es/ecma262/#prod-BindingPattern)s. ",
   Private: "A cover of private class elements and private identifiers.",
   Property: "A cover of object properties and class properties.",
-  Proposal:
-    "A cover of AST nodes which are proprosed for inclusion in ECMAScript.",
   Pureish:
     "A cover of AST nodes which do not have side-effects. In other words, there is no observable behaviour changes if they are evaluated more than once.",
   Scopable:
     "A cover of [FunctionParent](#functionparent) and [BlockParent](#blockparent).",
   Standardized:
     "A cover of AST nodes which are part of an official ECMAScript specification.",
-  StandardizedOrProposal:
-    "A cover of AST nodes which are part of an official ECMAScript specification or a proposed for inclusion.",
   Statement:
     "A cover of any [Statement](https://tc39.es/ecma262/#prod-Statement)s.",
   TSBaseType: "A cover of primary TypeScript type annotations.",

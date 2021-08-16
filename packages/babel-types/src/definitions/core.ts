@@ -23,7 +23,7 @@ import {
   validateOptional,
 } from "./utils";
 
-const defineType = defineAliasedType("Standardized", "StandardizedOrProposal");
+const defineType = defineAliasedType("Standardized");
 
 defineType("ArrayExpression", {
   fields: {
