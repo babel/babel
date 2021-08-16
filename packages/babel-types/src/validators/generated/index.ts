@@ -1399,6 +1399,23 @@ export function isClassProperty(
 
   return false;
 }
+export function isClassAccessorProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassAccessorProperty {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "ClassAccessorProperty") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isClassPrivateProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -4942,6 +4959,7 @@ export function isProperty(
   if (
     "ObjectProperty" === nodeType ||
     "ClassProperty" === nodeType ||
+    "ClassAccessorProperty" === nodeType ||
     "ClassPrivateProperty" === nodeType
   ) {
     if (typeof opts === "undefined") {
@@ -5068,6 +5086,23 @@ export function isModuleSpecifier(
     "ExportNamespaceSpecifier" === nodeType ||
     "ExportDefaultSpecifier" === nodeType
   ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isAccessor(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Accessor {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if ("ClassAccessorProperty" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {

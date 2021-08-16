@@ -1213,6 +1213,18 @@ interface ClassPrivateProperty <: Node {
 }
 ```
 
+## ClassAccessorProperty
+
+```js
+interface ClassAccessorProperty <: Node {
+  type: "ClassAccessorProperty";
+  key: Expression | PrivateName;
+  value: Expression;
+  static: boolean;
+  computed: boolean;
+}
+```
+
 ## StaticBlock
 
 ```js

@@ -525,6 +525,21 @@ export function classProperty(
 ): t.ClassProperty {
   return builder("ClassProperty", ...arguments);
 }
+export function classAccessorProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.Expression
+    | t.PrivateName,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: boolean,
+  _static?: boolean,
+): t.ClassAccessorProperty {
+  return builder("ClassAccessorProperty", ...arguments);
+}
 export function classPrivateProperty(
   key: t.PrivateName,
   value: t.Expression | null | undefined,

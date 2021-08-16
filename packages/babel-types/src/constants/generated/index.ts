@@ -38,6 +38,7 @@ export const CLASS_TYPES = FLIPPED_ALIAS_KEYS["Class"];
 export const MODULEDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["ModuleDeclaration"];
 export const EXPORTDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["ExportDeclaration"];
 export const MODULESPECIFIER_TYPES = FLIPPED_ALIAS_KEYS["ModuleSpecifier"];
+export const ACCESSOR_TYPES = FLIPPED_ALIAS_KEYS["Accessor"];
 export const PRIVATE_TYPES = FLIPPED_ALIAS_KEYS["Private"];
 export const FLOW_TYPES = FLIPPED_ALIAS_KEYS["Flow"];
 export const FLOWTYPE_TYPES = FLIPPED_ALIAS_KEYS["FlowType"];

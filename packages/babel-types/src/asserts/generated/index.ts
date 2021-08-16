@@ -506,6 +506,12 @@ export function assertClassProperty(
 ): asserts node is t.ClassProperty {
   assert("ClassProperty", node, opts);
 }
+export function assertClassAccessorProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.ClassAccessorProperty {
+  assert("ClassAccessorProperty", node, opts);
+}
 export function assertClassPrivateProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -1687,6 +1693,12 @@ export function assertModuleSpecifier(
   opts?: object | null,
 ): asserts node is t.ModuleSpecifier {
   assert("ModuleSpecifier", node, opts);
+}
+export function assertAccessor(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.Accessor {
+  assert("Accessor", node, opts);
 }
 export function assertPrivate(
   node: object | null | undefined,

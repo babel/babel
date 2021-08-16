@@ -2117,6 +2117,80 @@ defineType("ClassProperty", {
   },
 });
 
+defineType("ClassAccessorProperty", {
+  visitor: ["key", "value", "typeAnnotation", "decorators"],
+  builder: [
+    "key",
+    "value",
+    "typeAnnotation",
+    "decorators",
+    "computed",
+    "static",
+  ],
+  aliases: ["Property", "Accessor"],
+  fields: {
+    ...classMethodOrPropertyCommon,
+    key: {
+      validate: chain(
+        (function () {
+          const normal = assertNodeType(
+            "Identifier",
+            "StringLiteral",
+            "NumericLiteral",
+            "PrivateName",
+          );
+          const computed = assertNodeType("Expression");
+
+          return function (node: any, key: string, val: any) {
+            const validator = node.computed ? computed : normal;
+            validator(node, key, val);
+          };
+        })(),
+        assertNodeType(
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+          "Expression",
+          "PrivateName",
+        ),
+      ),
+    },
+    value: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+    definite: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    typeAnnotation: {
+      validate: process.env.BABEL_8_BREAKING
+        ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
+        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
+    },
+    readonly: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    declare: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    variance: {
+      validate: assertNodeType("Variance"),
+      optional: true,
+    },
+  },
+});
+
 defineType("ClassPrivateProperty", {
   visitor: ["key", "value", "decorators", "typeAnnotation"],
   builder: ["key", "value", "decorators", "static"],
