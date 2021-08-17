@@ -37,7 +37,7 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Until we figure it out (see https://github.com/babel/babel/pull/13618)
   # we can force exit so that CircleCI doesn't report it as a failure.
   make -j build-standalone-ci
-  BABEL_ENV=test yarn jest --maxWorkers=4 --ci --forceExit
+  BABEL_ENV=test yarn jest --maxWorkers=4 --ci --forceExit --runInBand
   make -j test-clean
 else
   make -j test-ci
