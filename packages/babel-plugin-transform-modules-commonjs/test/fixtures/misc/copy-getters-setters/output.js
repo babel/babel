@@ -3,17 +3,20 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "Foo", {
-  enumerable: true,
-  get: function () {
-    return _moduleWithGetter.default;
-  }
+
+function _export(key, get) {
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: get
+  });
+}
+
+_export("Foo", function () {
+  return _moduleWithGetter.default;
 });
-Object.defineProperty(exports, "baz", {
-  enumerable: true,
-  get: function () {
-    return _moduleWithGetter.baz;
-  }
+
+_export("baz", function () {
+  return _moduleWithGetter.baz;
 });
 
 var _moduleWithGetter = _interopRequireDefault(require("./moduleWithGetter"));

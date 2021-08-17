@@ -3,17 +3,20 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "named1", {
-  enumerable: true,
-  get: function () {
-    return _white().named1;
-  }
+
+function _export(key, get) {
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: get
+  });
+}
+
+_export("named1", function () {
+  return _white().named1;
 });
-Object.defineProperty(exports, "named2", {
-  enumerable: true,
-  get: function () {
-    return _black.named2;
-  }
+
+_export("named2", function () {
+  return _black.named2;
 });
 
 function _white() {

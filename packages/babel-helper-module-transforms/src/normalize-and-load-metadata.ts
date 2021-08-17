@@ -19,6 +19,10 @@ export interface ModuleMetadata {
   // `stringSpecifiers` is Set(1) ["any unicode"]
   // In most cases `stringSpecifiers` is an empty Set
   stringSpecifiers: Set<string>;
+  // Name of the function used to initialize `export { name } from "module"`.
+  reexportByGetName: null | string;
+  // Name of the function used to initialize `export * from "module"`.
+  reexportFromThisName: null | string;
 }
 
 export type InteropType =
@@ -157,6 +161,8 @@ export default function normalizeModuleAndLoadMetadata(
   return {
     exportName,
     exportNameListName: null,
+    reexportByGetName: null,
+    reexportFromThisName: null,
     hasExports,
     local,
     source,

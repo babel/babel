@@ -4,10 +4,15 @@ define(["exports", "foo"], function (_exports, _foo) {
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  Object.defineProperty(_exports, "default", {
-    enumerable: true,
-    get: function () {
-      return _foo.default;
-    }
+
+  function _export(key, get) {
+    Object.defineProperty(_exports, key, {
+      enumerable: true,
+      get: get
+    });
+  }
+
+  _export("default", function () {
+    return _foo.default;
   });
 });

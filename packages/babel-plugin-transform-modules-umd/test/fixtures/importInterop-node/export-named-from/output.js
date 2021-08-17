@@ -16,10 +16,15 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  Object.defineProperty(_exports, "name", {
-    enumerable: true,
-    get: function () {
-      return _dep.name;
-    }
+
+  function _export(key, get) {
+    Object.defineProperty(_exports, key, {
+      enumerable: true,
+      get: get
+    });
+  }
+
+  _export("name", function () {
+    return _dep.name;
   });
 });

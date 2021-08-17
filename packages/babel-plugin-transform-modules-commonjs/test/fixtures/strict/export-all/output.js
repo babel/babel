@@ -10,31 +10,42 @@ var _exportNames = {
   d: true,
   e: true,
   f: true,
-  c: true
+  "default": true,
+  c: true,
+  __esModule: true
 };
+
+function _exportFromThis(key) {
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === this[key]) return;
+  var imports = this;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return imports[key];
+    }
+  });
+}
+
 exports.b = b;
 exports.default = _default;
-Object.defineProperty(exports, "c", {
-  enumerable: true,
-  get: function () {
-    return _mod.c;
-  }
+
+function _export(key, get) {
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: get
+  });
+}
+
+_export("c", function () {
+  return _mod.c;
 });
+
 exports.f = exports.e = exports.d = exports.a = exports.z = void 0;
 
 var _mod = require("mod");
 
-Object.keys(_mod).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _mod[key]) return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _mod[key];
-    }
-  });
-});
+Object.keys(_mod).forEach(_exportFromThis, _mod);
 var z = 100;
 exports.z = z;
 
