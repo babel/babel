@@ -202,6 +202,7 @@ module.exports = function (api) {
       {
         test: sources.map(normalize),
         assumptions: sourceAssumptions,
+        plugins: [transformNamedBabelTypesImportToDestructuring],
       },
       {
         test: unambiguousSources.map(normalize),
@@ -450,6 +451,45 @@ function pluginPackageJsonMacro({ types: t }) {
 
         const value = JSON.parse(pkg)[field];
         path.replaceWith(t.valueToNode(value));
+      },
+    },
+  };
+}
+
+// transform `import { x } from "@babel/types"` to `import * as _t from "@babel/types"; const { x } = _t;
+function transformNamedBabelTypesImportToDestructuring({ types: t }) {
+  return {
+    name: "transform-babel-types-named-imports",
+    visitor: {
+      ImportDeclaration(path) {
+        const { node } = path;
+        if (
+          node.importKind === "value" &&
+          node.source.value === "@babel/types" &&
+          node.specifiers[0].type === "ImportSpecifier"
+        ) {
+          const hoistedDestructuringProperties = [];
+          for (const { imported, local } of node.specifiers) {
+            hoistedDestructuringProperties.push(
+              t.objectProperty(
+                imported,
+                local,
+                false,
+                imported.name === local.name
+              )
+            );
+          }
+          const babelTypeNsImport = path.scope.generateUidIdentifier("t");
+          node.specifiers = [t.importNamespaceSpecifier(babelTypeNsImport)];
+          path.insertAfter([
+            t.variableDeclaration("const", [
+              t.variableDeclarator(
+                t.objectPattern(hoistedDestructuringProperties),
+                t.cloneNode(babelTypeNsImport)
+              ),
+            ]),
+          ]);
+        }
       },
     },
   };
