@@ -5,6 +5,7 @@ import NodePath from "./index";
 import {
   getBindingIdentifiers as _getBindingIdentifiers,
   getOuterBindingIdentifiers as _getOuterBindingIdentifiers,
+  isDeclaration,
   numericLiteral,
   unaryExpression,
 } from "@babel/types";
@@ -525,7 +526,7 @@ export function getBindingIdentifierPaths(
 
     if (id.isExportDeclaration()) {
       const declaration = id.get("declaration");
-      if (t.isDeclaration(declaration)) {
+      if (isDeclaration(declaration)) {
         search.push(declaration);
       }
       continue;

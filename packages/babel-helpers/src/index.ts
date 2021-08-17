@@ -10,7 +10,7 @@ import {
   variableDeclaration,
   variableDeclarator,
 } from "@babel/types";
-import type t from "@babel/types";
+import type * as t from "@babel/types";
 import helpers from "./helpers";
 
 function makePath(path: NodePath) {
