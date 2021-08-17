@@ -1,5 +1,20 @@
 import assert from "assert";
-import * as t from "@babel/types";
+import {
+  booleanLiteral,
+  callExpression,
+  cloneNode,
+  directive,
+  directiveLiteral,
+  expressionStatement,
+  identifier,
+  isIdentifier,
+  memberExpression,
+  stringLiteral,
+  valueToNode,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import template from "@babel/template";
 
 import { isModule } from "@babel/helper-module-imports";
@@ -85,7 +100,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     if (!hasStrict) {
       path.unshiftContainer(
         "directives",
-        t.directive(t.directiveLiteral("use strict")),
+        directive(directiveLiteral("use strict")),
       );
     }
   }
@@ -140,10 +155,10 @@ export function wrapInterop(
   }
 
   if (type === "node-namespace") {
-    return t.callExpression(
-      programPath.hub.addHelper("interopRequireWildcard"),
-      [expr, t.booleanLiteral(true)],
-    );
+    return callExpression(programPath.hub.addHelper("interopRequireWildcard"), [
+      expr,
+      booleanLiteral(true),
+    ]);
   } else if (type === "node-default") {
     return null;
   }
@@ -157,7 +172,7 @@ export function wrapInterop(
     throw new Error(`Unknown interop: ${type}`);
   }
 
-  return t.callExpression(programPath.hub.addHelper(helper), [expr]);
+  return callExpression(programPath.hub.addHelper(helper), [expr]);
 }
 
 /**
@@ -173,8 +188,8 @@ export function buildNamespaceInitStatements(
 ) {
   const statements = [];
 
-  let srcNamespace: t.Node = t.identifier(sourceMetadata.name);
-  if (sourceMetadata.lazy) srcNamespace = t.callExpression(srcNamespace, []);
+  let srcNamespace: t.Node = identifier(sourceMetadata.name);
+  if (sourceMetadata.lazy) srcNamespace = callExpression(srcNamespace, []);
 
   for (const localName of sourceMetadata.importsNamespace) {
     if (localName === sourceMetadata.name) continue;
@@ -183,7 +198,7 @@ export function buildNamespaceInitStatements(
     statements.push(
       template.statement`var NAME = SOURCE;`({
         NAME: localName,
-        SOURCE: t.cloneNode(srcNamespace),
+        SOURCE: cloneNode(srcNamespace),
       }),
     );
   }
@@ -205,14 +220,14 @@ export function buildNamespaceInitStatements(
         : template.statement`EXPORTS.NAME = NAMESPACE;`)({
         EXPORTS: metadata.exportName,
         NAME: exportName,
-        NAMESPACE: t.cloneNode(srcNamespace),
+        NAMESPACE: cloneNode(srcNamespace),
       }),
     );
   }
   if (sourceMetadata.reexportAll) {
     const statement = buildNamespaceReexport(
       metadata,
-      t.cloneNode(srcNamespace),
+      cloneNode(srcNamespace),
       constantReexports,
     );
     statement.loc = sourceMetadata.reexportAll.loc;
@@ -242,24 +257,24 @@ const buildReexportsFromMeta = (
   constantReexports: boolean,
 ) => {
   const namespace = metadata.lazy
-    ? t.callExpression(t.identifier(metadata.name), [])
-    : t.identifier(metadata.name);
+    ? callExpression(identifier(metadata.name), [])
+    : identifier(metadata.name);
 
   const { stringSpecifiers } = meta;
   return Array.from(metadata.reexports, ([exportName, importName]) => {
-    let NAMESPACE_IMPORT: t.Expression = t.cloneNode(namespace);
+    let NAMESPACE_IMPORT: t.Expression = cloneNode(namespace);
     if (importName === "default" && metadata.interop === "node-default") {
       // Nothing, it's ok as-is
     } else if (stringSpecifiers.has(importName)) {
-      NAMESPACE_IMPORT = t.memberExpression(
+      NAMESPACE_IMPORT = memberExpression(
         NAMESPACE_IMPORT,
-        t.stringLiteral(importName),
+        stringLiteral(importName),
         true,
       );
     } else {
-      NAMESPACE_IMPORT = t.memberExpression(
+      NAMESPACE_IMPORT = memberExpression(
         NAMESPACE_IMPORT,
-        t.identifier(importName),
+        identifier(importName),
       );
     }
     const astNodes = {
@@ -267,7 +282,7 @@ const buildReexportsFromMeta = (
       EXPORT_NAME: exportName,
       NAMESPACE_IMPORT,
     };
-    if (constantReexports || t.isIdentifier(NAMESPACE_IMPORT)) {
+    if (constantReexports || isIdentifier(NAMESPACE_IMPORT)) {
       if (stringSpecifiers.has(exportName)) {
         return ReexportTemplate.constantComputed(astNodes);
       } else {
@@ -381,8 +396,8 @@ function buildExportNameListDeclaration(
 
   return {
     name: name.name,
-    statement: t.variableDeclaration("var", [
-      t.variableDeclarator(name, t.valueToNode(exportedVars)),
+    statement: variableDeclaration("var", [
+      variableDeclarator(name, valueToNode(exportedVars)),
     ]),
   };
 }
@@ -405,7 +420,7 @@ function buildExportInitializationStatements(
       // No-open since these are explicitly set with the "reexports" block.
     } else if (data.kind === "hoisted") {
       initStatements.push(
-        buildInitStatement(metadata, data.names, t.identifier(localName)),
+        buildInitStatement(metadata, data.names, identifier(localName)),
       );
     } else {
       exportNames.push(...data.names);
@@ -447,7 +462,7 @@ const InitTemplate = {
 
 function buildInitStatement(metadata: ModuleMetadata, exportNames, initExpr) {
   const { stringSpecifiers, exportName: EXPORTS } = metadata;
-  return t.expressionStatement(
+  return expressionStatement(
     exportNames.reduce((acc, exportName) => {
       const params = {
         EXPORTS,

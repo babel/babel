@@ -1,6 +1,7 @@
 import Buffer from "./buffer";
 import * as n from "./node";
-import * as t from "@babel/types";
+import { isProgram, isFile, isEmptyStatement } from "@babel/types";
+import type * as t from "@babel/types";
 
 import * as generatorFunctions from "./generators";
 import type SourceMap from "./source-map";
@@ -11,7 +12,6 @@ const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 
-const { isProgram, isFile, isEmptyStatement } = t;
 const { needsParens, needsWhitespaceAfter, needsWhitespaceBefore } = n;
 
 export type Format = {

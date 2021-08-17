@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
-import * as t from "@babel/types";
+import { file, traverseFast } from "@babel/types";
+import type * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
@@ -29,7 +30,7 @@ export default function* normalizeFile(
 
   if (ast) {
     if (ast.type === "Program") {
-      ast = t.file(ast, [], []);
+      ast = file(ast, [], []);
     } else if (ast.type !== "File") {
       throw new Error("AST root must be a Program or File node");
     }
@@ -119,7 +120,7 @@ function extractCommentsFromList(regex, comments, lastComment) {
 
 function extractComments(regex, ast) {
   let lastComment = null;
-  t.traverseFast(ast, node => {
+  traverseFast(ast, node => {
     [node.leadingComments, lastComment] = extractCommentsFromList(
       regex,
       node.leadingComments,

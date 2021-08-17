@@ -5,6 +5,7 @@ import buildDebug from "debug";
 import traverse from "../index";
 import type { Visitor } from "../types";
 import Scope from "../scope";
+import { validate } from "@babel/types";
 import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
 import generator from "@babel/generator";
@@ -135,7 +136,7 @@ class NodePath<T extends t.Node = t.Node> {
   }
 
   set(key: string, node: any) {
-    t.validate(this.node, key, node);
+    validate(this.node, key, node);
     this.node[key] = node;
   }
 
@@ -225,6 +226,10 @@ Object.assign(
   NodePath_comments,
 );
 
+// we can not use `import { TYPES } from "@babel/types"` here
+// because the transformNamedBabelTypesImportToDestructuring plugin in babel.config.js
+// does not offer live bindings for `TYPES`
+// we can change to `import { TYPES }` when we are publishing ES modules only
 for (const type of t.TYPES) {
   const typeKey = `is${type}`;
   const fn = t[typeKey];

@@ -1,8 +1,8 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import { isAssignmentPattern, isIdentifier } from "@babel/types";
+import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
-const { isAssignmentPattern, isIdentifier } = t;
 export function Identifier(this: Printer, node: t.Identifier) {
   this.exactSource(node.loc, () => {
     this.word(node.name);

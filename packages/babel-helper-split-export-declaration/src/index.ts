@@ -1,4 +1,11 @@
-import * as t from "@babel/types";
+import {
+  cloneNode,
+  exportNamedDeclaration,
+  exportSpecifier,
+  identifier,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
 
 export default function splitExportDeclaration(exportDeclaration) {
   if (!exportDeclaration.isExportDeclaration()) {
@@ -31,18 +38,18 @@ export default function splitExportDeclaration(exportDeclaration) {
         declaration.isFunctionExpression() ||
         declaration.isClassExpression()
       ) {
-        declaration.node.id = t.cloneNode(id);
+        declaration.node.id = cloneNode(id);
       }
     }
 
     const updatedDeclaration = standaloneDeclaration
       ? declaration
-      : t.variableDeclaration("var", [
-          t.variableDeclarator(t.cloneNode(id), declaration.node),
+      : variableDeclaration("var", [
+          variableDeclarator(cloneNode(id), declaration.node),
         ]);
 
-    const updatedExportDeclaration = t.exportNamedDeclaration(null, [
-      t.exportSpecifier(t.cloneNode(id), t.identifier("default")),
+    const updatedExportDeclaration = exportNamedDeclaration(null, [
+      exportSpecifier(cloneNode(id), identifier("default")),
     ]);
 
     exportDeclaration.insertAfter(updatedExportDeclaration);
@@ -62,10 +69,10 @@ export default function splitExportDeclaration(exportDeclaration) {
   const bindingIdentifiers = declaration.getOuterBindingIdentifiers();
 
   const specifiers = Object.keys(bindingIdentifiers).map(name => {
-    return t.exportSpecifier(t.identifier(name), t.identifier(name));
+    return exportSpecifier(identifier(name), identifier(name));
   });
 
-  const aliasDeclar = t.exportNamedDeclaration(null, specifiers);
+  const aliasDeclar = exportNamedDeclaration(null, specifiers);
 
   exportDeclaration.insertAfter(aliasDeclar);
   exportDeclaration.replaceWith(declaration.node);

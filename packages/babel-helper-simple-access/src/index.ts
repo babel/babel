@@ -1,4 +1,14 @@
-import * as t from "@babel/types";
+import {
+  LOGICAL_OPERATORS,
+  assignmentExpression,
+  binaryExpression,
+  cloneNode,
+  identifier,
+  logicalExpression,
+  numericLiteral,
+  sequenceExpression,
+  unaryExpression,
+} from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
 export default function simplifyAccess(path: NodePath, bindingNames) {
@@ -32,18 +42,18 @@ const simpleAssignmentVisitor = {
         // ++i => (i += 1);
         const operator = path.node.operator == "++" ? "+=" : "-=";
         path.replaceWith(
-          t.assignmentExpression(operator, arg.node, t.numericLiteral(1)),
+          assignmentExpression(operator, arg.node, numericLiteral(1)),
         );
       } else if (path.node.prefix) {
         // ++i => (i = (+i) + 1);
         path.replaceWith(
-          t.assignmentExpression(
+          assignmentExpression(
             "=",
-            t.identifier(localName),
-            t.binaryExpression(
+            identifier(localName),
+            binaryExpression(
               path.node.operator[0],
-              t.unaryExpression("+", arg.node),
-              t.numericLiteral(1),
+              unaryExpression("+", arg.node),
+              numericLiteral(1),
             ),
           ),
         );
@@ -55,22 +65,22 @@ const simpleAssignmentVisitor = {
         const varName = old.name;
         path.scope.push({ id: old });
 
-        const binary = t.binaryExpression(
+        const binary = binaryExpression(
           path.node.operator[0],
-          t.identifier(varName),
-          t.numericLiteral(1),
+          identifier(varName),
+          numericLiteral(1),
         );
 
         // i++ => (_old = (+i), i = _old + 1, _old)
         path.replaceWith(
-          t.sequenceExpression([
-            t.assignmentExpression(
+          sequenceExpression([
+            assignmentExpression(
               "=",
-              t.identifier(varName),
-              t.unaryExpression("+", arg.node),
+              identifier(varName),
+              unaryExpression("+", arg.node),
             ),
-            t.assignmentExpression("=", t.cloneNode(arg.node), binary),
-            t.identifier(varName),
+            assignmentExpression("=", cloneNode(arg.node), binary),
+            identifier(varName),
           ]),
         );
       }
@@ -101,25 +111,25 @@ const simpleAssignmentVisitor = {
       }
 
       const operator = path.node.operator.slice(0, -1);
-      if (t.LOGICAL_OPERATORS.includes(operator)) {
+      if (LOGICAL_OPERATORS.includes(operator)) {
         // &&, ||, ??
         // (foo &&= bar) => (foo && foo = bar)
         path.replaceWith(
-          t.logicalExpression(
+          logicalExpression(
             operator,
             path.node.left,
-            t.assignmentExpression(
+            assignmentExpression(
               "=",
-              t.cloneNode(path.node.left),
+              cloneNode(path.node.left),
               path.node.right,
             ),
           ),
         );
       } else {
         // (foo += bar) => (foo = foo + bar)
-        path.node.right = t.binaryExpression(
+        path.node.right = binaryExpression(
           operator,
-          t.cloneNode(path.node.left),
+          cloneNode(path.node.left),
           path.node.right,
         );
         path.node.operator = "=";

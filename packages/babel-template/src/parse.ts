@@ -1,4 +1,17 @@
-import * as t from "@babel/types";
+import {
+  isCallExpression,
+  isExpressionStatement,
+  isFunction,
+  isIdentifier,
+  isJSXIdentifier,
+  isNewExpression,
+  isPlaceholder,
+  isStatement,
+  isStringLiteral,
+  removePropertiesDeep,
+  traverse,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import type { TraversalAncestors, TraversalHandler } from "@babel/types";
 import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
@@ -35,7 +48,7 @@ export default function parseAndBuildMetadata<T>(
 
   const ast = parseWithCodeFrame(code, opts.parser, syntacticPlaceholders);
 
-  t.removePropertiesDeep(ast, {
+  removePropertiesDeep(ast, {
     preserveComments,
   });
 
@@ -51,7 +64,7 @@ export default function parseAndBuildMetadata<T>(
   };
   const isLegacyRef = { value: undefined };
 
-  t.traverse(ast, placeholderVisitorHandler as TraversalHandler<any>, {
+  traverse(ast, placeholderVisitorHandler as TraversalHandler<any>, {
     syntactic,
     legacy,
     isLegacyRef,
@@ -73,7 +86,7 @@ function placeholderVisitorHandler(
 ) {
   let name: string;
 
-  if (t.isPlaceholder(node)) {
+  if (isPlaceholder(node)) {
     if (state.syntacticPlaceholders === false) {
       throw new Error(
         "%%foo%%-style placeholders can't be used when " +
@@ -85,10 +98,10 @@ function placeholderVisitorHandler(
     }
   } else if (state.isLegacyRef.value === false || state.syntacticPlaceholders) {
     return;
-  } else if (t.isIdentifier(node) || t.isJSXIdentifier(node)) {
+  } else if (isIdentifier(node) || isJSXIdentifier(node)) {
     name = node.name;
     state.isLegacyRef.value = true;
-  } else if (t.isStringLiteral(node)) {
+  } else if (isStringLiteral(node)) {
     name = node.value;
     state.isLegacyRef.value = true;
   } else {
@@ -123,20 +136,20 @@ function placeholderVisitorHandler(
 
   let type: PlaceholderType;
   if (
-    t.isStringLiteral(node) ||
-    t.isPlaceholder(node, { expectedNode: "StringLiteral" })
+    isStringLiteral(node) ||
+    isPlaceholder(node, { expectedNode: "StringLiteral" })
   ) {
     type = "string";
   } else if (
-    (t.isNewExpression(parent) && key === "arguments") ||
-    (t.isCallExpression(parent) && key === "arguments") ||
-    (t.isFunction(parent) && key === "params")
+    (isNewExpression(parent) && key === "arguments") ||
+    (isCallExpression(parent) && key === "arguments") ||
+    (isFunction(parent) && key === "params")
   ) {
     type = "param";
-  } else if (t.isExpressionStatement(parent) && !t.isPlaceholder(node)) {
+  } else if (isExpressionStatement(parent) && !isPlaceholder(node)) {
     type = "statement";
     ancestors = ancestors.slice(0, -1);
-  } else if (t.isStatement(node) && t.isPlaceholder(node)) {
+  } else if (isStatement(node) && isPlaceholder(node)) {
     type = "statement";
   } else {
     type = "other";

@@ -1,4 +1,10 @@
-import * as t from "@babel/types";
+import {
+  isCallExpression,
+  isExpressionStatement,
+  isIdentifier,
+  isStringLiteral,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
 export function getImportSource({ node }: NodePath<t.ImportDeclaration>) {
@@ -6,14 +12,14 @@ export function getImportSource({ node }: NodePath<t.ImportDeclaration>) {
 }
 
 export function getRequireSource({ node }: NodePath) {
-  if (!t.isExpressionStatement(node)) return;
+  if (!isExpressionStatement(node)) return;
   const { expression } = node;
   if (
-    t.isCallExpression(expression) &&
-    t.isIdentifier(expression.callee) &&
+    isCallExpression(expression) &&
+    isIdentifier(expression.callee) &&
     expression.callee.name === "require" &&
     expression.arguments.length === 1 &&
-    t.isStringLiteral(expression.arguments[0])
+    isStringLiteral(expression.arguments[0])
   ) {
     return expression.arguments[0].value;
   }

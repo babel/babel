@@ -1,5 +1,23 @@
 import assert from "assert";
-import * as t from "@babel/types";
+import {
+  assignmentExpression,
+  callExpression,
+  cloneNode,
+  expressionStatement,
+  getOuterBindingIdentifiers,
+  identifier,
+  isMemberExpression,
+  isVariableDeclaration,
+  jsxIdentifier,
+  jsxMemberExpression,
+  memberExpression,
+  numericLiteral,
+  sequenceExpression,
+  stringLiteral,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import template from "@babel/template";
 import type { NodePath, Visitor, Scope } from "@babel/traverse";
 import simplifyAccess from "@babel/helper-simple-access";
@@ -89,12 +107,12 @@ export default function rewriteLiveReferences(
       const meta = metadata.source.get(source);
 
       if (localName) {
-        if (meta.lazy) identNode = t.callExpression(identNode, []);
+        if (meta.lazy) identNode = callExpression(identNode, []);
         return identNode;
       }
 
-      let namespace: t.Expression = t.identifier(meta.name);
-      if (meta.lazy) namespace = t.callExpression(namespace, []);
+      let namespace: t.Expression = identifier(meta.name);
+      if (meta.lazy) namespace = callExpression(namespace, []);
 
       if (importName === "default" && meta.interop === "node-default") {
         return namespace;
@@ -102,9 +120,9 @@ export default function rewriteLiveReferences(
 
       const computed = metadata.stringSpecifiers.has(importName);
 
-      return t.memberExpression(
+      return memberExpression(
         namespace,
-        computed ? t.stringLiteral(importName) : t.identifier(importName),
+        computed ? stringLiteral(importName) : identifier(importName),
         computed,
       );
     },
@@ -128,11 +146,11 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
 
     const exportNames = exported.get(localName) || [];
     if (exportNames.length > 0) {
-      const statement = t.expressionStatement(
+      const statement = expressionStatement(
         buildBindingExportAssignmentExpression(
           metadata,
           exportNames,
-          t.identifier(localName),
+          identifier(localName),
         ),
       );
       // @ts-expect-error todo(flow->ts): avoid mutations
@@ -148,11 +166,11 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
       const exportNames = exported.get(localName) || [];
 
       if (exportNames.length > 0) {
-        const statement = t.expressionStatement(
+        const statement = expressionStatement(
           buildBindingExportAssignmentExpression(
             metadata,
             exportNames,
-            t.identifier(localName),
+            identifier(localName),
           ),
         );
         // @ts-expect-error todo(flow->ts): avoid mutations
@@ -175,11 +193,11 @@ const buildBindingExportAssignmentExpression = (
     // class Foo {} exports.Foo = exports.Bar = Foo;
     const { stringSpecifiers } = metadata;
     const computed = stringSpecifiers.has(exportName);
-    return t.assignmentExpression(
+    return assignmentExpression(
       "=",
-      t.memberExpression(
-        t.identifier(metadata.exportName),
-        computed ? t.stringLiteral(exportName) : t.identifier(exportName),
+      memberExpression(
+        identifier(metadata.exportName),
+        computed ? stringLiteral(exportName) : identifier(exportName),
         /* computed */ computed,
       ),
       expr,
@@ -221,17 +239,17 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         (path.parentPath.isCallExpression({ callee: path.node }) ||
           path.parentPath.isOptionalCallExpression({ callee: path.node }) ||
           path.parentPath.isTaggedTemplateExpression({ tag: path.node })) &&
-        t.isMemberExpression(ref)
+        isMemberExpression(ref)
       ) {
-        path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));
-      } else if (path.isJSXIdentifier() && t.isMemberExpression(ref)) {
+        path.replaceWith(sequenceExpression([numericLiteral(0), ref]));
+      } else if (path.isJSXIdentifier() && isMemberExpression(ref)) {
         const { object, property } = ref;
         path.replaceWith(
-          t.jsxMemberExpression(
+          jsxMemberExpression(
             // @ts-expect-error todo(flow->ts): possible bug `object` might not have a name
-            t.jsxIdentifier(object.name),
+            jsxIdentifier(object.name),
             // @ts-expect-error todo(flow->ts): possible bug `property` might not have a name
-            t.jsxIdentifier(property.name),
+            jsxIdentifier(property.name),
           ),
         );
       } else {
@@ -285,7 +303,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
           if (importData) {
             assignment.left = buildImportReference(importData, assignment.left);
 
-            assignment.right = t.sequenceExpression([
+            assignment.right = sequenceExpression([
               assignment.right,
               buildImportThrow(localName),
             ]);
@@ -309,7 +327,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         const id = programScopeIds.find(localName => imported.has(localName));
 
         if (id) {
-          path.node.right = t.sequenceExpression([
+          path.node.right = sequenceExpression([
             path.node.right,
             buildImportThrow(id),
           ]);
@@ -325,16 +343,16 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
               buildBindingExportAssignmentExpression(
                 this.metadata,
                 exportedNames,
-                t.identifier(localName),
+                identifier(localName),
               ),
             );
           }
         });
 
         if (items.length > 0) {
-          let node: t.Node = t.sequenceExpression(items);
+          let node: t.Node = sequenceExpression(items);
           if (path.parentPath.isExpressionStatement()) {
-            node = t.expressionStatement(node);
+            node = expressionStatement(node);
             // @ts-expect-error todo(flow->ts): avoid mutations
             node._blockHoist = path.parentPath.node._blockHoist;
           }
@@ -352,11 +370,11 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
     const { left } = node;
     const { exported, imported, scope: programScope } = this;
 
-    if (!t.isVariableDeclaration(left)) {
+    if (!isVariableDeclaration(left)) {
       let didTransformExport = false,
         importConstViolationName;
       const loopBodyScope = path.get("body").scope;
-      for (const name of Object.keys(t.getOuterBindingIdentifiers(left))) {
+      for (const name of Object.keys(getOuterBindingIdentifiers(left))) {
         if (programScope.getBinding(name) === scope.getBinding(name)) {
           if (exported.has(name)) {
             didTransformExport = true;
@@ -380,8 +398,8 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       path
         .get("left")
         .replaceWith(
-          t.variableDeclaration("let", [
-            t.variableDeclarator(t.cloneNode(newLoopId)),
+          variableDeclaration("let", [
+            variableDeclarator(cloneNode(newLoopId)),
           ]),
         );
       scope.registerDeclaration(path.get("left"));
@@ -389,13 +407,13 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       if (didTransformExport) {
         bodyPath.unshiftContainer(
           "body",
-          t.expressionStatement(t.assignmentExpression("=", left, newLoopId)),
+          expressionStatement(assignmentExpression("=", left, newLoopId)),
         );
       }
       if (importConstViolationName) {
         bodyPath.unshiftContainer(
           "body",
-          t.expressionStatement(buildImportThrow(importConstViolationName)),
+          expressionStatement(buildImportThrow(importConstViolationName)),
         );
       }
     }

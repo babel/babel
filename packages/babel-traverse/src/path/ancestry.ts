@@ -1,6 +1,7 @@
 // This file contains that retrieve or validate anything related to the current paths ancestry.
 
-import * as t from "@babel/types";
+import { VISITOR_KEYS } from "@babel/types";
+import type * as t from "@babel/types";
 import NodePath from "./index";
 
 /**
@@ -88,7 +89,7 @@ export function getEarliestCommonAncestorFrom(
     paths,
     function (deepest, i, ancestries) {
       let earliest;
-      const keys = t.VISITOR_KEYS[deepest.type];
+      const keys = VISITOR_KEYS[deepest.type];
 
       for (const ancestry of ancestries) {
         const path = ancestry[i + 1];

@@ -1,8 +1,10 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import {
+  isExportDefaultDeclaration,
+  isExportNamedDeclaration,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import * as charCodes from "charcodes";
-
-const { isExportDefaultDeclaration, isExportNamedDeclaration } = t;
 
 export function ClassDeclaration(
   this: Printer,

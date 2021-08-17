@@ -1,6 +1,23 @@
 import type NodePath from "../index";
 import * as inferers from "./inferers";
-import * as t from "@babel/types";
+import {
+  anyTypeAnnotation,
+  isAnyTypeAnnotation,
+  isBooleanTypeAnnotation,
+  isEmptyTypeAnnotation,
+  isFlowBaseAnnotation,
+  isGenericTypeAnnotation,
+  isIdentifier,
+  isMixedTypeAnnotation,
+  isNumberTypeAnnotation,
+  isStringTypeAnnotation,
+  isTypeAnnotation,
+  isUnionTypeAnnotation,
+  isVoidTypeAnnotation,
+  stringTypeAnnotation,
+  voidTypeAnnotation,
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 /**
  * Infer the type of the current `NodePath`.
@@ -9,8 +26,8 @@ import * as t from "@babel/types";
 export function getTypeAnnotation(): t.FlowType {
   if (this.typeAnnotation) return this.typeAnnotation;
 
-  let type = this._getTypeAnnotation() || t.anyTypeAnnotation();
-  if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
+  let type = this._getTypeAnnotation() || anyTypeAnnotation();
+  if (isTypeAnnotation(type)) type = type.typeAnnotation;
   return (this.typeAnnotation = type);
 }
 
@@ -34,15 +51,15 @@ export function _getTypeAnnotation(): any {
 
       // for (let NODE in bar) {}
       if (declar.key === "left" && declarParent.isForInStatement()) {
-        return t.stringTypeAnnotation();
+        return stringTypeAnnotation();
       }
 
       // for (let NODE of bar) {}
       if (declar.key === "left" && declarParent.isForOfStatement()) {
-        return t.anyTypeAnnotation();
+        return anyTypeAnnotation();
       }
 
-      return t.voidTypeAnnotation();
+      return voidTypeAnnotation();
     } else {
       return;
     }
@@ -79,19 +96,19 @@ export function isBaseType(baseName: string, soft?: boolean): boolean {
 
 function _isBaseType(baseName: string, type?, soft?): boolean {
   if (baseName === "string") {
-    return t.isStringTypeAnnotation(type);
+    return isStringTypeAnnotation(type);
   } else if (baseName === "number") {
-    return t.isNumberTypeAnnotation(type);
+    return isNumberTypeAnnotation(type);
   } else if (baseName === "boolean") {
-    return t.isBooleanTypeAnnotation(type);
+    return isBooleanTypeAnnotation(type);
   } else if (baseName === "any") {
-    return t.isAnyTypeAnnotation(type);
+    return isAnyTypeAnnotation(type);
   } else if (baseName === "mixed") {
-    return t.isMixedTypeAnnotation(type);
+    return isMixedTypeAnnotation(type);
   } else if (baseName === "empty") {
-    return t.isEmptyTypeAnnotation(type);
+    return isEmptyTypeAnnotation(type);
   } else if (baseName === "void") {
-    return t.isVoidTypeAnnotation(type);
+    return isVoidTypeAnnotation(type);
   } else {
     if (soft) {
       return false;
@@ -103,11 +120,11 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
 
 export function couldBeBaseType(name: string): boolean {
   const type = this.getTypeAnnotation();
-  if (t.isAnyTypeAnnotation(type)) return true;
+  if (isAnyTypeAnnotation(type)) return true;
 
-  if (t.isUnionTypeAnnotation(type)) {
+  if (isUnionTypeAnnotation(type)) {
     for (const type2 of type.types) {
-      if (t.isAnyTypeAnnotation(type2) || _isBaseType(name, type2, true)) {
+      if (isAnyTypeAnnotation(type2) || _isBaseType(name, type2, true)) {
         return true;
       }
     }
@@ -121,7 +138,7 @@ export function baseTypeStrictlyMatches(rightArg: NodePath): boolean {
   const left = this.getTypeAnnotation();
   const right = rightArg.getTypeAnnotation();
 
-  if (!t.isAnyTypeAnnotation(left) && t.isFlowBaseAnnotation(left)) {
+  if (!isAnyTypeAnnotation(left) && isFlowBaseAnnotation(left)) {
     return right.type === left.type;
   }
   return false;
@@ -130,7 +147,7 @@ export function baseTypeStrictlyMatches(rightArg: NodePath): boolean {
 export function isGenericType(genericName: string): boolean {
   const type = this.getTypeAnnotation();
   return (
-    t.isGenericTypeAnnotation(type) &&
-    t.isIdentifier(type.id, { name: genericName })
+    isGenericTypeAnnotation(type) &&
+    isIdentifier(type.id, { name: genericName })
   );
 }

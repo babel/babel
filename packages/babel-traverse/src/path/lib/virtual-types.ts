@@ -1,14 +1,35 @@
 import type NodePath from "../index";
-import { react } from "@babel/types";
-import * as t from "@babel/types";
+import {
+  isBinding,
+  isBlockScoped,
+  isExportDeclaration,
+  isExpression,
+  isFlow,
+  isForStatement,
+  isForXStatement,
+  isIdentifier,
+  isImportDeclaration,
+  isImportSpecifier,
+  isJSXIdentifier,
+  isJSXMemberExpression,
+  isMemberExpression,
+  isReferenced,
+  isScope,
+  isStatement,
+  isVar,
+  isVariableDeclaration,
+  react,
+} from "@babel/types";
+import type * as t from "@babel/types";
+const { isCompatTag } = react;
 
 export const ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
   checkPath(path: NodePath, opts?: any): boolean {
     const { node, parent } = path;
-    if (!t.isIdentifier(node, opts) && !t.isJSXMemberExpression(parent, opts)) {
-      if (t.isJSXIdentifier(node, opts)) {
-        if (react.isCompatTag(node.name)) return false;
+    if (!isIdentifier(node, opts) && !isJSXMemberExpression(parent, opts)) {
+      if (isJSXIdentifier(node, opts)) {
+        if (isCompatTag(node.name)) return false;
       } else {
         // not a JSXIdentifier or an Identifier
         return false;
@@ -16,14 +37,14 @@ export const ReferencedIdentifier = {
     }
 
     // check if node is referenced
-    return t.isReferenced(node, parent, path.parentPath.parent);
+    return isReferenced(node, parent, path.parentPath.parent);
   },
 };
 
 export const ReferencedMemberExpression = {
   types: ["MemberExpression"],
   checkPath({ node, parent }) {
-    return t.isMemberExpression(node) && t.isReferenced(node, parent);
+    return isMemberExpression(node) && isReferenced(node, parent);
   },
 };
 
@@ -32,17 +53,17 @@ export const BindingIdentifier = {
   checkPath(path: NodePath): boolean {
     const { node, parent } = path;
     const grandparent = path.parentPath.parent;
-    return t.isIdentifier(node) && t.isBinding(node, parent, grandparent);
+    return isIdentifier(node) && isBinding(node, parent, grandparent);
   },
 };
 
 export const Statement = {
   types: ["Statement"],
   checkPath({ node, parent }: NodePath): boolean {
-    if (t.isStatement(node)) {
-      if (t.isVariableDeclaration(node)) {
-        if (t.isForXStatement(parent, { left: node })) return false;
-        if (t.isForStatement(parent, { init: node })) return false;
+    if (isStatement(node)) {
+      if (isVariableDeclaration(node)) {
+        if (isForXStatement(parent, { left: node })) return false;
+        if (isForStatement(parent, { init: node })) return false;
       }
 
       return true;
@@ -58,7 +79,7 @@ export const Expression = {
     if (path.isIdentifier()) {
       return path.isReferencedIdentifier();
     } else {
-      return t.isExpression(path.node);
+      return isExpression(path.node);
     }
   },
 };
@@ -67,26 +88,26 @@ export const Scope = {
   // When pattern is inside the function params, it is a scope
   types: ["Scopable", "Pattern"],
   checkPath(path) {
-    return t.isScope(path.node, path.parent);
+    return isScope(path.node, path.parent);
   },
 };
 
 export const Referenced = {
   checkPath(path: NodePath): boolean {
-    return t.isReferenced(path.node, path.parent);
+    return isReferenced(path.node, path.parent);
   },
 };
 
 export const BlockScoped = {
   checkPath(path: NodePath): boolean {
-    return t.isBlockScoped(path.node);
+    return isBlockScoped(path.node);
   },
 };
 
 export const Var = {
   types: ["VariableDeclaration"],
   checkPath(path: NodePath): boolean {
-    return t.isVar(path.node);
+    return isVar(path.node);
   },
 };
 
@@ -111,13 +132,13 @@ export const Pure = {
 export const Flow = {
   types: ["Flow", "ImportDeclaration", "ExportDeclaration", "ImportSpecifier"],
   checkPath({ node }: NodePath): boolean {
-    if (t.isFlow(node)) {
+    if (isFlow(node)) {
       return true;
-    } else if (t.isImportDeclaration(node)) {
+    } else if (isImportDeclaration(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
-    } else if (t.isExportDeclaration(node)) {
+    } else if (isExportDeclaration(node)) {
       return node.exportKind === "type";
-    } else if (t.isImportSpecifier(node)) {
+    } else if (isImportSpecifier(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
     } else {
       return false;
