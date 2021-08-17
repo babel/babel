@@ -457,7 +457,16 @@ function pluginPackageJsonMacro({ types: t }) {
 }
 
 // transform `import { x } from "@babel/types"` to `import * as _t from "@babel/types"; const { x } = _t;
-function transformNamedBabelTypesImportToDestructuring({ types: t }) {
+function transformNamedBabelTypesImportToDestructuring({
+  types: {
+    cloneNode,
+    importNamespaceSpecifier,
+    objectPattern,
+    objectProperty,
+    variableDeclarator,
+    variableDeclaration,
+  },
+}) {
   return {
     name: "transform-babel-types-named-imports",
     visitor: {
@@ -471,7 +480,7 @@ function transformNamedBabelTypesImportToDestructuring({ types: t }) {
           const hoistedDestructuringProperties = [];
           for (const { imported, local } of node.specifiers) {
             hoistedDestructuringProperties.push(
-              t.objectProperty(
+              objectProperty(
                 imported,
                 local,
                 false,
@@ -480,12 +489,12 @@ function transformNamedBabelTypesImportToDestructuring({ types: t }) {
             );
           }
           const babelTypeNsImport = path.scope.generateUidIdentifier("t");
-          node.specifiers = [t.importNamespaceSpecifier(babelTypeNsImport)];
+          node.specifiers = [importNamespaceSpecifier(babelTypeNsImport)];
           path.insertAfter([
-            t.variableDeclaration("const", [
-              t.variableDeclarator(
-                t.objectPattern(hoistedDestructuringProperties),
-                t.cloneNode(babelTypeNsImport)
+            variableDeclaration("const", [
+              variableDeclarator(
+                objectPattern(hoistedDestructuringProperties),
+                cloneNode(babelTypeNsImport)
               ),
             ]),
           ]);
