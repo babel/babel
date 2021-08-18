@@ -1,5 +1,18 @@
 import assert from "assert";
-import * as t from "@babel/types";
+import {
+  callExpression,
+  cloneNode,
+  expressionStatement,
+  identifier,
+  importDeclaration,
+  importDefaultSpecifier,
+  importNamespaceSpecifier,
+  importSpecifier,
+  memberExpression,
+  stringLiteral,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
 
 /**
  * A class to track and accumulate mutations to the AST that will eventually
@@ -28,16 +41,16 @@ export default class ImportBuilder {
 
   import() {
     this._statements.push(
-      t.importDeclaration([], t.stringLiteral(this._importedSource)),
+      importDeclaration([], stringLiteral(this._importedSource)),
     );
     return this;
   }
 
   require() {
     this._statements.push(
-      t.expressionStatement(
-        t.callExpression(t.identifier("require"), [
-          t.stringLiteral(this._importedSource),
+      expressionStatement(
+        callExpression(identifier("require"), [
+          stringLiteral(this._importedSource),
         ]),
       ),
     );
@@ -50,8 +63,8 @@ export default class ImportBuilder {
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
-    statement.specifiers = [t.importNamespaceSpecifier(local)];
-    this._resultName = t.cloneNode(local);
+    statement.specifiers = [importNamespaceSpecifier(local)];
+    this._resultName = cloneNode(local);
     return this;
   }
   default(name) {
@@ -59,8 +72,8 @@ export default class ImportBuilder {
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
-    statement.specifiers = [t.importDefaultSpecifier(name)];
-    this._resultName = t.cloneNode(name);
+    statement.specifiers = [importDefaultSpecifier(name)];
+    this._resultName = cloneNode(name);
     return this;
   }
   named(name, importName) {
@@ -70,8 +83,8 @@ export default class ImportBuilder {
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
-    statement.specifiers = [t.importSpecifier(name, t.identifier(importName))];
-    this._resultName = t.cloneNode(name);
+    statement.specifiers = [importSpecifier(name, identifier(importName))];
+    this._resultName = cloneNode(name);
     return this;
   }
 
@@ -80,14 +93,13 @@ export default class ImportBuilder {
     let statement = this._statements[this._statements.length - 1];
     if (statement.type !== "ExpressionStatement") {
       assert(this._resultName);
-      statement = t.expressionStatement(this._resultName);
+      statement = expressionStatement(this._resultName);
       this._statements.push(statement);
     }
-    this._statements[this._statements.length - 1] = t.variableDeclaration(
-      "var",
-      [t.variableDeclarator(name, statement.expression)],
-    );
-    this._resultName = t.cloneNode(name);
+    this._statements[this._statements.length - 1] = variableDeclaration("var", [
+      variableDeclarator(name, statement.expression),
+    ]);
+    this._resultName = cloneNode(name);
     return this;
   }
 
@@ -101,10 +113,10 @@ export default class ImportBuilder {
   _interop(callee) {
     const statement = this._statements[this._statements.length - 1];
     if (statement.type === "ExpressionStatement") {
-      statement.expression = t.callExpression(callee, [statement.expression]);
+      statement.expression = callExpression(callee, [statement.expression]);
     } else if (statement.type === "VariableDeclaration") {
       assert(statement.declarations.length === 1);
-      statement.declarations[0].init = t.callExpression(callee, [
+      statement.declarations[0].init = callExpression(callee, [
         statement.declarations[0].init,
       ]);
     } else {
@@ -116,15 +128,15 @@ export default class ImportBuilder {
   prop(name) {
     const statement = this._statements[this._statements.length - 1];
     if (statement.type === "ExpressionStatement") {
-      statement.expression = t.memberExpression(
+      statement.expression = memberExpression(
         statement.expression,
-        t.identifier(name),
+        identifier(name),
       );
     } else if (statement.type === "VariableDeclaration") {
       assert(statement.declarations.length === 1);
-      statement.declarations[0].init = t.memberExpression(
+      statement.declarations[0].init = memberExpression(
         statement.declarations[0].init,
-        t.identifier(name),
+        identifier(name),
       );
     } else {
       assert.fail("Unexpected type:" + statement.type);
@@ -133,6 +145,6 @@ export default class ImportBuilder {
   }
 
   read(name) {
-    this._resultName = t.memberExpression(this._resultName, t.identifier(name));
+    this._resultName = memberExpression(this._resultName, identifier(name));
   }
 }

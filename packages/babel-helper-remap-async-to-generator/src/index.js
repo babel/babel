@@ -3,7 +3,13 @@
 import type { NodePath } from "@babel/traverse";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import * as t from "@babel/types";
+import {
+  callExpression,
+  cloneNode,
+  isIdentifier,
+  isThisExpression,
+  yieldExpression,
+} from "@babel/types";
 
 const awaitVisitor = {
   Function(path) {
@@ -19,9 +25,9 @@ const awaitVisitor = {
     }
 
     path.replaceWith(
-      t.yieldExpression(
+      yieldExpression(
         wrapAwait
-          ? t.callExpression(t.cloneNode(wrapAwait), [argument.node])
+          ? callExpression(cloneNode(wrapAwait), [argument.node])
           : argument.node,
       ),
     );
@@ -42,7 +48,7 @@ export default function (
   path.node.async = false;
   path.node.generator = true;
 
-  wrapFunction(path, t.cloneNode(helpers.wrapAsync), noNewArrows);
+  wrapFunction(path, cloneNode(helpers.wrapAsync), noNewArrows);
 
   const isProperty =
     path.isObjectMethod() ||
@@ -64,7 +70,7 @@ export default function (
     const { parentPath } = path;
     if (
       parentPath.isMemberExpression() &&
-      t.isIdentifier(parentPath.node.property, { name: "bind" })
+      isIdentifier(parentPath.node.property, { name: "bind" })
     ) {
       const { parentPath: bindCall } = parentPath;
 
@@ -75,7 +81,7 @@ export default function (
         bindCall.isCallExpression() &&
         // and whether its sole argument is 'this'
         bindCall.node.arguments.length === 1 &&
-        t.isThisExpression(bindCall.node.arguments[0]) &&
+        isThisExpression(bindCall.node.arguments[0]) &&
         // and whether the result of the .bind(this) is being called
         bindCall.parentPath.isCallExpression({ callee: bindCall.node })
       );

@@ -1,6 +1,22 @@
 import getFunctionArity from "@babel/helper-get-function-arity";
 import template from "@babel/template";
-import * as t from "@babel/types";
+import {
+  NOT_LOCAL_BINDING,
+  cloneNode,
+  identifier,
+  isAssignmentExpression,
+  isFunction,
+  isIdentifier,
+  isLiteral,
+  isNullLiteral,
+  isObjectMethod,
+  isObjectProperty,
+  isRegExpLiteral,
+  isTemplateLiteral,
+  isVariableDeclarator,
+  toBindingIdentifierName,
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 const buildPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {
@@ -46,15 +62,15 @@ const visitor = {
 };
 
 function getNameFromLiteralId(id) {
-  if (t.isNullLiteral(id)) {
+  if (isNullLiteral(id)) {
     return "null";
   }
 
-  if (t.isRegExpLiteral(id)) {
+  if (isRegExpLiteral(id)) {
     return `_${id.pattern}_${id.flags}`;
   }
 
-  if (t.isTemplateLiteral(id)) {
+  if (isTemplateLiteral(id)) {
     return id.quasis.map(quasi => quasi.value.raw).join("");
   }
 
@@ -72,7 +88,7 @@ function wrap(state, method, id, scope) {
       scope.rename(id.name);
     } else {
       // we don't currently support wrapping class expressions
-      if (!t.isFunction(method)) return;
+      if (!isFunction(method)) return;
 
       // need to add a wrapper since we can't change the references
       let build = buildPropertyMethodAssignmentWrapper;
@@ -170,18 +186,17 @@ export default function (
   if (node.id) return;
 
   if (
-    (t.isObjectProperty(parent) ||
-      t.isObjectMethod(parent, { kind: "method" })) &&
-    (!parent.computed || t.isLiteral(parent.key))
+    (isObjectProperty(parent) || isObjectMethod(parent, { kind: "method" })) &&
+    (!parent.computed || isLiteral(parent.key))
   ) {
     // { foo() {} };
     id = parent.key;
-  } else if (t.isVariableDeclarator(parent)) {
+  } else if (isVariableDeclarator(parent)) {
     // let foo = function () {};
     id = parent.id;
 
     // but not "let foo = () => {};" being converted to function expression
-    if (t.isIdentifier(id) && !localBinding) {
+    if (isIdentifier(id) && !localBinding) {
       const binding = scope.parent.getBinding(id.name);
       if (
         binding &&
@@ -189,12 +204,12 @@ export default function (
         scope.getBinding(id.name) === binding
       ) {
         // always going to reference this method
-        node.id = t.cloneNode(id);
-        node.id[t.NOT_LOCAL_BINDING] = true;
+        node.id = cloneNode(id);
+        node.id[NOT_LOCAL_BINDING] = true;
         return;
       }
     }
-  } else if (t.isAssignmentExpression(parent, { operator: "=" })) {
+  } else if (isAssignmentExpression(parent, { operator: "=" })) {
     // foo = function () {};
     id = parent.left;
   } else if (!id) {
@@ -202,9 +217,9 @@ export default function (
   }
 
   let name;
-  if (id && t.isLiteral(id)) {
+  if (id && isLiteral(id)) {
     name = getNameFromLiteralId(id);
-  } else if (id && t.isIdentifier(id)) {
+  } else if (id && isIdentifier(id)) {
     name = id.name;
   }
 
@@ -212,13 +227,13 @@ export default function (
     return;
   }
 
-  name = t.toBindingIdentifierName(name);
-  id = t.identifier(name);
+  name = toBindingIdentifierName(name);
+  id = identifier(name);
 
   // The id shouldn't be considered a local binding to the function because
   // we are simply trying to set the function name and not actually create
   // a local binding.
-  id[t.NOT_LOCAL_BINDING] = true;
+  id[NOT_LOCAL_BINDING] = true;
 
   const state = visit(node, name, scope);
   return wrap(state, node, id, scope) || node;

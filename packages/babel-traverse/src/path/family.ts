@@ -2,7 +2,14 @@
 
 import type TraversalContext from "../context";
 import NodePath from "./index";
-import * as t from "@babel/types";
+import {
+  getBindingIdentifiers as _getBindingIdentifiers,
+  getOuterBindingIdentifiers as _getOuterBindingIdentifiers,
+  isDeclaration,
+  numericLiteral,
+  unaryExpression,
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 const NORMAL_COMPLETION = 0;
 const BREAK_COMPLETION = 1;
@@ -107,7 +114,7 @@ function replaceBreakStatementInBreakCompletion(
   completions.forEach(c => {
     if (c.path.isBreakStatement({ label: null })) {
       if (reachable) {
-        c.path.replaceWith(t.unaryExpression("void", t.numericLiteral(0)));
+        c.path.replaceWith(unaryExpression("void", numericLiteral(0)));
       } else {
         c.path.remove();
       }
@@ -463,7 +470,7 @@ function getBindingIdentifiers(
 function getBindingIdentifiers(
   duplicates?: boolean,
 ): Record<string, t.Identifier[] | t.Identifier> {
-  return t.getBindingIdentifiers(this.node, duplicates);
+  return _getBindingIdentifiers(this.node, duplicates);
 }
 
 export { getBindingIdentifiers };
@@ -481,7 +488,7 @@ function getOuterBindingIdentifiers(
 function getOuterBindingIdentifiers(
   duplicates?: boolean,
 ): Record<string, t.Identifier[] | t.Identifier> {
-  return t.getOuterBindingIdentifiers(this.node, duplicates);
+  return _getOuterBindingIdentifiers(this.node, duplicates);
 }
 
 export { getOuterBindingIdentifiers };
@@ -505,7 +512,7 @@ export function getBindingIdentifierPaths(
     if (!id) continue;
     if (!id.node) continue;
 
-    const keys = t.getBindingIdentifiers.keys[id.node.type];
+    const keys = _getBindingIdentifiers.keys[id.node.type];
 
     if (id.isIdentifier()) {
       if (duplicates) {
@@ -519,7 +526,7 @@ export function getBindingIdentifierPaths(
 
     if (id.isExportDeclaration()) {
       const declaration = id.get("declaration");
-      if (t.isDeclaration(declaration)) {
+      if (isDeclaration(declaration)) {
         search.push(declaration);
       }
       continue;

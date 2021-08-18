@@ -1,7 +1,28 @@
 import * as helpers from "@babel/helpers";
 import generator from "@babel/generator";
 import template from "@babel/template";
-import * as t from "@babel/types";
+import {
+  arrayExpression,
+  assignmentExpression,
+  binaryExpression,
+  blockStatement,
+  callExpression,
+  cloneNode,
+  conditionalExpression,
+  exportNamedDeclaration,
+  exportSpecifier,
+  expressionStatement,
+  functionExpression,
+  identifier,
+  memberExpression,
+  objectExpression,
+  program,
+  stringLiteral,
+  unaryExpression,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import File from "../transformation/file/file";
 
 // Wrapped to avoid wasting time parsing this when almost no-one uses
@@ -22,39 +43,39 @@ const buildUmdWrapper = replacements =>
   `(replacements);
 
 function buildGlobal(allowlist?: Array<string>) {
-  const namespace = t.identifier("babelHelpers");
+  const namespace = identifier("babelHelpers");
 
   const body: t.Statement[] = [];
-  const container = t.functionExpression(
+  const container = functionExpression(
     null,
-    [t.identifier("global")],
-    t.blockStatement(body),
+    [identifier("global")],
+    blockStatement(body),
   );
-  const tree = t.program([
-    t.expressionStatement(
-      t.callExpression(container, [
+  const tree = program([
+    expressionStatement(
+      callExpression(container, [
         // typeof global === "undefined" ? self : global
-        t.conditionalExpression(
-          t.binaryExpression(
+        conditionalExpression(
+          binaryExpression(
             "===",
-            t.unaryExpression("typeof", t.identifier("global")),
-            t.stringLiteral("undefined"),
+            unaryExpression("typeof", identifier("global")),
+            stringLiteral("undefined"),
           ),
-          t.identifier("self"),
-          t.identifier("global"),
+          identifier("self"),
+          identifier("global"),
         ),
       ]),
     ),
   ]);
 
   body.push(
-    t.variableDeclaration("var", [
-      t.variableDeclarator(
+    variableDeclaration("var", [
+      variableDeclarator(
         namespace,
-        t.assignmentExpression(
+        assignmentExpression(
           "=",
-          t.memberExpression(t.identifier("global"), namespace),
-          t.objectExpression([]),
+          memberExpression(identifier("global"), namespace),
+          objectExpression([]),
         ),
       ),
     ]),
@@ -70,57 +91,57 @@ function buildModule(allowlist?: Array<string>) {
   const refs = buildHelpers(body, null, allowlist);
 
   body.unshift(
-    t.exportNamedDeclaration(
+    exportNamedDeclaration(
       null,
       Object.keys(refs).map(name => {
-        return t.exportSpecifier(t.cloneNode(refs[name]), t.identifier(name));
+        return exportSpecifier(cloneNode(refs[name]), identifier(name));
       }),
     ),
   );
 
-  return t.program(body, [], "module");
+  return program(body, [], "module");
 }
 
 function buildUmd(allowlist?: Array<string>) {
-  const namespace = t.identifier("babelHelpers");
+  const namespace = identifier("babelHelpers");
 
   const body: t.Statement[] = [];
   body.push(
-    t.variableDeclaration("var", [
-      t.variableDeclarator(namespace, t.identifier("global")),
+    variableDeclaration("var", [
+      variableDeclarator(namespace, identifier("global")),
     ]),
   );
 
   buildHelpers(body, namespace, allowlist);
 
-  return t.program([
+  return program([
     buildUmdWrapper({
-      FACTORY_PARAMETERS: t.identifier("global"),
-      BROWSER_ARGUMENTS: t.assignmentExpression(
+      FACTORY_PARAMETERS: identifier("global"),
+      BROWSER_ARGUMENTS: assignmentExpression(
         "=",
-        t.memberExpression(t.identifier("root"), namespace),
-        t.objectExpression([]),
+        memberExpression(identifier("root"), namespace),
+        objectExpression([]),
       ),
-      COMMON_ARGUMENTS: t.identifier("exports"),
-      AMD_ARGUMENTS: t.arrayExpression([t.stringLiteral("exports")]),
+      COMMON_ARGUMENTS: identifier("exports"),
+      AMD_ARGUMENTS: arrayExpression([stringLiteral("exports")]),
       FACTORY_BODY: body,
-      UMD_ROOT: t.identifier("this"),
+      UMD_ROOT: identifier("this"),
     }),
   ]);
 }
 
 function buildVar(allowlist?: Array<string>) {
-  const namespace = t.identifier("babelHelpers");
+  const namespace = identifier("babelHelpers");
 
   const body: t.Statement[] = [];
   body.push(
-    t.variableDeclaration("var", [
-      t.variableDeclarator(namespace, t.objectExpression([])),
+    variableDeclaration("var", [
+      variableDeclarator(namespace, objectExpression([])),
     ]),
   );
-  const tree = t.program(body);
+  const tree = program(body);
   buildHelpers(body, namespace, allowlist);
-  body.push(t.expressionStatement(namespace));
+  body.push(expressionStatement(namespace));
   return tree;
 }
 
@@ -131,8 +152,8 @@ function buildHelpers(
 ) {
   const getHelperReference = (name: string) => {
     return namespace
-      ? t.memberExpression(namespace, t.identifier(name))
-      : t.identifier(`_${name}`);
+      ? memberExpression(namespace, identifier(name))
+      : identifier(`_${name}`);
   };
 
   const refs = {};

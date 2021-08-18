@@ -1,6 +1,4 @@
-import * as t from "@babel/types";
-
-const {
+import {
   isArrayTypeAnnotation,
   isArrowFunctionExpression,
   isAssignmentExpression,
@@ -48,7 +46,8 @@ const {
   isVariableDeclarator,
   isWhileStatement,
   isYieldExpression,
-} = t;
+} from "@babel/types";
+import type * as t from "@babel/types";
 const PRECEDENCE = {
   "||": 0,
   "??": 0,

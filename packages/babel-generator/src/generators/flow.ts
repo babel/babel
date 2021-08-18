@@ -1,8 +1,8 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import { isDeclareExportDeclaration, isStatement } from "@babel/types";
+import type * as t from "@babel/types";
 import { ExportAllDeclaration } from "./modules";
 
-const { isDeclareExportDeclaration, isStatement } = t;
 export function AnyTypeAnnotation(this: Printer) {
   this.word("any");
 }

@@ -1,5 +1,17 @@
 import type { Scope } from "@babel/traverse";
-import * as t from "@babel/types";
+import {
+  assignmentExpression,
+  cloneNode,
+  isIdentifier,
+  isLiteral,
+  isMemberExpression,
+  isPrivateName,
+  isPureish,
+  isSuper,
+  memberExpression,
+  toComputedKey,
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 function getObjRef(
   node: t.Identifier | t.MemberExpression,
@@ -7,7 +19,7 @@ function getObjRef(
   scope: Scope,
 ): t.Identifier | t.Super {
   let ref;
-  if (t.isIdentifier(node)) {
+  if (isIdentifier(node)) {
     if (scope.hasBinding(node.name)) {
       // this variable is declared in scope so we can be 100% sure
       // that evaluating it multiple times wont trigger a getter
@@ -18,10 +30,10 @@ function getObjRef(
       // it once
       ref = node;
     }
-  } else if (t.isMemberExpression(node)) {
+  } else if (isMemberExpression(node)) {
     ref = node.object;
 
-    if (t.isSuper(ref) || (t.isIdentifier(ref) && scope.hasBinding(ref.name))) {
+    if (isSuper(ref) || (isIdentifier(ref) && scope.hasBinding(ref.name))) {
       // the object reference that we need to save is locally declared
       // so as per the previous comment we can be 100% sure evaluating
       // it multiple times will be safe
@@ -34,7 +46,7 @@ function getObjRef(
 
   const temp = scope.generateUidIdentifierBasedOnNode(ref);
   scope.push({ id: temp });
-  nodes.push(t.assignmentExpression("=", t.cloneNode(temp), t.cloneNode(ref)));
+  nodes.push(assignmentExpression("=", cloneNode(temp), cloneNode(ref)));
   return temp;
 }
 
@@ -44,17 +56,17 @@ function getPropRef(
   scope: Scope,
 ): t.Identifier | t.Literal {
   const prop = node.property;
-  if (t.isPrivateName(prop)) {
+  if (isPrivateName(prop)) {
     throw new Error(
       "We can't generate property ref for private name, please install `@babel/plugin-proposal-class-properties`",
     );
   }
-  const key = t.toComputedKey(node, prop);
-  if (t.isLiteral(key) && t.isPureish(key)) return key;
+  const key = toComputedKey(node, prop);
+  if (isLiteral(key) && isPureish(key)) return key;
 
   const temp = scope.generateUidIdentifierBasedOnNode(prop);
   scope.push({ id: temp });
-  nodes.push(t.assignmentExpression("=", t.cloneNode(temp), t.cloneNode(prop)));
+  nodes.push(assignmentExpression("=", cloneNode(temp), cloneNode(prop)));
   return temp;
 }
 
@@ -70,7 +82,7 @@ export default function (
   ref: t.Identifier | t.MemberExpression;
 } {
   let obj;
-  if (t.isIdentifier(node) && allowedSingleIdent) {
+  if (isIdentifier(node) && allowedSingleIdent) {
     obj = node;
   } else {
     obj = getObjRef(node, nodes, scope);
@@ -78,14 +90,14 @@ export default function (
 
   let ref, uid;
 
-  if (t.isIdentifier(node)) {
-    ref = t.cloneNode(node);
+  if (isIdentifier(node)) {
+    ref = cloneNode(node);
     uid = obj;
   } else {
     const prop = getPropRef(node, nodes, scope);
-    const computed = node.computed || t.isLiteral(prop);
-    uid = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
-    ref = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
+    const computed = node.computed || isLiteral(prop);
+    uid = memberExpression(cloneNode(obj), cloneNode(prop), computed);
+    ref = memberExpression(cloneNode(obj), cloneNode(prop), computed);
   }
 
   return {

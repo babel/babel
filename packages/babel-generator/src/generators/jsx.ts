@@ -1,5 +1,5 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import type * as t from "@babel/types";
 
 export function JSXAttribute(this: Printer, node: t.JSXAttribute) {
   this.print(node.name, node);

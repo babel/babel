@@ -1,4 +1,28 @@
-import * as t from "@babel/types";
+import {
+  booleanLiteral,
+  callExpression,
+  identifier,
+  inherits,
+  isIdentifier,
+  isJSXExpressionContainer,
+  isJSXIdentifier,
+  isJSXMemberExpression,
+  isJSXNamespacedName,
+  isJSXSpreadAttribute,
+  isLiteral,
+  isObjectExpression,
+  isReferenced,
+  isStringLiteral,
+  isValidIdentifier,
+  memberExpression,
+  nullLiteral,
+  objectExpression,
+  objectProperty,
+  react,
+  spreadElement,
+  stringLiteral,
+  thisExpression,
+} from "@babel/types";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 type ElementState = {
@@ -31,7 +55,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     exit(path, file) {
       const callExpr = buildElementCall(path, file);
       if (callExpr) {
-        path.replaceWith(t.inherits(callExpr, path.node));
+        path.replaceWith(inherits(callExpr, path.node));
       }
     },
   };
@@ -45,7 +69,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
       const callExpr = buildFragmentCall(path, file);
       if (callExpr) {
-        path.replaceWith(t.inherits(callExpr, path.node));
+        path.replaceWith(inherits(callExpr, path.node));
       }
     },
   };
@@ -53,32 +77,32 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   return visitor;
 
   function convertJSXIdentifier(node, parent) {
-    if (t.isJSXIdentifier(node)) {
-      if (node.name === "this" && t.isReferenced(node, parent)) {
-        return t.thisExpression();
-      } else if (t.isValidIdentifier(node.name, false)) {
+    if (isJSXIdentifier(node)) {
+      if (node.name === "this" && isReferenced(node, parent)) {
+        return thisExpression();
+      } else if (isValidIdentifier(node.name, false)) {
         node.type = "Identifier";
       } else {
-        return t.stringLiteral(node.name);
+        return stringLiteral(node.name);
       }
-    } else if (t.isJSXMemberExpression(node)) {
-      return t.memberExpression(
+    } else if (isJSXMemberExpression(node)) {
+      return memberExpression(
         convertJSXIdentifier(node.object, node),
         convertJSXIdentifier(node.property, node),
       );
-    } else if (t.isJSXNamespacedName(node)) {
+    } else if (isJSXNamespacedName(node)) {
       /**
        * If there is flag "throwIfNamespace"
        * print XMLNamespace like string literal
        */
-      return t.stringLiteral(`${node.namespace.name}:${node.name.name}`);
+      return stringLiteral(`${node.namespace.name}:${node.name.name}`);
     }
 
     return node;
   }
 
   function convertAttributeValue(node) {
-    if (t.isJSXExpressionContainer(node)) {
+    if (isJSXExpressionContainer(node)) {
       return node.expression;
     } else {
       return node;
@@ -86,37 +110,37 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   }
 
   function convertAttribute(node) {
-    const value = convertAttributeValue(node.value || t.booleanLiteral(true));
+    const value = convertAttributeValue(node.value || booleanLiteral(true));
 
-    if (t.isJSXSpreadAttribute(node)) {
-      return t.spreadElement(node.argument);
+    if (isJSXSpreadAttribute(node)) {
+      return spreadElement(node.argument);
     }
 
-    if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
+    if (isStringLiteral(value) && !isJSXExpressionContainer(node.value)) {
       value.value = value.value.replace(/\n\s+/g, " ");
 
       // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
       delete value.extra?.raw;
     }
 
-    if (t.isJSXNamespacedName(node.name)) {
-      node.name = t.stringLiteral(
+    if (isJSXNamespacedName(node.name)) {
+      node.name = stringLiteral(
         node.name.namespace.name + ":" + node.name.name.name,
       );
-    } else if (t.isValidIdentifier(node.name.name, false)) {
+    } else if (isValidIdentifier(node.name.name, false)) {
       node.name.type = "Identifier";
     } else {
-      node.name = t.stringLiteral(node.name.name);
+      node.name = stringLiteral(node.name.name);
     }
 
-    return t.inherits(t.objectProperty(node.name, value), node);
+    return inherits(objectProperty(node.name, value), node);
   }
 
   function buildElementCall(path, file) {
     if (opts.filter && !opts.filter(path.node, file)) return;
 
     const openingPath = path.get("openingElement");
-    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
+    openingPath.parent.children = react.buildChildren(openingPath.parent);
 
     const tagExpr = convertJSXIdentifier(
       openingPath.node.name,
@@ -125,9 +149,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     const args = [];
 
     let tagName;
-    if (t.isIdentifier(tagExpr)) {
+    if (isIdentifier(tagExpr)) {
       tagName = tagExpr.name;
-    } else if (t.isLiteral(tagExpr)) {
+    } else if (isLiteral(tagExpr)) {
       tagName = tagExpr.value;
     }
 
@@ -145,12 +169,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     let attribs = openingPath.node.attributes;
     if (attribs.length) {
       if (process.env.BABEL_8_BREAKING) {
-        attribs = t.objectExpression(attribs.map(convertAttribute));
+        attribs = objectExpression(attribs.map(convertAttribute));
       } else {
         attribs = buildOpeningElementAttributes(attribs, file);
       }
     } else {
-      attribs = t.nullLiteral();
+      attribs = nullLiteral();
     }
 
     args.push(attribs, ...path.node.children);
@@ -159,7 +183,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       opts.post(state, file);
     }
 
-    const call = state.call || t.callExpression(state.callee, args);
+    const call = state.call || callExpression(state.callee, args);
     if (state.pure) annotateAsPure(call);
 
     return call;
@@ -168,7 +192,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   function pushProps(_props, objs) {
     if (!_props.length) return _props;
 
-    objs.push(t.objectExpression(_props));
+    objs.push(objectExpression(_props));
     return [];
   }
 
@@ -208,12 +232,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     if (useSpread) {
       const props = attribs.map(convertAttribute);
-      return t.objectExpression(props);
+      return objectExpression(props);
     }
 
     while (attribs.length) {
       const prop = attribs.shift();
-      if (t.isJSXSpreadAttribute(prop)) {
+      if (isJSXSpreadAttribute(prop)) {
         _props = pushProps(_props, objs);
         objs.push(prop.argument);
       } else {
@@ -228,16 +252,16 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       attribs = objs[0];
     } else {
       // looks like we have multiple objects
-      if (!t.isObjectExpression(objs[0])) {
-        objs.unshift(t.objectExpression([]));
+      if (!isObjectExpression(objs[0])) {
+        objs.unshift(objectExpression([]));
       }
 
       const helper = useBuiltIns
-        ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+        ? memberExpression(identifier("Object"), identifier("assign"))
         : file.addHelper("extends");
 
       // spread it
-      attribs = t.callExpression(helper, objs);
+      attribs = callExpression(helper, objs);
     }
 
     return attribs;
@@ -247,7 +271,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     if (opts.filter && !opts.filter(path.node, file)) return;
 
     const openingPath = path.get("openingElement");
-    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
+    openingPath.parent.children = react.buildChildren(openingPath.parent);
 
     const args = [];
     const tagName = null;
@@ -265,7 +289,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     // no attributes are allowed with <> syntax
-    args.push(t.nullLiteral(), ...path.node.children);
+    args.push(nullLiteral(), ...path.node.children);
 
     if (opts.post) {
       opts.post(state, file);
@@ -273,7 +297,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     file.set("usedFragment", true);
 
-    const call = state.call || t.callExpression(state.callee, args);
+    const call = state.call || callExpression(state.callee, args);
     if (state.pure) annotateAsPure(call);
 
     return call;

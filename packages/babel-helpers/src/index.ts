@@ -1,7 +1,16 @@
 import type { File } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
 import traverse from "@babel/traverse";
-import * as t from "@babel/types";
+import {
+  assignmentExpression,
+  cloneNode,
+  expressionStatement,
+  file as t_file,
+  identifier,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import helpers from "./helpers";
 
 function makePath(path: NodePath) {
@@ -213,8 +222,8 @@ function permuteHelperAST(
           exp.replaceWith(decl);
         } else {
           exp.replaceWith(
-            t.variableDeclaration("var", [
-              t.variableDeclarator(id, decl.node as t.Expression),
+            variableDeclaration("var", [
+              variableDeclarator(id, decl.node as t.Expression),
             ]),
           );
         }
@@ -222,19 +231,19 @@ function permuteHelperAST(
         if (decl.isFunctionDeclaration()) {
           exportBindingAssignments.forEach(assignPath => {
             const assign: NodePath<t.Expression> = path.get(assignPath);
-            assign.replaceWith(t.assignmentExpression("=", id, assign.node));
+            assign.replaceWith(assignmentExpression("=", id, assign.node));
           });
           exp.replaceWith(decl);
           path.pushContainer(
             "body",
-            t.expressionStatement(
-              t.assignmentExpression("=", id, t.identifier(exportName)),
+            expressionStatement(
+              assignmentExpression("=", id, identifier(exportName)),
             ),
           );
         } else {
           exp.replaceWith(
-            t.expressionStatement(
-              t.assignmentExpression("=", id, decl.node as t.Expression),
+            expressionStatement(
+              assignmentExpression("=", id, decl.node as t.Expression),
             ),
           );
         }
@@ -248,7 +257,7 @@ function permuteHelperAST(
 
       for (const path of imps) path.remove();
       for (const path of impsBindingRefs) {
-        const node = t.cloneNode(dependenciesRefs[path.node.name]);
+        const node = cloneNode(dependenciesRefs[path.node.name]);
         path.replaceWith(node);
       }
 
@@ -285,7 +294,7 @@ function loadHelper(name: string) {
     }
 
     const fn = (): File => {
-      const file = { ast: t.file(helper.ast()) };
+      const file = { ast: t_file(helper.ast()) };
       if (fileClass) {
         return new fileClass(
           {
