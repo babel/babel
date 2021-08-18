@@ -1,3 +1,3 @@
 class Foo {
-  static public {}
+  public static {}
 }

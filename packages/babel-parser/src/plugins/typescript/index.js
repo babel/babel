@@ -230,17 +230,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     /** Parses a modifier matching one the given modifier names. */
-    tsParseModifier<T: TsModifier>(allowedModifiers: T[]): ?T {
+    tsParseModifier<T: TsModifier>(
+      allowedModifiers: T[],
+      stopOnStartOfClassStaticBlock?: boolean,
+    ): ?T {
       if (!this.match(tt.name)) {
         return undefined;
       }
 
       const modifier = this.state.value;
-      if (
-        allowedModifiers.indexOf(modifier) !== -1 &&
-        this.tsTryParse(this.tsNextTokenCanFollowModifier.bind(this))
-      ) {
-        return modifier;
+      if (allowedModifiers.indexOf(modifier) !== -1) {
+        if (stopOnStartOfClassStaticBlock && this.tsIsStartOfStaticBlocks()) {
+          return undefined;
+        }
+        if (this.tsTryParse(this.tsNextTokenCanFollowModifier.bind(this))) {
+          return modifier;
+        }
       }
       return undefined;
     }
@@ -258,6 +263,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowedModifiers: TsModifier[],
       disallowedModifiers?: TsModifier[],
       errorTemplate?: ErrorTemplate,
+      stopOnStartOfClassStaticBlock?: boolean,
     ): void {
       const enforceOrder = (pos, modifier, before, after) => {
         if (modifier === before && modified[after]) {
@@ -277,6 +283,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const startPos = this.state.start;
         const modifier: ?TsModifier = this.tsParseModifier(
           allowedModifiers.concat(disallowedModifiers ?? []),
+          stopOnStartOfClassStaticBlock,
         );
 
         if (!modifier) break;
@@ -2374,6 +2381,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       });
     }
 
+    tsIsStartOfStaticBlocks() {
+      return (
+        this.isContextual("static") &&
+        this.lookaheadCharCode() === charCodes.leftCurlyBrace
+      );
+    }
+
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
@@ -2391,18 +2405,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.tsParseModifiers(
         member,
         invalidModifersForStaticBlocks.concat(["static"]),
+        /* disallowedModifiers */ undefined,
+        /* errorTemplate */ undefined,
+        /* stopOnStartOfClassStaticBlock */ true,
       );
 
       const callParseClassMemberWithIsStatic = () => {
-        const isStatic = !!member.static;
-        if (isStatic && this.eat(tt.braceL)) {
-          delete member.static;
+        if (this.tsIsStartOfStaticBlocks()) {
+          this.next(); // eat "static"
+          this.next(); // eat "{"
           if (this.tsHasSomeModifiers(member, invalidModifersForStaticBlocks)) {
             this.raise(this.state.pos, TSErrors.StaticBlockCannotHaveModifier);
           }
           this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
         } else {
-          this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
+          this.parseClassMemberWithIsStatic(
+            classBody,
+            member,
+            state,
+            !!member.static,
+          );
         }
       };
       if (member.declare) {

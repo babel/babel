@@ -1,3 +1,3 @@
 class Foo {
-  static protected {}
+  protected static {}
 }

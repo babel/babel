@@ -1,9 +1,6 @@
 {
   "type": "File",
   "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
-  "errors": [
-    "SyntaxError: Duplicate modifier: 'static'. (2:9)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
@@ -26,6 +23,7 @@
             {
               "type": "StaticBlock",
               "start":14,"end":30,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":18}},
+              "static": true,
               "body": []
             }
           ]
