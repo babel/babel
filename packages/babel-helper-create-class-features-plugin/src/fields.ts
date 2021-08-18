@@ -670,16 +670,14 @@ function buildPrivateAccessorInitialization(
   }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
-  const expr = t.callExpression(helper, [
-    t.thisExpression(),
-    t.cloneNode(id),
-    template.expression.ast`{
-        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-      }`,
-  ]);
-
-  return t.expressionStatement(expr);
+  return template.statement.ast`${helper}(
+    ${t.thisExpression()},
+    ${id},
+    {
+      get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+      set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+    },
+  )`;
 }
 
 function buildPrivateInstanceMethodInitalization(
