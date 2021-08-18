@@ -527,16 +527,14 @@ function buildPrivateInstanceFieldInitSpec(
   }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
-  const expr = t.callExpression(helper, [
-    t.thisExpression(),
-    t.cloneNode(id),
-    template.expression.ast`{
+  return template.statement.ast`${helper}(
+    ${t.thisExpression()},
+    ${id},
+    {
       writable: true,
       value: ${value}
-    }`,
-  ]);
-
-  return t.expressionStatement(expr);
+    },
+  )`;
 }
 
 function buildPrivateStaticFieldInitSpec(
