@@ -9,6 +9,7 @@ import {
   isRestElement,
   returnStatement,
 } from "@babel/types";
+import type * as t from "@babel/types";
 
 const buildAnonymousExpressionWrapper = template.expression(`
   (function () {
