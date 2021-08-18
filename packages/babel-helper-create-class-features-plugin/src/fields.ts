@@ -696,8 +696,7 @@ function buildPrivateInstanceMethodInitalization(
   }
 
   const helper = state.addHelper("classPrivateMethodInitSpec");
-  const expr = t.callExpression(helper, [t.thisExpression(), t.cloneNode(id)]);
-  return t.expressionStatement(expr);
+  return template.statement.ast`${helper}(${t.thisExpression()}, ${id})`;
 }
 
 function buildPublicFieldInitLoose(
