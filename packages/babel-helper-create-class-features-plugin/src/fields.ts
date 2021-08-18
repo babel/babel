@@ -529,7 +529,7 @@ function buildPrivateInstanceFieldInitSpec(
   const helper = state.addHelper("classPrivateFieldInitSpec");
   return template.statement.ast`${helper}(
     ${t.thisExpression()},
-    ${id},
+    ${t.cloneNode(id)},
     {
       writable: true,
       value: ${value}
@@ -670,7 +670,7 @@ function buildPrivateAccessorInitialization(
   const helper = state.addHelper("classPrivateFieldInitSpec");
   return template.statement.ast`${helper}(
     ${t.thisExpression()},
-    ${id},
+    ${t.cloneNode(id)},
     {
       get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
       set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
@@ -694,7 +694,10 @@ function buildPrivateInstanceMethodInitalization(
   }
 
   const helper = state.addHelper("classPrivateMethodInitSpec");
-  return template.statement.ast`${helper}(${t.thisExpression()}, ${id})`;
+  return template.statement.ast`${helper}(
+    ${t.thisExpression()},
+    ${t.cloneNode(id)}
+  )`;
 }
 
 function buildPublicFieldInitLoose(
