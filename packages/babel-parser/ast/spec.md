@@ -1352,6 +1352,7 @@ Note:
 
 - Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state.
 - If `source` is `null`, for each `specifier` of `specifiers`, `specifier.local` can not be a `StringLiteral`.
+- If `specifiers` contains `ExportNamespaceSpecifier`, it must have only one `ExportNamespaceSpecifier`.
 
 ### ExportSpecifier
 
