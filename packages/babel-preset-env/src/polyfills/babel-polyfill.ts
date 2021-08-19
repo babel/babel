@@ -1,7 +1,7 @@
 import { getImportSource, getRequireSource, isPolyfillSource } from "./utils";
 
 import type { NodePath } from "@babel/traverse";
-import * as t from "@babel/types";
+import type * as t from "@babel/types";
 
 const BABEL_POLYFILL_DEPRECATION = `
   \`@babel/polyfill\` is deprecated. Please, use required parts of \`core-js\`

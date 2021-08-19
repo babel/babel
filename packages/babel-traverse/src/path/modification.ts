@@ -3,7 +3,17 @@
 import { path as pathCache } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
-import * as t from "@babel/types";
+import {
+  arrowFunctionExpression,
+  assertExpression,
+  assignmentExpression,
+  blockStatement,
+  callExpression,
+  cloneNode,
+  expressionStatement,
+  isExpression,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import type Scope from "../scope";
 
 /**
@@ -40,7 +50,7 @@ export function insertBefore(this: NodePath, nodes_: t.Node | t.Node[]) {
       (!this.isExpressionStatement() ||
         (node as t.ExpressionStatement).expression != null);
 
-    this.replaceWith(t.blockStatement(shouldInsertCurrentNode ? [node] : []));
+    this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
     return this.unshiftContainer("body", nodes);
   } else {
     throw new Error(
@@ -118,7 +128,7 @@ export function insertAfter(
         // If A is an expression statement, it isn't safe anymore so we need to
         // convert B to an expression statement
         //     A;        -> A; B // No semicolon! It could break if followed by [!
-        return t.isExpression(node) ? t.expressionStatement(node) : node;
+        return isExpression(node) ? expressionStatement(node) : node;
       }),
     );
   } else if (
@@ -132,11 +142,9 @@ export function insertAfter(
       let { scope } = this;
 
       if (scope.path.isPattern()) {
-        t.assertExpression(node);
+        assertExpression(node);
 
-        this.replaceWith(
-          t.callExpression(t.arrowFunctionExpression([], node), []),
-        );
+        this.replaceWith(callExpression(arrowFunctionExpression([], node), []));
         (this.get("callee.body") as NodePath).insertAfter(nodes);
         return [this];
       }
@@ -148,14 +156,14 @@ export function insertAfter(
       }
       const temp = scope.generateDeclaredUidIdentifier();
       nodes.unshift(
-        t.expressionStatement(
+        expressionStatement(
           // @ts-expect-error todo(flow->ts): This can be a variable
           // declaraion in the "init" of a for statement, but that's
           // invalid here.
-          t.assignmentExpression("=", t.cloneNode(temp), node),
+          assignmentExpression("=", cloneNode(temp), node),
         ),
       );
-      nodes.push(t.expressionStatement(t.cloneNode(temp)));
+      nodes.push(expressionStatement(cloneNode(temp)));
     }
     // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
@@ -168,7 +176,7 @@ export function insertAfter(
       (!this.isExpressionStatement() ||
         (node as t.ExpressionStatement).expression != null);
 
-    this.replaceWith(t.blockStatement(shouldInsertCurrentNode ? [node] : []));
+    this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
     return this.pushContainer("body", nodes);
   } else {
     throw new Error(

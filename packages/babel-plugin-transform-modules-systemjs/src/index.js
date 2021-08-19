@@ -295,7 +295,7 @@ export default declare((api, options) => {
           const exportMap = Object.create(null);
           const modules = [];
 
-          let beforeBody = [];
+          const beforeBody = [];
           const setters = [];
           const sources = [];
           const variableIds = [];
@@ -475,7 +475,7 @@ export default declare((api, options) => {
           }
 
           modules.forEach(function (specifiers) {
-            let setterBody = [];
+            const setterBody = [];
             const target = scope.generateUid(specifiers.key);
 
             for (let specifier of specifiers.imports) {
@@ -540,8 +540,8 @@ export default declare((api, options) => {
                 }
               }
 
-              setterBody = setterBody.concat(
-                constructExportCall(
+              setterBody.push(
+                ...constructExportCall(
                   path,
                   t.identifier(exportIdent),
                   exportNames,
@@ -589,8 +589,8 @@ export default declare((api, options) => {
           }
 
           if (exportNames.length) {
-            beforeBody = beforeBody.concat(
-              constructExportCall(
+            beforeBody.push(
+              ...constructExportCall(
                 path,
                 t.identifier(exportIdent),
                 exportNames,

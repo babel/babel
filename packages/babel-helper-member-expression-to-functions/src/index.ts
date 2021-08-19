@@ -1,5 +1,28 @@
 import type { NodePath, Visitor } from "@babel/traverse";
-import * as t from "@babel/types";
+import {
+  LOGICAL_OPERATORS,
+  arrowFunctionExpression,
+  assignmentExpression,
+  binaryExpression,
+  booleanLiteral,
+  callExpression,
+  cloneNode,
+  conditionalExpression,
+  identifier,
+  isMemberExpression,
+  isOptionalCallExpression,
+  isOptionalMemberExpression,
+  isUpdateExpression,
+  logicalExpression,
+  memberExpression,
+  nullLiteral,
+  numericLiteral,
+  optionalCallExpression,
+  optionalMemberExpression,
+  sequenceExpression,
+  unaryExpression,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import { willPathCastToBoolean } from "./util";
 
 class AssignmentMemoiser {
@@ -22,7 +45,7 @@ class AssignmentMemoiser {
     if (record.count === 0) {
       // The `count` access is the outermost function call (hopefully), so it
       // does the assignment.
-      return t.assignmentExpression("=", value, key);
+      return assignmentExpression("=", value, key);
     }
     return value;
   }
@@ -37,8 +60,8 @@ function toNonOptional(
   base: t.Expression,
 ): t.Expression {
   const { node } = path;
-  if (t.isOptionalMemberExpression(node)) {
-    return t.memberExpression(base, node.property, node.computed);
+  if (isOptionalMemberExpression(node)) {
+    return memberExpression(base, node.property, node.computed);
   }
 
   if (path.isOptionalCallExpression()) {
@@ -48,15 +71,15 @@ function toNonOptional(
       const context = path.scope.maybeGenerateMemoised(object) || object;
       callee
         .get("object")
-        .replaceWith(t.assignmentExpression("=", context as t.LVal, object));
+        .replaceWith(assignmentExpression("=", context as t.LVal, object));
 
-      return t.callExpression(t.memberExpression(base, t.identifier("call")), [
+      return callExpression(memberExpression(base, identifier("call")), [
         context,
         ...path.node.arguments,
       ]);
     }
 
-    return t.callExpression(base, path.node.arguments);
+    return callExpression(base, path.node.arguments);
   }
 
   return path.node;
@@ -108,13 +131,13 @@ const handle = {
       // actually, we can consider the `baz` access to be the end. So we're
       // looking for the nearest optional chain that is `optional: true`.
       const endPath = member.find(({ node, parent }) => {
-        if (t.isOptionalMemberExpression(parent)) {
+        if (isOptionalMemberExpression(parent)) {
           // We need to check `parent.object` since we could be inside the
           // computed expression of a `bad?.[FOO?.BAR]`. In this case, the
           // endPath is the `FOO?.BAR` member itself.
           return parent.optional || parent.object !== node;
         }
-        if (t.isOptionalCallExpression(parent)) {
+        if (isOptionalCallExpression(parent)) {
           // Checking `parent.callee` since we could be in the arguments, eg
           // `bad?.(FOO?.BAR)`.
           // Also skip `FOO?.BAR` in `FOO?.BAR?.()` since we need to transform the optional call to ensure proper this
@@ -132,7 +155,7 @@ const handle = {
       if (scope.path.isPattern()) {
         endPath.replaceWith(
           // The injected member will be queued and eventually transformed when visited
-          t.callExpression(t.arrowFunctionExpression([], endPath.node), []),
+          callExpression(arrowFunctionExpression([], endPath.node), []),
         );
         return;
       }
@@ -239,7 +262,7 @@ const handle = {
       let context: t.Identifier;
       const endParentPath = endPath.parentPath as NodePath<t.Expression>;
       if (
-        t.isMemberExpression(regular) &&
+        isMemberExpression(regular) &&
         endParentPath.isOptionalCallExpression({
           callee: endPath.node,
           optional: true,
@@ -248,7 +271,7 @@ const handle = {
         const { object } = regular;
         context = member.scope.maybeGenerateMemoised(object);
         if (context) {
-          regular.object = t.assignmentExpression("=", context, object);
+          regular.object = assignmentExpression("=", context, object);
         }
       }
 
@@ -259,60 +282,48 @@ const handle = {
       }
 
       const baseMemoised = baseNeedsMemoised
-        ? t.assignmentExpression(
-            "=",
-            t.cloneNode(baseRef),
-            t.cloneNode(startingNode),
-          )
-        : t.cloneNode(baseRef);
+        ? assignmentExpression("=", cloneNode(baseRef), cloneNode(startingNode))
+        : cloneNode(baseRef);
 
       if (willEndPathCastToBoolean) {
         let nonNullishCheck;
         if (noDocumentAll) {
-          nonNullishCheck = t.binaryExpression(
-            "!=",
-            baseMemoised,
-            t.nullLiteral(),
-          );
+          nonNullishCheck = binaryExpression("!=", baseMemoised, nullLiteral());
         } else {
-          nonNullishCheck = t.logicalExpression(
+          nonNullishCheck = logicalExpression(
             "&&",
-            t.binaryExpression("!==", baseMemoised, t.nullLiteral()),
-            t.binaryExpression(
+            binaryExpression("!==", baseMemoised, nullLiteral()),
+            binaryExpression(
               "!==",
-              t.cloneNode(baseRef),
+              cloneNode(baseRef),
               scope.buildUndefinedNode(),
             ),
           );
         }
         replacementPath.replaceWith(
-          t.logicalExpression("&&", nonNullishCheck, regular),
+          logicalExpression("&&", nonNullishCheck, regular),
         );
       } else {
         let nullishCheck;
         if (noDocumentAll) {
-          nullishCheck = t.binaryExpression(
-            "==",
-            baseMemoised,
-            t.nullLiteral(),
-          );
+          nullishCheck = binaryExpression("==", baseMemoised, nullLiteral());
         } else {
-          nullishCheck = t.logicalExpression(
+          nullishCheck = logicalExpression(
             "||",
-            t.binaryExpression("===", baseMemoised, t.nullLiteral()),
-            t.binaryExpression(
+            binaryExpression("===", baseMemoised, nullLiteral()),
+            binaryExpression(
               "===",
-              t.cloneNode(baseRef),
+              cloneNode(baseRef),
               scope.buildUndefinedNode(),
             ),
           );
         }
 
         replacementPath.replaceWith(
-          t.conditionalExpression(
+          conditionalExpression(
             nullishCheck,
             isDeleteOperation
-              ? t.booleanLiteral(true)
+              ? booleanLiteral(true)
               : scope.buildUndefinedNode(),
             regular,
           ),
@@ -323,14 +334,14 @@ const handle = {
       if (context) {
         const endParent = endParentPath.node as t.OptionalCallExpression;
         endParentPath.replaceWith(
-          t.optionalCallExpression(
-            t.optionalMemberExpression(
+          optionalCallExpression(
+            optionalMemberExpression(
               endParent.callee,
-              t.identifier("call"),
+              identifier("call"),
               false,
               true,
             ),
-            [t.cloneNode(context), ...endParent.arguments],
+            [cloneNode(context), ...endParent.arguments],
             false,
           ),
         );
@@ -341,7 +352,7 @@ const handle = {
 
     // MEMBER++   ->   _set(MEMBER, (_ref = (+_get(MEMBER))) + 1), _ref
     // ++MEMBER   ->   _set(MEMBER, (+_get(MEMBER)) + 1)
-    if (t.isUpdateExpression(parent, { argument: node })) {
+    if (isUpdateExpression(parent, { argument: node })) {
       if (this.simpleSet) {
         member.replaceWith(this.simpleSet(member));
         return;
@@ -354,10 +365,10 @@ const handle = {
       // assignment.
       this.memoise(member, 2);
 
-      const value = t.binaryExpression(
+      const value = binaryExpression(
         operator[0] as "+" | "-",
-        t.unaryExpression("+", this.get(member)),
-        t.numericLiteral(1),
+        unaryExpression("+", this.get(member)),
+        numericLiteral(1),
       );
 
       if (prefix) {
@@ -367,15 +378,15 @@ const handle = {
         const ref = scope.generateUidIdentifierBasedOnNode(node);
         scope.push({ id: ref });
 
-        value.left = t.assignmentExpression(
+        value.left = assignmentExpression(
           "=",
-          t.cloneNode(ref),
+          cloneNode(ref),
           // @ts-expect-error todo(flow->ts) value.left is possibly PrivateName, which is not usable here
           value.left,
         );
 
         parentPath.replaceWith(
-          t.sequenceExpression([this.set(member, value), t.cloneNode(ref)]),
+          sequenceExpression([this.set(member, value), cloneNode(ref)]),
         );
       }
       return;
@@ -396,13 +407,13 @@ const handle = {
         parentPath.replaceWith(this.set(member, value));
       } else {
         const operatorTrunc = operator.slice(0, -1);
-        if (t.LOGICAL_OPERATORS.includes(operatorTrunc)) {
+        if (LOGICAL_OPERATORS.includes(operatorTrunc)) {
           // Give the state handler a chance to memoise the member, since we'll
           // reference it twice. The first access (the get) should do the memo
           // assignment.
           this.memoise(member, 1);
           parentPath.replaceWith(
-            t.logicalExpression(
+            logicalExpression(
               operatorTrunc as t.LogicalExpression["operator"],
               this.get(member),
               this.set(member, value),
@@ -414,7 +425,7 @@ const handle = {
           parentPath.replaceWith(
             this.set(
               member,
-              t.binaryExpression(
+              binaryExpression(
                 operatorTrunc as t.BinaryExpression["operator"],
                 this.get(member),
                 value,
@@ -440,7 +451,7 @@ const handle = {
       if (scope.path.isPattern()) {
         parentPath.replaceWith(
           // The injected member will be queued and eventually transformed when visited
-          t.callExpression(t.arrowFunctionExpression([], parentPath.node), []),
+          callExpression(arrowFunctionExpression([], parentPath.node), []),
         );
         return;
       }

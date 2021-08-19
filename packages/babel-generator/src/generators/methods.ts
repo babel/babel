@@ -1,7 +1,7 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import { isIdentifier } from "@babel/types";
+import type * as t from "@babel/types";
 
-const { isIdentifier } = t;
 export function _params(this: Printer, node: any) {
   this.print(node.typeParameters, node);
   this.token("(");

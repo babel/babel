@@ -3,7 +3,8 @@ import { NodePath, Scope } from "@babel/traverse";
 import type { HubInterface } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
-import * as t from "@babel/types";
+import { cloneNode, interpreterDirective } from "@babel/types";
+import type * as t from "@babel/types";
 import { getModuleName } from "@babel/helper-module-transforms";
 import semver from "semver";
 
@@ -89,7 +90,7 @@ export default class File {
   }
   set shebang(value: string) {
     if (value) {
-      this.path.get("interpreter").replaceWith(t.interpreterDirective(value));
+      this.path.get("interpreter").replaceWith(interpreterDirective(value));
     } else {
       this.path.get("interpreter").remove();
     }
@@ -174,9 +175,9 @@ export default class File {
     );
   }
 
-  addHelper(name: string): any {
+  addHelper(name: string): t.Identifier {
     const declar = this.declarations[name];
-    if (declar) return t.cloneNode(declar);
+    if (declar) return cloneNode(declar);
 
     const generator = this.get("helperGenerator");
     if (generator) {
@@ -209,6 +210,7 @@ export default class File {
     });
 
     nodes.forEach(node => {
+      // @ts-expect-error
       node._compact = true;
     });
 

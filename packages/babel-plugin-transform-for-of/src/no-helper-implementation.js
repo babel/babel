@@ -24,7 +24,7 @@ export default function transformWithoutHelper(loose, path, state) {
   }
 
   // push the rest of the original loop body onto our new body
-  block.body = block.body.concat(node.body.body);
+  block.body.push(...node.body.body);
 
   t.inherits(loop, node);
   t.inherits(loop.body, node.body);

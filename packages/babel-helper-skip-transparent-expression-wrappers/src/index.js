@@ -1,6 +1,12 @@
 // @flow
 
-import * as t from "@babel/types";
+import {
+  isParenthesizedExpression,
+  isTSAsExpression,
+  isTSNonNullExpression,
+  isTSTypeAssertion,
+  isTypeCastExpression,
+} from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
 // A transparent expression wrapper is an AST node that most plugins will wish
@@ -10,11 +16,11 @@ import type { NodePath } from "@babel/traverse";
 // determining the callee.
 export function isTransparentExprWrapper(node: Node) {
   return (
-    t.isTSAsExpression(node) ||
-    t.isTSTypeAssertion(node) ||
-    t.isTSNonNullExpression(node) ||
-    t.isTypeCastExpression(node) ||
-    t.isParenthesizedExpression(node)
+    isTSAsExpression(node) ||
+    isTSTypeAssertion(node) ||
+    isTSNonNullExpression(node) ||
+    isTypeCastExpression(node) ||
+    isParenthesizedExpression(node)
   );
 }
 

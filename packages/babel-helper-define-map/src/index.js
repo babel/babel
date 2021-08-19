@@ -1,8 +1,25 @@
 import nameFunction from "@babel/helper-function-name";
-import * as t from "@babel/types";
+import {
+  arrayExpression,
+  booleanLiteral,
+  functionExpression,
+  identifier,
+  inheritsComments,
+  isClassMethod,
+  isFunctionExpression,
+  isObjectMethod,
+  isObjectProperty,
+  isProperty,
+  isStringLiteral,
+  objectExpression,
+  objectProperty,
+  removeComments,
+  toComputedKey,
+  toKeyAlias,
+} from "@babel/types";
 
 function toKind(node: Object) {
-  if (t.isClassMethod(node) || t.isObjectMethod(node)) {
+  if (isClassMethod(node) || isObjectMethod(node)) {
     if (node.kind === "get" || node.kind === "set") {
       return node.kind;
     }
@@ -20,7 +37,7 @@ export function push(
   file,
   scope?,
 ): Object {
-  const alias = t.toKeyAlias(node);
+  const alias = toKeyAlias(node);
 
   //
 
@@ -40,10 +57,9 @@ export function push(
   }
 
   if (node.decorators) {
-    const decorators = (map.decorators =
-      map.decorators || t.arrayExpression([]));
-    decorators.elements = decorators.elements.concat(
-      node.decorators.map(dec => dec.expression).reverse(),
+    const decorators = (map.decorators = map.decorators || arrayExpression([]));
+    decorators.elements.push(
+      ...node.decorators.map(dec => dec.expression).reverse(),
     );
   }
 
@@ -54,18 +70,14 @@ export function push(
   let key, value;
 
   // save the key so we can possibly do function name inferences
-  if (
-    t.isObjectProperty(node) ||
-    t.isObjectMethod(node) ||
-    t.isClassMethod(node)
-  ) {
-    key = t.toComputedKey(node, node.key);
+  if (isObjectProperty(node) || isObjectMethod(node) || isClassMethod(node)) {
+    key = toComputedKey(node, node.key);
   }
 
-  if (t.isProperty(node)) {
+  if (isProperty(node)) {
     value = node.value;
-  } else if (t.isObjectMethod(node) || t.isClassMethod(node)) {
-    value = t.functionExpression(
+  } else if (isObjectMethod(node) || isClassMethod(node)) {
+    value = functionExpression(
       null,
       node.params,
       node.body,
@@ -83,15 +95,15 @@ export function push(
   // infer function name
   if (
     scope &&
-    t.isStringLiteral(key) &&
+    isStringLiteral(key) &&
     (kind === "value" || kind === "initializer") &&
-    t.isFunctionExpression(value)
+    isFunctionExpression(value)
   ) {
     value = nameFunction({ id: key, node: value, scope });
   }
 
   if (value) {
-    t.inheritsComments(value, node);
+    inheritsComments(value, node);
     map[kind] = value;
   }
 
@@ -108,13 +120,13 @@ export function hasComputed(mutatorMap: Object): boolean {
 }
 
 export function toComputedObjectFromClass(obj: Object): Object {
-  const objExpr = t.arrayExpression([]);
+  const objExpr = arrayExpression([]);
 
   for (let i = 0; i < obj.properties.length; i++) {
     const prop = obj.properties[i];
     const val = prop.value;
     val.properties.unshift(
-      t.objectProperty(t.identifier("key"), t.toComputedKey(prop)),
+      objectProperty(identifier("key"), toComputedKey(prop)),
     );
     objExpr.elements.push(val);
   }
@@ -123,21 +135,21 @@ export function toComputedObjectFromClass(obj: Object): Object {
 }
 
 export function toClassObject(mutatorMap: Object): Object {
-  const objExpr = t.objectExpression([]);
+  const objExpr = objectExpression([]);
 
   Object.keys(mutatorMap).forEach(function (mutatorMapKey) {
     const map = mutatorMap[mutatorMapKey];
-    const mapNode = t.objectExpression([]);
+    const mapNode = objectExpression([]);
 
-    const propNode = t.objectProperty(map._key, mapNode, map._computed);
+    const propNode = objectProperty(map._key, mapNode, map._computed);
 
     Object.keys(map).forEach(function (key) {
       const node = map[key];
       if (key[0] === "_") return;
 
-      const prop = t.objectProperty(t.identifier(key), node);
-      t.inheritsComments(prop, node);
-      t.removeComments(node);
+      const prop = objectProperty(identifier(key), node);
+      inheritsComments(prop, node);
+      removeComments(node);
 
       mapNode.properties.push(prop);
     });
@@ -151,9 +163,9 @@ export function toClassObject(mutatorMap: Object): Object {
 export function toDefineObject(mutatorMap: Object): Object {
   Object.keys(mutatorMap).forEach(function (key) {
     const map = mutatorMap[key];
-    if (map.value) map.writable = t.booleanLiteral(true);
-    map.configurable = t.booleanLiteral(true);
-    map.enumerable = t.booleanLiteral(true);
+    if (map.value) map.writable = booleanLiteral(true);
+    map.configurable = booleanLiteral(true);
+    map.enumerable = booleanLiteral(true);
   });
 
   return toClassObject(mutatorMap);

@@ -1,8 +1,19 @@
+import type { File } from "@babel/core";
+import type { NodePath, Visitor } from "@babel/traverse";
 import traverse from "@babel/traverse";
-import * as t from "@babel/types";
+import {
+  assignmentExpression,
+  cloneNode,
+  expressionStatement,
+  file as t_file,
+  identifier,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import helpers from "./helpers";
 
-function makePath(path) {
+function makePath(path: NodePath) {
   const parts = [];
 
   for (; path.parentPath; path = path.parentPath) {
@@ -14,23 +25,35 @@ function makePath(path) {
 }
 
 let fileClass = undefined;
+
+interface HelperMetadata {
+  globals: string[];
+  localBindingNames: string[];
+  dependencies: Map<t.Identifier, string>;
+  exportBindingAssignments: string[];
+  exportPath: string;
+  exportName: string;
+  importBindingsReferences: string[];
+  importPaths: string[];
+}
+
 /**
  * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
  * the helper is whatever context it is needed in.
  */
-function getHelperMetadata(file) {
-  const globals = new Set();
-  const localBindingNames = new Set();
+function getHelperMetadata(file: File): HelperMetadata {
+  const globals = new Set<string>();
+  const localBindingNames = new Set<string>();
   // Maps imported identifier -> helper name
-  const dependencies = new Map();
+  const dependencies = new Map<t.Identifier, string>();
 
-  let exportName;
-  let exportPath;
-  const exportBindingAssignments = [];
-  const importPaths = [];
-  const importBindingsReferences = [];
+  let exportName: string | undefined;
+  let exportPath: string | undefined;
+  const exportBindingAssignments: string[] = [];
+  const importPaths: string[] = [];
+  const importBindingsReferences: string[] = [];
 
-  const dependencyVisitor = {
+  const dependencyVisitor: Visitor = {
     ImportDeclaration(child) {
       const name = child.node.source.value;
       if (!helpers[name]) {
@@ -75,7 +98,7 @@ function getHelperMetadata(file) {
     },
   };
 
-  const referenceVisitor = {
+  const referenceVisitor: Visitor = {
     Program(path) {
       const bindings = path.scope.getAllBindings();
 
@@ -88,7 +111,7 @@ function getHelperMetadata(file) {
     },
     ReferencedIdentifier(child) {
       const name = child.node.name;
-      const binding = child.scope.getBinding(name, /* noGlobal */ true);
+      const binding = child.scope.getBinding(name);
       if (!binding) {
         globals.add(name);
       } else if (dependencies.has(binding.identifier)) {
@@ -135,10 +158,18 @@ function getHelperMetadata(file) {
   };
 }
 
+type GetDependency = (name: string) => t.Expression;
+
 /**
  * Given a helper AST and information about how it will be used, update the AST to match the usage.
  */
-function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
+function permuteHelperAST(
+  file: File,
+  metadata: HelperMetadata,
+  id?: t.Identifier | t.MemberExpression,
+  localBindings?: string[],
+  getDependency?: GetDependency,
+) {
   if (localBindings && !id) {
     throw new Error("Unexpected local bindings for module-based helpers.");
   }
@@ -155,13 +186,13 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
     importPaths,
   } = metadata;
 
-  const dependenciesRefs = {};
+  const dependenciesRefs: Record<string, t.Expression> = {};
   dependencies.forEach((name, id) => {
     dependenciesRefs[id.name] =
       (typeof getDependency === "function" && getDependency(name)) || id;
   });
 
-  const toRename = {};
+  const toRename: Record<string, string> = {};
   const bindings = new Set(localBindings || []);
   localBindingNames.forEach(name => {
     let newName = name;
@@ -174,13 +205,16 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
     toRename[exportName] = id.name;
   }
 
-  const visitor = {
+  const visitor: Visitor = {
     Program(path) {
       // We need to compute these in advance because removing nodes would
       // invalidate the paths.
-      const exp = path.get(exportPath);
-      const imps = importPaths.map(p => path.get(p));
-      const impsBindingRefs = importBindingsReferences.map(p => path.get(p));
+      const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
+      const imps: NodePath<t.ImportDeclaration>[] = importPaths.map(p =>
+        path.get(p),
+      );
+      const impsBindingRefs: NodePath<t.Identifier>[] =
+        importBindingsReferences.map(p => path.get(p));
 
       const decl = exp.get("declaration");
       if (id.type === "Identifier") {
@@ -188,25 +222,29 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
           exp.replaceWith(decl);
         } else {
           exp.replaceWith(
-            t.variableDeclaration("var", [t.variableDeclarator(id, decl.node)]),
+            variableDeclaration("var", [
+              variableDeclarator(id, decl.node as t.Expression),
+            ]),
           );
         }
       } else if (id.type === "MemberExpression") {
         if (decl.isFunctionDeclaration()) {
           exportBindingAssignments.forEach(assignPath => {
-            const assign = path.get(assignPath);
-            assign.replaceWith(t.assignmentExpression("=", id, assign.node));
+            const assign: NodePath<t.Expression> = path.get(assignPath);
+            assign.replaceWith(assignmentExpression("=", id, assign.node));
           });
           exp.replaceWith(decl);
           path.pushContainer(
             "body",
-            t.expressionStatement(
-              t.assignmentExpression("=", id, t.identifier(exportName)),
+            expressionStatement(
+              assignmentExpression("=", id, identifier(exportName)),
             ),
           );
         } else {
           exp.replaceWith(
-            t.expressionStatement(t.assignmentExpression("=", id, decl.node)),
+            expressionStatement(
+              assignmentExpression("=", id, decl.node as t.Expression),
+            ),
           );
         }
       } else {
@@ -219,7 +257,7 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
 
       for (const path of imps) path.remove();
       for (const path of impsBindingRefs) {
-        const node = t.cloneNode(dependenciesRefs[path.node.name]);
+        const node = cloneNode(dependenciesRefs[path.node.name]);
         path.replaceWith(node);
       }
 
@@ -231,8 +269,21 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
   traverse(file.ast, visitor, file.scope);
 }
 
-const helperData = Object.create(null);
-function loadHelper(name) {
+interface HelperData {
+  build: (
+    getDependency: GetDependency,
+    id: t.Identifier | t.MemberExpression,
+    localBindings: string[],
+  ) => {
+    nodes: t.Program["body"];
+    globals: string[];
+  };
+  minVersion: () => string;
+  dependencies: Map<t.Identifier, string>;
+}
+
+const helperData: Record<string, HelperData> = Object.create(null);
+function loadHelper(name: string) {
   if (!helperData[name]) {
     const helper = helpers[name];
     if (!helper) {
@@ -242,8 +293,8 @@ function loadHelper(name) {
       });
     }
 
-    const fn = () => {
-      const file = { ast: t.file(helper.ast()) };
+    const fn = (): File => {
+      const file = { ast: t_file(helper.ast()) };
       if (fileClass) {
         return new fileClass(
           {
@@ -252,7 +303,7 @@ function loadHelper(name) {
           file,
         );
       }
-      return file;
+      return file as File;
     };
 
     const metadata = getHelperMetadata(fn());
@@ -278,9 +329,9 @@ function loadHelper(name) {
 }
 
 export function get(
-  name,
-  getDependency?: string => ?t.Expression,
-  id?,
+  name: string,
+  getDependency?: GetDependency,
+  id?: t.Identifier | t.MemberExpression,
   localBindings?: string[],
 ) {
   return loadHelper(name).build(getDependency, id, localBindings);
@@ -290,7 +341,7 @@ export function minVersion(name: string) {
   return loadHelper(name).minVersion();
 }
 
-export function getDependencies(name: string): $ReadOnlyArray<string> {
+export function getDependencies(name: string): ReadonlyArray<string> {
   return Array.from(loadHelper(name).dependencies.values());
 }
 

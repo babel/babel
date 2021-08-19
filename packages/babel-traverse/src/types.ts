@@ -1,4 +1,4 @@
-import * as t from "@babel/types";
+import type * as t from "@babel/types";
 import { NodePath } from "./index";
 import { VirtualTypeAliases } from "./path/generated/virtual-types";
 

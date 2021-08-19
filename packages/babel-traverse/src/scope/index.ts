@@ -4,7 +4,46 @@ import traverse from "../index";
 import type { TraverseOptions } from "../index";
 import Binding from "./binding";
 import globals from "globals";
-import * as t from "@babel/types";
+import {
+  FOR_INIT_KEYS,
+  NOT_LOCAL_BINDING,
+  callExpression,
+  cloneNode,
+  getBindingIdentifiers,
+  identifier,
+  isArrayExpression,
+  isBinary,
+  isClass,
+  isClassBody,
+  isClassDeclaration,
+  isExportAllDeclaration,
+  isExportDefaultDeclaration,
+  isExportNamedDeclaration,
+  isFunctionDeclaration,
+  isIdentifier,
+  isImportDeclaration,
+  isLiteral,
+  isMethod,
+  isModuleDeclaration,
+  isModuleSpecifier,
+  isObjectExpression,
+  isProperty,
+  isPureish,
+  isSuper,
+  isTaggedTemplateExpression,
+  isTemplateLiteral,
+  isThisExpression,
+  isUnaryExpression,
+  isVariableDeclaration,
+  matchesPattern,
+  memberExpression,
+  numericLiteral,
+  toIdentifier,
+  unaryExpression,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 import type { Visitor } from "../types";
 
@@ -12,28 +51,28 @@ import type { Visitor } from "../types";
 function gatherNodeParts(node: t.Node, parts: any[]) {
   switch (node?.type) {
     default:
-      if (t.isModuleDeclaration(node)) {
+      if (isModuleDeclaration(node)) {
         if (
-          (t.isExportAllDeclaration(node) ||
-            t.isExportNamedDeclaration(node) ||
-            t.isImportDeclaration(node)) &&
+          (isExportAllDeclaration(node) ||
+            isExportNamedDeclaration(node) ||
+            isImportDeclaration(node)) &&
           node.source
         ) {
           gatherNodeParts(node.source, parts);
         } else if (
-          (t.isExportNamedDeclaration(node) || t.isImportDeclaration(node)) &&
+          (isExportNamedDeclaration(node) || isImportDeclaration(node)) &&
           node.specifiers &&
           node.specifiers.length
         ) {
           for (const e of node.specifiers) gatherNodeParts(e, parts);
         } else if (
-          (t.isExportDefaultDeclaration(node) ||
-            t.isExportNamedDeclaration(node)) &&
+          (isExportDefaultDeclaration(node) ||
+            isExportNamedDeclaration(node)) &&
           node.declaration
         ) {
           gatherNodeParts(node.declaration, parts);
         }
-      } else if (t.isModuleSpecifier(node)) {
+      } else if (isModuleSpecifier(node)) {
         // todo(flow->ts): should condition instead be:
         //    ```
         //    t.isExportSpecifier(node) ||
@@ -44,12 +83,12 @@ function gatherNodeParts(node: t.Node, parts: any[]) {
         //    allowing only nodes with `.local`?
         // @ts-expect-error todo(flow->ts)
         gatherNodeParts(node.local, parts);
-      } else if (t.isLiteral(node)) {
+      } else if (isLiteral(node)) {
         // todo(flow->ts): should condition be stricter to ensure value is there
         //   ```
         //   !t.isNullLiteral(node) &&
         //   !t.isRegExpLiteral(node) &&
-        //   !t.isTemplateLiteral(node)
+        //   !isTemplateLiteral(node)
         //   ```
         // @ts-expect-error todo(flow->ts)
         parts.push(node.value);
@@ -186,7 +225,7 @@ interface CollectVisitorState {
 
 const collectorVisitor: Visitor<CollectVisitorState> = {
   For(path) {
-    for (const key of t.FOR_INIT_KEYS) {
+    for (const key of FOR_INIT_KEYS) {
       // todo: might be not needed with improvement to babel-types
       const declar = path.get(key) as NodePath;
       // delegate block scope handling to the `BlockScoped` method
@@ -236,17 +275,17 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     exit(path) {
       const { node, scope } = path;
       // ExportAllDeclaration does not have `declaration`
-      if (t.isExportAllDeclaration(node)) return;
+      if (isExportAllDeclaration(node)) return;
       const declar = node.declaration;
-      if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
+      if (isClassDeclaration(declar) || isFunctionDeclaration(declar)) {
         const id = declar.id;
         if (!id) return;
 
         const binding = scope.getBinding(id.name);
         if (binding) binding.reference(path);
-      } else if (t.isVariableDeclaration(declar)) {
+      } else if (isVariableDeclaration(declar)) {
         for (const decl of declar.declarations) {
-          for (const name of Object.keys(t.getBindingIdentifiers(decl))) {
+          for (const name of Object.keys(getBindingIdentifiers(decl))) {
             const binding = scope.getBinding(name);
             if (binding) binding.reference(path);
           }
@@ -297,7 +336,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     if (
       path.isFunctionExpression() &&
       path.has("id") &&
-      !path.get("id").node[t.NOT_LOCAL_BINDING]
+      !path.get("id").node[NOT_LOCAL_BINDING]
     ) {
       path.scope.registerBinding("local", path.get("id"), path);
     }
@@ -309,7 +348,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   ClassExpression(path) {
-    if (path.has("id") && !path.get("id").node[t.NOT_LOCAL_BINDING]) {
+    if (path.has("id") && !path.get("id").node[NOT_LOCAL_BINDING]) {
       path.scope.registerBinding("local", path);
     }
   },
@@ -412,7 +451,7 @@ export default class Scope {
   generateDeclaredUidIdentifier(name?: string) {
     const id = this.generateUidIdentifier(name);
     this.push({ id });
-    return t.cloneNode(id);
+    return cloneNode(id);
   }
 
   /**
@@ -420,7 +459,7 @@ export default class Scope {
    */
 
   generateUidIdentifier(name?: string) {
-    return t.identifier(this.generateUid(name));
+    return identifier(this.generateUid(name));
   }
 
   /**
@@ -428,8 +467,7 @@ export default class Scope {
    */
 
   generateUid(name: string = "temp"): string {
-    name = t
-      .toIdentifier(name)
+    name = toIdentifier(name)
       .replace(/^_+/, "")
       .replace(/[0-9]+$/g, "");
 
@@ -477,7 +515,7 @@ export default class Scope {
    */
 
   generateUidIdentifierBasedOnNode(node: t.Node, defaultName?: string) {
-    return t.identifier(this.generateUidBasedOnNode(node, defaultName));
+    return identifier(this.generateUidBasedOnNode(node, defaultName));
   }
 
   /**
@@ -491,11 +529,11 @@ export default class Scope {
    */
 
   isStatic(node: t.Node): boolean {
-    if (t.isThisExpression(node) || t.isSuper(node)) {
+    if (isThisExpression(node) || isSuper(node)) {
       return true;
     }
 
-    if (t.isIdentifier(node)) {
+    if (isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding) {
         return binding.constant;
@@ -518,7 +556,7 @@ export default class Scope {
       const id = this.generateUidIdentifierBasedOnNode(node);
       if (!dontPush) {
         this.push({ id });
-        return t.cloneNode(id);
+        return cloneNode(id);
       }
       return id;
     }
@@ -591,28 +629,25 @@ export default class Scope {
 
   // TODO: (Babel 8) Split i in two parameters, and use an object of flags
   toArray(node: t.Node, i?: number | boolean, arrayLikeIsIterable?: boolean) {
-    if (t.isIdentifier(node)) {
+    if (isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding?.constant && binding.path.isGenericType("Array")) {
         return node;
       }
     }
 
-    if (t.isArrayExpression(node)) {
+    if (isArrayExpression(node)) {
       return node;
     }
 
-    if (t.isIdentifier(node, { name: "arguments" })) {
-      return t.callExpression(
-        t.memberExpression(
-          t.memberExpression(
-            t.memberExpression(
-              t.identifier("Array"),
-              t.identifier("prototype"),
-            ),
-            t.identifier("slice"),
+    if (isIdentifier(node, { name: "arguments" })) {
+      return callExpression(
+        memberExpression(
+          memberExpression(
+            memberExpression(identifier("Array"), identifier("prototype")),
+            identifier("slice"),
           ),
-          t.identifier("call"),
+          identifier("call"),
         ),
         [node],
       );
@@ -624,7 +659,7 @@ export default class Scope {
       // Used in array-spread to create an array.
       helperName = "toConsumableArray";
     } else if (i) {
-      args.push(t.numericLiteral(i));
+      args.push(numericLiteral(i));
 
       // Used in array-rest to create an array from a subset of an iterable.
       helperName = "slicedToArray";
@@ -640,7 +675,7 @@ export default class Scope {
     }
 
     // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
-    return t.callExpression(this.hub.addHelper(helperName), args);
+    return callExpression(this.hub.addHelper(helperName), args);
   }
 
   hasLabel(name: string) {
@@ -688,7 +723,7 @@ export default class Scope {
   }
 
   buildUndefinedNode() {
-    return t.unaryExpression("void", t.numericLiteral(0), true);
+    return unaryExpression("void", numericLiteral(0), true);
   }
 
   registerConstantViolation(path: NodePath) {
@@ -776,59 +811,59 @@ export default class Scope {
   }
 
   isPure(node: t.Node, constantsOnly?: boolean) {
-    if (t.isIdentifier(node)) {
+    if (isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (!binding) return false;
       if (constantsOnly) return binding.constant;
       return true;
-    } else if (t.isClass(node)) {
+    } else if (isClass(node)) {
       if (node.superClass && !this.isPure(node.superClass, constantsOnly)) {
         return false;
       }
       return this.isPure(node.body, constantsOnly);
-    } else if (t.isClassBody(node)) {
+    } else if (isClassBody(node)) {
       for (const method of node.body) {
         if (!this.isPure(method, constantsOnly)) return false;
       }
       return true;
-    } else if (t.isBinary(node)) {
+    } else if (isBinary(node)) {
       return (
         this.isPure(node.left, constantsOnly) &&
         this.isPure(node.right, constantsOnly)
       );
-    } else if (t.isArrayExpression(node)) {
+    } else if (isArrayExpression(node)) {
       for (const elem of node.elements) {
         if (!this.isPure(elem, constantsOnly)) return false;
       }
       return true;
-    } else if (t.isObjectExpression(node)) {
+    } else if (isObjectExpression(node)) {
       for (const prop of node.properties) {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
       return true;
-    } else if (t.isMethod(node)) {
+    } else if (isMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
-    } else if (t.isProperty(node)) {
+    } else if (isProperty(node)) {
       // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
-    } else if (t.isUnaryExpression(node)) {
+    } else if (isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
-    } else if (t.isTaggedTemplateExpression(node)) {
+    } else if (isTaggedTemplateExpression(node)) {
       return (
-        t.matchesPattern(node.tag, "String.raw") &&
+        matchesPattern(node.tag, "String.raw") &&
         !this.hasBinding("String", true) &&
         this.isPure(node.quasi, constantsOnly)
       );
-    } else if (t.isTemplateLiteral(node)) {
+    } else if (isTemplateLiteral(node)) {
       for (const expression of node.expressions) {
         if (!this.isPure(expression, constantsOnly)) return false;
       }
       return true;
     } else {
-      return t.isPureish(node);
+      return isPureish(node);
     }
   }
 
@@ -969,7 +1004,7 @@ export default class Scope {
     let declarPath = !unique && path.getData(dataKey);
 
     if (!declarPath) {
-      const declar = t.variableDeclaration(kind, []);
+      const declar = variableDeclaration(kind, []);
       // @ts-expect-error todo(flow->ts): avoid modifying nodes
       declar._blockHoist = blockHoist;
 
@@ -977,7 +1012,7 @@ export default class Scope {
       if (!unique) path.setData(dataKey, declarPath);
     }
 
-    const declarator = t.variableDeclarator(opts.id, opts.init);
+    const declarator = variableDeclarator(opts.id, opts.init);
     declarPath.node.declarations.push(declarator);
     this.registerBinding(kind, declarPath.get("declarations").pop());
   }
@@ -1031,7 +1066,7 @@ export default class Scope {
    * Walks the scope tree and gathers **all** bindings.
    */
 
-  getAllBindings(): any {
+  getAllBindings(): Record<string, Binding> {
     const ids = Object.create(null);
 
     let scope: Scope = this;

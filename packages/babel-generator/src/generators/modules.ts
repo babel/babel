@@ -1,14 +1,13 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
-
-const {
+import {
   isClassDeclaration,
   isExportDefaultSpecifier,
   isExportNamespaceSpecifier,
   isImportDefaultSpecifier,
   isImportNamespaceSpecifier,
   isStatement,
-} = t;
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   if (node.importKind === "type" || node.importKind === "typeof") {

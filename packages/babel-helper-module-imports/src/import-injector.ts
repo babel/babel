@@ -1,5 +1,6 @@
 import assert from "assert";
-import * as t from "@babel/types";
+import { numericLiteral, sequenceExpression } from "@babel/types";
+import type * as t from "@babel/types";
 import type { NodePath, Scope, HubInterface } from "@babel/traverse";
 
 import ImportBuilder from "./import-builder";
@@ -416,7 +417,7 @@ export default class ImportInjector {
       ensureNoContext &&
       resultName.type !== "Identifier"
     ) {
-      return t.sequenceExpression([t.numericLiteral(0), resultName]);
+      return sequenceExpression([numericLiteral(0), resultName]);
     }
     return resultName;
   }

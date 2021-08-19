@@ -1,6 +1,5 @@
-import * as t from "@babel/types";
-
-const {
+import {
+  FLIPPED_ALIAS_KEYS,
   isArrayExpression,
   isAssignmentExpression,
   isBinary,
@@ -14,7 +13,9 @@ const {
   isOptionalCallExpression,
   isOptionalMemberExpression,
   isStringLiteral,
-} = t;
+} from "@babel/types";
+
+import type * as t from "@babel/types";
 type WhitespaceObject = {
   before?: boolean;
   after?: boolean;
@@ -319,7 +320,7 @@ export const list = {
     amounts = { after: amounts, before: amounts };
   }
   [type as string]
-    .concat(t.FLIPPED_ALIAS_KEYS[type] || [])
+    .concat(FLIPPED_ALIAS_KEYS[type] || [])
     .forEach(function (type) {
       nodes[type] = function () {
         return amounts;

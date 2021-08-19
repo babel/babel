@@ -192,7 +192,8 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   let filenames = commander.args.reduce(function (globbed, input) {
     let files = glob.sync(input);
     if (!files.length) files = [input];
-    return globbed.concat(files);
+    globbed.push(...files);
+    return globbed;
   }, []);
 
   filenames = Array.from(new Set(filenames));
@@ -353,5 +354,9 @@ function collect(
 
   const values = value.split(",");
 
-  return previousValue ? previousValue.concat(values) : values;
+  if (previousValue) {
+    previousValue.push(...values);
+    return previousValue;
+  }
+  return values;
 }

@@ -8,7 +8,7 @@ import path from "path";
 import child_process from "child_process";
 import { fileURLToPath } from "url";
 
-let args = [
+const args = [
   path.join(path.dirname(fileURLToPath(import.meta.url)), "_babel-node"),
 ];
 
@@ -69,7 +69,7 @@ getV8Flags(async function (err, v8Flags) {
 
   // append arguments passed after --
   if (argSeparator > -1) {
-    args = args.concat(userArgs);
+    args.push(...userArgs);
   }
 
   try {

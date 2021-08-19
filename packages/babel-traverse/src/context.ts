@@ -1,5 +1,5 @@
 import NodePath from "./path";
-import * as t from "@babel/types";
+import { VISITOR_KEYS } from "@babel/types";
 import type Scope from "./scope";
 
 export default class TraversalContext {
@@ -30,7 +30,7 @@ export default class TraversalContext {
     if (opts[node.type]) return true;
 
     // check if we're going to traverse into this node
-    const keys: Array<string> | undefined = t.VISITOR_KEYS[node.type];
+    const keys: Array<string> | undefined = VISITOR_KEYS[node.type];
     if (!keys?.length) return false;
 
     // we need to traverse into this node so ensure that it has children to traverse into!

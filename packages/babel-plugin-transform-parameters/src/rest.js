@@ -305,9 +305,7 @@ export default function convertFunctionRest(path) {
     return true;
   }
 
-  state.references = state.references.concat(
-    state.candidates.map(({ path }) => path),
-  );
+  state.references.push(...state.candidates.map(({ path }) => path));
 
   const start = t.numericLiteral(paramsCount);
   const key = scope.generateUidIdentifier("key");

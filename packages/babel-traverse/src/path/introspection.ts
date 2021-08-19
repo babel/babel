@@ -1,7 +1,18 @@
 // This file contains methods responsible for introspecting the current path for certain values.
 
 import type NodePath from "./index";
-import * as t from "@babel/types";
+import {
+  STATEMENT_OR_BLOCK_KEYS,
+  VISITOR_KEYS,
+  isBlockStatement,
+  isExpression,
+  isIdentifier,
+  isLiteral,
+  isStringLiteral,
+  isType,
+  matchesPattern as _matchesPattern,
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 /**
  * Match the current node if it matches the provided `pattern`.
@@ -15,7 +26,7 @@ export function matchesPattern(
   pattern: string,
   allowPartial?: boolean,
 ): boolean {
-  return t.matchesPattern(this.node, pattern, allowPartial);
+  return _matchesPattern(this.node, pattern, allowPartial);
 }
 
 /**
@@ -68,7 +79,7 @@ export function equals(this: NodePath, key: string, value): boolean {
  */
 
 export function isNodeType(this: NodePath, type: string): boolean {
-  return t.isType(this.type, type);
+  return isType(this.type, type);
 }
 
 /**
@@ -104,9 +115,9 @@ export function canSwapBetweenExpressionAndStatement(
   }
 
   if (this.isExpression()) {
-    return t.isBlockStatement(replacement);
+    return isBlockStatement(replacement);
   } else if (this.isBlockStatement()) {
-    return t.isExpression(replacement);
+    return isExpression(replacement);
   }
 
   return false;
@@ -151,11 +162,11 @@ export function isCompletionRecord(
 export function isStatementOrBlock(this: NodePath): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
-    t.isBlockStatement(this.container)
+    isBlockStatement(this.container)
   ) {
     return false;
   } else {
-    return t.STATEMENT_OR_BLOCK_KEYS.includes(this.key as string);
+    return STATEMENT_OR_BLOCK_KEYS.includes(this.key as string);
   }
 }
 
@@ -172,7 +183,7 @@ export function referencesImport(
     if (
       (this.isMemberExpression() || this.isOptionalMemberExpression()) &&
       (this.node.computed
-        ? t.isStringLiteral(this.node.property, { value: importName })
+        ? isStringLiteral(this.node.property, { value: importName })
         : (this.node.property as t.Identifier).name === importName)
     ) {
       const object = (
@@ -211,7 +222,7 @@ export function referencesImport(
 
   if (
     path.isImportSpecifier() &&
-    t.isIdentifier(path.node.imported, { name: importName })
+    isIdentifier(path.node.imported, { name: importName })
   ) {
     return true;
   }
@@ -384,7 +395,7 @@ export function _guessExecutionStatusRelativeTo(
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
-  const keys = t.VISITOR_KEYS[commonPath.type];
+  const keys = VISITOR_KEYS[commonPath.type];
   const keyPosition = {
     this: keys.indexOf(divergence.this.parentKey as string),
     target: keys.indexOf(divergence.target.parentKey as string),
@@ -503,7 +514,7 @@ export function _resolve(
     // making this resolution inaccurate
 
     const targetKey = this.toComputedKey();
-    if (!t.isLiteral(targetKey)) return;
+    if (!isLiteral(targetKey)) return;
 
     // @ts-expect-error todo(flow->ts): NullLiteral
     const targetName = targetKey.value;

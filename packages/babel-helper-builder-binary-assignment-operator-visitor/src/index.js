@@ -1,5 +1,5 @@
 import explode from "@babel/helper-explode-assignable-expression";
-import * as t from "@babel/types";
+import { assignmentExpression, sequenceExpression } from "@babel/types";
 
 export default function (opts: { build: Function, operator: string }): Object {
   const { build, operator } = opts;
@@ -12,13 +12,13 @@ export default function (opts: { build: Function, operator: string }): Object {
       const nodes = [];
       const exploded = explode(node.left, nodes, this, scope);
       nodes.push(
-        t.assignmentExpression(
+        assignmentExpression(
           "=",
           exploded.ref,
           build(exploded.uid, node.right),
         ),
       );
-      path.replaceWith(t.sequenceExpression(nodes));
+      path.replaceWith(sequenceExpression(nodes));
     },
 
     BinaryExpression(path) {

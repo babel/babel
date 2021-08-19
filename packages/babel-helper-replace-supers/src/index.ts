@@ -2,7 +2,20 @@ import type { HubInterface, NodePath, Scope } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import * as t from "@babel/types";
+import {
+  VISITOR_KEYS,
+  assignmentExpression,
+  booleanLiteral,
+  callExpression,
+  cloneNode,
+  identifier,
+  memberExpression,
+  sequenceExpression,
+  staticBlock,
+  stringLiteral,
+  thisExpression,
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 /**
  * Creates an expression which result is the proto of objectRef.
@@ -16,13 +29,13 @@ import * as t from "@babel/types";
  *   helpers.getPrototypeOf(CLASS.prototype)
  */
 function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
-  objectRef = t.cloneNode(objectRef);
+  objectRef = cloneNode(objectRef);
   const targetRef =
     isStatic || isPrivateMethod
       ? objectRef
-      : t.memberExpression(objectRef, t.identifier("prototype"));
+      : memberExpression(objectRef, identifier("prototype"));
 
-  return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
+  return callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
 export function skipAllButComputedKey(
@@ -37,7 +50,7 @@ export function skipAllButComputedKey(
 
   // So it's got a computed key. Make sure to skip every other key the
   // traversal would visit.
-  const keys = t.VISITOR_KEYS[path.type];
+  const keys = VISITOR_KEYS[path.type];
   for (const key of keys) {
     if (key !== "key") path.skipKey(key);
   }
@@ -48,7 +61,7 @@ export function skipAllButComputedKey(
 // Avoid using `path.scope` here
 export const environmentVisitor = {
   // todo (Babel 8): remove StaticBlock brand checks
-  [`${t.staticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
+  [`${staticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
     path: NodePath,
   ) {
     path.skip();
@@ -110,14 +123,14 @@ const specHandlers = {
   prop(superMember) {
     const { computed, property } = superMember.node;
     if (this.memoiser.has(property)) {
-      return t.cloneNode(this.memoiser.get(property));
+      return cloneNode(this.memoiser.get(property));
     }
 
     if (computed) {
-      return t.cloneNode(property);
+      return cloneNode(property);
     }
 
-    return t.stringLiteral(property.name);
+    return stringLiteral(property.name);
   },
 
   get(superMember) {
@@ -131,8 +144,8 @@ const specHandlers = {
       this.file,
       this.isPrivateMethod,
     );
-    return t.callExpression(this.file.addHelper("get"), [
-      thisRefs.memo ? t.sequenceExpression([thisRefs.memo, proto]) : proto,
+    return callExpression(this.file.addHelper("get"), [
+      thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
       thisRefs.this,
     ]);
@@ -140,12 +153,12 @@ const specHandlers = {
 
   _getThisRefs() {
     if (!this.isDerivedConstructor) {
-      return { this: t.thisExpression() };
+      return { this: thisExpression() };
     }
     const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
     return {
-      memo: t.assignmentExpression("=", thisRef, t.thisExpression()),
-      this: t.cloneNode(thisRef),
+      memo: assignmentExpression("=", thisRef, thisExpression()),
+      this: cloneNode(thisRef),
     };
   },
 
@@ -157,12 +170,12 @@ const specHandlers = {
       this.file,
       this.isPrivateMethod,
     );
-    return t.callExpression(this.file.addHelper("set"), [
-      thisRefs.memo ? t.sequenceExpression([thisRefs.memo, proto]) : proto,
+    return callExpression(this.file.addHelper("set"), [
+      thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
       value,
       thisRefs.this,
-      t.booleanLiteral(superMember.isInStrictMode()),
+      booleanLiteral(superMember.isInStrictMode()),
     ]);
   },
 
@@ -176,7 +189,7 @@ const specHandlers = {
     const thisRefs = this._getThisRefs();
     return optimiseCall(
       this._get(superMember, thisRefs),
-      t.cloneNode(thisRefs.this),
+      cloneNode(thisRefs.this),
       args,
       false,
     );
@@ -186,7 +199,7 @@ const specHandlers = {
     const thisRefs = this._getThisRefs();
     return optimiseCall(
       this._get(superMember, thisRefs),
-      t.cloneNode(thisRefs.this),
+      cloneNode(thisRefs.this),
       args,
       true,
     );
@@ -199,10 +212,10 @@ const looseHandlers = {
   prop(superMember) {
     const { property } = superMember.node;
     if (this.memoiser.has(property)) {
-      return t.cloneNode(this.memoiser.get(property));
+      return cloneNode(this.memoiser.get(property));
     }
 
-    return t.cloneNode(property);
+    return cloneNode(property);
   },
 
   get(superMember) {
@@ -214,24 +227,24 @@ const looseHandlers = {
     if (isStatic) {
       object =
         getSuperRef() ??
-        t.memberExpression(t.identifier("Function"), t.identifier("prototype"));
+        memberExpression(identifier("Function"), identifier("prototype"));
     } else {
-      object = t.memberExpression(
-        getSuperRef() ?? t.identifier("Object"),
-        t.identifier("prototype"),
+      object = memberExpression(
+        getSuperRef() ?? identifier("Object"),
+        identifier("prototype"),
       );
     }
 
-    return t.memberExpression(object, prop, computed);
+    return memberExpression(object, prop, computed);
   },
 
   set(superMember, value) {
     const { computed } = superMember.node;
     const prop = this.prop(superMember);
 
-    return t.assignmentExpression(
+    return assignmentExpression(
       "=",
-      t.memberExpression(t.thisExpression(), prop, computed),
+      memberExpression(thisExpression(), prop, computed),
       value,
     );
   },
@@ -240,15 +253,15 @@ const looseHandlers = {
     const { computed } = superMember.node;
     const prop = this.prop(superMember);
 
-    return t.memberExpression(t.thisExpression(), prop, computed);
+    return memberExpression(thisExpression(), prop, computed);
   },
 
   call(superMember, args) {
-    return optimiseCall(this.get(superMember), t.thisExpression(), args, false);
+    return optimiseCall(this.get(superMember), thisExpression(), args, false);
   },
 
   optionalCall(superMember, args) {
-    return optimiseCall(this.get(superMember), t.thisExpression(), args, true);
+    return optimiseCall(this.get(superMember), thisExpression(), args, true);
   },
 };
 
@@ -309,12 +322,12 @@ export default class ReplaceSupers {
   declare opts: ReplaceSupersOptions;
 
   getObjectRef() {
-    return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
+    return cloneNode(this.opts.objectRef || this.opts.getObjectRef());
   }
 
   getSuperRef() {
-    if (this.opts.superRef) return t.cloneNode(this.opts.superRef);
-    if (this.opts.getSuperRef) return t.cloneNode(this.opts.getSuperRef());
+    if (this.opts.superRef) return cloneNode(this.opts.superRef);
+    if (this.opts.getSuperRef) return cloneNode(this.opts.getSuperRef());
   }
 
   replace() {

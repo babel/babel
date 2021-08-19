@@ -932,8 +932,8 @@ __metadata:
   dependencies:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/template": "workspace:^7.14.5"
-    "@babel/traverse": "workspace:^7.14.8"
-    "@babel/types": "workspace:^7.14.8"
+    "@babel/traverse": "workspace:^7.15.0"
+    "@babel/types": "workspace:^7.15.0"
   languageName: unknown
   linkType: soft
 
@@ -3591,7 +3591,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.14.5, @babel/traverse@workspace:^7.14.8, @babel/traverse@workspace:^7.15.0, @babel/traverse@workspace:packages/babel-traverse":
+"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.14.5, @babel/traverse@workspace:^7.15.0, @babel/traverse@workspace:packages/babel-traverse":
   version: 0.0.0-use.local
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:

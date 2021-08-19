@@ -19,6 +19,27 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.3 (2021-08-11)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helpers`, `babel-plugin-transform-classes`
+  * [#13571](https://github.com/babel/babel/pull/13571) Derived constructors should not be allowed to return primitives ([@dhrubesh](https://github.com/dhrubesh))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13659](https://github.com/babel/babel/pull/13659) Fix parse error when using named import "as" with flow parser ([@doing-art](https://github.com/doing-art))
+  * [#13655](https://github.com/babel/babel/pull/13655)  [flow] Fix parsing of arrows in conditional expressions in parentheses ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13645](https://github.com/babel/babel/pull/13645) Disallow `<T>(a => b)` when parsing Flow ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13657](https://github.com/babel/babel/pull/13657) fix(parser): add `attachComment` to `ParserOptions` type ([@sosukesuzuki](https://github.com/sosukesuzuki))
+
+#### :house: Internal
+* [#13643](https://github.com/babel/babel/pull/13643) Use `@babel/eslint-parser/experimental-worker` for our own repo ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#13652](https://github.com/babel/babel/pull/13652) perf: minor tokenizer tweaks ([@lightmare](https://github.com/lightmare))
+* `babel-register`
+  * [#13654](https://github.com/babel/babel/pull/13654) Reduce stat calls in register ([@overlookmotel](https://github.com/overlookmotel))
 ## v7.15.2 (2021-08-08)
 
 #### :bug: Bug Fix

@@ -1,5 +1,5 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import type * as t from "@babel/types";
 import * as charCodes from "charcodes";
 
 export function File(this: Printer, node: t.File) {

@@ -1961,7 +1961,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (failed && valid.length === 1) {
           this.state = state;
-          this.state.noArrowAt = noArrowAt.concat(valid[0].start);
+          noArrowAt.push(valid[0].start);
+          this.state.noArrowAt = noArrowAt;
           ({ consequent, failed } = this.tryParseConditionalConsequent());
         }
       }

@@ -1,4 +1,9 @@
-import * as t from "@babel/types";
+import {
+  assignmentExpression,
+  expressionStatement,
+  identifier,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
 export type EmitFunction = (
@@ -38,14 +43,14 @@ const visitor = {
 
       if (declar.node.init) {
         nodes.push(
-          t.expressionStatement(
-            t.assignmentExpression("=", declar.node.id, declar.node.init),
+          expressionStatement(
+            assignmentExpression("=", declar.node.id, declar.node.init),
           ),
         );
       }
 
       for (const name of Object.keys(declar.getBindingIdentifiers())) {
-        state.emit(t.identifier(name), name, declar.node.init !== null);
+        state.emit(identifier(name), name, declar.node.init !== null);
       }
     }
 

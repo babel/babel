@@ -1,8 +1,13 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import {
+  isCallExpression,
+  isLiteral,
+  isMemberExpression,
+  isNewExpression,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import * as n from "../node";
 
-const { isCallExpression, isLiteral, isMemberExpression, isNewExpression } = t;
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   if (
     node.operator === "void" ||

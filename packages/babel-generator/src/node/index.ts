@@ -1,12 +1,13 @@
 import * as whitespace from "./whitespace";
 import * as parens from "./parentheses";
-import * as t from "@babel/types";
-const {
+import {
+  FLIPPED_ALIAS_KEYS,
   isCallExpression,
   isExpressionStatement,
   isMemberExpression,
   isNewExpression,
-} = t;
+} from "@babel/types";
+
 function expandAliases(obj) {
   const newObj = {};
 
@@ -22,7 +23,7 @@ function expandAliases(obj) {
   }
 
   for (const type of Object.keys(obj)) {
-    const aliases = t.FLIPPED_ALIAS_KEYS[type];
+    const aliases = FLIPPED_ALIAS_KEYS[type];
     if (aliases) {
       for (const alias of aliases) {
         add(alias, obj[type]);

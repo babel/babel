@@ -1,8 +1,13 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import {
+  isFor,
+  isForStatement,
+  isIfStatement,
+  isStatement,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import * as charCodes from "charcodes";
 
-const { isFor, isForStatement, isIfStatement, isStatement } = t;
 export function WithStatement(this: Printer, node: t.WithStatement) {
   this.word("with");
   this.space();
