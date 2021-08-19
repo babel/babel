@@ -22,7 +22,7 @@ describe("ESLint config", () => {
     expect(messages.length).toEqual(0);
   });
 
-  it('should allow ecmaVersion to "latest"', () => {
+  it('should allow ecmaVersion to be "latest"', () => {
     const linter = new eslint.Linter();
     linter.defineParser("@babel/eslint-parser", parser);
     // ImportDeclarations result in a parser error if ecmaVersion < 2015 and sourceType != "module".
