@@ -701,6 +701,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     let optional = false;
+    let computed = false;
     if (this.match(tt.questionDot)) {
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         // stop at `?.` when parsing `new a?.()`
@@ -719,8 +720,19 @@ export default class ExpressionParser extends LValParser {
         state,
         optional,
       );
-    } else if (optional || this.match(tt.bracketL) || this.eat(tt.dot)) {
-      return this.parseMember(base, startPos, startLoc, state, optional);
+    } else if (
+      (computed = this.eat(tt.bracketL)) ||
+      optional ||
+      this.eat(tt.dot)
+    ) {
+      return this.parseMember(
+        base,
+        startPos,
+        startLoc,
+        state,
+        computed,
+        optional,
+      );
     } else {
       state.stop = true;
       return base;
@@ -736,10 +748,10 @@ export default class ExpressionParser extends LValParser {
     startPos: number,
     startLoc: Position,
     state: N.ParseSubscriptState,
+    computed: boolean,
     optional: boolean,
   ): N.OptionalMemberExpression | N.MemberExpression {
     const node = this.startNodeAt(startPos, startLoc);
-    const computed = this.eat(tt.bracketL);
     node.object = base;
     node.computed = computed;
     const privateName =
