@@ -20,6 +20,7 @@
     "./packages/babel-helper-optimise-call-expression/src/**/*.ts",
     "./packages/babel-helper-replace-supers/src/**/*.ts",
     "./packages/babel-helper-simple-access/src/**/*.ts",
+    "./packages/babel-helper-skip-transparent-expression-wrappers/src/**/*.ts",
     "./packages/babel-helper-split-export-declaration/src/**/*.ts",
     "./packages/babel-helper-transform-fixture-test-runner/src/**/*.ts",
     "./packages/babel-helper-validator-identifier/src/**/*.ts",
@@ -95,6 +96,9 @@
       ],
       "@babel/helper-simple-access": [
         "./packages/babel-helper-simple-access/src"
+      ],
+      "@babel/helper-skip-transparent-expression-wrappers": [
+        "./packages/babel-helper-skip-transparent-expression-wrappers/src"
       ],
       "@babel/helper-split-export-declaration": [
         "./packages/babel-helper-split-export-declaration/src"
