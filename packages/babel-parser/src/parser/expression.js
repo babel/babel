@@ -701,7 +701,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     let optional = false;
-    let computed = false;
+
     if (this.match(tt.questionDot)) {
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         // stop at `?.` when parsing `new a?.()`
@@ -720,22 +720,21 @@ export default class ExpressionParser extends LValParser {
         state,
         optional,
       );
-    } else if (
-      (computed = this.eat(tt.bracketL)) ||
-      optional ||
-      this.eat(tt.dot)
-    ) {
-      return this.parseMember(
-        base,
-        startPos,
-        startLoc,
-        state,
-        computed,
-        optional,
-      );
     } else {
-      state.stop = true;
-      return base;
+      const computed = this.eat(tt.bracketL);
+      if (computed || optional || this.eat(tt.dot)) {
+        return this.parseMember(
+          base,
+          startPos,
+          startLoc,
+          state,
+          computed,
+          optional,
+        );
+      } else {
+        state.stop = true;
+        return base;
+      }
     }
   }
 
