@@ -119,6 +119,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [Exports](#exports)
     - [ExportNamedDeclaration](#exportnameddeclaration)
     - [ExportSpecifier](#exportspecifier)
+    - [ExportNamespaceSpecifier](#exportnamespacespecifier)
     - [ExportDefaultDeclaration](#exportdefaultdeclaration)
     - [ExportAllDeclaration](#exportalldeclaration)
 
@@ -1339,7 +1340,7 @@ An attribute specified on the ImportDeclaration.
 interface ExportNamedDeclaration <: ModuleDeclaration {
   type: "ExportNamedDeclaration";
   declaration: Declaration | null;
-  specifiers: [ ExportSpecifier ];
+  specifiers: [ ExportSpecifier | ExportNamespaceSpecifier ];
   source: StringLiteral | null;
   assertions?: [ ImportAttribute ];
 }
@@ -1351,6 +1352,7 @@ Note:
 
 - Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state.
 - If `source` is `null`, for each `specifier` of `specifiers`, `specifier.local` can not be a `StringLiteral`.
+- If `specifiers` contains `ExportNamespaceSpecifier`, it must have only one `ExportNamespaceSpecifier`.
 
 ### ExportSpecifier
 
@@ -1363,6 +1365,17 @@ interface ExportSpecifier <: ModuleSpecifier {
 ```
 
 An exported variable binding, e.g., `{foo}` in `export {foo}` or `{bar as foo}` in `export {bar as foo}`. The `exported` field refers to the name exported in the module. The `local` field refers to the binding into the local module scope. If it is a basic named export, such as in `export {foo}`, both `exported` and `local` are equivalent `Identifier` nodes; in this case an `Identifier` node representing `foo`. If it is an aliased export, such as in `export {bar as foo}`, the `exported` field is an `Identifier` node representing `foo`, and the `local` field is an `Identifier` node representing `bar`.
+
+### ExportNamespaceSpecifier
+
+```js
+interface ExportNamespaceSpecifier <: ModuleSpecifier {
+  type: "ExportNamespaceSpecifier";
+  exported: Identifier;
+}
+```
+
+A namespace export specifier, e.g., `* as foo` in `export * as foo from "mod.js"`.
 
 ### ExportDefaultDeclaration
 
