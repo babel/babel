@@ -2393,7 +2393,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       member: any,
       state: N.ParseClassMemberState,
     ): void {
-      const invalidModifersForStaticBlocks = [
+      const modifiers = [
         "declare",
         "private",
         "public",
@@ -2401,10 +2401,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "override",
         "abstract",
         "readonly",
+        "static",
       ];
       this.tsParseModifiers(
         member,
-        invalidModifersForStaticBlocks.concat(["static"]),
+        modifiers,
         /* disallowedModifiers */ undefined,
         /* errorTemplate */ undefined,
         /* stopOnStartOfClassStaticBlock */ true,
@@ -2414,7 +2415,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.tsIsStartOfStaticBlocks()) {
           this.next(); // eat "static"
           this.next(); // eat "{"
-          if (this.tsHasSomeModifiers(member, invalidModifersForStaticBlocks)) {
+          if (this.tsHasSomeModifiers(member, modifiers)) {
             this.raise(this.state.pos, TSErrors.StaticBlockCannotHaveModifier);
           }
           this.parseClassStaticBlock(classBody, ((member: any): N.StaticBlock));
