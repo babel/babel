@@ -35,7 +35,6 @@
             {
               "type": "StaticBlock",
               "start":31,"end":40,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":11}},
-              "static": true,
               "body": []
             }
           ]
