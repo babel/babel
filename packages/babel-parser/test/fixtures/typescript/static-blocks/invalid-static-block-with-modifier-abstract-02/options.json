@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "classStaticBlock"
+    ],
+    [
+      "typescript"
+    ]
+  ],
+  "sourceType": "module",
+  "throws": "Unexpected token (2:18)"
+}
