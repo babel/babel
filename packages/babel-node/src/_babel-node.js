@@ -28,6 +28,18 @@ function collect(value, previousValue): Array<string> {
   return values;
 }
 
+function booleanify(val: any): boolean | any {
+  if (val === "true" || val == 1) {
+    return true;
+  }
+
+  if (val === "false" || val == 0 || !val) {
+    return false;
+  }
+
+  return val;
+}
+
 program.option("-e, --eval [script]", "Evaluate script");
 program.option(
   "--no-babelrc",
@@ -66,6 +78,7 @@ program.option(
 );
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
+program.option("-s, --source-maps [true|false|inline|both]", "", booleanify);
 
 program.version(PACKAGE_JSON.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
@@ -83,6 +96,7 @@ const babelOptions = {
   configFile: program.configFile,
   envName: program.envName,
   rootMode: program.rootMode,
+  sourceMaps: program.sourceMaps,
 
   // Commander will default the "--no-" arguments to true, but we want to
   // leave them undefined so that @babel/core can handle the
