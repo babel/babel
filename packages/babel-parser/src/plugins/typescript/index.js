@@ -584,14 +584,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       // Arrow fns *must* have return token (`=>`). Normal functions can omit it.
       const returnTokenRequired = returnToken === tt.arrow;
+
+      // https://github.com/babel/babel/issues/9231
+      const paramsKey = process.env.BABEL_8_BREAKING ? "params" : "parameters";
+      const returnTypeKey = process.env.BABEL_8_BREAKING
+        ? "returnType"
+        : "typeAnnotation";
+
       signature.typeParameters = this.tsTryParseTypeParameters();
       this.expect(tt.parenL);
-      signature.parameters = this.tsParseBindingListForSignature();
+      signature[paramsKey] = this.tsParseBindingListForSignature();
       if (returnTokenRequired) {
-        signature.typeAnnotation =
+        signature[returnTypeKey] =
           this.tsParseTypeOrTypePredicateAnnotation(returnToken);
       } else if (this.match(returnToken)) {
-        signature.typeAnnotation =
+        signature[returnTypeKey] =
           this.tsParseTypeOrTypePredicateAnnotation(returnToken);
       }
     }
@@ -683,10 +690,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
+        const paramsKey = process.env.BABEL_8_BREAKING
+          ? "params"
+          : "parameters";
+        const returnTypeKey = process.env.BABEL_8_BREAKING
+          ? "returnType"
+          : "typeAnnotation";
         if (method.kind === "get") {
-          if (method.parameters.length > 0) {
+          if (method[paramsKey].length > 0) {
             this.raise(this.state.pos, Errors.BadGetterArity);
-            if (this.isThisParam(method.parameters[0])) {
+            if (this.isThisParam(method[paramsKey][0])) {
               this.raise(
                 this.state.pos,
                 TSErrors.AccesorCannotDeclareThisParameter,
@@ -694,10 +707,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             }
           }
         } else if (method.kind === "set") {
-          if (method.parameters.length !== 1) {
+          if (method[paramsKey].length !== 1) {
             this.raise(this.state.pos, Errors.BadSetterArity);
           } else {
-            const firstParameter = method.parameters[0];
+            const firstParameter = method[paramsKey][0];
             if (this.isThisParam(firstParameter)) {
               this.raise(
                 this.state.pos,
@@ -720,9 +733,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               );
             }
           }
-          if (method.typeAnnotation) {
+          if (method[returnTypeKey]) {
             this.raise(
-              method.typeAnnotation.start,
+              method[returnTypeKey].start,
               TSErrors.SetAccesorCannotHaveReturnType,
             );
           }
