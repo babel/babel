@@ -40,6 +40,7 @@ const JsxErrors = makeErrorTemplates(
       "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
   },
   /* code */ ErrorCodes.SyntaxError,
+  /* syntaxPlugin */ "jsx",
 );
 /* eslint-disable sort-keys */
 

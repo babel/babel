@@ -28,17 +28,30 @@ export type ErrorTemplates = {
   [key: string]: ErrorTemplate,
 };
 
+type SyntaxPlugin = "flow" | "typescript" | "jsx" | typeof undefined;
+
+function keepReasonCodeCompat(reasonCode: string, syntaxPlugin: SyntaxPlugin) {
+  if (!process.env.BABEL_8_BREAKING) {
+    // For consistency in TypeScript and Flow error codes
+    if (syntaxPlugin === "flow" && reasonCode === "PatternIsOptional") {
+      return "OptionalBindingPattern";
+    }
+  }
+  return reasonCode;
+}
+
 export function makeErrorTemplates(
   messages: {
     [key: string]: string,
   },
   code: ErrorCode,
+  syntaxPlugin?: SyntaxPlugin,
 ): ErrorTemplates {
   const templates: ErrorTemplates = {};
   Object.keys(messages).forEach(reasonCode => {
     templates[reasonCode] = Object.freeze({
       code,
-      reasonCode,
+      reasonCode: keepReasonCodeCompat(reasonCode, syntaxPlugin),
       template: messages[reasonCode],
     });
   });

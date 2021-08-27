@@ -156,6 +156,7 @@ const TSErrors = makeErrorTemplates(
       "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0.",
   },
   /* code */ ErrorCodes.SyntaxError,
+  /* syntaxPlugin */ "typescript",
 );
 /* eslint-disable sort-keys */
 

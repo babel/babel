@@ -137,6 +137,7 @@ const FlowErrors = makeErrorTemplates(
     UnterminatedFlowComment: "Unterminated flow-comment.",
   },
   /* code */ ErrorCodes.SyntaxError,
+  /* syntaxPlugin */ "flow",
 );
 /* eslint-disable sort-keys */
 
