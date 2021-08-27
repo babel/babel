@@ -38,8 +38,8 @@
                   "name": "iterator"
                 }
               },
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":37,"end":43,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":29}},
                 "typeAnnotation": {
@@ -69,8 +69,8 @@
                 }
               },
               "optional": true,
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":69,"end":77,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":32}},
                 "typeAnnotation": {

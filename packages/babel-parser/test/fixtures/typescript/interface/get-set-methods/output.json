@@ -28,8 +28,8 @@
                 "name": "get"
               },
               "computed": false,
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":23,"end":31,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":15}},
                 "typeAnnotation": {
@@ -48,8 +48,8 @@
                 "name": "set"
               },
               "computed": false,
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":40,"end":48,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":15}},
                 "typeAnnotation": {

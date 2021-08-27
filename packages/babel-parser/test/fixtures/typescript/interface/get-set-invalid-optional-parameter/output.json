@@ -32,7 +32,7 @@
               },
               "computed": false,
               "kind": "set",
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":26,"end":38,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":22},"identifierName":"foo"},

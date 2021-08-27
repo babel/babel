@@ -22,7 +22,7 @@
             {
               "type": "TSConstructSignatureDeclaration",
               "start":18,"end":40,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":26}},
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":23,"end":32,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":18},"identifierName":"x"},
@@ -37,7 +37,7 @@
                   }
                 }
               ],
-              "typeAnnotation": {
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":33,"end":39,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":25}},
                 "typeAnnotation": {

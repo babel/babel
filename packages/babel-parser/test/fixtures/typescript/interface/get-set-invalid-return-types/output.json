@@ -32,14 +32,14 @@
               },
               "computed": false,
               "kind": "set",
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":26,"end":31,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":15},"identifierName":"param"},
                   "name": "param"
                 }
               ],
-              "typeAnnotation": {
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":32,"end":40,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":24}},
                 "typeAnnotation": {

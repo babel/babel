@@ -38,8 +38,8 @@
                 "name": "foo"
               },
               "computed": false,
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":29,"end":37,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":15}},
                 "typeAnnotation": {
@@ -68,7 +68,7 @@
                 "name": "bar"
               },
               "computed": false,
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":51,"end":52,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":7},"identifierName":"v"},

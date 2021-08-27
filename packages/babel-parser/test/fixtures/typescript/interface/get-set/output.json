@@ -29,8 +29,8 @@
               },
               "computed": false,
               "kind": "get",
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":27,"end":35,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":19}},
                 "typeAnnotation": {
@@ -49,7 +49,7 @@
               },
               "computed": false,
               "kind": "set",
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":47,"end":48,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":11},"identifierName":"v"},

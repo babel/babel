@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":13},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":14,"end":43,"loc":{"start":{"line":1,"column":14},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "TSCallSignatureDeclaration",
+              "start":18,"end":41,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":25}},
+              "typeParameters": {
+                "type": "TSTypeParameterDeclaration",
+                "start":18,"end":21,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5}},
+                "params": [
+                  {
+                    "type": "TSTypeParameter",
+                    "start":19,"end":20,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":4}},
+                    "name": {
+                      "type": "Identifier",
+                      "start":19,"end":20,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":4},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                ]
+              },
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":22,"end":31,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":15},"identifierName":"a"},
+                  "name": "a",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":23,"end":31,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":15}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":25,"end":31,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15}}
+                    }
+                  }
+                }
+              ],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":32,"end":40,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":24}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":34,"end":40,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":24}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
