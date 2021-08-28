@@ -52,6 +52,26 @@ const ignoredFields = {
   ObjectMethod: { method: true, id: true, predicate: true },
   StaticBlock: { static: true },
   TSDeclareMethod: { id: true },
+  // TODO(Babel 8): Remove
+  // https://github.com/babel/babel/issues/9231
+  ...(process.env.BABEL_8_BREAKING
+    ? {
+        TSFunctionType: { parameters: true, typeAnnotation: true },
+        TSMethodSignature: { parameters: true, typeAnnotation: true },
+        TSConstructorType: { parameters: true, typeAnnotation: true },
+        TSCallSignatureDeclaration: { parameters: true, typeAnnotation: true },
+        TSConstructSignatureDeclaration: {
+          parameters: true,
+          typeAnnotation: true,
+        },
+      }
+    : {
+        TSFunctionType: { params: true, returnType: true },
+        TSMethodSignature: { params: true, returnType: true },
+        TSConstructorType: { params: true, returnType: true },
+        TSCallSignatureDeclaration: { params: true, returnType: true },
+        TSConstructSignatureDeclaration: { params: true, returnType: true },
+      }),
 };
 
 function isEmpty(obj) {
