@@ -17,3 +17,5 @@ let {
 } = complex;
 
 let { x4: { ...y4 } } = z;
+
+let { x5: { w5, ...y5 } } = z();
