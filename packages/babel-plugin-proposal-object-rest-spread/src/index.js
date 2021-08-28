@@ -240,6 +240,17 @@ export default declare((api, opts) => {
     }
   }
 
+  function doesAnyChildNodeHaveMoreThanOneProperty(properties) {
+    if (properties.length > 1) {
+      return true;
+    }
+    const value = properties[0].value;
+    if (!value) {
+      return false;
+    }
+    return doesAnyChildNodeHaveMoreThanOneProperty(value.properties);
+  }
+
   return {
     name: "proposal-object-rest-spread",
     inherits: syntaxObjectRestSpread.default,
@@ -335,9 +346,9 @@ export default declare((api, opts) => {
             // skip single-property case, e.g.
             // const { ...x } = foo();
             // since the RHS will not be duplicated
-            (originalPath.node.id.properties.length > 1 ||
-              originalPath.node.id.properties[0].value?.properties.length >
-                1) &&
+            doesAnyChildNodeHaveMoreThanOneProperty(
+              originalPath.node.id.properties,
+            ) &&
             !t.isIdentifier(originalPath.node.init)
           ) {
             // const { a, ...b } = foo();

@@ -48,3 +48,47 @@ let _z = z(),
   }
 } = _z,
     y5 = babelHelpers.objectWithoutProperties(_z.x5, ["w5"]);
+
+let _z2 = z(),
+    {
+  x6: {
+    w6: {
+      a6
+    }
+  }
+} = _z2,
+    y6 = babelHelpers.objectWithoutProperties(_z2.x6.w6, ["a6"]);
+
+let _z3 = z(),
+    {
+  x7: {
+    e7,
+    r7
+  },
+  q7: {
+    w7: {
+      a7
+    }
+  }
+} = _z3,
+    y7 = babelHelpers.objectWithoutProperties(_z3.q7.w7, ["a7"]);
+
+let _z4 = z(),
+    {
+  x8
+} = _z4,
+    y8 = babelHelpers.objectWithoutProperties(_z4, ["x8"]);
+
+let _z5 = z(),
+    {
+  x9: {
+    w9: {
+      a9
+    }
+  },
+  x10: {
+    a10
+  }
+} = _z5,
+    y9 = babelHelpers.objectWithoutProperties(_z5.x9.w9, ["a9"]),
+    y10 = babelHelpers.objectWithoutProperties(_z5.x10, ["a10"]);
