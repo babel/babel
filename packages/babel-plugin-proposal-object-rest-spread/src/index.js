@@ -335,7 +335,9 @@ export default declare((api, opts) => {
             // skip single-property case, e.g.
             // const { ...x } = foo();
             // since the RHS will not be duplicated
-            originalPath.node.id.properties.length > 1 &&
+            (originalPath.node.id.properties.length > 1 ||
+              originalPath.node.id.properties[0].value?.properties.length >
+                1) &&
             !t.isIdentifier(originalPath.node.init)
           ) {
             // const { a, ...b } = foo();

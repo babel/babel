@@ -40,9 +40,11 @@ let {
     g = babelHelpers.objectWithoutProperties(complex, ["x"]);
 let {} = z,
     y4 = babelHelpers.extends({}, z.x4);
-let {
+
+let _z = z(),
+    {
   x5: {
     w5
   }
-} = z(),
-    y5 = babelHelpers.objectWithoutProperties(z().x5, ["w5"]);
+} = _z,
+    y5 = babelHelpers.objectWithoutProperties(_z.x5, ["w5"]);
