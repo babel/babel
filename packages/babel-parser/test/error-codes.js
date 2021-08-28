@@ -18,4 +18,25 @@ describe("error codes", function () {
     expect(error.code).toBe("BABEL_PARSER_SYNTAX_ERROR");
     expect(error.reasonCode).toBe("MissingSemicolon");
   });
+  it("consistent reasonCode between Flow and TypeScript in Babel 8", () => {
+    const code = `function f([]?) {}`;
+    const {
+      errors: [tsError],
+    } = parse(code, {
+      errorRecovery: true,
+      plugins: ["typescript"],
+    });
+    const {
+      errors: [flowError],
+    } = parse(code, {
+      errorRecovery: true,
+      plugins: ["flow"],
+    });
+    expect(flowError.reasonCode).toBe(
+      process.env.BABEL_8_BREAKING
+        ? tsError.reasonCode
+        : "OptionalBindingPattern",
+    );
+    expect(flowError.message).toBe(tsError.message);
+  });
 });
