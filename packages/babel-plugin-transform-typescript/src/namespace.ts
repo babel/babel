@@ -1,4 +1,5 @@
 import { template, types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 export default function transpileNamespace(path, t, allowNamespaces) {
   if (path.node.declare || path.node.id.type === "StringLiteral") {
@@ -102,11 +103,34 @@ function handleVariableDeclaration(
   return [node, t.expressionStatement(t.sequenceExpression(assignments))];
 }
 
-function handleNested(path, t, node, parentExport?) {
+function buildNestedAmbiendModuleError(path: NodePath, node: t.Node) {
+  throw path.hub.buildError(
+    node,
+    "Ambient modules cannot be nested in other modules or namespaces.",
+    Error,
+  );
+}
+
+function handleNested(
+  path: NodePath,
+  t: typeof import("@babel/types"),
+  node: t.TSModuleDeclaration,
+  parentExport?,
+) {
   const names = new Set();
   const realName = node.id;
+  t.assertIdentifier(realName);
+
   const name = path.scope.generateUid(realName.name);
-  const namespaceTopLevel = node.body.body;
+
+  const namespaceTopLevel: t.Statement[] = t.isTSModuleBlock(node.body)
+    ? node.body.body
+    : // We handle `namespace X.Y {}` as if it was
+      //   namespace X {
+      //     export namespace Y {}
+      //   }
+      [t.exportNamedDeclaration(node.body)];
+
   for (let i = 0; i < namespaceTopLevel.length; i++) {
     const subNode = namespaceTopLevel[i];
 
@@ -114,6 +138,10 @@ function handleNested(path, t, node, parentExport?) {
     // declarations require further transformation.
     switch (subNode.type) {
       case "TSModuleDeclaration": {
+        if (!t.isIdentifier(subNode.id)) {
+          throw buildNestedAmbiendModuleError(path, subNode);
+        }
+
         const transformed = handleNested(path, t, subNode);
         const moduleName = subNode.id.name;
         if (names.has(moduleName)) {
@@ -181,6 +209,10 @@ function handleNested(path, t, node, parentExport?) {
         break;
       }
       case "TSModuleDeclaration": {
+        if (!t.isIdentifier(subNode.declaration.id)) {
+          throw buildNestedAmbiendModuleError(path, subNode.declaration);
+        }
+
         const transformed = handleNested(
           path,
           t,
@@ -204,7 +236,7 @@ function handleNested(path, t, node, parentExport?) {
   }
 
   // {}
-  let fallthroughValue = t.objectExpression([]);
+  let fallthroughValue: t.Expression = t.objectExpression([]);
 
   if (parentExport) {
     const memberExpr = t.memberExpression(parentExport, realName);
