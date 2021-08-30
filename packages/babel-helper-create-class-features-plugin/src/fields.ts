@@ -1,6 +1,6 @@
 import { template, traverse, types as t } from "@babel/core";
 import type { File } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath, Visitor, Scope } from "@babel/traverse";
 import ReplaceSupers, {
   environmentVisitor,
 } from "@babel/helper-replace-supers";
@@ -58,7 +58,7 @@ export function buildPrivateNamesMap(props: PropPath[]) {
 export function buildPrivateNamesNodes(
   privateNamesMap: PrivateNamesMap,
   privateFieldsAsProperties: boolean,
-  state,
+  state: File,
 ) {
   const initNodes: t.Statement[] = [];
 
@@ -165,6 +165,7 @@ interface PrivateNameState {
   classRef: t.Identifier;
   file: File;
   noDocumentAll: boolean;
+  innerBinding?: t.Identifier;
 }
 
 const privateNameVisitor = privateNameVisitorFactory<
@@ -188,9 +189,28 @@ const privateNameVisitor = privateNameVisitorFactory<
   },
 });
 
+// rename all bindings that shadows innerBinding
+function unshadow(
+  name: string,
+  scope: Scope,
+  innerBinding: t.Identifier | undefined,
+) {
+  // in some cases, scope.getBinding(name) === undefined
+  // so we check hasBinding to avoid keeping looping
+  // see: https://github.com/babel/babel/pull/13656#discussion_r686030715
+  while (
+    scope?.hasBinding(name) &&
+    !scope.bindingIdentifierEquals(name, innerBinding)
+  ) {
+    scope.rename(name);
+    scope = scope.parent;
+  }
+}
+
 const privateInVisitor = privateNameVisitorFactory<{
   classRef: t.Identifier;
   file: File;
+  innerBinding?: t.Identifier;
 }>({
   BinaryExpression(path) {
     const { operator, left, right } = path.node;
@@ -203,6 +223,10 @@ const privateInVisitor = privateNameVisitorFactory<{
 
     if (!privateNamesMap.has(name)) return;
     if (redeclared && redeclared.includes(name)) return;
+
+    // if there are any local variable shadowing classRef, unshadow it
+    // see #12960
+    unshadow(this.classRef.name, path.scope, this.innerBinding);
 
     if (privateFieldsAsProperties) {
       const { id } = privateNamesMap.get(name);
@@ -255,7 +279,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
     },
 
     get(member) {
-      const { classRef, privateNamesMap, file } = this;
+      const { classRef, privateNamesMap, file, innerBinding } = this;
       const { name } = (member.node.property as t.PrivateName).id;
       const {
         id,
@@ -272,6 +296,10 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           isMethod && !isAccessor
             ? "classStaticPrivateMethodGet"
             : "classStaticPrivateFieldSpecGet";
+
+        // if there are any local variable shadowing classRef, unshadow it
+        // see #12960
+        unshadow(classRef.name, member.scope, innerBinding);
 
         return t.callExpression(file.addHelper(helperName), [
           this.receiver(member),
@@ -463,8 +491,8 @@ export function transformPrivateNamesUsage(
   ref: t.Identifier,
   path: NodePath<t.Class>,
   privateNamesMap: PrivateNamesMap,
-  { privateFieldsAsProperties, noDocumentAll },
-  state,
+  { privateFieldsAsProperties, noDocumentAll, innerBinding },
+  state: File,
 ) {
   if (!privateNamesMap.size) return;
 
@@ -479,12 +507,14 @@ export function transformPrivateNamesUsage(
     file: state,
     ...handler,
     noDocumentAll,
+    innerBinding,
   });
   body.traverse(privateInVisitor, {
     privateNamesMap,
     classRef: ref,
     file: state,
     privateFieldsAsProperties,
+    innerBinding,
   });
 }
 
@@ -770,7 +800,7 @@ const thisContextVisitor = traverse.visitors.merge([
 ]);
 
 const innerReferencesVisitor = {
-  ReferencedIdentifier(path, state) {
+  ReferencedIdentifier(path: NodePath<t.Identifier>, state) {
     if (
       path.scope.bindingIdentifierEquals(path.node.name, state.innerBinding)
     ) {
@@ -831,7 +861,7 @@ export function buildFieldsInitNodes(
   superRef: t.Expression | undefined,
   props: PropPath[],
   privateNamesMap: PrivateNamesMap,
-  state,
+  state: File,
   setPublicClassFields: boolean,
   privateFieldsAsProperties: boolean,
   constantSuper: boolean,

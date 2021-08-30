@@ -1,4 +1,5 @@
 import { types as t } from "@babel/core";
+import type { File } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
@@ -92,7 +93,7 @@ export function createClassFeaturePlugin({
     },
 
     visitor: {
-      Class(path: NodePath<t.Class>, state) {
+      Class(path: NodePath<t.Class>, state: File) {
         if (this.file.get(versionKey) !== version) return;
 
         verifyUsedFeatures(path, this.file);
@@ -198,6 +199,7 @@ export function createClassFeaturePlugin({
           {
             privateFieldsAsProperties: privateFieldsAsProperties ?? loose,
             noDocumentAll,
+            innerBinding,
           },
           state,
         );
