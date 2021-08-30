@@ -4,8 +4,7 @@ var Outer = function Outer() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Outer);
-
-  _outer.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _outer, {
     writable: true,
     value: void 0
   });

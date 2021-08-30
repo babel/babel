@@ -800,6 +800,33 @@
       "./helpers/classPrivateMethodGet.js"
     ],
     "./helpers/esm/classPrivateMethodGet": "./helpers/esm/classPrivateMethodGet.js",
+    "./helpers/checkPrivateRedeclaration": [
+      {
+        "node": "./helpers/checkPrivateRedeclaration.js",
+        "import": "./helpers/esm/checkPrivateRedeclaration.js",
+        "default": "./helpers/checkPrivateRedeclaration.js"
+      },
+      "./helpers/checkPrivateRedeclaration.js"
+    ],
+    "./helpers/esm/checkPrivateRedeclaration": "./helpers/esm/checkPrivateRedeclaration.js",
+    "./helpers/classPrivateFieldInitSpec": [
+      {
+        "node": "./helpers/classPrivateFieldInitSpec.js",
+        "import": "./helpers/esm/classPrivateFieldInitSpec.js",
+        "default": "./helpers/classPrivateFieldInitSpec.js"
+      },
+      "./helpers/classPrivateFieldInitSpec.js"
+    ],
+    "./helpers/esm/classPrivateFieldInitSpec": "./helpers/esm/classPrivateFieldInitSpec.js",
+    "./helpers/classPrivateMethodInitSpec": [
+      {
+        "node": "./helpers/classPrivateMethodInitSpec.js",
+        "import": "./helpers/esm/classPrivateMethodInitSpec.js",
+        "default": "./helpers/classPrivateMethodInitSpec.js"
+      },
+      "./helpers/classPrivateMethodInitSpec.js"
+    ],
+    "./helpers/esm/classPrivateMethodInitSpec": "./helpers/esm/classPrivateMethodInitSpec.js",
     "./helpers/classPrivateMethodSet": [
       {
         "node": "./helpers/classPrivateMethodSet.js",

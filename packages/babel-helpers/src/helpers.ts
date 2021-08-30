@@ -2022,6 +2022,32 @@ helpers.classPrivateMethodGet = helper("7.1.6")`
   }
 `;
 
+helpers.checkPrivateRedeclaration = helper("7.14.1")`
+  export default function _checkPrivateRedeclaration(obj, privateCollection) {
+    if (privateCollection.has(obj)) {
+      throw new TypeError("Cannot initialize the same private elements twice on an object");
+    }
+  }
+`;
+
+helpers.classPrivateFieldInitSpec = helper("7.14.1")`
+  import checkPrivateRedeclaration from "checkPrivateRedeclaration";
+
+  export default function _classPrivateFieldInitSpec(obj, privateMap, value) {
+    checkPrivateRedeclaration(obj, privateMap);
+    privateMap.set(obj, value);
+  }
+`;
+
+helpers.classPrivateMethodInitSpec = helper("7.14.1")`
+  import checkPrivateRedeclaration from "checkPrivateRedeclaration";
+
+  export default function _classPrivateMethodInitSpec(obj, privateSet) {
+    checkPrivateRedeclaration(obj, privateSet);
+    privateSet.add(obj);
+  }
+`;
+
 if (!process.env.BABEL_8_BREAKING) {
   // Use readOnlyError instead
   helpers.classPrivateMethodSet = helper("7.1.6")`

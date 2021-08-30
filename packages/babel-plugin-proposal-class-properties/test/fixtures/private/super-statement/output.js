@@ -12,12 +12,10 @@ var Foo = /*#__PURE__*/function (_Bar) {
 
     babelHelpers.classCallCheck(this, Foo);
     _this = _super.call(this);
-
-    _bar.set(babelHelpers.assertThisInitialized(_this), {
+    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _bar, {
       writable: true,
       value: "foo"
     });
-
     return _this;
   }
 

@@ -14,15 +14,13 @@ var Foo = /*#__PURE__*/function (_Bar) {
 
     if (condition) {
       _this = _super.call(this);
-
-      _bar.set(babelHelpers.assertThisInitialized(_this), {
+      babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _bar, {
         writable: true,
         value: "foo"
       });
     } else {
       _this = _super.call(this);
-
-      _bar.set(babelHelpers.assertThisInitialized(_this), {
+      babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _bar, {
         writable: true,
         value: "foo"
       });

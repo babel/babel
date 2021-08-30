@@ -5,8 +5,7 @@ var C = function C() {
 
   babelHelpers.classCallCheck(this, C);
   babelHelpers.defineProperty(this, "y", babelHelpers.classPrivateFieldGet(this, _x));
-
-  _x.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _x, {
     writable: true,
     value: void 0
   });

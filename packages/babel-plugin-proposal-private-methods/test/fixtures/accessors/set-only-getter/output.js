@@ -9,16 +9,14 @@ class Cl {
   }
 
   constructor() {
-    _privateFieldValue.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _privateFieldValue, {
       get: _get_privateFieldValue,
       set: void 0
     });
-
-    _privateField.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _privateField, {
       writable: true,
       value: 0
     });
-
     babelHelpers.defineProperty(this, "counter", 0);
     this.self, 1([babelHelpers.classPrivateFieldDestructureSet(this.self, _privateFieldValue).value] = [1]), babelHelpers.readOnlyError("#privateFieldValue");
   }

@@ -5,8 +5,7 @@ let Foo = /*#__PURE__*/function () {
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-
-    _foo.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _foo);
   }
 
   babelHelpers.createClass(Foo, [{

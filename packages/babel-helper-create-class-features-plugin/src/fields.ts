@@ -540,16 +540,31 @@ function buildPrivateInstanceFieldInitSpec(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateProperty>,
   privateNamesMap: PrivateNamesMap,
+  state,
 ) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
-    // configurable is always false for private elements
-    // enumerable is always false for private elements
-    writable: true,
-    value: ${value},
-  })`;
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!state.availableHelper("classPrivateFieldInitSpec")) {
+      return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
+        // configurable is always false for private elements
+        // enumerable is always false for private elements
+        writable: true,
+        value: ${value},
+      })`;
+    }
+  }
+
+  const helper = state.addHelper("classPrivateFieldInitSpec");
+  return template.statement.ast`${helper}(
+    ${t.thisExpression()},
+    ${t.cloneNode(id)},
+    {
+      writable: true,
+      value: ${value}
+    },
+  )`;
 }
 
 function buildPrivateStaticFieldInitSpec(
@@ -632,27 +647,87 @@ function buildPrivateInstanceMethodInitSpec(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
+  state,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
-  const { id, getId, setId, initAdded } = privateName;
+  const { getId, setId, initAdded } = privateName;
 
   if (initAdded) return;
 
   const isAccessor = getId || setId;
   if (isAccessor) {
-    privateNamesMap.set(prop.node.key.id.name, {
-      ...privateName,
-      initAdded: true,
-    });
+    return buildPrivateAccessorInitialization(
+      ref,
+      prop,
+      privateNamesMap,
+      state,
+    );
+  }
 
-    return template.statement.ast`
+  return buildPrivateInstanceMethodInitalization(
+    ref,
+    prop,
+    privateNamesMap,
+    state,
+  );
+}
+
+function buildPrivateAccessorInitialization(
+  ref: t.Expression,
+  prop: NodePath<t.ClassPrivateMethod>,
+  privateNamesMap: PrivateNamesMap,
+  state,
+) {
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id, getId, setId } = privateName;
+
+  privateNamesMap.set(prop.node.key.id.name, {
+    ...privateName,
+    initAdded: true,
+  });
+
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!state.availableHelper("classPrivateFieldInitSpec")) {
+      return template.statement.ast`
       ${id}.set(${ref}, {
         get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
         set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       });
     `;
+    }
   }
-  return template.statement.ast`${id}.add(${ref})`;
+
+  const helper = state.addHelper("classPrivateFieldInitSpec");
+  return template.statement.ast`${helper}(
+    ${t.thisExpression()},
+    ${t.cloneNode(id)},
+    {
+      get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+      set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+    },
+  )`;
+}
+
+function buildPrivateInstanceMethodInitalization(
+  ref: t.Expression,
+  prop: NodePath<t.ClassPrivateMethod>,
+  privateNamesMap: PrivateNamesMap,
+  state,
+) {
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id } = privateName;
+
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!state.availableHelper("classPrivateMethodInitSpec")) {
+      return template.statement.ast`${id}.add(${ref})`;
+    }
+  }
+
+  const helper = state.addHelper("classPrivateMethodInitSpec");
+  return template.statement.ast`${helper}(
+    ${t.thisExpression()},
+    ${t.cloneNode(id)}
+  )`;
 }
 
 function buildPublicFieldInitLoose(
@@ -957,6 +1032,7 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
+            state,
           ),
         );
         break;
@@ -985,6 +1061,7 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
+            state,
           ),
         );
         pureStaticNodes.push(

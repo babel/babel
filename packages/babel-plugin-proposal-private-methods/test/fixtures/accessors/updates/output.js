@@ -4,16 +4,14 @@ var _privateFieldValue = /*#__PURE__*/new WeakMap();
 
 class Cl {
   constructor() {
-    _privateFieldValue.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _privateFieldValue, {
       get: _get_privateFieldValue,
       set: _set_privateFieldValue
     });
-
-    _privateField.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _privateField, {
       writable: true,
       value: "top secret string"
     });
-
     this.publicField = "not secret string";
   }
 

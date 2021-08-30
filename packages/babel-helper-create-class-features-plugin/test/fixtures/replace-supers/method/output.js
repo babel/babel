@@ -3,8 +3,7 @@ var _foo = /*#__PURE__*/new WeakSet();
 class A extends B {
   constructor(...args) {
     super(...args);
-
-    _foo.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _foo);
   }
 
 }

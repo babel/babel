@@ -5,8 +5,7 @@ var D = /*#__PURE__*/function () {
 
   function D() {
     babelHelpers.classCallCheck(this, D);
-
-    _arr.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _arr, {
       writable: true,
       value: void 0
     });
@@ -30,8 +29,7 @@ var C = /*#__PURE__*/function () {
 
   function C() {
     babelHelpers.classCallCheck(this, C);
-
-    _p.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _p, {
       writable: true,
       value: void 0
     });
@@ -55,8 +53,7 @@ var E = /*#__PURE__*/function () {
 
   function E() {
     babelHelpers.classCallCheck(this, E);
-
-    _arr2.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _arr2, {
       writable: true,
       value: void 0
     });
@@ -80,8 +77,7 @@ var F = /*#__PURE__*/function () {
 
   function F() {
     babelHelpers.classCallCheck(this, F);
-
-    _ar.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _ar, {
       writable: true,
       value: void 0
     });

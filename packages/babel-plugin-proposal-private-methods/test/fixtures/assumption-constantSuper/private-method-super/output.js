@@ -10,8 +10,7 @@ var _privateMethod = /*#__PURE__*/new WeakSet();
 class Sub extends Base {
   constructor(...args) {
     super(...args);
-
-    _privateMethod.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _privateMethod);
   }
 
   superMethod() {

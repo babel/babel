@@ -4,8 +4,7 @@ var Foo = function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
-
-  _prop.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _prop, {
     writable: true,
     value: "foo"
   });
@@ -25,12 +24,10 @@ var Bar = /*#__PURE__*/function (_Foo) {
 
     babelHelpers.classCallCheck(this, Bar);
     _this = _super.call(this, ...args);
-
-    _prop2.set(babelHelpers.assertThisInitialized(_this), {
+    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _prop2, {
       writable: true,
       value: "bar"
     });
-
     return _this;
   }
 

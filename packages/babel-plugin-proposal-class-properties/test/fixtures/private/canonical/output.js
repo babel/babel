@@ -7,17 +7,14 @@ var Point = /*#__PURE__*/function () {
 
   function Point(x = 0, y = 0) {
     babelHelpers.classCallCheck(this, Point);
-
-    _x.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _x, {
       writable: true,
       value: void 0
     });
-
-    _y.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _y, {
       writable: true,
       value: void 0
     });
-
     babelHelpers.classPrivateFieldSet(this, _x, +x);
     babelHelpers.classPrivateFieldSet(this, _y, +y);
   }

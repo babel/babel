@@ -4,12 +4,11 @@ var _getSet = /*#__PURE__*/new WeakMap();
 
 class Cl {
   constructor() {
-    _getSet.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _getSet, {
       get: _get_getSet,
       set: _set_getSet
     });
-
-    _privateField.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _privateField, {
       writable: true,
       value: 0
     });
