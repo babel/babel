@@ -92,3 +92,30 @@ let _z5 = z(),
 } = _z5,
     y9 = babelHelpers.objectWithoutProperties(_z5.x9.w9, ["a9"]),
     y10 = babelHelpers.objectWithoutProperties(_z5.x10, ["a10"]);
+
+let _z6 = z(),
+    {
+  x11: [{
+    w11
+  }]
+} = _z6,
+    z11 = babelHelpers.objectWithoutProperties(_z6.x11, ["w11"]);
+
+let _z7 = z(),
+    {
+  x12: [{
+    a12,
+    b12
+  }, {
+    c12
+  }]
+} = _z7,
+    d12 = babelHelpers.objectWithoutProperties(_z7.x12, ["c12"]);
+
+let _z8 = z(),
+    {
+  x13: [, {
+    c13
+  }]
+} = _z8,
+    d13 = babelHelpers.objectWithoutProperties(_z8.x13, ["c13"]);

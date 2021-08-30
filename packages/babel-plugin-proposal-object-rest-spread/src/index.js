@@ -241,7 +241,7 @@ export default declare((api, opts) => {
   }
 
   function doesAnyChildNodeHaveMoreThanOneProperty(properties) {
-    if (properties.length > 1) {
+    if (!properties || properties.length > 1) {
       return true;
     }
     const value = properties[0].value;
