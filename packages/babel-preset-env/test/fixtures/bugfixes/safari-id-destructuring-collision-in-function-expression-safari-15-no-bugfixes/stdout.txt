@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-static-block { safari }
   syntax-private-property-in-object
   syntax-class-properties
   syntax-numeric-separator

@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-static-block { safari }
   proposal-private-property-in-object { safari < 15 }
   proposal-class-properties { safari < 15 }
   proposal-private-methods { safari < 15 }

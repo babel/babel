@@ -13,6 +13,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-class-static-block { chrome < 94, edge, firefox < 93, ie, ios, safari }
   proposal-private-property-in-object { chrome < 91, edge, firefox < 90, ie, ios < 15, safari < 15 }
   proposal-class-properties { chrome < 84, edge < 84, firefox < 90, ie, ios < 15, safari < 15 }
   proposal-private-methods { chrome < 84, edge < 84, firefox < 90, ie, ios < 15, safari < 15 }
