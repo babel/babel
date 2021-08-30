@@ -163,11 +163,10 @@ const es2022 = {
     ],
   },
   "proposal-private-methods": "private class methods",
-};
-
-const shippedProposal = {
   "proposal-class-static-block": "Class static initialization blocks",
 };
+
+const shippedProposal = {};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
