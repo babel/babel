@@ -1,34 +1,7 @@
-var z = {};
-var x = babelHelpers.extends({}, z);
-var a = babelHelpers.extends({}, {
-  a: 1
-});
-var x = babelHelpers.extends({}, a.b);
-var x = babelHelpers.extends({}, a());
-var {
-  x1
-} = z,
-    y1 = babelHelpers.objectWithoutProperties(z, ["x1"]);
-x1++;
-var {
-  [a]: b
-} = z,
-    c = babelHelpers.objectWithoutProperties(z, [a].map(babelHelpers.toPropertyKey));
-var {
-  x1
-} = z,
-    y1 = babelHelpers.objectWithoutProperties(z, ["x1"]);
-let {
-  x2,
-  y2
-} = z,
-    z2 = babelHelpers.objectWithoutProperties(z, ["x2", "y2"]);
-const {
-  w3,
-  x3,
-  y3
-} = z,
-      z4 = babelHelpers.objectWithoutProperties(z, ["w3", "x3", "y3"]);
+const _z = z(),
+      {} = _z,
+      y15 = babelHelpers.extends({}, _z.x15);
+
 let {
   x: {
     a: xa,
@@ -41,25 +14,25 @@ let {
 let {} = z,
     y4 = babelHelpers.extends({}, z.x4);
 
-let _z = z(),
+let _z2 = z(),
     {
   x5: {
     w5
   }
-} = _z,
-    y5 = babelHelpers.objectWithoutProperties(_z.x5, ["w5"]);
+} = _z2,
+    y5 = babelHelpers.objectWithoutProperties(_z2.x5, ["w5"]);
 
-let _z2 = z(),
+let _z3 = z(),
     {
   x6: {
     w6: {
       a6
     }
   }
-} = _z2,
-    y6 = babelHelpers.objectWithoutProperties(_z2.x6.w6, ["a6"]);
+} = _z3,
+    y6 = babelHelpers.objectWithoutProperties(_z3.x6.w6, ["a6"]);
 
-let _z3 = z(),
+let _z4 = z(),
     {
   x7: {
     e7,
@@ -70,16 +43,16 @@ let _z3 = z(),
       a7
     }
   }
-} = _z3,
-    y7 = babelHelpers.objectWithoutProperties(_z3.q7.w7, ["a7"]);
-
-let _z4 = z(),
-    {
-  x8
 } = _z4,
-    y8 = babelHelpers.objectWithoutProperties(_z4, ["x8"]);
+    y7 = babelHelpers.objectWithoutProperties(_z4.q7.w7, ["a7"]);
 
 let _z5 = z(),
+    {
+  x8
+} = _z5,
+    y8 = babelHelpers.objectWithoutProperties(_z5, ["x8"]);
+
+let _z6 = z(),
     {
   x9: {
     w9: {
@@ -89,19 +62,19 @@ let _z5 = z(),
   x10: {
     a10
   }
-} = _z5,
-    y9 = babelHelpers.objectWithoutProperties(_z5.x9.w9, ["a9"]),
-    y10 = babelHelpers.objectWithoutProperties(_z5.x10, ["a10"]);
+} = _z6,
+    y9 = babelHelpers.objectWithoutProperties(_z6.x9.w9, ["a9"]),
+    y10 = babelHelpers.objectWithoutProperties(_z6.x10, ["a10"]);
 
-let _z6 = z(),
+let _z7 = z(),
     {
   x11: [{
     w11
   }]
-} = _z6,
-    z11 = babelHelpers.objectWithoutProperties(_z6.x11, ["w11"]);
+} = _z7,
+    z11 = babelHelpers.objectWithoutProperties(_z7.x11, ["w11"]);
 
-let _z7 = z(),
+let _z8 = z(),
     {
   x12: [{
     a12,
@@ -109,21 +82,29 @@ let _z7 = z(),
   }, {
     c12
   }]
-} = _z7,
-    d12 = babelHelpers.objectWithoutProperties(_z7.x12, ["c12"]);
+} = _z8,
+    d12 = babelHelpers.objectWithoutProperties(_z8.x12, ["c12"]);
 
-let _z8 = z(),
+let _z9 = z(),
     {
   x13: [, {
     c13
   }]
-} = _z8,
-    d13 = babelHelpers.objectWithoutProperties(_z8.x13, ["c13"]);
+} = _z9,
+    d13 = babelHelpers.objectWithoutProperties(_z9.x13, ["c13"]);
 
-const _z9 = z(),
+const _z10 = z(),
       {
   x14: [...{
     q14
   }]
-} = _z9,
-      y14 = babelHelpers.objectWithoutProperties(_z9.x14, ["q14"]);
+} = _z10,
+      y14 = babelHelpers.objectWithoutProperties(_z10.x14, ["q14"]);
+
+const _z11 = z(),
+      {} = _z11,
+      y16 = babelHelpers.extends({}, _z11.x15);
+
+const {
+  x16: []
+} = z();

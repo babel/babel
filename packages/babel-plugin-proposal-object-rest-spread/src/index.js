@@ -240,15 +240,37 @@ export default declare((api, opts) => {
     }
   }
 
-  function doesAnyChildNodeHaveMoreThanOneProperty(properties) {
-    if (!properties || properties.length > 1) {
+  function doesAnyChildNodeHaveMoreThanOneProperty(node) {
+    if (node.argument) return true;
+    let innerNode;
+
+    // Array destructing case
+    if (node.elements) {
+      if (node.elements.length > 1) return true;
+      // Recurse on the element
+      innerNode = node.elements[0];
+    }
+
+    // Nested object case
+    if (node.properties) {
+      if (node.properties.length > 1) return true;
+      // Recurse value of the value of the first property
+      innerNode = node.properties[0].value;
+      // Short circuit if the value is falsy
+      if (!innerNode) {
+        return false;
+      }
+    }
+
+    // This shouldn't be something that we hit but in the event we can't inspect
+    // for elements or properties we should do the safe thing and assume that
+    // a child node has more than one property.
+    // This way the RHS is not called multiple times.
+    if (!innerNode) {
       return true;
     }
-    const value = properties[0].value;
-    if (!value) {
-      return false;
-    }
-    return doesAnyChildNodeHaveMoreThanOneProperty(value.properties);
+
+    return doesAnyChildNodeHaveMoreThanOneProperty(innerNode);
   }
 
   return {
@@ -346,9 +368,7 @@ export default declare((api, opts) => {
             // skip single-property case, e.g.
             // const { ...x } = foo();
             // since the RHS will not be duplicated
-            doesAnyChildNodeHaveMoreThanOneProperty(
-              originalPath.node.id.properties,
-            ) &&
+            doesAnyChildNodeHaveMoreThanOneProperty(originalPath.node.id) &&
             !t.isIdentifier(originalPath.node.init)
           ) {
             // const { a, ...b } = foo();
