@@ -21,6 +21,7 @@ module.exports = {
     "/test/helpers/",
     "<rootDir>/test/warning\\.js",
     "<rootDir>/build/",
+    "<rootDir>/.history/", // local directory for VSCode Extension - https://marketplace.visualstudio.com/items?itemName=xyz.local-history
     "_browser\\.js",
   ],
   testEnvironment: "node",

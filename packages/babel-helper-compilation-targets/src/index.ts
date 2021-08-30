@@ -154,8 +154,11 @@ function generateTargets(inputTargets: InputTargets): Targets {
   return input as any as Targets;
 }
 
-function resolveTargets(queries: Browsers): Targets {
-  const resolved = browserslist(queries, { mobileToDesktop: true });
+function resolveTargets(queries: Browsers, env?: string): Targets {
+  const resolved = browserslist(queries, {
+    mobileToDesktop: true,
+    env,
+  });
   return getLowestVersions(resolved);
 }
 
@@ -217,7 +220,7 @@ export default function getTargets(
   }
 
   if (browsers) {
-    const queryBrowsers = resolveTargets(browsers);
+    const queryBrowsers = resolveTargets(browsers, options.browserslistEnv);
 
     if (esmodules === "intersect") {
       for (const browser of Object.keys(queryBrowsers)) {
