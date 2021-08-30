@@ -11,7 +11,7 @@ exports.normalizeESLintConfig = function (options) {
 
   return {
     babelOptions: { cwd: process.cwd(), ...babelOptions },
-    ecmaVersion,
+    ecmaVersion: ecmaVersion === "latest" ? 1e8 : ecmaVersion,
     sourceType,
     allowImportExportEverywhere,
     requireConfigFile,
