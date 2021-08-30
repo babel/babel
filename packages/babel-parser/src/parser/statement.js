@@ -1619,7 +1619,6 @@ export default class StatementParser extends ExpressionParser {
     classBody: N.ClassBody,
     member: N.StaticBlock & { decorators?: Array<N.Decorator> },
   ) {
-    this.expectPlugin("classStaticBlock", member.start);
     // Start a new lexical scope
     this.scope.enter(SCOPE_CLASS | SCOPE_STATIC_BLOCK | SCOPE_SUPER);
     // Start a new scope with regard to loop labels
