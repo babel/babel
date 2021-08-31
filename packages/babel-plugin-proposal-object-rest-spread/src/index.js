@@ -241,9 +241,14 @@ export default declare((api, opts) => {
   }
 
   function doesAnyChildNodeHaveMoreThanOneProperty(node) {
-    if (node.argument) return true;
     let innerNode;
 
+    // Rest elements case
+    if (node.argument) {
+      if (node.argument.length > 1) return true;
+      // Recurse on the element
+      innerNode = node.argument[0];
+    }
     // Array destructing case
     if (node.elements) {
       if (node.elements.length > 1) return true;
@@ -259,6 +264,11 @@ export default declare((api, opts) => {
       // Short circuit if the value is falsy
       if (!innerNode) {
         return false;
+      }
+
+      // If this is an AssignmentPattern, always return true else the RHS will be duplicated
+      if (innerNode.type === "AssignmentPattern" && innerNode.left) {
+        return true;
       }
     }
 

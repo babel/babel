@@ -108,3 +108,33 @@ const _z11 = z(),
 const {
   x16: []
 } = z();
+const [...[...y17]] = z();
+const [..._ref] = z();
+const y18 = babelHelpers.extends({}, _ref);
+const [..._ref2] = z();
+const {
+  a19
+} = _ref2,
+      y19 = babelHelpers.objectWithoutProperties(_ref2, ["a19"]);
+
+const _z12 = z(),
+      {} = _z12,
+      y20 = babelHelpers.extends({}, _z12.x20);
+
+const _z13 = z(),
+      {
+  x22: {
+    q22
+  } = {}
+} = _z13,
+      y22 = babelHelpers.objectWithoutProperties(_z13.x22, ["q22"]);
+
+const [[...y23] = []] = z();
+const [_ref3 = []] = z();
+const y24 = babelHelpers.extends({}, _ref3);
+const {
+  x25: [...y25] = []
+} = z();
+const {
+  x26: [q26, ...y26] = []
+} = z();
