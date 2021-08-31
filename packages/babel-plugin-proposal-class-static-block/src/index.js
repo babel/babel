@@ -29,7 +29,7 @@ export default declare(({ types: t, template, assertVersion }) => {
 
   return {
     name: "proposal-class-static-block",
-    inherits: syntaxClassStaticBlock,
+    inherits: syntaxClassStaticBlock.default,
 
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
