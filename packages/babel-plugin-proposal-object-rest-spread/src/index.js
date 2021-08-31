@@ -240,47 +240,29 @@ export default declare((api, opts) => {
     }
   }
 
-  function doesAnyChildNodeHaveMoreThanOneProperty(node) {
-    let innerNode;
-
-    // Rest elements case
-    if (node.argument) {
-      if (node.argument.length > 1) return true;
-      // Recurse on the element
-      innerNode = node.argument[0];
-    }
-    // Array destructing case
-    if (node.elements) {
+  function hasMoreThanOneBinding(node) {
+    // ArrayPattern
+    if (node?.elements) {
       if (node.elements.length > 1) return true;
-      // Recurse on the element
-      innerNode = node.elements[0];
-    }
-
-    // Nested object case
-    if (node.properties) {
+      else return hasMoreThanOneBinding(node.elements[0]);
+      // ObjectPattern
+    } else if (node?.properties) {
       if (node.properties.length > 1) return true;
-      // Recurse value of the value of the first property
-      innerNode = node.properties[0].value;
-      // Short circuit if the value is falsy
-      if (!innerNode) {
-        return false;
-      }
-
-      // If this is an AssignmentPattern, always return true else the RHS will be duplicated
-      if (innerNode.type === "AssignmentPattern" && innerNode.left) {
-        return true;
-      }
-    }
-
-    // This shouldn't be something that we hit but in the event we can't inspect
-    // for elements or properties we should do the safe thing and assume that
-    // a child node has more than one property.
-    // This way the RHS is not called multiple times.
-    if (!innerNode) {
+      else return hasMoreThanOneBinding(node.properties[0]);
+      // ObjectProperty
+    } else if (node?.value) {
+      if (node.value.length > 1) return true;
+      else return hasMoreThanOneBinding(node.value);
+      // AssignmentPattern
+    } else if (node?.left) {
+      return hasMoreThanOneBinding(node.left);
+      // RestElement
+    } else if (node?.argument) {
+      return hasMoreThanOneBinding(node.argument);
+    } else {
+      // node is Identifier or MemberExpression
       return true;
     }
-
-    return doesAnyChildNodeHaveMoreThanOneProperty(innerNode);
   }
 
   return {
@@ -378,7 +360,7 @@ export default declare((api, opts) => {
             // skip single-property case, e.g.
             // const { ...x } = foo();
             // since the RHS will not be duplicated
-            doesAnyChildNodeHaveMoreThanOneProperty(originalPath.node.id) &&
+            hasMoreThanOneBinding(originalPath.node.id) &&
             !t.isIdentifier(originalPath.node.init)
           ) {
             // const { a, ...b } = foo();
