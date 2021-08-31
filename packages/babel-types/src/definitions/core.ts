@@ -898,7 +898,12 @@ defineType("RestElement", {
     argument: {
       validate: !process.env.BABEL_TYPES_8_BREAKING
         ? assertNodeType("LVal")
-        : assertNodeType("Identifier", "Pattern", "MemberExpression"),
+        : assertNodeType(
+            "Identifier",
+            "ArrayPattern",
+            "ObjectPattern",
+            "MemberExpression",
+          ),
     },
     // For Flow
     optional: {
