@@ -7,20 +7,25 @@ function getBody(program) {
 
 describe("retrievers", function () {
   describe("getBindingIdentifiers", function () {
-    it("variable declarations", function () {
-      const program = "var a = 1; let b = 2; const c = 3;";
-      const ids = t.getBindingIdentifiers(getBody(program));
-      expect(Object.keys(ids)).toEqual(["a", "b", "c"]);
-    });
-    it("function declarations", function () {
-      const program = "var foo = 1; function bar() { var baz = 2; }";
-      const ids = t.getBindingIdentifiers(getBody(program));
-      expect(Object.keys(ids)).toEqual(["bar", "foo"]);
-    });
-    it("export named declarations", function () {
-      const program = "export const foo = 'foo';";
-      const ids = t.getBindingIdentifiers(getBody(program));
-      expect(Object.keys(ids)).toEqual(["foo"]);
+    it.each([
+      [
+        "variable declarations",
+        getBody("var a = 1; let b = 2; const c = 3;"),
+        ["a", "b", "c"],
+      ],
+      [
+        "function declarations",
+        getBody("var foo = 1; function bar() { var baz = 2; }"),
+        ["bar", "foo"],
+      ],
+      [
+        "export named declarations",
+        getBody("export const foo = 'foo';"),
+        ["foo"],
+      ],
+    ])("%s", (_, program, bindingNames) => {
+      const ids = t.getBindingIdentifiers(program);
+      expect(Object.keys(ids)).toEqual(bindingNames);
     });
   });
 });
