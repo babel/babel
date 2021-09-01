@@ -492,6 +492,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-replace-supers": "workspace:^7.15.0"
     "@babel/helper-split-export-declaration": "workspace:^7.14.5"
+    "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/preset-env": "workspace:*"
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -1160,7 +1161,7 @@ __metadata:
     "@babel/helper-create-class-features-plugin": "workspace:^7.14.5"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
-    "@babel/plugin-syntax-class-static-block": "workspace:^7.14.5"
+    "@babel/plugin-syntax-class-static-block": ^7.14.5
   peerDependencies:
     "@babel/core": ^7.12.0
   languageName: unknown
@@ -1545,7 +1546,7 @@ __metadata:
     "@babel/helper-create-class-features-plugin": "workspace:^7.14.5"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
-    "@babel/plugin-syntax-private-property-in-object": "workspace:^7.14.5"
+    "@babel/plugin-syntax-private-property-in-object": ^7.14.5
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -1658,16 +1659,6 @@ __metadata:
   checksum: 43bef611dd3912e3adcea1bcb587eaba1b8c8f24dfb134f191488e3521453d4f0a36408e6a3e27b512bee6e1b569c889db31a270d5576e9c34a80326bbc6bd7d
   languageName: node
   linkType: hard
-
-"@babel/plugin-syntax-class-static-block@workspace:*, @babel/plugin-syntax-class-static-block@workspace:^7.14.5, @babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block"
-  dependencies:
-    "@babel/helper-plugin-utils": "workspace:^7.14.5"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "@babel/plugin-syntax-decimal@workspace:*, @babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal":
   version: 0.0.0-use.local
@@ -1931,16 +1922,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-private-property-in-object@workspace:^7.14.5, @babel/plugin-syntax-private-property-in-object@workspace:packages/babel-plugin-syntax-private-property-in-object":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-private-property-in-object@workspace:packages/babel-plugin-syntax-private-property-in-object"
-  dependencies:
-    "@babel/helper-plugin-utils": "workspace:^7.14.5"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-syntax-record-and-tuple@workspace:*, @babel/plugin-syntax-record-and-tuple@workspace:^7.14.5, @babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple"
@@ -1973,17 +1954,6 @@ __metadata:
   checksum: 642baff7c2150f146aa2ae94f8fa93f8aa81f5d82731241c60054037938cbde8031898194a216ec567af9b35bc4f394be3cd87d76aea39c8e32d68927ea67601
   languageName: node
   linkType: hard
-
-"@babel/plugin-syntax-top-level-await@workspace:*, @babel/plugin-syntax-top-level-await@workspace:^7.14.5, @babel/plugin-syntax-top-level-await@workspace:packages/babel-plugin-syntax-top-level-await":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-top-level-await@workspace:packages/babel-plugin-syntax-top-level-await"
-  dependencies:
-    "@babel/core": "workspace:*"
-    "@babel/helper-plugin-utils": "workspace:^7.14.5"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "@babel/plugin-syntax-typescript@npm:^7.14.5, @babel/plugin-syntax-typescript@npm:^7.7.2":
   version: 7.14.5
@@ -2469,6 +2439,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
     "@babel/helper-simple-access": "workspace:^7.14.8"
     "@babel/plugin-external-helpers": "workspace:*"
+    "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
     babel-plugin-dynamic-import-node: ^2.3.3
   peerDependencies:
@@ -3228,7 +3199,7 @@ __metadata:
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^7.14.5"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
-    "@babel/plugin-syntax-class-static-block": "workspace:^7.14.5"
+    "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/plugin-syntax-dynamic-import": ^7.8.3
     "@babel/plugin-syntax-export-namespace-from": ^7.8.3
     "@babel/plugin-syntax-json-strings": ^7.8.3
@@ -3238,8 +3209,8 @@ __metadata:
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
     "@babel/plugin-syntax-optional-chaining": ^7.8.3
-    "@babel/plugin-syntax-private-property-in-object": "workspace:^7.14.5"
-    "@babel/plugin-syntax-top-level-await": "workspace:^7.14.5"
+    "@babel/plugin-syntax-private-property-in-object": ^7.14.5
+    "@babel/plugin-syntax-top-level-await": ^7.14.5
     "@babel/plugin-transform-arrow-functions": "workspace:^7.14.5"
     "@babel/plugin-transform-async-to-generator": "workspace:^7.14.5"
     "@babel/plugin-transform-block-scoped-functions": "workspace:^7.14.5"
@@ -3467,7 +3438,7 @@ __metadata:
     "@babel/plugin-proposal-unicode-property-regex": "workspace:*"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
-    "@babel/plugin-syntax-class-static-block": "workspace:*"
+    "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/plugin-syntax-decimal": "workspace:*"
     "@babel/plugin-syntax-decorators": "workspace:*"
     "@babel/plugin-syntax-do-expressions": "workspace:*"
@@ -3483,7 +3454,7 @@ __metadata:
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
     "@babel/plugin-syntax-pipeline-operator": "workspace:*"
     "@babel/plugin-syntax-record-and-tuple": "workspace:*"
-    "@babel/plugin-syntax-top-level-await": "workspace:*"
+    "@babel/plugin-syntax-top-level-await": ^7.14.5
     "@babel/plugin-syntax-typescript": "workspace:*"
     "@babel/plugin-transform-arrow-functions": "workspace:*"
     "@babel/plugin-transform-async-to-generator": "workspace:*"

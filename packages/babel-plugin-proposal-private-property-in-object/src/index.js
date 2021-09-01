@@ -84,7 +84,7 @@ export default declare(({ assertVersion, types: t, template }, { loose }) => {
 
   return {
     name: "proposal-private-property-in-object",
-    inherits: syntaxPlugin,
+    inherits: syntaxPlugin.default,
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
       // can be handled by the private fields and methods transform.
