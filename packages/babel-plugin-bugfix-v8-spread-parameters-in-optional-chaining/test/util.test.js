@@ -15,6 +15,7 @@ function getPath(input, parserOpts = {}) {
         ...parserOpts,
       },
       filename: "example.js",
+      configFile: false,
     }),
     {
       "OptionalMemberExpression|OptionalCallExpression"(path) {
