@@ -17,6 +17,9 @@ set -x
 git clone --depth=1 https://github.com/facebook/create-react-app.git tmp/create-react-app
 cd tmp/create-react-app || exit
 
+# Update npm to v7
+npm i -g npm@7
+
 #==============================================================================#
 #                                   TEST                                       #
 #==============================================================================#
@@ -42,14 +45,10 @@ do
   (cd "$d"; node "$bump_deps")
 done
 
-# Don't use Yarn 2
-export YARN_IGNORE_PATH=1
-
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-yarn install
+npm install
 
 # Test
-CI=true yarn test
+CI=true npm run test
 
-unset YARN_IGNORE_PATH
 cleanup
