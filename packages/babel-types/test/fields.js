@@ -3,9 +3,10 @@ import glob from "glob";
 import path from "path";
 import fs from "fs";
 import { inspect } from "util";
+import { fileURLToPath } from "url";
 
-// eslint-disable-next-line no-restricted-globals
-const packages = path.resolve(__dirname, "..", "..");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const packages = path.resolve(dirname, "..", "..");
 
 function readJson(file) {
   return new Promise((resolve, reject) => {
