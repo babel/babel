@@ -251,7 +251,6 @@ export default declare((api, opts) => {
       else return hasMoreThanOneBinding(node.properties[0]);
       // ObjectProperty
     } else if (node?.value) {
-      if (node.value.length > 1) return true;
       else return hasMoreThanOneBinding(node.value);
       // AssignmentPattern
     } else if (node?.left) {
