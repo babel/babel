@@ -138,3 +138,34 @@ const {
 const {
   x26: [q26, ...y26] = []
 } = z();
+const {} = {};
+const [,, x27] = z();
+
+const _z14 = z(),
+      {} = _z14,
+      y28 = babelHelpers.extends({}, _z14.x28);
+
+const _z15 = z(),
+      {
+  x29: [,, {
+    q29
+  }]
+} = _z15,
+      y29 = babelHelpers.objectWithoutProperties(_z15.x29, ["q29"]);
+
+const [,, _ref4] = z();
+const {
+  y30
+} = _ref4,
+      x30 = babelHelpers.objectWithoutProperties(_ref4, ["y30"]);
+const [,, _ref5] = z();
+const x31 = babelHelpers.extends({}, _ref5);
+
+const _z16 = z(),
+      {
+  x32: {}
+} = _z16,
+      y32 = babelHelpers.extends({}, _z16.w32);
+
+const [,, {}, _ref6] = z();
+const q32 = babelHelpers.extends({}, _ref6);
