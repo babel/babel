@@ -284,12 +284,12 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
         if (!id) return;
 
         const binding = scope.getBinding(id.name);
-        if (binding) binding.reference(path);
+        binding?.reference(path);
       } else if (isVariableDeclaration(declar)) {
         for (const decl of declar.declarations) {
           for (const name of Object.keys(getBindingIdentifiers(decl))) {
             const binding = scope.getBinding(name);
-            if (binding) binding.reference(path);
+            binding?.reference(path);
           }
         }
       }
