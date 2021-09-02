@@ -241,26 +241,19 @@ export default declare((api, opts) => {
   }
 
   function hasMoreThanOneBinding(node) {
-    // ArrayPattern
-    if (node.elements) {
+    if (t.isArrayPattern(node)) {
       const nonNullElements = node.elements.filter(element => element !== null);
       if (nonNullElements.length > 1) return true;
       else return hasMoreThanOneBinding(nonNullElements[0]);
-      // ObjectPattern
-    } else if (node.properties) {
+    } else if (t.isObjectPattern(node)) {
       if (node.properties.length > 1) return true;
-      // Case of `const {} = {}`. This shouldn't be hit as
-      // we currently call `hasMoreThanOneBinding` only under visitRestElements.
       else if (node.properties.length === 0) return false;
       else return hasMoreThanOneBinding(node.properties[0]);
-      // ObjectProperty
-    } else if (node.value) {
+    } else if (t.isObjectProperty(node)) {
       return hasMoreThanOneBinding(node.value);
-      // AssignmentPattern
-    } else if (node.left) {
+    } else if (t.isAssignmentPattern(node)) {
       return hasMoreThanOneBinding(node.left);
-      // RestElement
-    } else if (node.argument) {
+    } else if (t.isRestElement(node)) {
       return hasMoreThanOneBinding(node.argument);
     } else {
       // node is Identifier or MemberExpression
