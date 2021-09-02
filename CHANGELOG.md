@@ -19,6 +19,43 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.4 (2021-09-02)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#13601](https://github.com/babel/babel/pull/13601) Disallow reinitializing private elements ([@komyg](https://github.com/komyg))
+
+#### :bug: Bug Fix
+* [#13638](https://github.com/babel/babel/pull/13638) [eslint] Allow `"latest"` as `ecmaVersion` ([@fisker](https://github.com/fisker))
+* `babel-traverse`, `babel-types`
+  * [#13723](https://github.com/babel/babel/pull/13723) `getBindingIdentifiers` should return params for private methods ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#13715](https://github.com/babel/babel/pull/13715) [babel 8] fix: stricter rest element builder check ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-compilation-targets`
+  * [#13697](https://github.com/babel/babel/pull/13697) fix: pass `browserslistEnv` to `resolveTargets` ([@meskill](https://github.com/meskill))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-property-in-object`
+  * [#13656](https://github.com/babel/babel/pull/13656) fix: fix static private field shadowed by local variable ([@colinaaa](https://github.com/colinaaa))
+* `babel-plugin-transform-typescript`
+  * [#13664](https://github.com/babel/babel/pull/13664) [ts] Fix transform for nested namespaces shorthand syntax ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#13680](https://github.com/babel/babel/pull/13680) fix(babel-parser): delete `static` property from class static block for TS ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13695](https://github.com/babel/babel/pull/13695) fix: assure left bracket is not consumed after dot ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#13532](https://github.com/babel/babel/pull/13532) fix: non breaking align options naming ([@fedeci](https://github.com/fedeci))
+
+#### :memo: Documentation
+* `babel-parser`
+  * [#13691](https://github.com/babel/babel/pull/13691) add missing ExportNamespaceSpecifier in spec.md ([@flyinox](https://github.com/flyinox))
+
+#### :house: Internal
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-syntax-class-static-block`, `babel-plugin-syntax-private-property-in-object`, `babel-plugin-syntax-top-level-await`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-preset-env`, `babel-standalone`
+  * [#13717](https://github.com/babel/babel/pull/13717) archive stage 4 parser plugins ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-core`, `babel-generator`, `babel-helper-annotate-as-pure`, `babel-helper-builder-binary-assignment-operator-visitor`, `babel-helper-builder-react-jsx`, `babel-helper-define-map`, `babel-helper-explode-assignable-expression`, `babel-helper-function-name`, `babel-helper-get-function-arity`, `babel-helper-hoist-variables`, `babel-helper-member-expression-to-functions`, `babel-helper-module-imports`, `babel-helper-module-transforms`, `babel-helper-optimise-call-expression`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-helper-simple-access`, `babel-helper-skip-transparent-expression-wrappers`, `babel-helper-split-export-declaration`, `babel-helper-wrap-function`, `babel-helpers`, `babel-preset-env`, `babel-template`, `babel-traverse`
+  * [#13685](https://github.com/babel/babel/pull/13685) Use named imports for babel types ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-helper-define-map`, `babel-helpers`, `babel-node`, `babel-parser`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-for-of`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-parameters`, `babel-traverse`, `babel-types`
+  * [#13609](https://github.com/babel/babel/pull/13609) perf: partially replace `.concat` with `.push` ([@fedeci](https://github.com/fedeci))
 ## v7.15.3 (2021-08-11)
 
 #### :eyeglasses: Spec Compliance
