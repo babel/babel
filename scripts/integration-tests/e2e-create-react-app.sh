@@ -17,8 +17,8 @@ set -x
 git clone --depth=1 https://github.com/facebook/create-react-app.git tmp/create-react-app
 cd tmp/create-react-app || exit
 
-# Update npm to v7
-npm i -g npm@7
+# Print npm version (it should be 7)
+npm --version
 
 #==============================================================================#
 #                                   TEST                                       #
