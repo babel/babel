@@ -254,10 +254,12 @@ export default declare((api, opts) => {
     } else if (t.isAssignmentPattern(node)) {
       return hasMoreThanOneBinding(node.left);
     } else if (t.isRestElement(node)) {
+      // This protects the `{ x: { ...y } } = z()` case;
+      if (t.isIdentifier(node.argument)) return true;
       return hasMoreThanOneBinding(node.argument);
     } else {
       // node is Identifier or MemberExpression
-      return true;
+      return false;
     }
   }
 
