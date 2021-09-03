@@ -139,6 +139,10 @@ export default function isReferenced(
     case "ImportSpecifier":
       return false;
 
+    // no: import "foo" assert { NODE: "json" }
+    case "ImportAttribute":
+      return false;
+
     // no: <div NODE="foo" />
     case "JSXAttribute":
       return false;

@@ -287,6 +287,15 @@ describe("validators", function () {
         expect(t.isReferenced(node, parent, grandparent)).toBe(true);
       });
     });
+
+    describe("import attributes", function () {
+      it("returns false for import attributes", function () {
+        const node = t.identifier("foo");
+        const parent = t.importAttribute(node, t.stringLiteral("bar"));
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+    });
   });
 
   describe("isBinding", function () {
