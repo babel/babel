@@ -4,5 +4,5 @@
       "patternMatching"
     ]
   ],
-  "throws": "Unexpected token (2:8)"
+  "throws": "Unexpected token (2:16)"
 }

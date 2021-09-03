@@ -3016,9 +3016,13 @@ export default class ExpressionParser extends LValParser {
   parseWhenMatchClause(): N.MatchClause {
     const node = this.startNode<N.MatchClause>();
     this.next(); // skip "when"
-    this.expect(tt.parenL);
-    node.test = this.parseMaybeBinaryMatchPattern();
-    this.expect(tt.parenR);
+    if (this.match(tt.bitwiseXOR)) {
+      node.test = this.parseExpressionMatchPattern();
+    } else {
+      this.expect(tt.parenL);
+      node.test = this.parseMaybeBinaryMatchPattern();
+      this.expect(tt.parenR);
+    }
 
     if (this.isLineTerminator()) {
       this.unexpected(
@@ -3056,9 +3060,25 @@ export default class ExpressionParser extends LValParser {
         return this.parseArrayMatchPattern();
       case tt.plusMin:
         return this.parseSimpleUnaryExpression();
+      case tt.bitwiseXOR:
+        return this.parseExpressionMatchPattern();
       default:
         throw this.unexpected();
     }
+  }
+
+  parseExpressionMatchPattern(): N.ExpressionMatchPattern {
+    const node = this.startNode<N.ExpressionMatchPattern>();
+    this.next(); // skip ^
+    let expression: N.Expression;
+    if (this.match(tt.parenL)) {
+      expression = this.parseParenAndDistinguishExpression(false);
+    } else {
+      expression = this.parseExprSubscripts();
+    }
+
+    node.expression = expression;
+    return this.finishNode(node, "ExpressionMatchPattern");
   }
 
   parseSimpleUnaryExpression(): N.UnaryExpression {
