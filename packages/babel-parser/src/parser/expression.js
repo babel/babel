@@ -409,7 +409,7 @@ export default class ExpressionParser extends LValParser {
       const { start } = left;
 
       if (
-        minPrec >= tt._in.binop ||
+        minPrec >= (tt._in.binop: number) ||
         !this.prodParam.hasIn ||
         !this.match(tt._in)
       ) {
