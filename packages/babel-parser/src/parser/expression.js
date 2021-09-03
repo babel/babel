@@ -413,11 +413,7 @@ export default class ExpressionParser extends LValParser {
         !this.prodParam.hasIn ||
         !this.match(tt._in)
       ) {
-        this.raise(
-          left.start,
-          Errors.PrivateInExpectedIn,
-          this.getPrivateNameSV(left),
-        );
+        this.raise(start, Errors.PrivateInExpectedIn, value);
       }
 
       this.classScope.usePrivateName(value, start);
