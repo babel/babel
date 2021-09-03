@@ -13,14 +13,14 @@ export default function isReferenced(
     // yes: NODE.child
     // no: parent.NODE
     case "MemberExpression":
-    case "JSXMemberExpression":
     case "OptionalMemberExpression":
       if (parent.property === node) {
-        // @ts-expect-error todo(flow->ts): computed is missing on JSXMemberExpression
         return !!parent.computed;
       }
       return parent.object === node;
 
+    case "JSXMemberExpression":
+      return parent.object === node;
     // no: let NODE = init;
     // yes: let id = NODE;
     case "VariableDeclarator":
@@ -44,31 +44,34 @@ export default function isReferenced(
     case "ClassMethod":
     case "ClassPrivateMethod":
     case "ObjectMethod":
-      // @ts-expect-error todo(flow->ts) params have more specific type comparing to node
-      if (parent.params.includes(node)) {
-        return false;
+      if (parent.key === node) {
+        return !!parent.computed;
       }
-    // fall through
+      return false;
 
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     // depends: { NODE }
     // depends: { key: NODE }
-    // fall through
     case "ObjectProperty":
+      if (parent.key === node) {
+        return !!parent.computed;
+      }
+      if (parent.value === node) {
+        return !grandparent || grandparent.type !== "ObjectPattern";
+      }
+      return true;
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
-    // fall through
     case "ClassProperty":
-    case "ClassPrivateProperty":
       if (parent.key === node) {
-        // @ts-expect-error todo(flow->ts): computed might not exist
         return !!parent.computed;
       }
-      // @ts-expect-error todo(flow->ts): ObjectMethod does not have value property
-      if (parent.value === node) {
-        return !grandparent || grandparent.type !== "ObjectPattern";
+      return true;
+    case "ClassPrivateProperty":
+      if (parent.key === node) {
+        return false;
       }
       return true;
 
