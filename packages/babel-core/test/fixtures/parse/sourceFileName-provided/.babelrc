@@ -1,5 +1,0 @@
-{
-  "parserOpts": {
-  	"plugins": ["decorators-legacy"]
-  }
-}
