@@ -1,7 +1,7 @@
 import { parse } from "@babel/parser";
 import hasMoreThanOneBinding from "../lib/hasMoreThanOneBinding";
 
-function getBody(program) {
+function getFistObjectPattern(program) {
   return parse(program, { sourceType: "module" }).program.body[0]
     .declarations[0].id;
 }
@@ -39,7 +39,7 @@ describe("hasMoreThanOneBinding", function () {
     ["const {} = {};", false],
     ["const [,,x27] = z();", false],
   ])("%s", (code, expectedResult) => {
-    const ast = getBody(code);
+    const ast = getFistObjectPattern(code);
     const result = hasMoreThanOneBinding(ast);
     expect(result).toEqual(expectedResult);
   });
