@@ -254,7 +254,7 @@ __metadata:
     "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.15.4"
     "@babel/helper-transform-fixture-test-runner": "workspace:*"
     "@babel/helpers": "workspace:^7.15.4"
-    "@babel/parser": "workspace:^7.15.4"
+    "@babel/parser": "workspace:^7.15.5"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
     "@babel/template": "workspace:^7.15.4"
     "@babel/traverse": "workspace:^7.15.4"
@@ -993,7 +993,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@workspace:*, @babel/parser@workspace:^7.15.4, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:*, @babel/parser@workspace:^7.15.4, @babel/parser@workspace:^7.15.5, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
