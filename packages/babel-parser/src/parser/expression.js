@@ -61,6 +61,7 @@ import { cloneIdentifier } from "./node";
 import type { SourceType } from "../options";
 */
 
+const hasOwn = Function.call.bind(Object.prototype.hasOwnProperty);
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   /*::
@@ -526,8 +527,19 @@ export default class ExpressionParser extends LValParser {
 
     const body = this.parseMaybeAssign();
 
-    if (body.type === "YieldExpression" && !body.extra?.parenthesized) {
-      this.raise(start, Errors.PipeUnparenthesizedYield);
+    const invalidBodies = {
+      ArrowFunctionExpression: "arrow function",
+      AssignmentExpression: "assignment",
+      ConditionalExpression: "conditional",
+      YieldExpression: "yield",
+    };
+
+    if (hasOwn(invalidBodies, body.type) && !body.extra?.parenthesized) {
+      this.raise(
+        start,
+        Errors.PipeUnparenthesizedBody,
+        invalidBodies[body.type],
+      );
     }
     if (!this.topicReferenceWasUsedInCurrentContext()) {
       // A Hack pipe body must use the topic reference at least once.
