@@ -235,9 +235,6 @@ export function tsPrintFunctionOrConstructorType(
   const returnType = process.env.BABEL_8_BREAKING
     ? node.returnType
     : node.typeAnnotation;
-  if (!returnType) {
-    console.log(node);
-  }
   this.print(returnType.typeAnnotation, node);
 }
 
