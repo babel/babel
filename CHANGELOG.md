@@ -19,6 +19,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.5 (2021-09-04)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#13727](https://github.com/babel/babel/pull/13727) Disallow `#a in #b in c` and similar expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-core`
+  * [#13732](https://github.com/babel/babel/pull/13732) Revert "fix: non breaking align options naming" ([@fedeci](https://github.com/fedeci))
 ## v7.15.4 (2021-09-02)
 
 #### :eyeglasses: Spec Compliance
