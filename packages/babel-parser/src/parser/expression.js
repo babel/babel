@@ -364,6 +364,14 @@ export default class ExpressionParser extends LValParser {
     return expr;
   }
 
+  parseMaybeUnaryOrPrivate(
+    refExpressionErrors?: ExpressionErrors,
+  ): N.Expression | N.PrivateName {
+    return this.match(tt.privateName)
+      ? this.parsePrivateName()
+      : this.parseMaybeUnary(refExpressionErrors);
+  }
+
   // Start the precedence parser.
   // https://tc39.es/ecma262/#prod-ShortCircuitExpression
 
@@ -371,7 +379,7 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
-    const expr = this.parseMaybeUnary(refExpressionErrors);
+    const expr = this.parseMaybeUnaryOrPrivate(refExpressionErrors);
 
     if (this.shouldExitDescending(expr, potentialArrowAt)) {
       return expr;
@@ -387,11 +395,31 @@ export default class ExpressionParser extends LValParser {
   // operator that has a lower precedence than the set it is parsing.
 
   parseExprOp(
-    left: N.Expression,
+    left: N.Expression | N.PrivateName,
     leftStartPos: number,
     leftStartLoc: Position,
     minPrec: number,
   ): N.Expression {
+    if (this.isPrivateName(left)) {
+      // https://tc39.es/proposal-private-fields-in-in
+      // RelationalExpression [In, Yield, Await]
+      //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
+
+      const value = this.getPrivateNameSV(left);
+      const { start } = left;
+
+      if (
+        // TODO: When migrating to TS, use tt._in.binop!
+        minPrec >= ((tt._in.binop: any): number) ||
+        !this.prodParam.hasIn ||
+        !this.match(tt._in)
+      ) {
+        this.raise(start, Errors.PrivateInExpectedIn, value);
+      }
+
+      this.classScope.usePrivateName(value, start);
+    }
+
     let prec = this.state.type.binop;
     if (prec != null && (this.prodParam.hasIn || !this.match(tt._in))) {
       if (prec > minPrec) {
@@ -504,7 +532,7 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
 
     return this.parseExprOp(
-      this.parseMaybeUnary(),
+      this.parseMaybeUnaryOrPrivate(),
       startPos,
       startLoc,
       op.rightAssociative ? prec - 1 : prec,
@@ -1213,17 +1241,18 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt.privateName: {
-        // https://tc39.es/proposal-private-fields-in-in
-        // RelationalExpression [In, Yield, Await]
-        //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
-        const { value, start } = this.state;
-        node = this.parsePrivateName();
-        if (this.match(tt._in)) {
-          this.classScope.usePrivateName(value, start);
-        } else {
-          this.raise(start, Errors.PrivateInExpectedIn, value);
-        }
-        return node;
+        // Standalone private names are only allowed in "#x in obj"
+        // expressions, and they are directly handled by callers of
+        // parseExprOp. If we reach this, the input is always invalid.
+        // We can throw a better error message and recover, rather than
+        // just throwing "Unexpected token" (which is the default
+        // behavior of this big switch statement).
+        this.raise(
+          this.state.start,
+          Errors.PrivateInExpectedIn,
+          this.state.value,
+        );
+        return this.parsePrivateName();
       }
 
       case tt.moduloAssign:
@@ -2904,7 +2933,7 @@ export default class ExpressionParser extends LValParser {
     this.state.inFSharpPipelineDirectBody = true;
 
     const ret = this.parseExprOp(
-      this.parseMaybeUnary(),
+      this.parseMaybeUnaryOrPrivate(),
       startPos,
       startLoc,
       prec,
