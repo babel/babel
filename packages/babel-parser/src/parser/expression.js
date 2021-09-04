@@ -61,7 +61,9 @@ import { cloneIdentifier } from "./node";
 import type { SourceType } from "../options";
 */
 
+// $FlowIgnore
 const hasOwn = Function.call.bind(Object.prototype.hasOwnProperty);
+
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   /*::
