@@ -57,10 +57,8 @@ export default function isReferenced(
       if (parent.key === node) {
         return !!parent.computed;
       }
-      if (parent.value === node) {
-        return !grandparent || grandparent.type !== "ObjectPattern";
-      }
-      return true;
+      // parent.value === node
+      return !grandparent || grandparent.type !== "ObjectPattern";
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
@@ -70,10 +68,7 @@ export default function isReferenced(
       }
       return true;
     case "ClassPrivateProperty":
-      if (parent.key === node) {
-        return false;
-      }
-      return true;
+      return parent.key !== node;
 
     // no: class NODE {}
     // yes: class Foo extends NODE {}
