@@ -1412,6 +1412,7 @@ __metadata:
     "@babel/helper-compilation-targets": "workspace:^7.14.5"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
+    "@babel/parser": "workspace:*"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
     "@babel/plugin-transform-parameters": "workspace:^7.14.5"
   peerDependencies:

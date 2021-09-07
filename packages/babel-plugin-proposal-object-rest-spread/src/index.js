@@ -4,6 +4,7 @@ import { types as t } from "@babel/core";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { isRequired } from "@babel/helper-compilation-targets";
 import compatData from "@babel/compat-data/corejs2-built-ins";
+import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable";
 
 // TODO: Remove in Babel 8
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
@@ -335,7 +336,7 @@ export default declare((api, opts) => {
             // skip single-property case, e.g.
             // const { ...x } = foo();
             // since the RHS will not be duplicated
-            originalPath.node.id.properties.length > 1 &&
+            shouldStoreRHSInTemporaryVariable(originalPath.node.id) &&
             !t.isIdentifier(originalPath.node.init)
           ) {
             // const { a, ...b } = foo();
