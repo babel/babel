@@ -79,12 +79,11 @@ function createContext() {
 function runCacheableScriptInTestContext(
   filename: string,
   srcFn: () => string,
-  // todo(flow->ts) was Context type, but it is missing
-  context: any,
+  context: vm.Context,
   moduleCache: any,
 ) {
-  // todo(flow->ts) improve types
-  let cached: any = cachedScripts.get(filename);
+  let cached: { code?: string; cachedData?: Buffer } =
+    cachedScripts.get(filename);
   if (!cached) {
     const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
     cached = {
@@ -102,9 +101,7 @@ function runCacheableScriptInTestContext(
     produceCachedData: true,
   });
 
-  // @ts-expect-error todo(flow->ts) improve types
   if (script.cachedDataProduced) {
-    // @ts-expect-error todo(flow->ts) improve types
     cached.cachedData = script.cachedData;
   }
 
@@ -129,8 +126,7 @@ function runCacheableScriptInTestContext(
 function runModuleInTestContext(
   id: string,
   relativeFilename: string,
-  // todo(flow->ts) was Context type, but it is missing
-  context: any,
+  context: vm.Context,
   moduleCache: any,
 ) {
   const filename = require.resolve(id, {
