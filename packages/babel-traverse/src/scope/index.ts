@@ -5,7 +5,6 @@ import type { TraverseOptions } from "../index";
 import Binding from "./binding";
 import globals from "globals";
 import {
-  FOR_INIT_KEYS,
   NOT_LOCAL_BINDING,
   callExpression,
   cloneNode,
@@ -224,16 +223,13 @@ interface CollectVisitorState {
 }
 
 const collectorVisitor: Visitor<CollectVisitorState> = {
-  For(path) {
-    for (const key of FOR_INIT_KEYS) {
-      // todo: might be not needed with improvement to babel-types
-      const declar = path.get(key) as NodePath;
-      // delegate block scope handling to the `BlockScoped` method
-      if (declar.isVar()) {
-        const parentScope =
-          path.scope.getFunctionParent() || path.scope.getProgramParent();
-        parentScope.registerBinding("var", declar);
-      }
+  ForStatement(path) {
+    const declar = path.get("init");
+    // delegate block scope handling to the `BlockScoped` method
+    if (declar.isVar()) {
+      const { scope } = path;
+      const parentScope = scope.getFunctionParent() || scope.getProgramParent();
+      parentScope.registerBinding("var", declar);
     }
   },
 
@@ -269,6 +265,12 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     if (left.isPattern() || left.isIdentifier()) {
       state.constantViolations.push(path);
     }
+    // delegate block scope handling to the `BlockScoped` method
+    else if (left.isVar()) {
+      const { scope } = path;
+      const parentScope = scope.getFunctionParent() || scope.getProgramParent();
+      parentScope.registerBinding("var", left);
+    }
   },
 
   ExportDeclaration: {
@@ -282,12 +284,12 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
         if (!id) return;
 
         const binding = scope.getBinding(id.name);
-        if (binding) binding.reference(path);
+        binding?.reference(path);
       } else if (isVariableDeclaration(declar)) {
         for (const decl of declar.declarations) {
           for (const name of Object.keys(getBindingIdentifiers(decl))) {
             const binding = scope.getBinding(name);
-            if (binding) binding.reference(path);
+            binding?.reference(path);
           }
         }
       }

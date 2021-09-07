@@ -17,8 +17,10 @@ set -x
 git clone --depth=1 https://github.com/facebook/create-react-app.git tmp/create-react-app
 cd tmp/create-react-app || exit
 
-# Update npm to v7
-npm i -g npm@7
+# CircleCI already has npm 7
+if [ "$BABEL_8_BREAKING" != true ] ; then
+  npm i -g npm@7
+fi
 
 #==============================================================================#
 #                                   TEST                                       #
