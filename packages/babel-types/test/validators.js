@@ -122,20 +122,38 @@ describe("validators", function () {
       expect(t.isReferenced(node, parent)).toBe(true);
     });
 
-    it("returns true if node is a value of ObjectProperty of an expression", function () {
-      const node = t.identifier("a");
-      const parent = t.objectProperty(t.identifier("key"), node);
-      const grandparent = t.objectExpression([parent]);
+    describe("ObjectProperty", () => {
+      it("returns true if node is a value of ObjectProperty of an expression", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(t.identifier("key"), node);
+        const grandparent = t.objectExpression([parent]);
 
-      expect(t.isReferenced(node, parent, grandparent)).toBe(true);
-    });
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
 
-    it("returns false if node is a value of ObjectProperty of a pattern", function () {
-      const node = t.identifier("a");
-      const parent = t.objectProperty(t.identifier("key"), node);
-      const grandparent = t.objectPattern([parent]);
+      it("returns false if node is a value of ObjectProperty of a pattern", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(t.identifier("key"), node);
+        const grandparent = t.objectPattern([parent]);
 
-      expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+        expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+      });
+
+      it("returns true if node is computed property key of an expression", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(node, t.identifier("value"), true);
+        const grandparent = t.objectExpression([parent]);
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
+
+      it("returns true if node is computed property key of a pattern", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(node, t.identifier("value"), true);
+        const grandparent = t.objectPattern([parent]);
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
     });
 
     describe("TSPropertySignature", function () {
@@ -267,6 +285,15 @@ describe("validators", function () {
         const grandparent = t.exportNamedDeclaration(null, [parent]);
 
         expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
+    });
+
+    describe("import attributes", function () {
+      it("returns false for import attributes", function () {
+        const node = t.identifier("foo");
+        const parent = t.importAttribute(node, t.stringLiteral("bar"));
+
+        expect(t.isReferenced(node, parent)).toBe(false);
       });
     });
   });
