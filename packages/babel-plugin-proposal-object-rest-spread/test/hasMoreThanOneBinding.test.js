@@ -1,11 +1,11 @@
 import { parse } from "@babel/parser";
-import hasMoreThanOneBinding from "../lib/hasMoreThanOneBinding";
+import shouldStoreRHSInTemporaryVariable from "../lib/shouldStoreRHSInTemporaryVariable";
 
 function getFistObjectPattern(program) {
   return parse(program, { sourceType: "module" }).program.body[0]
     .declarations[0].id;
 }
-describe("hasMoreThanOneBinding", function () {
+describe("shouldStoreRHSInTemporaryVariable", function () {
   it.each([
     ["const { x: { ...y } } = z();", true],
     ["let { x4: { ...y4 } } = z();", true],
@@ -40,7 +40,7 @@ describe("hasMoreThanOneBinding", function () {
     ["const [,,x27] = z();", false],
   ])("%s", (code, expectedResult) => {
     const ast = getFistObjectPattern(code);
-    const result = hasMoreThanOneBinding(ast);
+    const result = shouldStoreRHSInTemporaryVariable(ast);
     expect(result).toEqual(expectedResult);
   });
 });
