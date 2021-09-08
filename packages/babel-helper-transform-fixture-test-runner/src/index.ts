@@ -23,7 +23,10 @@ const checkDuplicatedNodes = _checkDuplicatedNodes.default;
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
-const cachedScripts = new QuickLRU({ maxSize: 10 });
+const cachedScripts = new QuickLRU<
+  string,
+  { code: string; cachedData?: Buffer }
+>({ maxSize: 10 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
@@ -79,12 +82,10 @@ function createContext() {
 function runCacheableScriptInTestContext(
   filename: string,
   srcFn: () => string,
-  // todo(flow->ts) was Context type, but it is missing
-  context: any,
+  context: vm.Context,
   moduleCache: any,
 ) {
-  // todo(flow->ts) improve types
-  let cached: any = cachedScripts.get(filename);
+  let cached = cachedScripts.get(filename);
   if (!cached) {
     const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
     cached = {
@@ -102,9 +103,7 @@ function runCacheableScriptInTestContext(
     produceCachedData: true,
   });
 
-  // @ts-expect-error todo(flow->ts) improve types
   if (script.cachedDataProduced) {
-    // @ts-expect-error todo(flow->ts) improve types
     cached.cachedData = script.cachedData;
   }
 
@@ -129,8 +128,7 @@ function runCacheableScriptInTestContext(
 function runModuleInTestContext(
   id: string,
   relativeFilename: string,
-  // todo(flow->ts) was Context type, but it is missing
-  context: any,
+  context: vm.Context,
   moduleCache: any,
 ) {
   const filename = require.resolve(id, {
@@ -490,7 +488,7 @@ export default function (
               // the options object with useless options
               delete task.options.throws;
 
-              assert.throws(runTask, function (err) {
+              assert.throws(runTask, function (err: Error) {
                 assert.ok(
                   throwMsg === true || err.message.includes(throwMsg),
                   `
