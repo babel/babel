@@ -61,8 +61,12 @@ import { cloneIdentifier } from "./node";
 import type { SourceType } from "../options";
 */
 
-// $FlowIgnore
-const hasOwn = Function.call.bind(Object.prototype.hasOwnProperty);
+const invalidHackPipeBodies = new Map([
+  ["ArrowFunctionExpression", "arrow function"],
+  ["AssignmentExpression", "assignment"],
+  ["ConditionalExpression", "conditional"],
+  ["YieldExpression", "yield"],
+]);
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -529,18 +533,12 @@ export default class ExpressionParser extends LValParser {
 
     const body = this.parseMaybeAssign();
 
-    const invalidBodies = {
-      ArrowFunctionExpression: "arrow function",
-      AssignmentExpression: "assignment",
-      ConditionalExpression: "conditional",
-      YieldExpression: "yield",
-    };
-
-    if (hasOwn(invalidBodies, body.type) && !body.extra?.parenthesized) {
+    // TODO: Check how to handle type casts in Flow and TS once they are supported
+    if (invalidHackPipeBodies.has(body.type) && !body.extra?.parenthesized) {
       this.raise(
         start,
         Errors.PipeUnparenthesizedBody,
-        invalidBodies[body.type],
+        invalidHackPipeBodies.get(body.type),
       );
     }
     if (!this.topicReferenceWasUsedInCurrentContext()) {
