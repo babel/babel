@@ -23,7 +23,10 @@ const checkDuplicatedNodes = _checkDuplicatedNodes.default;
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
-const cachedScripts = new QuickLRU({ maxSize: 10 });
+const cachedScripts = new QuickLRU<
+  string,
+  { code: string; cachedData?: Buffer }
+>({ maxSize: 10 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
@@ -82,8 +85,7 @@ function runCacheableScriptInTestContext(
   context: vm.Context,
   moduleCache: any,
 ) {
-  let cached: { code?: string; cachedData?: Buffer } =
-    cachedScripts.get(filename);
+  let cached = cachedScripts.get(filename);
   if (!cached) {
     const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
     cached = {
