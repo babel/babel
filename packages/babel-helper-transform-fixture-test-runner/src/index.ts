@@ -488,7 +488,7 @@ export default function (
               // the options object with useless options
               delete task.options.throws;
 
-              assert.throws(runTask, function (err) {
+              assert.throws(runTask, function (err: Error) {
                 assert.ok(
                   throwMsg === true || err.message.includes(throwMsg),
                   `
