@@ -4,8 +4,8 @@ function area(rect) {
   return rect.width * rect.height;
 }
 
-const result = (_ref3 = (_ref2 = (_ref = -5, Math.abs(_ref)), {
+const result = (_ref3 = -5, (_ref2 = Math.abs(_ref3), (_ref = {
   width: _ref2,
   height: _ref2 + 3
-}), area(_ref3));
+}, area(_ref))));
 expect(result).toBe(40);

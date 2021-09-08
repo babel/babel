@@ -61,6 +61,13 @@ import { cloneIdentifier } from "./node";
 import type { SourceType } from "../options";
 */
 
+const invalidHackPipeBodies = new Map([
+  ["ArrowFunctionExpression", "arrow function"],
+  ["AssignmentExpression", "assignment"],
+  ["ConditionalExpression", "conditional"],
+  ["YieldExpression", "yield"],
+]);
+
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   /*::
@@ -285,28 +292,6 @@ export default class ExpressionParser extends LValParser {
       const operator = this.state.value;
       node.operator = operator;
 
-      const leftIsHackPipeExpression =
-        left.type === "BinaryExpression" &&
-        left.operator === "|>" &&
-        this.getPluginOption("pipelineOperator", "proposal") === "hack";
-
-      if (leftIsHackPipeExpression) {
-        // If the pipelinePlugin is configured to use Hack pipes,
-        // and if an assignment expression’s LHS invalidly contains `|>`,
-        // then the user likely meant to parenthesize the assignment expression.
-        // Throw a human-friendly error
-        // instead of something like 'Invalid left-hand side'.
-        // For example, `x = x |> y = #` (assuming `#` is the topic reference)
-        // groups into `x = (x |> y) = #`,
-        // and `(x |> y)` is an invalid assignment LHS.
-        // This is because Hack-style `|>` has tighter precedence than `=>`.
-        // (Unparenthesized `yield` expressions are handled
-        // in `parseHackPipeBody`,
-        // and unparenthesized `=>` expressions are handled
-        // in `checkHackPipeBodyEarlyErrors`.)
-        throw this.raise(this.state.start, Errors.PipeBodyIsTighter, operator);
-      }
-
       if (this.match(tt.eq)) {
         node.left = this.toAssignable(left, /* isLHS */ true);
         refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
@@ -497,16 +482,20 @@ export default class ExpressionParser extends LValParser {
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
           case "hack":
             return this.withTopicBindingContext(() => {
-              const bodyExpr = this.parseHackPipeBody(op, prec);
-              this.checkHackPipeBodyEarlyErrors(startPos);
-              return bodyExpr;
+              return this.parseHackPipeBody();
             });
 
           case "smart":
             return this.withTopicBindingContext(() => {
-              const childExpr = this.parseHackPipeBody(op, prec);
+              if (this.prodParam.hasYield && this.isContextual("yield")) {
+                throw this.raise(
+                  this.state.start,
+                  Errors.PipeBodyIsTighter,
+                  this.state.value,
+                );
+              }
               return this.parseSmartPipelineBodyInStyle(
-                childExpr,
+                this.parseExprOpBaseRightExpr(op, prec),
                 startPos,
                 startLoc,
               );
@@ -539,37 +528,25 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
-  // Helper function for `parseExprOpRightExpr` for the Hack-pipe operator
-  // (and the Hack-style smart-mix pipe operator).
+  parseHackPipeBody(): N.Expression {
+    const { start } = this.state;
 
-  parseHackPipeBody(op: TokenType, prec: number): N.Expression {
-    // If the following expression is invalidly a `yield` expression,
-    // then throw a human-friendly error.
-    // A `yield` expression in a generator context (i.e., a [Yield] production)
-    // starts a YieldExpression.
-    // Outside of a generator context, any `yield` as a pipe body
-    // is considered simply an identifier.
-    // This error is checked here, before actually parsing the body expression,
-    // because `yield`’s “not allowed as identifier in generator” error
-    // would otherwise have immediately
-    // occur before the pipe body is fully parsed.
-    // (Unparenthesized assignment expressions are handled
-    // in `parseMaybeAssign`,
-    // and unparenthesized `=>` expressions are handled
-    // in `checkHackPipeBodyEarlyErrors`.)
-    const bodyIsInGeneratorContext = this.prodParam.hasYield;
-    const bodyIsYieldExpression =
-      bodyIsInGeneratorContext && this.isContextual("yield");
+    const body = this.parseMaybeAssign();
 
-    if (bodyIsYieldExpression) {
-      throw this.raise(
-        this.state.start,
-        Errors.PipeBodyIsTighter,
-        this.state.value,
+    // TODO: Check how to handle type casts in Flow and TS once they are supported
+    if (invalidHackPipeBodies.has(body.type) && !body.extra?.parenthesized) {
+      this.raise(
+        start,
+        Errors.PipeUnparenthesizedBody,
+        invalidHackPipeBodies.get(body.type),
       );
-    } else {
-      return this.parseExprOpBaseRightExpr(op, prec);
     }
+    if (!this.topicReferenceWasUsedInCurrentContext()) {
+      // A Hack pipe body must use the topic reference at least once.
+      this.raise(start, Errors.PipeTopicUnused);
+    }
+
+    return body;
   }
 
   checkExponentialAfterUnary(node: N.AwaitExpression | N.UnaryExpression) {
@@ -2738,24 +2715,7 @@ export default class ExpressionParser extends LValParser {
   // The `startPos` is the starting position of the pipe body.
 
   checkHackPipeBodyEarlyErrors(startPos: number): void {
-    // If the following token is invalidly `=>`,
-    // then throw a human-friendly error
-    // instead of something like 'Unexpected token, expected ";"'.
-    // For example, `x => x |> y => #` (assuming `#` is the topic reference)
-    // groups into `x => (x |> y) => #`,
-    // and `(x |> y) => #` is an invalid arrow function.
-    // This is because Hack-style `|>` has tighter precedence than `=>`.
-    // (Unparenthesized `yield` expressions are handled
-    // in `parseHackPipeBody`,
-    // and unparenthesized assignment expressions are handled
-    // in `parseMaybeAssign`.)
-    if (this.match(tt.arrow)) {
-      throw this.raise(
-        this.state.start,
-        Errors.PipeBodyIsTighter,
-        tt.arrow.label,
-      );
-    } else if (!this.topicReferenceWasUsedInCurrentContext()) {
+    if (!this.topicReferenceWasUsedInCurrentContext()) {
       // A Hack pipe body must use the topic reference at least once.
       this.raise(startPos, Errors.PipeTopicUnused);
     }

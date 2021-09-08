@@ -26,10 +26,6 @@
           "right": {
             "type": "BinaryExpression",
             "start":6,"end":12,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":12}},
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 5
-            },
             "left": {
               "type": "Identifier",
               "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"$"},
@@ -40,6 +36,10 @@
               "type": "Identifier",
               "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12},"identifierName":"f"},
               "name": "f"
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 5
             }
           }
         }

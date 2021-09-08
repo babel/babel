@@ -134,6 +134,7 @@ export const ErrorMessages = makeErrorTemplates(
     ParamDupe: "Argument name clash.",
     PatternHasAccessor: "Object pattern can't contain getter or setter.",
     PatternHasMethod: "Object pattern can't contain methods.",
+    // This error is only used by the smart-mix proposal
     PipeBodyIsTighter:
       "Unexpected %0 after pipeline body; any %0 expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.",
     PipeTopicRequiresHackPipes:
@@ -144,6 +145,8 @@ export const ErrorMessages = makeErrorTemplates(
       'Invalid topic token %0. In order to use %0 as a topic reference, the pipelineOperator plugin must be configured with { "proposal": "hack", "topicToken": "%0" }.',
     PipeTopicUnused:
       "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
+    PipeUnparenthesizedBody:
+      "Hack-style pipe body cannot be an unparenthesized %0 expression; please wrap it in parentheses.",
 
     // Messages whose codes start with “Pipeline” or “PrimaryTopic”
     // are retained for backwards compatibility
