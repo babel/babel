@@ -19,6 +19,27 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.6 (2021-09-09)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`, `babel-plugin-proposal-pipeline-operator`
+  * [#13668](https://github.com/babel/babel/pull/13668) Fix right precedence of Hack pipes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-plugin-proposal-pipeline-operator`
+  * [#13668](https://github.com/babel/babel/pull/13668) Fix right precedence of Hack pipes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-object-rest-spread`
+  * [#13711](https://github.com/babel/babel/pull/13711) fix: Duplicate function call in variable destructuring ([@dan-kez](https://github.com/dan-kez))
+* `babel-types`
+  * [#13733](https://github.com/babel/babel/pull/13733) id in import attributes should not be referenced ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#13731](https://github.com/babel/babel/pull/13731) fix(babel-parser): Fix end of `range` of `SequenceExpression` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+
+#### :house: Internal
+* `babel-helper-transform-fixture-test-runner`
+  * [#13738](https://github.com/babel/babel/pull/13738) Use `@types/node` for `vm` module ([@wafuwafu13](https://github.com/wafuwafu13))
+* `babel-preset-env`
+  * [#13737](https://github.com/babel/babel/pull/13737) Remove duplicate `dependency` and `devDependency` in preset-env ([@fyzhu](https://github.com/fyzhu))
 ## v7.15.5 (2021-09-04)
 
 #### :eyeglasses: Spec Compliance
