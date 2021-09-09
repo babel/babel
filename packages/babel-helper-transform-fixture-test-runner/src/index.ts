@@ -100,12 +100,9 @@ function runCacheableScriptInTestContext(
     displayErrors: true,
     lineOffset: -1,
     cachedData: cached.cachedData,
-    produceCachedData: true,
   });
 
-  if (script.cachedDataProduced) {
-    cached.cachedData = script.cachedData;
-  }
+  cached.cachedData = script.createCachedData();
 
   const module = {
     id: filename,
