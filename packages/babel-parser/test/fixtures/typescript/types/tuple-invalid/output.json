@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+  "errors": [
+    "SyntaxError: Invalid Tuple. (1:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":17,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":17}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":17,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":17},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":5,"end":17,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":17}},
+                "typeAnnotation": {
+                  "type": "TSTupleType",
+                  "start":7,"end":17,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":17}},
+                  "elementTypes": [
+                    {
+                      "type": "Identifier",
+                      "start":8,"end":16,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":16},"identifierName":"function"},
+                      "name": "function"
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

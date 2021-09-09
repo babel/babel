@@ -129,12 +129,22 @@
                     "start":81,"end":97,"loc":{"start":{"line":4,"column":17},"end":{"line":4,"column":33}},
                     "elementTypes": [
                       {
-                        "type": "TSNumberKeyword",
-                        "start":82,"end":88,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":24}}
+                        "type": "TSTypeReference",
+                        "start":82,"end":88,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":24}},
+                        "typeName": {
+                          "type": "Identifier",
+                          "start":82,"end":88,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":24},"identifierName":"number"},
+                          "name": "number"
+                        }
                       },
                       {
-                        "type": "TSNumberKeyword",
-                        "start":90,"end":96,"loc":{"start":{"line":4,"column":26},"end":{"line":4,"column":32}}
+                        "type": "TSTypeReference",
+                        "start":90,"end":96,"loc":{"start":{"line":4,"column":26},"end":{"line":4,"column":32}},
+                        "typeName": {
+                          "type": "Identifier",
+                          "start":90,"end":96,"loc":{"start":{"line":4,"column":26},"end":{"line":4,"column":32},"identifierName":"number"},
+                          "name": "number"
+                        }
                       }
                     ]
                   }

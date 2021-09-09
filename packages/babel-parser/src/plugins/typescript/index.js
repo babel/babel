@@ -107,6 +107,7 @@ const TSErrors = makeErrorTemplates(
     InvalidModifierOnTypeMember:
       "'%0' modifier cannot appear on a type member.",
     InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
+    InvalidTuple: "Invalid Tuple.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
     MissingInterfaceName:
@@ -882,10 +883,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTupleElementType(): N.TsType | N.TsNamedTupleMember {
       // parses `...TsType[]`
 
-      const { start: startPos, startLoc } = this.state;
+      const { start: startPos, startLoc, value } = this.state;
+
+      const { keyword } = this.state.type;
 
       const rest = this.eat(tt.ellipsis);
-      let type = this.tsParseType();
+      let type;
+      const ALLOWED_KEYWORDS = ["function"];
+      if (ALLOWED_KEYWORDS.includes(keyword)) {
+        // js allowed keywords
+        type = this.parseIdentifier(/* allow keywords */ true);
+      } else if (keywordTypeFromName(value)) {
+        // TS keywords
+        type = this.tsParseTypeReference();
+      } else {
+        type = this.tsParseType();
+      }
       const optional = this.eat(tt.question);
       const labeled = this.eat(tt.colon);
 
@@ -894,9 +907,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         labeledNode.optional = optional;
 
         if (
-          type.type === "TSTypeReference" &&
-          !type.typeParameters &&
-          type.typeName.type === "Identifier"
+          (type.type === "TSTypeReference" &&
+            !type.typeParameters &&
+            type.typeName.type === "Identifier") ||
+          ALLOWED_KEYWORDS.includes(type.name)
         ) {
           labeledNode.label = (type.typeName: N.Identifier);
         } else {
@@ -913,6 +927,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;
         type = this.finishNode(optionalTypeNode, "TSOptionalType");
+      } else if (ALLOWED_KEYWORDS.includes(type.name)) {
+        this.raise(type.start, TSErrors.InvalidTuple);
       }
 
       if (rest) {

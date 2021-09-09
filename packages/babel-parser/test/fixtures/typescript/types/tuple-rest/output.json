@@ -26,8 +26,13 @@
                   "start":7,"end":28,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":28}},
                   "elementTypes": [
                     {
-                      "type": "TSStringKeyword",
-                      "start":8,"end":14,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":14}}
+                      "type": "TSTypeReference",
+                      "start":8,"end":14,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":14}},
+                      "typeName": {
+                        "type": "Identifier",
+                        "start":8,"end":14,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":14},"identifierName":"string"},
+                        "name": "string"
+                      }
                     },
                     {
                       "type": "TSRestType",

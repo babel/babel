@@ -1,0 +1,1 @@
+let x: [string: string, number: number, unknown: any, function: (arg: any) => any];
