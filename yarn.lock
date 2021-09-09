@@ -187,7 +187,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@workspace:*, @babel/compat-data@workspace:^7.14.7, @babel/compat-data@workspace:^7.15.0, @babel/compat-data@workspace:packages/babel-compat-data":
+"@babel/compat-data@workspace:*, @babel/compat-data@workspace:^7.15.0, @babel/compat-data@workspace:packages/babel-compat-data":
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
@@ -244,7 +244,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@workspace:*, @babel/core@workspace:^7.14.5, @babel/core@workspace:^7.15.0, @babel/core@workspace:packages/babel-core":
+"@babel/core@workspace:*, @babel/core@workspace:^7.14.5, @babel/core@workspace:^7.15.5, @babel/core@workspace:packages/babel-core":
   version: 0.0.0-use.local
   resolution: "@babel/core@workspace:packages/babel-core"
   dependencies:
@@ -448,7 +448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-compilation-targets@workspace:^7.14.5, @babel/helper-compilation-targets@workspace:^7.15.4, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
+"@babel/helper-compilation-targets@workspace:^7.15.4, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
   version: 0.0.0-use.local
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
   dependencies:
@@ -854,7 +854,7 @@ __metadata:
   resolution: "@babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner"
   dependencies:
     "@babel/code-frame": "workspace:^7.14.5"
-    "@babel/core": "workspace:^7.15.0"
+    "@babel/core": "workspace:^7.15.5"
     "@babel/helper-fixtures": "workspace:^7.14.5"
     "@types/jest": ^25.2.2
     babel-check-duplicated-nodes: ^1.0.0
@@ -1403,18 +1403,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-object-rest-spread@workspace:*, @babel/plugin-proposal-object-rest-spread@workspace:^7.14.7, @babel/plugin-proposal-object-rest-spread@workspace:packages/babel-plugin-proposal-object-rest-spread":
+"@babel/plugin-proposal-object-rest-spread@workspace:*, @babel/plugin-proposal-object-rest-spread@workspace:^7.15.6, @babel/plugin-proposal-object-rest-spread@workspace:packages/babel-plugin-proposal-object-rest-spread":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-object-rest-spread@workspace:packages/babel-plugin-proposal-object-rest-spread"
   dependencies:
-    "@babel/compat-data": "workspace:^7.14.7"
+    "@babel/compat-data": "workspace:^7.15.0"
     "@babel/core": "workspace:*"
-    "@babel/helper-compilation-targets": "workspace:^7.14.5"
+    "@babel/helper-compilation-targets": "workspace:^7.15.4"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
     "@babel/parser": "workspace:*"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
-    "@babel/plugin-transform-parameters": "workspace:^7.14.5"
+    "@babel/plugin-transform-parameters": "workspace:^7.15.4"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2614,7 +2614,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-parameters@workspace:*, @babel/plugin-transform-parameters@workspace:^7.14.5, @babel/plugin-transform-parameters@workspace:^7.15.4, @babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters":
+"@babel/plugin-transform-parameters@workspace:*, @babel/plugin-transform-parameters@workspace:^7.15.4, @babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters"
   dependencies:
@@ -3192,7 +3192,7 @@ __metadata:
     "@babel/plugin-proposal-logical-assignment-operators": "workspace:^7.14.5"
     "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^7.14.5"
     "@babel/plugin-proposal-numeric-separator": "workspace:^7.14.5"
-    "@babel/plugin-proposal-object-rest-spread": "workspace:^7.14.7"
+    "@babel/plugin-proposal-object-rest-spread": "workspace:^7.15.6"
     "@babel/plugin-proposal-optional-catch-binding": "workspace:^7.14.5"
     "@babel/plugin-proposal-optional-chaining": "workspace:^7.14.5"
     "@babel/plugin-proposal-private-methods": "workspace:^7.14.5"
@@ -3245,7 +3245,7 @@ __metadata:
     "@babel/plugin-transform-unicode-escapes": "workspace:^7.14.5"
     "@babel/plugin-transform-unicode-regex": "workspace:^7.14.5"
     "@babel/preset-modules": ^0.1.4
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/types": "workspace:^7.15.6"
     babel-plugin-polyfill-corejs2: ^0.2.2
     babel-plugin-polyfill-corejs3: ^0.2.2
     babel-plugin-polyfill-regenerator: ^0.2.2
@@ -3590,7 +3590,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@workspace:*, @babel/types@workspace:^7.14.9, @babel/types@workspace:^7.15.4, @babel/types@workspace:packages/babel-types":
+"@babel/types@workspace:*, @babel/types@workspace:^7.14.9, @babel/types@workspace:^7.15.4, @babel/types@workspace:^7.15.6, @babel/types@workspace:packages/babel-types":
   version: 0.0.0-use.local
   resolution: "@babel/types@workspace:packages/babel-types"
   dependencies:
