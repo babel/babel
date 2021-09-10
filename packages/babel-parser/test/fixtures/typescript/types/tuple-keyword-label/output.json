@@ -29,11 +29,6 @@
                       "type": "TSNamedTupleMember",
                       "start":8,"end":22,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":22}},
                       "optional": false,
-                      "label": {
-                        "type": "Identifier",
-                        "start":8,"end":14,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":14},"identifierName":"string"},
-                        "name": "string"
-                      },
                       "elementType": {
                         "type": "TSStringKeyword",
                         "start":16,"end":22,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":22}}
@@ -43,11 +38,6 @@
                       "type": "TSNamedTupleMember",
                       "start":24,"end":38,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":38}},
                       "optional": false,
-                      "label": {
-                        "type": "Identifier",
-                        "start":24,"end":30,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":30},"identifierName":"number"},
-                        "name": "number"
-                      },
                       "elementType": {
                         "type": "TSNumberKeyword",
                         "start":32,"end":38,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":38}}
@@ -57,11 +47,6 @@
                       "type": "TSNamedTupleMember",
                       "start":40,"end":52,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":52}},
                       "optional": false,
-                      "label": {
-                        "type": "Identifier",
-                        "start":40,"end":47,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":47},"identifierName":"unknown"},
-                        "name": "unknown"
-                      },
                       "elementType": {
                         "type": "TSAnyKeyword",
                         "start":49,"end":52,"loc":{"start":{"line":1,"column":49},"end":{"line":1,"column":52}}

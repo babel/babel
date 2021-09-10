@@ -895,7 +895,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         type = this.parseIdentifier(/* allow keywords */ true);
       } else if (keywordTypeFromName(value)) {
         // TS keywords
-        type = this.tsParseTypeReference();
+        assert(this.state.inType);
+        type = this.tsParseNonConditionalType(); // this.tsParseTypeReference();
       } else {
         type = this.tsParseType();
       }
@@ -910,7 +911,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           (type.type === "TSTypeReference" &&
             !type.typeParameters &&
             type.typeName.type === "Identifier") ||
-          ALLOWED_KEYWORDS.includes(type.name)
+          ALLOWED_KEYWORDS.includes(type.name) ||
+          type.type === keywordTypeFromName(value)
         ) {
           labeledNode.label = (type.typeName: N.Identifier);
         } else {
