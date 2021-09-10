@@ -2,12 +2,10 @@
 
 import * as charCodes from "charcodes";
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import { types as tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
 import { makeErrorTemplates, ErrorCodes } from "../parser/error";
-
-tt.placeholder = new TokenType("%%", { startsExpr: true });
 
 export type PlaceholderTypes =
   | "Identifier"

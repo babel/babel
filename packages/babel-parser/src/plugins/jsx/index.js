@@ -51,15 +51,10 @@ const JsxErrors = makeErrorTemplates(
 /* eslint-disable sort-keys */
 
 // Be aware that this file is always executed and not only when the plugin is enabled.
-// Therefore this contexts and tokens do always exist.
+// Therefore the contexts do always exist.
 tc.j_oTag = new TokContext("<tag");
 tc.j_cTag = new TokContext("</tag");
 tc.j_expr = new TokContext("<tag>...</tag>", true);
-
-tt.jsxName = new TokenType("jsxName");
-tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
-tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
-tt.jsxTagEnd = new TokenType("jsxTagEnd");
 
 if (!process.env.BABEL_8_BREAKING) {
   tt.jsxTagStart.updateContext = context => {
