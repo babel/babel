@@ -1,6 +1,6 @@
 // @flow
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import { tokenIsKeyword, types as tt, TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
 import type { Node } from "../types";
@@ -298,7 +298,7 @@ export default class UtilParser extends Tokenizer {
   isLiteralPropertyName(): boolean {
     return (
       this.match(tt.name) ||
-      !!this.state.type.keyword ||
+      tokenIsKeyword(this.state.type) ||
       this.match(tt.string) ||
       this.match(tt.num) ||
       this.match(tt.bigint) ||

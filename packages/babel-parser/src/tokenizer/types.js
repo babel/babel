@@ -207,3 +207,47 @@ export const types: { [name: string]: TokenType } = {
   _void: createKeyword("void", { beforeExpr, prefix, startsExpr }),
   _delete: createKeyword("delete", { beforeExpr, prefix, startsExpr }),
 };
+
+export function tokenComesBeforeExpression(token: TokenType): boolean {
+  return token.beforeExpr;
+}
+
+export function tokenCanStartExpression(token: TokenType): boolean {
+  return token.startsExpr;
+}
+
+export function tokenIsAssignment(token: TokenType): boolean {
+  return token.isAssign;
+}
+
+export function tokenIsLoop(token: TokenType): boolean {
+  return token.isLoop;
+}
+
+export function tokenIsKeyword(token: TokenType): boolean {
+  return !!token.keyword;
+}
+
+export function tokenIsOperator(token: TokenType): boolean {
+  return token.binop != null;
+}
+
+export function tokenIsPostfix(token: TokenType): boolean {
+  return token.postfix;
+}
+
+export function tokenIsPrefix(token: TokenType): boolean {
+  return token.prefix;
+}
+
+export function tokenKeywordName(token: TokenType): string {
+  return token.keyword;
+}
+
+export function tokenOperatorPrecedence(token: TokenType): number {
+  return token.binop;
+}
+
+export function tokenIsRightAssociative(token: TokenType): boolean {
+  return token === types.exponent;
+}

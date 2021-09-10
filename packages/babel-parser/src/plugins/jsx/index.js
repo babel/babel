@@ -8,7 +8,13 @@ import * as charCodes from "charcodes";
 import XHTMLEntities from "./xhtml";
 import type Parser from "../../parser";
 import type { ExpressionErrors } from "../../parser/util";
-import { TokenType, types as tt } from "../../tokenizer/types";
+import {
+  tokenComesBeforeExpression,
+  tokenIsKeyword,
+  tokenKeywordName,
+  TokenType,
+  types as tt,
+} from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
@@ -259,8 +265,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       if (this.match(tt.jsxName)) {
         node.name = this.state.value;
-      } else if (this.state.type.keyword) {
-        node.name = this.state.type.keyword;
+      } else if (tokenIsKeyword(this.state.type)) {
+        node.name = tokenKeywordName(this.state.type);
       } else {
         this.unexpected();
       }
@@ -633,12 +639,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.state.exprAllowed = true;
         }
       } else if (
-        type.keyword &&
+        tokenIsKeyword(type) &&
         (prevType === tt.dot || prevType === tt.questionDot)
       ) {
         this.state.exprAllowed = false;
       } else {
-        this.state.exprAllowed = type.beforeExpr;
+        this.state.exprAllowed = tokenComesBeforeExpression(type);
       }
     }
   };

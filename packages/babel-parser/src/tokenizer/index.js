@@ -6,7 +6,12 @@ import type { Options } from "../options";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
-import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
+import {
+  tokenKeywordName,
+  types as tt,
+  keywords as keywordTypes,
+  type TokenType,
+} from "./types";
 import { type TokContext, types as ct } from "./context";
 import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
 import { SourceLocation } from "../util/location";
@@ -1564,7 +1569,7 @@ export default class Tokenizer extends ParserErrors {
   }
 
   checkKeywordEscapes(): void {
-    const kw = this.state.type.keyword;
+    const kw = tokenKeywordName(this.state.type);
     if (kw && this.state.containsEsc) {
       this.raise(this.state.start, Errors.InvalidEscapedReservedWord, kw);
     }
