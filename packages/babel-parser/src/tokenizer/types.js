@@ -52,7 +52,8 @@ export class TokenType {
   prefix: boolean;
   postfix: boolean;
   binop: ?number;
-  updateContext: ?(context: Array<TokContext>) => void;
+  // todo(Babel 8): remove updateContext from exposed token layout
+  declare updateContext: ?(context: Array<TokContext>) => void;
 
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
@@ -65,7 +66,9 @@ export class TokenType {
     this.prefix = !!conf.prefix;
     this.postfix = !!conf.postfix;
     this.binop = conf.binop != null ? conf.binop : null;
-    this.updateContext = null;
+    if (!process.env.BABEL_8_BREAKING) {
+      this.updateContext = null;
+    }
   }
 }
 

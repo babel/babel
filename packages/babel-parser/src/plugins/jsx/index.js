@@ -61,12 +61,11 @@ tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
 tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
 tt.jsxTagEnd = new TokenType("jsxTagEnd");
 
-tt.jsxTagStart.updateContext = context => {
-  context.push(
-    tc.j_expr, // treat as beginning of JSX expression
-    tc.j_oTag, // start opening tag context
-  );
-};
+if (!process.env.BABEL_8_BREAKING) {
+  tt.jsxTagStart.updateContext = context => {
+    context.push(tc.j_expr, tc.j_oTag);
+  };
+}
 
 function isFragment(object: ?N.JSXElement): boolean {
   return object
@@ -630,6 +629,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // reconsider as closing tag context
         context.splice(-2, 2, tc.j_cTag);
         this.state.exprAllowed = false;
+      } else if (type === tt.jsxTagStart) {
+        context.push(
+          tc.j_expr, // treat as beginning of JSX expression
+          tc.j_oTag, // start opening tag context
+        );
       } else if (type === tt.jsxTagEnd) {
         const out = context.pop();
         if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
