@@ -67,3 +67,8 @@ gen_enforced_field(WorkspaceCwd, FieldName, ExpectedValue) :-
   \+ atom_concat('./', _, CurrentValue),
   % Store './' + CurrentValue in ExpectedValue
   atom_concat('./', CurrentValue, ExpectedValue).
+
+% Enforces that a dependency doesn't appear in both `dependencies` and `devDependencies`
+gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'devDependencies') :-
+  workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'devDependencies'),
+  workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'dependencies').
