@@ -240,16 +240,14 @@ export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
 // Hack pipe operator
 export function TopicReference(this: Printer) {
   const { topicToken } = this.format;
-  switch (topicToken) {
-    case "#":
-      this.token("#");
-      break;
+  const validTopicTokenSet = new Set(["^", "%", "#"]);
 
-    default: {
-      const givenTopicTokenJSON = JSON.stringify(topicToken);
-      const message = `The "topicToken" generator option must be "#" (${givenTopicTokenJSON} received instead).`;
-      throw new Error(message);
-    }
+  if (validTopicTokenSet.has(topicToken)) {
+    this.token(topicToken);
+  } else {
+    const givenTopicTokenJSON = JSON.stringify(topicToken);
+    const message = `The "topicToken" generator option must be "#" (${givenTopicTokenJSON} received instead).`;
+    throw new Error(message);
   }
 }
 

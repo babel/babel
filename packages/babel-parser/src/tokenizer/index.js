@@ -605,20 +605,24 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readToken_mult_modulo(code: number): void {
-    // '%*'
+    // '%' or '*'
     let type = code === charCodes.asterisk ? tt.star : tt.modulo;
     let width = 1;
     let next = this.input.charCodeAt(this.state.pos + 1);
 
-    // Exponentiation operator **
+    // Exponentiation operator '**'
     if (code === charCodes.asterisk && next === charCodes.asterisk) {
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;
     }
 
+    // '%=' or '*='
     if (next === charCodes.equalsTo && !this.state.inType) {
       width++;
+      // `tt.moduloAssign` is only needed to support % as a Hack-pipe topic token.
+      // If the proposal ends up choosing a different token,
+      // it can be merged with tt.assign.
       type = code === charCodes.percentSign ? tt.moduloAssign : tt.assign;
     }
 
@@ -692,11 +696,17 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readToken_caret(): void {
-    // '^'
     const next = this.input.charCodeAt(this.state.pos + 1);
-    if (next === charCodes.equalsTo) {
-      this.finishOp(tt.assign, 2);
-    } else {
+
+    // '^='
+    if (next === charCodes.equalsTo && !this.state.inType) {
+      // `tt.xorAssign` is only needed to support ^ as a Hack-pipe topic token.
+      // If the proposal ends up choosing a different token,
+      // it can be merged with tt.assign.
+      this.finishOp(tt.xorAssign, 2);
+    }
+    // '^'
+    else {
       this.finishOp(tt.bitwiseXOR, 1);
     }
   }

@@ -203,7 +203,7 @@ export interface GeneratorOptions {
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
-  topicToken?: "#";
+  topicToken?: "^" | "%" | "#";
 }
 
 export interface GeneratorResult {
