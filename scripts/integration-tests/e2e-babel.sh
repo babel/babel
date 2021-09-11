@@ -27,9 +27,6 @@ fi
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 
-npm view @babel/preset-flow
-npm view @babel/preset-flow versions
-
 # We only bump dependencies in the top-level package.json, because workspaces
 # already use the workspace: protocol so will get the version in the monorepo
 # and not from npm.
