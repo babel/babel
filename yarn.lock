@@ -14762,11 +14762,11 @@ fsevents@^1.2.7:
 
 "typescript@patch:typescript@~4.2.3#~builtin<compat/typescript>":
   version: 4.2.3
-  resolution: "typescript@patch:typescript@npm%3A4.2.3#~builtin<compat/typescript>::version=4.2.3&hash=d8b4e7"
+  resolution: "typescript@patch:typescript@npm%3A4.2.3#~builtin<compat/typescript>::version=4.2.3&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: f24cd922182bb29e1849fa72dffc25ff37f2177646b5526100e8638baf69e5498969e2364ae1a1deba8e74d0d101c1a91b73e6b5d3d9a3c8674c7ac95b3f67cd
+  checksum: d75725ea2c660b79c399a382cf738e2ff78e271a2d8ae351bc21fc1cd8a1630d34e5cf5a9da8e34871a34d27dee1de0efc1c4ae2ee8ed6127ebd7926521f6c7d
   languageName: node
   linkType: hard
 
