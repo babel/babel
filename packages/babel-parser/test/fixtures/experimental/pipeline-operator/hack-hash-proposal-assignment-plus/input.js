@@ -1,1 +1,1 @@
-value |> x += #
+value |> (x += #)

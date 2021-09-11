@@ -1,21 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
-  "errors": [
-    "SyntaxError: Hack-style pipe body cannot be an unparenthesized assignment expression; please wrap it in parentheses. (1:9)"
-  ],
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
   "program": {
     "type": "Program",
-    "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
         "expression": {
           "type": "BinaryExpression",
-          "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
           "left": {
             "type": "Identifier",
             "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5},"identifierName":"value"},
@@ -24,16 +21,20 @@
           "operator": "|>",
           "right": {
             "type": "AssignmentExpression",
-            "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15}},
+            "start":10,"end":16,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":16}},
             "operator": "+=",
             "left": {
               "type": "Identifier",
-              "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"x"},
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"x"},
               "name": "x"
             },
             "right": {
               "type": "TopicReference",
-              "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15}}
+              "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16}}
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 9
             }
           }
         }

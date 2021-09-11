@@ -1,1 +1,1 @@
-value |> [x, y] = %
+value |> ([x, y] = %)
