@@ -1225,14 +1225,11 @@ export default class ExpressionParser extends LValParser {
           ) {
             this.expectOnePlugin(["jsx", "flow", "typescript"]);
             break;
-          } else {
-            throw this.unexpected();
           }
-        } else {
-          throw this.unexpected();
         }
       }
 
+      // fall through
       default:
         if (tokenIsIdentifier(type)) {
           if (
