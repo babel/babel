@@ -95,16 +95,26 @@ function runCacheableScriptInTestContext(
     cachedScripts.set(filename, cached);
   }
 
-  const script = new vm.Script(cached.code, {
-    filename,
-    displayErrors: true,
-    lineOffset: -1,
-    cachedData: cached.cachedData,
-    produceCachedData: true,
-  });
-
-  if (script.cachedDataProduced) {
-    cached.cachedData = script.cachedData;
+  let script: vm.Script;
+  if (process.env.BABEL_8_BREAKING) {
+    script = new vm.Script(cached.code, {
+      filename,
+      displayErrors: true,
+      lineOffset: -1,
+      cachedData: cached.cachedData,
+    });
+    cached.cachedData = script.createCachedData();
+  } else {
+    script = new vm.Script(cached.code, {
+      filename,
+      displayErrors: true,
+      lineOffset: -1,
+      cachedData: cached.cachedData,
+      produceCachedData: true,
+    });
+    if (script.cachedDataProduced) {
+      cached.cachedData = script.cachedData;
+    }
   }
 
   const module = {
