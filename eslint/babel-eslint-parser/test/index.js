@@ -5,6 +5,16 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { parseForESLint } from "../lib/index.cjs";
 
+function parseForESLint8(code, options) {
+  const { ESLINT_VERSION_FOR_BABEL } = process.env;
+  process.env.ESLINT_VERSION_FOR_BABEL = "8";
+  try {
+    return parseForESLint(code, options);
+  } finally {
+    process.env.ESLINT_VERSION_FOR_BABEL = ESLINT_VERSION_FOR_BABEL;
+  }
+}
+
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const BABEL_OPTIONS = {
@@ -18,6 +28,8 @@ const PROPS_TO_REMOVE = [
   "exportKind",
   "variance",
   "typeArguments",
+  "filename",
+  "identifierName",
 ];
 
 function deeplyRemoveProperties(obj, props) {
@@ -46,35 +58,61 @@ function deeplyRemoveProperties(obj, props) {
 }
 
 describe("Babel and Espree", () => {
-  let espree;
+  let espree7, espree8;
 
-  function parseAndAssertSame(code) {
+  const espreeOptions = {
+    ecmaFeatures: {
+      // enable JSX parsing
+      jsx: true,
+      // enable return in global scope
+      globalReturn: true,
+      // enable implied strict mode (if ecmaVersion >= 5)
+      impliedStrict: true,
+      // allow experimental object rest/spread
+      experimentalObjectRestSpread: true,
+    },
+    tokens: true,
+    loc: true,
+    range: true,
+    comment: true,
+    sourceType: "module",
+  };
+
+  function parseAndAssertSame(code, /* optional */ eslintVersion) {
     code = unpad(code);
-    const espreeAST = espree.parse(code, {
-      ecmaFeatures: {
-        // enable JSX parsing
-        jsx: true,
-        // enable return in global scope
-        globalReturn: true,
-        // enable implied strict mode (if ecmaVersion >= 5)
-        impliedStrict: true,
-        // allow experimental object rest/spread
-        experimentalObjectRestSpread: true,
-      },
-      tokens: true,
-      loc: true,
-      range: true,
-      comment: true,
-      ecmaVersion: 2021,
-      sourceType: "module",
-    });
-    const babelAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
-    expect(babelAST).toEqual(espreeAST);
+
+    if (eslintVersion !== 8) {
+      // ESLint 7
+      const espreeAST = espree7.parse(code, {
+        ...espreeOptions,
+        ecmaVersion: 2021,
+      });
+      const babelAST = parseForESLint(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: BABEL_OPTIONS,
+      }).ast;
+
+      deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
+      expect(babelAST).toEqual(espreeAST);
+    }
+
+    if (eslintVersion !== 7) {
+      // ESLint 8
+      const espreeAST = espree8.parse(code, {
+        ...espreeOptions,
+        ecmaVersion: 2022,
+      });
+
+      const babelAST = parseForESLint8(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: BABEL_OPTIONS,
+      }).ast;
+
+      deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
+      expect(babelAST).toEqual(espreeAST);
+    }
   }
 
   beforeAll(() => {
@@ -82,11 +120,15 @@ describe("Babel and Espree", () => {
 
     // Use the version of Espree that is a dependency of
     // the version of ESLint we are testing against.
-    const espreePath = require.resolve("espree", {
+    const espree7Path = require.resolve("espree", {
       paths: [path.dirname(require.resolve("eslint"))],
     });
+    const espree8Path = require.resolve("espree", {
+      paths: [path.dirname(require.resolve("eslint-8"))],
+    });
 
-    espree = require(espreePath);
+    espree7 = require(espree7Path);
+    espree8 = require(espree8Path);
   });
 
   describe("compatibility", () => {
@@ -381,7 +423,7 @@ describe("Babel and Espree", () => {
   });
 
   if (process.env.BABEL_8_BREAKING) {
-    it("hash (token)", () => {
+    it("hash (token) - ESLint 7", () => {
       const code = "class A { #x }";
       const babylonAST = parseForESLint(code, {
         eslintVisitorKeys: true,
@@ -393,7 +435,7 @@ describe("Babel and Espree", () => {
     });
   } else {
     // Espree doesn't support private fields yet
-    it("hash (token)", () => {
+    it("hash (token) - ESLint 7", () => {
       const code = "class A { #x }";
       const babylonAST = parseForESLint(code, {
         eslintVisitorKeys: true,
@@ -404,6 +446,18 @@ describe("Babel and Espree", () => {
       expect(babylonAST.tokens[3].value).toEqual("#");
     });
   }
+
+  it("hash (token) - ESLint 8", () => {
+    const code = "class A { #x }";
+    const babylonAST = parseForESLint8(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+    }).ast;
+
+    expect(babylonAST.tokens[3].type).toEqual("PrivateIdentifier");
+    expect(babylonAST.tokens[3].value).toEqual("x");
+  });
 
   it("static (token)", () => {
     const code = `
@@ -448,6 +502,78 @@ describe("Babel and Espree", () => {
     }).ast;
     const classDeclaration = babylonAST.body[0];
     expect(classDeclaration.body.body[0].type).toEqual("PropertyDefinition");
+  });
+
+  it("class fields with ESLint 8", () => {
+    parseAndAssertSame(
+      `
+        class A {
+          x = 2;
+          static #y = 3;
+          asi
+          #m() {}
+        }
+      `,
+      8,
+    );
+  });
+
+  it("static (token) - ESLint 7", () => {
+    const code = `
+      class A {
+        static m() {}
+        static() {}
+        static x;
+        static #y;
+        static;
+        static = 2;
+      }
+    `;
+    const babylonAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+    }).ast;
+
+    const staticKw = { type: "Keyword", value: "static" };
+
+    expect(babylonAST.tokens[3]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[9]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[14]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[17]).toMatchObject(staticKw);
+    expect(
+      babylonAST.tokens[process.env.BABEL_8_BREAKING ? 20 : 21],
+    ).toMatchObject(staticKw);
+    expect(
+      babylonAST.tokens[process.env.BABEL_8_BREAKING ? 22 : 23],
+    ).toMatchObject(staticKw);
+  });
+
+  it("static (token) - ESLint 8", () => {
+    const code = `
+      class A {
+        static m() {}
+        static() {}
+        static x;
+        static #y;
+        static;
+        static = 2;
+      }
+    `;
+    const babylonAST = parseForESLint8(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+    }).ast;
+
+    const staticKw = { type: "Keyword", value: "static" };
+
+    expect(babylonAST.tokens[3]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[9]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[14]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[17]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[20]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[22]).toMatchObject(staticKw);
   });
 
   it("empty program with line comment", () => {

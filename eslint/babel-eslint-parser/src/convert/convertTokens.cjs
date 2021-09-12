@@ -1,3 +1,5 @@
+const getEslintVersion = require("../utils/get-eslint-version.cjs");
+
 function convertTemplateType(tokens, tl) {
   let curlyBrace = null;
   let templateTokens = [];
@@ -190,12 +192,37 @@ function convertToken(token, source, tl) {
     // Acorn does not have rightAssociative
     delete token.type.rightAssociative;
   }
-
-  return token;
 }
 
 module.exports = function convertTokens(tokens, code, tl) {
-  return convertTemplateType(tokens, tl)
-    .filter(t => t.type !== "CommentLine" && t.type !== "CommentBlock")
-    .map(t => convertToken(t, code, tl));
+  const result = [];
+
+  const withoutComments = convertTemplateType(tokens, tl).filter(
+    t => t.type !== "CommentLine" && t.type !== "CommentBlock",
+  );
+  for (let i = 0; i < withoutComments.length; i++) {
+    let token = withoutComments[i];
+
+    if (!process.env.BABEL_8_BREAKING) {
+      // Babel 8 already produces a single token
+
+      if (getEslintVersion() >= 8 && token.type.label === tl.hash) {
+        i++;
+        token = withoutComments[i];
+
+        token.type = "PrivateIdentifier";
+        token.start -= 1;
+        token.loc.start.column -= 1;
+        token.range = [token.start, token.end];
+
+        result.push(token);
+        continue;
+      }
+    }
+
+    convertToken(token, code, tl);
+    result.push(token);
+  }
+
+  return result;
 };

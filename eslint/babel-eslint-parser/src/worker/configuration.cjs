@@ -1,4 +1,5 @@
 const babel = require("./babel-core.cjs");
+const getEslintVersion = require("../utils/get-eslint-version.cjs");
 
 /**
  * Merge user supplied estree plugin options to default estree plugin options
@@ -8,8 +9,7 @@ const babel = require("./babel-core.cjs");
  */
 function getParserPlugins(babelOptions) {
   const babelParserPlugins = babelOptions.parserOpts?.plugins ?? [];
-  // todo: enable classFeatures when it is supported by ESLint
-  const estreeOptions = { classFeatures: false };
+  const estreeOptions = { classFeatures: getEslintVersion() >= 8 };
   for (const plugin of babelParserPlugins) {
     if (Array.isArray(plugin) && plugin[0] === "estree") {
       Object.assign(estreeOptions, plugin[1]);
