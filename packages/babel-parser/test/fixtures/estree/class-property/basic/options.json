@@ -1,3 +1,0 @@
-{
-  "plugins": [["estree", { "classFeatures": true }]]
-}
