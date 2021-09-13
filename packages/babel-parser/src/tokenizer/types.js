@@ -76,55 +76,59 @@ export const keywords = new Map<string, TokenType>();
 
 function createKeyword(name: string, options: TokenOptions = {}): TokenType {
   options.keyword = name;
-  const token = new TokenType(name, options);
+  const token = createToken(name, options);
   keywords.set(name, token);
   return token;
 }
 
 function createBinop(name: string, binop: number) {
-  return new TokenType(name, { beforeExpr, binop });
+  return createToken(name, { beforeExpr, binop });
+}
+
+function createToken(name: string, options: TokenOptions): TokenType {
+  return new TokenType(name, options);
 }
 
 export const types: { [name: string]: TokenType } = {
-  num: new TokenType("num", { startsExpr }),
-  bigint: new TokenType("bigint", { startsExpr }),
-  decimal: new TokenType("decimal", { startsExpr }),
-  regexp: new TokenType("regexp", { startsExpr }),
-  string: new TokenType("string", { startsExpr }),
-  name: new TokenType("name", { startsExpr }),
-  privateName: new TokenType("#name", { startsExpr }),
-  eof: new TokenType("eof"),
+  num: createToken("num", { startsExpr }),
+  bigint: createToken("bigint", { startsExpr }),
+  decimal: createToken("decimal", { startsExpr }),
+  regexp: createToken("regexp", { startsExpr }),
+  string: createToken("string", { startsExpr }),
+  name: createToken("name", { startsExpr }),
+  privateName: createToken("#name", { startsExpr }),
+  eof: createToken("eof"),
 
   // Punctuation token types.
-  bracketL: new TokenType("[", { beforeExpr, startsExpr }),
-  bracketHashL: new TokenType("#[", { beforeExpr, startsExpr }),
-  bracketBarL: new TokenType("[|", { beforeExpr, startsExpr }),
-  bracketR: new TokenType("]"),
-  bracketBarR: new TokenType("|]"),
-  braceL: new TokenType("{", { beforeExpr, startsExpr }),
-  braceBarL: new TokenType("{|", { beforeExpr, startsExpr }),
-  braceHashL: new TokenType("#{", { beforeExpr, startsExpr }),
-  braceR: new TokenType("}", { beforeExpr }),
-  braceBarR: new TokenType("|}"),
-  parenL: new TokenType("(", { beforeExpr, startsExpr }),
-  parenR: new TokenType(")"),
-  comma: new TokenType(",", { beforeExpr }),
-  semi: new TokenType(";", { beforeExpr }),
-  colon: new TokenType(":", { beforeExpr }),
-  doubleColon: new TokenType("::", { beforeExpr }),
-  dot: new TokenType("."),
-  question: new TokenType("?", { beforeExpr }),
-  questionDot: new TokenType("?."),
-  arrow: new TokenType("=>", { beforeExpr }),
-  template: new TokenType("template"),
-  ellipsis: new TokenType("...", { beforeExpr }),
-  backQuote: new TokenType("`", { startsExpr }),
-  dollarBraceL: new TokenType("${", { beforeExpr, startsExpr }),
-  at: new TokenType("@"),
-  hash: new TokenType("#", { startsExpr }),
+  bracketL: createToken("[", { beforeExpr, startsExpr }),
+  bracketHashL: createToken("#[", { beforeExpr, startsExpr }),
+  bracketBarL: createToken("[|", { beforeExpr, startsExpr }),
+  bracketR: createToken("]"),
+  bracketBarR: createToken("|]"),
+  braceL: createToken("{", { beforeExpr, startsExpr }),
+  braceBarL: createToken("{|", { beforeExpr, startsExpr }),
+  braceHashL: createToken("#{", { beforeExpr, startsExpr }),
+  braceR: createToken("}", { beforeExpr }),
+  braceBarR: createToken("|}"),
+  parenL: createToken("(", { beforeExpr, startsExpr }),
+  parenR: createToken(")"),
+  comma: createToken(",", { beforeExpr }),
+  semi: createToken(";", { beforeExpr }),
+  colon: createToken(":", { beforeExpr }),
+  doubleColon: createToken("::", { beforeExpr }),
+  dot: createToken("."),
+  question: createToken("?", { beforeExpr }),
+  questionDot: createToken("?."),
+  arrow: createToken("=>", { beforeExpr }),
+  template: createToken("template"),
+  ellipsis: createToken("...", { beforeExpr }),
+  backQuote: createToken("`", { startsExpr }),
+  dollarBraceL: createToken("${", { beforeExpr, startsExpr }),
+  at: createToken("@"),
+  hash: createToken("#", { startsExpr }),
 
   // Special hashbang token.
-  interpreterDirective: new TokenType("#!..."),
+  interpreterDirective: createToken("#!..."),
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -140,15 +144,15 @@ export const types: { [name: string]: TokenType } = {
   // binary operators with a very low precedence, that should result
   // in AssignmentExpression nodes.
 
-  eq: new TokenType("=", { beforeExpr, isAssign }),
-  assign: new TokenType("_=", { beforeExpr, isAssign }),
-  slashAssign: new TokenType("_=", { beforeExpr, isAssign }),
+  eq: createToken("=", { beforeExpr, isAssign }),
+  assign: createToken("_=", { beforeExpr, isAssign }),
+  slashAssign: createToken("_=", { beforeExpr, isAssign }),
   // This is only needed to support % as a Hack-pipe topic token. If the proposal
   // ends up choosing a different token, it can be merged with tt.assign.
-  moduloAssign: new TokenType("_=", { beforeExpr, isAssign }),
-  incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
-  bang: new TokenType("!", { beforeExpr, prefix, startsExpr }),
-  tilde: new TokenType("~", { beforeExpr, prefix, startsExpr }),
+  moduloAssign: createToken("_=", { beforeExpr, isAssign }),
+  incDec: createToken("++/--", { prefix, postfix, startsExpr }),
+  bang: createToken("!", { beforeExpr, prefix, startsExpr }),
+  tilde: createToken("~", { beforeExpr, prefix, startsExpr }),
   pipeline: createBinop("|>", 0),
   nullishCoalescing: createBinop("??", 1),
   logicalOR: createBinop("||", 1),
@@ -159,13 +163,13 @@ export const types: { [name: string]: TokenType } = {
   equality: createBinop("==/!=/===/!==", 6),
   relational: createBinop("</>/<=/>=", 7),
   bitShift: createBinop("<</>>/>>>", 8),
-  plusMin: new TokenType("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
+  plusMin: createToken("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
   // startsExpr: required by v8intrinsic plugin
-  modulo: new TokenType("%", { binop: 10, startsExpr }),
+  modulo: createToken("%", { binop: 10, startsExpr }),
   // unset `beforeExpr` as it can be `function *`
-  star: new TokenType("*", { binop: 10 }),
+  star: createToken("*", { binop: 10 }),
   slash: createBinop("/", 10),
-  exponent: new TokenType("**", {
+  exponent: createToken("**", {
     beforeExpr,
     binop: 11,
     rightAssociative: true,
@@ -211,13 +215,13 @@ export const types: { [name: string]: TokenType } = {
   _delete: createKeyword("delete", { beforeExpr, prefix, startsExpr }),
 
   // jsx plugin
-  jsxName: new TokenType("jsxName"),
-  jsxText: new TokenType("jsxText", { beforeExpr: true }),
-  jsxTagStart: new TokenType("jsxTagStart", { startsExpr: true }),
-  jsxTagEnd: new TokenType("jsxTagEnd"),
+  jsxName: createToken("jsxName"),
+  jsxText: createToken("jsxText", { beforeExpr: true }),
+  jsxTagStart: createToken("jsxTagStart", { startsExpr: true }),
+  jsxTagEnd: createToken("jsxTagEnd"),
 
   // placeholder plugin
-  placeholder: new TokenType("%%", { startsExpr: true }),
+  placeholder: createToken("%%", { startsExpr: true }),
 };
 
 export function tokenComesBeforeExpression(token: TokenType): boolean {
