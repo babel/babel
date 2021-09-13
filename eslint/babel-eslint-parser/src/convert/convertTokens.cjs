@@ -95,7 +95,11 @@ function convertToken(token, source, tl) {
   token.range = [token.start, token.end];
 
   if (label === tl.name) {
-    token.type = "Identifier";
+    if (token.value === "static") {
+      token.type = "Keyword";
+    } else {
+      token.type = "Identifier";
+    }
   } else if (
     label === tl.semi ||
     label === tl.comma ||
