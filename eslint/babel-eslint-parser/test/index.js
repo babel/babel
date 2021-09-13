@@ -405,6 +405,31 @@ describe("Babel and Espree", () => {
     });
   }
 
+  it("static (token)", () => {
+    const code = `
+      import { static as foo } from "foo";
+
+      class A {
+        static m() {}
+        static() {}
+      }
+    `;
+
+    parseAndAssertSame(code);
+
+    const babylonAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+    }).ast;
+
+    const staticKw = { type: "Keyword", value: "static" };
+
+    expect(babylonAST.tokens[2]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[12]).toMatchObject(staticKw);
+    expect(babylonAST.tokens[18]).toMatchObject(staticKw);
+  });
+
   it("parse to PropertyDeclaration when `classFeatures: true`", () => {
     const code = "class A { #x }";
     const babylonAST = parseForESLint(code, {
