@@ -7,8 +7,8 @@ export default (_: any, opts: any = {}) => {
     useBuiltIns = false,
     decoratorsLegacy = false,
     decoratorsBeforeExport,
-    pipelineProposal = "minimal",
-    pipelineTopicToken = "%",
+    pipelineProposal,
+    pipelineTopicToken,
     recordAndTupleSyntax,
   } = opts;
 
@@ -21,6 +21,8 @@ export default (_: any, opts: any = {}) => {
           useBuiltIns,
           decoratorsLegacy,
           decoratorsBeforeExport,
+          pipelineProposal,
+          pipelineTopicToken,
           recordAndTupleSyntax,
         },
       ],
@@ -28,10 +30,6 @@ export default (_: any, opts: any = {}) => {
     plugins: [
       babelPlugins.syntaxDecimal,
       babelPlugins.proposalExportDefaultFrom,
-      [
-        babelPlugins.proposalPipelineOperator,
-        { proposal: pipelineProposal, topicToken: pipelineTopicToken },
-      ],
       babelPlugins.proposalDoExpressions,
     ],
   };
