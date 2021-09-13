@@ -5,11 +5,13 @@ import type * as t from "..";
  * A prefix AST traversal implementation meant for simple searching
  * and processing.
  */
-export default function traverseFast(
-  node: t.Node | null | undefined,
-  enter: (node: t.Node, opts?: any) => void,
-  // todo(flow->ts) We could parametrize opts to T rather than any, so that the type is "forwarded" to the callback.
-  opts?: any,
+export default function traverseFast<
+  T extends object = {},
+  Node extends t.Node = t.Node,
+>(
+  node: Node | null | undefined,
+  enter: (node: Node, opts?: Partial<T>) => void,
+  opts?: Partial<T>,
 ): void {
   if (!node) return;
 

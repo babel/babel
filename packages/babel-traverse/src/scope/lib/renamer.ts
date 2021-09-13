@@ -21,6 +21,7 @@ const renameVisitor: Visitor<Renamer> = {
     }
   },
 
+  // @ts-expect-error todo(flow->ts)
   "AssignmentExpression|Declaration|VariableDeclarator"(path, state) {
     if (path.isVariableDeclaration()) return;
     const ids = path.getOuterBindingIdentifiers();

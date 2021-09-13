@@ -14,13 +14,11 @@ export type { HubInterface } from "./hub";
 
 export { visitors };
 
-export type TraverseOptions<S = t.Node> =
-  | {
-      scope?: Scope;
-      noScope?: boolean;
-      denylist?: string[];
-    }
-  | Visitor<S>;
+export type TraverseOptions<S = {}> = {
+  scope?: Scope;
+  noScope?: boolean;
+  denylist?: string[];
+} & Visitor<S>;
 
 function traverse<S>(
   parent: t.Node,
@@ -72,15 +70,18 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.cheap = function (node, enter) {
+traverse.cheap = function <T extends t.Node = t.Node>(
+  node: T,
+  enter: (node: T) => void,
+) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function (
+traverse.node = function <S = {}>(
   node: t.Node,
-  opts: TraverseOptions,
+  opts: TraverseOptions<S>,
   scope?: Scope,
-  state?: any,
+  state?: S,
   parentPath?: NodePath,
   skipKeys?: Record<string, boolean>,
 ) {
@@ -94,18 +95,31 @@ traverse.node = function (
   }
 };
 
-traverse.clearNode = function (node: t.Node, opts?) {
+traverse.clearNode = function (
+  node: t.Node,
+  opts?: {
+    preserveComments?: boolean;
+  },
+) {
   t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function (tree, opts?) {
+traverse.removeProperties = function (
+  tree: t.Node,
+  opts?: {
+    preserveComments?: boolean;
+  },
+) {
   t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 
-function hasDenylistedType(path: NodePath, state) {
+function hasDenylistedType(
+  path: NodePath,
+  state: { type: t.Node["type"]; has: boolean },
+) {
   if (path.node.type === state.type) {
     state.has = true;
     path.stop();
@@ -113,8 +127,8 @@ function hasDenylistedType(path: NodePath, state) {
 }
 
 traverse.hasType = function (
-  tree: any,
-  type: any,
+  tree: t.Node,
+  type: t.Node["type"],
   denylistTypes?: Array<string>,
 ): boolean {
   // the node we're searching in is denylisted
@@ -125,7 +139,7 @@ traverse.hasType = function (
 
   const state = {
     has: false,
-    type: type,
+    type,
   };
 
   traverse(

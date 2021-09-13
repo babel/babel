@@ -345,6 +345,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       }
     },
   },
+  // @ts-expect-error todo(flow->ts)
   "ForOfStatement|ForInStatement"(
     path: NodePath<t.ForOfStatement | t.ForInStatement>,
   ) {

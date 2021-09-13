@@ -322,6 +322,7 @@ const loopVisitor: Visitor<LoopVisitorState> = {
     path.skip();
   },
 
+  // @ts-expect-error todo(flow->ts)
   "BreakStatement|ContinueStatement|ReturnStatement"(
     path: NodePath<t.BreakStatement | t.ContinueStatement | t.ReturnStatement>,
     state,

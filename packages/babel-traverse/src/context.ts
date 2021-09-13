@@ -1,19 +1,25 @@
 import NodePath from "./path";
 import * as t from "@babel/types";
 import type Scope from "./scope";
+import type { TraverseOptions } from "./index";
 
-export default class TraversalContext {
-  constructor(scope: Scope, opts, state, parentPath: NodePath) {
+export default class TraversalContext<S = {}> {
+  constructor(
+    scope: Scope,
+    opts: TraverseOptions,
+    state: S,
+    parentPath: NodePath,
+  ) {
     this.parentPath = parentPath;
     this.scope = scope;
     this.state = state;
     this.opts = opts;
   }
 
-  declare parentPath: NodePath;
-  declare scope: Scope;
-  declare state;
-  declare opts;
+  parentPath: NodePath;
+  scope: Scope;
+  state: S;
+  opts: TraverseOptions;
   queue: Array<NodePath> | null = null;
   priorityQueue: Array<NodePath> | null = null;
 

@@ -11,8 +11,6 @@ export type Visitor<S = {}> = VisitNodeObject<S, t.Node> &
   } &
   {
     [K in keyof VirtualTypeAliases]?: VisitNode<S, VirtualTypeAliases[K]>;
-  } & {
-    [k: string]: VisitNode<S, t.Node>;
   };
 
 export type VisitNode<S, P extends t.Node> =
@@ -28,4 +26,5 @@ export type VisitNodeFunction<S, P extends t.Node> = (
 export interface VisitNodeObject<S, P extends t.Node> {
   enter?: VisitNodeFunction<S, P>;
   exit?: VisitNodeFunction<S, P>;
+  _exploded?: boolean;
 }
