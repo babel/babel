@@ -181,15 +181,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       classBody.body.push(method);
     }
 
-    parseMaybePrivateName(...args: [boolean]): any {
-      const node = super.parseMaybePrivateName(...args);
-      if (
-        node.type === "PrivateName" &&
-        this.getPluginOption("estree", "classFeatures")
-      ) {
-        return this.convertPrivateNameToPrivateIdentifier(node);
+    parsePrivateName(): any {
+      const node = super.parsePrivateName();
+      if (!this.getPluginOption("estree", "classFeatures")) {
+        return node;
       }
-      return node;
+      return this.convertPrivateNameToPrivateIdentifier(node);
     }
 
     convertPrivateNameToPrivateIdentifier(

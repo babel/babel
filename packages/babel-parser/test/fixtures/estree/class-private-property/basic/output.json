@@ -88,13 +88,9 @@
                         },
                         "computed": false,
                         "property": {
-                          "type": "PrivateName",
+                          "type": "PrivateIdentifier",
                           "start":70,"end":74,"loc":{"start":{"line":6,"column":9},"end":{"line":6,"column":13}},
-                          "id": {
-                            "type": "Identifier",
-                            "start":71,"end":74,"loc":{"start":{"line":6,"column":10},"end":{"line":6,"column":13},"identifierName":"foo"},
-                            "name": "foo"
-                          }
+                          "name": "foo"
                         },
                         "optional": false
                       }
