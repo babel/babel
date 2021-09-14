@@ -41,7 +41,12 @@ type TokenOptions = {
   binop?: ?number,
 };
 
+// Internally the tokenizer stores token as a number
 export type TokenType = number;
+
+// The `ExportedTokenType` is exported via `tokTypes` and accessible
+// when `tokens: true` is enabled. Unlike internal token type, it provides
+// metadata of the tokens.
 export class ExportedTokenType {
   label: string;
   keyword: ?string;
@@ -87,12 +92,12 @@ function createBinop(name: string, binop: number) {
 }
 
 let tokenTypeCounter = -1;
-export const tokenTypes = [];
-const tokenLabels = [];
-const tokenBinops = [];
-const tokenBeforeExprs = [];
-const tokenStartsExprs = [];
-const tokenPrefixes = [];
+export const tokenTypes: ExportedTokenType[] = [];
+const tokenLabels: string[] = [];
+const tokenBinops: number[] = [];
+const tokenBeforeExprs: boolean[] = [];
+const tokenStartsExprs: boolean[] = [];
+const tokenPrefixes: boolean[] = [];
 
 function createToken(name: string, options: TokenOptions = {}): TokenType {
   ++tokenTypeCounter;
