@@ -11,9 +11,10 @@ import type { ExpressionErrors } from "../../parser/util";
 import {
   tokenComesBeforeExpression,
   tokenIsKeyword,
-  tokenKeywordName,
-  TokenType,
+  tokenLabelName,
+  type TokenType,
   types as tt,
+  tokenTypes,
 } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
@@ -57,7 +58,7 @@ tc.j_cTag = new TokContext("</tag");
 tc.j_expr = new TokContext("<tag>...</tag>", true);
 
 if (!process.env.BABEL_8_BREAKING) {
-  tt.jsxTagStart.updateContext = context => {
+  tokenTypes[tt.jsxTagStart].updateContext = context => {
     context.push(tc.j_expr, tc.j_oTag);
   };
 }
@@ -260,7 +261,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.jsxName)) {
         node.name = this.state.value;
       } else if (tokenIsKeyword(this.state.type)) {
-        node.name = tokenKeywordName(this.state.type);
+        node.name = tokenLabelName(this.state.type);
       } else {
         this.unexpected();
       }

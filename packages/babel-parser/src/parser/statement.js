@@ -1,7 +1,12 @@
 // @flow
 
 import * as N from "../types";
-import { tokenIsLoop, types as tt, type TokenType } from "../tokenizer/types";
+import {
+  tokenIsLoop,
+  types as tt,
+  type TokenType,
+  getExportedToken,
+} from "../tokenizer/types";
 import ExpressionParser from "./expression";
 import { Errors, SourceTypeModuleErrors } from "./error";
 import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
@@ -56,10 +61,11 @@ const keywordRelationalOperator = /in(?:stanceof)?/y;
  * @returns
  */
 function babel7CompatTokens(tokens) {
-  if (!process.env.BABEL_8_BREAKING) {
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
-      if (token.type === tt.privateName) {
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    const { type } = token;
+    if (type === tt.privateName) {
+      if (!process.env.BABEL_8_BREAKING) {
         const { loc, start, value, end } = token;
         const hashEndPos = start + 1;
         const hashEndLoc = new Position(loc.start.line, loc.start.column + 1);
@@ -68,7 +74,7 @@ function babel7CompatTokens(tokens) {
           1,
           // $FlowIgnore: hacky way to create token
           new Token({
-            type: tt.hash,
+            type: getExportedToken(tt.hash),
             value: "#",
             start: start,
             end: hashEndPos,
@@ -77,7 +83,7 @@ function babel7CompatTokens(tokens) {
           }),
           // $FlowIgnore: hacky way to create token
           new Token({
-            type: tt.name,
+            type: getExportedToken(tt.name),
             value: value,
             start: hashEndPos,
             end: end,
@@ -85,7 +91,12 @@ function babel7CompatTokens(tokens) {
             endLoc: loc.end,
           }),
         );
+        i++;
+        continue;
       }
+    }
+    if (typeof type === "number") {
+      token.type = getExportedToken(token.type);
     }
   }
   return tokens;

@@ -2,7 +2,7 @@
 
 import * as charCodes from "charcodes";
 
-import { types as tt } from "../tokenizer/types";
+import { tokenLabelName, types as tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
 import { makeErrorTemplates, ErrorCodes } from "../parser/error";
@@ -286,7 +286,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.isUnparsedContextual(next, "from")) {
           if (
             this.input.startsWith(
-              tt.placeholder.label,
+              tokenLabelName(tt.placeholder),
               this.nextTokenStartSince(next + 4),
             )
           ) {

@@ -22,14 +22,14 @@ import {
   tokenCanStartExpression,
   tokenIsAssignment,
   tokenIsKeyword,
+  tokenIsOperator,
   tokenIsPostfix,
   tokenIsPrefix,
   tokenIsRightAssociative,
-  tokenKeywordName,
+  tokenLabelName,
+  tokenOperatorPrecedence,
   types as tt,
   type TokenType,
-  tokenIsOperator,
-  tokenOperatorPrecedence,
 } from "../tokenizer/types";
 import * as N from "../types";
 import LValParser from "./lval";
@@ -406,8 +406,7 @@ export default class ExpressionParser extends LValParser {
       const { start } = left;
 
       if (
-        // TODO: When migrating to TS, use tt._in.binop!
-        minPrec >= ((tt._in.binop: any): number) ||
+        minPrec >= tokenOperatorPrecedence(tt._in) ||
         !this.prodParam.hasIn ||
         !this.match(tt._in)
       ) {
@@ -438,7 +437,7 @@ export default class ExpressionParser extends LValParser {
         if (coalesce) {
           // Handle the precedence of `tt.coalesce` as equal to the range of logical expressions.
           // In other words, `node.right` shouldn't contain logical expressions in order to check the mixed error.
-          prec = ((tt.logicalAND: any): { binop: number }).binop;
+          prec = tokenOperatorPrecedence(tt.logicalAND);
         }
 
         this.next();
@@ -1369,7 +1368,7 @@ export default class ExpressionParser extends LValParser {
       throw this.raise(
         start,
         Errors.PipeTopicUnconfiguredToken,
-        tokenType.label,
+        tokenLabelName(tokenType),
       );
     }
   }
@@ -1394,7 +1393,7 @@ export default class ExpressionParser extends LValParser {
           "pipelineOperator",
           "topicToken",
         );
-        return tokenType.label === pluginTopicToken;
+        return tokenLabelName(tokenType) === pluginTopicToken;
       }
       case "smart":
         return tokenType === tt.hash;
@@ -2541,7 +2540,7 @@ export default class ExpressionParser extends LValParser {
     if (type === tt.name) {
       name = this.state.value;
     } else if (tokenIsKeyword(type)) {
-      name = tokenKeywordName(type);
+      name = tokenLabelName(type);
     } else {
       throw this.unexpected();
     }

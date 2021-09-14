@@ -7,7 +7,8 @@ import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import {
-  tokenKeywordName,
+  tokenIsKeyword,
+  tokenLabelName,
   types as tt,
   keywords as keywordTypes,
   type TokenType,
@@ -1569,9 +1570,13 @@ export default class Tokenizer extends ParserErrors {
   }
 
   checkKeywordEscapes(): void {
-    const kw = tokenKeywordName(this.state.type);
-    if (kw && this.state.containsEsc) {
-      this.raise(this.state.start, Errors.InvalidEscapedReservedWord, kw);
+    const { type } = this.state;
+    if (tokenIsKeyword(type) && this.state.containsEsc) {
+      this.raise(
+        this.state.start,
+        Errors.InvalidEscapedReservedWord,
+        tokenLabelName(type),
+      );
     }
   }
 

@@ -41,7 +41,8 @@ type TokenOptions = {
   binop?: ?number,
 };
 
-export class TokenType {
+export type TokenType = number;
+export class ExportedTokenType {
   label: string;
   keyword: ?string;
   beforeExpr: boolean;
@@ -85,9 +86,28 @@ function createBinop(name: string, binop: number) {
   return createToken(name, { beforeExpr, binop });
 }
 
-function createToken(name: string, options: TokenOptions): TokenType {
-  return new TokenType(name, options);
+let tokenTypeCounter = -1;
+export const tokenTypes = [];
+const tokenLabels = [];
+const tokenBinops = [];
+const tokenBeforeExprs = [];
+const tokenStartsExprs = [];
+const tokenPrefixes = [];
+
+function createToken(name: string, options: TokenOptions = {}): TokenType {
+  ++tokenTypeCounter;
+  tokenLabels.push(name);
+  tokenBinops.push(options.binop ?? -1);
+  tokenBeforeExprs.push(options.beforeExpr ?? false);
+  tokenStartsExprs.push(options.startsExpr ?? false);
+  tokenPrefixes.push(options.prefix ?? false);
+  tokenTypes.push(new ExportedTokenType(name, options));
+
+  return tokenTypeCounter;
 }
+
+// For performance the token type helpers depend on the following declarations order.
+// When adding new token types, please also check if the token helpers needs update.
 
 export const types: { [name: string]: TokenType } = {
   num: createToken("num", { startsExpr }),
@@ -144,15 +164,19 @@ export const types: { [name: string]: TokenType } = {
   // binary operators with a very low precedence, that should result
   // in AssignmentExpression nodes.
 
+  // start: isAssign
   eq: createToken("=", { beforeExpr, isAssign }),
   assign: createToken("_=", { beforeExpr, isAssign }),
   slashAssign: createToken("_=", { beforeExpr, isAssign }),
   // This is only needed to support % as a Hack-pipe topic token. If the proposal
   // ends up choosing a different token, it can be merged with tt.assign.
   moduloAssign: createToken("_=", { beforeExpr, isAssign }),
+  // end: isAssign
+
   incDec: createToken("++/--", { prefix, postfix, startsExpr }),
   bang: createToken("!", { beforeExpr, prefix, startsExpr }),
   tilde: createToken("~", { beforeExpr, prefix, startsExpr }),
+  // start: isBinop
   pipeline: createBinop("|>", 0),
   nullishCoalescing: createBinop("??", 1),
   logicalOR: createBinop("||", 1),
@@ -178,16 +202,18 @@ export const types: { [name: string]: TokenType } = {
   // Keywords
   // Don't forget to update packages/babel-helper-validator-identifier/src/keyword.js
   // when new keywords are added
+  // start: isKeyword
+  _in: createKeyword("in", { beforeExpr, binop: 7 }),
+  _instanceof: createKeyword("instanceof", { beforeExpr, binop: 7 }),
+  // end: isBinop
   _break: createKeyword("break"),
   _case: createKeyword("case", { beforeExpr }),
   _catch: createKeyword("catch"),
   _continue: createKeyword("continue"),
   _debugger: createKeyword("debugger"),
   _default: createKeyword("default", { beforeExpr }),
-  _do: createKeyword("do", { isLoop, beforeExpr }),
   _else: createKeyword("else", { beforeExpr }),
   _finally: createKeyword("finally"),
-  _for: createKeyword("for", { isLoop }),
   _function: createKeyword("function", { startsExpr }),
   _if: createKeyword("if"),
   _return: createKeyword("return", { beforeExpr }),
@@ -196,7 +222,6 @@ export const types: { [name: string]: TokenType } = {
   _try: createKeyword("try"),
   _var: createKeyword("var"),
   _const: createKeyword("const"),
-  _while: createKeyword("while", { isLoop }),
   _with: createKeyword("with"),
   _new: createKeyword("new", { beforeExpr, startsExpr }),
   _this: createKeyword("this", { startsExpr }),
@@ -208,11 +233,15 @@ export const types: { [name: string]: TokenType } = {
   _null: createKeyword("null", { startsExpr }),
   _true: createKeyword("true", { startsExpr }),
   _false: createKeyword("false", { startsExpr }),
-  _in: createKeyword("in", { beforeExpr, binop: 7 }),
-  _instanceof: createKeyword("instanceof", { beforeExpr, binop: 7 }),
   _typeof: createKeyword("typeof", { beforeExpr, prefix, startsExpr }),
   _void: createKeyword("void", { beforeExpr, prefix, startsExpr }),
   _delete: createKeyword("delete", { beforeExpr, prefix, startsExpr }),
+  // start: isLoop
+  _do: createKeyword("do", { isLoop, beforeExpr }),
+  _for: createKeyword("for", { isLoop }),
+  _while: createKeyword("while", { isLoop }),
+  // end: isLoop
+  // end: isKeyword
 
   // jsx plugin
   jsxName: createToken("jsxName"),
@@ -224,46 +253,52 @@ export const types: { [name: string]: TokenType } = {
   placeholder: createToken("%%", { startsExpr: true }),
 };
 
+const tt = types;
+
 export function tokenComesBeforeExpression(token: TokenType): boolean {
-  return token.beforeExpr;
+  return tokenBeforeExprs[token];
 }
 
 export function tokenCanStartExpression(token: TokenType): boolean {
-  return token.startsExpr;
+  return tokenStartsExprs[token];
 }
 
 export function tokenIsAssignment(token: TokenType): boolean {
-  return token.isAssign;
+  return token >= tt.eq && token <= tt.moduloAssign;
 }
 
 export function tokenIsLoop(token: TokenType): boolean {
-  return token.isLoop;
+  return token >= tt._do && token <= tt._while;
 }
 
 export function tokenIsKeyword(token: TokenType): boolean {
-  return !!token.keyword;
+  return token >= tt._in && token <= tt._while;
 }
 
 export function tokenIsOperator(token: TokenType): boolean {
-  return token.binop != null;
+  return token >= tt.pipeline && token <= tt._instanceof;
 }
 
 export function tokenIsPostfix(token: TokenType): boolean {
-  return token.postfix;
+  return token === tt.incDec;
 }
 
 export function tokenIsPrefix(token: TokenType): boolean {
-  return token.prefix;
+  return tokenPrefixes[token];
 }
 
-export function tokenKeywordName(token: TokenType): string {
-  return token.keyword;
+export function tokenLabelName(token: TokenType): string {
+  return tokenLabels[token];
 }
 
 export function tokenOperatorPrecedence(token: TokenType): number {
-  return token.binop;
+  return tokenBinops[token];
 }
 
 export function tokenIsRightAssociative(token: TokenType): boolean {
-  return token === types.exponent;
+  return token === tt.exponent;
+}
+
+export function getExportedToken(token: TokenType): ExportedTokenType {
+  return tokenTypes[token];
 }

@@ -1,6 +1,11 @@
 // @flow
 
-import { tokenIsKeyword, types as tt, TokenType } from "../tokenizer/types";
+import {
+  tokenIsKeyword,
+  tokenLabelName,
+  types as tt,
+  type TokenType,
+} from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
 import type { Node } from "../types";
@@ -168,11 +173,13 @@ export default class UtilParser extends Tokenizer {
       template: "Unexpected token",
     },
   ): empty {
-    if (messageOrType instanceof TokenType) {
+    if (typeof messageOrType === "number") {
       messageOrType = {
         code: ErrorCodes.SyntaxError,
         reasonCode: "UnexpectedToken",
-        template: `Unexpected token, expected "${messageOrType.label}"`,
+        template: `Unexpected token, expected "${tokenLabelName(
+          messageOrType,
+        )}"`,
       };
     }
 

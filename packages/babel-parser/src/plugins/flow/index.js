@@ -8,7 +8,7 @@
 import type Parser from "../../parser";
 import {
   tokenIsKeyword,
-  tokenKeywordName,
+  tokenLabelName,
   types as tt,
   type TokenType,
 } from "../../tokenizer/types";
@@ -1616,7 +1616,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         default:
           if (tokenIsKeyword(this.state.type)) {
-            const label = tokenKeywordName(this.state.type);
+            const label = tokenLabelName(this.state.type);
             this.next();
             return super.createIdentifier(node, label);
           }

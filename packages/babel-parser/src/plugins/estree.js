@@ -1,6 +1,6 @@
 // @flow
 
-import { TokenType } from "../tokenizer/types";
+import { type TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";

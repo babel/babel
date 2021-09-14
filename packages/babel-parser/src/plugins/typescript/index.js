@@ -7,7 +7,7 @@
 
 import type { TokenType } from "../../tokenizer/types";
 import type State from "../../tokenizer/state";
-import { types as tt } from "../../tokenizer/types";
+import { tokenOperatorPrecedence, types as tt } from "../../tokenizer/types";
 import { types as ct } from "../../tokenizer/context";
 import * as N from "../../types";
 import type { Position } from "../../util/location";
@@ -2199,7 +2199,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       minPrec: number,
     ) {
       if (
-        nonNull(tt._in.binop) > minPrec &&
+        tokenOperatorPrecedence(tt._in) > minPrec &&
         !this.hasPrecedingLineBreak() &&
         this.isContextual("as")
       ) {
