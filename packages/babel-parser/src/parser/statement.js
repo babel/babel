@@ -96,7 +96,8 @@ function babel7CompatTokens(tokens) {
       }
     }
     if (typeof type === "number") {
-      token.type = getExportedToken(token.type);
+      // $FlowIgnore: we manipulate `token` for performance reasons
+      token.type = getExportedToken(type);
     }
   }
   return tokens;
