@@ -13,3 +13,16 @@ index 81cb408c8482fc7591a3381eb00b46abc9d21b14..1816113246e075ba7ae99638b64f004f
        // eslint-disable-next-line no-param-reassign
        code =
          getDynamicPackagesEntryIntro(dynamicRequireModuleDirPaths, dynamicRequireModuleSet) + code;
+diff --git a/dist/index.js b/dist/index.js
+index 8ef2184001cb697c6fc2466e9b5fe084c7f1d08c..056ded21d0bb35b8a7c36d1ec50a6ddb5508d386 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1650,7 +1650,7 @@ function commonjs(options = {}) {
+   const sourceMap = options.sourceMap !== false;
+
+   function transformAndCheckExports(code, id) {
+-    if (isDynamicRequireModulesEnabled && this.getModuleInfo(id).isEntry) {
++    if (isDynamicRequireModulesEnabled && (this.getModuleInfo(id).isEntry || id.endsWith("/dynamic-require-entrypoint.cjs"))) {
+       // eslint-disable-next-line no-param-reassign
+       code =
+         getDynamicPackagesEntryIntro(dynamicRequireModuleDirPaths, dynamicRequireModuleSet) + code;
