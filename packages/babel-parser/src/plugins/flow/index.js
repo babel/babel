@@ -1818,11 +1818,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // interfaces and enums
     parseStatement(context: ?string, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
-      if (
-        this.state.strict &&
-        tokenIsIdentifier(this.state.type) &&
-        this.state.value === "interface"
-      ) {
+      if (this.state.strict && this.isContextual(tt._interface)) {
         const lookahead = this.lookahead();
         if (tokenIsKeywordOrIdentifier(lookahead.type)) {
           const node = this.startNode();
@@ -2651,8 +2647,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const as_ident = this.parseIdentifier(true);
         if (
           specifierTypeKind !== null &&
-          !tokenIsIdentifier(this.state.type) &&
-          !tokenIsKeyword(this.state.type)
+          !tokenIsKeywordOrIdentifier(this.state.type)
         ) {
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
@@ -2667,8 +2662,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         if (
           specifierTypeKind !== null &&
-          (tokenIsIdentifier(this.state.type) ||
-            tokenIsKeyword(this.state.type))
+          tokenIsKeywordOrIdentifier(this.state.type)
         ) {
           // `import {type foo`
           specifier.imported = this.parseIdentifier(true);
