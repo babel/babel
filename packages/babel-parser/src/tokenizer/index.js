@@ -180,8 +180,13 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  // TODO
-
+  /**
+   * Whether current token matches given type
+   *
+   * @param {TokenType} type
+   * @returns {boolean}
+   * @memberof Tokenizer
+   */
   match(type: TokenType): boolean {
     return this.state.type === type;
   }

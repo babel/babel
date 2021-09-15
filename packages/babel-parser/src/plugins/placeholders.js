@@ -163,7 +163,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // Replicate the original checks that lead to looking ahead for an
       // identifier.
-      if (!this.isContextual("let")) {
+      if (!this.isContextual(tt._let)) {
         return false;
       }
       if (context) return false;
@@ -263,7 +263,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const placeholder = this.parsePlaceholder("Identifier");
       if (!placeholder) return super.parseExport(...arguments);
 
-      if (!this.isContextual("from") && !this.match(tt.comma)) {
+      if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // export %%DECL%%;
         node.specifiers = [];
         node.source = null;
@@ -324,7 +324,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       node.specifiers = [];
 
-      if (!this.isContextual("from") && !this.match(tt.comma)) {
+      if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // import %%STRING%%;
         node.source = this.finishPlaceholder(placeholder, "StringLiteral");
         this.semicolon();
@@ -345,7 +345,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (!hasStarImport) this.parseNamedImportSpecifiers(node);
       }
 
-      this.expectContextual("from");
+      this.expectContextual(tt._from);
       node.source = this.parseImportSource();
       this.semicolon();
       return this.finishNode(node, "ImportDeclaration");

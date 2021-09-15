@@ -275,7 +275,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
-    if (this.isContextual("yield")) {
+    if (this.isContextual(tt._yield)) {
       if (this.prodParam.hasYield) {
         let left = this.parseYield();
         if (afterLeftParse) {
@@ -449,11 +449,7 @@ export default class ExpressionParser extends LValParser {
           op === tt.pipeline &&
           this.getPluginOption("pipelineOperator", "proposal") === "minimal"
         ) {
-          if (
-            tokenIsIdentifier(this.state.type) &&
-            this.state.value === "await" &&
-            this.prodParam.hasAwait
-          ) {
+          if (this.state.type === tt._await && this.prodParam.hasAwait) {
             throw this.raise(
               this.state.start,
               Errors.UnexpectedAwaitAfterPipelineBody,
@@ -501,7 +497,7 @@ export default class ExpressionParser extends LValParser {
 
           case "smart":
             return this.withTopicBindingContext(() => {
-              if (this.prodParam.hasYield && this.isContextual("yield")) {
+              if (this.prodParam.hasYield && this.isContextual(tt._yield)) {
                 throw this.raise(
                   this.state.start,
                   Errors.PipeBodyIsTighter,
@@ -580,7 +576,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
-    const isAwait = this.isContextual("await");
+    const isAwait = this.isContextual(tt._await);
 
     if (isAwait && this.isAwaitAllowed()) {
       this.next();
@@ -1259,7 +1255,7 @@ export default class ExpressionParser extends LValParser {
       default:
         if (tokenIsIdentifier(type)) {
           if (
-            this.isContextual("module") &&
+            this.isContextual(tt._module) &&
             this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
             !this.hasFollowingLineBreak()
           ) {
@@ -1532,6 +1528,13 @@ export default class ExpressionParser extends LValParser {
         "function",
       );
       this.next(); // eat `.`
+      // https://github.com/tc39/proposal-function.sent#syntax-1
+      if (this.match(tt._sent)) {
+        this.expectPlugin("functionSent");
+      } else if (!this.hasPlugin("functionSent")) {
+        // The code wasn't `function.sent` but just `function.`, so a simple error is less confusing.
+        this.unexpected();
+      }
       return this.parseMetaProperty(node, meta, "sent");
     }
     return this.parseFunction(node);
@@ -1543,16 +1546,6 @@ export default class ExpressionParser extends LValParser {
     propertyName: string,
   ): N.MetaProperty {
     node.meta = meta;
-
-    if (meta.name === "function" && propertyName === "sent") {
-      // https://github.com/tc39/proposal-function.sent#syntax-1
-      if (this.isContextual(propertyName)) {
-        this.expectPlugin("functionSent");
-      } else if (!this.hasPlugin("functionSent")) {
-        // The code wasn't `function.sent` but just `function.`, so a simple error is less confusing.
-        this.unexpected();
-      }
-    }
 
     const containsEsc = this.state.containsEsc;
 
@@ -1575,7 +1568,7 @@ export default class ExpressionParser extends LValParser {
     const id = this.createIdentifier(this.startNodeAtNode(node), "import");
     this.next(); // eat `.`
 
-    if (this.isContextual("meta")) {
+    if (this.isContextual(tt._meta)) {
       if (!this.inModule) {
         this.raise(id.start, SourceTypeModuleErrors.ImportMetaOutsideModule);
       }

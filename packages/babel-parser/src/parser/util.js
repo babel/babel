@@ -2,7 +2,6 @@
 
 import {
   isTokenType,
-  tokenIsIdentifier,
   tokenIsLiteralPropertyName,
   tokenLabelName,
   tt,
@@ -69,12 +68,8 @@ export default class UtilParser extends Tokenizer {
 
   // Tests whether parsed token is a contextual keyword.
 
-  isContextual(name: string): boolean {
-    return (
-      tokenIsIdentifier(this.state.type) &&
-      this.state.value === name &&
-      !this.state.containsEsc
-    );
+  isContextual(token: TokenType): boolean {
+    return this.state.type === token && !this.state.containsEsc;
   }
 
   isUnparsedContextual(nameStart: number, name: string): boolean {
@@ -99,8 +94,8 @@ export default class UtilParser extends Tokenizer {
 
   // Consumes contextual keyword if possible.
 
-  eatContextual(name: string): boolean {
-    if (this.isContextual(name)) {
+  eatContextual(token: TokenType): boolean {
+    if (this.isContextual(token)) {
       this.next();
       return true;
     }
@@ -109,8 +104,8 @@ export default class UtilParser extends Tokenizer {
 
   // Asserts that following token is given contextual keyword.
 
-  expectContextual(name: string, template?: ErrorTemplate): void {
-    if (!this.eatContextual(name)) this.unexpected(null, template);
+  expectContextual(token: TokenType, template?: ErrorTemplate): void {
+    if (!this.eatContextual(token)) this.unexpected(null, template);
   }
 
   // Test whether a semicolon can be inserted at the current position.
