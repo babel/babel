@@ -115,15 +115,6 @@ function createToken(name: string, options: TokenOptions = {}): TokenType {
 // When adding new token types, please also check if the token helpers need update.
 
 export const tt: { [name: string]: TokenType } = {
-  num: createToken("num", { startsExpr }),
-  bigint: createToken("bigint", { startsExpr }),
-  decimal: createToken("decimal", { startsExpr }),
-  regexp: createToken("regexp", { startsExpr }),
-  string: createToken("string", { startsExpr }),
-  name: createToken("name", { startsExpr }),
-  privateName: createToken("#name", { startsExpr }),
-  eof: createToken("eof"),
-
   // Punctuation token types.
   bracketL: createToken("[", { beforeExpr, startsExpr }),
   bracketHashL: createToken("#[", { beforeExpr, startsExpr }),
@@ -248,6 +239,19 @@ export const tt: { [name: string]: TokenType } = {
   // end: isLoop
   // end: isKeyword
 
+  // Primary literals
+  // start: isIdentifier
+  name: createToken("name", { startsExpr }),
+  // end: isIdentifier
+
+  string: createToken("string", { startsExpr }),
+  num: createToken("num", { startsExpr }),
+  bigint: createToken("bigint", { startsExpr }),
+  decimal: createToken("decimal", { startsExpr }),
+  regexp: createToken("regexp", { startsExpr }),
+  privateName: createToken("#name", { startsExpr }),
+  eof: createToken("eof"),
+
   // jsx plugin
   jsxName: createToken("jsxName"),
   jsxText: createToken("jsxText", { beforeExpr: true }),
@@ -257,6 +261,18 @@ export const tt: { [name: string]: TokenType } = {
   // placeholder plugin
   placeholder: createToken("%%", { startsExpr: true }),
 };
+
+export function tokenIsIdentifier(token: TokenType): boolean {
+  return token === tt.name;
+}
+
+export function tokenIsKeywordOrIdentifier(token: TokenType): boolean {
+  return token >= tt._in && token <= tt.name;
+}
+
+export function tokenIsLiteralPropertyName(token: TokenType): boolean {
+  return token >= tt._in && token <= tt.decimal;
+}
 
 export function tokenComesBeforeExpression(token: TokenType): boolean {
   return tokenBeforeExprs[token];

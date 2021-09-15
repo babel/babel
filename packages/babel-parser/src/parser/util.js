@@ -2,7 +2,8 @@
 
 import {
   isTokenType,
-  tokenIsKeyword,
+  tokenIsIdentifier,
+  tokenIsLiteralPropertyName,
   tokenLabelName,
   tt,
   type TokenType,
@@ -70,7 +71,7 @@ export default class UtilParser extends Tokenizer {
 
   isContextual(name: string): boolean {
     return (
-      this.match(tt.name) &&
+      tokenIsIdentifier(this.state.type) &&
       this.state.value === name &&
       !this.state.containsEsc
     );
@@ -99,7 +100,11 @@ export default class UtilParser extends Tokenizer {
   // Consumes contextual keyword if possible.
 
   eatContextual(name: string): boolean {
-    return this.isContextual(name) && this.eat(tt.name);
+    if (this.isContextual(name)) {
+      this.next();
+      return true;
+    }
+    return false;
   }
 
   // Asserts that following token is given contextual keyword.
@@ -306,14 +311,7 @@ export default class UtilParser extends Tokenizer {
    *   BigIntLiteral
    */
   isLiteralPropertyName(): boolean {
-    return (
-      this.match(tt.name) ||
-      tokenIsKeyword(this.state.type) ||
-      this.match(tt.string) ||
-      this.match(tt.num) ||
-      this.match(tt.bigint) ||
-      this.match(tt.decimal)
-    );
+    return tokenIsLiteralPropertyName(this.state.type);
   }
 
   /*

@@ -2,6 +2,7 @@
 
 import * as N from "../types";
 import {
+  tokenIsIdentifier,
   tokenIsLoop,
   tt,
   type TokenType,
@@ -378,7 +379,7 @@ export default class StatementParser extends ExpressionParser {
     const expr = this.parseExpression();
 
     if (
-      starttype === tt.name &&
+      tokenIsIdentifier(starttype) &&
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {
@@ -609,7 +610,7 @@ export default class StatementParser extends ExpressionParser {
     // Check whether the first token is possibly a contextual keyword, so that
     // we can forbid `for (async of` if this turns out to be a for-of loop.
     const startsWithUnescapedName =
-      this.match(tt.name) && !this.state.containsEsc;
+      tokenIsIdentifier(this.state.type) && !this.state.containsEsc;
 
     const refExpressionErrors = new ExpressionErrors();
     const init = this.parseExpression(true, refExpressionErrors);
@@ -1219,7 +1220,9 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseFunctionId(requireId?: boolean): ?N.Identifier {
-    return requireId || this.match(tt.name) ? this.parseIdentifier() : null;
+    return requireId || tokenIsIdentifier(this.state.type)
+      ? this.parseIdentifier()
+      : null;
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
@@ -1465,7 +1468,8 @@ export default class StatementParser extends ExpressionParser {
       return;
     }
 
-    const isContextual = this.match(tt.name) && !this.state.containsEsc;
+    const isContextual =
+      tokenIsIdentifier(this.state.type) && !this.state.containsEsc;
     const isPrivate = this.match(tt.privateName);
     const key = this.parseClassElementName(member);
     const maybeQuestionTokenStart = this.state.start;
@@ -1758,7 +1762,7 @@ export default class StatementParser extends ExpressionParser {
     optionalId: ?boolean,
     bindingType: BindingTypes = BIND_CLASS,
   ): void {
-    if (this.match(tt.name)) {
+    if (tokenIsIdentifier(this.state.type)) {
       node.id = this.parseIdentifier();
       if (isStatement) {
         this.checkLVal(node.id, "class name", bindingType);
@@ -1941,7 +1945,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   isExportDefaultSpecifier(): boolean {
-    if (this.match(tt.name)) {
+    if (tokenIsIdentifier(this.state.type)) {
       const value = this.state.value;
       if ((value === "async" && !this.state.containsEsc) || value === "let") {
         return false;
@@ -1956,7 +1960,7 @@ export default class StatementParser extends ExpressionParser {
         // note that this approach may fail on some pedantic cases
         // export type from = number
         if (
-          (l.type === tt.name && l.value !== "from") ||
+          (tokenIsIdentifier(l.type) && l.value !== "from") ||
           l.type === tt.braceL
         ) {
           this.expectOnePlugin(["flow", "typescript"]);
@@ -1971,7 +1975,7 @@ export default class StatementParser extends ExpressionParser {
     const hasFrom = this.isUnparsedContextual(next, "from");
     if (
       this.input.charCodeAt(next) === charCodes.comma ||
-      (this.match(tt.name) && hasFrom)
+      (tokenIsIdentifier(this.state.type) && hasFrom)
     ) {
       return true;
     }
@@ -2249,7 +2253,7 @@ export default class StatementParser extends ExpressionParser {
 
   // eslint-disable-next-line no-unused-vars
   shouldParseDefaultImport(node: N.ImportDeclaration): boolean {
-    return this.match(tt.name);
+    return tokenIsIdentifier(this.state.type);
   }
 
   parseImportSpecifierLocal(

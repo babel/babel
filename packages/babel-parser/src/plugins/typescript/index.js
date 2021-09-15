@@ -5,7 +5,7 @@
 // Error messages are colocated with the plugin.
 /* eslint-disable @babel/development-internal/dry-error-messages */
 
-import type { TokenType } from "../../tokenizer/types";
+import { tokenIsIdentifier, TokenType } from "../../tokenizer/types";
 import type State from "../../tokenizer/state";
 import { tokenOperatorPrecedence, tt } from "../../tokenizer/types";
 import { types as ct } from "../../tokenizer/context";
@@ -206,7 +206,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsIsIdentifier(): boolean {
       // TODO: actually a bit more complex in TypeScript, but shouldn't matter.
       // See https://github.com/Microsoft/TypeScript/issues/15008
-      return this.match(tt.name);
+      return tokenIsIdentifier(this.state.type);
     }
 
     tsTokenCanFollowModifier() {
@@ -235,7 +235,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowedModifiers: T[],
       stopOnStartOfClassStaticBlock?: boolean,
     ): ?T {
-      if (!this.match(tt.name)) {
+      if (!tokenIsIdentifier(this.state.type)) {
         return undefined;
       }
 
@@ -597,7 +597,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsIsUnambiguouslyIndexSignature() {
       this.next(); // Skip '{'
-      return this.eat(tt.name) && this.match(tt.colon);
+      if (tokenIsIdentifier(this.state.type)) {
+        this.next();
+        return this.match(tt.colon);
+      }
+      return false;
     }
 
     tsTryParseIndexSignature(node: N.Node): ?N.TsIndexSignature {
@@ -1164,7 +1168,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsSkipParameterStart(): boolean {
-      if (this.match(tt.name) || this.match(tt._this)) {
+      if (tokenIsIdentifier(this.state.type) || this.match(tt._this)) {
         this.next();
         return true;
       }
@@ -1316,12 +1320,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypePredicateAsserts(): boolean {
-      if (!this.match(tt.name) || this.state.value !== "asserts") {
+      if (!tokenIsIdentifier(this.state.type) || this.state.value !== "asserts") {
         return false;
       }
       const containsEsc = this.state.containsEsc;
       this.next();
-      if (!this.match(tt.name) && !this.match(tt._this)) {
+      if (!tokenIsIdentifier(this.state.type) && !this.match(tt._this)) {
         return false;
       }
 
@@ -1427,7 +1431,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseInterfaceDeclaration(
       node: N.TsInterfaceDeclaration,
     ): N.TsInterfaceDeclaration {
-      if (this.match(tt.name)) {
+      if (tokenIsIdentifier(this.state.type)) {
         node.id = this.parseIdentifier();
         this.checkLVal(
           node.id,
@@ -1798,21 +1802,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "abstract":
           if (
             this.tsCheckLineTerminator(next) &&
-            (this.match(tt._class) || this.match(tt.name))
+            (this.match(tt._class) || tokenIsIdentifier(this.state.type))
           ) {
             return this.tsParseAbstractDeclaration(node);
           }
           break;
 
         case "enum":
-          if (next || this.match(tt.name)) {
+          if (next || tokenIsIdentifier(this.state.type)) {
             if (next) this.next();
             return this.tsParseEnumDeclaration(node, /* isConst */ false);
           }
           break;
 
         case "interface":
-          if (this.tsCheckLineTerminator(next) && this.match(tt.name)) {
+          if (
+            this.tsCheckLineTerminator(next) &&
+            tokenIsIdentifier(this.state.type)
+          ) {
             return this.tsParseInterfaceDeclaration(node);
           }
           break;
@@ -1821,20 +1828,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.tsCheckLineTerminator(next)) {
             if (this.match(tt.string)) {
               return this.tsParseAmbientExternalModuleDeclaration(node);
-            } else if (this.match(tt.name)) {
+            } else if (tokenIsIdentifier(this.state.type)) {
               return this.tsParseModuleOrNamespaceDeclaration(node);
             }
           }
           break;
 
         case "namespace":
-          if (this.tsCheckLineTerminator(next) && this.match(tt.name)) {
+          if (
+            this.tsCheckLineTerminator(next) &&
+            tokenIsIdentifier(this.state.type)
+          ) {
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "type":
-          if (this.tsCheckLineTerminator(next) && this.match(tt.name)) {
+          if (
+            this.tsCheckLineTerminator(next) &&
+            tokenIsIdentifier(this.state.type)
+          ) {
             return this.tsParseTypeAliasDeclaration(node);
           }
           break;
@@ -1907,7 +1920,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsIsDeclarationStart(): boolean {
-      if (this.match(tt.name)) {
+      if (tokenIsIdentifier(this.state.type)) {
         switch (this.state.value) {
           case "abstract":
           case "declare":
@@ -2244,7 +2257,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseImport(node: N.Node): N.AnyImport {
       node.importKind = "value";
-      if (this.match(tt.name) || this.match(tt.star) || this.match(tt.braceL)) {
+      if (
+        tokenIsIdentifier(this.state.type) ||
+        this.match(tt.star) ||
+        this.match(tt.braceL)
+      ) {
         let ahead = this.lookahead();
 
         if (
@@ -2261,7 +2278,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           ahead = this.lookahead();
         }
 
-        if (this.match(tt.name) && ahead.type === tt.eq) {
+        if (tokenIsIdentifier(this.state.type) && ahead.type === tt.eq) {
           return this.tsParseImportEqualsDeclaration(node);
         }
       }
@@ -2598,7 +2615,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       let declaration: ?N.Declaration;
 
-      if (this.match(tt.name)) {
+      if (tokenIsIdentifier(this.state.type)) {
         declaration = this.tsTryParseExportDeclaration();
       }
       if (!declaration) {

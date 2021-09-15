@@ -21,7 +21,9 @@
 import {
   tokenCanStartExpression,
   tokenIsAssignment,
+  tokenIsIdentifier,
   tokenIsKeyword,
+  tokenIsKeywordOrIdentifier,
   tokenIsOperator,
   tokenIsPostfix,
   tokenIsPrefix,
@@ -290,8 +292,9 @@ export default class ExpressionParser extends LValParser {
       refExpressionErrors = new ExpressionErrors();
       ownExpressionErrors = true;
     }
+    const { type } = this.state;
 
-    if (this.match(tt.parenL) || this.match(tt.name)) {
+    if (type === tt.parenL || tokenIsIdentifier(type)) {
       this.state.potentialArrowAt = this.state.start;
     }
 
@@ -447,7 +450,7 @@ export default class ExpressionParser extends LValParser {
           this.getPluginOption("pipelineOperator", "proposal") === "minimal"
         ) {
           if (
-            this.match(tt.name) &&
+            tokenIsIdentifier(this.state.type) &&
             this.state.value === "await" &&
             this.prodParam.hasAwait
           ) {
@@ -1053,7 +1056,8 @@ export default class ExpressionParser extends LValParser {
   parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
     let node;
 
-    switch (this.state.type) {
+    const { type } = this.state;
+    switch (type) {
       case tt._super:
         return this.parseSuper();
 
@@ -1073,61 +1077,6 @@ export default class ExpressionParser extends LValParser {
         node = this.startNode();
         this.next();
         return this.finishNode(node, "ThisExpression");
-
-      case tt.name: {
-        if (
-          this.isContextual("module") &&
-          this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
-          !this.hasFollowingLineBreak()
-        ) {
-          return this.parseModuleExpression();
-        }
-        const canBeArrow = this.state.potentialArrowAt === this.state.start;
-        const containsEsc = this.state.containsEsc;
-        const id = this.parseIdentifier();
-
-        if (!containsEsc && id.name === "async" && !this.canInsertSemicolon()) {
-          if (this.match(tt._function)) {
-            this.resetPreviousNodeTrailingComments(id);
-            this.next();
-            return this.parseFunction(
-              this.startNodeAtNode(id),
-              undefined,
-              true,
-            );
-          } else if (this.match(tt.name)) {
-            // If the next token begins with "=", commit to parsing an async
-            // arrow function. (Peeking ahead for "=" lets us avoid a more
-            // expensive full-token lookahead on this common path.)
-            if (this.lookaheadCharCode() === charCodes.equalsTo) {
-              // although `id` is not used in async arrow unary function,
-              // we don't need to reset `async`'s trailing comments because
-              // it will be attached to the upcoming async arrow binding identifier
-              return this.parseAsyncArrowUnaryFunction(
-                this.startNodeAtNode(id),
-              );
-            } else {
-              // Otherwise, treat "async" as an identifier and let calling code
-              // deal with the current tt.name token.
-              return id;
-            }
-          } else if (this.match(tt._do)) {
-            this.resetPreviousNodeTrailingComments(id);
-            return this.parseDo(this.startNodeAtNode(id), true);
-          }
-        }
-
-        if (canBeArrow && this.match(tt.arrow) && !this.canInsertSemicolon()) {
-          this.next();
-          return this.parseArrowExpression(
-            this.startNodeAtNode(id),
-            [id],
-            false,
-          );
-        }
-
-        return id;
-      }
 
       case tt._do: {
         return this.parseDo(this.startNode(), false);
@@ -1308,7 +1257,71 @@ export default class ExpressionParser extends LValParser {
 
       // fall through
       default:
-        throw this.unexpected();
+        if (tokenIsIdentifier(type)) {
+          if (
+            this.isContextual("module") &&
+            this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
+            !this.hasFollowingLineBreak()
+          ) {
+            return this.parseModuleExpression();
+          }
+          const canBeArrow = this.state.potentialArrowAt === this.state.start;
+          const containsEsc = this.state.containsEsc;
+          const id = this.parseIdentifier();
+
+          if (
+            !containsEsc &&
+            id.name === "async" &&
+            !this.canInsertSemicolon()
+          ) {
+            const { type } = this.state;
+            if (type === tt._function) {
+              this.resetPreviousNodeTrailingComments(id);
+              this.next();
+              return this.parseFunction(
+                this.startNodeAtNode(id),
+                undefined,
+                true,
+              );
+            } else if (tokenIsIdentifier(type)) {
+              // If the next token begins with "=", commit to parsing an async
+              // arrow function. (Peeking ahead for "=" lets us avoid a more
+              // expensive full-token lookahead on this common path.)
+              if (this.lookaheadCharCode() === charCodes.equalsTo) {
+                // although `id` is not used in async arrow unary function,
+                // we don't need to reset `async`'s trailing comments because
+                // it will be attached to the upcoming async arrow binding identifier
+                return this.parseAsyncArrowUnaryFunction(
+                  this.startNodeAtNode(id),
+                );
+              } else {
+                // Otherwise, treat "async" as an identifier and let calling code
+                // deal with the current tt.name token.
+                return id;
+              }
+            } else if (type === tt._do) {
+              this.resetPreviousNodeTrailingComments(id);
+              return this.parseDo(this.startNodeAtNode(id), true);
+            }
+          }
+
+          if (
+            canBeArrow &&
+            this.match(tt.arrow) &&
+            !this.canInsertSemicolon()
+          ) {
+            this.next();
+            return this.parseArrowExpression(
+              this.startNodeAtNode(id),
+              [id],
+              false,
+            );
+          }
+
+          return id;
+        } else {
+          throw this.unexpected();
+        }
     }
   }
 
@@ -2537,10 +2550,8 @@ export default class ExpressionParser extends LValParser {
 
     const { start, type } = this.state;
 
-    if (type === tt.name) {
+    if (tokenIsKeywordOrIdentifier(type)) {
       name = this.state.value;
-    } else if (tokenIsKeyword(type)) {
-      name = tokenLabelName(type);
     } else {
       throw this.unexpected();
     }
