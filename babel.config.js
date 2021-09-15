@@ -631,8 +631,12 @@ function pluginBabelParserTokenType({
   let typesDeclaration;
   for (const n of tokenTypesAst.program.body) {
     if (n.type === "ExportNamedDeclaration" && n.exportKind === "value") {
-      typesDeclaration = n.declaration.declarations?.[0];
-      if (typesDeclaration && typesDeclaration.id.name === "types") {
+      const declarations = n.declaration.declarations;
+      if (declarations !== undefined) typesDeclaration = declarations[0];
+      if (
+        typesDeclaration !== undefined &&
+        typesDeclaration.id.name === "types"
+      ) {
         break;
       }
     }
