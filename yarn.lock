@@ -3966,7 +3966,7 @@ __metadata:
 
 "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@^18.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::locator=babel%40workspace%3A.":
   version: 18.1.0
-  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A18.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::version=18.1.0&hash=6f70f1&locator=babel%40workspace%3A."
+  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A18.1.0#./.yarn/patches/@rollup__plugin-commonjs.patch::version=18.1.0&hash=6733ff&locator=babel%40workspace%3A."
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -3977,7 +3977,7 @@ __metadata:
     resolve: ^1.17.0
   peerDependencies:
     rollup: ^2.30.0
-  checksum: a6826d2e03d4fc952bd6bab57c0acd0eb412dbf9a8e1bd47ce0647eac2c2d2f94aa129b9d0e29dee0d8da819e38651ee7f11e2d330a9acb0dbee35c0cba1ff91
+  checksum: a3215f9c90838086e01f06227b0bc2d1d79ae4c6c1fd145fe99cf93e721cb84375a6116b98a4f9753d9a8b8ae7a88fb7a0ec7ebdafd74894bbf5e56b809df184
   languageName: node
   linkType: hard
 
