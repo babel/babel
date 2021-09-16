@@ -16,6 +16,7 @@
     "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
+  "packageManager": "yarn@3.0.2",
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",

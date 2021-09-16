@@ -64,7 +64,7 @@
       "schedule": ["before 00:05 on Friday"],
       "postUpgradeTasks": {
         "commands": [
-          "yarn install --immutable --skip-builds",
+          "yarn install --immutable --mode=skip-build",
           "yarn gulp build-rollup",
           "make test-test262-update-allowlist",
           "make test-flow-update-allowlist",
