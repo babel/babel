@@ -49,6 +49,7 @@ function isInType(path) {
     switch (path.parent.type) {
       case "TSTypeAnnotation":
       case "TSTypeAliasDeclaration":
+      case "TSTypeReference":
       case "TypeAnnotation":
       case "TypeAlias":
         return true;
