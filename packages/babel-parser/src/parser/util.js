@@ -3,7 +3,7 @@
 import {
   tokenIsKeyword,
   tokenLabelName,
-  types as tt,
+  tt,
   type TokenType,
 } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";

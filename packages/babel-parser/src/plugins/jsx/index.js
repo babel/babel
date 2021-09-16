@@ -13,7 +13,7 @@ import {
   tokenIsKeyword,
   tokenLabelName,
   type TokenType,
-  types as tt,
+  tt,
   tokenTypes,
 } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";

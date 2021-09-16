@@ -7,7 +7,7 @@
 
 import type { TokenType } from "../../tokenizer/types";
 import type State from "../../tokenizer/state";
-import { tokenOperatorPrecedence, types as tt } from "../../tokenizer/types";
+import { tokenOperatorPrecedence, tt } from "../../tokenizer/types";
 import { types as ct } from "../../tokenizer/context";
 import * as N from "../../types";
 import type { Position } from "../../util/location";

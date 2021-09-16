@@ -112,9 +112,9 @@ function createToken(name: string, options: TokenOptions = {}): TokenType {
 }
 
 // For performance the token type helpers depend on the following declarations order.
-// When adding new token types, please also check if the token helpers needs update.
+// When adding new token types, please also check if the token helpers need update.
 
-export const types: { [name: string]: TokenType } = {
+export const tt: { [name: string]: TokenType } = {
   num: createToken("num", { startsExpr }),
   bigint: createToken("bigint", { startsExpr }),
   decimal: createToken("decimal", { startsExpr }),
@@ -257,8 +257,6 @@ export const types: { [name: string]: TokenType } = {
   // placeholder plugin
   placeholder: createToken("%%", { startsExpr: true }),
 };
-
-const tt = types;
 
 export function tokenComesBeforeExpression(token: TokenType): boolean {
   return tokenBeforeExprs[token];

@@ -6,7 +6,7 @@ import type { CommentWhitespace } from "../parser/comments";
 import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
-import { types as tt, type TokenType } from "./types";
+import { tt, type TokenType } from "./types";
 import type { ParsingError, ErrorTemplate } from "../parser/error";
 
 type TopicContextState = {

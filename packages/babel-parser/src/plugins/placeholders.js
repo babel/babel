@@ -2,7 +2,7 @@
 
 import * as charCodes from "charcodes";
 
-import { tokenLabelName, types as tt } from "../tokenizer/types";
+import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
 import { makeErrorTemplates, ErrorCodes } from "../parser/error";

@@ -1,5 +1,5 @@
 import type Parser from "../parser";
-import { types as tt } from "../tokenizer/types";
+import { tt } from "../tokenizer/types";
 import * as N from "../types";
 
 export default (superClass: Class<Parser>): Class<Parser> =>

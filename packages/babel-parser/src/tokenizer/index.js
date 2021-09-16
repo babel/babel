@@ -9,7 +9,7 @@ import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import {
   tokenIsKeyword,
   tokenLabelName,
-  types as tt,
+  tt,
   keywords as keywordTypes,
   type TokenType,
 } from "./types";

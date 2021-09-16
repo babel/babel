@@ -10,10 +10,7 @@ import {
 } from "./plugin-utils";
 import Parser from "./parser";
 
-import {
-  getExportedToken,
-  types as internalTokenTypes,
-} from "./tokenizer/types";
+import { getExportedToken, tt as internalTokenTypes } from "./tokenizer/types";
 import "./tokenizer/context";
 
 import type { Expression, File } from "./types";

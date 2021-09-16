@@ -3,7 +3,7 @@
 // The token context is used to track whether the apostrophe "`"
 // starts or ends a string template
 
-import { types as tt, tokenTypes } from "./types";
+import { tt, tokenTypes } from "./types";
 
 export class TokContext {
   constructor(token: string, preserveSpace?: boolean) {

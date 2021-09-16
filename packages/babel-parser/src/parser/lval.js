@@ -2,7 +2,7 @@
 
 /*:: declare var invariant; */
 import * as charCodes from "charcodes";
-import { types as tt, type TokenType } from "../tokenizer/types";
+import { tt, type TokenType } from "../tokenizer/types";
 import type {
   TSParameterProperty,
   Decorator,

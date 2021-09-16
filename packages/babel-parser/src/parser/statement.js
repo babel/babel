@@ -3,7 +3,7 @@
 import * as N from "../types";
 import {
   tokenIsLoop,
-  types as tt,
+  tt,
   type TokenType,
   getExportedToken,
 } from "../tokenizer/types";
