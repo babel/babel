@@ -1316,11 +1316,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypePredicateAsserts(): boolean {
-      if (
-        !this.match(tt.name) ||
-        this.state.value !== "asserts" ||
-        this.hasPrecedingLineBreak()
-      ) {
+      if (!this.match(tt.name) || this.state.value !== "asserts") {
         return false;
       }
       const containsEsc = this.state.containsEsc;
