@@ -1,5 +1,5 @@
 // @flow
-import type { TokContext } from "./context";
+import { types as tc, type TokContext } from "./context";
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects
@@ -304,4 +304,29 @@ export function tokenIsRightAssociative(token: TokenType): boolean {
 
 export function getExportedToken(token: TokenType): ExportedTokenType {
   return tokenTypes[token];
+}
+
+if (!process.env.BABEL_8_BREAKING) {
+  tokenTypes[tt.braceR].updateContext = context => {
+    context.pop();
+  };
+
+  tokenTypes[tt.braceL].updateContext =
+    tokenTypes[tt.braceHashL].updateContext =
+    tokenTypes[tt.dollarBraceL].updateContext =
+      context => {
+        context.push(tc.brace);
+      };
+
+  tokenTypes[tt.backQuote].updateContext = context => {
+    if (context[context.length - 1] === tc.template) {
+      context.pop();
+    } else {
+      context.push(tc.template);
+    }
+  };
+
+  tokenTypes[tt.jsxTagStart].updateContext = context => {
+    context.push(tc.j_expr, tc.j_oTag);
+  };
 }

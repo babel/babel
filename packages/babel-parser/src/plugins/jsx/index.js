@@ -14,7 +14,6 @@ import {
   tokenLabelName,
   type TokenType,
   tt,
-  tokenTypes,
 } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
@@ -56,12 +55,6 @@ const JsxErrors = makeErrorTemplates(
 tc.j_oTag = new TokContext("<tag");
 tc.j_cTag = new TokContext("</tag");
 tc.j_expr = new TokContext("<tag>...</tag>", true);
-
-if (!process.env.BABEL_8_BREAKING) {
-  tokenTypes[tt.jsxTagStart].updateContext = context => {
-    context.push(tc.j_expr, tc.j_oTag);
-  };
-}
 
 function isFragment(object: ?N.JSXElement): boolean {
   return object
