@@ -1,6 +1,7 @@
 // @flow
 
 import {
+  isTokenType,
   tokenIsKeyword,
   tokenLabelName,
   tt,
@@ -173,17 +174,19 @@ export default class UtilParser extends Tokenizer {
       template: "Unexpected token",
     },
   ): empty {
-    if (typeof messageOrType === "number") {
+    if (isTokenType(messageOrType)) {
       messageOrType = {
         code: ErrorCodes.SyntaxError,
         reasonCode: "UnexpectedToken",
         template: `Unexpected token, expected "${tokenLabelName(
+          // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
           messageOrType,
         )}"`,
       };
     }
 
     /* eslint-disable @babel/development-internal/dry-error-messages */
+    // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
     /* eslint-enable @babel/development-internal/dry-error-messages */
   }

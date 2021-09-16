@@ -306,6 +306,10 @@ export function getExportedToken(token: TokenType): ExportedTokenType {
   return tokenTypes[token];
 }
 
+export function isTokenType(obj: any): boolean {
+  return typeof obj === "number";
+}
+
 if (!process.env.BABEL_8_BREAKING) {
   tokenTypes[tt.braceR].updateContext = context => {
     context.pop();
