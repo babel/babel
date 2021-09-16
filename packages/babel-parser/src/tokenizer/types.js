@@ -42,7 +42,7 @@ type TokenOptions = {
 };
 
 // Internally the tokenizer stores token as a number
-export type TokenType = number;
+export opaque type TokenType = number;
 
 // The `ExportedTokenType` is exported via `tokTypes` and accessible
 // when `tokens: true` is enabled. Unlike internal token type, it provides
