@@ -245,7 +245,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
     if (importData) {
       if (isInType(path)) {
         throw path.buildCodeFrameError(
-          `Cannot transform the imported ${localName} binding since it's used in a type annotation. ` +
+          `Cannot transform the imported binding "${localName}" since it's also used in a type annotation. ` +
             `Please strip type annotations using @babel/preset-typescript or @babel/preset-flow.`,
         );
       }
