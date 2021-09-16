@@ -1,15 +1,21 @@
-import { types } from "../../../src/tokenizer/types";
+import { tt, tokenOperatorPrecedence } from "../../../src/tokenizer/types";
 
 describe("token types", () => {
   it("should check if the binOp for relational === in", () => {
-    expect(types.relational.binop).toEqual(types._in.binop);
+    expect(tokenOperatorPrecedence(tt.relational)).toEqual(
+      tokenOperatorPrecedence(tt._in),
+    );
   });
 
   it("should check if the binOp for relational === instanceOf", () => {
-    expect(types.relational.binop).toEqual(types._instanceof.binop);
+    expect(tokenOperatorPrecedence(tt.relational)).toEqual(
+      tokenOperatorPrecedence(tt._instanceof),
+    );
   });
 
   it("should check if the binOp for in === instanceOf", () => {
-    expect(types._in.binop).toEqual(types._instanceof.binop);
+    expect(tokenOperatorPrecedence(tt._in)).toEqual(
+      tokenOperatorPrecedence(tt._instanceof),
+    );
   });
 });
