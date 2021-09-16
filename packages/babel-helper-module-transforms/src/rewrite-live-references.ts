@@ -44,6 +44,25 @@ interface RewriteBindingInitVisitorState {
   scope: Scope;
 }
 
+function isInType(path) {
+  do {
+    switch (path.parent.type) {
+      case "TSTypeAnnotation":
+      case "TSTypeAliasDeclaration":
+      case "TSTypeReference":
+      case "TypeAnnotation":
+      case "TypeAlias":
+        return true;
+      case "ExportSpecifier":
+        return path.parentPath.parent.exportKind === "type";
+      default:
+        if (path.parentPath.isStatement() || path.parentPath.isExpression()) {
+          return false;
+        }
+    }
+  } while ((path = path.parentPath));
+}
+
 export default function rewriteLiveReferences(
   programPath: NodePath<t.Program>,
   metadata: ModuleMetadata,
@@ -224,6 +243,13 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
 
     const importData = imported.get(localName);
     if (importData) {
+      if (isInType(path)) {
+        throw path.buildCodeFrameError(
+          `Cannot transform the imported binding "${localName}" since it's also used in a type annotation. ` +
+            `Please strip type annotations using @babel/preset-typescript or @babel/preset-flow.`,
+        );
+      }
+
       const localBinding = path.scope.getBinding(localName);
       const rootBinding = scope.getBinding(localName);
 
