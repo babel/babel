@@ -1,19 +1,19 @@
 {
   "type": "File",
-  "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+  "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
   "program": {
     "type": "Program",
-    "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+    "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+        "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
         "expression": {
-          "type": "TupleExpression",
-          "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
-          "elements": []
+          "type": "RecordExpression",
+          "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
+          "properties": []
         }
       }
     ],
@@ -22,7 +22,7 @@
   "tokens": [
     {
       "type": {
-        "label": "[|",
+        "label": "#{",
         "beforeExpr": true,
         "startsExpr": true,
         "rightAssociative": false,
@@ -36,8 +36,8 @@
     },
     {
       "type": {
-        "label": "|]",
-        "beforeExpr": false,
+        "label": "}",
+        "beforeExpr": true,
         "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
@@ -46,7 +46,7 @@
         "postfix": false,
         "binop": null
       },
-      "start":2,"end":4,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":4}}
+      "start":2,"end":3,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":3}}
     },
     {
       "type": {
@@ -58,9 +58,10 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
-      "start":4,"end":4,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":4}}
+      "start":3,"end":3,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":3}}
     }
   ]
 }

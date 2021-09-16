@@ -82,7 +82,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "var",
       "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}}
@@ -97,7 +98,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "a",
       "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5}}
@@ -112,7 +114,8 @@
         "isAssign": true,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "=",
       "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}}
@@ -127,7 +130,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": 1,
       "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}}
@@ -142,7 +146,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10}}
     },
@@ -157,7 +162,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "var",
       "start":12,"end":15,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3}}
@@ -172,7 +178,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "b",
       "start":16,"end":17,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5}}
@@ -187,7 +194,8 @@
         "isAssign": true,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "=",
       "start":18,"end":19,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":7}}
@@ -202,7 +210,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "a",
       "start":20,"end":21,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":9}}
@@ -217,7 +226,8 @@
         "isAssign": false,
         "prefix": true,
         "postfix": false,
-        "binop": 9
+        "binop": 9,
+        "updateContext": null
       },
       "value": "+",
       "start":22,"end":23,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":11}}
@@ -232,7 +242,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": 1,
       "start":24,"end":25,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":13}}
@@ -247,7 +258,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start":25,"end":26,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":14}}
     },
@@ -261,7 +273,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start":26,"end":26,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":14}}
     }

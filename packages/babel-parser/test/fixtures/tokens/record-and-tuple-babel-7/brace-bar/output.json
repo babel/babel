@@ -11,9 +11,9 @@
         "type": "ExpressionStatement",
         "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
         "expression": {
-          "type": "TupleExpression",
+          "type": "RecordExpression",
           "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
-          "elements": []
+          "properties": []
         }
       }
     ],
@@ -22,7 +22,7 @@
   "tokens": [
     {
       "type": {
-        "label": "[|",
+        "label": "{|",
         "beforeExpr": true,
         "startsExpr": true,
         "rightAssociative": false,
@@ -30,13 +30,14 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2}}
     },
     {
       "type": {
-        "label": "|]",
+        "label": "|}",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -44,7 +45,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start":2,"end":4,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":4}}
     },
@@ -58,7 +60,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start":4,"end":4,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":4}}
     }
