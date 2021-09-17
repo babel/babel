@@ -5,20 +5,24 @@ const enhancedResolve = require("enhanced-resolve");
 
 const EXTENSIONS = [".js", ".json", ".node", ".ts"];
 
-const resolvers = new Map();
-function getResolver(conditionNames) {
-  const key = conditionNames.join(":::");
+function mapGetOr(map, key, init) {
+  if (!map.has(key)) {
+    map.set(key, init());
+  }
+  return map.get(key);
+}
 
-  let resolver = resolvers.get(key);
-  if (!resolver) {
-    resolver = enhancedResolve.create.sync({
+const resolversCache = new Map();
+function getResolver(conditionNames) {
+  const cacheKeySeparator = ":::";
+  const cacheKey = conditionNames.join(cacheKeySeparator);
+
+  return mapGetOr(resolversCache, cacheKey, () =>
+    enhancedResolve.create.sync({
       conditionNames,
       extensions: EXTENSIONS,
-    });
-    resolvers.set(key, resolver);
-  }
-
-  return resolver;
+    })
+  );
 }
 
 module.exports = function (request, options) {
