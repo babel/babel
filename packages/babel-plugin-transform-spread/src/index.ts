@@ -45,40 +45,21 @@ export default declare((api, options) => {
   }
 
   function push(
-    _props: Array<
-      | t.Expression
-      | t.SpreadElement
-      | t.JSXNamespacedName
-      | t.ArgumentPlaceholder
-    >,
+    _props: Array<t.Expression | t.SpreadElement>,
     nodes: Array<t.Expression>,
-  ): Array<
-    t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
-  > {
+  ) {
     if (!_props.length) return _props;
-    nodes.push(
-      t.arrayExpression(_props as Array<t.Expression | t.SpreadElement>),
-    );
+    nodes.push(t.arrayExpression(_props));
     return [];
   }
 
   function build(
-    props: Array<
-      | t.Expression
-      | t.SpreadElement
-      | t.JSXNamespacedName
-      | t.ArgumentPlaceholder
-    >,
+    props: Array<t.Expression | t.SpreadElement>,
     scope: Scope,
     file: File,
   ): t.Expression[] {
     const nodes: Array<t.Expression> = [];
-    let _props: Array<
-      | t.Expression
-      | t.SpreadElement
-      | t.JSXNamespacedName
-      | t.ArgumentPlaceholder
-    > = [];
+    let _props: Array<t.Expression | t.SpreadElement> = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
@@ -153,7 +134,7 @@ export default declare((api, options) => {
       CallExpression(path: NodePath<t.CallExpression>): void {
         const { node, scope } = path;
 
-        const args = node.arguments;
+        const args = node.arguments as Array<t.Expression | t.SpreadElement>;
         if (!hasSpread(args)) return;
         const calleePath = skipTransparentExprWrappers(
           path.get("callee") as NodePath<t.Expression>,
@@ -221,7 +202,7 @@ export default declare((api, options) => {
 
       NewExpression(path: NodePath<t.NewExpression>): void {
         const { node, scope } = path;
-        let args = node.arguments;
+        let args = node.arguments as Array<t.Expression | t.SpreadElement>;
         if (!hasSpread(args)) return;
 
         const nodes = build(args, scope, this);
