@@ -6,7 +6,13 @@ import type { Options } from "../options";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
-import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
+import {
+  tokenIsKeyword,
+  tokenLabelName,
+  tt,
+  keywords as keywordTypes,
+  type TokenType,
+} from "./types";
 import { type TokContext, types as ct } from "./context";
 import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
 import { SourceLocation } from "../util/location";
@@ -1564,15 +1570,54 @@ export default class Tokenizer extends ParserErrors {
   }
 
   checkKeywordEscapes(): void {
-    const kw = this.state.type.keyword;
-    if (kw && this.state.containsEsc) {
-      this.raise(this.state.start, Errors.InvalidEscapedReservedWord, kw);
+    const { type } = this.state;
+    if (tokenIsKeyword(type) && this.state.containsEsc) {
+      this.raise(
+        this.state.start,
+        Errors.InvalidEscapedReservedWord,
+        tokenLabelName(type),
+      );
     }
   }
 
   // the prevType is required by the jsx plugin
   // eslint-disable-next-line no-unused-vars
   updateContext(prevType: TokenType): void {
-    this.state.type.updateContext?.(this.state.context);
+    // Token-specific context update code
+    // Note that we should avoid accessing `this.prodParam` in context update,
+    // because it is executed immediately when last token is consumed, which may be
+    // before `this.prodParam` is updated. e.g.
+    // ```
+    // function *g() { () => yield / 2 }
+    // ```
+    // When `=>` is eaten, the context update of `yield` is executed, however,
+    // `this.prodParam` still has `[Yield]` production because it is not yet updated
+    const { context, type } = this.state;
+    switch (type) {
+      case tt.braceR:
+        context.pop();
+        break;
+      // we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
+      // ideally only dollarBraceL "${" needs a non-template context
+      // in order to indicate that the last "`" in `${`" starts a new string template
+      // inside a template element within outer string template.
+      // but when we popped such context in `}`, we lost track of whether this
+      // `}` matches a `${` or other tokens matching `}`, so we have to push
+      // such context in every token that `}` will match.
+      case tt.braceL:
+      case tt.braceHashL:
+      case tt.dollarBraceL:
+        context.push(ct.brace);
+        break;
+      case tt.backQuote:
+        if (context[context.length - 1] === ct.template) {
+          context.pop();
+        } else {
+          context.push(ct.template);
+        }
+        break;
+      default:
+        break;
+    }
   }
 }

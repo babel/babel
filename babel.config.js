@@ -2,6 +2,7 @@
 
 const pathUtils = require("path");
 const fs = require("fs");
+const { parseSync } = require("@babel/core");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
@@ -176,7 +177,10 @@ module.exports = function (api) {
           "packages/babel-parser",
           "packages/babel-helper-validator-identifier",
         ].map(normalize),
-        plugins: ["babel-plugin-transform-charcodes"],
+        plugins: [
+          "babel-plugin-transform-charcodes",
+          pluginBabelParserTokenType,
+        ],
         assumptions: parserAssumptions,
       },
       {
@@ -583,3 +587,68 @@ function pluginImportMetaUrl({ types: t, template }) {
     },
   };
 }
+
+const tokenTypesMapping = new Map();
+const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.js";
+
+function pluginBabelParserTokenType({
+  types: { isIdentifier, numericLiteral },
+}) {
+  return {
+    visitor: {
+      MemberExpression(path) {
+        const { node } = path;
+        if (
+          isIdentifier(node.object, { name: "tt" }) &&
+          isIdentifier(node.property) &&
+          !node.computed
+        ) {
+          const tokenName = node.property.name;
+          const tokenType = tokenTypesMapping.get(node.property.name);
+          if (tokenType === undefined) {
+            throw path.buildCodeFrameError(
+              `${tokenName} is not defined in ${tokenTypeSourcePath}`
+            );
+          }
+          path.replaceWith(numericLiteral(tokenType));
+        }
+      },
+    },
+  };
+}
+
+(function generateTokenTypesMapping() {
+  const tokenTypesAst = parseSync(
+    fs.readFileSync(tokenTypeSourcePath, {
+      encoding: "utf-8",
+    }),
+    {
+      configFile: false,
+      parserOpts: { attachComments: false, plugins: ["flow"] },
+    }
+  );
+
+  let typesDeclaration;
+  for (const n of tokenTypesAst.program.body) {
+    if (n.type === "ExportNamedDeclaration" && n.exportKind === "value") {
+      const declarations = n.declaration.declarations;
+      if (declarations !== undefined) typesDeclaration = declarations[0];
+      if (
+        typesDeclaration !== undefined &&
+        typesDeclaration.id.name === "types"
+      ) {
+        break;
+      }
+    }
+  }
+  if (typesDeclaration === undefined) {
+    throw new Error(
+      "The plugin can not find TokenType definition in " + tokenTypeSourcePath
+    );
+  }
+
+  const tokenTypesDefinition = typesDeclaration.init.properties;
+  for (let i = 0; i < tokenTypesDefinition.length; i++) {
+    tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
+  }
+})();

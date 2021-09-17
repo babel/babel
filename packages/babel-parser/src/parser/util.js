@@ -1,6 +1,12 @@
 // @flow
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import {
+  isTokenType,
+  tokenIsKeyword,
+  tokenLabelName,
+  tt,
+  type TokenType,
+} from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
 import type { Node } from "../types";
@@ -168,15 +174,19 @@ export default class UtilParser extends Tokenizer {
       template: "Unexpected token",
     },
   ): empty {
-    if (messageOrType instanceof TokenType) {
+    if (isTokenType(messageOrType)) {
       messageOrType = {
         code: ErrorCodes.SyntaxError,
         reasonCode: "UnexpectedToken",
-        template: `Unexpected token, expected "${messageOrType.label}"`,
+        template: `Unexpected token, expected "${tokenLabelName(
+          // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
+          messageOrType,
+        )}"`,
       };
     }
 
     /* eslint-disable @babel/development-internal/dry-error-messages */
+    // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
     /* eslint-enable @babel/development-internal/dry-error-messages */
   }
@@ -298,7 +308,7 @@ export default class UtilParser extends Tokenizer {
   isLiteralPropertyName(): boolean {
     return (
       this.match(tt.name) ||
-      !!this.state.type.keyword ||
+      tokenIsKeyword(this.state.type) ||
       this.match(tt.string) ||
       this.match(tt.num) ||
       this.match(tt.bigint) ||

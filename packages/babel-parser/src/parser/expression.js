@@ -18,7 +18,19 @@
 //
 // [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
 
-import { types as tt, type TokenType } from "../tokenizer/types";
+import {
+  tokenCanStartExpression,
+  tokenIsAssignment,
+  tokenIsKeyword,
+  tokenIsOperator,
+  tokenIsPostfix,
+  tokenIsPrefix,
+  tokenIsRightAssociative,
+  tokenLabelName,
+  tokenOperatorPrecedence,
+  tt,
+  type TokenType,
+} from "../tokenizer/types";
 import * as N from "../types";
 import LValParser from "./lval";
 import {
@@ -287,7 +299,7 @@ export default class ExpressionParser extends LValParser {
     if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startPos, startLoc);
     }
-    if (this.state.type.isAssign) {
+    if (tokenIsAssignment(this.state.type)) {
       const node = this.startNodeAt(startPos, startLoc);
       const operator = this.state.value;
       node.operator = operator;
@@ -394,8 +406,7 @@ export default class ExpressionParser extends LValParser {
       const { start } = left;
 
       if (
-        // TODO: When migrating to TS, use tt._in.binop!
-        minPrec >= ((tt._in.binop: any): number) ||
+        minPrec >= tokenOperatorPrecedence(tt._in) ||
         !this.prodParam.hasIn ||
         !this.match(tt._in)
       ) {
@@ -405,10 +416,10 @@ export default class ExpressionParser extends LValParser {
       this.classScope.usePrivateName(value, start);
     }
 
-    let prec = this.state.type.binop;
-    if (prec != null && (this.prodParam.hasIn || !this.match(tt._in))) {
+    const op = this.state.type;
+    if (tokenIsOperator(op) && (this.prodParam.hasIn || !this.match(tt._in))) {
+      let prec = tokenOperatorPrecedence(op);
       if (prec > minPrec) {
-        const op = this.state.type;
         if (op === tt.pipeline) {
           this.expectPlugin("pipelineOperator");
           if (this.state.inFSharpPipelineDirectBody) {
@@ -426,7 +437,7 @@ export default class ExpressionParser extends LValParser {
         if (coalesce) {
           // Handle the precedence of `tt.coalesce` as equal to the range of logical expressions.
           // In other words, `node.right` shouldn't contain logical expressions in order to check the mixed error.
-          prec = ((tt.logicalAND: any): { binop: number }).binop;
+          prec = tokenOperatorPrecedence(tt.logicalAND);
         }
 
         this.next();
@@ -524,7 +535,7 @@ export default class ExpressionParser extends LValParser {
       this.parseMaybeUnaryOrPrivate(),
       startPos,
       startLoc,
-      op.rightAssociative ? prec - 1 : prec,
+      tokenIsRightAssociative(op) ? prec - 1 : prec,
     );
   }
 
@@ -576,7 +587,7 @@ export default class ExpressionParser extends LValParser {
     }
     const update = this.match(tt.incDec);
     const node = this.startNode();
-    if (this.state.type.prefix) {
+    if (tokenIsPrefix(this.state.type)) {
       node.operator = this.state.value;
       node.prefix = true;
 
@@ -609,9 +620,10 @@ export default class ExpressionParser extends LValParser {
     const expr = this.parseUpdate(node, update, refExpressionErrors);
 
     if (isAwait) {
+      const { type } = this.state;
       const startsExpr = this.hasPlugin("v8intrinsic")
-        ? this.state.type.startsExpr
-        : this.state.type.startsExpr && !this.match(tt.modulo);
+        ? tokenCanStartExpression(type)
+        : tokenCanStartExpression(type) && !this.match(tt.modulo);
       if (startsExpr && !this.isAmbiguousAwait()) {
         this.raiseOverwrite(startPos, Errors.AwaitNotInAsyncContext);
         return this.parseAwait(startPos, startLoc);
@@ -636,7 +648,7 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     let expr = this.parseExprSubscripts(refExpressionErrors);
     if (this.checkExpressionErrors(refExpressionErrors, false)) return expr;
-    while (this.state.type.postfix && !this.canInsertSemicolon()) {
+    while (tokenIsPostfix(this.state.type) && !this.canInsertSemicolon()) {
       const node = this.startNodeAt(startPos, startLoc);
       node.operator = this.state.value;
       node.prefix = false;
@@ -1356,7 +1368,7 @@ export default class ExpressionParser extends LValParser {
       throw this.raise(
         start,
         Errors.PipeTopicUnconfiguredToken,
-        tokenType.label,
+        tokenLabelName(tokenType),
       );
     }
   }
@@ -1381,7 +1393,7 @@ export default class ExpressionParser extends LValParser {
           "pipelineOperator",
           "topicToken",
         );
-        return tokenType.label === pluginTopicToken;
+        return tokenLabelName(tokenType) === pluginTopicToken;
       }
       case "smart":
         return tokenType === tt.hash;
@@ -2527,8 +2539,8 @@ export default class ExpressionParser extends LValParser {
 
     if (type === tt.name) {
       name = this.state.value;
-    } else if (type.keyword) {
-      name = type.keyword;
+    } else if (tokenIsKeyword(type)) {
+      name = tokenLabelName(type);
     } else {
       throw this.unexpected();
     }
@@ -2538,7 +2550,7 @@ export default class ExpressionParser extends LValParser {
       // This will prevent this.next() from throwing about unexpected escapes.
       this.state.type = tt.name;
     } else {
-      this.checkReservedWord(name, start, !!type.keyword, false);
+      this.checkReservedWord(name, start, tokenIsKeyword(type), false);
     }
 
     this.next();

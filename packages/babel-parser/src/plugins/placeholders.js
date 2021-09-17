@@ -2,12 +2,10 @@
 
 import * as charCodes from "charcodes";
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
 import { makeErrorTemplates, ErrorCodes } from "../parser/error";
-
-tt.placeholder = new TokenType("%%", { startsExpr: true });
 
 export type PlaceholderTypes =
   | "Identifier"
@@ -288,7 +286,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.isUnparsedContextual(next, "from")) {
           if (
             this.input.startsWith(
-              tt.placeholder.label,
+              tokenLabelName(tt.placeholder),
               this.nextTokenStartSince(next + 4),
             )
           ) {

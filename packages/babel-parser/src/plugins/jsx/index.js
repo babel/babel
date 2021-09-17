@@ -8,7 +8,13 @@ import * as charCodes from "charcodes";
 import XHTMLEntities from "./xhtml";
 import type Parser from "../../parser";
 import type { ExpressionErrors } from "../../parser/util";
-import { TokenType, types as tt } from "../../tokenizer/types";
+import {
+  tokenComesBeforeExpression,
+  tokenIsKeyword,
+  tokenLabelName,
+  type TokenType,
+  tt,
+} from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
@@ -45,22 +51,10 @@ const JsxErrors = makeErrorTemplates(
 /* eslint-disable sort-keys */
 
 // Be aware that this file is always executed and not only when the plugin is enabled.
-// Therefore this contexts and tokens do always exist.
+// Therefore the contexts do always exist.
 tc.j_oTag = new TokContext("<tag");
 tc.j_cTag = new TokContext("</tag");
 tc.j_expr = new TokContext("<tag>...</tag>", true);
-
-tt.jsxName = new TokenType("jsxName");
-tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
-tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
-tt.jsxTagEnd = new TokenType("jsxTagEnd");
-
-tt.jsxTagStart.updateContext = context => {
-  context.push(
-    tc.j_expr, // treat as beginning of JSX expression
-    tc.j_oTag, // start opening tag context
-  );
-};
 
 function isFragment(object: ?N.JSXElement): boolean {
   return object
@@ -259,8 +253,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       if (this.match(tt.jsxName)) {
         node.name = this.state.value;
-      } else if (this.state.type.keyword) {
-        node.name = this.state.type.keyword;
+      } else if (tokenIsKeyword(this.state.type)) {
+        node.name = tokenLabelName(this.state.type);
       } else {
         this.unexpected();
       }
@@ -624,6 +618,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // reconsider as closing tag context
         context.splice(-2, 2, tc.j_cTag);
         this.state.exprAllowed = false;
+      } else if (type === tt.jsxTagStart) {
+        context.push(
+          tc.j_expr, // treat as beginning of JSX expression
+          tc.j_oTag, // start opening tag context
+        );
       } else if (type === tt.jsxTagEnd) {
         const out = context.pop();
         if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
@@ -633,12 +632,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.state.exprAllowed = true;
         }
       } else if (
-        type.keyword &&
+        tokenIsKeyword(type) &&
         (prevType === tt.dot || prevType === tt.questionDot)
       ) {
         this.state.exprAllowed = false;
       } else {
-        this.state.exprAllowed = type.beforeExpr;
+        this.state.exprAllowed = tokenComesBeforeExpression(type);
       }
     }
   };

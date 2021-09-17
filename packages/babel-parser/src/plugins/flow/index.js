@@ -6,7 +6,12 @@
 /* eslint-disable @babel/development-internal/dry-error-messages */
 
 import type Parser from "../../parser";
-import { types as tt, type TokenType } from "../../tokenizer/types";
+import {
+  tokenIsKeyword,
+  tokenLabelName,
+  tt,
+  type TokenType,
+} from "../../tokenizer/types";
 import * as N from "../../types";
 import type { Position } from "../../util/location";
 import { types as tc } from "../../tokenizer/context";
@@ -157,7 +162,8 @@ function hasTypeImportKind(node: N.Node): boolean {
 
 function isMaybeDefaultImport(state: { type: TokenType, value: any }): boolean {
   return (
-    (state.type === tt.name || !!state.type.keyword) && state.value !== "from"
+    (state.type === tt.name || tokenIsKeyword(state.type)) &&
+    state.value !== "from"
   );
 }
 
@@ -1605,11 +1611,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.next();
           return this.finishNode(node, "ExistsTypeAnnotation");
 
+        case tt._typeof:
+          return this.flowParseTypeofType();
+
         default:
-          if (this.state.type.keyword === "typeof") {
-            return this.flowParseTypeofType();
-          } else if (this.state.type.keyword) {
-            const label = this.state.type.label;
+          if (tokenIsKeyword(this.state.type)) {
+            const label = tokenLabelName(this.state.type);
             this.next();
             return super.createIdentifier(node, label);
           }
@@ -2650,7 +2657,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (
           specifierTypeKind !== null &&
           !this.match(tt.name) &&
-          !this.state.type.keyword
+          !tokenIsKeyword(this.state.type)
         ) {
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
@@ -2665,7 +2672,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         if (
           specifierTypeKind !== null &&
-          (this.match(tt.name) || this.state.type.keyword)
+          (this.match(tt.name) || tokenIsKeyword(this.state.type))
         ) {
           // `import {type foo`
           specifier.imported = this.parseIdentifier(true);

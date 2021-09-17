@@ -1,7 +1,12 @@
 // @flow
 
 import * as N from "../types";
-import { types as tt, type TokenType } from "../tokenizer/types";
+import {
+  tokenIsLoop,
+  tt,
+  type TokenType,
+  getExportedToken,
+} from "../tokenizer/types";
 import ExpressionParser from "./expression";
 import { Errors, SourceTypeModuleErrors } from "./error";
 import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
@@ -56,10 +61,11 @@ const keywordRelationalOperator = /in(?:stanceof)?/y;
  * @returns
  */
 function babel7CompatTokens(tokens) {
-  if (!process.env.BABEL_8_BREAKING) {
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
-      if (token.type === tt.privateName) {
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    const { type } = token;
+    if (type === tt.privateName) {
+      if (!process.env.BABEL_8_BREAKING) {
         const { loc, start, value, end } = token;
         const hashEndPos = start + 1;
         const hashEndLoc = new Position(loc.start.line, loc.start.column + 1);
@@ -68,7 +74,7 @@ function babel7CompatTokens(tokens) {
           1,
           // $FlowIgnore: hacky way to create token
           new Token({
-            type: tt.hash,
+            type: getExportedToken(tt.hash),
             value: "#",
             start: start,
             end: hashEndPos,
@@ -77,7 +83,7 @@ function babel7CompatTokens(tokens) {
           }),
           // $FlowIgnore: hacky way to create token
           new Token({
-            type: tt.name,
+            type: getExportedToken(tt.name),
             value: value,
             start: hashEndPos,
             end: end,
@@ -85,7 +91,13 @@ function babel7CompatTokens(tokens) {
             endLoc: loc.end,
           }),
         );
+        i++;
+        continue;
       }
+    }
+    if (typeof type === "number") {
+      // $FlowIgnore: we manipulate `token` for performance reasons
+      token.type = getExportedToken(type);
     }
   }
   return tokens;
@@ -246,9 +258,9 @@ export default class StatementParser extends ExpressionParser {
 
     switch (starttype) {
       case tt._break:
+        return this.parseBreakContinueStatement(node, /* isBreak */ true);
       case tt._continue:
-        // $FlowFixMe
-        return this.parseBreakContinueStatement(node, starttype.keyword);
+        return this.parseBreakContinueStatement(node, /* isBreak */ false);
       case tt._debugger:
         return this.parseDebuggerStatement(node);
       case tt._do:
@@ -472,9 +484,8 @@ export default class StatementParser extends ExpressionParser {
 
   parseBreakContinueStatement(
     node: N.BreakStatement | N.ContinueStatement,
-    keyword: string,
+    isBreak: boolean,
   ): N.BreakStatement | N.ContinueStatement {
-    const isBreak = keyword === "break";
     this.next();
 
     if (this.isLineTerminator()) {
@@ -484,7 +495,7 @@ export default class StatementParser extends ExpressionParser {
       this.semicolon();
     }
 
-    this.verifyBreakContinue(node, keyword);
+    this.verifyBreakContinue(node, isBreak);
 
     return this.finishNode(
       node,
@@ -494,9 +505,8 @@ export default class StatementParser extends ExpressionParser {
 
   verifyBreakContinue(
     node: N.BreakStatement | N.ContinueStatement,
-    keyword: string,
+    isBreak: boolean,
   ) {
-    const isBreak = keyword === "break";
     let i;
     for (i = 0; i < this.state.labels.length; ++i) {
       const lab = this.state.labels[i];
@@ -506,7 +516,11 @@ export default class StatementParser extends ExpressionParser {
       }
     }
     if (i === this.state.labels.length) {
-      this.raise(node.start, Errors.IllegalBreakContinue, keyword);
+      this.raise(
+        node.start,
+        Errors.IllegalBreakContinue,
+        isBreak ? "break" : "continue",
+      );
     }
   }
 
@@ -850,7 +864,7 @@ export default class StatementParser extends ExpressionParser {
       }
     }
 
-    const kind = this.state.type.isLoop
+    const kind = tokenIsLoop(this.state.type)
       ? "loop"
       : this.match(tt._switch)
       ? "switch"
@@ -1994,7 +2008,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   shouldParseExportDeclaration(): boolean {
-    if (this.match(tt.at)) {
+    const { type } = this.state;
+    if (type === tt.at) {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
         if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
@@ -2006,10 +2021,10 @@ export default class StatementParser extends ExpressionParser {
     }
 
     return (
-      this.state.type.keyword === "var" ||
-      this.state.type.keyword === "const" ||
-      this.state.type.keyword === "function" ||
-      this.state.type.keyword === "class" ||
+      type === tt._var ||
+      type === tt._const ||
+      type === tt._function ||
+      type === tt._class ||
       this.isLet() ||
       this.isAsyncFunction()
     );
