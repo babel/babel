@@ -107,7 +107,7 @@ const TSErrors = makeErrorTemplates(
     InvalidModifierOnTypeMember:
       "'%0' modifier cannot appear on a type member.",
     InvalidModifiersOrder: "'%0' modifier must precede '%1' modifier.",
-    InvalidTuple: "Invalid Tuple.",
+    InvalidTupleElementKeyword: "The '%0' keyword cannot be used as a tuple element.",
     InvalidTupleMemberLabel:
       "Tuple members must be labeled with a simple identifier.",
     MissingInterfaceName:
@@ -930,7 +930,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         optionalTypeNode.typeAnnotation = type;
         type = this.finishNode(optionalTypeNode, "TSOptionalType");
       } else if (ALLOWED_KEYWORDS.includes(type.name)) {
-        this.raise(type.start, TSErrors.InvalidTuple);
+        this.raise(type.start, TSErrors.InvalidTupleElementKeyword, type.name);
       }
 
       if (rest) {
