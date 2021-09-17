@@ -19,6 +19,30 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.7 (2021-09-17)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13771](https://github.com/babel/babel/pull/13771) fix(babel-parser): Allow line break before `assert` return type ([@JuniorTour](https://github.com/JuniorTour))
+  * [#13755](https://github.com/babel/babel/pull/13755) [estree] Fix conversion of `PrivateName` in `MemberExpression` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-standalone`
+  * [#13754](https://github.com/babel/babel/pull/13754) Move pipeline operator to Stage 2 ([@sdegutis](https://github.com/sdegutis))
+* Other
+  * [#13767](https://github.com/babel/babel/pull/13767) Fix `regexpu-core` bundling in `@babel/standalone` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13751](https://github.com/babel/babel/pull/13751) [eslint-parser] Represent `static` using a `Keyword` token ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-validator-identifier`
+  * [#13759](https://github.com/babel/babel/pull/13759) Update Identifier definitions to Unicode 14 ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-parser`
+  * [#13768](https://github.com/babel/babel/pull/13768) Store token type as number ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#13739](https://github.com/babel/babel/pull/13739) Throw a better error when transforming imported bindings in types ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#13140](https://github.com/babel/babel/pull/13140) Update to Yarn 3 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13744](https://github.com/babel/babel/pull/13744) chore: add constraint for duplicate dependency declarations ([@merceyz](https://github.com/merceyz))
+* `babel-helper-transform-fixture-test-runner`
+  * [#13741](https://github.com/babel/babel/pull/13741) Replace the deprecated `produceCachedData` option used in `vm` module with `script.createCachedData()` ([@wafuwafu13](https://github.com/wafuwafu13))
 ## v7.15.6 (2021-09-09)
 
 #### :eyeglasses: Spec Compliance
