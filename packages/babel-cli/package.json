@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.15.4",
+  "version": "7.15.7",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-cli",
