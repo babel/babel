@@ -14,6 +14,7 @@ import {
   tokenLabelName,
   tt,
   type TokenType,
+  tokenIsFlowInterfaceOrTypeOrOpaque,
 } from "../../tokenizer/types";
 import * as N from "../../types";
 import type { Position } from "../../util/location";
@@ -1870,24 +1871,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // export type
     shouldParseExportDeclaration(): boolean {
-      return (
-        this.isContextual(tt._type) ||
-        this.isContextual(tt._interface) ||
-        this.isContextual(tt._opaque) ||
-        (this.shouldParseEnums() && this.isContextual(tt._enum)) ||
-        super.shouldParseExportDeclaration()
-      );
+      const { type } = this.state;
+      if (
+        tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
+        (this.shouldParseEnums() && type === tt._enum)
+      ) {
+        return !this.state.containsEsc;
+      }
+      return super.shouldParseExportDeclaration();
     }
 
     isExportDefaultSpecifier(): boolean {
+      const { type } = this.state;
       if (
-        tokenIsIdentifier(this.state.type) &&
-        (this.state.value === "type" ||
-          this.state.value === "interface" ||
-          this.state.value === "opaque" ||
-          (this.shouldParseEnums() && this.state.value === "enum"))
+        tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
+        (this.shouldParseEnums() && type === tt._enum)
       ) {
-        return false;
+        return this.state.containsEsc;
       }
 
       return super.isExportDefaultSpecifier();

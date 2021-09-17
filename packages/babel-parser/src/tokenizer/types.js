@@ -216,6 +216,7 @@ export const tt: { [name: string]: TokenType } = {
   // Keywords
   // Don't forget to update packages/babel-helper-validator-identifier/src/keyword.js
   // when new keywords are added
+  // start: isLiteralPropertyName
   // start: isKeyword
   _in: createKeyword("in", { beforeExpr, binop: 7 }),
   _instanceof: createKeyword("instanceof", { beforeExpr, binop: 7 }),
@@ -309,6 +310,7 @@ export const tt: { [name: string]: TokenType } = {
   num: createToken("num", { startsExpr }),
   bigint: createToken("bigint", { startsExpr }),
   decimal: createToken("decimal", { startsExpr }),
+  // end: isLiteralPropertyName
   regexp: createToken("regexp", { startsExpr }),
   privateName: createToken("#name", { startsExpr }),
   eof: createToken("eof"),
