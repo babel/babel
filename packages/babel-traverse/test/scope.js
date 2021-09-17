@@ -361,6 +361,29 @@ describe("scope", () => {
       expect(
         getPath("var a = 1; var a = 2;").scope.getBinding("a").constant,
       ).toBe(false);
+      expect(
+        getPath("for (var n of ns) { var a = 1; }").scope.getBinding("a")
+          .constant,
+      ).toBe(false);
+      expect(
+        getPath("for (var n in ns) { var a = 1; }").scope.getBinding("a")
+          .constant,
+      ).toBe(false);
+      expect(
+        getPath("for (var i = 0; i < n; i++) { var a = 1; }").scope.getBinding(
+          "a",
+        ).constant,
+      ).toBe(false);
+      expect(
+        getPath("var i = 0; while (i != 1) { var a = 1; }").scope.getBinding(
+          "a",
+        ).constant,
+      ).toBe(false);
+      expect(
+        getPath("var i = 0; do { var a = 1; } while (i != 1)").scope.getBinding(
+          "a",
+        ).constant,
+      ).toBe(false);
     });
 
     it("purity", function () {

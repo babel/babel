@@ -44,6 +44,13 @@ export default class Binding {
     this.path = path;
     this.kind = kind;
 
+    for (let node of path.getAncestry()) {
+      if (node.isLoop()) {
+        debugger;
+        this.constant = false;
+      }
+    }
+
     this.clearValue();
   }
 
