@@ -128,7 +128,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/helper-fixtures": "workspace:*"
-    "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.2"
+    "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
     chokidar: ^3.4.0
     commander: ^4.0.1
     convert-source-map: ^1.1.0
@@ -3875,7 +3875,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.2, @nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.2":
+"@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
+  version: 2.1.8-no-fsevents.3
+  resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.3"
+  checksum: ee55cc9241aeea7eb94b8a8551bfa4246c56c53bc71ecda0a2104018fcc328ba5723b33686bdf9cc65d4df4ae65e8016b89e0bbdeb94e0309fe91bb9ced42344
+  languageName: node
+  linkType: hard
+
+"@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3":
+  version: 0.0.0-condition-2e969f
+  resolution: "@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING?:2.1.8-no-fsevents.3#2e969f"
+  dependencies:
+    "@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false": "npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3"
+  checksum: f5f76f2136c04a78bad4f9fc4c3219de13c953fcb5c667fbb79de5740fce01793f7e3a07948bedea8b3b6d6dbb19b6baedd778d36a71fb58629a9a04484cafc8
+  languageName: node
+  linkType: hard
+
+"@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.2":
   version: 2.1.8-no-fsevents.2
   resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.2"
   dependencies:
@@ -3891,15 +3907,6 @@ __metadata:
     readdirp: ^2.2.1
     upath: ^1.1.1
   checksum: 76003fce915aa6891b759498d3f79bc7b4db48395dc465e28f982e95fd04ebb63a7755ebbaa7e1fe6ff65edf182ba82ad51d97ebcf7ad1c6feaf8f53d43415bb
-  languageName: node
-  linkType: hard
-
-"@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.2":
-  version: 0.0.0-condition-cef960
-  resolution: "@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING?:2.1.8-no-fsevents.2#cef960"
-  dependencies:
-    "@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false": "npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.2"
-  checksum: 4fb836331edc50f31e24d89c64b7c8e20639f06fa6ca6baa2d0bcd388098aa42155a2e87c3b4bd7c06e179b746f540a8476f1b43886161be981ab6bfe60bbc78
   languageName: node
   linkType: hard
 
