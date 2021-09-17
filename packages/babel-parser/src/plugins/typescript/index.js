@@ -2364,7 +2364,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // export default interface allowed in:
       // https://github.com/Microsoft/TypeScript/pull/16040
-      if (this.state.value === "interface") {
+      if (this.match(tt._interface)) {
         const interfaceNode = this.startNode();
         this.next();
         const result = this.tsParseInterfaceDeclaration(interfaceNode);
