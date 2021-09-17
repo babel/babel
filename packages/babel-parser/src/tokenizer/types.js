@@ -78,6 +78,7 @@ export class ExportedTokenType {
   }
 }
 
+// A map from keyword/keyword-like string value to the token type
 export const keywords = new Map<string, TokenType>();
 
 function createKeyword(name: string, options: TokenOptions = {}): TokenType {

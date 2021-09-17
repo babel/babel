@@ -163,8 +163,8 @@ function hasTypeImportKind(node: N.Node): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
 
-function isMaybeDefaultImport(state: { type: TokenType, value: any }): boolean {
-  return tokenIsKeywordOrIdentifier(state.type) && state.value !== "from";
+function isMaybeDefaultImport(type: TokenType): boolean {
+  return tokenIsKeywordOrIdentifier(type) && type !== tt._from;
 }
 
 const exportSuggestions = {
@@ -2576,7 +2576,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return super.shouldParseDefaultImport(node);
       }
 
-      return isMaybeDefaultImport(this.state);
+      return isMaybeDefaultImport(this.state.type);
     }
 
     parseImportSpecifierLocal(
@@ -2608,16 +2608,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       if (kind) {
         const lh = this.lookahead();
+        const { type } = lh;
 
         // import type * is not allowed
-        if (kind === "type" && lh.type === tt.star) {
+        if (kind === "type" && type === tt.star) {
           this.unexpected(lh.start);
         }
 
         if (
-          isMaybeDefaultImport(lh) ||
-          lh.type === tt.braceL ||
-          lh.type === tt.star
+          isMaybeDefaultImport(type) ||
+          type === tt.braceL ||
+          type === tt.star
         ) {
           this.next();
           node.importKind = kind;
