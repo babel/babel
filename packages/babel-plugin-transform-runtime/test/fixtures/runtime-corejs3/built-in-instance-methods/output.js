@@ -38,6 +38,8 @@ var _lastIndexOfInstanceProperty = require("@babel/runtime-corejs3/core-js-stabl
 
 var _mapInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/map");
 
+var _matchAllInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/match-all");
+
 var _padEndInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/pad-end");
 
 var _padStartInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/pad-start");
@@ -47,6 +49,8 @@ var _reduceInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/ins
 var _reduceRightInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/reduce-right");
 
 var _repeatInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/repeat");
+
+var _replaceAllInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/replace-all");
 
 var _reverseInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/reverse");
 
@@ -116,7 +120,7 @@ _lastIndexOfInstanceProperty(object);
 
 _mapInstanceProperty(object);
 
-object.matchAll;
+_matchAllInstanceProperty(object);
 
 _padEndInstanceProperty(object);
 
@@ -128,7 +132,7 @@ _reduceRightInstanceProperty(object);
 
 _repeatInstanceProperty(object);
 
-object.replaceAll;
+_replaceAllInstanceProperty(object);
 
 _reverseInstanceProperty(object);
 
@@ -199,7 +203,7 @@ _lastIndexOfInstanceProperty(object).call(object, arg);
 
 _mapInstanceProperty(object).call(object, arg);
 
-object.matchAll(arg);
+_matchAllInstanceProperty(object).call(object, arg);
 
 _padEndInstanceProperty(object).call(object, arg);
 
@@ -211,7 +215,7 @@ _reduceRightInstanceProperty(object).call(object, arg);
 
 _repeatInstanceProperty(object).call(object, arg);
 
-object.replaceAll(arg);
+_replaceAllInstanceProperty(object).call(object, arg);
 
 _reverseInstanceProperty(object).call(object, arg);
 
