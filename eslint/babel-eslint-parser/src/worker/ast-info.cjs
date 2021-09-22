@@ -13,7 +13,7 @@ exports.getVisitorKeys = function getVisitorKeys() {
         ESLINT_VISITOR_KEYS.MethodDefinition,
       ),
       Property: ["decorators"].concat(ESLINT_VISITOR_KEYS.Property),
-      PropertyDefinition: ["decorators"].concat(
+      PropertyDefinition: ["decorators", "typeAnnotation"].concat(
         ESLINT_VISITOR_KEYS.PropertyDefinition,
       ),
     };

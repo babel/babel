@@ -183,8 +183,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parsePrivateName(): any {
       const node = super.parsePrivateName();
-      if (!this.getPluginOption("estree", "classFeatures")) {
-        return node;
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!this.getPluginOption("estree", "classFeatures")) {
+          return node;
+        }
       }
       return this.convertPrivateNameToPrivateIdentifier(node);
     }
@@ -201,15 +203,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isPrivateName(node: N.Node): boolean {
-      if (!this.getPluginOption("estree", "classFeatures")) {
-        return super.isPrivateName(node);
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!this.getPluginOption("estree", "classFeatures")) {
+          return super.isPrivateName(node);
+        }
       }
       return node.type === "PrivateIdentifier";
     }
 
     getPrivateNameSV(node: N.Node): string {
-      if (!this.getPluginOption("estree", "classFeatures")) {
-        return super.getPrivateNameSV(node);
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!this.getPluginOption("estree", "classFeatures")) {
+          return super.getPrivateNameSV(node);
+        }
       }
       return node.name;
     }
@@ -265,18 +271,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassProperty(...args: [N.ClassProperty]): any {
       const propertyNode = (super.parseClassProperty(...args): any);
-      if (this.getPluginOption("estree", "classFeatures")) {
-        propertyNode.type = "PropertyDefinition";
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!this.getPluginOption("estree", "classFeatures")) {
+          return (propertyNode: N.EstreePropertyDefinition);
+        }
       }
+      propertyNode.type = "PropertyDefinition";
       return (propertyNode: N.EstreePropertyDefinition);
     }
 
     parseClassPrivateProperty(...args: [N.ClassPrivateProperty]): any {
       const propertyNode = (super.parseClassPrivateProperty(...args): any);
-      if (this.getPluginOption("estree", "classFeatures")) {
-        propertyNode.type = "PropertyDefinition";
-        propertyNode.computed = false;
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!this.getPluginOption("estree", "classFeatures")) {
+          return (propertyNode: N.EstreePropertyDefinition);
+        }
       }
+      propertyNode.type = "PropertyDefinition";
+      propertyNode.computed = false;
       return (propertyNode: N.EstreePropertyDefinition);
     }
 
