@@ -1,4 +1,4 @@
-const getEslintVersion = require("../utils/get-eslint-version.cjs");
+const ESLINT_VERSION = require("../utils/eslint-version.cjs");
 
 function* it(children) {
   if (Array.isArray(children)) yield* children;
@@ -92,7 +92,7 @@ const convertNodesVisitor = {
           q.loc.end.column += 2;
         }
 
-        if (getEslintVersion() >= 8) {
+        if (ESLINT_VERSION >= 8) {
           q.start -= 1;
           if (q.tail) {
             q.end += 1;
@@ -129,7 +129,7 @@ function convertProgramNode(ast) {
         ast.loc.end.line = lastToken.loc.end.line;
         ast.loc.end.column = lastToken.loc.end.column;
 
-        if (getEslintVersion() >= 8) {
+        if (ESLINT_VERSION >= 8) {
           ast.end = lastToken.end;
         }
       }
@@ -145,7 +145,7 @@ function convertProgramNode(ast) {
     ast.loc.start.line = ast.body[0].loc.start.line;
     ast.range[0] = ast.body[0].start;
 
-    if (getEslintVersion() >= 8) {
+    if (ESLINT_VERSION >= 8) {
       ast.start = ast.body[0].start;
     }
   }

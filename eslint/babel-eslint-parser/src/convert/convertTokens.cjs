@@ -1,4 +1,4 @@
-const getEslintVersion = require("../utils/get-eslint-version.cjs");
+const ESLINT_VERSION = require("../utils/eslint-version.cjs");
 
 function convertTemplateType(tokens, tl) {
   let curlyBrace = null;
@@ -206,7 +206,7 @@ module.exports = function convertTokens(tokens, code, tl) {
     if (!process.env.BABEL_8_BREAKING) {
       // Babel 8 already produces a single token
 
-      if (getEslintVersion() >= 8 && token.type.label === tl.hash) {
+      if (ESLINT_VERSION >= 8 && token.type.label === tl.hash) {
         i++;
         token = withoutComments[i];
 
