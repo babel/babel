@@ -412,21 +412,21 @@ function buildExportInitializationStatements(
   constantReexports: boolean = false,
   noIncompleteNsImportDetection = false,
 ) {
-  const initStatements = new Map<string, t.Statement | null>();
+  const initStatements: Array<[string, t.Statement | null]> = [];
 
   for (const [localName, data] of metadata.local) {
     if (data.kind === "import") {
       // No-open since these are explicitly set with the "reexports" block.
     } else if (data.kind === "hoisted") {
-      initStatements.set(
+      initStatements.push([
         // data.names is always of length 1 because a hoisted export
         // name must be id of a function declaration
         data.names[0],
         buildInitStatement(metadata, data.names, identifier(localName)),
-      );
+      ]);
     } else if (!noIncompleteNsImportDetection) {
       for (const exportName of data.names) {
-        initStatements.set(exportName, null);
+        initStatements.push([exportName, null]);
       }
     }
   }
@@ -436,12 +436,12 @@ function buildExportInitializationStatements(
       const reexportsStatements = buildReexportsFromMeta(metadata, data, false);
       const reexports = [...data.reexports.keys()];
       for (let i = 0; i < reexportsStatements.length; i++) {
-        initStatements.set(reexports[i], reexportsStatements[i]);
+        initStatements.push([reexports[i], reexportsStatements[i]]);
       }
     }
     if (!noIncompleteNsImportDetection) {
       for (const exportName of data.reexportNamespace) {
-        initStatements.set(exportName, null);
+        initStatements.push([exportName, null]);
       }
     }
   }
@@ -449,12 +449,11 @@ function buildExportInitializationStatements(
   // https://tc39.es/ecma262/#sec-module-namespace-exotic-objects
   // The [Exports] list is ordered as if an Array of those String values
   // had been sorted using %Array.prototype.sort% using undefined as comparefn
-  const sortedExportNames = [...initStatements.keys()].sort();
+  initStatements.sort((a, b) => (a[0] > b[0] ? 1 : -1));
 
   const results = [];
   if (noIncompleteNsImportDetection) {
-    for (const exportName of sortedExportNames) {
-      const initStatement = initStatements.get(exportName);
+    for (const [, initStatement] of initStatements) {
       results.push(initStatement);
     }
   } else {
@@ -463,12 +462,11 @@ function buildExportInitializationStatements(
     const chunkSize = 100;
     for (
       let i = 0, uninitializedExportNames = [];
-      i < sortedExportNames.length;
+      i < initStatements.length;
       i += chunkSize
     ) {
-      for (let j = 0; j < chunkSize && i + j < sortedExportNames.length; j++) {
-        const exportName = sortedExportNames[i + j];
-        const initStatement = initStatements.get(sortedExportNames[i + j]);
+      for (let j = 0; j < chunkSize && i + j < initStatements.length; j++) {
+        const [exportName, initStatement] = initStatements[i + j];
         if (initStatement !== null) {
           if (uninitializedExportNames.length > 0) {
             results.push(
