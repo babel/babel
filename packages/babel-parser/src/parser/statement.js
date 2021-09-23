@@ -2,6 +2,7 @@
 
 import * as N from "../types";
 import {
+  tokenIsIdentifier,
   tokenIsLoop,
   tt,
   type TokenType,
@@ -178,7 +179,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   isLet(context: ?string): boolean {
-    if (!this.isContextual("let")) {
+    if (!this.isContextual(tt._let)) {
       return false;
     }
     return this.isLetKeyword(context);
@@ -378,7 +379,7 @@ export default class StatementParser extends ExpressionParser {
     const expr = this.parseExpression();
 
     if (
-      starttype === tt.name &&
+      tokenIsIdentifier(starttype) &&
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {
@@ -572,7 +573,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.push(loopLabel);
 
     let awaitAt = -1;
-    if (this.isAwaitAllowed() && this.eatContextual("await")) {
+    if (this.isAwaitAllowed() && this.eatContextual(tt._await)) {
       awaitAt = this.state.lastTokStart;
     }
     this.scope.enter(SCOPE_OTHER);
@@ -585,7 +586,7 @@ export default class StatementParser extends ExpressionParser {
       return this.parseFor(node, null);
     }
 
-    const startsWithLet = this.isContextual("let");
+    const startsWithLet = this.isContextual(tt._let);
     const isLet = startsWithLet && this.isLetKeyword();
     if (this.match(tt._var) || this.match(tt._const) || isLet) {
       const init = this.startNode();
@@ -595,7 +596,7 @@ export default class StatementParser extends ExpressionParser {
       this.finishNode(init, "VariableDeclaration");
 
       if (
-        (this.match(tt._in) || this.isContextual("of")) &&
+        (this.match(tt._in) || this.isContextual(tt._of)) &&
         init.declarations.length === 1
       ) {
         return this.parseForIn(node, init, awaitAt);
@@ -608,12 +609,11 @@ export default class StatementParser extends ExpressionParser {
 
     // Check whether the first token is possibly a contextual keyword, so that
     // we can forbid `for (async of` if this turns out to be a for-of loop.
-    const startsWithUnescapedName =
-      this.match(tt.name) && !this.state.containsEsc;
+    const startsWithAsync = this.isContextual(tt._async);
 
     const refExpressionErrors = new ExpressionErrors();
     const init = this.parseExpression(true, refExpressionErrors);
-    const isForOf = this.isContextual("of");
+    const isForOf = this.isContextual(tt._of);
     if (isForOf) {
       // Check for leading tokens that are forbidden in for-of loops:
       if (startsWithLet) {
@@ -621,9 +621,8 @@ export default class StatementParser extends ExpressionParser {
       } else if (
         // `for await (async of []);` is allowed.
         awaitAt === -1 &&
-        startsWithUnescapedName &&
-        init.type === "Identifier" &&
-        init.name === "async"
+        startsWithAsync &&
+        init.type === "Identifier"
       ) {
         // This catches the case where the `async` in `for (async of` was
         // parsed as an identifier. If it was parsed as the start of an async
@@ -1119,7 +1118,7 @@ export default class StatementParser extends ExpressionParser {
       } else {
         if (
           kind === "const" &&
-          !(this.match(tt._in) || this.isContextual("of"))
+          !(this.match(tt._in) || this.isContextual(tt._of))
         ) {
           // `const` with no initializer is allowed in TypeScript.
           // It could be a declaration like `const x: number;`.
@@ -1132,7 +1131,7 @@ export default class StatementParser extends ExpressionParser {
           }
         } else if (
           decl.id.type !== "Identifier" &&
-          !(isFor && (this.match(tt._in) || this.isContextual("of")))
+          !(isFor && (this.match(tt._in) || this.isContextual(tt._of)))
         ) {
           this.raise(
             this.state.lastTokEnd,
@@ -1219,7 +1218,9 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseFunctionId(requireId?: boolean): ?N.Identifier {
-    return requireId || this.match(tt.name) ? this.parseIdentifier() : null;
+    return requireId || tokenIsIdentifier(this.state.type)
+      ? this.parseIdentifier()
+      : null;
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
@@ -1405,7 +1406,7 @@ export default class StatementParser extends ExpressionParser {
     member: N.ClassMember,
     state: N.ParseClassMemberState,
   ): void {
-    const isStatic = this.isContextual("static");
+    const isStatic = this.isContextual(tt._static);
 
     if (isStatic) {
       if (this.parseClassMemberFromModifier(classBody, member)) {
@@ -1465,7 +1466,8 @@ export default class StatementParser extends ExpressionParser {
       return;
     }
 
-    const isContextual = this.match(tt.name) && !this.state.containsEsc;
+    const isContextual =
+      tokenIsIdentifier(this.state.type) && !this.state.containsEsc;
     const isPrivate = this.match(tt.privateName);
     const key = this.parseClassElementName(member);
     const maybeQuestionTokenStart = this.state.start;
@@ -1758,7 +1760,7 @@ export default class StatementParser extends ExpressionParser {
     optionalId: ?boolean,
     bindingType: BindingTypes = BIND_CLASS,
   ): void {
-    if (this.match(tt.name)) {
+    if (tokenIsIdentifier(this.state.type)) {
       node.id = this.parseIdentifier();
       if (isStatement) {
         this.checkLVal(node.id, "class name", bindingType);
@@ -1848,7 +1850,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   maybeParseExportNamespaceSpecifier(node: N.Node): boolean {
-    if (this.isContextual("as")) {
+    if (this.isContextual(tt._as)) {
       if (!node.specifiers) node.specifiers = [];
 
       const specifier = this.startNodeAt(
@@ -1891,7 +1893,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   isAsyncFunction(): boolean {
-    if (!this.isContextual("async")) return false;
+    if (!this.isContextual(tt._async)) return false;
     const next = this.nextTokenStart();
     return (
       !lineBreak.test(this.input.slice(this.state.pos, next)) &&
@@ -1941,23 +1943,23 @@ export default class StatementParser extends ExpressionParser {
   }
 
   isExportDefaultSpecifier(): boolean {
-    if (this.match(tt.name)) {
-      const value = this.state.value;
-      if ((value === "async" && !this.state.containsEsc) || value === "let") {
+    const { type } = this.state;
+    if (tokenIsIdentifier(type)) {
+      if ((type === tt._async && !this.state.containsEsc) || type === tt._let) {
         return false;
       }
       if (
-        (value === "type" || value === "interface") &&
+        (type === tt._type || type === tt._interface) &&
         !this.state.containsEsc
       ) {
-        const l = this.lookahead();
+        const { type: nextType } = this.lookahead();
         // If we see any variable name other than `from` after `type` keyword,
         // we consider it as flow/typescript type exports
         // note that this approach may fail on some pedantic cases
         // export type from = number
         if (
-          (l.type === tt.name && l.value !== "from") ||
-          l.type === tt.braceL
+          (tokenIsIdentifier(nextType) && nextType !== tt._from) ||
+          nextType === tt.braceL
         ) {
           this.expectOnePlugin(["flow", "typescript"]);
           return false;
@@ -1971,7 +1973,7 @@ export default class StatementParser extends ExpressionParser {
     const hasFrom = this.isUnparsedContextual(next, "from");
     if (
       this.input.charCodeAt(next) === charCodes.comma ||
-      (this.match(tt.name) && hasFrom)
+      (tokenIsIdentifier(this.state.type) && hasFrom)
     ) {
       return true;
     }
@@ -1989,7 +1991,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseExportFrom(node: N.ExportNamedDeclaration, expect?: boolean): void {
-    if (this.eatContextual("from")) {
+    if (this.eatContextual(tt._from)) {
       node.source = this.parseImportSource();
       this.checkExport(node);
       const assertions = this.maybeParseImportAssertions();
@@ -2169,7 +2171,7 @@ export default class StatementParser extends ExpressionParser {
       const isString = this.match(tt.string);
       const local = this.parseModuleExportName();
       node.local = local;
-      if (this.eatContextual("as")) {
+      if (this.eatContextual(tt._as)) {
         node.exported = this.parseModuleExportName();
       } else if (isString) {
         node.exported = cloneStringLiteral(local);
@@ -2222,7 +2224,7 @@ export default class StatementParser extends ExpressionParser {
       // now we check if we need to parse the next imports
       // but only if they are not importing * (everything)
       if (parseNext && !hasStar) this.parseNamedImportSpecifiers(node);
-      this.expectContextual("from");
+      this.expectContextual(tt._from);
     }
     node.source = this.parseImportSource();
     // https://github.com/tc39/proposal-import-assertions
@@ -2249,7 +2251,7 @@ export default class StatementParser extends ExpressionParser {
 
   // eslint-disable-next-line no-unused-vars
   shouldParseDefaultImport(node: N.ImportDeclaration): boolean {
-    return this.match(tt.name);
+    return tokenIsIdentifier(this.state.type);
   }
 
   parseImportSpecifierLocal(
@@ -2368,7 +2370,7 @@ export default class StatementParser extends ExpressionParser {
 
   maybeParseImportAssertions() {
     // [no LineTerminator here] AssertClause
-    if (this.isContextual("assert") && !this.hasPrecedingLineBreak()) {
+    if (this.isContextual(tt._assert) && !this.hasPrecedingLineBreak()) {
       this.expectPlugin("importAssertions");
       this.next(); // eat `assert`
     } else {
@@ -2401,7 +2403,7 @@ export default class StatementParser extends ExpressionParser {
     if (this.match(tt.star)) {
       const specifier = this.startNode();
       this.next();
-      this.expectContextual("as");
+      this.expectContextual(tt._as);
 
       this.parseImportSpecifierLocal(
         node,
@@ -2439,7 +2441,7 @@ export default class StatementParser extends ExpressionParser {
     const specifier = this.startNode();
     const importedIsString = this.match(tt.string);
     specifier.imported = this.parseModuleExportName();
-    if (this.eatContextual("as")) {
+    if (this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();
     } else {
       const { imported } = specifier;

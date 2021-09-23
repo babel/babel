@@ -78,6 +78,7 @@ export class ExportedTokenType {
   }
 }
 
+// A map from keyword/keyword-like string value to the token type
 export const keywords = new Map<string, TokenType>();
 
 function createKeyword(name: string, options: TokenOptions = {}): TokenType {
@@ -111,19 +112,27 @@ function createToken(name: string, options: TokenOptions = {}): TokenType {
   return tokenTypeCounter;
 }
 
+function createKeywordLike(
+  name: string,
+  options: TokenOptions = {},
+): TokenType {
+  ++tokenTypeCounter;
+  keywords.set(name, tokenTypeCounter);
+  tokenLabels.push(name);
+  tokenBinops.push(options.binop ?? -1);
+  tokenBeforeExprs.push(options.beforeExpr ?? false);
+  tokenStartsExprs.push(options.startsExpr ?? false);
+  tokenPrefixes.push(options.prefix ?? false);
+  // In the exported token type, we set the label as "name" for backward compatibility with Babel 7
+  tokenTypes.push(new ExportedTokenType("name", options));
+
+  return tokenTypeCounter;
+}
+
 // For performance the token type helpers depend on the following declarations order.
 // When adding new token types, please also check if the token helpers need update.
 
 export const tt: { [name: string]: TokenType } = {
-  num: createToken("num", { startsExpr }),
-  bigint: createToken("bigint", { startsExpr }),
-  decimal: createToken("decimal", { startsExpr }),
-  regexp: createToken("regexp", { startsExpr }),
-  string: createToken("string", { startsExpr }),
-  name: createToken("name", { startsExpr }),
-  privateName: createToken("#name", { startsExpr }),
-  eof: createToken("eof"),
-
   // Punctuation token types.
   bracketL: createToken("[", { beforeExpr, startsExpr }),
   bracketHashL: createToken("#[", { beforeExpr, startsExpr }),
@@ -207,6 +216,7 @@ export const tt: { [name: string]: TokenType } = {
   // Keywords
   // Don't forget to update packages/babel-helper-validator-identifier/src/keyword.js
   // when new keywords are added
+  // start: isLiteralPropertyName
   // start: isKeyword
   _in: createKeyword("in", { beforeExpr, binop: 7 }),
   _instanceof: createKeyword("instanceof", { beforeExpr, binop: 7 }),
@@ -248,6 +258,63 @@ export const tt: { [name: string]: TokenType } = {
   // end: isLoop
   // end: isKeyword
 
+  // Primary literals
+  // start: isIdentifier
+  _as: createKeywordLike("as", { startsExpr }),
+  _assert: createKeywordLike("assert", { startsExpr }),
+  _async: createKeywordLike("async", { startsExpr }),
+  _await: createKeywordLike("await", { startsExpr }),
+  _from: createKeywordLike("from", { startsExpr }),
+  _get: createKeywordLike("get", { startsExpr }),
+  _let: createKeywordLike("let", { startsExpr }),
+  _meta: createKeywordLike("meta", { startsExpr }),
+  _of: createKeywordLike("of", { startsExpr }),
+  _sent: createKeywordLike("sent", { startsExpr }),
+  _set: createKeywordLike("set", { startsExpr }),
+  _static: createKeywordLike("static", { startsExpr }),
+  _yield: createKeywordLike("yield", { startsExpr }),
+
+  // Flow and TypeScript Keywordlike
+  _asserts: createKeywordLike("asserts", { startsExpr }),
+  _checks: createKeywordLike("checks", { startsExpr }),
+  _exports: createKeywordLike("exports", { startsExpr }),
+  _global: createKeywordLike("global", { startsExpr }),
+  _implements: createKeywordLike("implements", { startsExpr }),
+  _intrinsic: createKeywordLike("intrinsic", { startsExpr }),
+  _infer: createKeywordLike("infer", { startsExpr }),
+  _is: createKeywordLike("is", { startsExpr }),
+  _mixins: createKeywordLike("mixins", { startsExpr }),
+  _proto: createKeywordLike("proto", { startsExpr }),
+  _require: createKeywordLike("require", { startsExpr }),
+  // start: isTSTypeOperator
+  _keyof: createKeywordLike("keyof", { startsExpr }),
+  _readonly: createKeywordLike("readonly", { startsExpr }),
+  _unique: createKeywordLike("unique", { startsExpr }),
+  // end: isTSTypeOperator
+  // start: isTSDeclarationStart
+  _abstract: createKeywordLike("abstract", { startsExpr }),
+  _declare: createKeywordLike("declare", { startsExpr }),
+  _enum: createKeywordLike("enum", { startsExpr }),
+  _module: createKeywordLike("module", { startsExpr }),
+  _namespace: createKeywordLike("namespace", { startsExpr }),
+  // start: isFlowInterfaceOrTypeOrOpaque
+  _interface: createKeywordLike("interface", { startsExpr }),
+  _type: createKeywordLike("type", { startsExpr }),
+  // end: isTSDeclarationStart
+  _opaque: createKeywordLike("opaque", { startsExpr }),
+  // end: isFlowInterfaceOrTypeOrOpaque
+  name: createToken("name", { startsExpr }),
+  // end: isIdentifier
+
+  string: createToken("string", { startsExpr }),
+  num: createToken("num", { startsExpr }),
+  bigint: createToken("bigint", { startsExpr }),
+  decimal: createToken("decimal", { startsExpr }),
+  // end: isLiteralPropertyName
+  regexp: createToken("regexp", { startsExpr }),
+  privateName: createToken("#name", { startsExpr }),
+  eof: createToken("eof"),
+
   // jsx plugin
   jsxName: createToken("jsxName"),
   jsxText: createToken("jsxText", { beforeExpr: true }),
@@ -257,6 +324,18 @@ export const tt: { [name: string]: TokenType } = {
   // placeholder plugin
   placeholder: createToken("%%", { startsExpr: true }),
 };
+
+export function tokenIsIdentifier(token: TokenType): boolean {
+  return token >= tt._as && token <= tt.name;
+}
+
+export function tokenIsKeywordOrIdentifier(token: TokenType): boolean {
+  return token >= tt._in && token <= tt.name;
+}
+
+export function tokenIsLiteralPropertyName(token: TokenType): boolean {
+  return token >= tt._in && token <= tt.decimal;
+}
 
 export function tokenComesBeforeExpression(token: TokenType): boolean {
   return tokenBeforeExprs[token];
@@ -268,6 +347,10 @@ export function tokenCanStartExpression(token: TokenType): boolean {
 
 export function tokenIsAssignment(token: TokenType): boolean {
   return token >= tt.eq && token <= tt.moduloAssign;
+}
+
+export function tokenIsFlowInterfaceOrTypeOrOpaque(token: TokenType): boolean {
+  return token >= tt._interface && token <= tt._opaque;
 }
 
 export function tokenIsLoop(token: TokenType): boolean {
@@ -288,6 +371,14 @@ export function tokenIsPostfix(token: TokenType): boolean {
 
 export function tokenIsPrefix(token: TokenType): boolean {
   return tokenPrefixes[token];
+}
+
+export function tokenIsTSTypeOperator(token: TokenType): boolean {
+  return token >= tt._keyof && token <= tt._unique;
+}
+
+export function tokenIsTSDeclarationStart(token: TokenType): boolean {
+  return token >= tt._abstract && token <= tt._type;
 }
 
 export function tokenLabelName(token: TokenType): string {

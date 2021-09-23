@@ -7,16 +7,20 @@
 
 import type Parser from "../../parser";
 import {
+  tokenIsIdentifier,
   tokenIsKeyword,
+  tokenIsKeywordOrIdentifier,
+  tokenIsLiteralPropertyName,
   tokenLabelName,
   tt,
   type TokenType,
+  tokenIsFlowInterfaceOrTypeOrOpaque,
 } from "../../tokenizer/types";
 import * as N from "../../types";
 import type { Position } from "../../util/location";
 import { types as tc } from "../../tokenizer/context";
 import * as charCodes from "charcodes";
-import { isIteratorStart, isKeyword } from "../../util/identifier";
+import { isIteratorStart } from "../../util/identifier";
 import FlowScopeHandler from "./scope";
 import {
   type BindingTypes,
@@ -160,11 +164,8 @@ function hasTypeImportKind(node: N.Node): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
 
-function isMaybeDefaultImport(state: { type: TokenType, value: any }): boolean {
-  return (
-    (state.type === tt.name || tokenIsKeyword(state.type)) &&
-    state.value !== "from"
-  );
+function isMaybeDefaultImport(type: TokenType): boolean {
+  return tokenIsKeywordOrIdentifier(type) && type !== tt._from;
 }
 
 const exportSuggestions = {
@@ -266,7 +267,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       const moduloPos = this.state.start;
       this.next(); // eat `%`
-      this.expectContextual("checks");
+      this.expectContextual(tt._checks);
       // Force '%' and 'checks' to be adjacent
       if (this.state.lastTokStart > moduloPos + 1) {
         this.raise(moduloPos, FlowErrors.UnexpectedSpaceBetweenModuloChecks);
@@ -360,7 +361,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.flowParseDeclareFunction(node);
       } else if (this.match(tt._var)) {
         return this.flowParseDeclareVariable(node);
-      } else if (this.eatContextual("module")) {
+      } else if (this.eatContextual(tt._module)) {
         if (this.match(tt.dot)) {
           return this.flowParseDeclareModuleExports(node);
         } else {
@@ -369,11 +370,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
           return this.flowParseDeclareModule(node);
         }
-      } else if (this.isContextual("type")) {
+      } else if (this.isContextual(tt._type)) {
         return this.flowParseDeclareTypeAlias(node);
-      } else if (this.isContextual("opaque")) {
+      } else if (this.isContextual(tt._opaque)) {
         return this.flowParseDeclareOpaqueType(node);
-      } else if (this.isContextual("interface")) {
+      } else if (this.isContextual(tt._interface)) {
         return this.flowParseDeclareInterface(node);
       } else if (this.match(tt._export)) {
         return this.flowParseDeclareExportDeclaration(node, insideModule);
@@ -411,7 +412,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (this.match(tt._import)) {
           this.next();
-          if (!this.isContextual("type") && !this.match(tt._typeof)) {
+          if (!this.isContextual(tt._type) && !this.match(tt._typeof)) {
             this.raise(
               this.state.lastTokStart,
               FlowErrors.InvalidNonTypeImportInDeclareModule,
@@ -420,7 +421,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.parseImport(bodyNode);
         } else {
           this.expectContextual(
-            "declare",
+            tt._declare,
             FlowErrors.UnsupportedStatementInDeclareModule,
           );
 
@@ -492,7 +493,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (
           this.match(tt._const) ||
           this.isLet() ||
-          ((this.isContextual("type") || this.isContextual("interface")) &&
+          ((this.isContextual(tt._type) || this.isContextual(tt._interface)) &&
             !insideModule)
         ) {
           const label = this.state.value;
@@ -510,7 +511,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.match(tt._var) || // declare export var ...
           this.match(tt._function) || // declare export function ...
           this.match(tt._class) || // declare export class ...
-          this.isContextual("opaque") // declare export opaque ..
+          this.isContextual(tt._opaque) // declare export opaque ..
         ) {
           node.declaration = this.flowParseDeclare(this.startNode());
           node.default = false;
@@ -519,9 +520,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else if (
           this.match(tt.star) || // declare export * from ''
           this.match(tt.braceL) || // declare export {} ...
-          this.isContextual("interface") || // declare export interface ...
-          this.isContextual("type") || // declare export type ...
-          this.isContextual("opaque") // declare export opaque type ...
+          this.isContextual(tt._interface) || // declare export interface ...
+          this.isContextual(tt._type) || // declare export type ...
+          this.isContextual(tt._opaque) // declare export opaque type ...
         ) {
           node = this.parseExport(node);
           if (node.type === "ExportNamedDeclaration") {
@@ -547,7 +548,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.FlowDeclareModuleExports,
     ): N.FlowDeclareModuleExports {
       this.next();
-      this.expectContextual("exports");
+      this.expectContextual(tt._exports);
       node.typeAnnotation = this.flowParseTypeAnnotation();
       this.semicolon();
 
@@ -615,14 +616,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (!isClass && this.eat(tt.comma));
       }
 
-      if (this.isContextual("mixins")) {
+      if (this.isContextual(tt._mixins)) {
         this.next();
         do {
           node.mixins.push(this.flowParseInterfaceExtends());
         } while (this.eat(tt.comma));
       }
 
-      if (this.isContextual("implements")) {
+      if (this.isContextual(tt._implements)) {
         this.next();
         do {
           node.implements.push(this.flowParseInterfaceExtends());
@@ -707,7 +708,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.FlowOpaqueType,
       declare: boolean,
     ): N.FlowOpaqueType {
-      this.expectContextual("type");
+      this.expectContextual(tt._type);
       node.id = this.flowParseRestrictedIdentifier(
         /* liberal */ true,
         /* declaration */ true,
@@ -844,7 +845,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseInterfaceType(): N.FlowInterfaceType {
       const node = this.startNode();
-      this.expectContextual("interface");
+      this.expectContextual(tt._interface);
 
       node.extends = [];
       if (this.eat(tt._extends)) {
@@ -1008,7 +1009,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         let inexactStart: ?number = null;
         const node = this.startNode();
 
-        if (allowProto && this.isContextual("proto")) {
+        if (allowProto && this.isContextual(tt._proto)) {
           const lookahead = this.lookahead();
 
           if (lookahead.type !== tt.colon && lookahead.type !== tt.question) {
@@ -1018,7 +1019,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         }
 
-        if (allowStatic && this.isContextual("static")) {
+        if (allowStatic && this.isContextual(tt._static)) {
           const lookahead = this.lookahead();
 
           // static is a valid identifier name
@@ -1059,13 +1060,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           let kind = "init";
 
-          if (this.isContextual("get") || this.isContextual("set")) {
+          if (this.isContextual(tt._get) || this.isContextual(tt._set)) {
             const lookahead = this.lookahead();
-            if (
-              lookahead.type === tt.name ||
-              lookahead.type === tt.string ||
-              lookahead.type === tt.num
-            ) {
+            if (tokenIsLiteralPropertyName(lookahead.type)) {
               kind = this.state.value;
               this.next();
             }
@@ -1432,18 +1429,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const oldNoAnonFunctionType = this.state.noAnonFunctionType;
 
       switch (this.state.type) {
-        case tt.name:
-          if (this.isContextual("interface")) {
-            return this.flowParseInterfaceType();
-          }
-
-          return this.flowIdentToTypeAnnotation(
-            startPos,
-            startLoc,
-            node,
-            this.parseIdentifier(),
-          );
-
         case tt.braceL:
           return this.flowParseObjectType({
             allowStatic: false,
@@ -1491,7 +1476,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
           // Check to see if this is actually a grouped type
           if (!this.match(tt.parenR) && !this.match(tt.ellipsis)) {
-            if (this.match(tt.name) || this.match(tt._this)) {
+            if (tokenIsIdentifier(this.state.type) || this.match(tt._this)) {
               const token = this.lookahead().type;
               isGroupedType = token !== tt.question && token !== tt.colon;
             } else {
@@ -1619,6 +1604,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             const label = tokenLabelName(this.state.type);
             this.next();
             return super.createIdentifier(node, label);
+          } else if (tokenIsIdentifier(this.state.type)) {
+            if (this.isContextual(tt._interface)) {
+              return this.flowParseInterfaceType();
+            }
+
+            return this.flowIdentToTypeAnnotation(
+              startPos,
+              startLoc,
+              node,
+              this.parseIdentifier(),
+            );
           }
       }
 
@@ -1823,18 +1819,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // interfaces and enums
     parseStatement(context: ?string, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
-      if (
-        this.state.strict &&
-        this.match(tt.name) &&
-        this.state.value === "interface"
-      ) {
+      if (this.state.strict && this.isContextual(tt._interface)) {
         const lookahead = this.lookahead();
-        if (lookahead.type === tt.name || isKeyword(lookahead.value)) {
+        if (tokenIsKeywordOrIdentifier(lookahead.type)) {
           const node = this.startNode();
           this.next();
           return this.flowParseInterface(node);
         }
-      } else if (this.shouldParseEnums() && this.isContextual("enum")) {
+      } else if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
@@ -1856,14 +1848,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (expr.name === "declare") {
           if (
             this.match(tt._class) ||
-            this.match(tt.name) ||
+            tokenIsIdentifier(this.state.type) ||
             this.match(tt._function) ||
             this.match(tt._var) ||
             this.match(tt._export)
           ) {
             return this.flowParseDeclare(node);
           }
-        } else if (this.match(tt.name)) {
+        } else if (tokenIsIdentifier(this.state.type)) {
           if (expr.name === "interface") {
             return this.flowParseInterface(node);
           } else if (expr.name === "type") {
@@ -1879,31 +1871,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // export type
     shouldParseExportDeclaration(): boolean {
-      return (
-        this.isContextual("type") ||
-        this.isContextual("interface") ||
-        this.isContextual("opaque") ||
-        (this.shouldParseEnums() && this.isContextual("enum")) ||
-        super.shouldParseExportDeclaration()
-      );
+      const { type } = this.state;
+      if (
+        tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
+        (this.shouldParseEnums() && type === tt._enum)
+      ) {
+        return !this.state.containsEsc;
+      }
+      return super.shouldParseExportDeclaration();
     }
 
     isExportDefaultSpecifier(): boolean {
+      const { type } = this.state;
       if (
-        this.match(tt.name) &&
-        (this.state.value === "type" ||
-          this.state.value === "interface" ||
-          this.state.value === "opaque" ||
-          (this.shouldParseEnums() && this.state.value === "enum"))
+        tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
+        (this.shouldParseEnums() && type === tt._enum)
       ) {
-        return false;
+        return this.state.containsEsc;
       }
 
       return super.isExportDefaultSpecifier();
     }
 
     parseExportDefaultExpression(): N.Expression | N.Declaration {
-      if (this.shouldParseEnums() && this.isContextual("enum")) {
+      if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
@@ -2124,7 +2115,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
-      if (this.isContextual("type")) {
+      if (this.isContextual(tt._type)) {
         node.exportKind = "type";
 
         const declarationNode = this.startNode();
@@ -2139,19 +2130,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // export type Foo = Bar;
           return this.flowParseTypeAlias(declarationNode);
         }
-      } else if (this.isContextual("opaque")) {
+      } else if (this.isContextual(tt._opaque)) {
         node.exportKind = "type";
 
         const declarationNode = this.startNode();
         this.next();
         // export opaque type Foo = Bar;
         return this.flowParseOpaqueType(declarationNode, false);
-      } else if (this.isContextual("interface")) {
+      } else if (this.isContextual(tt._interface)) {
         node.exportKind = "type";
         const declarationNode = this.startNode();
         this.next();
         return this.flowParseInterface(declarationNode);
-      } else if (this.shouldParseEnums() && this.isContextual("enum")) {
+      } else if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
         node.exportKind = "value";
         const declarationNode = this.startNode();
         this.next();
@@ -2164,7 +2155,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     eatExportStar(node: N.Node): boolean {
       if (super.eatExportStar(...arguments)) return true;
 
-      if (this.isContextual("type") && this.lookahead().type === tt.star) {
+      if (this.isContextual(tt._type) && this.lookahead().type === tt.star) {
         node.exportKind = "type";
         this.next();
         this.next();
@@ -2196,7 +2187,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: N.ParseClassMemberState,
     ): void {
       const pos = this.state.start;
-      if (this.isContextual("declare")) {
+      if (this.isContextual(tt._declare)) {
         if (this.parseClassMemberFromModifier(classBody, member)) {
           // 'declare' is a class element name
           return;
@@ -2456,7 +2447,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.superClass && this.isRelational("<")) {
         node.superTypeParameters = this.flowParseTypeParameterInstantiation();
       }
-      if (this.isContextual("implements")) {
+      if (this.isContextual(tt._implements)) {
         this.next();
         const implemented: N.FlowClassImplements[] = (node.implements = []);
         do {
@@ -2585,7 +2576,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return super.shouldParseDefaultImport(node);
       }
 
-      return isMaybeDefaultImport(this.state);
+      return isMaybeDefaultImport(this.state.type);
     }
 
     parseImportSpecifierLocal(
@@ -2612,21 +2603,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let kind = null;
       if (this.match(tt._typeof)) {
         kind = "typeof";
-      } else if (this.isContextual("type")) {
+      } else if (this.isContextual(tt._type)) {
         kind = "type";
       }
       if (kind) {
         const lh = this.lookahead();
+        const { type } = lh;
 
         // import type * is not allowed
-        if (kind === "type" && lh.type === tt.star) {
+        if (kind === "type" && type === tt.star) {
           this.unexpected(lh.start);
         }
 
         if (
-          isMaybeDefaultImport(lh) ||
-          lh.type === tt.braceL ||
-          lh.type === tt.star
+          isMaybeDefaultImport(type) ||
+          type === tt.braceL ||
+          type === tt.star
         ) {
           this.next();
           node.importKind = kind;
@@ -2652,12 +2644,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       let isBinding = false;
-      if (this.isContextual("as") && !this.isLookaheadContextual("as")) {
+      if (this.isContextual(tt._as) && !this.isLookaheadContextual("as")) {
         const as_ident = this.parseIdentifier(true);
         if (
           specifierTypeKind !== null &&
-          !this.match(tt.name) &&
-          !tokenIsKeyword(this.state.type)
+          !tokenIsKeywordOrIdentifier(this.state.type)
         ) {
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
@@ -2672,7 +2663,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         if (
           specifierTypeKind !== null &&
-          (this.match(tt.name) || tokenIsKeyword(this.state.type))
+          tokenIsKeywordOrIdentifier(this.state.type)
         ) {
           // `import {type foo`
           specifier.imported = this.parseIdentifier(true);
@@ -2691,7 +2682,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.importKind = null;
         }
 
-        if (this.eatContextual("as")) {
+        if (this.eatContextual(tt._as)) {
           specifier.local = this.parseIdentifier();
         } else {
           isBinding = true;
@@ -3546,8 +3537,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }: {
       enumName: string,
     }): EnumExplicitType {
-      if (this.eatContextual("of")) {
-        if (!this.match(tt.name)) {
+      if (this.eatContextual(tt._of)) {
+        if (!tokenIsIdentifier(this.state.type)) {
           throw this.flowEnumErrorInvalidExplicitType(this.state.start, {
             enumName,
             suppliedType: null,

@@ -180,8 +180,13 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  // TODO
-
+  /**
+   * Whether current token matches given type
+   *
+   * @param {TokenType} type
+   * @returns {boolean}
+   * @memberof Tokenizer
+   */
   match(type: TokenType): boolean {
     return this.state.type === type;
   }
@@ -1565,8 +1570,14 @@ export default class Tokenizer extends ParserErrors {
 
   readWord(firstCode: number | void): void {
     const word = this.readWord1(firstCode);
-    const type = keywordTypes.get(word) || tt.name;
-    this.finishToken(type, word);
+    const type = keywordTypes.get(word);
+    if (type !== undefined) {
+      // We don't use word as state.value here because word is a dynamic string
+      // while token label is a shared constant string
+      this.finishToken(type, tokenLabelName(type));
+    } else {
+      this.finishToken(tt.name, word);
+    }
   }
 
   checkKeywordEscapes(): void {

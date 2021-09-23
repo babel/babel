@@ -2,7 +2,7 @@
 
 import {
   isTokenType,
-  tokenIsKeyword,
+  tokenIsLiteralPropertyName,
   tokenLabelName,
   tt,
   type TokenType,
@@ -68,12 +68,8 @@ export default class UtilParser extends Tokenizer {
 
   // Tests whether parsed token is a contextual keyword.
 
-  isContextual(name: string): boolean {
-    return (
-      this.match(tt.name) &&
-      this.state.value === name &&
-      !this.state.containsEsc
-    );
+  isContextual(token: TokenType): boolean {
+    return this.state.type === token && !this.state.containsEsc;
   }
 
   isUnparsedContextual(nameStart: number, name: string): boolean {
@@ -98,14 +94,18 @@ export default class UtilParser extends Tokenizer {
 
   // Consumes contextual keyword if possible.
 
-  eatContextual(name: string): boolean {
-    return this.isContextual(name) && this.eat(tt.name);
+  eatContextual(token: TokenType): boolean {
+    if (this.isContextual(token)) {
+      this.next();
+      return true;
+    }
+    return false;
   }
 
   // Asserts that following token is given contextual keyword.
 
-  expectContextual(name: string, template?: ErrorTemplate): void {
-    if (!this.eatContextual(name)) this.unexpected(null, template);
+  expectContextual(token: TokenType, template?: ErrorTemplate): void {
+    if (!this.eatContextual(token)) this.unexpected(null, template);
   }
 
   // Test whether a semicolon can be inserted at the current position.
@@ -306,14 +306,7 @@ export default class UtilParser extends Tokenizer {
    *   BigIntLiteral
    */
   isLiteralPropertyName(): boolean {
-    return (
-      this.match(tt.name) ||
-      tokenIsKeyword(this.state.type) ||
-      this.match(tt.string) ||
-      this.match(tt.num) ||
-      this.match(tt.bigint) ||
-      this.match(tt.decimal)
-    );
+    return tokenIsLiteralPropertyName(this.state.type);
   }
 
   /*
