@@ -41,6 +41,10 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 yarn dedupe '@babel/*'
 
+# Temporary update code points in test. The visual result is the same.
+sed -i 's/>)<yellow>;<\/><\/>/>)<yellow>;<\/>/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
+sed -i 's/<\/> <gray>   |<\/>       <red><bold>^/ <gray>   | <gray>   |<\/>       <red><bold>^/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
+
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # This option is removed in Babel 8
   sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
@@ -48,10 +52,6 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Jest depends on @types/babel__traverse for Babel 7, and they contain the removed Noop node
   sed -i 's/t.Noop/any/g' node_modules/@types/babel__traverse/index.d.ts
   sed -i 's/t.Noop/any/g' node_modules/@types/babel__traverse/ts4.1/index.d.ts
-
-  # Temporary update code points in test. The visual result is the same.
-  sed -i 's/>)<yellow>;<\/><\/>/>)<yellow>;<\/>/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
-  sed -i 's/<\/> <gray>   |<\/>       <red><bold>^/ <gray>   | <gray>   |<\/>       <red><bold>^/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
 
   node -e "
     var pkg = require('./package.json');
