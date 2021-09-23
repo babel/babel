@@ -31,7 +31,7 @@
     "@babel/generator": "workspace:*",
     "@babel/parser": "workspace:*",
     "glob": "^7.1.7",
-    "nanocolors": "^0.1.11"
+    "nanocolors": "^0.1.12"
   },
   "engines": {
     "node": ">=6.9.0"
