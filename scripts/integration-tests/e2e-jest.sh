@@ -43,7 +43,7 @@ yarn dedupe '@babel/*'
 
 # Temporary update code points in test. The visual result is the same.
 sed -i 's/>)<yellow>;<\/><\/>/>)<yellow>;<\/>/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
-sed -i 's/<\/> <gray>   |<\/>       <red><bold>^/ <gray>   | <gray>   |<\/>       <red><bold>^/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
+sed -i 's/<\/> <gray>   |<\/>       <red><bold>^/ <gray>   |<\/>       <red><bold>^/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # This option is removed in Babel 8
