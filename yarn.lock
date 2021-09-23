@@ -174,8 +174,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/highlight": "workspace:^7.14.5"
-    "@types/chalk": ^2.0.0
-    chalk: ^2.0.0
+    nanocolors: ^0.1.10
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -954,9 +953,8 @@ __metadata:
   resolution: "@babel/highlight@workspace:packages/babel-highlight"
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^7.14.5"
-    "@types/chalk": ^2.0.0
-    chalk: ^2.0.0
     js-tokens: "condition:BABEL_8_BREAKING ? ^7.0.0 : ^4.0.0"
+    nanocolors: ^0.1.10
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -3542,7 +3540,7 @@ __metadata:
   dependencies:
     "@babel/runtime": "workspace:*"
     "@babel/runtime-corejs3": "workspace:*"
-    chalk: ^4.1.0
+    nanocolors: ^0.1.10
   languageName: unknown
   linkType: soft
 
@@ -3597,8 +3595,8 @@ __metadata:
     "@babel/generator": "workspace:*"
     "@babel/helper-validator-identifier": "workspace:^7.14.9"
     "@babel/parser": "workspace:*"
-    chalk: ^4.1.0
     glob: ^7.1.7
+    nanocolors: ^0.1.10
     to-fast-properties: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -4084,15 +4082,6 @@ __metadata:
   resolution: "@types/babel__traverse@link:./nope::locator=babel%40workspace%3A."
   languageName: node
   linkType: soft
-
-"@types/chalk@npm:^2.0.0":
-  version: 2.2.0
-  resolution: "@types/chalk@npm:2.2.0"
-  dependencies:
-    chalk: "*"
-  checksum: 846437590d0bf0026d8c2f454e5d91a486becfabde61c0441025e791a0fed75304e143717bc4d025569394dcce5a32f2c53d97253d0c735ac1abae63f1b25c3e
-  languageName: node
-  linkType: hard
 
 "@types/color-name@npm:^1.1.1":
   version: 1.1.1
@@ -5738,7 +5727,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
     babel-plugin-transform-charcodes: ^0.2.0
-    chalk: ^2.4.2
     charcodes: ^0.2.0
     enhanced-resolve: ^5.8.2
     eslint: ^7.27.0
@@ -5759,6 +5747,7 @@ __metadata:
     lint-staged: ^9.2.0
     lodash: ^4.17.21
     mergeiterator: ^1.2.5
+    nanocolors: ^0.1.10
     prettier: 2.3.1
     rollup: ~2.54.0
     rollup-plugin-dts: ^2.0.0
@@ -6317,16 +6306,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:*, chalk@npm:^4.0.0, chalk@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "chalk@npm:4.1.0"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: 5561c7b4c063badee3e16d04bce50bd033e1be1bf4c6948639275683ffa7a1993c44639b43c22b1c505f0f813a24b1889037eb182546b48946f9fe7cdd0e7d13
-  languageName: node
-  linkType: hard
-
 "chalk@npm:^1.0.0, chalk@npm:^1.1.3":
   version: 1.1.3
   resolution: "chalk@npm:1.1.3"
@@ -6358,6 +6337,16 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: 8e3ddf3981c4da405ddbd7d9c8d91944ddf6e33d6837756979f7840a29272a69a5189ecae0ff84006750d6d1e92368d413335eab4db5476db6e6703a1d1e0505
+  languageName: node
+  linkType: hard
+
+"chalk@npm:^4.0.0":
+  version: 4.1.0
+  resolution: "chalk@npm:4.1.0"
+  dependencies:
+    ansi-styles: ^4.1.0
+    supports-color: ^7.1.0
+  checksum: 5561c7b4c063badee3e16d04bce50bd033e1be1bf4c6948639275683ffa7a1993c44639b43c22b1c505f0f813a24b1889037eb182546b48946f9fe7cdd0e7d13
   languageName: node
   linkType: hard
 
@@ -11588,6 +11577,13 @@ fsevents@^1.2.7:
   dependencies:
     node-gyp: latest
   checksum: 6dfd00d9bf71769898dfab21ef9d2ef278b392c586147616a718b995d6a582f5caa7f2ca0f83ce956fb0def698aca813b2b6fd4598125cd16bdc85924c34a37d
+  languageName: node
+  linkType: hard
+
+"nanocolors@npm:^0.1.10":
+  version: 0.1.10
+  resolution: "nanocolors@npm:0.1.10"
+  checksum: fae94d3afe7bf5b78ce909b00a52e7a8751355199805c45b30c7b2b547bedefcee2b0bcac637ee89041d4eafc1857fd6f5f4f924ad3c545af4a173de8f72802c
   languageName: node
   linkType: hard
 

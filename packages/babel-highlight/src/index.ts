@@ -7,9 +7,7 @@ import {
   isStrictReservedWord,
   isKeyword,
 } from "@babel/helper-validator-identifier";
-import Chalk from "chalk";
-
-type ChalkClass = ReturnType<typeof getChalk>;
+import { isColorSupported, createColors, Colors, Color } from "nanocolors";
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -34,19 +32,19 @@ type InternalTokenType =
   | "invalid";
 
 /**
- * Chalk styles for token types.
+ * Nano Colors styles for token types.
  */
-function getDefs(chalk: ChalkClass): Record<InternalTokenType, ChalkClass> {
+function getDefs(colors: Colors): Record<InternalTokenType, Color> {
   return {
-    keyword: chalk.cyan,
-    capitalized: chalk.yellow,
-    jsxIdentifier: chalk.yellow,
-    punctuator: chalk.yellow,
-    number: chalk.magenta,
-    string: chalk.green,
-    regex: chalk.magenta,
-    comment: chalk.grey,
-    invalid: chalk.white.bgRed.bold,
+    keyword: colors.cyan,
+    capitalized: colors.yellow,
+    jsxIdentifier: colors.yellow,
+    punctuator: colors.yellow,
+    number: colors.magenta,
+    string: colors.green,
+    regex: colors.magenta,
+    comment: colors.gray,
+    invalid: s => colors.white(colors.bgRed(colors.bold(s))),
   };
 }
 
@@ -216,7 +214,7 @@ if (process.env.BABEL_8_BREAKING) {
 /**
  * Highlight `text` using the token definitions in `defs`.
  */
-function highlightTokens(defs: Record<string, ChalkClass>, text: string) {
+function highlightTokens(defs: Record<string, Color>, text: string) {
   let highlighted = "";
 
   for (const { type, value } of tokenize(text)) {
@@ -246,16 +244,14 @@ type Options = {
  * Whether the code should be highlighted given the passed options.
  */
 export function shouldHighlight(options: Options): boolean {
-  return !!Chalk.supportsColor || options.forceColor;
+  return isColorSupported || options.forceColor;
 }
 
 /**
- * The Chalk instance that should be used given the passed options.
+ * The Nano Colors instance that should be used given the passed options.
  */
 export function getChalk(options: Options) {
-  return options.forceColor
-    ? new Chalk.constructor({ enabled: true, level: 1 })
-    : Chalk;
+  return createColors(options.forceColor);
 }
 
 /**
@@ -263,8 +259,8 @@ export function getChalk(options: Options) {
  */
 export default function highlight(code: string, options: Options = {}): string {
   if (shouldHighlight(options)) {
-    const chalk = getChalk(options);
-    const defs = getDefs(chalk);
+    const colors = getChalk(options);
+    const defs = getDefs(colors);
     return highlightTokens(defs, code);
   } else {
     return code;

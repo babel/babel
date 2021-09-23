@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import { green, red } from "nanocolors";
 
 export default async function testRunner({ title, testcases }) {
   console.log(title);
@@ -6,9 +6,9 @@ export default async function testRunner({ title, testcases }) {
   for (const [subtitle, testcase] of testcases) {
     try {
       await testcase();
-      console.log(chalk.green(indent + "✓ " + subtitle));
+      console.log(green(indent + "✓ " + subtitle));
     } catch (e) {
-      console.log(chalk.red(indent + "✗ " + subtitle));
+      console.log(red(indent + "✗ " + subtitle));
       console.error(e);
     }
   }

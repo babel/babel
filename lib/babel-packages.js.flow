@@ -180,7 +180,7 @@ declare module "@babel/generator" {
 }
 
 declare module "@babel/highlight" {
-  import typeof { Chalk } from "chalk";
+  import typeof { Colors } from "nanocolors";
   declare type Options = {
     forceColor?: boolean,
   };
@@ -193,7 +193,7 @@ declare module "@babel/highlight" {
   /**
    * The Chalk instance that should be used given the passed options.
    */
-  declare function getChalk(options: Options): Chalk;
+  declare function getChalk(options: Options): Colors;
 
   /**
    * Highlight `code`.

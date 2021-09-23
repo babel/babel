@@ -1,7 +1,7 @@
 const { transformSync } = require("@babel/core");
 const { mkdirSync, statSync, readFileSync, writeFileSync } = require("fs");
 const { dirname } = require("path");
-const chalk = require("chalk");
+const { cyan } = require("nanocolors");
 const fancyLog = require("fancy-log");
 
 function needCompile(src, dest) {
@@ -24,7 +24,7 @@ exports.transform = function (src, dest) {
   if (!needCompile(src, dest)) {
     return;
   }
-  fancyLog(`Compiling '${chalk.cyan(src)}'...`);
+  fancyLog(`Compiling '${cyan(src)}'...`);
   const content = readFileSync(src, { encoding: "utf8" });
   const { code } = transformSync(content, {
     filename: src,

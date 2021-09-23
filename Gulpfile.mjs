@@ -4,7 +4,7 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import plumber from "gulp-plumber";
 import through from "through2";
-import chalk from "chalk";
+import { green, cyan, yellow } from "nanocolors";
 import fancyLog from "fancy-log";
 import filter from "gulp-filter";
 import gulp from "gulp";
@@ -107,7 +107,7 @@ function generateHelpers(generator, dest, filename, message) {
         file.contents = Buffer.from(
           formatCode(await generateCode(filename), dest + file.path)
         );
-        fancyLog(`${chalk.green("✔")} Generated ${message}`);
+        fancyLog(`${green("✔")} Generated ${message}`);
         callback(null, file);
       })
     )
@@ -291,7 +291,7 @@ function buildRollup(packages, targetBrowsers) {
         );
 
         const input = getIndexFromPackage(src);
-        fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+        fancyLog(`Compiling '${cyan(input)}' with rollup ...`);
         const bundle = await rollup({
           input,
           external,
@@ -396,15 +396,15 @@ function buildRollup(packages, targetBrowsers) {
 
         if (!process.env.IS_PUBLISH) {
           fancyLog(
-            chalk.yellow(
-              `Skipped minification of '${chalk.cyan(
+            yellow(
+              `Skipped minification of '${cyan(
                 outputFile
               )}' because not publishing`
             )
           );
           return undefined;
         }
-        fancyLog(`Minifying '${chalk.cyan(outputFile)}'...`);
+        fancyLog(`Minifying '${cyan(outputFile)}'...`);
 
         await bundle.write({
           file: outputFile.replace(/\.js$/, ".min.js"),
@@ -432,7 +432,7 @@ function buildRollupDts(packages) {
     packages.map(async packageName => {
       const input = `${mapToDts(packageName)}/src/index.d.ts`;
       const output = `${packageName}/lib/index.d.ts`;
-      fancyLog(`Bundling '${chalk.cyan(output)}' with rollup ...`);
+      fancyLog(`Bundling '${cyan(output)}' with rollup ...`);
 
       const bundle = await rollup({
         input,

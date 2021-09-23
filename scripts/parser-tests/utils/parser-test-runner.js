@@ -1,8 +1,8 @@
 import fs from "fs/promises";
-import chalk from "chalk";
+import { red, green, gray } from "nanocolors";
 import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 
-const dot = chalk.gray(".");
+const dot = gray(".");
 
 class TestRunner {
   constructor({
@@ -212,11 +212,11 @@ class TestRunner {
 
     console.log(`Testing complete (${summary.count} tests).`);
     console.log("Summary:");
-    console.log(chalk.green(goodnews.join("\n").replace(/^/gm, " ✔ ")));
+    console.log(green(goodnews.join("\n").replace(/^/gm, " ✔ ")));
 
     if (!summary.passed) {
       console.log("");
-      console.log(chalk.red(badnews.join("\n").replace(/^/gm, " ✘ ")));
+      console.log(red(badnews.join("\n").replace(/^/gm, " ✘ ")));
       console.log("");
       console.log("Details:");
       console.log(badnewsDetails.join("\n").replace(/^/gm, "   "));

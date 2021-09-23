@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import { red, bold, gray, yellow, reset } from "nanocolors";
 import stripAnsi from "strip-ansi";
 import codeFrame, { codeFrameColumns } from "..";
 
@@ -262,8 +262,7 @@ describe("@babel/code-frame", function () {
   });
 
   test("opts.forceColor", function () {
-    const marker = chalk.red.bold;
-    const gutter = chalk.grey;
+    const gutter = gray;
 
     const rawLines = ["", "", "", ""].join("\n");
     expect(
@@ -273,10 +272,10 @@ describe("@babel/code-frame", function () {
         forceColor: true,
       }),
     ).toEqual(
-      chalk.reset(
+      reset(
         [
           " " + gutter(" 2 |"),
-          marker(">") + gutter(" 3 |"),
+          red(bold(">")) + gutter(" 3 |"),
           " " + gutter(" 4 |"),
         ].join("\n"),
       ),
@@ -284,8 +283,7 @@ describe("@babel/code-frame", function () {
   });
 
   test("jsx", function () {
-    const gutter = chalk.grey;
-    const yellow = chalk.yellow;
+    const gutter = gray;
 
     const rawLines = ["<div />"].join("\n");
 
@@ -299,7 +297,7 @@ describe("@babel/code-frame", function () {
       ),
     ).toEqual(
       JSON.stringify(
-        chalk.reset(
+        reset(
           " " +
             gutter(" 1 |") +
             " " +

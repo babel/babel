@@ -35,13 +35,16 @@ export interface Options {
 }
 
 /**
- * Chalk styles for code frame token types.
+ * Nano Colors styles for code frame token types.
  */
-function getDefs(chalk) {
+function getDefs(colors) {
+  function redBold(s) {
+    return colors.red(colors.bold(s));
+  }
   return {
-    gutter: chalk.grey,
-    marker: chalk.red.bold,
-    message: chalk.red.bold,
+    gutter: colors.gray,
+    marker: redBold,
+    message: redBold,
   };
 }
 
@@ -133,10 +136,10 @@ export function codeFrameColumns(
 ): string {
   const highlighted =
     (opts.highlightCode || opts.forceColor) && shouldHighlight(opts);
-  const chalk = getChalk(opts);
-  const defs = getDefs(chalk);
-  const maybeHighlight = (chalkFn, string) => {
-    return highlighted ? chalkFn(string) : string;
+  const colors = getChalk(opts);
+  const defs = getDefs(colors);
+  const maybeHighlight = (color, string) => {
+    return highlighted ? color(string) : string;
   };
   const lines = rawLines.split(NEWLINE);
   const { start, end, markerLines } = getMarkerLines(loc, lines, opts);
@@ -194,7 +197,7 @@ export function codeFrameColumns(
   }
 
   if (highlighted) {
-    return chalk.reset(frame);
+    return colors.reset(frame);
   } else {
     return frame;
   }

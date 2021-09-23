@@ -19,8 +19,7 @@
     "@babel/highlight": "workspace:^7.14.5"
   },
   "devDependencies": {
-    "@types/chalk": "^2.0.0",
-    "chalk": "^2.0.0",
+    "nanocolors": "^0.1.10",
     "strip-ansi": "^4.0.0"
   },
   "engines": {

@@ -16,11 +16,10 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^7.14.5",
-    "chalk": "^2.0.0",
-    "js-tokens": "condition:BABEL_8_BREAKING ? ^7.0.0 : ^4.0.0"
+    "js-tokens": "condition:BABEL_8_BREAKING ? ^7.0.0 : ^4.0.0",
+    "nanocolors": "^0.1.10"
   },
   "devDependencies": {
-    "@types/chalk": "^2.0.0",
     "strip-ansi": "^4.0.0"
   },
   "engines": {
