@@ -1,7 +1,7 @@
 "use strict";
 
 exports.__esModule = true;
-exports.bar = exports.default = void 0;
+exports.default = exports.bar = void 0;
 
 var _foo = require("foo");
 
