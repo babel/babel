@@ -1,13 +1,14 @@
 /// <reference path="../../../lib/third-party-libs.d.ts" />
 
 import type { Token, JSXToken } from "js-tokens";
+import type { Colors, Color } from "nanocolors";
 import jsTokens from "js-tokens";
 
 import {
   isStrictReservedWord,
   isKeyword,
 } from "@babel/helper-validator-identifier";
-import { isColorSupported, createColors, Colors, Color } from "nanocolors";
+import { isColorSupported, createColors } from "nanocolors";
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
