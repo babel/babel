@@ -50,8 +50,8 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   sed -i 's/t.Noop/any/g' node_modules/@types/babel__traverse/ts4.1/index.d.ts
 
   # Temporary update code points in test. The visual result is the same.
-  sed -i 's/Whoops!\\"<\/>\)<yellow>;<\/><\/>/Whoops!\\"<\/>)<yellow>;</>/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
-  sed -i 's/<\/> <gray>   \|<\/>/ <gray>   |</>/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
+  sed -i 's/>)<yellow>;<\/><\/>/>)<yellow>;<\/>/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
+  sed -i 's/<\/> <gray>   |<\/>       <red><bold>^/ <gray>   | <gray>   |<\/>       <red><bold>^/g' packages/jest-message-util/src/__tests__/__snapshots__/messages.test.ts.snap
 
   node -e "
     var pkg = require('./package.json');
