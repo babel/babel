@@ -1,3 +1,5 @@
+var _AggregateError = require("@babel/runtime-corejs3/core-js/aggregate-error");
+
 var _Map = require("@babel/runtime-corejs3/core-js-stable/map");
 
 var _Promise = require("@babel/runtime-corejs3/core-js-stable/promise");
@@ -16,6 +18,8 @@ var _WeakSet = require("@babel/runtime-corejs3/core-js-stable/weak-set");
 
 var _clearImmediate = require("@babel/runtime-corejs3/core-js-stable/clear-immediate");
 
+var _globalThis = require("@babel/runtime-corejs3/core-js/global-this");
+
 var _parseFloat = require("@babel/runtime-corejs3/core-js-stable/parse-float");
 
 var _parseInt = require("@babel/runtime-corejs3/core-js-stable/parse-int");
@@ -28,7 +32,7 @@ var _setInterval = require("@babel/runtime-corejs3/core-js-stable/set-interval")
 
 var _setTimeout = require("@babel/runtime-corejs3/core-js-stable/set-timeout");
 
-AggregateError;
+_AggregateError;
 _Map;
 Observable;
 _Promise;
@@ -41,7 +45,7 @@ _WeakSet;
 _clearImmediate;
 compositeKey;
 compositeSymbol;
-globalThis;
+_globalThis;
 _parseFloat;
 _parseInt;
 _queueMicrotask;
