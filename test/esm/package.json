@@ -6,6 +6,6 @@
   "devDependencies": {
     "@babel/runtime": "workspace:*",
     "@babel/runtime-corejs3": "workspace:*",
-    "nanocolors": "^0.1.10"
+    "nanocolors": "^0.1.11"
   }
 }
