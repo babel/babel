@@ -31,7 +31,7 @@ export function resolveTargets(
     targets = { ...targets, esmodules: "intersect" };
   }
 
-  const { browserslistConfigFile } = options;
+  const { browserslistConfigFile = false } = options;
   let configFile;
   let ignoreBrowserslistConfig = false;
   if (typeof browserslistConfigFile === "string") {
