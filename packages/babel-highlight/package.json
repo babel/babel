@@ -17,7 +17,7 @@
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^7.14.5",
     "js-tokens": "condition:BABEL_8_BREAKING ? ^7.0.0 : ^4.0.0",
-    "nanocolors": "^0.2.2"
+    "nanocolors": "^0.2.3"
   },
   "devDependencies": {
     "strip-ansi": "^4.0.0"

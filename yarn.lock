@@ -174,7 +174,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/highlight": "workspace:^7.14.5"
-    nanocolors: ^0.2.2
+    nanocolors: ^0.2.3
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -954,7 +954,7 @@ __metadata:
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^7.14.5"
     js-tokens: "condition:BABEL_8_BREAKING ? ^7.0.0 : ^4.0.0"
-    nanocolors: ^0.2.2
+    nanocolors: ^0.2.3
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -3540,7 +3540,7 @@ __metadata:
   dependencies:
     "@babel/runtime": "workspace:*"
     "@babel/runtime-corejs3": "workspace:*"
-    nanocolors: ^0.2.2
+    nanocolors: ^0.2.3
   languageName: unknown
   linkType: soft
 
@@ -3596,7 +3596,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^7.14.9"
     "@babel/parser": "workspace:*"
     glob: ^7.1.7
-    nanocolors: ^0.2.2
+    nanocolors: ^0.2.3
     to-fast-properties: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -5747,7 +5747,7 @@ __metadata:
     lint-staged: ^9.2.0
     lodash: ^4.17.21
     mergeiterator: ^1.2.5
-    nanocolors: ^0.2.2
+    nanocolors: ^0.2.3
     prettier: 2.3.1
     rollup: ~2.54.0
     rollup-plugin-dts: ^2.0.0
@@ -11580,10 +11580,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"nanocolors@npm:^0.2.2":
-  version: 0.2.2
-  resolution: "nanocolors@npm:0.2.2"
-  checksum: 87392fa827d033847d08d5b6ef47aceb165856a100dd079de6cc7b749ca5ed5d237e8609b2e64b64f7933aee497f73ccc2930dcefe1cbcb70a253418423d936e
+"nanocolors@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "nanocolors@npm:0.2.3"
+  checksum: e2167b904cec141dcb0ec869a59ca3027403559c3ba0b546eb1c85e89056fd6d77795e891160ca527119a4d88c52f33d51dc3ddf7825594b7ca8392ffc1ad9d5
   languageName: node
   linkType: hard
 
