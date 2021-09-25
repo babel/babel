@@ -26,6 +26,6 @@ function getResolver(conditionNames) {
 }
 
 module.exports = function (request, options) {
-  const resolver = getResolver(options.conditions || ["default"]);
+  const resolver = getResolver(options.conditions || ["require", "default"]);
   return resolver(options.basedir, request);
 };
