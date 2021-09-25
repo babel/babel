@@ -19,7 +19,7 @@
     "@babel/highlight": "workspace:^7.14.5"
   },
   "devDependencies": {
-    "nanocolors": "^0.1.12",
+    "nanocolors": "^0.2.2",
     "strip-ansi": "^4.0.0"
   },
   "engines": {

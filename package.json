@@ -63,7 +63,7 @@
     "lint-staged": "^9.2.0",
     "lodash": "^4.17.21",
     "mergeiterator": "^1.2.5",
-    "nanocolors": "^0.1.12",
+    "nanocolors": "^0.2.2",
     "prettier": "2.3.1",
     "rollup": "~2.54.0",
     "rollup-plugin-dts": "^2.0.0",
