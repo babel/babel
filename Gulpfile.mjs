@@ -53,9 +53,9 @@ const buildTypingsWatchGlob = [
  * @returns {string}
  */
 function mapSrcToLib(srcPath) {
-  const parts = srcPath.replace(/(?<!\.d)\.ts$/, ".js").split(path.sep);
+  const parts = srcPath.replace(/(?<!\.d)\.ts$/, ".js").split("/");
   parts[2] = "lib";
-  return parts.join(path.sep);
+  return parts.join("/");
 }
 
 function mapToDts(packageName) {
