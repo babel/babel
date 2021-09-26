@@ -4,7 +4,7 @@ define(["exports"], function (_exports) {
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.bar = _exports.defaultExports = void 0;
+  _exports.defaultExports = _exports.bar = void 0;
   var foo, bar;
   _exports.bar = bar;
   _exports.defaultExports = foo;

@@ -3,8 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.nextOdd = nextOdd;
 exports.isOdd = void 0;
+exports.nextOdd = nextOdd;
 
 var _evens = require("./evens");
 

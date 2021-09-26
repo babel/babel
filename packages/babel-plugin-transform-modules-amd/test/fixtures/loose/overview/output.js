@@ -2,7 +2,7 @@ define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (_exports,
   "use strict";
 
   _exports.__esModule = true;
-  _exports.default = _exports.test2 = _exports.test = void 0;
+  _exports.test2 = _exports.test = _exports.default = void 0;
   foo2 = babelHelpers.interopRequireWildcard(foo2);
   var test;
   _exports.test = test;
