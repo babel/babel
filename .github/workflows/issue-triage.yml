@@ -35,7 +35,7 @@ jobs:
 
             If you need any help, or just have general Babel or JavaScript questions, we have a 
             vibrant [Slack community](https://babeljs.slack.com) that typically always has someone 
-            willing to help. You can sign-up [here](https://slack.babeljs.io/) for an invite."
+            willing to help. You can sign-up [here](https://slack.babeljs.io/) for an invite.
 
   needs_info:
     name: Needs Info
