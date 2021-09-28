@@ -324,7 +324,7 @@ __metadata:
     "@babel/core": "workspace:^"
     dedent: ^0.7.0
     eslint: ^7.27.0
-    eslint-8: "npm:eslint@^8.0.0-beta.2"
+    eslint-8: "npm:eslint@^8.0.0-rc.0"
     eslint-scope: ^5.1.1
     eslint-visitor-keys: ^2.1.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
@@ -7723,9 +7723,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-8@npm:eslint@^8.0.0-beta.2, eslint@npm:8.0.0-beta.2":
-  version: 8.0.0-beta.2
-  resolution: "eslint@npm:8.0.0-beta.2"
+"eslint-8@npm:eslint@^8.0.0-rc.0, eslint@npm:8.0.0-rc.0":
+  version: 8.0.0-rc.0
+  resolution: "eslint@npm:8.0.0-rc.0"
   dependencies:
     "@eslint/eslintrc": ^1.0.1
     "@humanwhocodes/config-array": ^0.6.0
@@ -7767,7 +7767,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 720e4f0aa46ec09f1a7f9e7bcf75e817ffcebb9c74d91e42b7a1956a7cf153f700a209a41079dd78af3494be4ff0fa2bc03768dd42118f2733774b54f6114636
+  checksum: 2f1e07f270bd863acf695fc1520ec53b10b06432751107c42c7d448bc72a8215f0f589dc3bc1c97a15e15a55adcb65ac6d0772a2bdf3a4e03d795e2c40482956
   languageName: node
   linkType: hard
 

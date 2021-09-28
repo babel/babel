@@ -39,6 +39,6 @@
     "@babel/core": "workspace:^",
     "dedent": "^0.7.0",
     "eslint": "^7.27.0",
-    "eslint-8": "npm:eslint@^8.0.0-beta.2"
+    "eslint-8": "npm:eslint@^8.0.0-rc.0"
   }
 }
