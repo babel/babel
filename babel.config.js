@@ -100,6 +100,8 @@ module.exports = function (api) {
       needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
+      dynamicESLintVersionCheck = true;
+    // fall through
     case "production":
       // Config during builds before publish.
       targets = { node: nodeVersion };
