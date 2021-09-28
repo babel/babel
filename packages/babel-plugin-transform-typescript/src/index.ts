@@ -47,8 +47,8 @@ function isGlobalType(path, name) {
   return false;
 }
 
-function registerGlobalType(programScope, name) {
-  GLOBAL_TYPES.get(programScope.path.node).add(name);
+function registerGlobalType(programNode, name) {
+  GLOBAL_TYPES.get(programNode).add(name);
 }
 
 export default declare((api, opts) => {
@@ -188,9 +188,10 @@ export default declare((api, opts) => {
           const { file } = state;
           let fileJsxPragma = null;
           let fileJsxPragmaFrag = null;
+          const programNode = path.node;
 
-          if (!GLOBAL_TYPES.has(path.node)) {
-            GLOBAL_TYPES.set(path.node, new Set());
+          if (!GLOBAL_TYPES.has(programNode)) {
+            GLOBAL_TYPES.set(programNode, new Set());
           }
 
           if (file.ast.comments) {
@@ -225,6 +226,9 @@ export default declare((api, opts) => {
               }
 
               if (stmt.node.importKind === "type") {
+                for (const specifier of stmt.node.specifiers) {
+                  registerGlobalType(programNode, specifier.local.name);
+                }
                 stmt.remove();
                 continue;
               }
@@ -287,7 +291,7 @@ export default declare((api, opts) => {
 
             if (stmt.isVariableDeclaration({ declare: true })) {
               for (const name of Object.keys(stmt.getBindingIdentifiers())) {
-                registerGlobalType(path.scope, name);
+                registerGlobalType(programNode, name);
               }
             } else if (
               stmt.isTSTypeAliasDeclaration() ||
@@ -298,7 +302,7 @@ export default declare((api, opts) => {
               (stmt.isTSModuleDeclaration({ declare: true }) &&
                 stmt.get("id").isIdentifier())
             ) {
-              registerGlobalType(path.scope, stmt.node.id.name);
+              registerGlobalType(programNode, stmt.node.id.name);
             }
           }
         },
