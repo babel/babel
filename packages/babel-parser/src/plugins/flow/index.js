@@ -2123,7 +2123,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (this.match(tt.braceL)) {
           // export type { foo, bar };
-          node.specifiers = this.parseExportSpecifiers();
+          node.specifiers = this.parseExportSpecifiers(
+            /* isInTypeExport */ true,
+          );
           this.parseExportFrom(node);
           return null;
         } else {

@@ -1872,7 +1872,8 @@ export default class StatementParser extends ExpressionParser {
   maybeParseExportNamedSpecifiers(node: N.Node): boolean {
     if (this.match(tt.braceL)) {
       if (!node.specifiers) node.specifiers = [];
-      node.specifiers.push(...this.parseExportSpecifiers());
+      const isTypeExport = node.exportKind === "type";
+      node.specifiers.push(...this.parseExportSpecifiers(isTypeExport));
 
       node.source = null;
       node.declaration = null;
@@ -2152,7 +2153,7 @@ export default class StatementParser extends ExpressionParser {
 
   // Parses a comma-separated list of module exports.
 
-  parseExportSpecifiers(): Array<N.ExportSpecifier> {
+  parseExportSpecifiers(isInTypeExport: boolean): Array<N.ExportSpecifier> {
     const nodes = [];
     let first = true;
 
@@ -2169,14 +2170,19 @@ export default class StatementParser extends ExpressionParser {
 
       const node = this.startNode();
       const isString = this.match(tt.string);
-      const local = this.parseModuleExportName();
-      node.local = local;
-      if (this.eatContextual(tt._as)) {
+      node.local = this.parseModuleExportName();
+      const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
+        node,
+        /* isImport */ false,
+        isString,
+        isInTypeExport,
+      );
+      if (canParseAsKeyword && this.eatContextual(tt._as)) {
         node.exported = this.parseModuleExportName();
       } else if (isString) {
-        node.exported = cloneStringLiteral(local);
-      } else {
-        node.exported = cloneIdentifier(local);
+        node.exported = cloneStringLiteral(node.local);
+      } else if (!node.exported) {
+        node.exported = cloneIdentifier(node.local);
       }
       nodes.push(this.finishNode(node, "ExportSpecifier"));
     }
@@ -2436,12 +2442,29 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
+  parseTypeOnlyImportExportSpecifier(
+    /* eslint-disable no-unused-vars -- used in typescript plugin */
+    node: any,
+    isImport: boolean,
+    isStringSpecifier: boolean,
+    isInTypeOnlyImportExport: boolean,
+    /* eslint-enable no-unused-vars */
+  ): boolean {
+    return true;
+  }
+
   // https://tc39.es/ecma262/#prod-ImportSpecifier
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
     const importedIsString = this.match(tt.string);
     specifier.imported = this.parseModuleExportName();
-    if (this.eatContextual(tt._as)) {
+    const canParseAsKeyworkd = this.parseTypeOnlyImportExportSpecifier(
+      specifier,
+      /* isImport */ true,
+      importedIsString,
+      /* isInTypeOnlyImportExport */ node.importKind === "type",
+    );
+    if (canParseAsKeyworkd && this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();
     } else {
       const { imported } = specifier;
@@ -2453,7 +2476,9 @@ export default class StatementParser extends ExpressionParser {
         );
       }
       this.checkReservedWord(imported.name, specifier.start, true, true);
-      specifier.local = cloneIdentifier(imported);
+      if (!specifier.local) {
+        specifier.local = cloneIdentifier(imported);
+      }
     }
     this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));

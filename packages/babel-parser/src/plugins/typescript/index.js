@@ -147,6 +147,10 @@ const TSErrors = makeErrorTemplates(
       "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     TypeImportCannotSpecifyDefaultAndNamed:
       "A type-only import can specify a default import or named bindings, but not both.",
+    TypeModifierIsUsedInTypeExports:
+      "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
+    TypeModifierIsUsedInTypeImports:
+      "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
     UnexpectedParameterModifier:
       "A parameter property is only allowed in a constructor implementation.",
     UnexpectedReadonly:
@@ -3310,5 +3314,78 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.state.isAmbientContext = true;
       }
       return super.getExpression();
+    }
+
+    parseTypeOnlyImportExportSpecifier(
+      node: any,
+      isImport: boolean,
+      isStringSpecifier: boolean,
+      isInTypeOnlyImportExport: boolean,
+    ): boolean {
+      const leftOfAsKey = isImport ? "imported" : "local";
+      const rightOfAsKey = isImport ? "local" : "exported";
+
+      let leftOfAs = node[leftOfAsKey];
+      let rightOfAs;
+
+      let isTypeOnly = false;
+      let canParseAsKeyword = true;
+
+      const pos = leftOfAs.start;
+
+      // https://github.com/microsoft/TypeScript/blob/fc4f9d83d5939047aa6bb2a43965c6e9bbfbc35b/src/compiler/parser.ts#L7411-L7456
+      if (!isStringSpecifier && leftOfAs.name === "type") {
+        // import { type } from "mod";          - isTypeOnly: false, leftOfAs: type
+        // import { type as } from "mod";       - isTypeOnly: true,  leftOfAs: as
+        // import { type as as } from "mod";    - isTypeOnly: false, leftOfAs: type, rightOfAs: as
+        // import { type as as as } from "mod"; - isTypeOnly: true,  leftOfAs: as,   rightOfAs: as
+        if (this.isContextual(tt._as)) {
+          // { type as ...? }
+          const firstAs = this.parseIdentifier();
+          if (this.isContextual(tt._as)) {
+            // { type as as ...? }
+            const secondAs = this.parseIdentifier();
+            if (this.match(tt.name)) {
+              // { type as as something }
+              isTypeOnly = true;
+              leftOfAs = firstAs;
+              rightOfAs = this.parseIdentifier();
+              canParseAsKeyword = false;
+            } else {
+              // { type as as }
+              rightOfAs = secondAs;
+              canParseAsKeyword = false;
+            }
+          } else if (this.match(tt.name)) {
+            // { type as something }
+            canParseAsKeyword = false;
+            rightOfAs = this.parseIdentifier();
+          } else {
+            // { type as }
+            isTypeOnly = true;
+            leftOfAs = firstAs;
+          }
+        } else if (this.match(tt.name)) {
+          // { type something ...? }
+          isTypeOnly = true;
+          leftOfAs = this.parseIdentifier();
+        }
+      }
+      node[leftOfAsKey] = leftOfAs;
+      node[rightOfAsKey] = rightOfAs;
+
+      const kindKey = isImport ? "importKind" : "exportKind";
+      node[kindKey] = isTypeOnly ? "type" : "value";
+
+      if (isTypeOnly && isInTypeOnlyImportExport) {
+        this.raise(
+          pos,
+          isImport
+            ? TSErrors.TypeModifierIsUsedInTypeImports
+            : TSErrors.TypeModifierIsUsedInTypeExports,
+        );
+      }
+
+      return canParseAsKeyword;
     }
   };
