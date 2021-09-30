@@ -45,6 +45,7 @@
               "start":42,"end":43,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15},"identifierName":"A"},
               "name": "A"
             },
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":42,"end":43,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15},"identifierName":"A"},
@@ -59,6 +60,7 @@
               "start":45,"end":46,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"B"},
               "name": "B"
             },
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":45,"end":46,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"B"},
