@@ -140,7 +140,7 @@
       "@babel/plugin-transform-runtime": [
         "./packages/babel-plugin-transform-runtime/src"
       ],
-	  "@babel/plugin-transform-spread": [
+      "@babel/plugin-transform-spread": [
         "./packages/babel-plugin-transform-spread/src"
       ],
       "@babel/plugin-transform-typescript": [
