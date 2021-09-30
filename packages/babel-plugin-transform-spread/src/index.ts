@@ -1,6 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
-import { types as t } from "@babel/core";
+import { types as t, File } from "@babel/core";
+import type { NodePath, Scope } from "@babel/traverse";
+
+type ListElement = t.SpreadElement | t.Expression;
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -9,7 +12,10 @@ export default declare((api, options) => {
   const arrayLikeIsIterable =
     options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
 
-  function getSpreadLiteral(spread, scope) {
+  function getSpreadLiteral(
+    spread: t.SpreadElement,
+    scope: Scope,
+  ): t.Expression {
     if (
       iterableIsArray &&
       !t.isIdentifier(spread.argument, { name: "arguments" })
@@ -20,11 +26,11 @@ export default declare((api, options) => {
     }
   }
 
-  function hasHole(spread) {
+  function hasHole(spread: t.ArrayExpression): boolean {
     return spread.elements.some(el => el === null);
   }
 
-  function hasSpread(nodes) {
+  function hasSpread(nodes: Array<t.Node>): boolean {
     for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
         return true;
@@ -33,15 +39,19 @@ export default declare((api, options) => {
     return false;
   }
 
-  function push(_props, nodes) {
+  function push(_props: Array<ListElement>, nodes: Array<t.Expression>) {
     if (!_props.length) return _props;
     nodes.push(t.arrayExpression(_props));
     return [];
   }
 
-  function build(props: Array, scope, file) {
-    const nodes = [];
-    let _props = [];
+  function build(
+    props: Array<ListElement>,
+    scope: Scope,
+    file: File,
+  ): t.Expression[] {
+    const nodes: Array<t.Expression> = [];
+    let _props: Array<ListElement> = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
@@ -74,7 +84,7 @@ export default declare((api, options) => {
     name: "transform-spread",
 
     visitor: {
-      ArrayExpression(path) {
+      ArrayExpression(path: NodePath<t.ArrayExpression>): void {
         const { node, scope } = path;
         const elements = node.elements;
         if (!hasSpread(elements)) return;
@@ -86,7 +96,10 @@ export default declare((api, options) => {
         // the element was transformed (Array.prototype.slice.call or toConsumableArray)
         // we know that the transformed code already takes care of cloning the array.
         // So we can simply return that element.
-        if (nodes.length === 1 && first !== elements[0].argument) {
+        if (
+          nodes.length === 1 &&
+          first !== (elements[0] as t.SpreadElement).argument
+        ) {
           path.replaceWith(first);
           return;
         }
@@ -110,15 +123,14 @@ export default declare((api, options) => {
           ),
         );
       },
-
-      CallExpression(path) {
+      CallExpression(path: NodePath<t.CallExpression>): void {
         const { node, scope } = path;
 
-        const args = node.arguments;
+        const args = node.arguments as Array<ListElement>;
         if (!hasSpread(args)) return;
-
-        const calleePath = skipTransparentExprWrappers(path.get("callee"));
-
+        const calleePath = skipTransparentExprWrappers(
+          path.get("callee") as NodePath<t.Expression>,
+        );
         if (calleePath.isSuper()) {
           // NOTE: spread and classes have almost the same compat data, so this is very unlikely to happen in practice.
           throw path.buildCodeFrameError(
@@ -126,14 +138,17 @@ export default declare((api, options) => {
               "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
           );
         }
-
-        let contextLiteral = scope.buildUndefinedNode();
-
+        let contextLiteral: t.Expression = scope.buildUndefinedNode();
         node.arguments = [];
 
-        let nodes;
-        if (args.length === 1 && args[0].argument.name === "arguments") {
-          nodes = [args[0].argument];
+        let nodes: t.Expression[];
+        if (
+          args.length === 1 &&
+          t.isIdentifier((args[0] as t.SpreadElement).argument, {
+            name: "arguments",
+          })
+        ) {
+          nodes = [(args[0] as t.SpreadElement).argument];
         } else {
           nodes = build(args, scope, this);
         }
@@ -150,7 +165,7 @@ export default declare((api, options) => {
           node.arguments.push(first);
         }
 
-        const callee = calleePath.node;
+        const callee = calleePath.node as t.MemberExpression;
 
         if (calleePath.isMemberExpression()) {
           const temp = scope.maybeGenerateMemoised(callee.object);
@@ -163,8 +178,10 @@ export default declare((api, options) => {
         }
 
         // We use the original callee here, to preserve any types/parentheses
-        node.callee = t.memberExpression(node.callee, t.identifier("apply"));
-
+        node.callee = t.memberExpression(
+          node.callee as t.Expression,
+          t.identifier("apply"),
+        );
         if (t.isSuper(contextLiteral)) {
           contextLiteral = t.thisExpression();
         }
@@ -172,15 +189,15 @@ export default declare((api, options) => {
         node.arguments.unshift(t.cloneNode(contextLiteral));
       },
 
-      NewExpression(path) {
+      NewExpression(path: NodePath<t.NewExpression>): void {
         const { node, scope } = path;
-        let args = node.arguments;
-        if (!hasSpread(args)) return;
+        if (!hasSpread(node.arguments)) return;
 
-        const nodes = build(args, scope, this);
+        const nodes = build(node.arguments as Array<ListElement>, scope, this);
 
         const first = nodes.shift();
 
+        let args: t.Expression;
         if (nodes.length) {
           args = t.callExpression(
             t.memberExpression(first, t.identifier("concat")),
@@ -192,7 +209,7 @@ export default declare((api, options) => {
 
         path.replaceWith(
           t.callExpression(path.hub.addHelper("construct"), [
-            node.callee,
+            node.callee as t.Expression,
             args,
           ]),
         );
