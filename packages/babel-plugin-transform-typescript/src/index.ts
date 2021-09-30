@@ -233,9 +233,23 @@ export default declare((api, opts) => {
                 continue;
               }
 
+              const importsToRemove: NodePath<t.Node>[] = [];
+              const specifiersLength = stmt.node.specifiers.length;
+              const isAllSpecifiersElided = () =>
+                specifiersLength > 0 &&
+                specifiersLength === importsToRemove.length;
+
               // If onlyRemoveTypeImports is `true`, only remove type-only imports
               // and exports introduced in TypeScript 3.8.
               if (onlyRemoveTypeImports) {
+                for (const specifier of stmt.node.specifiers) {
+                  if (specifier.importKind === "type") {
+                    const binding = stmt.scope.getBinding(specifier.local.name);
+                    if (binding) {
+                      importsToRemove.push(binding.path);
+                    }
+                  }
+                }
                 NEEDS_EXPLICIT_ESM.set(path.node, false);
               } else {
                 // Note: this will allow both `import { } from "m"` and `import "m";`.
@@ -244,9 +258,6 @@ export default declare((api, opts) => {
                   NEEDS_EXPLICIT_ESM.set(path.node, false);
                   continue;
                 }
-
-                let allElided = true;
-                const importsToRemove: NodePath<t.Node>[] = [];
 
                 for (const specifier of stmt.node.specifiers) {
                   const binding = stmt.scope.getBinding(specifier.local.name);
@@ -268,17 +279,16 @@ export default declare((api, opts) => {
                   ) {
                     importsToRemove.push(binding.path);
                   } else {
-                    allElided = false;
                     NEEDS_EXPLICIT_ESM.set(path.node, false);
                   }
                 }
+              }
 
-                if (allElided) {
-                  stmt.remove();
-                } else {
-                  for (const importPath of importsToRemove) {
-                    importPath.remove();
-                  }
+              if (isAllSpecifiersElided()) {
+                stmt.remove();
+              } else {
+                for (const importPath of importsToRemove) {
+                  importPath.remove();
                 }
               }
 
@@ -329,6 +339,17 @@ export default declare((api, opts) => {
           return;
         }
 
+        // remove export declaration that is filled with type-only specifiers
+        //   export { type A1, type A2 } from "a";
+        if (
+          path.node.source &&
+          path.node.specifiers.length > 0 &&
+          path.node.specifiers.every(({ exportKind }) => exportKind === "type")
+        ) {
+          path.remove();
+          return;
+        }
+
         // remove export declaration if it's exporting only types
         // This logic is needed when exportKind is "value", because
         // currently the "type" keyword is optional.
@@ -352,7 +373,10 @@ export default declare((api, opts) => {
 
       ExportSpecifier(path) {
         // remove type exports
-        if (!path.parent.source && isGlobalType(path, path.node.local.name)) {
+        if (
+          (!path.parent.source && isGlobalType(path, path.node.local.name)) ||
+          path.node.exportKind === "type"
+        ) {
           path.remove();
         }
       },
