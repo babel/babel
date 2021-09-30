@@ -27,11 +27,6 @@
         "innerComments": [
           {
             "type": "CommentBlock",
-            "value": " 2 ",
-            "start":9,"end":16,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":16}}
-          },
-          {
-            "type": "CommentBlock",
             "value": " 8 ",
             "start":68,"end":75,"loc":{"start":{"line":1,"column":68},"end":{"line":1,"column":75}}
           }
@@ -40,6 +35,11 @@
           "type": "SequenceExpression",
           "start":27,"end":47,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":47}},
           "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": " 2 ",
+              "start":9,"end":16,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":16}}
+            },
             {
               "type": "CommentBlock",
               "value": " 3 ",

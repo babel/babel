@@ -1738,6 +1738,9 @@ export default class ExpressionParser extends LValParser {
     if (!this.options.createParenthesizedExpressions) {
       this.addExtra(val, "parenthesized", true);
       this.addExtra(val, "parenStart", startPos);
+
+      this.takeLeadingCommentsBefore(val, startPos);
+
       return val;
     }
 

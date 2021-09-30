@@ -26,21 +26,30 @@ export type CommentWhitespace = {
   trailingNode: Node | null,
   containingNode: Node | null,
 };
+
 /**
- * Merge comments with node's trailingComments or assign comments to be
- * trailingComments. New comments will be placed before old comments
+ * Merge comments with node's ${type}Comments or assign comments to be
+ * ${type}Comments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  *
+ * @param {"leading" | "inner" | "trailing"} position
  * @param {Node} node
  * @param {Array<Comment>} comments
  */
-function setTrailingComments(node: Node, comments: Array<Comment>) {
-  if (node.trailingComments === undefined) {
-    node.trailingComments = comments;
+function setComments(
+  position: "leading" | "inner" | "trailing",
+  node: Node,
+  comments: Array<Comment>,
+) {
+  if (node[`${position}Comments`] === undefined) {
+    node[`${position}Comments`] = comments;
   } else {
-    node.trailingComments.unshift(...comments);
+    node[`${position}Comments`].unshift(...comments);
   }
 }
+
+const setLeadingComments = setComments.bind(null, "leading");
+const setTrailingComments = setComments.bind(null, "trailing");
 
 /**
  * Merge comments with node's innerComments or assign comments to be
@@ -51,10 +60,8 @@ function setTrailingComments(node: Node, comments: Array<Comment>) {
  * @param {Array<Comment>} comments
  */
 export function setInnerComments(node: Node, comments: Array<Comment> | void) {
-  if (node.innerComments === undefined) {
-    node.innerComments = comments;
-  } else if (comments !== undefined) {
-    node.innerComments.unshift(...comments);
+  if (comments) {
+    setComments("inner", node, comments);
   }
 }
 
@@ -149,7 +156,7 @@ export default class CommentsParser extends BaseParser {
         setTrailingComments(commentWS.leadingNode, comments);
       }
       if (commentWS.trailingNode !== null) {
-        commentWS.trailingNode.leadingComments = comments;
+        setLeadingComments(commentWS.trailingNode, comments);
       }
     } else {
       /*:: invariant(commentWS.containingNode !== null) */
@@ -236,6 +243,34 @@ export default class CommentsParser extends BaseParser {
     const commentWS = commentStack[length - 1];
     if (commentWS.leadingNode === node) {
       commentWS.leadingNode = null;
+    }
+  }
+
+  /**
+   * Marks the node as a trailingNode of the comment whitespace
+   * ending at pos, if it exists.
+   *
+   * This is used to propertly attach comments before parenthesized
+   * expressions as leading comments of the inner expression.
+   *
+   * @param {Node} node
+   * @param {number} pos
+   */
+  takeLeadingCommentsBefore(node: Node, pos: number) {
+    const { commentStack } = this.state;
+    const commentStackLength = commentStack.length;
+    if (commentStackLength === 0) return;
+    let i = commentStackLength - 1;
+
+    for (; i >= 0; i--) {
+      const commentWS = commentStack[i];
+      const commentEnd = commentWS.end;
+
+      if (commentEnd === pos) {
+        commentWS.trailingNode = node;
+      } else if (commentEnd < pos) {
+        break;
+      }
     }
   }
 }
