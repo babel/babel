@@ -239,17 +239,19 @@ export default declare((api, opts) => {
                 specifiersLength > 0 &&
                 specifiersLength === importsToRemove.length;
 
+              for (const specifier of stmt.node.specifiers) {
+                if (specifier.importKind === "type") {
+                  registerGlobalType(programNode, specifier.local.name);
+                  const binding = stmt.scope.getBinding(specifier.local.name);
+                  if (binding) {
+                    importsToRemove.push(binding.path);
+                  }
+                }
+              }
+
               // If onlyRemoveTypeImports is `true`, only remove type-only imports
               // and exports introduced in TypeScript 3.8.
               if (onlyRemoveTypeImports) {
-                for (const specifier of stmt.node.specifiers) {
-                  if (specifier.importKind === "type") {
-                    const binding = stmt.scope.getBinding(specifier.local.name);
-                    if (binding) {
-                      importsToRemove.push(binding.path);
-                    }
-                  }
-                }
                 NEEDS_EXPLICIT_ESM.set(path.node, false);
               } else {
                 // Note: this will allow both `import { } from "m"` and `import "m";`.
@@ -268,18 +270,20 @@ export default declare((api, opts) => {
                   // just bail if there is no binding, since chances are good that if
                   // the import statement was injected then it wasn't a typescript type
                   // import anyway.
-                  if (
-                    binding &&
-                    isImportTypeOnly({
-                      binding,
-                      programPath: path,
-                      pragmaImportName,
-                      pragmaFragImportName,
-                    })
-                  ) {
-                    importsToRemove.push(binding.path);
-                  } else {
-                    NEEDS_EXPLICIT_ESM.set(path.node, false);
+                  if (!importsToRemove.includes(binding.path)) {
+                    if (
+                      binding &&
+                      isImportTypeOnly({
+                        binding,
+                        programPath: path,
+                        pragmaImportName,
+                        pragmaFragImportName,
+                      })
+                    ) {
+                      importsToRemove.push(binding.path);
+                    } else {
+                      NEEDS_EXPLICIT_ESM.set(path.node, false);
+                    }
                   }
                 }
               }
