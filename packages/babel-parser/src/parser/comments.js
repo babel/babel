@@ -48,9 +48,6 @@ function setComments(
   }
 }
 
-const setLeadingComments = setComments.bind(null, "leading");
-const setTrailingComments = setComments.bind(null, "trailing");
-
 /**
  * Merge comments with node's innerComments or assign comments to be
  * innerComments. New comments will be placed before old comments
@@ -85,9 +82,9 @@ function adjustInnerComments(
     lastElement = elements[--i];
   }
   if (lastElement === null || lastElement.start > commentWS.start) {
-    setInnerComments(node, commentWS.comments);
+    setComments("inner", node, commentWS.comments);
   } else {
-    setTrailingComments(lastElement, commentWS.comments);
+    setComments("trailing", lastElement, commentWS.comments);
   }
 }
 
@@ -153,10 +150,10 @@ export default class CommentsParser extends BaseParser {
     const { comments } = commentWS;
     if (commentWS.leadingNode !== null || commentWS.trailingNode !== null) {
       if (commentWS.leadingNode !== null) {
-        setTrailingComments(commentWS.leadingNode, comments);
+        setComments("trailing", commentWS.leadingNode, comments);
       }
       if (commentWS.trailingNode !== null) {
-        setLeadingComments(commentWS.trailingNode, comments);
+        setComments("leading", commentWS.trailingNode, comments);
       }
     } else {
       /*:: invariant(commentWS.containingNode !== null) */
@@ -193,11 +190,11 @@ export default class CommentsParser extends BaseParser {
             adjustInnerComments(node, node.specifiers, commentWS);
             break;
           default: {
-            setInnerComments(node, comments);
+            setComments("inner", node, comments);
           }
         }
       } else {
-        setInnerComments(node, comments);
+        setComments("inner", node, comments);
       }
     }
   }
@@ -247,16 +244,17 @@ export default class CommentsParser extends BaseParser {
   }
 
   /**
-   * Marks the node as a trailingNode of the comment whitespace
-   * ending at pos, if it exists.
+   * Attach a node to the comment whitespaces right before/after
+   * the given range.
    *
-   * This is used to propertly attach comments before parenthesized
-   * expressions as leading comments of the inner expression.
+   * This is used to propertly attach comments aroung parenthesized
+   * expressions as leading/trailing comments of the inner expression.
    *
    * @param {Node} node
-   * @param {number} pos
+   * @param {number} start
+   * @param {number} end
    */
-  takeLeadingCommentsBefore(node: Node, pos: number) {
+  takeSurroundingComments(node: Node, start: number, end: number) {
     const { commentStack } = this.state;
     const commentStackLength = commentStack.length;
     if (commentStackLength === 0) return;
@@ -265,10 +263,13 @@ export default class CommentsParser extends BaseParser {
     for (; i >= 0; i--) {
       const commentWS = commentStack[i];
       const commentEnd = commentWS.end;
+      const commentStart = commentWS.start;
 
-      if (commentEnd === pos) {
+      if (commentStart === end) {
+        commentWS.leadingNode = node;
+      } else if (commentEnd === start) {
         commentWS.trailingNode = node;
-      } else if (commentEnd < pos) {
+      } else if (commentEnd < start) {
         break;
       }
     }

@@ -9,3 +9,8 @@ function assertElement(assertFn, shouldBeElement, opt_message) {
 
 
 }
+
+const slot = /** @type {!HTMLSlotElement} */e.target;
+
+assertElement(
+/** @type {Element} */el);

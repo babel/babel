@@ -1739,7 +1739,7 @@ export default class ExpressionParser extends LValParser {
       this.addExtra(val, "parenthesized", true);
       this.addExtra(val, "parenStart", startPos);
 
-      this.takeLeadingCommentsBefore(val, startPos);
+      this.takeSurroundingComments(val, startPos, this.state.lastTokEnd);
 
       return val;
     }
