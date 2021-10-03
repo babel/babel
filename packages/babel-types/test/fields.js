@@ -52,8 +52,6 @@ const ignoredFields = {
   ObjectMethod: { method: true, id: true, predicate: true },
   StaticBlock: { static: true },
   TSDeclareMethod: { id: true },
-  // TODO(Babel 8): Remove
-  // https://github.com/babel/babel/issues/9231
   ...(process.env.BABEL_8_BREAKING
     ? {
         TSFunctionType: { parameters: true, typeAnnotation: true },
