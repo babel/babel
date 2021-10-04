@@ -1,0 +1,4 @@
+{
+  "throws": "This experimental syntax requires enabling the parser plugin: \"decoratorAutoAccessors\". (2:11)",
+  "plugins": []
+}
