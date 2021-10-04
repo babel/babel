@@ -28,23 +28,34 @@ export type CommentWhitespace = {
 };
 
 /**
- * Merge comments with node's ${type}Comments or assign comments to be
- * ${type}Comments. New comments will be placed before old comments
+ * Merge comments with node's trailingComments or assign comments to be
+ * trailingComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  *
- * @param {"leading" | "inner" | "trailing"} position
  * @param {Node} node
  * @param {Array<Comment>} comments
  */
-function setComments(
-  position: "leading" | "inner" | "trailing",
-  node: Node,
-  comments: Array<Comment>,
-) {
-  if (node[`${position}Comments`] === undefined) {
-    node[`${position}Comments`] = comments;
+function setTrailingComments(node: Node, comments: Array<Comment>) {
+  if (node.trailingComments === undefined) {
+    node.trailingComments = comments;
   } else {
-    node[`${position}Comments`].unshift(...comments);
+    node.trailingComments.unshift(...comments);
+  }
+}
+
+/**
+ * Merge comments with node's leadingComments or assign comments to be
+ * leadingComments. New comments will be placed before old comments
+ * because the commentStack is enumerated reversely.
+ *
+ * @param {Node} node
+ * @param {Array<Comment>} comments
+ */
+function setLeadingComments(node: Node, comments: Array<Comment>) {
+  if (node.leadingComments === undefined) {
+    node.leadingComments = comments;
+  } else {
+    node.leadingComments.unshift(...comments);
   }
 }
 
@@ -56,9 +67,11 @@ function setComments(
  * @param {Node} node
  * @param {Array<Comment>} comments
  */
-export function setInnerComments(node: Node, comments: Array<Comment> | void) {
-  if (comments) {
-    setComments("inner", node, comments);
+export function setInnerComments(node: Node, comments: Array<Comment>) {
+  if (node.innerComments === undefined) {
+    node.innerComments = comments;
+  } else {
+    node.innerComments.unshift(...comments);
   }
 }
 
@@ -82,9 +95,9 @@ function adjustInnerComments(
     lastElement = elements[--i];
   }
   if (lastElement === null || lastElement.start > commentWS.start) {
-    setComments("inner", node, commentWS.comments);
+    setInnerComments(node, commentWS.comments);
   } else {
-    setComments("trailing", lastElement, commentWS.comments);
+    setTrailingComments(lastElement, commentWS.comments);
   }
 }
 
@@ -150,10 +163,10 @@ export default class CommentsParser extends BaseParser {
     const { comments } = commentWS;
     if (commentWS.leadingNode !== null || commentWS.trailingNode !== null) {
       if (commentWS.leadingNode !== null) {
-        setComments("trailing", commentWS.leadingNode, comments);
+        setTrailingComments(commentWS.leadingNode, comments);
       }
       if (commentWS.trailingNode !== null) {
-        setComments("leading", commentWS.trailingNode, comments);
+        setLeadingComments(commentWS.trailingNode, comments);
       }
     } else {
       /*:: invariant(commentWS.containingNode !== null) */
@@ -190,11 +203,11 @@ export default class CommentsParser extends BaseParser {
             adjustInnerComments(node, node.specifiers, commentWS);
             break;
           default: {
-            setComments("inner", node, comments);
+            setInnerComments(node, comments);
           }
         }
       } else {
-        setComments("inner", node, comments);
+        setInnerComments(node, comments);
       }
     }
   }

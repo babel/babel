@@ -1023,9 +1023,13 @@ export default class ExpressionParser extends LValParser {
       call.extra?.trailingComma,
     );
     // mark inner comments of `async()` as inner comments of `async () =>`
-    setInnerComments(node, call.innerComments);
+    if (call.innerComments) {
+      setInnerComments(node, call.innerComments);
+    }
     // mark trailing comments of `async` to be inner comments
-    setInnerComments(node, call.callee.trailingComments);
+    if (call.callee.trailingComments) {
+      setInnerComments(node, call.callee.trailingComments);
+    }
     return node;
   }
 
