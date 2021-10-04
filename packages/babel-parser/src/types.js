@@ -782,7 +782,8 @@ export type ClassMember =
   | ClassMethod
   | ClassPrivateMethod
   | ClassProperty
-  | ClassPrivateProperty;
+  | ClassPrivateProperty
+  | ClassAccessorProperty;
 
 export type MethodLike =
   | ObjectMethod
@@ -854,6 +855,20 @@ export type ClassPrivateProperty = NodeBase & {
   // Flow only
   variance?: ?FlowVariance,
 };
+
+export type ClassAccessorProperty = ClassMemberBase &
+  DeclarationBase & {
+    type: "ClassAccessorProperty",
+    key: Expression | PrivateName,
+    value: ?Expression,
+
+    typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
+    variance?: ?FlowVariance, // TODO: Not in spec
+
+    // TypeScript only: (TODO: Not in spec)
+    readonly?: true,
+    definite?: true,
+  };
 
 export type OptClassDeclaration = ClassBase &
   DeclarationBase &
