@@ -1518,8 +1518,9 @@ export default class StatementParser extends ExpressionParser {
   ) {
     const publicMethod: $FlowSubtype<N.ClassMethod> = member;
     const privateMethod: $FlowSubtype<N.ClassPrivateMethod> = member;
-    const publicProp: $FlowSubtype<N.ClassMethod> = member;
-    const privateProp: $FlowSubtype<N.ClassPrivateMethod> = member;
+    const publicProp: $FlowSubtype<N.ClassProperty> = member;
+    const privateProp: $FlowSubtype<N.ClassPrivateProperty> = member;
+    const accessorProp: $FlowSubtype<N.ClassAccessorProperty> = member;
 
     const method: typeof publicMethod | typeof privateMethod = publicMethod;
     const publicMember: typeof publicMethod | typeof publicProp = publicMethod;
@@ -1674,6 +1675,18 @@ export default class StatementParser extends ExpressionParser {
       }
 
       this.checkGetterSetterParams(publicMethod);
+    } else if (
+      isContextual &&
+      key.name === "accessor" &&
+      !this.isLineTerminator()
+    ) {
+      this.expectPlugin("decoratorAutoAccessors");
+      this.resetPreviousNodeTrailingComments(key);
+
+      // The so-called parsed name would have been "accessor": get the real name.
+      const isPrivate = this.match(tt.privateName);
+      this.parseClassElementName(publicProp);
+      this.pushClassAccessorProperty(classBody, accessorProp, isPrivate);
     } else if (this.isLineTerminator()) {
       // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
       if (isPrivate) {
@@ -1757,6 +1770,34 @@ export default class StatementParser extends ExpressionParser {
       CLASS_ELEMENT_OTHER,
       node.key.start,
     );
+  }
+
+  pushClassAccessorProperty(
+    classBody: N.ClassBody,
+    prop: N.ClassAccessorProperty,
+    isPrivate: boolean,
+  ) {
+    if (!isPrivate && !prop.computed) {
+      // Not private, so not node is not a PrivateName and we can safely cast
+      const key = (prop.key: N.Expression);
+
+      if (key.name === "constructor" || key.value === "constructor") {
+        // Non-computed field, which is either an identifier named "constructor"
+        // or a string literal named "constructor"
+        this.raise(prop.key.start, Errors.ConstructorClassField);
+      }
+    }
+
+    const node = this.parseClassAccessorProperty(prop);
+    classBody.body.push(node);
+
+    if (isPrivate) {
+      this.classScope.declarePrivateName(
+        this.getPrivateNameSV(node.key),
+        CLASS_ELEMENT_OTHER,
+        node.key.start,
+      );
+    }
   }
 
   pushClassMethod(
@@ -1843,8 +1884,18 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ClassProperty");
   }
 
+  parseClassAccessorProperty(
+    node: N.ClassAccessorProperty,
+  ): N.ClassAccessorProperty {
+    this.parseInitializer(node);
+    this.semicolon();
+    return this.finishNode(node, "ClassAccessorProperty");
+  }
+
   // https://tc39.es/ecma262/#prod-Initializer
-  parseInitializer(node: N.ClassProperty | N.ClassPrivateProperty): void {
+  parseInitializer(
+    node: N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty,
+  ): void {
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
     this.expressionScope.enter(newExpressionScope());
     this.prodParam.enter(PARAM);
