@@ -63,6 +63,7 @@ export default function isReferenced(
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
     case "ClassProperty":
+    case "ClassAccessorProperty":
       if (parent.key === node) {
         return !!parent.computed;
       }

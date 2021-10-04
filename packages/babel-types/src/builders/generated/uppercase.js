@@ -91,6 +91,7 @@ export {
   optionalMemberExpression as OptionalMemberExpression,
   optionalCallExpression as OptionalCallExpression,
   classProperty as ClassProperty,
+  classAccessorProperty as ClassAccessorProperty,
   classPrivateProperty as ClassPrivateProperty,
   classPrivateMethod as ClassPrivateMethod,
   privateName as PrivateName,

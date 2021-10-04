@@ -65,6 +65,7 @@ export type Node =
   | BreakStatement
   | CallExpression
   | CatchClause
+  | ClassAccessorProperty
   | ClassBody
   | ClassDeclaration
   | ClassExpression
@@ -973,6 +974,24 @@ export interface OptionalCallExpression extends BaseNode {
 export interface ClassProperty extends BaseNode {
   type: "ClassProperty";
   key: Identifier | StringLiteral | NumericLiteral | Expression;
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  decorators?: Array<Decorator> | null;
+  computed?: boolean;
+  static?: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean;
+  readonly?: boolean | null;
+  variance?: Variance | null;
+}
+
+export interface ClassAccessorProperty extends BaseNode {
+  type: "ClassAccessorProperty";
+  key: Identifier | StringLiteral | NumericLiteral | Expression | PrivateName;
   value?: Expression | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   decorators?: Array<Decorator> | null;
@@ -2094,6 +2113,7 @@ export type Standardized =
   | OptionalMemberExpression
   | OptionalCallExpression
   | ClassProperty
+  | ClassAccessorProperty
   | ClassPrivateProperty
   | ClassPrivateMethod
   | PrivateName
@@ -2366,7 +2386,11 @@ export type UserWhitespacable =
   | ObjectTypeSpreadProperty;
 export type Method = ObjectMethod | ClassMethod | ClassPrivateMethod;
 export type ObjectMember = ObjectMethod | ObjectProperty;
-export type Property = ObjectProperty | ClassProperty | ClassPrivateProperty;
+export type Property =
+  | ObjectProperty
+  | ClassProperty
+  | ClassAccessorProperty
+  | ClassPrivateProperty;
 export type UnaryLike = UnaryExpression | SpreadElement;
 export type Pattern = AssignmentPattern | ArrayPattern | ObjectPattern;
 export type Class = ClassExpression | ClassDeclaration;
@@ -2386,6 +2410,7 @@ export type ModuleSpecifier =
   | ImportSpecifier
   | ExportNamespaceSpecifier
   | ExportDefaultSpecifier;
+export type Accessor = ClassAccessorProperty;
 export type Private = ClassPrivateProperty | ClassPrivateMethod | PrivateName;
 export type Flow =
   | AnyTypeAnnotation
@@ -2691,6 +2716,7 @@ export interface Aliases {
   ModuleDeclaration: ModuleDeclaration;
   ExportDeclaration: ExportDeclaration;
   ModuleSpecifier: ModuleSpecifier;
+  Accessor: Accessor;
   Private: Private;
   Flow: Flow;
   FlowType: FlowType;

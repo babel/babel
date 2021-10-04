@@ -8,6 +8,7 @@ export default function toComputedKey(
     | t.ObjectProperty
     | t.ClassMethod
     | t.ClassProperty
+    | t.ClassAccessorProperty
     | t.MemberExpression
     | t.OptionalMemberExpression,
   // @ts-expect-error todo(flow->ts): maybe check the type of node before accessing .key and .property

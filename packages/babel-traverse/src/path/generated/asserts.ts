@@ -6,6 +6,7 @@ import * as t from "@babel/types";
 import NodePath from "../index";
 
 export interface NodePathAssetions {
+  assertAccessor(opts?: object): asserts this is NodePath<t.Accessor>;
   assertAnyTypeAnnotation(
     opts?: object,
   ): asserts this is NodePath<t.AnyTypeAnnotation>;
@@ -61,6 +62,9 @@ export interface NodePathAssetions {
   ): asserts this is NodePath<t.CallExpression>;
   assertCatchClause(opts?: object): asserts this is NodePath<t.CatchClause>;
   assertClass(opts?: object): asserts this is NodePath<t.Class>;
+  assertClassAccessorProperty(
+    opts?: object,
+  ): asserts this is NodePath<t.ClassAccessorProperty>;
   assertClassBody(opts?: object): asserts this is NodePath<t.ClassBody>;
   assertClassDeclaration(
     opts?: object,
