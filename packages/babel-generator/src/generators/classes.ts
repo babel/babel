@@ -127,6 +127,7 @@ export function ClassAccessorProperty(
   this.tsPrintClassMemberModifiers(node, /* isField */ true);
 
   this.word("accessor");
+  this.printInnerComments(node);
   this.space();
 
   if (node.computed) {
