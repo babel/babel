@@ -1,0 +1,4 @@
+{
+  "throws": "__source and __self should not be defined in props and are reserved for internal usage",
+  "plugins": ["transform-react-jsx-development"]
+}
