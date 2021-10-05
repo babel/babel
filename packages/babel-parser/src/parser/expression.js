@@ -1023,9 +1023,13 @@ export default class ExpressionParser extends LValParser {
       call.extra?.trailingComma,
     );
     // mark inner comments of `async()` as inner comments of `async () =>`
-    setInnerComments(node, call.innerComments);
+    if (call.innerComments) {
+      setInnerComments(node, call.innerComments);
+    }
     // mark trailing comments of `async` to be inner comments
-    setInnerComments(node, call.callee.trailingComments);
+    if (call.callee.trailingComments) {
+      setInnerComments(node, call.callee.trailingComments);
+    }
     return node;
   }
 
@@ -1738,6 +1742,9 @@ export default class ExpressionParser extends LValParser {
     if (!this.options.createParenthesizedExpressions) {
       this.addExtra(val, "parenthesized", true);
       this.addExtra(val, "parenStart", startPos);
+
+      this.takeSurroundingComments(val, startPos, this.state.lastTokEnd);
+
       return val;
     }
 

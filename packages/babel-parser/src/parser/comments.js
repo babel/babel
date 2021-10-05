@@ -26,6 +26,7 @@ export type CommentWhitespace = {
   trailingNode: Node | null,
   containingNode: Node | null,
 };
+
 /**
  * Merge comments with node's trailingComments or assign comments to be
  * trailingComments. New comments will be placed before old comments
@@ -43,6 +44,22 @@ function setTrailingComments(node: Node, comments: Array<Comment>) {
 }
 
 /**
+ * Merge comments with node's leadingComments or assign comments to be
+ * leadingComments. New comments will be placed before old comments
+ * because the commentStack is enumerated reversely.
+ *
+ * @param {Node} node
+ * @param {Array<Comment>} comments
+ */
+function setLeadingComments(node: Node, comments: Array<Comment>) {
+  if (node.leadingComments === undefined) {
+    node.leadingComments = comments;
+  } else {
+    node.leadingComments.unshift(...comments);
+  }
+}
+
+/**
  * Merge comments with node's innerComments or assign comments to be
  * innerComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
@@ -50,10 +67,10 @@ function setTrailingComments(node: Node, comments: Array<Comment>) {
  * @param {Node} node
  * @param {Array<Comment>} comments
  */
-export function setInnerComments(node: Node, comments: Array<Comment> | void) {
+export function setInnerComments(node: Node, comments: Array<Comment>) {
   if (node.innerComments === undefined) {
     node.innerComments = comments;
-  } else if (comments !== undefined) {
+  } else {
     node.innerComments.unshift(...comments);
   }
 }
@@ -149,7 +166,7 @@ export default class CommentsParser extends BaseParser {
         setTrailingComments(commentWS.leadingNode, comments);
       }
       if (commentWS.trailingNode !== null) {
-        commentWS.trailingNode.leadingComments = comments;
+        setLeadingComments(commentWS.trailingNode, comments);
       }
     } else {
       /*:: invariant(commentWS.containingNode !== null) */
@@ -236,6 +253,38 @@ export default class CommentsParser extends BaseParser {
     const commentWS = commentStack[length - 1];
     if (commentWS.leadingNode === node) {
       commentWS.leadingNode = null;
+    }
+  }
+
+  /**
+   * Attach a node to the comment whitespaces right before/after
+   * the given range.
+   *
+   * This is used to properly attach comments around parenthesized
+   * expressions as leading/trailing comments of the inner expression.
+   *
+   * @param {Node} node
+   * @param {number} start
+   * @param {number} end
+   */
+  takeSurroundingComments(node: Node, start: number, end: number) {
+    const { commentStack } = this.state;
+    const commentStackLength = commentStack.length;
+    if (commentStackLength === 0) return;
+    let i = commentStackLength - 1;
+
+    for (; i >= 0; i--) {
+      const commentWS = commentStack[i];
+      const commentEnd = commentWS.end;
+      const commentStart = commentWS.start;
+
+      if (commentStart === end) {
+        commentWS.leadingNode = node;
+      } else if (commentEnd === start) {
+        commentWS.trailingNode = node;
+      } else if (commentEnd < start) {
+        break;
+      }
     }
   }
 }
