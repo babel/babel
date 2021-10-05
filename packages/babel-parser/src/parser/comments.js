@@ -260,7 +260,7 @@ export default class CommentsParser extends BaseParser {
    * Attach a node to the comment whitespaces right before/after
    * the given range.
    *
-   * This is used to propertly attach comments aroung parenthesized
+   * This is used to properly attach comments around parenthesized
    * expressions as leading/trailing comments of the inner expression.
    *
    * @param {Node} node
