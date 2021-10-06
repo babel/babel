@@ -169,7 +169,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@workspace:*, @babel/code-frame@workspace:^7.14.5, @babel/code-frame@workspace:packages/babel-code-frame":
+"@babel/code-frame@workspace:*, @babel/code-frame@workspace:^7.14.5, @babel/code-frame@workspace:^7.15.8, @babel/code-frame@workspace:packages/babel-code-frame":
   version: 0.0.0-use.local
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
@@ -248,17 +248,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/core@workspace:packages/babel-core"
   dependencies:
-    "@babel/code-frame": "workspace:^7.14.5"
-    "@babel/generator": "workspace:^7.15.4"
+    "@babel/code-frame": "workspace:^7.15.8"
+    "@babel/generator": "workspace:^7.15.8"
     "@babel/helper-compilation-targets": "workspace:^7.15.4"
-    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.15.4"
+    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.15.8"
     "@babel/helper-transform-fixture-test-runner": "workspace:*"
     "@babel/helpers": "workspace:^7.15.4"
-    "@babel/parser": "workspace:^7.15.5"
+    "@babel/parser": "workspace:^7.15.8"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
     "@babel/template": "workspace:^7.15.4"
     "@babel/traverse": "workspace:^7.15.4"
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/types": "workspace:^7.15.6"
     "@types/convert-source-map": ^1.5.1
     "@types/debug": ^4.1.0
     "@types/resolve": ^1.3.2
@@ -374,13 +374,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@workspace:*, @babel/generator@workspace:^7.14.5, @babel/generator@workspace:^7.15.4, @babel/generator@workspace:packages/babel-generator":
+"@babel/generator@workspace:*, @babel/generator@workspace:^7.14.5, @babel/generator@workspace:^7.15.4, @babel/generator@workspace:^7.15.8, @babel/generator@workspace:packages/babel-generator":
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
     "@babel/helper-fixtures": "workspace:*"
     "@babel/parser": "workspace:*"
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/types": "workspace:^7.15.6"
     "@types/jsesc": ^2.5.0
     "@types/source-map": ^0.5.0
     charcodes: ^0.2.0
@@ -671,7 +671,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-module-transforms-BABEL_8_BREAKING-false@npm:@babel/helper-module-transforms@workspace:^7.15.4, @babel/helper-module-transforms@workspace:^7.14.5, @babel/helper-module-transforms@workspace:^7.15.4, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
+"@babel/helper-module-transforms-BABEL_8_BREAKING-false@npm:@babel/helper-module-transforms@workspace:^7.15.8, @babel/helper-module-transforms@workspace:^7.14.5, @babel/helper-module-transforms@workspace:^7.15.4, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
@@ -686,12 +686,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-module-transforms@condition:BABEL_8_BREAKING ? : workspace:^7.15.4":
-  version: 0.0.0-condition-82b77f
-  resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.15.4#82b77f"
+"@babel/helper-module-transforms@condition:BABEL_8_BREAKING ? : workspace:^7.15.8":
+  version: 0.0.0-condition-b38c26
+  resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.15.8#b38c26"
   dependencies:
-    "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.15.4"
-  checksum: 94f5bd35b38dbe18655fb20e1872cf205419ad5d4871e5c66d1ffb478aee531bf1daea139723bfd410b0c2a29e7709f6a43d5eb760e7e0c81893a12b9a800c31
+    "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.15.8"
   languageName: node
   linkType: hard
 
@@ -993,7 +992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@workspace:*, @babel/parser@workspace:^7.15.4, @babel/parser@workspace:^7.15.5, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:*, @babel/parser@workspace:^7.15.4, @babel/parser@workspace:^7.15.8, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
@@ -1099,7 +1098,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-async-generator-functions@workspace:*, @babel/plugin-proposal-async-generator-functions@workspace:^7.15.4, @babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions":
+"@babel/plugin-proposal-async-generator-functions@workspace:*, @babel/plugin-proposal-async-generator-functions@workspace:^7.15.8, @babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions"
   dependencies:
@@ -2859,7 +2858,7 @@ __metadata:
   resolution: "@babel/plugin-transform-runtime@workspace:packages/babel-plugin-transform-runtime"
   dependencies:
     "@babel/core": "workspace:*"
-    "@babel/helper-module-imports": "workspace:^7.14.5"
+    "@babel/helper-module-imports": "workspace:^7.15.4"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
     "@babel/helpers": "workspace:*"
@@ -2914,14 +2913,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-spread@workspace:*, @babel/plugin-transform-spread@workspace:^7.14.6, @babel/plugin-transform-spread@workspace:packages/babel-plugin-transform-spread":
+"@babel/plugin-transform-spread@workspace:*, @babel/plugin-transform-spread@workspace:^7.15.8, @babel/plugin-transform-spread@workspace:packages/babel-plugin-transform-spread":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-spread@workspace:packages/babel-plugin-transform-spread"
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^7.14.5"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^7.15.4"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3183,7 +3182,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.14.5"
     "@babel/helper-validator-option": "workspace:^7.14.5"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^7.15.4"
-    "@babel/plugin-proposal-async-generator-functions": "workspace:^7.15.4"
+    "@babel/plugin-proposal-async-generator-functions": "workspace:^7.15.8"
     "@babel/plugin-proposal-class-properties": "workspace:^7.14.5"
     "@babel/plugin-proposal-class-static-block": "workspace:^7.15.4"
     "@babel/plugin-proposal-dynamic-import": "workspace:^7.14.5"
@@ -3238,7 +3237,7 @@ __metadata:
     "@babel/plugin-transform-regenerator": "workspace:^7.14.5"
     "@babel/plugin-transform-reserved-words": "workspace:^7.14.5"
     "@babel/plugin-transform-shorthand-properties": "workspace:^7.14.5"
-    "@babel/plugin-transform-spread": "workspace:^7.14.6"
+    "@babel/plugin-transform-spread": "workspace:^7.15.8"
     "@babel/plugin-transform-sticky-regex": "workspace:^7.14.5"
     "@babel/plugin-transform-template-literals": "workspace:^7.14.5"
     "@babel/plugin-transform-typeof-symbol": "workspace:^7.14.5"
