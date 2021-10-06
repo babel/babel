@@ -114,17 +114,6 @@ export default function createPlugin({ name, development }) {
 
     const injectMetaPropertiesVisitor: Visitor<PluginPass> = {
       JSXOpeningElement(path, state) {
-        for (const attr of path.get("attributes")) {
-          if (!attr.isJSXAttribute()) continue;
-
-          const { name } = attr.node.name;
-          if (name === "__source" || name === "__self") {
-            throw path.buildCodeFrameError(
-              `__source and __self should not be defined in props and are reserved for internal usage.`,
-            );
-          }
-        }
-
         const attributes = [];
         if (isThisAllowed(path)) {
           attributes.push(
