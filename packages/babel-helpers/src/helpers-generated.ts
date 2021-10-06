@@ -5,6 +5,14 @@
 
 import template from "@babel/template";
 
+export const asyncIterator = {
+  minVersion: "7.15.9",
+  ast: () =>
+    template.program.ast(
+      '\nexport default function _asyncIterator(iterable) {\n  var method;\n  if (typeof Symbol !== "undefined") {\n    if (Symbol.asyncIterator) method = iterable[Symbol.asyncIterator];\n    if (method == null && Symbol.iterator) {\n      method = iterable[Symbol.iterator];\n      if (method != null) {\n        return new AsyncFromSyncIterator(method.call(iterable));\n      }\n    }\n  }\n  if (method == null) method = iterable["@@asyncIterator"];\n  if (method == null) {\n    method = iterable["@@iterator"];\n    if (method != null) return new AsyncFromSyncIterator(method.call(iterable));\n  }\n  if (method == null) throw new TypeError("Object is not async iterable");\n  return method.call(iterable);\n}\nfunction AsyncFromSyncIterator(s) {\n  AsyncFromSyncIterator = function (s) {\n    this.s = s;\n    this.n = s.next;\n  };\n  AsyncFromSyncIterator.prototype = {\n     s: null,\n     n: null,\n    next: function () {\n      return AsyncFromSyncIteratorContinuation(this.n.apply(this.s, arguments));\n    },\n    return: function (value) {\n      var ret = this.s.return;\n      if (ret === undefined) {\n        return Promise.resolve({ value: value, done: true });\n      }\n      return AsyncFromSyncIteratorContinuation(ret.apply(this.s, arguments));\n    },\n    throw: function (value) {\n      var thr = this.s.return;\n      if (thr === undefined) return Promise.reject(value);\n      return AsyncFromSyncIteratorContinuation(thr.apply(this.s, arguments));\n    },\n  };\n  function AsyncFromSyncIteratorContinuation(r) {\n    \n    if (Object(r) !== r) {\n      return Promise.reject(new TypeError(r + " is not an object."));\n    }\n    var done = r.done;\n    return Promise.resolve(r.value).then(function (value) {\n      return { value: value, done: done };\n    });\n  }\n  return new AsyncFromSyncIterator(s);\n}\n',
+    ),
+};
+
 export const jsx = {
   minVersion: "7.0.0-beta.0",
   ast: () =>

@@ -16,62 +16,6 @@ const helper = (minVersion: string) => (tpl: TemplateStringsArray) => ({
   ast: () => template.program.ast(tpl),
 });
 
-helpers.asyncIterator = helper("7.15.9")`
-  export default function _asyncIterator(iterable) {
-    var method;
-    if (typeof Symbol !== "undefined") {
-      if (Symbol.asyncIterator) method = iterable[Symbol.asyncIterator];
-      if (method == null && Symbol.iterator) {
-        method = iterable[Symbol.iterator];
-        if (method != null) return new AsyncFromSyncIterator(method.call(iterable));
-      }
-    }
-    if (method == null) method = iterable["@@asyncIterator"];
-    if (method == null) {
-      method = iterable["@@iterator"];
-      if (method != null) return new AsyncFromSyncIterator(method.call(iterable));
-    }
-    if (method == null) throw new TypeError("Object is not async iterable");
-    return method.call(iterable);
-  }
-
-  function AsyncFromSyncIterator(s) {
-    AsyncFromSyncIterator = function (s) {
-      this.s = s;
-      this.n = s.next;
-    };
-    AsyncFromSyncIterator.prototype = {
-      /* SyncIterator */ s: null,
-      /* SyncIterator.[[Next]] */ n: null,
-      next: function () {
-        return AsyncFromSyncIteratorContinuation(this.n.apply(this.s, arguments));
-      },
-      return: function (value) {
-        var ret = this.s.return;
-        if (ret === undefined) return Promise.resolve({ value: value, done: true });
-        return AsyncFromSyncIteratorContinuation(ret.apply(this.s, arguments));
-      },
-      throw: function (value) {
-        var thr = this.s.return;
-        if (thr === undefined) return Promise.reject(value);
-        return AsyncFromSyncIteratorContinuation(thr.apply(this.s, arguments));
-      },
-    };
-
-    function AsyncFromSyncIteratorContinuation(r) {
-      // This step is _before_ calling AsyncFromSyncIteratorContinuation in the spec.
-      if (Object(r) !== r) return Promise.reject(new TypeError(r + " is not an object."));
-
-      var done = r.done;
-      return Promise.resolve(r.value).then(function (value) {
-        return { value: value, done: done };
-      });
-    }
-
-    return new AsyncFromSyncIterator(s);
-  }
-`;
-
 helpers.AwaitValue = helper("7.0.0-beta.0")`
   export default function _AwaitValue(value) {
     this.wrapped = value;
