@@ -19,6 +19,35 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.15.8 (2021-10-06)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#13788](https://github.com/babel/babel/pull/13788) Sort module export names ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#13769](https://github.com/babel/babel/pull/13769) Tokenize keywords-like identifier as new tokens ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#13821](https://github.com/babel/babel/pull/13821) Fix missing inner comments in class expressions ([@overlookmotel](https://github.com/overlookmotel))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`
+  * [#13803](https://github.com/babel/babel/pull/13803) Collect comments around parentheses in expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`
+  * [#13800](https://github.com/babel/babel/pull/13800) fix: remove imported types from export ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#13814](https://github.com/babel/babel/pull/13814) Improve debug logging for IgnoreList ([@paleite](https://github.com/paleite))
+* `babel-node`
+  * [#13784](https://github.com/babel/babel/pull/13784) [@babel/node] Forward the signal SIGTERM as well ([@julienw](https://github.com/julienw))
+
+#### :house: Internal
+* [#13808](https://github.com/babel/babel/pull/13808) Update parser plugins for TypeScript tests ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* [#13795](https://github.com/babel/babel/pull/13795) Fix Gulpfile path separator issue on Windows ([@NotWearingPants](https://github.com/NotWearingPants))
+
+#### :running_woman: Performance
+* `babel-code-frame`
+  * [#13812](https://github.com/babel/babel/pull/13812) Optimization of string splitting ([@shoonia](https://github.com/shoonia))
 ## v7.15.7 (2021-09-17)
 
 #### :bug: Bug Fix
