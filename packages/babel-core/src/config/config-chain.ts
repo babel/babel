@@ -1,5 +1,4 @@
 import path from "path";
-import { inspect } from "util";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { validate } from "./validation/options";
@@ -788,7 +787,7 @@ function ignoreListReplacer(
   value: IgnoreList | IgnoreItem,
 ): IgnoreList | IgnoreItem | string {
   if (value instanceof RegExp) {
-    return inspect(value);
+    return String(value);
   }
 
   return value;
