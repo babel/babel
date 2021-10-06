@@ -5749,7 +5749,7 @@ __metadata:
     rollup-plugin-node-polyfills: ^0.2.1
     rollup-plugin-terser: ^7.0.2
     test262-stream: ^1.4.0
-    through2: ^2.0.0
+    through2: ^4.0.0
     typescript: ~4.2.3
   dependenciesMeta:
     core-js:
@@ -12931,14 +12931,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.0.6":
-  version: 3.4.0
-  resolution: "readable-stream@npm:3.4.0"
+"readable-stream@npm:3, readable-stream@npm:^3.0.6":
+  version: 3.6.0
+  resolution: "readable-stream@npm:3.6.0"
   dependencies:
     inherits: ^2.0.3
     string_decoder: ^1.1.1
     util-deprecate: ^1.0.1
-  checksum: cb4a55018facb15312e2f91a0389d0cc41b88afef6fd9f533db75533ec60102bafd6fd0185699aa3328a3b2301e2f867ef1903f1b7389f916614edbc53359b94
+  checksum: d4ea81502d3799439bb955a3a5d1d808592cf3133350ed352aeaa499647858b27b1c4013984900238b0873ec8d0d8defce72469fb7a83e61d53f5ad61cb80dc8
   languageName: node
   linkType: hard
 
@@ -14486,6 +14486,15 @@ fsevents@^1.2.7:
     readable-stream: ~2.3.6
     xtend: ~4.0.1
   checksum: beb0f338aa2931e5660ec7bf3ad949e6d2e068c31f4737b9525e5201b824ac40cac6a337224856b56bd1ddd866334bbfb92a9f57cd6f66bc3f18d3d86fc0fe50
+  languageName: node
+  linkType: hard
+
+"through2@npm:^4.0.0":
+  version: 4.0.2
+  resolution: "through2@npm:4.0.2"
+  dependencies:
+    readable-stream: 3
+  checksum: ac7430bd54ccb7920fd094b1c7ff3e1ad6edd94202e5528331253e5fde0cc56ceaa690e8df9895de2e073148c52dfbe6c4db74cacae812477a35660090960cc0
   languageName: node
   linkType: hard
 
