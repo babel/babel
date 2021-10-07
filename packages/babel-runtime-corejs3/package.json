@@ -17,6 +17,15 @@
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
+    "./helpers/asyncIterator": [
+      {
+        "node": "./helpers/asyncIterator.js",
+        "import": "./helpers/esm/asyncIterator.js",
+        "default": "./helpers/asyncIterator.js"
+      },
+      "./helpers/asyncIterator.js"
+    ],
+    "./helpers/esm/asyncIterator": "./helpers/esm/asyncIterator.js",
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx.js",
@@ -53,15 +62,6 @@
       "./helpers/wrapRegExp.js"
     ],
     "./helpers/esm/wrapRegExp": "./helpers/esm/wrapRegExp.js",
-    "./helpers/asyncIterator": [
-      {
-        "node": "./helpers/asyncIterator.js",
-        "import": "./helpers/esm/asyncIterator.js",
-        "default": "./helpers/asyncIterator.js"
-      },
-      "./helpers/asyncIterator.js"
-    ],
-    "./helpers/esm/asyncIterator": "./helpers/esm/asyncIterator.js",
     "./helpers/AwaitValue": [
       {
         "node": "./helpers/AwaitValue.js",
