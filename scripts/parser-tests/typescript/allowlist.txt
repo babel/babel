@@ -109,7 +109,6 @@ declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts
 declarationEmitMixinPrivateProtected.ts
 declarationEmitPrefersPathKindBasedOnBundling.ts
 declarationEmitPrefersPathKindBasedOnBundling2.ts
-declarationEmitPrivatePromiseLikeInterface.ts
 declarationEmitPrivateSymbolCausesVarDeclarationEmit2.ts
 declarationEmitReadonlyComputedProperty.ts
 declarationEmitStringEnumUsedInNonlocalSpread.ts
@@ -222,7 +221,6 @@ exportSpecifierAndLocalMemberDeclaration.ts
 exportStarFromEmptyModule.ts
 exportStarNotElided.ts
 expressionsForbiddenInParameterInitializers.ts
-extendedUnicodePlaneIdentifiers.ts
 extendingClassFromAliasAndUsageInIndexer.ts
 extendsClauseAlreadySeen.ts
 extendsClauseAlreadySeen2.ts
@@ -234,7 +232,6 @@ functionCall15.ts
 functionDeclarationWithResolutionOfTypeNamedArguments01.ts
 functionExpressionInWithBlock.ts
 functionExpressionWithResolutionOfTypeNamedArguments01.ts
-getterErrorMessageNotDuplicated.ts
 gettersAndSettersErrors.ts
 giant.ts
 globalThisDeclarationEmit.ts
@@ -410,7 +407,6 @@ shorthandPropertyAssignmentInES6Module.ts
 sourceMap-LineBreaks.ts
 sourceMapValidationDecorators.ts
 sourceMapValidationStatements.ts
-stackDepthLimitCastingType.ts
 strictModeReservedWord.ts
 superCallFromClassThatHasNoBaseType1.ts
 symbolLinkDeclarationEmitModuleNames.ts
