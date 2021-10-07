@@ -1,23 +1,28 @@
 /* @minVersion 7.15.9 */
 
 export default function _asyncIterator(iterable) {
-  var method, async, sync;
+  var method,
+    async,
+    sync,
+    retry = 2;
+
   if (typeof Symbol !== "undefined") {
     async = Symbol.asyncIterator;
     sync = Symbol.iterator;
   }
-  do {
-    if (!sync) {
-      async = "@@asyncIterator";
-      sync = "@@iterator";
-    }
+
+  while (retry--) {
     if (async && (method = iterable[async]) != null) {
       return method.call(iterable);
     }
-    if ((method = iterable[sync]) != null) {
+    if (sync && (method = iterable[sync]) != null) {
       return new AsyncFromSyncIterator(method.call(iterable));
     }
-  } while (!(sync === "@@iterator" || (sync = null)));
+
+    async = "@@asyncIterator";
+    sync = "@@iterator";
+  }
+
   throw new TypeError("Object is not async iterable");
 }
 
