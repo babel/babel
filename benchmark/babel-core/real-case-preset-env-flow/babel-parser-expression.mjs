@@ -18,15 +18,22 @@ function createInput() {
 }
 function benchCases(name, implementation, options) {
   const input = createInput();
-  suite.add(`${name} ${fixtureName}`, () => {
-    implementation(input, {
-      plugins: ["@babel/preset-env", "@babel/preset-flow"],
-      targets: "ie 11",
-      configFile: false,
-      babelrc: false,
-      ...options,
-    });
-  });
+  suite.add(
+    `${name} ${fixtureName}`,
+    () => {
+      implementation(input, {
+        plugins: ["@babel/preset-env", "@babel/preset-flow"],
+        targets: "ie 11",
+        configFile: false,
+        babelrc: false,
+        ...options,
+      });
+    },
+    {
+      // increase minSamples for accuracy
+      minSamples: 100,
+    }
+  );
 }
 
 benchCases("baseline", baseline.transformFromAstSync, {});
