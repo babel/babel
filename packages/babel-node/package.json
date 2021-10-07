@@ -38,7 +38,7 @@
     "@babel/helper-fixtures": "workspace:*",
     "@babel/runtime": "workspace:*",
     "fs-readdir-recursive": "^1.0.0",
-    "make-dir": "^2.1.0",
+    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
     "rimraf": "^3.0.0"
   },
   "bin": {
