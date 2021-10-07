@@ -598,7 +598,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           children.length > 0
             ? [
                 buildChildrenProperty(
-                  //@ts-expect-error The childre here contains JSXSpreadChild,
+                  //@ts-expect-error The children here contains JSXSpreadChild,
                   // which will be thrown later
                   children,
                 ),
