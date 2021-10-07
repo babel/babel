@@ -7,22 +7,14 @@ import cleanJSXElementLiteralChild from "../../utils/react/cleanJSXElementLitera
 import type * as t from "../..";
 
 type ReturnedChild =
-  | t.JSXExpressionContainer
   | t.JSXSpreadChild
   | t.JSXElement
   | t.JSXFragment
   | t.Expression;
 
-export default function buildChildren(node: {
-  children: ReadonlyArray<
-    | t.JSXText
-    | t.JSXExpressionContainer
-    | t.JSXSpreadChild
-    | t.JSXElement
-    | t.JSXFragment
-    | t.JSXEmptyExpression
-  >;
-}): ReturnedChild[] {
+export default function buildChildren(
+  node: t.JSXElement | t.JSXFragment,
+): ReturnedChild[] {
   const elements = [];
 
   for (let i = 0; i < node.children.length; i++) {

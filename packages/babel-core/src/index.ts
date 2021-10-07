@@ -2,6 +2,7 @@ declare const PACKAGE_JSON: { name: string; version: string };
 export const version = PACKAGE_JSON.version;
 
 export { default as File } from "./transformation/file/file";
+export type { default as PluginPass } from "./transformation/plugin-pass";
 export { default as buildExternalHelpers } from "./tools/build-external-helpers";
 export { resolvePlugin, resolvePreset } from "./config/files";
 
