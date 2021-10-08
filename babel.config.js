@@ -104,10 +104,12 @@ module.exports = function (api) {
       targets = { node: nodeVersion };
       needsPolyfillsForOldNode = true;
       break;
+    case "test":
+      targets = { node: "current" };
+      needsPolyfillsForOldNode = true;
+      break;
     case "development":
       envOpts.debug = true;
-    // fall through
-    case "test":
       targets = { node: "current" };
       break;
   }
