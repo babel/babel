@@ -2207,5 +2207,5 @@ defineType("StaticBlock", {
       ),
     },
   },
-  aliases: ["Scopable", "BlockParent"],
+  aliases: ["Scopable", "BlockParent", "FunctionParent"],
 });
