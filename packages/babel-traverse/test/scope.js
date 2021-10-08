@@ -782,12 +782,11 @@ describe("scope", () => {
         expect(switchStatement.scope.hasOwnBinding("foo")).toBe(false);
       });
       it("in while statement", () => {
-        const whileStatement = getPath("while (0) { var foo; }").get("body.0");
-
+        const whileStatement = getPath("while (0) \n var foo;").get("body.0");
         expect(whileStatement.scope.hasOwnBinding("foo")).toBe(false);
       });
       it("in do-while statement", () => {
-        const doWhileStatement = getPath("do { var foo; } while (0)").get(
+        const doWhileStatement = getPath("do \n var foo \n while(0);").get(
           "body.0",
         );
         expect(doWhileStatement.scope.hasOwnBinding("foo")).toBe(false);
@@ -867,20 +866,6 @@ describe("scope", () => {
           "body.0",
         );
         expect(switchStatement.scope.hasOwnBinding("foo")).toBe(true);
-      });
-    });
-    //todo: decide whether these statements should be scopeable and blockParent
-    describe("let declarations should not be registered", () => {
-      it("in while statement", () => {
-        const whileStatement = getPath("while (0) { let foo; }").get("body.0");
-
-        expect(whileStatement.scope.hasOwnBinding("foo")).toBe(false);
-      });
-      it("in do-while statement", () => {
-        const doWhileStatement = getPath("do { let foo; } while (0)").get(
-          "body.0",
-        );
-        expect(doWhileStatement.scope.hasOwnBinding("foo")).toBe(false);
       });
     });
   });
