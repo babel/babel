@@ -1450,6 +1450,23 @@ export function isPrivateName(
 
   return false;
 }
+export function isStaticBlock(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.StaticBlock {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "StaticBlock") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isAnyTypeAnnotation(
   node: object | null | undefined,
   opts?: object | null,
@@ -3005,23 +3022,6 @@ export function isDecimalLiteral(
 
   const nodeType = (node as t.Node).type;
   if (nodeType === "DecimalLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isStaticBlock(
-  node: object | null | undefined,
-  opts?: object | null,
-): node is t.StaticBlock {
-  if (!node) return false;
-
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "StaticBlock") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -4642,7 +4642,8 @@ export function isFunctionParent(
     "ObjectMethod" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
     "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType
+    "ClassPrivateMethod" === nodeType ||
+    "StaticBlock" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

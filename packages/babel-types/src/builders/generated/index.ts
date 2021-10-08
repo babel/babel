@@ -547,6 +547,9 @@ export function classPrivateMethod(
 export function privateName(id: t.Identifier): t.PrivateName {
   return builder("PrivateName", ...arguments);
 }
+export function staticBlock(body: Array<t.Statement>): t.StaticBlock {
+  return builder("StaticBlock", ...arguments);
+}
 export function anyTypeAnnotation(): t.AnyTypeAnnotation {
   return builder("AnyTypeAnnotation", ...arguments);
 }
@@ -1056,9 +1059,6 @@ export function tupleExpression(
 }
 export function decimalLiteral(value: string): t.DecimalLiteral {
   return builder("DecimalLiteral", ...arguments);
-}
-export function staticBlock(body: Array<t.Statement>): t.StaticBlock {
-  return builder("StaticBlock", ...arguments);
 }
 export function moduleExpression(body: t.Program): t.ModuleExpression {
   return builder("ModuleExpression", ...arguments);
