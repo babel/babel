@@ -21,7 +21,7 @@ const fileFilter = function (x) {
 };
 
 const outputFileSync = function (filePath, data) {
-  fs.makeDirSync(path.dirname(filePath), { recursive: true });
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
 
