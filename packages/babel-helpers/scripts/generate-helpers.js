@@ -5,7 +5,7 @@ import { URL, fileURLToPath } from "url";
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json"]);
 
-export default async function generateAsserts() {
+export default async function generateHelpers() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
