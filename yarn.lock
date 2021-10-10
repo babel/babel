@@ -324,13 +324,13 @@ __metadata:
     "@babel/core": "workspace:^"
     dedent: ^0.7.0
     eslint: ^7.27.0
-    eslint-8: "npm:eslint@^8.0.0-rc.0"
+    eslint-8: "npm:eslint@^8.0.0"
     eslint-scope: ^5.1.1
     eslint-visitor-keys: ^2.1.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
     "@babel/core": ">=7.11.0"
-    eslint: ^7.5.0 || ^8.0.0-beta.2
+    eslint: ^7.5.0 || ^8.0.0
   languageName: unknown
   linkType: soft
 
@@ -3657,9 +3657,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@eslint/eslintrc@npm:1.0.1"
+"@eslint/eslintrc@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@eslint/eslintrc@npm:1.0.2"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
@@ -3670,7 +3670,7 @@ __metadata:
     js-yaml: ^3.13.1
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: 0d0919e4f51be1e760e0370789bbd8051db323bd85ec427c693398f63c4f441b828199232bf538161a18ab76100e071902e8b3f7e92c2bee34d17da3d070e9f6
+  checksum: bc57f1cfb8809552072e8dedf219753972f804c4d3efffbb365946fc1e09218b5e032da91afffee23739f21ecb761e151d72d5058245b5064183735c7a20fffb
   languageName: node
   linkType: hard
 
@@ -7723,11 +7723,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-8@npm:eslint@^8.0.0-rc.0, eslint@npm:8.0.0-rc.0":
-  version: 8.0.0-rc.0
-  resolution: "eslint@npm:8.0.0-rc.0"
+"eslint-8@npm:eslint@^8.0.0, eslint@npm:8.0.0":
+  version: 8.0.0
+  resolution: "eslint@npm:8.0.0"
   dependencies:
-    "@eslint/eslintrc": ^1.0.1
+    "@eslint/eslintrc": ^1.0.2
     "@humanwhocodes/config-array": ^0.6.0
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -7767,7 +7767,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 2f1e07f270bd863acf695fc1520ec53b10b06432751107c42c7d448bc72a8215f0f589dc3bc1c97a15e15a55adcb65ac6d0772a2bdf3a4e03d795e2c40482956
+  checksum: 68ba2838862782d9cbf6100218cbf0d69873b6d5d1de5860627b5424f067e2145d334810168142452fb93692666aa1cbeb4d0a94eea089a7d54d3ae32e99942c
   languageName: node
   linkType: hard
 
