@@ -246,8 +246,11 @@ export function TopicReference(this: Printer) {
     this.token(topicToken);
   } else {
     const givenTopicTokenJSON = JSON.stringify(topicToken);
-    const message = `The "topicToken" generator option must be "#" (${givenTopicTokenJSON} received instead).`;
-    throw new Error(message);
+    const validTopics = Array.from(validTopicTokenSet, v => JSON.stringify(v));
+    throw new Error(
+      `The "topicToken" generator option must be one of ` +
+        `${validTopics.join(", ")} (${givenTopicTokenJSON} received instead).`,
+    );
   }
 }
 
