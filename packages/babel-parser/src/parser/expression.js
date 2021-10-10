@@ -1211,11 +1211,10 @@ export default class ExpressionParser extends LValParser {
 
         if (pipeProposal) {
           return this.parseTopicReference(pipeProposal);
-        } else {
-          throw this.unexpected();
         }
       }
 
+      // fall through
       case tt.relational: {
         if (this.state.value === "<") {
           const lookaheadCh = this.input.codePointAt(this.nextTokenStart());
@@ -1224,7 +1223,6 @@ export default class ExpressionParser extends LValParser {
             lookaheadCh === charCodes.greaterThan // Fragment <>
           ) {
             this.expectOnePlugin(["jsx", "flow", "typescript"]);
-            break;
           }
         }
       }
