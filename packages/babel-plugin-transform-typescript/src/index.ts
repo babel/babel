@@ -233,18 +233,18 @@ export default declare((api, opts) => {
                 continue;
               }
 
-              const importsToRemove: NodePath<t.Node>[] = [];
+              const importsToRemove: Set<NodePath<t.Node>> = new Set();
               const specifiersLength = stmt.node.specifiers.length;
               const isAllSpecifiersElided = () =>
                 specifiersLength > 0 &&
-                specifiersLength === importsToRemove.length;
+                specifiersLength === importsToRemove.size;
 
               for (const specifier of stmt.node.specifiers) {
                 if (specifier.importKind === "type") {
                   registerGlobalType(programNode, specifier.local.name);
                   const binding = stmt.scope.getBinding(specifier.local.name);
                   if (binding) {
-                    importsToRemove.push(binding.path);
+                    importsToRemove.add(binding.path);
                   }
                 }
               }
@@ -270,7 +270,7 @@ export default declare((api, opts) => {
                   // just bail if there is no binding, since chances are good that if
                   // the import statement was injected then it wasn't a typescript type
                   // import anyway.
-                  if (!importsToRemove.includes(binding.path)) {
+                  if (!importsToRemove.has(binding.path)) {
                     if (
                       binding &&
                       isImportTypeOnly({
@@ -280,7 +280,7 @@ export default declare((api, opts) => {
                         pragmaFragImportName,
                       })
                     ) {
-                      importsToRemove.push(binding.path);
+                      importsToRemove.add(binding.path);
                     } else {
                       NEEDS_EXPLICIT_ESM.set(path.node, false);
                     }
