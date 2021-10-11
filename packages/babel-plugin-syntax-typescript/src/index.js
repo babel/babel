@@ -15,7 +15,7 @@ function removePlugin(plugins, name) {
   }
 }
 
-export default declare((api, { isTSX }) => {
+export default declare((api, { isTSX, disallowJSXAmbiguity }) => {
   api.assertVersion(7);
 
   return {
@@ -31,7 +31,10 @@ export default declare((api, { isTSX }) => {
       // in TS depends on the extensions, and is purely dependent on 'isTSX'.
       removePlugin(plugins, "jsx");
 
-      parserOpts.plugins.push("typescript", "classProperties");
+      parserOpts.plugins.push(
+        ["typescript", { disallowJSXAmbiguity }],
+        "classProperties",
+      );
 
       if (!process.env.BABEL_8_BREAKING) {
         // This is enabled by default since @babel/parser 7.1.5
