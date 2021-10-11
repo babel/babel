@@ -64,7 +64,7 @@ function shouldIgnore(name, ignore?: Array<string>) {
   );
 }
 
-const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx"];
+const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx", ".cts", ".mts"];
 
 function findFile(filepath: string, allowJSON?: boolean) {
   const matches = [];
@@ -134,6 +134,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
         ? taskOpts.BABEL_8_BREAKING === false
         : taskOpts.BABEL_8_BREAKING === true),
     options: taskOpts,
+    doNotSetSourceType: taskOpts.DO_NOT_SET_SOURCE_TYPE,
     externalHelpers:
       taskOpts.externalHelpers ??
       !!tryResolve("@babel/plugin-external-helpers"),
@@ -162,6 +163,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   };
 
   delete taskOpts.BABEL_8_BREAKING;
+  delete taskOpts.DO_NOT_SET_SOURCE_TYPE;
 
   // If there's node requirement, check it before pushing task
   if (taskOpts.minNodeVersion) {
