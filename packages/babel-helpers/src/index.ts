@@ -354,8 +354,6 @@ export function ensure(name: string, newFileClass?) {
   loadHelper(name);
 }
 
-export const list = Object.keys(helpers)
-  .map(name => name.replace(/^_/, ""))
-  .filter(name => name !== "__esModule");
+export const list = Object.keys(helpers).map(name => name.replace(/^_/, ""));
 
 export default get;
