@@ -134,7 +134,7 @@ __metadata:
     convert-source-map: ^1.1.0
     fs-readdir-recursive: ^1.1.0
     glob: ^7.0.0
-    make-dir: ^2.1.0
+    make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     rimraf: ^3.0.0
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
     source-map: ^0.5.0
@@ -972,7 +972,7 @@ __metadata:
     commander: ^4.0.1
     core-js: ^3.16.0
     fs-readdir-recursive: ^1.0.0
-    make-dir: ^2.1.0
+    make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     node-environment-flags: ^1.0.5
     regenerator-runtime: ^0.13.4
     rimraf: ^3.0.0
@@ -2872,7 +2872,7 @@ __metadata:
     babel-plugin-polyfill-corejs2: ^0.2.2
     babel-plugin-polyfill-corejs3: ^0.2.5
     babel-plugin-polyfill-regenerator: ^0.2.2
-    make-dir: ^2.1.0
+    make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -3366,7 +3366,7 @@ __metadata:
     browserify: ^16.5.2
     clone-deep: ^4.0.1
     find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
-    make-dir: ^2.1.0
+    make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     pirates: ^4.0.0
     source-map-support: ^0.5.16
   peerDependencies:
@@ -11190,13 +11190,22 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"make-dir@npm:^2.0.0, make-dir@npm:^2.1.0":
+"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^2.1.0, make-dir@npm:^2.0.0, make-dir@npm:^2.1.0":
   version: 2.1.0
   resolution: "make-dir@npm:2.1.0"
   dependencies:
     pify: ^4.0.1
     semver: ^5.6.0
   checksum: 043548886bfaf1820323c6a2997e6d2fa51ccc2586ac14e6f14634f7458b4db2daf15f8c310e2a0abd3e0cddc64df1890d8fc7263033602c47bb12cbfcf86aab
+  languageName: node
+  linkType: hard
+
+"make-dir@condition:BABEL_8_BREAKING ? : ^2.1.0":
+  version: 0.0.0-condition-86eacd
+  resolution: "make-dir@condition:BABEL_8_BREAKING?:^2.1.0#86eacd"
+  dependencies:
+    make-dir-BABEL_8_BREAKING-false: "npm:make-dir@^2.1.0"
+  checksum: 98e37a75730bfb08722d3eac1295aa8a73960791e662f16491c49397f193f44ce2ac32938b71059b43ae9ff48003610edeeb2c59ac86c20d4b21d02a6dcc54a0
   languageName: node
   linkType: hard
 

@@ -40,7 +40,7 @@
     "@babel/runtime-corejs3": "workspace:*",
     "@babel/template": "workspace:*",
     "@babel/types": "workspace:*",
-    "make-dir": "^2.1.0"
+    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",
   "engines": {

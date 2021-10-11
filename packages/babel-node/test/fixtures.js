@@ -1,7 +1,6 @@
 import readdir from "fs-readdir-recursive";
 import * as helper from "@babel/helper-fixtures";
 import rimraf from "rimraf";
-import { sync as makeDirSync } from "make-dir";
 import child from "child_process";
 import path from "path";
 import fs from "fs";
@@ -20,7 +19,7 @@ const fileFilter = function (x) {
 };
 
 const outputFileSync = function (filePath, data) {
-  makeDirSync(path.dirname(filePath));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
 
