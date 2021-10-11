@@ -41,7 +41,7 @@ export function ExportDefaultSpecifier(
 
 export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
   if (node.exportKind === "type") {
-    this.word(node.exportKind);
+    this.word("type");
     this.space();
   }
 
