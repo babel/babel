@@ -8,11 +8,19 @@ const IGNORED_FILES = new Set(["package.json"]);
 export default async function generateHelpers() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
- * To re-generate run 'make build'
+ * To re-generate run 'yarn gulp generate-runtime-helpers'
  */
 
 import template from "@babel/template";
 
+function helper(minVersion, source) {
+  return Object.freeze({
+    minVersion,
+    ast: () => template.program.ast(source),
+  })
+}
+
+export default Object.freeze({
 `;
 
   for (const file of (await fs.promises.readdir(HELPERS_FOLDER)).sort()) {
@@ -20,8 +28,6 @@ import template from "@babel/template";
     if (file.startsWith(".")) continue; // ignore e.g. vim swap files
 
     const [helperName] = file.split(".");
-    const isValidId = isValidBindingIdentifier(helperName);
-    const varName = isValidId ? helperName : `_${helperName}`;
 
     const filePath = join(fileURLToPath(HELPERS_FOLDER), file);
     if (!file.endsWith(".js")) {
@@ -45,24 +51,14 @@ import template from "@babel/template";
       // Remove multiple newlines
       .replace(/\n{2,}/g, "\n");
 
-    const intro = isValidId
-      ? "export "
-      : `export { ${varName} as ${helperName} }\n`;
-
-    output += `\n${intro}const ${varName} = {
-  minVersion: ${JSON.stringify(minVersion)},
-  ast: () => template.program.ast(${JSON.stringify(source)})
-};\n`;
+    output += `\
+  ${JSON.stringify(helperName)}: helper(
+    ${JSON.stringify(minVersion)},
+    ${JSON.stringify(source)},
+  ),
+`;
   }
 
+  output += "});";
   return output;
-}
-
-function isValidBindingIdentifier(name) {
-  try {
-    Function(`var ${name}`);
-    return true;
-  } catch {
-    return false;
-  }
 }
