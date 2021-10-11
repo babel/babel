@@ -702,4 +702,171 @@ describe("scope", () => {
       }
     });
   });
+
+  describe("own bindings", () => {
+    // Var declarations should be declared in the nearest FunctionParent ancestry
+    describe("var declarations should be registered", () => {
+      it("in program", () => {
+        const program = getPath("var foo;");
+        expect(program.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in function declaration", () => {
+        const functionDeclaration = getPath("function f() { var foo; }").get(
+          "body.0.expression",
+        );
+        expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in function expression", () => {
+        const functionExpression = getPath("(function () { var foo; })").get(
+          "body.0.expression",
+        );
+        expect(functionExpression.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in arrow expression", () => {
+        const arrowExpression =
+          getPath("() => { var foo; }").get("body.0.expression");
+        expect(arrowExpression.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in object method", () => {
+        const objectMethod = getPath("({ method() { var foo; } })").get(
+          "body.0.expression.properties.0",
+        );
+        expect(objectMethod.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in class method", () => {
+        const classMethod = getPath("(class { method() { var foo; } })").get(
+          "body.0.expression.body.body.0",
+        );
+        expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in class private method", () => {
+        const classMethod = getPath("(class { #method() { var foo; } })").get(
+          "body.0.expression.body.body.0",
+        );
+        expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in static block", () => {
+        const staticBlock = getPath("(class { static { var foo; } })", {
+          plugins: ["classStaticBlock"],
+        }).get("body.0.expression.body.body.0");
+        expect(staticBlock.scope.hasOwnBinding("foo")).toBe(true);
+      });
+    });
+    describe("var declarations should not be registered", () => {
+      it("in block statement", () => {
+        const blockStatement = getPath("{ var foo; }").get("body.0");
+        expect(blockStatement.scope.hasOwnBinding("foo")).toBe(false);
+      });
+      it("in catch clause", () => {
+        const catchClause = getPath("try {} catch { var foo; }").get(
+          "body.0.handler",
+        );
+        expect(catchClause.scope.hasOwnBinding("foo")).toBe(false);
+      });
+      it("in for-init statement", () => {
+        const forStatement = getPath("for (var foo;;);").get("body.0");
+        expect(forStatement.scope.hasOwnBinding("foo")).toBe(false);
+      });
+      it("in for-in statement", () => {
+        const forStatement = getPath("for (var foo in x);").get("body.0");
+        expect(forStatement.scope.hasOwnBinding("foo")).toBe(false);
+      });
+      it("in for-of statement", () => {
+        const forStatement = getPath("for (var foo of x);").get("body.0");
+        expect(forStatement.scope.hasOwnBinding("foo")).toBe(false);
+      });
+      it("in switch statement", () => {
+        const switchStatement = getPath("switch (0) { case 0: var foo; }").get(
+          "body.0",
+        );
+        expect(switchStatement.scope.hasOwnBinding("foo")).toBe(false);
+      });
+      it("in while statement", () => {
+        const whileStatement = getPath("while (0) \n var foo;").get("body.0");
+        expect(whileStatement.scope.hasOwnBinding("foo")).toBe(false);
+      });
+      it("in do-while statement", () => {
+        const doWhileStatement = getPath("do \n var foo \n while(0);").get(
+          "body.0",
+        );
+        expect(doWhileStatement.scope.hasOwnBinding("foo")).toBe(false);
+      });
+    });
+    // Lexical declarations should be registered in the nearest BlockParent ancestry
+    describe("let declarations should be registered", () => {
+      it("in program", () => {
+        const program = getPath("let foo;");
+        expect(program.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in function declaration", () => {
+        const functionDeclaration = getPath("function f() { let foo; }").get(
+          "body.0.expression",
+        );
+        expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in function expression", () => {
+        const functionExpression = getPath("(function () { let foo; })").get(
+          "body.0.expression",
+        );
+        expect(functionExpression.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in arrow expression", () => {
+        const arrowExpression =
+          getPath("() => { let foo; }").get("body.0.expression");
+        expect(arrowExpression.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in object method", () => {
+        const objectMethod = getPath("({ method() { let foo; } })").get(
+          "body.0.expression.properties.0",
+        );
+        expect(objectMethod.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in class method", () => {
+        const classMethod = getPath("(class { method() { let foo; } })").get(
+          "body.0.expression.body.body.0",
+        );
+        expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in class private method", () => {
+        const classMethod = getPath("(class { #method() { let foo; } })").get(
+          "body.0.expression.body.body.0",
+        );
+        expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in static block", () => {
+        const staticBlock = getPath("(class { static { let foo; } })", {
+          plugins: ["classStaticBlock"],
+        }).get("body.0.expression.body.body.0");
+        expect(staticBlock.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in block statement", () => {
+        const blockStatement = getPath("{ let foo; }").get("body.0");
+        expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in catch clause", () => {
+        const catchClause = getPath("try {} catch { let foo; }").get(
+          "body.0.handler",
+        );
+        expect(catchClause.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in for-init statement", () => {
+        const forStatement = getPath("for (let foo;;);").get("body.0");
+        expect(forStatement.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in for-in statement", () => {
+        const forStatement = getPath("for (let foo in x);").get("body.0");
+        expect(forStatement.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in for-of statement", () => {
+        const forStatement = getPath("for (let foo of x);").get("body.0");
+        expect(forStatement.scope.hasOwnBinding("foo")).toBe(true);
+      });
+      it("in switch statement", () => {
+        const switchStatement = getPath("switch (0) { case 0: let foo; }").get(
+          "body.0",
+        );
+        expect(switchStatement.scope.hasOwnBinding("foo")).toBe(true);
+      });
+    });
+  });
 });

@@ -206,7 +206,7 @@ const aliasDescriptions = {
   ForXStatement:
     "A cover of [ForInStatements and ForOfStatements](https://tc39.es/ecma262/#sec-for-in-and-for-of-statements).",
   Function:
-    "A cover of functions and [method](#method)s, the must have `body` and `params`. Note: `Function` is different to `FunctionParent`.",
+    "A cover of functions and [method](#method)s, the must have `body` and `params`. Note: `Function` is different to `FunctionParent`. For example, a `StaticBlock` is a `FunctionParent` but not `Function`.",
   FunctionParent:
     "A cover of AST nodes that start an execution context with new [VariableEnvironment](https://tc39.es/ecma262/#table-additional-state-components-for-ecmascript-code-execution-contexts). In other words, they define the scope of `var` declarations. FunctionParent did not include `Program` since Babel 7.",
   Immutable:
