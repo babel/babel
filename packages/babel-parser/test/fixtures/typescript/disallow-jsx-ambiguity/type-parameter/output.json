@@ -1,0 +1,95 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+  "errors": [
+    "SyntaxError: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`. (1:0)",
+    "SyntaxError: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`. (2:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":11}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "NumericLiteral",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":2}},
+                "name": {
+                  "type": "Identifier",
+                  "start":1,"end":2,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":2},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":12,"end":24,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":12}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":12,"end":23,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":11}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":16,"end":17,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":22,"end":23,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":12,"end":15,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":13,"end":14,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2}},
+                "name": {
+                  "type": "Identifier",
+                  "start":13,"end":14,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
