@@ -61,6 +61,14 @@ export function isDenylisted(this: NodePath): boolean {
 // TODO: Remove in Babel 8
 export { isDenylisted as isBlacklisted };
 
+function restoreContext(path: NodePath, context: TraversalContext) {
+  if (path.context !== context) {
+    path.context = context;
+    path.state = context.state;
+    path.opts = context.opts;
+  }
+}
+
 export function visit(this: NodePath): boolean {
   if (!this.node) {
     return false;
@@ -74,15 +82,17 @@ export function visit(this: NodePath): boolean {
     return false;
   }
 
-  // Note: We need to check "this.shouldSkip" twice because
-  // the visitor can set it to true. Usually .shouldSkip is false
+  const currentContext = this.context;
+  // Note: We need to check "this.shouldSkip" first because
+  // another visitor can set it to true. Usually .shouldSkip is false
   // before calling the enter visitor, but it can be true in case of
   // a requeued node (e.g. by .replaceWith()) that is then marked
   // with .skip().
-  if (this.shouldSkip || this.call("enter") || this.shouldSkip) {
+  if (this.shouldSkip || this.call("enter")) {
     this.debug("Skip...");
     return this.shouldStop;
   }
+  restoreContext(this, currentContext);
 
   this.debug("Recursing into...");
   traverse.node(
@@ -93,6 +103,8 @@ export function visit(this: NodePath): boolean {
     this,
     this.skipKeys,
   );
+
+  restoreContext(this, currentContext);
 
   this.call("exit");
 
