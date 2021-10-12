@@ -1,6 +1,7 @@
 import fs from "fs";
 import { join } from "path";
 import { URL, fileURLToPath } from "url";
+import { minify } from "terser"; // eslint-disable-line
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json"]);
@@ -44,17 +45,15 @@ export default Object.freeze({
     }
     const { minVersion } = minVersionMatch.groups;
 
-    // TODO: We can minify the helpers in production
-    const source = fileContents
-      // Remove comments
-      .replace(/\/\*[^]*?\*\/|\/\/.*/g, "")
-      // Remove multiple newlines
-      .replace(/\n{2,}/g, "\n");
+    const source = await minify(fileContents, {
+      compress: false,
+      mangle: false,
+    });
 
     output += `\
   ${JSON.stringify(helperName)}: helper(
     ${JSON.stringify(minVersion)},
-    ${JSON.stringify(source)},
+    ${JSON.stringify(source.code)},
   ),
 `;
   }
