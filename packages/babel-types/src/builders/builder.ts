@@ -27,7 +27,9 @@ export default function builder<T extends t.Node>(this: T["type"]): T {
     node[key] = arg;
   }
 
-  for (const key of Object.keys(node)) {
+  // (assume all enumerable properties are own)
+  // eslint-disable-next-line guard-for-in
+  for (const key in node) {
     validate(node as t.Node, key, node[key]);
   }
 
