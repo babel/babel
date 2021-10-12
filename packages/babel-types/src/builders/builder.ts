@@ -14,8 +14,8 @@ export default function builder<T extends t.Node>(this: T["type"]): T {
 
   const node = { type };
 
-  let i = 0;
-  keys.forEach(key => {
+  for (let i = 0; i < keys.length; ++i) {
+    const key = keys[i];
     const field = NODE_FIELDS[type][key];
 
     let arg;
@@ -25,8 +25,7 @@ export default function builder<T extends t.Node>(this: T["type"]): T {
     }
 
     node[key] = arg;
-    i++;
-  });
+  }
 
   for (const key of Object.keys(node)) {
     validate(node as t.Node, key, node[key]);
