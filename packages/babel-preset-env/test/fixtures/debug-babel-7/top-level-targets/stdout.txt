@@ -14,7 +14,7 @@ Using plugins:
   syntax-numeric-separator
   proposal-logical-assignment-operators { chrome < 85 }
   syntax-nullish-coalescing-operator
-  proposal-optional-chaining { chrome }
+  proposal-optional-chaining { chrome < 91 }
   syntax-json-strings
   syntax-optional-catch-binding
   syntax-async-generators

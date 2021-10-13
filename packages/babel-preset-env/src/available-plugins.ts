@@ -68,6 +68,7 @@ import bugfixEdgeFunctionName from "@babel/preset-modules/lib/plugins/transform-
 import bugfixTaggedTemplateCaching from "@babel/preset-modules/lib/plugins/transform-tagged-template-caching";
 import bugfixSafariBlockShadowing from "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing";
 import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing";
+import bugfixSafariIdDestructuringCollisionInFunctionExpression from "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression";
 import bugfixV8SpreadParametersInOptionalChaining from "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining";
 
 export default {
@@ -76,6 +77,8 @@ export default {
   "bugfix/transform-edge-function-name": () => bugfixEdgeFunctionName,
   "bugfix/transform-safari-block-shadowing": () => bugfixSafariBlockShadowing,
   "bugfix/transform-safari-for-shadowing": () => bugfixSafariForShadowing,
+  "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
+    () => bugfixSafariIdDestructuringCollisionInFunctionExpression,
   "bugfix/transform-tagged-template-caching": () => bugfixTaggedTemplateCaching,
   "bugfix/transform-v8-spread-parameters-in-optional-chaining": () =>
     bugfixV8SpreadParametersInOptionalChaining,
