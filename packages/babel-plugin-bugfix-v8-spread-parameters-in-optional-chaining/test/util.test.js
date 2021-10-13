@@ -5,15 +5,7 @@ function getPath(input, parserOpts = {}) {
   let targetPath;
   traverse(
     parseSync(input, {
-      parserOpts: {
-        plugins: [
-          "classPrivateMethods",
-          "classPrivateProperties",
-          "classProperties",
-          ...(parserOpts.plugins || []),
-        ],
-        ...parserOpts,
-      },
+      parserOpts,
       filename: "example.js",
       configFile: false,
     }),

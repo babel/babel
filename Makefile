@@ -186,15 +186,15 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 
 new-version-checklist:
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @echo "!!!!!!                                                   !!!!!!"
-	# @echo "!!!!!!         Write any message that should             !!!!!!"
-	# @echo "!!!!!!            block the release here                 !!!!!!"
-	# @echo "!!!!!!                                                   !!!!!!"
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @exit 1
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!  Set packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/package.json"
+	@echo "!!!!!!  @babel/core peerDependencies to latest published version"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@exit 1
 
 new-version:
 	$(MAKE) new-version-checklist
