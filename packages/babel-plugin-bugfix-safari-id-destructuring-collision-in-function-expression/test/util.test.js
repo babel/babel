@@ -25,7 +25,9 @@ describe("shouldTransform", () => {
     "({ b: function a([a]) {} })",
     "(function a({a}) {})",
     "(function a(...a) {})",
+    "(function a({ ...a }) {})",
     "(function a([a = 1]) {})",
+    "(function a(b, { a: [,...a] }) {})",
   ];
 
   const negativeCases = [
@@ -33,19 +35,22 @@ describe("shouldTransform", () => {
     "(function a() {})",
     "(function a(a) {})",
     "(function a() { var a })",
+    "(function b([a]) { var a })",
+    "(function b([a]) { function a() {} })",
     "(function a(x = a) {})",
     "(function a() { var { a } = {}; })",
+    "(function b([a]) { var { a } = {}; })",
+    "(function a({ [a]: b }) {})",
   ];
 
-  describe("default parser options", () => {
-    test.each(positiveCases)("shouldTransform(%p) should return 'a'", input => {
+  describe("the following cases should be transformed", () => {
+    test.each(positiveCases)("%p", input => {
       expect(shouldTransform(getPath(input))).toBe("a");
     });
-    test.each(negativeCases)(
-      "shouldTransform(in %p) should return false",
-      input => {
-        expect(shouldTransform(getPath(input))).toBe(false);
-      },
-    );
+  });
+  describe("the following cases should not be transformed", () => {
+    test.each(negativeCases)("%p", input => {
+      expect(shouldTransform(getPath(input))).toBe(false);
+    });
   });
 });
