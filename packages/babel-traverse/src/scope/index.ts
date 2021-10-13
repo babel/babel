@@ -335,17 +335,20 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   Function(path) {
+    const params: Array<NodePath> = path.get("params");
+    for (const param of params) {
+      path.scope.registerBinding("param", param);
+    }
+
+    // Register function expression id after params. When the id
+    // collides with a function param, the id effectively can't be
+    // referenced: here we registered it as a constantViolation
     if (
       path.isFunctionExpression() &&
       path.has("id") &&
       !path.get("id").node[NOT_LOCAL_BINDING]
     ) {
       path.scope.registerBinding("local", path.get("id"), path);
-    }
-
-    const params: Array<NodePath> = path.get("params");
-    for (const param of params) {
-      path.scope.registerBinding("param", param);
     }
   },
 
