@@ -3328,17 +3328,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let leftOfAs = node[leftOfAsKey];
       let rightOfAs;
 
-      let isTypeOnly = false;
+      let hasTypeSpecifier = false;
       let canParseAsKeyword = true;
 
       const pos = leftOfAs.start;
 
       // https://github.com/microsoft/TypeScript/blob/fc4f9d83d5939047aa6bb2a43965c6e9bbfbc35b/src/compiler/parser.ts#L7411-L7456
       if (!isStringSpecifier && leftOfAs.name === "type") {
-        // import { type } from "mod";          - isTypeOnly: false, leftOfAs: type
-        // import { type as } from "mod";       - isTypeOnly: true,  leftOfAs: as
-        // import { type as as } from "mod";    - isTypeOnly: false, leftOfAs: type, rightOfAs: as
-        // import { type as as as } from "mod"; - isTypeOnly: true,  leftOfAs: as,   rightOfAs: as
+        // import { type } from "mod";          - hasTypeSpecifier: false, leftOfAs: type
+        // import { type as } from "mod";       - hasTypeSpecifier: true,  leftOfAs: as
+        // import { type as as } from "mod";    - hasTypeSpecifier: false, leftOfAs: type, rightOfAs: as
+        // import { type as as as } from "mod"; - hasTypeSpecifier: true,  leftOfAs: as,   rightOfAs: as
         if (this.isContextual(tt._as)) {
           // { type as ...? }
           const firstAs = this.parseIdentifier();
@@ -3347,7 +3347,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             const secondAs = this.parseIdentifier();
             if (this.match(tt.name)) {
               // { type as as something }
-              isTypeOnly = true;
+              hasTypeSpecifier = true;
               leftOfAs = firstAs;
               rightOfAs = this.parseIdentifier();
               canParseAsKeyword = false;
@@ -3362,12 +3362,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             rightOfAs = this.parseIdentifier();
           } else {
             // { type as }
-            isTypeOnly = true;
+            hasTypeSpecifier = true;
             leftOfAs = firstAs;
           }
         } else if (this.match(tt.name)) {
           // { type something ...? }
-          isTypeOnly = true;
+          hasTypeSpecifier = true;
           leftOfAs = this.parseIdentifier();
         }
       }
@@ -3375,9 +3375,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node[rightOfAsKey] = rightOfAs;
 
       const kindKey = isImport ? "importKind" : "exportKind";
-      node[kindKey] = isTypeOnly ? "type" : "value";
+      node[kindKey] = hasTypeSpecifier ? "type" : "value";
 
-      if (isTypeOnly && isInTypeOnlyImportExport) {
+      if (hasTypeSpecifier && isInTypeOnlyImportExport) {
         this.raise(
           pos,
           isImport
