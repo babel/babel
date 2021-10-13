@@ -1125,9 +1125,14 @@ export default class Scope {
         // That is, if a scope path is pattern, its parent must be Function/CatchClause
 
         // Spec 9.2.10.28: The closure created by this expression should not have visibility of
-        // declarations in the function body. If the binding is not a `param`-kind,
+        // declarations in the function body. If the binding is not a `param`-kind (as function parameters)
+        // or `local`-kind (as id in function expression),
         // then it must be defined inside the function body, thus it should be skipped
-        if (previousPath?.isPattern() && binding.kind !== "param") {
+        if (
+          previousPath?.isPattern() &&
+          binding.kind !== "param" &&
+          binding.kind !== "local"
+        ) {
           // do nothing
         } else {
           return binding;
