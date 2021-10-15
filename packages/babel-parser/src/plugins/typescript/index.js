@@ -11,6 +11,7 @@ import {
   tokenIsTSDeclarationStart,
   tokenIsTSTypeOperator,
   tokenOperatorPrecedence,
+  tokenIsKeywordOrIdentifier,
   tt,
   type TokenType,
 } from "../../tokenizer/types";
@@ -3346,7 +3347,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.isContextual(tt._as)) {
             // { type as as ...? }
             const secondAs = this.parseIdentifier();
-            if (this.match(tt.name)) {
+            if (tokenIsKeywordOrIdentifier(this.state.type)) {
               // { type as as something }
               hasTypeSpecifier = true;
               leftOfAs = firstAs;
@@ -3357,7 +3358,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               rightOfAs = secondAs;
               canParseAsKeyword = false;
             }
-          } else if (this.match(tt.name)) {
+          } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
             // { type as something }
             canParseAsKeyword = false;
             rightOfAs = this.parseIdentifier();
@@ -3366,7 +3367,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             hasTypeSpecifier = true;
             leftOfAs = firstAs;
           }
-        } else if (this.match(tt.name)) {
+        } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
           // { type something ...? }
           hasTypeSpecifier = true;
           leftOfAs = this.parseIdentifier();
