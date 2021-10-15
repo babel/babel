@@ -8,7 +8,7 @@ export default declare((api, opts) => {
   const {
     allExtensions,
     allowNamespaces,
-    disallowJSXAmbiguity,
+    disallowAmbiguousJSXLike,
     isTSX,
     jsxPragma,
     jsxPragmaFrag,
@@ -17,19 +17,19 @@ export default declare((api, opts) => {
   } = normalizeOptions(opts);
 
   const pluginOptions = process.env.BABEL_8_BREAKING
-    ? (isTSX, disallowJSXAmbiguity) => ({
+    ? (isTSX, disallowAmbiguousJSXLike) => ({
         allowNamespaces,
-        disallowJSXAmbiguity,
+        disallowAmbiguousJSXLike,
         isTSX,
         jsxPragma,
         jsxPragmaFrag,
         onlyRemoveTypeImports,
         optimizeConstEnums,
       })
-    : (isTSX, disallowJSXAmbiguity) => ({
+    : (isTSX, disallowAmbiguousJSXLike) => ({
         allowDeclareFields: opts.allowDeclareFields,
         allowNamespaces,
-        disallowJSXAmbiguity,
+        disallowAmbiguousJSXLike,
         isTSX,
         jsxPragma,
         jsxPragmaFrag,
@@ -42,7 +42,10 @@ export default declare((api, opts) => {
       ? [
           {
             plugins: [
-              [transformTypeScript, pluginOptions(isTSX, disallowJSXAmbiguity)],
+              [
+                transformTypeScript,
+                pluginOptions(isTSX, disallowAmbiguousJSXLike),
+              ],
             ],
           },
         ]
@@ -65,7 +68,7 @@ export default declare((api, opts) => {
           },
           {
             test: /\.tsx$/,
-            // disallowJSXAmbiguity is a no-op when parsing TSX, since it's
+            // disallowAmbiguousJSXLike is a no-op when parsing TSX, since it's
             // always disallowed.
             plugins: [[transformTypeScript, pluginOptions(true, false)]],
           },

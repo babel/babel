@@ -15,7 +15,7 @@ function removePlugin(plugins, name) {
   }
 }
 
-export default declare((api, { isTSX, disallowJSXAmbiguity }) => {
+export default declare((api, { isTSX, disallowAmbiguousJSXLike }) => {
   api.assertVersion(7);
 
   return {
@@ -32,7 +32,7 @@ export default declare((api, { isTSX, disallowJSXAmbiguity }) => {
       removePlugin(plugins, "jsx");
 
       parserOpts.plugins.push(
-        ["typescript", { disallowJSXAmbiguity }],
+        ["typescript", { disallowAmbiguousJSXLike }],
         "classProperties",
       );
 

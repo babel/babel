@@ -1428,7 +1428,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeAssertion(): N.TsTypeAssertion {
-      if (this.getPluginOption("typescript", "disallowJSXAmbiguity")) {
+      if (this.getPluginOption("typescript", "disallowAmbiguousJSXLike")) {
         this.raise(this.state.start, TSErrors.ReservedTypeAssertion);
       }
 
@@ -2959,7 +2959,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (
         node.params.length === 1 &&
         !node.extra?.trailingComma &&
-        this.getPluginOption("typescript", "disallowJSXAmbiguity")
+        this.getPluginOption("typescript", "disallowAmbiguousJSXLike")
       ) {
         this.raise(node.start, TSErrors.ReservedArrowTypeParam);
       }

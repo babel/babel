@@ -185,7 +185,7 @@ export interface FlowPluginOptions {
 
 export interface TypeScriptPluginOptions {
   dts?: boolean;
-  disallowJSXAmbiguity?: boolean;
+  disallowAmbiguousJSXLike?: boolean;
 }
 
 export const tokTypes: {

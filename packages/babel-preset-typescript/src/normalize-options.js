@@ -7,7 +7,7 @@ export default function normalizeOptions(options = {}) {
   const TopLevelOptions = {
     allExtensions: "allExtensions",
     allowNamespaces: "allowNamespaces",
-    disallowJSXAmbiguity: "disallowJSXAmbiguity",
+    disallowAmbiguousJSXLike: "disallowAmbiguousJSXLike",
     isTSX: "isTSX",
     jsxPragma: "jsxPragma",
     jsxPragmaFrag: "jsxPragmaFrag",
@@ -55,15 +55,15 @@ export default function normalizeOptions(options = {}) {
     v.invariant(allExtensions, "isTSX:true requires allExtensions:true");
   }
 
-  const disallowJSXAmbiguity = v.validateBooleanOption(
-    TopLevelOptions.disallowJSXAmbiguity,
-    options.disallowJSXAmbiguity,
+  const disallowAmbiguousJSXLike = v.validateBooleanOption(
+    TopLevelOptions.disallowAmbiguousJSXLike,
+    options.disallowAmbiguousJSXLike,
     false,
   );
-  if (disallowJSXAmbiguity) {
+  if (disallowAmbiguousJSXLike) {
     v.invariant(
       allExtensions,
-      "disallowJSXAmbiguity:true requires allExtensions:true",
+      "disallowAmbiguousJSXLike:true requires allExtensions:true",
     );
   }
 
@@ -76,7 +76,7 @@ export default function normalizeOptions(options = {}) {
   return {
     allExtensions,
     allowNamespaces,
-    disallowJSXAmbiguity,
+    disallowAmbiguousJSXLike,
     isTSX,
     jsxPragma,
     jsxPragmaFrag,

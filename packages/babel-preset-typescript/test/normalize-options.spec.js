@@ -33,7 +33,7 @@ describe("normalize options", () => {
 Object {
   "allExtensions": false,
   "allowNamespaces": true,
-  "disallowJSXAmbiguity": false,
+  "disallowAmbiguousJSXLike": false,
   "isTSX": false,
   "jsxPragma": "React",
   "jsxPragmaFrag": "React.Fragment",
@@ -82,7 +82,7 @@ Object {
 Object {
   "allExtensions": false,
   "allowNamespaces": true,
-  "disallowJSXAmbiguity": false,
+  "disallowAmbiguousJSXLike": false,
   "isTSX": false,
   "jsxPragma": undefined,
   "jsxPragmaFrag": "React.Fragment",
