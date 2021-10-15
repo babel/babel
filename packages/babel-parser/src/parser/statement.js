@@ -2169,6 +2169,7 @@ export default class StatementParser extends ExpressionParser {
       }
 
       const node = this.startNode();
+      const isMaybeTypeOnly = this.isContextual(tt._type);
       const isString = this.match(tt.string);
       node.local = this.parseModuleExportName();
       const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
@@ -2176,6 +2177,7 @@ export default class StatementParser extends ExpressionParser {
         /* isImport */ false,
         isString,
         isInTypeExport,
+        isMaybeTypeOnly,
       );
       if (canParseAsKeyword && this.eatContextual(tt._as)) {
         node.exported = this.parseModuleExportName();
@@ -2448,6 +2450,7 @@ export default class StatementParser extends ExpressionParser {
     isImport: boolean,
     isStringSpecifier: boolean,
     isInTypeOnlyImportExport: boolean,
+    isMaybeTypeOnly: boolean,
     /* eslint-enable no-unused-vars */
   ): boolean {
     return true;
@@ -2457,14 +2460,16 @@ export default class StatementParser extends ExpressionParser {
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
     const importedIsString = this.match(tt.string);
+    const isMaybeTypeOnly = this.isContextual(tt._type);
     specifier.imported = this.parseModuleExportName();
-    const canParseAsKeyworkd = this.parseTypeOnlyImportExportSpecifier(
+    const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
       specifier,
       /* isImport */ true,
       importedIsString,
       /* isInTypeOnlyImportExport */ node.importKind === "type",
+      isMaybeTypeOnly,
     );
-    if (canParseAsKeyworkd && this.eatContextual(tt._as)) {
+    if (canParseAsKeyword && this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();
     } else {
       const { imported } = specifier;

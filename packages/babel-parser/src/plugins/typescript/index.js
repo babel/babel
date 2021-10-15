@@ -3321,6 +3321,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isImport: boolean,
       isStringSpecifier: boolean,
       isInTypeOnlyImportExport: boolean,
+      isMaybeTypeOnly: boolean,
     ): boolean {
       const leftOfAsKey = isImport ? "imported" : "local";
       const rightOfAsKey = isImport ? "local" : "exported";
@@ -3334,7 +3335,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const pos = leftOfAs.start;
 
       // https://github.com/microsoft/TypeScript/blob/fc4f9d83d5939047aa6bb2a43965c6e9bbfbc35b/src/compiler/parser.ts#L7411-L7456
-      if (!isStringSpecifier && leftOfAs.name === "type") {
+      if (!isStringSpecifier && isMaybeTypeOnly) {
         // import { type } from "mod";          - hasTypeSpecifier: false, leftOfAs: type
         // import { type as } from "mod";       - hasTypeSpecifier: true,  leftOfAs: as
         // import { type as as } from "mod";    - hasTypeSpecifier: false, leftOfAs: type, rightOfAs: as
