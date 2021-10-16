@@ -1,12 +1,13 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t, template } from "@babel/core";
+import type { File as BabelFile } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 
-import transpileConstEnum from "./const-enum";
+import transpileConstEnum, { NodePathConstEnum } from "./const-enum";
 import transpileEnum from "./enum";
 import transpileNamespace from "./namespace";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
 
 function isInType(path) {
   switch (path.parent.type) {
@@ -50,8 +51,31 @@ function isGlobalType(path, name) {
 function registerGlobalType(programNode, name) {
   GLOBAL_TYPES.get(programNode).add(name);
 }
-
-export default declare((api, opts) => {
+export interface Options {
+  /** @default true */
+  allowNamespaces?: boolean;
+  /** @default "React.createElement" */
+  jsxPragma?: string;
+  /** @default "React.Fragment" */
+  jsxPragmaFrag?: string;
+  onlyRemoveTypeImports?: boolean;
+  optimizeConstEnums?: boolean;
+  allowDeclareFields?: boolean;
+}
+type ConfigAPI = { assertVersion: (range: string | number) => void };
+interface Plugin {
+  name: string;
+  visitor: Visitor<{ file: BabelFile }>;
+  inherits: typeof syntaxTypeScript;
+}
+type ExtraNodeProps = {
+  declare?: unknown;
+  accessibility?: unknown;
+  abstract?: unknown;
+  optional?: unknown;
+  override?: unknown;
+};
+export default declare((api: ConfigAPI, opts: Options): Plugin => {
   api.assertVersion(7);
 
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;
@@ -70,7 +94,11 @@ export default declare((api, opts) => {
   }
 
   const classMemberVisitors = {
-    field(path) {
+    field(
+      path: NodePath<
+        (t.ClassPrivateProperty | t.ClassProperty) & ExtraNodeProps
+      >,
+    ) {
       const { node } = path;
 
       if (!process.env.BABEL_8_BREAKING) {
@@ -302,7 +330,10 @@ export default declare((api, opts) => {
               (stmt.isTSModuleDeclaration({ declare: true }) &&
                 stmt.get("id").isIdentifier())
             ) {
-              registerGlobalType(programNode, stmt.node.id.name);
+              registerGlobalType(
+                programNode,
+                (stmt.node.id as t.Identifier).name,
+              );
             }
           }
         },
@@ -336,10 +367,11 @@ export default declare((api, opts) => {
         // Also, currently @babel/parser sets exportKind to "value" for
         //   export interface A {}
         //   etc.
+        type S = typeof path.node.specifiers[number] & { local?: t.Identifier };
         if (
           !path.node.source &&
           path.node.specifiers.length > 0 &&
-          path.node.specifiers.every(({ local }) =>
+          path.node.specifiers.every(({ local }: S) =>
             isGlobalType(path, local.name),
           )
         ) {
@@ -352,7 +384,9 @@ export default declare((api, opts) => {
 
       ExportSpecifier(path) {
         // remove type exports
-        if (!path.parent.source && isGlobalType(path, path.node.local.name)) {
+        type Parent = t.ExportDeclaration & { source?: t.StringLiteral };
+        const parent = path.parent as Parent;
+        if (!parent.source && isGlobalType(path, path.node.local.name)) {
           path.remove();
         }
       },
@@ -406,7 +440,7 @@ export default declare((api, opts) => {
       },
 
       Class(path) {
-        const { node } = path;
+        const { node }: { node: typeof path.node & ExtraNodeProps } = path;
 
         if (node.typeParameters) node.typeParameters = null;
         if (node.superTypeParameters) node.superTypeParameters = null;
@@ -469,7 +503,7 @@ export default declare((api, opts) => {
 
       TSEnumDeclaration(path) {
         if (optimizeConstEnums && path.node.const) {
-          transpileConstEnum(path, t);
+          transpileConstEnum(path as NodePathConstEnum, t);
         } else {
           transpileEnum(path, t);
         }
@@ -510,7 +544,7 @@ export default declare((api, opts) => {
       },
 
       TSAsExpression(path) {
-        let { node } = path;
+        let { node }: { node: t.Expression } = path;
         do {
           node = node.expression;
         } while (t.isTSAsExpression(node));
