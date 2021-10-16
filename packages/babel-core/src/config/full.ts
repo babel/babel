@@ -92,7 +92,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
       function* recursePresetDescriptors(
         rawPresets: Array<UnloadedDescriptor>,
         pluginDescriptorsPass: Array<UnloadedDescriptor>,
-      ) {
+      ): Handler<true | void> {
         const presets: Array<{
           preset: ConfigChain | null;
           pass: Array<UnloadedDescriptor>;
