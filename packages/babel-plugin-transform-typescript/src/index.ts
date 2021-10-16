@@ -5,7 +5,8 @@ import type { PluginPass } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 import type { NodePath, Visitor } from "@babel/traverse";
 
-import transpileConstEnum, { NodePathConstEnum } from "./const-enum";
+import transpileConstEnum from "./const-enum";
+import type { NodePathConstEnum } from "./const-enum";
 import transpileEnum from "./enum";
 import transpileNamespace from "./namespace";
 
