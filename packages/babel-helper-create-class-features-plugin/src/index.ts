@@ -18,6 +18,7 @@ import {
   FEATURES,
   isLoose,
 } from "./features";
+import { assertFieldTransformed } from "./typescript";
 
 export { FEATURES, enableFeature, injectInitialization };
 
@@ -98,10 +99,7 @@ export function createClassFeaturePlugin({
 
         verifyUsedFeatures(path, this.file);
 
-        if ((path.node as t.ClassDeclaration).declare) {
-          // TypeScript ambient declaration; dont transform
-          return;
-        }
+        if (path.isClassDeclaration()) assertFieldTransformed(path);
 
         const loose = isLoose(this.file, feature);
 
