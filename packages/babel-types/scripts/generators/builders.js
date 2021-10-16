@@ -119,7 +119,7 @@ import type * as t from "../..";
     const newType = definitions.DEPRECATED_KEYS[type];
     const formatedBuilderName = formatBuilderName(type);
     output += `/** @deprecated */
-function ${type}(...args: Array<any>): any {
+function ${type}(${generateBuilderArgs(newType).join(", ")}): t.${type} {
   console.trace("The node type ${type} has been renamed to ${newType}");
   return builder.apply("${type}", arguments);
 }
