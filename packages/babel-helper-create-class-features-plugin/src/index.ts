@@ -98,6 +98,11 @@ export function createClassFeaturePlugin({
 
         verifyUsedFeatures(path, this.file);
 
+        if ((path.node as t.ClassDeclaration).declare) {
+          // TypeScript ambient declaration; dont transform
+          return;
+        }
+
         const loose = isLoose(this.file, feature);
 
         let constructor: NodePath<t.ClassMethod>;
