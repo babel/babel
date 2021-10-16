@@ -1470,7 +1470,7 @@ export function tsTypeParameter(
 }
 export { tsTypeParameter as tSTypeParameter };
 /** @deprecated */
-function NumberLiteral(...args: Array<any>): any {
+function NumberLiteral(value: number): t.NumberLiteral {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
@@ -1478,19 +1478,19 @@ function NumberLiteral(...args: Array<any>): any {
 }
 export { NumberLiteral as numberLiteral };
 /** @deprecated */
-function RegexLiteral(...args: Array<any>): any {
+function RegexLiteral(pattern: string, flags?: string): t.RegexLiteral {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
   return builder.apply("RegexLiteral", arguments);
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
-function RestProperty(...args: Array<any>): any {
+function RestProperty(argument: t.LVal): t.RestProperty {
   console.trace("The node type RestProperty has been renamed to RestElement");
   return builder.apply("RestProperty", arguments);
 }
 export { RestProperty as restProperty };
 /** @deprecated */
-function SpreadProperty(...args: Array<any>): any {
+function SpreadProperty(argument: t.Expression): t.SpreadProperty {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
