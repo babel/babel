@@ -33,7 +33,7 @@ module.exports = {
   },
   "bugfix/transform-safari-id-destructuring-collision-in-function-expression": {
     features: ["destructuring, parameters / duplicate identifier"],
-    replaces: ["transform-parameters", "proposal-object-rest-spread"],
+    replaces: ["transform-parameters"],
   },
   "bugfix/transform-tagged-template-caching": {
     features: ["template literals / TemplateStrings permanent caching"],

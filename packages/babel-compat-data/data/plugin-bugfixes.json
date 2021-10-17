@@ -101,17 +101,6 @@
     "rhino": "1.7.13",
     "electron": "0.37"
   },
-  "proposal-object-rest-spread": {
-    "chrome": "60",
-    "opera": "47",
-    "edge": "79",
-    "firefox": "55",
-    "safari": "11.1",
-    "node": "8.3",
-    "ios": "11.3",
-    "samsung": "8",
-    "electron": "2.0"
-  },
   "bugfix/transform-safari-id-destructuring-collision-in-function-expression": {
     "chrome": "49",
     "opera": "36",
