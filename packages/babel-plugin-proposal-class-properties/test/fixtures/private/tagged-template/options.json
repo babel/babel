@@ -1,13 +1,13 @@
 {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "shippedProposals": true,
-          "targets": {
-            "chrome": "75"
-          }
+  "presets": [
+    [
+      "env",
+      {
+        "shippedProposals": true,
+        "targets": {
+          "chrome": "75"
         }
-      ]
+      }
     ]
-  }
+  ]
+}
