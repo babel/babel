@@ -150,6 +150,7 @@ export default {
 };
 
 export const minVersions = {
+  "bugfix/transform-v8-spread-parameters-in-optional-chaining": "7.15.0",
   "proposal-class-static-block": "7.12.0",
   "proposal-private-property-in-object": "7.10.0",
 };

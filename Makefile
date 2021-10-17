@@ -189,8 +189,10 @@ new-version-checklist:
 	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!  Set packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/package.json"
-	@echo "!!!!!!  @babel/core peerDependencies to latest published version"
+	@echo "!!!!!!  packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/index.ts"
+	@echo "!!!!!!  replace "api.assertVersion()" to the latest published version"
+	@echo "!!!!!!  packages/babel-preset-env/src/available-plugins.ts:"
+	@echo "!!!!!!  replace minVersion["bugfix/transform-v8-spread-parameters-in-optional-chaining"] to the latest published version
 	@echo "!!!!!!                                                   !!!!!!"
 	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
