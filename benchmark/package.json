@@ -15,7 +15,8 @@
     "@babel/preset-env": "workspace:*",
     "@babel/preset-flow": "workspace:*",
     "@babel/traverse": "workspace:*",
-    "benchmark": "^2.1.4"
+    "benchmark": "^2.1.4",
+    "chalk": "^4.0.0"
   },
   "version": "7.15.0"
 }

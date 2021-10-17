@@ -138,6 +138,7 @@ __metadata:
     "@babel/preset-flow": "workspace:*"
     "@babel/traverse": "workspace:*"
     benchmark: ^2.1.4
+    chalk: ^4.0.0
   languageName: unknown
   linkType: soft
 
