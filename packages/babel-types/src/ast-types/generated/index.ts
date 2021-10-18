@@ -1585,6 +1585,7 @@ export interface ImportAttribute extends BaseNode {
 export interface Decorator extends BaseNode {
   type: "Decorator";
   expression: Expression;
+  init?: boolean | null;
 }
 
 export interface DoExpression extends BaseNode {

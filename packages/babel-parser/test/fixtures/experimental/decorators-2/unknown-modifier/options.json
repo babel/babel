@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "decorators",
+      {
+        "decoratorsBeforeExport": false
+      }
+    ]
+  ],
+  "throws": "Unsupported decorator modifier. `@init:` is the only modifier currently supported for decorators. (1:1)"
+}

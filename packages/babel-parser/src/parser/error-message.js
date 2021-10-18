@@ -223,6 +223,8 @@ export const ErrorMessages = makeErrorTemplates(
     UnsupportedBind: "Binding should be performed on object property.",
     UnsupportedDecoratorExport:
       "A decorated export must export a class declaration.",
+    UnsupportedDecoratorModifier:
+      "Unsupported decorator modifier. `@init:` is the only modifier currently supported for decorators.",
     UnsupportedDefaultExport:
       "Only expressions, functions or classes are allowed as the `default` export.",
     UnsupportedImport:

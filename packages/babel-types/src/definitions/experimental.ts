@@ -51,6 +51,10 @@ defineType("Decorator", {
     expression: {
       validate: assertNodeType("Expression"),
     },
+    init: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
   },
 });
 

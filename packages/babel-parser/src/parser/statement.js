@@ -450,14 +450,42 @@ export default class StatementParser extends ExpressionParser {
 
       const startPos = this.state.start;
       const startLoc = this.state.startLoc;
-      let expr: N.Expression;
+      let expr: ?N.Expression;
 
-      if (this.eat(tt.parenL)) {
+      if (!this.match(tt.parenL)) {
+        // Will enter for @id and @init:*
+        const firstIdentifier = this.parseIdentifier(false);
+
+        if (this.eat(tt.colon)) {
+          // Will enter for @init:
+          if (firstIdentifier.name !== "init") {
+            this.unexpected(
+              firstIdentifier.start,
+              Errors.UnsupportedDecoratorModifier,
+            );
+          }
+          node.init = true;
+        } else {
+          // Will enter for @id*
+          expr = firstIdentifier;
+        }
+      }
+
+      if (!expr && this.eat(tt.parenL)) {
+        // Will enter for @(expr) and @init:(expr)
+        // If we did not parse an identifier yet, we can still have a valid expression
         expr = this.parseExpression();
         this.expect(tt.parenR);
       } else {
-        expr = this.parseIdentifier(false);
+        if (!expr) {
+          // Will enter for @init:id
+          // If it was a decorator with a modifier, and we didn't match a paren, then
+          // we haven't yet parsed an identifier because the previously parsed id was
+          // the `init` identifier.
+          expr = this.parseIdentifier(false);
+        }
 
+        // Parse the remaining member expressions
         while (this.eat(tt.dot)) {
           const node = this.startNodeAt(startPos, startLoc);
           node.object = expr;

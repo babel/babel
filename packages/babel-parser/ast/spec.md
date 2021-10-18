@@ -598,6 +598,7 @@ A variable declarator.
 interface Decorator <: Node {
   type: "Decorator";
   expression: Expression;
+  init: boolean;
 }
 ```
 

@@ -381,6 +381,7 @@ export type ArgumentPlaceholder = NodeBase & { type: "ArgumentPlaceholder" };
 export type Decorator = NodeBase & {
   type: "Decorator",
   expression: Expression,
+  init?: boolean,
   arguments?: Array<Expression | SpreadElement>,
 };
 
