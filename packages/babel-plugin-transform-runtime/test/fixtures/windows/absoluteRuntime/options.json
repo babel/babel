@@ -2,7 +2,7 @@
   "externalHelpers": false,
   "presets": [
     [
-      "@babel/preset-env",
+      "env",
       {
         "corejs": 3,
         "useBuiltIns": "entry"
