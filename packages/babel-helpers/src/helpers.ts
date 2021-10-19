@@ -651,10 +651,14 @@ helpers.superPropBase = helper("7.0.0-beta.0")`
   }
 `;
 
+// https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get
+//
+//  28.1.5 Reflect.get ( target, propertyKey [ , receiver ] )
+//
 helpers.get = helper("7.0.0-beta.0")`
   import superPropBase from "superPropBase";
 
-  export default function _get(target, property, receiver) {
+  export default function _get() {
     if (typeof Reflect !== "undefined" && Reflect.get) {
       _get = Reflect.get;
     } else {
@@ -665,13 +669,14 @@ helpers.get = helper("7.0.0-beta.0")`
 
         var desc = Object.getOwnPropertyDescriptor(base, property);
         if (desc.get) {
-          return desc.get.call(receiver);
+          // STEP 3. If receiver is not present, then set receiver to target.
+          return desc.get.call(arguments.length < 3 ? target : receiver);
         }
 
         return desc.value;
       };
     }
-    return _get(target, property, receiver || target);
+    return _get.apply(this, arguments);
   }
 `;
 
