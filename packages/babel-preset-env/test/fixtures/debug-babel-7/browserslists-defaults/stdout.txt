@@ -25,7 +25,7 @@ Using plugins:
   proposal-optional-chaining { android, chrome < 91, edge, ie, opera, samsung }
   proposal-json-strings { ie }
   proposal-optional-catch-binding { ie }
-  transform-parameters { ie }
+  transform-parameters { ie, ios, safari }
   proposal-async-generator-functions { ie }
   proposal-object-rest-spread { ie }
   transform-dotall-regex { ie }

@@ -37,6 +37,7 @@ Using plugins:
   bugfix/transform-edge-function-name { edge < 79 }
   bugfix/transform-safari-block-shadowing { ios < 11, safari < 11 }
   bugfix/transform-safari-for-shadowing { ios < 11, safari < 11 }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
   bugfix/transform-tagged-template-caching { ios < 13, safari < 13 }
   transform-modules-commonjs
   proposal-dynamic-import

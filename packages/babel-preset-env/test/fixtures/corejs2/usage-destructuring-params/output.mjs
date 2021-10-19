@@ -1,3 +1,5 @@
 import "core-js/modules/web.dom.iterable.js";
 
-function a([b, c]) {}
+function a(_ref) {
+  let [b, c] = _ref;
+}

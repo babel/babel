@@ -24,6 +24,7 @@ Using plugins:
   proposal-optional-chaining { android, chrome < 91, edge, opera, samsung }
   syntax-json-strings
   syntax-optional-catch-binding
+  transform-parameters { ios, safari }
   syntax-async-generators
   syntax-object-rest-spread
   proposal-export-namespace-from { firefox < 80, ios, safari }

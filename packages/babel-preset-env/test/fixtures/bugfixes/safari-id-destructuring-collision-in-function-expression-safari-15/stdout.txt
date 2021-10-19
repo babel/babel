@@ -15,6 +15,7 @@ Using plugins:
   syntax-optional-chaining
   syntax-json-strings
   syntax-optional-catch-binding
+  transform-parameters { safari }
   syntax-async-generators
   syntax-object-rest-spread
   proposal-export-namespace-from { safari }

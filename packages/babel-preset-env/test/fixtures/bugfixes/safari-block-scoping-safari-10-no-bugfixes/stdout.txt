@@ -17,6 +17,7 @@ Using plugins:
   proposal-optional-chaining { safari < 13.1 }
   proposal-json-strings { safari < 12 }
   proposal-optional-catch-binding { safari < 11.1 }
+  transform-parameters { safari }
   proposal-async-generator-functions { safari < 12 }
   proposal-object-rest-spread { safari < 11.1 }
   transform-dotall-regex { safari < 11.1 }
