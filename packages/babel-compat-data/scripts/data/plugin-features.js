@@ -18,7 +18,7 @@ const es2015Parameter = {
       "rest parameters",
       "destructuring, parameters / aliased defaults, arrow function",
       "destructuring, parameters / shorthand defaults, arrow function",
-      "parameters / duplicate identifier",
+      "destructuring, parameters / duplicate identifier",
     ],
   },
 };
