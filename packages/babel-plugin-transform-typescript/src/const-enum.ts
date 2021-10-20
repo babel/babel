@@ -3,8 +3,9 @@ import type { NodePath } from "@babel/traverse";
 
 import { translateEnumValues } from "./enum";
 
+export type NodePathConstEnum = NodePath<t.TSEnumDeclaration & { const: true }>;
 export default function transpileConstEnum(
-  path: NodePath<t.TSEnumDeclaration & { const: true }>,
+  path: NodePathConstEnum,
   t: typeof import("@babel/types"),
 ) {
   const { name } = path.node.id;

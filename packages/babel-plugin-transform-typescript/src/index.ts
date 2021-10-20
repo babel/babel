@@ -1,14 +1,16 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t, template } from "@babel/core";
+import type { PluginPass } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
+import type { NodePath, Visitor } from "@babel/traverse";
 
 import transpileConstEnum from "./const-enum";
+import type { NodePathConstEnum } from "./const-enum";
 import transpileEnum from "./enum";
 import transpileNamespace from "./namespace";
-import type { NodePath } from "@babel/traverse";
 
-function isInType(path) {
+function isInType(path: NodePath) {
   switch (path.parent.type) {
     case "TSTypeReference":
     case "TSQualifiedName":
@@ -16,7 +18,10 @@ function isInType(path) {
     case "TSTypeQuery":
       return true;
     case "ExportSpecifier":
-      return path.parentPath.parent.exportKind === "type";
+      return (
+        (path.parentPath.parent as t.ExportNamedDeclaration).exportKind ===
+        "type"
+      );
     default:
       return false;
   }
@@ -29,7 +34,7 @@ const GLOBAL_TYPES = new WeakMap();
 const NEEDS_EXPLICIT_ESM = new WeakMap();
 const PARSED_PARAMS = new WeakSet();
 
-function isGlobalType(path, name) {
+function isGlobalType(path: NodePath, name: string) {
   const program = path.find(path => path.isProgram()).node;
   if (path.scope.hasOwnBinding(name)) return false;
   if (GLOBAL_TYPES.get(program).has(name)) return true;
@@ -47,11 +52,34 @@ function isGlobalType(path, name) {
   return false;
 }
 
-function registerGlobalType(programNode, name) {
+function registerGlobalType(programNode: t.Program, name: string) {
   GLOBAL_TYPES.get(programNode).add(name);
 }
-
-export default declare((api, opts) => {
+export interface Options {
+  /** @default true */
+  allowNamespaces?: boolean;
+  /** @default "React.createElement" */
+  jsxPragma?: string;
+  /** @default "React.Fragment" */
+  jsxPragmaFrag?: string;
+  onlyRemoveTypeImports?: boolean;
+  optimizeConstEnums?: boolean;
+  allowDeclareFields?: boolean;
+}
+type ConfigAPI = { assertVersion: (range: string | number) => void };
+interface Plugin {
+  name: string;
+  visitor: Visitor<PluginPass>;
+  inherits: typeof syntaxTypeScript;
+}
+type ExtraNodeProps = {
+  declare?: unknown;
+  accessibility?: unknown;
+  abstract?: unknown;
+  optional?: unknown;
+  override?: unknown;
+};
+export default declare((api: ConfigAPI, opts: Options): Plugin => {
   api.assertVersion(7);
 
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;
@@ -70,7 +98,11 @@ export default declare((api, opts) => {
   }
 
   const classMemberVisitors = {
-    field(path) {
+    field(
+      path: NodePath<
+        (t.ClassPrivateProperty | t.ClassProperty) & ExtraNodeProps
+      >,
+    ) {
       const { node } = path;
 
       if (!process.env.BABEL_8_BREAKING) {
@@ -302,7 +334,11 @@ export default declare((api, opts) => {
               (stmt.isTSModuleDeclaration({ declare: true }) &&
                 stmt.get("id").isIdentifier())
             ) {
-              registerGlobalType(programNode, stmt.node.id.name);
+              registerGlobalType(
+                programNode,
+                //@ts-expect-error
+                stmt.node.id.name,
+              );
             }
           }
         },
@@ -339,8 +375,10 @@ export default declare((api, opts) => {
         if (
           !path.node.source &&
           path.node.specifiers.length > 0 &&
-          path.node.specifiers.every(({ local }) =>
-            isGlobalType(path, local.name),
+          path.node.specifiers.every(
+            specifier =>
+              t.isExportSpecifier(specifier) &&
+              isGlobalType(path, specifier.local.name),
           )
         ) {
           path.remove();
@@ -352,7 +390,9 @@ export default declare((api, opts) => {
 
       ExportSpecifier(path) {
         // remove type exports
-        if (!path.parent.source && isGlobalType(path, path.node.local.name)) {
+        type Parent = t.ExportDeclaration & { source?: t.StringLiteral };
+        const parent = path.parent as Parent;
+        if (!parent.source && isGlobalType(path, path.node.local.name)) {
           path.remove();
         }
       },
@@ -406,7 +446,7 @@ export default declare((api, opts) => {
       },
 
       Class(path) {
-        const { node } = path;
+        const { node }: { node: typeof path.node & ExtraNodeProps } = path;
 
         if (node.typeParameters) node.typeParameters = null;
         if (node.superTypeParameters) node.superTypeParameters = null;
@@ -469,7 +509,7 @@ export default declare((api, opts) => {
 
       TSEnumDeclaration(path) {
         if (optimizeConstEnums && path.node.const) {
-          transpileConstEnum(path, t);
+          transpileConstEnum(path as NodePathConstEnum, t);
         } else {
           transpileEnum(path, t);
         }
@@ -510,7 +550,7 @@ export default declare((api, opts) => {
       },
 
       TSAsExpression(path) {
-        let { node } = path;
+        let { node }: { node: t.Expression } = path;
         do {
           node = node.expression;
         } while (t.isTSAsExpression(node));

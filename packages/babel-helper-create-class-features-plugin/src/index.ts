@@ -18,6 +18,7 @@ import {
   FEATURES,
   isLoose,
 } from "./features";
+import { assertFieldTransformed } from "./typescript";
 
 export { FEATURES, enableFeature, injectInitialization };
 
@@ -97,6 +98,8 @@ export function createClassFeaturePlugin({
         if (this.file.get(versionKey) !== version) return;
 
         verifyUsedFeatures(path, this.file);
+
+        if (path.isClassDeclaration()) assertFieldTransformed(path);
 
         const loose = isLoose(this.file, feature);
 
