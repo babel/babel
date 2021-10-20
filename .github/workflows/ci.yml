@@ -62,7 +62,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "16"
+          node-version: 17
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -146,7 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14, 12, 10, 8, 6]
+        node-version: [16, 14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
