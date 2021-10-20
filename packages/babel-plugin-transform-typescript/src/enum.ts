@@ -108,37 +108,43 @@ export function translateEnumValues(
 ): Array<[name: string, value: t.Expression]> {
   const seen: PreviousEnumMembers = Object.create(null);
   // Start at -1 so the first enum member is its increment, 0.
-  let prev: number | typeof undefined = -1;
+  let constValue: number | string | undefined = -1;
+  let lastName: string;
+
   return path.node.members.map(member => {
     const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
     const initializer = member.initializer;
     let value: t.Expression;
     if (initializer) {
-      const constValue = evaluate(initializer, seen);
+      constValue = evaluate(initializer, seen);
       if (constValue !== undefined) {
         seen[name] = constValue;
         if (typeof constValue === "number") {
           value = t.numericLiteral(constValue);
-          prev = constValue;
         } else {
           assert(typeof constValue === "string");
           value = t.stringLiteral(constValue);
-          prev = undefined;
         }
       } else {
         value = initializer;
-        prev = undefined;
       }
+    } else if (typeof constValue === "number") {
+      constValue += 1;
+      value = t.numericLiteral(constValue);
+      seen[name] = constValue;
+    } else if (typeof constValue === "string") {
+      throw path.buildCodeFrameError("Enum member must have initializer.");
     } else {
-      if (prev !== undefined) {
-        prev++;
-        value = t.numericLiteral(prev);
-        seen[name] = prev;
-      } else {
-        throw path.buildCodeFrameError("Enum member must have initializer.");
-      }
+      // create dynamic initializer: 1 + ENUM["PREVIOUS"]
+      const lastRef = t.memberExpression(
+        t.cloneNode(path.node.id),
+        t.stringLiteral(lastName),
+        true,
+      );
+      value = t.binaryExpression("+", t.numericLiteral(1), lastRef);
     }
 
+    lastName = name;
     return [name, value];
   });
 }
