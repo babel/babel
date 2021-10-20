@@ -16,7 +16,7 @@ Using plugins:
   proposal-numeric-separator { chrome < 75, ie, node < 12.5 }
   proposal-logical-assignment-operators { chrome < 85, ie, node < 15 }
   proposal-nullish-coalescing-operator { chrome < 80, ie, node < 14 }
-  proposal-optional-chaining { chrome, ie, node }
+  proposal-optional-chaining { chrome < 91, ie, node }
   proposal-json-strings { chrome < 66, ie, node < 10 }
   proposal-optional-catch-binding { chrome < 66, ie, node < 10 }
   transform-parameters { ie }

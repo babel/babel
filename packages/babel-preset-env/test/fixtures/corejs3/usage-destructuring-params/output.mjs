@@ -1,1 +1,3 @@
-function a([b, c]) {}
+function a(_ref) {
+  let [b, c] = _ref;
+}

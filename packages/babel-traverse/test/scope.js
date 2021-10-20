@@ -432,17 +432,54 @@ describe("scope", () => {
       ).toBe("_foo3");
     });
 
-    it("reference paths", function () {
-      const path = getIdentifierPath("function square(n) { return n * n}");
-      const referencePaths = path.context.scope.bindings.n.referencePaths;
-      expect(referencePaths).toHaveLength(2);
-      expect(referencePaths[0].node.loc.start).toEqual({
-        line: 1,
-        column: 28,
+    describe("reference paths", () => {
+      it("param referenced in function body", function () {
+        const path = getIdentifierPath("function square(n) { return n * n}");
+        const referencePaths = path.context.scope.bindings.n.referencePaths;
+        expect(referencePaths).toHaveLength(2);
+        expect(referencePaths[0].node.loc.start).toEqual({
+          line: 1,
+          column: 28,
+        });
+        expect(referencePaths[1].node.loc.start).toEqual({
+          line: 1,
+          column: 32,
+        });
       });
-      expect(referencePaths[1].node.loc.start).toEqual({
-        line: 1,
-        column: 32,
+      it("id referenced in function body", () => {
+        const path = getIdentifierPath("(function n(m) { return n })");
+        const { referencePaths, identifier } = path.scope.getOwnBinding("n");
+        expect(identifier.start).toMatchInlineSnapshot(`10`);
+        expect(referencePaths).toHaveLength(1);
+        expect(referencePaths[0].node.start).toMatchInlineSnapshot(`24`);
+      });
+      it("id referenced in param initializer - function expression", () => {
+        const path = getIdentifierPath("(function n(m = n) {})");
+        const { referencePaths, identifier } = path.scope.getOwnBinding("n");
+        expect(identifier.start).toMatchInlineSnapshot(`10`);
+        expect(referencePaths).toHaveLength(1);
+        expect(referencePaths[0].node.start).toMatchInlineSnapshot(`16`);
+      });
+      it("id referenced in param initializer - function declaration", () => {
+        const path = getIdentifierPath("function n(m = n) {}");
+        const { referencePaths, identifier } = path.scope.getBinding("n");
+        expect(identifier.start).toMatchInlineSnapshot(`9`);
+        expect(referencePaths).toHaveLength(1);
+        expect(referencePaths[0].node.start).toMatchInlineSnapshot(`15`);
+      });
+      it("param referenced in function body with id collision", () => {
+        const path = getIdentifierPath("(function n(n) { return n })");
+        const { referencePaths, identifier } = path.scope.getOwnBinding("n");
+        expect(identifier.start).toMatchInlineSnapshot(`12`);
+        expect(referencePaths).toHaveLength(1);
+        expect(referencePaths[0].node.start).toMatchInlineSnapshot(`24`);
+      });
+      it("param referenced in param initializer with id collision", () => {
+        const path = getIdentifierPath("(function n(n, m = n) {})");
+        const { referencePaths, identifier } = path.scope.getOwnBinding("n");
+        expect(identifier.start).toMatchInlineSnapshot(`12`);
+        expect(referencePaths).toHaveLength(1);
+        expect(referencePaths[0].node.start).toMatchInlineSnapshot(`19`);
       });
     });
 

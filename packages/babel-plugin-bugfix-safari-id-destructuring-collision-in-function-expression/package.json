@@ -1,0 +1,40 @@
+{
+  "name": "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
+  "version": "0.0.0",
+  "description": "Rename destructuring parameter to workaround https://bugs.webkit.org/show_bug.cgi?id=220517",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": [
+      "./lib/index.js"
+    ]
+  },
+  "keywords": [
+    "babel-plugin",
+    "bugfix"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^7.14.5"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
+}
