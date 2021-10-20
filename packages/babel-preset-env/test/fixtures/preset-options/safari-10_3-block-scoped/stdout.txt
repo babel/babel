@@ -17,18 +17,19 @@ Using plugins:
   proposal-optional-chaining { safari < 13.1 }
   proposal-json-strings { safari < 12 }
   proposal-optional-catch-binding { safari < 11.1 }
-  transform-parameters { safari }
   proposal-async-generator-functions { safari < 12 }
   proposal-object-rest-spread { safari < 11.1 }
   transform-dotall-regex { safari < 11.1 }
   proposal-unicode-property-regex { safari < 11.1 }
   transform-named-capturing-groups-regex { safari < 11.1 }
-  transform-async-to-generator { safari < 11 }
+  transform-async-to-generator { safari < 10.1 }
   transform-exponentiation-operator { safari < 10.1 }
-  transform-template-literals { safari < 13 }
   transform-unicode-regex { safari < 12 }
-  transform-block-scoping { safari < 11 }
   proposal-export-namespace-from { safari }
+  bugfix/transform-safari-block-shadowing { safari < 11 }
+  bugfix/transform-safari-for-shadowing { safari < 11 }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari }
+  bugfix/transform-tagged-template-caching { safari < 13 }
   transform-modules-commonjs
   proposal-dynamic-import
 

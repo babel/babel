@@ -15,11 +15,12 @@ Using plugins:
   syntax-numeric-separator
   proposal-logical-assignment-operators { chrome < 85 }
   syntax-nullish-coalescing-operator
-  proposal-optional-chaining { chrome < 91 }
+  syntax-optional-chaining
   syntax-json-strings
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
+  bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome < 91 }
   transform-modules-commonjs
   proposal-dynamic-import
   proposal-export-namespace-from { }
