@@ -22,19 +22,17 @@ const allReplacedFeatures = {};
 const has = Function.call.bind(Object.hasOwnProperty);
 
 for (const [plugin, { replaces, features }] of Object.entries(data)) {
-  for (const replace of replaces) {
-    if (!has(overlappingPlugins, replace)) {
-      overlappingPlugins[replace] = [];
-      generatedTargets[replace] = {};
-      allReplacedFeatures[replace] = [];
-    }
-
-    allReplacedFeatures[replace].push(...features);
-
-    overlappingPlugins[replace].push(plugin);
+  if (!has(overlappingPlugins, replaces)) {
+    overlappingPlugins[replaces] = [];
+    generatedTargets[replaces] = {};
+    allReplacedFeatures[replaces] = [];
   }
-
   generatedTargets[plugin] = {};
+
+  allReplacedFeatures[replaces].push(...features);
+
+  overlappingPlugins[replaces].push(plugin);
+
   for (const env of environments) {
     const supportedWithBugfix = getLowestImplementedVersion({ features }, env);
     if (supportedWithBugfix) {
