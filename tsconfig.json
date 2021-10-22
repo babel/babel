@@ -27,6 +27,7 @@
     "./packages/babel-helper-validator-option/src/**/*.ts",
     "./packages/babel-helpers/src/**/*.ts",
     "./packages/babel-highlight/src/**/*.ts",
+    "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/**/*.ts",
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
@@ -118,6 +119,9 @@
       ],
       "@babel/highlight": [
         "./packages/babel-highlight/src"
+      ],
+      "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": [
+        "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src"
       ],
       "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": [
         "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src"

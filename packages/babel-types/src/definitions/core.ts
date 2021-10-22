@@ -2202,3 +2202,16 @@ defineType("PrivateName", {
     },
   },
 });
+
+defineType("StaticBlock", {
+  visitor: ["body"],
+  fields: {
+    body: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Statement")),
+      ),
+    },
+  },
+  aliases: ["Scopable", "BlockParent", "FunctionParent"],
+});

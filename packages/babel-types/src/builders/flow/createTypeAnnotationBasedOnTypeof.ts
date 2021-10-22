@@ -9,44 +9,40 @@ import {
 } from "../generated";
 import type * as t from "../..";
 
+export default createTypeAnnotationBasedOnTypeof as {
+  (type: "string"): t.StringTypeAnnotation;
+  (type: "number"): t.NumberTypeAnnotation;
+  (type: "undefined"): t.VoidTypeAnnotation;
+  (type: "boolean"): t.BooleanTypeAnnotation;
+  (type: "function"): t.GenericTypeAnnotation;
+  (type: "object"): t.GenericTypeAnnotation;
+  (type: "symbol"): t.GenericTypeAnnotation;
+  (type: "bigint"): t.AnyTypeAnnotation;
+};
+
 /**
  * Create a type annotation based on typeof expression.
  */
-export default function createTypeAnnotationBasedOnTypeof(
-  type:
-    | "string"
-    | "number"
-    | "undefined"
-    | "boolean"
-    | "function"
-    | "object"
-    | "symbol",
-):
-  | t.StringTypeAnnotation
-  | t.VoidTypeAnnotation
-  | t.NumberTypeAnnotation
-  | t.BooleanTypeAnnotation
-  | t.GenericTypeAnnotation
-  | t.AnyTypeAnnotation {
-  if (type === "string") {
-    return stringTypeAnnotation();
-  } else if (type === "number") {
-    return numberTypeAnnotation();
-  } else if (type === "undefined") {
-    return voidTypeAnnotation();
-  } else if (type === "boolean") {
-    return booleanTypeAnnotation();
-  } else if (type === "function") {
-    return genericTypeAnnotation(identifier("Function"));
-  } else if (type === "object") {
-    return genericTypeAnnotation(identifier("Object"));
-  } else if (type === "symbol") {
-    return genericTypeAnnotation(identifier("Symbol"));
-  } else if (type === "bigint") {
-    // todo: use BigInt annotation when Flow supports BigInt
-    // https://github.com/facebook/flow/issues/6639
-    return anyTypeAnnotation();
-  } else {
-    throw new Error("Invalid typeof value: " + type);
+function createTypeAnnotationBasedOnTypeof(type: string): t.FlowType {
+  switch (type) {
+    case "string":
+      return stringTypeAnnotation();
+    case "number":
+      return numberTypeAnnotation();
+    case "undefined":
+      return voidTypeAnnotation();
+    case "boolean":
+      return booleanTypeAnnotation();
+    case "function":
+      return genericTypeAnnotation(identifier("Function"));
+    case "object":
+      return genericTypeAnnotation(identifier("Object"));
+    case "symbol":
+      return genericTypeAnnotation(identifier("Symbol"));
+    case "bigint":
+      // todo: use BigInt annotation when Flow supports BigInt
+      // https://github.com/facebook/flow/issues/6639
+      return anyTypeAnnotation();
   }
+  throw new Error("Invalid typeof value: " + type);
 }

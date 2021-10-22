@@ -1074,6 +1074,11 @@ export interface PrivateName extends BaseNode {
   id: Identifier;
 }
 
+export interface StaticBlock extends BaseNode {
+  type: "StaticBlock";
+  body: Array<Statement>;
+}
+
 export interface AnyTypeAnnotation extends BaseNode {
   type: "AnyTypeAnnotation";
 }
@@ -1632,11 +1637,6 @@ export interface TupleExpression extends BaseNode {
 export interface DecimalLiteral extends BaseNode {
   type: "DecimalLiteral";
   value: string;
-}
-
-export interface StaticBlock extends BaseNode {
-  type: "StaticBlock";
-  body: Array<Statement>;
 }
 
 export interface ModuleExpression extends BaseNode {
@@ -2233,7 +2233,8 @@ export type FunctionParent =
   | ObjectMethod
   | ArrowFunctionExpression
   | ClassMethod
-  | ClassPrivateMethod;
+  | ClassPrivateMethod
+  | StaticBlock;
 export type Pureish =
   | FunctionDeclaration
   | FunctionExpression

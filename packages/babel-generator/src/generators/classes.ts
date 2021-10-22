@@ -31,6 +31,7 @@ export function ClassDeclaration(
   }
 
   this.word("class");
+  this.printInnerComments(node);
 
   if (node.id) {
     this.space();

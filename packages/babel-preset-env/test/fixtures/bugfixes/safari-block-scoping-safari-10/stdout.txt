@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-private-property-in-object { safari }
+  proposal-private-property-in-object { safari < 15 }
   proposal-class-properties { safari < 15 }
   proposal-private-methods { safari < 15 }
   proposal-numeric-separator { safari < 13 }
@@ -28,6 +28,7 @@ Using plugins:
   proposal-export-namespace-from { safari }
   bugfix/transform-safari-block-shadowing { safari < 11 }
   bugfix/transform-safari-for-shadowing { safari < 11 }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari }
   bugfix/transform-tagged-template-caching { safari < 13 }
   transform-modules-commonjs
   proposal-dynamic-import

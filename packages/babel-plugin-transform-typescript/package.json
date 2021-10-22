@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typescript",
-  "version": "7.15.4",
+  "version": "7.15.8",
   "description": "Transform TypeScript into ES.next",
   "repository": {
     "type": "git",

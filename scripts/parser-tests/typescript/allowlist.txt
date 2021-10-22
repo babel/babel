@@ -5,6 +5,7 @@ ParameterList4.ts
 ParameterList5.ts
 ParameterList6.ts
 abstractPropertyNegative.ts
+accessorBodyInTypeContext.ts
 accessorParameterAccessibilityModifier.ts
 accessorWithoutBody1.ts
 accessorWithoutBody2.ts
@@ -84,6 +85,8 @@ constDeclarations-validContexts.ts
 constEnumNamespaceReferenceCausesNoImport2.ts
 constEnumNoEmitReexport.ts
 constEnumNoPreserveDeclarationReexport.ts
+constEnumPreserveEmitNamedExport1.ts
+constEnumPreserveEmitNamedExport2.ts
 constEnumPreserveEmitReexport.ts
 contextualOverloadListFromArrayUnion.ts
 convertKeywordsYes.ts
@@ -107,6 +110,7 @@ declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts
 declarationEmitForTypesWhichNeedImportTypes.ts
 declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts
 declarationEmitMixinPrivateProtected.ts
+declarationEmitObjectAssignedDefaultExport.ts
 declarationEmitPrefersPathKindBasedOnBundling.ts
 declarationEmitPrefersPathKindBasedOnBundling2.ts
 declarationEmitPrivatePromiseLikeInterface.ts
@@ -137,8 +141,6 @@ deleteOperator1.ts
 deleteOperatorInStrictMode.ts
 dependencyViaImportAlias.ts
 destructuredDeclarationEmit.ts
-divergentAccessors1.ts
-divergentAccessorsTypes1.ts
 doubleUnderscoreExportStarConflict.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
 duplicateIdentifierBindingElementInParameterDeclaration2.ts
@@ -222,7 +224,6 @@ exportSpecifierAndLocalMemberDeclaration.ts
 exportStarFromEmptyModule.ts
 exportStarNotElided.ts
 expressionsForbiddenInParameterInitializers.ts
-extendedUnicodePlaneIdentifiers.ts
 extendingClassFromAliasAndUsageInIndexer.ts
 extendsClauseAlreadySeen.ts
 extendsClauseAlreadySeen2.ts
@@ -234,7 +235,6 @@ functionCall15.ts
 functionDeclarationWithResolutionOfTypeNamedArguments01.ts
 functionExpressionInWithBlock.ts
 functionExpressionWithResolutionOfTypeNamedArguments01.ts
-getterErrorMessageNotDuplicated.ts
 gettersAndSettersErrors.ts
 giant.ts
 globalThisDeclarationEmit.ts
@@ -250,10 +250,12 @@ importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
 importHelpers.ts
 importHelpersAmd.ts
+importHelpersES6.ts
 importHelpersInAmbientContext.ts
 importHelpersInIsolatedModules.ts
 importHelpersInTsx.tsx
 importHelpersNoHelpers.ts
+importHelpersNoHelpersForPrivateFields.ts
 importHelpersNoModule.ts
 importHelpersOutFile.ts
 importHelpersSystem.ts
@@ -357,6 +359,7 @@ moduleSharesNameWithImportDeclarationInsideIt3.ts
 moduleSharesNameWithImportDeclarationInsideIt5.ts
 module_augmentUninstantiatedModule2.ts
 multiImportExport.ts
+multipleClassPropertyModifiersErrors.ts
 multipleInheritance.ts
 nameCollisions.ts
 namespacesWithTypeAliasOnlyExportsMerge.ts
@@ -411,7 +414,10 @@ sourceMap-LineBreaks.ts
 sourceMapValidationDecorators.ts
 sourceMapValidationStatements.ts
 stackDepthLimitCastingType.ts
+staticAsIdentifier.ts
+staticModifierAlreadySeen.ts
 strictModeReservedWord.ts
+strictOptionalProperties1.ts
 superCallFromClassThatHasNoBaseType1.ts
 symbolLinkDeclarationEmitModuleNames.ts
 symbolMergeValueAndImportedType.ts

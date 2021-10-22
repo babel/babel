@@ -780,6 +780,20 @@ function configFieldIsApplicable(
 }
 
 /**
+ * Print the ignoreList-values in a more helpful way than the default.
+ */
+function ignoreListReplacer(
+  _key: string,
+  value: IgnoreList | IgnoreItem,
+): IgnoreList | IgnoreItem | string {
+  if (value instanceof RegExp) {
+    return String(value);
+  }
+
+  return value;
+}
+
+/**
  * Tests if a filename should be ignored based on "ignore" and "only" options.
  */
 function shouldIgnore(
@@ -793,6 +807,7 @@ function shouldIgnore(
       context.filename ?? "(unknown)"
     }" because it matches one of \`ignore: ${JSON.stringify(
       ignore,
+      ignoreListReplacer,
     )}\` from "${dirname}"`;
     debug(message);
     if (context.showConfig) {
@@ -806,6 +821,7 @@ function shouldIgnore(
       context.filename ?? "(unknown)"
     }" because it fails to match one of \`only: ${JSON.stringify(
       only,
+      ignoreListReplacer,
     )}\` from "${dirname}"`;
     debug(message);
     if (context.showConfig) {

@@ -147,7 +147,7 @@ export function codeFrameColumns(
   const highlightedLines = highlighted ? highlight(rawLines, opts) : rawLines;
 
   let frame = highlightedLines
-    .split(NEWLINE)
+    .split(NEWLINE, end)
     .slice(start, end)
     .map((line, index) => {
       const number = start + 1 + index;

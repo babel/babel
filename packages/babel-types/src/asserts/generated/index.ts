@@ -524,6 +524,12 @@ export function assertPrivateName(
 ): asserts node is t.PrivateName {
   assert("PrivateName", node, opts);
 }
+export function assertStaticBlock(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.StaticBlock {
+  assert("StaticBlock", node, opts);
+}
 export function assertAnyTypeAnnotation(
   node: object | null | undefined,
   opts?: object | null,
@@ -1075,12 +1081,6 @@ export function assertDecimalLiteral(
   opts?: object | null,
 ): asserts node is t.DecimalLiteral {
   assert("DecimalLiteral", node, opts);
-}
-export function assertStaticBlock(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.StaticBlock {
-  assert("StaticBlock", node, opts);
 }
 export function assertModuleExpression(
   node: object | null | undefined,

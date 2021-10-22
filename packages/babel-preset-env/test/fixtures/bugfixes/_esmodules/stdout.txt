@@ -16,11 +16,11 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-private-property-in-object { android, chrome < 91, edge, firefox < 90, ios, node, opera, safari, samsung }
-  proposal-class-properties { android, chrome < 84, edge < 84, firefox < 90, ios, node < 14.6, opera < 70, safari < 15, samsung }
-  proposal-private-methods { android, chrome < 84, edge < 84, firefox < 90, ios, node < 14.6, opera < 70, safari < 15, samsung }
+  proposal-private-property-in-object { android, chrome < 91, edge, firefox < 90, ios < 15, node, opera, safari < 15, samsung }
+  proposal-class-properties { android, chrome < 84, edge < 84, firefox < 90, ios < 15, node < 14.6, opera < 70, safari < 15, samsung < 14 }
+  proposal-private-methods { android, chrome < 84, edge < 84, firefox < 90, ios < 15, node < 14.6, opera < 70, safari < 15, samsung < 14 }
   proposal-numeric-separator { android, chrome < 75, edge < 79, firefox < 70, ios < 13, opera < 62, safari < 13, samsung < 11 }
-  proposal-logical-assignment-operators { android, chrome < 85, edge < 85, firefox < 79, ios < 14, node < 15, opera < 71, safari < 14, samsung }
+  proposal-logical-assignment-operators { android, chrome < 85, edge < 85, firefox < 79, ios < 14, node < 15, opera < 71, safari < 14, samsung < 14 }
   proposal-nullish-coalescing-operator { android, chrome < 80, edge < 80, firefox < 72, ios < 13.4, node < 14, opera < 67, safari < 13.1, samsung < 13 }
   proposal-optional-chaining { android, chrome < 80, edge < 80, firefox < 74, ios < 13.4, node < 14, opera < 67, safari < 13.1, samsung < 13 }
   proposal-json-strings { android, chrome < 66, edge < 79, firefox < 62, ios < 12, opera < 53, safari < 12, samsung < 9 }
@@ -37,6 +37,7 @@ Using plugins:
   bugfix/transform-edge-function-name { edge < 79 }
   bugfix/transform-safari-block-shadowing { ios < 11, safari < 11 }
   bugfix/transform-safari-for-shadowing { ios < 11, safari < 11 }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
   bugfix/transform-tagged-template-caching { ios < 13, safari < 13 }
   transform-modules-commonjs
   proposal-dynamic-import

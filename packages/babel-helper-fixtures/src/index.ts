@@ -284,13 +284,25 @@ function wrapPackagesArray(type, names, optionsDir) {
 
       val[0] = path.resolve(optionsDir, val[0]);
     } else {
+      let name = val[0];
+      const match = name.match(/^(@babel\/(?:plugin-|preset-)?)(.*)$/);
+      if (match) {
+        name = match[2];
+      }
+
       const monorepoPath = path.join(
         path.dirname(fileURLToPath(import.meta.url)),
         "../..",
-        `babel-${type}-${val[0]}`,
+        `babel-${type}-${name}`,
       );
 
       if (fs.existsSync(monorepoPath)) {
+        if (match) {
+          throw new Error(
+            `Remove the "${match[1]}" prefix from "${val[0]}", to load it from the monorepo`,
+          );
+        }
+
         val[0] = monorepoPath;
       }
     }

@@ -84,6 +84,7 @@ export function _functionHead(this: Printer, node: any) {
   }
   this.word("function");
   if (node.generator) this.token("*");
+  this.printInnerComments(node);
 
   this.space();
   if (node.id) {
