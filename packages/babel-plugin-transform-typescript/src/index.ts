@@ -272,7 +272,10 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
                 specifiersLength === importsToRemove.size;
 
               for (const specifier of stmt.node.specifiers) {
-                if (specifier.importKind === "type") {
+                if (
+                  specifier.type === "ImportSpecifier" &&
+                  specifier.importKind === "type"
+                ) {
                   registerGlobalType(programNode, specifier.local.name);
                   const binding = stmt.scope.getBinding(specifier.local.name);
                   if (binding) {
@@ -384,7 +387,11 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
         if (
           path.node.source &&
           path.node.specifiers.length > 0 &&
-          path.node.specifiers.every(({ exportKind }) => exportKind === "type")
+          path.node.specifiers.every(
+            specifier =>
+              specifier.type === "ExportSpecifier" &&
+              specifier.exportKind === "type",
+          )
         ) {
           path.remove();
           return;
