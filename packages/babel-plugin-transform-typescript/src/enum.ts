@@ -98,15 +98,13 @@ function enumFill(path, t, id) {
  *     Z = X | Y,
  *   }
  */
-type PreviousEnumMembers = {
-  [name: string]: number | string;
-};
+type PreviousEnumMembers = Map<string, number | string>;
 
 export function translateEnumValues(
   path: NodePath<t.TSEnumDeclaration>,
   t: typeof import("@babel/types"),
 ): Array<[name: string, value: t.Expression]> {
-  const seen: PreviousEnumMembers = Object.create(null);
+  const seen: PreviousEnumMembers = new Map();
   // Start at -1 so the first enum member is its increment, 0.
   let constValue: number | string | undefined = -1;
   let lastName: string;
@@ -118,7 +116,7 @@ export function translateEnumValues(
     if (initializer) {
       constValue = evaluate(initializer, seen);
       if (constValue !== undefined) {
-        seen[name] = constValue;
+        seen.set(name, constValue);
         if (typeof constValue === "number") {
           value = t.numericLiteral(constValue);
         } else {
@@ -131,7 +129,7 @@ export function translateEnumValues(
     } else if (typeof constValue === "number") {
       constValue += 1;
       value = t.numericLiteral(constValue);
-      seen[name] = constValue;
+      seen.set(name, constValue);
     } else if (typeof constValue === "string") {
       throw path.buildCodeFrameError("Enum member must have initializer.");
     } else {
@@ -169,7 +167,7 @@ function evaluate(
       case "ParenthesizedExpression":
         return evalConstant(expr.expression);
       case "Identifier":
-        return seen[expr.name];
+        return seen.get(expr.name);
       case "TemplateLiteral":
         if (expr.quasis.length === 1) {
           return expr.quasis[0].value.cooked;
