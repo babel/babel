@@ -111,7 +111,7 @@ function generateHelpers(generator, dest, filename, message) {
         callback(null, file);
       })
     )
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(dest, { mode: 0o644 }));
 
   return finish(stream);
 }
