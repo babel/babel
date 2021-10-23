@@ -2015,7 +2015,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const bodilessType =
         type === "FunctionDeclaration"
           ? "TSDeclareFunction"
-          : type === "ClassMethod"
+          : type === "ClassMethod" || type === "ClassPrivateMethod"
           ? "TSDeclareMethod"
           : undefined;
       if (bodilessType && !this.match(tt.braceL) && this.isLineTerminator()) {
@@ -2753,6 +2753,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) method.typeParameters = typeParameters;
       super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
+    }
+
+    declareClassPrivateMethodInScope(node: N.ClassPrivateMethod, kind: number) {
+      if (node.type === "TSDeclareMethod") return;
+      super.declareClassPrivateMethodInScope(node, kind);
     }
 
     parseClassSuper(node: N.Class): void {
