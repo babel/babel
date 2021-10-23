@@ -6,6 +6,8 @@ import Binding from "./binding";
 import globals from "globals";
 import {
   NOT_LOCAL_BINDING,
+  arrayExpression,
+  assignmentExpression,
   callExpression,
   cloneNode,
   getBindingIdentifiers,
@@ -37,6 +39,7 @@ import {
   matchesPattern,
   memberExpression,
   numericLiteral,
+  sequenceExpression,
   toIdentifier,
   unaryExpression,
   variableDeclaration,
@@ -646,16 +649,16 @@ export default class Scope {
     }
 
     if (isIdentifier(node, { name: "arguments" })) {
-      return callExpression(
-        memberExpression(
-          memberExpression(
-            memberExpression(identifier("Array"), identifier("prototype")),
-            identifier("slice"),
-          ),
-          identifier("call"),
-        ),
-        [node],
+      const tmp = this.generateDeclaredUidIdentifier("args");
+      const init = assignmentExpression("=", tmp, arrayExpression([]));
+      const callee = memberExpression(
+        memberExpression(init, identifier("push")),
+        identifier("apply"),
       );
+      return sequenceExpression([
+        callExpression(callee, [cloneNode(tmp), node]),
+        cloneNode(tmp),
+      ]);
     }
 
     let helperName;
