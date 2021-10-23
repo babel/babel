@@ -72,6 +72,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel-baseline/types@npm:@babel/types@7.15.6, @babel/types@npm:^7.0.0, @babel/types@npm:^7.12.7, @babel/types@npm:^7.14.5, @babel/types@npm:^7.15.0, @babel/types@npm:^7.15.4, @babel/types@npm:^7.15.6, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
+  version: 7.15.6
+  resolution: "@babel/types@npm:7.15.6"
+  dependencies:
+    "@babel/helper-validator-identifier": ^7.14.9
+    to-fast-properties: ^2.0.0
+  checksum: 37f497dde10d238b5eb184efab83b415a86611e3d73dc0434de0cfb851b20ee606a3b7e1525e5b2d522fac1248d0345fea0468006f246262511b80cd3ed2419f
+  languageName: node
+  linkType: hard
+
 "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup":
   version: 0.0.0-use.local
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
@@ -130,6 +140,7 @@ __metadata:
     "@babel-baseline/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.10.4"
     "@babel-baseline/parser": "npm:@babel/parser@7.14.8"
     "@babel-baseline/traverse": "npm:@babel/traverse@7.15.4"
+    "@babel-baseline/types": "npm:@babel/types@7.15.6"
     "@babel/core": "workspace:*"
     "@babel/generator": "workspace:*"
     "@babel/helper-validator-identifier": "workspace:*"
@@ -137,6 +148,7 @@ __metadata:
     "@babel/preset-env": "workspace:*"
     "@babel/preset-flow": "workspace:*"
     "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
     benchmark: ^2.1.4
   languageName: unknown
   linkType: soft
@@ -3599,16 +3611,6 @@ __metadata:
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   languageName: unknown
   linkType: soft
-
-"@babel/types@npm:^7.0.0, @babel/types@npm:^7.12.7, @babel/types@npm:^7.14.5, @babel/types@npm:^7.15.0, @babel/types@npm:^7.15.4, @babel/types@npm:^7.15.6, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
-  version: 7.15.6
-  resolution: "@babel/types@npm:7.15.6"
-  dependencies:
-    "@babel/helper-validator-identifier": ^7.14.9
-    to-fast-properties: ^2.0.0
-  checksum: 37f497dde10d238b5eb184efab83b415a86611e3d73dc0434de0cfb851b20ee606a3b7e1525e5b2d522fac1248d0345fea0468006f246262511b80cd3ed2419f
-  languageName: node
-  linkType: hard
 
 "@babel/types@workspace:*, @babel/types@workspace:^7.14.9, @babel/types@workspace:^7.15.4, @babel/types@workspace:^7.15.6, @babel/types@workspace:packages/babel-types":
   version: 0.0.0-use.local
