@@ -200,23 +200,31 @@ module.exports = function convertTokens(tokens, code, tl) {
   const withoutComments = convertTemplateType(tokens, tl).filter(
     t => t.type !== "CommentLine" && t.type !== "CommentBlock",
   );
-  for (let i = 0; i < withoutComments.length; i++) {
-    let token = withoutComments[i];
+  for (let i = 0, { length } = withoutComments; i < length; i++) {
+    const token = withoutComments[i];
 
     if (!process.env.BABEL_8_BREAKING) {
       // Babel 8 already produces a single token
 
-      if (ESLINT_VERSION >= 8 && token.type.label === tl.hash) {
-        i++;
-        token = withoutComments[i];
+      if (
+        ESLINT_VERSION >= 8 &&
+        i + 1 < length &&
+        token.type.label === tl.hash
+      ) {
+        const nextToken = withoutComments[i + 1];
 
-        token.type = "PrivateIdentifier";
-        token.start -= 1;
-        token.loc.start.column -= 1;
-        token.range = [token.start, token.end];
+        // We must disambiguate private identifier from the hack pipes topic token
+        if (nextToken.type.label === tl.name && token.end === nextToken.start) {
+          i++;
 
-        result.push(token);
-        continue;
+          nextToken.type = "PrivateIdentifier";
+          nextToken.start -= 1;
+          nextToken.loc.start.column -= 1;
+          nextToken.range = [nextToken.start, nextToken.end];
+
+          result.push(nextToken);
+          continue;
+        }
       }
     }
 

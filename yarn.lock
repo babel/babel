@@ -7723,7 +7723,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-8@npm:eslint@^8.0.0, eslint@npm:8.0.0":
+"eslint-8@npm:eslint@^8.0.0":
   version: 8.0.0
   resolution: "eslint@npm:8.0.0"
   dependencies:

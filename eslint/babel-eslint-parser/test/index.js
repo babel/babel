@@ -423,7 +423,7 @@ describe("Babel and Espree", () => {
   });
 
   if (process.env.BABEL_8_BREAKING) {
-    it("hash (token) - ESLint 7", () => {
+    it("private identifier (token) - ESLint 7", () => {
       const code = "class A { #x }";
       const babylonAST = parseForESLint(code, {
         eslintVisitorKeys: true,
@@ -434,7 +434,6 @@ describe("Babel and Espree", () => {
       expect(babylonAST.tokens[3].value).toEqual("x");
     });
   } else {
-    // Espree doesn't support private fields yet
     it("hash (token) - ESLint 7", () => {
       const code = "class A { #x }";
       const babylonAST = parseForESLint(code, {
@@ -447,7 +446,7 @@ describe("Babel and Espree", () => {
     });
   }
 
-  it("hash (token) - ESLint 8", () => {
+  it("private identifier (token) - ESLint 8", () => {
     const code = "class A { #x }";
     const babylonAST = parseForESLint8(code, {
       eslintVisitorKeys: true,
@@ -574,6 +573,98 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[17]).toMatchObject(staticKw);
     expect(babylonAST.tokens[20]).toMatchObject(staticKw);
     expect(babylonAST.tokens[22]).toMatchObject(staticKw);
+  });
+
+  if (process.env.BABEL_8_BREAKING) {
+    it("pipeline # topic token - ESLint 7", () => {
+      const code = `
+        x |> #
+        y |> #[0]
+        class A {
+          #x = y |>
+          #
+          z
+        }
+      `;
+      const babylonAST = parseForESLint(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: {
+          filename: "test.js",
+          parserOpts: {
+            plugins: [
+              ["pipelineOperator", { proposal: "hack", topicToken: "#" }],
+            ],
+            tokens: true,
+          },
+        },
+      }).ast;
+
+      const topicToken = { type: "Punctuator", value: "#" };
+      expect(babylonAST.tokens[2]).toMatchObject(topicToken);
+      expect(babylonAST.tokens[5]).toMatchObject(topicToken);
+      expect(babylonAST.tokens[16]).toMatchObject(topicToken);
+    });
+  } else {
+    it("pipeline # topic token - ESLint 7", () => {
+      const code = `
+        x |> #
+        y |> #[0]
+        class A {
+          #x = y |>
+          #
+          z
+        }
+      `;
+      const babylonAST = parseForESLint(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: {
+          filename: "test.js",
+          parserOpts: {
+            plugins: [
+              ["pipelineOperator", { proposal: "hack", topicToken: "#" }],
+            ],
+            tokens: true,
+          },
+        },
+      }).ast;
+
+      const topicToken = { type: "Punctuator", value: "#" };
+      expect(babylonAST.tokens[2]).toMatchObject(topicToken);
+      expect(babylonAST.tokens[5]).toMatchObject(topicToken);
+      expect(babylonAST.tokens[17]).toMatchObject(topicToken);
+    });
+  }
+
+  it("pipeline # topic token - ESLint 8", () => {
+    const code = `
+      x |> #
+      y |> #[0]
+      class A {
+        #x = y |>
+        #
+        z
+      }
+    `;
+    const babylonAST = parseForESLint8(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: {
+        filename: "test.js",
+        parserOpts: {
+          plugins: [
+            ["pipelineOperator", { proposal: "hack", topicToken: "#" }],
+          ],
+          tokens: true,
+        },
+      },
+    }).ast;
+
+    const topicToken = { type: "Punctuator", value: "#" };
+    expect(babylonAST.tokens[2]).toMatchObject(topicToken);
+    expect(babylonAST.tokens[5]).toMatchObject(topicToken);
+    expect(babylonAST.tokens[16]).toMatchObject(topicToken);
   });
 
   it("empty program with line comment", () => {
