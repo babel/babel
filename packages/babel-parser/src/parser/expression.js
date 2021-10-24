@@ -114,6 +114,8 @@ export default class ExpressionParser extends LValParser {
   +parseProgram: (
     program: N.Program, end: TokenType, sourceType?: SourceType
   ) => N.Program
+  +parseStatement: (context: ?string, topLevel?: boolean) => N.Statement
+  +parseHeaderExpression: () => N.Expression
   */
 
   // For object literal, check if property __proto__ has been used more than once.
@@ -829,6 +831,7 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+    const lineTerminatorAfterId = this.isLineTerminator();
     let refExpressionErrors = null;
 
     this.state.maybeInArrowParameters = true;
@@ -865,6 +868,18 @@ export default class ExpressionParser extends LValParser {
       this.expressionScope.exit();
       node = this.parseAsyncArrowFromCallExpression(
         this.startNodeAt(startPos, startLoc),
+        node,
+      );
+    } else if (
+      base.name === "match" &&
+      this.hasPlugin("patternMatching") &&
+      !lineTerminatorAfterId &&
+      !this.isLineTerminator() &&
+      !optional &&
+      node.arguments.length > 0
+    ) {
+      node = this.parseMatchExpressionFromCallExpression(
+        this.startNodeAt<N.MatchExpression>(startPos, startLoc),
         node,
       );
     } else {
@@ -2944,5 +2959,238 @@ export default class ExpressionParser extends LValParser {
     }
     this.eat(tt.braceR);
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
+  }
+
+  // https://github.com/tc39/proposal-pattern-matching
+  parseMatchExpressionFromCallExpression(
+    node: N.MatchExpression,
+    callExpression: N.CallExpression,
+  ): N.MatchExpression {
+    const expressions = callExpression.arguments;
+    this.checkMatchExpressionDiscriminant(expressions);
+    if (expressions.length > 1) {
+      const sequence = this.startNodeAtNode(expressions[0]);
+      sequence.expressions = expressions;
+      const lastExpression = expressions[expressions.length - 1];
+      node.discriminant = this.finishNodeAt(
+        sequence,
+        "SequenceExpression",
+        lastExpression.end,
+        lastExpression.loc.end,
+      );
+    } else {
+      node.discriminant = expressions[0];
+    }
+    node.clauses = this.parseMatchClauses();
+    return this.finishNode(node, "MatchExpression");
+  }
+
+  checkMatchExpressionDiscriminant(
+    expressions: Array<N.Expression | N.SpreadElement>,
+  ) {
+    for (const expression of expressions) {
+      if (expression.type === "SpreadElement") {
+        this.unexpected(
+          expression.start,
+          Errors.SpreadElementInMatchExpression,
+        );
+      }
+    }
+  }
+
+  parseMatchClauses(): N.MatchClause[] {
+    this.eat(tt.braceL);
+    const clauses = [];
+    while (!this.eat(tt.braceR)) {
+      if (this.match(tt._if) || this.match(tt._else)) {
+        clauses.push(this.parseConditionalMatchClause());
+      } else if (this.isContextual("when")) {
+        clauses.push(this.parseWhenMatchClause());
+      } else {
+        this.unexpected();
+      }
+    }
+    return clauses;
+  }
+
+  parseConditionalMatchClause(): N.MatchClause {
+    const node = this.startNode<N.MatchClause>();
+    const type = this.state.type;
+    this.next(); // skip "if" / "else"
+    if (type === tt._if) {
+      node.guard = this.parseHeaderExpression();
+    }
+    node.consequent = this.parseStatement("if");
+    return this.finishNode(node, "MatchClause");
+  }
+
+  parseWhenMatchClause(): N.MatchClause {
+    const node = this.startNode<N.MatchClause>();
+    this.next(); // skip "when"
+    if (this.match(tt.bitwiseXOR)) {
+      node.test = this.parseExpressionMatchPattern();
+    } else {
+      this.expect(tt.parenL);
+      node.test = this.parseMaybeBinaryMatchPattern();
+      this.expect(tt.parenR);
+    }
+
+    if (this.isLineTerminator()) {
+      this.unexpected(
+        this.state.lastTokEnd,
+        Errors.LineTerminatorAfterMatchPattern,
+      );
+    }
+    node.consequent = this.parseStatement("do");
+    return this.finishNode(node, "MatchClause");
+  }
+
+  parseMatchPattern(): N.MatchPattern {
+    switch (this.state.type) {
+      case tt.slash:
+      case tt.slashAssign:
+        this.readRegexp();
+        return this.parseRegExpLiteral(this.state.value);
+      case tt.num:
+        return this.parseNumericLiteral(this.state.value);
+      case tt.bigint:
+        return this.parseBigIntLiteral(this.state.value);
+      case tt.string:
+        return this.parseStringLiteral(this.state.value);
+      case tt._null:
+        return this.parseNullLiteral();
+      case tt._true:
+        return this.parseBooleanLiteral(true);
+      case tt._false:
+        return this.parseBooleanLiteral(false);
+      case tt.name:
+        return this.parseIdentifier();
+      case tt.braceL:
+        return this.parseObjectMatchPattern();
+      case tt.bracketL:
+        return this.parseArrayMatchPattern();
+      case tt.plusMin:
+        return this.parseSimpleUnaryExpression();
+      case tt.bitwiseXOR:
+        return this.parseExpressionMatchPattern();
+      default:
+        throw this.unexpected();
+    }
+  }
+
+  parseExpressionMatchPattern(): N.ExpressionMatchPattern {
+    const node = this.startNode<N.ExpressionMatchPattern>();
+    this.next(); // skip ^
+    let expression: N.Expression;
+    if (this.match(tt.parenL)) {
+      expression = this.parseParenAndDistinguishExpression(false);
+    } else {
+      expression = this.parseExprSubscripts();
+    }
+
+    node.expression = expression;
+    return this.finishNode(node, "ExpressionMatchPattern");
+  }
+
+  parseSimpleUnaryExpression(): N.UnaryExpression {
+    const node = this.startNode<N.UnaryExpression>();
+    node.operator = this.state.value;
+    this.next(); // skip operator (+/-)
+    node.prefix = true;
+    switch (this.state.type) {
+      case tt.num:
+        node.argument = this.parseNumericLiteral(this.state.value);
+        break;
+      case tt.bigint:
+        node.argument = this.parseBigIntLiteral(this.state.value);
+        break;
+      default:
+        if (this.isContextual("Infinity")) {
+          node.argument = this.parseIdentifier();
+          break;
+        }
+        throw this.unexpected();
+    }
+    return this.finishNode(node, "UnaryExpression");
+  }
+
+  parseMaybeBinaryMatchPattern(
+    previousOp?: "and" | "or",
+  ): N.BinaryMatchPattern | N.MatchPattern {
+    const node = this.startNode<N.BinaryMatchPattern>();
+    const lhs = this.parseMatchPattern();
+    if (this.match(tt.bitwiseOR) || this.match(tt.bitwiseAND)) {
+      const operator = this.match(tt.bitwiseOR) ? "or" : "and";
+      if (previousOp && previousOp !== operator) {
+        this.unexpected(this.state.start, Errors.InvalidBinaryMatchPattern);
+      }
+      this.next(); // skip "or" or "and"
+      node.left = lhs;
+      node.operator = operator;
+      node.right = this.parseMaybeBinaryMatchPattern(operator);
+      return this.finishNode(node, "BinaryMatchPattern");
+    } else {
+      return lhs;
+    }
+  }
+
+  parseObjectMatchPattern(): N.ObjectMatchPattern {
+    const node = this.startNode<N.ObjectMatchPattern>();
+    this.expect(tt.braceL);
+    const properties: (N.AssignmentMatchProperty | N.RestMatchElement)[] = [];
+    while (!this.eat(tt.braceR)) {
+      if (this.match(tt.ellipsis)) {
+        properties.push(this.parseRestMatchElement());
+        this.checkCommaAfterRest(charCodes.rightCurlyBrace);
+        this.expect(tt.braceR);
+        break;
+      }
+      const node = this.startNode<N.AssignmentMatchProperty>();
+      node.method = false;
+      this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
+      if (this.eat(tt.colon)) {
+        node.value = this.parseMaybeBinaryMatchPattern();
+      }
+      this.finishNode(node, "ObjectProperty");
+      properties.push(node);
+      this.eat(tt.comma);
+    }
+
+    node.properties = properties;
+    return this.finishNode(node, "ObjectMatchPattern");
+  }
+
+  parseArrayMatchPattern(): N.ArrayMatchPattern {
+    const node = this.startNode<N.ArrayMatchPattern>();
+    this.expect(tt.bracketL);
+
+    const elements: N.MatchPattern[] = [];
+
+    while (!this.eat(tt.bracketR)) {
+      if (this.match(tt.ellipsis)) {
+        elements.push(this.parseRestMatchElement());
+      } else if (this.isContextual("_")) {
+        elements.push(this.parseNullMatchPattern());
+      } else {
+        elements.push(this.parseMaybeBinaryMatchPattern());
+      }
+      this.eat(tt.comma);
+    }
+
+    node.elements = elements;
+    return this.finishNode(node, "ArrayMatchPattern");
+  }
+
+  parseNullMatchPattern(): N.NullMatchPattern {
+    const node = this.startNode();
+    this.next(); // skip "_"
+    return this.finishNode(node, "NullMatchPattern");
+  }
+
+  parseRestMatchElement(): N.RestMatchElement {
+    const node = this.startNode();
+    this.expect(tt.ellipsis);
+    node.argument = this.parseMaybeBinaryMatchPattern();
+    return this.finishNode(node, "RestMatchElement");
   }
 }

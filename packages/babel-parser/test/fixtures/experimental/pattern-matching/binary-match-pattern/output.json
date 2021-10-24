@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "expression": {
+          "type": "MatchExpression",
+          "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+          "discriminant": {
+            "type": "Identifier",
+            "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"x"},
+            "name": "x"
+          },
+          "clauses": [
+            {
+              "type": "MatchClause",
+              "start":14,"end":44,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":32}},
+              "test": {
+                "type": "ObjectMatchPattern",
+                "start":19,"end":40,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":28}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":21,"end":38,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":26}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":21,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15},"identifierName":"status"},
+                      "name": "status"
+                    },
+                    "computed": false,
+                    "value": {
+                      "type": "BinaryMatchPattern",
+                      "start":29,"end":38,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":26}},
+                      "left": {
+                        "type": "NumericLiteral",
+                        "start":29,"end":32,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":20}},
+                        "extra": {
+                          "rawValue": 200,
+                          "raw": "200"
+                        },
+                        "value": 200
+                      },
+                      "operator": "or",
+                      "right": {
+                        "type": "NumericLiteral",
+                        "start":35,"end":38,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":26}},
+                        "extra": {
+                          "rawValue": 201,
+                          "raw": "201"
+                        },
+                        "value": 201
+                      }
+                    }
+                  }
+                ]
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "start":42,"end":44,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":32}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

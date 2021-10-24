@@ -283,6 +283,76 @@ export type SwitchCase = NodeBase & {
   consequent: $ReadOnlyArray<Statement>,
 };
 
+// Pattern Matching
+export type MatchExpression = Expression & {
+  type: "MatchExpression",
+  discriminant: Expression,
+  id: Pattern | null,
+  clauses: $ReadOnlyArray<MatchClause>,
+};
+
+export type MatchClause = NodeBase & {
+  type: "MatchClause",
+  test: MatchPattern | null,
+  guard: Expression | null,
+  id: Pattern | null,
+  consequent: BlockStatement,
+};
+
+export type MatchPattern =
+  | ArrayMatchPattern
+  | ObjectMatchPattern
+  | RestMatchElement
+  | BinaryMatchPattern
+  | AsMatchPattern
+  | ExpressionMatchPattern
+  | NullMatchPattern
+  | Literal
+  | Identifier
+  | UnaryExpression;
+
+export type ArrayMatchPattern = NodeBase & {
+  type: "ArrayMatchPattern",
+  elements: $ReadOnlyArray<MatchPattern>,
+};
+
+export type AssignmentMatchProperty = ObjectProperty & {
+  value: MatchPattern,
+  kind: "init",
+  method: false,
+};
+
+export type ObjectMatchPattern = NodeBase & {
+  type: "ObjectMatchPattern",
+  properties: $ReadOnlyArray<AssignmentMatchProperty | RestMatchElement>,
+};
+
+export type RestMatchElement = NodeBase & {
+  type: "RestMatchElement",
+  argument: MatchPattern,
+};
+
+export type BinaryMatchPattern = NodeBase & {
+  type: "BinaryMatchPattern",
+  operator: "and" | "or" | "with",
+  left: MatchPattern,
+  right: MatchPattern,
+};
+
+export type AsMatchPattern = NodeBase & {
+  type: "AsMatchPattern",
+  test: MatchPattern,
+  id: Pattern,
+};
+
+export type ExpressionMatchPattern = NodeBase & {
+  type: "ExpressionMatchPattern",
+  expression: Expression,
+};
+
+export type NullMatchPattern = NodeBase & {
+  type: "NullMatchPattern",
+};
 // Exceptions
 
 export type ThrowStatement = NodeBase & {

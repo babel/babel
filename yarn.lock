@@ -1949,6 +1949,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-pattern-matching@workspace:packages/babel-plugin-syntax-pattern-matching":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-pattern-matching@workspace:packages/babel-plugin-syntax-pattern-matching"
+  dependencies:
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:^7.14.5"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-pipeline-operator@workspace:*, @babel/plugin-syntax-pipeline-operator@workspace:^7.15.0, @babel/plugin-syntax-pipeline-operator@workspace:packages/babel-plugin-syntax-pipeline-operator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-pipeline-operator@workspace:packages/babel-plugin-syntax-pipeline-operator"

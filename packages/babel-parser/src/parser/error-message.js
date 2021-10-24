@@ -77,6 +77,8 @@ export const ErrorMessages = makeErrorTemplates(
     ImportCallNotNewExpression: "Cannot use new with import(...).",
     ImportCallSpreadArgument: "`...` is not allowed in `import()`.",
     InvalidBigIntLiteral: "Invalid BigIntLiteral.",
+    InvalidBinaryMatchPattern:
+      "Different binary match pattern operators cannot be at the same level.",
     InvalidCodePoint: "Code point out of bounds.",
     InvalidDecimal: "Invalid decimal.",
     InvalidDigit: "Expected number in radix %0.",
@@ -99,6 +101,8 @@ export const ErrorMessages = makeErrorTemplates(
     LabelRedeclaration: "Label '%0' is already declared.",
     LetInLexicalBinding:
       "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
+    LineTerminatorAfterMatchPattern:
+      "No line terminator allowed after match pattern.",
     LineTerminatorBeforeArrow: "No line break is allowed before '=>'.",
     MalformedRegExpFlags: "Invalid regular expression flag.",
     MissingClassName: "A class name is required.",
@@ -178,6 +182,8 @@ export const ErrorMessages = makeErrorTemplates(
     RestTrailingComma: "Unexpected trailing comma after rest element.",
     SloppyFunction:
       "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement.",
+    SpreadElementInMatchExpression:
+      "Spread elements are not allowed in match expressions.",
     StaticPrototype: "Classes may not have static property named prototype.",
     StrictDelete: "Deleting local variable in strict mode.",
     StrictEvalArguments: "Assigning to '%0' in strict mode.",

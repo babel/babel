@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "patternMatching"
+    ]
+  ],
+  "throws": "Different binary match pattern operators cannot be at the same level. (2:23)"
+}
