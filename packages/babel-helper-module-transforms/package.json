@@ -15,14 +15,14 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-module-imports": "workspace:^7.15.4",
-    "@babel/helper-replace-supers": "workspace:^7.15.4",
-    "@babel/helper-simple-access": "workspace:^7.15.4",
-    "@babel/helper-split-export-declaration": "workspace:^7.15.4",
-    "@babel/helper-validator-identifier": "workspace:^7.15.7",
-    "@babel/template": "workspace:^7.15.4",
-    "@babel/traverse": "workspace:^7.15.4",
-    "@babel/types": "workspace:^7.15.6"
+    "@babel/helper-module-imports": "workspace:^",
+    "@babel/helper-replace-supers": "workspace:^",
+    "@babel/helper-simple-access": "workspace:^",
+    "@babel/helper-split-export-declaration": "workspace:^",
+    "@babel/helper-validator-identifier": "workspace:^",
+    "@babel/template": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

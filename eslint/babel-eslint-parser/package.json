@@ -36,7 +36,7 @@
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
+    "@babel/core": "workspace:^",
     "dedent": "^0.7.0",
     "eslint": "^7.27.0"
   }

@@ -2,7 +2,7 @@
   "name": "@babel-internal/runtime-integration-webpack-3",
   "private": true,
   "devDependencies": {
-    "@babel/runtime": "workspace:*",
+    "@babel/runtime": "workspace:^",
     "webpack": "^3.12.0"
   }
 }

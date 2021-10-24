@@ -14,7 +14,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/types": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

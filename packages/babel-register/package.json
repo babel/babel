@@ -27,8 +27,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/plugin-transform-modules-commonjs": "workspace:*",
+    "@babel/core": "workspace:^",
+    "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "browserify": "^16.5.2"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-register",

@@ -14,10 +14,10 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-member-expression-to-functions": "workspace:^7.15.4",
-    "@babel/helper-optimise-call-expression": "workspace:^7.15.4",
-    "@babel/traverse": "workspace:^7.15.4",
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/helper-member-expression-to-functions": "workspace:^",
+    "@babel/helper-optimise-call-expression": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

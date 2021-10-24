@@ -16,19 +16,19 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.14.5",
-    "@babel/helper-validator-option": "workspace:^7.14.5",
-    "@babel/plugin-transform-react-display-name": "workspace:^7.14.5",
-    "@babel/plugin-transform-react-jsx": "workspace:^7.14.5",
-    "@babel/plugin-transform-react-jsx-development": "workspace:^7.14.5",
-    "@babel/plugin-transform-react-pure-annotations": "workspace:^7.14.5"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^",
+    "@babel/plugin-transform-react-display-name": "workspace:^",
+    "@babel/plugin-transform-react-jsx": "workspace:^",
+    "@babel/plugin-transform-react-jsx-development": "workspace:^",
+    "@babel/plugin-transform-react-pure-annotations": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

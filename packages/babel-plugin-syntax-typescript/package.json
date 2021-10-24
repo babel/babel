@@ -18,13 +18,13 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.14.5"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*"
+    "@babel/core": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

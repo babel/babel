@@ -14,9 +14,9 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-get-function-arity": "workspace:^7.15.4",
-    "@babel/template": "workspace:^7.15.4",
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/helper-get-function-arity": "workspace:^",
+    "@babel/template": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

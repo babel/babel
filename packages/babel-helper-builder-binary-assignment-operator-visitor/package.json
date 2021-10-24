@@ -14,8 +14,8 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-explode-assignable-expression": "workspace:^7.15.4",
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/helper-explode-assignable-expression": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

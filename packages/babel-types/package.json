@@ -24,12 +24,12 @@
     }
   },
   "dependencies": {
-    "@babel/helper-validator-identifier": "workspace:^7.14.9",
+    "@babel/helper-validator-identifier": "workspace:^",
     "to-fast-properties": "^2.0.0"
   },
   "devDependencies": {
-    "@babel/generator": "workspace:*",
-    "@babel/parser": "workspace:*",
+    "@babel/generator": "workspace:^",
+    "@babel/parser": "workspace:^",
     "chalk": "^4.1.0",
     "glob": "^7.1.7"
   },

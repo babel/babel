@@ -4,8 +4,8 @@
   "type": "module",
   "exports": "./index.js",
   "devDependencies": {
-    "@babel/runtime": "workspace:*",
-    "@babel/runtime-corejs3": "workspace:*",
+    "@babel/runtime": "workspace:^",
+    "@babel/runtime-corejs3": "workspace:^",
     "chalk": "^4.1.0"
   }
 }
