@@ -72,6 +72,7 @@
                               "type": "ThisExpression",
                               "start":46,"end":50,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":15}}
                             },
+                            "computed": false,
                             "property": {
                               "type": "PrivateName",
                               "start":51,"end":53,"loc":{"start":{"line":4,"column":16},"end":{"line":4,"column":18}},
@@ -80,8 +81,7 @@
                                 "start":52,"end":53,"loc":{"start":{"line":4,"column":17},"end":{"line":4,"column":18},"identifierName":"y"},
                                 "name": "y"
                               }
-                            },
-                            "computed": false
+                            }
                           }
                         }
                       ]

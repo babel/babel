@@ -10,13 +10,6 @@
       {
         "type": "ExpressionStatement",
         "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
-        "trailingComments": [
-          {
-            "type": "CommentBlock",
-            "value": " 2 ",
-            "start":17,"end":24,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":24}}
-          }
-        ],
         "expression": {
           "type": "OptionalCallExpression",
           "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
@@ -30,17 +23,24 @@
             {
               "type": "Identifier",
               "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"x"},
+              "name": "x",
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " 1 ",
                   "start":9,"end":16,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":16}}
                 }
-              ],
-              "name": "x"
+              ]
             }
           ]
-        }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": " 2 ",
+            "start":17,"end":24,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":24}}
+          }
+        ]
       }
     ],
     "directives": []

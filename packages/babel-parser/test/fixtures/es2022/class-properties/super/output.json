@@ -73,12 +73,12 @@
                     "type": "Super",
                     "start":44,"end":49,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":11}}
                   },
+                  "computed": false,
                   "property": {
                     "type": "Identifier",
                     "start":50,"end":51,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"c"},
                     "name": "c"
-                  },
-                  "computed": false
+                  }
                 },
                 "arguments": []
               }

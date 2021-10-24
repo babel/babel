@@ -32,10 +32,6 @@
               "callee": {
                 "type": "ClassExpression",
                 "start":17,"end":127,"loc":{"start":{"line":2,"column":2},"end":{"line":8,"column":3}},
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 13
-                },
                 "decorators": [
                   {
                     "type": "Decorator",
@@ -119,6 +115,10 @@
                       }
                     }
                   ]
+                },
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 13
                 }
               },
               "arguments": []

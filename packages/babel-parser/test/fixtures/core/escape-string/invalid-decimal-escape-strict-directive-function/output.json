@@ -38,8 +38,8 @@
                 "type": "DirectiveLiteral",
                 "start":17,"end":21,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":6}},
                 "extra": {
-                  "raw": "\"\\5\"",
-                  "rawValue": "\\5"
+                  "rawValue": "\\5",
+                  "raw": "\"\\5\""
                 },
                 "value": "\\5"
               }
@@ -51,8 +51,8 @@
                 "type": "DirectiveLiteral",
                 "start":25,"end":37,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":14}},
                 "extra": {
-                  "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\""
                 },
                 "value": "use strict"
               }
@@ -83,8 +83,8 @@
                 "type": "DirectiveLiteral",
                 "start":59,"end":63,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":6}},
                 "extra": {
-                  "raw": "\"\\4\"",
-                  "rawValue": "\\4"
+                  "rawValue": "\\4",
+                  "raw": "\"\\4\""
                 },
                 "value": "\\4"
               }
@@ -96,8 +96,8 @@
                 "type": "DirectiveLiteral",
                 "start":67,"end":71,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":6}},
                 "extra": {
-                  "raw": "\"\\5\"",
-                  "rawValue": "\\5"
+                  "rawValue": "\\5",
+                  "raw": "\"\\5\""
                 },
                 "value": "\\5"
               }
@@ -109,8 +109,8 @@
                 "type": "DirectiveLiteral",
                 "start":75,"end":87,"loc":{"start":{"line":9,"column":2},"end":{"line":9,"column":14}},
                 "extra": {
-                  "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\""
                 },
                 "value": "use strict"
               }
@@ -141,8 +141,8 @@
                 "type": "DirectiveLiteral",
                 "start":109,"end":121,"loc":{"start":{"line":13,"column":2},"end":{"line":13,"column":14}},
                 "extra": {
-                  "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\""
                 },
                 "value": "use strict"
               }
@@ -154,8 +154,8 @@
                 "type": "DirectiveLiteral",
                 "start":125,"end":129,"loc":{"start":{"line":14,"column":2},"end":{"line":14,"column":6}},
                 "extra": {
-                  "raw": "\"\\5\"",
-                  "rawValue": "\\5"
+                  "rawValue": "\\5",
+                  "raw": "\"\\5\""
                 },
                 "value": "\\5"
               }
@@ -186,8 +186,8 @@
                 "type": "DirectiveLiteral",
                 "start":151,"end":163,"loc":{"start":{"line":18,"column":2},"end":{"line":18,"column":14}},
                 "extra": {
-                  "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\""
                 },
                 "value": "use strict"
               }
@@ -199,8 +199,8 @@
                 "type": "DirectiveLiteral",
                 "start":167,"end":171,"loc":{"start":{"line":19,"column":2},"end":{"line":19,"column":6}},
                 "extra": {
-                  "raw": "\"\\4\"",
-                  "rawValue": "\\4"
+                  "rawValue": "\\4",
+                  "raw": "\"\\4\""
                 },
                 "value": "\\4"
               }
@@ -212,8 +212,8 @@
                 "type": "DirectiveLiteral",
                 "start":175,"end":179,"loc":{"start":{"line":20,"column":2},"end":{"line":20,"column":6}},
                 "extra": {
-                  "raw": "\"\\5\"",
-                  "rawValue": "\\5"
+                  "rawValue": "\\5",
+                  "raw": "\"\\5\""
                 },
                 "value": "\\5"
               }

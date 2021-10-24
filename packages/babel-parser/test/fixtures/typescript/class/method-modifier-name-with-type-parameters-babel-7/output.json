@@ -122,14 +122,14 @@
             {
               "type": "ClassMethod",
               "start":68,"end":82,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":16}},
-              "kind": "method",
-              "computed": false,
+              "static": false,
               "key": {
                 "type": "Identifier",
                 "start":68,"end":74,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":8},"identifierName":"static"},
                 "name": "static"
               },
-              "static": false,
+              "computed": false,
+              "kind": "method",
               "typeParameters": {
                 "type": "TSTypeParameterDeclaration",
                 "start":74,"end":77,"loc":{"start":{"line":5,"column":8},"end":{"line":5,"column":11}},

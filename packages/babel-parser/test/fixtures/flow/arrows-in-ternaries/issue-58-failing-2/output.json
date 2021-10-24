@@ -13,13 +13,6 @@
       {
         "type": "ExpressionStatement",
         "start":47,"end":83,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":36}},
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " Invalid LHS parameter after type parameters",
-            "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
-          }
-        ],
         "expression": {
           "type": "ConditionalExpression",
           "start":47,"end":82,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":35}},
@@ -73,11 +66,11 @@
             "body": {
               "type": "Identifier",
               "start":71,"end":72,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":25},"identifierName":"e"},
+              "name": "e",
               "extra": {
                 "parenthesized": true,
                 "parenStart": 70
-              },
-              "name": "e"
+              }
             },
             "typeParameters": {
               "type": "TypeParameterDeclaration",
@@ -111,7 +104,14 @@
               "name": "g"
             }
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Invalid LHS parameter after type parameters",
+            "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
+          }
+        ]
       }
     ],
     "directives": []

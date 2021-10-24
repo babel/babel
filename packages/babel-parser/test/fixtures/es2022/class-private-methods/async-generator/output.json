@@ -108,12 +108,12 @@
                                 "start":102,"end":106,"loc":{"start":{"line":6,"column":14},"end":{"line":6,"column":18},"identifierName":"file"},
                                 "name": "file"
                               },
+                              "computed": false,
                               "property": {
                                 "type": "Identifier",
                                 "start":107,"end":110,"loc":{"start":{"line":6,"column":19},"end":{"line":6,"column":22},"identifierName":"EOF"},
                                 "name": "EOF"
-                              },
-                              "computed": false
+                              }
                             }
                           },
                           "body": {
@@ -141,12 +141,12 @@
                                           "start":134,"end":138,"loc":{"start":{"line":7,"column":20},"end":{"line":7,"column":24},"identifierName":"file"},
                                           "name": "file"
                                         },
+                                        "computed": false,
                                         "property": {
                                           "type": "Identifier",
                                           "start":139,"end":147,"loc":{"start":{"line":7,"column":25},"end":{"line":7,"column":33},"identifierName":"readLine"},
                                           "name": "readLine"
-                                        },
-                                        "computed": false
+                                        }
                                       },
                                       "arguments": []
                                     }
@@ -182,12 +182,12 @@
                                   "start":187,"end":191,"loc":{"start":{"line":10,"column":12},"end":{"line":10,"column":16},"identifierName":"file"},
                                   "name": "file"
                                 },
+                                "computed": false,
                                 "property": {
                                   "type": "Identifier",
                                   "start":192,"end":197,"loc":{"start":{"line":10,"column":17},"end":{"line":10,"column":22},"identifierName":"close"},
                                   "name": "close"
-                                },
-                                "computed": false
+                                }
                               },
                               "arguments": []
                             }

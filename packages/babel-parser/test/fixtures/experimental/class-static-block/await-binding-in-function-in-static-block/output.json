@@ -208,13 +208,6 @@
       {
         "type": "ExpressionStatement",
         "start":158,"end":213,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":55}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " await in function expression is allowed",
-            "start":214,"end":256,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":42}}
-          }
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start":158,"end":212,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":54}},
@@ -284,18 +277,18 @@
               ]
             }
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":257,"end":304,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":47}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " await in function expression is allowed",
             "start":214,"end":256,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":42}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":257,"end":304,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":47}},
         "expression": {
           "type": "AssignmentExpression",
           "start":257,"end":303,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":46}},
@@ -324,10 +317,6 @@
                       "expression": {
                         "type": "FunctionExpression",
                         "start":279,"end":298,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":41}},
-                        "extra": {
-                          "parenthesized": true,
-                          "parenStart": 278
-                        },
                         "id": {
                           "type": "Identifier",
                           "start":288,"end":293,"loc":{"start":{"line":11,"column":31},"end":{"line":11,"column":36},"identifierName":"await"},
@@ -341,6 +330,10 @@
                           "start":296,"end":298,"loc":{"start":{"line":11,"column":39},"end":{"line":11,"column":41}},
                           "body": [],
                           "directives": []
+                        },
+                        "extra": {
+                          "parenthesized": true,
+                          "parenStart": 278
                         }
                       }
                     }
@@ -349,7 +342,14 @@
               ]
             }
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await in function expression is allowed",
+            "start":214,"end":256,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":42}}
+          }
+        ]
       }
     ],
     "directives": []

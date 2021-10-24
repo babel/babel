@@ -20,16 +20,10 @@
             "id": {
               "type": "ObjectPattern",
               "start":4,"end":19,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":19}},
-              "extra": {
-                "trailingComma": 16
-              },
               "properties": [
                 {
                   "type": "ObjectProperty",
                   "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}},
-                  "extra": {
-                    "shorthand": true
-                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -42,14 +36,14 @@
                     "type": "Identifier",
                     "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"x"},
                     "name": "x"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
                   "type": "ObjectProperty",
                   "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10}},
-                  "extra": {
-                    "shorthand": true
-                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -62,6 +56,9 @@
                     "type": "Identifier",
                     "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"y"},
                     "name": "y"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
@@ -73,7 +70,10 @@
                     "name": "z"
                   }
                 }
-              ]
+              ],
+              "extra": {
+                "trailingComma": 16
+              }
             },
             "init": {
               "type": "Identifier",

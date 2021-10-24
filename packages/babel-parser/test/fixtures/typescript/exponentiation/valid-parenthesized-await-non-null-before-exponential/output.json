@@ -29,10 +29,6 @@
             "left": {
               "type": "AwaitExpression",
               "start":14,"end":22,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":22}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 13
-              },
               "argument": {
                 "type": "TSNonNullExpression",
                 "start":20,"end":22,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":22}},
@@ -41,6 +37,10 @@
                   "start":20,"end":21,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":21},"identifierName":"a"},
                   "name": "a"
                 }
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 13
               }
             },
             "operator": "**",

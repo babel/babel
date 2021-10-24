@@ -36,12 +36,12 @@
                     "start":18,"end":25,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":25},"identifierName":"console"},
                     "name": "console"
                   },
+                  "computed": false,
                   "property": {
                     "type": "Identifier",
                     "start":26,"end":29,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":29},"identifierName":"log"},
                     "name": "log"
-                  },
-                  "computed": false
+                  }
                 },
                 "arguments": [
                   {

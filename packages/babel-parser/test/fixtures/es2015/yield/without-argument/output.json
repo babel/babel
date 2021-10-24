@@ -28,12 +28,12 @@
               "expression": {
                 "type": "YieldExpression",
                 "start":19,"end":24,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":8}},
+                "delegate": false,
+                "argument": null,
                 "extra": {
                   "parenthesized": true,
                   "parenStart": 18
-                },
-                "delegate": false,
-                "argument": null
+                }
               }
             },
             {

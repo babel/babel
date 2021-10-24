@@ -14,11 +14,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":16,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":16}},
-          "value": "Hello\\812World",
           "extra": {
-            "raw": "\"Hello\\812World\"",
-            "rawValue": "Hello\\812World"
-          }
+            "rawValue": "Hello\\812World",
+            "raw": "\"Hello\\812World\""
+          },
+          "value": "Hello\\812World"
         }
       }
     ]

@@ -48,14 +48,14 @@
               "type": "TSDeclareMethod",
               "start":34,"end":56,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":26}},
               "accessibility": "public",
-              "kind": "method",
-              "computed": false,
+              "static": false,
               "key": {
                 "type": "Identifier",
                 "start":41,"end":47,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":17},"identifierName":"static"},
                 "name": "static"
               },
-              "static": false,
+              "computed": false,
+              "kind": "method",
               "id": null,
               "generator": false,
               "async": false,

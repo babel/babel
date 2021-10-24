@@ -22,12 +22,12 @@
               "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6},"identifierName":"module"},
               "name": "module"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":7,"end":14,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":14},"identifierName":"exports"},
               "name": "exports"
-            },
-            "computed": false
+            }
           },
           "right": {
             "type": "FunctionExpression",
@@ -78,12 +78,12 @@
                             "start":86,"end":90,"loc":{"start":{"line":4,"column":16},"end":{"line":4,"column":20},"identifierName":"node"},
                             "name": "node"
                           },
+                          "computed": false,
                           "property": {
                             "type": "Identifier",
                             "start":91,"end":95,"loc":{"start":{"line":4,"column":21},"end":{"line":4,"column":25},"identifierName":"type"},
                             "name": "type"
-                          },
-                          "computed": false
+                          }
                         },
                         "cases": [
                           {
@@ -113,13 +113,14 @@
                                           "start":172,"end":176,"loc":{"start":{"line":6,"column":34},"end":{"line":6,"column":38},"identifierName":"node"},
                                           "name": "node"
                                         },
+                                        "computed": false,
                                         "property": {
                                           "type": "Identifier",
                                           "start":177,"end":188,"loc":{"start":{"line":6,"column":39},"end":{"line":6,"column":50},"identifierName":"expressions"},
                                           "name": "expressions"
-                                        },
-                                        "computed": false
+                                        }
                                       },
+                                      "computed": true,
                                       "property": {
                                         "type": "BinaryExpression",
                                         "start":189,"end":216,"loc":{"start":{"line":6,"column":51},"end":{"line":6,"column":78}},
@@ -134,19 +135,19 @@
                                               "start":189,"end":193,"loc":{"start":{"line":6,"column":51},"end":{"line":6,"column":55},"identifierName":"node"},
                                               "name": "node"
                                             },
+                                            "computed": false,
                                             "property": {
                                               "type": "Identifier",
                                               "start":194,"end":205,"loc":{"start":{"line":6,"column":56},"end":{"line":6,"column":67},"identifierName":"expressions"},
                                               "name": "expressions"
-                                            },
-                                            "computed": false
+                                            }
                                           },
+                                          "computed": false,
                                           "property": {
                                             "type": "Identifier",
                                             "start":206,"end":212,"loc":{"start":{"line":6,"column":68},"end":{"line":6,"column":74},"identifierName":"length"},
                                             "name": "length"
-                                          },
-                                          "computed": false
+                                          }
                                         },
                                         "operator": "-",
                                         "right": {
@@ -158,8 +159,7 @@
                                           },
                                           "value": 1
                                         }
-                                      },
-                                      "computed": true
+                                      }
                                     }
                                   ]
                                 }

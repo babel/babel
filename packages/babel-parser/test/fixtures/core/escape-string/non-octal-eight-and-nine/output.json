@@ -33,8 +33,8 @@
                   "type": "DirectiveLiteral",
                   "start":21,"end":33,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":14}},
                   "extra": {
-                    "raw": "\"use strict\"",
-                    "rawValue": "use strict"
+                    "rawValue": "use strict",
+                    "raw": "\"use strict\""
                   },
                   "value": "use strict"
                 }
@@ -46,8 +46,8 @@
                   "type": "DirectiveLiteral",
                   "start":37,"end":41,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":6}},
                   "extra": {
-                    "raw": "\"\\8\"",
-                    "rawValue": "\\8"
+                    "rawValue": "\\8",
+                    "raw": "\"\\8\""
                   },
                   "value": "\\8"
                 }
@@ -59,8 +59,8 @@
                   "type": "DirectiveLiteral",
                   "start":42,"end":46,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":11}},
                   "extra": {
-                    "raw": "\"\\9\"",
-                    "rawValue": "\\9"
+                    "rawValue": "\\9",
+                    "raw": "\"\\9\""
                   },
                   "value": "\\9"
                 }
@@ -78,8 +78,8 @@
           "type": "DirectiveLiteral",
           "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
           "extra": {
-            "raw": "\"\\8\"",
-            "rawValue": "\\8"
+            "rawValue": "\\8",
+            "raw": "\"\\8\""
           },
           "value": "\\8"
         }
@@ -91,8 +91,8 @@
           "type": "DirectiveLiteral",
           "start":5,"end":9,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":9}},
           "extra": {
-            "raw": "\"\\9\"",
-            "rawValue": "\\9"
+            "rawValue": "\\9",
+            "raw": "\"\\9\""
           },
           "value": "\\9"
         }

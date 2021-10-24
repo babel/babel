@@ -16,10 +16,6 @@
         "expression": {
           "type": "ObjectExpression",
           "start":1,"end":39,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":39}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "properties": [
             {
               "type": "ObjectProperty",
@@ -57,7 +53,11 @@
                 "start":33,"end":37,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":37}}
               }
             }
-          ]
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
         }
       }
     ],

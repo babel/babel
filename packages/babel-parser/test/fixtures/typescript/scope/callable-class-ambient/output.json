@@ -26,6 +26,7 @@
       {
         "type": "TSDeclareFunction",
         "start":20,"end":47,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":27}},
+        "declare": true,
         "id": {
           "type": "Identifier",
           "start":37,"end":38,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"C"},
@@ -41,8 +42,7 @@
             "type": "TSVoidKeyword",
             "start":42,"end":46,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":26}}
           }
-        },
-        "declare": true
+        }
       }
     ],
     "directives": []

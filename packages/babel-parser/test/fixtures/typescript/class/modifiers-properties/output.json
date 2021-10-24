@@ -151,8 +151,8 @@
             {
               "type": "ClassProperty",
               "start":198,"end":217,"loc":{"start":{"line":13,"column":4},"end":{"line":13,"column":23}},
-              "readonly": true,
               "static": true,
+              "readonly": true,
               "key": {
                 "type": "Identifier",
                 "start":214,"end":216,"loc":{"start":{"line":13,"column":20},"end":{"line":13,"column":22},"identifierName":"sr"},
@@ -236,8 +236,8 @@
               "type": "ClassProperty",
               "start":366,"end":394,"loc":{"start":{"line":20,"column":4},"end":{"line":20,"column":32}},
               "accessibility": "public",
-              "readonly": true,
               "static": true,
+              "readonly": true,
               "key": {
                 "type": "Identifier",
                 "start":389,"end":393,"loc":{"start":{"line":20,"column":27},"end":{"line":20,"column":31},"identifierName":"pusr"},

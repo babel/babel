@@ -16,10 +16,6 @@
         "expression": {
           "type": "BinaryExpression",
           "start":1,"end":9,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":9}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "left": {
             "type": "UnaryExpression",
             "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4}},
@@ -50,6 +46,10 @@
               "raw": "6"
             },
             "value": 6
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

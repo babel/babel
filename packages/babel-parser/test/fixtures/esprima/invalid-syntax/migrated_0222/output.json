@@ -34,8 +34,8 @@
                 "type": "DirectiveLiteral",
                 "start":19,"end":38,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":38}},
                 "extra": {
-                  "raw": "\"octal directive\\1\"",
-                  "rawValue": "octal directive\\1"
+                  "rawValue": "octal directive\\1",
+                  "raw": "\"octal directive\\1\""
                 },
                 "value": "octal directive\\1"
               }
@@ -47,8 +47,8 @@
                 "type": "DirectiveLiteral",
                 "start":40,"end":59,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":59}},
                 "extra": {
-                  "raw": "\"octal directive\\2\"",
-                  "rawValue": "octal directive\\2"
+                  "rawValue": "octal directive\\2",
+                  "raw": "\"octal directive\\2\""
                 },
                 "value": "octal directive\\2"
               }
@@ -60,8 +60,8 @@
                 "type": "DirectiveLiteral",
                 "start":61,"end":73,"loc":{"start":{"line":1,"column":61},"end":{"line":1,"column":73}},
                 "extra": {
-                  "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\""
                 },
                 "value": "use strict"
               }

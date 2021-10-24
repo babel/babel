@@ -41,13 +41,6 @@
                   {
                     "type": "ClassProperty",
                     "start":79,"end":94,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":19}},
-                    "leadingComments": [
-                      {
-                        "type": "CommentLine",
-                        "value": " here yield is an identifier reference",
-                        "start":34,"end":74,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":44}}
-                      }
-                    ],
                     "static": false,
                     "key": {
                       "type": "Identifier",
@@ -73,7 +66,14 @@
                         },
                         "value": 42
                       }
-                    }
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentLine",
+                        "value": " here yield is an identifier reference",
+                        "start":34,"end":74,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":44}}
+                      }
+                    ]
                   }
                 ]
               }

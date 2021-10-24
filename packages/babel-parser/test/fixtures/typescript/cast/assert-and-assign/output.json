@@ -17,10 +17,6 @@
           "left": {
             "type": "TSAsExpression",
             "start":1,"end":12,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":12}},
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
-            },
             "expression": {
               "type": "Identifier",
               "start":1,"end":2,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":2},"identifierName":"a"},
@@ -29,6 +25,10 @@
             "typeAnnotation": {
               "type": "TSNumberKeyword",
               "start":6,"end":12,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":12}}
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
             }
           },
           "right": {
@@ -48,10 +48,6 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":21,"end":49,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":29}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 20
-          },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -74,10 +70,6 @@
                   "left": {
                     "type": "TSAsExpression",
                     "start":27,"end":35,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":15}},
-                    "extra": {
-                      "parenthesized": true,
-                      "parenStart": 26
-                    },
                     "expression": {
                       "type": "Identifier",
                       "start":27,"end":28,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8},"identifierName":"b"},
@@ -86,6 +78,10 @@
                     "typeAnnotation": {
                       "type": "TSAnyKeyword",
                       "start":32,"end":35,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15}}
+                    },
+                    "extra": {
+                      "parenthesized": true,
+                      "parenStart": 26
                     }
                   },
                   "right": {
@@ -105,6 +101,10 @@
             "type": "Identifier",
             "start":48,"end":49,"loc":{"start":{"line":2,"column":28},"end":{"line":2,"column":29},"identifierName":"x"},
             "name": "x"
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 20
           }
         }
       }

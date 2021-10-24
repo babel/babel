@@ -33,6 +33,7 @@
       {
         "type": "TSDeclareFunction",
         "start":17,"end":46,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":29}},
+        "declare": true,
         "id": {
           "type": "Identifier",
           "start":34,"end":37,"loc":{"start":{"line":3,"column":17},"end":{"line":3,"column":20},"identifierName":"foo"},
@@ -48,8 +49,7 @@
             "type": "TSVoidKeyword",
             "start":41,"end":45,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":28}}
           }
-        },
-        "declare": true
+        }
       }
     ],
     "directives": []

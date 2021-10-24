@@ -70,9 +70,6 @@
                       {
                         "type": "ObjectProperty",
                         "start":43,"end":46,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":24}},
-                        "extra": {
-                          "shorthand": true
-                        },
                         "method": false,
                         "key": {
                           "type": "Identifier",
@@ -85,6 +82,9 @@
                           "type": "Identifier",
                           "start":43,"end":46,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":24},"identifierName":"baz"},
                           "name": "baz"
+                        },
+                        "extra": {
+                          "shorthand": true
                         }
                       },
                       {

@@ -27,17 +27,10 @@
             "init": {
               "type": "ObjectExpression",
               "start":23,"end":57,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":43}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 22
-              },
               "properties": [
                 {
                   "type": "ObjectProperty",
                   "start":25,"end":35,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":21}},
-                  "extra": {
-                    "shorthand": true
-                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -50,14 +43,14 @@
                     "type": "Identifier",
                     "start":25,"end":35,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":21},"identifierName":"implements"},
                     "name": "implements"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
                   "type": "ObjectProperty",
                   "start":37,"end":46,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":32}},
-                  "extra": {
-                    "shorthand": true
-                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -70,14 +63,14 @@
                     "type": "Identifier",
                     "start":37,"end":46,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":32},"identifierName":"interface"},
                     "name": "interface"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
                   "type": "ObjectProperty",
                   "start":48,"end":55,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":41}},
-                  "extra": {
-                    "shorthand": true
-                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -90,9 +83,16 @@
                     "type": "Identifier",
                     "start":48,"end":55,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":41},"identifierName":"package"},
                     "name": "package"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 }
-              ]
+              ],
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 22
+              }
             }
           }
         ],
@@ -107,8 +107,8 @@
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
           "extra": {
-            "raw": "\"use strict\"",
-            "rawValue": "use strict"
+            "rawValue": "use strict",
+            "raw": "\"use strict\""
           },
           "value": "use strict"
         }

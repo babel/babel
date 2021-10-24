@@ -33,8 +33,8 @@
                 "type": "DirectiveLiteral",
                 "start":28,"end":40,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":40}},
                 "extra": {
-                  "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\""
                 },
                 "value": "use strict"
               }
@@ -95,8 +95,8 @@
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
           "extra": {
-            "raw": "\"use strict\"",
-            "rawValue": "use strict"
+            "rawValue": "use strict",
+            "raw": "\"use strict\""
           },
           "value": "use strict"
         }

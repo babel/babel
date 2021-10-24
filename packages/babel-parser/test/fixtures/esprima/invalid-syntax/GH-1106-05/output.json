@@ -18,8 +18,8 @@
           "type": "DirectiveLiteral",
           "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}},
           "extra": {
-            "raw": "\"\\ux\"",
-            "rawValue": "\\ux"
+            "rawValue": "\\ux",
+            "raw": "\"\\ux\""
           },
           "value": "\\ux"
         }

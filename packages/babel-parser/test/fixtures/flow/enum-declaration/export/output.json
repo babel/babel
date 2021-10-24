@@ -24,9 +24,9 @@
           "body": {
             "type": "EnumStringBody",
             "start":14,"end":16,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":16}},
+            "hasUnknownMembers": false,
             "explicitType": false,
-            "members": [],
-            "hasUnknownMembers": false
+            "members": []
           }
         }
       },
@@ -44,9 +44,9 @@
           "body": {
             "type": "EnumStringBody",
             "start":40,"end":42,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":24}},
+            "hasUnknownMembers": false,
             "explicitType": false,
-            "members": [],
-            "hasUnknownMembers": false
+            "members": []
           }
         }
       }

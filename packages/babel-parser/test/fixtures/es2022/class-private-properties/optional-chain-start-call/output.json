@@ -81,6 +81,7 @@
                           "start":71,"end":74,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":14},"identifierName":"Foo"},
                           "name": "Foo"
                         },
+                        "computed": false,
                         "property": {
                           "type": "PrivateName",
                           "start":76,"end":78,"loc":{"start":{"line":5,"column":16},"end":{"line":5,"column":18}},
@@ -90,7 +91,6 @@
                             "name": "m"
                           }
                         },
-                        "computed": false,
                         "optional": true
                       },
                       "optional": false,

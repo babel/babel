@@ -16,11 +16,11 @@
         "expression": {
           "type": "Identifier",
           "start":1,"end":6,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":6},"identifierName":"async"},
+          "name": "async",
           "extra": {
             "parenthesized": true,
             "parenStart": 0
-          },
-          "name": "async"
+          }
         }
       },
       {

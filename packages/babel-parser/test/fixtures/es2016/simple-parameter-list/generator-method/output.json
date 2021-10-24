@@ -68,8 +68,8 @@
                           "type": "DirectiveLiteral",
                           "start":38,"end":50,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":16}},
                           "extra": {
-                            "raw": "\"use strict\"",
-                            "rawValue": "use strict"
+                            "rawValue": "use strict",
+                            "raw": "\"use strict\""
                           },
                           "value": "use strict"
                         }

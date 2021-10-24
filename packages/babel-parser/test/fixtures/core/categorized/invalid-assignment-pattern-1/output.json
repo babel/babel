@@ -20,10 +20,6 @@
           "left": {
             "type": "AssignmentPattern",
             "start":1,"end":6,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":6}},
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
-            },
             "left": {
               "type": "Identifier",
               "start":1,"end":2,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":2},"identifierName":"a"},
@@ -34,6 +30,10 @@
               "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6}},
               "value": 1,
               "raw": "1"
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
             }
           },
           "right": {
