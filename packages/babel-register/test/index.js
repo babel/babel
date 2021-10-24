@@ -4,6 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const child = require("child_process");
 
+// We cannot use "const" here, because Jest wraps this module in a function with a "jest" parameter.
+// eslint-disable-next-line no-var
+var { jest } = require("@jest/globals");
+
 let currentHook;
 let currentOptions;
 let sourceMapSupport = false;

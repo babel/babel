@@ -14,6 +14,7 @@ import path from "path";
 import vm from "vm";
 import QuickLRU from "quick-lru";
 import { fileURLToPath } from "url";
+import { jest } from "@jest/globals";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);

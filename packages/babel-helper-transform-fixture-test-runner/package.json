@@ -24,6 +24,7 @@
     "source-map": "^0.5.0"
   },
   "devDependencies": {
+    "@jest/globals": "^27.3.1",
     "@types/jest": "^25.2.2"
   },
   "engines": {

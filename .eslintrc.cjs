@@ -68,6 +68,9 @@ module.exports = {
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
         "import/extensions": ["error", { json: "always", cjs: "always" }],
+        // The "jest" global is not available when using native ESM. For consistency,
+        // always disallow it.
+        "no-restricted-globals": ["error", "jest"],
       },
     },
     {
@@ -86,7 +89,9 @@ module.exports = {
         "packages/babel-register/**/*.js",
       ],
       rules: {
-        "no-restricted-globals": ["error", ...cjsGlobals],
+        // The "jest" global is not available when using native ESM. For consistency,
+        // always disallow it.
+        "no-restricted-globals": ["error", ...cjsGlobals, "jest"],
       },
     },
     {

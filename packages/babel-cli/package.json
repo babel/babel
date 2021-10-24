@@ -42,6 +42,7 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/helper-fixtures": "workspace:*",
+    "@jest/globals": "^27.3.1",
     "rimraf": "^3.0.0"
   },
   "bin": {

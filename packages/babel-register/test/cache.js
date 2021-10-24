@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { jest } from "@jest/globals";
 
 const testCacheFilename = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
