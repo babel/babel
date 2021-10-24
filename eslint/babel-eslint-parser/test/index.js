@@ -129,6 +129,19 @@ describe("Babel and Espree", () => {
 
     espree7 = require(espree7Path);
     espree8 = require(espree8Path);
+
+    const espree7pkg = require(require.resolve("espree/package.json", {
+      paths: [path.dirname(require.resolve("eslint"))],
+    }));
+    const espree8pkg = require(require.resolve("espree/package.json", {
+      paths: [path.dirname(require.resolve("eslint-8"))],
+    }));
+    if (!espree7pkg.version.startsWith("7.")) {
+      throw new Error(`Expected espree 7, but found ${espree7pkg.version}`);
+    }
+    if (!espree8pkg.version.startsWith("9.")) {
+      throw new Error(`Expected espree 9, but found ${espree8pkg.version}`);
+    }
   });
 
   describe("compatibility", () => {
