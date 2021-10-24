@@ -418,6 +418,7 @@ function buildRollup(packages, targetBrowsers) {
               output: {
                 ascii_only: true,
               },
+              numWorkers: process.env.CIRCLECI ? 1 : undefined,
             }),
           ],
         });
