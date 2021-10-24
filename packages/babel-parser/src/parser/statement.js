@@ -1717,7 +1717,10 @@ export default class StatementParser extends ExpressionParser {
     this.declareClassPrivateMethodInScope(node, kind);
   }
 
-  declareClassPrivateMethodInScope(node: N.ClassPrivateMethod, kind: number) {
+  declareClassPrivateMethodInScope(
+    node: N.ClassPrivateMethod | N.EstreeMethodDefinition | N.TSDeclareMethod,
+    kind: number,
+  ) {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
       kind,
