@@ -2757,6 +2757,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     declareClassPrivateMethodInScope(node: N.ClassPrivateMethod, kind: number) {
       if (node.type === "TSDeclareMethod") return;
+      // This happens when using the "estree" plugin.
+      if (node.type === "MethodDefinition" && !node.value.body) return;
+
       super.declareClassPrivateMethodInScope(node, kind);
     }
 
