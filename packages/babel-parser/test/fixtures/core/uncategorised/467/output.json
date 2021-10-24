@@ -16,10 +16,6 @@
         "expression": {
           "type": "CallExpression",
           "start":1,"end":42,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":42}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "callee": {
             "type": "FunctionExpression",
             "start":1,"end":40,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":40}},
@@ -53,8 +49,8 @@
                     "type": "DirectiveLiteral",
                     "start":15,"end":27,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":27}},
                     "extra": {
-                      "raw": "'use strict'",
-                      "rawValue": "use strict"
+                      "rawValue": "use strict",
+                      "raw": "'use strict'"
                     },
                     "value": "use strict"
                   }
@@ -62,7 +58,11 @@
               ]
             }
           },
-          "arguments": []
+          "arguments": [],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
         }
       }
     ],

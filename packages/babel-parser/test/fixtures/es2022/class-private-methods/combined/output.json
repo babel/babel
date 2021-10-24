@@ -222,12 +222,12 @@
                           "start":139,"end":143,"loc":{"start":{"line":14,"column":11},"end":{"line":14,"column":15},"identifierName":"Math"},
                           "name": "Math"
                         },
+                        "computed": false,
                         "property": {
                           "type": "Identifier",
                           "start":144,"end":150,"loc":{"start":{"line":14,"column":16},"end":{"line":14,"column":22},"identifierName":"random"},
                           "name": "random"
-                        },
-                        "computed": false
+                        }
                       },
                       "arguments": []
                     }

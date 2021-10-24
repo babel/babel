@@ -143,12 +143,12 @@
                     },
                     "arguments": []
                   },
+                  "computed": true,
                   "property": {
                     "type": "Identifier",
                     "start":61,"end":62,"loc":{"start":{"line":6,"column":18},"end":{"line":6,"column":19},"identifierName":"a"},
                     "name": "a"
-                  },
-                  "computed": true
+                  }
                 }
               },
               {
@@ -169,12 +169,12 @@
                     "type": "ThisExpression",
                     "start":71,"end":75,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":10}}
                   },
+                  "computed": false,
                   "property": {
                     "type": "Identifier",
                     "start":76,"end":77,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":12},"identifierName":"a"},
                     "name": "a"
-                  },
-                  "computed": false
+                  }
                 }
               }
             ]

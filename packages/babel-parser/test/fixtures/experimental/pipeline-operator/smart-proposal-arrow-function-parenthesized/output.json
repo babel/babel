@@ -25,10 +25,6 @@
             "expression": {
               "type": "ArrowFunctionExpression",
               "start":10,"end":21,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":21}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 9
-              },
               "id": null,
               "generator": false,
               "async": false,
@@ -50,6 +46,10 @@
                   },
                   "value": 1
                 }
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 9
               }
             }
           }

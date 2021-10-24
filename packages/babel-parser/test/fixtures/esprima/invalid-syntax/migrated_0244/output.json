@@ -16,10 +16,6 @@
         "expression": {
           "type": "FunctionExpression",
           "start":1,"end":35,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":35}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "id": {
             "type": "Identifier",
             "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"a"},
@@ -51,13 +47,17 @@
                   "type": "DirectiveLiteral",
                   "start":20,"end":32,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}},
                   "extra": {
-                    "raw": "\"use strict\"",
-                    "rawValue": "use strict"
+                    "rawValue": "use strict",
+                    "raw": "\"use strict\""
                   },
                   "value": "use strict"
                 }
               }
             ]
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

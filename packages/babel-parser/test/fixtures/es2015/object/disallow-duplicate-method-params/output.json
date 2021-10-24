@@ -16,10 +16,6 @@
         "expression": {
           "type": "ObjectExpression",
           "start":1,"end":21,"loc":{"start":{"line":1,"column":1},"end":{"line":3,"column":1}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "properties": [
             {
               "type": "ObjectMethod",
@@ -54,7 +50,11 @@
                 "directives": []
               }
             }
-          ]
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
         }
       }
     ],

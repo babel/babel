@@ -51,12 +51,12 @@
                       "type": "Super",
                       "start":34,"end":39,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":19}}
                     },
+                    "computed": false,
                     "property": {
                       "type": "Identifier",
                       "start":40,"end":41,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":21},"identifierName":"x"},
                       "name": "x"
-                    },
-                    "computed": false
+                    }
                   },
                   "arguments": []
                 }

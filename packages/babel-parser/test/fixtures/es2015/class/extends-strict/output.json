@@ -21,10 +21,6 @@
         "superClass": {
           "type": "CallExpression",
           "start":17,"end":60,"loc":{"start":{"line":1,"column":17},"end":{"line":4,"column":3}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 16
-          },
           "callee": {
             "type": "FunctionExpression",
             "start":17,"end":58,"loc":{"start":{"line":1,"column":17},"end":{"line":4,"column":1}},
@@ -66,7 +62,11 @@
               "directives": []
             }
           },
-          "arguments": []
+          "arguments": [],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 16
+          }
         },
         "body": {
           "type": "ClassBody",

@@ -21,12 +21,12 @@
               "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3},"identifierName":"foo"},
               "name": "foo"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"bar"},
               "name": "bar"
             },
-            "computed": false,
             "optional": true
           }
         }

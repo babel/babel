@@ -22,13 +22,13 @@
             {
               "type": "TSMethodSignature",
               "start":18,"end":36,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":20}},
-              "kind": "get",
               "key": {
                 "type": "Identifier",
                 "start":22,"end":25,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9},"identifierName":"foo"},
                 "name": "foo"
               },
               "computed": false,
+              "kind": "get",
               "parameters": [],
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
@@ -42,13 +42,13 @@
             {
               "type": "TSMethodSignature",
               "start":39,"end":50,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":13}},
-              "kind": "set",
               "key": {
                 "type": "Identifier",
                 "start":43,"end":46,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":9},"identifierName":"bar"},
                 "name": "bar"
               },
               "computed": false,
+              "kind": "set",
               "parameters": [
                 {
                   "type": "Identifier",

@@ -136,6 +136,7 @@
                           "type": "ThisExpression",
                           "start":69,"end":73,"loc":{"start":{"line":6,"column":4},"end":{"line":6,"column":8}}
                         },
+                        "computed": false,
                         "property": {
                           "type": "PrivateName",
                           "start":74,"end":76,"loc":{"start":{"line":6,"column":9},"end":{"line":6,"column":11}},
@@ -144,8 +145,7 @@
                             "start":75,"end":76,"loc":{"start":{"line":6,"column":10},"end":{"line":6,"column":11},"identifierName":"x"},
                             "name": "x"
                           }
-                        },
-                        "computed": false
+                        }
                       },
                       "right": {
                         "type": "UnaryExpression",
@@ -174,6 +174,7 @@
                           "type": "ThisExpression",
                           "start":87,"end":91,"loc":{"start":{"line":7,"column":4},"end":{"line":7,"column":8}}
                         },
+                        "computed": false,
                         "property": {
                           "type": "PrivateName",
                           "start":92,"end":94,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":11}},
@@ -182,8 +183,7 @@
                             "start":93,"end":94,"loc":{"start":{"line":7,"column":10},"end":{"line":7,"column":11},"identifierName":"y"},
                             "name": "y"
                           }
-                        },
-                        "computed": false
+                        }
                       },
                       "right": {
                         "type": "UnaryExpression",
@@ -212,12 +212,12 @@
                           "type": "ThisExpression",
                           "start":106,"end":110,"loc":{"start":{"line":9,"column":4},"end":{"line":9,"column":8}}
                         },
+                        "computed": false,
                         "property": {
                           "type": "Identifier",
                           "start":111,"end":114,"loc":{"start":{"line":9,"column":9},"end":{"line":9,"column":12},"identifierName":"foo"},
                           "name": "foo"
-                        },
-                        "computed": false
+                        }
                       },
                       "right": {
                         "type": "ClassExpression",
@@ -344,6 +344,7 @@
                                           "type": "ThisExpression",
                                           "start":196,"end":200,"loc":{"start":{"line":14,"column":8},"end":{"line":14,"column":12}}
                                         },
+                                        "computed": false,
                                         "property": {
                                           "type": "PrivateName",
                                           "start":201,"end":203,"loc":{"start":{"line":14,"column":13},"end":{"line":14,"column":15}},
@@ -352,8 +353,7 @@
                                             "start":202,"end":203,"loc":{"start":{"line":14,"column":14},"end":{"line":14,"column":15},"identifierName":"x"},
                                             "name": "x"
                                           }
-                                        },
-                                        "computed": false
+                                        }
                                       },
                                       "right": {
                                         "type": "UnaryExpression",
@@ -382,6 +382,7 @@
                                           "type": "ThisExpression",
                                           "start":218,"end":222,"loc":{"start":{"line":15,"column":8},"end":{"line":15,"column":12}}
                                         },
+                                        "computed": false,
                                         "property": {
                                           "type": "PrivateName",
                                           "start":223,"end":225,"loc":{"start":{"line":15,"column":13},"end":{"line":15,"column":15}},
@@ -390,8 +391,7 @@
                                             "start":224,"end":225,"loc":{"start":{"line":15,"column":14},"end":{"line":15,"column":15},"identifierName":"y"},
                                             "name": "y"
                                           }
-                                        },
-                                        "computed": false
+                                        }
                                       },
                                       "right": {
                                         "type": "UnaryExpression",
@@ -439,6 +439,7 @@
                                         "type": "ThisExpression",
                                         "start":264,"end":268,"loc":{"start":{"line":18,"column":23},"end":{"line":18,"column":27}}
                                       },
+                                      "computed": false,
                                       "property": {
                                         "type": "PrivateName",
                                         "start":269,"end":271,"loc":{"start":{"line":18,"column":28},"end":{"line":18,"column":30}},
@@ -447,8 +448,7 @@
                                           "start":270,"end":271,"loc":{"start":{"line":18,"column":29},"end":{"line":18,"column":30},"identifierName":"x"},
                                           "name": "x"
                                         }
-                                      },
-                                      "computed": false
+                                      }
                                     }
                                   }
                                 ],
@@ -494,6 +494,7 @@
                                           "type": "ThisExpression",
                                           "start":295,"end":299,"loc":{"start":{"line":19,"column":21},"end":{"line":19,"column":25}}
                                         },
+                                        "computed": false,
                                         "property": {
                                           "type": "PrivateName",
                                           "start":300,"end":302,"loc":{"start":{"line":19,"column":26},"end":{"line":19,"column":28}},
@@ -502,8 +503,7 @@
                                             "start":301,"end":302,"loc":{"start":{"line":19,"column":27},"end":{"line":19,"column":28},"identifierName":"x"},
                                             "name": "x"
                                           }
-                                        },
-                                        "computed": false
+                                        }
                                       },
                                       "right": {
                                         "type": "UnaryExpression",
@@ -551,6 +551,7 @@
                                         "type": "ThisExpression",
                                         "start":338,"end":342,"loc":{"start":{"line":21,"column":23},"end":{"line":21,"column":27}}
                                       },
+                                      "computed": false,
                                       "property": {
                                         "type": "PrivateName",
                                         "start":343,"end":345,"loc":{"start":{"line":21,"column":28},"end":{"line":21,"column":30}},
@@ -559,8 +560,7 @@
                                           "start":344,"end":345,"loc":{"start":{"line":21,"column":29},"end":{"line":21,"column":30},"identifierName":"y"},
                                           "name": "y"
                                         }
-                                      },
-                                      "computed": false
+                                      }
                                     }
                                   }
                                 ],
@@ -606,6 +606,7 @@
                                           "type": "ThisExpression",
                                           "start":369,"end":373,"loc":{"start":{"line":22,"column":21},"end":{"line":22,"column":25}}
                                         },
+                                        "computed": false,
                                         "property": {
                                           "type": "PrivateName",
                                           "start":374,"end":376,"loc":{"start":{"line":22,"column":26},"end":{"line":22,"column":28}},
@@ -614,8 +615,7 @@
                                             "start":375,"end":376,"loc":{"start":{"line":22,"column":27},"end":{"line":22,"column":28},"identifierName":"y"},
                                             "name": "y"
                                           }
-                                        },
-                                        "computed": false
+                                        }
                                       },
                                       "right": {
                                         "type": "UnaryExpression",
@@ -675,6 +675,7 @@
                                             "type": "ThisExpression",
                                             "start":414,"end":418,"loc":{"start":{"line":24,"column":25},"end":{"line":24,"column":29}}
                                           },
+                                          "computed": false,
                                           "property": {
                                             "type": "PrivateName",
                                             "start":419,"end":421,"loc":{"start":{"line":24,"column":30},"end":{"line":24,"column":32}},
@@ -683,8 +684,7 @@
                                               "start":420,"end":421,"loc":{"start":{"line":24,"column":31},"end":{"line":24,"column":32},"identifierName":"x"},
                                               "name": "x"
                                             }
-                                          },
-                                          "computed": false
+                                          }
                                         },
                                         "operator": "===",
                                         "right": {
@@ -695,6 +695,7 @@
                                             "start":426,"end":427,"loc":{"start":{"line":24,"column":37},"end":{"line":24,"column":38},"identifierName":"p"},
                                             "name": "p"
                                           },
+                                          "computed": false,
                                           "property": {
                                             "type": "PrivateName",
                                             "start":428,"end":430,"loc":{"start":{"line":24,"column":39},"end":{"line":24,"column":41}},
@@ -703,8 +704,7 @@
                                               "start":429,"end":430,"loc":{"start":{"line":24,"column":40},"end":{"line":24,"column":41},"identifierName":"x"},
                                               "name": "x"
                                             }
-                                          },
-                                          "computed": false
+                                          }
                                         }
                                       },
                                       "operator": "&&",
@@ -718,6 +718,7 @@
                                             "type": "ThisExpression",
                                             "start":434,"end":438,"loc":{"start":{"line":24,"column":45},"end":{"line":24,"column":49}}
                                           },
+                                          "computed": false,
                                           "property": {
                                             "type": "PrivateName",
                                             "start":439,"end":441,"loc":{"start":{"line":24,"column":50},"end":{"line":24,"column":52}},
@@ -726,8 +727,7 @@
                                               "start":440,"end":441,"loc":{"start":{"line":24,"column":51},"end":{"line":24,"column":52},"identifierName":"y"},
                                               "name": "y"
                                             }
-                                          },
-                                          "computed": false
+                                          }
                                         },
                                         "operator": "===",
                                         "right": {
@@ -738,6 +738,7 @@
                                             "start":446,"end":447,"loc":{"start":{"line":24,"column":57},"end":{"line":24,"column":58},"identifierName":"p"},
                                             "name": "p"
                                           },
+                                          "computed": false,
                                           "property": {
                                             "type": "PrivateName",
                                             "start":448,"end":450,"loc":{"start":{"line":24,"column":59},"end":{"line":24,"column":61}},
@@ -746,8 +747,7 @@
                                               "start":449,"end":450,"loc":{"start":{"line":24,"column":60},"end":{"line":24,"column":61},"identifierName":"y"},
                                               "name": "y"
                                             }
-                                          },
-                                          "computed": false
+                                          }
                                         }
                                       }
                                     }
@@ -789,6 +789,7 @@
                                             "type": "ThisExpression",
                                             "start":490,"end":494,"loc":{"start":{"line":26,"column":36},"end":{"line":26,"column":40}}
                                           },
+                                          "computed": false,
                                           "property": {
                                             "type": "PrivateName",
                                             "start":495,"end":497,"loc":{"start":{"line":26,"column":41},"end":{"line":26,"column":43}},
@@ -797,8 +798,7 @@
                                               "start":496,"end":497,"loc":{"start":{"line":26,"column":42},"end":{"line":26,"column":43},"identifierName":"x"},
                                               "name": "x"
                                             }
-                                          },
-                                          "computed": false
+                                          }
                                         },
                                         {
                                           "type": "MemberExpression",
@@ -807,6 +807,7 @@
                                             "type": "ThisExpression",
                                             "start":503,"end":507,"loc":{"start":{"line":26,"column":49},"end":{"line":26,"column":53}}
                                           },
+                                          "computed": false,
                                           "property": {
                                             "type": "PrivateName",
                                             "start":508,"end":510,"loc":{"start":{"line":26,"column":54},"end":{"line":26,"column":56}},
@@ -815,8 +816,7 @@
                                               "start":509,"end":510,"loc":{"start":{"line":26,"column":55},"end":{"line":26,"column":56},"identifierName":"y"},
                                               "name": "y"
                                             }
-                                          },
-                                          "computed": false
+                                          }
                                         }
                                       ],
                                       "quasis": [
@@ -892,6 +892,7 @@
                         "type": "ThisExpression",
                         "start":548,"end":552,"loc":{"start":{"line":30,"column":19},"end":{"line":30,"column":23}}
                       },
+                      "computed": false,
                       "property": {
                         "type": "PrivateName",
                         "start":553,"end":555,"loc":{"start":{"line":30,"column":24},"end":{"line":30,"column":26}},
@@ -900,8 +901,7 @@
                           "start":554,"end":555,"loc":{"start":{"line":30,"column":25},"end":{"line":30,"column":26},"identifierName":"x"},
                           "name": "x"
                         }
-                      },
-                      "computed": false
+                      }
                     }
                   }
                 ],
@@ -947,6 +947,7 @@
                           "type": "ThisExpression",
                           "start":575,"end":579,"loc":{"start":{"line":31,"column":17},"end":{"line":31,"column":21}}
                         },
+                        "computed": false,
                         "property": {
                           "type": "PrivateName",
                           "start":580,"end":582,"loc":{"start":{"line":31,"column":22},"end":{"line":31,"column":24}},
@@ -955,8 +956,7 @@
                             "start":581,"end":582,"loc":{"start":{"line":31,"column":23},"end":{"line":31,"column":24},"identifierName":"x"},
                             "name": "x"
                           }
-                        },
-                        "computed": false
+                        }
                       },
                       "right": {
                         "type": "UnaryExpression",
@@ -1004,6 +1004,7 @@
                         "type": "ThisExpression",
                         "start":614,"end":618,"loc":{"start":{"line":33,"column":19},"end":{"line":33,"column":23}}
                       },
+                      "computed": false,
                       "property": {
                         "type": "PrivateName",
                         "start":619,"end":621,"loc":{"start":{"line":33,"column":24},"end":{"line":33,"column":26}},
@@ -1012,8 +1013,7 @@
                           "start":620,"end":621,"loc":{"start":{"line":33,"column":25},"end":{"line":33,"column":26},"identifierName":"y"},
                           "name": "y"
                         }
-                      },
-                      "computed": false
+                      }
                     }
                   }
                 ],
@@ -1059,6 +1059,7 @@
                           "type": "ThisExpression",
                           "start":641,"end":645,"loc":{"start":{"line":34,"column":17},"end":{"line":34,"column":21}}
                         },
+                        "computed": false,
                         "property": {
                           "type": "PrivateName",
                           "start":646,"end":648,"loc":{"start":{"line":34,"column":22},"end":{"line":34,"column":24}},
@@ -1067,8 +1068,7 @@
                             "start":647,"end":648,"loc":{"start":{"line":34,"column":23},"end":{"line":34,"column":24},"identifierName":"y"},
                             "name": "y"
                           }
-                        },
-                        "computed": false
+                        }
                       },
                       "right": {
                         "type": "UnaryExpression",
@@ -1128,6 +1128,7 @@
                             "type": "ThisExpression",
                             "start":682,"end":686,"loc":{"start":{"line":36,"column":21},"end":{"line":36,"column":25}}
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":687,"end":689,"loc":{"start":{"line":36,"column":26},"end":{"line":36,"column":28}},
@@ -1136,8 +1137,7 @@
                               "start":688,"end":689,"loc":{"start":{"line":36,"column":27},"end":{"line":36,"column":28},"identifierName":"x"},
                               "name": "x"
                             }
-                          },
-                          "computed": false
+                          }
                         },
                         "operator": "===",
                         "right": {
@@ -1148,6 +1148,7 @@
                             "start":694,"end":695,"loc":{"start":{"line":36,"column":33},"end":{"line":36,"column":34},"identifierName":"p"},
                             "name": "p"
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":696,"end":698,"loc":{"start":{"line":36,"column":35},"end":{"line":36,"column":37}},
@@ -1156,8 +1157,7 @@
                               "start":697,"end":698,"loc":{"start":{"line":36,"column":36},"end":{"line":36,"column":37},"identifierName":"x"},
                               "name": "x"
                             }
-                          },
-                          "computed": false
+                          }
                         }
                       },
                       "operator": "&&",
@@ -1171,6 +1171,7 @@
                             "type": "ThisExpression",
                             "start":702,"end":706,"loc":{"start":{"line":36,"column":41},"end":{"line":36,"column":45}}
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":707,"end":709,"loc":{"start":{"line":36,"column":46},"end":{"line":36,"column":48}},
@@ -1179,8 +1180,7 @@
                               "start":708,"end":709,"loc":{"start":{"line":36,"column":47},"end":{"line":36,"column":48},"identifierName":"y"},
                               "name": "y"
                             }
-                          },
-                          "computed": false
+                          }
                         },
                         "operator": "===",
                         "right": {
@@ -1191,6 +1191,7 @@
                             "start":714,"end":715,"loc":{"start":{"line":36,"column":53},"end":{"line":36,"column":54},"identifierName":"p"},
                             "name": "p"
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":716,"end":718,"loc":{"start":{"line":36,"column":55},"end":{"line":36,"column":57}},
@@ -1199,8 +1200,7 @@
                               "start":717,"end":718,"loc":{"start":{"line":36,"column":56},"end":{"line":36,"column":57},"identifierName":"y"},
                               "name": "y"
                             }
-                          },
-                          "computed": false
+                          }
                         }
                       }
                     }
@@ -1242,6 +1242,7 @@
                             "type": "ThisExpression",
                             "start":754,"end":758,"loc":{"start":{"line":38,"column":32},"end":{"line":38,"column":36}}
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":759,"end":761,"loc":{"start":{"line":38,"column":37},"end":{"line":38,"column":39}},
@@ -1250,8 +1251,7 @@
                               "start":760,"end":761,"loc":{"start":{"line":38,"column":38},"end":{"line":38,"column":39},"identifierName":"x"},
                               "name": "x"
                             }
-                          },
-                          "computed": false
+                          }
                         },
                         {
                           "type": "MemberExpression",
@@ -1260,6 +1260,7 @@
                             "type": "ThisExpression",
                             "start":767,"end":771,"loc":{"start":{"line":38,"column":45},"end":{"line":38,"column":49}}
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":772,"end":774,"loc":{"start":{"line":38,"column":50},"end":{"line":38,"column":52}},
@@ -1268,8 +1269,7 @@
                               "start":773,"end":774,"loc":{"start":{"line":38,"column":51},"end":{"line":38,"column":52},"identifierName":"y"},
                               "name": "y"
                             }
-                          },
-                          "computed": false
+                          }
                         }
                       ],
                       "quasis": [

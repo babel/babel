@@ -46,12 +46,12 @@
                     "right": {
                       "type": "YieldExpression",
                       "start":25,"end":30,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":13}},
+                      "delegate": false,
+                      "argument": null,
                       "extra": {
                         "parenthesized": true,
                         "parenStart": 24
-                      },
-                      "delegate": false,
-                      "argument": null
+                      }
                     }
                   }
                 ],

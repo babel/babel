@@ -99,9 +99,6 @@
                   {
                     "type": "ObjectProperty",
                     "start":62,"end":63,"loc":{"start":{"line":2,"column":35},"end":{"line":2,"column":36}},
-                    "extra": {
-                      "shorthand": true
-                    },
                     "method": false,
                     "key": {
                       "type": "Identifier",
@@ -114,6 +111,9 @@
                       "type": "Identifier",
                       "start":62,"end":63,"loc":{"start":{"line":2,"column":35},"end":{"line":2,"column":36},"identifierName":"b"},
                       "name": "b"
+                    },
+                    "extra": {
+                      "shorthand": true
                     }
                   },
                   {

@@ -56,13 +56,6 @@
       {
         "type": "ExportNamedDeclaration",
         "start":26,"end":58,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":32}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " should throw",
-            "start":59,"end":74,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":48}}
-          }
-        ],
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -84,25 +77,18 @@
           }
         ],
         "source": null,
-        "declaration": null
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start":75,"end":107,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":32}},
-        "leadingComments": [
+        "declaration": null,
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " should throw",
             "start":59,"end":74,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":48}}
           }
-        ],
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " should not throw",
-            "start":108,"end":127,"loc":{"start":{"line":3,"column":33},"end":{"line":3,"column":52}}
-          }
-        ],
+        ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":75,"end":107,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":32}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -124,7 +110,21 @@
           }
         ],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " should not throw",
+            "start":108,"end":127,"loc":{"start":{"line":3,"column":33},"end":{"line":3,"column":52}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " should throw",
+            "start":59,"end":74,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":48}}
+          }
+        ]
       }
     ],
     "directives": []

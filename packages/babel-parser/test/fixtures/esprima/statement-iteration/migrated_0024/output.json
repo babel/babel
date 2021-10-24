@@ -18,6 +18,7 @@
             "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"a"},
             "name": "a"
           },
+          "computed": true,
           "property": {
             "type": "BinaryExpression",
             "start":7,"end":13,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":13}},
@@ -32,8 +33,7 @@
               "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13},"identifierName":"c"},
               "name": "c"
             }
-          },
-          "computed": true
+          }
         },
         "right": {
           "type": "Identifier",

@@ -29,12 +29,12 @@
                 "start":17,"end":22,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":12},"identifierName":"async"},
                 "name": "async"
               },
+              "computed": false,
               "property": {
                 "type": "Identifier",
                 "start":23,"end":32,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":22},"identifierName":"waterfall"},
                 "name": "waterfall"
-              },
-              "computed": false
+              }
             },
             "arguments": []
           },

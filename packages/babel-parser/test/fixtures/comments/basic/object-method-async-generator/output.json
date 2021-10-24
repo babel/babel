@@ -16,39 +16,15 @@
           "callee": {
             "type": "ObjectExpression",
             "start":1,"end":86,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":86}},
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
-            },
             "properties": [
               {
                 "type": "ObjectMethod",
                 "start":11,"end":84,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":84}},
-                "leadingComments": [
-                  {
-                    "type": "CommentBlock",
-                    "value": " 1 ",
-                    "start":3,"end":10,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":10}}
-                  }
-                ],
-                "innerComments": [
-                  {
-                    "type": "CommentBlock",
-                    "value": " 2 ",
-                    "start":17,"end":24,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":24}}
-                  }
-                ],
                 "method": true,
                 "key": {
                   "type": "Identifier",
                   "start":35,"end":36,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":36},"identifierName":"f"},
-                  "leadingComments": [
-                    {
-                      "type": "CommentBlock",
-                      "value": " 3 ",
-                      "start":27,"end":34,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":34}}
-                    }
-                  ],
+                  "name": "f",
                   "trailingComments": [
                     {
                       "type": "CommentBlock",
@@ -56,7 +32,13 @@
                       "start":37,"end":44,"loc":{"start":{"line":1,"column":37},"end":{"line":1,"column":44}}
                     }
                   ],
-                  "name": "f"
+                  "leadingComments": [
+                    {
+                      "type": "CommentBlock",
+                      "value": " 3 ",
+                      "start":27,"end":34,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":34}}
+                    }
+                  ]
                 },
                 "computed": false,
                 "kind": "method",
@@ -67,13 +49,7 @@
                   {
                     "type": "Identifier",
                     "start":54,"end":55,"loc":{"start":{"line":1,"column":54},"end":{"line":1,"column":55},"identifierName":"a"},
-                    "leadingComments": [
-                      {
-                        "type": "CommentBlock",
-                        "value": " 5 ",
-                        "start":46,"end":53,"loc":{"start":{"line":1,"column":46},"end":{"line":1,"column":53}}
-                      }
-                    ],
+                    "name": "a",
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
@@ -86,24 +62,48 @@
                         "start":65,"end":72,"loc":{"start":{"line":1,"column":65},"end":{"line":1,"column":72}}
                       }
                     ],
-                    "name": "a"
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": " 5 ",
+                        "start":46,"end":53,"loc":{"start":{"line":1,"column":46},"end":{"line":1,"column":53}}
+                      }
+                    ]
                   }
                 ],
                 "body": {
                   "type": "BlockStatement",
                   "start":82,"end":84,"loc":{"start":{"line":1,"column":82},"end":{"line":1,"column":84}},
+                  "body": [],
+                  "directives": [],
                   "leadingComments": [
                     {
                       "type": "CommentBlock",
                       "value": " 8 ",
                       "start":74,"end":81,"loc":{"start":{"line":1,"column":74},"end":{"line":1,"column":81}}
                     }
-                  ],
-                  "body": [],
-                  "directives": []
-                }
+                  ]
+                },
+                "innerComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " 2 ",
+                    "start":17,"end":24,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":24}}
+                  }
+                ],
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " 1 ",
+                    "start":3,"end":10,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":10}}
+                  }
+                ]
               }
-            ]
+            ],
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            }
           },
           "arguments": [
             {
@@ -113,13 +113,6 @@
                 {
                   "type": "ObjectMethod",
                   "start":91,"end":113,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":25}},
-                  "innerComments": [
-                    {
-                      "type": "CommentBlock",
-                      "value": " 1 ",
-                      "start":97,"end":104,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":16}}
-                    }
-                  ],
                   "method": true,
                   "key": {
                     "type": "Identifier",
@@ -137,7 +130,14 @@
                     "start":111,"end":113,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":25}},
                     "body": [],
                     "directives": []
-                  }
+                  },
+                  "innerComments": [
+                    {
+                      "type": "CommentBlock",
+                      "value": " 1 ",
+                      "start":97,"end":104,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":16}}
+                    }
+                  ]
                 }
               ]
             }

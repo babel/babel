@@ -57,11 +57,11 @@
               "value": {
                 "type": "DirectiveLiteral",
                 "start":30,"end":42,"loc":{"start":{"line":4,"column":15},"end":{"line":4,"column":27}},
-                "value": "use strict",
                 "extra": {
-                  "raw": "'use strict'",
-                  "rawValue": "use strict"
-                }
+                  "rawValue": "use strict",
+                  "raw": "'use strict'"
+                },
+                "value": "use strict"
               }
             }
           ]

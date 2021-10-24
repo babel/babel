@@ -21,12 +21,12 @@
               "start":14,"end":20,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":6},"identifierName":"object"},
               "name": "object"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":21,"end":27,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":13},"identifierName":"static"},
               "name": "static"
-            },
-            "computed": false
+            }
           },
           "arguments": []
         }
@@ -39,11 +39,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
-            "raw": "'use strict'",
-            "rawValue": "use strict"
-          }
+            "rawValue": "use strict",
+            "raw": "'use strict'"
+          },
+          "value": "use strict"
         }
       }
     ]

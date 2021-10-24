@@ -10,18 +10,6 @@
       {
         "type": "ExpressionStatement",
         "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":23}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " This looks A LOT like an async arrow function, but it isn't because",
-            "start":25,"end":95,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":70}}
-          },
-          {
-            "type": "CommentLine",
-            "value": " T + U isn't a valid type parameter.",
-            "start":96,"end":134,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":38}}
-          }
-        ],
         "expression": {
           "type": "BinaryExpression",
           "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
@@ -44,10 +32,6 @@
           "right": {
             "type": "TypeCastExpression",
             "start":10,"end":21,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":21}},
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 9
-            },
             "expression": {
               "type": "Identifier",
               "start":10,"end":12,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":12},"identifierName":"fn"},
@@ -74,14 +58,14 @@
                 },
                 "typeParameters": null
               }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 9
             }
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":135,"end":167,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":32}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " This looks A LOT like an async arrow function, but it isn't because",
@@ -92,14 +76,14 @@
             "value": " T + U isn't a valid type parameter.",
             "start":96,"end":134,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":38}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":135,"end":167,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":32}},
         "expression": {
           "type": "TypeCastExpression",
           "start":136,"end":165,"loc":{"start":{"line":5,"column":1},"end":{"line":5,"column":30}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 135
-          },
           "expression": {
             "type": "BinaryExpression",
             "start":136,"end":156,"loc":{"start":{"line":5,"column":1},"end":{"line":5,"column":21}},
@@ -132,10 +116,6 @@
             "right": {
               "type": "TypeCastExpression",
               "start":150,"end":155,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":20}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 149
-              },
               "expression": {
                 "type": "Identifier",
                 "start":150,"end":152,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":17},"identifierName":"fn"},
@@ -154,6 +134,10 @@
                     "name": "T"
                   }
                 }
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 149
               }
             }
           },
@@ -195,8 +179,24 @@
               },
               "typeParameters": null
             }
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 135
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " This looks A LOT like an async arrow function, but it isn't because",
+            "start":25,"end":95,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":70}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " T + U isn't a valid type parameter.",
+            "start":96,"end":134,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":38}}
+          }
+        ]
       }
     ],
     "directives": []

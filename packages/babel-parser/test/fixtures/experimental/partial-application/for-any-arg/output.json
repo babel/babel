@@ -49,12 +49,12 @@
               "start":12,"end":15,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3},"identifierName":"bar"},
               "name": "bar"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":16,"end":19,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7},"identifierName":"foo"},
               "name": "foo"
-            },
-            "computed": false
+            }
           },
           "arguments": [
             {

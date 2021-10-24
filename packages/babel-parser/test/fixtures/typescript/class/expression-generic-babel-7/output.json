@@ -13,10 +13,6 @@
         "expression": {
           "type": "ClassExpression",
           "start":1,"end":12,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":12}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "id": null,
           "typeParameters": {
             "type": "TSTypeParameterDeclaration",
@@ -34,6 +30,10 @@
             "type": "ClassBody",
             "start":10,"end":12,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":12}},
             "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       },
@@ -43,10 +43,6 @@
         "expression": {
           "type": "ClassExpression",
           "start":16,"end":29,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":14}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 15
-          },
           "id": {
             "type": "Identifier",
             "start":22,"end":23,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8},"identifierName":"C"},
@@ -68,6 +64,10 @@
             "type": "ClassBody",
             "start":27,"end":29,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":14}},
             "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 15
           }
         }
       }

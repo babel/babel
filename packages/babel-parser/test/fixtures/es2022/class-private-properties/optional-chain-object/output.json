@@ -150,14 +150,15 @@
                               "start":124,"end":125,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":7},"identifierName":"o"},
                               "name": "o"
                             },
+                            "computed": false,
                             "property": {
                               "type": "Identifier",
                               "start":127,"end":130,"loc":{"start":{"line":8,"column":9},"end":{"line":8,"column":12},"identifierName":"Foo"},
                               "name": "Foo"
                             },
-                            "computed": false,
                             "optional": true
                           },
+                          "computed": false,
                           "property": {
                             "type": "PrivateName",
                             "start":131,"end":133,"loc":{"start":{"line":8,"column":13},"end":{"line":8,"column":15}},
@@ -167,7 +168,6 @@
                               "name": "x"
                             }
                           },
-                          "computed": false,
                           "optional": false
                         },
                         {
@@ -184,14 +184,15 @@
                                 "start":141,"end":142,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":7},"identifierName":"o"},
                                 "name": "o"
                               },
+                              "computed": false,
                               "property": {
                                 "type": "Identifier",
                                 "start":144,"end":147,"loc":{"start":{"line":9,"column":9},"end":{"line":9,"column":12},"identifierName":"Foo"},
                                 "name": "Foo"
                               },
-                              "computed": false,
                               "optional": true
                             },
+                            "computed": false,
                             "property": {
                               "type": "PrivateName",
                               "start":148,"end":150,"loc":{"start":{"line":9,"column":13},"end":{"line":9,"column":15}},
@@ -201,15 +202,14 @@
                                 "name": "x"
                               }
                             },
-                            "computed": false,
                             "optional": false
                           },
+                          "computed": false,
                           "property": {
                             "type": "Identifier",
                             "start":151,"end":158,"loc":{"start":{"line":9,"column":16},"end":{"line":9,"column":23},"identifierName":"toFixed"},
                             "name": "toFixed"
                           },
-                          "computed": false,
                           "optional": false
                         },
                         {
@@ -229,14 +229,15 @@
                                   "start":166,"end":167,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":7},"identifierName":"o"},
                                   "name": "o"
                                 },
+                                "computed": false,
                                 "property": {
                                   "type": "Identifier",
                                   "start":169,"end":172,"loc":{"start":{"line":10,"column":9},"end":{"line":10,"column":12},"identifierName":"Foo"},
                                   "name": "Foo"
                                 },
-                                "computed": false,
                                 "optional": true
                               },
+                              "computed": false,
                               "property": {
                                 "type": "PrivateName",
                                 "start":173,"end":175,"loc":{"start":{"line":10,"column":13},"end":{"line":10,"column":15}},
@@ -246,15 +247,14 @@
                                   "name": "x"
                                 }
                               },
-                              "computed": false,
                               "optional": false
                             },
+                            "computed": false,
                             "property": {
                               "type": "Identifier",
                               "start":176,"end":183,"loc":{"start":{"line":10,"column":16},"end":{"line":10,"column":23},"identifierName":"toFixed"},
                               "name": "toFixed"
                             },
-                            "computed": false,
                             "optional": false
                           },
                           "optional": false,
@@ -284,14 +284,15 @@
                                 "start":194,"end":195,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":7},"identifierName":"o"},
                                 "name": "o"
                               },
+                              "computed": false,
                               "property": {
                                 "type": "Identifier",
                                 "start":197,"end":200,"loc":{"start":{"line":11,"column":9},"end":{"line":11,"column":12},"identifierName":"Foo"},
                                 "name": "Foo"
                               },
-                              "computed": false,
                               "optional": true
                             },
+                            "computed": false,
                             "property": {
                               "type": "PrivateName",
                               "start":201,"end":203,"loc":{"start":{"line":11,"column":13},"end":{"line":11,"column":15}},
@@ -301,7 +302,6 @@
                                 "name": "m"
                               }
                             },
-                            "computed": false,
                             "optional": false
                           },
                           "optional": false,

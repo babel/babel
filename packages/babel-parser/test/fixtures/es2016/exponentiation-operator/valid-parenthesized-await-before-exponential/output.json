@@ -23,10 +23,6 @@
             "left": {
               "type": "AwaitExpression",
               "start":13,"end":20,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":20}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 12
-              },
               "argument": {
                 "type": "NumericLiteral",
                 "start":19,"end":20,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":20}},
@@ -35,6 +31,10 @@
                   "raw": "5"
                 },
                 "value": 5
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 12
               }
             },
             "operator": "**",

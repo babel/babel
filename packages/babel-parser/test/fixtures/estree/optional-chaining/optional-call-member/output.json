@@ -32,12 +32,12 @@
               "parenStart": 0
             }
           },
+          "computed": false,
           "property": {
             "type": "Identifier",
             "start":10,"end":13,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":13},"identifierName":"bar"},
             "name": "bar"
           },
-          "computed": false,
           "optional": false
         }
       }

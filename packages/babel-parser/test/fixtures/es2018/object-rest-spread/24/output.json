@@ -16,10 +16,6 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":1,"end":13,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":13}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -40,6 +36,10 @@
             "type": "ObjectExpression",
             "start":11,"end":13,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":13}},
             "properties": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

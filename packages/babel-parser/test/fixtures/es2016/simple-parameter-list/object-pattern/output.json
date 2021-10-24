@@ -28,9 +28,6 @@
               {
                 "type": "ObjectProperty",
                 "start":13,"end":20,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":20}},
-                "extra": {
-                  "shorthand": true
-                },
                 "method": false,
                 "key": {
                   "type": "Identifier",
@@ -43,14 +40,14 @@
                   "type": "Identifier",
                   "start":13,"end":20,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":20},"identifierName":"option1"},
                   "name": "option1"
+                },
+                "extra": {
+                  "shorthand": true
                 }
               },
               {
                 "type": "ObjectProperty",
                 "start":22,"end":29,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":29}},
-                "extra": {
-                  "shorthand": true
-                },
                 "method": false,
                 "key": {
                   "type": "Identifier",
@@ -63,6 +60,9 @@
                   "type": "Identifier",
                   "start":22,"end":29,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":29},"identifierName":"option2"},
                   "name": "option2"
+                },
+                "extra": {
+                  "shorthand": true
                 }
               }
             ]
@@ -80,8 +80,8 @@
                 "type": "DirectiveLiteral",
                 "start":37,"end":49,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}},
                 "extra": {
-                  "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\""
                 },
                 "value": "use strict"
               }

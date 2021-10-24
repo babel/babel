@@ -60,12 +60,12 @@
               "start":64,"end":70,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":6},"identifierName":"socket"},
               "name": "socket"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":71,"end":73,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":9},"identifierName":"on"},
               "name": "on"
-            },
-            "computed": false
+            }
           },
           "arguments": [
             {

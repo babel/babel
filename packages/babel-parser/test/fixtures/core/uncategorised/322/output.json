@@ -14,11 +14,11 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
-          "value": "a\\u0026b",
           "extra": {
-            "raw": "'a\\u0026b'",
-            "rawValue": "a\\u0026b"
-          }
+            "rawValue": "a\\u0026b",
+            "raw": "'a\\u0026b'"
+          },
+          "value": "a\\u0026b"
         }
       }
     ]

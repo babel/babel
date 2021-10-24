@@ -40,18 +40,6 @@
                     "raw": "\"Two\""
                   },
                   "value": "Two",
-                  "leadingComments": [
-                    {
-                      "type": "CommentLine",
-                      "value": " One",
-                      "start":31,"end":37,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15}}
-                    },
-                    {
-                      "type": "CommentLine",
-                      "value": " Two",
-                      "start":41,"end":47,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":9}}
-                    }
-                  ],
                   "trailingComments": [
                     {
                       "type": "CommentLine",
@@ -62,6 +50,18 @@
                       "type": "CommentLine",
                       "value": " Four",
                       "start":67,"end":74,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":9}}
+                    }
+                  ],
+                  "leadingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " One",
+                      "start":31,"end":37,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15}}
+                    },
+                    {
+                      "type": "CommentLine",
+                      "value": " Two",
+                      "start":41,"end":47,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":9}}
                     }
                   ]
                 }
@@ -107,18 +107,6 @@
                     "raw": "\"Two\""
                   },
                   "value": "Two",
-                  "leadingComments": [
-                    {
-                      "type": "CommentLine",
-                      "value": " One",
-                      "start":116,"end":122,"loc":{"start":{"line":9,"column":9},"end":{"line":9,"column":15}}
-                    },
-                    {
-                      "type": "CommentLine",
-                      "value": " Two",
-                      "start":126,"end":132,"loc":{"start":{"line":10,"column":3},"end":{"line":10,"column":9}}
-                    }
-                  ],
                   "trailingComments": [
                     {
                       "type": "CommentLine",
@@ -129,6 +117,18 @@
                       "type": "CommentLine",
                       "value": " Four",
                       "start":153,"end":160,"loc":{"start":{"line":12,"column":2},"end":{"line":12,"column":9}}
+                    }
+                  ],
+                  "leadingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " One",
+                      "start":116,"end":122,"loc":{"start":{"line":9,"column":9},"end":{"line":9,"column":15}}
+                    },
+                    {
+                      "type": "CommentLine",
+                      "value": " Two",
+                      "start":126,"end":132,"loc":{"start":{"line":10,"column":3},"end":{"line":10,"column":9}}
                     }
                   ]
                 }

@@ -22,10 +22,6 @@
           "right": {
             "type": "AssignmentExpression",
             "start":10,"end":23,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":23}},
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 9
-            },
             "operator": "%=",
             "left": {
               "type": "Identifier",
@@ -35,6 +31,10 @@
             "right": {
               "type": "TopicReference",
               "start":22,"end":23,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":23}}
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 9
             }
           }
         }

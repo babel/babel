@@ -29,18 +29,18 @@
               },
               "value": 1
             },
-            "leadingComments": [
-              {
-                "type": "CommentLine",
-                "value": " foo",
-                "start":18,"end":24,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":10}}
-              }
-            ],
             "trailingComments": [
               {
                 "type": "CommentLine",
                 "value": " falls through",
                 "start":45,"end":61,"loc":{"start":{"line":4,"column":8},"end":{"line":4,"column":24}}
+              }
+            ],
+            "leadingComments": [
+              {
+                "type": "CommentLine",
+                "value": " foo",
+                "start":18,"end":24,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":10}}
               }
             ]
           },
