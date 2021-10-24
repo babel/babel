@@ -43,6 +43,9 @@ done
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
 npm install
 
+# Remove this when https://github.com/webpack/webpack/issues/14532 is fixed
+export NODE_OPTIONS=--openssl-legacy-provider
+
 # Test
 CI=true npm run test
 

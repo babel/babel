@@ -25,10 +25,10 @@ cd tmp/vue-cli || exit
 export YARN_IGNORE_PATH=1
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-yarn install
+yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
 node "$PWD"/../../utils/bump-babel-dependencies.js
 yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
-yarn install
+yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
 
 # Test
 CI=true yarn test -p babel,babel-preset-app
