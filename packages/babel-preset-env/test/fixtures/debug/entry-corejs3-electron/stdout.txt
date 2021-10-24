@@ -14,7 +14,7 @@ Using plugins:
   proposal-numeric-separator { electron < 6.0 }
   proposal-logical-assignment-operators { electron < 10.0 }
   proposal-nullish-coalescing-operator { electron < 8.0 }
-  proposal-optional-chaining { electron < 13.0 }
+  proposal-optional-chaining { electron < 8.0 }
   proposal-json-strings { electron < 3.0 }
   proposal-optional-catch-binding { electron < 3.0 }
   transform-parameters { electron < 0.37 }

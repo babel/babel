@@ -3293,7 +3293,7 @@ __metadata:
     "@babel/plugin-transform-typeof-symbol": "workspace:^7.14.5"
     "@babel/plugin-transform-unicode-escapes": "workspace:^7.14.5"
     "@babel/plugin-transform-unicode-regex": "workspace:^7.14.5"
-    "@babel/preset-modules": ^0.1.4
+    "@babel/preset-modules": ^0.1.5
     "@babel/types": "workspace:^7.15.6"
     babel-plugin-polyfill-corejs2: ^0.2.2
     babel-plugin-polyfill-corejs3: ^0.2.5
@@ -3332,9 +3332,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/preset-modules@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@babel/preset-modules@npm:0.1.4"
+"@babel/preset-modules@npm:^0.1.4, @babel/preset-modules@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@babel/preset-modules@npm:0.1.5"
   dependencies:
     "@babel/helper-plugin-utils": ^7.0.0
     "@babel/plugin-proposal-unicode-property-regex": ^7.4.4
@@ -3343,7 +3343,7 @@ __metadata:
     esutils: ^2.0.2
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 7c6500be06be9a341e377eb63292a4a22d0da2b4fb8c68714aff703ddb341cbd58e37d4119d64fc3e602f73801103af471fca2c60b4c1e48e08eea3e6b1afc93
+  checksum: 8430e0e9e9d520b53e22e8c4c6a5a080a12b63af6eabe559c2310b187bd62ae113f3da82ba33e9d1d0f3230930ca702843aae9dd226dec51f7d7114dc1f51c10
   languageName: node
   linkType: hard
 

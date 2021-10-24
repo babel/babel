@@ -231,7 +231,7 @@ export default function normalizeOptions(opts: Options) {
     bugfixes: v.validateBooleanOption(
       TopLevelOptions.bugfixes,
       opts.bugfixes,
-      false,
+      process.env.BABEL_8_BREAKING ? true : false,
     ),
     configPath: v.validateStringOption(
       TopLevelOptions.configPath,
