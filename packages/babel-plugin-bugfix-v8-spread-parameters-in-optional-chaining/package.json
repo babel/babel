@@ -23,17 +23,17 @@
     "bugfix"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.14.5",
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^7.15.4",
-    "@babel/plugin-proposal-optional-chaining": "workspace:^7.14.5"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
+    "@babel/plugin-proposal-optional-chaining": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.13.0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/traverse": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

@@ -17,17 +17,17 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.14.5",
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^7.14.5",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
     "@babel/plugin-syntax-optional-chaining": "^7.8.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/plugin-transform-block-scoping": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-transform-block-scoping": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

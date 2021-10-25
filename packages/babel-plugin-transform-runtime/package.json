@@ -20,8 +20,8 @@
     "./src/get-runtime-path/index.ts": "./src/get-runtime-path/browser.ts"
   },
   "dependencies": {
-    "@babel/helper-module-imports": "workspace:^7.15.4",
-    "@babel/helper-plugin-utils": "workspace:^7.14.5",
+    "@babel/helper-module-imports": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
     "babel-plugin-polyfill-corejs2": "^0.2.2",
     "babel-plugin-polyfill-corejs3": "^0.2.5",
     "babel-plugin-polyfill-regenerator": "^0.2.2",
@@ -31,15 +31,15 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/helpers": "workspace:*",
-    "@babel/plugin-transform-typeof-symbol": "workspace:*",
-    "@babel/preset-env": "workspace:*",
-    "@babel/runtime": "workspace:*",
-    "@babel/runtime-corejs3": "workspace:*",
-    "@babel/template": "workspace:*",
-    "@babel/types": "workspace:*",
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/helpers": "workspace:^",
+    "@babel/plugin-transform-typeof-symbol": "workspace:^",
+    "@babel/preset-env": "workspace:^",
+    "@babel/runtime": "workspace:^",
+    "@babel/runtime-corejs3": "workspace:^",
+    "@babel/template": "workspace:^",
+    "@babel/types": "workspace:^",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",

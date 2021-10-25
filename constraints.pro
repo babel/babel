@@ -1,8 +1,10 @@
-% Enforces that all workspaces depend on other workspaces using `workspace:*` in devDependencies
-gen_enforced_dependency(WorkspaceCwd, DependencyIdent, 'workspace:*', 'devDependencies') :-
-  workspace_has_dependency(WorkspaceCwd, DependencyIdent, DependencyRange, 'devDependencies'),
+% Enforces that all workspaces depend on other workspaces using `workspace:^`
+gen_enforced_dependency(WorkspaceCwd, DependencyIdent, 'workspace:^', DependencyType) :-
+  workspace_has_dependency(WorkspaceCwd, DependencyIdent, DependencyRange, DependencyType),
   % Only consider dependency ranges that start with 'workspace:'
-  atom_concat('workspace:', _, DependencyRange).
+  atom_concat('workspace:', _, DependencyRange),
+  % Only consider 'dependencies' and 'devDependencies'
+  (DependencyType = 'dependencies'; DependencyType = 'devDependencies').
 
 % Enforces the license in all public workspaces while removing it from private workspaces
 gen_enforced_field(WorkspaceCwd, 'license', 'MIT') :-

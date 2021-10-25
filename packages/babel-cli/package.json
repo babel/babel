@@ -40,8 +40,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-fixtures": "workspace:*",
+    "@babel/core": "workspace:^",
+    "@babel/helper-fixtures": "workspace:^",
     "rimraf": "^3.0.0"
   },
   "bin": {

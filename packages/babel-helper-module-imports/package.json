@@ -15,11 +15,11 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/types": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/traverse": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

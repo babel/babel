@@ -17,16 +17,16 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.14.5",
-    "@babel/helper-validator-option": "workspace:^7.14.5",
-    "@babel/plugin-transform-typescript": "workspace:^7.15.0"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^",
+    "@babel/plugin-transform-typescript": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-preset-typescript",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20typescript%22+is%3Aopen",

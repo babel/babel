@@ -23,7 +23,7 @@
     "compiler"
   ],
   "dependencies": {
-    "@babel/register": "workspace:^7.15.3",
+    "@babel/register": "workspace:^",
     "commander": "^4.0.1",
     "core-js": "^3.16.0",
     "node-environment-flags": "^1.0.5",
@@ -34,9 +34,9 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-fixtures": "workspace:*",
-    "@babel/runtime": "workspace:*",
+    "@babel/core": "workspace:^",
+    "@babel/helper-fixtures": "workspace:^",
+    "@babel/runtime": "workspace:^",
     "fs-readdir-recursive": "^1.0.0",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
     "rimraf": "^3.0.0"
