@@ -15,7 +15,7 @@ Using plugins:
   proposal-numeric-separator { firefox < 70, node < 12.5 }
   proposal-logical-assignment-operators { firefox < 79, node < 15 }
   proposal-nullish-coalescing-operator { firefox < 72, node < 14 }
-  proposal-optional-chaining { firefox < 74, node }
+  proposal-optional-chaining { firefox < 74, node < 14 }
   proposal-json-strings { firefox < 62, node < 10 }
   proposal-optional-catch-binding { firefox < 58, node < 10 }
   proposal-async-generator-functions { firefox < 57, node < 10 }
@@ -29,6 +29,7 @@ Using plugins:
   transform-unicode-escapes { firefox < 53 }
   transform-destructuring { firefox < 53 }
   proposal-export-namespace-from { firefox < 80, node < 13.2 }
+  bugfix/transform-async-arrows-in-class { node < 7.6 }
   transform-modules-commonjs
   proposal-dynamic-import
 

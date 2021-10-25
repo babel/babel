@@ -14,11 +14,11 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/types": "workspace:^"
   },
   "TODO": "The @babel/traverse dependency is only needed for the NodePath TS type. We can consider exporting it from @babel/core.",
   "devDependencies": {
-    "@babel/traverse": "workspace:*"
+    "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

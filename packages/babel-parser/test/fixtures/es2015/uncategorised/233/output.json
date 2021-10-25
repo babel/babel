@@ -16,10 +16,6 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":15,"end":32,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":32}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 14
-          },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -48,6 +44,10 @@
             "type": "Identifier",
             "start":29,"end":32,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":32},"identifierName":"obj"},
             "name": "obj"
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
           }
         }
       }
@@ -60,8 +60,8 @@
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
           "extra": {
-            "raw": "\"use strict\"",
-            "rawValue": "use strict"
+            "rawValue": "use strict",
+            "raw": "\"use strict\""
           },
           "value": "use strict"
         }

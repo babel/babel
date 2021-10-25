@@ -22,10 +22,10 @@ Using plugins:
   proposal-numeric-separator { ie }
   proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, samsung < 14 }
   proposal-nullish-coalescing-operator { ie }
-  proposal-optional-chaining { android, chrome < 91, edge, ie, opera, samsung }
+  proposal-optional-chaining { ie }
   proposal-json-strings { ie }
   proposal-optional-catch-binding { ie }
-  transform-parameters { ie, ios, safari }
+  transform-parameters { ie }
   proposal-async-generator-functions { ie }
   proposal-object-rest-spread { ie }
   transform-dotall-regex { ie }

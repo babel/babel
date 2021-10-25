@@ -25,10 +25,6 @@
             "callee": {
               "type": "ClassExpression",
               "start":14,"end":92,"loc":{"start":{"line":1,"column":14},"end":{"line":7,"column":1}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 13
-              },
               "id": {
                 "type": "Identifier",
                 "start":20,"end":25,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":25},"identifierName":"Thing"},
@@ -109,6 +105,10 @@
                     }
                   }
                 ]
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 13
               }
             },
             "arguments": []

@@ -14,7 +14,7 @@ Using plugins:
   proposal-numeric-separator { node < 12.5 }
   proposal-logical-assignment-operators { node < 15 }
   proposal-nullish-coalescing-operator { node < 14 }
-  proposal-optional-chaining { node }
+  proposal-optional-chaining { node < 14 }
   proposal-json-strings { node < 10 }
   proposal-optional-catch-binding { node < 10 }
   proposal-async-generator-functions { node < 10 }

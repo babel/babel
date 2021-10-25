@@ -42,9 +42,6 @@
                       {
                         "type": "ObjectProperty",
                         "start":14,"end":19,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":19}},
-                        "extra": {
-                          "shorthand": true
-                        },
                         "method": false,
                         "key": {
                           "type": "Identifier",
@@ -57,6 +54,9 @@
                           "type": "Identifier",
                           "start":14,"end":19,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":19},"identifierName":"await"},
                           "name": "await"
+                        },
+                        "extra": {
+                          "shorthand": true
                         }
                       }
                     ]

@@ -2,7 +2,7 @@
   "name": "@babel-internal/runtime-integration-rollup",
   "private": true,
   "devDependencies": {
-    "@babel/runtime": "workspace:*",
+    "@babel/runtime": "workspace:^",
     "@rollup/plugin-commonjs": "^18.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "rollup": "~2.54.0"

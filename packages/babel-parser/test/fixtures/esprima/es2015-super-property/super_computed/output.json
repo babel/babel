@@ -53,6 +53,7 @@
                         "type": "Super",
                         "start":45,"end":50,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":20}}
                       },
+                      "computed": true,
                       "property": {
                         "type": "NumericLiteral",
                         "start":51,"end":52,"loc":{"start":{"line":3,"column":21},"end":{"line":3,"column":22}},
@@ -61,8 +62,7 @@
                           "raw": "1"
                         },
                         "value": 1
-                      },
-                      "computed": true
+                      }
                     }
                   }
                 ],

@@ -19,20 +19,20 @@ Using plugins:
   proposal-numeric-separator { chrome < 75, edge < 79, firefox < 70, ie, ios < 13, safari < 13 }
   proposal-logical-assignment-operators { chrome < 85, edge < 85, firefox < 79, ie, ios < 14, safari < 14 }
   proposal-nullish-coalescing-operator { chrome < 80, edge < 80, firefox < 72, ie, ios < 13.4, safari < 13.1 }
-  proposal-optional-chaining { chrome < 91, edge, firefox < 74, ie, ios < 13.4, safari < 13.1 }
+  proposal-optional-chaining { chrome < 80, edge < 80, firefox < 74, ie, ios < 13.4, safari < 13.1 }
   proposal-json-strings { chrome < 66, edge < 79, firefox < 62, ie, ios < 12, safari < 12 }
   proposal-optional-catch-binding { chrome < 66, edge < 79, firefox < 58, ie, ios < 11.3, safari < 11.1 }
-  transform-parameters { edge < 18, firefox < 53, ie, ios, safari }
+  transform-parameters { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
   proposal-async-generator-functions { chrome < 63, edge < 79, firefox < 57, ie, ios < 12, safari < 12 }
   proposal-object-rest-spread { chrome < 60, edge < 79, firefox < 55, ie, ios < 11.3, safari < 11.1 }
   transform-dotall-regex { chrome < 62, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }
   proposal-unicode-property-regex { chrome < 64, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }
   transform-named-capturing-groups-regex { chrome < 64, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }
-  transform-async-to-generator { chrome < 55, edge < 15, firefox < 52, ie, ios < 11, safari < 11 }
+  transform-async-to-generator { chrome < 55, edge < 15, firefox < 52, ie, ios < 10.3, safari < 10.1 }
   transform-exponentiation-operator { edge < 14, firefox < 52, ie, ios < 10.3, safari < 10.1 }
-  transform-template-literals { ie, ios < 13, safari < 13 }
+  transform-template-literals { ie, safari < 9 }
   transform-literals { firefox < 53, ie, safari < 9 }
-  transform-function-name { edge < 79, firefox < 53, ie, ios < 10, safari < 10 }
+  transform-function-name { edge < 14, firefox < 53, ie, ios < 10, safari < 10 }
   transform-arrow-functions { ie, ios < 10, safari < 10 }
   transform-block-scoped-functions { ie < 11, ios < 10, safari < 10 }
   transform-classes { ie, ios < 10, safari < 10 }
@@ -46,7 +46,7 @@ Using plugins:
   transform-unicode-regex { ie, ios < 12, safari < 12 }
   transform-spread { ie, ios < 10, safari < 10 }
   transform-destructuring { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
-  transform-block-scoping { edge < 14, firefox < 51, ie, ios < 11, safari < 11 }
+  transform-block-scoping { edge < 14, firefox < 51, ie, ios < 10, safari < 10 }
   transform-typeof-symbol { ie, safari < 9 }
   transform-new-target { edge < 14, ie, ios < 10, safari < 10 }
   transform-regenerator { firefox < 53, ie, ios < 10, safari < 10 }

@@ -67,12 +67,12 @@
                               "start":51,"end":61,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":22},"identifierName":"MatrixType"},
                               "name": "MatrixType"
                             },
+                            "computed": false,
                             "property": {
                               "type": "Identifier",
                               "start":62,"end":71,"loc":{"start":{"line":4,"column":23},"end":{"line":4,"column":32},"identifierName":"IsScaling"},
                               "name": "IsScaling"
-                            },
-                            "computed": false
+                            }
                           },
                           "operator": "|",
                           "right": {
@@ -83,12 +83,12 @@
                               "start":74,"end":84,"loc":{"start":{"line":4,"column":35},"end":{"line":4,"column":45},"identifierName":"MatrixType"},
                               "name": "MatrixType"
                             },
+                            "computed": false,
                             "property": {
                               "type": "Identifier",
                               "start":85,"end":98,"loc":{"start":{"line":4,"column":46},"end":{"line":4,"column":59},"identifierName":"IsTranslation"},
                               "name": "IsTranslation"
-                            },
-                            "computed": false
+                            }
                           },
                           "extra": {
                             "parenthesized": true,

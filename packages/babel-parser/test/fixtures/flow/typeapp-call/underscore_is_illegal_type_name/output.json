@@ -13,13 +13,6 @@
       {
         "type": "TypeAlias",
         "start":8,"end":24,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":16}},
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": "@flow",
-            "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}}
-          }
-        ],
         "id": {
           "type": "Identifier",
           "start":13,"end":14,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"_"},
@@ -29,7 +22,14 @@
         "right": {
           "type": "NumberTypeAnnotation",
           "start":17,"end":23,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15}}
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": "@flow",
+            "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}}
+          }
+        ]
       }
     ],
     "directives": []

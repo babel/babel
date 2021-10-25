@@ -10,20 +10,9 @@
       {
         "type": "ExpressionStatement",
         "start":10,"end":47,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":2}},
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " @flow",
-            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
-          }
-        ],
         "expression": {
           "type": "ObjectExpression",
           "start":11,"end":46,"loc":{"start":{"line":3,"column":1},"end":{"line":5,"column":1}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 10
-          },
           "properties": [
             {
               "type": "ObjectMethod",
@@ -61,8 +50,19 @@
                 "directives": []
               }
             }
-          ]
-        }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 10
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ]
       }
     ],
     "directives": []

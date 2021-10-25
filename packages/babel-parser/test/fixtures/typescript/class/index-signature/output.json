@@ -106,8 +106,8 @@
             {
               "type": "TSIndexSignature",
               "start":96,"end":129,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":37}},
-              "readonly": true,
               "static": true,
+              "readonly": true,
               "parameters": [
                 {
                   "type": "Identifier",

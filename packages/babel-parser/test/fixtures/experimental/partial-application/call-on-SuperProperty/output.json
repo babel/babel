@@ -72,12 +72,12 @@
                                 "type": "Super",
                                 "start":56,"end":61,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":29}}
                               },
+                              "computed": false,
                               "property": {
                                 "type": "Identifier",
                                 "start":62,"end":65,"loc":{"start":{"line":3,"column":30},"end":{"line":3,"column":33},"identifierName":"bar"},
                                 "name": "bar"
-                              },
-                              "computed": false
+                              }
                             },
                             "arguments": [
                               {

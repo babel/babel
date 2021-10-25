@@ -17,10 +17,6 @@
         "expression": {
           "type": "ObjectExpression",
           "start":1,"end":18,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":18}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "properties": [
             {
               "type": "Property",
@@ -55,7 +51,11 @@
               },
               "shorthand": false
             }
-          ]
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
         }
       },
       {
@@ -64,10 +64,6 @@
         "expression": {
           "type": "ObjectExpression",
           "start":22,"end":46,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":25}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 21
-          },
           "properties": [
             {
               "type": "Property",
@@ -107,7 +103,11 @@
               },
               "shorthand": false
             }
-          ]
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 21
+          }
         }
       },
       {
@@ -116,10 +116,6 @@
         "expression": {
           "type": "ObjectExpression",
           "start":50,"end":64,"loc":{"start":{"line":3,"column":1},"end":{"line":3,"column":15}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 49
-          },
           "properties": [
             {
               "type": "Property",
@@ -148,7 +144,11 @@
               },
               "shorthand": false
             }
-          ]
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 49
+          }
         }
       },
       {
@@ -157,10 +157,6 @@
         "expression": {
           "type": "ObjectExpression",
           "start":68,"end":83,"loc":{"start":{"line":4,"column":1},"end":{"line":4,"column":16}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 67
-          },
           "properties": [
             {
               "type": "Property",
@@ -195,7 +191,11 @@
               },
               "shorthand": false
             }
-          ]
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 67
+          }
         }
       }
     ]

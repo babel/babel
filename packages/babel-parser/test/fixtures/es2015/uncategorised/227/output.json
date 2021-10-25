@@ -31,10 +31,6 @@
               "expression": {
                 "type": "ObjectExpression",
                 "start":33,"end":55,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":55}},
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 32
-                },
                 "properties": [
                   {
                     "type": "ObjectProperty",
@@ -85,7 +81,11 @@
                       "directives": []
                     }
                   }
-                ]
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 32
+                }
               }
             }
           ],
@@ -97,8 +97,8 @@
                 "type": "DirectiveLiteral",
                 "start":18,"end":30,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}},
                 "extra": {
-                  "raw": "'use strict'",
-                  "rawValue": "use strict"
+                  "rawValue": "use strict",
+                  "raw": "'use strict'"
                 },
                 "value": "use strict"
               }

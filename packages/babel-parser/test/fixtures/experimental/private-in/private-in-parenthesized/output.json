@@ -74,14 +74,14 @@
                       "left": {
                         "type": "PrivateName",
                         "start":38,"end":40,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":7}},
-                        "extra": {
-                          "parenthesized": true,
-                          "parenStart": 37
-                        },
                         "id": {
                           "type": "Identifier",
                           "start":39,"end":40,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":7},"identifierName":"x"},
                           "name": "x"
+                        },
+                        "extra": {
+                          "parenthesized": true,
+                          "parenStart": 37
                         }
                       },
                       "operator": "in",

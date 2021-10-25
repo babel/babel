@@ -19,13 +19,13 @@
     "lib"
   ],
   "dependencies": {
-    "@babel/types": "workspace:^7.15.6",
+    "@babel/types": "workspace:^",
     "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1",
     "source-map": "^0.5.0"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "workspace:*",
-    "@babel/parser": "workspace:*",
+    "@babel/helper-fixtures": "workspace:^",
+    "@babel/parser": "workspace:^",
     "@types/jsesc": "^2.5.0",
     "@types/source-map": "^0.5.0",
     "charcodes": "^0.2.0"

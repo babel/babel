@@ -15,12 +15,12 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/template": "workspace:^7.15.4",
-    "@babel/traverse": "workspace:^7.15.4",
-    "@babel/types": "workspace:^7.15.4"
+    "@babel/template": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

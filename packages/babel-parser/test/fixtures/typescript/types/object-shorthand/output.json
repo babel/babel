@@ -99,15 +99,15 @@
                   "body": {
                     "type": "BlockStatement",
                     "start":58,"end":84,"loc":{"start":{"line":2,"column":42},"end":{"line":4,"column":3}},
+                    "body": [],
+                    "directives": [],
                     "innerComments": [
                       {
                         "type": "CommentLine",
                         "value": " actually put.",
                         "start":64,"end":80,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":20}}
                       }
-                    ],
-                    "body": [],
-                    "directives": []
+                    ]
                   }
                 }
               ]

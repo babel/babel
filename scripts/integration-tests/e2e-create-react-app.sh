@@ -40,6 +40,11 @@ do
   (cd "$d"; node "$bump_deps")
 done
 
+if [[ "$(node --version)" == v17.* ]]; then
+  # Remove this when https://github.com/webpack/webpack/issues/14532 is fixed
+  export NODE_OPTIONS=--openssl-legacy-provider
+fi
+
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
 npm install
 

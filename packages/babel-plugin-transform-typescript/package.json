@@ -17,18 +17,18 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-create-class-features-plugin": "workspace:^7.15.4",
-    "@babel/helper-plugin-utils": "workspace:^7.14.5",
-    "@babel/plugin-syntax-typescript": "workspace:^7.14.5"
+    "@babel/helper-create-class-features-plugin": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-typescript": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/traverse": "workspace:*",
-    "@babel/types": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-typescript",
   "engines": {

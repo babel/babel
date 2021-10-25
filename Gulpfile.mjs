@@ -111,7 +111,7 @@ function generateHelpers(generator, dest, filename, message) {
         callback(null, file);
       })
     )
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(dest, { mode: 0o644 }));
 
   return finish(stream);
 }
@@ -418,6 +418,7 @@ function buildRollup(packages, targetBrowsers) {
               output: {
                 ascii_only: true,
               },
+              numWorkers: process.env.CIRCLECI ? 1 : undefined,
             }),
           ],
         });

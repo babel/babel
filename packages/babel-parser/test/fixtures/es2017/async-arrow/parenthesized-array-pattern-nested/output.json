@@ -37,11 +37,11 @@
                         {
                           "type": "Identifier",
                           "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12},"identifierName":"a"},
+                          "name": "a",
                           "extra": {
                             "parenthesized": true,
                             "parenStart": 10
-                          },
-                          "name": "a"
+                          }
                         }
                       ]
                     },

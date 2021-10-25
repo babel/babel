@@ -38,9 +38,6 @@
                     {
                       "type": "ObjectProperty",
                       "start":27,"end":30,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13}},
-                      "extra": {
-                        "shorthand": true
-                      },
                       "method": false,
                       "key": {
                         "type": "Identifier",
@@ -53,6 +50,9 @@
                         "type": "Identifier",
                         "start":27,"end":30,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13},"identifierName":"foo"},
                         "name": "foo"
+                      },
+                      "extra": {
+                        "shorthand": true
                       }
                     }
                   ]

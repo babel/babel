@@ -18,8 +18,8 @@
           "type": "DirectiveLiteral",
           "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
           "extra": {
-            "raw": "\"\\u12_34\"",
-            "rawValue": "\\u12_34"
+            "rawValue": "\\u12_34",
+            "raw": "\"\\u12_34\""
           },
           "value": "\\u12_34"
         }

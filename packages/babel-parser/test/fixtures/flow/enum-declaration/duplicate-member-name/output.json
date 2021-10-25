@@ -21,6 +21,7 @@
         "body": {
           "type": "EnumStringBody",
           "start":7,"end":20,"loc":{"start":{"line":1,"column":7},"end":{"line":4,"column":1}},
+          "hasUnknownMembers": false,
           "explicitType": false,
           "members": [
             {
@@ -41,8 +42,7 @@
                 "name": "A"
               }
             }
-          ],
-          "hasUnknownMembers": false
+          ]
         }
       }
     ],

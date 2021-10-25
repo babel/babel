@@ -37,12 +37,12 @@
             },
             "value": "use strict"
           },
+          "computed": false,
           "property": {
             "type": "Identifier",
             "start":30,"end":33,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":16},"identifierName":"foo"},
             "name": "foo"
-          },
-          "computed": false
+          }
         }
       },
       {
@@ -60,12 +60,12 @@
             },
             "value": "use strict"
           },
+          "computed": true,
           "property": {
             "type": "Identifier",
             "start":48,"end":51,"loc":{"start":{"line":4,"column":13},"end":{"line":4,"column":16},"identifierName":"foo"},
             "name": "foo"
-          },
-          "computed": true
+          }
         }
       },
       {
@@ -140,12 +140,12 @@
             },
             "value": "use strict"
           },
+          "computed": false,
           "property": {
             "type": "Identifier",
             "start":108,"end":111,"loc":{"start":{"line":8,"column":3},"end":{"line":8,"column":6},"identifierName":"foo"},
             "name": "foo"
-          },
-          "computed": false
+          }
         }
       },
       {
@@ -163,12 +163,12 @@
             },
             "value": "use strict"
           },
+          "computed": true,
           "property": {
             "type": "Identifier",
             "start":129,"end":132,"loc":{"start":{"line":10,"column":3},"end":{"line":10,"column":6},"identifierName":"foo"},
             "name": "foo"
-          },
-          "computed": true
+          }
         }
       },
       {
@@ -285,12 +285,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":293,"end":296,"loc":{"start":{"line":20,"column":15},"end":{"line":20,"column":18},"identifierName":"foo"},
                   "name": "foo"
-                },
-                "computed": false
+                }
               }
             },
             {
@@ -340,12 +340,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": true,
                 "property": {
                   "type": "Identifier",
                   "start":338,"end":341,"loc":{"start":{"line":25,"column":15},"end":{"line":25,"column":18},"identifierName":"foo"},
                   "name": "foo"
-                },
-                "computed": true
+                }
               }
             },
             {
@@ -516,12 +516,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":479,"end":482,"loc":{"start":{"line":41,"column":3},"end":{"line":41,"column":6},"identifierName":"foo"},
                   "name": "foo"
-                },
-                "computed": false
+                }
               }
             },
             {
@@ -571,12 +571,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": true,
                 "property": {
                   "type": "Identifier",
                   "start":527,"end":530,"loc":{"start":{"line":47,"column":3},"end":{"line":47,"column":6},"identifierName":"foo"},
                   "name": "foo"
-                },
-                "computed": true
+                }
               }
             },
             {
@@ -761,12 +761,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":680,"end":683,"loc":{"start":{"line":65,"column":15},"end":{"line":65,"column":18},"identifierName":"bar"},
                   "name": "bar"
-                },
-                "computed": false
+                }
               }
             },
             {
@@ -830,12 +830,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": true,
                 "property": {
                   "type": "Identifier",
                   "start":734,"end":737,"loc":{"start":{"line":71,"column":15},"end":{"line":71,"column":18},"identifierName":"bar"},
                   "name": "bar"
-                },
-                "computed": true
+                }
               }
             },
             {
@@ -1048,12 +1048,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":902,"end":905,"loc":{"start":{"line":90,"column":3},"end":{"line":90,"column":6},"identifierName":"bar"},
                   "name": "bar"
-                },
-                "computed": false
+                }
               }
             },
             {
@@ -1117,12 +1117,12 @@
                   },
                   "value": "use strict"
                 },
+                "computed": true,
                 "property": {
                   "type": "Identifier",
                   "start":959,"end":962,"loc":{"start":{"line":97,"column":3},"end":{"line":97,"column":6},"identifierName":"bar"},
                   "name": "bar"
-                },
-                "computed": true
+                }
               }
             },
             {

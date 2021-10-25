@@ -10,13 +10,6 @@
       {
         "type": "ExpressionStatement",
         "start":47,"end":76,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":29}},
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " https://github.com/babel/babel/issues/11038",
-            "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
-          }
-        ],
         "expression": {
           "type": "ConditionalExpression",
           "start":47,"end":75,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":28}},
@@ -45,10 +38,6 @@
             "body": {
               "type": "AssignmentExpression",
               "start":57,"end":65,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":18}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 56
-              },
               "operator": "+=",
               "left": {
                 "type": "Identifier",
@@ -59,6 +48,10 @@
                 "type": "Identifier",
                 "start":64,"end":65,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"v"},
                 "name": "v"
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 56
               }
             }
           },
@@ -85,7 +78,14 @@
               "value": 0
             }
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " https://github.com/babel/babel/issues/11038",
+            "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
+          }
+        ]
       }
     ],
     "directives": []

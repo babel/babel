@@ -21,13 +21,14 @@ Using plugins:
   syntax-numeric-separator
   proposal-logical-assignment-operators { firefox < 79, ios < 14, samsung < 14 }
   syntax-nullish-coalescing-operator
-  proposal-optional-chaining { android, chrome < 91, edge, opera, samsung }
+  syntax-optional-chaining
   syntax-json-strings
   syntax-optional-catch-binding
-  transform-parameters { ios, safari }
   syntax-async-generators
   syntax-object-rest-spread
   proposal-export-namespace-from { firefox < 80, ios, safari }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
+  bugfix/transform-v8-spread-parameters-in-optional-chaining { android, chrome < 91, edge, opera, samsung }
   transform-modules-commonjs
   proposal-dynamic-import
 

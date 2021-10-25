@@ -10,13 +10,6 @@
       {
         "type": "VariableDeclaration",
         "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " await in body is allowed",
-            "start":7,"end":34,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":27}}
-          }
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -29,18 +22,18 @@
             "init": null
           }
         ],
-        "kind": "var"
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":35,"end":72,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":37}},
-        "leadingComments": [
+        "kind": "var",
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " await in body is allowed",
             "start":7,"end":34,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":27}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":35,"end":72,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":37}},
         "expression": {
           "type": "AssignmentExpression",
           "start":35,"end":71,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":36}},
@@ -85,7 +78,14 @@
               ]
             }
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await in body is allowed",
+            "start":7,"end":34,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":27}}
+          }
+        ]
       }
     ],
     "directives": []

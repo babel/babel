@@ -71,10 +71,6 @@
               "argument": {
                 "type": "TypeCastExpression",
                 "start":62,"end":68,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":16}},
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 61
-                },
                 "expression": {
                   "type": "NumericLiteral",
                   "start":62,"end":63,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}},
@@ -91,6 +87,10 @@
                     "type": "AnyTypeAnnotation",
                     "start":65,"end":68,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":16}}
                   }
+                },
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 61
                 }
               }
             }

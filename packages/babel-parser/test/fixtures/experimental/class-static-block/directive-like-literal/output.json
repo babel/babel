@@ -49,13 +49,6 @@
                 {
                   "type": "ExpressionStatement",
                   "start":43,"end":56,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":17}},
-                  "trailingComments": [
-                    {
-                      "type": "CommentLine",
-                      "value": " will not be parsed as directives",
-                      "start":57,"end":92,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":53}}
-                    }
-                  ],
                   "expression": {
                     "type": "StringLiteral",
                     "start":43,"end":55,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":16}},
@@ -64,18 +57,18 @@
                       "raw": "\"use strict\""
                     },
                     "value": "use strict"
-                  }
-                },
-                {
-                  "type": "ExpressionStatement",
-                  "start":97,"end":117,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":24}},
-                  "leadingComments": [
+                  },
+                  "trailingComments": [
                     {
                       "type": "CommentLine",
                       "value": " will not be parsed as directives",
                       "start":57,"end":92,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":53}}
                     }
-                  ],
+                  ]
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "start":97,"end":117,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":24}},
                   "expression": {
                     "type": "AssignmentExpression",
                     "start":97,"end":116,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":23}},
@@ -108,7 +101,14 @@
                         "name": "foo"
                       }
                     }
-                  }
+                  },
+                  "leadingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " will not be parsed as directives",
+                      "start":57,"end":92,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":53}}
+                    }
+                  ]
                 }
               ]
             }

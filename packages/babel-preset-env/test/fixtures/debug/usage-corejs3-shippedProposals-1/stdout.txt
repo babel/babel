@@ -17,7 +17,7 @@ Using plugins:
   proposal-numeric-separator { chrome < 75, firefox < 70, ie }
   proposal-logical-assignment-operators { chrome < 85, firefox < 79, ie }
   proposal-nullish-coalescing-operator { chrome < 80, firefox < 72, ie }
-  proposal-optional-chaining { chrome < 91, firefox < 74, ie }
+  proposal-optional-chaining { chrome < 80, firefox < 74, ie }
   proposal-json-strings { chrome < 66, firefox < 62, ie }
   proposal-optional-catch-binding { chrome < 66, firefox < 58, ie }
   transform-parameters { firefox < 53, ie }

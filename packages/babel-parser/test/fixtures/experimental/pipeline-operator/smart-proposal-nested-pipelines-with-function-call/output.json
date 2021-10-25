@@ -25,10 +25,6 @@
             "expression": {
               "type": "BinaryExpression",
               "start":6,"end":18,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":18}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 5
-              },
               "left": {
                 "type": "PipelinePrimaryTopicReference",
                 "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}}
@@ -57,6 +53,10 @@
                     }
                   ]
                 }
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 5
               }
             }
           }

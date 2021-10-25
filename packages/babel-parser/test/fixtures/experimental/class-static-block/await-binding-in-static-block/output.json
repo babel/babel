@@ -26,13 +26,6 @@
       {
         "type": "VariableDeclaration",
         "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " This file enumerates all the disallowed cases, for allowed cases, see await-binding-*",
-            "start":7,"end":95,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":88}}
-          }
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -45,18 +38,18 @@
             "init": null
           }
         ],
-        "kind": "var"
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":96,"end":127,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":31}},
-        "leadingComments": [
+        "kind": "var",
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " This file enumerates all the disallowed cases, for allowed cases, see await-binding-*",
             "start":7,"end":95,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":88}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":96,"end":127,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":31}},
         "expression": {
           "type": "AssignmentExpression",
           "start":96,"end":126,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":30}},
@@ -93,7 +86,14 @@
               ]
             }
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " This file enumerates all the disallowed cases, for allowed cases, see await-binding-*",
+            "start":7,"end":95,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":88}}
+          }
+        ]
       },
       {
         "type": "ExpressionStatement",
@@ -126,11 +126,11 @@
                       "expression": {
                         "type": "Identifier",
                         "start":151,"end":156,"loc":{"start":{"line":5,"column":22},"end":{"line":5,"column":27},"identifierName":"await"},
+                        "name": "await",
                         "extra": {
                           "parenthesized": true,
                           "parenStart": 150
-                        },
-                        "name": "await"
+                        }
                       }
                     }
                   ]
@@ -265,13 +265,6 @@
       {
         "type": "ExpressionStatement",
         "start":254,"end":299,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":45}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " await as label is not allowed",
-            "start":300,"end":332,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":32}}
-          }
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start":254,"end":298,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":44}},
@@ -322,18 +315,18 @@
             "body": [],
             "directives": []
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":333,"end":367,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":34}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " await as label is not allowed",
             "start":300,"end":332,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":32}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":333,"end":367,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":34}},
         "expression": {
           "type": "AssignmentExpression",
           "start":333,"end":366,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":33}},
@@ -383,18 +376,18 @@
               ]
             }
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await as label is not allowed",
+            "start":300,"end":332,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":32}}
+          }
+        ]
       },
       {
         "type": "ExpressionStatement",
         "start":369,"end":414,"loc":{"start":{"line":15,"column":0},"end":{"line":15,"column":45}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " await binding in function declaration is not allowed",
-            "start":415,"end":470,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":55}}
-          }
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start":369,"end":413,"loc":{"start":{"line":15,"column":0},"end":{"line":15,"column":44}},
@@ -450,25 +443,18 @@
               ]
             }
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":471,"end":516,"loc":{"start":{"line":17,"column":0},"end":{"line":17,"column":45}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " await binding in function declaration is not allowed",
             "start":415,"end":470,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":55}}
           }
-        ],
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " await binding in class declaration is not allowed",
-            "start":517,"end":569,"loc":{"start":{"line":18,"column":0},"end":{"line":18,"column":52}}
-          }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":471,"end":516,"loc":{"start":{"line":17,"column":0},"end":{"line":17,"column":45}},
         "expression": {
           "type": "AssignmentExpression",
           "start":471,"end":515,"loc":{"start":{"line":17,"column":0},"end":{"line":17,"column":44}},
@@ -514,25 +500,25 @@
               ]
             }
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":570,"end":610,"loc":{"start":{"line":19,"column":0},"end":{"line":19,"column":40}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " await binding in class declaration is not allowed",
             "start":517,"end":569,"loc":{"start":{"line":18,"column":0},"end":{"line":18,"column":52}}
           }
         ],
-        "trailingComments": [
+        "leadingComments": [
           {
             "type": "CommentLine",
-            "value": " await binding in class expression is not allowed",
-            "start":611,"end":662,"loc":{"start":{"line":20,"column":0},"end":{"line":20,"column":51}}
+            "value": " await binding in function declaration is not allowed",
+            "start":415,"end":470,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":55}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":570,"end":610,"loc":{"start":{"line":19,"column":0},"end":{"line":19,"column":40}},
         "expression": {
           "type": "AssignmentExpression",
           "start":570,"end":609,"loc":{"start":{"line":19,"column":0},"end":{"line":19,"column":39}},
@@ -575,25 +561,25 @@
               ]
             }
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":663,"end":705,"loc":{"start":{"line":21,"column":0},"end":{"line":21,"column":42}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " await binding in class expression is not allowed",
             "start":611,"end":662,"loc":{"start":{"line":20,"column":0},"end":{"line":20,"column":51}}
           }
         ],
-        "trailingComments": [
+        "leadingComments": [
           {
             "type": "CommentLine",
-            "value": " await in arrow parameters is not allowed",
-            "start":706,"end":749,"loc":{"start":{"line":22,"column":0},"end":{"line":22,"column":43}}
+            "value": " await binding in class declaration is not allowed",
+            "start":517,"end":569,"loc":{"start":{"line":18,"column":0},"end":{"line":18,"column":52}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":663,"end":705,"loc":{"start":{"line":21,"column":0},"end":{"line":21,"column":42}},
         "expression": {
           "type": "AssignmentExpression",
           "start":663,"end":704,"loc":{"start":{"line":21,"column":0},"end":{"line":21,"column":41}},
@@ -622,10 +608,6 @@
                       "expression": {
                         "type": "ClassExpression",
                         "start":685,"end":699,"loc":{"start":{"line":21,"column":22},"end":{"line":21,"column":36}},
-                        "extra": {
-                          "parenthesized": true,
-                          "parenStart": 684
-                        },
                         "id": {
                           "type": "Identifier",
                           "start":691,"end":696,"loc":{"start":{"line":21,"column":28},"end":{"line":21,"column":33},"identifierName":"await"},
@@ -636,6 +618,10 @@
                           "type": "ClassBody",
                           "start":697,"end":699,"loc":{"start":{"line":21,"column":34},"end":{"line":21,"column":36}},
                           "body": []
+                        },
+                        "extra": {
+                          "parenthesized": true,
+                          "parenStart": 684
                         }
                       }
                     }
@@ -644,18 +630,25 @@
               ]
             }
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":750,"end":789,"loc":{"start":{"line":23,"column":0},"end":{"line":23,"column":39}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " await in arrow parameters is not allowed",
             "start":706,"end":749,"loc":{"start":{"line":22,"column":0},"end":{"line":22,"column":43}}
           }
         ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await binding in class expression is not allowed",
+            "start":611,"end":662,"loc":{"start":{"line":20,"column":0},"end":{"line":20,"column":51}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":750,"end":789,"loc":{"start":{"line":23,"column":0},"end":{"line":23,"column":39}},
         "expression": {
           "type": "AssignmentExpression",
           "start":750,"end":788,"loc":{"start":{"line":23,"column":0},"end":{"line":23,"column":38}},
@@ -707,7 +700,14 @@
               ]
             }
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " await in arrow parameters is not allowed",
+            "start":706,"end":749,"loc":{"start":{"line":22,"column":0},"end":{"line":22,"column":43}}
+          }
+        ]
       },
       {
         "type": "ExpressionStatement",

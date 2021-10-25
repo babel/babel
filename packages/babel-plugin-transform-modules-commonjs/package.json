@@ -13,9 +13,9 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-module-transforms": "workspace:^7.15.4",
-    "@babel/helper-plugin-utils": "workspace:^7.14.5",
-    "@babel/helper-simple-access": "workspace:^7.15.4",
+    "@babel/helper-module-transforms": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-simple-access": "workspace:^",
     "babel-plugin-dynamic-import-node": "^2.3.3"
   },
   "keywords": [
@@ -25,9 +25,9 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/plugin-external-helpers": "workspace:*",
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-external-helpers": "workspace:^",
     "@babel/plugin-syntax-class-static-block": "^7.14.5",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   },

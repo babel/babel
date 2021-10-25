@@ -43,14 +43,14 @@
                 "right": {
                   "type": "YieldExpression",
                   "start":34,"end":41,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":22}},
-                  "extra": {
-                    "parenthesized": true,
-                    "parenStart": 33
-                  },
                   "delegate": false,
                   "argument": {
                     "type": "TopicReference",
                     "start":40,"end":41,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":22}}
+                  },
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 33
                   }
                 }
               }
