@@ -13,7 +13,7 @@ function benchCases(implementations) {
     const idObj = t.identifier("obj");
     const idProp = t.identifier("prop");
     suite.add(`${version} ${funcName} builder`, () => {
-      func(idObj, idProp, /*computed?*/ false, /*optional? missing*/);
+      func(idObj, idProp, /*computed?*/ false /*, optional? missing*/);
     });
   }
 }
