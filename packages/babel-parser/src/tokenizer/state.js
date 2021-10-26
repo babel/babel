@@ -25,22 +25,24 @@ type TopicContextState = {
 export default class State {
   strict: boolean;
   curLine: number;
+  lineStart: number;
 
   // And, if locations are used, the {line, column} object
   // corresponding to those offsets
   startLoc: Position;
   endLoc: Position;
 
-  init(options: Options): void {
+  init({ strictMode, sourceType, startLine, startColumn }: Options): void {
     this.strict =
-      options.strictMode === false
+      strictMode === false
         ? false
-        : options.strictMode === true
+        : strictMode === true
         ? true
-        : options.sourceType === "module";
+        : sourceType === "module";
 
-    this.curLine = options.startLine;
-    this.startLoc = this.endLoc = this.curPosition();
+    this.curLine = startLine;
+    this.lineStart = -startColumn;
+    this.startLoc = this.endLoc = new Position(startLine, startColumn);
   }
 
   errors: ParsingError[] = [];
@@ -101,7 +103,6 @@ export default class State {
 
   // The current position of the tokenizer in the input.
   pos: number = 0;
-  lineStart: number = 0;
 
   // Properties of the current token:
   // Its type

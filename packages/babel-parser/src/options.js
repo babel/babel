@@ -10,6 +10,7 @@ export type SourceType = "script" | "module" | "unambiguous";
 export type Options = {
   sourceType: SourceType,
   sourceFilename?: string,
+  startColumn: number,
   startLine: number,
   allowAwaitOutsideFunction: boolean,
   allowReturnOutsideFunction: boolean,
@@ -30,7 +31,10 @@ export const defaultOptions: Options = {
   sourceType: "script",
   // Source filename.
   sourceFilename: undefined,
-  // Line from which to start counting source. Useful for
+  // Column (0-based) from which to start counting source. Useful for
+  // integration with other tools.
+  startColumn: 0,
+  // Line (1-based) from which to start counting source. Useful for
   // integration with other tools.
   startLine: 1,
   // When enabled, await at the top level is not considered an
