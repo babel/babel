@@ -2167,29 +2167,33 @@ export default class StatementParser extends ExpressionParser {
         this.expect(tt.comma);
         if (this.eat(tt.braceR)) break;
       }
-
-      const node = this.startNode();
-      const isMaybeTypeOnly = this.isContextual(tt._type);
-      const isString = this.match(tt.string);
-      node.local = this.parseModuleExportName();
-      const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
-        node,
-        /* isImport */ false,
-        isString,
-        isInTypeExport,
-        isMaybeTypeOnly,
-      );
-      if (canParseAsKeyword && this.eatContextual(tt._as)) {
-        node.exported = this.parseModuleExportName();
-      } else if (isString) {
-        node.exported = cloneStringLiteral(node.local);
-      } else if (!node.exported) {
-        node.exported = cloneIdentifier(node.local);
-      }
-      nodes.push(this.finishNode(node, "ExportSpecifier"));
+      const node = this.parseExportSpecifier(isInTypeExport);
+      nodes.push(node);
     }
 
     return nodes;
+  }
+
+  parseExportSpecifier(isInTypeExport: boolean): N.ExportSpecifier {
+    const node = this.startNode();
+    const isMaybeTypeOnly = this.isContextual(tt._type);
+    const isString = this.match(tt.string);
+    node.local = this.parseModuleExportName();
+    const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
+      node,
+      /* isImport */ false,
+      isString,
+      isInTypeExport,
+      isMaybeTypeOnly,
+    );
+    if (canParseAsKeyword && this.eatContextual(tt._as)) {
+      node.exported = this.parseModuleExportName();
+    } else if (isString) {
+      node.exported = cloneStringLiteral(node.local);
+    } else if (!node.exported) {
+      node.exported = cloneIdentifier(node.local);
+    }
+    return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
   }
 
   // https://tc39.es/ecma262/#prod-ModuleExportName
