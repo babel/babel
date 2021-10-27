@@ -68,7 +68,6 @@ export default class State {
   maybeInArrowParameters: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
-  inPropertyName: boolean = false;
   hasFlowComment: boolean = false;
   isAmbientContext: boolean = false;
   inAbstractClass: boolean = false;

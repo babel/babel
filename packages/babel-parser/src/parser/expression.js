@@ -2236,10 +2236,11 @@ export default class ExpressionParser extends LValParser {
       prop.key = this.parseMaybeAssignAllowIn();
       this.expect(tt.bracketR);
     } else {
-      const oldInPropertyName = this.state.inPropertyName;
-      this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
       const type = this.state.type;
+      // disallow jsx tag after property name
+      // e.g. foo<T>() is a class method with type parameters.
+      this.state.exprAllowed = false;
       (prop: $FlowFixMe).key =
         type === tt.num ||
         type === tt.string ||
@@ -2252,8 +2253,6 @@ export default class ExpressionParser extends LValParser {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
         prop.computed = false;
       }
-
-      this.state.inPropertyName = oldInPropertyName;
     }
 
     return prop.key;
