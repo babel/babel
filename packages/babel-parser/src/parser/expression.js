@@ -2240,7 +2240,7 @@ export default class ExpressionParser extends LValParser {
       const type = this.state.type;
       // disallow jsx tag after property name
       // e.g. foo<T>() is a class method with type parameters.
-      this.state.exprAllowed = false;
+      this.state.canStartJSXElement = false;
       (prop: $FlowFixMe).key =
         type === tt.num ||
         type === tt.string ||

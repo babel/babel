@@ -126,7 +126,7 @@ export default class State {
   // or ends a string template
   context: Array<TokContext> = [ct.brace];
   // Used to track whether a JSX element is allowed to form
-  exprAllowed: boolean = true;
+  canStartJSXElement: boolean = true;
 
   // Used to signal to callers of `readWord1` whether the word
   // contained any escape sequences. This is needed because words with
