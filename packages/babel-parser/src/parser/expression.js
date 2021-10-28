@@ -2582,8 +2582,7 @@ export default class ExpressionParser extends LValParser {
     if (liberal) {
       // If the current token is not used as a keyword, set its type to "tt.name".
       // This will prevent this.next() from throwing about unexpected escapes.
-      this.state.type = tt.name;
-      this.state.canStartJSXElement = false;
+      this.replaceToken(tt.name);
     } else {
       this.checkReservedWord(name, start, tokenIsKeyword(type), false);
     }

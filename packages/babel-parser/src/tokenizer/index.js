@@ -498,6 +498,11 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
+  replaceToken(type: TokenType): void {
+    this.state.type = type;
+    this.updateContext();
+  }
+
   // ### Token reading
 
   // This is the function that is called to fetch the next token. It

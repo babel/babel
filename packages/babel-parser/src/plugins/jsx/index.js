@@ -552,7 +552,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         // In case we encounter an lt token here it will always be the start of
         // jsx as the lt sign is not allowed in places that expect an expression
-        this.finishToken(tt.jsxTagStart);
+        this.replaceToken(tt.jsxTagStart);
         return this.jsxParseElement();
       } else {
         return super.parseExprAtom(refExpressionErrors);
