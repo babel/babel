@@ -2187,10 +2187,10 @@ export default class StatementParser extends ExpressionParser {
   parseExportSpecifier(
     node: any,
     isString: boolean,
-    // eslint-disable-next-line no-unused-vars
+    /* eslint-disable no-unused-vars -- used in TypeScript parser */
     isInTypeExport: boolean,
-    // eslint-disable-next-line no-unused-vars
     isMaybeTypeOnly: boolean,
+    /* eslint-enable no-unused-vars */
   ): N.ExportSpecifier {
     if (this.eatContextual(tt._as)) {
       node.exported = this.parseModuleExportName();
