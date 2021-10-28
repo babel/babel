@@ -41,6 +41,7 @@
               "start":40,"end":43,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":12},"identifierName":"foo"},
               "name": "foo"
             },
+            "exportKind": "value",
             "exported": {
               "type": "Identifier",
               "start":40,"end":43,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":12},"identifierName":"foo"},

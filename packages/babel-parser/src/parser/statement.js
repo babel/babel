@@ -1878,7 +1878,8 @@ export default class StatementParser extends ExpressionParser {
   maybeParseExportNamedSpecifiers(node: N.Node): boolean {
     if (this.match(tt.braceL)) {
       if (!node.specifiers) node.specifiers = [];
-      node.specifiers.push(...this.parseExportSpecifiers());
+      const isTypeExport = node.exportKind === "type";
+      node.specifiers.push(...this.parseExportSpecifiers(isTypeExport));
 
       node.source = null;
       node.declaration = null;
@@ -2158,7 +2159,7 @@ export default class StatementParser extends ExpressionParser {
 
   // Parses a comma-separated list of module exports.
 
-  parseExportSpecifiers(): Array<N.ExportSpecifier> {
+  parseExportSpecifiers(isInTypeExport: boolean): Array<N.ExportSpecifier> {
     const nodes = [];
     let first = true;
 
@@ -2172,22 +2173,39 @@ export default class StatementParser extends ExpressionParser {
         this.expect(tt.comma);
         if (this.eat(tt.braceR)) break;
       }
-
-      const node = this.startNode();
+      const isMaybeTypeOnly = this.isContextual(tt._type);
       const isString = this.match(tt.string);
-      const local = this.parseModuleExportName();
-      node.local = local;
-      if (this.eatContextual(tt._as)) {
-        node.exported = this.parseModuleExportName();
-      } else if (isString) {
-        node.exported = cloneStringLiteral(local);
-      } else {
-        node.exported = cloneIdentifier(local);
-      }
-      nodes.push(this.finishNode(node, "ExportSpecifier"));
+      const node = this.startNode();
+      node.local = this.parseModuleExportName();
+      nodes.push(
+        this.parseExportSpecifier(
+          node,
+          isString,
+          isInTypeExport,
+          isMaybeTypeOnly,
+        ),
+      );
     }
 
     return nodes;
+  }
+
+  parseExportSpecifier(
+    node: any,
+    isString: boolean,
+    /* eslint-disable no-unused-vars -- used in TypeScript parser */
+    isInTypeExport: boolean,
+    isMaybeTypeOnly: boolean,
+    /* eslint-enable no-unused-vars */
+  ): N.ExportSpecifier {
+    if (this.eatContextual(tt._as)) {
+      node.exported = this.parseModuleExportName();
+    } else if (isString) {
+      node.exported = cloneStringLiteral(node.local);
+    } else if (!node.exported) {
+      node.exported = cloneIdentifier(node.local);
+    }
+    return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
   }
 
   // https://tc39.es/ecma262/#prod-ModuleExportName
@@ -2438,15 +2456,29 @@ export default class StatementParser extends ExpressionParser {
         if (this.eat(tt.braceR)) break;
       }
 
-      this.parseImportSpecifier(node);
+      const specifier = this.startNode();
+      const importedIsString = this.match(tt.string);
+      const isMaybeTypeOnly = this.isContextual(tt._type);
+      specifier.imported = this.parseModuleExportName();
+      const importSpecifier = this.parseImportSpecifier(
+        specifier,
+        importedIsString,
+        node.importKind === "type" || node.importKind === "typeof",
+        isMaybeTypeOnly,
+      );
+      node.specifiers.push(importSpecifier);
     }
   }
 
   // https://tc39.es/ecma262/#prod-ImportSpecifier
-  parseImportSpecifier(node: N.ImportDeclaration): void {
-    const specifier = this.startNode();
-    const importedIsString = this.match(tt.string);
-    specifier.imported = this.parseModuleExportName();
+  parseImportSpecifier(
+    specifier: any,
+    importedIsString: boolean,
+    /* eslint-disable no-unused-vars -- used in TypeScript and Flow parser */
+    isInTypeOnlyImport: boolean,
+    isMaybeTypeOnly: boolean,
+    /* eslint-enable no-unused-vars */
+  ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();
     } else {
@@ -2459,10 +2491,12 @@ export default class StatementParser extends ExpressionParser {
         );
       }
       this.checkReservedWord(imported.name, specifier.start, true, true);
-      specifier.local = cloneIdentifier(imported);
+      if (!specifier.local) {
+        specifier.local = cloneIdentifier(imported);
+      }
     }
     this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
-    node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
+    return this.finishNode(specifier, "ImportSpecifier");
   }
 
   // This is used in flow and typescript plugin

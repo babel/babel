@@ -20,6 +20,7 @@
               "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28},"identifierName":"A"},
               "name": "A"
             },
+            "exportKind": "value",
             "exported": {
               "type": "Identifier",
               "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28},"identifierName":"A"},
@@ -55,6 +56,7 @@
                 }
               ]
             },
+            "exportKind": "value",
             "exported": {
               "type": "Identifier",
               "start":59,"end":60,"loc":{"start":{"line":1,"column":59},"end":{"line":1,"column":60},"identifierName":"C"},

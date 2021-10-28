@@ -265,6 +265,25 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
                 continue;
               }
 
+              const importsToRemove: Set<NodePath<t.Node>> = new Set();
+              const specifiersLength = stmt.node.specifiers.length;
+              const isAllSpecifiersElided = () =>
+                specifiersLength > 0 &&
+                specifiersLength === importsToRemove.size;
+
+              for (const specifier of stmt.node.specifiers) {
+                if (
+                  specifier.type === "ImportSpecifier" &&
+                  specifier.importKind === "type"
+                ) {
+                  registerGlobalType(programNode, specifier.local.name);
+                  const binding = stmt.scope.getBinding(specifier.local.name);
+                  if (binding) {
+                    importsToRemove.add(binding.path);
+                  }
+                }
+              }
+
               // If onlyRemoveTypeImports is `true`, only remove type-only imports
               // and exports introduced in TypeScript 3.8.
               if (onlyRemoveTypeImports) {
@@ -277,9 +296,6 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
                   continue;
                 }
 
-                let allElided = true;
-                const importsToRemove: NodePath<t.Node>[] = [];
-
                 for (const specifier of stmt.node.specifiers) {
                   const binding = stmt.scope.getBinding(specifier.local.name);
 
@@ -289,28 +305,29 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
                   // just bail if there is no binding, since chances are good that if
                   // the import statement was injected then it wasn't a typescript type
                   // import anyway.
-                  if (
-                    binding &&
-                    isImportTypeOnly({
-                      binding,
-                      programPath: path,
-                      pragmaImportName,
-                      pragmaFragImportName,
-                    })
-                  ) {
-                    importsToRemove.push(binding.path);
-                  } else {
-                    allElided = false;
-                    NEEDS_EXPLICIT_ESM.set(path.node, false);
+                  if (!importsToRemove.has(binding.path)) {
+                    if (
+                      binding &&
+                      isImportTypeOnly({
+                        binding,
+                        programPath: path,
+                        pragmaImportName,
+                        pragmaFragImportName,
+                      })
+                    ) {
+                      importsToRemove.add(binding.path);
+                    } else {
+                      NEEDS_EXPLICIT_ESM.set(path.node, false);
+                    }
                   }
                 }
+              }
 
-                if (allElided) {
-                  stmt.remove();
-                } else {
-                  for (const importPath of importsToRemove) {
-                    importPath.remove();
-                  }
+              if (isAllSpecifiersElided()) {
+                stmt.remove();
+              } else {
+                for (const importPath of importsToRemove) {
+                  importPath.remove();
                 }
               }
 
@@ -365,6 +382,21 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
           return;
         }
 
+        // remove export declaration that is filled with type-only specifiers
+        //   export { type A1, type A2 } from "a";
+        if (
+          path.node.source &&
+          path.node.specifiers.length > 0 &&
+          path.node.specifiers.every(
+            specifier =>
+              specifier.type === "ExportSpecifier" &&
+              specifier.exportKind === "type",
+          )
+        ) {
+          path.remove();
+          return;
+        }
+
         // remove export declaration if it's exporting only types
         // This logic is needed when exportKind is "value", because
         // currently the "type" keyword is optional.
@@ -392,7 +424,10 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
         // remove type exports
         type Parent = t.ExportDeclaration & { source?: t.StringLiteral };
         const parent = path.parent as Parent;
-        if (!parent.source && isGlobalType(path, path.node.local.name)) {
+        if (
+          (!parent.source && isGlobalType(path, path.node.local.name)) ||
+          path.node.exportKind === "type"
+        ) {
           path.remove();
         }
       },

@@ -40,6 +40,11 @@ export function ExportDefaultSpecifier(
 }
 
 export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
+  if (node.exportKind === "type") {
+    this.word("type");
+    this.space();
+  }
+
   this.print(node.local, node);
   // @ts-expect-error todo(flow-ts) maybe check node type instead of relying on name to be undefined on t.StringLiteral
   if (node.exported && node.local.name !== node.exported.name) {

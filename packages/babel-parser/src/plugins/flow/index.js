@@ -2123,7 +2123,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (this.match(tt.braceL)) {
           // export type { foo, bar };
-          node.specifiers = this.parseExportSpecifiers();
+          node.specifiers = this.parseExportSpecifiers(
+            /* isInTypeExport */ true,
+          );
           this.parseExportFrom(node);
           return null;
         } else {
@@ -2629,10 +2631,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // parse import-type/typeof shorthand
-    parseImportSpecifier(node: N.ImportDeclaration): void {
-      const specifier = this.startNode();
-      const firstIdentIsString = this.match(tt.string);
-      const firstIdent = this.parseModuleExportName();
+    parseImportSpecifier(
+      specifier: any,
+      importedIsString: boolean,
+      isInTypeOnlyImport: boolean,
+      // eslint-disable-next-line no-unused-vars
+      isMaybeTypeOnly: boolean,
+    ): N.ImportSpecifier {
+      const firstIdent = specifier.imported;
 
       let specifierTypeKind = null;
       if (firstIdent.type === "Identifier") {
@@ -2669,7 +2675,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.imported = this.parseIdentifier(true);
           specifier.importKind = specifierTypeKind;
         } else {
-          if (firstIdentIsString) {
+          if (importedIsString) {
             /*:: invariant(firstIdent instanceof N.StringLiteral) */
             throw this.raise(
               specifier.start,
@@ -2690,17 +2696,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      const nodeIsTypeImport = hasTypeImportKind(node);
       const specifierIsTypeImport = hasTypeImportKind(specifier);
 
-      if (nodeIsTypeImport && specifierIsTypeImport) {
+      if (isInTypeOnlyImport && specifierIsTypeImport) {
         this.raise(
           specifier.start,
           FlowErrors.ImportTypeShorthandOnlyInPureImport,
         );
       }
 
-      if (nodeIsTypeImport || specifierIsTypeImport) {
+      if (isInTypeOnlyImport || specifierIsTypeImport) {
         this.checkReservedType(
           specifier.local.name,
           specifier.local.start,
@@ -2708,7 +2713,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      if (isBinding && !nodeIsTypeImport && !specifierIsTypeImport) {
+      if (isBinding && !isInTypeOnlyImport && !specifierIsTypeImport) {
         this.checkReservedWord(
           specifier.local.name,
           specifier.start,
@@ -2718,7 +2723,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
-      node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
+      return this.finishNode(specifier, "ImportSpecifier");
     }
 
     parseBindingAtom(): N.Pattern {

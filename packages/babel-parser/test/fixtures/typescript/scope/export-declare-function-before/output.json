@@ -20,6 +20,7 @@
               "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
               "name": "foo"
             },
+            "exportKind": "value",
             "exported": {
               "type": "Identifier",
               "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},

@@ -903,6 +903,7 @@ export type ImportDeclaration = NodeBase & {
 export type ImportSpecifier = ModuleSpecifier & {
   type: "ImportSpecifier",
   imported: Identifier | StringLiteral,
+  importKind?: "type" | "value",
 };
 
 export type ImportDefaultSpecifier = ModuleSpecifier & {
@@ -930,6 +931,7 @@ export type ExportSpecifier = NodeBase & {
   type: "ExportSpecifier",
   exported: Identifier | StringLiteral,
   local: Identifier,
+  exportKind?: "type" | "value",
 };
 
 export type ExportDefaultSpecifier = NodeBase & {

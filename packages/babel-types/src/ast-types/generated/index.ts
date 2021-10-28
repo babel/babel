@@ -812,6 +812,7 @@ export interface ExportSpecifier extends BaseNode {
   type: "ExportSpecifier";
   local: Identifier;
   exported: Identifier | StringLiteral;
+  exportKind?: "type" | "value" | null;
 }
 
 export interface ForOfStatement extends BaseNode {
@@ -846,7 +847,7 @@ export interface ImportSpecifier extends BaseNode {
   type: "ImportSpecifier";
   local: Identifier;
   imported: Identifier | StringLiteral;
-  importKind?: "type" | "typeof" | null;
+  importKind?: "type" | "typeof" | "value" | null;
 }
 
 export interface MetaProperty extends BaseNode {

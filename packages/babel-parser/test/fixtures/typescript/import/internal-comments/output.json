@@ -43,6 +43,7 @@
               "start":42,"end":43,"loc":{"start":{"line":1,"column":42},"end":{"line":1,"column":43},"identifierName":"A"},
               "name": "A"
             },
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":42,"end":43,"loc":{"start":{"line":1,"column":42},"end":{"line":1,"column":43},"identifierName":"A"},
@@ -78,6 +79,7 @@
                 }
               ]
             },
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":74,"end":75,"loc":{"start":{"line":1,"column":74},"end":{"line":1,"column":75},"identifierName":"C"},
