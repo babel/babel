@@ -50,22 +50,6 @@ export default class UtilParser extends Tokenizer {
     extra[key] = val;
   }
 
-  // TODO
-
-  isRelational(op: "<" | ">"): boolean {
-    return this.match(tt.relational) && this.state.value === op;
-  }
-
-  // TODO
-
-  expectRelational(op: "<" | ">"): void {
-    if (this.isRelational(op)) {
-      this.next();
-    } else {
-      this.unexpected(null, tt.relational);
-    }
-  }
-
   // Tests whether parsed token is a contextual keyword.
 
   isContextual(token: TokenType): boolean {

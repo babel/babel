@@ -1211,23 +1211,24 @@ export default class ExpressionParser extends LValParser {
 
         if (pipeProposal) {
           return this.parseTopicReference(pipeProposal);
+        } else {
+          throw this.unexpected();
         }
       }
 
-      // fall through
-      case tt.relational: {
-        if (this.state.value === "<") {
-          const lookaheadCh = this.input.codePointAt(this.nextTokenStart());
-          if (
-            isIdentifierStart(lookaheadCh) || // Element/Type Parameter <foo>
-            lookaheadCh === charCodes.greaterThan // Fragment <>
-          ) {
-            this.expectOnePlugin(["jsx", "flow", "typescript"]);
-          }
+      case tt.lt: {
+        const lookaheadCh = this.input.codePointAt(this.nextTokenStart());
+        if (
+          isIdentifierStart(lookaheadCh) || // Element/Type Parameter <foo>
+          lookaheadCh === charCodes.greaterThan // Fragment <>
+        ) {
+          this.expectOnePlugin(["jsx", "flow", "typescript"]);
+          break;
+        } else {
+          throw this.unexpected();
         }
       }
 
-      // fall through
       default:
         if (tokenIsIdentifier(type)) {
           if (

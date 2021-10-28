@@ -200,6 +200,8 @@ export const tt: { [name: string]: TokenType } = {
   bitwiseXOR: createBinop("^", 4),
   bitwiseAND: createBinop("&", 5),
   equality: createBinop("==/!=/===/!==", 6),
+  lt: createBinop("</>/<=/>=", 7),
+  gt: createBinop("</>/<=/>=", 7),
   relational: createBinop("</>/<=/>=", 7),
   bitShift: createBinop("<</>>/>>>", 8),
   plusMin: createToken("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
