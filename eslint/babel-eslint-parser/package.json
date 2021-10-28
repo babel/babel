@@ -28,7 +28,7 @@
   },
   "peerDependencies": {
     "@babel/core": ">=7.11.0",
-    "eslint": ">=7.5.0"
+    "eslint": "^7.5.0 || ^8.0.0"
   },
   "dependencies": {
     "eslint-scope": "^5.1.1",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "dedent": "^0.7.0",
-    "eslint": "^7.27.0"
+    "eslint": "^7.27.0",
+    "eslint-8": "npm:eslint@^8.0.0"
   }
 }
