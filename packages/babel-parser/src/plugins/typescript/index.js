@@ -3372,21 +3372,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           hasTypeSpecifier = true;
           leftOfAs = this.parseIdentifier();
         }
+        if (hasTypeSpecifier && isInTypeOnlyImportExport) {
+          this.raise(
+            pos,
+            isImport
+              ? TSErrors.TypeModifierIsUsedInTypeImports
+              : TSErrors.TypeModifierIsUsedInTypeExports,
+          );
+        }
       }
+
       node[leftOfAsKey] = leftOfAs;
       node[rightOfAsKey] = rightOfAs;
 
       const kindKey = isImport ? "importKind" : "exportKind";
       node[kindKey] = hasTypeSpecifier ? "type" : "value";
-
-      if (hasTypeSpecifier && isInTypeOnlyImportExport) {
-        this.raise(
-          pos,
-          isImport
-            ? TSErrors.TypeModifierIsUsedInTypeImports
-            : TSErrors.TypeModifierIsUsedInTypeExports,
-        );
-      }
 
       return canParseAsKeyword;
     }
