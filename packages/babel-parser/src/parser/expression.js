@@ -22,12 +22,12 @@ import {
   tokenCanStartExpression,
   tokenIsAssignment,
   tokenIsIdentifier,
-  tokenIsKeyword,
   tokenIsKeywordOrIdentifier,
   tokenIsOperator,
   tokenIsPostfix,
   tokenIsPrefix,
   tokenIsRightAssociative,
+  tokenKeywordOrIdentifierIsKeyword,
   tokenLabelName,
   tokenOperatorPrecedence,
   tt,
@@ -2579,12 +2579,16 @@ export default class ExpressionParser extends LValParser {
       throw this.unexpected();
     }
 
+    const tokenIsKeyword = tokenKeywordOrIdentifierIsKeyword(type);
+
     if (liberal) {
       // If the current token is not used as a keyword, set its type to "tt.name".
       // This will prevent this.next() from throwing about unexpected escapes.
-      this.replaceToken(tt.name);
+      if (tokenIsKeyword) {
+        this.replaceToken(tt.name);
+      }
     } else {
-      this.checkReservedWord(name, start, tokenIsKeyword(type), false);
+      this.checkReservedWord(name, start, tokenIsKeyword, false);
     }
 
     this.next();
