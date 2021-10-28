@@ -618,11 +618,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           this.state.canStartJSXElement = true;
         }
-      } else if (
-        tokenIsKeyword(type) &&
-        (prevType === tt.dot || prevType === tt.questionDot)
-      ) {
-        this.state.canStartJSXElement = false;
       } else {
         this.state.canStartJSXElement = tokenComesBeforeExpression(type);
       }

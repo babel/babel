@@ -2238,9 +2238,6 @@ export default class ExpressionParser extends LValParser {
     } else {
       // We check if it's valid for it to be a private name when we push it.
       const type = this.state.type;
-      // disallow jsx tag after property name
-      // e.g. foo<T>() is a class method with type parameters.
-      this.state.canStartJSXElement = false;
       (prop: $FlowFixMe).key =
         type === tt.num ||
         type === tt.string ||
@@ -2586,6 +2583,7 @@ export default class ExpressionParser extends LValParser {
       // If the current token is not used as a keyword, set its type to "tt.name".
       // This will prevent this.next() from throwing about unexpected escapes.
       this.state.type = tt.name;
+      this.state.canStartJSXElement = false;
     } else {
       this.checkReservedWord(name, start, tokenIsKeyword(type), false);
     }
