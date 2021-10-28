@@ -2450,36 +2450,30 @@ export default class StatementParser extends ExpressionParser {
         if (this.eat(tt.braceR)) break;
       }
 
-      this.parseImportSpecifier(node);
+      const specifier = this.startNode();
+      const importedIsString = this.match(tt.string);
+      const isMaybeTypeOnly = this.isContextual(tt._type);
+      specifier.imported = this.parseModuleExportName();
+      const importSpecifier = this.parseImportSpecifier(
+        specifier,
+        importedIsString,
+        node.importKind === "type" || node.importKind === "typeof",
+        isMaybeTypeOnly,
+      );
+      node.specifiers.push(importSpecifier);
     }
   }
 
-  parseTypeOnlyImportExportSpecifier(
-    /* eslint-disable no-unused-vars -- used in typescript plugin */
-    node: any,
-    isImport: boolean,
-    isStringSpecifier: boolean,
-    isInTypeOnlyImportExport: boolean,
+  // https://tc39.es/ecma262/#prod-ImportSpecifier
+  parseImportSpecifier(
+    specifier: any,
+    importedIsString: boolean,
+    /* eslint-disable no-unused-vars -- used in TypeScript and Flow parser */
+    isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
     /* eslint-enable no-unused-vars */
-  ): boolean {
-    return true;
-  }
-
-  // https://tc39.es/ecma262/#prod-ImportSpecifier
-  parseImportSpecifier(node: N.ImportDeclaration): void {
-    const specifier = this.startNode();
-    const importedIsString = this.match(tt.string);
-    const isMaybeTypeOnly = this.isContextual(tt._type);
-    specifier.imported = this.parseModuleExportName();
-    const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
-      specifier,
-      /* isImport */ true,
-      importedIsString,
-      /* isInTypeOnlyImportExport */ node.importKind === "type",
-      isMaybeTypeOnly,
-    );
-    if (canParseAsKeyword && this.eatContextual(tt._as)) {
+  ): N.ImportSpecifier {
+    if (this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();
     } else {
       const { imported } = specifier;
@@ -2496,7 +2490,7 @@ export default class StatementParser extends ExpressionParser {
       }
     }
     this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
-    node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
+    return this.finishNode(specifier, "ImportSpecifier");
   }
 
   // This is used in flow and typescript plugin

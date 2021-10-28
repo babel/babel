@@ -3328,9 +3328,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.parseTypeOnlyImportExportSpecifier(
           node,
           /* isImport */ false,
-          isString,
           isInTypeExport,
-          isMaybeTypeOnly,
         );
         return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
       }
@@ -3343,13 +3341,34 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
+    parseImportSpecifier(
+      specifier: any,
+      importedIsString: boolean,
+      isInTypeOnlyImport: boolean,
+      isMaybeTypeOnly: boolean,
+    ): N.ImportSpecifier {
+      if (!importedIsString && isMaybeTypeOnly) {
+        this.parseTypeOnlyImportExportSpecifier(
+          specifier,
+          /* isImport */ true,
+          isInTypeOnlyImport,
+        );
+        return this.finishNode<N.ImportSpecifier>(specifier, "ImportSpecifier");
+      }
+      specifier.importKind = "value";
+      return super.parseImportSpecifier(
+        specifier,
+        importedIsString,
+        isInTypeOnlyImport,
+        isMaybeTypeOnly,
+      );
+    }
+
     parseTypeOnlyImportExportSpecifier(
       node: any,
       isImport: boolean,
-      isStringSpecifier: boolean,
       isInTypeOnlyImportExport: boolean,
-      isMaybeTypeOnly: boolean,
-    ): boolean {
+    ): void {
       const leftOfAsKey = isImport ? "imported" : "local";
       const rightOfAsKey = isImport ? "local" : "exported";
 
@@ -3362,50 +3381,48 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const pos = leftOfAs.start;
 
       // https://github.com/microsoft/TypeScript/blob/fc4f9d83d5939047aa6bb2a43965c6e9bbfbc35b/src/compiler/parser.ts#L7411-L7456
-      if (!isStringSpecifier && isMaybeTypeOnly) {
-        // import { type } from "mod";          - hasTypeSpecifier: false, leftOfAs: type
-        // import { type as } from "mod";       - hasTypeSpecifier: true,  leftOfAs: as
-        // import { type as as } from "mod";    - hasTypeSpecifier: false, leftOfAs: type, rightOfAs: as
-        // import { type as as as } from "mod"; - hasTypeSpecifier: true,  leftOfAs: as,   rightOfAs: as
+      // import { type } from "mod";          - hasTypeSpecifier: false, leftOfAs: type
+      // import { type as } from "mod";       - hasTypeSpecifier: true,  leftOfAs: as
+      // import { type as as } from "mod";    - hasTypeSpecifier: false, leftOfAs: type, rightOfAs: as
+      // import { type as as as } from "mod"; - hasTypeSpecifier: true,  leftOfAs: as,   rightOfAs: as
+      if (this.isContextual(tt._as)) {
+        // { type as ...? }
+        const firstAs = this.parseIdentifier();
         if (this.isContextual(tt._as)) {
-          // { type as ...? }
-          const firstAs = this.parseIdentifier();
-          if (this.isContextual(tt._as)) {
-            // { type as as ...? }
-            const secondAs = this.parseIdentifier();
-            if (tokenIsKeywordOrIdentifier(this.state.type)) {
-              // { type as as something }
-              hasTypeSpecifier = true;
-              leftOfAs = firstAs;
-              rightOfAs = this.parseIdentifier();
-              canParseAsKeyword = false;
-            } else {
-              // { type as as }
-              rightOfAs = secondAs;
-              canParseAsKeyword = false;
-            }
-          } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
-            // { type as something }
-            canParseAsKeyword = false;
-            rightOfAs = this.parseIdentifier();
-          } else {
-            // { type as }
+          // { type as as ...? }
+          const secondAs = this.parseIdentifier();
+          if (tokenIsKeywordOrIdentifier(this.state.type)) {
+            // { type as as something }
             hasTypeSpecifier = true;
             leftOfAs = firstAs;
+            rightOfAs = this.parseIdentifier();
+            canParseAsKeyword = false;
+          } else {
+            // { type as as }
+            rightOfAs = secondAs;
+            canParseAsKeyword = false;
           }
         } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
-          // { type something ...? }
+          // { type as something }
+          canParseAsKeyword = false;
+          rightOfAs = this.parseIdentifier();
+        } else {
+          // { type as }
           hasTypeSpecifier = true;
-          leftOfAs = this.parseIdentifier();
+          leftOfAs = firstAs;
         }
-        if (hasTypeSpecifier && isInTypeOnlyImportExport) {
-          this.raise(
-            pos,
-            isImport
-              ? TSErrors.TypeModifierIsUsedInTypeImports
-              : TSErrors.TypeModifierIsUsedInTypeExports,
-          );
-        }
+      } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
+        // { type something ...? }
+        hasTypeSpecifier = true;
+        leftOfAs = this.parseIdentifier();
+      }
+      if (hasTypeSpecifier && isInTypeOnlyImportExport) {
+        this.raise(
+          pos,
+          isImport
+            ? TSErrors.TypeModifierIsUsedInTypeImports
+            : TSErrors.TypeModifierIsUsedInTypeExports,
+        );
       }
 
       node[leftOfAsKey] = leftOfAs;
@@ -3414,14 +3431,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const kindKey = isImport ? "importKind" : "exportKind";
       node[kindKey] = hasTypeSpecifier ? "type" : "value";
 
-      if (!isImport) {
-        if (canParseAsKeyword && this.eatContextual(tt._as)) {
-          node[rightOfAsKey] = this.parseModuleExportName();
-        } else if (!node[rightOfAsKey]) {
-          node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
-        }
+      if (canParseAsKeyword && this.eatContextual(tt._as)) {
+        node[rightOfAsKey] = this.parseModuleExportName();
+      } else if (!node[rightOfAsKey]) {
+        node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
       }
-
-      return canParseAsKeyword;
     }
   };
