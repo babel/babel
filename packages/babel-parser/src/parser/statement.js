@@ -2167,18 +2167,29 @@ export default class StatementParser extends ExpressionParser {
         this.expect(tt.comma);
         if (this.eat(tt.braceR)) break;
       }
-      const node = this.parseExportSpecifier(isInTypeExport);
+      const isMaybeTypeOnly = this.isContextual(tt._type);
+      const isString = this.match(tt.string);
+      const local = this.parseModuleExportName();
+      const node = this.parseExportSpecifier(
+        local,
+        isString,
+        isInTypeExport,
+        isMaybeTypeOnly,
+      );
       nodes.push(node);
     }
 
     return nodes;
   }
 
-  parseExportSpecifier(isInTypeExport: boolean): N.ExportSpecifier {
-    const node = this.startNode();
-    const isMaybeTypeOnly = this.isContextual(tt._type);
-    const isString = this.match(tt.string);
-    node.local = this.parseModuleExportName();
+  parseExportSpecifier(
+    local: N.StringLiteral | N.Identifier,
+    isString: boolean,
+    isInTypeExport: boolean,
+    isMaybeTypeOnly: boolean,
+  ): N.ExportSpecifier {
+    const node = this.startNodeAtNode(local);
+    node.local = local;
     const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
       node,
       /* isImport */ false,
