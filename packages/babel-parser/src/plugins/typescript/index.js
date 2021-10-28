@@ -135,6 +135,10 @@ const TSErrors = makeErrorTemplates(
       "Private elements cannot have an accessibility modifier ('%0').",
     ReadonlyForMethodSignature:
       "'readonly' modifier can only appear on a property declaration or index signature.",
+    ReservedArrowTypeParam:
+      "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
+    ReservedTypeAssertion:
+      "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
     SetAccesorCannotHaveOptionalParameter:
       "A 'set' accessor cannot have an optional parameter.",
     SetAccesorCannotHaveRestParameter:
@@ -359,12 +363,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseDelimitedList<T: N.Node>(
       kind: ParsingContext,
       parseElement: () => T,
+      refTrailingCommaPos?: { value: number },
     ): T[] {
       return nonNull(
         this.tsParseDelimitedListWorker(
           kind,
           parseElement,
           /* expectSuccess */ true,
+          refTrailingCommaPos,
         ),
       );
     }
@@ -377,13 +383,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       kind: ParsingContext,
       parseElement: () => ?T,
       expectSuccess: boolean,
+      refTrailingCommaPos?: { value: number },
     ): ?(T[]) {
       const result = [];
+      let trailingCommaPos = -1;
 
       for (;;) {
         if (this.tsIsListTerminator(kind)) {
           break;
         }
+        trailingCommaPos = -1;
 
         const element = parseElement();
         if (element == null) {
@@ -392,6 +401,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         result.push(element);
 
         if (this.eat(tt.comma)) {
+          trailingCommaPos = this.state.lastTokStart;
           continue;
         }
 
@@ -406,6 +416,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return undefined;
       }
 
+      if (refTrailingCommaPos) {
+        refTrailingCommaPos.value = trailingCommaPos;
+      }
+
       return result;
     }
 
@@ -414,6 +428,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       parseElement: () => T,
       bracket: boolean,
       skipFirstToken: boolean,
+      refTrailingCommaPos?: { value: number },
     ): T[] {
       if (!skipFirstToken) {
         if (bracket) {
@@ -423,7 +438,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      const result = this.tsParseDelimitedList(kind, parseElement);
+      const result = this.tsParseDelimitedList(
+        kind,
+        parseElement,
+        refTrailingCommaPos,
+      );
 
       if (bracket) {
         this.expect(tt.bracketR);
@@ -524,14 +543,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.unexpected();
       }
 
+      const refTrailingCommaPos = { value: -1 };
+
       node.params = this.tsParseBracketedList(
         "TypeParametersOrArguments",
         this.tsParseTypeParameter.bind(this),
         /* bracket */ false,
         /* skipFirstToken */ true,
+        refTrailingCommaPos,
       );
       if (node.params.length === 0) {
         this.raise(node.start, TSErrors.EmptyTypeParameters);
+      }
+      if (refTrailingCommaPos.value !== -1) {
+        this.addExtra(node, "trailingComma", refTrailingCommaPos.value);
       }
       return this.finishNode(node, "TSTypeParameterDeclaration");
     }
@@ -1403,6 +1428,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeAssertion(): N.TsTypeAssertion {
+      if (this.getPluginOption("typescript", "disallowAmbiguousJSXLike")) {
+        this.raise(this.state.start, TSErrors.ReservedTypeAssertion);
+      }
+
       const node: N.TsTypeAssertion = this.startNode();
       const _const = this.tsTryNextParseConstantContext();
       node.typeAnnotation = _const || this.tsNextThenParseType();
@@ -2854,7 +2883,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
 
-      let typeParameters: N.TsTypeParameterDeclaration;
+      let typeParameters: ?N.TsTypeParameterDeclaration;
       state = state || this.state.clone();
 
       const arrow = this.tryParse(abort => {
@@ -2878,7 +2907,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }, state);
 
       /*:: invariant(arrow.node != null) */
-      if (!arrow.error && !arrow.aborted) return arrow.node;
+      if (!arrow.error && !arrow.aborted) {
+        // This error is reported outside of the this.tryParse call so that
+        // in case of <T>(x) => 2, we don't consider <T>(x) as a type assertion
+        // because of this error.
+        if (typeParameters) this.reportReservedArrowTypeParam(typeParameters);
+        return arrow.node;
+      }
 
       if (!jsx) {
         // Try parsing a type cast instead of an arrow function.
@@ -2903,6 +2938,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (arrow.node) {
         /*:: invariant(arrow.failState) */
         this.state = arrow.failState;
+        if (typeParameters) this.reportReservedArrowTypeParam(typeParameters);
         return arrow.node;
       }
 
@@ -2917,6 +2953,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (typeCast?.thrown) throw typeCast.error;
 
       throw jsx?.error || arrow.error || typeCast?.error;
+    }
+
+    reportReservedArrowTypeParam(node: any) {
+      if (
+        node.params.length === 1 &&
+        !node.extra?.trailingComma &&
+        this.getPluginOption("typescript", "disallowAmbiguousJSXLike")
+      ) {
+        this.raise(node.start, TSErrors.ReservedArrowTypeParam);
+      }
     }
 
     // Handle type assertions

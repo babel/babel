@@ -2021,6 +2021,7 @@ __metadata:
   resolution: "@babel/plugin-syntax-typescript@workspace:packages/babel-plugin-syntax-typescript"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0

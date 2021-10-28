@@ -1,0 +1,3 @@
+{
+  "plugins": [["syntax-typescript", { "disallowAmbiguousJSXLike": true }]]
+}

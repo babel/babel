@@ -8,6 +8,7 @@ export default declare((api, opts) => {
   const {
     allExtensions,
     allowNamespaces,
+    disallowAmbiguousJSXLike,
     isTSX,
     jsxPragma,
     jsxPragmaFrag,
@@ -16,17 +17,19 @@ export default declare((api, opts) => {
   } = normalizeOptions(opts);
 
   const pluginOptions = process.env.BABEL_8_BREAKING
-    ? isTSX => ({
+    ? (isTSX, disallowAmbiguousJSXLike) => ({
         allowNamespaces,
+        disallowAmbiguousJSXLike,
         isTSX,
         jsxPragma,
         jsxPragmaFrag,
         onlyRemoveTypeImports,
         optimizeConstEnums,
       })
-    : isTSX => ({
+    : (isTSX, disallowAmbiguousJSXLike) => ({
         allowDeclareFields: opts.allowDeclareFields,
         allowNamespaces,
+        disallowAmbiguousJSXLike,
         isTSX,
         jsxPragma,
         jsxPragmaFrag,
@@ -38,21 +41,36 @@ export default declare((api, opts) => {
     overrides: allExtensions
       ? [
           {
-            plugins: [[transformTypeScript, pluginOptions(isTSX)]],
+            plugins: [
+              [
+                transformTypeScript,
+                pluginOptions(isTSX, disallowAmbiguousJSXLike),
+              ],
+            ],
           },
         ]
-      : [
+      : // Only set 'test' if explicitly requested, since it requires that
+        // Babel is being called`
+        [
           {
-            // Only set 'test' if explicitly requested, since it requires that
-            // Babel is being called`
             test: /\.ts$/,
-            plugins: [[transformTypeScript, pluginOptions(false)]],
+            plugins: [[transformTypeScript, pluginOptions(false, false)]],
           },
           {
-            // Only set 'test' if explicitly requested, since it requires that
-            // Babel is being called`
+            test: /\.mts$/,
+            sourceType: "module",
+            plugins: [[transformTypeScript, pluginOptions(false, true)]],
+          },
+          {
+            test: /\.cts$/,
+            sourceType: "script",
+            plugins: [[transformTypeScript, pluginOptions(false, true)]],
+          },
+          {
             test: /\.tsx$/,
-            plugins: [[transformTypeScript, pluginOptions(true)]],
+            // disallowAmbiguousJSXLike is a no-op when parsing TSX, since it's
+            // always disallowed.
+            plugins: [[transformTypeScript, pluginOptions(true, false)]],
           },
         ],
   };
