@@ -42,6 +42,7 @@ import {
   type ErrorTemplate,
   ErrorCodes,
 } from "../../parser/error";
+import { cloneIdentifier } from "../../parser/node";
 
 type TsModifier =
   | "readonly"
@@ -3317,6 +3318,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.getExpression();
     }
 
+    parseExportSpecifier(
+      node: any,
+      isString: boolean,
+      isInTypeExport: boolean,
+      isMaybeTypeOnly: boolean,
+    ) {
+      if (!isString && isMaybeTypeOnly) {
+        this.parseTypeOnlyImportExportSpecifier(
+          node,
+          /* isImport */ false,
+          isString,
+          isInTypeExport,
+          isMaybeTypeOnly,
+        );
+        return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
+      }
+      node.exportKind = "value";
+      return super.parseExportSpecifier(
+        node,
+        isString,
+        isInTypeExport,
+        isMaybeTypeOnly,
+      );
+    }
+
     parseTypeOnlyImportExportSpecifier(
       node: any,
       isImport: boolean,
@@ -3387,6 +3413,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       const kindKey = isImport ? "importKind" : "exportKind";
       node[kindKey] = hasTypeSpecifier ? "type" : "value";
+
+      if (!isImport) {
+        if (canParseAsKeyword && this.eatContextual(tt._as)) {
+          node[rightOfAsKey] = this.parseModuleExportName();
+        } else if (!node[rightOfAsKey]) {
+          node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
+        }
+      }
 
       return canParseAsKeyword;
     }

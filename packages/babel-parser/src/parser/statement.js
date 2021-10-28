@@ -2169,35 +2169,30 @@ export default class StatementParser extends ExpressionParser {
       }
       const isMaybeTypeOnly = this.isContextual(tt._type);
       const isString = this.match(tt.string);
-      const local = this.parseModuleExportName();
-      const node = this.parseExportSpecifier(
-        local,
-        isString,
-        isInTypeExport,
-        isMaybeTypeOnly,
+      const node = this.startNode();
+      node.local = this.parseModuleExportName();
+      nodes.push(
+        this.parseExportSpecifier(
+          node,
+          isString,
+          isInTypeExport,
+          isMaybeTypeOnly,
+        ),
       );
-      nodes.push(node);
     }
 
     return nodes;
   }
 
   parseExportSpecifier(
-    local: N.StringLiteral | N.Identifier,
+    node: any,
     isString: boolean,
+    // eslint-disable-next-line no-unused-vars
     isInTypeExport: boolean,
+    // eslint-disable-next-line no-unused-vars
     isMaybeTypeOnly: boolean,
   ): N.ExportSpecifier {
-    const node = this.startNodeAtNode(local);
-    node.local = local;
-    const canParseAsKeyword = this.parseTypeOnlyImportExportSpecifier(
-      node,
-      /* isImport */ false,
-      isString,
-      isInTypeExport,
-      isMaybeTypeOnly,
-    );
-    if (canParseAsKeyword && this.eatContextual(tt._as)) {
+    if (this.eatContextual(tt._as)) {
       node.exported = this.parseModuleExportName();
     } else if (isString) {
       node.exported = cloneStringLiteral(node.local);
