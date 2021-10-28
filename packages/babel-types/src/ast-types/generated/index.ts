@@ -2095,7 +2095,8 @@ export type Standardized =
   | ClassProperty
   | ClassPrivateProperty
   | ClassPrivateMethod
-  | PrivateName;
+  | PrivateName
+  | StaticBlock;
 export type Expression =
   | ArrayExpression
   | AssignmentExpression

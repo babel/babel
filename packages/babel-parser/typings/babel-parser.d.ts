@@ -125,7 +125,7 @@ export type ParserPlugin =
   | "classPrivateMethods"
   | "classPrivateProperties"
   | "classProperties"
-  | "classStaticBlock"
+  | "classStaticBlock" // Enabled by default
   | "decimal"
   | "decorators"
   | "decorators-legacy"

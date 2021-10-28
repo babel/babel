@@ -2,9 +2,7 @@
 // These mappings represent the syntax proposals that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
-const proposalPlugins = new Set([
-  "proposal-class-static-block",
-]);
+const proposalPlugins = new Set();
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = {

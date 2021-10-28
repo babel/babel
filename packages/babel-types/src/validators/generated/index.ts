@@ -4280,6 +4280,7 @@ export function isStandardized(
     "ClassPrivateProperty" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
     "PrivateName" === nodeType ||
+    "StaticBlock" === nodeType ||
     (nodeType === "Placeholder" &&
       ("Identifier" === (node as t.Placeholder).expectedNode ||
         "StringLiteral" === (node as t.Placeholder).expectedNode ||
