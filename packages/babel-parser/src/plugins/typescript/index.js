@@ -3435,8 +3435,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node[rightOfAsKey] = isImport
           ? this.parseIdentifier()
           : this.parseModuleExportName();
-      } else if (!node[rightOfAsKey]) {
+      }
+      if (!node[rightOfAsKey]) {
         node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
+      }
+      if (isImport) {
+        this.checkLVal(node[rightOfAsKey], "import specifier", BIND_LEXICAL);
       }
     }
   };
