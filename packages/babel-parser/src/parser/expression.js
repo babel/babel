@@ -1193,26 +1193,15 @@ export default class ExpressionParser extends LValParser {
         return this.parsePrivateName();
       }
 
-      case tt.moduloAssign:
-        if (
-          this.getPluginOption("pipelineOperator", "proposal") === "hack" &&
-          this.getPluginOption("pipelineOperator", "topicToken") === "%"
-        ) {
-          // If we find %= in an expression position, and the Hack-pipes proposal is active,
-          // then the % could be the topic token (e.g., in x |> %==y or x |> %===y), and so we
-          // reparse it as %.
-          // The next readToken() call will start parsing from =.
+      case tt.moduloAssign: {
+        return this.parseTopicReferenceThenEqualsSign(tt.modulo, "%");
+      }
 
-          this.state.value = "%";
-          this.state.type = tt.modulo;
-          this.state.pos--;
-          this.state.end--;
-          this.state.endLoc.column--;
-        } else {
-          throw this.unexpected();
-        }
+      case tt.xorAssign: {
+        return this.parseTopicReferenceThenEqualsSign(tt.bitwiseXOR, "^");
+      }
 
-      // falls through
+      case tt.bitwiseXOR:
       case tt.modulo:
       case tt.hash: {
         const pipeProposal = this.getPluginOption(
@@ -1221,24 +1210,7 @@ export default class ExpressionParser extends LValParser {
         );
 
         if (pipeProposal) {
-          // A pipe-operator proposal is active,
-          // although its configuration might not match the current token’s type.
-          node = this.startNode();
-          const start = this.state.start;
-          const tokenType = this.state.type;
-
-          // Consume the current token.
-          this.next();
-
-          // If the pipe-operator plugin’s configuration matches the current token’s type,
-          // then this will return `node`, will have been finished as a topic reference.
-          // Otherwise, this will throw a `PipeTopicUnconfiguredToken` error.
-          return this.finishTopicReference(
-            node,
-            start,
-            pipeProposal,
-            tokenType,
-          );
+          return this.parseTopicReference(pipeProposal);
         }
       }
 
@@ -1323,6 +1295,61 @@ export default class ExpressionParser extends LValParser {
           throw this.unexpected();
         }
     }
+  }
+
+  // This helper method should only be called
+  // when the parser has reached a potential Hack pipe topic token
+  // that is followed by an equals sign.
+  // See <https://github.com/js-choi/proposal-hack-pipes>.
+  // If we find ^= or %= in an expression position
+  // (i.e., the tt.moduloAssign or tt.xorAssign token types),
+  // and if the Hack-pipes proposal is active with ^ or % as its topicToken,
+  // then the ^ or % could be the topic token (e.g., in x |> ^==y or x |> ^===y),
+  // and so we reparse the current token as ^ or %.
+  // Otherwise, this throws an unexpected-token error.
+  parseTopicReferenceThenEqualsSign(
+    topicTokenType: TokenType,
+    topicTokenValue: string,
+  ): N.Expression {
+    const pipeProposal = this.getPluginOption("pipelineOperator", "proposal");
+
+    if (pipeProposal) {
+      // Set the most-recent token to be a topic token
+      // given by the tokenType and tokenValue.
+      // Now the next readToken() call (in parseTopicReference)
+      // will consume that “topic token”.
+      this.state.type = topicTokenType;
+      this.state.value = topicTokenValue;
+      // Rewind the tokenizer to the end of the “topic token”,
+      // so that the following token starts at the equals sign after that topic token.
+      this.state.pos--;
+      this.state.end--;
+      this.state.endLoc.column--;
+      // Now actually consume the topic token.
+      return this.parseTopicReference(pipeProposal);
+    } else {
+      throw this.unexpected();
+    }
+  }
+
+  // This helper method should only be called
+  // when the proposal-pipeline-operator plugin is active,
+  // and when the parser has reached a potential Hack pipe topic token.
+  // Although a pipe-operator proposal is assumed to be active,
+  // its configuration might not match the current token’s type.
+  // See <https://github.com/js-choi/proposal-hack-pipes>.
+  parseTopicReference(pipeProposal: string): N.Expression {
+    const node = this.startNode();
+    const start = this.state.start;
+    const tokenType = this.state.type;
+
+    // Consume the current token.
+    this.next();
+
+    // If the pipe-operator plugin’s configuration matches the current token’s type,
+    // then this will return `node`, will have been finished as a topic reference.
+    // Otherwise, this will throw a `PipeTopicUnconfiguredToken` error.
+    return this.finishTopicReference(node, start, pipeProposal, tokenType);
   }
 
   // This helper method attempts to finish the given `node`

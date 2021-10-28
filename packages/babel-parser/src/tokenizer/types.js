@@ -182,8 +182,9 @@ export const tt: { [name: string]: TokenType } = {
   eq: createToken("=", { beforeExpr, isAssign }),
   assign: createToken("_=", { beforeExpr, isAssign }),
   slashAssign: createToken("_=", { beforeExpr, isAssign }),
-  // This is only needed to support % as a Hack-pipe topic token. If the proposal
-  // ends up choosing a different token, it can be merged with tt.assign.
+  // These are only needed to support % and ^ as a Hack-pipe topic token. When the
+  // proposal settles on a token, the others can be merged with tt.assign.
+  xorAssign: createToken("_=", { beforeExpr, isAssign }),
   moduloAssign: createToken("_=", { beforeExpr, isAssign }),
   // end: isAssign
 
