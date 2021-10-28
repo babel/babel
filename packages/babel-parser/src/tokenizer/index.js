@@ -500,6 +500,9 @@ export default class Tokenizer extends ParserErrors {
 
   replaceToken(type: TokenType): void {
     this.state.type = type;
+    // the prevType of updateContext is required
+    // only when the new type is tt.slash/tt.jsxTagEnd
+    // $FlowIgnore
     this.updateContext();
   }
 
