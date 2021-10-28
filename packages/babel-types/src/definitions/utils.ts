@@ -19,6 +19,18 @@ function getType(val) {
   }
 }
 
+type DefineTypeOpts = {
+  fields?: {
+    [x: string]: FieldOptions;
+  };
+  visitor?: Array<string>;
+  aliases?: Array<string>;
+  builder?: Array<string>;
+  inherits?: string;
+  deprecatedAlias?: string;
+  validate?: Validator;
+};
+
 type Validator = (
   | { type: string }
   | { each: Validator }
@@ -256,20 +268,22 @@ const validTypeOpts = [
 ];
 const validFieldKeys = ["default", "optional", "validate"];
 
-export default function defineType(
-  type: string,
-  opts: {
-    fields?: {
-      [x: string]: FieldOptions;
-    };
-    visitor?: Array<string>;
-    aliases?: Array<string>;
-    builder?: Array<string>;
-    inherits?: string;
-    deprecatedAlias?: string;
-    validate?: Validator;
-  } = {},
-) {
+// Wraps defineType to ensure these aliases are included.
+export function defineAliasedType(...aliases: string[]) {
+  return (type: string, opts: DefineTypeOpts = {}) => {
+    let defined = opts.aliases;
+    if (!defined) {
+      if (opts.inherits) defined = store[opts.inherits].aliases?.slice();
+      defined ??= [];
+      opts.aliases = defined;
+    }
+    const additional = aliases.filter(a => !defined.includes(a));
+    defined.unshift(...additional);
+    return defineType(type, opts);
+  };
+}
+
+export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
   let fields = opts.fields;

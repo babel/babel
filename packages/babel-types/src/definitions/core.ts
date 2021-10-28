@@ -10,7 +10,8 @@ import {
   UPDATE_OPERATORS,
 } from "../constants";
 
-import defineType, {
+import {
+  defineAliasedType,
   assertShape,
   assertOptionalChainStart,
   assertValueType,
@@ -21,6 +22,8 @@ import defineType, {
   assertOneOf,
   validateOptional,
 } from "./utils";
+
+const defineType = defineAliasedType("Standardized");
 
 defineType("ArrayExpression", {
   fields: {

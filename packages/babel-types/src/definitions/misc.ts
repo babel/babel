@@ -1,9 +1,12 @@
-import defineType, {
+import {
+  defineAliasedType,
   assertNodeType,
   assertOneOf,
   assertValueType,
 } from "./utils";
 import { PLACEHOLDERS } from "./placeholders";
+
+const defineType = defineAliasedType("Miscellaneous");
 
 if (!process.env.BABEL_8_BREAKING) {
   defineType("Noop", {

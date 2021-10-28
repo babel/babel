@@ -4187,6 +4187,114 @@ export function isTSTypeParameter(
 
   return false;
 }
+export function isStandardized(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Standardized {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (
+    "ArrayExpression" === nodeType ||
+    "AssignmentExpression" === nodeType ||
+    "BinaryExpression" === nodeType ||
+    "InterpreterDirective" === nodeType ||
+    "Directive" === nodeType ||
+    "DirectiveLiteral" === nodeType ||
+    "BlockStatement" === nodeType ||
+    "BreakStatement" === nodeType ||
+    "CallExpression" === nodeType ||
+    "CatchClause" === nodeType ||
+    "ConditionalExpression" === nodeType ||
+    "ContinueStatement" === nodeType ||
+    "DebuggerStatement" === nodeType ||
+    "DoWhileStatement" === nodeType ||
+    "EmptyStatement" === nodeType ||
+    "ExpressionStatement" === nodeType ||
+    "File" === nodeType ||
+    "ForInStatement" === nodeType ||
+    "ForStatement" === nodeType ||
+    "FunctionDeclaration" === nodeType ||
+    "FunctionExpression" === nodeType ||
+    "Identifier" === nodeType ||
+    "IfStatement" === nodeType ||
+    "LabeledStatement" === nodeType ||
+    "StringLiteral" === nodeType ||
+    "NumericLiteral" === nodeType ||
+    "NullLiteral" === nodeType ||
+    "BooleanLiteral" === nodeType ||
+    "RegExpLiteral" === nodeType ||
+    "LogicalExpression" === nodeType ||
+    "MemberExpression" === nodeType ||
+    "NewExpression" === nodeType ||
+    "Program" === nodeType ||
+    "ObjectExpression" === nodeType ||
+    "ObjectMethod" === nodeType ||
+    "ObjectProperty" === nodeType ||
+    "RestElement" === nodeType ||
+    "ReturnStatement" === nodeType ||
+    "SequenceExpression" === nodeType ||
+    "ParenthesizedExpression" === nodeType ||
+    "SwitchCase" === nodeType ||
+    "SwitchStatement" === nodeType ||
+    "ThisExpression" === nodeType ||
+    "ThrowStatement" === nodeType ||
+    "TryStatement" === nodeType ||
+    "UnaryExpression" === nodeType ||
+    "UpdateExpression" === nodeType ||
+    "VariableDeclaration" === nodeType ||
+    "VariableDeclarator" === nodeType ||
+    "WhileStatement" === nodeType ||
+    "WithStatement" === nodeType ||
+    "AssignmentPattern" === nodeType ||
+    "ArrayPattern" === nodeType ||
+    "ArrowFunctionExpression" === nodeType ||
+    "ClassBody" === nodeType ||
+    "ClassExpression" === nodeType ||
+    "ClassDeclaration" === nodeType ||
+    "ExportAllDeclaration" === nodeType ||
+    "ExportDefaultDeclaration" === nodeType ||
+    "ExportNamedDeclaration" === nodeType ||
+    "ExportSpecifier" === nodeType ||
+    "ForOfStatement" === nodeType ||
+    "ImportDeclaration" === nodeType ||
+    "ImportDefaultSpecifier" === nodeType ||
+    "ImportNamespaceSpecifier" === nodeType ||
+    "ImportSpecifier" === nodeType ||
+    "MetaProperty" === nodeType ||
+    "ClassMethod" === nodeType ||
+    "ObjectPattern" === nodeType ||
+    "SpreadElement" === nodeType ||
+    "Super" === nodeType ||
+    "TaggedTemplateExpression" === nodeType ||
+    "TemplateElement" === nodeType ||
+    "TemplateLiteral" === nodeType ||
+    "YieldExpression" === nodeType ||
+    "AwaitExpression" === nodeType ||
+    "Import" === nodeType ||
+    "BigIntLiteral" === nodeType ||
+    "ExportNamespaceSpecifier" === nodeType ||
+    "OptionalMemberExpression" === nodeType ||
+    "OptionalCallExpression" === nodeType ||
+    "ClassProperty" === nodeType ||
+    "ClassPrivateProperty" === nodeType ||
+    "ClassPrivateMethod" === nodeType ||
+    "PrivateName" === nodeType ||
+    (nodeType === "Placeholder" &&
+      ("Identifier" === (node as t.Placeholder).expectedNode ||
+        "StringLiteral" === (node as t.Placeholder).expectedNode ||
+        "BlockStatement" === (node as t.Placeholder).expectedNode ||
+        "ClassBody" === (node as t.Placeholder).expectedNode))
+  ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isExpression(
   node: object | null | undefined,
   opts?: object | null,
@@ -5161,6 +5269,15 @@ export function isFlow(
     "UnionTypeAnnotation" === nodeType ||
     "Variance" === nodeType ||
     "VoidTypeAnnotation" === nodeType ||
+    "EnumDeclaration" === nodeType ||
+    "EnumBooleanBody" === nodeType ||
+    "EnumNumberBody" === nodeType ||
+    "EnumStringBody" === nodeType ||
+    "EnumSymbolBody" === nodeType ||
+    "EnumBooleanMember" === nodeType ||
+    "EnumNumberMember" === nodeType ||
+    "EnumStringMember" === nodeType ||
+    "EnumDefaultedMember" === nodeType ||
     "IndexedAccessType" === nodeType ||
     "OptionalIndexedAccessType" === nodeType
   ) {
@@ -5360,6 +5477,108 @@ export function isJSX(
     "JSXFragment" === nodeType ||
     "JSXOpeningFragment" === nodeType ||
     "JSXClosingFragment" === nodeType
+  ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isMiscellaneous(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Miscellaneous {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (
+    "Noop" === nodeType ||
+    "Placeholder" === nodeType ||
+    "V8IntrinsicIdentifier" === nodeType
+  ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTypeScript(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeScript {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (
+    "TSParameterProperty" === nodeType ||
+    "TSDeclareFunction" === nodeType ||
+    "TSDeclareMethod" === nodeType ||
+    "TSQualifiedName" === nodeType ||
+    "TSCallSignatureDeclaration" === nodeType ||
+    "TSConstructSignatureDeclaration" === nodeType ||
+    "TSPropertySignature" === nodeType ||
+    "TSMethodSignature" === nodeType ||
+    "TSIndexSignature" === nodeType ||
+    "TSAnyKeyword" === nodeType ||
+    "TSBooleanKeyword" === nodeType ||
+    "TSBigIntKeyword" === nodeType ||
+    "TSIntrinsicKeyword" === nodeType ||
+    "TSNeverKeyword" === nodeType ||
+    "TSNullKeyword" === nodeType ||
+    "TSNumberKeyword" === nodeType ||
+    "TSObjectKeyword" === nodeType ||
+    "TSStringKeyword" === nodeType ||
+    "TSSymbolKeyword" === nodeType ||
+    "TSUndefinedKeyword" === nodeType ||
+    "TSUnknownKeyword" === nodeType ||
+    "TSVoidKeyword" === nodeType ||
+    "TSThisType" === nodeType ||
+    "TSFunctionType" === nodeType ||
+    "TSConstructorType" === nodeType ||
+    "TSTypeReference" === nodeType ||
+    "TSTypePredicate" === nodeType ||
+    "TSTypeQuery" === nodeType ||
+    "TSTypeLiteral" === nodeType ||
+    "TSArrayType" === nodeType ||
+    "TSTupleType" === nodeType ||
+    "TSOptionalType" === nodeType ||
+    "TSRestType" === nodeType ||
+    "TSNamedTupleMember" === nodeType ||
+    "TSUnionType" === nodeType ||
+    "TSIntersectionType" === nodeType ||
+    "TSConditionalType" === nodeType ||
+    "TSInferType" === nodeType ||
+    "TSParenthesizedType" === nodeType ||
+    "TSTypeOperator" === nodeType ||
+    "TSIndexedAccessType" === nodeType ||
+    "TSMappedType" === nodeType ||
+    "TSLiteralType" === nodeType ||
+    "TSExpressionWithTypeArguments" === nodeType ||
+    "TSInterfaceDeclaration" === nodeType ||
+    "TSInterfaceBody" === nodeType ||
+    "TSTypeAliasDeclaration" === nodeType ||
+    "TSAsExpression" === nodeType ||
+    "TSTypeAssertion" === nodeType ||
+    "TSEnumDeclaration" === nodeType ||
+    "TSEnumMember" === nodeType ||
+    "TSModuleDeclaration" === nodeType ||
+    "TSModuleBlock" === nodeType ||
+    "TSImportType" === nodeType ||
+    "TSImportEqualsDeclaration" === nodeType ||
+    "TSExternalModuleReference" === nodeType ||
+    "TSNonNullExpression" === nodeType ||
+    "TSExportAssignment" === nodeType ||
+    "TSNamespaceExportDeclaration" === nodeType ||
+    "TSTypeAnnotation" === nodeType ||
+    "TSTypeParameterInstantiation" === nodeType ||
+    "TSTypeParameterDeclaration" === nodeType ||
+    "TSTypeParameter" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

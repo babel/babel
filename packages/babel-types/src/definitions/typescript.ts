@@ -1,4 +1,5 @@
-import defineType, {
+import {
+  defineAliasedType,
   arrayOfType,
   assertEach,
   assertNodeType,
@@ -16,6 +17,8 @@ import {
   classMethodOrDeclareMethodCommon,
 } from "./core";
 import is from "../validators/is";
+
+const defineType = defineAliasedType("TypeScript");
 
 const bool = assertValueType("boolean");
 
