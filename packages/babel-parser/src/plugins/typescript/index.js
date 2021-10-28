@@ -3432,7 +3432,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node[kindKey] = hasTypeSpecifier ? "type" : "value";
 
       if (canParseAsKeyword && this.eatContextual(tt._as)) {
-        node[rightOfAsKey] = this.parseModuleExportName();
+        node[rightOfAsKey] = isImport
+          ? this.parseIdentifier()
+          : this.parseModuleExportName();
       } else if (!node[rightOfAsKey]) {
         node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
       }
