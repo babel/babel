@@ -4,7 +4,7 @@ import type { Visitor } from "@babel/traverse";
 import { shouldTransform } from "./util";
 
 export default declare(api => {
-  api.assertVersion("^7.15.0");
+  api.assertVersion("^7.16.0");
 
   return {
     name: "plugin-bugfix-safari-id-destructuring-collision-in-function-expression",

@@ -186,17 +186,15 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 
 new-version-checklist:
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!  packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/index.ts"
-	@echo "!!!!!!  replace \"api.assertVersion()\" to the latest published version"
-	@echo "!!!!!!  packages/babel-preset-env/src/available-plugins.ts:"
-	@echo "!!!!!!  replace minVersion[\"bugfix/transform-v8-spread-parameters-in-optional-chaining\"] to the latest published version"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@exit 1
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @echo "!!!!!!                                                   !!!!!!"
+	# @echo "!!!!!!         Write any message that should             !!!!!!"
+	# @echo "!!!!!!            block the release here                 !!!!!!"
+	# @echo "!!!!!!                                                   !!!!!!"
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @exit 1
 
 new-version:
 	$(MAKE) new-version-checklist
