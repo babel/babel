@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-flow",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Babel preset for all Flow plugins.",
   "author": "The Babel Team (https://babel.dev/team)",
   "repository": {

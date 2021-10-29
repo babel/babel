@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-assign",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Replace Object.assign with an inline helper",
   "repository": {
     "type": "git",

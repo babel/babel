@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-flow",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Allow parsing of the flow syntax",
   "repository": {
     "type": "git",

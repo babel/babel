@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-async-to-generator",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Turn async functions into ES2015 generators",
   "repository": {
     "type": "git",

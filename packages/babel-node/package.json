@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.15.8",
+  "version": "7.16.0",
   "description": "Babel command line",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-node",

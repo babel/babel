@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-template-literals",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Compile ES2015 template literals to ES5",
   "repository": {
     "type": "git",

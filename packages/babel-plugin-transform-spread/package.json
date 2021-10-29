@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-spread",
-  "version": "7.15.8",
+  "version": "7.16.0",
   "description": "Compile ES2015 spread to ES5",
   "repository": {
     "type": "git",

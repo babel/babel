@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-replace-supers",
-  "version": "7.15.4",
+  "version": "7.16.0",
   "description": "Helper function to replace supers",
   "repository": {
     "type": "git",

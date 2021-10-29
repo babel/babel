@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-skip-transparent-expression-wrappers",
-  "version": "7.15.4",
+  "version": "7.16.0",
   "description": "Helper which skips types and parentheses",
   "repository": {
     "type": "git",

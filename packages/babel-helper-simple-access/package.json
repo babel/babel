@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-simple-access",
-  "version": "7.15.4",
+  "version": "7.16.0",
   "description": "Babel helper for ensuring that access to a given value is performed through simple accesses",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-simple-access",

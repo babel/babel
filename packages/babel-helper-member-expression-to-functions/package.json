@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-member-expression-to-functions",
-  "version": "7.15.4",
+  "version": "7.16.0",
   "description": "Helper function to replace certain member expressions with function calls",
   "repository": {
     "type": "git",

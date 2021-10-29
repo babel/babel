@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-external-helpers",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "This plugin contains helper functions that’ll be placed at the top of the generated code",
   "repository": {
     "type": "git",

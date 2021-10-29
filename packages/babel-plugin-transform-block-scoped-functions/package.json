@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-block-scoped-functions",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Babel plugin to ensure function declarations at the block level are block scoped",
   "repository": {
     "type": "git",

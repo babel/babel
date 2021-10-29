@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-record-and-tuple",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "A transform for Record and Tuple syntax.",
   "repository": {
     "type": "git",

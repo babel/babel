@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-class-static-block",
-  "version": "7.15.4",
+  "version": "7.16.0",
   "description": "Allow parsing of class static blocks",
   "repository": {
     "type": "git",

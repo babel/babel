@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-new-target",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Transforms new.target meta property",
   "repository": {
     "type": "git",

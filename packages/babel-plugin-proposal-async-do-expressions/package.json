@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-async-do-expressions",
-  "version": "7.14.5",
+  "version": "7.16.0",
   "description": "Transform async do expressions to ES2021",
   "repository": {
     "type": "git",
