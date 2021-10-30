@@ -98,6 +98,11 @@ describe("Babel and Espree", () => {
     }
 
     if (eslintVersion !== 7) {
+      if (process.env.IS_PUBLISH) {
+        console.warn("Skipping ESLint 8 test because using a release build.");
+        return;
+      }
+
       // ESLint 8
       const espreeAST = espree8.parse(code, {
         ...espreeOptions,
@@ -459,7 +464,9 @@ describe("Babel and Espree", () => {
     });
   }
 
-  it("private identifier (token) - ESLint 8", () => {
+  const itNotPublish = process.env.IS_PUBLISH ? it.skip : it;
+
+  itNotPublish("private identifier (token) - ESLint 8", () => {
     const code = "class A { #x }";
     const babylonAST = parseForESLint8(code, {
       eslintVisitorKeys: true,
@@ -561,7 +568,7 @@ describe("Babel and Espree", () => {
     ).toMatchObject(staticKw);
   });
 
-  it("static (token) - ESLint 8", () => {
+  itNotPublish("static (token) - ESLint 8", () => {
     const code = `
       class A {
         static m() {}
@@ -650,7 +657,7 @@ describe("Babel and Espree", () => {
     });
   }
 
-  it("pipeline # topic token - ESLint 8", () => {
+  itNotPublish("pipeline # topic token - ESLint 8", () => {
     const code = `
       x |> #
       y |> #[0]
