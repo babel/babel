@@ -20,6 +20,14 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.1 (2021-10-30)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#13900](https://github.com/babel/babel/pull/13900) Fix binding access for plugin-transform-typescript ([@PeachScript](https://github.com/PeachScript))
+
+#### :house: Internal
+* [#13898](https://github.com/babel/babel/pull/13898) Skip ESLint 8 tests on publish ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 ## v7.16.0 (2021-10-30)
 
