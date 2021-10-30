@@ -50,3 +50,11 @@ export function getLineInfo(input: string, offset: number): Position {
 
   return new Position(line, offset - lineStart);
 }
+
+export function createPositionFromPosition(
+  position: Position,
+  columnOffset: number,
+) {
+  const { line, column } = position;
+  return new Position(line, column + columnOffset);
+}

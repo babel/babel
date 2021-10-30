@@ -43,7 +43,7 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import { Position } from "../util/location";
+import { Position, createPositionFromPosition } from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -708,7 +708,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       return this.parseBind(base, startPos, startLoc, noCalls, state);
-    } else if (this.match(tt.backQuote)) {
+    } else if (this.match(tt.templateMiddle) || this.match(tt.templateTail)) {
       return this.parseTaggedTemplateExpression(
         base,
         startPos,
@@ -1153,7 +1153,8 @@ export default class ExpressionParser extends LValParser {
       case tt._new:
         return this.parseNewOrNewTarget();
 
-      case tt.backQuote:
+      case tt.templateMiddle:
+      case tt.templateTail:
         return this.parseTemplate(false);
 
       // BindExpression[Yield]
@@ -1831,37 +1832,47 @@ export default class ExpressionParser extends LValParser {
   // Parse template expression.
 
   parseTemplateElement(isTagged: boolean): N.TemplateElement {
-    const elem = this.startNode();
-    if (this.state.value === null) {
+    const { start, end, value } = this.state;
+    const elemStart = start + 1;
+    const elem = this.startNodeAt(
+      elemStart,
+      createPositionFromPosition(this.state.startLoc, 1),
+    );
+    if (value === null) {
       if (!isTagged) {
-        this.raise(this.state.start + 1, Errors.InvalidEscapeSequenceTemplate);
+        this.raise(start + 2, Errors.InvalidEscapeSequenceTemplate);
       }
     }
+
+    const isTail = this.match(tt.templateTail);
+    const endOffset = isTail ? -1 : -2;
+    const elemEnd = end + endOffset;
     elem.value = {
-      raw: this.input
-        .slice(this.state.start, this.state.end)
-        .replace(/\r\n?/g, "\n"),
-      cooked: this.state.value,
+      raw: this.input.slice(elemStart, elemEnd).replace(/\r\n?/g, "\n"),
+      cooked: value === null ? null : value.slice(1, endOffset),
     };
+    elem.tail = isTail;
     this.next();
-    elem.tail = this.match(tt.backQuote);
-    return this.finishNode(elem, "TemplateElement");
+    const result = this.finishNodeAt(
+      elem,
+      "TemplateElement",
+      elemEnd,
+      createPositionFromPosition(this.state.lastTokEndLoc, endOffset),
+    );
+    return result;
   }
 
   // https://tc39.es/ecma262/#prod-TemplateLiteral
   parseTemplate(isTagged: boolean): N.TemplateLiteral {
     const node = this.startNode();
-    this.next();
     node.expressions = [];
     let curElt = this.parseTemplateElement(isTagged);
     node.quasis = [curElt];
     while (!curElt.tail) {
-      this.expect(tt.dollarBraceL);
       node.expressions.push(this.parseTemplateSubstitution());
-      this.expect(tt.braceR);
+      this.readTemplateMiddle();
       node.quasis.push((curElt = this.parseTemplateElement(isTagged)));
     }
-    this.next();
     return this.finishNode(node, "TemplateLiteral");
   }
 
@@ -2687,7 +2698,8 @@ export default class ExpressionParser extends LValParser {
       this.match(tt.plusMin) ||
       this.match(tt.parenL) ||
       this.match(tt.bracketL) ||
-      this.match(tt.backQuote) ||
+      this.match(tt.templateMiddle) ||
+      this.match(tt.templateTail) ||
       // Sometimes the tokenizer generates tt.slash for regexps, and this is
       // handler by parseExprAtom
       this.match(tt.regexp) ||

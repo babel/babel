@@ -1071,7 +1071,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           return this.tsParseParenthesizedType();
-        case tt.backQuote:
+        case tt.templateMiddle:
+        case tt.templateTail:
           return this.tsParseTemplateLiteralType();
         default: {
           const { type } = this.state;
@@ -2196,7 +2197,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               }
 
               return this.finishCallExpression(node, state.optionalChainMember);
-            } else if (this.match(tt.backQuote)) {
+            } else if (
+              this.match(tt.templateMiddle) ||
+              this.match(tt.templateTail)
+            ) {
               const result = this.parseTaggedTemplateExpression(
                 base,
                 startPos,

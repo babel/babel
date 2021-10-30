@@ -39,7 +39,7 @@ import {
 } from "../util/expression-scope";
 import type { SourceType } from "../options";
 import { Token } from "../tokenizer";
-import { Position } from "../util/location";
+import { createPositionFromPosition } from "../util/location";
 import { cloneStringLiteral, cloneIdentifier } from "./node";
 
 const loopLabel = { kind: "loop" },
@@ -69,7 +69,7 @@ function babel7CompatTokens(tokens) {
       if (!process.env.BABEL_8_BREAKING) {
         const { loc, start, value, end } = token;
         const hashEndPos = start + 1;
-        const hashEndLoc = new Position(loc.start.line, loc.start.column + 1);
+        const hashEndLoc = createPositionFromPosition(loc.start, 1);
         tokens.splice(
           i,
           1,
@@ -94,6 +94,76 @@ function babel7CompatTokens(tokens) {
         );
         i++;
         continue;
+      }
+    }
+    if (type === tt.templateMiddle || type === tt.templateTail) {
+      if (!process.env.BABEL_8_BREAKING) {
+        const { loc, start, value, end } = token;
+        const backquoteEnd = start + 1;
+        const backquoteEndLoc = createPositionFromPosition(loc.start, 1);
+        let startToken;
+        if (value.charCodeAt(0) === charCodes.graveAccent) {
+          startToken = new Token({
+            type: getExportedToken(tt.backQuote),
+            value: "`",
+            start: start,
+            end: backquoteEnd,
+            startLoc: loc.start,
+            endLoc: backquoteEndLoc,
+          });
+        } else {
+          startToken = new Token({
+            type: getExportedToken(tt.braceR),
+            value: "}",
+            start: start,
+            end: backquoteEnd,
+            startLoc: loc.start,
+            endLoc: backquoteEndLoc,
+          });
+        }
+        let templateValue, templateElementEnd, templateElementEndLoc, endToken;
+        if (type === tt.templateTail) {
+          // ends with '`'
+          templateElementEnd = end - 1;
+          templateElementEndLoc = createPositionFromPosition(loc.end, -1);
+          templateValue = value.slice(1, -1);
+          endToken = new Token({
+            type: getExportedToken(tt.backQuote),
+            value: "`",
+            start: templateElementEnd,
+            end: end,
+            startLoc: templateElementEndLoc,
+            endLoc: loc.end,
+          });
+        } else {
+          // ends with `${`
+          templateElementEnd = end - 2;
+          templateElementEndLoc = createPositionFromPosition(loc.end, -2);
+          templateValue = value.slice(1, -2);
+          endToken = new Token({
+            type: getExportedToken(tt.dollarBraceL),
+            value: "${",
+            start: templateElementEnd,
+            end: end,
+            startLoc: templateElementEndLoc,
+            endLoc: loc.end,
+          });
+        }
+        tokens.splice(
+          i,
+          1,
+          startToken,
+          new Token({
+            type: getExportedToken(tt.template),
+            value: templateValue,
+            start: backquoteEnd,
+            end: templateElementEnd,
+            startLoc: backquoteEndLoc,
+            endLoc: templateElementEndLoc,
+          }),
+          endToken,
+        );
+        i += 2;
       }
     }
     if (typeof type === "number") {
