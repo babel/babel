@@ -305,9 +305,8 @@ export default declare((api: ConfigAPI, opts: Options): Plugin => {
                   // just bail if there is no binding, since chances are good that if
                   // the import statement was injected then it wasn't a typescript type
                   // import anyway.
-                  if (!importsToRemove.has(binding.path)) {
+                  if (binding && !importsToRemove.has(binding.path)) {
                     if (
-                      binding &&
                       isImportTypeOnly({
                         binding,
                         programPath: path,
