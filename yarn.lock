@@ -312,8 +312,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   peerDependencies:
-    "@babel/eslint-parser": ^7.15.0
-    eslint-plugin-flowtype: ^4.6.0
+    "@babel/eslint-parser": ^7.16.0
+    eslint-plugin-flowtype: ^8.0.3
   languageName: unknown
   linkType: soft
 
