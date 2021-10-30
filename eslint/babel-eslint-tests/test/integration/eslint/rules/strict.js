@@ -55,6 +55,7 @@ function readFixture(id, done) {
 // readFixture
 
 describe("Rules:", () => {
+  // eslint-disable-next-line jest/valid-describe-callback
   describe("`strict`", strictSuite);
 });
 
