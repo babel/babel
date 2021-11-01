@@ -18,16 +18,16 @@ export function shouldTransform(
   // On collision, `getOwnBinding` returns the param binding
   // with the id binding be registered as constant violation
   const paramNameBinding = path.scope.getOwnBinding(name);
-  const constantViolations = paramNameBinding.constantViolations;
-  if (constantViolations.length === 0) {
-    // the function scope has no such collided bindings
+  if (paramNameBinding === undefined) {
+    // Case 1: the function id is injected by babel-helper-name-function, which
+    // assigns `NOT_LOCAL_BINDING` to the `functionId` and thus not registering id
+    // in scope tracking
+    // Case 2: the function id is injected by a third party plugin which does not update the
+    // scope info
     return false;
   }
-  const firstViolation = constantViolations[0];
-
-  if (firstViolation.node !== node) {
-    // the violation does not happen in id
-    // e.g. (function a() { var a; })
+  if (paramNameBinding.kind !== "param") {
+    // the function id does not reproduce in params
     return false;
   }
 
