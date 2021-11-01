@@ -20,6 +20,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.2 (2021-11-01)
+
+#### :bug: Bug Fix
+* `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`
+  * [#13910](https://github.com/babel/babel/pull/13910) skip id-destructuring bugfix when binding info is not found ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-parser`
+  * [#13905](https://github.com/babel/babel/pull/13905) babel-parser: add missing assertions type ([@sosukesuzuki](https://github.com/sosukesuzuki))
 ## v7.16.1 (2021-10-30)
 
 #### :bug: Bug Fix
