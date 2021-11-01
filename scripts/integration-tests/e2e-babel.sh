@@ -34,11 +34,16 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
 # Update deps, build and test
 if [ "$BABEL_8_BREAKING" = true ] ; then
+  YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j build-standalone-ci
+
   # Jest hangs forever in the Babel 8 e2e test when using multiple workers,
   # but we don't know yet why. Until we figure it out (see
   # https://github.com/babel/babel/pull/13618) we can use --runInBand.
-  YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j build-standalone-ci
-  BABEL_ENV=test yarn jest --ci --runInBand
+  # Additinally, in Babel 8 tests Jest needs to run with ESM support because
+  # @babel/eslint-parser/lib/worker/babel-core.cjs uses dynamic import() to
+  # load @babel/core.
+  NODE_OPTIONS="--experimental-vm-modules" BABEL_ENV=test yarn jest --ci --runInBand
+
   make -j test-clean
 else
   YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
