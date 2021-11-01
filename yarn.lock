@@ -1047,6 +1047,7 @@ __metadata:
   resolution: "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@workspace:packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-function-name": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
