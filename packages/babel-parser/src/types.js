@@ -898,6 +898,8 @@ export type ImportDeclaration = NodeBase & {
   source: Literal,
 
   importKind?: "type" | "typeof" | "value", // TODO: Not in spec
+
+  assertions?: $ReadOnlyArray<ImportAttribute>,
 };
 
 export type ImportSpecifier = ModuleSpecifier & {
@@ -952,6 +954,7 @@ export type ExportAllDeclaration = NodeBase & {
   type: "ExportAllDeclaration",
   source: Literal,
   exportKind?: "type" | "value", // TODO: Not in spec
+  assertions?: $ReadOnlyArray<ImportAttribute>,
 };
 
 // JSX (TODO: Not in spec)
