@@ -11,6 +11,7 @@ import "core-js/modules/esnext.map.merge.js";
 import "core-js/modules/esnext.map.reduce.js";
 import "core-js/modules/esnext.map.some.js";
 import "core-js/modules/esnext.map.update.js";
+import "core-js/modules/web.dom-collections.iterator.js";
 import "core-js/modules/esnext.observable.js";
 import "core-js/modules/esnext.symbol.observable.js";
 Array.from; // static method

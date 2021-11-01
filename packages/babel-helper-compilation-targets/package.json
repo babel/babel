@@ -23,7 +23,7 @@
   "dependencies": {
     "@babel/compat-data": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
-    "browserslist": "^4.16.6",
+    "browserslist": "^4.17.5",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {

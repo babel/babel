@@ -2,34 +2,34 @@
 
 Using targets:
 {
-  "android": "90",
-  "chrome": "89",
-  "edge": "90",
+  "android": "94",
+  "chrome": "91",
+  "edge": "92",
   "firefox": "78",
-  "ios": "13.4",
-  "opera": "75",
-  "safari": "14",
-  "samsung": "13"
+  "ios": "12.2",
+  "opera": "78",
+  "safari": "13.1",
+  "samsung": "14"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { android, chrome < 94, edge, firefox < 93, ios, opera, safari, samsung }
-  proposal-private-property-in-object { android, chrome < 91, edge, firefox < 90, ios < 15, opera, safari < 15, samsung }
-  proposal-class-properties { firefox < 90, ios < 15, safari < 15, samsung < 14 }
-  proposal-private-methods { firefox < 90, ios < 15, safari < 15, samsung < 14 }
-  syntax-numeric-separator
-  proposal-logical-assignment-operators { firefox < 79, ios < 14, samsung < 14 }
-  syntax-nullish-coalescing-operator
-  syntax-optional-chaining
+  proposal-class-static-block { chrome < 94, edge, firefox < 93, ios, opera, safari, samsung }
+  proposal-private-property-in-object { edge, firefox < 90, ios < 15, opera, safari < 15, samsung }
+  proposal-class-properties { firefox < 90, ios < 15, safari < 15 }
+  proposal-private-methods { firefox < 90, ios < 15, safari < 15 }
+  proposal-numeric-separator { ios < 13 }
+  proposal-logical-assignment-operators { firefox < 79, ios < 14, safari < 14 }
+  proposal-nullish-coalescing-operator { ios < 13.4 }
+  proposal-optional-chaining { ios < 13.4 }
   syntax-json-strings
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
   proposal-export-namespace-from { firefox < 80, ios, safari }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
-  bugfix/transform-v8-spread-parameters-in-optional-chaining { android, chrome < 91, edge, opera, samsung }
+  bugfix/transform-tagged-template-caching { ios < 13 }
   transform-modules-commonjs
   proposal-dynamic-import
 

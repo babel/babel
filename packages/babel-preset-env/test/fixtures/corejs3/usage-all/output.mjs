@@ -1,3 +1,6 @@
+import "core-js/modules/web.dom-collections.iterator.js";
+import "core-js/modules/es.promise.all-settled.js";
+import "core-js/modules/es.string.match-all.js";
 Array.from; // static method
 
 Map; // built-in
