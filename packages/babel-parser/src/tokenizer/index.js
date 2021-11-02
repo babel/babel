@@ -296,8 +296,7 @@ export default class Tokenizer extends ParserErrors {
   // properties.
 
   nextToken(): void {
-    const curContext = this.curContext();
-    if (!curContext.preserveSpace) this.skipSpace();
+    this.skipSpace();
     this.state.start = this.state.pos;
     if (!this.isLookahead) this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {

@@ -574,6 +574,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    skipSpace() {
+      const curContext = this.curContext();
+      if (!curContext.preserveSpace) super.skipSpace();
+    }
+
     getTokenFromCode(code: number): void {
       const context = this.curContext();
 
