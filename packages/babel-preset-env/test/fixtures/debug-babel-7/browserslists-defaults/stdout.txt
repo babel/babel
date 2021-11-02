@@ -2,28 +2,28 @@
 
 Using targets:
 {
-  "android": "90",
-  "chrome": "89",
-  "edge": "90",
+  "android": "94",
+  "chrome": "91",
+  "edge": "92",
   "firefox": "78",
   "ie": "11",
-  "ios": "13.4",
-  "opera": "75",
-  "safari": "14",
-  "samsung": "13"
+  "ios": "12.2",
+  "opera": "78",
+  "safari": "13.1",
+  "samsung": "14"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { android, chrome < 94, edge, firefox < 93, ie, ios, opera, safari, samsung }
-  proposal-private-property-in-object { android, chrome < 91, edge, firefox < 90, ie, ios < 15, opera, safari < 15, samsung }
-  proposal-class-properties { firefox < 90, ie, ios < 15, safari < 15, samsung < 14 }
-  proposal-private-methods { firefox < 90, ie, ios < 15, safari < 15, samsung < 14 }
-  proposal-numeric-separator { ie }
-  proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, samsung < 14 }
-  proposal-nullish-coalescing-operator { ie }
-  proposal-optional-chaining { android, chrome < 91, edge, ie, opera, samsung }
+  proposal-class-static-block { chrome < 94, edge, firefox < 93, ie, ios, opera, safari, samsung }
+  proposal-private-property-in-object { edge, firefox < 90, ie, ios < 15, opera, safari < 15, samsung }
+  proposal-class-properties { firefox < 90, ie, ios < 15, safari < 15 }
+  proposal-private-methods { firefox < 90, ie, ios < 15, safari < 15 }
+  proposal-numeric-separator { ie, ios < 13 }
+  proposal-logical-assignment-operators { firefox < 79, ie, ios < 14, safari < 14 }
+  proposal-nullish-coalescing-operator { ie, ios < 13.4 }
+  proposal-optional-chaining { edge, ie, ios < 13.4, opera, samsung }
   proposal-json-strings { ie }
   proposal-optional-catch-binding { ie }
   transform-parameters { ie, ios, safari }
@@ -34,7 +34,7 @@ Using plugins:
   transform-named-capturing-groups-regex { ie }
   transform-async-to-generator { ie }
   transform-exponentiation-operator { ie }
-  transform-template-literals { ie }
+  transform-template-literals { ie, ios < 13 }
   transform-literals { ie }
   transform-function-name { ie }
   transform-arrow-functions { ie }

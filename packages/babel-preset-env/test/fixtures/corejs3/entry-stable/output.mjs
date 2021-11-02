@@ -1,3 +1,6 @@
+import "core-js/modules/es.array.unscopables.flat.js";
+import "core-js/modules/es.array.unscopables.flat-map.js";
+import "core-js/modules/es.promise.finally.js";
 import "core-js/modules/es.string.replace.js";
 import "core-js/modules/es.typed-array.float32-array.js";
 import "core-js/modules/es.typed-array.float64-array.js";
@@ -11,6 +14,7 @@ import "core-js/modules/es.typed-array.uint32-array.js";
 import "core-js/modules/es.typed-array.from.js";
 import "core-js/modules/es.typed-array.of.js";
 import "core-js/modules/es.typed-array.sort.js";
+import "core-js/modules/web.dom-collections.iterator.js";
 import "core-js/modules/web.immediate.js";
 import "core-js/modules/web.url.js";
 import "core-js/modules/web.url.to-json.js";

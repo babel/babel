@@ -1,5 +1,7 @@
 "use strict";
 
+require("core-js/modules/web.dom-collections.iterator.js");
+
 Array.from; // static method
 
 Map; // built-in
