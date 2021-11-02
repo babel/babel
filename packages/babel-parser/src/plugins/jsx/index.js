@@ -46,12 +46,6 @@ const JsxErrors = makeErrorTemplates(
 );
 /* eslint-disable sort-keys */
 
-// Be aware that this file is always executed and not only when the plugin is enabled.
-// Therefore the contexts do always exist.
-tc.j_oTag = new TokContext("<tag");
-tc.j_cTag = new TokContext("</tag");
-tc.j_expr = new TokContext("<tag>...</tag>", true);
-
 function isFragment(object: ?N.JSXElement): boolean {
   return object
     ? object.type === "JSXOpeningFragment" ||
