@@ -520,7 +520,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.closingElement = closingElement;
       }
       node.children = children;
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         throw this.raise(
           this.state.start,
           JsxErrors.UnwrappedAdjacentJSXElements,
@@ -551,7 +551,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
       } else if (
-        this.isRelational("<") &&
+        this.match(tt.lt) &&
         this.input.charCodeAt(this.state.pos) !== charCodes.exclamationMark
       ) {
         // In case we encounter an lt token here it will always be the start of

@@ -316,7 +316,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const typeNode = this.startNode();
       const typeContainer = this.startNode();
 
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         typeNode.typeParameters = this.flowParseTypeParameterDeclaration();
       } else {
         typeNode.typeParameters = null;
@@ -600,7 +600,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.id.start,
       );
 
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       } else {
         node.typeParameters = null;
@@ -643,7 +643,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
 
       node.id = this.flowParseQualifiedTypeIdentifier();
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterInstantiation();
       } else {
         node.typeParameters = null;
@@ -692,7 +692,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
       this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       } else {
         node.typeParameters = null;
@@ -715,7 +715,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
       this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       } else {
         node.typeParameters = null;
@@ -770,7 +770,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.state.inType = true;
 
       // istanbul ignore else: this condition is already checked at all call sites
-      if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
+      if (this.match(tt.lt) || this.match(tt.jsxTagStart)) {
         this.next();
       } else {
         this.unexpected();
@@ -787,11 +787,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           defaultRequired = true;
         }
 
-        if (!this.isRelational(">")) {
+        if (!this.match(tt.gt)) {
           this.expect(tt.comma);
         }
-      } while (!this.isRelational(">"));
-      this.expectRelational(">");
+      } while (!this.match(tt.gt));
+      this.expect(tt.gt);
 
       this.state.inType = oldInType;
 
@@ -805,17 +805,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.state.inType = true;
 
-      this.expectRelational("<");
+      this.expect(tt.lt);
       const oldNoAnonFunctionType = this.state.noAnonFunctionType;
       this.state.noAnonFunctionType = false;
-      while (!this.isRelational(">")) {
+      while (!this.match(tt.gt)) {
         node.params.push(this.flowParseType());
-        if (!this.isRelational(">")) {
+        if (!this.match(tt.gt)) {
           this.expect(tt.comma);
         }
       }
       this.state.noAnonFunctionType = oldNoAnonFunctionType;
-      this.expectRelational(">");
+      this.expect(tt.gt);
 
       this.state.inType = oldInType;
 
@@ -829,14 +829,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.state.inType = true;
 
-      this.expectRelational("<");
-      while (!this.isRelational(">")) {
+      this.expect(tt.lt);
+      while (!this.match(tt.gt)) {
         node.params.push(this.flowParseTypeOrImplicitInstantiation());
-        if (!this.isRelational(">")) {
+        if (!this.match(tt.gt)) {
           this.expect(tt.comma);
         }
       }
-      this.expectRelational(">");
+      this.expect(tt.gt);
 
       this.state.inType = oldInType;
 
@@ -902,7 +902,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.flowParseObjectPropertyKey();
       this.expect(tt.bracketR);
       this.expect(tt.bracketR);
-      if (this.isRelational("<") || this.match(tt.parenL)) {
+      if (this.match(tt.lt) || this.match(tt.parenL)) {
         node.method = true;
         node.optional = false;
         node.value = this.flowParseObjectTypeMethodish(
@@ -926,7 +926,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeParameters = null;
       node.this = null;
 
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
@@ -1047,7 +1047,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               this.flowParseObjectTypeIndexer(node, isStatic, variance),
             );
           }
-        } else if (this.match(tt.parenL) || this.isRelational("<")) {
+        } else if (this.match(tt.parenL) || this.match(tt.lt)) {
           if (protoStart != null) {
             this.unexpected(protoStart);
           }
@@ -1169,7 +1169,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.kind = kind;
 
         let optional = false;
-        if (this.isRelational("<") || this.match(tt.parenL)) {
+        if (this.match(tt.lt) || this.match(tt.parenL)) {
           // This is a method property
           node.method = true;
 
@@ -1287,7 +1287,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeParameters = null;
       node.id = this.flowParseQualifiedTypeIdentifier(startPos, startLoc, id);
 
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterInstantiation();
       }
 
@@ -1453,23 +1453,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.state.noAnonFunctionType = oldNoAnonFunctionType;
           return type;
 
-        case tt.relational:
-          if (this.state.value === "<") {
-            node.typeParameters = this.flowParseTypeParameterDeclaration();
-            this.expect(tt.parenL);
-            tmp = this.flowParseFunctionTypeParams();
-            node.params = tmp.params;
-            node.rest = tmp.rest;
-            node.this = tmp._this;
-            this.expect(tt.parenR);
+        case tt.lt:
+          node.typeParameters = this.flowParseTypeParameterDeclaration();
+          this.expect(tt.parenL);
+          tmp = this.flowParseFunctionTypeParams();
+          node.params = tmp.params;
+          node.rest = tmp.rest;
+          node.this = tmp._this;
+          this.expect(tt.parenR);
 
-            this.expect(tt.arrow);
+          this.expect(tt.arrow);
 
-            node.returnType = this.flowParseType();
+          node.returnType = this.flowParseType();
 
-            return this.finishNode(node, "FunctionTypeAnnotation");
-          }
-          break;
+          return this.finishNode(node, "FunctionTypeAnnotation");
 
         case tt.parenL:
           this.next();
@@ -2178,7 +2175,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {
       super.parseClassId(node, isStatement, optionalId);
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
     }
@@ -2241,7 +2238,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.state.inType &&
         (code === charCodes.greaterThan || code === charCodes.lessThan)
       ) {
-        return this.finishOp(tt.relational, 1);
+        return this.finishOp(code === charCodes.greaterThan ? tt.gt : tt.lt, 1);
       } else if (this.state.inType && code === charCodes.questionMark) {
         if (next === charCodes.dot) {
           return this.finishOp(tt.questionDot, 2);
@@ -2369,7 +2366,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // determine whether or not we're currently in the position where a class method would appear
     isClassMethod(): boolean {
-      return this.isRelational("<") || super.isClassMethod();
+      return this.match(tt.lt) || super.isClassMethod();
     }
 
     // determine whether or not we're currently in the position where a class property would appear
@@ -2394,7 +2391,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.unexpected((method: $FlowFixMe).variance.start);
       }
       delete (method: $FlowFixMe).variance;
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
@@ -2436,7 +2433,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.unexpected((method: $FlowFixMe).variance.start);
       }
       delete (method: $FlowFixMe).variance;
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
@@ -2446,7 +2443,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // parse a the super class type parameters and implements
     parseClassSuper(node: N.Class): void {
       super.parseClassSuper(node);
-      if (node.superClass && this.isRelational("<")) {
+      if (node.superClass && this.match(tt.lt)) {
         node.superTypeParameters = this.flowParseTypeParameterInstantiation();
       }
       if (this.isContextual(tt._implements)) {
@@ -2455,7 +2452,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         do {
           const node = this.startNode();
           node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
-          if (this.isRelational("<")) {
+          if (this.match(tt.lt)) {
             node.typeParameters = this.flowParseTypeParameterInstantiation();
           } else {
             node.typeParameters = null;
@@ -2508,7 +2505,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let typeParameters;
 
       // method shorthand
-      if (this.isRelational("<") && !isAccessor) {
+      if (this.match(tt.lt) && !isAccessor) {
         typeParameters = this.flowParseTypeParameterDeclaration();
         if (!this.match(tt.parenL)) this.unexpected();
       }
@@ -2740,7 +2737,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
       // $FlowFixMe
       const kind = node.kind;
-      if (kind !== "get" && kind !== "set" && this.isRelational("<")) {
+      if (kind !== "get" && kind !== "set" && this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
       super.parseFunctionParams(node, allowModifiers);
@@ -2798,7 +2795,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (
         this.hasPlugin("jsx") &&
-        (this.match(tt.jsxTagStart) || this.isRelational("<"))
+        (this.match(tt.jsxTagStart) || this.match(tt.lt))
       ) {
         state = this.state.clone();
 
@@ -2823,7 +2820,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      if (jsx?.error || this.isRelational("<")) {
+      if (jsx?.error || this.match(tt.lt)) {
         state = state || this.state.clone();
 
         let typeParameters;
@@ -3020,7 +3017,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else if (
         base.type === "Identifier" &&
         base.name === "async" &&
-        this.isRelational("<")
+        this.match(tt.lt)
       ) {
         const state = this.state.clone();
         const arrow = this.tryParse(
@@ -3081,11 +3078,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
         return this.finishCallExpression(node, /* optional */ true);
-      } else if (
-        !noCalls &&
-        this.shouldParseTypes() &&
-        this.isRelational("<")
-      ) {
+      } else if (!noCalls && this.shouldParseTypes() && this.match(tt.lt)) {
         const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
 
@@ -3118,7 +3111,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseNewArguments(node: N.NewExpression): void {
       let targs = null;
-      if (this.shouldParseTypes() && this.isRelational("<")) {
+      if (this.shouldParseTypes() && this.match(tt.lt)) {
         targs = this.tryParse(() =>
           this.flowParseTypeParameterInstantiationCallOrNew(),
         ).node;
@@ -3665,7 +3658,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "EnumDeclaration");
     }
 
-    // check if the next token is a tt.relation("<")
+    // check if the next token is a tt.lt
     isLookaheadToken_lt(): boolean {
       const next = this.nextTokenStart();
       if (this.input.charCodeAt(next) === charCodes.lessThan) {

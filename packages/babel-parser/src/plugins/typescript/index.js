@@ -351,7 +351,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TupleElementTypes":
           return this.match(tt.bracketR);
         case "TypeParametersOrArguments":
-          return this.isRelational(">");
+          return this.match(tt.gt);
       }
 
       throw new Error("Unreachable");
@@ -440,7 +440,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (bracket) {
           this.expect(tt.bracketL);
         } else {
-          this.expectRelational("<");
+          this.expect(tt.lt);
         }
       }
 
@@ -453,7 +453,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (bracket) {
         this.expect(tt.bracketR);
       } else {
-        this.expectRelational(">");
+        this.expect(tt.gt);
       }
 
       return result;
@@ -474,7 +474,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt.dot)) {
         node.qualifier = this.tsParseEntityName(/* allowReservedWords */ true);
       }
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
       }
       return this.finishNode(node, "TSImportType");
@@ -494,7 +494,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeReference(): N.TsTypeReference {
       const node: N.TsTypeReference = this.startNode();
       node.typeName = this.tsParseEntityName(/* allowReservedWords */ false);
-      if (!this.hasPrecedingLineBreak() && this.isRelational("<")) {
+      if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
       }
       return this.finishNode(node, "TSTypeReference");
@@ -535,7 +535,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsTryParseTypeParameters(): ?N.TsTypeParameterDeclaration {
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         return this.tsParseTypeParameters();
       }
     }
@@ -543,7 +543,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeParameters() {
       const node: N.TsTypeParameterDeclaration = this.startNode();
 
-      if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
+      if (this.match(tt.lt) || this.match(tt.jsxTagStart)) {
         this.next();
       } else {
         this.unexpected();
@@ -672,12 +672,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt.question)) node.optional = true;
       const nodeAny: any = node;
 
-      if (this.match(tt.parenL) || this.isRelational("<")) {
+      if (this.match(tt.parenL) || this.match(tt.lt)) {
         if (readonly) {
           this.raise(node.start, TSErrors.ReadonlyForMethodSignature);
         }
         const method: N.TsMethodSignature = nodeAny;
-        if (method.kind && this.isRelational("<")) {
+        if (method.kind && this.match(tt.lt)) {
           this.raise(this.state.pos, TSErrors.AccesorCannotHaveTypeParameters);
         }
         this.tsFillSignature(tt.colon, method);
@@ -742,14 +742,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeMember(): N.TsTypeElement {
       const node: any = this.startNode();
 
-      if (this.match(tt.parenL) || this.isRelational("<")) {
+      if (this.match(tt.parenL) || this.match(tt.lt)) {
         return this.tsParseSignatureMember("TSCallSignatureDeclaration", node);
       }
 
       if (this.match(tt._new)) {
         const id: N.Identifier = this.startNode();
         this.next();
-        if (this.match(tt.parenL) || this.isRelational("<")) {
+        if (this.match(tt.parenL) || this.match(tt.lt)) {
           return this.tsParseSignatureMember(
             "TSConstructSignatureDeclaration",
             node,
@@ -1199,7 +1199,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsIsStartOfFunctionType() {
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         return true;
       }
       return (
@@ -1441,7 +1441,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsTypeAssertion = this.startNode();
       const _const = this.tsTryNextParseConstantContext();
       node.typeAnnotation = _const || this.tsNextThenParseType();
-      this.expectRelational(">");
+      this.expect(tt.gt);
       node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
     }
@@ -1468,7 +1468,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Note: TS uses parseLeftHandSideExpressionOrHigher,
       // then has grammar errors later if it's not an EntityName.
       node.expression = this.tsParseEntityName(/* allowReservedWords */ false);
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
       }
 
@@ -1917,7 +1917,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: number,
       startLoc: Position,
     ): ?N.ArrowFunctionExpression {
-      if (!this.isRelational("<")) {
+      if (!this.match(tt.lt)) {
         return undefined;
       }
 
@@ -1955,7 +1955,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.params = this.tsInType(() =>
         // Temporarily remove a JSX parsing context, which makes us scan different tokens.
         this.tsInNoContext(() => {
-          this.expectRelational("<");
+          this.expect(tt.lt);
           return this.tsParseDelimitedList(
             "TypeParametersOrArguments",
             this.tsParseType.bind(this),
@@ -1965,7 +1965,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.params.length === 0) {
         this.raise(node.start, TSErrors.EmptyTypeArguments);
       }
-      this.expectRelational(">");
+      this.expect(tt.gt);
       return this.finishNode(node, "TSTypeParameterInstantiation");
     }
 
@@ -2149,7 +2149,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
       }
 
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         let missingParenErrorPos;
         // tsTryParseAndCatch is expensive, so avoid if not necessary.
         // There are number of things we are going to "maybe" parse, like type arguments on
@@ -2222,7 +2222,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseNewArguments(node: N.NewExpression): void {
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         // tsTryParseAndCatch is expensive, so avoid if not necessary.
         // 99% certain this is `new C<T>();`. But may be `new C < T;`, which is also legal.
         const typeParameters = this.tsTryParseAndCatch(() => {
@@ -2803,7 +2803,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassSuper(node: N.Class): void {
       super.parseClassSuper(node);
-      if (node.superClass && this.isRelational("<")) {
+      if (node.superClass && this.match(tt.lt)) {
         node.superTypeParameters = this.tsParseTypeArguments();
       }
       if (this.eatContextual(tt._implements)) {
@@ -2861,7 +2861,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (
         this.hasPlugin("jsx") &&
-        (this.match(tt.jsxTagStart) || this.isRelational("<"))
+        (this.match(tt.jsxTagStart) || this.match(tt.lt))
       ) {
         // Prefer to parse JSX if possible. But may be an arrow fn.
         state = this.state.clone();
@@ -2883,7 +2883,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      if (!jsx?.error && !this.isRelational("<")) {
+      if (!jsx?.error && !this.match(tt.lt)) {
         return super.parseMaybeAssign(...args);
       }
 
@@ -2973,7 +2973,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Handle type assertions
     parseMaybeUnary(refExpressionErrors?: ?ExpressionErrors): N.Expression {
-      if (!this.hasPlugin("jsx") && this.isRelational("<")) {
+      if (!this.hasPlugin("jsx") && this.match(tt.lt)) {
         return this.tsParseTypeAssertion();
       } else {
         return super.parseMaybeUnary(refExpressionErrors);
@@ -3114,7 +3114,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseMaybeDecoratorArguments(expr: N.Expression): N.Expression {
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         const typeArguments = this.tsParseTypeArguments();
 
         if (this.match(tt.parenL)) {
@@ -3147,7 +3147,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // === === === === === === === === === === === === === === === ===
 
     isClassMethod(): boolean {
-      return this.isRelational("<") || super.isClassMethod();
+      return this.match(tt.lt) || super.isClassMethod();
     }
 
     isClassProperty(): boolean {
@@ -3175,24 +3175,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // ensure that inside types, we bypass the jsx parser plugin
     getTokenFromCode(code: number): void {
-      if (
-        this.state.inType &&
-        (code === charCodes.greaterThan || code === charCodes.lessThan)
-      ) {
-        return this.finishOp(tt.relational, 1);
-      } else {
-        return super.getTokenFromCode(code);
+      if (this.state.inType) {
+        if (code === charCodes.greaterThan) {
+          return this.finishOp(tt.gt, 1);
+        }
+        if (code === charCodes.lessThan) {
+          return this.finishOp(tt.lt, 1);
+        }
       }
+      return super.getTokenFromCode(code);
     }
 
     // used after we have finished parsing types
     reScan_lt_gt() {
-      if (this.match(tt.relational)) {
-        const code = this.input.charCodeAt(this.state.start);
-        if (code === charCodes.lessThan || code === charCodes.greaterThan) {
-          this.state.pos -= 1;
-          this.readToken_lt_gt(code);
-        }
+      const { type } = this.state;
+      if (type === tt.lt) {
+        this.state.pos -= 1;
+        this.readToken_lt();
+      } else if (type === tt.gt) {
+        this.state.pos -= 1;
+        this.readToken_gt();
       }
     }
 
@@ -3248,7 +3250,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseOpeningElementAfterName(
       node: N.JSXOpeningElement,
     ): N.JSXOpeningElement {
-      if (this.isRelational("<")) {
+      if (this.match(tt.lt)) {
         const typeArguments = this.tsTryParseAndCatch(() =>
           this.tsParseTypeArguments(),
         );
