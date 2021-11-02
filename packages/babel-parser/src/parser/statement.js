@@ -103,6 +103,7 @@ function babel7CompatTokens(tokens) {
         const backquoteEndLoc = createPositionFromPosition(loc.start, 1);
         let startToken;
         if (value.charCodeAt(0) === charCodes.graveAccent) {
+          // $FlowIgnore: hacky way to create token
           startToken = new Token({
             type: getExportedToken(tt.backQuote),
             value: "`",
@@ -112,6 +113,7 @@ function babel7CompatTokens(tokens) {
             endLoc: backquoteEndLoc,
           });
         } else {
+          // $FlowIgnore: hacky way to create token
           startToken = new Token({
             type: getExportedToken(tt.braceR),
             value: "}",
@@ -127,6 +129,7 @@ function babel7CompatTokens(tokens) {
           templateElementEnd = end - 1;
           templateElementEndLoc = createPositionFromPosition(loc.end, -1);
           templateValue = value.slice(1, -1);
+          // $FlowIgnore: hacky way to create token
           endToken = new Token({
             type: getExportedToken(tt.backQuote),
             value: "`",
@@ -140,6 +143,7 @@ function babel7CompatTokens(tokens) {
           templateElementEnd = end - 2;
           templateElementEndLoc = createPositionFromPosition(loc.end, -2);
           templateValue = value.slice(1, -2);
+          // $FlowIgnore: hacky way to create token
           endToken = new Token({
             type: getExportedToken(tt.dollarBraceL),
             value: "${",
@@ -153,6 +157,7 @@ function babel7CompatTokens(tokens) {
           i,
           1,
           startToken,
+          // $FlowIgnore: hacky way to create token
           new Token({
             type: getExportedToken(tt.template),
             value: templateValue,

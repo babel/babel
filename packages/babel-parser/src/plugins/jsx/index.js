@@ -350,7 +350,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     jsxParseExpressionContainer(
       node: N.JSXExpressionContainer,
-      previousContext: context,
+      previousContext: TokContext,
     ): N.JSXExpressionContainer {
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
