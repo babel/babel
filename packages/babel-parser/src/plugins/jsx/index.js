@@ -301,9 +301,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       switch (this.state.type) {
         case tt.braceL:
           node = this.startNode();
-          this.state.context.push(tc.brace);
+          this.setContext(tc.brace);
           this.next();
-          node = this.jsxParseExpressionContainer(node);
+          node = this.jsxParseExpressionContainer(node, tc.j_oTag);
           if (node.expression.type === "JSXEmptyExpression") {
             this.raise(node.start, JsxErrors.AttributeIsEmpty);
           }
@@ -340,7 +340,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseSpreadChild(node: N.JSXSpreadChild): N.JSXSpreadChild {
       this.next(); // ellipsis
       node.expression = this.parseExpression();
-      this.state.context.pop();
+      this.setContext(tc.j_oTag);
       this.expect(tt.braceR);
 
       return this.finishNode(node, "JSXSpreadChild");
@@ -350,6 +350,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     jsxParseExpressionContainer(
       node: N.JSXExpressionContainer,
+      previousContext: context,
     ): N.JSXExpressionContainer {
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
@@ -370,7 +371,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         node.expression = expression;
       }
-      this.state.context.pop();
+      this.setContext(previousContext);
       this.expect(tt.braceR);
 
       return this.finishNode(node, "JSXExpressionContainer");
@@ -381,11 +382,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseAttribute(): N.JSXAttribute {
       const node = this.startNode();
       if (this.match(tt.braceL)) {
-        this.state.context.push(tc.brace);
+        this.setContext(tc.brace);
         this.next();
         this.expect(tt.ellipsis);
         node.argument = this.parseMaybeAssignAllowIn();
-        this.state.context.pop();
+        this.setContext(tc.j_oTag);
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }
@@ -470,12 +471,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
             case tt.braceL: {
               const node = this.startNode();
-              this.state.context.push(tc.brace);
+              this.setContext(tc.brace);
               this.next();
               if (this.match(tt.ellipsis)) {
                 children.push(this.jsxParseSpreadChild(node));
               } else {
-                children.push(this.jsxParseExpressionContainer(node));
+                children.push(
+                  this.jsxParseExpressionContainer(node, tc.j_expr),
+                );
               }
 
               break;
@@ -542,6 +545,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const startLoc = this.state.startLoc;
       this.next();
       return this.jsxParseElementAt(startPos, startLoc);
+    }
+
+    setContext(newContext: TokContext) {
+      const { context } = this.state;
+      context[context.length - 1] = newContext;
     }
 
     // ==================================
