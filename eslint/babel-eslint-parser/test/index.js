@@ -68,8 +68,6 @@ describe("Babel and Espree", () => {
       globalReturn: true,
       // enable implied strict mode (if ecmaVersion >= 5)
       impliedStrict: true,
-      // allow experimental object rest/spread
-      experimentalObjectRestSpread: true,
     },
     tokens: true,
     loc: true,
@@ -78,7 +76,11 @@ describe("Babel and Espree", () => {
     sourceType: "module",
   };
 
-  function parseAndAssertSame(code, /* optional */ eslintVersion) {
+  function parseAndAssertSame(
+    code,
+    eslintVersion = undefined,
+    babelEcmaFeatures = null,
+  ) {
     code = unpad(code);
 
     if (eslintVersion !== 8) {
@@ -91,6 +93,7 @@ describe("Babel and Espree", () => {
         eslintVisitorKeys: true,
         eslintScopeManager: true,
         babelOptions: BABEL_OPTIONS,
+        ecmaFeatures: babelEcmaFeatures,
       }).ast;
 
       deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
@@ -113,6 +116,7 @@ describe("Babel and Espree", () => {
         eslintVisitorKeys: true,
         eslintScopeManager: true,
         babelOptions: BABEL_OPTIONS,
+        ecmaFeatures: babelEcmaFeatures,
       }).ast;
 
       deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
@@ -851,23 +855,121 @@ describe("Babel and Espree", () => {
 
     it("do not allow import export everywhere", () => {
       expect(() => {
-        parseAndAssertSame('function F() { import a from "a"; }');
-      }).toThrow(
-        new SyntaxError(
-          "'import' and 'export' may only appear at the top level",
-        ),
-      );
+        parseForESLint('function F() { import a from "a"; }', {
+          babelOptions: BABEL_OPTIONS,
+        });
+      }).toThrow(/'import' and 'export' may only appear at the top level/);
     });
 
-    it("return outside function", () => {
-      parseAndAssertSame("return;");
-    });
-
-    it("super outside method", () => {
+    it("allowImportExportEverywhere", () => {
       expect(() => {
-        parseAndAssertSame("function F() { super(); }");
-      }).toThrow(new SyntaxError("'super' keyword outside a method"));
+        parseForESLint('function F() { import a from "a"; }', {
+          babelOptions: {
+            ...BABEL_OPTIONS,
+            parserOpts: {
+              allowImportExportEverywhere: true,
+            },
+          },
+        });
+      }).not.toThrow();
     });
+
+    if (!process.env.BABEL_8_BREAKING) {
+      it("top-level allowImportExportEverywhere", () => {
+        expect(() => {
+          parseForESLint('function F() { import a from "a"; }', {
+            babelOptions: BABEL_OPTIONS,
+            allowImportExportEverywhere: true,
+          });
+        }).not.toThrow();
+      });
+    }
+
+    if (process.env.BABEL_8_BREAKING) {
+      it("return outside function with ecmaFeatures.globalReturn: true", () => {
+        parseAndAssertSame("return;", /* version */ undefined, {
+          globalReturn: true,
+        });
+      });
+
+      it("return outside function with ecmaFeatures.globalReturn: false", () => {
+        expect(() =>
+          parseForESLint("return;", {
+            babelOptions: BABEL_OPTIONS,
+            ecmaVersion: { globalReturn: false },
+          }),
+        ).toThrow(new SyntaxError("'return' outside of function. (1:0)"));
+
+        expect(() =>
+          parseForESLint8("return;", {
+            babelOptions: BABEL_OPTIONS,
+            ecmaVersion: { globalReturn: false },
+          }),
+        ).toThrow(new SyntaxError("'return' outside of function. (1:0)"));
+      });
+
+      it("return outside function without ecmaFeatures.globalReturn", () => {
+        expect(() =>
+          parseForESLint("return;", { babelOptions: BABEL_OPTIONS }),
+        ).toThrow(new SyntaxError("'return' outside of function. (1:0)"));
+
+        expect(() =>
+          parseForESLint8("return;", { babelOptions: BABEL_OPTIONS }),
+        ).toThrow(new SyntaxError("'return' outside of function. (1:0)"));
+      });
+    } else {
+      it("return outside function", () => {
+        parseAndAssertSame("return;");
+      });
+    }
+
+    if (process.env.BABEL_8_BREAKING) {
+      it("super outside method", () => {
+        expect(() => {
+          parseForESLint("function F() { super(); }", {
+            babelOptions: BABEL_OPTIONS,
+          });
+        }).toThrow(
+          /`super\(\)` is only valid inside a class constructor of a subclass\./,
+        );
+      });
+
+      it("super outside method - enabled", () => {
+        expect(() => {
+          parseForESLint("function F() { super(); }", {
+            babelOptions: {
+              ...BABEL_OPTIONS,
+              parserOpts: {
+                allowSuperOutsideMethod: true,
+              },
+            },
+          });
+        }).not.toThrow();
+      });
+    } else {
+      it("super outside method", () => {
+        expect(() => {
+          parseForESLint("function F() { super(); }", {
+            babelOptions: BABEL_OPTIONS,
+          });
+        }).not.toThrow();
+      });
+
+      it("super outside method - disabled", () => {
+        expect(() => {
+          parseForESLint("function F() { super(); }", {
+            babelOptions: {
+              ...BABEL_OPTIONS,
+              parserOpts: {
+                allowSuperOutsideMethod: false,
+              },
+            },
+          });
+        }).toThrow(
+          /`super\(\)` is only valid inside a class constructor of a subclass\./,
+        );
+      });
+    }
 
     it("StringLiteral", () => {
       parseAndAssertSame("");
