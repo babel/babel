@@ -617,7 +617,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     updateContext(prevType: TokenType): void {
-      super.updateContext(prevType);
       const { context, type } = this.state;
       if (type === tt.slash && prevType === tt.jsxTagStart) {
         // do not consider JSX expr -> JSX open tag -> ... anymore
@@ -625,17 +624,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         context.splice(-2, 2, tc.j_cTag);
         this.state.canStartJSXElement = false;
       } else if (type === tt.jsxTagStart) {
-        context.push(
-          tc.j_expr, // treat as beginning of JSX expression
-          tc.j_oTag, // start opening tag context
-        );
+        // start opening tag context
+        context.push(tc.j_oTag);
       } else if (type === tt.jsxTagEnd) {
-        const out = context.pop();
+        const out = context[context.length - 1];
         if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
           context.pop();
           this.state.canStartJSXElement =
             context[context.length - 1] === tc.j_expr;
         } else {
+          this.setContext(tc.j_expr);
           this.state.canStartJSXElement = true;
         }
       } else {
