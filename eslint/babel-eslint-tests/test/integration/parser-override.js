@@ -1,7 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
 import * as babelESLint from "@babel/eslint-parser";
-import * as babelESLintWorker from "@babel/eslint-parser/experimental-worker";
 
 describe("parserOverride", () => {
   const expectedAST = {
@@ -31,7 +31,11 @@ describe("parserOverride", () => {
     expect(ast).toMatchObject(expectedAST);
   });
 
-  it("works when parsing in a worker", () => {
+  const babel7node12 = parseInt(process.versions.node) < 12 ? it.skip : it;
+  babel7node12("works when parsing in a worker", async () => {
+    const require = createRequire(import.meta.url);
+    const babelESLintWorker = require("@babel/eslint-parser/experimental-worker");
+
     const { ast } = babelESLintWorker.parseForESLint(`27`, {
       filename: "input.js",
       babelOptions: {
