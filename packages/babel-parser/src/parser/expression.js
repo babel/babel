@@ -1853,13 +1853,13 @@ export default class ExpressionParser extends LValParser {
     };
     elem.tail = isTail;
     this.next();
-    const result = this.finishNodeAt(
+    this.finishNode(elem, "TemplateElement");
+    this.resetEndLocation(
       elem,
-      "TemplateElement",
       elemEnd,
       createPositionFromPosition(this.state.lastTokEndLoc, endOffset),
     );
-    return result;
+    return elem;
   }
 
   // https://tc39.es/ecma262/#prod-TemplateLiteral
