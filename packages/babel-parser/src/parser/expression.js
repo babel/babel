@@ -1512,21 +1512,6 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "Super");
   }
 
-  parseMaybePrivateName(
-    isPrivateNameAllowed: boolean,
-  ): N.PrivateName | N.Identifier {
-    const isPrivate = this.match(tt.privateName);
-
-    if (isPrivate) {
-      if (!isPrivateNameAllowed) {
-        this.raise(this.state.start + 1, Errors.UnexpectedPrivateField);
-      }
-      return this.parsePrivateName();
-    } else {
-      return this.parseIdentifier(true);
-    }
-  }
-
   parsePrivateName(): N.PrivateName {
     const node = this.startNode();
     const id = this.startNodeAt(
@@ -2238,15 +2223,33 @@ export default class ExpressionParser extends LValParser {
       this.expect(tt.bracketR);
     } else {
       // We check if it's valid for it to be a private name when we push it.
-      const type = this.state.type;
-      (prop: $FlowFixMe).key =
-        type === tt.num ||
-        type === tt.string ||
-        type === tt.bigint ||
-        type === tt.decimal
-          ? this.parseExprAtom()
-          : this.parseMaybePrivateName(isPrivateNameAllowed);
-
+      const { type, value } = this.state;
+      let key;
+      switch (type) {
+        case tt.num:
+          key = this.parseNumericLiteral(value);
+          break;
+        case tt.string:
+          key = this.parseStringLiteral(value);
+          break;
+        case tt.bigint:
+          key = this.parseBigIntLiteral(value);
+          break;
+        case tt.decimal:
+          key = this.parseDecimalLiteral(value);
+          break;
+        case tt.privateName: {
+          if (!isPrivateNameAllowed) {
+            this.raise(this.state.start + 1, Errors.UnexpectedPrivateField);
+          }
+          key = this.parsePrivateName();
+          break;
+        }
+        default:
+          key = this.parseIdentifier(true);
+          break;
+      }
+      (prop: $FlowFixMe).key = key;
       if (type !== tt.privateName) {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
         prop.computed = false;
