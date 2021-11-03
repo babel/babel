@@ -391,6 +391,18 @@ jobs:
           node-version: 14.2
       - name: Test Node.js 14.2
         run: yarn test:runtime:node
+      - name: Use Node.js 16.5
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 16.5
+      - name: Test Node.js 16.5
+        run: yarn test:runtime:node
+      - name: Use Node.js 16.6
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 16.6
+      - name: Test Node.js 16.6
+        run: yarn test:runtime:node
 
   e2e-publish:
     name: Publish to local Verdaccio registry
