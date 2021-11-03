@@ -12,7 +12,7 @@ if (
   const expectedEsm =
     major === 13 && minor <= 3
       ? "expected-esm-13.2.txt"
-      : major === 16 && minor <= 5
+      : major < 16 || (major === 16 && minor <= 5)
       ? "expected-esm-16.0.txt"
       : "expected-esm.txt";
 
@@ -28,7 +28,7 @@ const expectedCjs =
     ? "expected-cjs-13.0.txt"
     : major === 13 && minor <= 3
     ? "expected-cjs-13.2.txt"
-    : major === 16 && minor <= 5
+    : major < 16 || (major === 16 && minor <= 5)
     ? "expected-cjs-16.0.txt"
     : "expected-cjs.txt";
 
@@ -41,7 +41,7 @@ const expectedCjsAbsolute =
     ? "expected-cjs-absolute-13.0.txt"
     : major === 13 && minor <= 3
     ? "expected-cjs-absolute-13.2.txt"
-    : major === 16 && minor <= 5
+    : major < 16 || (major === 16 && minor <= 5)
     ? "expected-cjs-absolute-16.0.txt"
     : "expected-cjs-absolute.txt";
 
