@@ -45,9 +45,10 @@ describe("verify", () => {
   });
 
   it("super keyword in class (issue #10)", () => {
-    verifyAndAssertMessages("class Foo { constructor() { super() } }", {
-      "no-undef": 1,
-    });
+    verifyAndAssertMessages(
+      "class Foo extends class {} { constructor() { super() } }",
+      { "no-undef": 1 },
+    );
   });
 
   it("Rest parameter in destructuring assignment (issue #11)", () => {
@@ -1549,7 +1550,9 @@ describe("verify", () => {
     );
   });
 
-  it("allowImportExportEverywhere option (#327)", () => {
+  const babel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+
+  babel7("allowImportExportEverywhere option (#327)", () => {
     verifyAndAssertMessages(
       `
         if (true) { import Foo from 'foo'; }
@@ -1565,6 +1568,29 @@ describe("verify", () => {
           ecmaVersion: 6,
           sourceType: "module",
           allowImportExportEverywhere: true,
+        },
+      },
+    );
+  });
+
+  it("allowImportExportEverywhere @babel/parser option (#327)", () => {
+    verifyAndAssertMessages(
+      `
+        if (true) { import Foo from 'foo'; }
+        function foo() { import Bar from 'bar'; }
+        switch (a) { case 1: import FooBar from 'foobar'; }
+      `,
+      {},
+      [],
+      "module",
+      {
+        env: {},
+        parserOptions: {
+          ecmaVersion: 6,
+          sourceType: "module",
+          babelOptions: {
+            parserOpts: { allowImportExportEverywhere: true },
+          },
         },
       },
     );
