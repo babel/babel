@@ -2475,21 +2475,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseClassElementName(node: N.ClassMember): N.Identifier | N.PrivateName {
-      const variance = this.flowParseVariance();
-      const key = super.parseClassElementName(node);
-      node.variance = variance;
-      return key;
-    }
-
-    parsePropertyName(
-      node: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
-    ): N.Identifier {
-      const variance = this.flowParseVariance();
-      const key = super.parsePropertyName(node);
-      // $FlowIgnore ("variance" not defined on TsNamedTypeElementBase)
-      node.variance = variance;
-      return key;
+    parsePropertyNamePrefixOperator(
+      node: N.ObjectOrClassMember | N.ClassMember,
+    ): void {
+      node.variance = this.flowParseVariance();
     }
 
     // parse type parameters for object method shorthand

@@ -1437,6 +1437,7 @@ export default class StatementParser extends ExpressionParser {
     const publicMember: typeof publicMethod | typeof publicProp = publicMethod;
 
     member.static = isStatic;
+    this.parsePropertyNamePrefixOperator(member);
 
     if (this.eat(tt.star)) {
       // a generator

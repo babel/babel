@@ -1999,6 +1999,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     let isGenerator = this.eat(tt.star);
+    this.parsePropertyNamePrefixOperator(prop);
     const containsEsc = this.state.containsEsc;
     const key = this.parsePropertyName(prop);
 
@@ -2963,4 +2964,10 @@ export default class ExpressionParser extends LValParser {
     this.eat(tt.braceR);
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
   }
+
+  // Used in Flow plugin
+  parsePropertyNamePrefixOperator(
+    // eslint-disable-next-line no-unused-vars
+    prop: N.ObjectOrClassMember | N.ClassMember,
+  ): void {}
 }
