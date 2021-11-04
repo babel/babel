@@ -418,6 +418,9 @@ export default class LValParser extends NodeUtils {
     const { type, start: startPos, startLoc } = this.state;
     if (type === tt.ellipsis) {
       return this.parseBindingRestProperty(prop);
+    } else if (type === tt.privateName) {
+      this.expectPlugin("destructuringPrivate", this.state.start + 1);
+      prop.key = this.parsePrivateName();
     } else {
       this.parsePropertyName(prop);
     }

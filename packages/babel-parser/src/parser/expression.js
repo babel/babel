@@ -316,6 +316,10 @@ export default class ExpressionParser extends LValParser {
         if (refExpressionErrors.shorthandAssign >= startPos) {
           refExpressionErrors.shorthandAssign = -1; // reset because shorthand default was used correctly
         }
+        if (refExpressionErrors.privateKey >= startPos) {
+          this.checkDestructuringPrivate(refExpressionErrors);
+          refExpressionErrors.privateKey = -1; // reset because `({ #x: x })` is an assignable pattern
+        }
       } else {
         node.left = left;
       }
@@ -855,6 +859,7 @@ export default class ExpressionParser extends LValParser {
 
     if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
       state.stop = true;
+      this.checkDestructuringPrivate(refExpressionErrors);
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
       node = this.parseAsyncArrowFromCallExpression(
@@ -1719,6 +1724,7 @@ export default class ExpressionParser extends LValParser {
       this.shouldParseArrow(exprList) &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
+      this.checkDestructuringPrivate(refExpressionErrors);
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
       this.parseArrowExpression(arrowNode, exprList, false);
@@ -1993,7 +1999,7 @@ export default class ExpressionParser extends LValParser {
     let isGenerator = this.eat(tt.star);
     this.parsePropertyNamePrefixOperator(prop);
     const containsEsc = this.state.containsEsc;
-    const key = this.parsePropertyName(prop);
+    const key = this.parsePropertyName(prop, refExpressionErrors);
 
     if (!isGenerator && !containsEsc && this.maybeAsyncOrAccessorProp(prop)) {
       const keyName = key.name;
@@ -2197,6 +2203,7 @@ export default class ExpressionParser extends LValParser {
 
   parsePropertyName(
     prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
+    refExpressionErrors?: ?ExpressionErrors,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
       (prop: $FlowSubtype<N.ObjectOrClassMember>).computed = true;
@@ -2226,7 +2233,13 @@ export default class ExpressionParser extends LValParser {
           case tt.privateName: {
             // the class private key has been handled in parseClassElementName
             const privateKeyPos = this.state.start + 1;
-            this.raise(privateKeyPos, Errors.UnexpectedPrivateField);
+            if (refExpressionErrors !== undefined) {
+              if (refExpressionErrors.privateKey === -1) {
+                refExpressionErrors.privateKey = privateKeyPos;
+              }
+            } else {
+              this.raise(privateKeyPos, Errors.UnexpectedPrivateField);
+            }
             key = this.parsePrivateName();
             break;
           }
