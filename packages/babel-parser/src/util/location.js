@@ -51,7 +51,18 @@ export function getLineInfo(input: string, offset: number): Position {
   return new Position(line, offset - lineStart);
 }
 
-export function createPositionFromPosition(
+/**
+ * creates a new position with a non-zero column offset from the given position.
+ * This function should be only be used when we create AST node out of the token
+ * boundaries, such as TemplateElement ends before tt.templateMiddle. This
+ * function does not skip whitespaces.
+ *
+ * @export
+ * @param {Position} position
+ * @param {number} columnOffset
+ * @returns {Position}
+ */
+export function createPositionWithColumnOffset(
   position: Position,
   columnOffset: number,
 ) {

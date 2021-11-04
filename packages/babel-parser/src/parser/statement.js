@@ -39,7 +39,7 @@ import {
 } from "../util/expression-scope";
 import type { SourceType } from "../options";
 import { Token } from "../tokenizer";
-import { createPositionFromPosition } from "../util/location";
+import { createPositionWithColumnOffset } from "../util/location";
 import { cloneStringLiteral, cloneIdentifier } from "./node";
 
 const loopLabel = { kind: "loop" },
@@ -69,7 +69,7 @@ function babel7CompatTokens(tokens) {
       if (!process.env.BABEL_8_BREAKING) {
         const { loc, start, value, end } = token;
         const hashEndPos = start + 1;
-        const hashEndLoc = createPositionFromPosition(loc.start, 1);
+        const hashEndLoc = createPositionWithColumnOffset(loc.start, 1);
         tokens.splice(
           i,
           1,
@@ -100,7 +100,7 @@ function babel7CompatTokens(tokens) {
       if (!process.env.BABEL_8_BREAKING) {
         const { loc, start, value, end } = token;
         const backquoteEnd = start + 1;
-        const backquoteEndLoc = createPositionFromPosition(loc.start, 1);
+        const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
         let startToken;
         if (value.charCodeAt(0) === charCodes.graveAccent) {
           // $FlowIgnore: hacky way to create token
@@ -127,7 +127,7 @@ function babel7CompatTokens(tokens) {
         if (type === tt.templateTail) {
           // ends with '`'
           templateElementEnd = end - 1;
-          templateElementEndLoc = createPositionFromPosition(loc.end, -1);
+          templateElementEndLoc = createPositionWithColumnOffset(loc.end, -1);
           templateValue = value.slice(1, -1);
           // $FlowIgnore: hacky way to create token
           endToken = new Token({
@@ -141,7 +141,7 @@ function babel7CompatTokens(tokens) {
         } else {
           // ends with `${`
           templateElementEnd = end - 2;
-          templateElementEndLoc = createPositionFromPosition(loc.end, -2);
+          templateElementEndLoc = createPositionWithColumnOffset(loc.end, -2);
           templateValue = value.slice(1, -2);
           // $FlowIgnore: hacky way to create token
           endToken = new Token({

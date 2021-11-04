@@ -43,7 +43,7 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import { Position, createPositionFromPosition } from "../util/location";
+import { Position, createPositionWithColumnOffset } from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -1836,7 +1836,7 @@ export default class ExpressionParser extends LValParser {
     const elemStart = start + 1;
     const elem = this.startNodeAt(
       elemStart,
-      createPositionFromPosition(this.state.startLoc, 1),
+      createPositionWithColumnOffset(this.state.startLoc, 1),
     );
     if (value === null) {
       if (!isTagged) {
@@ -1857,7 +1857,7 @@ export default class ExpressionParser extends LValParser {
     this.resetEndLocation(
       elem,
       elemEnd,
-      createPositionFromPosition(this.state.lastTokEndLoc, endOffset),
+      createPositionWithColumnOffset(this.state.lastTokEndLoc, endOffset),
     );
     return elem;
   }
