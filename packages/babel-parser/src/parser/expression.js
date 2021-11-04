@@ -1119,7 +1119,6 @@ export default class ExpressionParser extends LValParser {
           this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR,
           /* canBePattern */ false,
           /* isTuple */ true,
-          refExpressionErrors,
         );
       }
       case tt.bracketL: {
@@ -1136,7 +1135,6 @@ export default class ExpressionParser extends LValParser {
           this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR,
           /* isPattern */ false,
           /* isRecord */ true,
-          refExpressionErrors,
         );
       }
       case tt.braceL: {
