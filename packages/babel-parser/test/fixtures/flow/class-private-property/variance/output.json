@@ -1,9 +1,6 @@
 {
   "type": "File",
   "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
-  "errors": [
-    "SyntaxError: Duplicate private name #foo. (3:3)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
@@ -57,8 +54,8 @@
                 "start":22,"end":26,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":7}},
                 "id": {
                   "type": "Identifier",
-                  "start":23,"end":26,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7},"identifierName":"foo"},
-                  "name": "foo"
+                  "start":23,"end":26,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7},"identifierName":"bar"},
+                  "name": "bar"
                 }
               },
               "value": null

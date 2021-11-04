@@ -1,4 +1,4 @@
 class A {
   +#foo;
-  -#foo;
+  -#bar;
 }
