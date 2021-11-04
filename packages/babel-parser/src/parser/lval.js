@@ -11,6 +11,10 @@ import type {
   Pattern,
   RestElement,
   SpreadElement,
+  /*:: ObjectOrClassMember, */
+  /*:: ClassMember, */
+  /*:: ObjectMember, */
+  /*:: TsNamedTypeElementBase, */
   /*:: Identifier, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
@@ -46,6 +50,19 @@ export default class LValParser extends NodeUtils {
     isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ) => T;
+  +parseObjPropValue: (
+    prop: any,
+    startPos: ?number,
+    startLoc: ?Position,
+    isGenerator: boolean,
+    isAsync: boolean,
+    isPattern: boolean,
+    isAccessor: boolean,
+    refExpressionErrors?: ?ExpressionErrors,
+  ) => void;
+  +parsePropertyName: (
+    prop: ObjectOrClassMember | ClassMember | TsNamedTypeElementBase,
+  ) => Expression | Identifier;
   */
   // Forward-declaration: defined in statement.js
   /*::
@@ -384,6 +401,38 @@ export default class LValParser extends NodeUtils {
       }
     }
     return elts;
+  }
+
+  // https://tc39.es/ecma262/#prod-BindingRestProperty
+  parseBindingRestProperty(prop: RestElement): RestElement {
+    this.next(); // eat '...'
+    // Don't use parseRestBinding() as we only allow Identifier here.
+    prop.argument = this.parseIdentifier();
+    this.checkCommaAfterRest(charCodes.rightCurlyBrace);
+    return this.finishNode(prop, "RestElement");
+  }
+
+  // https://tc39.es/ecma262/#prod-BindingProperty
+  parseBindingProperty(): ObjectMember | RestElement {
+    const prop = this.startNode();
+    const { type, start: startPos, startLoc } = this.state;
+    if (type === tt.ellipsis) {
+      return this.parseBindingRestProperty(prop);
+    } else {
+      this.parsePropertyName(prop);
+    }
+    prop.method = false;
+    this.parseObjPropValue(
+      prop,
+      startPos,
+      startLoc,
+      false /* isGenerator */,
+      false /* isAsync */,
+      true /* isPattern */,
+      false /* isAccessor */,
+    );
+
+    return prop;
   }
 
   parseAssignableListItem(

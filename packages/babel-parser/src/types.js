@@ -816,6 +816,7 @@ export type ClassPrivateMethod = NodeBase &
     type: "ClassPrivateMethod",
     key: PrivateName,
     computed: false,
+    variance?: ?FlowVariance, // TODO: Not in spec
   };
 
 export type ClassProperty = ClassMemberBase &
@@ -825,6 +826,8 @@ export type ClassProperty = ClassMemberBase &
     value: ?Expression, // TODO: Not in spec that this is nullable.
 
     typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
+
+    // Flow only:
     variance?: ?FlowVariance, // TODO: Not in spec
 
     // TypeScript only: (TODO: Not in spec)
@@ -847,6 +850,9 @@ export type ClassPrivateProperty = NodeBase & {
   definite?: true,
   readonly?: true,
   override?: true,
+
+  // Flow only
+  variance?: ?FlowVariance,
 };
 
 export type OptClassDeclaration = ClassBase &

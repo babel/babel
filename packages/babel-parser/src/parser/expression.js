@@ -124,7 +124,7 @@ export default class ExpressionParser extends LValParser {
 
   checkProto(
     prop: N.ObjectMember | N.SpreadElement,
-    isRecord: boolean,
+    isRecord: ?boolean,
     protoRef: { used: boolean },
     refExpressionErrors: ?ExpressionErrors,
   ): void {
@@ -401,7 +401,7 @@ export default class ExpressionParser extends LValParser {
     minPrec: number,
   ): N.Expression {
     if (this.isPrivateName(left)) {
-      // https://tc39.es/proposal-private-fields-in-in
+      // https://tc39.es/ecma262/#prod-RelationalExpression
       // RelationalExpression [In, Yield, Await]
       //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
 
@@ -1909,9 +1909,11 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
-      const prop = this.parsePropertyDefinition(isPattern, refExpressionErrors);
-      if (!isPattern) {
-        // $FlowIgnore RestElement will never be returned if !isPattern
+      let prop;
+      if (isPattern) {
+        prop = this.parseBindingProperty();
+      } else {
+        prop = this.parsePropertyDefinition(refExpressionErrors);
         this.checkProto(prop, isRecord, propHash, refExpressionErrors);
       }
 
@@ -1958,9 +1960,8 @@ export default class ExpressionParser extends LValParser {
 
   // https://tc39.es/ecma262/#prod-PropertyDefinition
   parsePropertyDefinition(
-    isPattern: boolean,
     refExpressionErrors?: ?ExpressionErrors,
-  ): N.ObjectMember | N.SpreadElement | N.RestElement {
+  ): N.ObjectMember | N.SpreadElement {
     let decorators = [];
     if (this.match(tt.at)) {
       if (this.hasPlugin("decorators")) {
@@ -1975,7 +1976,6 @@ export default class ExpressionParser extends LValParser {
     }
 
     const prop = this.startNode();
-    let isGenerator = false;
     let isAsync = false;
     let isAccessor = false;
     let startPos;
@@ -1983,14 +1983,6 @@ export default class ExpressionParser extends LValParser {
 
     if (this.match(tt.ellipsis)) {
       if (decorators.length) this.unexpected();
-      if (isPattern) {
-        this.next();
-        // Don't use parseRestBinding() as we only allow Identifier here.
-        prop.argument = this.parseIdentifier();
-        this.checkCommaAfterRest(charCodes.rightCurlyBrace);
-        return this.finishNode(prop, "RestElement");
-      }
-
       return this.parseSpread();
     }
 
@@ -2001,24 +1993,16 @@ export default class ExpressionParser extends LValParser {
 
     prop.method = false;
 
-    if (isPattern || refExpressionErrors) {
+    if (refExpressionErrors) {
       startPos = this.state.start;
       startLoc = this.state.startLoc;
     }
 
-    if (!isPattern) {
-      isGenerator = this.eat(tt.star);
-    }
-
+    let isGenerator = this.eat(tt.star);
     const containsEsc = this.state.containsEsc;
-    const key = this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
+    const key = this.parsePropertyName(prop);
 
-    if (
-      !isPattern &&
-      !isGenerator &&
-      !containsEsc &&
-      this.maybeAsyncOrAccessorProp(prop)
-    ) {
+    if (!isGenerator && !containsEsc && this.maybeAsyncOrAccessorProp(prop)) {
       const keyName = key.name;
       // https://tc39.es/ecma262/#prod-AsyncMethod
       // https://tc39.es/ecma262/#prod-AsyncGeneratorMethod
@@ -2026,7 +2010,7 @@ export default class ExpressionParser extends LValParser {
         isAsync = true;
         this.resetPreviousNodeTrailingComments(key);
         isGenerator = this.eat(tt.star);
-        this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
+        this.parsePropertyName(prop);
       }
       // get PropertyName[?Yield, ?Await] () { FunctionBody[~Yield, ~Await] }
       // set PropertyName[?Yield, ?Await] ( PropertySetParameterList ) { FunctionBody[~Yield, ~Await] }
@@ -2039,7 +2023,7 @@ export default class ExpressionParser extends LValParser {
           this.raise(this.state.pos, Errors.AccessorIsGenerator, keyName);
           this.next();
         }
-        this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
+        this.parsePropertyName(prop);
       }
     }
 
@@ -2049,7 +2033,7 @@ export default class ExpressionParser extends LValParser {
       startLoc,
       isGenerator,
       isAsync,
-      isPattern,
+      false /* isPattern */,
       isAccessor,
       refExpressionErrors,
     );
@@ -2215,7 +2199,6 @@ export default class ExpressionParser extends LValParser {
 
   parsePropertyName(
     prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
-    isPrivateNameAllowed: boolean,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
       (prop: $FlowSubtype<N.ObjectOrClassMember>).computed = true;
@@ -2225,29 +2208,33 @@ export default class ExpressionParser extends LValParser {
       // We check if it's valid for it to be a private name when we push it.
       const { type, value } = this.state;
       let key;
-      switch (type) {
-        case tt.num:
-          key = this.parseNumericLiteral(value);
-          break;
-        case tt.string:
-          key = this.parseStringLiteral(value);
-          break;
-        case tt.bigint:
-          key = this.parseBigIntLiteral(value);
-          break;
-        case tt.decimal:
-          key = this.parseDecimalLiteral(value);
-          break;
-        case tt.privateName: {
-          if (!isPrivateNameAllowed) {
-            this.raise(this.state.start + 1, Errors.UnexpectedPrivateField);
+      // most un-computed property name is identifier
+      if (tokenIsKeywordOrIdentifier(type)) {
+        key = this.parseIdentifier(true);
+      } else {
+        switch (type) {
+          case tt.num:
+            key = this.parseNumericLiteral(value);
+            break;
+          case tt.string:
+            key = this.parseStringLiteral(value);
+            break;
+          case tt.bigint:
+            key = this.parseBigIntLiteral(value);
+            break;
+          case tt.decimal:
+            key = this.parseDecimalLiteral(value);
+            break;
+          case tt.privateName: {
+            // the class private key has been handled in parseClassElementName
+            const privateKeyPos = this.state.start + 1;
+            this.raise(privateKeyPos, Errors.UnexpectedPrivateField);
+            key = this.parsePrivateName();
+            break;
           }
-          key = this.parsePrivateName();
-          break;
+          default:
+            throw this.unexpected();
         }
-        default:
-          key = this.parseIdentifier(true);
-          break;
       }
       (prop: $FlowFixMe).key = key;
       if (type !== tt.privateName) {

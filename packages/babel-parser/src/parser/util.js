@@ -305,7 +305,7 @@ export default class UtilParser extends Tokenizer {
   /*
    * Return the string value of a given private name
    * WITHOUT `#`
-   * @see {@link https://tc39.es/proposal-class-fields/#sec-private-names-static-semantics-stringvalue}
+   * @see {@link https://tc39.es/ecma262/#sec-static-semantics-stringvalue}
    */
   getPrivateNameSV(node: Node): string {
     return node.id.name;
