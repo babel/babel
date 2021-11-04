@@ -26,9 +26,16 @@ function normalizeParserOptions(options) {
     filename: options.filePath,
     ...options.babelOptions,
     parserOpts: {
-      allowImportExportEverywhere: options.allowImportExportEverywhere,
-      allowReturnOutsideFunction: true,
-      allowSuperOutsideMethod: true,
+      ...(process.env.BABEL_8_BREAKING
+        ? {}
+        : {
+            allowImportExportEverywhere:
+              options.allowImportExportEverywhere ?? false,
+            allowSuperOutsideMethod: true,
+          }),
+      allowReturnOutsideFunction:
+        options.ecmaFeatures?.globalReturn ??
+        (process.env.BABEL_8_BREAKING ? false : true),
       ...options.babelOptions.parserOpts,
       plugins: getParserPlugins(options.babelOptions),
       // skip comment attaching for parsing performance
