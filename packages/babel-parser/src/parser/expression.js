@@ -2209,7 +2209,7 @@ export default class ExpressionParser extends LValParser {
       // We check if it's valid for it to be a private name when we push it.
       const { type, value } = this.state;
       let key;
-      // most un-computed property name is identifier
+      // most un-computed property names are identifiers
       if (tokenIsKeywordOrIdentifier(type)) {
         key = this.parseIdentifier(true);
       } else {
