@@ -2390,7 +2390,6 @@ export default class ExpressionParser extends LValParser {
       // https://tc39.es/ecma262/#prod-ExpressionBody
       node.body = this.parseMaybeAssign();
       this.checkParams(node, false, allowExpression, false);
-      this.expressionScope.exit();
     } else {
       const oldStrict = this.state.strict;
       // Start a new scope with regard to labels
@@ -2445,9 +2444,9 @@ export default class ExpressionParser extends LValParser {
         },
       );
       this.prodParam.exit();
-      this.expressionScope.exit();
       this.state.labels = oldLabels;
     }
+    this.expressionScope.exit();
   }
 
   isSimpleParamList(
