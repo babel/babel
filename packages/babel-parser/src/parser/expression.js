@@ -22,12 +22,12 @@ import {
   tokenCanStartExpression,
   tokenIsAssignment,
   tokenIsIdentifier,
-  tokenIsKeyword,
   tokenIsKeywordOrIdentifier,
   tokenIsOperator,
   tokenIsPostfix,
   tokenIsPrefix,
   tokenIsRightAssociative,
+  tokenKeywordOrIdentifierIsKeyword,
   tokenLabelName,
   tokenOperatorPrecedence,
   tt,
@@ -2237,8 +2237,6 @@ export default class ExpressionParser extends LValParser {
       prop.key = this.parseMaybeAssignAllowIn();
       this.expect(tt.bracketR);
     } else {
-      const oldInPropertyName = this.state.inPropertyName;
-      this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
       const type = this.state.type;
       (prop: $FlowFixMe).key =
@@ -2253,8 +2251,6 @@ export default class ExpressionParser extends LValParser {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
         prop.computed = false;
       }
-
-      this.state.inPropertyName = oldInPropertyName;
     }
 
     return prop.key;
@@ -2584,12 +2580,16 @@ export default class ExpressionParser extends LValParser {
       throw this.unexpected();
     }
 
+    const tokenIsKeyword = tokenKeywordOrIdentifierIsKeyword(type);
+
     if (liberal) {
       // If the current token is not used as a keyword, set its type to "tt.name".
       // This will prevent this.next() from throwing about unexpected escapes.
-      this.state.type = tt.name;
+      if (tokenIsKeyword) {
+        this.replaceToken(tt.name);
+      }
     } else {
-      this.checkReservedWord(name, start, tokenIsKeyword(type), false);
+      this.checkReservedWord(name, start, tokenIsKeyword, false);
     }
 
     this.next();

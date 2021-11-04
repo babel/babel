@@ -482,7 +482,7 @@ export default class Tokenizer extends ParserErrors {
   }
 
   // Called at the end of every token. Sets `end`, `val`, and
-  // maintains `context` and `exprAllowed`, and skips the space after
+  // maintains `context` and `canStartJSXElement`, and skips the space after
   // the token, so that the next one's `start` will point at the
   // right position.
 
@@ -496,6 +496,14 @@ export default class Tokenizer extends ParserErrors {
       this.state.endLoc = this.state.curPosition();
       this.updateContext(prevType);
     }
+  }
+
+  replaceToken(type: TokenType): void {
+    this.state.type = type;
+    // the prevType of updateContext is required
+    // only when the new type is tt.slash/tt.jsxTagEnd
+    // $FlowIgnore
+    this.updateContext();
   }
 
   // ### Token reading

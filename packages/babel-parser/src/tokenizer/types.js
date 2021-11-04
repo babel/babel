@@ -332,6 +332,12 @@ export function tokenIsIdentifier(token: TokenType): boolean {
   return token >= tt._as && token <= tt.name;
 }
 
+export function tokenKeywordOrIdentifierIsKeyword(token: TokenType): boolean {
+  // we can remove the token >= tt._in check when we
+  // know a token is either keyword or identifier
+  return token <= tt._while;
+}
+
 export function tokenIsKeywordOrIdentifier(token: TokenType): boolean {
   return token >= tt._in && token <= tt.name;
 }

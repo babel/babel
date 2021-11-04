@@ -21,10 +21,6 @@ import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
 import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
-import type { LookaheadState } from "../../tokenizer/state";
-import State from "../../tokenizer/state";
-
-type JSXLookaheadState = LookaheadState & { inPropertyName: boolean };
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
@@ -106,7 +102,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           case charCodes.lessThan:
           case charCodes.leftCurlyBrace:
             if (this.state.pos === this.state.start) {
-              if (ch === charCodes.lessThan && this.state.exprAllowed) {
+              if (ch === charCodes.lessThan && this.state.canStartJSXElement) {
                 ++this.state.pos;
                 return this.finishToken(tt.jsxTagStart);
               }
@@ -556,24 +552,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         // In case we encounter an lt token here it will always be the start of
         // jsx as the lt sign is not allowed in places that expect an expression
-        this.finishToken(tt.jsxTagStart);
+        this.replaceToken(tt.jsxTagStart);
         return this.jsxParseElement();
       } else {
         return super.parseExprAtom(refExpressionErrors);
       }
     }
 
-    createLookaheadState(state: State): JSXLookaheadState {
-      const lookaheadState = ((super.createLookaheadState(
-        state,
-      ): any): JSXLookaheadState);
-      lookaheadState.inPropertyName = state.inPropertyName;
-      return lookaheadState;
-    }
-
     getTokenFromCode(code: number): void {
-      if (this.state.inPropertyName) return super.getTokenFromCode(code);
-
       const context = this.curContext();
 
       if (context === tc.j_expr) {
@@ -600,7 +586,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (
         code === charCodes.lessThan &&
-        this.state.exprAllowed &&
+        this.state.canStartJSXElement &&
         this.input.charCodeAt(this.state.pos + 1) !== charCodes.exclamationMark
       ) {
         ++this.state.pos;
@@ -617,7 +603,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // do not consider JSX expr -> JSX open tag -> ... anymore
         // reconsider as closing tag context
         context.splice(-2, 2, tc.j_cTag);
-        this.state.exprAllowed = false;
+        this.state.canStartJSXElement = false;
       } else if (type === tt.jsxTagStart) {
         context.push(
           tc.j_expr, // treat as beginning of JSX expression
@@ -627,17 +613,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const out = context.pop();
         if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
           context.pop();
-          this.state.exprAllowed = context[context.length - 1] === tc.j_expr;
+          this.state.canStartJSXElement =
+            context[context.length - 1] === tc.j_expr;
         } else {
-          this.state.exprAllowed = true;
+          this.state.canStartJSXElement = true;
         }
-      } else if (
-        tokenIsKeyword(type) &&
-        (prevType === tt.dot || prevType === tt.questionDot)
-      ) {
-        this.state.exprAllowed = false;
       } else {
-        this.state.exprAllowed = tokenComesBeforeExpression(type);
+        this.state.canStartJSXElement = tokenComesBeforeExpression(type);
       }
     }
   };
