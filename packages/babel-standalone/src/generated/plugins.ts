@@ -8,6 +8,7 @@ import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
+import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
 import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
 import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
 import syntaxFlow from "@babel/plugin-syntax-flow";
@@ -103,6 +104,7 @@ export {
   syntaxClassStaticBlock,
   syntaxDecimal,
   syntaxDecorators,
+  syntaxDestructuringPrivate,
   syntaxDoExpressions,
   syntaxExportDefaultFrom,
   syntaxFlow,
@@ -199,6 +201,7 @@ export const all: { [k: string]: any } = {
   "syntax-class-static-block": syntaxClassStaticBlock,
   "syntax-decimal": syntaxDecimal,
   "syntax-decorators": syntaxDecorators,
+  "syntax-destructuring-private": syntaxDestructuringPrivate,
   "syntax-do-expressions": syntaxDoExpressions,
   "syntax-export-default-from": syntaxExportDefaultFrom,
   "syntax-flow": syntaxFlow,

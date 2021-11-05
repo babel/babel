@@ -1751,7 +1751,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private":
+"@babel/plugin-syntax-destructuring-private@workspace:^, @babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private"
   dependencies:
@@ -3523,6 +3523,7 @@ __metadata:
     "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/plugin-syntax-decimal": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
+    "@babel/plugin-syntax-destructuring-private": "workspace:^"
     "@babel/plugin-syntax-do-expressions": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"

@@ -19,6 +19,7 @@ export default (_: any, opts: any = {}) => {
         babelPlugins.proposalDecorators,
         { legacy: decoratorsLegacy, decoratorsBeforeExport },
       ],
+      babelPlugins.syntaxDestructuringPrivate,
       [
         babelPlugins.proposalPipelineOperator,
         { proposal: pipelineProposal, topicToken: pipelineTopicToken },

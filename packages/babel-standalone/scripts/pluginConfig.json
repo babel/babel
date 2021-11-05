@@ -5,6 +5,7 @@
   "syntax-class-static-block",
   "syntax-decimal",
   "syntax-decorators",
+  "syntax-destructuring-private",
   "syntax-do-expressions",
   "syntax-export-default-from",
   "syntax-flow",

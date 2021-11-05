@@ -1,6 +1,6 @@
 # @babel/plugin-syntax-destructuring-private
 
-> Allow parsing of class static blocks
+> Allow parsing of destructuring private fields
 
 See our website [@babel/plugin-syntax-destructuring-private](https://babeljs.io/docs/en/babel-plugin-syntax-destructuring-private) for more information.
 
