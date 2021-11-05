@@ -1751,6 +1751,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private"
+  dependencies:
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-do-expressions@workspace:^, @babel/plugin-syntax-do-expressions@workspace:packages/babel-plugin-syntax-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-do-expressions@workspace:packages/babel-plugin-syntax-do-expressions"

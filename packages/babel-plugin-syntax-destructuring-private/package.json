@@ -1,0 +1,32 @@
+{
+  "name": "@babel/plugin-syntax-destructuring-private",
+  "version": "0.0.0",
+  "description": "Allow parsing of destructuring private fields",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-syntax-destructuring-private"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-destructuring-private",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
+}
