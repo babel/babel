@@ -2232,11 +2232,12 @@ export default class ExpressionParser extends LValParser {
             break;
           case tt.privateName: {
             // the class private key has been handled in parseClassElementName
-            const privateKeyPos = this.state.start + 1;
+            const privateKeyPos = this.state.start;
             if (refExpressionErrors !== undefined) {
               if (refExpressionErrors.privateKey === -1) {
                 refExpressionErrors.privateKey = privateKeyPos;
               }
+              this.classScope.usePrivateName(value, privateKeyPos);
             } else {
               this.raise(privateKeyPos, Errors.UnexpectedPrivateField);
             }
