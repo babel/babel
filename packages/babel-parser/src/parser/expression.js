@@ -2440,9 +2440,9 @@ export default class ExpressionParser extends LValParser {
         },
       );
       this.prodParam.exit();
-      this.expressionScope.exit();
       this.state.labels = oldLabels;
     }
+    this.expressionScope.exit();
   }
 
   isSimpleParamList(
