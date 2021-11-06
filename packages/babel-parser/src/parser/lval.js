@@ -16,6 +16,7 @@ import type {
   /*:: ObjectMember, */
   /*:: TsNamedTypeElementBase, */
   /*:: Identifier, */
+  /*:: PrivateName, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
 } from "../types";
@@ -63,6 +64,7 @@ export default class LValParser extends NodeUtils {
   +parsePropertyName: (
     prop: ObjectOrClassMember | ClassMember | TsNamedTypeElementBase,
   ) => Expression | Identifier;
+  +parsePrivateName: () => PrivateName
   */
   // Forward-declaration: defined in statement.js
   /*::

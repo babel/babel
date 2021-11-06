@@ -73,6 +73,7 @@ import { cloneIdentifier } from "./node";
 
 /*::
 import type { SourceType } from "../options";
+declare var invariant;
 */
 
 const invalidHackPipeBodies = new Map([
@@ -834,13 +835,14 @@ export default class ExpressionParser extends LValParser {
 
     let node = this.startNodeAt(startPos, startLoc);
     node.callee = base;
+    const { maybeAsyncArrow, optionalChainMember } = state;
 
-    if (state.maybeAsyncArrow) {
+    if (maybeAsyncArrow) {
       this.expressionScope.enter(newAsyncArrowScope());
       refExpressionErrors = new ExpressionErrors();
     }
 
-    if (state.optionalChainMember) {
+    if (optionalChainMember) {
       node.optional = optional;
     }
 
@@ -855,9 +857,10 @@ export default class ExpressionParser extends LValParser {
         refExpressionErrors,
       );
     }
-    this.finishCallExpression(node, state.optionalChainMember);
+    this.finishCallExpression(node, optionalChainMember);
 
-    if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
+    if (maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
+      /*:: invariant(refExpressionErrors != null) */
       state.stop = true;
       this.checkDestructuringPrivate(refExpressionErrors);
       this.expressionScope.validateAsPattern();
@@ -867,7 +870,7 @@ export default class ExpressionParser extends LValParser {
         node,
       );
     } else {
-      if (state.maybeAsyncArrow) {
+      if (maybeAsyncArrow) {
         this.checkExpressionErrors(refExpressionErrors, true);
         this.expressionScope.exit();
       }
@@ -2233,7 +2236,7 @@ export default class ExpressionParser extends LValParser {
           case tt.privateName: {
             // the class private key has been handled in parseClassElementName
             const privateKeyPos = this.state.start;
-            if (refExpressionErrors !== undefined) {
+            if (refExpressionErrors != null) {
               if (refExpressionErrors.privateKey === -1) {
                 refExpressionErrors.privateKey = privateKeyPos;
               }
