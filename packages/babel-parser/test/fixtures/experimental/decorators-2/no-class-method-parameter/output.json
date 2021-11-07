@@ -46,6 +46,7 @@
                     {
                       "type": "Decorator",
                       "start":26,"end":30,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":18}},
+                      "init": false,
                       "expression": {
                         "type": "Identifier",
                         "start":27,"end":30,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":18},"identifierName":"foo"},

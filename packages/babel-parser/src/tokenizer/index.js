@@ -829,6 +829,43 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
+  readToken_at(): void {
+    // Increase past @
+    ++this.state.pos;
+    const next = this.input.charCodeAt(this.state.pos);
+
+    if (isIdentifierStart(next)) {
+      // Read the next word with a lookahead state that we'll
+      // throw away afterwards. Cheaper than doing a full lookahead,
+      // since we know that we're trying to read a word/identifier.
+      const old = this.state;
+      // $FlowIgnore
+      this.state = this.createLookaheadState(old);
+
+      const word = this.readWord1(next);
+      const wordNext = this.input.charCodeAt(this.state.pos);
+      const containsEsc = this.state.containsEsc;
+
+      // Replace the previous state
+      this.state = old;
+
+      if (wordNext === charCodes.colon) {
+        if (word !== "init") {
+          this.raise(this.state.pos, Errors.UnsupportedDecoratorModifier);
+        } else if (containsEsc) {
+          this.raise(this.state.pos, Errors.InvalidEscapedReservedWord);
+        }
+
+        // Increase the pos by word.length + `:`
+        this.state.pos += word.length + 1;
+        this.finishToken(tt.atInit);
+        return;
+      }
+    }
+
+    this.finishToken(tt.at);
+  }
+
   getTokenFromCode(code: number): void {
     switch (code) {
       // The interpretation of a dot depends on whether it is followed
@@ -1009,8 +1046,7 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.atSign:
-        ++this.state.pos;
-        this.finishToken(tt.at);
+        this.readToken_at();
         return;
 
       case charCodes.numberSign:

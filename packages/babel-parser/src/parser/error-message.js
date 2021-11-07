@@ -229,6 +229,8 @@ export const ErrorMessages = makeErrorTemplates(
       "Only expressions, functions or classes are allowed as the `default` export.",
     UnsupportedImport:
       "`import` can only be used in `import()` or `import.meta`.",
+    UnsupportedLegacyDecoratorModifier:
+      "Legacy decorators do not support modifiers.",
     UnsupportedMetaProperty: "The only valid meta property for %0 is %0.%1.",
     UnsupportedParameterDecorator:
       "Decorators cannot be used to decorate parameters.",

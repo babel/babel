@@ -27,6 +27,7 @@
                 {
                   "type": "Decorator",
                   "start":13,"end":91,"loc":{"start":{"line":2,"column":2},"end":{"line":7,"column":3}},
+                  "init": false,
                   "expression": {
                     "type": "CallExpression",
                     "start":14,"end":91,"loc":{"start":{"line":2,"column":3},"end":{"line":7,"column":3}},
@@ -43,6 +44,7 @@
                           {
                             "type": "Decorator",
                             "start":25,"end":34,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":13}},
+                            "init": false,
                             "expression": {
                               "type": "Identifier",
                               "start":26,"end":34,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":13},"identifierName":"classDec"},
@@ -63,6 +65,7 @@
                                 {
                                   "type": "Decorator",
                                   "start":50,"end":56,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":12}},
+                                  "init": false,
                                   "expression": {
                                     "type": "Identifier",
                                     "start":51,"end":56,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":12},"identifierName":"inner"},

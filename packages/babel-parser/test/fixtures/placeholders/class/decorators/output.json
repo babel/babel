@@ -14,6 +14,7 @@
           {
             "type": "Decorator",
             "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
+            "init": false,
             "expression": {
               "type": "Placeholder",
               "start":2,"end":9,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":9}},

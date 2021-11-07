@@ -20,6 +20,7 @@
             {
               "type": "Decorator",
               "start":15,"end":25,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":25}},
+              "init": false,
               "expression": {
                 "type": "Identifier",
                 "start":16,"end":25,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":25},"identifierName":"decorator"},

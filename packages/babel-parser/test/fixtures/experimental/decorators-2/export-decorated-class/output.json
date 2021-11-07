@@ -19,6 +19,7 @@
             {
               "type": "Decorator",
               "start":7,"end":11,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":11}},
+              "init": false,
               "expression": {
                 "type": "Identifier",
                 "start":8,"end":11,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":11},"identifierName":"bar"},

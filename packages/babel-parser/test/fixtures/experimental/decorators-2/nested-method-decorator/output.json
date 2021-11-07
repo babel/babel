@@ -27,6 +27,7 @@
                 {
                   "type": "Decorator",
                   "start":13,"end":86,"loc":{"start":{"line":2,"column":2},"end":{"line":7,"column":3}},
+                  "init": false,
                   "expression": {
                     "type": "ClassExpression",
                     "start":20,"end":82,"loc":{"start":{"line":3,"column":4},"end":{"line":6,"column":5}},
@@ -34,6 +35,7 @@
                       {
                         "type": "Decorator",
                         "start":20,"end":29,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":13}},
+                        "init": false,
                         "expression": {
                           "type": "Identifier",
                           "start":21,"end":29,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":13},"identifierName":"classDec"},
@@ -54,6 +56,7 @@
                             {
                               "type": "Decorator",
                               "start":45,"end":51,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":12}},
+                              "init": false,
                               "expression": {
                                 "type": "Identifier",
                                 "start":46,"end":51,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":12},"identifierName":"inner"},

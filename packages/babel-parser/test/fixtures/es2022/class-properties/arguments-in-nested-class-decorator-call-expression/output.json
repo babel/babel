@@ -68,6 +68,7 @@
                               {
                                 "type": "Decorator",
                                 "start":48,"end":63,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":35}},
+                                "init": false,
                                 "expression": {
                                   "type": "CallExpression",
                                   "start":49,"end":63,"loc":{"start":{"line":3,"column":21},"end":{"line":3,"column":35}},

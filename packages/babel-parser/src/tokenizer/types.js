@@ -159,6 +159,7 @@ export const tt: { [name: string]: TokenType } = {
   backQuote: createToken("`", { startsExpr }),
   dollarBraceL: createToken("${", { beforeExpr, startsExpr }),
   at: createToken("@"),
+  atInit: createToken("@init:"),
   hash: createToken("#", { startsExpr }),
 
   // Special hashbang token.
@@ -400,6 +401,10 @@ export function tokenOperatorPrecedence(token: TokenType): number {
 
 export function tokenIsRightAssociative(token: TokenType): boolean {
   return token === tt.exponent;
+}
+
+export function tokenIsDecorator(token: TokenType): boolean {
+  return token === tt.at || token === tt.atInit;
 }
 
 export function getExportedToken(token: TokenType): ExportedTokenType {

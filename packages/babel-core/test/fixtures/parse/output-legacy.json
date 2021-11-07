@@ -49,7 +49,6 @@
             "type": "Decorator",
             "start": 0,
             "end": 11,
-            "init": false,
             "loc": {
               "start": {
                 "line": 1,

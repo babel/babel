@@ -14,6 +14,7 @@
           {
             "type": "Decorator",
             "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+            "init": false,
             "expression": {
               "type": "ObjectExpression",
               "start":2,"end":34,"loc":{"start":{"line":1,"column":2},"end":{"line":3,"column":1}},
@@ -36,6 +37,7 @@
                       {
                         "type": "Decorator",
                         "start":13,"end":19,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15}},
+                        "init": false,
                         "expression": {
                           "type": "Identifier",
                           "start":14,"end":19,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":15},"identifierName":"inner"},

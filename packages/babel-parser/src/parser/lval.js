@@ -390,7 +390,10 @@ export default class LValParser extends NodeUtils {
         break;
       } else {
         const decorators = [];
-        if (this.match(tt.at) && this.hasPlugin("decorators")) {
+        if (
+          (this.match(tt.at) && this.hasPlugin("decorators")) ||
+          this.match(tt.atInit)
+        ) {
           this.raise(this.state.start, Errors.UnsupportedParameterDecorator);
         }
         // invariant: hasPlugin("decorators-legacy")

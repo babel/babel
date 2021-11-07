@@ -26,6 +26,7 @@
                 {
                   "type": "Decorator",
                   "start":10,"end":14,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":14}},
+                  "init": false,
                   "expression": {
                     "type": "Identifier",
                     "start":11,"end":14,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":14},"identifierName":"dec"},
@@ -50,6 +51,7 @@
                       {
                         "type": "Decorator",
                         "start":29,"end":33,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":6}},
+                        "init": false,
                         "expression": {
                           "type": "Identifier",
                           "start":30,"end":33,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":6},"identifierName":"baz"},

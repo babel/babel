@@ -32,6 +32,7 @@ import {
   tokenOperatorPrecedence,
   tt,
   type TokenType,
+  tokenIsDecorator,
 } from "../tokenizer/types";
 import * as N from "../types";
 import LValParser from "./lval";
@@ -1143,6 +1144,7 @@ export default class ExpressionParser extends LValParser {
         return this.parseFunctionOrFunctionSent();
 
       case tt.at:
+      case tt.atInit:
         this.parseDecorators();
       // fall through
       case tt._class:
@@ -1955,7 +1957,7 @@ export default class ExpressionParser extends LValParser {
     refExpressionErrors?: ?ExpressionErrors,
   ): N.ObjectMember | N.SpreadElement {
     let decorators = [];
-    if (this.match(tt.at)) {
+    if (tokenIsDecorator(this.state.type)) {
       if (this.hasPlugin("decorators")) {
         this.raise(this.state.start, Errors.UnsupportedPropertyDecorator);
       }

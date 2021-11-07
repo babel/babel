@@ -190,7 +190,7 @@
                   "init": true,
                   "expression": {
                     "type": "MemberExpression",
-                    "start":137,"end":149,"loc":{"start":{"line":13,"column":3},"end":{"line":13,"column":15}},
+                    "start":142,"end":149,"loc":{"start":{"line":13,"column":8},"end":{"line":13,"column":15}},
                     "object": {
                       "type": "Identifier",
                       "start":142,"end":145,"loc":{"start":{"line":13,"column":8},"end":{"line":13,"column":11},"identifierName":"foo"},

@@ -27,6 +27,7 @@
                 {
                   "type": "Decorator",
                   "start":12,"end":26,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":16}},
+                  "init": false,
                   "expression": {
                     "type": "CallExpression",
                     "start":13,"end":26,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":16}},
