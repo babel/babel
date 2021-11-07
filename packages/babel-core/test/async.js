@@ -6,7 +6,7 @@ import {
   spawnTransformAsync,
   spawnTransformSync,
   supportsESM,
-} from "./helpers/esm";
+} from "./helpers/esm.js";
 
 const nodeGte8 = (...args) => {
   // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6

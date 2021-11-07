@@ -1,4 +1,4 @@
-import verifyAndAssertMessages from "../../helpers/verifyAndAssertMessages";
+import verifyAndAssertMessages from "../../helpers/verifyAndAssertMessages.js";
 import path from "path";
 import { fileURLToPath } from "url";
 

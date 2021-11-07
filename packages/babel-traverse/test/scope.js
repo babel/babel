@@ -1,4 +1,4 @@
-import traverse, { NodePath } from "../lib";
+import traverse, { NodePath } from "../lib/index.js";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 

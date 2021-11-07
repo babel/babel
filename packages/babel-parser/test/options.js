@@ -1,4 +1,4 @@
-import { parse } from "../lib";
+import { parse } from "../lib/index.js";
 
 describe("options", () => {
   describe("strictMode", () => {

@@ -1,4 +1,4 @@
-import getOptionSpecificExcludesFor from "../lib/get-option-specific-excludes";
+import getOptionSpecificExcludesFor from "../lib/get-option-specific-excludes.js";
 
 describe("defaults", () => {
   describe("getOptionSpecificExcludesFor", () => {

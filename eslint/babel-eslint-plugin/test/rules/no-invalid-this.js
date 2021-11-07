@@ -1,6 +1,6 @@
 import cloneDeep from "clone-deep";
-import rule from "../../src/rules/no-invalid-this";
-import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
+import rule from "../../lib/rules/no-invalid-this.js";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 /**
  * A constant value for non strict mode environment.

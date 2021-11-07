@@ -1,5 +1,5 @@
-import rule from "../../src/rules/new-cap";
-import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
+import rule from "../../lib/rules/new-cap.js";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const ruleTester = new RuleTester();
 ruleTester.run("@babel/new-cap", rule, {

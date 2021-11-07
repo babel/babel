@@ -1,4 +1,4 @@
-import { NodePath } from "../lib";
+import { NodePath } from "../lib/index.js";
 import { parse } from "@babel/parser";
 import generate from "@babel/generator";
 import * as t from "@babel/types";

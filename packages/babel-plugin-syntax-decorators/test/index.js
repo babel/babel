@@ -1,5 +1,5 @@
 import { parse } from "@babel/core";
-import syntaxDecorators from "../lib";
+import syntaxDecorators from "../lib/index.js";
 
 function makeParser(code, options) {
   return () =>

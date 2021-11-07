@@ -1,6 +1,6 @@
 import path from "path";
-import { runFixtureTestsWithoutExactASTMatch } from "./helpers/runFixtureTests";
-import { parse } from "../lib";
+import { runFixtureTestsWithoutExactASTMatch } from "./helpers/runFixtureTests.js";
+import { parse } from "../lib/index.js";
 import { fileURLToPath } from "url";
 
 runFixtureTestsWithoutExactASTMatch(

@@ -1,5 +1,5 @@
 import { parse } from "@babel/parser";
-import shouldStoreRHSInTemporaryVariable from "../lib/shouldStoreRHSInTemporaryVariable";
+import shouldStoreRHSInTemporaryVariable from "../lib/shouldStoreRHSInTemporaryVariable.js";
 
 function getFistObjectPattern(program) {
   return parse(program, { sourceType: "module" }).program.body[0]

@@ -1,4 +1,4 @@
-import { createTypeAnnotationBasedOnTypeof } from "../../..";
+import { createTypeAnnotationBasedOnTypeof } from "../../../lib/index.js";
 
 describe("builders", function () {
   describe("flow", function () {

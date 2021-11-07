@@ -1,4 +1,4 @@
-import annotateAsPure from "../";
+import annotateAsPure from "../lib/index.js";
 
 describe("@babel/helper-annotate-as-pure", () => {
   it("will add leading comment", () => {

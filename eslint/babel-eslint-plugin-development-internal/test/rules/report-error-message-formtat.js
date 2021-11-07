@@ -1,5 +1,5 @@
-import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
-import rule from "../../src/rules/report-error-message-format";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+import rule from "../../lib/rules/report-error-message-format.js";
 
 const ruleTester = new RuleTester();
 

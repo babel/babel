@@ -1,13 +1,13 @@
-import * as babel from "../lib/index";
+import * as babel from "../lib/index.js";
 import sourceMap from "source-map";
 import path from "path";
-import Plugin from "../lib/config/plugin";
+import Plugin from "../lib/config/plugin.js";
 import generator from "@babel/generator";
 import { fileURLToPath } from "url";
 
-import presetEnv from "../../babel-preset-env";
-import pluginSyntaxFlow from "../../babel-plugin-syntax-flow";
-import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types";
+import presetEnv from "../../babel-preset-env/lib/index.js";
+import pluginSyntaxFlow from "../../babel-plugin-syntax-flow/lib/index.js";
+import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types/lib/index.js";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 

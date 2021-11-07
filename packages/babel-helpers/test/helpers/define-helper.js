@@ -1,6 +1,6 @@
 import path from "path";
 import template from "@babel/template";
-import helpers from "../../lib/helpers";
+import helpers from "../../lib/helpers.js";
 
 function getHelperId(dir, name) {
   const testName = path.basename(dir);

@@ -3,7 +3,7 @@ import normalizeOptions, {
   validateModulesOption,
   validateUseBuiltInsOption,
   normalizePluginName,
-} from "../lib/normalize-options";
+} from "../lib/normalize-options.js";
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {

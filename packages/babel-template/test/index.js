@@ -1,5 +1,5 @@
-import generator from "../../babel-generator";
-import template from "../lib";
+import generator from "../../babel-generator/lib/index.js";
+import template from "../lib/index.js";
 import * as t from "@babel/types";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
