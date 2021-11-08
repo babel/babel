@@ -47,5 +47,20 @@ describe("NodePath", () => {
 
       expect(path.getData(symbol)).toBe(42);
     });
+
+    describe("hasNode", () => {
+      it("returns true if node is null", () => {
+        const path = new NodePath({}, {});
+
+        expect(path.hasNode()).toBe(false);
+      });
+
+      it("returns false if node is not null", () => {
+        const path = new NodePath({}, {});
+        path.node = {};
+
+        expect(path.hasNode()).toBe(true);
+      });
+    });
   });
 });

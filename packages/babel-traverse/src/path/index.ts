@@ -122,6 +122,10 @@ class NodePath<T extends t.Node = t.Node> {
     return val;
   }
 
+  hasNode(): this is NodePath<NonNullable<this["node"]>> {
+    return this.node != null;
+  }
+
   buildCodeFrameError(
     msg: string,
     Error: new () => Error = SyntaxError,
