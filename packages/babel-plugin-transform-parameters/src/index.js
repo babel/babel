@@ -26,7 +26,7 @@ export default declare((api, options) => {
 
           // In some cases arrowFunctionToExpression replaces the function with a wrapper.
           // Return early; the wrapped function will be visited later in the AST traversal.
-          if (!path.isFunction()) return;
+          if (!path.isFunctionExpression()) return;
         }
 
         const convertedRest = convertFunctionRest(path);

@@ -193,6 +193,10 @@ export function arrowFunctionToExpression(
 /**
  * Given a function, traverse its contents, and if there are references to "this", "arguments", "super",
  * or "new.target", ensure that these references reference the parent environment around this function.
+ *
+ * @returns `thisBinding`: the name of the injected reference to `this`; for example "_this"
+ * @returns `fnPath`: the new path to the function node. This is different from the fnPath
+ *                    parameter when the function node is wrapped in another node.
  */
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
@@ -207,12 +211,15 @@ function hoistFunctionEnvironment(
       return false;
     }
     return (
-      p.isFunction() || p.isProgram() || p.isClassProperty({ static: false })
+      p.isFunction() ||
+      p.isProgram() ||
+      p.isClassProperty({ static: false }) ||
+      p.isClassPrivateProperty({ static: false })
     );
   });
   const inConstructor = thisEnvFn.isClassMethod({ kind: "constructor" });
 
-  if (thisEnvFn.isClassProperty()) {
+  if (thisEnvFn.isClassProperty() || thisEnvFn.isClassPrivateProperty()) {
     if (arrowParent) {
       thisEnvFn = arrowParent;
     } else if (allowInsertArrow) {
