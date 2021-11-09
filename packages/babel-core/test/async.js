@@ -1,6 +1,6 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import * as babel from "..";
+import * as babel from "../lib/index.js";
 
 import {
   spawnTransformAsync,

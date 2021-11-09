@@ -1,4 +1,4 @@
-import { findSuggestion } from "..";
+import { findSuggestion } from "../lib/index.js";
 
 describe("findSuggestion", function () {
   test.each([

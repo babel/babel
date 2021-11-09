@@ -1,4 +1,4 @@
-import env from "..";
+import env from "../lib/index.js";
 import * as babel from "@babel/core";
 
 describe("supportsTopLevelAwait enables the parser plugin for old parser versions", () => {

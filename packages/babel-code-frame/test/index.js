@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import stripAnsi from "strip-ansi";
-import codeFrame, { codeFrameColumns } from "..";
+import codeFrame, { codeFrameColumns } from "../lib/index.js";
 
 describe("@babel/code-frame", function () {
   test("basic usage", function () {

@@ -2,7 +2,7 @@ import * as babel from "@babel/core";
 import fs from "fs";
 import { createRequire } from "module";
 
-import transformTypeofSymbol from "..";
+import transformTypeofSymbol from "../lib/index.js";
 
 const require = createRequire(import.meta.url);
 
