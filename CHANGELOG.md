@@ -20,6 +20,24 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.3 (2021-11-09)
+
+#### :bug: Bug Fix
+* `babel-helpers`
+  * [#13862](https://github.com/babel/babel/pull/13862) fix(helpers): match `Reflect.get` behaviour ([@lightmare](https://github.com/lightmare))
+* `babel-plugin-transform-parameters`, `babel-traverse`
+  * [#13941](https://github.com/babel/babel/pull/13941) Support transforming params of arrow functions in class fields ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#13928](https://github.com/babel/babel/pull/13928) fix: incorrect await rejection following arrow function in parameters (Closes [#13872](https://github.com/babel/babel/issues/13872)) ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* Other
+  * [#13918](https://github.com/babel/babel/pull/13918) Fix `parserOverride` support in `@babel/eslint-parser` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-parser`
+  * [#13891](https://github.com/babel/babel/pull/13891) Simplifiy tracking of valid JSX positions ([@JLHwung](https://github.com/JLHwung))
+  * [#13892](https://github.com/babel/babel/pull/13892) extract tt.lt and tt.gt from tt.relation ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#13914](https://github.com/babel/babel/pull/13914) Update browserslist ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.16.2 (2021-11-01)
 
 #### :bug: Bug Fix
