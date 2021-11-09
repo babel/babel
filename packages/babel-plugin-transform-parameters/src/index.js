@@ -23,6 +23,10 @@ export default declare((api, options) => {
         ) {
           // default/rest visitors require access to `arguments`, so it cannot be an arrow
           path.arrowFunctionToExpression({ noNewArrows });
+
+          // In some cases arrowFunctionToExpression replaces the function with a wrapper.
+          // Return early; the wrapped function will be visited later in the AST traversal.
+          if (!path.isFunctionExpression()) return;
         }
 
         const convertedRest = convertFunctionRest(path);

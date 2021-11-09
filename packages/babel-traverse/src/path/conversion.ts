@@ -22,6 +22,7 @@ import {
   stringLiteral,
   super as _super,
   thisExpression,
+  toExpression,
   unaryExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
@@ -146,27 +147,26 @@ export function arrowFunctionToExpression(
     );
   }
 
-  const thisBinding = hoistFunctionEnvironment(
+  const { thisBinding, fnPath: fn } = hoistFunctionEnvironment(
     this,
     noNewArrows,
     allowInsertArrow,
   );
 
-  this.ensureBlock();
-  // @ts-expect-error todo(flow->ts): avoid mutating nodes
-  this.node.type = "FunctionExpression";
+  fn.ensureBlock();
+  fn.node.type = "FunctionExpression";
   if (!noNewArrows) {
     const checkBinding = thisBinding
       ? null
-      : this.parentPath.scope.generateUidIdentifier("arrowCheckId");
+      : fn.scope.generateUidIdentifier("arrowCheckId");
     if (checkBinding) {
-      this.parentPath.scope.push({
+      fn.parentPath.scope.push({
         id: checkBinding,
         init: objectExpression([]),
       });
     }
 
-    this.get("body").unshiftContainer(
+    fn.get("body").unshiftContainer(
       "body",
       expressionStatement(
         callExpression(this.hub.addHelper("newArrowCheck"), [
@@ -178,10 +178,10 @@ export function arrowFunctionToExpression(
       ),
     );
 
-    this.replaceWith(
+    fn.replaceWith(
       callExpression(
         memberExpression(
-          nameFunction(this, true) || this.node,
+          nameFunction(this, true) || fn.node,
           identifier("bind"),
         ),
         [checkBinding ? identifier(checkBinding.name) : thisExpression()],
@@ -193,26 +193,53 @@ export function arrowFunctionToExpression(
 /**
  * Given a function, traverse its contents, and if there are references to "this", "arguments", "super",
  * or "new.target", ensure that these references reference the parent environment around this function.
+ *
+ * @returns `thisBinding`: the name of the injected reference to `this`; for example "_this"
+ * @returns `fnPath`: the new path to the function node. This is different from the fnPath
+ *                    parameter when the function node is wrapped in another node.
  */
 function hoistFunctionEnvironment(
-  fnPath,
+  fnPath: NodePath<t.Function>,
   // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
   noNewArrows = true,
   allowInsertArrow = true,
-) {
-  const thisEnvFn = fnPath.findParent(p => {
+): { thisBinding: string; fnPath: NodePath<t.Function> } {
+  let arrowParent;
+  let thisEnvFn = fnPath.findParent(p => {
+    if (p.isArrowFunctionExpression()) {
+      arrowParent ??= p;
+      return false;
+    }
     return (
-      (p.isFunction() && !p.isArrowFunctionExpression()) ||
+      p.isFunction() ||
       p.isProgram() ||
-      p.isClassProperty({ static: false })
+      p.isClassProperty({ static: false }) ||
+      p.isClassPrivateProperty({ static: false })
     );
   });
-  const inConstructor = thisEnvFn?.node.kind === "constructor";
+  const inConstructor = thisEnvFn.isClassMethod({ kind: "constructor" });
 
-  if (thisEnvFn.isClassProperty()) {
-    throw fnPath.buildCodeFrameError(
-      "Unable to transform arrow inside class property",
-    );
+  if (thisEnvFn.isClassProperty() || thisEnvFn.isClassPrivateProperty()) {
+    if (arrowParent) {
+      thisEnvFn = arrowParent;
+    } else if (allowInsertArrow) {
+      // It's safe to wrap this function in another and not hoist to the
+      // top level because the 'this' binding is constant in class
+      // properties (since 'super()' has already been called), so we don't
+      // need to capture/reassign it at the top level.
+      fnPath.replaceWith(
+        callExpression(
+          arrowFunctionExpression([], toExpression(fnPath.node)),
+          [],
+        ),
+      );
+      thisEnvFn = fnPath.get("callee");
+      fnPath = thisEnvFn.get("body");
+    } else {
+      throw fnPath.buildCodeFrameError(
+        "Unable to transform arrow inside class property",
+      );
+    }
   }
 
   const { thisPaths, argumentsPaths, newTargetPaths, superProps, superCalls } =
@@ -365,7 +392,7 @@ function hoistFunctionEnvironment(
     }
   }
 
-  return thisBinding;
+  return { thisBinding, fnPath };
 }
 
 function standardizeSuperProperty(superProp) {
