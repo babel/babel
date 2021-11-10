@@ -21,6 +21,7 @@
   "syntax-top-level-await",
   "syntax-typescript",
   "proposal-async-generator-functions",
+  "proposal-class-brand-check",
   "proposal-class-properties",
   "proposal-class-static-block",
   "proposal-decorators",

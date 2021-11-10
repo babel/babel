@@ -124,6 +124,7 @@ export type ParserPlugin =
   | "bigInt"
   | "classPrivateMethods"
   | "classPrivateProperties"
+  | "classBrandCheck"
   | "classProperties"
   | "classStaticBlock" // Enabled by default
   | "decimal"

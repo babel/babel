@@ -1165,6 +1165,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-class-brand-check@workspace:^, @babel/plugin-proposal-class-brand-check@workspace:packages/babel-plugin-proposal-class-brand-check":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-class-brand-check@workspace:packages/babel-plugin-proposal-class-brand-check"
+  dependencies:
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-class-properties@npm:^7.14.5":
   version: 7.14.5
   resolution: "@babel/plugin-proposal-class-properties@npm:7.14.5"
@@ -3468,6 +3478,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^"
+    "@babel/plugin-proposal-class-brand-check": "workspace:^"
     "@babel/plugin-proposal-class-properties": "workspace:^"
     "@babel/plugin-proposal-class-static-block": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"

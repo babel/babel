@@ -1,5 +1,8 @@
 import presetStage1 from "./preset-stage-1";
-import { proposalFunctionBind } from "./generated/plugins";
+import {
+  proposalFunctionBind,
+  proposalClassBrandCheck,
+} from "./generated/plugins";
 
 export default (_: any, opts: any = {}) => {
   const {
@@ -27,6 +30,6 @@ export default (_: any, opts: any = {}) => {
         },
       ],
     ],
-    plugins: [proposalFunctionBind],
+    plugins: [proposalFunctionBind, proposalClassBrandCheck],
   };
 };

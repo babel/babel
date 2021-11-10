@@ -11,6 +11,7 @@
     "@babel/core": "workspace:^",
     "@babel/plugin-external-helpers": "workspace:^",
     "@babel/plugin-proposal-async-generator-functions": "workspace:^",
+    "@babel/plugin-proposal-class-brand-check": "workspace:^",
     "@babel/plugin-proposal-class-properties": "workspace:^",
     "@babel/plugin-proposal-class-static-block": "workspace:^",
     "@babel/plugin-proposal-decorators": "workspace:^",

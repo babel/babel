@@ -24,6 +24,7 @@ import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
+import proposalClassBrandCheck from "@babel/plugin-proposal-class-brand-check";
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
 import proposalClassStaticBlock from "@babel/plugin-proposal-class-static-block";
 import proposalDecorators from "@babel/plugin-proposal-decorators";
@@ -119,6 +120,7 @@ export {
   syntaxTopLevelAwait,
   syntaxTypescript,
   proposalAsyncGeneratorFunctions,
+  proposalClassBrandCheck,
   proposalClassProperties,
   proposalClassStaticBlock,
   proposalDecorators,
@@ -215,6 +217,7 @@ export const all: { [k: string]: any } = {
   "syntax-top-level-await": syntaxTopLevelAwait,
   "syntax-typescript": syntaxTypescript,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
+  "proposal-class-brand-check": proposalClassBrandCheck,
   "proposal-class-properties": proposalClassProperties,
   "proposal-class-static-block": proposalClassStaticBlock,
   "proposal-decorators": proposalDecorators,
