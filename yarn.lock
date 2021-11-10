@@ -249,9 +249,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
-    "@mdn/browser-compat-data": ^3.3.4
-    core-js-compat: ^3.19.0
-    electron-to-chromium: ^1.3.749
+    "@mdn/browser-compat-data": ^4.0.10
+    core-js-compat: ^3.19.1
+    electron-to-chromium: ^1.3.893
   languageName: unknown
   linkType: soft
 
@@ -3301,7 +3301,7 @@ __metadata:
     babel-plugin-polyfill-corejs2: ^0.2.3
     babel-plugin-polyfill-corejs3: ^0.3.0
     babel-plugin-polyfill-regenerator: ^0.2.3
-    core-js-compat: ^3.19.0
+    core-js-compat: ^3.19.1
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -3927,10 +3927,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdn/browser-compat-data@npm:^3.3.4":
-  version: 3.3.4
-  resolution: "@mdn/browser-compat-data@npm:3.3.4"
-  checksum: abcb3a6e29327e63393f69b47f9612aa4b920119e5be3755306e5d5a794b647ca74e1b1f3f8dc7164ec5dc5c9b6056acb10002eeeba3d8404a6ed9e9a0bc10b4
+"@mdn/browser-compat-data@npm:^4.0.10":
+  version: 4.0.10
+  resolution: "@mdn/browser-compat-data@npm:4.0.10"
+  checksum: fcb7fac153b589d4e8f253bf2bb1bb8c72da8e1c081bbc886e4cca8234721800b15a768cf5f91d003877a8b17358ccfe67e121d767ac3d9b28bae7c8978e45f1
   languageName: node
   linkType: hard
 

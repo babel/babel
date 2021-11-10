@@ -152,6 +152,7 @@ const es2021 = {
 };
 
 const es2022 = {
+  "proposal-class-static-block": "Class static initialization blocks",
   "proposal-private-property-in-object":
     "Ergonomic brand checks for private fields",
   "proposal-class-properties": {
@@ -163,7 +164,6 @@ const es2022 = {
     ],
   },
   "proposal-private-methods": "private class methods",
-  "proposal-class-static-block": "Class static initialization blocks",
 };
 
 const shippedProposal = {};

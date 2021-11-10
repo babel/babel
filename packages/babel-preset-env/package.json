@@ -88,7 +88,7 @@
     "babel-plugin-polyfill-corejs2": "^0.2.3",
     "babel-plugin-polyfill-corejs3": "^0.3.0",
     "babel-plugin-polyfill-regenerator": "^0.2.3",
-    "core-js-compat": "^3.19.0",
+    "core-js-compat": "^3.19.1",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {
