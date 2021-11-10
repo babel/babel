@@ -2,6 +2,7 @@
   "es6.module": {
     "chrome": "61",
     "and_chr": "61",
+    "deno": "1.0",
     "edge": "16",
     "firefox": "60",
     "and_ff": "60",
