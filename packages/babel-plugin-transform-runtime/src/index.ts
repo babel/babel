@@ -165,7 +165,7 @@ export default declare((api, options, dirname) => {
     };
   }
 
-  const corejsExt = absoluteRuntime ? ".js" : "";
+  const ext = absoluteRuntime ? ".js" : "";
 
   return {
     name: "transform-runtime",
@@ -178,7 +178,7 @@ export default declare((api, options, dirname) => {
             [pluginsCompat]: {
               runtimeVersion,
               useBabelRuntime: modulePath,
-              ext: corejsExt,
+              ext,
             },
           },
           createRegeneratorPlugin({
@@ -193,7 +193,7 @@ export default declare((api, options, dirname) => {
             method: "usage-pure",
             version: 3,
             proposals,
-            [pluginsCompat]: { useBabelRuntime: modulePath, ext: corejsExt },
+            [pluginsCompat]: { useBabelRuntime: modulePath, ext },
           },
           createRegeneratorPlugin({
             method: "usage-pure",
@@ -233,7 +233,7 @@ export default declare((api, options, dirname) => {
             : "helpers";
 
         return addDefaultImport(
-          `${modulePath}/${helpersDir}/${name}`,
+          `${modulePath}/${helpersDir}/${name}${ext}`,
           name,
           blockHoist,
           true,
