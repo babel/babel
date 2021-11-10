@@ -8,6 +8,7 @@ import { isRequired } from "@babel/helper-compilation-targets";
 import compatData from "@babel/compat-data/corejs2-built-ins";
 import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable";
 
+const { isAssignmentPattern, isObjectProperty } = t;
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
 // We need to detect this bug to know if "unused" means 0 or 1 references.
 const ZERO_REFS = process.env.BABEL_8_BREAKING
@@ -73,12 +74,10 @@ export default declare((api, opts) => {
   ) {
     path.traverse({
       Expression(path) {
-        const parentType = path.parent.type;
+        const { parent, key } = path;
         if (
-          (parentType === "AssignmentPattern" && path.key === "right") ||
-          (parentType === "ObjectProperty" &&
-            path.parent.computed &&
-            path.key === "key")
+          (isAssignmentPattern(parent) && key === "right") ||
+          (isObjectProperty(parent) && parent.computed && key === "key")
         ) {
           path.skip();
         }
