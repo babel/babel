@@ -983,7 +983,7 @@ export default class Scope {
     init?: t.Expression;
     unique?: boolean;
     _blockHoist?: number | undefined;
-    kind?: "var" | "let";
+    kind?: "var" | "let" | "const";
   }) {
     let path = this.path;
 
