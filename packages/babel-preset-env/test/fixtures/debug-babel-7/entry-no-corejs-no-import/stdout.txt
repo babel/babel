@@ -8,14 +8,14 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { node }
-  proposal-private-property-in-object { node }
+  proposal-class-static-block { node < 16.11 }
+  proposal-private-property-in-object { node < 16.9 }
   proposal-class-properties { node < 14.6 }
   proposal-private-methods { node < 14.6 }
   proposal-numeric-separator { node < 12.5 }
   proposal-logical-assignment-operators { node < 15 }
   proposal-nullish-coalescing-operator { node < 14 }
-  proposal-optional-chaining { node }
+  proposal-optional-chaining { node < 16.9 }
   proposal-json-strings { node < 10 }
   proposal-optional-catch-binding { node < 10 }
   proposal-async-generator-functions { node < 10 }
