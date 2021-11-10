@@ -1,8 +1,4 @@
 {
-  "proposal-class-static-block": {
-    "chrome": "94",
-    "firefox": "93"
-  },
   "proposal-private-property-in-object": {
     "chrome": "91",
     "firefox": "90",
@@ -31,6 +27,10 @@
     "ios": "15",
     "samsung": "14",
     "electron": "10.0"
+  },
+  "proposal-class-static-block": {
+    "chrome": "94",
+    "firefox": "93"
   },
   "proposal-numeric-separator": {
     "chrome": "75",
