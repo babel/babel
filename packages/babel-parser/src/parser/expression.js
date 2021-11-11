@@ -309,7 +309,10 @@ export default class ExpressionParser extends LValParser {
 
       if (this.match(tt.eq)) {
         node.left = this.toAssignable(left, /* isLHS */ true);
-        refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
+
+        if (refExpressionErrors.doubleProto >= node.left.start) {
+          refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
+        }
       } else {
         node.left = left;
       }
