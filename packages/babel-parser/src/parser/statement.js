@@ -156,14 +156,9 @@ export default class StatementParser extends ExpressionParser {
     directive.type = "Directive";
     directive.value = directive.expression;
     delete directive.expression;
-
-    const directiveLiteral = directive.value;
-    const raw = this.input.slice(directiveLiteral.start, directiveLiteral.end);
-    const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
-
-    this.addExtra(directiveLiteral, "raw", raw);
-    this.addExtra(directiveLiteral, "rawValue", val);
-    directiveLiteral.type = "DirectiveLiteral";
+    // We can keep `value` and `extra { raw, rawValue }` from the converted
+    // expression, which was a `StringLiteral`.
+    directive.value.type = "DirectiveLiteral";
     return directive;
   }
 
