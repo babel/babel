@@ -780,7 +780,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return idx;
       }
 
-      this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
+      this.parsePropertyName(node);
       if (
         !node.computed &&
         node.key.type === "Identifier" &&
@@ -788,7 +788,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.tsTokenCanFollowModifier()
       ) {
         node.kind = node.key.name;
-        this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
+        this.parsePropertyName(node);
       }
       return this.tsParsePropertyOrMethodSignature(node, !!node.readonly);
     }

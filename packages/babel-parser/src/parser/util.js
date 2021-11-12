@@ -264,19 +264,20 @@ export default class UtilParser extends Tokenizer {
     if (!refExpressionErrors) return false;
     const { shorthandAssign, doubleProto, optionalParameters } =
       refExpressionErrors;
+    // shorthandAssign >= 0 || doubleProto >= 0 || optionalParameters >= 0
+    const hasErrors = shorthandAssign + doubleProto + optionalParameters > -3;
     if (!andThrow) {
-      return (
-        shorthandAssign >= 0 || doubleProto >= 0 || optionalParameters >= 0
-      );
-    }
-    if (shorthandAssign >= 0) {
-      this.unexpected(shorthandAssign);
-    }
-    if (doubleProto >= 0) {
-      this.raise(doubleProto, Errors.DuplicateProto);
-    }
-    if (optionalParameters >= 0) {
-      this.unexpected(optionalParameters);
+      return hasErrors;
+    } else if (hasErrors) {
+      if (shorthandAssign >= 0) {
+        this.unexpected(shorthandAssign);
+      }
+      if (doubleProto >= 0) {
+        this.raise(doubleProto, Errors.DuplicateProto);
+      }
+      if (optionalParameters >= 0) {
+        this.unexpected(optionalParameters);
+      }
     }
   }
 
@@ -304,7 +305,7 @@ export default class UtilParser extends Tokenizer {
   /*
    * Return the string value of a given private name
    * WITHOUT `#`
-   * @see {@link https://tc39.es/proposal-class-fields/#sec-private-names-static-semantics-stringvalue}
+   * @see {@link https://tc39.es/ecma262/#sec-static-semantics-stringvalue}
    */
   getPrivateNameSV(node: Node): string {
     return node.id.name;

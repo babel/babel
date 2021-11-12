@@ -1437,6 +1437,7 @@ export default class StatementParser extends ExpressionParser {
     const publicMember: typeof publicMethod | typeof publicProp = publicMethod;
 
     member.static = isStatic;
+    this.parsePropertyNamePrefixOperator(member);
 
     if (this.eat(tt.star)) {
       // a generator
@@ -1597,7 +1598,7 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
-  // https://tc39.es/proposal-class-fields/#prod-ClassElementName
+  // https://tc39.es/ecma262/#prod-ClassElementName
   parseClassElementName(member: N.ClassMember): N.Expression | N.Identifier {
     const { type, value, start } = this.state;
     if (
@@ -1608,11 +1609,16 @@ export default class StatementParser extends ExpressionParser {
       this.raise(start, Errors.StaticPrototype);
     }
 
-    if (type === tt.privateName && value === "constructor") {
-      this.raise(start, Errors.ConstructorClassPrivateField);
+    if (type === tt.privateName) {
+      if (value === "constructor") {
+        this.raise(start, Errors.ConstructorClassPrivateField);
+      }
+      const key = this.parsePrivateName();
+      member.key = key;
+      return key;
     }
 
-    return this.parsePropertyName(member, /* isPrivateNameAllowed */ true);
+    return this.parsePropertyName(member);
   }
 
   parseClassStaticBlock(
@@ -1733,7 +1739,7 @@ export default class StatementParser extends ExpressionParser {
     methodOrProp: N.ClassMethod | N.ClassProperty,
   ): void {}
 
-  // https://tc39.es/proposal-class-fields/#prod-FieldDefinition
+  // https://tc39.es/ecma262/#prod-FieldDefinition
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
@@ -1742,14 +1748,14 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ClassPrivateProperty");
   }
 
-  // https://tc39.es/proposal-class-fields/#prod-FieldDefinition
+  // https://tc39.es/ecma262/#prod-FieldDefinition
   parseClassProperty(node: N.ClassProperty): N.ClassProperty {
     this.parseInitializer(node);
     this.semicolon();
     return this.finishNode(node, "ClassProperty");
   }
 
-  // https://tc39.es/proposal-class-fields/#prod-Initializer
+  // https://tc39.es/ecma262/#prod-Initializer
   parseInitializer(node: N.ClassProperty | N.ClassPrivateProperty): void {
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
     this.expressionScope.enter(newExpressionScope());
