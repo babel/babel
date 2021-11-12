@@ -309,17 +309,18 @@ export default class ExpressionParser extends LValParser {
 
       if (this.match(tt.eq)) {
         node.left = this.toAssignable(left, /* isLHS */ true);
-        refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
+
+        if (refExpressionErrors.doubleProto >= startPos) {
+          refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
+        }
+        if (refExpressionErrors.shorthandAssign >= startPos) {
+          refExpressionErrors.shorthandAssign = -1; // reset because shorthand default was used correctly
+        }
       } else {
         node.left = left;
       }
 
-      if (refExpressionErrors.shorthandAssign >= node.left.start) {
-        refExpressionErrors.shorthandAssign = -1; // reset because shorthand default was used correctly
-      }
-
       this.checkLVal(left, "assignment expression");
-
       this.next();
       node.right = this.parseMaybeAssign();
       return this.finishNode(node, "AssignmentExpression");
