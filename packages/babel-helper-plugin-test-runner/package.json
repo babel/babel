@@ -13,6 +13,20 @@
     "access": "public"
   },
   "main": "./lib/index.js",
+  "exports": {
+    ".": [
+      {
+        "import": "./esm.mjs",
+        "default": "./lib/index.js"
+      },
+      "./lib/index.js"
+    ],
+    "./lib": "./lib/index.js",
+    "./lib/index": "./lib/index.js",
+    "./lib/index.js": "./lib/index.js",
+    "./package": "./package.json",
+    "./package.json": "./package.json"
+  },
   "dependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
   },
