@@ -36,7 +36,8 @@
                   "start":10,"end":14,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":6}},
                   "extra": {
                     "rawValue": "\\8",
-                    "raw": "\"\\8\""
+                    "raw": "\"\\8\"",
+                    "expressionValue": "8"
                   },
                   "value": "\\8"
                 }
@@ -49,7 +50,8 @@
                   "start":15,"end":19,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":11}},
                   "extra": {
                     "rawValue": "\\9",
-                    "raw": "\"\\9\""
+                    "raw": "\"\\9\"",
+                    "expressionValue": "9"
                   },
                   "value": "\\9"
                 }
@@ -62,7 +64,8 @@
                   "start":23,"end":35,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":14}},
                   "extra": {
                     "rawValue": "use strict",
-                    "raw": "\"use strict\""
+                    "raw": "\"use strict\"",
+                    "expressionValue": "use strict"
                   },
                   "value": "use strict"
                 }
@@ -75,7 +78,8 @@
                   "start":39,"end":43,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":6}},
                   "extra": {
                     "rawValue": "\\8",
-                    "raw": "\"\\8\""
+                    "raw": "\"\\8\"",
+                    "expressionValue": "8"
                   },
                   "value": "\\8"
                 }
@@ -88,7 +92,8 @@
                   "start":44,"end":48,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":11}},
                   "extra": {
                     "rawValue": "\\9",
-                    "raw": "\"\\9\""
+                    "raw": "\"\\9\"",
+                    "expressionValue": "9"
                   },
                   "value": "\\9"
                 }

@@ -19,7 +19,8 @@
           "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}},
           "extra": {
             "rawValue": "\\x0",
-            "raw": "\"\\x0\""
+            "raw": "\"\\x0\"",
+            "expressionValue": "null"
           },
           "value": "\\x0"
         }

@@ -28,7 +28,8 @@
           "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
           "extra": {
             "rawValue": "\\01 foo \\02 bar \\03",
-            "raw": "\"\\01 foo \\02 bar \\03\""
+            "raw": "\"\\01 foo \\02 bar \\03\"",
+            "expressionValue": "\u0001 foo \u0002 bar \u0003"
           },
           "value": "\\01 foo \\02 bar \\03"
         }
@@ -41,7 +42,8 @@
           "start":24,"end":28,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":4}},
           "extra": {
             "rawValue": "\\4",
-            "raw": "\"\\4\""
+            "raw": "\"\\4\"",
+            "expressionValue": "\u0004"
           },
           "value": "\\4"
         }
@@ -54,7 +56,8 @@
           "start":30,"end":34,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":4}},
           "extra": {
             "rawValue": "\\5",
-            "raw": "\"\\5\""
+            "raw": "\"\\5\"",
+            "expressionValue": "\u0005"
           },
           "value": "\\5"
         }
@@ -67,7 +70,8 @@
           "start":37,"end":49,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":12}},
           "extra": {
             "rawValue": "use strict",
-            "raw": "\"use strict\""
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
           },
           "value": "use strict"
         }
@@ -80,7 +84,8 @@
           "start":52,"end":56,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":4}},
           "extra": {
             "rawValue": "\\4",
-            "raw": "\"\\4\""
+            "raw": "\"\\4\"",
+            "expressionValue": "\u0004"
           },
           "value": "\\4"
         }
@@ -93,7 +98,8 @@
           "start":58,"end":62,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":4}},
           "extra": {
             "rawValue": "\\5",
-            "raw": "\"\\5\""
+            "raw": "\"\\5\"",
+            "expressionValue": "\u0005"
           },
           "value": "\\5"
         }
@@ -106,7 +112,8 @@
           "start":65,"end":86,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":21}},
           "extra": {
             "rawValue": "\\04 foo \\05 bar \\06",
-            "raw": "\"\\04 foo \\05 bar \\06\""
+            "raw": "\"\\04 foo \\05 bar \\06\"",
+            "expressionValue": "\u0004 foo \u0005 bar \u0006"
           },
           "value": "\\04 foo \\05 bar \\06"
         }
