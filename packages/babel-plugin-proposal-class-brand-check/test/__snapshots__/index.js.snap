@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`babel-plugin-proposal-class-brand-check/expression exec 1`] = `
+"
+class Range {
+    #start
+    #end
+    constructor(start, end) {
+        this.#start = start
+        this.#end = end
+    }
+    test(){
+    }
+    equals(range) {
+        // this.test(range);
+        call(range)
+        if (!(class.hasInstance(range))) return false
+        // return this.#start === range.#start && this.#end === range.#end
+    }
+}
+"
+`;
+
+exports[`babel-plugin-proposal-class-brand-check/expression exec2 1`] = `
+"
+class Range {
+    #start
+    #end
+    constructor(start, end) {
+        this.#start = start
+        this.#end = end
+    }
+    test(){
+    }
+    equals(range) {
+        // this.test(range);
+        call(range)
+        if (!(class.hasInstance(range))) return false
+        // return this.#start === range.#start && this.#end === range.#end
+    }
+}
+"
+`;

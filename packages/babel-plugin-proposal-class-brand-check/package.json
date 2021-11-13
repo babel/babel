@@ -2,6 +2,7 @@
   "name": "@babel/plugin-proposal-class-brand-check",
   "version": "7.16.0",
   "description": "",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
@@ -20,7 +21,10 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/parser": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
