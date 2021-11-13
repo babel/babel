@@ -27,7 +27,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "babel-plugin-polyfill-corejs3": "^0.3.0",
+    "babel-plugin-polyfill-corejs3": "^0.4.0",
     "core-js-pure": "^3.19.0"
   },
   "engines": {
