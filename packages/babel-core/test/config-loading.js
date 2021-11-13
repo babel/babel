@@ -1,4 +1,4 @@
-import loadConfigRunner, {
+import _loadConfigRunner, {
   loadPartialConfig,
   createConfigItem,
 } from "../lib/config/index.js";
@@ -8,7 +8,7 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 
-const loadConfig = loadConfigRunner.sync;
+const loadConfig = _loadConfigRunner.default.sync;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(

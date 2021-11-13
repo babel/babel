@@ -1,6 +1,8 @@
-import getTargets from "../../lib/index.js";
 import { fileURLToPath } from "url";
 import path from "path";
+
+import _getTargets from "../../lib/index.js";
+const getTargets = _getTargets.default;
 
 const oldCwd = process.cwd();
 

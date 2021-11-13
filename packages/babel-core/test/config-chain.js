@@ -2,8 +2,10 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
-import * as babel from "../lib/index.js";
-import getTargets from "@babel/helper-compilation-targets";
+import babel from "../lib/index.js";
+
+import _getTargets from "@babel/helper-compilation-targets";
+const getTargets = _getTargets.default;
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 

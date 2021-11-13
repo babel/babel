@@ -1,9 +1,11 @@
-import * as babel from "../lib/index.js";
+import babel from "../lib/index.js";
 import sourceMap from "source-map";
 import path from "path";
-import Plugin from "../lib/config/plugin.js";
 import generator from "@babel/generator";
 import { fileURLToPath } from "url";
+
+import _Plugin from "../lib/config/plugin.js";
+const Plugin = _Plugin.default;
 
 import presetEnv from "../../babel-preset-env/lib/index.js";
 import pluginSyntaxFlow from "../../babel-plugin-syntax-flow/lib/index.js";

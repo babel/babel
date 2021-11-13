@@ -1,7 +1,9 @@
 import { transform } from "../lib/index.js";
-import Plugin from "../lib/config/plugin.js";
 import { fileURLToPath } from "url";
 import path from "path";
+
+import _Plugin from "../lib/config/plugin.js";
+const Plugin = _Plugin.default;
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 

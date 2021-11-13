@@ -1,11 +1,16 @@
 // eslint-disable-next-line import/extensions
 import compatData from "@babel/compat-data/plugins";
 
-import * as babelPresetEnv from "../lib/index.js";
-import removeRegeneratorEntryPlugin from "../lib/polyfills/regenerator.js";
-import pluginLegacyBabelPolyfill from "../lib/polyfills/babel-polyfill.js";
-import transformations from "../lib/module-transformations.js";
-import availablePlugins from "../lib/available-plugins.js";
+import babelPresetEnv from "../lib/index.js";
+
+import _removeRegeneratorEntryPlugin from "../lib/polyfills/regenerator.js";
+import _pluginLegacyBabelPolyfill from "../lib/polyfills/babel-polyfill.js";
+import _transformations from "../lib/module-transformations.js";
+import _availablePlugins from "../lib/available-plugins.js";
+const removeRegeneratorEntryPlugin = _removeRegeneratorEntryPlugin.default;
+const pluginLegacyBabelPolyfill = _pluginLegacyBabelPolyfill.default;
+const transformations = _transformations.default;
+const availablePlugins = _availablePlugins.default;
 
 import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";

@@ -9,7 +9,7 @@ const ruleTester = new RuleTester({
   parserOptions: { sourceType: "module" },
 });
 
-ruleTester.run("no-deprecated-clone", rule, {
+ruleTester.run("no-deprecated-clone", rule.default, {
   valid: [
     `_.clone(obj)`,
     `_.cloneDeep(obj)`,

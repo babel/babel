@@ -3,7 +3,7 @@ import rule from "../../lib/rules/report-error-message-format.js";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("report-error-message-format", rule, {
+ruleTester.run("report-error-message-format", rule.default, {
   valid: [
     "makeErrorTemplates({});",
     'makeErrorTemplates({ ThisIsAnError: "This is an error." });',

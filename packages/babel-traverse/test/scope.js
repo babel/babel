@@ -1,6 +1,8 @@
-import traverse, { NodePath } from "../lib/index.js";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+
+import _traverse, { NodePath } from "../lib/index.js";
+const traverse = _traverse.default;
 
 function getPath(code, options): NodePath<t.Program> {
   const ast =

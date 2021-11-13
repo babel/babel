@@ -3,7 +3,7 @@ import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.j
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("semi", rule, {
+ruleTester.run("semi", rule.default, {
   valid: [
     "class Foo { bar = 'example'; }",
     "class Foo { #bar = 'example'; }",
