@@ -3,7 +3,7 @@ import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
 import { hasMinVersion } from "./helpers";
-import getRuntimePath from "./get-runtime-path";
+import getRuntimePath, { resolveFSPath } from "./get-runtime-path";
 
 import _pluginCorejs2 from "babel-plugin-polyfill-corejs2";
 import _pluginCorejs3 from "babel-plugin-polyfill-corejs3";
@@ -165,8 +165,6 @@ export default declare((api, options, dirname) => {
     };
   }
 
-  const corejsExt = absoluteRuntime ? ".js" : "";
-
   return {
     name: "transform-runtime",
 
@@ -175,14 +173,16 @@ export default declare((api, options, dirname) => {
           pluginCorejs2,
           {
             method: "usage-pure",
+            absoluteImports: absoluteRuntime ? modulePath : false,
             [pluginsCompat]: {
               runtimeVersion,
               useBabelRuntime: modulePath,
-              ext: corejsExt,
+              ext: "",
             },
           },
           createRegeneratorPlugin({
             method: "usage-pure",
+            absoluteImports: absoluteRuntime ? modulePath : false,
             [pluginsCompat]: { useBabelRuntime: modulePath },
           }),
         )
@@ -193,15 +193,18 @@ export default declare((api, options, dirname) => {
             method: "usage-pure",
             version: 3,
             proposals,
-            [pluginsCompat]: { useBabelRuntime: modulePath, ext: corejsExt },
+            absoluteImports: absoluteRuntime ? modulePath : false,
+            [pluginsCompat]: { useBabelRuntime: modulePath, ext: "" },
           },
           createRegeneratorPlugin({
             method: "usage-pure",
+            absoluteImports: absoluteRuntime ? modulePath : false,
             [pluginsCompat]: { useBabelRuntime: modulePath },
           }),
         )
       : createRegeneratorPlugin({
           method: "usage-pure",
+          absoluteImports: absoluteRuntime ? modulePath : false,
           [pluginsCompat]: { useBabelRuntime: modulePath },
         }),
 
@@ -232,12 +235,10 @@ export default declare((api, options, dirname) => {
             ? "helpers/esm"
             : "helpers";
 
-        return addDefaultImport(
-          `${modulePath}/${helpersDir}/${name}`,
-          name,
-          blockHoist,
-          true,
-        );
+        let helperPath = `${modulePath}/${helpersDir}/${name}`;
+        if (absoluteRuntime) helperPath = resolveFSPath(helperPath);
+
+        return addDefaultImport(helperPath, name, blockHoist, true);
       });
 
       const cache = new Map();
