@@ -13,8 +13,7 @@ export default declare(api => {
         const node = path.node;
         if (node.callee.name === "hasInstance") {
           const args = node.arguments;
-
-          if (!args || args.length > 1) {
+          if (!args || args.length !== 1) {
             throw new Error("Expected 1 arguments, but got " + args.length);
           }
           const setID = path.scope.generateUidIdentifier("set");
