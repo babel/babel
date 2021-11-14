@@ -1,8 +1,9 @@
-"use strict";
+import { createRequire } from "module";
+import path from "path";
+import fs from "fs";
+import child from "child_process";
 
-const fs = require("fs");
-const path = require("path");
-const child = require("child_process");
+const require = createRequire(import.meta.url);
 
 let currentHook;
 let currentOptions;

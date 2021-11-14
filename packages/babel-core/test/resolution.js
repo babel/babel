@@ -355,8 +355,8 @@ describe("addon resolution", function () {
       // `require.resolve` is provided.
       // see https://github.com/babel/babel/pull/12439/files#r535996000
       process.versions.node.startsWith("8.")
-        ? /Cannot resolve module 'babel-preset-foo'/
-        : /Cannot resolve module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
+        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 
@@ -371,8 +371,8 @@ describe("addon resolution", function () {
       });
     }).toThrow(
       process.versions.node.startsWith("8.")
-        ? /Cannot resolve module 'babel-plugin-foo'/
-        : /Cannot resolve module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
+        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 
@@ -387,8 +387,8 @@ describe("addon resolution", function () {
       });
     }).toThrow(
       process.versions.node.startsWith("8.")
-        ? /Cannot resolve module 'babel-preset-foo'/
-        : /Cannot resolve module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/,
+        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
+        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -403,8 +403,8 @@ describe("addon resolution", function () {
       });
     }).toThrow(
       process.versions.node.startsWith("8.")
-        ? /Cannot resolve module 'babel-plugin-foo'/
-        : /Cannot resolve module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/,
+        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
+        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -419,8 +419,8 @@ describe("addon resolution", function () {
       });
     }).toThrow(
       process.versions.node.startsWith("8.")
-        ? /Cannot resolve module 'babel-preset-testplugin'/
-        : /Cannot resolve module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/,
+        ? /Cannot (?:find|resolve) module 'babel-preset-testplugin'/
+        : /Cannot (?:find|resolve) module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/s,
     );
   });
 
@@ -435,8 +435,8 @@ describe("addon resolution", function () {
       });
     }).toThrow(
       process.versions.node.startsWith("8.")
-        ? /Cannot resolve module 'babel-plugin-testpreset'/
-        : /Cannot resolve module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/,
+        ? /Cannot (?:find|resolve) module 'babel-plugin-testpreset'/
+        : /Cannot (?:find|resolve) module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/s,
     );
   });
 
@@ -449,7 +449,7 @@ describe("addon resolution", function () {
         babelrc: false,
         presets: ["foo"],
       });
-    }).toThrow(/Cannot resolve module 'babel-preset-foo'/);
+    }).toThrow(/Cannot (?:find|resolve) module 'babel-preset-foo'/);
   });
 
   it("should throw about missing plugins", function () {
@@ -461,6 +461,6 @@ describe("addon resolution", function () {
         babelrc: false,
         plugins: ["foo"],
       });
-    }).toThrow(/Cannot resolve module 'babel-plugin-foo'/);
+    }).toThrow(/Cannot (?:find|resolve) module 'babel-plugin-foo'/);
   });
 });

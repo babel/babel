@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const testCacheFilename = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -39,7 +42,7 @@ describe("@babel/register - caching", () => {
 
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
-      jest.resetModules();
+      jest.resetModules(require);
       const cache = require("../lib/cache.js");
 
       load = cache.load;

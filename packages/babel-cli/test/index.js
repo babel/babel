@@ -190,7 +190,7 @@ const buildTest = function (binName, testName, opts) {
 };
 
 fs.readdirSync(fixtureLoc).forEach(function (binName) {
-  if (binName.startsWith(".")) return;
+  if (binName.startsWith(".") || binName === "package.json") return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function () {

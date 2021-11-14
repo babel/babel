@@ -100,9 +100,7 @@ const assertTest = function (stdout, stderr, ipcMessage, opts) {
 const buildTest = function (testName, opts) {
   return function (callback) {
     saveInFiles(opts.inFiles);
-    let args = [binLoc];
-    args.push("--config-file", "../config.json");
-    args = args.concat(opts.args);
+    const args = [binLoc].concat(opts.args);
 
     const spawnOpts = {};
     if (opts.ipc) {
@@ -202,6 +200,9 @@ describe("bin/babel-node", function () {
     if (fs.existsSync(babelrcLoc)) {
       // copy .babelrc file to tmp directory
       opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+    }
+    if (!opts.inFiles["package.json"]) {
+      opts.inFiles["package.json"] = `{ "type": "commonjs" }`;
     }
 
     // eslint-disable-next-line jest/valid-title

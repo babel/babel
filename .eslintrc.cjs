@@ -68,6 +68,7 @@ module.exports = {
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
         "import/extensions": ["error", "always"],
+        "import/no-extraneous-dependencies": "off",
         "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
       },
     },
