@@ -32,3 +32,7 @@ function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
     );
   }
 }
+
+export function resolveFSPath(path) {
+  return require.resolve(path);
+}
