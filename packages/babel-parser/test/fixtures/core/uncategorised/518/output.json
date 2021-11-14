@@ -48,7 +48,8 @@
                   "start":20,"end":32,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}},
                   "extra": {
                     "rawValue": "use strict",
-                    "raw": "\"use strict\""
+                    "raw": "\"use strict\"",
+                    "expressionValue": "use strict"
                   },
                   "value": "use strict"
                 }

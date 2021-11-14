@@ -16,7 +16,8 @@
           "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
           "extra": {
             "rawValue": "Hello\\02World",
-            "raw": "\"Hello\\02World\""
+            "raw": "\"Hello\\02World\"",
+            "expressionValue": "Hello\u0002World"
           },
           "value": "Hello\\02World"
         }

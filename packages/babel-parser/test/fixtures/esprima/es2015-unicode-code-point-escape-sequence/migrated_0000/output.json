@@ -16,7 +16,8 @@
           "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
           "extra": {
             "rawValue": "\\\\u{714E}\\\\u{8336}",
-            "raw": "\"\\\\u{714E}\\\\u{8336}\""
+            "raw": "\"\\\\u{714E}\\\\u{8336}\"",
+            "expressionValue": "\\u{714E}\\u{8336}"
           },
           "value": "\\\\u{714E}\\\\u{8336}"
         }

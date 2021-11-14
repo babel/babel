@@ -16,7 +16,8 @@
           "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
           "extra": {
             "rawValue": "\\u{714E}\\u{8336}",
-            "raw": "\"\\u{714E}\\u{8336}\""
+            "raw": "\"\\u{714E}\\u{8336}\"",
+            "expressionValue": "煎茶"
           },
           "value": "\\u{714E}\\u{8336}"
         }

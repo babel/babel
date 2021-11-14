@@ -16,7 +16,8 @@
           "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":6}},
           "extra": {
             "rawValue": "before after",
-            "raw": "\"before after\""
+            "raw": "\"before after\"",
+            "expressionValue": "before after"
           },
           "value": "before after"
         },

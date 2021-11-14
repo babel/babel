@@ -49,7 +49,8 @@
                       "start":52,"end":71,"loc":{"start":{"line":1,"column":52},"end":{"line":1,"column":71}},
                       "extra": {
                         "rawValue": "octal directive\\1",
-                        "raw": "\"octal directive\\1\""
+                        "raw": "\"octal directive\\1\"",
+                        "expressionValue": "octal directive\u0001"
                       },
                       "value": "octal directive\\1"
                     }
@@ -67,7 +68,8 @@
                 "start":19,"end":31,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":31}},
                 "extra": {
                   "rawValue": "use strict",
-                  "raw": "\"use strict\""
+                  "raw": "\"use strict\"",
+                  "expressionValue": "use strict"
                 },
                 "value": "use strict"
               }

@@ -19,7 +19,8 @@
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
           "extra": {
             "rawValue": "\\u{1F_639}",
-            "raw": "\"\\u{1F_639}\""
+            "raw": "\"\\u{1F_639}\"",
+            "expressionValue": "😹"
           },
           "value": "\\u{1F_639}"
         }
