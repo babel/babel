@@ -80,6 +80,7 @@
     "eslint/*",
     "packages/*",
     "test/esm",
+    "test/jest-light-runner",
     "test/runtime-integration/*",
     "benchmark"
   ],

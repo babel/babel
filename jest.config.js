@@ -2,6 +2,8 @@ const supportsESM = parseInt(process.versions.node) >= 12;
 const isPublishBundle = process.env.IS_PUBLISH;
 
 module.exports = {
+  runner: supportsESM ? "./test/jest-light-runner" : "jest-runner",
+
   collectCoverageFrom: [
     "packages/*/src/**/*.{js,mjs,ts}",
     "codemods/*/src/**/*.{js,mjs,ts}",
