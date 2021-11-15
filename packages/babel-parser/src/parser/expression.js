@@ -2204,6 +2204,9 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
+  // https://tc39.es/ecma262/#prod-PropertyName
+  // when refExpressionErrors presents, it will parse private name
+  // and record the position of the first private name
   parsePropertyName(
     prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
     refExpressionErrors?: ?ExpressionErrors,
