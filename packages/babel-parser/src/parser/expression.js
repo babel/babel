@@ -2130,7 +2130,7 @@ export default class ExpressionParser extends LValParser {
     if (!prop.computed && prop.key.type === "Identifier") {
       // PropertyDefinition:
       //   IdentifierReference
-      //   CoveredInitializedName
+      //   CoverInitializedName
       // Note: `{ eval } = {}` will be checked in `checkLVal` later.
       this.checkReservedWord(prop.key.name, prop.key.start, true, false);
 
@@ -2140,9 +2140,14 @@ export default class ExpressionParser extends LValParser {
           startLoc,
           cloneIdentifier(prop.key),
         );
-      } else if (this.match(tt.eq) && refExpressionErrors) {
-        if (refExpressionErrors.shorthandAssign === -1) {
-          refExpressionErrors.shorthandAssign = this.state.start;
+      } else if (this.match(tt.eq)) {
+        const shorthandAssign = this.state.start;
+        if (refExpressionErrors != null) {
+          if (refExpressionErrors.shorthandAssign === -1) {
+            refExpressionErrors.shorthandAssign = shorthandAssign;
+          }
+        } else {
+          this.raise(shorthandAssign, Errors.InvalidCoverInitializedName);
         }
         prop.value = this.parseMaybeDefault(
           startPos,
