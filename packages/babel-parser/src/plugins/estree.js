@@ -336,8 +336,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       if (node != null && this.isObjectProperty(node)) {
-        this.toAssignable(node.value, isLHS);
-
+        const { key, value } = node;
+        if (this.isPrivateName(key)) {
+          this.classScope.usePrivateName(this.getPrivateNameSV(key), key.start);
+        }
+        this.toAssignable(value, isLHS);
         return node;
       }
 

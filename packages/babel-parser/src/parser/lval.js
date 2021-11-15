@@ -143,9 +143,14 @@ export default class LValParser extends NodeUtils {
         }
         break;
 
-      case "ObjectProperty":
-        this.toAssignable(node.value, isLHS);
+      case "ObjectProperty": {
+        const { key, value } = node;
+        if (this.isPrivateName(key)) {
+          this.classScope.usePrivateName(this.getPrivateNameSV(key), key.start);
+        }
+        this.toAssignable(value, isLHS);
         break;
+      }
 
       case "SpreadElement": {
         this.checkToRestConversion(node);

@@ -2243,7 +2243,6 @@ export default class ExpressionParser extends LValParser {
               if (refExpressionErrors.privateKey === -1) {
                 refExpressionErrors.privateKey = privateKeyPos;
               }
-              this.classScope.usePrivateName(value, privateKeyPos);
             } else {
               this.raise(privateKeyPos, Errors.UnexpectedPrivateField);
             }
