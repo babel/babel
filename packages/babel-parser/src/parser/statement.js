@@ -1824,8 +1824,8 @@ export default class StatementParser extends ExpressionParser {
 
     if (isFromRequired || hasSpecifiers || hasDeclaration) {
       this.checkExport(node, true, false, !!node.source);
-      if (this.hasPlugin("importAssertions")) {
-        node.assertions ??= [];
+      if (this.hasPlugin("importAssertions") && node.assertions == null) {
+        node.assertions = [];
       }
       return this.finishNode(node, "ExportNamedDeclaration");
     }
