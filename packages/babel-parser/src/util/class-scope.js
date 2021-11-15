@@ -61,11 +61,12 @@ export default class ClassScopeHandler {
     elementType: ClassElementTypes,
     pos: number,
   ) {
-    const classScope = this.current();
-    let redefined = classScope.privateNames.has(name);
+    const { privateNames, loneAccessors, undefinedPrivateNames } =
+      this.current();
+    let redefined = privateNames.has(name);
 
     if (elementType & CLASS_ELEMENT_KIND_ACCESSOR) {
-      const accessor = redefined && classScope.loneAccessors.get(name);
+      const accessor = redefined && loneAccessors.get(name);
       if (accessor) {
         const oldStatic = accessor & CLASS_ELEMENT_FLAG_STATIC;
         const newStatic = elementType & CLASS_ELEMENT_FLAG_STATIC;
@@ -78,9 +79,9 @@ export default class ClassScopeHandler {
         // they have the same placement (static or not).
         redefined = oldKind === newKind || oldStatic !== newStatic;
 
-        if (!redefined) classScope.loneAccessors.delete(name);
+        if (!redefined) loneAccessors.delete(name);
       } else if (!redefined) {
-        classScope.loneAccessors.set(name, elementType);
+        loneAccessors.set(name, elementType);
       }
     }
 
@@ -88,8 +89,8 @@ export default class ClassScopeHandler {
       this.raise(pos, Errors.PrivateNameRedeclaration, name);
     }
 
-    classScope.privateNames.add(name);
-    classScope.undefinedPrivateNames.delete(name);
+    privateNames.add(name);
+    undefinedPrivateNames.delete(name);
   }
 
   usePrivateName(name: string, pos: number) {
