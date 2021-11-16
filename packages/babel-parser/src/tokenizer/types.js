@@ -186,8 +186,9 @@ export const tt: { [name: string]: TokenType } = {
   eq: createToken("=", { beforeExpr, isAssign }),
   assign: createToken("_=", { beforeExpr, isAssign }),
   slashAssign: createToken("_=", { beforeExpr, isAssign }),
-  // These are only needed to support % and ^ as a Hack-pipe topic token. When the
-  // proposal settles on a token, the others can be merged with tt.assign.
+  // These are only needed to support % and ^ as a Hack-pipe topic token.
+  // When the proposal settles on a token, the others can be merged with
+  // tt.assign.
   xorAssign: createToken("_=", { beforeExpr, isAssign }),
   moduloAssign: createToken("_=", { beforeExpr, isAssign }),
   // end: isAssign
@@ -195,6 +196,12 @@ export const tt: { [name: string]: TokenType } = {
   incDec: createToken("++/--", { prefix, postfix, startsExpr }),
   bang: createToken("!", { beforeExpr, prefix, startsExpr }),
   tilde: createToken("~", { beforeExpr, prefix, startsExpr }),
+
+  // More possible topic tokens.
+  // When the proposal settles on a token, at least one of these may be removed.
+  doubleCaret: createToken("^^", { startsExpr }),
+  doubleAt: createToken("@@", { startsExpr }),
+
   // start: isBinop
   pipeline: createBinop("|>", 0),
   nullishCoalescing: createBinop("??", 1),

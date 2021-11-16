@@ -1204,6 +1204,30 @@ export default class ExpressionParser extends LValParser {
         return this.parseTopicReferenceThenEqualsSign(tt.bitwiseXOR, "^");
       }
 
+      case tt.doubleCaret: {
+        const pipeProposal = this.getPluginOption(
+          "pipelineOperator",
+          "proposal",
+        );
+        const pluginTopicToken = this.getPluginOption(
+          "pipelineOperator",
+          "topicToken",
+        );
+
+        // The `^^` token is valid only when:
+        // the pipe-operator proposal is active,
+        // its "pipeProposal" is configured as "hack",
+        // and "topicToken" is configured as "^^".
+        // If the pipe-operator proposal settles on a token that is not ^^,
+        // then this token type may be removed.
+        if (pipeProposal === "hack" && pluginTopicToken === "^^") {
+          return this.parseTopicReference(pipeProposal);
+        } else {
+          throw this.unexpected();
+        }
+      }
+
+      case tt.doubleAt:
       case tt.bitwiseXOR:
       case tt.modulo:
       case tt.hash: {
@@ -1306,10 +1330,10 @@ export default class ExpressionParser extends LValParser {
   // that is followed by an equals sign.
   // See <https://github.com/js-choi/proposal-hack-pipes>.
   // If we find ^= or %= in an expression position
-  // (i.e., the tt.moduloAssign or tt.xorAssign token types),
-  // and if the Hack-pipes proposal is active with ^ or % as its topicToken,
-  // then the ^ or % could be the topic token (e.g., in x |> ^==y or x |> ^===y),
-  // and so we reparse the current token as ^ or %.
+  // (i.e., the tt.moduloAssign or tt.xorAssign token types), and if the
+  // Hack-pipes proposal is active with ^ or % as its topicToken, then the ^ or
+  // % could be the topic token (e.g., in x |> ^==y or x |> ^===y), and so we
+  // reparse the current token as ^ or %.
   // Otherwise, this throws an unexpected-token error.
   parseTopicReferenceThenEqualsSign(
     topicTokenType: TokenType,
@@ -1324,8 +1348,8 @@ export default class ExpressionParser extends LValParser {
       // will consume that “topic token”.
       this.state.type = topicTokenType;
       this.state.value = topicTokenValue;
-      // Rewind the tokenizer to the end of the “topic token”,
-      // so that the following token starts at the equals sign after that topic token.
+      // Rewind the tokenizer to the end of the “topic token”, so that the
+      // following token starts at the equals sign after that topic token.
       this.state.pos--;
       this.state.end--;
       // This is safe to do since the preceding character was either ^ or %, and
