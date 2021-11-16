@@ -20,6 +20,24 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.4 (2021-11-16)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-remap-async-to-generator`, `babel-plugin-transform-async-to-generator`
+  * [#13961](https://github.com/babel/babel/pull/13961) Wait the correct number of ticks on nested `await` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#13929](https://github.com/babel/babel/pull/13929) Refactor bindingProperty parsing ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#13957](https://github.com/babel/babel/pull/13957) Add `assertions` to `ExportNamedDeclaration` without `from` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#13951](https://github.com/babel/babel/pull/13951) Throw on duplicate `__proto__` props followed by assignment ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#12827](https://github.com/babel/babel/pull/12827) Add file extension when using `absoluteRuntime` ([@mbehzad](https://github.com/mbehzad))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#13960](https://github.com/babel/babel/pull/13960) Always expose `expressionValue` in `DirectiveLiteral` nodes ([@tolmasky](https://github.com/tolmasky))
 ## v7.16.3 (2021-11-09)
 
 #### :bug: Bug Fix
