@@ -1893,6 +1893,9 @@ export default class StatementParser extends ExpressionParser {
 
       node.source = null;
       node.declaration = null;
+      if (this.hasPlugin("importAssertions")) {
+        node.assertions = [];
+      }
 
       return true;
     }
@@ -1903,6 +1906,9 @@ export default class StatementParser extends ExpressionParser {
     if (this.shouldParseExportDeclaration()) {
       node.specifiers = [];
       node.source = null;
+      if (this.hasPlugin("importAssertions")) {
+        node.assertions = [];
+      }
       node.declaration = this.parseExportDeclaration(node);
       return true;
     }
@@ -2015,12 +2021,8 @@ export default class StatementParser extends ExpressionParser {
       if (assertions) {
         node.assertions = assertions;
       }
-    } else {
-      if (expect) {
-        this.unexpected();
-      } else {
-        node.source = null;
-      }
+    } else if (expect) {
+      this.unexpected();
     }
 
     this.semicolon();
