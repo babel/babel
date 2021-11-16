@@ -13,17 +13,69 @@ function helper(minVersion, source) {
 }
 
 export default Object.freeze({
+  appendArrayLike: helper(
+    "7.16.5",
+    "export default function _appendArrayLike(dest,src,num){var i=0,l=dest.length,n=src.length;for(n>num&&(n=num>0?num:0),dest.length+=n;i<n;)dest[l++]=src[i++];return dest}",
+  ),
   asyncIterator: helper(
     "7.15.9",
     'export default function _asyncIterator(iterable){var method,async,sync,retry=2;for("undefined"!=typeof Symbol&&(async=Symbol.asyncIterator,sync=Symbol.iterator);retry--;){if(async&&null!=(method=iterable[async]))return method.call(iterable);if(sync&&null!=(method=iterable[sync]))return new AsyncFromSyncIterator(method.call(iterable));async="@@asyncIterator",sync="@@iterator"}throw new TypeError("Object is not async iterable")}function AsyncFromSyncIterator(s){function AsyncFromSyncIteratorContinuation(r){if(Object(r)!==r)return Promise.reject(new TypeError(r+" is not an object."));var done=r.done;return Promise.resolve(r.value).then((function(value){return{value:value,done:done}}))}return AsyncFromSyncIterator=function(s){this.s=s,this.n=s.next},AsyncFromSyncIterator.prototype={s:null,n:null,next:function(){return AsyncFromSyncIteratorContinuation(this.n.apply(this.s,arguments))},return:function(value){var ret=this.s.return;return void 0===ret?Promise.resolve({value:value,done:!0}):AsyncFromSyncIteratorContinuation(ret.apply(this.s,arguments))},throw:function(value){var thr=this.s.return;return void 0===thr?Promise.reject(value):AsyncFromSyncIteratorContinuation(thr.apply(this.s,arguments))}},new AsyncFromSyncIterator(s)}',
+  ),
+  concatArrayLike: helper(
+    "7.16.5",
+    "export default function _concatArrayLike(){for(var ai=0,an=arguments.length,dn=0;ai<an;)dn+=arguments[ai++].length;var dest=new Array(dn),di=0;for(ai=0;ai<an;)for(var src=arguments[ai++],si=0,sn=src.length;si<sn;)dest[di++]=src[si++];return dest}",
+  ),
+  getIterator: helper(
+    "7.16.5",
+    'import isObjectType from"isObjectType";export default function _getIterator(o){var m="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(null!=m){if(isObjectType(m=m.call(o)))return m;throw new TypeError("@@iterator method returned a non-object.")}}',
+  ),
+  isArrayLike: helper(
+    "7.16.5",
+    'import isObjectType from"isObjectType";export default function _isArrayLike(x){return isObjectType(x)&&"number"==typeof x.length}',
+  ),
+  isObjectType: helper(
+    "7.16.5",
+    'export default function _isObjectType(x){return"object"==typeof x?null!==x:"function"==typeof x}',
+  ),
+  iteratorClose: helper(
+    "7.16.5",
+    "export default function _iteratorClose(it){null!=it.return&&it.return()}",
+  ),
+  iteratorCloseQuiet: helper(
+    "7.16.5",
+    "export default function _iteratorCloseQuiet(it){try{null!=it.return&&it.return()}catch(e){}}",
   ),
   jsx: helper(
     "7.0.0-beta.0",
     'var REACT_ELEMENT_TYPE;export default function _createRawReactElement(type,props,key,children){REACT_ELEMENT_TYPE||(REACT_ELEMENT_TYPE="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103);var defaultProps=type&&type.defaultProps,childrenLength=arguments.length-3;if(props||0===childrenLength||(props={children:void 0}),1===childrenLength)props.children=children;else if(childrenLength>1){for(var childArray=new Array(childrenLength),i=0;i<childrenLength;i++)childArray[i]=arguments[i+3];props.children=childArray}if(props&&defaultProps)for(var propName in defaultProps)void 0===props[propName]&&(props[propName]=defaultProps[propName]);else props||(props=defaultProps||{});return{$$typeof:REACT_ELEMENT_TYPE,type:type,key:void 0===key?null:""+key,ref:null,props:props,_owner:null}}',
   ),
+  maybeAppendIterable: helper(
+    "7.16.5",
+    'import getIterator from"getIterator";import iteratorClose from"iteratorClose";import iteratorCloseQuiet from"iteratorCloseQuiet";export default function _maybeAppendIterable(dest,src,limit){var it=null!=src&&getIterator(src);if(it){for(var s,v,n=0;!(++n>limit||(s=it.next()).done);){v=s.value;try{dest.push(v)}catch(e){throw iteratorCloseQuiet(it),e}}return n>limit&&iteratorClose(it),dest}}',
+  ),
+  maybeAppendUnsupportedIterable: helper(
+    "7.16.5",
+    'import appendArrayLike from"appendArrayLike";export default function _maybeAppendUnsupportedIterable(a,o,n){if("string"==typeof o)return appendArrayLike(a,o,n);if(o){var c=Object.prototype.toString.call(o).slice(8,-1);return"Object"===c&&o.constructor&&(c=o.constructor.name),"Map"===c||"Set"===c?appendArrayLike(a,Array.from(o),n):"Arguments"===c||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(c)?appendArrayLike(a,o,n):void 0}}',
+  ),
   objectSpread2: helper(
     "7.5.0",
     'import defineProperty from"defineProperty";function ownKeys(object,enumerableOnly){var keys=Object.keys(object);if(Object.getOwnPropertySymbols){var symbols=Object.getOwnPropertySymbols(object);enumerableOnly&&(symbols=symbols.filter((function(sym){return Object.getOwnPropertyDescriptor(object,sym).enumerable}))),keys.push.apply(keys,symbols)}return keys}export default function _objectSpread2(target){for(var i=1;i<arguments.length;i++){var source=null!=arguments[i]?arguments[i]:{};i%2?ownKeys(Object(source),!0).forEach((function(key){defineProperty(target,key,source[key])})):Object.getOwnPropertyDescriptors?Object.defineProperties(target,Object.getOwnPropertyDescriptors(source)):ownKeys(Object(source)).forEach((function(key){Object.defineProperty(target,key,Object.getOwnPropertyDescriptor(source,key))}))}return target}',
+  ),
+  spreadCoerceToArray: helper(
+    "7.16.5",
+    'import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableSpread from"nonIterableSpread";export default function _spreadCoerceToArray(src){return Array.isArray(src)?src:iterableToArray(src)||unsupportedIterableToArray(src)||nonIterableSpread()}',
+  ),
+  spreadCoerceToArrayLike: helper(
+    "7.16.5",
+    'import isArrayLike from"isArrayLike";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableSpread from"nonIterableSpread";export default function _spreadCoerceToArrayLike(src){return isArrayLike(src)?src:iterableToArray(src)||unsupportedIterableToArray(src)||nonIterableSpread()}',
+  ),
+  spreadIterableOrArray: helper(
+    "7.16.5",
+    'import appendArrayLike from"appendArrayLike";import maybeAppendIterable from"maybeAppendIterable";import maybeAppendUnsupportedIterable from"maybeAppendUnsupportedIterable";import nonIterableSpread from"nonIterableSpread";export default function _spreadIterableOrArray(dest,src){return Array.isArray(src)?appendArrayLike(dest,src):maybeAppendIterable(dest,src)||maybeAppendUnsupportedIterable(dest,src)||nonIterableSpread()}',
+  ),
+  spreadIterableOrArrayLike: helper(
+    "7.16.5",
+    'import isArrayLike from"isArrayLike";import appendArrayLike from"appendArrayLike";import maybeAppendIterable from"maybeAppendIterable";import maybeAppendUnsupportedIterable from"maybeAppendUnsupportedIterable";import nonIterableSpread from"nonIterableSpread";export default function _spreadIterableOrArrayLike(dest,src){return isArrayLike(src)?appendArrayLike(dest,src):maybeAppendIterable(dest,src)||maybeAppendUnsupportedIterable(dest,src)||nonIterableSpread()}',
   ),
   typeof: helper(
     "7.0.0-beta.0",
