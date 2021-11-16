@@ -123,7 +123,7 @@ const assertTest = function (stdout, stderr, opts, cwd) {
           const expected = opts.outFiles[filename];
           const actual = actualFiles[filename];
 
-          expect(actual).toBe(expected ?? "");
+          expect(actual).toBe(expected || "");
         }
       } catch (e) {
         e.message += "\n at " + filename;

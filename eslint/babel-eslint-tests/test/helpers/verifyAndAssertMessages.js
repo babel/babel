@@ -31,7 +31,7 @@ export default function verifyAndAssertMessages(
           "../../../babel-eslint-shared-fixtures/config/babel.config.js",
         ),
       },
-      ...overrideConfig?.parserOptions,
+      ...(overrideConfig && overrideConfig.parserOptions),
     },
   });
 

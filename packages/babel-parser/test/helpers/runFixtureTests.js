@@ -218,7 +218,7 @@ function runTest(test, parseFunction, compareErrorsOnly = false) {
       return save(test, ast);
     }
 
-    if (ast.errors?.length) {
+    if (ast.errors && ast.errors.length) {
       throw new Error(
         `Expected non-recoverable error message: ${
           opts.throws
