@@ -1,17 +1,14 @@
-import path from "path";
-import template from "@babel/template";
-import helpers from "../../lib/helpers.js";
+const path = require("path");
+// eslint-disable-next-line import/no-extraneous-dependencies
+const template = require("@babel/template").default;
+const helpers = require("../../lib/helpers.js").default;
 
 function getHelperId(dir, name) {
   const testName = path.basename(dir);
   return `_$_${testName}_${name}`;
 }
 
-export default function defineHelper(
-  dir: string,
-  name: string,
-  code: string,
-): string {
+module.exports = function defineHelper(dir, name, code) {
   const id = getHelperId(dir, name);
   if (id in helpers) {
     throw new Error(`The ${id} helper is already defined.`);
@@ -23,4 +20,4 @@ export default function defineHelper(
     },
   });
   return id;
-}
+};
