@@ -9,7 +9,10 @@ export function declare<
   Builder extends (...args: Args) => any,
 >(
   builder: Builder,
-): Builder extends (...args: infer A) => infer R ? (...args: A) => R : never {
+  // todo(flow->ts) maybe add stricter type for returned function
+  // reason any is there to not expose exact implementation details in type
+  // example of issue with this packages/babel-preset-typescript/src/index.ts
+): Builder extends (...args: infer A) => any ? (...args: A) => any : never {
   // @ts-ignore
   return (api, options, dirname) => {
     let clonedApi;
