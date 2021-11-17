@@ -213,8 +213,7 @@ export const ErrorMessages = makeErrorTemplates(
       "`new.target` can only be used in functions or class properties.",
     UnexpectedNumericSeparator:
       "A numeric separator is only allowed between two digits.",
-    UnexpectedPrivateField:
-      "Private names can only be used as the name of a class element (i.e. class C { #p = 42; #m() {} } )\n or a property of member expression (i.e. this.#p).",
+    UnexpectedPrivateField: "Unexpected private name.",
     UnexpectedReservedWord: "Unexpected reserved word '%0'.",
     UnexpectedSuper: "'super' is only allowed in object methods and classes.",
     UnexpectedToken: "Unexpected token '%0'.",
