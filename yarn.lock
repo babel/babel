@@ -989,6 +989,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
+    terser: ^5.9.0
   languageName: unknown
   linkType: soft
 
@@ -14035,13 +14036,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.6, source-map-support@npm:~0.5.12, source-map-support@npm:~0.5.19":
-  version: 0.5.19
-  resolution: "source-map-support@npm:0.5.19"
+"source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.6, source-map-support@npm:~0.5.12, source-map-support@npm:~0.5.20":
+  version: 0.5.20
+  resolution: "source-map-support@npm:0.5.20"
   dependencies:
     buffer-from: ^1.0.0
     source-map: ^0.6.0
-  checksum: c72802fdba9cb62b92baef18cc14cc4047608b77f0353e6c36dd993444149a466a2845332c5540d4a6630957254f0f68f4ef5a0120c33d2e83974c51a05afbac
+  checksum: 43946aff452011960d16154304b11011e0185549493e65dd90da045959409fb2d266ba1c854fff3d5949f8e59382e3fcc7f7c5fa66136007a6750ad06c6c0baa
   languageName: node
   linkType: hard
 
@@ -14659,16 +14660,16 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"terser@npm:^5.0.0, terser@npm:^5.5.1":
-  version: 5.6.0
-  resolution: "terser@npm:5.6.0"
+"terser@npm:^5.0.0, terser@npm:^5.5.1, terser@npm:^5.9.0":
+  version: 5.9.0
+  resolution: "terser@npm:5.9.0"
   dependencies:
     commander: ^2.20.0
     source-map: ~0.7.2
-    source-map-support: ~0.5.19
+    source-map-support: ~0.5.20
   bin:
     terser: bin/terser
-  checksum: 5932e620ffd2222cde2d0610ff9a608910c1ffec2e755e95db983cc43968f87e3ad7b6808420067805432ee03d46216b9919ff6b37f1c6ca4adef2f715d23711
+  checksum: 11c1246b1991015a8881742878af779e3863fad42f626ffda957dbf28c94bf51e7994cffb9ffbec86ff3c23ab45ffa6d79d453c15e664306e35fc7b2c4eee5f4
   languageName: node
   linkType: hard
 

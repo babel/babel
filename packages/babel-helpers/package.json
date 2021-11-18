@@ -20,7 +20,8 @@
     "@babel/types": "workspace:^"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "terser": "^5.9.0"
   },
   "engines": {
     "node": ">=6.9.0"
