@@ -46,8 +46,9 @@ export default Object.freeze({
     const { minVersion } = minVersionMatch.groups;
 
     const source = await minify(fileContents, {
-      compress: false,
       mangle: false,
+      // The _typeof helper has a custom directive that we must keep
+      compress: { directives: false },
     });
 
     output += `\

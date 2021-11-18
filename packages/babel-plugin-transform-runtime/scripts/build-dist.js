@@ -302,14 +302,24 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
 }
 
 function addDefaultCJSExport({ template }) {
+  const transformed = new WeakSet();
+
   return {
     visitor: {
       AssignmentExpression: {
         exit(path) {
           if (path.get("left").matchesPattern("module.exports")) {
-            path.insertAfter(template.expression.ast`
-              module.exports.default = module.exports,
-              module.exports.__esModule = true
+            if (transformed.has(path.node)) return;
+            transformed.add(path.node);
+
+            // Ensure that the completion value is still `module.exports`.
+            // This would be guaranteed by `insertAfter`, but by using `replaceWith`
+            // we can do it by putting `module.exports` last so that we don't need
+            // to inject temporary variables.
+            path.replaceWith(template.expression.ast`
+              ${path.node},
+              module.exports.__esModule = true,
+              module.exports.default = module.exports
             `);
           }
         },
