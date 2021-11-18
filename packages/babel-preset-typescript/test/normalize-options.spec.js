@@ -1,5 +1,13 @@
-import normalizeOptions from "../src/normalize-options.js";
-describe("normalize options", () => {
+const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
+
+describeSkipPublish("normalize options", () => {
+  let normalizeOptions;
+  beforeAll(async () => {
+    ({ default: normalizeOptions } = await import(
+      "../lib/normalize-options.js"
+    ));
+  });
+
   (process.env.BABEL_8_BREAKING ? describe : describe.skip)("Babel 8", () => {
     it("should throw on unknown options", () => {
       expect(() => normalizeOptions({ allowNamespace: true })).toThrowError(

@@ -1,4 +1,3 @@
-import { willPathCastToBoolean } from "../src/util.js";
 import { parseSync, traverse } from "@babel/core";
 
 function getPath(input, parserOpts) {
@@ -13,7 +12,14 @@ function getPath(input, parserOpts) {
   return targetPath;
 }
 
-describe("willPathCastToBoolean", () => {
+const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
+
+describeSkipPublish("willPathCastToBoolean", () => {
+  let willPathCastToBoolean;
+  beforeAll(async () => {
+    ({ willPathCastToBoolean } = await import("../lib/util.js"));
+  });
+
   const positiveCases = [
     "if(a?.b) {}",
     "while(a?.b) {}",

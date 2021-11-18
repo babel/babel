@@ -1,6 +1,11 @@
-import { getLineInfo } from "../../../src/util/location.js";
+const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
 
-describe("getLineInfo", () => {
+describeSkipPublish("getLineInfo", () => {
+  let getLineInfo;
+  beforeAll(async () => {
+    ({ getLineInfo } = await import("../../../lib/util/location.js"));
+  });
+
   const input = "a\nb\nc\nd\ne\nf\ng\nh\ni";
 
   it("reports correct position", () => {

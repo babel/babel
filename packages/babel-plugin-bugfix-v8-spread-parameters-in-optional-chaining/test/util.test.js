@@ -1,5 +1,4 @@
 import { parseSync, traverse } from "@babel/core";
-import { shouldTransform } from "../src/util.ts";
 
 function getPath(input, parserOpts = {}) {
   let targetPath;
@@ -20,7 +19,14 @@ function getPath(input, parserOpts = {}) {
   return targetPath;
 }
 
-describe("shouldTransform", () => {
+const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
+
+describeSkipPublish("shouldTransform", () => {
+  let shouldTransform;
+  beforeAll(async () => {
+    ({ shouldTransform } = await import("../lib/util.js"));
+  });
+
   const positiveCases = [
     "fn?.(...[], 0)",
     "fn?.(...[], ...[])",

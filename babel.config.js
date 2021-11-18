@@ -216,6 +216,10 @@ module.exports = function (api) {
         plugins: [transformNamedBabelTypesImportToDestructuring],
       },
       {
+        test: sources.map(source => normalize(source.replace("/src", "/test"))),
+        plugins: ["@babel/plugin-proposal-dynamic-import"],
+      },
+      {
         test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
       },

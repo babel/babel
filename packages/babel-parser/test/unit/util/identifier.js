@@ -1,9 +1,13 @@
-import {
-  isKeyword,
-  keywordRelationalOperator,
-} from "../../../src/util/identifier.js";
+const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
 
-describe("identifier", () => {
+describeSkipPublish("identifier", () => {
+  let isKeyword, keywordRelationalOperator;
+  beforeAll(async () => {
+    ({ isKeyword, keywordRelationalOperator } = await import(
+      "../../../lib/util/identifier.js"
+    ));
+  });
+
   describe("isKeyword", () => {
     it("break is a keyword", () => {
       expect(isKeyword("break")).toBe(true);
