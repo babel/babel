@@ -10,6 +10,7 @@ export default async function testRunner({ title, testcases }) {
     } catch (e) {
       console.log(chalk.red(indent + "✗ " + subtitle));
       console.error(e);
+      process.exitCode = 1;
     }
   }
 }

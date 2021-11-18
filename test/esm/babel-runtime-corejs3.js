@@ -11,7 +11,7 @@ export default {
             import("@babel/runtime-corejs3/helpers/esm/unknown-helper"),
           {
             name: "Error",
-            code: "ERR_MODULE_NOT_FOUND",
+            code: "ERR_PACKAGE_PATH_NOT_EXPORTED",
           }
         ),
     ],
@@ -24,14 +24,14 @@ export default {
           Error
         ),
     ],
-    [
+    /*[
       "it supports importing with explicit extension",
       () =>
         assert.doesNotReject(
           async () => import("@babel/runtime/helpers/esm/wrapNativeSuper.js"),
           Error
         ),
-    ],
+    ],*/
     [
       "it should not throw on importing core-js helpers",
       () =>
@@ -40,7 +40,7 @@ export default {
           Error
         ),
     ],
-    [
+    /*[
       "it should not throw on importing core-js helpers with explicit extension",
       () =>
         assert.doesNotReject(
@@ -48,7 +48,7 @@ export default {
             import("@babel/runtime-corejs3/core-js/array/is-array.js"),
           Error
         ),
-    ],
+    ],*/
     [
       "it should not throw on importing regenerator helpers",
       () =>
