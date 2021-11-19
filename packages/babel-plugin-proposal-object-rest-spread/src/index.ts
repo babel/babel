@@ -11,15 +11,14 @@ import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariab
 const { isAssignmentPattern, isObjectProperty } = t;
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
 // We need to detect this bug to know if "unused" means 0 or 1 references.
-const ZERO_REFS = process.env.BABEL_8_BREAKING
-  ? 0
-  : (() => {
-      const node = t.identifier("a");
-      const property = t.objectProperty(t.identifier("key"), node);
-      const pattern = t.objectPattern([property]);
+if (!process.env.BABEL_8_BREAKING) {
+  const node = t.identifier("a");
+  const property = t.objectProperty(t.identifier("key"), node);
+  const pattern = t.objectPattern([property]);
 
-      return t.isReferenced(node, property, pattern) ? 1 : 0;
-    })();
+  // eslint-disable-next-line no-var
+  var ZERO_REFS = t.isReferenced(node, property, pattern) ? 1 : 0;
+}
 
 export default declare((api, opts) => {
   api.assertVersion(7);
@@ -156,7 +155,8 @@ export default declare((api, opts) => {
     Object.keys(bindings).forEach(bindingName => {
       const bindingParentPath = bindings[bindingName].parentPath;
       if (
-        path.scope.getBinding(bindingName).references > ZERO_REFS ||
+        path.scope.getBinding(bindingName).references >
+          (process.env.BABEL_8_BREAKING ? 0 : ZERO_REFS) ||
         !bindingParentPath.isObjectProperty()
       ) {
         return;
