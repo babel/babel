@@ -27,6 +27,7 @@ import {
   tokenIsPostfix,
   tokenIsPrefix,
   tokenIsRightAssociative,
+  tokenIsTemplate,
   tokenKeywordOrIdentifierIsKeyword,
   tokenLabelName,
   tokenOperatorPrecedence,
@@ -706,9 +707,10 @@ export default class ExpressionParser extends LValParser {
     noCalls: ?boolean,
     state: N.ParseSubscriptState,
   ): N.Expression {
-    if (!noCalls && this.eat(tt.doubleColon)) {
+    const { type } = this.state;
+    if (!noCalls && type === tt.doubleColon) {
       return this.parseBind(base, startPos, startLoc, noCalls, state);
-    } else if (this.match(tt.templateNonTail) || this.match(tt.templateTail)) {
+    } else if (tokenIsTemplate(type)) {
       return this.parseTaggedTemplateExpression(
         base,
         startPos,
@@ -719,7 +721,7 @@ export default class ExpressionParser extends LValParser {
 
     let optional = false;
 
-    if (this.match(tt.questionDot)) {
+    if (type === tt.questionDot) {
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         // stop at `?.` when parsing `new a?.()`
         state.stop = true;
@@ -801,6 +803,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const node = this.startNodeAt(startPos, startLoc);
     node.object = base;
+    this.next(); // eat '::'
     node.callee = this.parseNoCallExpr();
     state.stop = true;
     return this.parseSubscripts(
@@ -2691,22 +2694,22 @@ export default class ExpressionParser extends LValParser {
   }
 
   isAmbiguousAwait(): boolean {
+    if (this.hasPrecedingLineBreak()) return true;
+    const { type } = this.state;
     return (
-      this.hasPrecedingLineBreak() ||
       // All the following expressions are ambiguous:
       //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
-      this.match(tt.plusMin) ||
-      this.match(tt.parenL) ||
-      this.match(tt.bracketL) ||
-      this.match(tt.templateNonTail) ||
-      this.match(tt.templateTail) ||
+      type === tt.plusMin ||
+      type === tt.parenL ||
+      type === tt.bracketL ||
+      tokenIsTemplate(type) ||
       // Sometimes the tokenizer generates tt.slash for regexps, and this is
       // handler by parseExprAtom
-      this.match(tt.regexp) ||
-      this.match(tt.slash) ||
+      type === tt.regexp ||
+      type === tt.slash ||
       // This code could be parsed both as a modulo operator or as an intrinsic:
       //   await %x(0)
-      (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
+      (this.hasPlugin("v8intrinsic") && type === tt.modulo)
     );
   }
 

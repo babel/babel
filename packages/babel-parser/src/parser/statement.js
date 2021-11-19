@@ -4,6 +4,7 @@ import * as N from "../types";
 import {
   tokenIsIdentifier,
   tokenIsLoop,
+  tokenIsTemplate,
   tt,
   type TokenType,
   getExportedToken,
@@ -96,7 +97,7 @@ function babel7CompatTokens(tokens) {
         continue;
       }
     }
-    if (type === tt.templateNonTail || type === tt.templateTail) {
+    if (tokenIsTemplate(type)) {
       if (!process.env.BABEL_8_BREAKING) {
         const { loc, start, value, end } = token;
         const backquoteEnd = start + 1;

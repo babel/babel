@@ -14,6 +14,7 @@ import {
   tokenIsKeywordOrIdentifier,
   tt,
   type TokenType,
+  tokenIsTemplate,
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
@@ -2197,10 +2198,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               }
 
               return this.finishCallExpression(node, state.optionalChainMember);
-            } else if (
-              this.match(tt.templateNonTail) ||
-              this.match(tt.templateTail)
-            ) {
+            } else if (tokenIsTemplate(this.state.type)) {
               const result = this.parseTaggedTemplateExpression(
                 base,
                 startPos,
