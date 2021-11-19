@@ -37,7 +37,7 @@ const buildDeclarationWrapper = template(`
   }
 `);
 
-function classOrObjectMethod(path: NodePath, callId: Object) {
+function classOrObjectMethod(path: NodePath, callId: any) {
   const node = path.node;
   const body = node.body;
 
@@ -62,7 +62,7 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
     .unwrapFunctionEnvironment();
 }
 
-function plainFunction(path: NodePath, callId: Object, noNewArrows: boolean) {
+function plainFunction(path: NodePath, callId: any, noNewArrows: boolean) {
   const node = path.node;
   const isDeclaration = path.isFunctionDeclaration();
   const functionId = node.id;
@@ -130,7 +130,7 @@ function plainFunction(path: NodePath, callId: Object, noNewArrows: boolean) {
 
 export default function wrapFunction(
   path: NodePath,
-  callId: Object,
+  callId: any,
   // TODO(Babel 8): Consider defaulting to false for spec compliancy
   noNewArrows: boolean = true,
 ) {
