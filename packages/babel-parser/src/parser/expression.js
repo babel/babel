@@ -770,24 +770,17 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNodeAt(startPos, startLoc);
     node.object = base;
     node.computed = computed;
-    const privateName =
-      !computed && this.match(tt.privateName) && this.state.value;
-    const property = computed
-      ? this.parseExpression()
-      : privateName
-      ? this.parsePrivateName()
-      : this.parseIdentifier(true);
-
-    if (privateName !== false) {
-      if (node.object.type === "Super") {
+    if (computed) {
+      node.property = this.parseExpression();
+      this.expect(tt.bracketR);
+    } else if (this.match(tt.privateName)) {
+      if (base.type === "Super") {
         this.raise(startPos, Errors.SuperPrivateField);
       }
-      this.classScope.usePrivateName(privateName, property.start);
-    }
-    node.property = property;
-
-    if (computed) {
-      this.expect(tt.bracketR);
+      this.classScope.usePrivateName(this.state.value, this.state.start);
+      node.property = this.parsePrivateName();
+    } else {
+      node.property = this.parseIdentifier(true);
     }
 
     if (state.optionalChainMember) {
@@ -2137,7 +2130,7 @@ export default class ExpressionParser extends LValParser {
     if (!prop.computed && prop.key.type === "Identifier") {
       // PropertyDefinition:
       //   IdentifierReference
-      //   CoveredInitializedName
+      //   CoverInitializedName
       // Note: `{ eval } = {}` will be checked in `checkLVal` later.
       this.checkReservedWord(prop.key.name, prop.key.start, true, false);
 
@@ -2147,9 +2140,14 @@ export default class ExpressionParser extends LValParser {
           startLoc,
           cloneIdentifier(prop.key),
         );
-      } else if (this.match(tt.eq) && refExpressionErrors) {
-        if (refExpressionErrors.shorthandAssign === -1) {
-          refExpressionErrors.shorthandAssign = this.state.start;
+      } else if (this.match(tt.eq)) {
+        const shorthandAssign = this.state.start;
+        if (refExpressionErrors != null) {
+          if (refExpressionErrors.shorthandAssign === -1) {
+            refExpressionErrors.shorthandAssign = shorthandAssign;
+          }
+        } else {
+          this.raise(shorthandAssign, Errors.InvalidCoverInitializedName);
         }
         prop.value = this.parseMaybeDefault(
           startPos,

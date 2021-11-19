@@ -78,6 +78,7 @@ export const ErrorMessages = makeErrorTemplates(
     ImportCallSpreadArgument: "`...` is not allowed in `import()`.",
     InvalidBigIntLiteral: "Invalid BigIntLiteral.",
     InvalidCodePoint: "Code point out of bounds.",
+    InvalidCoverInitializedName: "Invalid shorthand property initializer.",
     InvalidDecimal: "Invalid decimal.",
     InvalidDigit: "Expected number in radix %0.",
     InvalidEscapeSequence: "Bad character escape sequence.",

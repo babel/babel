@@ -270,7 +270,7 @@ export default class UtilParser extends Tokenizer {
       return hasErrors;
     } else if (hasErrors) {
       if (shorthandAssign >= 0) {
-        this.unexpected(shorthandAssign);
+        this.raise(shorthandAssign, Errors.InvalidCoverInitializedName);
       }
       if (doubleProto >= 0) {
         this.raise(doubleProto, Errors.DuplicateProto);
