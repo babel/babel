@@ -56,7 +56,10 @@ const loneSurrogate = /[\uD800-\uDFFF]/u;
 const keywordRelationalOperator = /in(?:stanceof)?/y;
 
 /**
- * Convert tt.privateName to tt.hash + tt.name for backward Babel 7 compat.
+ * Convert tokens for backward Babel 7 compat.
+ * tt.privateName => tt.hash + tt.name
+ * tt.templateTail => tt.backquote/tt.braceR + tt.template + tt.backquote
+ * tt.templateNonTail => tt.backquote/tt.braceR + tt.template + tt.dollarBraceL
  * For performance reasons this routine mutates `tokens`, it is okay
  * here since we execute `parseTopLevel` once for every file.
  * @param {*} tokens
@@ -66,8 +69,8 @@ function babel7CompatTokens(tokens) {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const { type } = token;
-    if (type === tt.privateName) {
-      if (!process.env.BABEL_8_BREAKING) {
+    if (!process.env.BABEL_8_BREAKING) {
+      if (type === tt.privateName) {
         const { loc, start, value, end } = token;
         const hashEndPos = start + 1;
         const hashEndLoc = createPositionWithColumnOffset(loc.start, 1);
@@ -96,9 +99,8 @@ function babel7CompatTokens(tokens) {
         i++;
         continue;
       }
-    }
-    if (tokenIsTemplate(type)) {
-      if (!process.env.BABEL_8_BREAKING) {
+
+      if (tokenIsTemplate(type)) {
         const { loc, start, value, end } = token;
         const backquoteEnd = start + 1;
         const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
