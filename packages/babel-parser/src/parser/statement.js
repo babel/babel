@@ -96,7 +96,7 @@ function babel7CompatTokens(tokens) {
         continue;
       }
     }
-    if (type === tt.templateMiddle || type === tt.templateTail) {
+    if (type === tt.templateNonTail || type === tt.templateTail) {
       if (!process.env.BABEL_8_BREAKING) {
         const { loc, start, value, end } = token;
         const backquoteEnd = start + 1;

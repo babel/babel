@@ -159,7 +159,7 @@ export const tt: { [name: string]: TokenType } = {
   backQuote: createToken("`", { startsExpr }),
   dollarBraceL: createToken("${", { beforeExpr, startsExpr }),
   templateTail: createToken("...`", { startsExpr }),
-  templateMiddle: createToken("...${", { beforeExpr, startsExpr }),
+  templateNonTail: createToken("...${", { beforeExpr, startsExpr }),
   at: createToken("@"),
   hash: createToken("#", { startsExpr }),
 

@@ -179,7 +179,7 @@ function convertToken(token, source, tl) {
     token.value = `${token.value}n`;
   } else if (label === tl.privateName) {
     token.type = "PrivateIdentifier";
-  } else if (label === tl.templateMiddle || label === tl.templateTail) {
+  } else if (label === tl.templateNonTail || label === tl.templateTail) {
     token.type = "Template";
   }
 

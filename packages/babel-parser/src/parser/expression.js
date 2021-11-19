@@ -708,7 +708,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       return this.parseBind(base, startPos, startLoc, noCalls, state);
-    } else if (this.match(tt.templateMiddle) || this.match(tt.templateTail)) {
+    } else if (this.match(tt.templateNonTail) || this.match(tt.templateTail)) {
       return this.parseTaggedTemplateExpression(
         base,
         startPos,
@@ -1153,7 +1153,7 @@ export default class ExpressionParser extends LValParser {
       case tt._new:
         return this.parseNewOrNewTarget();
 
-      case tt.templateMiddle:
+      case tt.templateNonTail:
       case tt.templateTail:
         return this.parseTemplate(false);
 
@@ -1870,7 +1870,7 @@ export default class ExpressionParser extends LValParser {
     node.quasis = [curElt];
     while (!curElt.tail) {
       node.expressions.push(this.parseTemplateSubstitution());
-      this.readTemplateMiddle();
+      this.readTemplateContinuation();
       node.quasis.push((curElt = this.parseTemplateElement(isTagged)));
     }
     return this.finishNode(node, "TemplateLiteral");
@@ -2698,7 +2698,7 @@ export default class ExpressionParser extends LValParser {
       this.match(tt.plusMin) ||
       this.match(tt.parenL) ||
       this.match(tt.bracketL) ||
-      this.match(tt.templateMiddle) ||
+      this.match(tt.templateNonTail) ||
       this.match(tt.templateTail) ||
       // Sometimes the tokenizer generates tt.slash for regexps, and this is
       // handler by parseExprAtom

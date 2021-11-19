@@ -916,7 +916,7 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.graveAccent:
-        this.readTmplToken();
+        this.readTemplateToken();
         return;
 
       case charCodes.digit0: {
@@ -1369,18 +1369,18 @@ export default class Tokenizer extends ParserErrors {
     this.finishToken(tt.string, out);
   }
 
-  // Reads template string tokens.
-
-  readTemplateMiddle(): void {
+  // Reads tempalte continuation `}...`
+  readTemplateContinuation(): void {
     if (!this.match(tt.braceR)) {
       this.unexpected(this.state.start, tt.braceR);
     }
     // rewind pos to `}`
     this.state.pos--;
-    this.readTmplToken();
+    this.readTemplateToken();
   }
 
-  readTmplToken(): void {
+  // Reads template string tokens.
+  readTemplateToken(): void {
     let out = "",
       chunkStart = this.state.pos, // eat '`' or `}`
       containsInvalid = false;
@@ -1402,7 +1402,7 @@ export default class Tokenizer extends ParserErrors {
       ) {
         this.state.pos += 2; // eat '${'
         out += this.input.slice(chunkStart, this.state.pos);
-        this.finishToken(tt.templateMiddle, containsInvalid ? null : out);
+        this.finishToken(tt.templateNonTail, containsInvalid ? null : out);
         return;
       }
       if (ch === charCodes.backslash) {

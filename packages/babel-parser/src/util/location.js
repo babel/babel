@@ -54,7 +54,7 @@ export function getLineInfo(input: string, offset: number): Position {
 /**
  * creates a new position with a non-zero column offset from the given position.
  * This function should be only be used when we create AST node out of the token
- * boundaries, such as TemplateElement ends before tt.templateMiddle. This
+ * boundaries, such as TemplateElement ends before tt.templateNonTail. This
  * function does not skip whitespaces.
  *
  * @export
