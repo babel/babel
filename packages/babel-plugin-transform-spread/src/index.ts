@@ -4,6 +4,33 @@ import { types as t, File } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
 
 type ListElement = t.SpreadElement | t.Expression;
+type ArrayExpressionElement = ListElement | null;
+
+class LazyTemporary {
+  scope: Scope;
+  name: string | undefined;
+  uid: t.Identifier | undefined;
+
+  constructor(scope: Scope, name?: string) {
+    this.scope = scope;
+    this.name = name;
+  }
+
+  assign(value: t.Expression): t.AssignmentExpression {
+    return t.assignmentExpression("=", this.clone(), value);
+  }
+
+  clone(): t.Identifier {
+    if (this.uid) {
+      return t.cloneNode(this.uid);
+    }
+    return (this.uid = this.scope.generateDeclaredUidIdentifier(this.name));
+  }
+
+  get declared(): boolean {
+    return !!this.uid;
+  }
+}
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -12,22 +39,17 @@ export default declare((api, options) => {
   const arrayLikeIsIterable =
     options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
 
-  function getSpreadLiteral(
-    spread: t.SpreadElement,
-    scope: Scope,
-  ): t.Expression {
-    if (
-      iterableIsArray &&
-      !t.isIdentifier(spread.argument, { name: "arguments" })
-    ) {
-      return spread.argument;
-    } else {
-      return scope.toArray(spread.argument, true, arrayLikeIsIterable);
+  function isArrayLikeBinding(node: t.Node, scope: Scope): boolean {
+    if (t.isIdentifier(node)) {
+      if (node.name === "arguments") {
+        return true;
+      }
+      const binding = scope.getBinding(node.name);
+      if (binding?.constant && binding.path.isGenericType("Array")) {
+        return true;
+      }
     }
-  }
-
-  function hasHole(spread: t.ArrayExpression): boolean {
-    return spread.elements.some(el => el === null);
+    return false;
   }
 
   function hasSpread(nodes: Array<t.Node>): boolean {
@@ -39,45 +61,199 @@ export default declare((api, options) => {
     return false;
   }
 
-  function push(_props: Array<ListElement>, nodes: Array<t.Expression>) {
-    if (!_props.length) return _props;
-    nodes.push(t.arrayExpression(_props));
-    return [];
+  function member(target: t.Expression, ...props: string[]): t.Expression {
+    let result = target;
+    for (const prop of props) {
+      result = t.memberExpression(result, t.identifier(prop));
+    }
+    return result;
   }
 
-  function build(
-    props: Array<ListElement>,
-    scope: Scope,
-    file: File,
-  ): t.Expression[] {
-    const nodes: Array<t.Expression> = [];
-    let _props: Array<ListElement> = [];
+  function voidZero() {
+    return t.unaryExpression("void", t.numericLiteral(0), true);
+  }
 
-    for (const prop of props) {
-      if (t.isSpreadElement(prop)) {
-        _props = push(_props, nodes);
-        let spreadLiteral = getSpreadLiteral(prop, scope);
-
-        if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
-          spreadLiteral = t.callExpression(
-            file.addHelper(
-              process.env.BABEL_8_BREAKING
-                ? "arrayLikeToArray"
-                : "arrayWithoutHoles",
-            ),
-            [spreadLiteral],
-          );
-        }
-
-        nodes.push(spreadLiteral);
+  function flattenSpreadElements(
+    elements: readonly ArrayExpressionElement[],
+    fillHoles: boolean,
+    dest: ArrayExpressionElement[] = [],
+  ): ArrayExpressionElement[] {
+    for (const item of elements) {
+      if (t.isSpreadElement(item) && t.isArrayExpression(item.argument)) {
+        // unwrap nested spread, always filling holes
+        flattenSpreadElements(item.argument.elements, true, dest);
       } else {
-        _props.push(prop);
+        dest.push(item === null && fillHoles ? voidZero() : item);
       }
     }
+    return dest;
+  }
 
-    push(_props, nodes);
+  function collectSpreadChunks(
+    elements: readonly ArrayExpressionElement[],
+  ): t.Expression[] {
+    const result: t.Expression[] = [];
+    const nonSpreadValues: (t.Expression | null)[] = [];
+    for (const item of elements) {
+      if (t.isSpreadElement(item)) {
+        if (nonSpreadValues.length > 0) {
+          result.push(t.arrayExpression(nonSpreadValues.splice(0)));
+        }
+        result.push(item.argument);
+      } else {
+        nonSpreadValues.push(item);
+      }
+    }
+    if (nonSpreadValues.length > 0) {
+      result.push(t.arrayExpression(nonSpreadValues));
+    }
+    return result;
+  }
 
-    return nodes;
+  function buildAccumulate(
+    file: File,
+    accum: t.Expression,
+    chunk: t.Expression,
+  ): t.CallExpression {
+    const helper = file.addHelper(
+      arrayLikeIsIterable
+        ? "spreadIterableOrArrayLike"
+        : "spreadIterableOrArray",
+    );
+    return t.callExpression(helper, [accum, chunk]);
+  }
+
+  function buildCoerce(file: File, chunk: t.Expression): t.CallExpression {
+    const helper = file.addHelper(
+      arrayLikeIsIterable ? "spreadCoerceToArrayLike" : "spreadCoerceToArray",
+    );
+    return t.callExpression(helper, [chunk]);
+  }
+
+  function buildArraySpread(
+    props: readonly ArrayExpressionElement[],
+    scope: Scope,
+    file: File,
+  ): t.Expression {
+    const flatProps = flattenSpreadElements(props, false);
+    const flatChunks = collectSpreadChunks(flatProps);
+    const resultHasHoles = props.includes(null);
+    const nodes: t.Expression[] = [];
+    const tmp = new LazyTemporary(scope, "sprd");
+
+    function popAccumulator(): t.Expression {
+      const n = nodes.length;
+      return n > 0 && t.isArrayExpression(nodes[n - 1])
+        ? nodes.pop()
+        : t.arrayExpression([]);
+    }
+
+    for (let spreadChunk of flatChunks) {
+      if (t.isArrayExpression(spreadChunk)) {
+        // no transform necessary
+      } else if (iterableIsArray || isArrayLikeBinding(spreadChunk, scope)) {
+        if (t.isIdentifier(spreadChunk, { name: "arguments" })) {
+          // convert `arguments` to array using `tmp.push.apply` because it
+          // is faster than passing them to any other function, for example
+          // `Array.prototype.slice.call`
+          const acc = tmp.assign(popAccumulator());
+          const callPushApply = t.callExpression(member(acc, "push", "apply"), [
+            tmp.clone(),
+            spreadChunk,
+          ]);
+          spreadChunk = t.sequenceExpression([callPushApply, tmp.clone()]);
+        } else if (resultHasHoles || flatChunks.length === 1) {
+          spreadChunk = t.callExpression(file.addHelper("concatArrayLike"), [
+            spreadChunk,
+          ]);
+        }
+      } else if (resultHasHoles || flatChunks.length === 1) {
+        spreadChunk = buildAccumulate(file, popAccumulator(), spreadChunk);
+      } else {
+        spreadChunk = buildCoerce(file, spreadChunk);
+      }
+      nodes.push(spreadChunk);
+    }
+
+    if (nodes.length === 0) {
+      return t.arrayExpression([]);
+    }
+    if (nodes.length === 1) {
+      return nodes[0];
+    }
+    const callee = resultHasHoles
+      ? member(nodes.shift(), "concat")
+      : file.addHelper("concatArrayLike");
+    return t.callExpression(callee, nodes);
+  }
+
+  function buildCallSpread(
+    props: readonly ListElement[],
+    forceUnpackArguments: boolean,
+    scope: Scope,
+    file: File,
+  ): t.Expression {
+    const flatProps = flattenSpreadElements(props, true);
+    const flatChunks = collectSpreadChunks(flatProps);
+    const needAccumulator = flatChunks.length > 1;
+    const nodes: t.Expression[] = [];
+    const tmp = new LazyTemporary(scope, "sprd");
+
+    function popAccumulator(...props: string[]): t.Expression {
+      let acc = nodes.length ? nodes.pop() : t.arrayExpression([]);
+      for (const prop of props) {
+        acc = t.memberExpression(
+          tmp.declared ? acc : tmp.assign(acc),
+          t.identifier(prop),
+        );
+      }
+      return acc;
+    }
+
+    for (let spreadChunk of flatChunks) {
+      if (t.isArrayExpression(spreadChunk)) {
+        if (nodes.length > 0) {
+          const callPush = t.callExpression(
+            popAccumulator("push"),
+            spreadChunk.elements,
+          );
+          nodes.push(callPush);
+          spreadChunk = tmp.clone();
+        }
+      } else if (iterableIsArray || isArrayLikeBinding(spreadChunk, scope)) {
+        if (needAccumulator || forceUnpackArguments) {
+          if (t.isIdentifier(spreadChunk, { name: "arguments" })) {
+            // convert `arguments` to array using `tmp.push.apply` because it
+            // is faster than passing them to any other function, for example
+            // `Array.prototype.slice.call`
+            const callPushApply = t.callExpression(
+              popAccumulator("push", "apply"),
+              [tmp.clone(), spreadChunk],
+            );
+            nodes.push(callPushApply);
+            spreadChunk = tmp.clone();
+          } else if (needAccumulator) {
+            spreadChunk = t.callExpression(file.addHelper("appendArrayLike"), [
+              popAccumulator(),
+              spreadChunk,
+            ]);
+          }
+        }
+      } else if (needAccumulator) {
+        spreadChunk = buildAccumulate(file, popAccumulator(), spreadChunk);
+      } else {
+        spreadChunk = buildCoerce(file, spreadChunk);
+      }
+      nodes.push(spreadChunk);
+    }
+
+    if (nodes.length === 0) {
+      return t.arrayExpression([]);
+    }
+    if (nodes.length === 1) {
+      return nodes[0];
+    }
+    return t.sequenceExpression(nodes);
   }
 
   return {
@@ -86,43 +262,12 @@ export default declare((api, options) => {
     visitor: {
       ArrayExpression(path: NodePath<t.ArrayExpression>): void {
         const { node, scope } = path;
-        const elements = node.elements;
+        const { elements } = node;
         if (!hasSpread(elements)) return;
 
-        const nodes = build(elements, scope, this);
-        let first = nodes[0];
-
-        // If there is only one element in the ArrayExpression and
-        // the element was transformed (Array.prototype.slice.call or toConsumableArray)
-        // we know that the transformed code already takes care of cloning the array.
-        // So we can simply return that element.
-        if (
-          nodes.length === 1 &&
-          first !== (elements[0] as t.SpreadElement).argument
-        ) {
-          path.replaceWith(first);
-          return;
-        }
-
-        // If the first element is a ArrayExpression we can directly call
-        // concat on it.
-        // `[..].concat(..)`
-        // If not then we have to use `[].concat(arr)` and not `arr.concat`
-        // because `arr` could be extended/modified (e.g. Immutable) and we do not know exactly
-        // what concat would produce.
-        if (!t.isArrayExpression(first)) {
-          first = t.arrayExpression([]);
-        } else {
-          nodes.shift();
-        }
-
-        path.replaceWith(
-          t.callExpression(
-            t.memberExpression(first, t.identifier("concat")),
-            nodes,
-          ),
-        );
+        path.replaceWith(buildArraySpread(elements, scope, this));
       },
+
       CallExpression(path: NodePath<t.CallExpression>): void {
         const { node, scope } = path;
 
@@ -138,32 +283,14 @@ export default declare((api, options) => {
               "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
           );
         }
-        let contextLiteral: t.Expression = scope.buildUndefinedNode();
-        node.arguments = [];
 
-        let nodes: t.Expression[];
-        if (
-          args.length === 1 &&
-          t.isIdentifier((args[0] as t.SpreadElement).argument, {
-            name: "arguments",
-          })
-        ) {
-          nodes = [(args[0] as t.SpreadElement).argument];
-        } else {
-          nodes = build(args, scope, this);
+        const accumulated = buildCallSpread(args, false, scope, this);
+        if (t.isArrayExpression(accumulated)) {
+          node.arguments = accumulated.elements;
+          return;
         }
 
-        const first = nodes.shift();
-        if (nodes.length) {
-          node.arguments.push(
-            t.callExpression(
-              t.memberExpression(first, t.identifier("concat")),
-              nodes,
-            ),
-          );
-        } else {
-          node.arguments.push(first);
-        }
+        let contextLiteral: t.Expression = voidZero();
 
         const callee = calleePath.node as t.MemberExpression;
 
@@ -171,7 +298,9 @@ export default declare((api, options) => {
           const temp = scope.maybeGenerateMemoised(callee.object);
           if (temp) {
             callee.object = t.assignmentExpression("=", temp, callee.object);
-            contextLiteral = temp;
+            contextLiteral = t.cloneNode(temp);
+          } else if (t.isSuper(callee.object)) {
+            contextLiteral = t.thisExpression();
           } else {
             contextLiteral = t.cloneNode(callee.object);
           }
@@ -182,35 +311,21 @@ export default declare((api, options) => {
           node.callee as t.Expression,
           t.identifier("apply"),
         );
-        if (t.isSuper(contextLiteral)) {
-          contextLiteral = t.thisExpression();
-        }
 
-        node.arguments.unshift(t.cloneNode(contextLiteral));
+        node.arguments = [contextLiteral, accumulated];
       },
 
       NewExpression(path: NodePath<t.NewExpression>): void {
         const { node, scope } = path;
         if (!hasSpread(node.arguments)) return;
 
-        const nodes = build(node.arguments as Array<ListElement>, scope, this);
-
-        const first = nodes.shift();
-
-        let args: t.Expression;
-        if (nodes.length) {
-          args = t.callExpression(
-            t.memberExpression(first, t.identifier("concat")),
-            nodes,
-          );
-        } else {
-          args = first;
-        }
+        const args = node.arguments as readonly ListElement[];
+        const accumulated = buildCallSpread(args, true, scope, this);
 
         path.replaceWith(
           t.callExpression(path.hub.addHelper("construct"), [
             node.callee as t.Expression,
-            args,
+            accumulated,
           ]),
         );
       },
