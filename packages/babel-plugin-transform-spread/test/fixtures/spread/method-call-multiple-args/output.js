@@ -1,1 +1,1 @@
-add.apply(void 0, [foo, bar].concat(babelHelpers.toConsumableArray(numbers)));
+add.apply(void 0, babelHelpers.spreadIterableOrArray([foo, bar], numbers));

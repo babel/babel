@@ -1,1 +1,1 @@
-babelHelpers.toConsumableArray(foo);
+babelHelpers.spreadIterableOrArray([], foo);

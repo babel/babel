@@ -1,1 +1,1 @@
-var lyrics = ["head", "and", "toes"].concat(babelHelpers.toConsumableArray(parts));
+var lyrics = babelHelpers.concatArrayLike(["head", "and", "toes"], babelHelpers.spreadCoerceToArray(parts));

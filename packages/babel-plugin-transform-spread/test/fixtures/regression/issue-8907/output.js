@@ -4,4 +4,4 @@ arr.concat = () => {
   throw new Error('Should not be called');
 };
 
-const x = [].concat(arr);
+const x = babelHelpers.concatArrayLike(arr);

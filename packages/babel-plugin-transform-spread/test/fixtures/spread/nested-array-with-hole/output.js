@@ -1,2 +1,2 @@
-var a = babelHelpers.arrayLikeToArray(['a',, 'b']);
-var b = ['a'].concat(babelHelpers.arrayLikeToArray(['b',, 'c']));
+var a = ['a', void 0, 'b'];
+var b = ['a', 'b', void 0, 'c'];

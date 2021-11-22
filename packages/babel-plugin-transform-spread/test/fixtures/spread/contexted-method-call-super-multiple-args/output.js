@@ -1,6 +1,6 @@
 class Foo {
   bar() {
-    super.bar.apply(this, [arg1, arg2].concat(babelHelpers.toConsumableArray(args)));
+    super.bar.apply(this, babelHelpers.spreadIterableOrArray([arg1, arg2], args));
   }
 
 }

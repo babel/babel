@@ -1,3 +1,3 @@
-babelHelpers.construct(Numbers, babelHelpers.toConsumableArray(nums));
-babelHelpers.construct(Numbers, [1].concat(babelHelpers.toConsumableArray(nums)));
-babelHelpers.construct(Numbers, babelHelpers.arrayLikeToArray([1,, 3]));
+babelHelpers.construct(Numbers, babelHelpers.spreadCoerceToArray(nums));
+babelHelpers.construct(Numbers, babelHelpers.spreadIterableOrArray([1], nums));
+babelHelpers.construct(Numbers, [1, void 0, 3]);

@@ -3,4 +3,4 @@ var a = (() => [2, 3])(); // !!! In order to run this test, this shouldn't be op
 // and exec.js
 
 
-[1].concat(babelHelpers.toConsumableArray(a));
+babelHelpers.concatArrayLike([1], babelHelpers.spreadCoerceToArray(a));

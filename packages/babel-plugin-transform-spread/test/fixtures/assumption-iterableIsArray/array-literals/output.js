@@ -1,1 +1,1 @@
-var lyrics = ["head", "and", "toes"].concat(parts);
+var lyrics = babelHelpers.concatArrayLike(["head", "and", "toes"], parts);
