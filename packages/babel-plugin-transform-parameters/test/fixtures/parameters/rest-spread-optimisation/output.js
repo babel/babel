@@ -17,7 +17,7 @@ function foo() {
     b[_key2] = arguments[_key2];
   }
 
-  foo.apply(void 0, [1].concat(b));
+  foo.apply(void 0, babelHelpers.appendArrayLike([1], b));
 }
 
 function foo() {

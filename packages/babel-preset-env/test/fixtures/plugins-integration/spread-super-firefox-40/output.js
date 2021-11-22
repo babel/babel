@@ -7,7 +7,7 @@ var A = /*#__PURE__*/function (_B) {
 
   function A(args) {
     babelHelpers.classCallCheck(this, A);
-    return _super.call.apply(_super, [this].concat(babelHelpers.toConsumableArray(args)));
+    return _super.call.apply(_super, babelHelpers.spreadIterableOrArray([this], args));
   }
 
   return A;

@@ -21,7 +21,7 @@ var App = /*#__PURE__*/function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    _this = _super.call.apply(_super, [this].concat(args));
+    _this = _super.call.apply(_super, babelHelpers.appendArrayLike([this], args));
     babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "exportType", '');
     return _this;
   }
