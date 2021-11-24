@@ -30,6 +30,7 @@
     "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/**/*.ts",
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
+    "./packages/babel-plugin-proposal-object-rest-spread/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-transform-block-scoping/src/**/*.ts",
     "./packages/babel-plugin-transform-classes/src/**/*.ts",
@@ -128,6 +129,9 @@
       ],
       "@babel/plugin-proposal-async-do-expressions": [
         "./packages/babel-plugin-proposal-async-do-expressions/src"
+      ],
+      "@babel/plugin-proposal-object-rest-spread": [
+        "./packages/babel-plugin-proposal-object-rest-spread/src"
       ],
       "@babel/plugin-syntax-async-do-expressions": [
         "./packages/babel-plugin-syntax-async-do-expressions/src"

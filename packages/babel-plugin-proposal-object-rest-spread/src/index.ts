@@ -1,21 +1,24 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
+import type { PluginPass } from "@babel/core";
+import type { NodePath, Visitor, Scope } from "@babel/traverse";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { isRequired } from "@babel/helper-compilation-targets";
 import compatData from "@babel/compat-data/corejs2-built-ins";
 import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable";
 
-// TODO: Remove in Babel 8
+const { isAssignmentPattern, isObjectProperty } = t;
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
 // We need to detect this bug to know if "unused" means 0 or 1 references.
-const ZERO_REFS = (() => {
+if (!process.env.BABEL_8_BREAKING) {
   const node = t.identifier("a");
   const property = t.objectProperty(t.identifier("key"), node);
   const pattern = t.objectPattern([property]);
 
-  return t.isReferenced(node, property, pattern) ? 1 : 0;
-})();
+  // eslint-disable-next-line no-var
+  var ZERO_REFS = t.isReferenced(node, property, pattern) ? 1 : 0;
+}
 
 export default declare((api, opts) => {
   api.assertVersion(7);
@@ -36,7 +39,9 @@ export default declare((api, opts) => {
   const pureGetters = api.assumption("pureGetters") ?? loose;
   const setSpreadProperties = api.assumption("setSpreadProperties") ?? loose;
 
-  function getExtendsHelper(file) {
+  function getExtendsHelper(
+    file: PluginPass,
+  ): t.MemberExpression | t.Identifier {
     return useBuiltIns
       ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
       : file.addHelper("extends");
@@ -51,7 +56,7 @@ export default declare((api, opts) => {
     return foundRestElement;
   }
 
-  function hasObjectPatternRestElement(path) {
+  function hasObjectPatternRestElement(path: NodePath): boolean {
     let foundRestElement = false;
     visitRestElements(path, restElement => {
       if (restElement.parentPath.isObjectPattern()) {
@@ -62,15 +67,16 @@ export default declare((api, opts) => {
     return foundRestElement;
   }
 
-  function visitRestElements(path, visitor) {
+  function visitRestElements(
+    path: NodePath,
+    visitor: (path: NodePath<t.RestElement>) => any,
+  ) {
     path.traverse({
       Expression(path) {
-        const parentType = path.parent.type;
+        const { parent, key } = path;
         if (
-          (parentType === "AssignmentPattern" && path.key === "right") ||
-          (parentType === "ObjectProperty" &&
-            path.parent.computed &&
-            path.key === "key")
+          (isAssignmentPattern(parent) && key === "right") ||
+          (isObjectProperty(parent) && parent.computed && key === "key")
         ) {
           path.skip();
         }
@@ -79,7 +85,7 @@ export default declare((api, opts) => {
     });
   }
 
-  function hasSpread(node) {
+  function hasSpread(node: t.ObjectExpression): boolean {
     for (const prop of node.properties) {
       if (t.isSpreadElement(prop)) {
         return true;
@@ -92,9 +98,10 @@ export default declare((api, opts) => {
   // were converted to stringLiterals or not
   // e.g. extracts {keys: ["a", "b", "3", ++x], allLiteral: false }
   // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
-  function extractNormalizedKeys(path) {
-    const props = path.node.properties;
-    const keys = [];
+  function extractNormalizedKeys(node: t.ObjectPattern) {
+    // RestElement has been removed in createObjectRest
+    const props = node.properties as t.ObjectProperty[];
+    const keys: t.Expression[] = [];
     let allLiteral = true;
     let hasTemplateLiteral = false;
 
@@ -106,7 +113,14 @@ export default declare((api, opts) => {
         keys.push(t.cloneNode(prop.key));
         hasTemplateLiteral = true;
       } else if (t.isLiteral(prop.key)) {
-        keys.push(t.stringLiteral(String(prop.key.value)));
+        keys.push(
+          t.stringLiteral(
+            String(
+              //@ts-ignore prop.key can not be a NullLiteral
+              prop.key.value,
+            ),
+          ),
+        );
       } else {
         keys.push(t.cloneNode(prop.key));
         allLiteral = false;
@@ -118,8 +132,11 @@ export default declare((api, opts) => {
 
   // replaces impure computed keys with new identifiers
   // and returns variable declarators of these new identifiers
-  function replaceImpureComputedKeys(properties, scope) {
-    const impureComputedPropertyDeclarators = [];
+  function replaceImpureComputedKeys(
+    properties: NodePath<t.ObjectProperty>[],
+    scope: Scope,
+  ) {
+    const impureComputedPropertyDeclarators: t.VariableDeclarator[] = [];
     for (const propPath of properties) {
       const key = propPath.get("key");
       if (propPath.node.computed && !key.isPure()) {
@@ -132,13 +149,14 @@ export default declare((api, opts) => {
     return impureComputedPropertyDeclarators;
   }
 
-  function removeUnusedExcludedKeys(path) {
+  function removeUnusedExcludedKeys(path: NodePath<t.ObjectPattern>): void {
     const bindings = path.getOuterBindingIdentifierPaths();
 
     Object.keys(bindings).forEach(bindingName => {
       const bindingParentPath = bindings[bindingName].parentPath;
       if (
-        path.scope.getBinding(bindingName).references > ZERO_REFS ||
+        path.scope.getBinding(bindingName).references >
+          (process.env.BABEL_8_BREAKING ? 0 : ZERO_REFS) ||
         !bindingParentPath.isObjectProperty()
       ) {
         return;
@@ -148,7 +166,11 @@ export default declare((api, opts) => {
   }
 
   //expects path to an object pattern
-  function createObjectRest(path, file, objRef) {
+  function createObjectRest(
+    path: NodePath<t.ObjectPattern>,
+    file: PluginPass,
+    objRef: t.Identifier | t.MemberExpression,
+  ): [t.VariableDeclarator[], t.LVal, t.CallExpression] {
     const props = path.get("properties");
     const last = props[props.length - 1];
     t.assertRestElement(last.node);
@@ -156,11 +178,12 @@ export default declare((api, opts) => {
     last.remove();
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(
-      path.get("properties"),
+      path.get("properties") as NodePath<t.ObjectProperty>[],
       path.scope,
     );
-    const { keys, allLiteral, hasTemplateLiteral } =
-      extractNormalizedKeys(path);
+    const { keys, allLiteral, hasTemplateLiteral } = extractNormalizedKeys(
+      path.node,
+    );
 
     if (keys.length === 0) {
       return [
@@ -210,7 +233,11 @@ export default declare((api, opts) => {
     ];
   }
 
-  function replaceRestElement(parentPath, paramPath, container) {
+  function replaceRestElement(
+    parentPath: NodePath<t.Function | t.CatchClause>,
+    paramPath: NodePath,
+    container?: t.VariableDeclaration[],
+  ): void {
     if (paramPath.isAssignmentPattern()) {
       replaceRestElement(parentPath, paramPath.get("left"), container);
       return;
@@ -299,7 +326,7 @@ export default declare((api, opts) => {
           for (let i = 0; i < params.length; ++i) {
             const param = params[i];
             if (paramsWithRestElement.has(i)) {
-              replaceRestElement(param.parentPath, param);
+              replaceRestElement(path, param);
             }
           }
         } else {
@@ -360,14 +387,15 @@ export default declare((api, opts) => {
           }
 
           let ref = originalPath.node.init;
-          const refPropertyPath = [];
+          const refPropertyPath: NodePath<t.ObjectProperty>[] = [];
           let kind;
 
-          path.findParent(path => {
+          path.findParent((path: NodePath): boolean => {
             if (path.isObjectProperty()) {
               refPropertyPath.unshift(path);
             } else if (path.isVariableDeclarator()) {
-              kind = path.parentPath.node.kind;
+              kind = (path.parentPath as NodePath<t.VariableDeclaration>).node
+                .kind;
               return true;
             }
           });
@@ -385,12 +413,17 @@ export default declare((api, opts) => {
             );
           });
 
-          const objectPatternPath = path.findParent(path =>
-            path.isObjectPattern(),
+          //@ts-expect-error: findParent can not apply assertions on result shape
+          const objectPatternPath: NodePath<t.ObjectPattern> = path.findParent(
+            path => path.isObjectPattern(),
           );
 
           const [impureComputedPropertyDeclarators, argument, callExpression] =
-            createObjectRest(objectPatternPath, file, ref);
+            createObjectRest(
+              objectPatternPath,
+              file,
+              ref as t.MemberExpression,
+            );
 
           if (pureGetters) {
             removeUnusedExcludedKeys(objectPatternPath);
@@ -402,11 +435,9 @@ export default declare((api, opts) => {
 
           insertionPath.insertBefore(impureObjRefComputedDeclarators);
 
-          insertionPath.insertAfter(
+          insertionPath = insertionPath.insertAfter(
             t.variableDeclarator(argument, callExpression),
-          );
-
-          insertionPath = insertionPath.getSibling(insertionPath.key + 1);
+          )[0] as NodePath<t.VariableDeclarator>;
 
           path.scope.registerBinding(kind, insertionPath);
 
@@ -433,7 +464,7 @@ export default declare((api, opts) => {
 
         const specifiers = [];
 
-        for (const name of Object.keys(path.getOuterBindingIdentifiers(path))) {
+        for (const name of Object.keys(path.getOuterBindingIdentifiers(true))) {
           specifiers.push(
             t.exportSpecifier(t.identifier(name), t.identifier(name)),
           );
@@ -449,7 +480,7 @@ export default declare((api, opts) => {
       // try {} catch ({a, ...b}) {}
       CatchClause(path) {
         const paramPath = path.get("param");
-        replaceRestElement(paramPath.parentPath, paramPath);
+        replaceRestElement(path, paramPath);
       },
 
       // ({a, ...b} = c);
@@ -511,14 +542,15 @@ export default declare((api, opts) => {
           ]);
 
           path.ensureBlock();
+          const body = node.body as t.BlockStatement;
 
-          if (node.body.body.length === 0 && path.isCompletionRecord()) {
-            node.body.body.unshift(
+          if (body.body.length === 0 && path.isCompletionRecord()) {
+            body.body.unshift(
               t.expressionStatement(scope.buildUndefinedNode()),
             );
           }
 
-          node.body.body.unshift(
+          body.body.unshift(
             t.expressionStatement(
               t.assignmentExpression("=", left, t.cloneNode(temp)),
             ),
@@ -533,8 +565,9 @@ export default declare((api, opts) => {
           ]);
 
           path.ensureBlock();
+          const body = node.body as t.BlockStatement;
 
-          node.body.body.unshift(
+          body.body.unshift(
             t.variableDeclaration(node.left.kind, [
               t.variableDeclarator(pattern, t.cloneNode(key)),
             ]),
@@ -565,11 +598,13 @@ export default declare((api, opts) => {
 
         if (objectPatterns.length > 0) {
           const statementPath = path.getStatementParent();
+          const statementNode = statementPath.node;
+          const kind =
+            statementNode.type === "VariableDeclaration"
+              ? statementNode.kind
+              : "var";
           statementPath.insertAfter(
-            t.variableDeclaration(
-              statementPath.node.kind || "var",
-              objectPatterns,
-            ),
+            t.variableDeclaration(kind, objectPatterns),
           );
         }
       },
@@ -627,7 +662,7 @@ export default declare((api, opts) => {
           ]);
         }
 
-        for (const prop of (path.node.properties: Array)) {
+        for (const prop of path.node.properties) {
           if (t.isSpreadElement(prop)) {
             make();
             exp.arguments.push(prop.argument);
@@ -640,6 +675,6 @@ export default declare((api, opts) => {
 
         path.replaceWith(exp);
       },
-    },
+    } as Visitor<PluginPass>,
   };
 });
