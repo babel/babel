@@ -1,4 +1,5 @@
-import normalizeOptions from "../src/normalize-options.js";
+import normalizeOptions from "../lib/normalize-options.js";
+
 describe("normalize options", () => {
   (process.env.BABEL_8_BREAKING ? describe : describe.skip)("Babel 8", () => {
     it("should throw on unknown options", () => {

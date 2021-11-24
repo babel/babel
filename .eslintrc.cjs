@@ -67,10 +67,8 @@ module.exports = {
         "jest/no-standalone-expect": "off",
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
-        "import/extensions": [
-          "error",
-          { json: "always", js: "always", cjs: "always", mjs: "always" },
-        ],
+        "import/extensions": ["error", "always"],
+        "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
       },
     },
     {

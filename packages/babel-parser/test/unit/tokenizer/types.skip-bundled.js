@@ -1,4 +1,4 @@
-import { tt, tokenOperatorPrecedence } from "../../../src/tokenizer/types.js";
+import { tt, tokenOperatorPrecedence } from "../../../lib/tokenizer/types.js";
 
 describe("token types", () => {
   it("should check if the binOp for relational === in", () => {

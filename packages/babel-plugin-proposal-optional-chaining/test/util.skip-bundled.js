@@ -1,4 +1,4 @@
-import { willPathCastToBoolean } from "../src/util.js";
+import { willPathCastToBoolean } from "../lib/util.js";
 import { parseSync, traverse } from "@babel/core";
 
 function getPath(input, parserOpts) {

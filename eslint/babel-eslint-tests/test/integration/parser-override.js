@@ -34,6 +34,7 @@ describe("parserOverride", () => {
   const babel7node12 = parseInt(process.versions.node) < 12 ? it.skip : it;
   babel7node12("works when parsing in a worker", async () => {
     const require = createRequire(import.meta.url);
+    // eslint-disable-next-line import/extensions
     const babelESLintWorker = require("@babel/eslint-parser/experimental-worker");
 
     const { ast } = babelESLintWorker.parseForESLint(`27`, {

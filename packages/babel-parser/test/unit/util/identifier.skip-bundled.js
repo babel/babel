@@ -1,7 +1,7 @@
 import {
   isKeyword,
   keywordRelationalOperator,
-} from "../../../src/util/identifier.js";
+} from "../../../lib/util/identifier.js";
 
 describe("identifier", () => {
   describe("isKeyword", () => {

@@ -18,7 +18,7 @@ NODE := $(YARN) node
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
-build: build-bundle
+build: build-no-bundle
 ifneq ("$(BABEL_COVERAGE)", "true")
 	$(MAKE) build-standalone
 endif
@@ -28,8 +28,15 @@ build-bundle: clean clean-lib
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
 
-build-bundle-ci: bootstrap-only
-	$(MAKE) build-bundle
+build-no-bundle-ci: bootstrap-only
+	$(YARN) gulp build-dev
+	$(MAKE) build-flow-typings
+	$(MAKE) build-dist
+
+build-no-bundle: clean clean-lib
+	BABEL_ENV=development $(YARN) gulp build-dev
+	$(MAKE) build-flow-typings
+	$(MAKE) build-dist
 
 generate-tsconfig:
 	$(NODE) scripts/generators/tsconfig.js
@@ -46,7 +53,7 @@ build-typescript-legacy-typings:
 
 build-standalone: build-babel-standalone
 
-build-standalone-ci: build-bundle-ci
+build-standalone-ci: build-no-bundle-ci
 	$(MAKE) build-standalone
 
 build-babel-standalone:
@@ -60,12 +67,6 @@ build-dist: build-plugin-transform-runtime-dist
 build-plugin-transform-runtime-dist:
 	cd packages/babel-plugin-transform-runtime; \
 	$(NODE) scripts/build-dist.js
-
-build-no-bundle: clean clean-lib
-	BABEL_ENV=development $(YARN) gulp build-dev
-	# Ensure that build artifacts for types are created during local
-	# development too.
-	$(MAKE) build-flow-typings
 
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch

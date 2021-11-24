@@ -1,4 +1,4 @@
-import { getLineInfo } from "../../../src/util/location.js";
+import { getLineInfo } from "../../../lib/util/location.js";
 
 describe("getLineInfo", () => {
   const input = "a\nb\nc\nd\ne\nf\ng\nh\ni";
