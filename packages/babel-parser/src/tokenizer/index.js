@@ -855,6 +855,8 @@ export default class Tokenizer extends ParserErrors {
         // @a::b is a valid decorator when using decorators-legacy and functionBind
         this.input.charCodeAt(workEndPos + 1) !== charCodes.colon
       ) {
+        this.expectPlugin("decorators");
+
         if (word !== "init") {
           this.raise(this.state.pos, Errors.UnsupportedDecoratorModifier);
         } else if (containsEsc) {

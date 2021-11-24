@@ -2,7 +2,7 @@
 
 /*:: declare var invariant; */
 import * as charCodes from "charcodes";
-import { tt, type TokenType } from "../tokenizer/types";
+import { tt, tokenIsDecorator, type TokenType } from "../tokenizer/types";
 import type {
   TSParameterProperty,
   Decorator,
@@ -390,10 +390,7 @@ export default class LValParser extends NodeUtils {
         break;
       } else {
         const decorators = [];
-        if (
-          (this.match(tt.at) && this.hasPlugin("decorators")) ||
-          this.match(tt.atInit)
-        ) {
+        if (tokenIsDecorator(this.state.type) && this.hasPlugin("decorators")) {
           this.raise(this.state.start, Errors.UnsupportedParameterDecorator);
         }
         // invariant: hasPlugin("decorators-legacy")

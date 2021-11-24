@@ -1,0 +1,4 @@
+{
+  "plugins": ["decorators-legacy"],
+  "throws": "This experimental syntax requires enabling the parser plugin: 'decorators' (2:2)"
+}
