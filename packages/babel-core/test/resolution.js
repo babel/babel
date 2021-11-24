@@ -1,4 +1,4 @@
-import * as babel from "../lib/index";
+import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 

@@ -1,4 +1,4 @@
-import { OptionValidator } from "..";
+import { OptionValidator } from "../lib/index.js";
 
 describe("OptionValidator", () => {
   describe("validateTopLevelOptions", () => {

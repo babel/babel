@@ -2,7 +2,7 @@ import * as babel from "@babel/core";
 import { fileURLToPath } from "url";
 import path from "path";
 
-import { ImportInjector } from "../";
+import { ImportInjector } from "../lib/index.js";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 

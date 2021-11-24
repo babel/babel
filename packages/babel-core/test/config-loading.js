@@ -1,7 +1,7 @@
 import loadConfigRunner, {
   loadPartialConfig,
   createConfigItem,
-} from "../lib/config";
+} from "../lib/config/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
@@ -38,10 +38,10 @@ describe("@babel/core config loading", () => {
       filename: FILEPATH,
       presets: skipProgrammatic
         ? null
-        : [[require("./fixtures/config-loading/preset3"), {}]],
+        : [[require("./fixtures/config-loading/preset3.js"), {}]],
       plugins: skipProgrammatic
         ? null
-        : [[require("./fixtures/config-loading/plugin6"), {}]],
+        : [[require("./fixtures/config-loading/plugin6.js"), {}]],
     };
   }
 

@@ -1,7 +1,7 @@
 import { parse } from "@babel/parser";
 import generator from "@babel/generator";
 import * as t from "@babel/types";
-import optimizeCallExpression from "..";
+import optimizeCallExpression from "../lib/index.js";
 
 function transformInput(input, thisIdentifier) {
   const ast = parse(input);

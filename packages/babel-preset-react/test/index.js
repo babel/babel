@@ -1,4 +1,4 @@
-import react from "../lib";
+import react from "../lib/index.js";
 
 describe("react preset", () => {
   it("does throw clear error when no options passed for Babel 6", () => {

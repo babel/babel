@@ -1,4 +1,4 @@
-import generate from "../lib";
+import generate from "../lib/index.js";
 import { parse } from "@babel/parser";
 
 describe("parameter parentheses", () => {

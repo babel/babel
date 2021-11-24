@@ -2,12 +2,12 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
-import * as babel from "../lib";
+import * as babel from "../lib/index.js";
 import getTargets from "@babel/helper-compilation-targets";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm";
+import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
 
 // TODO: In Babel 8, we can directly uses fs.promises which is supported by
 // node 8+

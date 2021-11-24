@@ -7,7 +7,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
-import { chmod } from "../lib/babel/util";
+import { chmod } from "../lib/babel/util.js";
 
 const require = createRequire(import.meta.url);
 

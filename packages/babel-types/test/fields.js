@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import glob from "glob";
 import path from "path";
 import fs from "fs";

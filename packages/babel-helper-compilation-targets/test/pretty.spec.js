@@ -1,4 +1,4 @@
-import { prettifyTargets, prettifyVersion } from "../lib/pretty";
+import { prettifyTargets, prettifyVersion } from "../lib/pretty.js";
 
 describe("pretty", () => {
   describe("prettifyVersion", () => {

@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
   () => {
     let Babel;
     beforeAll(() => {
-      Babel = require("../babel");
+      Babel = require("../babel.js");
     });
 
     it("should parser decimal literal", () => {

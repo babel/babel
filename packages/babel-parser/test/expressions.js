@@ -1,6 +1,6 @@
 import path from "path";
-import { runFixtureTests } from "./helpers/runFixtureTests";
-import { parseExpression } from "../lib";
+import { runFixtureTests } from "./helpers/runFixtureTests.js";
+import { parseExpression } from "../lib/index.js";
 import { fileURLToPath } from "url";
 
 const fixtures = path.join(

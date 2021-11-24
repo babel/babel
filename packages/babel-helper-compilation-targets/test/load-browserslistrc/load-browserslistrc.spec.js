@@ -1,4 +1,4 @@
-import getTargets from "../..";
+import getTargets from "../../lib/index.js";
 import { fileURLToPath } from "url";
 import path from "path";
 

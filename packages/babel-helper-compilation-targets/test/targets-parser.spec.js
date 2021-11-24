@@ -1,7 +1,7 @@
 import browserslist from "browserslist";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import getTargets from "..";
+import getTargets from "../lib/index.js";
 
 describe("getTargets", () => {
   it("parses", () => {

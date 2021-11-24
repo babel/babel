@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import * as vm from "vm";
 
 describe("regressions", () => {

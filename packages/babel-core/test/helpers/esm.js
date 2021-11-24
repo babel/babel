@@ -4,7 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
-import * as babel from "../../lib";
+import * as babel from "../../lib/index.js";
 
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));

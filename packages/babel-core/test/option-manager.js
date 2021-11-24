@@ -1,4 +1,4 @@
-import { loadOptions as loadOptionsOrig } from "../lib";
+import { loadOptions as loadOptionsOrig } from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 

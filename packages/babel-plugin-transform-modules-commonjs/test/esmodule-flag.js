@@ -3,7 +3,7 @@ import vm from "vm";
 import { fileURLToPath } from "url";
 import path from "path";
 
-import transformCommonJS from "..";
+import transformCommonJS from "../lib/index.js";
 
 test("Re-export doesn't overwrite __esModule flag", function () {
   let code = 'export * from "./dep";';

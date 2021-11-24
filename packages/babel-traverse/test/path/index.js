@@ -1,4 +1,4 @@
-import { NodePath } from "../../lib";
+import { NodePath } from "../../lib/index.js";
 
 describe("NodePath", () => {
   describe("setData/getData", () => {

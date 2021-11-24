@@ -1,5 +1,5 @@
 import * as babel from "@babel/core";
-import transformUmd from "../lib";
+import transformUmd from "../lib/index.js";
 import externalHelpers from "@babel/plugin-external-helpers";
 
 it("'importInterop' accepts a function", function () {

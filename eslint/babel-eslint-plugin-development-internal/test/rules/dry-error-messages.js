@@ -1,6 +1,6 @@
 import path from "path";
-import rule from "../../src/rules/dry-error-messages";
-import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
+import rule from "../../lib/rules/dry-error-messages.js";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 import { fileURLToPath } from "url";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));

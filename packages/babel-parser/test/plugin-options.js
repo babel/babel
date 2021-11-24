@@ -1,4 +1,4 @@
-import { parse } from "../lib";
+import { parse } from "../lib/index.js";
 
 function getParser(code, plugins) {
   return () => parse(code, { plugins, sourceType: "module" });
