@@ -843,13 +843,18 @@ export default class Tokenizer extends ParserErrors {
       this.state = this.createLookaheadState(old);
 
       const word = this.readWord1(next);
-      const wordNext = this.input.charCodeAt(this.state.pos);
+      const workEndPos = this.state.pos;
+      const wordNext = this.input.charCodeAt(workEndPos);
       const containsEsc = this.state.containsEsc;
 
       // Replace the previous state
       this.state = old;
 
-      if (wordNext === charCodes.colon) {
+      if (
+        wordNext === charCodes.colon &&
+        // @a::b is a valid decorator when using decorators-legacy and functionBind
+        this.input.charCodeAt(workEndPos + 1) !== charCodes.colon
+      ) {
         if (word !== "init") {
           this.raise(this.state.pos, Errors.UnsupportedDecoratorModifier);
         } else if (containsEsc) {
