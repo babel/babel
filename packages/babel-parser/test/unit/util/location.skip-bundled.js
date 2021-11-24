@@ -1,11 +1,6 @@
-const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
+import { getLineInfo } from "../../../lib/util/location.js";
 
-describeSkipPublish("getLineInfo", () => {
-  let getLineInfo;
-  beforeAll(async () => {
-    ({ getLineInfo } = await import("../../../lib/util/location.js"));
-  });
-
+describe("getLineInfo", () => {
   const input = "a\nb\nc\nd\ne\nf\ng\nh\ni";
 
   it("reports correct position", () => {

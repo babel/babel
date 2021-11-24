@@ -1,13 +1,9 @@
-const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
+import {
+  isKeyword,
+  keywordRelationalOperator,
+} from "../../../lib/util/identifier.js";
 
-describeSkipPublish("identifier", () => {
-  let isKeyword, keywordRelationalOperator;
-  beforeAll(async () => {
-    ({ isKeyword, keywordRelationalOperator } = await import(
-      "../../../lib/util/identifier.js"
-    ));
-  });
-
+describe("identifier", () => {
   describe("isKeyword", () => {
     it("break is a keyword", () => {
       expect(isKeyword("break")).toBe(true);

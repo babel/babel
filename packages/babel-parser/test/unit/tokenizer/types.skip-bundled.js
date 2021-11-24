@@ -1,13 +1,6 @@
-const describeSkipPublish = process.env.IS_PUBLISH ? describe.skip : describe;
+import { tt, tokenOperatorPrecedence } from "../../../lib/tokenizer/types.js";
 
-describeSkipPublish("token types", () => {
-  let tt, tokenOperatorPrecedence;
-  beforeAll(async () => {
-    ({ tt, tokenOperatorPrecedence } = await import(
-      "../../../lib/tokenizer/types.js"
-    ));
-  });
-
+describe("token types", () => {
   it("should check if the binOp for relational === in", () => {
     expect(tokenOperatorPrecedence(tt.relational)).toEqual(
       tokenOperatorPrecedence(tt._in),
