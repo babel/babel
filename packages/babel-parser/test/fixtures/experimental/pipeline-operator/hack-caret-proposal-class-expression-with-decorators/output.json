@@ -25,14 +25,11 @@
             "callee": {
               "type": "ClassExpression",
               "start":17,"end":127,"loc":{"start":{"line":2,"column":2},"end":{"line":8,"column":3}},
-              "extra": {
-                "parenthesized": true,
-                "parenStart": 13
-              },
               "decorators": [
                 {
                   "type": "Decorator",
                   "start":17,"end":32,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":17}},
+                  "init": false,
                   "expression": {
                     "type": "Identifier",
                     "start":18,"end":32,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":17},"identifierName":"classDecorator"},
@@ -57,6 +54,7 @@
                       {
                         "type": "Decorator",
                         "start":53,"end":69,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":20}},
+                        "init": false,
                         "expression": {
                           "type": "Identifier",
                           "start":54,"end":69,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":20},"identifierName":"methodDecorator"},
@@ -112,6 +110,10 @@
                     }
                   }
                 ]
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 13
               }
             },
             "arguments": []
