@@ -1,10 +1,10 @@
 See packages/babel-standalone/src/dynamic-require-entrypoint.cjs for the reason for this diff.
 
 diff --git a/dist/index.es.js b/dist/index.es.js
-index 81cb408c8482fc7591a3381eb00b46abc9d21b14..1816113246e075ba7ae99638b64f004fd985ec74 100644
+index e45973c763ab18ef907be4b6237a3c7f9140029b..4bb446d8d599feac6bf7e2653e78c92187ae7966 100644
 --- a/dist/index.es.js
 +++ b/dist/index.es.js
-@@ -1641,7 +1641,7 @@ function commonjs(options = {}) {
+@@ -1724,7 +1724,7 @@ function commonjs(options = {}) {
    const sourceMap = options.sourceMap !== false;
 
    function transformAndCheckExports(code, id) {
@@ -14,10 +14,10 @@ index 81cb408c8482fc7591a3381eb00b46abc9d21b14..1816113246e075ba7ae99638b64f004f
        code =
          getDynamicPackagesEntryIntro(dynamicRequireModuleDirPaths, dynamicRequireModuleSet) + code;
 diff --git a/dist/index.js b/dist/index.js
-index 8ef2184001cb697c6fc2466e9b5fe084c7f1d08c..056ded21d0bb35b8a7c36d1ec50a6ddb5508d386 100644
+index ca1e2da22b422979d81de61768b56f6520e96ecd..feb0ed40e59580f716aab1a27fc668f0e8549fbe 100644
 --- a/dist/index.js
 +++ b/dist/index.js
-@@ -1650,7 +1650,7 @@ function commonjs(options = {}) {
+@@ -1733,7 +1733,7 @@ function commonjs(options = {}) {
    const sourceMap = options.sourceMap !== false;
 
    function transformAndCheckExports(code, id) {
