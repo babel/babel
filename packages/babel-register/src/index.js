@@ -13,6 +13,3 @@ const node = require("./nodeWrapper");
 const register = node.default;
 
 Object.assign(exports, node);
-
-// make TypeScript happy, by making this file a "module"
-export default register;
