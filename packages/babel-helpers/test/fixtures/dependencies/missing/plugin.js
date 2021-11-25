@@ -1,4 +1,4 @@
-const defineHelper = require("../../../helpers/define-helper").default;
+const defineHelper = require("../../../helpers/define-helper.cjs");
 
 const main = defineHelper(__dirname, "main", `
   import dep from "(!!!)%-..a,4892 missing";
