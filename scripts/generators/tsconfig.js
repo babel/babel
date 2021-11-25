@@ -16,7 +16,12 @@ function getTsPkgs(subRoot) {
       dir: path.resolve(root, subRoot, name),
       relative: `./${subRoot}/${name}`,
     }))
-    .filter(({ dir }) => fs.existsSync(path.join(dir, "src", "index.ts")));
+    .filter(
+      ({ dir }) =>
+        // babel-register is special-cased because its entry point is a js file
+        dir.includes("babel-register") ||
+        fs.existsSync(path.join(dir, "src", "index.ts"))
+    );
 }
 
 const tsPkgs = [

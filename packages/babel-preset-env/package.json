@@ -97,7 +97,8 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/core-7.12": "npm:@babel/core@7.12.9",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

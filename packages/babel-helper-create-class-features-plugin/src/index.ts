@@ -19,6 +19,7 @@ import {
   isLoose,
 } from "./features";
 import { assertFieldTransformed } from "./typescript";
+import type { ParserOptions } from "@babel/parser";
 
 export { FEATURES, enableFeature, injectInitialization };
 
@@ -38,7 +39,7 @@ interface Options {
   feature: number;
   loose?: boolean;
   // same as PluginObject.manipulateOptions
-  manipulateOptions: (options: unknown, parserOpts: unknown) => void;
+  manipulateOptions: (options: unknown, parserOpts: ParserOptions) => void;
   // TODO(flow->ts): change to babel api
   api?: { assumption: (key?: string) => boolean | undefined };
 }
