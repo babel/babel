@@ -1,13 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { createRequire } from "module";
+import { createRequire, Module } from "module";
 
 const require = createRequire(import.meta.url);
 
 const testCacheFilename = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
-  ".babel",
+  ".cache.babel",
 );
 const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
 
@@ -35,14 +35,30 @@ function resetCache() {
   process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
 }
 
+const OLD_JEST_MOCKS = !!jest.doMock;
+
 describe("@babel/register - caching", () => {
   describe("cache", () => {
     let load, get, setDirty, save;
     let consoleWarnSpy;
 
+    if (!OLD_JEST_MOCKS) {
+      let oldModuleCache;
+      beforeAll(() => {
+        oldModuleCache = Module._cache;
+      });
+      afterAll(() => {
+        Module._cache = oldModuleCache;
+      });
+    }
+
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
-      jest.resetModules(require);
+      if (OLD_JEST_MOCKS) {
+        jest.resetModules();
+      } else {
+        Module._cache = {};
+      }
       const cache = require("../lib/cache.js");
 
       load = cache.load;

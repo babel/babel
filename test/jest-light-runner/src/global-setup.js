@@ -24,7 +24,4 @@ globalThis.afterEach = circus.afterEach;
 globalThis.jest = {
   fn: mock.fn,
   spyOn: mock.spyOn,
-  resetModules: require => {
-    for (const k of Object.keys(require.cache)) delete require.cache[k];
-  },
 };
