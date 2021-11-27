@@ -12,7 +12,7 @@ import { rollup } from "rollup";
 import { babel as rollupBabel } from "@rollup/plugin-babel";
 import rollupCommonJs from "@rollup/plugin-commonjs";
 import rollupJson from "@rollup/plugin-json";
-import rollupNodePolyfills from "rollup-plugin-node-polyfills";
+import rollupPolyfillNode from "rollup-plugin-polyfill-node";
 import rollupNodeResolve from "@rollup/plugin-node-resolve";
 import rollupReplace from "@rollup/plugin-replace";
 import { terser as rollupTerser } from "rollup-plugin-terser";
@@ -382,7 +382,7 @@ function buildRollup(packages, targetBrowsers) {
             }),
             rollupJson(),
             targetBrowsers &&
-              rollupNodePolyfills({
+              rollupPolyfillNode({
                 sourceMap: sourcemap,
                 include: "**/*.{js,cjs,ts}",
               }),
