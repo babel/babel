@@ -911,7 +911,7 @@ function replaceThisContext(
     getSuperRef,
     getObjectRef() {
       state.needsClassRef = true;
-      return isStaticBlock || path.node.static
+      return t.isStaticBlock(path.node) || path.node.static
         ? ref
         : t.memberExpression(ref, t.identifier("prototype"));
     },
@@ -931,7 +931,8 @@ function replaceThisContext(
 export type PropNode =
   | t.ClassProperty
   | t.ClassPrivateMethod
-  | t.ClassPrivateProperty;
+  | t.ClassPrivateProperty
+  | t.StaticBlock;
 export type PropPath = NodePath<PropNode>;
 
 export function buildFieldsInitNodes(
@@ -963,7 +964,7 @@ export function buildFieldsInitNodes(
   for (const prop of props) {
     prop.isClassProperty() && ts.assertFieldTransformed(prop);
 
-    const isStatic = prop.node.static;
+    const isStatic = !t.isStaticBlock(prop.node) && prop.node.static;
     const isInstance = !isStatic;
     const isPrivate = prop.isPrivate();
     const isPublic = !isPrivate;

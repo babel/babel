@@ -7,6 +7,7 @@ import {
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
 import legacyVisitor from "./transformer-legacy";
+import transformer2021_12 from "./transformer-2021-12";
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -16,7 +17,7 @@ export default declare((api, options) => {
     throw new Error("'legacy' must be a boolean.");
   }
 
-  const { decoratorsBeforeExport } = options;
+  const { decoratorsBeforeExport, version } = options;
   if (decoratorsBeforeExport === undefined) {
     if (!legacy) {
       throw new Error(
@@ -37,6 +38,10 @@ export default declare((api, options) => {
   }
 
   if (legacy) {
+    if (version !== undefined) {
+      throw new Error("'version' can't be used with legacy decorators");
+    }
+
     return {
       name: "proposal-decorators",
       inherits: syntaxDecorators,
@@ -45,6 +50,12 @@ export default declare((api, options) => {
       },
       visitor: legacyVisitor,
     };
+  }
+
+  if (version === "2021-12") {
+    return transformer2021_12(api, options);
+  } else if (!(version === "2018-09" || version === undefined)) {
+    throw new Error("Unsupported decorators version: " + version);
   }
 
   return createClassFeaturePlugin({

@@ -18,6 +18,15 @@
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
+    "./helpers/applyDecs": [
+      {
+        "node": "./helpers/applyDecs.js",
+        "import": "./helpers/esm/applyDecs.js",
+        "default": "./helpers/applyDecs.js"
+      },
+      "./helpers/applyDecs.js"
+    ],
+    "./helpers/esm/applyDecs": "./helpers/esm/applyDecs.js",
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator.js",

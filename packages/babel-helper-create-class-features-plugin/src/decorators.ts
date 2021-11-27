@@ -80,7 +80,10 @@ function extractElementDescriptor(
   const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(t.isClassMethod(node) ? node.kind : "field")),
     prop("decorators", takeDecorators(node as Decorable)),
-    prop("static", node.static && t.booleanLiteral(true)),
+    prop(
+      "static",
+      !t.isStaticBlock(node) && node.static && t.booleanLiteral(true),
+    ),
     prop("key", getKey(node)),
   ].filter(Boolean);
 

@@ -3,7 +3,7 @@ import { declare } from "@babel/helper-plugin-utils";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { legacy = false } = options;
+  const { legacy = false, version } = options;
   if (typeof legacy !== "boolean") {
     throw new Error("'legacy' must be a boolean.");
   }
@@ -29,6 +29,12 @@ export default declare((api, options) => {
     }
   }
 
+  if (
+    !(version === "2021-12" || version === "2018-09" || version === undefined)
+  ) {
+    throw new Error("Unsupported decorators version: " + version);
+  }
+
   return {
     name: "syntax-decorators",
 
@@ -38,6 +44,11 @@ export default declare((api, options) => {
           ? "decorators-legacy"
           : ["decorators", { decoratorsBeforeExport }],
       );
+
+      if (version === "2021-12") {
+        parserOpts.plugins.push("decoratorAutoAccessors");
+        parserOpts.plugins.push("classStaticBlock");
+      }
     },
   };
 });

@@ -170,7 +170,7 @@ export function createClassFeaturePlugin({
               path.isPrivate() ||
               path.isStaticBlock?.()
             ) {
-              props.push(path);
+              props.push(path as PropPath);
             }
           }
         }
@@ -246,7 +246,7 @@ export function createClassFeaturePlugin({
             (referenceVisitor, state) => {
               if (isDecorated) return;
               for (const prop of props) {
-                if (prop.node.static) continue;
+                if (t.isStaticBlock(prop.node) || prop.node.static) continue;
                 prop.traverse(referenceVisitor, state);
               }
             },
