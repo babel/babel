@@ -103,7 +103,7 @@ __metadata:
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
   dependencies:
     "@babel/runtime": "workspace:^"
-    "@rollup/plugin-commonjs": ^21.0.1
+    "@rollup/plugin-commonjs": 22.0.0-0
     "@rollup/plugin-node-resolve": ^13.0.0
     rollup: ^2.60.1
   languageName: unknown
@@ -4161,9 +4161,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:^21.0.1":
-  version: 21.0.1
-  resolution: "@rollup/plugin-commonjs@npm:21.0.1"
+"@rollup/plugin-commonjs@npm:22.0.0-0":
+  version: 22.0.0-0
+  resolution: "@rollup/plugin-commonjs@npm:22.0.0-0"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -4173,25 +4173,8 @@ __metadata:
     magic-string: ^0.25.7
     resolve: ^1.17.0
   peerDependencies:
-    rollup: ^2.38.3
-  checksum: 3e56be58c72d655face6f361f85923ddcc3cc07760b5a3a91cfc728115dfed358fc595781148c512d53a03be8c703133379f228e78fd2aed8655fae9d83800b6
-  languageName: node
-  linkType: hard
-
-"@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@^21.0.1#./.yarn/patches/@rollup__plugin-commonjs.patch::locator=babel%40workspace%3A.":
-  version: 21.0.1
-  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A21.0.1#./.yarn/patches/@rollup__plugin-commonjs.patch::version=21.0.1&hash=858477&locator=babel%40workspace%3A."
-  dependencies:
-    "@rollup/pluginutils": ^3.1.0
-    commondir: ^1.0.1
-    estree-walker: ^2.0.1
-    glob: ^7.1.6
-    is-reference: ^1.2.1
-    magic-string: ^0.25.7
-    resolve: ^1.17.0
-  peerDependencies:
-    rollup: ^2.38.3
-  checksum: ed506b3063e709d6650f9e20c632e6ad43d33038409544a47f0c848a4c1b2ebdad5f0199a718cadaa2c6ec31e15fa839294ddefb7c2c8eba513c316334660ff8
+    rollup: ^2.60.0
+  checksum: 9235ecdf8f5249bf572adb6041d359642ea12a4941047f21d6561b69221ce5dfb2960a29980aafefa908e0962d267a23372d4a88f32915fc744d95491017bbb9
   languageName: node
   linkType: hard
 
@@ -5920,7 +5903,7 @@ __metadata:
     "@babel/preset-typescript": ^7.16.7
     "@babel/runtime": ^7.17.0
     "@rollup/plugin-babel": ^5.3.0
-    "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@^21.0.1#./.yarn/patches/@rollup__plugin-commonjs.patch"
+    "@rollup/plugin-commonjs": 22.0.0-0
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rollup/plugin-replace": ^2.4.2
