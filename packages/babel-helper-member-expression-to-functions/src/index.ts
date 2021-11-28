@@ -538,7 +538,7 @@ export interface HandlerState<State = {}> extends Handler<State> {
   handle(
     this: HandlerState<State> & State,
     member: Member,
-    noDocumentAll: boolean,
+    noDocumentAll?: boolean,
   ): void;
   memoiser: AssignmentMemoiser;
 }

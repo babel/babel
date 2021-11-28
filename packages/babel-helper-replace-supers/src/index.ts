@@ -1,6 +1,7 @@
 import type { HubInterface, NodePath, Scope } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
+import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import environmentVisitor from "@babel/helper-environment-visitor";
 import {
@@ -43,7 +44,9 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-const visitor = traverse.visitors.merge([
+const visitor = traverse.visitors.merge<
+  HandlerState<ReplaceState> & ReplaceState
+>([
   environmentVisitor,
   {
     Super(path, state) {

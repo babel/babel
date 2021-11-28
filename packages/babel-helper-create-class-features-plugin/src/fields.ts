@@ -850,7 +850,11 @@ function buildPrivateMethodDeclaration(
   );
 }
 
-const thisContextVisitor = traverse.visitors.merge([
+const thisContextVisitor = traverse.visitors.merge<{
+  classRef: t.Identifier;
+  needsClassRef: boolean;
+  innerBinding: t.Identifier;
+}>([
   {
     ThisExpression(path, state) {
       state.needsClassRef = true;

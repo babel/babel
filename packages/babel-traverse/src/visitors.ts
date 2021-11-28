@@ -178,6 +178,11 @@ function validateVisitorMethods(path, val) {
 
 export function merge<State>(visitors: Visitor<State>[]): Visitor<State>;
 export function merge(
+  visitors: Visitor<unknown>[],
+  states?: any[],
+  wrapper?: Function | null,
+): Visitor<unknown>;
+export function merge(
   visitors: any[],
   states: any[] = [],
   wrapper?: Function | null,
