@@ -1,4 +1,4 @@
-import { environmentVisitor } from "@babel/helper-replace-supers";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import traverse from "@babel/traverse";
 import { numericLiteral, unaryExpression } from "@babel/types";
 import type * as t from "@babel/types";

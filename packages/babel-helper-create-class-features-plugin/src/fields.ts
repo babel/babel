@@ -1,9 +1,8 @@
 import { template, traverse, types as t } from "@babel/core";
 import type { File } from "@babel/core";
 import type { NodePath, Visitor, Scope } from "@babel/traverse";
-import ReplaceSupers, {
-  environmentVisitor,
-} from "@babel/helper-replace-supers";
+import ReplaceSupers from "@babel/helper-replace-supers";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type {
   Handler,
