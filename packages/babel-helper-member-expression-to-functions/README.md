@@ -9,11 +9,11 @@ See our website [@babel/helper-member-expression-to-functions](https://babeljs.i
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-member-expression-to-functions
+npm install --save @babel/helper-member-expression-to-functions
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-member-expression-to-functions --dev
+yarn add @babel/helper-member-expression-to-functions
 ```

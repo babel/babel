@@ -1,6 +1,6 @@
 # @babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining
 
-> Transform optional chaining operators to workaround a [v8 bug](https://crbug.com/v8/11558).
+> Transform optional chaining operators to workaround https://crbug.com/v8/11558
 
 See our website [@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining](https://babeljs.io/docs/en/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining) for more information.
 

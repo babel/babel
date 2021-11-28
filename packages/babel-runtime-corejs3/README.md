@@ -9,11 +9,11 @@ See our website [@babel/runtime-corejs3](https://babeljs.io/docs/en/babel-runtim
 Using npm:
 
 ```sh
-npm install --save-dev @babel/runtime-corejs3
+npm install --save @babel/runtime-corejs3
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/runtime-corejs3 --dev
+yarn add @babel/runtime-corejs3
 ```
