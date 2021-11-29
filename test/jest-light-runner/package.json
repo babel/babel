@@ -8,11 +8,11 @@
     ".": "./src/index.js"
   },
   "dependencies": {
-    "expect": "^27.3.1",
-    "jest-circus": "^27.3.1",
-    "jest-each": "^27.3.1",
-    "jest-mock": "^27.3.0",
-    "jest-snapshot": "^27.3.1",
+    "expect": "^27.4.0",
+    "jest-circus": "^27.4.0",
+    "jest-each": "^27.4.0",
+    "jest-mock": "^27.4.0",
+    "jest-snapshot": "^27.4.0",
     "piscina": "^3.1.0",
     "supports-color": "^9.0.2"
   }
