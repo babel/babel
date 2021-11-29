@@ -9,11 +9,11 @@ See our website [@babel/helper-explode-assignable-expression](https://babeljs.io
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-explode-assignable-expression
+npm install --save @babel/helper-explode-assignable-expression
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-explode-assignable-expression --dev
+yarn add @babel/helper-explode-assignable-expression
 ```

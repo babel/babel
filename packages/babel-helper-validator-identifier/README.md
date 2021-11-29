@@ -9,11 +9,11 @@ See our website [@babel/helper-validator-identifier](https://babeljs.io/docs/en/
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-validator-identifier
+npm install --save @babel/helper-validator-identifier
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-validator-identifier --dev
+yarn add @babel/helper-validator-identifier
 ```

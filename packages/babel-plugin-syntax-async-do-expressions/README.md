@@ -2,7 +2,7 @@
 
 > Allow parsing of async do expressions
 
-See our website [@babel/plugin-syntax-async-do-expressions](https://babel.dev/docs/en/babel-plugin-syntax-async-do-expressions) for more information.
+See our website [@babel/plugin-syntax-async-do-expressions](https://babeljs.io/docs/en/babel-plugin-syntax-async-do-expressions) for more information.
 
 ## Install
 

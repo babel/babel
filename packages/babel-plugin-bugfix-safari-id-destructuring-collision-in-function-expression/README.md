@@ -1,6 +1,6 @@
 # @babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression
 
-> Rename destructuring parameter to workaround a [Safari bug](https://bugs.webkit.org/show_bug.cgi?id=220517).
+> Rename destructuring parameter to workaround https://bugs.webkit.org/show_bug.cgi?id=220517
 
 See our website [@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression](https://babeljs.io/docs/en/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression) for more information.
 
