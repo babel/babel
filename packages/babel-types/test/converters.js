@@ -1,6 +1,8 @@
 import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
+
+import _generate from "@babel/generator";
+const generate = _generate.default;
 
 function parseCode(string) {
   return parse(string, {

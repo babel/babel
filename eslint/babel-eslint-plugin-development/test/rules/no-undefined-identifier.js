@@ -8,7 +8,7 @@ const ruleTester = new RuleTester({
   parserOptions: { sourceType: "module" },
 });
 
-ruleTester.run("no-undefined-identifier", rule, {
+ruleTester.run("no-undefined-identifier", rule.default, {
   valid: [
     `_.identifier("undefined")`,
     `_.Identifier("undefined")`,

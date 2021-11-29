@@ -1,6 +1,8 @@
-import traverse from "../lib/index.js";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+const traverse = _traverse.default;
 
 describe("path/family", function () {
   describe("getBindingIdentifiers", function () {

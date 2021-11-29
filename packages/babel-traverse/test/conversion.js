@@ -1,7 +1,10 @@
-import traverse from "../lib/index.js";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+import _generate from "@babel/generator";
+const traverse = _traverse.default;
+const generate = _generate.default;
 
 function getPath(code) {
   const ast = parse(code);

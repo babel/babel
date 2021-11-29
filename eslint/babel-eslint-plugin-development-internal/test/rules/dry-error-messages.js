@@ -12,7 +12,7 @@ const MODULE_PARENT_DIR = path.resolve(dirname, "test/errorsModule.js");
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("dry-error-messages", rule, {
+ruleTester.run("dry-error-messages", rule.default, {
   valid: [
     // Ignores malformed `this.raise` invocations.
     {

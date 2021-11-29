@@ -1,6 +1,8 @@
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import getTargets from "../../lib/index.js";
+
+import _getTargets from "../../lib/index.js";
+const getTargets = _getTargets.default;
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 

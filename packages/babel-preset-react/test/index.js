@@ -1,16 +1,17 @@
-import react from "../lib/index.js";
+import _reactPreset from "../lib/index.js";
+const reactPreset = _reactPreset.default;
 
 describe("react preset", () => {
   it("does throw clear error when no options passed for Babel 6", () => {
     expect(() => {
-      react({ version: "6.5.0" });
+      reactPreset({ version: "6.5.0" });
     }).toThrow(Error, /Requires Babel "\^7.0.0-0"/);
   });
   (process.env.BABEL_8_BREAKING ? it : it.skip)(
     "throws when unknown option is passed",
     () => {
       expect(() => {
-        react({ assertVersion() {} }, { runtine: true });
+        reactPreset({ assertVersion() {} }, { runtine: true });
       }).toThrowErrorMatchingInlineSnapshot(`
         "@babel/preset-react: 'runtine' is not a valid top-level option.
         - Did you mean 'runtime'?"
@@ -21,7 +22,7 @@ describe("react preset", () => {
     "throws when option is of incorrect type",
     () => {
       expect(() => {
-        react({ assertVersion() {} }, { runtime: true });
+        reactPreset({ assertVersion() {} }, { runtime: true });
       }).toThrowErrorMatchingInlineSnapshot(
         `"@babel/preset-react: 'runtime' option must be a string."`,
       );

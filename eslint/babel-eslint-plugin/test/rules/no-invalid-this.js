@@ -165,7 +165,7 @@ const patterns = [
 ];
 
 const ruleTester = new RuleTester();
-ruleTester.run("@babel/no-invalid-this", rule, {
+ruleTester.run("@babel/no-invalid-this", rule.default, {
   valid: extractPatterns(patterns, "valid"),
   invalid: extractPatterns(patterns, "invalid"),
 });

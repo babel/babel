@@ -1,5 +1,3 @@
-import Printer from "../lib/printer.js";
-import generate, { CodeGenerator } from "../lib/index.js";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
@@ -7,6 +5,11 @@ import path from "path";
 import fixtures from "@babel/helper-fixtures";
 import sourcemap from "source-map";
 import { fileURLToPath } from "url";
+
+import _Printer from "../lib/printer.js";
+import _generate, { CodeGenerator } from "../lib/index.js";
+const Printer = _Printer.default;
+const generate = _generate.default;
 
 describe("generation", function () {
   it("completeness", function () {
@@ -795,7 +798,7 @@ describe("CodeGenerator", function () {
   });
 });
 
-const suites = fixtures(
+const suites = fixtures.default(
   path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
 );
 

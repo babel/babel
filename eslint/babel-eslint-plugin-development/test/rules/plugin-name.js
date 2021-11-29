@@ -6,7 +6,7 @@ const missingNameError = "This Babel plugin doesn't have a 'name' property.";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("plugin-name", rule, {
+ruleTester.run("plugin-name", rule.default, {
   valid: [
     `export default function () { return { name: "test-plugin" } }`,
     `import { declare } from "@babel/helper-plugin-utils"; declare(() => { return { name: "test-plugin" } })`,
