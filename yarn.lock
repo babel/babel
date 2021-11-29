@@ -218,7 +218,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.14.5, @babel/code-frame@npm:^7.15.8, @babel/code-frame@npm:^7.16.0":
+"@babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.14.5, @babel/code-frame@npm:^7.15.8, @babel/code-frame@npm:^7.16.0":
   version: 7.16.0
   resolution: "@babel/code-frame@npm:7.16.0"
   dependencies:
@@ -4370,13 +4370,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/normalize-package-data@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "@types/normalize-package-data@npm:2.4.0"
-  checksum: fd22ba86a186a033dbe173840fd2ad091032be6d48163198869d058821acca7373d9f39cfd0caf42f3b92bc737723814fe1b4e9e90eacaa913836610aa197d3b
-  languageName: node
-  linkType: hard
-
 "@types/prettier@npm:^2.1.5":
   version: 2.2.3
   resolution: "@types/prettier@npm:2.2.3"
@@ -5798,7 +5791,7 @@ __metadata:
     gulp: ^4.0.2
     gulp-filter: ^7.0.0
     gulp-plumber: ^1.2.1
-    husky: ^3.0.0
+    husky: ^7.0.4
     jest: ^27.2.0
     jest-worker: ^27.2.0
     lint-staged: ^9.2.0
@@ -6485,13 +6478,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "ci-info@npm:2.0.0"
-  checksum: 3b374666a85ea3ca43fa49aa3a048d21c9b475c96eb13c133505d2324e7ae5efd6a454f41efe46a152269e9b6a00c9edbe63ec7fa1921957165aae16625acd67
-  languageName: node
-  linkType: hard
-
 "ci-info@npm:^3.1.1":
   version: 3.1.1
   resolution: "ci-info@npm:3.1.1"
@@ -6958,19 +6944,6 @@ __metadata:
     shebang-command: ^1.2.0
     which: ^1.2.9
   checksum: 726939c9954fc70c20e538923feaaa33bebc253247d13021737c3c7f68cdc3e0a57f720c0fe75057c0387995349f3f12e20e9bfdbf12274db28019c7ea4ec166
-  languageName: node
-  linkType: hard
-
-"cross-spawn@npm:^6.0.0":
-  version: 6.0.5
-  resolution: "cross-spawn@npm:6.0.5"
-  dependencies:
-    nice-try: ^1.0.4
-    path-key: ^2.0.1
-    semver: ^5.5.0
-    shebang-command: ^1.2.0
-    which: ^1.2.9
-  checksum: f893bb0d96cd3d5751d04e67145bdddf25f99449531a72e82dcbbd42796bbc8268c1076c6b3ea51d4d455839902804b94bc45dfb37ecbb32ea8e54a6741c3ab9
   languageName: node
   linkType: hard
 
@@ -8186,21 +8159,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"execa@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "execa@npm:1.0.0"
-  dependencies:
-    cross-spawn: ^6.0.0
-    get-stream: ^4.0.0
-    is-stream: ^1.1.0
-    npm-run-path: ^2.0.0
-    p-finally: ^1.0.0
-    signal-exit: ^3.0.0
-    strip-eof: ^1.0.0
-  checksum: ddf1342c1c7d02dd93b41364cd847640f6163350d9439071abf70bf4ceb1b9b2b2e37f54babb1d8dc1df8e0d8def32d0e81e74a2e62c3e1d70c303eb4c306bc4
-  languageName: node
-  linkType: hard
-
 "execa@npm:^2.0.3":
   version: 2.1.0
   resolution: "execa@npm:2.1.0"
@@ -8892,26 +8850,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"get-stdin@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "get-stdin@npm:7.0.0"
-  checksum: a24ab2cf8ee35bf5d3460c0d8145f2624715d864485789b7101a7cf1b6c1ce0a57319e25304872074121fa60e7104f1af3583a7014e9974c84c61d0702beae24
-  languageName: node
-  linkType: hard
-
 "get-stream@npm:^3.0.0":
   version: 3.0.0
   resolution: "get-stream@npm:3.0.0"
   checksum: 36142f46005ed74ce3a45c55545ec4e7da8e243554179e345a786baf144e5c4a35fb7bdc49fadfa9f18bd08000589b6fe364abdadfc4e1eb0e1b9914a6bb9c56
-  languageName: node
-  linkType: hard
-
-"get-stream@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "get-stream@npm:4.1.0"
-  dependencies:
-    pump: ^3.0.0
-  checksum: 443e1914170c15bd52ff8ea6eff6dfc6d712b031303e36302d2778e3de2506af9ee964d6124010f7818736dcfde05c04ba7ca6cc26883106e084357a17ae7d73
   languageName: node
   linkType: hard
 
@@ -9474,25 +9416,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"husky@npm:^3.0.0":
-  version: 3.1.0
-  resolution: "husky@npm:3.1.0"
-  dependencies:
-    chalk: ^2.4.2
-    ci-info: ^2.0.0
-    cosmiconfig: ^5.2.1
-    execa: ^1.0.0
-    get-stdin: ^7.0.0
-    opencollective-postinstall: ^2.0.2
-    pkg-dir: ^4.2.0
-    please-upgrade-node: ^3.2.0
-    read-pkg: ^5.2.0
-    run-node: ^1.0.0
-    slash: ^3.0.0
+"husky@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "husky@npm:7.0.4"
   bin:
-    husky-run: ./run.js
-    husky-upgrade: ./lib/upgrader/bin.js
-  checksum: 15a8eeb5ca8286f4e1f64cbc55ffb2295c407ba9da84a88128471a886e6fb6cf7a2b5ea0db5f0715e185d7251fc09700baf3bc95f63cb80accc5d253d69c141f
+    husky: lib/bin.js
+  checksum: c6ec4af63da2c9522da8674a20ad9b48362cc92704896cc8a58c6a2a39d797feb2b806f93fbd83a6d653fbdceb2c3b6e0b602c6b2e8565206ffc2882ef7db9e9
   languageName: node
   linkType: hard
 
@@ -11169,13 +11098,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lines-and-columns@npm:^1.1.6":
-  version: 1.1.6
-  resolution: "lines-and-columns@npm:1.1.6"
-  checksum: 198a5436b1fa5cf703bae719c01c686b076f0ad7e1aafd95a58d626cabff302dc0414822126f2f80b58a8c3d66cda8a7b6da064f27130f87e1d3506d6dfd0d68
-  languageName: node
-  linkType: hard
-
 "lint-staged@npm:^9.2.0":
   version: 9.5.0
   resolution: "lint-staged@npm:9.5.0"
@@ -11889,13 +11811,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"nice-try@npm:^1.0.4":
-  version: 1.0.5
-  resolution: "nice-try@npm:1.0.5"
-  checksum: 0b4af3b5bb5d86c289f7a026303d192a7eb4417231fe47245c460baeabae7277bcd8fd9c728fb6bd62c30b3e15cd6620373e2cf33353b095d8b403d3e8a15aff
-  languageName: node
-  linkType: hard
-
 "node-environment-flags@npm:^1.0.5":
   version: 1.0.6
   resolution: "node-environment-flags@npm:1.0.6"
@@ -11990,7 +11905,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"normalize-package-data@npm:^2.3.2, normalize-package-data@npm:^2.5.0":
+"normalize-package-data@npm:^2.3.2":
   version: 2.5.0
   resolution: "normalize-package-data@npm:2.5.0"
   dependencies:
@@ -12236,15 +12151,6 @@ fsevents@^1.2.7:
   dependencies:
     mimic-fn: ^2.1.0
   checksum: 2478859ef817fc5d4e9c2f9e5728512ddd1dbc9fb7829ad263765bb6d3b91ce699d6e2332eef6b7dff183c2f490bd3349f1666427eaba4469fba0ac38dfd0d34
-  languageName: node
-  linkType: hard
-
-"opencollective-postinstall@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "opencollective-postinstall@npm:2.0.2"
-  bin:
-    opencollective-postinstall: index.js
-  checksum: 4b6f333f1c863ef141abef16998daf45f891baf63765684f14b97884ca069fb0055decb59ade7800153190c099b559918c2adeb99f3db70bb0fd616220e8cc17
   languageName: node
   linkType: hard
 
@@ -12521,18 +12427,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"parse-json@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "parse-json@npm:5.0.0"
-  dependencies:
-    "@babel/code-frame": ^7.0.0
-    error-ex: ^1.3.1
-    json-parse-better-errors: ^1.0.1
-    lines-and-columns: ^1.1.6
-  checksum: bfe9108b5305a58f7e6575faaba2968e48e61ba3e784d6bf06d297f6127e00deb3d8161dd567e6988ddb5da50c8ff00f44197f917d63de070025bc2ce185c180
-  languageName: node
-  linkType: hard
-
 "parse-node-version@npm:^1.0.0":
   version: 1.0.1
   resolution: "parse-node-version@npm:1.0.1"
@@ -12605,7 +12499,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"path-key@npm:^2.0.0, path-key@npm:^2.0.1":
+"path-key@npm:^2.0.0":
   version: 2.0.1
   resolution: "path-key@npm:2.0.1"
   checksum: f7ab0ad42fe3fb8c7f11d0c4f849871e28fbd8e1add65c370e422512fc5887097b9cf34d09c1747d45c942a8c1e26468d6356e2df3f740bf177ab8ca7301ebfd
@@ -12783,7 +12677,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"please-upgrade-node@npm:^3.1.1, please-upgrade-node@npm:^3.2.0":
+"please-upgrade-node@npm:^3.1.1":
   version: 3.2.0
   resolution: "please-upgrade-node@npm:3.2.0"
   dependencies:
@@ -13128,18 +13022,6 @@ fsevents@^1.2.7:
     normalize-package-data: ^2.3.2
     path-type: ^2.0.0
   checksum: 85c5bf35f2d96acdd756151ba83251831bb2b1040b7d96adce70b2cb119b5320417f34876de0929f2d06c67f3df33ef4636427df3533913876f9ef2487a6f48f
-  languageName: node
-  linkType: hard
-
-"read-pkg@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "read-pkg@npm:5.2.0"
-  dependencies:
-    "@types/normalize-package-data": ^2.4.0
-    normalize-package-data: ^2.5.0
-    parse-json: ^5.0.0
-    type-fest: ^0.6.0
-  checksum: eb696e60528b29aebe10e499ba93f44991908c57d70f2d26f369e46b8b9afc208ef11b4ba64f67630f31df8b6872129e0a8933c8c53b7b4daf0eace536901222
   languageName: node
   linkType: hard
 
@@ -13612,15 +13494,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"run-node@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "run-node@npm:1.0.0"
-  bin:
-    run-node: run-node
-  checksum: 99a0846de16d64c81e7cce487b8d7a77907d7ff69e229ad154cc7ee33ded6f82f71309f47de33cc4c206de6c7b7c37f641d7b6488bb85cc0bfe4da6d8b029242
-  languageName: node
-  linkType: hard
-
 "run-parallel@npm:^1.1.9":
   version: 1.1.9
   resolution: "run-parallel@npm:1.1.9"
@@ -13753,7 +13626,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.6.0, semver@npm:^5.7.0":
+"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.6.0, semver@npm:^5.7.0":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
   bin:
@@ -14974,13 +14847,6 @@ fsevents@^1.2.7:
   version: 0.20.2
   resolution: "type-fest@npm:0.20.2"
   checksum: 4fb3272df21ad1c552486f8a2f8e115c09a521ad7a8db3d56d53718d0c907b62c6e9141ba5f584af3f6830d0872c521357e512381f24f7c44acae583ad517d73
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "type-fest@npm:0.6.0"
-  checksum: b2188e6e4b21557f6e92960ec496d28a51d68658018cba8b597bd3ef757721d1db309f120ae987abeeda874511d14b776157ff809f23c6d1ce8f83b9b2b7d60f
   languageName: node
   linkType: hard
 
