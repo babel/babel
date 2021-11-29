@@ -49,7 +49,6 @@ module.exports = {
     "/test/__data__/",
     "<rootDir>/build/",
   ],
-  resolver: supportsESM ? "./test/jestExportsMapResolver.cjs" : null,
   // We don't need module name mappers here as depedencies of workspace
   // package should be declared explicitly in the package.json
   // Yarn will generate correct file links so that Jest can resolve correctly
