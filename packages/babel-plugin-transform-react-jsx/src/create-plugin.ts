@@ -31,11 +31,14 @@ const DEFAULT = {
   pragmaFrag: "React.Fragment",
 };
 
-const JSX_SOURCE_ANNOTATION_REGEX = /\*?\s*@jsxImportSource\s+([^\s]+)/;
-const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
+const JSX_SOURCE_ANNOTATION_REGEX =
+  /^\/*\*?\/*\*\s*@jsxImportSource\s+([^\s]+)\s*\/*\*\//;
+const JSX_RUNTIME_ANNOTATION_REGEX =
+  /^\/*\*?\/*\*\s*@jsxRuntime\s+([^\s]+)\s*\/*\*\//;
 
-const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
-const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
+const JSX_ANNOTATION_REGEX = /^\/*\*?\/*\*\s*@jsx\s+([^\s]+)\s*\/*\*\//;
+const JSX_FRAG_ANNOTATION_REGEX =
+  /^\/*\*?\/*\*\s*@jsxFrag\s+([^\s]+)\s*\/*\*\//;
 
 const get = (pass: PluginPass, name: string) =>
   pass.get(`@babel/plugin-react-jsx/${name}`);
@@ -167,29 +170,25 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
             if (file.ast.comments) {
               for (const comment of file.ast.comments) {
-                const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(
-                  comment.value,
-                );
+                const value = `/*${comment.value}*/`;
+
+                const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(value);
                 if (sourceMatches) {
                   source = sourceMatches[1];
                   sourceSet = true;
                 }
 
-                const runtimeMatches = JSX_RUNTIME_ANNOTATION_REGEX.exec(
-                  comment.value,
-                );
+                const runtimeMatches = JSX_RUNTIME_ANNOTATION_REGEX.exec(value);
                 if (runtimeMatches) {
                   runtime = runtimeMatches[1];
                 }
 
-                const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
+                const jsxMatches = JSX_ANNOTATION_REGEX.exec(value);
                 if (jsxMatches) {
                   pragma = jsxMatches[1];
                   pragmaSet = true;
                 }
-                const jsxFragMatches = JSX_FRAG_ANNOTATION_REGEX.exec(
-                  comment.value,
-                );
+                const jsxFragMatches = JSX_FRAG_ANNOTATION_REGEX.exec(value);
                 if (jsxFragMatches) {
                   pragmaFrag = jsxFragMatches[1];
                   pragmaFragSet = true;
