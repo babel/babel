@@ -1,9 +1,9 @@
 import { template, traverse, types as t } from "@babel/core";
 import type { File } from "@babel/core";
 import type { NodePath, Scope, Visitor, Binding } from "@babel/traverse";
-import { environmentVisitor } from "@babel/helper-replace-supers";
+import environmentVisitor from "@babel/helper-environment-visitor";
 
-const findBareSupers = traverse.visitors.merge([
+const findBareSupers = traverse.visitors.merge<NodePath<t.CallExpression>[]>([
   {
     Super(path: NodePath<t.Super>) {
       const { node, parentPath } = path;

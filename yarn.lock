@@ -546,6 +546,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
@@ -610,6 +611,15 @@ __metadata:
   checksum: 372378ac4235c4fe135f1cd6d0f63697e7cb3ef63a884eb14f4b439984846bcaec0b7a32cf8df6756a21557ae3ebb3c2ee18d9a191260705a583333e5e60df7c
   languageName: node
   linkType: hard
+
+"@babel/helper-environment-visitor@workspace:^, @babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor"
+  dependencies:
+    "@babel/traverse": "workspace:^"
+    "@babel/types": "workspace:^"
+  languageName: unknown
+  linkType: soft
 
 "@babel/helper-explode-assignable-expression@npm:^7.16.0":
   version: 7.16.0
@@ -735,8 +745,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-replace-supers": "workspace:^"
     "@babel/helper-simple-access": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
@@ -849,6 +859,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers"
   dependencies:
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
     "@babel/traverse": "workspace:^"
@@ -2193,6 +2204,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
@@ -3667,6 +3679,7 @@ __metadata:
   dependencies:
     "@babel/code-frame": "workspace:^"
     "@babel/generator": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-hoist-variables": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"

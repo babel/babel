@@ -71,6 +71,30 @@ describe("arrow function conversion", () => {
     );
   });
 
+  it("should convert super calls in constructors used in computed method keys", () => {
+    assertConversion(
+      `
+      () => ({
+        [super()]: 123,
+        get [super() + "1"]() {},
+        [super()]() {},
+      });
+    `,
+      `
+      var _supercall = (..._args) => super(..._args);
+
+      (function () {
+        return {
+          [_supercall()]: 123,
+          get [_supercall() + "1"]() {},
+          [_supercall()]() {},
+        };
+      });
+    `,
+      { methodName: "constructor", extend: true },
+    );
+  });
+
   it("should convert super calls and this references in constructors", () => {
     assertConversion(
       `
@@ -122,6 +146,32 @@ describe("arrow function conversion", () => {
       this;
       () => (super(), _this = this);
       () => this;
+    `,
+      { methodName: "constructor", extend: true },
+    );
+  });
+
+  it("should convert this references in constructors with super() used in computed method keys", () => {
+    assertConversion(
+      `
+      () => this;
+
+      ({
+        [super()]: 123,
+        get [super() + "1"]() {},
+        [super()]() {},
+      });
+    `,
+      `
+      var _this;
+
+      (function () { return _this; });
+
+      ({
+        [(super(), _this = this)]: 123,
+        get [(super(), _this = this) + "1"]() {},
+        [(super(), _this = this)]() {},
+      });
     `,
       { methodName: "constructor", extend: true },
     );
@@ -269,6 +319,29 @@ describe("arrow function conversion", () => {
       });
       <this.this this="" />;
       () => <this.this this="" />;
+    `,
+    );
+  });
+
+  it("should convert this references used in computed method keys", () => {
+    assertConversion(
+      `
+      () => ({
+        [this]: 123,
+        get [this + "1"]() {},
+        [this]() {},
+      });
+    `,
+      `
+      var _this = this;
+
+      (function () {
+        return {
+          [_this]: 123,
+          get [_this + "1"]() {},
+          [_this]() {},
+        };
+      });
     `,
     );
   });

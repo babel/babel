@@ -1,9 +1,10 @@
 import type { HubInterface, NodePath, Scope } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
+import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import {
-  VISITOR_KEYS,
   assignmentExpression,
   booleanLiteral,
   callExpression,
@@ -11,11 +12,16 @@ import {
   identifier,
   memberExpression,
   sequenceExpression,
-  staticBlock,
   stringLiteral,
   thisExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
+
+// TODO (Babel 8): Don't export this.
+export {
+  default as environmentVisitor,
+  skipAllButComputedKey,
+} from "@babel/helper-environment-visitor";
 
 /**
  * Creates an expression which result is the proto of objectRef.
@@ -38,49 +44,9 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-export function skipAllButComputedKey(
-  path: NodePath<t.Method | t.ClassProperty | t.ClassPrivateProperty>,
-) {
-  // If the path isn't computed, just skip everything.
-  // @ts-expect-error todo(flow->ts) check node type before cheking the property
-  if (!path.node.computed) {
-    path.skip();
-    return;
-  }
-
-  // So it's got a computed key. Make sure to skip every other key the
-  // traversal would visit.
-  const keys = VISITOR_KEYS[path.type];
-  for (const key of keys) {
-    if (key !== "key") path.skipKey(key);
-  }
-}
-
-// environmentVisitor should be used when traversing the whole class and not for specific class elements/methods.
-// For perf reasons, the environmentVisitor will be traversed with `{ noScope: true }`, which means `path.scope` is undefined.
-// Avoid using `path.scope` here
-export const environmentVisitor = {
-  // todo (Babel 8): remove StaticBlock brand checks
-  [`${staticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
-    path: NodePath,
-  ) {
-    path.skip();
-  },
-
-  Function(path: NodePath) {
-    // Methods will be handled by the Method visit
-    if (path.isMethod()) return;
-    // Arrow functions inherit their parent's environment
-    if (path.isArrowFunctionExpression()) return;
-    path.skip();
-  },
-
-  "Method|ClassProperty"(path: NodePath<t.Method | t.ClassProperty>) {
-    skipAllButComputedKey(path);
-  },
-};
-
-const visitor = traverse.visitors.merge([
+const visitor = traverse.visitors.merge<
+  HandlerState<ReplaceState> & ReplaceState
+>([
   environmentVisitor,
   {
     Super(path, state) {

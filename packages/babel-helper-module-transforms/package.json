@@ -15,8 +15,8 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
+    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-module-imports": "workspace:^",
-    "@babel/helper-replace-supers": "workspace:^",
     "@babel/helper-simple-access": "workspace:^",
     "@babel/helper-split-export-declaration": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",

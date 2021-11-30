@@ -1,8 +1,7 @@
 import type { NodePath, Visitor } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
-import ReplaceSupers, {
-  environmentVisitor,
-} from "@babel/helper-replace-supers";
+import ReplaceSupers from "@babel/helper-replace-supers";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import { traverse, template, types as t } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";

@@ -12,6 +12,7 @@
     "./packages/babel-helper-create-class-features-plugin/src/**/*.ts",
     "./packages/babel-helper-create-regexp-features-plugin/src/**/*.ts",
     "./packages/babel-helper-define-map/src/**/*.ts",
+    "./packages/babel-helper-environment-visitor/src/**/*.ts",
     "./packages/babel-helper-explode-assignable-expression/src/**/*.ts",
     "./packages/babel-helper-fixtures/src/**/*.ts",
     "./packages/babel-helper-function-name/src/**/*.ts",
@@ -176,6 +177,9 @@
       ],
       "@babel/helper-define-map": [
         "./packages/babel-helper-define-map/src"
+      ],
+      "@babel/helper-environment-visitor": [
+        "./packages/babel-helper-environment-visitor/src"
       ],
       "@babel/helper-explode-assignable-expression": [
         "./packages/babel-helper-explode-assignable-expression/src"
