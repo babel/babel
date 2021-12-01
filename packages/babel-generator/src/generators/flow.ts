@@ -321,9 +321,10 @@ export function FunctionTypeAnnotation(
 
   // this node type is overloaded, not sure why but it makes it EXTREMELY annoying
   if (
-    parent.type === "ObjectTypeCallProperty" ||
-    parent.type === "DeclareFunction" ||
-    (parent.type === "ObjectTypeProperty" && parent.method)
+    parent &&
+    (parent.type === "ObjectTypeCallProperty" ||
+      parent.type === "DeclareFunction" ||
+      (parent.type === "ObjectTypeProperty" && parent.method))
   ) {
     this.token(":");
   } else {
