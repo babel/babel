@@ -76,15 +76,10 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'devDependencies') 
   workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'dependencies').
 
 % Enforces `exports` to be consistent
-% gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package.json": "./package.json" }') :-
-%  \+ workspace_field(WorkspaceCwd, 'private', true),
-%   % Get the workspace name
-%   workspace_ident(WorkspaceCwd, WorkspaceIdent),
-%   WorkspaceIdent \= '@babel/eslint-parser',
-%   WorkspaceIdent \= '@babel/compat-data',
-%   \+ atom_concat('@babel/runtime', _, WorkspaceIdent).
-
-% Add `conditions` field to packages without `exports`
-gen_enforced_field(WorkspaceCwd, 'conditions', '{"BABEL_8_BREAKING":[null,{"exports":null}]}') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true),
-  \+ workspace_field(WorkspaceCwd, 'exports', _).
+gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package.json": "./package.json" }') :-
+ \+ workspace_field(WorkspaceCwd, 'private', true),
+  % Get the workspace name
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  WorkspaceIdent \= '@babel/eslint-parser',
+  WorkspaceIdent \= '@babel/compat-data',
+  \+ atom_concat('@babel/runtime', _, WorkspaceIdent).
