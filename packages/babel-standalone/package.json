@@ -141,7 +141,9 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": "./babel.js",
+    "./babel.js": "./babel.js",
+    "./babel.min.js": "./babel.min.js",
     "./package.json": "./package.json"
   }
 }

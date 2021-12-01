@@ -82,4 +82,5 @@ gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
   WorkspaceIdent \= '@babel/eslint-parser',
   WorkspaceIdent \= '@babel/compat-data',
+  WorkspaceIdent \= '@babel/standalone',
   \+ atom_concat('@babel/runtime', _, WorkspaceIdent).
