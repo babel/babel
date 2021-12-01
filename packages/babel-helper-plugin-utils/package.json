@@ -16,5 +16,13 @@
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
   }
 }
