@@ -52,7 +52,8 @@ package-lock.json
 /packages/babel-runtime-corejs3/core-js/**/*.js
 /packages/babel-runtime-corejs3/core-js-stable/**/*.js
 
-/packages/babel-register/test/.babel
+/packages/babel-register/test/.cache.babel
+/packages/babel-register/test/.index.babel
 /packages/babel-cli/test/tmp
 /packages/babel-node/test/tmp
 /packages/*/lib
