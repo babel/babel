@@ -69,112 +69,116 @@ function babel7CompatTokens(tokens) {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const { type } = token;
-    if (!process.env.BABEL_8_BREAKING) {
-      if (type === tt.privateName) {
-        const { loc, start, value, end } = token;
-        const hashEndPos = start + 1;
-        const hashEndLoc = createPositionWithColumnOffset(loc.start, 1);
-        tokens.splice(
-          i,
-          1,
-          // $FlowIgnore: hacky way to create token
-          new Token({
-            type: getExportedToken(tt.hash),
-            value: "#",
-            start: start,
-            end: hashEndPos,
-            startLoc: loc.start,
-            endLoc: hashEndLoc,
-          }),
-          // $FlowIgnore: hacky way to create token
-          new Token({
-            type: getExportedToken(tt.name),
-            value: value,
-            start: hashEndPos,
-            end: end,
-            startLoc: hashEndLoc,
-            endLoc: loc.end,
-          }),
-        );
-        i++;
-        continue;
-      }
-
-      if (tokenIsTemplate(type)) {
-        const { loc, start, value, end } = token;
-        const backquoteEnd = start + 1;
-        const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
-        let startToken;
-        if (value.charCodeAt(0) === charCodes.graveAccent) {
-          // $FlowIgnore: hacky way to create token
-          startToken = new Token({
-            type: getExportedToken(tt.backQuote),
-            value: "`",
-            start: start,
-            end: backquoteEnd,
-            startLoc: loc.start,
-            endLoc: backquoteEndLoc,
-          });
-        } else {
-          // $FlowIgnore: hacky way to create token
-          startToken = new Token({
-            type: getExportedToken(tt.braceR),
-            value: "}",
-            start: start,
-            end: backquoteEnd,
-            startLoc: loc.start,
-            endLoc: backquoteEndLoc,
-          });
-        }
-        let templateValue, templateElementEnd, templateElementEndLoc, endToken;
-        if (type === tt.templateTail) {
-          // ends with '`'
-          templateElementEnd = end - 1;
-          templateElementEndLoc = createPositionWithColumnOffset(loc.end, -1);
-          templateValue = value.slice(1, -1);
-          // $FlowIgnore: hacky way to create token
-          endToken = new Token({
-            type: getExportedToken(tt.backQuote),
-            value: "`",
-            start: templateElementEnd,
-            end: end,
-            startLoc: templateElementEndLoc,
-            endLoc: loc.end,
-          });
-        } else {
-          // ends with `${`
-          templateElementEnd = end - 2;
-          templateElementEndLoc = createPositionWithColumnOffset(loc.end, -2);
-          templateValue = value.slice(1, -2);
-          // $FlowIgnore: hacky way to create token
-          endToken = new Token({
-            type: getExportedToken(tt.dollarBraceL),
-            value: "${",
-            start: templateElementEnd,
-            end: end,
-            startLoc: templateElementEndLoc,
-            endLoc: loc.end,
-          });
-        }
-        tokens.splice(
-          i,
-          1,
-          startToken,
-          // $FlowIgnore: hacky way to create token
-          new Token({
-            type: getExportedToken(tt.template),
-            value: templateValue,
-            start: backquoteEnd,
-            end: templateElementEnd,
-            startLoc: backquoteEndLoc,
-            endLoc: templateElementEndLoc,
-          }),
-          endToken,
-        );
-        i += 2;
-      }
-    }
     if (typeof type === "number") {
+      if (!process.env.BABEL_8_BREAKING) {
+        if (type === tt.privateName) {
+          const { loc, start, value, end } = token;
+          const hashEndPos = start + 1;
+          const hashEndLoc = createPositionWithColumnOffset(loc.start, 1);
+          tokens.splice(
+            i,
+            1,
+            // $FlowIgnore: hacky way to create token
+            new Token({
+              type: getExportedToken(tt.hash),
+              value: "#",
+              start: start,
+              end: hashEndPos,
+              startLoc: loc.start,
+              endLoc: hashEndLoc,
+            }),
+            // $FlowIgnore: hacky way to create token
+            new Token({
+              type: getExportedToken(tt.name),
+              value: value,
+              start: hashEndPos,
+              end: end,
+              startLoc: hashEndLoc,
+              endLoc: loc.end,
+            }),
+          );
+          i++;
+          continue;
+        }
+
+        if (tokenIsTemplate(type)) {
+          const { loc, start, value, end } = token;
+          const backquoteEnd = start + 1;
+          const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
+          let startToken;
+          if (value.charCodeAt(0) === charCodes.graveAccent) {
+            // $FlowIgnore: hacky way to create token
+            startToken = new Token({
+              type: getExportedToken(tt.backQuote),
+              value: "`",
+              start: start,
+              end: backquoteEnd,
+              startLoc: loc.start,
+              endLoc: backquoteEndLoc,
+            });
+          } else {
+            // $FlowIgnore: hacky way to create token
+            startToken = new Token({
+              type: getExportedToken(tt.braceR),
+              value: "}",
+              start: start,
+              end: backquoteEnd,
+              startLoc: loc.start,
+              endLoc: backquoteEndLoc,
+            });
+          }
+          let templateValue,
+            templateElementEnd,
+            templateElementEndLoc,
+            endToken;
+          if (type === tt.templateTail) {
+            // ends with '`'
+            templateElementEnd = end - 1;
+            templateElementEndLoc = createPositionWithColumnOffset(loc.end, -1);
+            templateValue = value.slice(1, -1);
+            // $FlowIgnore: hacky way to create token
+            endToken = new Token({
+              type: getExportedToken(tt.backQuote),
+              value: "`",
+              start: templateElementEnd,
+              end: end,
+              startLoc: templateElementEndLoc,
+              endLoc: loc.end,
+            });
+          } else {
+            // ends with `${`
+            templateElementEnd = end - 2;
+            templateElementEndLoc = createPositionWithColumnOffset(loc.end, -2);
+            templateValue = value.slice(1, -2);
+            // $FlowIgnore: hacky way to create token
+            endToken = new Token({
+              type: getExportedToken(tt.dollarBraceL),
+              value: "${",
+              start: templateElementEnd,
+              end: end,
+              startLoc: templateElementEndLoc,
+              endLoc: loc.end,
+            });
+          }
+          tokens.splice(
+            i,
+            1,
+            startToken,
+            // $FlowIgnore: hacky way to create token
+            new Token({
+              type: getExportedToken(tt.template),
+              value: templateValue,
+              start: backquoteEnd,
+              end: templateElementEnd,
+              startLoc: backquoteEndLoc,
+              endLoc: templateElementEndLoc,
+            }),
+            endToken,
+          );
+          i += 2;
+          continue;
+        }
+      }
       // $FlowIgnore: we manipulate `token` for performance reasons
       token.type = getExportedToken(type);
     }
