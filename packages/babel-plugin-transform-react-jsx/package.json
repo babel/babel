@@ -45,6 +45,7 @@
   },
   "exports": {
     ".": "./lib/index.js",
+    "./lib/development": "./lib/development.js",
     "./package.json": "./package.json"
   }
 }
