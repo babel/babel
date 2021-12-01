@@ -34,5 +34,9 @@
         "exports": null
       }
     ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }
