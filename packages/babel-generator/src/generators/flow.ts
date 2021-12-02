@@ -290,7 +290,7 @@ export function ExistsTypeAnnotation(this: Printer) {
 export function FunctionTypeAnnotation(
   this: Printer,
   node: t.FunctionTypeAnnotation,
-  parent: any,
+  parent: t.Node | void,
 ) {
   this.print(node.typeParameters, node);
   this.token("(");
