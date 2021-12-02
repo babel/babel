@@ -73,7 +73,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "test262-stream": "^1.4.0",
     "through2": "^4.0.0",
-    "typescript": "~4.2.3"
+    "typescript": "~4.5.0"
   },
   "workspaces": [
     "codemods/*",
