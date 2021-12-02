@@ -153,6 +153,7 @@ const ignoredFeatures = [
 const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
 const featuresToPlugins = {
+  __proto__: null,
   "import-assertions": "importAssertions",
 };
 

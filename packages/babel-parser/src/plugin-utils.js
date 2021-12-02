@@ -1,19 +1,47 @@
 // @flow
 
 import type Parser from "./parser";
+import type { PluginConfig } from "./parser/base";
 
-export type Plugin = string | [string, Object];
+export type Plugin = PluginConfig;
 
-export type PluginList = $ReadOnlyArray<Plugin>;
+export type PluginList = $ReadOnlyArray<PluginConfig>;
 
 export type MixinPlugin = (superClass: Class<Parser>) => Class<Parser>;
 
-export function hasPlugin(plugins: PluginList, name: string): boolean {
-  return plugins.some(plugin => {
-    if (Array.isArray(plugin)) {
-      return plugin[0] === name;
+// This function’s second parameter accepts either a string (plugin name) or an
+// array pair (plugin name and options object). If an options object is given,
+// then each value is non-recursively checked for identity with the actual
+// option value of each plugin in the first argument (which is an array of
+// plugin names or array pairs).
+export function hasPlugin(
+  plugins: PluginList,
+  expectedConfig: PluginConfig,
+): boolean {
+  // The expectedOptions object is by default an empty object if the given
+  // expectedConfig argument does not give an options object (i.e., if it is a
+  // string).
+  const [expectedName, expectedOptions] =
+    typeof expectedConfig === "string" ? [expectedConfig, {}] : expectedConfig;
+
+  const expectedKeys = Object.keys(expectedOptions);
+
+  const expectedOptionsIsEmpty = expectedKeys.length === 0;
+
+  return plugins.some(p => {
+    if (typeof p === "string") {
+      return expectedOptionsIsEmpty && p === expectedName;
     } else {
-      return plugin === name;
+      const [pluginName, pluginOptions] = p;
+      if (pluginName !== expectedName) {
+        return false;
+      }
+      for (const key of expectedKeys) {
+        if (pluginOptions[key] !== expectedOptions[key]) {
+          return false;
+        }
+      }
+      return true;
     }
   });
 }
@@ -85,9 +113,10 @@ export function validatePlugins(plugins: PluginList) {
       );
     }
 
-    const tupleSyntaxIsHash =
-      hasPlugin(plugins, "recordAndTuple") &&
-      getPluginOption(plugins, "recordAndTuple", "syntaxType") === "hash";
+    const tupleSyntaxIsHash = hasPlugin(plugins, [
+      "recordAndTuple",
+      { syntaxType: "hash" },
+    ]);
 
     if (proposal === "hack") {
       if (hasPlugin(plugins, "placeholders")) {

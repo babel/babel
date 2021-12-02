@@ -448,7 +448,7 @@ export default class ExpressionParser extends LValParser {
 
         if (
           op === tt.pipeline &&
-          this.getPluginOption("pipelineOperator", "proposal") === "minimal"
+          this.hasPlugin(["pipelineOperator", { proposal: "minimal" }])
         ) {
           if (this.state.type === tt._await && this.prodParam.hasAwait) {
             throw this.raise(
@@ -1422,11 +1422,12 @@ export default class ExpressionParser extends LValParser {
   ): boolean {
     switch (pipeProposal) {
       case "hack": {
-        const pluginTopicToken = this.getPluginOption(
+        return this.hasPlugin([
           "pipelineOperator",
-          "topicToken",
-        );
-        return tokenLabelName(tokenType) === pluginTopicToken;
+          {
+            topicToken: tokenLabelName(tokenType),
+          },
+        ]);
       }
       case "smart":
         return tokenType === tt.hash;
@@ -2740,7 +2741,7 @@ export default class ExpressionParser extends LValParser {
   // of the infix operator `|>`.
 
   checkPipelineAtInfixOperator(left: N.Expression, leftStartPos: number) {
-    if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
+    if (this.hasPlugin(["pipelineOperator", { proposal: "smart" }])) {
       if (left.type === "SequenceExpression") {
         // Ensure that the pipeline head is not a comma-delimited
         // sequence expression.
@@ -2841,8 +2842,7 @@ export default class ExpressionParser extends LValParser {
   // had before the function was called.
 
   withSmartMixTopicForbiddingContext<T>(callback: () => T): T {
-    const proposal = this.getPluginOption("pipelineOperator", "proposal");
-    if (proposal === "smart") {
+    if (this.hasPlugin(["pipelineOperator", { proposal: "smart" }])) {
       // Reset the parser’s topic context only if the smart-mix pipe proposal is active.
       const outerContextTopicState = this.state.topicContext;
       this.state.topicContext = {

@@ -21,6 +21,7 @@ import ProductionParameterHandler, {
 } from "../util/production-parameter";
 import { Errors, type ErrorTemplate, ErrorCodes } from "./error";
 import type { ParsingError } from "./error";
+import type { PluginConfig } from "./base";
 /*::
 import type ScopeHandler from "../util/scope";
 */
@@ -175,26 +176,38 @@ export default class UtilParser extends Tokenizer {
     /* eslint-enable @babel/development-internal/dry-error-messages */
   }
 
-  expectPlugin(name: string, pos?: ?number): true {
-    if (!this.hasPlugin(name)) {
+  getPluginNamesFromConfigs(pluginConfigs: Array<PluginConfig>): Array<string> {
+    return pluginConfigs.map(c => {
+      if (typeof c === "string") {
+        return c;
+      } else {
+        return c[0];
+      }
+    });
+  }
+
+  expectPlugin(pluginConfig: PluginConfig, pos?: ?number): true {
+    if (!this.hasPlugin(pluginConfig)) {
       throw this.raiseWithData(
         pos != null ? pos : this.state.start,
-        { missingPlugin: [name] },
-        `This experimental syntax requires enabling the parser plugin: '${name}'`,
+        { missingPlugin: this.getPluginNamesFromConfigs([pluginConfig]) },
+        `This experimental syntax requires enabling the parser plugin: ${JSON.stringify(
+          pluginConfig,
+        )}.`,
       );
     }
 
     return true;
   }
 
-  expectOnePlugin(names: Array<string>, pos?: ?number): void {
-    if (!names.some(n => this.hasPlugin(n))) {
+  expectOnePlugin(pluginConfigs: Array<PluginConfig>, pos?: ?number): void {
+    if (!pluginConfigs.some(c => this.hasPlugin(c))) {
       throw this.raiseWithData(
         pos != null ? pos : this.state.start,
-        { missingPlugin: names },
-        `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
-          ", ",
-        )}'`,
+        { missingPlugin: this.getPluginNamesFromConfigs(pluginConfigs) },
+        `This experimental syntax requires enabling one of the following parser plugin(s): ${pluginConfigs
+          .map(c => JSON.stringify(c))
+          .join(", ")}.`,
       );
     }
   }
