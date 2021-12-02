@@ -395,7 +395,6 @@ export function assertSimpleType(value: unknown): SimpleType {
       "Cache keys must be either string, boolean, number, null, or undefined.",
     );
   }
-  // @ts-expect-error todo(flow->ts) value is still typed as unknown, also assert function typically should not return a value
   return value;
 }
 

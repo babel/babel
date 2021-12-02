@@ -160,6 +160,7 @@ export function transform(
         }
 
         node.arguments.unshift(t.cloneNode(context));
+        // @ts-expect-error node.callee can not be an V8IntrinsicIdentifier: V8 intrinsic is disallowed in optional chain
         node.callee = t.memberExpression(node.callee, t.identifier("call"));
       }
     }
