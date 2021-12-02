@@ -17,7 +17,7 @@ var Test = function Test() {
         args[_key] = arguments[_key];
       }
 
-      _this = _super.call.apply(_super, babelHelpers.appendArrayLike([this], args));
+      _this = _super.call.apply(_super, [this].concat(args));
       babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "a", function () {
         return babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Other.prototype)), "test", _thisSuper);
       });
