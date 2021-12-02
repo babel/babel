@@ -705,7 +705,7 @@ export default class Scope {
       for (const declar of declarations) {
         this.registerBinding(path.node.kind, declar);
       }
-    } else if(path.isClassDeclaration() && path.node.declare) {
+    } else if (path.isClassDeclaration() && path.node.declare) {
       this.registerBinding("class", path);
     } else if (path.isClassDeclaration()) {
       this.registerBinding("let", path);
