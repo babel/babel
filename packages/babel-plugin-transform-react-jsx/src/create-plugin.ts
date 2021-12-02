@@ -31,11 +31,12 @@ const DEFAULT = {
   pragmaFrag: "React.Fragment",
 };
 
-const JSX_SOURCE_ANNOTATION_REGEX = /\*?\s*@jsxImportSource\s+([^\s]+)/;
-const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
+const JSX_SOURCE_ANNOTATION_REGEX =
+  /^\s*\*?\s*@jsxImportSource\s+([^\s]+)\s*$/m;
+const JSX_RUNTIME_ANNOTATION_REGEX = /^\s*\*?\s*@jsxRuntime\s+([^\s]+)\s*$/m;
 
-const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
-const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
+const JSX_ANNOTATION_REGEX = /^\s*\*?\s*@jsx\s+([^\s]+)\s*$/m;
+const JSX_FRAG_ANNOTATION_REGEX = /^\s*\*?\s*@jsxFrag\s+([^\s]+)\s*$/m;
 
 const get = (pass: PluginPass, name: string) =>
   pass.get(`@babel/plugin-react-jsx/${name}`);
