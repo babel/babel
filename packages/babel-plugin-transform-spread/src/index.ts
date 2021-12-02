@@ -39,11 +39,8 @@ export default declare((api, options) => {
   const arrayLikeIsIterable =
     options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
 
-  function isArrayLikeBinding(node: t.Node, scope: Scope): boolean {
+  function isArrayBinding(node: t.Node, scope: Scope): boolean {
     if (t.isIdentifier(node)) {
-      if (node.name === "arguments") {
-        return true;
-      }
       const binding = scope.getBinding(node.name);
       if (binding?.constant && binding.path.isGenericType("Array")) {
         return true;
@@ -110,6 +107,13 @@ export default declare((api, options) => {
     return result;
   }
 
+  function popArrayExpression(nodes: t.Expression[]): t.ArrayExpression {
+    const n = nodes.length;
+    return n > 0 && t.isArrayExpression(nodes[n - 1])
+      ? (nodes.pop() as t.ArrayExpression)
+      : t.arrayExpression([]);
+  }
+
   function buildAccumulate(
     file: File,
     accum: t.Expression,
@@ -141,34 +145,28 @@ export default declare((api, options) => {
     const nodes: t.Expression[] = [];
     const tmp = new LazyTemporary(scope, "sprd");
 
-    function popAccumulator(): t.Expression {
-      const n = nodes.length;
-      return n > 0 && t.isArrayExpression(nodes[n - 1])
-        ? nodes.pop()
-        : t.arrayExpression([]);
-    }
-
     for (let spreadChunk of flatChunks) {
       if (t.isArrayExpression(spreadChunk)) {
         // no transform necessary
-      } else if (iterableIsArray || isArrayLikeBinding(spreadChunk, scope)) {
-        if (t.isIdentifier(spreadChunk, { name: "arguments" })) {
-          // convert `arguments` to array using `tmp.push.apply` because it
-          // is faster than passing them to any other function, for example
-          // `Array.prototype.slice.call`
-          const acc = tmp.assign(popAccumulator());
-          const callPushApply = t.callExpression(member(acc, "push", "apply"), [
-            tmp.clone(),
-            spreadChunk,
-          ]);
-          spreadChunk = t.sequenceExpression([callPushApply, tmp.clone()]);
-        } else if (resultHasHoles || flatChunks.length === 1) {
+      } else if (t.isIdentifier(spreadChunk, { name: "arguments" })) {
+        // convert `arguments` to array using `tmp.push.apply` because it
+        // is faster than passing them to any other function, for example
+        // `Array.prototype.slice.call`
+        const acc = popArrayExpression(nodes);
+        const callPushApply = t.callExpression(
+          member(tmp.assign(acc), "push", "apply"),
+          [tmp.clone(), spreadChunk],
+        );
+        spreadChunk = t.sequenceExpression([callPushApply, tmp.clone()]);
+      } else if (iterableIsArray || isArrayBinding(spreadChunk, scope)) {
+        if (resultHasHoles || flatChunks.length === 1) {
           spreadChunk = t.callExpression(file.addHelper("concatArrayLike"), [
             spreadChunk,
           ]);
         }
       } else if (resultHasHoles || flatChunks.length === 1) {
-        spreadChunk = buildAccumulate(file, popAccumulator(), spreadChunk);
+        const acc = popArrayExpression(nodes);
+        spreadChunk = buildAccumulate(file, acc, spreadChunk);
       } else {
         spreadChunk = buildCoerce(file, spreadChunk);
       }
@@ -199,6 +197,17 @@ export default declare((api, options) => {
     const nodes: t.Expression[] = [];
     const tmp = new LazyTemporary(scope, "sprd");
 
+    const hasArguments = flatChunks.some(chunk =>
+      t.isIdentifier(chunk, { name: "arguments" }),
+    );
+
+    const everyChunkIsArray = hasArguments
+      ? false
+      : iterableIsArray ||
+        flatChunks.every(
+          chunk => t.isArrayExpression(chunk) || isArrayBinding(chunk, scope),
+        );
+
     function popAccumulator(...props: string[]): t.Expression {
       let acc = nodes.length ? nodes.pop() : t.arrayExpression([]);
       for (const prop of props) {
@@ -211,7 +220,21 @@ export default declare((api, options) => {
     }
 
     for (let spreadChunk of flatChunks) {
-      if (t.isArrayExpression(spreadChunk)) {
+      if (everyChunkIsArray) {
+        // based on `api.assumption` or type inference, all the spread chunks
+        // are arrays, so instead of incrementally building a temporary with
+        // `.push` or `appendArrayLike` helper, simply collect the nodes and
+        // `.concat` them at the end
+        if (
+          nodes.length === 0 &&
+          needAccumulator &&
+          !t.isArrayExpression(spreadChunk)
+        ) {
+          // ensure we call `.concat` on a built-in array,
+          // not on whatever the first spread element is
+          nodes.push(t.arrayExpression([]));
+        }
+      } else if (t.isArrayExpression(spreadChunk)) {
         if (nodes.length > 0) {
           const callPush = t.callExpression(
             popAccumulator("push"),
@@ -220,24 +243,24 @@ export default declare((api, options) => {
           nodes.push(callPush);
           spreadChunk = tmp.clone();
         }
-      } else if (iterableIsArray || isArrayLikeBinding(spreadChunk, scope)) {
+      } else if (t.isIdentifier(spreadChunk, { name: "arguments" })) {
         if (needAccumulator || forceUnpackArguments) {
-          if (t.isIdentifier(spreadChunk, { name: "arguments" })) {
-            // convert `arguments` to array using `tmp.push.apply` because it
-            // is faster than passing them to any other function, for example
-            // `Array.prototype.slice.call`
-            const callPushApply = t.callExpression(
-              popAccumulator("push", "apply"),
-              [tmp.clone(), spreadChunk],
-            );
-            nodes.push(callPushApply);
-            spreadChunk = tmp.clone();
-          } else if (needAccumulator) {
-            spreadChunk = t.callExpression(file.addHelper("appendArrayLike"), [
-              popAccumulator(),
-              spreadChunk,
-            ]);
-          }
+          // convert `arguments` to array using `tmp.push.apply` because it
+          // is faster than passing them to any other function, for example
+          // `Array.prototype.slice.call`
+          const callPushApply = t.callExpression(
+            popAccumulator("push", "apply"),
+            [tmp.clone(), spreadChunk],
+          );
+          nodes.push(callPushApply);
+          spreadChunk = tmp.clone();
+        }
+      } else if (iterableIsArray || isArrayBinding(spreadChunk, scope)) {
+        if (needAccumulator) {
+          spreadChunk = t.callExpression(file.addHelper("appendArrayLike"), [
+            popAccumulator(),
+            spreadChunk,
+          ]);
         }
       } else if (needAccumulator) {
         spreadChunk = buildAccumulate(file, popAccumulator(), spreadChunk);
@@ -252,6 +275,10 @@ export default declare((api, options) => {
     }
     if (nodes.length === 1) {
       return nodes[0];
+    }
+    if (everyChunkIsArray) {
+      const callee = member(nodes.shift(), "concat");
+      return t.callExpression(callee, nodes);
     }
     return t.sequenceExpression(nodes);
   }
