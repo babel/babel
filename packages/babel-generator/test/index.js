@@ -497,6 +497,17 @@ describe("programmatic generation", function () {
     expect(output).toBe("interface A {}");
   });
 
+  it("flow function type annotation with no parent", () => {
+    const functionTypeAnnotation = t.functionTypeAnnotation(
+      null,
+      [],
+      null,
+      t.voidTypeAnnotation(),
+    );
+    const output = generate(functionTypeAnnotation).code;
+    expect(output).toBe("() => void");
+  });
+
   describe("directives", function () {
     it("preserves escapes", function () {
       const directive = t.directive(
