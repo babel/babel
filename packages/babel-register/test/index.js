@@ -1,46 +1,19 @@
-"use strict";
+import { createRequire, Module } from "module";
+import path from "path";
+import fs from "fs";
+import child from "child_process";
+import { fileURLToPath } from "url";
 
-const fs = require("fs");
-const path = require("path");
-const child = require("child_process");
-
-let currentHook;
-let currentOptions;
-let sourceMapSupport = false;
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
 
 const registerFile = require.resolve("../lib/index");
-const testCacheFilename = path.join(__dirname, ".babel");
+const testCacheFilename = path.join(dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFileContent = fs.readFileSync(testFile);
-const sourceMapTestFile = require.resolve("./fixtures/source-map/index");
-const sourceMapNestedTestFile = require.resolve(
-  "./fixtures/source-map/foo/bar",
-);
-const internalModulesTestFile = require.resolve(
-  "./fixtures/internal-modules/index",
-);
 
-jest.mock("pirates", () => {
-  return {
-    addHook(hook, opts) {
-      currentHook = hook;
-      currentOptions = opts;
-
-      return () => {
-        currentHook = null;
-        currentOptions = null;
-      };
-    },
-  };
-});
-
-jest.mock("source-map-support", () => {
-  return {
-    install() {
-      sourceMapSupport = true;
-    },
-  };
-});
+const piratesPath = require.resolve("pirates");
+const smsPath = require.resolve("source-map-support");
 
 const defaultOptions = {
   exts: [".js", ".jsx", ".es6", ".es", ".mjs", ".cjs"],
@@ -59,7 +32,31 @@ function resetCache() {
   process.env.BABEL_CACHE_PATH = null;
 }
 
+const OLD_JEST_MOCKS = !!jest.doMock;
+
 describe("@babel/register", function () {
+  let currentHook, currentOptions, sourceMapSupport;
+
+  const mocks = {
+    ["pirates"]: {
+      addHook(hook, opts) {
+        currentHook = hook;
+        currentOptions = opts;
+
+        return () => {
+          currentHook = null;
+          currentOptions = null;
+        };
+      },
+    },
+
+    ["source-map-support"]: {
+      install() {
+        sourceMapSupport = true;
+      },
+    },
+  };
+
   let babelRegister;
 
   function setupRegister(config = { babelrc: false }) {
@@ -82,6 +79,12 @@ describe("@babel/register", function () {
     cleanCache();
   }
 
+  beforeEach(() => {
+    currentHook = null;
+    currentOptions = null;
+    sourceMapSupport = false;
+  });
+
   afterEach(async () => {
     // @babel/register saves the cache on process.nextTick.
     // We need to wait for at least one tick so that when jest
@@ -90,15 +93,59 @@ describe("@babel/register", function () {
     await new Promise(setImmediate);
 
     revertRegister();
-    currentHook = null;
-    currentOptions = null;
-    sourceMapSupport = false;
-    jest.resetModules();
   });
 
   afterAll(() => {
     resetCache();
   });
+
+  if (OLD_JEST_MOCKS) {
+    jest.doMock("pirates", () => mocks["pirates"]);
+    jest.doMock("source-map-support", () => mocks["source-map-support"]);
+
+    afterEach(() => {
+      jest.resetModules();
+    });
+  } else {
+    let originalRequireCacheDescriptor;
+    beforeAll(() => {
+      originalRequireCacheDescriptor = Object.getOwnPropertyDescriptor(
+        Module,
+        "_cache",
+      );
+    });
+
+    beforeEach(() => {
+      const isEmptyObj = obj =>
+        Object.getPrototypeOf(obj) === null && Object.keys(obj).length === 0;
+
+      // This setter intercepts the Module._cache assignment in
+      // packages/babel-register/src/nodeWrapper.js to install in the
+      // internal isolated cache.
+      const emptyInitialCache = {};
+      Object.defineProperty(Module, "_cache", {
+        get: () => emptyInitialCache,
+        set(value) {
+          expect(isEmptyObj(value)).toBe(true);
+
+          Object.defineProperty(Module, "_cache", {
+            value,
+            enumerable: originalRequireCacheDescriptor.enumerable,
+            configurable: originalRequireCacheDescriptor.configurable,
+            writable: originalRequireCacheDescriptor.writable,
+          });
+          value[piratesPath] = { exports: mocks["pirates"] };
+          value[smsPath] = { exports: mocks["source-map-support"] };
+        },
+        enumerable: originalRequireCacheDescriptor.enumerable,
+        configurable: originalRequireCacheDescriptor.configurable,
+      });
+    });
+
+    afterAll(() => {
+      Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
+    });
+  }
 
   test("registers hook correctly", () => {
     setupRegister();
@@ -159,11 +206,11 @@ describe("@babel/register", function () {
     const output = await spawnNodeAsync([
       "-r",
       registerFile,
-      sourceMapTestFile,
+      require.resolve("./fixtures/source-map/index"),
     ]);
     const sourceMap = JSON.parse(output);
     expect(sourceMap.map.sourceRoot + sourceMap.map.sources[0]).toBe(
-      sourceMapNestedTestFile,
+      require.resolve("./fixtures/source-map/foo/bar"),
     );
   });
 
@@ -194,14 +241,16 @@ describe("@babel/register", function () {
     // Need a clean environment without `convert-source-map`
     // already in the require cache, so we spawn a separate process
 
-    const output = await spawnNodeAsync([internalModulesTestFile]);
+    const output = await spawnNodeAsync([
+      require.resolve("./fixtures/internal-modules/index.js"),
+    ]);
     const { convertSourceMap } = JSON.parse(output);
     expect(convertSourceMap).toMatch("/* transformed */");
   });
 });
 
 function spawnNodeAsync(args) {
-  const spawn = child.spawn(process.execPath, args, { cwd: __dirname });
+  const spawn = child.spawn(process.execPath, args, { cwd: dirname });
 
   let output = "";
   let callback;

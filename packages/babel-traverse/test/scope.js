@@ -4,7 +4,7 @@ import * as t from "@babel/types";
 import _traverse, { NodePath } from "../lib/index.js";
 const traverse = _traverse.default;
 
-function getPath(code, options): NodePath<t.Program> {
+function getPath(code, options) {
   const ast =
     typeof code === "string" ? parse(code, options) : createNode(code);
   let path;

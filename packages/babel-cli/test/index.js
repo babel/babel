@@ -45,13 +45,13 @@ const readDir = function (loc, filter) {
 
 const saveInFiles = function (files) {
   // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
-  if (!fs.existsSync(".babelrc")) {
-    outputFileSync(".babelrc", "{}");
+  if (!fs.existsSync(path.join(tmpLoc, ".babelrc"))) {
+    outputFileSync(path.join(tmpLoc, ".babelrc"), "{}");
   }
 
   Object.keys(files).forEach(function (filename) {
     const content = files[filename];
-    outputFileSync(filename, content);
+    outputFileSync(path.join(tmpLoc, filename), content);
   });
 };
 
@@ -123,7 +123,7 @@ const assertTest = function (stdout, stderr, opts, cwd) {
           const expected = opts.outFiles[filename];
           const actual = actualFiles[filename];
 
-          expect(actual).toBe(expected ?? "");
+          expect(actual).toBe(expected || "");
         }
       } catch (e) {
         e.message += "\n at " + filename;
@@ -152,7 +152,7 @@ const buildTest = function (binName, testName, opts) {
     args = args.concat(opts.args);
     const env = { ...process.env, ...opts.env };
 
-    const spawn = child.spawn(process.execPath, args, { env });
+    const spawn = child.spawn(process.execPath, args, { env, cwd: tmpLoc });
 
     let stderr = "";
     let stdout = "";
@@ -190,15 +190,11 @@ const buildTest = function (binName, testName, opts) {
 };
 
 fs.readdirSync(fixtureLoc).forEach(function (binName) {
-  if (binName.startsWith(".")) return;
+  if (binName.startsWith(".") || binName === "package.json") return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function () {
-    let cwd;
-
     beforeEach(() => {
-      cwd = process.cwd();
-
       if (fs.existsSync(tmpLoc)) {
         for (const child of fs.readdirSync(tmpLoc)) {
           rimraf.sync(path.join(tmpLoc, child));
@@ -206,12 +202,6 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       } else {
         fs.mkdirSync(tmpLoc);
       }
-
-      process.chdir(tmpLoc);
-    });
-
-    afterEach(() => {
-      process.chdir(cwd);
     });
 
     fs.readdirSync(suiteLoc).forEach(function (testName) {

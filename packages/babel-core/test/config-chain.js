@@ -14,7 +14,7 @@ import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
 // TODO: In Babel 8, we can directly uses fs.promises which is supported by
 // node 8+
 const pfs =
-  fs.promises ??
+  fs.promises ||
   new Proxy(fs, {
     get(target, name) {
       if (name === "copyFile") {

@@ -60,7 +60,11 @@ function shouldIgnore(name, ignore?: Array<string>) {
   const base = path.basename(name, ext);
 
   return (
-    name[0] === "." || ext === ".md" || base === "LICENSE" || base === "options"
+    name[0] === "." ||
+    ext === ".md" ||
+    base === "LICENSE" ||
+    base === "options" ||
+    name === "package.json"
   );
 }
 
