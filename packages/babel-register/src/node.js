@@ -1,15 +1,18 @@
-import cloneDeep from "clone-deep";
-import sourceMapSupport from "source-map-support";
-import * as registerCache from "./cache";
-import * as babel from "@babel/core";
-import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
-import { addHook } from "pirates";
-import fs from "fs";
-import path from "path";
-import Module from "module";
+"use strict";
+
+const cloneDeep = require("clone-deep");
+const sourceMapSupport = require("source-map-support");
+const registerCache = require("./cache");
+const babel = require("@babel/core");
+const { addHook } = require("pirates");
+const fs = require("fs");
+const path = require("path");
+const Module = require("module");
+
+const { OptionManager, DEFAULT_EXTENSIONS } = babel;
 
 const maps = {};
-let transformOpts: any = {};
+let transformOpts = {};
 let piratesRevert = null;
 
 function installSourceMapSupport() {
@@ -87,22 +90,18 @@ function compile(code, filename) {
 }
 
 let compiling = false;
-// @ts-expect-error field is missing in type definitions
 const internalModuleCache = Module._cache;
 
 function compileHook(code, filename) {
   if (compiling) return code;
 
-  // @ts-expect-error field is missing in type definitions
   const globalModuleCache = Module._cache;
   try {
     compiling = true;
-    // @ts-expect-error field is missing in type definitions
     Module._cache = internalModuleCache;
     return compile(code, filename);
   } finally {
     compiling = false;
-    // @ts-expect-error field is missing in type definitions
     Module._cache = globalModuleCache;
   }
 }
@@ -112,15 +111,15 @@ function hookExtensions(exts) {
   piratesRevert = addHook(compileHook, { exts, ignoreNodeModules: false });
 }
 
-export function revert() {
+exports.revert = function revert() {
   if (piratesRevert) piratesRevert();
-}
+};
 
 function escapeRegExp(string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
-export default function register(opts: any = {}) {
+exports.default = function register(opts = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
   opts = {
     ...opts,
@@ -162,15 +161,13 @@ export default function register(opts: any = {}) {
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
-          // $FlowIgnore
           escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +
-          // $FlowIgnore
           escapeRegExp(path.sep + "node_modules" + path.sep),
         "i",
       ),
     ];
   }
-}
+};
