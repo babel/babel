@@ -7,11 +7,10 @@ import { fileURLToPath } from "url";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
-const registerFile = require.resolve("../lib/index");
 const testCacheFilename = path.join(dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFile2 = require.resolve("./fixtures/babelrc/log");
-const testFileContent = fs.readFileSync(testFile);
+const testFileContent = fs.readFileSync(testFile, "utf-8");
 
 const piratesPath = require.resolve("pirates");
 const smsPath = require.resolve("source-map-support");
@@ -58,48 +57,13 @@ describe("@babel/register", function () {
     },
   };
 
-  let babelRegister;
-
-  function setupRegister(config = { babelrc: false }) {
-    process.env.BABEL_CACHE_PATH = testCacheFilename;
-    config = {
-      cwd: path.dirname(testFile),
-      ...config,
-    };
-
-    babelRegister = require(registerFile);
-    babelRegister.default(config);
-  }
-
-  function revertRegister() {
-    if (babelRegister) {
-      babelRegister.revert();
-      delete require.cache[registerFile];
-      babelRegister = null;
-    }
-    cleanCache();
-  }
-
   beforeEach(() => {
     currentHook = null;
     currentOptions = null;
     sourceMapSupport = false;
   });
 
-  afterEach(async () => {
-    // @babel/register saves the cache on process.nextTick.
-    // We need to wait for at least one tick so that when jest
-    // tears down the testing environment @babel/register has
-    // already finished.
-    await new Promise(setImmediate);
-
-    revertRegister();
-  });
-
-  afterAll(() => {
-    resetCache();
-  });
-
+  let originalRequireCacheDescriptor;
   if (OLD_JEST_MOCKS) {
     jest.doMock("pirates", () => mocks["pirates"]);
     jest.doMock("source-map-support", () => mocks["source-map-support"]);
@@ -108,7 +72,6 @@ describe("@babel/register", function () {
       jest.resetModules();
     });
   } else {
-    let originalRequireCacheDescriptor;
     beforeAll(() => {
       originalRequireCacheDescriptor = Object.getOwnPropertyDescriptor(
         Module,
@@ -116,186 +79,255 @@ describe("@babel/register", function () {
       );
     });
 
-    beforeEach(() => {
-      const isEmptyObj = obj =>
-        Object.getPrototypeOf(obj) === null && Object.keys(obj).length === 0;
-
-      // This setter intercepts the Module._cache assignment in
-      // packages/babel-register/src/nodeWrapper.js to install in the
-      // internal isolated cache.
-      const emptyInitialCache = {};
-      Object.defineProperty(Module, "_cache", {
-        get: () => emptyInitialCache,
-        set(value) {
-          expect(isEmptyObj(value)).toBe(true);
-
-          Object.defineProperty(Module, "_cache", {
-            value,
-            enumerable: originalRequireCacheDescriptor.enumerable,
-            configurable: originalRequireCacheDescriptor.configurable,
-            writable: originalRequireCacheDescriptor.writable,
-          });
-          value[piratesPath] = { exports: mocks["pirates"] };
-          value[smsPath] = { exports: mocks["source-map-support"] };
-        },
-        enumerable: originalRequireCacheDescriptor.enumerable,
-        configurable: originalRequireCacheDescriptor.configurable,
-      });
-    });
-
     afterAll(() => {
       Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
     });
   }
 
-  test("registers hook correctly", () => {
-    setupRegister();
+  if (!process.env.BABEL_8_BREAKING) {
+    describe("babel 7", () => {
+      if (!OLD_JEST_MOCKS) {
+        beforeEach(() => {
+          const isEmptyObj = obj =>
+            Object.getPrototypeOf(obj) === null &&
+            Object.keys(obj).length === 0;
 
-    expect(typeof currentHook).toBe("function");
-    expect(currentOptions).toEqual(defaultOptions);
+          // This setter intercepts the Module._cache assignment in
+          // packages/babel-register/src/nodeWrapper.js to install in the
+          // internal isolated cache.
+          const emptyInitialCache = {};
+          Object.defineProperty(Module, "_cache", {
+            get: () => emptyInitialCache,
+            set(value) {
+              expect(isEmptyObj(value)).toBe(true);
+
+              Object.defineProperty(Module, "_cache", {
+                value,
+                enumerable: originalRequireCacheDescriptor.enumerable,
+                configurable: originalRequireCacheDescriptor.configurable,
+                writable: originalRequireCacheDescriptor.writable,
+              });
+              value[piratesPath] = { exports: mocks["pirates"] };
+              value[smsPath] = { exports: mocks["source-map-support"] };
+            },
+            enumerable: originalRequireCacheDescriptor.enumerable,
+            configurable: originalRequireCacheDescriptor.configurable,
+          });
+        });
+      }
+
+      buildTests(require.resolve(".."));
+    });
+  }
+
+  const nodeGte12 = (fn, ...args) => {
+    // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6-8-10
+    const testFn = /v(?:6|8|10)\./.test(process.version) ? fn.skip : fn;
+    testFn(...args);
+  };
+
+  nodeGte12(describe, "worker", () => {
+    if (!OLD_JEST_MOCKS) {
+      beforeEach(() => {
+        Object.defineProperty(Module, "_cache", {
+          ...originalRequireCacheDescriptor,
+          value: {
+            [piratesPath]: { exports: mocks["pirates"] },
+            [smsPath]: { exports: mocks["source-map-support"] },
+          },
+        });
+      });
+    }
+
+    buildTests(require.resolve("../experimental-worker"));
   });
 
-  test("unregisters hook correctly", () => {
-    setupRegister();
-    revertRegister();
+  function buildTests(registerFile) {
+    let babelRegister;
 
-    expect(currentHook).toBeNull();
-    expect(currentOptions).toBeNull();
-  });
+    function setupRegister(config = { babelrc: false }) {
+      process.env.BABEL_CACHE_PATH = testCacheFilename;
+      config = {
+        cwd: path.dirname(testFile),
+        ...config,
+      };
 
-  test("installs source map support by default", () => {
-    setupRegister();
+      babelRegister = require(registerFile);
+      babelRegister.default(config);
+    }
 
-    currentHook("const a = 1;", testFile);
+    function revertRegister() {
+      if (babelRegister) {
+        babelRegister.revert();
+        delete require.cache[registerFile];
+        babelRegister = null;
+      }
+      cleanCache();
+    }
 
-    expect(sourceMapSupport).toBe(true);
-  });
+    afterEach(async () => {
+      // @babel/register saves the cache on process.nextTick.
+      // We need to wait for at least one tick so that when jest
+      // tears down the testing environment @babel/register has
+      // already finished.
+      await new Promise(setImmediate);
 
-  test("installs source map support when requested", () => {
-    setupRegister({
-      babelrc: false,
-      sourceMaps: true,
+      revertRegister();
     });
 
-    currentHook("const a = 1;", testFile);
-
-    expect(sourceMapSupport).toBe(true);
-  });
-
-  test("does not install source map support if asked not to", () => {
-    setupRegister({
-      babelrc: false,
-      sourceMaps: false,
+    afterAll(() => {
+      resetCache();
     });
 
-    currentHook("const a = 1;", testFile);
+    test("registers hook correctly", () => {
+      setupRegister();
 
-    expect(sourceMapSupport).toBe(false);
-  });
+      expect(typeof currentHook).toBe("function");
+      expect(currentOptions).toEqual(defaultOptions);
+    });
 
-  describe("node auto-require", () => {
-    it("works with the -r flag", async () => {
-      const output = await spawnNodeAsync(
-        ["-r", registerFile, testFile2],
-        path.dirname(testFile2),
-      );
+    test("unregisters hook correctly", () => {
+      setupRegister();
+      revertRegister();
 
-      expect(output.trim()).toMatchInlineSnapshot(
-        `"It worked! function () {}"`,
+      expect(currentHook).toBeNull();
+      expect(currentOptions).toBeNull();
+    });
+
+    test("installs source map support by default", () => {
+      setupRegister();
+
+      currentHook("const a = 1;", testFile);
+
+      expect(sourceMapSupport).toBe(true);
+    });
+
+    test("installs source map support when requested", () => {
+      setupRegister({
+        babelrc: false,
+        sourceMaps: true,
+      });
+
+      currentHook("const a = 1;", testFile);
+
+      expect(sourceMapSupport).toBe(true);
+    });
+
+    test("does not install source map support if asked not to", () => {
+      setupRegister({
+        babelrc: false,
+        sourceMaps: false,
+      });
+
+      currentHook("const a = 1;", testFile);
+
+      expect(sourceMapSupport).toBe(false);
+    });
+
+    describe("node auto-require", () => {
+      it("works with the -r flag", async () => {
+        const output = await spawnNodeAsync(
+          ["-r", registerFile, testFile2],
+          path.dirname(testFile2),
+        );
+
+        expect(output.trim()).toMatchInlineSnapshot(
+          `"It worked! function () {}"`,
+        );
+      });
+
+      it("works with the --require flag", async () => {
+        const output = await spawnNodeAsync(
+          ["-r", registerFile, testFile2],
+          path.dirname(testFile2),
+        );
+
+        expect(output.trim()).toMatchInlineSnapshot(
+          `"It worked! function () {}"`,
+        );
+      });
+
+      it("works with the -r flag in NODE_OPTIONS", async () => {
+        const output = await spawnNodeAsync(
+          [testFile2],
+          path.dirname(testFile2),
+          { NODE_OPTIONS: `-r ${registerFile}` },
+        );
+
+        expect(output.trim()).toMatchInlineSnapshot(
+          `"It worked! function () {}"`,
+        );
+      });
+
+      it("works with the --require flag in NODE_OPTIONS", async () => {
+        const output = await spawnNodeAsync(
+          [testFile2],
+          path.dirname(testFile2),
+          { NODE_OPTIONS: `-r ${registerFile}` },
+        );
+
+        expect(output.trim()).toMatchInlineSnapshot(
+          `"It worked! function () {}"`,
+        );
+      });
+    });
+
+    it("returns concatenatable sourceRoot and sources", async () => {
+      // The Source Maps R3 standard https://sourcemaps.info/spec.html states
+      // that `sourceRoot` is “prepended to the individual entries in the
+      // ‘source’ field.” If `sources` contains file names, and `sourceRoot`
+      // is intended to refer to a directory but doesn’t end with a trailing
+      // slash, any consumers of the source map are in for a bad day.
+      //
+      // The underlying problem seems to only get triggered if one file
+      // requires() another with @babel/register active, and I couldn’t get
+      // that working inside a test, possibly because of jest’s mocking
+      // hooks, so we spawn a separate process.
+      const output = await spawnNodeAsync([
+        "-r",
+        registerFile,
+        require.resolve("./fixtures/source-map/index"),
+      ]);
+      const sourceMap = JSON.parse(output);
+      expect(sourceMap.map.sourceRoot + sourceMap.map.sources[0]).toBe(
+        require.resolve("./fixtures/source-map/foo/bar"),
       );
     });
 
-    it("works with the --require flag", async () => {
-      const output = await spawnNodeAsync(
-        ["-r", registerFile, testFile2],
-        path.dirname(testFile2),
-      );
+    test("hook transpiles with config", () => {
+      setupRegister({
+        babelrc: false,
+        sourceMaps: false,
+        plugins: ["@babel/transform-modules-commonjs"],
+      });
 
-      expect(output.trim()).toMatchInlineSnapshot(
-        `"It worked! function () {}"`,
-      );
+      const result = currentHook(testFileContent, testFile);
+
+      expect(result).toBe('"use strict";\n\nrequire("assert");');
     });
 
-    it("works with the -r flag in NODE_OPTIONS", async () => {
-      const output = await spawnNodeAsync(
-        [testFile2],
-        path.dirname(testFile2),
-        { NODE_OPTIONS: `-r ${registerFile}` },
-      );
+    test("hook transpiles with babelrc", () => {
+      setupRegister({
+        babelrc: true,
+        sourceMaps: false,
+      });
 
-      expect(output.trim()).toMatchInlineSnapshot(
-        `"It worked! function () {}"`,
-      );
+      const result = currentHook(testFileContent, testFile);
+
+      expect(result).toBe('"use strict";\n\nrequire("assert");');
     });
 
-    it("works with the --require flag in NODE_OPTIONS", async () => {
-      const output = await spawnNodeAsync(
-        [testFile2],
-        path.dirname(testFile2),
-        { NODE_OPTIONS: `-r ${registerFile}` },
-      );
+    test("transforms modules used within register", async () => {
+      // Need a clean environment without `convert-source-map`
+      // already in the require cache, so we spawn a separate process
 
-      expect(output.trim()).toMatchInlineSnapshot(
-        `"It worked! function () {}"`,
-      );
+      const output = await spawnNodeAsync([
+        require.resolve("./fixtures/internal-modules/index.js"),
+      ]);
+      const { convertSourceMap } = JSON.parse(output);
+      expect(convertSourceMap).toMatch("/* transformed */");
     });
-  });
-
-  it("returns concatenatable sourceRoot and sources", async () => {
-    // The Source Maps R3 standard https://sourcemaps.info/spec.html states
-    // that `sourceRoot` is “prepended to the individual entries in the
-    // ‘source’ field.” If `sources` contains file names, and `sourceRoot`
-    // is intended to refer to a directory but doesn’t end with a trailing
-    // slash, any consumers of the source map are in for a bad day.
-    //
-    // The underlying problem seems to only get triggered if one file
-    // requires() another with @babel/register active, and I couldn’t get
-    // that working inside a test, possibly because of jest’s mocking
-    // hooks, so we spawn a separate process.
-    const output = await spawnNodeAsync([
-      "-r",
-      registerFile,
-      require.resolve("./fixtures/source-map/index"),
-    ]);
-    const sourceMap = JSON.parse(output);
-    expect(sourceMap.map.sourceRoot + sourceMap.map.sources[0]).toBe(
-      require.resolve("./fixtures/source-map/foo/bar"),
-    );
-  });
-
-  test("hook transpiles with config", () => {
-    setupRegister({
-      babelrc: false,
-      sourceMaps: false,
-      plugins: ["@babel/transform-modules-commonjs"],
-    });
-
-    const result = currentHook(testFileContent, testFile);
-
-    expect(result).toBe('"use strict";\n\nrequire("assert");');
-  });
-
-  test("hook transpiles with babelrc", () => {
-    setupRegister({
-      babelrc: true,
-      sourceMaps: false,
-    });
-
-    const result = currentHook(testFileContent, testFile);
-
-    expect(result).toBe('"use strict";\n\nrequire("assert");');
-  });
-
-  test("transforms modules used within register", async () => {
-    // Need a clean environment without `convert-source-map`
-    // already in the require cache, so we spawn a separate process
-
-    const output = await spawnNodeAsync([
-      require.resolve("./fixtures/internal-modules/index.js"),
-    ]);
-    const { convertSourceMap } = JSON.parse(output);
-    expect(convertSourceMap).toMatch("/* transformed */");
-  });
+  }
 });
 
 function spawnNodeAsync(args, cwd = dirname, env) {
