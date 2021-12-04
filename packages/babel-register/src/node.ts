@@ -65,7 +65,7 @@ function compile(code, filename) {
   if (!cached || cached.mtime !== fileMtime) {
     cached = babel.transform(code, {
       ...opts,
-      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
+      sourceMaps: opts.sourceMaps === undefined ? false : opts.sourceMaps,
       ast: false,
     });
 
