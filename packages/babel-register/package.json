@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "./lib/index.js",
   "browser": {
-    "./lib/nodeWrapper.js": "./lib/browser.js"
+    "./lib/index.js": "./lib/browser.js"
   },
   "dependencies": {
     "clone-deep": "^4.0.1",

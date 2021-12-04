@@ -5,6 +5,8 @@
  * and allows register to transform these modules if they are loaded externally.
  */
 
+// TODO: Remove this file in Babel 8
+
 const Module = require("module");
 
 const globalModuleCache = Module._cache;
