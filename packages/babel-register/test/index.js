@@ -10,6 +10,7 @@ const require = createRequire(import.meta.url);
 const registerFile = require.resolve("../lib/index");
 const testCacheFilename = path.join(dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
+const testFile2 = require.resolve("./fixtures/babelrc/log");
 const testFileContent = fs.readFileSync(testFile);
 
 const piratesPath = require.resolve("pirates");
@@ -192,6 +193,54 @@ describe("@babel/register", function () {
     expect(sourceMapSupport).toBe(false);
   });
 
+  describe("node auto-require", () => {
+    it("works with the -r flag", async () => {
+      const output = await spawnNodeAsync(
+        ["-r", registerFile, testFile2],
+        path.dirname(testFile2),
+      );
+
+      expect(output.trim()).toMatchInlineSnapshot(
+        `"It worked! function () {}"`,
+      );
+    });
+
+    it("works with the --require flag", async () => {
+      const output = await spawnNodeAsync(
+        ["-r", registerFile, testFile2],
+        path.dirname(testFile2),
+      );
+
+      expect(output.trim()).toMatchInlineSnapshot(
+        `"It worked! function () {}"`,
+      );
+    });
+
+    it("works with the -r flag in NODE_OPTIONS", async () => {
+      const output = await spawnNodeAsync(
+        [testFile2],
+        path.dirname(testFile2),
+        { NODE_OPTIONS: `-r ${registerFile}` },
+      );
+
+      expect(output.trim()).toMatchInlineSnapshot(
+        `"It worked! function () {}"`,
+      );
+    });
+
+    it("works with the --require flag in NODE_OPTIONS", async () => {
+      const output = await spawnNodeAsync(
+        [testFile2],
+        path.dirname(testFile2),
+        { NODE_OPTIONS: `-r ${registerFile}` },
+      );
+
+      expect(output.trim()).toMatchInlineSnapshot(
+        `"It worked! function () {}"`,
+      );
+    });
+  });
+
   it("returns concatenatable sourceRoot and sources", async () => {
     // The Source Maps R3 standard https://sourcemaps.info/spec.html states
     // that `sourceRoot` is “prepended to the individual entries in the
@@ -249,8 +298,8 @@ describe("@babel/register", function () {
   });
 });
 
-function spawnNodeAsync(args) {
-  const spawn = child.spawn(process.execPath, args, { cwd: dirname });
+function spawnNodeAsync(args, cwd = dirname, env) {
+  const spawn = child.spawn(process.execPath, args, { cwd, env });
 
   let output = "";
   let callback;
