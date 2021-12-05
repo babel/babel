@@ -9,8 +9,10 @@ const require = createRequire(import.meta.url);
 
 const testCacheFilename = path.join(dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
-const testFile2 = require.resolve("./fixtures/babelrc/log");
+const testFileLog = require.resolve("./fixtures/babelrc/log");
+const testFileMjs = require.resolve("./fixtures/mjs-babelrc/es2015");
 const testFileContent = fs.readFileSync(testFile, "utf-8");
+const testFileMjsContent = fs.readFileSync(testFileMjs, "utf-8");
 
 const piratesPath = require.resolve("pirates");
 const smsPath = require.resolve("source-map-support");
@@ -139,7 +141,21 @@ describe("@babel/register", function () {
       });
     }
 
-    buildTests(require.resolve("../experimental-worker"));
+    const { setupRegister } = buildTests(
+      require.resolve("../experimental-worker"),
+    );
+
+    it("works with mjs config files", () => {
+      setupRegister({
+        babelrc: true,
+        sourceMaps: false,
+        cwd: path.dirname(testFileMjs),
+      });
+
+      const result = currentHook(testFileMjsContent, testFileMjs);
+
+      expect(result).toBe('"use strict";\n\nrequire("assert");');
+    });
   });
 
   function buildTests(registerFile) {
@@ -227,8 +243,8 @@ describe("@babel/register", function () {
     describe("node auto-require", () => {
       it("works with the -r flag", async () => {
         const output = await spawnNodeAsync(
-          ["-r", registerFile, testFile2],
-          path.dirname(testFile2),
+          ["-r", registerFile, testFileLog],
+          path.dirname(testFileLog),
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -238,8 +254,8 @@ describe("@babel/register", function () {
 
       it("works with the --require flag", async () => {
         const output = await spawnNodeAsync(
-          ["-r", registerFile, testFile2],
-          path.dirname(testFile2),
+          ["-r", registerFile, testFileLog],
+          path.dirname(testFileLog),
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -249,8 +265,8 @@ describe("@babel/register", function () {
 
       it("works with the -r flag in NODE_OPTIONS", async () => {
         const output = await spawnNodeAsync(
-          [testFile2],
-          path.dirname(testFile2),
+          [testFileLog],
+          path.dirname(testFileLog),
           { NODE_OPTIONS: `-r ${registerFile}` },
         );
 
@@ -261,8 +277,8 @@ describe("@babel/register", function () {
 
       it("works with the --require flag in NODE_OPTIONS", async () => {
         const output = await spawnNodeAsync(
-          [testFile2],
-          path.dirname(testFile2),
+          [testFileLog],
+          path.dirname(testFileLog),
           { NODE_OPTIONS: `-r ${registerFile}` },
         );
 
@@ -327,6 +343,8 @@ describe("@babel/register", function () {
       const { convertSourceMap } = JSON.parse(output);
       expect(convertSourceMap).toMatch("/* transformed */");
     });
+
+    return { setupRegister, revertRegister };
   }
 });
 
