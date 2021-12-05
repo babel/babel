@@ -1,7 +1,5 @@
 const path = require("path");
 
-const { markInRegisterWorker } = require("./is-in-register-worker");
-
 const ACTIONS = {
   GET_DEFAULT_EXTENSIONS: "GET_DEFAULT_EXTENSIONS",
   SET_OPTIONS: "SET_OPTIONS",
@@ -47,15 +45,25 @@ class Client {
 // run synchronously, but many steps of Babel's config loading
 // (which is done for each file) can be asynchronous
 exports.WorkerClient = class WorkerClient extends Client {
+  // These two require() calls are in deferred so that they are not imported in
+  // older Node.js versions (which don't support workers).
+  // TODO: Hoist them in Babel 8.
+
   static #worker_threads_cache;
   /** @type {typeof import("worker_threads")} */
   static get #worker_threads() {
     return (WorkerClient.#worker_threads_cache ??= require("worker_threads"));
   }
 
+  static #markInRegisterWorker_cache;
+  static get #markInRegisterWorker() {
+    return (WorkerClient.#markInRegisterWorker_cache ??=
+      require("./is-in-register-worker").markInRegisterWorker);
+  }
+
   #worker = new WorkerClient.#worker_threads.Worker(
     path.resolve(__dirname, "./worker/index.js"),
-    { env: markInRegisterWorker(process.env) },
+    { env: WorkerClient.#markInRegisterWorker(process.env) },
   );
 
   #signal = new Int32Array(new SharedArrayBuffer(4));
