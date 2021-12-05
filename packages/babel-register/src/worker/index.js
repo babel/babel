@@ -22,17 +22,7 @@ parentPort.addListener("message", async ({ signal, port, action, payload }) => {
     });
   } finally {
     port.close();
-
-    // console.log in workers is asynchronous. Wait for it to finish writing
-    // to stdout/stderr before waking up the main thread.
-    await Promise.all([flush(process.stdout), flush(process.stderr)]);
-
     Atomics.store(signal, 0, 1);
     Atomics.notify(signal, 0);
   }
 });
-
-function flush(stream) {
-  // inspired from https://twitter.com/addaleax/status/1467548499650781185
-  return new Promise(resolve => stream.write("", resolve));
-}
