@@ -655,6 +655,18 @@ describe("scope", () => {
       });
     });
 
+    describe("duplicate declaration", () => {
+      it("should not throw error on duplicate class and function declaration", () => {
+        const ast = [
+          t.classDeclaration(t.identifier("A"), t.super(), t.classBody([]), []),
+          t.functionDeclaration(t.identifier("A"), [], t.blockStatement([])),
+        ];
+
+        ast[0].declare = true;
+        expect(() => getPath(ast)).not.toThrowError();
+      });
+    });
+
     describe("global", () => {
       // node1, node2, success
       // every line will run 2 tests `node1;node2;` and `node2;node1;`
