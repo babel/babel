@@ -71,13 +71,6 @@ function convertTemplateType(tokens, tl) {
         templateTokens.push(token);
         break;
 
-      case tl.eof:
-        if (curlyBrace) {
-          result.push(curlyBrace);
-        }
-
-        break;
-
       default:
         if (curlyBrace) {
           result.push(curlyBrace);
@@ -186,6 +179,8 @@ function convertToken(token, source, tl) {
     token.value = `${token.value}n`;
   } else if (label === tl.privateName) {
     token.type = "PrivateIdentifier";
+  } else if (label === tl.templateNonTail || label === tl.templateTail) {
+    token.type = "Template";
   }
 
   if (typeof token.type !== "string") {
@@ -196,12 +191,16 @@ function convertToken(token, source, tl) {
 
 module.exports = function convertTokens(tokens, code, tl) {
   const result = [];
-
-  const withoutComments = convertTemplateType(tokens, tl).filter(
-    t => t.type !== "CommentLine" && t.type !== "CommentBlock",
-  );
-  for (let i = 0, { length } = withoutComments; i < length; i++) {
-    const token = withoutComments[i];
+  const templateTypeMergedTokens = process.env.BABEL_8_BREAKING
+    ? tokens
+    : convertTemplateType(tokens, tl);
+  // The last token is always tt.eof and should be skipped
+  for (let i = 0, { length } = templateTypeMergedTokens; i < length - 1; i++) {
+    const token = templateTypeMergedTokens[i];
+    const tokenType = token.type;
+    if (tokenType === "CommentLine" || tokenType === "CommentBlock") {
+      continue;
+    }
 
     if (!process.env.BABEL_8_BREAKING) {
       // Babel 8 already produces a single token
@@ -209,9 +208,9 @@ module.exports = function convertTokens(tokens, code, tl) {
       if (
         ESLINT_VERSION >= 8 &&
         i + 1 < length &&
-        token.type.label === tl.hash
+        tokenType.label === tl.hash
       ) {
-        const nextToken = withoutComments[i + 1];
+        const nextToken = templateTypeMergedTokens[i + 1];
 
         // We must disambiguate private identifier from the hack pipes topic token
         if (nextToken.type.label === tl.name && token.end === nextToken.start) {

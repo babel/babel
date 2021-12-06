@@ -14,8 +14,9 @@ import {
   tokenIsKeywordOrIdentifier,
   tt,
   type TokenType,
+  tokenIsTemplate,
 } from "../../tokenizer/types";
-import { types as ct } from "../../tokenizer/context";
+import { types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
 import type { Position } from "../../util/location";
 import type Parser from "../../parser";
@@ -1071,7 +1072,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           return this.tsParseParenthesizedType();
-        case tt.backQuote:
+        case tt.templateNonTail:
+        case tt.templateTail:
           return this.tsParseTemplateLiteralType();
         default: {
           const { type } = this.state;
@@ -2196,7 +2198,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               }
 
               return this.finishCallExpression(node, state.optionalChainMember);
-            } else if (this.match(tt.backQuote)) {
+            } else if (tokenIsTemplate(this.state.type)) {
               const result = this.parseTaggedTemplateExpression(
                 base,
                 startPos,
@@ -2872,14 +2874,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /*:: invariant(jsx.node != null) */
         if (!jsx.error) return jsx.node;
 
-        // Remove `tc.j_expr` and `tc.j_oTag` from context added
+        // Remove `tc.j_expr` or `tc.j_oTag` from context added
         // by parsing `jsxTagStart` to stop the JSX plugin from
         // messing with the tokens
         const { context } = this.state;
-        if (context[context.length - 1] === ct.j_oTag) {
-          context.length -= 2;
-        } else if (context[context.length - 1] === ct.j_expr) {
-          context.length -= 1;
+        const currentContext = context[context.length - 1];
+        if (currentContext === tc.j_oTag || currentContext === tc.j_expr) {
+          context.pop();
         }
       }
 

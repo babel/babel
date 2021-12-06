@@ -158,6 +158,10 @@ export const tt: { [name: string]: TokenType } = {
   ellipsis: createToken("...", { beforeExpr }),
   backQuote: createToken("`", { startsExpr }),
   dollarBraceL: createToken("${", { beforeExpr, startsExpr }),
+  // start: isTemplate
+  templateTail: createToken("...`", { startsExpr }),
+  templateNonTail: createToken("...${", { beforeExpr, startsExpr }),
+  // end: isTemplate
   at: createToken("@"),
   hash: createToken("#", { startsExpr }),
 
@@ -400,6 +404,10 @@ export function tokenOperatorPrecedence(token: TokenType): number {
 
 export function tokenIsRightAssociative(token: TokenType): boolean {
   return token === tt.exponent;
+}
+
+export function tokenIsTemplate(token: TokenType): boolean {
+  return token >= tt.templateTail && token <= tt.templateNonTail;
 }
 
 export function getExportedToken(token: TokenType): ExportedTokenType {

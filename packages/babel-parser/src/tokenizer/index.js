@@ -13,7 +13,7 @@ import {
   keywords as keywordTypes,
   type TokenType,
 } from "./types";
-import { type TokContext, types as ct } from "./context";
+import { type TokContext } from "./context";
 import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
 import { SourceLocation } from "../util/location";
 import {
@@ -296,8 +296,7 @@ export default class Tokenizer extends ParserErrors {
   // properties.
 
   nextToken(): void {
-    const curContext = this.curContext();
-    if (!curContext.preserveSpace) this.skipSpace();
+    this.skipSpace();
     this.state.start = this.state.pos;
     if (!this.isLookahead) this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
@@ -305,11 +304,7 @@ export default class Tokenizer extends ParserErrors {
       return;
     }
 
-    if (curContext === ct.template) {
-      this.readTmplToken();
-    } else {
-      this.getTokenFromCode(this.codePointAtPos(this.state.pos));
-    }
+    this.getTokenFromCode(this.codePointAtPos(this.state.pos));
   }
 
   skipBlockComment(): N.CommentBlock | void {
@@ -921,8 +916,7 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.graveAccent:
-        ++this.state.pos;
-        this.finishToken(tt.backQuote);
+        this.readTemplateToken();
         return;
 
       case charCodes.digit0: {
@@ -1375,36 +1369,40 @@ export default class Tokenizer extends ParserErrors {
     this.finishToken(tt.string, out);
   }
 
-  // Reads template string tokens.
+  // Reads tempalte continuation `}...`
+  readTemplateContinuation(): void {
+    if (!this.match(tt.braceR)) {
+      this.unexpected(this.state.start, tt.braceR);
+    }
+    // rewind pos to `}`
+    this.state.pos--;
+    this.readTemplateToken();
+  }
 
-  readTmplToken(): void {
+  // Reads template string tokens.
+  readTemplateToken(): void {
     let out = "",
-      chunkStart = this.state.pos,
+      chunkStart = this.state.pos, // eat '`' or `}`
       containsInvalid = false;
+    ++this.state.pos; // eat '`' or `}`
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(this.state.start, Errors.UnterminatedTemplate);
+        throw this.raise(this.state.start + 1, Errors.UnterminatedTemplate);
       }
       const ch = this.input.charCodeAt(this.state.pos);
-      if (
-        ch === charCodes.graveAccent ||
-        (ch === charCodes.dollarSign &&
-          this.input.charCodeAt(this.state.pos + 1) ===
-            charCodes.leftCurlyBrace)
-      ) {
-        if (this.state.pos === this.state.start && this.match(tt.template)) {
-          if (ch === charCodes.dollarSign) {
-            this.state.pos += 2;
-            this.finishToken(tt.dollarBraceL);
-            return;
-          } else {
-            ++this.state.pos;
-            this.finishToken(tt.backQuote);
-            return;
-          }
-        }
+      if (ch === charCodes.graveAccent) {
+        ++this.state.pos; // eat '`'
         out += this.input.slice(chunkStart, this.state.pos);
-        this.finishToken(tt.template, containsInvalid ? null : out);
+        this.finishToken(tt.templateTail, containsInvalid ? null : out);
+        return;
+      }
+      if (
+        ch === charCodes.dollarSign &&
+        this.input.charCodeAt(this.state.pos + 1) === charCodes.leftCurlyBrace
+      ) {
+        this.state.pos += 2; // eat '${'
+        out += this.input.slice(chunkStart, this.state.pos);
+        this.finishToken(tt.templateNonTail, containsInvalid ? null : out);
         return;
       }
       if (ch === charCodes.backslash) {
@@ -1633,44 +1631,7 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  // the prevType is required by the jsx plugin
+  // updateContext is used by the jsx plugin
   // eslint-disable-next-line no-unused-vars
-  updateContext(prevType: TokenType): void {
-    // Token-specific context update code
-    // Note that we should avoid accessing `this.prodParam` in context update,
-    // because it is executed immediately when last token is consumed, which may be
-    // before `this.prodParam` is updated. e.g.
-    // ```
-    // function *g() { () => yield / 2 }
-    // ```
-    // When `=>` is eaten, the context update of `yield` is executed, however,
-    // `this.prodParam` still has `[Yield]` production because it is not yet updated
-    const { context, type } = this.state;
-    switch (type) {
-      case tt.braceR:
-        context.pop();
-        break;
-      // we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
-      // ideally only dollarBraceL "${" needs a non-template context
-      // in order to indicate that the last "`" in `${`" starts a new string template
-      // inside a template element within outer string template.
-      // but when we popped such context in `}`, we lost track of whether this
-      // `}` matches a `${` or other tokens matching `}`, so we have to push
-      // such context in every token that `}` will match.
-      case tt.braceL:
-      case tt.braceHashL:
-      case tt.dollarBraceL:
-        context.push(ct.brace);
-        break;
-      case tt.backQuote:
-        if (context[context.length - 1] === ct.template) {
-          context.pop();
-        } else {
-          context.push(ct.template);
-        }
-        break;
-      default:
-        break;
-    }
-  }
+  updateContext(prevType: TokenType): void {}
 }

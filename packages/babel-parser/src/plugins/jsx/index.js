@@ -46,12 +46,6 @@ const JsxErrors = makeErrorTemplates(
 );
 /* eslint-disable sort-keys */
 
-// Be aware that this file is always executed and not only when the plugin is enabled.
-// Therefore the contexts do always exist.
-tc.j_oTag = new TokContext("<tag");
-tc.j_cTag = new TokContext("</tag");
-tc.j_expr = new TokContext("<tag>...</tag>", true);
-
 function isFragment(object: ?N.JSXElement): boolean {
   return object
     ? object.type === "JSXOpeningFragment" ||
@@ -301,8 +295,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       switch (this.state.type) {
         case tt.braceL:
           node = this.startNode();
+          this.setContext(tc.brace);
           this.next();
-          node = this.jsxParseExpressionContainer(node);
+          node = this.jsxParseExpressionContainer(node, tc.j_oTag);
           if (node.expression.type === "JSXEmptyExpression") {
             this.raise(node.start, JsxErrors.AttributeIsEmpty);
           }
@@ -339,6 +334,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseSpreadChild(node: N.JSXSpreadChild): N.JSXSpreadChild {
       this.next(); // ellipsis
       node.expression = this.parseExpression();
+      this.setContext(tc.j_oTag);
       this.expect(tt.braceR);
 
       return this.finishNode(node, "JSXSpreadChild");
@@ -348,6 +344,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     jsxParseExpressionContainer(
       node: N.JSXExpressionContainer,
+      previousContext: TokContext,
     ): N.JSXExpressionContainer {
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
@@ -368,6 +365,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         node.expression = expression;
       }
+      this.setContext(previousContext);
       this.expect(tt.braceR);
 
       return this.finishNode(node, "JSXExpressionContainer");
@@ -377,9 +375,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     jsxParseAttribute(): N.JSXAttribute {
       const node = this.startNode();
-      if (this.eat(tt.braceL)) {
+      if (this.match(tt.braceL)) {
+        this.setContext(tc.brace);
+        this.next();
         this.expect(tt.ellipsis);
         node.argument = this.parseMaybeAssignAllowIn();
+        this.setContext(tc.j_oTag);
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }
@@ -464,11 +465,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
             case tt.braceL: {
               const node = this.startNode();
+              this.setContext(tc.brace);
               this.next();
               if (this.match(tt.ellipsis)) {
                 children.push(this.jsxParseSpreadChild(node));
               } else {
-                children.push(this.jsxParseExpressionContainer(node));
+                children.push(
+                  this.jsxParseExpressionContainer(node, tc.j_expr),
+                );
               }
 
               break;
@@ -537,6 +541,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.jsxParseElementAt(startPos, startLoc);
     }
 
+    setContext(newContext: TokContext) {
+      const { context } = this.state;
+      context[context.length - 1] = newContext;
+    }
+
     // ==================================
     // Overrides
     // ==================================
@@ -557,6 +566,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         return super.parseExprAtom(refExpressionErrors);
       }
+    }
+
+    skipSpace() {
+      const curContext = this.curContext();
+      if (!curContext.preserveSpace) super.skipSpace();
     }
 
     getTokenFromCode(code: number): void {
@@ -597,7 +611,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     updateContext(prevType: TokenType): void {
-      super.updateContext(prevType);
       const { context, type } = this.state;
       if (type === tt.slash && prevType === tt.jsxTagStart) {
         // do not consider JSX expr -> JSX open tag -> ... anymore
@@ -605,17 +618,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         context.splice(-2, 2, tc.j_cTag);
         this.state.canStartJSXElement = false;
       } else if (type === tt.jsxTagStart) {
-        context.push(
-          tc.j_expr, // treat as beginning of JSX expression
-          tc.j_oTag, // start opening tag context
-        );
+        // start opening tag context
+        context.push(tc.j_oTag);
       } else if (type === tt.jsxTagEnd) {
-        const out = context.pop();
+        const out = context[context.length - 1];
         if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
           context.pop();
           this.state.canStartJSXElement =
             context[context.length - 1] === tc.j_expr;
         } else {
+          this.setContext(tc.j_expr);
           this.state.canStartJSXElement = true;
         }
       } else {

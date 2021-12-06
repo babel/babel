@@ -1,7 +1,7 @@
 // @flow
 
-// The token context is used to track whether the apostrophe "`"
-// starts or ends a string template
+// The token context is used in JSX plugin to track
+// jsx tag / jsx text / normal JavaScript expression
 
 export class TokContext {
   constructor(token: string, preserveSpace?: boolean) {
@@ -13,9 +13,17 @@ export class TokContext {
   preserveSpace: boolean;
 }
 
-export const types: {
+const types: {
   [key: string]: TokContext,
 } = {
-  brace: new TokContext("{"),
-  template: new TokContext("`", true),
+  brace: new TokContext("{"), // normal JavaScript expression
+  j_oTag: new TokContext("<tag"), // JSX openning tag
+  j_cTag: new TokContext("</tag"), // JSX closing tag
+  j_expr: new TokContext("<tag>...</tag>", true), // JSX expressions
 };
+
+if (!process.env.BABEL_8_BREAKING) {
+  types.template = new TokContext("`", true);
+}
+
+export { types };

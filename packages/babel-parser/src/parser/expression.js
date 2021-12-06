@@ -27,6 +27,7 @@ import {
   tokenIsPostfix,
   tokenIsPrefix,
   tokenIsRightAssociative,
+  tokenIsTemplate,
   tokenKeywordOrIdentifierIsKeyword,
   tokenLabelName,
   tokenOperatorPrecedence,
@@ -43,7 +44,7 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import { Position } from "../util/location";
+import { Position, createPositionWithColumnOffset } from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -706,9 +707,10 @@ export default class ExpressionParser extends LValParser {
     noCalls: ?boolean,
     state: N.ParseSubscriptState,
   ): N.Expression {
-    if (!noCalls && this.eat(tt.doubleColon)) {
+    const { type } = this.state;
+    if (!noCalls && type === tt.doubleColon) {
       return this.parseBind(base, startPos, startLoc, noCalls, state);
-    } else if (this.match(tt.backQuote)) {
+    } else if (tokenIsTemplate(type)) {
       return this.parseTaggedTemplateExpression(
         base,
         startPos,
@@ -719,7 +721,7 @@ export default class ExpressionParser extends LValParser {
 
     let optional = false;
 
-    if (this.match(tt.questionDot)) {
+    if (type === tt.questionDot) {
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         // stop at `?.` when parsing `new a?.()`
         state.stop = true;
@@ -801,6 +803,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const node = this.startNodeAt(startPos, startLoc);
     node.object = base;
+    this.next(); // eat '::'
     node.callee = this.parseNoCallExpr();
     state.stop = true;
     return this.parseSubscripts(
@@ -1153,7 +1156,8 @@ export default class ExpressionParser extends LValParser {
       case tt._new:
         return this.parseNewOrNewTarget();
 
-      case tt.backQuote:
+      case tt.templateNonTail:
+      case tt.templateTail:
         return this.parseTemplate(false);
 
       // BindExpression[Yield]
@@ -1832,37 +1836,47 @@ export default class ExpressionParser extends LValParser {
   // Parse template expression.
 
   parseTemplateElement(isTagged: boolean): N.TemplateElement {
-    const elem = this.startNode();
-    if (this.state.value === null) {
+    const { start, end, value } = this.state;
+    const elemStart = start + 1;
+    const elem = this.startNodeAt(
+      elemStart,
+      createPositionWithColumnOffset(this.state.startLoc, 1),
+    );
+    if (value === null) {
       if (!isTagged) {
-        this.raise(this.state.start + 1, Errors.InvalidEscapeSequenceTemplate);
+        this.raise(start + 2, Errors.InvalidEscapeSequenceTemplate);
       }
     }
+
+    const isTail = this.match(tt.templateTail);
+    const endOffset = isTail ? -1 : -2;
+    const elemEnd = end + endOffset;
     elem.value = {
-      raw: this.input
-        .slice(this.state.start, this.state.end)
-        .replace(/\r\n?/g, "\n"),
-      cooked: this.state.value,
+      raw: this.input.slice(elemStart, elemEnd).replace(/\r\n?/g, "\n"),
+      cooked: value === null ? null : value.slice(1, endOffset),
     };
+    elem.tail = isTail;
     this.next();
-    elem.tail = this.match(tt.backQuote);
-    return this.finishNode(elem, "TemplateElement");
+    this.finishNode(elem, "TemplateElement");
+    this.resetEndLocation(
+      elem,
+      elemEnd,
+      createPositionWithColumnOffset(this.state.lastTokEndLoc, endOffset),
+    );
+    return elem;
   }
 
   // https://tc39.es/ecma262/#prod-TemplateLiteral
   parseTemplate(isTagged: boolean): N.TemplateLiteral {
     const node = this.startNode();
-    this.next();
     node.expressions = [];
     let curElt = this.parseTemplateElement(isTagged);
     node.quasis = [curElt];
     while (!curElt.tail) {
-      this.expect(tt.dollarBraceL);
       node.expressions.push(this.parseTemplateSubstitution());
-      this.expect(tt.braceR);
+      this.readTemplateContinuation();
       node.quasis.push((curElt = this.parseTemplateElement(isTagged)));
     }
-    this.next();
     return this.finishNode(node, "TemplateLiteral");
   }
 
@@ -2681,21 +2695,22 @@ export default class ExpressionParser extends LValParser {
   }
 
   isAmbiguousAwait(): boolean {
+    if (this.hasPrecedingLineBreak()) return true;
+    const { type } = this.state;
     return (
-      this.hasPrecedingLineBreak() ||
       // All the following expressions are ambiguous:
       //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
-      this.match(tt.plusMin) ||
-      this.match(tt.parenL) ||
-      this.match(tt.bracketL) ||
-      this.match(tt.backQuote) ||
+      type === tt.plusMin ||
+      type === tt.parenL ||
+      type === tt.bracketL ||
+      tokenIsTemplate(type) ||
       // Sometimes the tokenizer generates tt.slash for regexps, and this is
       // handler by parseExprAtom
-      this.match(tt.regexp) ||
-      this.match(tt.slash) ||
+      type === tt.regexp ||
+      type === tt.slash ||
       // This code could be parsed both as a modulo operator or as an intrinsic:
       //   await %x(0)
-      (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
+      (this.hasPlugin("v8intrinsic") && type === tt.modulo)
     );
   }
 
