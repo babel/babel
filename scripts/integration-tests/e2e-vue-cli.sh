@@ -30,11 +30,6 @@ node "$PWD"/../../utils/bump-babel-dependencies.js
 yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
 yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
 
-if [[ "$(node --version)" == v17.* ]]; then
-  # Remove this when https://github.com/webpack/webpack/issues/14532 is fixed
-  export NODE_OPTIONS=--openssl-legacy-provider
-fi
-
 # Test
 CI=true yarn test -p babel,babel-preset-app
 
