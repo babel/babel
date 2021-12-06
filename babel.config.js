@@ -73,6 +73,12 @@ module.exports = function (api) {
     "eslint/*/test",
   ];
 
+  const lazyRequireSources = [
+    "./packages/babel-cli",
+    "./packages/babel-core",
+    "./packages/babel-preset-env/src/available-plugins.js",
+  ];
+
   switch (env) {
     // Configs used during bundling builds.
     case "standalone":
@@ -192,20 +198,6 @@ module.exports = function (api) {
         plugins: ["babel-plugin-transform-charcodes"],
       },
       convertESM && {
-        test: [
-          "./packages/babel-cli",
-          "./packages/babel-core",
-          "./packages/babel-preset-env/src/available-plugins.js",
-        ].map(normalize),
-        plugins: [
-          // Explicitly use the lazy version of CommonJS modules.
-          [
-            "@babel/transform-modules-commonjs",
-            { importInterop: importInteropSrc, lazy: true },
-          ],
-        ],
-      },
-      convertESM && {
         test: ["./packages/babel-node/src"].map(normalize),
         // Used to conditionally import kexec
         plugins: ["@babel/plugin-proposal-dynamic-import"],
@@ -216,7 +208,18 @@ module.exports = function (api) {
         plugins: [transformNamedBabelTypesImportToDestructuring],
       },
       convertESM && {
+        test: lazyRequireSources.map(normalize),
+        plugins: [
+          // Explicitly use the lazy version of CommonJS modules.
+          [
+            "@babel/transform-modules-commonjs",
+            { importInterop: importInteropSrc, lazy: true },
+          ],
+        ],
+      },
+      convertESM && {
         test: sources.map(normalize),
+        exclude: lazyRequireSources.map(normalize),
         plugins: [
           [
             "@babel/transform-modules-commonjs",

@@ -1,5 +1,6 @@
-import { parseSync, traverse } from "@babel/core";
 import { shouldTransform } from "../lib/util.js";
+import babel from "@babel/core";
+const { parseSync, traverse } = babel;
 
 function getPath(input, parserOpts = {}) {
   let targetPath;
