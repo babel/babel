@@ -139,12 +139,6 @@ module.exports = {
       },
     },
     {
-      files: ["./packages/babel-register/src/**/*.js"],
-      parserOptions: {
-        sourceType: "script",
-      },
-    },
-    {
       files: ["eslint/babel-eslint-parser/src/**/*.js"],
       rules: {
         "no-restricted-imports": ["error", "@babel/core"],

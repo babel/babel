@@ -254,7 +254,7 @@ describe("@babel/register", function () {
 
       it("works with the --require flag", async () => {
         const output = await spawnNodeAsync(
-          ["-r", registerFile, testFileLog],
+          ["--require", registerFile, testFileLog],
           path.dirname(testFileLog),
         );
 
@@ -279,7 +279,7 @@ describe("@babel/register", function () {
         const output = await spawnNodeAsync(
           [testFileLog],
           path.dirname(testFileLog),
-          { NODE_OPTIONS: `-r ${registerFile}` },
+          { NODE_OPTIONS: `--require ${registerFile}` },
         );
 
         expect(output.trim()).toMatchInlineSnapshot(

@@ -10,10 +10,6 @@ if (major < 12 || (major === 12 && minor < 3)) {
   );
 }
 
-if (require("./is-in-register-worker").isInRegisterWorker) {
-  return;
-}
-
 const hook = require("./hook");
 const { WorkerClient } = require("./worker-client");
 
@@ -25,4 +21,6 @@ module.exports = Object.assign(register, {
   __esModule: true,
 });
 
-register();
+if (!require("./is-in-register-worker").isInRegisterWorker) {
+  register();
+}

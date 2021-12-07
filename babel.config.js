@@ -191,11 +191,6 @@ module.exports = function (api) {
         test: ["packages/babel-generator"].map(normalize),
         plugins: ["babel-plugin-transform-charcodes"],
       },
-      {
-        test: ["packages/babel-register/**/*.js"].map(normalize),
-        sourceType: "script",
-        parserOpts: { allowReturnOutsideFunction: true },
-      },
       convertESM && {
         test: [
           "./packages/babel-cli",

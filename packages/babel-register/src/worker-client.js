@@ -49,16 +49,13 @@ exports.WorkerClient = class WorkerClient extends Client {
   // older Node.js versions (which don't support workers).
   // TODO: Hoist them in Babel 8.
 
-  static #worker_threads_cache;
   /** @type {typeof import("worker_threads")} */
   static get #worker_threads() {
-    return (WorkerClient.#worker_threads_cache ??= require("worker_threads"));
+    return require("worker_threads");
   }
 
-  static #markInRegisterWorker_cache;
   static get #markInRegisterWorker() {
-    return (WorkerClient.#markInRegisterWorker_cache ??=
-      require("./is-in-register-worker").markInRegisterWorker);
+    return require("./is-in-register-worker").markInRegisterWorker;
   }
 
   #worker = new WorkerClient.#worker_threads.Worker(

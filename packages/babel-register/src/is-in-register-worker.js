@@ -4,9 +4,9 @@
  * Since workers inherit the exec options from the parent thread, we
  * must be careful to avoid infite "@babel/register" setup loops.
  *
- * If @babel/register is imported using the -r/--require flag, we
- * must the worker will have the same flag and we must avoid registering
- * the @babel/register hook again.
+ * If @babel/register is imported using the -r/--require flag, the worker
+ * will have the same flag and we must avoid registering the @babel/register
+ * hook again.
  *
  * - markInRegisterWorker() can be used to mark a set of env vars (that will
  *   be forwarded to a worker) as being in the @babel/register worker.
