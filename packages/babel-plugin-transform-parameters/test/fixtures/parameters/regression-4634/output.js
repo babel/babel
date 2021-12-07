@@ -1,6 +1,6 @@
 let oneOf = function () {
-  for (var _len = arguments.length, nodes = new Array(_len), _key = 0; _key < _len; _key++) {
-    nodes[_key] = arguments[_key];
+  for (var _args = arguments, _len = _args.length, nodes = new Array(_len), _key = 0; _key < _len; _key++) {
+    nodes[_key] = _args[_key];
   }
 
   if (nodes.length === 1) {

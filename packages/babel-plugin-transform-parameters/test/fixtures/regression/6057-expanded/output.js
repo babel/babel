@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _args = babelHelpers.interopRequireDefault(require("utils/url/args"));
+var _args2 = babelHelpers.interopRequireDefault(require("utils/url/args"));
 
 var App = /*#__PURE__*/function (_Component) {
   babelHelpers.inherits(App, _Component);
@@ -17,8 +17,8 @@ var App = /*#__PURE__*/function (_Component) {
 
     babelHelpers.classCallCheck(this, App);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    for (var _args = arguments, _len = _args.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = _args[_key];
     }
 
     _this = _super.call.apply(_super, [this].concat(args));
@@ -29,7 +29,7 @@ var App = /*#__PURE__*/function (_Component) {
   babelHelpers.createClass(App, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.exportType = _args["default"].get('type', window.location.href);
+      this.exportType = _args2["default"].get('type', window.location.href);
     }
   }]);
   return App;
