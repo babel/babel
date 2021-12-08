@@ -7,8 +7,8 @@ function _s() {
     var _arguments = arguments,
         _this = this;
 
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
+    for (var _args = arguments, _len = _args.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = _args[_key];
     }
 
     let t = /*#__PURE__*/function () {
@@ -17,8 +17,8 @@ function _s() {
           var _ref2 = babelHelpers.asyncToGenerator(function* (z, b) {
             yield z;
 
-            for (var _len2 = arguments.length, innerArgs = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-              innerArgs[_key2 - 2] = arguments[_key2];
+            for (var _args2 = arguments, _len2 = _args2.length, innerArgs = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+              innerArgs[_key2 - 2] = _args2[_key2];
             }
 
             console.log(_this, innerArgs, _arguments);
