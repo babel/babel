@@ -1,5 +1,5 @@
 function func(a, b, ...arguments) {
-    return arguments;
+    return [a, b, arguments];
 }
 
-expect(func('a', 'b', 1, 2, 3)).toStrictEqual([1, 2, 3])
+expect(func('a', 'b', 1, 2, 3)).toStrictEqual(['a', 'b', [1, 2, 3]])

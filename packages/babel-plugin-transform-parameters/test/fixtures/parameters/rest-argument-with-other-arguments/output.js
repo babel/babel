@@ -3,7 +3,7 @@ function func(a, b) {
     arguments[_key - 2] = _args[_key];
   }
 
-  return arguments;
+  return [a, b, arguments];
 }
 
 func('a', 'b', 1, 2, 3);
