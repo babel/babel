@@ -79,12 +79,17 @@ export function cloneStringLiteral(node: any): any {
     return clonePlaceholder(node);
   }
   const cloned = Object.create(NodePrototype);
-  cloned.type = "StringLiteral";
+  cloned.type = type;
   cloned.start = start;
   cloned.end = end;
   cloned.loc = loc;
   cloned.range = range;
-  cloned.extra = extra;
+  if (node.raw !== undefined) {
+    // estree set node.raw instead of node.extra
+    cloned.raw = node.raw;
+  } else {
+    cloned.extra = extra;
+  }
   cloned.value = node.value;
   return cloned;
 }
