@@ -1,3 +1,5 @@
+var _arguments6 = typeof arguments === "undefined" ? void 0 : arguments;
+
 function one() {
   var _arguments = arguments;
 
@@ -83,26 +85,27 @@ function six(obj) {
 six();
 
 var seven = function () {
-  var _arguments6 = 1;
+  var arguments = 1;
   return _arguments6;
 };
 
 seven();
 
 var eight = function () {
-  var _arguments7 = 1;
+  var arguments = 1;
   return function () {
-    return _arguments7;
+    return _arguments6;
   };
 };
 
 eight();
 
 function nine() {
-  var _arguments8 = 1;
+  var _arguments7 = arguments;
+  var arguments = 1;
 
   var foo = function () {
-    return _arguments8;
+    return _arguments7;
   };
 }
 
@@ -111,9 +114,9 @@ nine();
 var eleven = function () {
   var arguments = 2;
   return function () {
-    var _arguments9 = arguments;
+    var _arguments8 = arguments;
     return function () {
-      return _arguments9;
+      return _arguments8;
     };
   };
 };
@@ -124,9 +127,9 @@ var twelve = function () {
   var arguments = 2;
   return class {
     m() {
-      var _arguments10 = arguments;
+      var _arguments9 = arguments;
       return function () {
-        return _arguments10;
+        return _arguments9;
       };
     }
 

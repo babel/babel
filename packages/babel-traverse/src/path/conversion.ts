@@ -635,7 +635,7 @@ const getScopeInformationVisitor = mergeVisitors<{
 
       let curr = child.scope;
       do {
-        if (curr.hasOwnBinding("arguments")) {
+        if (curr.hasOwnBinding("arguments") && !curr.hasBinding("arguments")) {
           curr.rename("arguments");
           return;
         }

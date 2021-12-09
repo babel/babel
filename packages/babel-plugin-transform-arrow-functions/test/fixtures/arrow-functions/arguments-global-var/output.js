@@ -1,7 +1,9 @@
-var _arguments2 = 1;
+var _arguments2 = typeof arguments === "undefined" ? void 0 : arguments;
+
+var arguments = 1;
 
 function fn() {
-  var _arguments = _arguments2;
+  var _arguments = arguments;
 
   var foo = function () {
     return _arguments;
