@@ -223,6 +223,7 @@ helpers.createClass = helper("7.0.0-beta.0")`
   export default function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", { writable: false });
     return Constructor;
   }
 `;
@@ -334,12 +335,15 @@ helpers.inherits = helper("7.0.0-beta.0")`
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
+    Object.defineProperty(subClass, "prototype", {
+      value: Object.create(superClass && superClass.prototype, {
+        constructor: {
+          value: subClass,
+          writable: true,
+          configurable: true
+        }
+      }),
+      writable: false,
     });
     if (superClass) setPrototypeOf(subClass, superClass);
   }
