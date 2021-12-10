@@ -1,8 +1,8 @@
-var A = function A() {
+var A = /*#__PURE__*/babelHelpers.createClass(function A() {
   "use strict";
 
   babelHelpers.classCallCheck(this, A);
-};
+});
 
 var B = /*#__PURE__*/function (_A) {
   "use strict";
@@ -18,5 +18,5 @@ var B = /*#__PURE__*/function (_A) {
     return babelHelpers.possibleConstructorReturn(_this, _this = _super.call(this));
   }
 
-  return B;
+  return babelHelpers.createClass(B);
 }(A);

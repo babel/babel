@@ -1,6 +1,6 @@
 var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
 
-var C = function C() {
+var C = /*#__PURE__*/babelHelpers.createClass(function C() {
   "use strict";
 
   babelHelpers.classCallCheck(this, C);
@@ -9,8 +9,7 @@ var C = function C() {
     writable: true,
     value: void 0
   });
-};
-
+});
 expect(() => {
   new C();
 }).toThrow();

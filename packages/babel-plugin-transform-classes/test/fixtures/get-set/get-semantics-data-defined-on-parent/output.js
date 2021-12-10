@@ -1,9 +1,8 @@
 "use strict";
 
-let Base = function Base() {
+let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {
   babelHelpers.classCallCheck(this, Base);
-};
-
+});
 Base.prototype.test = 1;
 
 let Obj = /*#__PURE__*/function (_Base) {

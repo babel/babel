@@ -1,3 +1,4 @@
+import _createClass from "@babel/runtime/helpers/esm/createClass";
 import _classCallCheck from "@babel/runtime/helpers/esm/classCallCheck";
 import _inherits from "@babel/runtime/helpers/esm/inherits";
 import _possibleConstructorReturn from "@babel/runtime/helpers/esm/possibleConstructorReturn";
@@ -18,5 +19,5 @@ let Foo = /*#__PURE__*/function (_Bar) {
     return _super.apply(this, arguments);
   }
 
-  return Foo;
+  return _createClass(Foo);
 }(Bar);

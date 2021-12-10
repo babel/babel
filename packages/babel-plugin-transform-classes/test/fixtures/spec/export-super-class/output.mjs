@@ -8,7 +8,7 @@ var _default = /*#__PURE__*/function (_A) {
     return _super.apply(this, arguments);
   }
 
-  return _default;
+  return babelHelpers.createClass(_default);
 }(A);
 
 export { _default as default };

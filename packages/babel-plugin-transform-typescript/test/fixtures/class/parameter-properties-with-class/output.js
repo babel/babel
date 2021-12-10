@@ -6,5 +6,5 @@ let Person = /*#__PURE__*/function () {
     this.name = name;
   }
 
-  return Person;
+  return babelHelpers.createClass(Person);
 }();

@@ -1,9 +1,8 @@
 "use strict";
 
-let Base = function Base() {
+let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {
   babelHelpers.classCallCheck(this, Base);
-};
-
+});
 Object.defineProperty(Base.prototype, 'test', {
   value: 1,
   writable: true,
