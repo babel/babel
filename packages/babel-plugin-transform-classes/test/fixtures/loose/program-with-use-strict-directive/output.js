@@ -7,5 +7,5 @@ var Foo = /*#__PURE__*/function () {
 
   _proto.method = function method() {};
 
-  return babelHelpers.createClass(Foo);
+  return Foo;
 }();

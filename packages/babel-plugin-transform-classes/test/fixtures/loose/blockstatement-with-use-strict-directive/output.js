@@ -8,6 +8,6 @@ function t() {
 
     _proto.method = function method() {};
 
-    return babelHelpers.createClass(Foo);
+    return Foo;
   }();
 }

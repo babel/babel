@@ -42,7 +42,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     throw new Error("called");
   };
 
-  return babelHelpers.createClass(Obj);
+  return Obj;
 }(Base);
 
 const obj = new Obj();

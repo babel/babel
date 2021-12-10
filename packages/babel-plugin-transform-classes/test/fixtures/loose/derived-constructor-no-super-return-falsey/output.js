@@ -9,5 +9,5 @@ var Child = /*#__PURE__*/function (_Base) {
     return false || babelHelpers.assertThisInitialized(_this);
   }
 
-  return babelHelpers.createClass(Child);
+  return Child;
 }(Base);

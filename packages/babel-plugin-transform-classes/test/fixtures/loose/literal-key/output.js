@@ -7,5 +7,5 @@ var Foo = /*#__PURE__*/function () {
 
   _proto["bar"] = function bar() {};
 
-  return babelHelpers.createClass(Foo);
+  return Foo;
 }();

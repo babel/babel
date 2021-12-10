@@ -9,5 +9,5 @@ var Foo = /*#__PURE__*/function (_Bar) {
     return babelHelpers.assertThisInitialized(_this);
   }
 
-  return babelHelpers.createClass(Foo);
+  return Foo;
 }(Bar);

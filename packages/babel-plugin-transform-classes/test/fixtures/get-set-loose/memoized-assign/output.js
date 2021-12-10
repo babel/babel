@@ -1,6 +1,7 @@
 "use strict";
 
-let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {});
+let Base = function Base() {};
+
 Object.defineProperty(Base.prototype, 0, {
   value: 0,
   writable: true,
@@ -40,7 +41,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     this[_i = i] = _Base.prototype[_i] + 1;
   };
 
-  return babelHelpers.createClass(Obj);
+  return Obj;
 }(Base);
 
 const obj = new Obj();

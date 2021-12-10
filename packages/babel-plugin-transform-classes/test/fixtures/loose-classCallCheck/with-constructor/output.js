@@ -1,8 +1,8 @@
-let A = /*#__PURE__*/babelHelpers.createClass(function A() {
+let A = function A() {
   "use strict";
 
   console.log('a');
-});
+};
 
 let B = /*#__PURE__*/function () {
   "use strict";
@@ -15,5 +15,5 @@ let B = /*#__PURE__*/function () {
     console.log('b');
   };
 
-  return babelHelpers.createClass(B);
+  return B;
 }();

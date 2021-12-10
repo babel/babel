@@ -1,6 +1,6 @@
 "use strict";
 
-let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {});
+let Base = function Base() {};
 
 let Obj = /*#__PURE__*/function (_Base) {
   babelHelpers.inheritsLoose(Obj, _Base);
@@ -15,7 +15,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     return this.test = 3;
   };
 
-  return babelHelpers.createClass(Obj);
+  return Obj;
 }(Base);
 
 const obj = new Obj();

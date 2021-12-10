@@ -1,6 +1,7 @@
 "use strict";
 
-let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {});
+let Base = function Base() {};
+
 Base.prototype.test = 1;
 
 let Obj = /*#__PURE__*/function (_Base) {
@@ -16,7 +17,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     return _Base.prototype.test;
   };
 
-  return babelHelpers.createClass(Obj);
+  return Obj;
 }(Base);
 
 Obj.prototype.test = 2;

@@ -29,7 +29,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     throw new Error("gobbledygook");
   };
 
-  return babelHelpers.createClass(Obj);
+  return Obj;
 }(Base);
 
 const obj = new Obj();

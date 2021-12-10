@@ -1,3 +1,3 @@
-let A = /*#__PURE__*/babelHelpers.createClass(function A() {
+let A = function A() {
   "use strict";
-});
+};

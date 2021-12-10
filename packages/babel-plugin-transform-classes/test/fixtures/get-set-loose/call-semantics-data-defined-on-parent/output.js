@@ -11,7 +11,7 @@ let Base = /*#__PURE__*/function () {
     return 1;
   };
 
-  return babelHelpers.createClass(Base);
+  return Base;
 }();
 
 let Obj = /*#__PURE__*/function (_Base) {
@@ -37,7 +37,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     throw new Error("called");
   };
 
-  return babelHelpers.createClass(Obj);
+  return Obj;
 }(Base);
 
 const obj = new Obj();

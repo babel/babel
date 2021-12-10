@@ -13,5 +13,5 @@ var Test = /*#__PURE__*/function (_Foo) {
     return babelHelpers.assertThisInitialized(_this);
   }
 
-  return babelHelpers.createClass(Test);
+  return Test;
 }(Foo);

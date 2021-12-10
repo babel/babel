@@ -9,5 +9,5 @@ var C = /*#__PURE__*/function () {
     return 'a';
   };
 
-  return babelHelpers.createClass(C);
+  return C;
 }();
