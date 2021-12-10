@@ -57,10 +57,11 @@ node -e "
 "
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-npm install
 
 # Remove these when https://github.com/facebook/jest/pull/12128 is fixed
+npm install --ignore-scripts
 npx npm-force-resolutions
+
 npm install
 
 # Test
