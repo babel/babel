@@ -7,5 +7,5 @@ var Test = /*#__PURE__*/function (_Foo) {
     return _Foo.apply(this, arguments) || this;
   }
 
-  return Test;
+  return babelHelpers.createClass(Test);
 }(Foo);

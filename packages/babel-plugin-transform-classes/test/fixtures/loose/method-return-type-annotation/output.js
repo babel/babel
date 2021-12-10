@@ -10,5 +10,5 @@ var C = /*#__PURE__*/function () {
     return 'a';
   };
 
-  return C;
+  return babelHelpers.createClass(C);
 }();

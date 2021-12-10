@@ -12,5 +12,5 @@ var Foo = /*#__PURE__*/function () {
     } = props);
   };
 
-  return Foo;
+  return babelHelpers.createClass(Foo);
 }();

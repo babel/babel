@@ -1,6 +1,6 @@
 "use strict";
 
-let Base = function Base() {};
+let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {});
 
 let Obj = /*#__PURE__*/function (_Base) {
   babelHelpers.inheritsLoose(Obj, _Base);
@@ -19,7 +19,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     throw new Error("gobbledygook");
   };
 
-  return Obj;
+  return babelHelpers.createClass(Obj);
 }(Base);
 
 const obj = new Obj();

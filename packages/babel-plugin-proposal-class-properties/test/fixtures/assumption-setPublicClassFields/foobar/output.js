@@ -18,5 +18,5 @@ var Child = /*#__PURE__*/function (_Parent) {
     return _this;
   }
 
-  return Child;
+  return babelHelpers.createClass(Child);
 }(Parent);

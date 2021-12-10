@@ -7,5 +7,5 @@ var List = /*#__PURE__*/function (_Array) {
     return _Array.apply(this, arguments) || this;
   }
 
-  return List;
+  return babelHelpers.createClass(List);
 }( /*#__PURE__*/babelHelpers.wrapNativeSuper(Array));

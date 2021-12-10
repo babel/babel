@@ -1,6 +1,6 @@
-let B = function B() {
+let B = /*#__PURE__*/babelHelpers.createClass(function B() {
   "use strict";
-};
+});
 
 let A = /*#__PURE__*/function (_B) {
   "use strict";
@@ -14,5 +14,5 @@ let A = /*#__PURE__*/function (_B) {
     return babelHelpers.assertThisInitialized(_this);
   }
 
-  return A;
+  return babelHelpers.createClass(A);
 }(B);

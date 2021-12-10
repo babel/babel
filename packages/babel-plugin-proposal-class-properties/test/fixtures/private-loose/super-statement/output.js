@@ -19,5 +19,5 @@ var Foo = /*#__PURE__*/function (_Bar) {
     return _this;
   }
 
-  return Foo;
+  return babelHelpers.createClass(Foo);
 }(Bar);

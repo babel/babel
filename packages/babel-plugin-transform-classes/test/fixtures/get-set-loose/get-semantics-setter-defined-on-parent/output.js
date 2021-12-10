@@ -25,7 +25,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     return _Base.prototype.test;
   };
 
-  return Obj;
+  return babelHelpers.createClass(Obj);
 }(Base);
 
 Object.defineProperty(Obj.prototype, 'test', {

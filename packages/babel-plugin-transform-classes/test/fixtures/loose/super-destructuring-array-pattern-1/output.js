@@ -10,5 +10,5 @@ var Foo = /*#__PURE__*/function () {
     [x, ...this.client] = props;
   };
 
-  return Foo;
+  return babelHelpers.createClass(Foo);
 }();

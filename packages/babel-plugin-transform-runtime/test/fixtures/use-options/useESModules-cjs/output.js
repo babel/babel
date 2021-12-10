@@ -1,3 +1,5 @@
+var _createClass = require("@babel/runtime/helpers/createClass");
+
 var _classCallCheck = require("@babel/runtime/helpers/classCallCheck");
 
 var _inherits = require("@babel/runtime/helpers/inherits");
@@ -23,5 +25,5 @@ let Foo = /*#__PURE__*/function (_Bar) {
     return _super.apply(this, arguments);
   }
 
-  return Foo;
+  return _createClass(Foo);
 }(Bar);

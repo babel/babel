@@ -19,5 +19,5 @@ var Test = /*#__PURE__*/function (_Foo) {
     return _Foo.wow.call(this);
   };
 
-  return Test;
+  return babelHelpers.createClass(Test);
 }(Foo);

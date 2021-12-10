@@ -1,6 +1,6 @@
 "use strict";
 
-var Hello = function Hello() {
+var Hello = /*#__PURE__*/babelHelpers.createClass(function Hello() {
   babelHelpers.classCallCheck(this, Hello);
   return {
     toString() {
@@ -8,7 +8,7 @@ var Hello = function Hello() {
     }
 
   };
-};
+});
 
 var Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
@@ -37,7 +37,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
 
-  return Outer;
+  return babelHelpers.createClass(Outer);
 }(Hello);
 
 expect(new Outer().hello()).toBe('hello');

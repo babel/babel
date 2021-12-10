@@ -1,9 +1,9 @@
-var Test = function Test() {
+var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Test);
   this.state = "test";
-};
+});
 
 var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
@@ -21,10 +21,10 @@ var Foo = /*#__PURE__*/function (_Bar) {
     return _this;
   }
 
-  return Foo;
+  return babelHelpers.createClass(Foo);
 }(Bar);
 
-var ConstructorScoping = function ConstructorScoping() {
+var ConstructorScoping = /*#__PURE__*/babelHelpers.createClass(function ConstructorScoping() {
   "use strict";
 
   babelHelpers.classCallCheck(this, ConstructorScoping);
@@ -32,4 +32,4 @@ var ConstructorScoping = function ConstructorScoping() {
   {
     var _bar;
   }
-};
+});

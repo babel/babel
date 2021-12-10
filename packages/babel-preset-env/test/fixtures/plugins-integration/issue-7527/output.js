@@ -10,7 +10,7 @@ var MyDate = /*#__PURE__*/function (_Date) {
     return _super.call(this, time);
   }
 
-  return MyDate;
+  return babelHelpers.createClass(MyDate);
 }( /*#__PURE__*/babelHelpers.wrapNativeSuper(Date));
 
 var myDate = new MyDate();

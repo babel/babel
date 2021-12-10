@@ -9,7 +9,7 @@ var Test = /*#__PURE__*/function () {
     return Function.prototype.constructor;
   };
 
-  return Test;
+  return babelHelpers.createClass(Test);
 }(); // Instances
 
 

@@ -1,5 +1,6 @@
+import _createClass from "@babel/runtime/helpers/esm/createClass";
 import _classCallCheck from "@babel/runtime/helpers/esm/classCallCheck";
 
-let A = function A() {
+let A = /*#__PURE__*/_createClass(function A() {
   _classCallCheck(this, A);
-};
+});

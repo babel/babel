@@ -1,7 +1,6 @@
 "use strict";
 
-let Base = function Base() {};
-
+let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {});
 let called = false;
 
 let Obj = /*#__PURE__*/function (_Base) {

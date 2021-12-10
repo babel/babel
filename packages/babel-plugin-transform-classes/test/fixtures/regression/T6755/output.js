@@ -44,5 +44,5 @@ var Example = /*#__PURE__*/function () {
       }
     }, test2);
   });
-  return Example;
+  return babelHelpers.createClass(Example);
 }();

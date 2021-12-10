@@ -23,5 +23,5 @@ var Test = /*#__PURE__*/function (_Foo) {
     return _this;
   }
 
-  return Test;
+  return babelHelpers.createClass(Test);
 }(Foo);

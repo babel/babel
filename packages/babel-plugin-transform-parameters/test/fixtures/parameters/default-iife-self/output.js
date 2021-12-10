@@ -7,7 +7,7 @@ var Ref = /*#__PURE__*/function () {
     this.ref = ref;
   }
 
-  return Ref;
+  return babelHelpers.createClass(Ref);
 }();
 
 var X = /*#__PURE__*/function () {
@@ -19,5 +19,5 @@ var X = /*#__PURE__*/function () {
     this.x = x;
   }
 
-  return X;
+  return babelHelpers.createClass(X);
 }();

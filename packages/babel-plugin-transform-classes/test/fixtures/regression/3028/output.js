@@ -4,10 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
-var b = function b() {
+var b = /*#__PURE__*/babelHelpers.createClass(function b() {
   babelHelpers.classCallCheck(this, b);
-};
+});
 
 var a1 = /*#__PURE__*/function (_b) {
   babelHelpers.inherits(a1, _b);
@@ -27,7 +26,7 @@ var a1 = /*#__PURE__*/function (_b) {
     return _this;
   }
 
-  return a1;
+  return babelHelpers.createClass(a1);
 }(b);
 
 var a2 = /*#__PURE__*/function (_b2) {
@@ -48,7 +47,7 @@ var a2 = /*#__PURE__*/function (_b2) {
     return _this2;
   }
 
-  return a2;
+  return babelHelpers.createClass(a2);
 }(b);
 
 exports["default"] = a2;
