@@ -1,5 +1,3 @@
-var _arguments6 = typeof arguments === "undefined" ? void 0 : arguments;
-
 function one() {
   var _arguments = arguments;
 
@@ -85,27 +83,26 @@ function six(obj) {
 six();
 
 var seven = function () {
-  var arguments = 1;
+  var _arguments6 = 1;
   return _arguments6;
 };
 
 seven();
 
 var eight = function () {
-  var arguments = 1;
+  var _arguments7 = 1;
   return function () {
-    return _arguments6;
+    return _arguments7;
   };
 };
 
 eight();
 
 function nine() {
-  var _arguments7 = arguments;
   var arguments = 1;
 
   var foo = function () {
-    return _arguments7;
+    return arguments;
   };
 }
 

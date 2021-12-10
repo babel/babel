@@ -1,5 +1,3 @@
-var _arguments2 = typeof arguments === "undefined" ? void 0 : arguments;
-
 var arguments = 1;
 
 function fn() {
@@ -11,10 +9,11 @@ function fn() {
 }
 
 var bar = function () {
-  return _arguments2;
+  return arguments;
 };
 
 var baz = function () {
+  var _arguments2 = arguments;
   return function () {
     return _arguments2;
   };
