@@ -635,8 +635,8 @@ const getScopeInformationVisitor = mergeVisitors<{
 
       let curr = child.scope;
       do {
-        if (curr.hasOwnBinding("arguments") && !curr.hasBinding("arguments")) {
-          curr.rename("arguments");
+        if (curr.hasOwnBinding("arguments")) {
+          if (curr.path.isArrowFunctionExpression()) curr.rename("arguments");
           return;
         }
         if (curr.path.isFunction() && !curr.path.isArrowFunctionExpression()) {
