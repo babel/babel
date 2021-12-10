@@ -58,9 +58,9 @@ export default function transformClass(
     superThises: [],
     pushedConstructor: false,
     pushedInherits: false,
+    pushedCreateClass: false,
     protoAlias: null,
     isLoose: false,
-    createClassInjected: false,
 
     dynamicKeys: new Map(),
 
@@ -246,7 +246,7 @@ export default function transformClass(
       args = args.slice(0, lastNonNullIndex + 1);
 
       body.push(t.expressionStatement(createClassHelper(args)));
-      classState.createClassInjected = true;
+      classState.pushedCreateClass = true;
     }
   }
 
@@ -739,11 +739,12 @@ export default function transformClass(
 
     if (constructorOnly) {
       // named class with only a constructor
-      return createClassHelper([t.toExpression(body[0])]);
+      const expr = t.toExpression(body[0]);
+      return classState.isLoose ? expr : createClassHelper([expr]);
     }
 
     let returnArg = t.cloneNode(classState.classRef);
-    if (!classState.createClassInjected) {
+    if (!classState.pushedCreateClass && !classState.isLoose) {
       returnArg = createClassHelper([returnArg]);
     }
 
