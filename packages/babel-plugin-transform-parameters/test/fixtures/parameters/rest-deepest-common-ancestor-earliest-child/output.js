@@ -2,8 +2,8 @@
 function r() {
   if (noNeedToWork) return 0;
 
-  for (var _args = arguments, _len = _args.length, rest = new Array(_len), _key = 0; _key < _len; _key++) {
-    rest[_key] = _args[_key];
+  for (var _len = arguments.length, rest = new Array(_len), _key = 0; _key < _len; _key++) {
+    rest[_key] = arguments[_key];
   }
 
   return rest;
@@ -13,8 +13,8 @@ function r() {
 function r() {
   if (noNeedToWork) return 0;
 
-  for (var _args2 = arguments, _len2 = _args2.length, rest = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    rest[_key2] = _args2[_key2];
+  for (var _len2 = arguments.length, rest = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    rest[_key2] = arguments[_key2];
   }
 
   rest;
@@ -25,8 +25,8 @@ function r() {
 function r() {
   if (noNeedToWork) return 0;
 
-  for (var _args3 = arguments, _len3 = _args3.length, rest = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-    rest[_key3] = _args3[_key3];
+  for (var _len3 = arguments.length, rest = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    rest[_key3] = arguments[_key3];
   }
 
   if (true) {
@@ -39,8 +39,8 @@ function r() {
 
 function r() {
   if (true) {
-    for (var _args4 = arguments, _len4 = _args4.length, rest = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-      rest[_key4] = _args4[_key4];
+    for (var _len4 = arguments.length, rest = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      rest[_key4] = arguments[_key4];
     }
 
     if (true) {
@@ -55,8 +55,8 @@ function r() {
 function r() {
   if (noNeedToWork) return 0;
 
-  for (var _args5 = arguments, _len5 = _args5.length, rest = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-    rest[_key5] = _args5[_key5];
+  for (var _len5 = arguments.length, rest = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+    rest[_key5] = arguments[_key5];
   }
 
   if (lol) rest;
@@ -65,8 +65,8 @@ function r() {
 
 
 function a() {
-  for (var _args6 = arguments, _len6 = _args6.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-    args[_key6] = _args6[_key6];
+  for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+    args[_key6] = arguments[_key6];
   }
 
   return function () {
@@ -78,8 +78,8 @@ function a() {
 
 
 function runQueue(queue) {
-  for (var _args7 = arguments, _len7 = _args7.length, args = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
-    args[_key7 - 1] = _args7[_key7];
+  for (var _len7 = arguments.length, args = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+    args[_key7 - 1] = arguments[_key7];
   }
 
   for (var i = 0; i < queue.length; i++) {
@@ -90,8 +90,8 @@ function runQueue(queue) {
 
 function runQueue(queue) {
   if (foo) {
-    for (var _args8 = arguments, _len8 = _args8.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
-      args[_key8 - 1] = _args8[_key8];
+    for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+      args[_key8 - 1] = arguments[_key8];
     }
 
     for (var i = 0; i < queue.length; i++) {
@@ -103,8 +103,8 @@ function runQueue(queue) {
 function r() {
   if (noNeedToWork) return 0;
 
-  for (var _args9 = arguments, _len9 = _args9.length, rest = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-    rest[_key9] = _args9[_key9];
+  for (var _len9 = arguments.length, rest = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+    rest[_key9] = arguments[_key9];
   }
 
   var _x = x;

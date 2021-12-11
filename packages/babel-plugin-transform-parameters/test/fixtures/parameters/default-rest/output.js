@@ -17,8 +17,8 @@ rest2(undefined, 2);
 function rest3() {
   var b = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : a;
 
-  for (var _args = arguments, _len = _args.length, a = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    a[_key - 1] = _args[_key];
+  for (var _len = arguments.length, a = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    a[_key - 1] = arguments[_key];
   }
 
   expect(a).toHaveLength(1);

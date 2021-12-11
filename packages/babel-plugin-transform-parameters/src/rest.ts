@@ -1,8 +1,12 @@
 import { template, types as t } from "@babel/core";
 
 const buildRest = template(`
-  for (var ARGS = ARGUMENTS, LEN = ARGS.length, ARRAY = new Array(ARRAY_LEN), KEY = START; KEY < LEN; KEY++) {
-    ARRAY[ARRAY_KEY] = ARGS[KEY];
+  for (var LEN = ARGUMENTS.length,
+           ARRAY = new Array(ARRAY_LEN),
+           KEY = START;
+       KEY < LEN;
+       KEY++) {
+    ARRAY[ARRAY_KEY] = ARGUMENTS[KEY];
   }
 `);
 
@@ -238,6 +242,8 @@ export default function convertFunctionRest(path) {
 
   let rest = node.params.pop().argument;
 
+  if (rest.name === "arguments") scope.rename(rest.name);
+
   const argsId = t.identifier("arguments");
 
   if (t.isPattern(rest)) {
@@ -330,10 +336,7 @@ export default function convertFunctionRest(path) {
     arrLen = t.identifier(len.name);
   }
 
-  const args = scope.generateUidIdentifier("args");
-
   const loop = buildRest({
-    ARGS: args,
     ARGUMENTS: argsId,
     ARRAY_KEY: arrKey,
     ARRAY_LEN: arrLen,
