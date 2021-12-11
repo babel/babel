@@ -171,38 +171,38 @@ workflows:
   build-standalone:
     jobs:
       - build-standalone
-  test262:
-    jobs:
-      - test262:
-          filters:
-            branches:
-              only:
-                - main
-                - next-8-dev
-                - next-8-rebased
-          context: babel-test262
-  test262-pr:
-    jobs:
-      - approve-test262-run:
-          type: approval
-          filters:
-            branches:
-              ignore:
-                - main
-                - master
-                - next-8-dev
-                - next-8-rebased
-      - test262:
-          requires:
-            - approve-test262-run
-          filters:
-            branches:
-              ignore:
-                - main
-                - master
-                - next-8-dev
-                - next-8-rebased
-          context: babel-test262
+  # test262:
+  #   jobs:
+  #     - test262:
+  #         filters:
+  #           branches:
+  #             only:
+  #               - main
+  #               - next-8-dev
+  #               - next-8-rebased
+  #         context: babel-test262
+  # test262-pr:
+  #   jobs:
+  #     - approve-test262-run:
+  #         type: approval
+  #         filters:
+  #           branches:
+  #             ignore:
+  #               - main
+  #               - master
+  #               - next-8-dev
+  #               - next-8-rebased
+  #     - test262:
+  #         requires:
+  #           - approve-test262-run
+  #         filters:
+  #           branches:
+  #             ignore:
+  #               - main
+  #               - master
+  #               - next-8-dev
+  #               - next-8-rebased
+  #         context: babel-test262
 
   e2e-breaking:
     jobs:
