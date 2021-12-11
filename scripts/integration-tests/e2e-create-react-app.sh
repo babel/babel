@@ -45,7 +45,23 @@ if [[ "$(node --version)" == v17.* ]]; then
   export NODE_OPTIONS=--openssl-legacy-provider
 fi
 
+# Remove this when https://github.com/facebook/jest/pull/12128 is fixed
+node -e "
+  var pkg = require('./package.json');
+
+  pkg.resolutions = {
+    'jest-worker': '27.3.1'
+  };
+
+  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
+"
+
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
+
+# Remove these when https://github.com/facebook/jest/pull/12128 is fixed
+npm install --ignore-scripts
+npx npm-force-resolutions
+
 npm install
 
 # Test
