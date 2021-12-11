@@ -99,10 +99,10 @@ var eight = function () {
 eight();
 
 function nine() {
-  var arguments = 1;
+  var _arguments8 = 1;
 
   var foo = function () {
-    return arguments;
+    return _arguments8;
   };
 }
 
@@ -111,9 +111,9 @@ nine();
 var eleven = function () {
   var arguments = 2;
   return function () {
-    var _arguments8 = arguments;
+    var _arguments9 = arguments;
     return function () {
-      return _arguments8;
+      return _arguments9;
     };
   };
 };
@@ -124,9 +124,9 @@ var twelve = function () {
   var arguments = 2;
   return class {
     m() {
-      var _arguments9 = arguments;
+      var _arguments10 = arguments;
       return function () {
-        return _arguments9;
+        return _arguments10;
       };
     }
 

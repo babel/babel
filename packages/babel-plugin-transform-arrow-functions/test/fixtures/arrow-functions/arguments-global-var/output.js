@@ -1,4 +1,4 @@
-var arguments = 1;
+var _arguments2 = 1;
 
 function fn() {
   var _arguments = arguments;
@@ -9,11 +9,10 @@ function fn() {
 }
 
 var bar = function () {
-  return arguments;
+  return _arguments2;
 };
 
 var baz = function () {
-  var _arguments2 = arguments;
   return function () {
     return _arguments2;
   };

@@ -1,16 +1,16 @@
-var arguments = [1, 2, 3];
+var _arguments = [1, 2, 3];
 
 var arr = function arr(n) {
-  return arguments[0];
+  return _arguments[0];
 };
 
 arr(4); // 1
 
 function foo(n) {
-  var _arguments = arguments;
+  var _arguments2 = arguments;
 
   var f = function f() {
-    return _arguments[0] + n;
+    return _arguments2[0] + n;
   }; // foo's implicit arguments binding. arguments[0] is n
 
 
