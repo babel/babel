@@ -223,6 +223,8 @@ export default function (
     name = id.name;
   }
 
+  if (isFunction(node) && /[\u{10000}-\u{10ffff}]/u.test(name)) return;
+
   if (name === undefined) {
     return;
   }
