@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-amd",
-  "version": "7.16.0",
+  "version": "7.16.5",
   "description": "This plugin transforms ES2015 modules to AMD",
   "repository": {
     "type": "git",

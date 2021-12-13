@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx-development",
-  "version": "7.16.0",
+  "version": "7.16.5",
   "description": "Turn JSX into React function calls in development",
   "repository": {
     "type": "git",

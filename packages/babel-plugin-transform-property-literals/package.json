@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-property-literals",
-  "version": "7.16.0",
+  "version": "7.16.5",
   "description": "Ensure that reserved words are quoted in object property keys",
   "repository": {
     "type": "git",

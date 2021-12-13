@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-export-default-from",
-  "version": "7.16.0",
+  "version": "7.16.5",
   "description": "Allow parsing of export default from",
   "repository": {
     "type": "git",

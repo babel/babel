@@ -316,7 +316,7 @@ __metadata:
     "@babel/code-frame": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.16.0"
+    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.16.5"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/helpers": "workspace:^"
     "@babel/parser": "workspace:^"
@@ -748,7 +748,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-module-transforms-BABEL_8_BREAKING-false@npm:@babel/helper-module-transforms@workspace:^7.16.0, @babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
+"@babel/helper-module-transforms-BABEL_8_BREAKING-false@npm:@babel/helper-module-transforms@workspace:^7.16.5, @babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
@@ -763,12 +763,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-module-transforms@condition:BABEL_8_BREAKING ? : workspace:^7.16.0":
-  version: 0.0.0-condition-8bcb1a
-  resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.16.0#8bcb1a"
+"@babel/helper-module-transforms@condition:BABEL_8_BREAKING ? : workspace:^7.16.5":
+  version: 0.0.0-condition-a9f1b1
+  resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.16.5#a9f1b1"
   dependencies:
-    "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.16.0"
-  checksum: 9f7787eb2cc7f20bb73e973cc1a12e697673c3239c60950b99bda749158e5d12981aefc7f127952edd0a1d21adc1e928fcc7c1a9fc34d0d0313394fae06b283d
+    "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.16.5"
   languageName: node
   linkType: hard
 

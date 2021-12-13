@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-private-property-in-object",
-  "version": "7.16.0",
+  "version": "7.16.5",
   "description": "This plugin transforms checks for a private property in an object",
   "repository": {
     "type": "git",
