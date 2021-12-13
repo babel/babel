@@ -1138,6 +1138,13 @@ export default class Scope {
         } else {
           return binding;
         }
+      } else if (
+        !binding &&
+        name === "arguments" &&
+        scope.path.isFunction() &&
+        !scope.path.isArrowFunctionExpression()
+      ) {
+        break;
       }
       previousPath = scope.path;
     } while ((scope = scope.parent));
