@@ -20,6 +20,58 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.5 (2021-12-13)
+
+#### :eyeglasses: Spec Compliance
+* `babel-cli`, `babel-core`, `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-jscript`, `babel-plugin-transform-parameters`, `babel-plugin-transform-runtime`, `babel-plugin-transform-spread`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#12115](https://github.com/babel/babel/pull/12115) Mark class prototype as read-only ([@wentout](https://github.com/wentout))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-parameters`
+  * [#14032](https://github.com/babel/babel/pull/14032) Fix: default rest argument array elements as undefined ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-plugin-transform-arrow-functions`, `babel-traverse`
+  * [#14036](https://github.com/babel/babel/pull/14036) Don't resolve shadowed `arguments` variables from functions ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-parser`
+  * [#14039](https://github.com/babel/babel/pull/14039) maintain estree string literal shape when cloned ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#14016](https://github.com/babel/babel/pull/14016) Fix duplicate declaration error on ambient class declarations ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-generator`
+  * [#14014](https://github.com/babel/babel/pull/14014) Support flow function type annotation with no parent ([@krosenberg](https://github.com/krosenberg))
+* `babel-plugin-transform-react-jsx`
+  * [#14012](https://github.com/babel/babel/pull/14012) Fix JSX pragma anywhere in comment ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-helper-create-class-features-plugin`, `babel-helper-environment-visitor`, `babel-helper-member-expression-to-functions`, `babel-helper-module-transforms`, `babel-helper-replace-supers`, `babel-plugin-transform-classes`, `babel-traverse`
+  * [#14005](https://github.com/babel/babel/pull/14005) Fix handling of `this`&co in computed keys in arrows transform ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#13968](https://github.com/babel/babel/pull/13968) Recover from shorthand assign exprs ([@JLHwung](https://github.com/JLHwung))
+  * [#13975](https://github.com/babel/babel/pull/13975) fix: update UnexpectedPrivateField error message ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* `babel-compat-data`, `babel-helper-annotate-as-pure`, `babel-helper-builder-binary-assignment-operator-visitor`, `babel-helper-builder-react-jsx`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-define-map`, `babel-helper-explode-assignable-expression`, `babel-helper-fixtures`, `babel-helper-function-name`, `babel-helper-get-function-arity`, `babel-helper-hoist-variables`, `babel-helper-member-expression-to-functions`, `babel-helper-module-imports`, `babel-helper-module-transforms`, `babel-helper-optimise-call-expression`, `babel-helper-plugin-test-runner`, `babel-helper-plugin-utils`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-helper-simple-access`, `babel-helper-skip-transparent-expression-wrappers`, `babel-helper-split-export-declaration`, `babel-helper-transform-fixture-test-runner`, `babel-helper-validator-identifier`, `babel-helper-validator-option`, `babel-helper-wrap-function`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-async-do-expressions`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-syntax-async-do-expressions`, `babel-plugin-syntax-module-blocks`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-pure-annotations`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#14006](https://github.com/babel/babel/pull/14006) Regenerate monorepo READMEs ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-cli`, `babel-code-frame`, `babel-core`, `babel-generator`, `babel-helper-annotate-as-pure`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-fixtures`, `babel-helper-module-imports`, `babel-helper-optimise-call-expression`, `babel-helper-plugin-test-runner`, `babel-helper-transform-fixture-test-runner`, `babel-helper-validator-identifier`, `babel-helper-validator-option`, `babel-helpers`, `babel-highlight`, `babel-node`, `babel-parser`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-external-helpers`, `babel-plugin-proposal-async-do-expressions`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-do-expressions`, `babel-plugin-proposal-dynamic-import`, `babel-plugin-proposal-export-default-from`, `babel-plugin-proposal-export-namespace-from`, `babel-plugin-proposal-function-bind`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-json-strings`, `babel-plugin-proposal-logical-assignment-operators`, `babel-plugin-proposal-nullish-coalescing-operator`, `babel-plugin-proposal-numeric-separator`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-proposal-optional-catch-binding`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-proposal-throw-expressions`, `babel-plugin-proposal-unicode-property-regex`, `babel-plugin-syntax-decorators`, `babel-plugin-syntax-typescript`, `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoped-functions`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-computed-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-dotall-regex`, `babel-plugin-transform-duplicate-keys`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-for-of`, `babel-plugin-transform-function-name`, `babel-plugin-transform-instanceof`, `babel-plugin-transform-jscript`, `babel-plugin-transform-member-expression-literals`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-plugin-transform-new-target`, `babel-plugin-transform-object-super`, `babel-plugin-transform-parameters`, `babel-plugin-transform-property-literals`, `babel-plugin-transform-property-mutators`, `babel-plugin-transform-proto-to-assign`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-display-name`, `babel-plugin-transform-react-inline-elements`, `babel-plugin-transform-react-jsx-compat`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx-self`, `babel-plugin-transform-react-jsx-source`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-react-pure-annotations`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-reserved-words`, `babel-plugin-transform-runtime`, `babel-plugin-transform-shorthand-properties`, `babel-plugin-transform-spread`, `babel-plugin-transform-sticky-regex`, `babel-plugin-transform-strict-mode`, `babel-plugin-transform-template-literals`, `babel-plugin-transform-typeof-symbol`, `babel-plugin-transform-typescript`, `babel-plugin-transform-unicode-escapes`, `babel-plugin-transform-unicode-regex`, `babel-preset-env`, `babel-preset-flow`, `babel-preset-react`, `babel-preset-typescript`, `babel-register`, `babel-standalone`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#13966](https://github.com/babel/babel/pull/13966) Run tests in a native Node.js ESM environment ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#13982](https://github.com/babel/babel/pull/13982) Extend `hasPlugin` to accept plugin-configuration array pairs ([@js-choi](https://github.com/js-choi))
+* `babel-helpers`
+  * [#13996](https://github.com/babel/babel/pull/13996) Don't use ESM for `require`d files in `@babel/helpers` tests ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-object-rest-spread`, `babel-traverse`
+  * [#13948](https://github.com/babel/babel/pull/13948) Convert proposal-object-rest-spread to TS ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-optional-chaining`, `babel-preset-react`, `babel-preset-typescript`
+  * [#13978](https://github.com/babel/babel/pull/13978) Only bundle the release build, and don't import `src` in tests ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#13976](https://github.com/babel/babel/pull/13976) Fail CI when `@babel/runtime` ESM tests fail ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#13919](https://github.com/babel/babel/pull/13919) Improve template tokenizing ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helpers`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime`
+  * [#13837](https://github.com/babel/babel/pull/13837) minify `helpers-generated.ts` ([@lightmare](https://github.com/lightmare))
 ## v7.16.4 (2021-11-16)
 
 #### :eyeglasses: Spec Compliance
