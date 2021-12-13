@@ -242,6 +242,8 @@ export default function convertFunctionRest(path) {
 
   let rest = node.params.pop().argument;
 
+  if (rest.name === "arguments") scope.rename(rest.name);
+
   const argsId = t.identifier("arguments");
 
   if (t.isPattern(rest)) {
