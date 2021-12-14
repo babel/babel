@@ -20,6 +20,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.6 (2021-12-14)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#14055](https://github.com/babel/babel/pull/14055) fix: handle tokens for invalid template element ([@JLHwung](https://github.com/JLHwung))
 ## v7.16.5 (2021-12-13)
 
 #### :eyeglasses: Spec Compliance
