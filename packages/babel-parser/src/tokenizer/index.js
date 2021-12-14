@@ -1382,7 +1382,7 @@ export default class Tokenizer extends ParserErrors {
   // Reads template string tokens.
   readTemplateToken(): void {
     let out = "",
-      chunkStart = this.state.pos, // eat '`' or `}`
+      chunkStart = this.state.pos,
       containsInvalid = false;
     ++this.state.pos; // eat '`' or `}`
     for (;;) {
