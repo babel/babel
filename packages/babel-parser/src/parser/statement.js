@@ -65,7 +65,7 @@ const keywordRelationalOperator = /in(?:stanceof)?/y;
  * @param {*} tokens
  * @returns
  */
-function babel7CompatTokens(tokens) {
+function babel7CompatTokens(tokens, input) {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const { type } = token;
@@ -106,7 +106,7 @@ function babel7CompatTokens(tokens) {
           const backquoteEnd = start + 1;
           const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
           let startToken;
-          if (value.charCodeAt(0) === charCodes.graveAccent) {
+          if (input.charCodeAt(start) === charCodes.graveAccent) {
             // $FlowIgnore: hacky way to create token
             startToken = new Token({
               type: getExportedToken(tt.backQuote),
@@ -135,7 +135,7 @@ function babel7CompatTokens(tokens) {
             // ends with '`'
             templateElementEnd = end - 1;
             templateElementEndLoc = createPositionWithColumnOffset(loc.end, -1);
-            templateValue = value.slice(1, -1);
+            templateValue = value === null ? null : value.slice(1, -1);
             // $FlowIgnore: hacky way to create token
             endToken = new Token({
               type: getExportedToken(tt.backQuote),
@@ -149,7 +149,7 @@ function babel7CompatTokens(tokens) {
             // ends with `${`
             templateElementEnd = end - 2;
             templateElementEndLoc = createPositionWithColumnOffset(loc.end, -2);
-            templateValue = value.slice(1, -2);
+            templateValue = value === null ? null : value.slice(1, -2);
             // $FlowIgnore: hacky way to create token
             endToken = new Token({
               type: getExportedToken(tt.dollarBraceL),
@@ -197,7 +197,9 @@ export default class StatementParser extends ExpressionParser {
     file.program = this.parseProgram(program);
     file.comments = this.state.comments;
 
-    if (this.options.tokens) file.tokens = babel7CompatTokens(this.tokens);
+    if (this.options.tokens) {
+      file.tokens = babel7CompatTokens(this.tokens, this.input);
+    }
 
     return this.finishNode(file, "File");
   }
