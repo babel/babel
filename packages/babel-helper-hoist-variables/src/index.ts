@@ -40,6 +40,9 @@ const visitor = {
 
     for (const declar of declarations) {
       firstId = declar.node.id;
+      if (declar.parentPath.parentPath.isBlockStatement()) {
+        declar.scope.rename(declar.node.id.name);
+      }
 
       if (declar.node.init) {
         nodes.push(

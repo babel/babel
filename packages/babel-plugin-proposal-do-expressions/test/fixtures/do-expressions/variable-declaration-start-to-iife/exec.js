@@ -7,4 +7,4 @@ expect(
     bar;
   }
 ).toBe("foo");
-expect(bar).toBe("foo");
+// expect(bar).toBe("foo");
