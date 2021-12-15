@@ -172,6 +172,7 @@ function visit(node, name, scope) {
 /**
  * @param {NodePath} param0
  * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
+ * @param {Boolean} supportUnicodeId whether a target support unicodeId or not
  */
 export default function (
   {
@@ -181,6 +182,7 @@ export default function (
     id,
   }: { node: any; parent?: any; scope: any; id?: any },
   localBinding = false,
+  supportUnicodeId = false,
 ) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
@@ -223,7 +225,9 @@ export default function (
     name = id.name;
   }
 
-  if (isFunction(node) && /[\u{10000}-\u{10ffff}]/u.test(name)) return;
+  if (!supportUnicodeId && isFunction(node) && /[\uD800-\uDFFF]/.test(name)) {
+    return;
+  }
 
   if (name === undefined) {
     return;

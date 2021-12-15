@@ -1,4 +1,4 @@
 {
     "plugins": ["transform-unicode-escapes"],
-    "presets": ["env"]
+    "targets": { "firefox": 60 }
 }
