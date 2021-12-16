@@ -44,7 +44,7 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
 fi
 
-# Only run js and jsx format tests
-yarn test "tests/format/jsx?"
+# Only run js,jsx,misc format tests
+yarn test "tests/format/{js,jsx,misc}" --update-snapshot
 
 cleanup
