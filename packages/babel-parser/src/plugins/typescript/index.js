@@ -2832,7 +2832,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       kind: "var" | "let" | "const",
     ): void {
       super.parseVarId(decl, kind);
-      if (decl.id.type === "Identifier" && this.eat(tt.bang)) {
+      if (
+        decl.id.type === "Identifier" &&
+        !this.hasPrecedingLineBreak() &&
+        this.eat(tt.bang)
+      ) {
         decl.definite = true;
       }
 
