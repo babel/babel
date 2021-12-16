@@ -45,6 +45,6 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
 fi
 
 # Only run js,jsx,misc format tests
-yarn test "tests/format/{js,jsx,misc}" --update-snapshot
+yarn test "tests/format/(jsx?|misc)" --update-snapshot
 
 cleanup
