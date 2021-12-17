@@ -220,20 +220,55 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Read a JSX identifier (valid tag or attribute name).
     //
-    // Optimized version since JSX identifiers can"t contain
-    // escape characters and so can be read as single slice.
-    // Also assumes that first character was already checked
+    // assumes that first character was already checked
     // by isIdentifierStart in readToken.
 
-    jsxReadWord(): void {
-      let ch;
+    jsxReadWord(firstCode?: number): void {
+      this.state.containsEsc = false;
+      let word = "";
       const start = this.state.pos;
-      do {
-        ch = this.input.charCodeAt(++this.state.pos);
-      } while (isIdentifierChar(ch) || ch === charCodes.dash);
+      let chunkStart = this.state.pos;
+      if (firstCode !== undefined) {
+        this.state.pos += firstCode <= 0xffff ? 1 : 2;
+      }
+
+      while (this.state.pos < this.length) {
+        const ch = this.codePointAtPos(this.state.pos);
+        if (isIdentifierChar(ch) || ch === charCodes.dash) {
+          this.state.pos += ch <= 0xffff ? 1 : 2;
+        } else if (ch === charCodes.backslash) {
+          this.state.containsEsc = true;
+
+          word += this.input.slice(chunkStart, this.state.pos);
+          const escStart = this.state.pos;
+          const identifierCheck =
+            this.state.pos === start ? isIdentifierStart : isIdentifierChar;
+
+          if (
+            this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU
+          ) {
+            this.raise(this.state.pos, Errors.MissingUnicodeEscape);
+            chunkStart = this.state.pos - 1;
+            continue;
+          }
+
+          ++this.state.pos;
+          const esc = this.readCodePoint(true);
+          if (esc !== null) {
+            if (!identifierCheck(esc)) {
+              this.raise(escStart, Errors.EscapedCharNotAnIdentifier);
+            }
+
+            word += String.fromCodePoint(esc);
+          }
+          chunkStart = this.state.pos;
+        } else {
+          break;
+        }
+      }
       return this.finishToken(
         tt.jsxName,
-        this.input.slice(start, this.state.pos),
+        word + this.input.slice(chunkStart, this.state.pos),
       );
     }
 
@@ -582,6 +617,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (context === tc.j_oTag || context === tc.j_cTag) {
         if (isIdentifierStart(code)) {
+          return this.jsxReadWord(code);
+        }
+
+        if (code === charCodes.backslash) {
           return this.jsxReadWord();
         }
 

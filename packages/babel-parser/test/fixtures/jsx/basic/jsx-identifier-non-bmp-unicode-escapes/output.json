@@ -1,0 +1,92 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":3}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":3}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":3}},
+        "expression": {
+          "type": "JSXFragment",
+          "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":3}},
+          "openingFragment": {
+            "type": "JSXOpeningFragment",
+            "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2}}
+          },
+          "closingFragment": {
+            "type": "JSXClosingFragment",
+            "start":39,"end":42,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":3}}
+          },
+          "children": [
+            {
+              "type": "JSXText",
+              "start":2,"end":3,"loc":{"start":{"line":1,"column":2},"end":{"line":2,"column":0}},
+              "extra": {
+                "rawValue": "\n",
+                "raw": "\n"
+              },
+              "value": "\n"
+            },
+            {
+              "type": "JSXElement",
+              "start":3,"end":22,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":19}},
+              "openingElement": {
+                "type": "JSXOpeningElement",
+                "start":3,"end":22,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":19}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":4,"end":20,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":17}},
+                  "name": "𐀀-0"
+                },
+                "attributes": [],
+                "selfClosing": true
+              },
+              "closingElement": null,
+              "children": []
+            },
+            {
+              "type": "JSXText",
+              "start":22,"end":23,"loc":{"start":{"line":2,"column":19},"end":{"line":3,"column":0}},
+              "extra": {
+                "rawValue": "\n",
+                "raw": "\n"
+              },
+              "value": "\n"
+            },
+            {
+              "type": "JSXElement",
+              "start":23,"end":38,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":15}},
+              "openingElement": {
+                "type": "JSXOpeningElement",
+                "start":23,"end":38,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":15}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":24,"end":36,"loc":{"start":{"line":3,"column":1},"end":{"line":3,"column":13}},
+                  "name": "𐀀-𐀀"
+                },
+                "attributes": [],
+                "selfClosing": true
+              },
+              "closingElement": null,
+              "children": []
+            },
+            {
+              "type": "JSXText",
+              "start":38,"end":39,"loc":{"start":{"line":3,"column":15},"end":{"line":4,"column":0}},
+              "extra": {
+                "rawValue": "\n",
+                "raw": "\n"
+              },
+              "value": "\n"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
