@@ -1,4 +1,4 @@
 {
-    "plugins": ["transform-unicode-escapes"],
-    "targets": { "firefox": 50 }
+    "plugins": ["transform-function-name", "transform-shorthand-properties"],
+    "targets": { "firefox": 60 }
 }

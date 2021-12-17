@@ -1,4 +1,3 @@
 {
-    "plugins": ["transform-unicode-escapes"],
-    "presets": ["env"]
+    "plugins": ["transform-function-name", "transform-shorthand-properties"]
 }
