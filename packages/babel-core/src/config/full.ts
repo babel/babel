@@ -301,6 +301,27 @@ const makeDescriptorLoader = <Context, API>(
       );
     }
 
+    if (
+      externalDependencies.size > 0 &&
+      (!cache.configured() || cache.mode() === "forever")
+    ) {
+      const [firstDep] = externalDependencies;
+
+      let error = `A plugin/preset has external untracked dependencies (${firstDep}), but the cache `;
+      if (!cache.configured()) {
+        error += `has not been configured to be invalidated when the external dependencies change. `;
+      } else {
+        error += ` has been configured to never be invalidated. `;
+      }
+      error +=
+        `Plugins/presets should configure their cache to be invalidated when the external ` +
+        `dependencies change, for example using \`api.cache.invalidate(() => ` +
+        `+statSync(filepath).mtime)\` or \`api.cache.never()\`\n` +
+        `(While processing: ${JSON.stringify(alias)})`;
+
+      throw new Error(error);
+    }
+
     return { value: item, options, dirname, alias, externalDependencies };
   });
 

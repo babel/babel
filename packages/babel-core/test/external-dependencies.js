@@ -11,6 +11,7 @@ function transform(code, opts) {
 describe("externalDependencies", () => {
   function makePlugin(external) {
     return api => {
+      api.cache.invalidate(() => "");
       api.addExternalDependency(external);
       return { visitor: {} };
     };
@@ -18,6 +19,7 @@ describe("externalDependencies", () => {
 
   function makePreset(external, plugins = []) {
     return api => {
+      api.cache.invalidate(() => "");
       api.addExternalDependency(external);
       return { plugins };
     };
@@ -35,6 +37,7 @@ describe("externalDependencies", () => {
     const { externalDependencies } = transform("", {
       plugins: [
         function (api) {
+          api.cache.never();
           api.addExternalDependency("./foo");
           api.addExternalDependency("./bar");
           return { visitor: {} };
@@ -57,6 +60,7 @@ describe("externalDependencies", () => {
     const { externalDependencies } = transform("", {
       presets: [
         function (api) {
+          api.cache.never();
           api.addExternalDependency("./foo");
           api.addExternalDependency("./bar");
           return { plugins: [] };
@@ -106,6 +110,7 @@ describe("externalDependencies", () => {
       const plugin1 = jest.fn(makePlugin("./foo"));
       const plugin2 = jest.fn((api, { file }) => {
         api.addExternalDependency(file);
+        api.cache.never();
         return { visitor: {} };
       });
 
@@ -125,6 +130,93 @@ describe("externalDependencies", () => {
       expect(new Set(result2.externalDependencies)).toEqual(
         new Set(["./foo", "./file2"]),
       );
+    });
+  });
+
+  describe("cache validation", () => {
+    it("cache must be configured", () => {
+      function plugin(api) {
+        api.addExternalDependency("./foo");
+        return { visitor: {} };
+      }
+
+      expect(() => transform("", { plugins: [plugin] })).toThrow(
+        /A plugin\/preset has external untracked dependencies/,
+      );
+    });
+
+    it("cache.forever() is disallowed", () => {
+      function plugin(api) {
+        api.cache.forever();
+        api.addExternalDependency("./foo");
+        return { visitor: {} };
+      }
+
+      expect(() => transform("", { plugins: [plugin] })).toThrow(
+        /A plugin\/preset has external untracked dependencies/,
+      );
+    });
+
+    it("cache.never() is a valid configuration", () => {
+      function plugin(api) {
+        api.cache.never();
+        api.addExternalDependency("./foo");
+        return { visitor: {} };
+      }
+
+      expect(() => transform("", { plugins: [plugin] })).not.toThrow();
+    });
+
+    it("cache.using() is a valid configuration", () => {
+      function plugin(api) {
+        api.cache.using(() => "");
+        api.addExternalDependency("./foo");
+        return { visitor: {} };
+      }
+
+      expect(() => transform("", { plugins: [plugin] })).not.toThrow();
+    });
+
+    it("cache.invalidate() is a valid configuration", () => {
+      function plugin(api) {
+        api.cache.invalidate(() => "");
+        api.addExternalDependency("./foo");
+        return { visitor: {} };
+      }
+
+      expect(() => transform("", { plugins: [plugin] })).not.toThrow();
+    });
+
+    it("cache must be configured in the same plugin that uses addExternalDependency", () => {
+      function plugin1(api) {
+        api.cache.never();
+        return { visitor: {} };
+      }
+
+      function plugin2(api) {
+        api.addExternalDependency("./foo");
+        return { visitor: {} };
+      }
+
+      expect(() => transform("", { plugins: [plugin1, plugin2] })).toThrow(
+        /A plugin\/preset has external untracked dependencies/,
+      );
+    });
+
+    it("cache does not need to be configured in other plugins", () => {
+      function plugin1() {
+        return { visitor: {} };
+      }
+
+      function plugin2(api) {
+        api.cache.never();
+        api.addExternalDependency("./foo");
+        return { visitor: {} };
+      }
+
+      expect(() =>
+        transform("", { plugins: [plugin1, plugin2] }),
+      ).not.toThrow();
     });
   });
 });
