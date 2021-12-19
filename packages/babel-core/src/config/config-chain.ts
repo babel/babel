@@ -35,6 +35,8 @@ import type {
   ValidatedFile,
 } from "./config-descriptors";
 
+import ReadonlySet from "./helpers/readonly-set";
+
 export type ConfigChain = {
   plugins: Array<UnloadedDescriptor>;
   presets: Array<UnloadedDescriptor>;
@@ -46,6 +48,7 @@ export type PresetInstance = {
   options: ValidatedOptions;
   alias: string;
   dirname: string;
+  externalDependencies: ReadonlySet<string>;
 };
 
 export type ConfigContext = {

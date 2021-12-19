@@ -1,4 +1,5 @@
 import type { PluginObject } from "./validation/plugins";
+import ReadonlySet from "./helpers/readonly-set";
 
 export default class Plugin {
   key: string | undefined | null;
@@ -12,7 +13,14 @@ export default class Plugin {
 
   options: {};
 
-  constructor(plugin: PluginObject, options: {}, key?: string) {
+  externalDependencies: ReadonlySet<string>;
+
+  constructor(
+    plugin: PluginObject,
+    options: {},
+    key?: string,
+    externalDependencies: Set<string> = new Set(),
+  ) {
     this.key = plugin.name || key;
 
     this.manipulateOptions = plugin.manipulateOptions;
@@ -23,5 +31,7 @@ export default class Plugin {
     this.generatorOverride = plugin.generatorOverride;
 
     this.options = options;
+
+    this.externalDependencies = new ReadonlySet(externalDependencies);
   }
 }
