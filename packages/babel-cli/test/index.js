@@ -44,11 +44,6 @@ const readDir = function (loc, filter) {
 };
 
 const saveInFiles = function (files) {
-  // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
-  if (!fs.existsSync(path.join(tmpLoc, ".babelrc"))) {
-    outputFileSync(path.join(tmpLoc, ".babelrc"), "{}");
-  }
-
   Object.keys(files).forEach(function (filename) {
     const content = files[filename];
     outputFileSync(path.join(tmpLoc, filename), content);
@@ -145,7 +140,7 @@ const buildTest = function (binName, testName, opts) {
 
     let args = [binLoc];
 
-    if (binName !== "babel-external-helpers") {
+    if (binName !== "babel-external-helpers" && !opts.noDefaultPlugins) {
       args.push("--presets", presetLocs, "--plugins", pluginLocs);
     }
 
@@ -185,6 +180,24 @@ const buildTest = function (binName, testName, opts) {
     if (opts.stdin) {
       spawn.stdin.write(opts.stdin);
       spawn.stdin.end();
+    }
+
+    if (opts.executor) {
+      const executor = child.spawn(process.execPath, [opts.executor], {
+        cwd: tmpLoc,
+      });
+
+      executor.stderr.on("data", function (chunk) {
+        stderr += chunk;
+      });
+
+      executor.stdout.on("data", function (chunk) {
+        stdout += chunk;
+      });
+
+      executor.on("close", function () {
+        setTimeout(() => spawn.kill("SIGINT"), 250);
+      });
     }
   };
 };
@@ -238,6 +251,11 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         opts = { args: [], ...taskOpts };
       }
 
+      const executorLoc = path.join(testLoc, "executor.js");
+      if (fs.existsSync(executorLoc)) {
+        opts.executor = executorLoc;
+      }
+
       ["stdout", "stdin", "stderr"].forEach(function (key) {
         const loc = path.join(testLoc, key + ".txt");
         opts[key + "Path"] = loc;
@@ -256,7 +274,8 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
-        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
+      } else if (!opts.noBabelrc) {
+        opts.inFiles[".babelrc"] = "{}";
       }
       if (fs.existsSync(babelIgnoreLoc)) {
         // copy .babelignore file to tmp directory
