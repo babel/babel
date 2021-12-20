@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
+import * as watcher from "./watcher";
 import type { CmdOptions } from "./options";
 
 const FILE_TYPE = Object.freeze({
@@ -21,10 +22,6 @@ export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
-  const absoluteFilePaths = cliOptions.filenames.map(name =>
-    path.resolve(name),
-  );
-
   async function write(
     src: string,
     base: string,
@@ -68,7 +65,7 @@ export default async function ({
       util.chmod(src, dest);
 
       if (cliOptions.verbose) {
-        console.log(src + " -> " + dest);
+        console.log(path.relative(process.cwd(), src) + " -> " + dest);
       }
 
       return FILE_TYPE.COMPILED;
@@ -152,8 +149,7 @@ export default async function ({
     startTime = null;
   }, 100);
 
-  // Look at corresponding comment in file.js
-  if (cliOptions.watch) util.watchMode();
+  if (cliOptions.watch) watcher.enable({ enableGlobbing: true });
 
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
@@ -178,55 +174,37 @@ export default async function ({
   }
 
   if (cliOptions.watch) {
+    // This, alongside with debounce, allows us to only log
+    // when we are sure that all the files have been compiled.
     let processing = 0;
 
-    util.onDependencyFileChanged(async (changedFilePath: string) => {
-      if (
-        !util.isCompilableExtension(changedFilePath, cliOptions.extensions) &&
-        // See comment on corresponding code in file.js
-        !absoluteFilePaths.includes(changedFilePath)
-      ) {
-        return;
-      }
-      processing++;
-      if (startTime === null) startTime = process.hrtime();
+    cliOptions.filenames.forEach(filenameOrDir => {
+      watcher.watch(filenameOrDir);
 
-      /**
-       * The relative path from @var base to @var changedFilePath
-       * will be path of @var changedFilePath in the output directory.
-       */
-      let base = null;
-      for (const filePath of absoluteFilePaths) {
-        if (changedFilePath === filePath) {
-          // Case: "babel --watch src/bar/foo.js --out-dir dist"
-          // We want src/bar/foo.js --> dist/foo.js
-          base = path.dirname(changedFilePath);
-          break;
-        } else if (util.isChildPath(changedFilePath, filePath)) {
-          // Case: "babel --watch src/ --out-dir dist"
-          // src/foo/bar.js changes
-          // We want src/foo/bar.js --> dist/foo/bar.js
-          base = filePath;
-          break;
+      watcher.onFilesChange(async filenames => {
+        processing++;
+        if (startTime === null) startTime = process.hrtime();
+
+        try {
+          const written = await Promise.all(
+            filenames.map(filename =>
+              handleFile(
+                filename,
+                filename === filenameOrDir
+                  ? path.dirname(filenameOrDir)
+                  : filenameOrDir,
+              ),
+            ),
+          );
+
+          compiledFiles += written.filter(Boolean).length;
+        } catch (err) {
+          console.error(err);
         }
-      }
 
-      if (base === null) {
-        throw new Error(
-          `path: ${changedFilePath} was not equal to/a child path of any of these paths: ${absoluteFilePaths}`,
-        );
-      }
-
-      try {
-        await handleFile(changedFilePath, base);
-        compiledFiles++;
-      } catch (err) {
-        console.error(err);
-      }
-
-      processing--;
-      if (processing === 0 && !cliOptions.quiet) logSuccess();
-    }, false);
-    util.watchFiles(absoluteFilePaths);
+        processing--;
+        if (processing === 0 && !cliOptions.quiet) logSuccess();
+      });
+    });
   }
 }

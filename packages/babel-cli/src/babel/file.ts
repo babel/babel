@@ -6,6 +6,7 @@ import fs from "fs";
 
 import * as util from "./util";
 import type { CmdOptions } from "./options";
+import * as watcher from "./watcher";
 
 type CompilationOutput = {
   code: string;
@@ -123,7 +124,7 @@ export default async function ({
   async function stdin(): Promise<void> {
     const code = await readStdin();
 
-    const res = await util.transform(cliOptions.filename, code, {
+    const res = await util.transformRepl(cliOptions.filename, code, {
       ...babelOptions,
       sourceFileName: "stdin",
     });
@@ -193,37 +194,33 @@ export default async function ({
   }
 
   async function files(filenames: Array<string>): Promise<void> {
-    // We need to set watch mode before the initial compilation
-    // so external dependencies are registered during the first compilation pass.
-    if (cliOptions.watch) util.watchMode();
+    if (cliOptions.watch) {
+      watcher.enable({ enableGlobbing: false });
+    }
+
     if (!cliOptions.skipInitialBuild) {
       await walk(filenames);
     }
 
     if (cliOptions.watch) {
-      util.onDependencyFileChanged((filename: string | null) => {
-        if (
-          filename !== null &&
-          !util.isCompilableExtension(filename, cliOptions.extensions) &&
-          // Used in the case: babel --watch foo.ts --out-file compiled.js
-          // In this, case ".ts" is not a compilable extension (since the user didn't pass
-          // the --extensions flag), but, we still want to watch "foo.ts" anyway.
-          !filenames.includes(filename)
-        ) {
-          return;
-        }
+      filenames.forEach(watcher.watch);
+
+      watcher.onFilesChange((changes, event, cause) => {
+        const actionableChange = changes.some(
+          filename =>
+            util.isCompilableExtension(filename, cliOptions.extensions) ||
+            filenames.includes(filename),
+        );
+        if (!actionableChange) return;
 
         if (cliOptions.verbose) {
-          if (filename === null) {
-            console.log(`recompiling: external dependency changed`);
-          } else console.log(`compiling: ${filename}`);
+          console.log(`${event} ${cause}`);
         }
 
         walk(filenames).catch(err => {
           console.error(err);
         });
-      }, true);
-      util.watchFiles(filenames);
+      });
     }
   }
 
