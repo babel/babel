@@ -1343,5 +1343,19 @@ describe("buildConfigChain", function () {
         });
       }).toThrow(/Preset \/\* your preset \*\/ requires a filename/);
     });
+
+    it("should not throw error on $schema property in json config files", () => {
+      const filename = fixture(
+        "config-files",
+        "babel-config-json-$schema-property",
+        "babel.config.json",
+      );
+      expect(() => {
+        babel.loadPartialConfig({
+          filename,
+          cwd: path.dirname(filename),
+        });
+      }).not.toThrow();
+    });
   });
 });
