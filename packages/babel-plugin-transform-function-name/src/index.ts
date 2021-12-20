@@ -25,7 +25,7 @@ export default declare(api => {
       ObjectProperty(path) {
         const value = path.get("value");
         if (value.isFunction()) {
-          const newNode = nameFunction(value, null, supportUnicodeId);
+          const newNode = nameFunction(value, false, supportUnicodeId);
           if (newNode) value.replaceWith(newNode);
         }
       },

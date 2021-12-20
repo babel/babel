@@ -225,11 +225,11 @@ export default function (
     name = id.name;
   }
 
-  if (!supportUnicodeId && isFunction(node) && /[\uD800-\uDFFF]/.test(name)) {
+  if (name === undefined) {
     return;
   }
 
-  if (name === undefined) {
+  if (!supportUnicodeId && isFunction(node) && /[\uD800-\uDFFF]/.test(name)) {
     return;
   }
 
