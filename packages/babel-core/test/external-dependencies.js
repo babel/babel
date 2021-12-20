@@ -1,6 +1,6 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import { transformSync } from "../lib";
+import { transformSync } from "../lib/index.js";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
