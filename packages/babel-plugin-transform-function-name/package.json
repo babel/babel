@@ -17,6 +17,7 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-compilation-targets": "workspace:^",
     "@babel/helper-function-name": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
   },

@@ -2437,6 +2437,7 @@ __metadata:
   resolution: "@babel/plugin-transform-function-name@workspace:packages/babel-plugin-transform-function-name"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
