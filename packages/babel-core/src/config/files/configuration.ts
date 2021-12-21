@@ -263,8 +263,6 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
     throw err;
   }
 
-  delete options["$schema"];
-
   if (!options) throw new Error(`${filepath}: No config detected`);
 
   if (typeof options !== "object") {
@@ -273,6 +271,8 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
   if (Array.isArray(options)) {
     throw new Error(`${filepath}: Expected config object but found array`);
   }
+
+  delete options["$schema"];
 
   return {
     filepath,
