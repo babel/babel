@@ -152,14 +152,6 @@ const buildTest = function (binName, testName, opts) {
     let stderr = "";
     let stdout = "";
 
-    spawn.stderr.on("data", function (chunk) {
-      stderr += chunk;
-    });
-
-    spawn.stdout.on("data", function (chunk) {
-      stdout += chunk;
-    });
-
     spawn.on("close", function () {
       let err;
 
@@ -182,22 +174,31 @@ const buildTest = function (binName, testName, opts) {
       spawn.stdin.end();
     }
 
+    const captureOutput = proc => {
+      proc.stderr.on("data", function (chunk) {
+        stderr += chunk;
+      });
+
+      proc.stdout.on("data", function (chunk) {
+        stdout += chunk;
+      });
+    };
+
     if (opts.executor) {
       const executor = child.spawn(process.execPath, [opts.executor], {
         cwd: tmpLoc,
       });
 
-      executor.stderr.on("data", function (chunk) {
-        stderr += chunk;
-      });
-
-      executor.stdout.on("data", function (chunk) {
-        stdout += chunk;
-      });
+      spawn.stdout.pipe(executor.stdin);
+      spawn.stderr.pipe(executor.stdin);
 
       executor.on("close", function () {
         setTimeout(() => spawn.kill("SIGINT"), 250);
       });
+
+      captureOutput(executor);
+    } else {
+      captureOutput(spawn);
     }
   };
 };

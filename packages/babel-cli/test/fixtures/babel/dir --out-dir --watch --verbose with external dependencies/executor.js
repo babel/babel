@@ -1,25 +1,47 @@
 const fs = require("fs");
+const assert = require("assert");
 
-// Wait for the initial build
-sleep(300);
+// For Node.js <= 10
+if (!assert.match) assert.match = (val, re) => assert(re.test(val));
 
-logFile("lib/index.js");
-logFile("lib/main.js");
+const run = (function* () {
+  let files = [yield, yield].sort();
+  assert.match(files[0], /src[\\/]index.js -> lib[\\/]index.js/);
+  assert.match(files[1], /src[\\/]main.js -> lib[\\/]main.js/);
+  assert.match(yield, /Successfully compiled 2 files with Babel \(\d+ms\)\./);
 
-fs.writeFileSync("./file.txt", "Updated!");
+  logFile("lib/index.js");
+  logFile("lib/main.js");
 
-// Wait for the new build
-sleep(300);
+  fs.writeFileSync("./file.txt", "Updated!");
 
-logFile("lib/index.js");
-logFile("lib/main.js");
+  files = [yield, yield].sort();
+  assert.match(files[0], /src[\\/]index.js -> lib[\\/]index.js/);
+  assert.match(files[1], /src[\\/]main.js -> lib[\\/]main.js/);
+  assert.match(yield, /Successfully compiled 2 files with Babel \(\d+ms\)\./);
+
+  logFile("lib/index.js");
+  logFile("lib/main.js");
+})();
+
+run.next();
+
+process.stdin.on("data", function listener(chunk) {
+  const str = String(chunk).trim();
+  if (!str) return;
+
+  console.log(str);
+
+  if (run.next(str).done) {
+    process.exit(0);
+  }
+});
 
 function logFile(file) {
   console.log("EXECUTOR", file, JSON.stringify(fs.readFileSync(file, "utf8")));
 }
 
-function sleep(ms) {
-  const arr = new Int32Array(new SharedArrayBuffer(4));
-  arr[0] = 0;
-  Atomics.wait(arr, 0, 0, ms);
-}
+setTimeout(() => {
+  console.error("EXECUTOR TIMEOUT");
+  process.exit(1);
+}, 5000);
