@@ -1,7 +1,7 @@
-var _y;
+var y;
 
 const x = (async () => {
   await Promise.resolve();
-  _y = 21;
-  return _y + _y;
+  y = 21;
+  return y + y;
 })();

@@ -40,7 +40,10 @@ const visitor = {
 
     for (const declar of declarations) {
       firstId = declar.node.id;
-      if (declar.parentPath.parentPath.isBlockStatement()) {
+      if (
+        declar.parentPath.parentPath.isBlockStatement() &&
+        declar.parent.kind !== "var"
+      ) {
         declar.scope.rename(declar.node.id.name);
       }
 

@@ -1,6 +1,6 @@
-var _y;
+var y;
 
 const x = (async () => {
-  _y = 21;
-  return _y + _y;
+  y = 21;
+  return y + y;
 })();
