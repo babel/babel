@@ -282,8 +282,15 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         // copy .babelignore file to tmp directory
         opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
       }
+
+      const skip =
+        opts.minNodeVersion &&
+        parseInt(process.versions.node, 10) < opts.minNodeVersion;
+
       // eslint-disable-next-line jest/valid-title
-      it(testName, buildTest(binName, testName, opts), 20000);
+      (skip
+        ? it.skip
+        : it)(testName, buildTest(binName, testName, opts), 20000);
     });
   });
 });
