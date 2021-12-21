@@ -5,11 +5,12 @@ exports.normalizeESLintConfig = function (options) {
     ecmaVersion = 2020,
     sourceType = "module",
     requireConfigFile = true,
+    filePath,
     ...otherOptions
   } = options;
 
   return {
-    babelOptions: { cwd: process.cwd(), ...babelOptions },
+    babelOptions: { cwd: process.cwd(), filename: filePath, ...babelOptions },
     ecmaVersion: ecmaVersion === "latest" ? 1e8 : ecmaVersion,
     sourceType,
     requireConfigFile,
