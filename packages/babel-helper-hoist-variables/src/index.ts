@@ -38,12 +38,12 @@ const visitor = {
     > = path.get("declarations");
     let firstId;
 
+    const needsRename =
+      path.node.kind !== "var" && path.parentPath.isBlockStatement();
+
     for (const declar of declarations) {
       firstId = declar.node.id;
-      if (
-        declar.parentPath.parentPath.isBlockStatement() &&
-        declar.parent.kind !== "var"
-      ) {
+      if (needsRename) {
         declar.scope.rename(declar.node.id.name);
       }
 
