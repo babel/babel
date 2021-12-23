@@ -337,6 +337,7 @@ helpers.inherits = helper("7.0.0-beta.0")`
     }
     // We can't use defineProperty to set the prototype in a single step because it
     // doesn't work in Chrome <= 36. https://github.com/babel/babel/issues/14056
+    // V8 bug: https://bugs.chromium.org/p/v8/issues/detail?id=3334
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
         value: subClass,
