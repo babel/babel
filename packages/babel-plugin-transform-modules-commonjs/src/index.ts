@@ -235,6 +235,12 @@ export default declare((api, options) => {
 
           ensureStatementsHoisted(headers);
           path.unshiftContainer("body", headers);
+          path.get("body").forEach(path => {
+            if (headers.indexOf(path.node) === -1) return;
+            if (path.isVariableDeclaration()) {
+              path.scope.registerDeclaration(path);
+            }
+          });
         },
       },
     },
