@@ -259,15 +259,23 @@ function buildHelper(
 
 function buildRuntimeRewritePlugin(runtimeName, helperName) {
   /**
-   * rewrite helpers imports to runtime imports
+   * Rewrite helper imports to load the adequate module format version
    * @example
    * adjustImportPath(ast`"setPrototypeOf"`)
-   * // returns ast`"@babel/runtime/helpers/esm/setPrototypeOf"`
-   * @param {*} node The string literal contains import path
+   * // returns ast`"./setPrototypeOf"`
+   * @example
+   * adjustImportPath(ast`"@babel/runtime/helpers/typeof"`)
+   * // returns ast`"./typeof"`
+   * @param {*} node The string literal that contains the import path
    */
   function adjustImportPath(node) {
-    if (helpers.list.includes(node.value)) {
-      node.value = `./${node.value}.js`;
+    const helpersPath = path.join(runtimeName, "helpers");
+    const helper = node.value.startsWith(helpersPath)
+      ? path.basename(node.value)
+      : node.value;
+
+    if (helpers.list.includes(helper)) {
+      node.value = `./${helper}.js`;
     }
   }
 
