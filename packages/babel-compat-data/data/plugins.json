@@ -223,9 +223,9 @@
     "electron": "1.2"
   },
   "transform-arrow-functions": {
-    "chrome": "47",
-    "opera": "34",
-    "edge": "13",
+    "chrome": "45",
+    "opera": "32",
+    "edge": "12",
     "firefox": "43",
     "safari": "10",
     "node": "6",
