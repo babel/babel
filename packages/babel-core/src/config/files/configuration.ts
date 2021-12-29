@@ -272,6 +272,8 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
     throw new Error(`${filepath}: Expected config object but found array`);
   }
 
+  delete options["$schema"];
+
   return {
     filepath,
     dirname: path.dirname(filepath),
