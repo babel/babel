@@ -38,5 +38,17 @@
     "@babel/helper-validator-identifier": "workspace:^",
     "charcodes": "^0.2.0"
   },
-  "bin": "./bin/babel-parser.js"
+  "bin": "./bin/babel-parser.js",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
 }

@@ -36,5 +36,17 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
 }

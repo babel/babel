@@ -34,5 +34,18 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./lib/development": "./lib/development.js",
+    "./package.json": "./package.json"
+  }
 }

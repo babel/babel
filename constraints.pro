@@ -74,3 +74,15 @@ gen_enforced_field(WorkspaceCwd, FieldName, ExpectedValue) :-
 gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'devDependencies') :-
   workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'devDependencies'),
   workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'dependencies').
+
+% Enforces `exports` to be consistent
+gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package.json": "./package.json" }') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true),
+  % Exclude packages with more complex `exports`
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  WorkspaceIdent \= '@babel/eslint-parser',
+  WorkspaceIdent \= '@babel/compat-data',
+  WorkspaceIdent \= '@babel/plugin-transform-react-jsx', % TODO: Remove in Babel 8
+  WorkspaceIdent \= '@babel/helper-plugin-test-runner', % TODO: Remove in Babel 8
+  WorkspaceIdent \= '@babel/standalone',
+  \+ atom_concat('@babel/runtime', _, WorkspaceIdent).
