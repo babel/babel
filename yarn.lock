@@ -3494,6 +3494,7 @@ __metadata:
   resolution: "@babel/register@workspace:packages/babel-register"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     browserify: ^16.5.2
     clone-deep: ^4.0.1

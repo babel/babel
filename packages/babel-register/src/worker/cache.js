@@ -1,8 +1,10 @@
-import path from "path";
-import fs from "fs";
-import os from "os";
-import * as babel from "@babel/core";
-import findCacheDir from "find-cache-dir";
+"use strict";
+
+const path = require("path");
+const fs = require("fs");
+const os = require("os");
+const babel = require("@babel/core");
+const findCacheDir = require("find-cache-dir");
 
 const DEFAULT_CACHE_DIR =
   findCacheDir({ name: "@babel/register" }) || os.homedir() || os.tmpdir();
@@ -10,8 +12,9 @@ const DEFAULT_FILENAME = path.join(
   DEFAULT_CACHE_DIR,
   `.babel.${babel.version}.${babel.getEnv()}.json`,
 );
-const FILENAME: string = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
-let data: any = {};
+
+const FILENAME = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
+let data = {};
 
 let cacheDirty = false;
 
@@ -20,15 +23,16 @@ let cacheDisabled = false;
 function isCacheDisabled() {
   return process.env.BABEL_DISABLE_CACHE ?? cacheDisabled;
 }
+
+exports.save = save;
 /**
  * Write stringified cache to disk.
  */
-
-export function save() {
+function save() {
   if (isCacheDisabled() || !cacheDirty) return;
   cacheDirty = false;
 
-  let serialised: string = "{}";
+  let serialised = "{}";
 
   try {
     serialised = JSON.stringify(data, null, "  ");
@@ -74,7 +78,7 @@ because it resides in a readonly filesystem. Cache is disabled.`,
  * Load cache from disk and parse.
  */
 
-export function load() {
+exports.load = function load() {
   if (isCacheDisabled()) {
     data = {};
     return;
@@ -106,27 +110,25 @@ due to a permission issue. Cache is disabled.`,
   try {
     data = JSON.parse(cacheContent);
   } catch {}
-}
+};
 
 /**
  * Retrieve data from cache.
  */
-
-export function get(): any {
+exports.get = function get() {
   return data;
-}
+};
 
 /**
  * Set the cache dirty bit.
  */
-export function setDirty() {
+exports.setDirty = function setDirty() {
   cacheDirty = true;
-}
+};
 
 /**
  * Clear the cache object.
  */
-
-export function clear() {
+exports.clear = function clear() {
   data = {};
-}
+};
