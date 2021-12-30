@@ -33,6 +33,8 @@ const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseY,
   charCodes.lowercaseU,
   charCodes.lowercaseD,
+  // This is only valid when using the regexpUnicodeSets plugin
+  charCodes.lowercaseV,
 ]);
 
 // The following character codes are forbidden from being
@@ -1071,6 +1073,16 @@ export default class Tokenizer extends ParserErrors {
       const char = String.fromCharCode(cp);
 
       if (VALID_REGEX_FLAGS.has(cp)) {
+        if (cp === charCodes.lowercaseV) {
+          this.expectPlugin("regexpUnicodeSets", pos + 1);
+          if (mods.includes("u")) {
+            this.raise(pos + 1, Errors.IncompatibleRegExpUVFlags);
+          }
+        } else if (cp === charCodes.lowercaseU) {
+          if (mods.includes("v")) {
+            this.raise(pos + 1, Errors.IncompatibleRegExpUVFlags);
+          }
+        }
         if (mods.includes(char)) {
           this.raise(pos + 1, Errors.DuplicateRegExpFlags);
         }
