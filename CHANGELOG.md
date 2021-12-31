@@ -20,6 +20,23 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.7 (2021-12-31)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#14049](https://github.com/babel/babel/pull/14049) fix: check preceding line break before exclamation ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#14081](https://github.com/babel/babel/pull/14081) Import the correct `./typeof.js` helper in `@babel/runtime` ([@exb](https://github.com/exb))
+* `babel-helpers`
+  * [#14072](https://github.com/babel/babel/pull/14072) Fix derived classes in Chrome <= 36 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-function-name`, `babel-plugin-transform-function-name`
+  * [#14047](https://github.com/babel/babel/pull/14047) Fix unicode handling in generated function names ([@The-x-Theorist](https://github.com/The-x-Theorist))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#14067](https://github.com/babel/babel/pull/14067) Allow `$schema` property in json config files ([@The-x-Theorist](https://github.com/The-x-Theorist))
 ## v7.16.6 (2021-12-14)
 
 #### :bug: Bug Fix
