@@ -38,6 +38,8 @@ const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseY,
   charCodes.lowercaseU,
   charCodes.lowercaseD,
+  // This is only valid when using the regexpUnicodeSets plugin
+  charCodes.lowercaseV,
 ]);
 
 // The following character codes are forbidden from being
@@ -1086,22 +1088,32 @@ export default class Tokenizer extends ParserErrors {
 
     let mods = "";
 
+    const nextPos = () =>
+      // (pos + 1) + 1 - start
+      createPositionWithColumnOffset(startLoc, pos + 2 - start);
+
     while (pos < this.length) {
       const cp = this.codePointAtPos(pos);
       // It doesn't matter if cp > 0xffff, the loop will either throw or break because we check on cp
       const char = String.fromCharCode(cp);
 
       if (VALID_REGEX_FLAGS.has(cp)) {
+        if (cp === charCodes.lowercaseV) {
+          this.expectPlugin("regexpUnicodeSets", nextPos());
+
+          if (mods.includes("u")) {
+            this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
+          }
+        } else if (cp === charCodes.lowercaseU) {
+          if (mods.includes("v")) {
+            this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
+          }
+        }
         if (mods.includes(char)) {
-          // (pos + 1) + 1 - start
-          this.raise(Errors.DuplicateRegExpFlags, {
-            at: createPositionWithColumnOffset(startLoc, pos + 2 - start),
-          });
+          this.raise(Errors.DuplicateRegExpFlags, { at: nextPos() });
         }
       } else if (isIdentifierChar(cp) || cp === charCodes.backslash) {
-        this.raise(Errors.MalformedRegExpFlags, {
-          at: createPositionWithColumnOffset(startLoc, pos + 2 - start),
-        });
+        this.raise(Errors.MalformedRegExpFlags, { at: nextPos() });
       } else {
         break;
       }
