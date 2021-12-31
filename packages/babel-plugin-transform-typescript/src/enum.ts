@@ -1,7 +1,8 @@
 import assert from "assert";
 import { template } from "@babel/core";
 import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+import traverse from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
 
 export default function transpileEnum(path, t) {
   const { node } = path;
@@ -124,6 +125,24 @@ export function translateEnumValues(
           value = t.stringLiteral(constValue);
         }
       } else {
+        const IdentifierVisitor: Visitor = {
+          Identifier(expr) {
+            if (seen.has(expr.node.name)) {
+              expr.replaceWith(
+                t.memberExpression(
+                  t.cloneNode(path.node.id),
+                  t.cloneNode(expr.node),
+                ),
+              );
+            }
+          },
+          MemberExpression(expr) {
+            expr.skip();
+          },
+        };
+
+        traverse(initializer, IdentifierVisitor, path.scope);
+
         value = initializer;
       }
     } else if (typeof constValue === "number") {
