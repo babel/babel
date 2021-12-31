@@ -153,6 +153,7 @@ export type ParserPlugin =
   | "pipelineOperator"
   | "placeholders"
   | "privateIn" // Enabled by default
+  | "regexpUnicodeSets"
   | "throwExpressions"
   | "topLevelAwait"
   | "typescript"
