@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-decimal",
-  "version": "7.16.5",
+  "version": "7.16.7",
   "description": "Allow parsing of decimal",
   "repository": {
     "type": "git",

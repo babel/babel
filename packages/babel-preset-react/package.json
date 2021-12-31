@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-react",
-  "version": "7.16.5",
+  "version": "7.16.7",
   "description": "Babel preset for all React plugins.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-react",

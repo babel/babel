@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-export-namespace-from",
-  "version": "7.16.5",
+  "version": "7.16.7",
   "description": "Compile export namespace to ES2015",
   "repository": {
     "type": "git",

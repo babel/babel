@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-systemjs",
-  "version": "7.16.5",
+  "version": "7.16.7",
   "description": "This plugin transforms ES2015 modules to SystemJS",
   "repository": {
     "type": "git",

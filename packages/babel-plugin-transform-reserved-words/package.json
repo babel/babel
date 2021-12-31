@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-reserved-words",
-  "version": "7.16.5",
+  "version": "7.16.7",
   "description": "Ensure that no reserved words are used.",
   "repository": {
     "type": "git",

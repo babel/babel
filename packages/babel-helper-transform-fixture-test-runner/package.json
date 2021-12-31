@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-transform-fixture-test-runner",
-  "version": "7.16.0",
+  "version": "7.16.7",
   "description": "Transform test runner for @babel/helper-fixtures module",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-transform-fixture-test-runner",
