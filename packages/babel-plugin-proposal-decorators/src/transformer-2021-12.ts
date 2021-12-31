@@ -17,10 +17,6 @@ type ClassElement =
   | t.TSIndexSignature
   | t.StaticBlock;
 
-type classUidGenerator = <B extends boolean>(
-  isPrivate: B,
-) => B extends true ? t.PrivateName : t.Identifier;
-
 function incrementId(id: number[], idx = id.length - 1): void {
   // If index is -1, id needs an additional character, unshift A
   if (idx === -1) {
@@ -54,64 +50,29 @@ function incrementId(id: number[], idx = id.length - 1): void {
  * (you cannot have #x and static #x in the same class) and it's not worth the
  * extra complexity for public names.
  */
-function createUidGeneratorForClass(
-  body: NodePath<ClassElement>[],
-): (isPrivate: boolean) => t.Identifier | t.PrivateName {
-  let currentPublicId: number[], currentPrivateId: number[];
-
-  const publicNames = new Set<string>();
+function createPrivateUidGeneratorForClass(
+  classPath: NodePath<t.ClassDeclaration | t.ClassExpression>,
+): () => t.PrivateName {
+  const currentPrivateId = [charCodes.uppercaseA];
   const privateNames = new Set<string>();
 
-  for (const element of body) {
-    if (
-      element.node.type === "TSIndexSignature" ||
-      element.node.type === "StaticBlock"
-    ) {
-      continue;
+  classPath.traverse({
+    PrivateName(path) {
+      privateNames.add(path.node.id.name);
+    },
+  });
+
+  return (): t.PrivateName => {
+    let reifiedId = String.fromCharCode(...currentPrivateId);
+
+    while (privateNames.has(reifiedId)) {
+      incrementId(currentPrivateId);
+      reifiedId = String.fromCharCode(...currentPrivateId);
     }
 
-    const { key } = element.node;
+    incrementId(currentPrivateId);
 
-    if (key.type === "PrivateName") {
-      privateNames.add(key.id.name);
-    } else if (key.type === "Identifier") {
-      publicNames.add(key.name);
-    }
-  }
-
-  return (isPrivate: boolean): t.Identifier | t.PrivateName => {
-    let currentId: number[], names: Set<String>;
-
-    if (isPrivate) {
-      if (!currentPrivateId) {
-        currentPrivateId = [charCodes.uppercaseA];
-      }
-
-      currentId = currentPrivateId;
-      names = privateNames;
-    } else {
-      if (!currentPublicId) {
-        currentPublicId = [charCodes.uppercaseA];
-      }
-
-      currentId = currentPublicId;
-      names = publicNames;
-    }
-
-    let reifiedId = String.fromCharCode(...currentId);
-
-    while (names.has(reifiedId)) {
-      incrementId(currentId);
-      reifiedId = String.fromCharCode(...currentId);
-    }
-
-    incrementId(currentId);
-
-    if (isPrivate) {
-      return t.privateName(t.identifier(reifiedId));
-    } else {
-      return t.identifier(reifiedId);
-    }
+    return t.privateName(t.identifier(reifiedId));
   };
 }
 
@@ -121,20 +82,18 @@ function createUidGeneratorForClass(
  * saves iterating the class elements an additional time and allocating the space
  * for the Sets of element names.
  */
-function createLazyUidGeneratorForClass(
-  body: NodePath<ClassElement>[],
-): classUidGenerator {
-  let generator: (isPrivate: boolean) => t.Identifier | t.PrivateName;
+function createLazyPrivateUidGeneratorForClass(
+  classPath: NodePath<t.ClassDeclaration | t.ClassExpression>,
+): () => t.PrivateName {
+  let generator: () => t.PrivateName;
 
-  const lazyGenerator = (isPrivate: boolean): t.Identifier | t.PrivateName => {
+  return (): t.PrivateName => {
     if (!generator) {
-      generator = createUidGeneratorForClass(body);
+      generator = createPrivateUidGeneratorForClass(classPath);
     }
 
-    return generator(isPrivate);
+    return generator();
   };
-
-  return lazyGenerator as unknown as classUidGenerator;
 }
 
 /**
@@ -510,7 +469,7 @@ function transformClass(
   const classDecorators = path.node.decorators;
   let hasElementDecorators = false;
 
-  const generateClassUid = createLazyUidGeneratorForClass(body);
+  const generateClassPrivateUid = createLazyPrivateUidGeneratorForClass(path);
 
   // Iterate over the class to see if we need to decorate it, and also to
   // transform simple auto accessors which are not decorated
@@ -524,7 +483,7 @@ function transformClass(
     } else if (element.node.type === "ClassAccessorProperty") {
       const { key, value, static: isStatic } = element.node;
 
-      const newId = generateClassUid(true);
+      const newId = generateClassPrivateUid();
 
       const valueNode = value ? t.cloneNode(value) : undefined;
 
@@ -626,7 +585,7 @@ function transformClass(
             params.push(t.cloneNode(value));
           }
 
-          const newId = generateClassUid(true);
+          const newId = generateClassPrivateUid();
           const newFieldInitId = generateLocalVarId(element, `init_${name}`);
           const newValue = t.callExpression(
             t.cloneNode(newFieldInitId),
