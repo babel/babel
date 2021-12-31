@@ -76,6 +76,8 @@ export const ErrorMessages = makeErrorTemplates(
     ImportCallArity: "`import()` requires exactly %0.",
     ImportCallNotNewExpression: "Cannot use new with import(...).",
     ImportCallSpreadArgument: "`...` is not allowed in `import()`.",
+    IncompatibleRegExpUVFlags:
+      "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
     InvalidBigIntLiteral: "Invalid BigIntLiteral.",
     InvalidCodePoint: "Code point out of bounds.",
     InvalidCoverInitializedName: "Invalid shorthand property initializer.",
