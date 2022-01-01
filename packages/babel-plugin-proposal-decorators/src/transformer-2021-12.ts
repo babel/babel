@@ -40,20 +40,16 @@ function incrementId(id: number[], idx = id.length - 1): void {
 }
 
 /**
- * Generates a new element name that is unique to the given class. This can be
+ * Generates a new private name that is unique to the given class. This can be
  * used to create extra class fields and methods for the implementation, while
  * keeping the length of those names as small as possible. This is important for
- * minification purposes, since public names cannot be safely renamed/minified.
- *
- * Names are split into two namespaces, public and private. Static and non-static
- * names are shared in the same namespace, because this is true for private names
- * (you cannot have #x and static #x in the same class) and it's not worth the
- * extra complexity for public names.
+ * minification purposes (though private names can generally be minified,
+ * transpilations and polyfills cannot yet).
  */
 function createPrivateUidGeneratorForClass(
   classPath: NodePath<t.ClassDeclaration | t.ClassExpression>,
 ): () => t.PrivateName {
-  const currentPrivateId = [charCodes.uppercaseA];
+  const currentPrivateId = [];
   const privateNames = new Set<string>();
 
   classPath.traverse({
@@ -63,14 +59,11 @@ function createPrivateUidGeneratorForClass(
   });
 
   return (): t.PrivateName => {
-    let reifiedId = String.fromCharCode(...currentPrivateId);
-
-    while (privateNames.has(reifiedId)) {
+    let reifiedId;
+    do {
       incrementId(currentPrivateId);
       reifiedId = String.fromCharCode(...currentPrivateId);
-    }
-
-    incrementId(currentPrivateId);
+    } while (privateNames.has(reifiedId));
 
     return t.privateName(t.identifier(reifiedId));
   };
@@ -124,16 +117,17 @@ function replaceClassWithVar(
 
     if (path.node.id) {
       className = path.node.id.name;
-      varId = generateLocalVarId(path, className);
+      varId = path.scope.parent.generateDeclaredUidIdentifier(className);
       path.scope.rename(className, varId.name);
     } else if (
       path.parentPath.node.type === "VariableDeclarator" &&
       path.parentPath.node.id.type === "Identifier"
     ) {
       className = path.parentPath.node.id.name;
-      varId = generateLocalVarId(path, className);
+      varId = path.scope.parent.generateDeclaredUidIdentifier(className);
     } else {
-      varId = generateLocalVarId(path, "decorated_class");
+      varId =
+        path.scope.parent.generateDeclaredUidIdentifier("decorated_class");
     }
 
     const newClassExpr = t.classExpression(
@@ -281,12 +275,6 @@ function getElementKind(element: NodePath<ClassDecoratableElement>): number {
         return METHOD;
       }
   }
-}
-
-function generateLocalVarId(path: NodePath, name: string): t.Identifier {
-  const varId = path.scope.generateUidIdentifier(name);
-  path.scope.parent.push({ id: varId });
-  return t.cloneNode(varId);
 }
 
 // Information about the decorators applied to an element
@@ -514,7 +502,8 @@ function transformClass(
     classLocal: t.Identifier;
 
   if (classDecorators) {
-    classInitLocal = generateLocalVarId(path, "initClass");
+    classInitLocal =
+      path.scope.parent.generateDeclaredUidIdentifier("initClass");
 
     const [localId, classPath] = replaceClassWithVar(path);
     path = classPath;
@@ -560,7 +549,8 @@ function transformClass(
 
       if (isComputed) {
         const keyPath = element.get("key");
-        const localComputedNameId = generateLocalVarId(keyPath, name);
+        const localComputedNameId =
+          keyPath.scope.parent.generateDeclaredUidIdentifier(name);
         keyPath.replaceWith(localComputedNameId);
 
         elementDecoratorInfo.push({
@@ -586,7 +576,8 @@ function transformClass(
           }
 
           const newId = generateClassPrivateUid();
-          const newFieldInitId = generateLocalVarId(element, `init_${name}`);
+          const newFieldInitId =
+            element.scope.parent.generateDeclaredUidIdentifier(`init_${name}`);
           const newValue = t.callExpression(
             t.cloneNode(newFieldInitId),
             params,
@@ -598,8 +589,12 @@ function transformClass(
           if (isPrivate) {
             privateMethods = extractProxyAccessorsFor(newId);
 
-            const getId = generateLocalVarId(newPath, `get_${name}`);
-            const setId = generateLocalVarId(newPath, `set_${name}`);
+            const getId = newPath.scope.parent.generateDeclaredUidIdentifier(
+              `get_${name}`,
+            );
+            const setId = newPath.scope.parent.generateDeclaredUidIdentifier(
+              `set_${name}`,
+            );
 
             addCallAccessorsFor(newPath, key as t.PrivateName, getId, setId);
 
@@ -609,7 +604,9 @@ function transformClass(
             locals = newFieldInitId;
           }
         } else if (kind === FIELD) {
-          const initId = generateLocalVarId(element, `init_${name}`);
+          const initId = element.scope.parent.generateDeclaredUidIdentifier(
+            `init_${name}`,
+          );
           const valuePath = (
             element as NodePath<t.ClassProperty | t.ClassPrivateProperty>
           ).get("value");
@@ -627,7 +624,9 @@ function transformClass(
             privateMethods = extractProxyAccessorsFor(key as t.PrivateName);
           }
         } else if (isPrivate) {
-          locals = generateLocalVarId(element, `call_${name}`);
+          locals = element.scope.parent.generateDeclaredUidIdentifier(
+            `call_${name}`,
+          ) as t.Identifier;
 
           const replaceSupers = new ReplaceSupers({
             constantSuper,
@@ -730,7 +729,8 @@ function transformClass(
         const newDecorators: t.Identifier[] = [];
 
         for (const decorator of decorators) {
-          const localComputedNameId = generateLocalVarId(path, "dec");
+          const localComputedNameId =
+            path.scope.parent.generateDeclaredUidIdentifier("dec");
           assignments.push(
             t.assignmentExpression("=", localComputedNameId, decorator),
           );
@@ -761,7 +761,8 @@ function transformClass(
   }
 
   if (requiresProtoInit) {
-    protoInitLocal = generateLocalVarId(path, "initProto");
+    protoInitLocal =
+      path.scope.parent.generateDeclaredUidIdentifier("initProto");
     locals.push(protoInitLocal);
 
     const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
@@ -789,7 +790,8 @@ function transformClass(
 
             found = true;
 
-            const prop = generateLocalVarId(path, "super");
+            const prop =
+              path.scope.parent.generateDeclaredUidIdentifier("super");
             parentPath.replaceWith(
               t.sequenceExpression([
                 t.assignmentExpression("=", t.cloneNode(prop), parentPath.node),
@@ -829,7 +831,8 @@ function transformClass(
   }
 
   if (requiresStaticInit) {
-    staticInitLocal = generateLocalVarId(path, "initStatic");
+    staticInitLocal =
+      path.scope.parent.generateDeclaredUidIdentifier("initStatic");
     locals.push(staticInitLocal);
   }
 

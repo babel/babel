@@ -37,9 +37,11 @@ export default declare((api, options) => {
     }
   }
 
-  if (legacy) {
-    if (version !== undefined) {
-      throw new Error("'version' can't be used with legacy decorators");
+  if (version === "legacy" || legacy) {
+    if (version !== undefined && legacy) {
+      throw new Error(
+        'You can either specify `legacy: true` or `version: "legacy"` with decorators, not both.',
+      );
     }
 
     return {
