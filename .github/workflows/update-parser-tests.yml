@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs: {}
   schedule:
-    - cron: "0 0 * * 5"
+    - cron: "0 0 * * 5" 
 
 jobs:
   createPullRequest:
