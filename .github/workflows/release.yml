@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags: ["v*"]
-  workflow_dispatch:
+  workflow_dispatch: 
     inputs:
       version:
         # This input isn't actually used as an input, but it's a reminder that
