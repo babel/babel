@@ -11,7 +11,7 @@ jobs:
   update-windows-fixtures:
     runs-on: windows-latest
     steps:
-      - name: Get Pull Request branch
+      - name: Get Pull Request branch 
         uses: actions/github-script@v4
         id: pr-meta
         with:
