@@ -4,6 +4,7 @@
  */
 import { FLIPPED_ALIAS_KEYS } from "../../definitions";
 
+export const STANDARDIZED_TYPES = FLIPPED_ALIAS_KEYS["Standardized"];
 export const EXPRESSION_TYPES = FLIPPED_ALIAS_KEYS["Expression"];
 export const BINARY_TYPES = FLIPPED_ALIAS_KEYS["Binary"];
 export const SCOPABLE_TYPES = FLIPPED_ALIAS_KEYS["Scopable"];
@@ -38,6 +39,7 @@ export const CLASS_TYPES = FLIPPED_ALIAS_KEYS["Class"];
 export const MODULEDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["ModuleDeclaration"];
 export const EXPORTDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["ExportDeclaration"];
 export const MODULESPECIFIER_TYPES = FLIPPED_ALIAS_KEYS["ModuleSpecifier"];
+export const PRIVATE_TYPES = FLIPPED_ALIAS_KEYS["Private"];
 export const FLOW_TYPES = FLIPPED_ALIAS_KEYS["Flow"];
 export const FLOWTYPE_TYPES = FLIPPED_ALIAS_KEYS["FlowType"];
 export const FLOWBASEANNOTATION_TYPES =
@@ -47,7 +49,8 @@ export const FLOWPREDICATE_TYPES = FLIPPED_ALIAS_KEYS["FlowPredicate"];
 export const ENUMBODY_TYPES = FLIPPED_ALIAS_KEYS["EnumBody"];
 export const ENUMMEMBER_TYPES = FLIPPED_ALIAS_KEYS["EnumMember"];
 export const JSX_TYPES = FLIPPED_ALIAS_KEYS["JSX"];
-export const PRIVATE_TYPES = FLIPPED_ALIAS_KEYS["Private"];
+export const MISCELLANEOUS_TYPES = FLIPPED_ALIAS_KEYS["Miscellaneous"];
+export const TYPESCRIPT_TYPES = FLIPPED_ALIAS_KEYS["TypeScript"];
 export const TSTYPEELEMENT_TYPES = FLIPPED_ALIAS_KEYS["TSTypeElement"];
 export const TSTYPE_TYPES = FLIPPED_ALIAS_KEYS["TSType"];
 export const TSBASETYPE_TYPES = FLIPPED_ALIAS_KEYS["TSBaseType"];

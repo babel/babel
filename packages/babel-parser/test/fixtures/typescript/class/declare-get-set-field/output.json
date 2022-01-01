@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":56,"loc":{"start":{"line":1,"column":8},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":31,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":21}},
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":20,"end":23,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13},"identifierName":"get"},
+                "name": "get"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":23,"end":31,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":21}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":25,"end":31,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":34,"end":54,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":22}},
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":42,"end":45,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":13},"identifierName":"set"},
+                "name": "set"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":45,"end":53,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":21}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":47,"end":53,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":21}}
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

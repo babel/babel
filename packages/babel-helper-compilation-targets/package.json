@@ -1,17 +1,18 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
-  "description": "Engine compat data used in @babel/preset-env",
+  "description": "Helper functions on Babel compilation targets",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-compilation-targets"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js"
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   },
   "publishConfig": {
     "access": "public"
@@ -21,15 +22,20 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/compat-data": "workspace:^7.12.13",
-    "@babel/helper-validator-option": "workspace:^7.12.11",
-    "browserslist": "^4.14.5",
-    "semver": "^5.5.0"
+    "@babel/compat-data": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^",
+    "browserslist": "^4.17.5",
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@types/semver": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

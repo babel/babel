@@ -1,15 +1,8 @@
 {
   "plugins": [
     "transform-destructuring",
-    [
-      "external-helpers",
-      {
-        "helperVersion": "7.4.4"
-      }
-    ],
     "proposal-class-properties",
     "transform-classes",
-    "transform-block-scoping",
-    "syntax-class-properties"
+    "transform-block-scoping"
   ]
 }

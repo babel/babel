@@ -1,6 +1,6 @@
-FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
-TEST262_COMMIT = 950d09751616a104cb87588e21b3a32563d332d4
-TYPESCRIPT_COMMIT = da8633212023517630de5f3620a23736b63234b1
+FLOW_COMMIT = 92bbb5e9dacb8185aa73ea343954d0434b42c40b
+TEST262_COMMIT = 46f165ae490de7f1343165ab8d228db81eaa02c5
+TYPESCRIPT_COMMIT = bbd9ff51f5fa5208b223bbb75a94e5e8184e3ffd
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -18,7 +18,7 @@ NODE := $(YARN) node
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
-build: build-bundle
+build: build-no-bundle
 ifneq ("$(BABEL_COVERAGE)", "true")
 	$(MAKE) build-standalone
 endif
@@ -28,8 +28,15 @@ build-bundle: clean clean-lib
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
 
-build-bundle-ci: bootstrap-only
-	$(MAKE) build-bundle
+build-no-bundle-ci: bootstrap-only
+	$(YARN) gulp build-dev
+	$(MAKE) build-flow-typings
+	$(MAKE) build-dist
+
+build-no-bundle: clean clean-lib
+	BABEL_ENV=development $(YARN) gulp build-dev
+	$(MAKE) build-flow-typings
+	$(MAKE) build-dist
 
 generate-tsconfig:
 	$(NODE) scripts/generators/tsconfig.js
@@ -46,7 +53,7 @@ build-typescript-legacy-typings:
 
 build-standalone: build-babel-standalone
 
-build-standalone-ci: build-bundle-ci
+build-standalone-ci: build-no-bundle-ci
 	$(MAKE) build-standalone
 
 build-babel-standalone:
@@ -61,12 +68,6 @@ build-plugin-transform-runtime-dist:
 	cd packages/babel-plugin-transform-runtime; \
 	$(NODE) scripts/build-dist.js
 
-build-no-bundle: clean clean-lib
-	BABEL_ENV=development $(YARN) gulp build-dev
-	# Ensure that build artifacts for types are created during local
-	# development too.
-	$(MAKE) build-flow-typings
-
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
@@ -76,6 +77,7 @@ flowcheck-ci:
 code-quality: tscheck flow lint
 
 tscheck: generate-tsconfig
+	rm -rf dts
 	$(YARN) tsc -b .
 
 flow: build-flow-typings
@@ -87,12 +89,12 @@ check-compat-data-ci:
 	$(MAKE) check-compat-data
 
 lint:
-	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.{js,cjs,mjs,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
+	BABEL_ENV=test $(YARN) eslint scripts benchmark $(SOURCES) '*.{js,cjs,mjs,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
 
 fix: fix-json fix-js
 
 fix-js:
-	$(YARN) eslint scripts $(SOURCES) '*.{js,cjs,mjs,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts --fix
+	$(YARN) eslint scripts benchmark $(SOURCES) '*.{js,cjs,mjs,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts --fix
 
 fix-json:
 	$(YARN) prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
@@ -108,13 +110,6 @@ clean: test-clean
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 	rm -rf node_modules/.cache
-
-clean-tsconfig:
-	rm -f tsconfig.json
-	git clean packages/*/tsconfig.json -xfq
-	git clean codemods/*/tsconfig.json -xfq
-	git clean eslint/*/tsconfig.json -xfq
-	rm -f */*/tsconfig.tsbuildinfo
 
 test-clean:
 	$(foreach source, $(SOURCES), \
@@ -140,7 +135,7 @@ test-ci-coverage:
 bootstrap-flow:
 	rm -rf build/flow
 	mkdir -p build
-	git clone --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git build/flow
+	git clone --single-branch --shallow-since=2021-05-01 https://github.com/facebook/flow.git build/flow
 	cd build/flow && git checkout -q $(FLOW_COMMIT)
 
 test-flow:
@@ -152,7 +147,7 @@ test-flow-update-allowlist:
 bootstrap-typescript:
 	rm -rf ./build/typescript
 	mkdir -p ./build
-	git clone --single-branch --shallow-since=2019-09-01 https://github.com/microsoft/TypeScript.git ./build/typescript
+	git clone --single-branch --shallow-since=2021-05-01 https://github.com/microsoft/TypeScript.git ./build/typescript
 	cd build/typescript && git checkout -q $(TYPESCRIPT_COMMIT)
 
 test-typescript:
@@ -164,7 +159,7 @@ test-typescript-update-allowlist:
 bootstrap-test262:
 	rm -rf build/test262
 	mkdir -p build
-	git clone --single-branch --shallow-since=2019-12-01 https://github.com/tc39/test262.git build/test262
+	git clone --single-branch --shallow-since=2021-05-01 https://github.com/tc39/test262.git build/test262
 	cd build/test262 && git checkout -q $(TEST262_COMMIT)
 
 test-test262:
@@ -182,20 +177,28 @@ prepublish-build: clean-lib clean-runtime-helpers
 	STRIP_BABEL_8_FLAG=true $(MAKE) prepublish-build-standalone clone-license prepublish-prepare-dts
 
 prepublish-prepare-dts:
-	$(MAKE) clean-tsconfig
 	$(MAKE) tscheck
 	$(YARN) gulp bundle-dts
-	$(YARN) gulp clean-dts
 	$(MAKE) build-typescript-legacy-typings
-	$(MAKE) clean-tsconfig
 
 prepublish:
-	$(MAKE) check-yarn-bug-1882
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
 
+new-version-checklist:
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @echo "!!!!!!                                                   !!!!!!"
+	# @echo "!!!!!!         Write any message that should             !!!!!!"
+	# @echo "!!!!!!            block the release here                 !!!!!!"
+	# @echo "!!!!!!                                                   !!!!!!"
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	# @exit 1
+
 new-version:
+	$(MAKE) new-version-checklist
 	git pull --rebase
 	$(YARN) release-tool version -f @babel/standalone
 
@@ -210,29 +213,21 @@ publish:
 	$(YARN) release-tool publish
 	$(MAKE) clean
 
-check-yarn-bug-1882:
-ifneq ("$(shell grep 3155328e5 .yarn/releases/yarn-*.cjs -c)", "0")
-	@echo "Your version of yarn is affected by https://github.com/yarnpkg/berry/issues/1882"
-	@echo "Please run \`sed -i -e "s/3155328e5/4567890e5/g" .yarn/releases/yarn-*.cjs\`"
-	@exit 1
-endif
-
 publish-test:
 ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
 	exit 1
 endif
-	$(MAKE) check-yarn-bug-1882
 	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) prepublish-build
 	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
 bootstrap-only: clean-all
-	yarn install
+	$(YARN) install
 
-bootstrap: bootstrap-only generate-tsconfig
-	$(MAKE) build
+bootstrap: bootstrap-only
+	$(MAKE) generate-tsconfig build
 
 clean-lib:
 	$(foreach source, $(SOURCES), \
@@ -242,9 +237,12 @@ clean-runtime-helpers:
 	rm -f packages/babel-runtime/helpers/**/*.js
 	rm -f packages/babel-runtime-corejs2/helpers/**/*.js
 	rm -f packages/babel-runtime-corejs3/helpers/**/*.js
+	rm -f packages/babel-runtime/helpers/**/*.mjs
+	rm -f packages/babel-runtime-corejs2/helpers/**/*.mjs
+	rm -f packages/babel-runtime-corejs3/helpers/**/*.mjs
 	rm -rf packages/babel-runtime-corejs2/core-js
 
-clean-all: clean-tsconfig
+clean-all:
 	rm -rf node_modules
 	rm -rf package-lock.json
 	rm -rf .changelog

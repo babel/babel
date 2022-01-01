@@ -35,18 +35,18 @@
                 },
                 "arguments": []
               },
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " before ",
-                  "start":19,"end":31,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":16}}
-                }
-              ],
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " after ",
                   "start":47,"end":58,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":15}}
+                }
+              ],
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " before ",
+                  "start":19,"end":31,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":16}}
                 }
               ]
             }

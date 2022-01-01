@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "7.12.13",
+  "version": "7.16.5",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "./lib/index.js",
   "type": "commonjs",
@@ -23,7 +23,7 @@
     "eslint-plugin",
     "babel-eslint"
   ],
-  "author": "Jason Quense @monasticpanic",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "engines": {
     "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
@@ -40,7 +40,7 @@
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
-    "eslint": "^7.5.0",
-    "lodash": "^4.17.20"
+    "clone-deep": "^4.0.1",
+    "eslint": "^7.27.0"
   }
 }

@@ -13,10 +13,6 @@
         "expression": {
           "type": "ObjectExpression",
           "start":1,"end":23,"loc":{"start":{"line":1,"column":1},"end":{"line":3,"column":1}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "properties": [
             {
               "type": "ObjectProperty",
@@ -39,7 +35,11 @@
                 "value": "foo"
               }
             }
-          ]
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
         }
       }
     ],

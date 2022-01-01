@@ -2,29 +2,34 @@
 
 Using targets:
 {
-  "android": "85",
-  "chrome": "85",
-  "edge": "85",
-  "firefox": "81",
-  "ios": "13.4",
-  "opera": "71",
-  "safari": "13.1",
-  "samsung": "11.1"
+  "android": "94",
+  "chrome": "94",
+  "edge": "94",
+  "firefox": "92",
+  "ios": "14.5",
+  "opera": "79",
+  "safari": "14.1",
+  "samsung": "14"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  syntax-numeric-separator { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
-  proposal-logical-assignment-operators { "edge":"85", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
-  proposal-nullish-coalescing-operator { "samsung":"11.1" }
-  proposal-optional-chaining { "samsung":"11.1" }
-  syntax-json-strings { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
-  syntax-optional-catch-binding { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
-  syntax-async-generators { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
-  syntax-object-rest-spread { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
-  proposal-export-namespace-from { "ios":"13.4", "safari":"13.1" }
-  transform-modules-commonjs { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
-  proposal-dynamic-import { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-class-static-block { firefox < 93, ios, opera < 80, safari, samsung }
+  proposal-private-property-in-object { ios < 15, safari < 15, samsung }
+  proposal-class-properties { ios < 15, safari < 15 }
+  proposal-private-methods { ios < 15, safari < 15 }
+  syntax-numeric-separator
+  syntax-nullish-coalescing-operator
+  syntax-optional-chaining
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-export-namespace-from { ios, safari }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
+  bugfix/transform-v8-spread-parameters-in-optional-chaining { samsung }
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

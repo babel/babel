@@ -1,5 +1,6 @@
 {
+  "BABEL_8_BREAKING": false,
   "sourceType": "module",
   "moduleIds": true,
-  "plugins": ["external-helpers", ["transform-modules-amd", { "loose": true }]]
+  "plugins": [["transform-modules-amd", { "loose": true }]]
 }

@@ -1,6 +1,8 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+const traverse = _traverse.default;
 
 function getPath(code) {
   const ast = parse(code, { plugins: ["flow"] });
@@ -16,7 +18,7 @@ function getPath(code) {
 
 describe("inference", function () {
   describe("baseTypeStrictlyMatches", function () {
-    it("it should work with null", function () {
+    it("should work with null", function () {
       const path = getPath("var x = null; x === null")
         .get("body")[1]
         .get("expression");
@@ -27,7 +29,7 @@ describe("inference", function () {
       expect(strictMatch).toBeTruthy();
     });
 
-    it("it should work with numbers", function () {
+    it("should work with numbers", function () {
       const path = getPath("var x = 1; x === 2")
         .get("body")[1]
         .get("expression");
@@ -38,7 +40,7 @@ describe("inference", function () {
       expect(strictMatch).toBeTruthy();
     });
 
-    it("it should bail when type changes", function () {
+    it("should bail when type changes", function () {
       const path = getPath("var x = 1; if (foo) x = null;else x = 3; x === 2")
         .get("body")[2]
         .get("expression");
@@ -50,7 +52,7 @@ describe("inference", function () {
       expect(strictMatch).toBeFalsy();
     });
 
-    it("it should differentiate between null and undefined", function () {
+    it("should differentiate between null and undefined", function () {
       const path = getPath("var x; x === null")
         .get("body")[1]
         .get("expression");

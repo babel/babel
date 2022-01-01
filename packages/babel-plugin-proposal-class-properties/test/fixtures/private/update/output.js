@@ -1,12 +1,11 @@
-var _foo = new WeakMap();
+var _foo = /*#__PURE__*/new WeakMap();
 
 var Foo = /*#__PURE__*/function () {
   "use strict";
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-
-    _foo.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _foo, {
       writable: true,
       value: 0
     });

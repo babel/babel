@@ -1,5 +1,5 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import type * as t from "@babel/types";
 
 export function TSTypeAnnotation(this: Printer, node: t.TSTypeAnnotation) {
   this.token(":");
@@ -21,7 +21,11 @@ export function TSTypeParameterInstantiation(
 export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
 
 export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
-  this.word(node.name);
+  this.word(
+    !process.env.BABEL_8_BREAKING
+      ? (node.name as unknown as string)
+      : (node.name as unknown as t.Identifier).name,
+  );
 
   if (node.constraint) {
     this.space();
@@ -127,13 +131,22 @@ export function tsPrintPropertyOrMethodName(this: Printer, node) {
 }
 
 export function TSMethodSignature(this: Printer, node: t.TSMethodSignature) {
+  const { kind } = node;
+  if (kind === "set" || kind === "get") {
+    this.word(kind);
+    this.space();
+  }
   this.tsPrintPropertyOrMethodName(node);
   this.tsPrintSignatureDeclarationBase(node);
   this.token(";");
 }
 
 export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
-  const { readonly } = node;
+  const { readonly, static: isStatic } = node;
+  if (isStatic) {
+    this.word("static");
+    this.space();
+  }
   if (readonly) {
     this.word("readonly");
     this.space();
@@ -194,6 +207,10 @@ export function TSFunctionType(this: Printer, node: t.TSFunctionType) {
 }
 
 export function TSConstructorType(this: Printer, node: t.TSConstructorType) {
+  if (node.abstract) {
+    this.word("abstract");
+    this.space();
+  }
   this.word("new");
   this.space();
   this.tsPrintFunctionOrConstructorType(node);
@@ -374,7 +391,11 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
   }
 
   this.token("[");
-  this.word(typeParameter.name);
+  this.word(
+    !process.env.BABEL_8_BREAKING
+      ? (typeParameter.name as unknown as string)
+      : (typeParameter.name as unknown as t.Identifier).name,
+  );
   this.space();
   this.word("in");
   this.space();
@@ -431,7 +452,7 @@ export function TSInterfaceDeclaration(
   this.space();
   this.print(id, node);
   this.print(typeParameters, node);
-  if (extendz) {
+  if (extendz?.length) {
     this.space();
     this.word("extends");
     this.space();
@@ -642,6 +663,10 @@ export function tsPrintClassMemberModifiers(this: Printer, node: any, isField) {
   }
   if (node.static) {
     this.word("static");
+    this.space();
+  }
+  if (node.override) {
+    this.word("override");
     this.space();
   }
   if (node.abstract) {

@@ -31,8 +31,18 @@ module.exports = {
     ],
     replaces: "transform-block-scoping",
   },
+  "bugfix/transform-safari-id-destructuring-collision-in-function-expression": {
+    features: ["destructuring, parameters / duplicate identifier"],
+    replaces: "transform-parameters",
+  },
   "bugfix/transform-tagged-template-caching": {
     features: ["template literals / TemplateStrings permanent caching"],
     replaces: "transform-template-literals",
+  },
+  "bugfix/transform-v8-spread-parameters-in-optional-chaining": {
+    features: [
+      "optional chaining operator (?.) / spread parameters after optional chaining",
+    ],
+    replaces: "proposal-optional-chaining",
   },
 };

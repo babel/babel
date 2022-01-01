@@ -1,10 +1,10 @@
+var _B;
+
 class A {
   render() {
-    return _ref;
+    return _B || (_B = /*#__PURE__*/React.createElement(B, null));
   }
 
 }
 
 export default class B {}
-
-var _ref = /*#__PURE__*/React.createElement(B, null);

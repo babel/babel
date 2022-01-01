@@ -6,6 +6,5 @@
         "modules": false
       }
     ]
-  ],
-  "plugins": [["external-helpers", { "helperVersion": "7.100" }]]
+  ]
 }

@@ -1,0 +1,190 @@
+{
+  "type": "File",
+  "start":0,"end":103,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":27}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":103,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":27}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "OptionalIndexedAccessType",
+          "start":9,"end":19,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":19}},
+          "objectType": {
+            "type": "GenericTypeAnnotation",
+            "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12}},
+            "typeParameters": null,
+            "id": {
+              "type": "Identifier",
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"Obj"},
+              "name": "Obj"
+            }
+          },
+          "indexType": {
+            "type": "StringLiteralTypeAnnotation",
+            "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18}},
+            "extra": {
+              "rawValue": "a",
+              "raw": "'a'"
+            },
+            "value": "a"
+          },
+          "optional": true
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":22,"end":47,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":25}},
+        "id": {
+          "type": "Identifier",
+          "start":27,"end":28,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":6},"identifierName":"B"},
+          "name": "B"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "OptionalIndexedAccessType",
+          "start":31,"end":46,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":24}},
+          "objectType": {
+            "type": "IndexedAccessType",
+            "start":31,"end":39,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":17}},
+            "objectType": {
+              "type": "GenericTypeAnnotation",
+              "start":31,"end":34,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":12}},
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start":31,"end":34,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":12},"identifierName":"Obj"},
+                "name": "Obj"
+              }
+            },
+            "indexType": {
+              "type": "StringLiteralTypeAnnotation",
+              "start":35,"end":38,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":16}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "'a'"
+              },
+              "value": "a"
+            }
+          },
+          "indexType": {
+            "type": "StringLiteralTypeAnnotation",
+            "start":42,"end":45,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":23}},
+            "extra": {
+              "rawValue": "b",
+              "raw": "'b'"
+            },
+            "value": "b"
+          },
+          "optional": true
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":49,"end":74,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":25}},
+        "id": {
+          "type": "Identifier",
+          "start":54,"end":55,"loc":{"start":{"line":5,"column":5},"end":{"line":5,"column":6},"identifierName":"C"},
+          "name": "C"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "OptionalIndexedAccessType",
+          "start":58,"end":73,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":24}},
+          "objectType": {
+            "type": "OptionalIndexedAccessType",
+            "start":58,"end":68,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":19}},
+            "objectType": {
+              "type": "GenericTypeAnnotation",
+              "start":58,"end":61,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":12}},
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start":58,"end":61,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":12},"identifierName":"Obj"},
+                "name": "Obj"
+              }
+            },
+            "indexType": {
+              "type": "StringLiteralTypeAnnotation",
+              "start":64,"end":67,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":18}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "'a'"
+              },
+              "value": "a"
+            },
+            "optional": true
+          },
+          "indexType": {
+            "type": "StringLiteralTypeAnnotation",
+            "start":69,"end":72,"loc":{"start":{"line":5,"column":20},"end":{"line":5,"column":23}},
+            "extra": {
+              "rawValue": "b",
+              "raw": "'b'"
+            },
+            "value": "b"
+          },
+          "optional": false
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":76,"end":103,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":27}},
+        "id": {
+          "type": "Identifier",
+          "start":81,"end":82,"loc":{"start":{"line":7,"column":5},"end":{"line":7,"column":6},"identifierName":"D"},
+          "name": "D"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "OptionalIndexedAccessType",
+          "start":85,"end":102,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":26}},
+          "objectType": {
+            "type": "OptionalIndexedAccessType",
+            "start":85,"end":95,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":19}},
+            "objectType": {
+              "type": "GenericTypeAnnotation",
+              "start":85,"end":88,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":12}},
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start":85,"end":88,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":12},"identifierName":"Obj"},
+                "name": "Obj"
+              }
+            },
+            "indexType": {
+              "type": "StringLiteralTypeAnnotation",
+              "start":91,"end":94,"loc":{"start":{"line":7,"column":15},"end":{"line":7,"column":18}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "'a'"
+              },
+              "value": "a"
+            },
+            "optional": true
+          },
+          "indexType": {
+            "type": "StringLiteralTypeAnnotation",
+            "start":98,"end":101,"loc":{"start":{"line":7,"column":22},"end":{"line":7,"column":25}},
+            "extra": {
+              "rawValue": "b",
+              "raw": "'b'"
+            },
+            "value": "b"
+          },
+          "optional": true
+        }
+      }
+    ],
+    "directives": []
+  }
+}

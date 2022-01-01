@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "description": "Turn JSX into React function calls",
   "repository": {
     "type": "git",
@@ -12,22 +12,40 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "workspace:^7.12.13",
-    "@babel/helper-module-imports": "workspace:^7.12.13",
-    "@babel/helper-plugin-utils": "workspace:^7.12.13",
-    "@babel/plugin-syntax-jsx": "workspace:^7.12.13",
-    "@babel/types": "workspace:^7.12.13"
+    "@babel/helper-annotate-as-pure": "workspace:^",
+    "@babel/helper-module-imports": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-jsx": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/traverse": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./lib/development": "./lib/development.js",
+    "./package.json": "./package.json"
   }
 }

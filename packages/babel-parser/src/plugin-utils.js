@@ -1,19 +1,47 @@
 // @flow
 
 import type Parser from "./parser";
+import type { PluginConfig } from "./parser/base";
 
-export type Plugin = string | [string, Object];
+export type Plugin = PluginConfig;
 
-export type PluginList = $ReadOnlyArray<Plugin>;
+export type PluginList = $ReadOnlyArray<PluginConfig>;
 
 export type MixinPlugin = (superClass: Class<Parser>) => Class<Parser>;
 
-export function hasPlugin(plugins: PluginList, name: string): boolean {
-  return plugins.some(plugin => {
-    if (Array.isArray(plugin)) {
-      return plugin[0] === name;
+// This function’s second parameter accepts either a string (plugin name) or an
+// array pair (plugin name and options object). If an options object is given,
+// then each value is non-recursively checked for identity with the actual
+// option value of each plugin in the first argument (which is an array of
+// plugin names or array pairs).
+export function hasPlugin(
+  plugins: PluginList,
+  expectedConfig: PluginConfig,
+): boolean {
+  // The expectedOptions object is by default an empty object if the given
+  // expectedConfig argument does not give an options object (i.e., if it is a
+  // string).
+  const [expectedName, expectedOptions] =
+    typeof expectedConfig === "string" ? [expectedConfig, {}] : expectedConfig;
+
+  const expectedKeys = Object.keys(expectedOptions);
+
+  const expectedOptionsIsEmpty = expectedKeys.length === 0;
+
+  return plugins.some(p => {
+    if (typeof p === "string") {
+      return expectedOptionsIsEmpty && p === expectedName;
     } else {
-      return plugin === name;
+      const [pluginName, pluginOptions] = p;
+      if (pluginName !== expectedName) {
+        return false;
+      }
+      for (const key of expectedKeys) {
+        if (pluginOptions[key] !== expectedOptions[key]) {
+          return false;
+        }
+      }
+      return true;
     }
   });
 }
@@ -38,7 +66,8 @@ export function getPluginOption(
   return null;
 }
 
-const PIPELINE_PROPOSALS = ["minimal", "smart", "fsharp"];
+const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
+const TOPIC_TOKENS = ["^", "%", "#"];
 const RECORD_AND_TUPLE_SYNTAX_TYPES = ["hash", "bar"];
 
 export function validatePlugins(plugins: PluginList) {
@@ -74,35 +103,83 @@ export function validatePlugins(plugins: PluginList) {
     throw new Error("Cannot combine placeholders and v8intrinsic plugins.");
   }
 
-  if (
-    hasPlugin(plugins, "pipelineOperator") &&
-    !PIPELINE_PROPOSALS.includes(
-      getPluginOption(plugins, "pipelineOperator", "proposal"),
-    )
-  ) {
-    throw new Error(
-      "'pipelineOperator' requires 'proposal' option whose value should be one of: " +
-        PIPELINE_PROPOSALS.map(p => `'${p}'`).join(", "),
-    );
+  if (hasPlugin(plugins, "pipelineOperator")) {
+    const proposal = getPluginOption(plugins, "pipelineOperator", "proposal");
+
+    if (!PIPELINE_PROPOSALS.includes(proposal)) {
+      const proposalList = PIPELINE_PROPOSALS.map(p => `"${p}"`).join(", ");
+      throw new Error(
+        `"pipelineOperator" requires "proposal" option whose value must be one of: ${proposalList}.`,
+      );
+    }
+
+    const tupleSyntaxIsHash = hasPlugin(plugins, [
+      "recordAndTuple",
+      { syntaxType: "hash" },
+    ]);
+
+    if (proposal === "hack") {
+      if (hasPlugin(plugins, "placeholders")) {
+        throw new Error(
+          "Cannot combine placeholders plugin and Hack-style pipes.",
+        );
+      }
+
+      if (hasPlugin(plugins, "v8intrinsic")) {
+        throw new Error(
+          "Cannot combine v8intrinsic plugin and Hack-style pipes.",
+        );
+      }
+
+      const topicToken = getPluginOption(
+        plugins,
+        "pipelineOperator",
+        "topicToken",
+      );
+
+      if (!TOPIC_TOKENS.includes(topicToken)) {
+        const tokenList = TOPIC_TOKENS.map(t => `"${t}"`).join(", ");
+
+        throw new Error(
+          `"pipelineOperator" in "proposal": "hack" mode also requires a "topicToken" option whose value must be one of: ${tokenList}.`,
+        );
+      }
+
+      if (topicToken === "#" && tupleSyntaxIsHash) {
+        throw new Error(
+          'Plugin conflict between `["pipelineOperator", { proposal: "hack", topicToken: "#" }]` and `["recordAndtuple", { syntaxType: "hash"}]`.',
+        );
+      }
+    } else if (proposal === "smart" && tupleSyntaxIsHash) {
+      throw new Error(
+        'Plugin conflict between `["pipelineOperator", { proposal: "smart" }]` and `["recordAndtuple", { syntaxType: "hash"}]`.',
+      );
+    }
   }
 
   if (hasPlugin(plugins, "moduleAttributes")) {
-    if (hasPlugin(plugins, "importAssertions")) {
+    if (process.env.BABEL_8_BREAKING) {
       throw new Error(
-        "Cannot combine importAssertions and moduleAttributes plugins.",
+        "`moduleAttributes` has been removed in Babel 8, please use `importAssertions` parser plugin, or `@babel/plugin-syntax-import-assertions`.",
       );
-    }
-    const moduleAttributesVerionPluginOption = getPluginOption(
-      plugins,
-      "moduleAttributes",
-      "version",
-    );
-    if (moduleAttributesVerionPluginOption !== "may-2020") {
-      throw new Error(
-        "The 'moduleAttributes' plugin requires a 'version' option," +
-          " representing the last proposal update. Currently, the" +
-          " only supported value is 'may-2020'.",
+    } else {
+      if (hasPlugin(plugins, "importAssertions")) {
+        throw new Error(
+          "Cannot combine importAssertions and moduleAttributes plugins.",
+        );
+      }
+      const moduleAttributesVerionPluginOption = getPluginOption(
+        plugins,
+        "moduleAttributes",
+        "version",
       );
+      if (moduleAttributesVerionPluginOption !== "may-2020") {
+        throw new Error(
+          "The 'moduleAttributes' plugin requires a 'version' option," +
+            " representing the last proposal update. Currently, the" +
+            " only supported value is 'may-2020'.",
+        );
+      }
     }
   }
 
@@ -116,6 +193,18 @@ export function validatePlugins(plugins: PluginList) {
       "'recordAndTuple' requires 'syntaxType' option whose value should be one of: " +
         RECORD_AND_TUPLE_SYNTAX_TYPES.map(p => `'${p}'`).join(", "),
     );
+  }
+
+  if (
+    hasPlugin(plugins, "asyncDoExpressions") &&
+    !hasPlugin(plugins, "doExpressions")
+  ) {
+    const error = new Error(
+      "'asyncDoExpressions' requires 'doExpressions', please add 'doExpressions' to parser plugins.",
+    );
+    // $FlowIgnore
+    error.missingPlugins = "doExpressions"; // so @babel/core can provide better error message
+    throw error;
   }
 }
 
@@ -138,6 +227,5 @@ export const mixinPlugins: { [name: string]: MixinPlugin } = {
   placeholders,
 };
 
-export const mixinPluginNames: $ReadOnlyArray<string> = Object.keys(
-  mixinPlugins,
-);
+export const mixinPluginNames: $ReadOnlyArray<string> =
+  Object.keys(mixinPlugins);

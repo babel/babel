@@ -128,12 +128,12 @@
                 }
               ]
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":97,"end":101,"loc":{"start":{"line":6,"column":21},"end":{"line":6,"column":25},"identifierName":"then"},
               "name": "then"
-            },
-            "computed": false
+            }
           },
           "arguments": [
             {

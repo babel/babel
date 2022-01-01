@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":62}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":62}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":62}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18}},
+            "imported": {
+              "type": "Identifier",
+              "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18},"identifierName":"Component"},
+              "name": "Component"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":18,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":18},"identifierName":"Component"},
+              "name": "Component"
+            },
+            "importKind": "value"
+          },
+          {
+            "type": "ImportSpecifier",
+            "start":20,"end":39,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":39}},
+            "imported": {
+              "type": "Identifier",
+              "start":25,"end":39,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":39},"identifierName":"ComponentProps"},
+              "name": "ComponentProps"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":25,"end":39,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":39},"identifierName":"ComponentProps"},
+              "name": "ComponentProps"
+            },
+            "importKind": "type"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":47,"end":61,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":61}},
+          "extra": {
+            "rawValue": "./exports.js",
+            "raw": "\"./exports.js\""
+          },
+          "value": "./exports.js"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

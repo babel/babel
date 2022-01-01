@@ -34,7 +34,11 @@
                         "typeParameter": {
                           "type": "TSTypeParameter",
                           "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23}},
-                          "name": "bar"
+                          "name": {
+                            "type": "Identifier",
+                            "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23},"identifierName":"bar"},
+                            "name": "bar"
+                          }
                         }
                       }
                     ],

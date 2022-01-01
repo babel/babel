@@ -18,6 +18,9 @@ export default class BaseParser {
   declare expressionScope: ExpressionScopeHandler;
   declare plugins: PluginsMap;
   declare filename: ?string;
+  // Names of exports store. `default` is stored as a name for both
+  // `export default foo;` and `export { foo as default };`.
+  declare exportedIdentifiers: Set<string>;
   sawUnambiguousESM: boolean = false;
   ambiguousScriptDifferentAst: boolean = false;
 
@@ -28,12 +31,31 @@ export default class BaseParser {
   declare input: string;
   declare length: number;
 
-  hasPlugin(name: string): boolean {
-    return this.plugins.has(name);
+  // This method accepts either a string (plugin name) or an array pair
+  // (plugin name and options object). If an options object is given,
+  // then each value is non-recursively checked for identity with that
+  // plugin’s actual option value.
+  hasPlugin(pluginConfig: PluginConfig): boolean {
+    if (typeof pluginConfig === "string") {
+      return this.plugins.has(pluginConfig);
+    } else {
+      const [pluginName, pluginOptions] = pluginConfig;
+      if (!this.hasPlugin(pluginName)) {
+        return false;
+      }
+      const actualOptions = this.plugins.get(pluginName);
+      for (const key of Object.keys(pluginOptions)) {
+        if (actualOptions?.[key] !== pluginOptions[key]) {
+          return false;
+        }
+      }
+      return true;
+    }
   }
 
   getPluginOption(plugin: string, name: string) {
-    // $FlowIssue
-    if (this.hasPlugin(plugin)) return this.plugins.get(plugin)[name];
+    return this.plugins.get(plugin)?.[name];
   }
 }
+
+export type PluginConfig = string | [string, { [string]: any }];

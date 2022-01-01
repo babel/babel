@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: 'static' modifier must precede 'readonly' modifier. (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":49,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "TSIndexSignature",
+              "start":14,"end":47,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":37}},
+              "readonly": true,
+              "static": true,
+              "parameters": [
+                {
+                  "type": "Identifier",
+                  "start":31,"end":40,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":30},"identifierName":"x"},
+                  "name": "x",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":32,"end":40,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":30}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":34,"end":40,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":30}}
+                    }
+                  }
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":41,"end":46,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":36}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":43,"end":46,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":36}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

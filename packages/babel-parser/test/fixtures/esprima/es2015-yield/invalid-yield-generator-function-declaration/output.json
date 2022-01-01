@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
   "errors": [
-    "SyntaxError: Can not use 'yield' as identifier inside a generator (1:25)"
+    "SyntaxError: Can not use 'yield' as identifier inside a generator. (1:25)"
   ],
   "program": {
     "type": "Program",

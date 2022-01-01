@@ -31,12 +31,12 @@
                   "start":19,"end":25,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":11},"identifierName":"Symbol"},
                   "name": "Symbol"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":26,"end":34,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":20},"identifierName":"iterator"},
                   "name": "iterator"
-                },
-                "computed": false
+                }
               },
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
@@ -59,12 +59,12 @@
                   "start":50,"end":56,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":11},"identifierName":"Symbol"},
                   "name": "Symbol"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":57,"end":65,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":20},"identifierName":"iterator"},
                   "name": "iterator"
-                },
-                "computed": false
+                }
               },
               "optional": true,
               "typeAnnotation": {

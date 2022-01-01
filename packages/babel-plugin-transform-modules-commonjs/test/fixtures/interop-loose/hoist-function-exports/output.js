@@ -1,8 +1,8 @@
 "use strict";
 
 exports.__esModule = true;
-exports.nextOdd = nextOdd;
 exports.isOdd = void 0;
+exports.nextOdd = nextOdd;
 
 var _evens = require("./evens");
 

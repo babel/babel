@@ -27,12 +27,12 @@
                 },
                 "arguments": []
               },
+              "computed": false,
               "property": {
                 "type": "Identifier",
                 "start":8,"end":11,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":11},"identifierName":"bar"},
                 "name": "bar"
-              },
-              "computed": false
+              }
             }
           }
         ],
@@ -61,12 +61,12 @@
                       "start":29,"end":35,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":10},"identifierName":"member"},
                       "name": "member"
                     },
+                    "computed": true,
                     "property": {
                       "type": "Identifier",
                       "start":36,"end":46,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":21},"identifierName":"expression"},
                       "name": "expression"
-                    },
-                    "computed": true
+                    }
                   }
                 }
               ],

@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": { "browsers": "ie 6" },
+        "corejs": 3
+      }
+    ]
+  ]
+}

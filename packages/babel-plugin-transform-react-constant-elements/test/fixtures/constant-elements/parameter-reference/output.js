@@ -1,8 +1,8 @@
 function render(text) {
-  var _ref = <div>{text}</div>;
+  var _div;
 
   return function () {
-    return _ref;
+    return _div || (_div = <div>{text}</div>);
   };
 }
 

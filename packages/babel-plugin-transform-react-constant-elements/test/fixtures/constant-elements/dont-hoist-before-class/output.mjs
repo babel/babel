@@ -1,14 +1,13 @@
+var _div, _div2;
+
 import React from "react";
 
-const Parent = ({}) => _ref;
+const Parent = ({}) => _div || (_div = <div className="parent">
+    <Child />
+  </div>);
 
 export default Parent;
 
-var _ref2 = <div className="child">
+let Child = () => _div2 || (_div2 = <div className="child">
     ChildTextContent
-  </div>;
-
-let Child = () => _ref2,
-    _ref = <div className="parent">
-    <Child />
-  </div>;
+  </div>);

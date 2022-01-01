@@ -1,4 +1,15 @@
-import * as t from "@babel/types";
+import {
+  blockStatement,
+  cloneNode,
+  emptyStatement,
+  expressionStatement,
+  identifier,
+  isStatement,
+  isStringLiteral,
+  stringLiteral,
+  validate,
+} from "@babel/types";
+import type * as t from "@babel/types";
 
 import type { TemplateReplacements } from "./options";
 import type { Metadata, Placeholder } from "./parse";
@@ -7,7 +18,7 @@ export default function populatePlaceholders(
   metadata: Metadata,
   replacements: TemplateReplacements,
 ): t.File {
-  const ast = t.cloneNode(metadata.ast);
+  const ast = cloneNode(metadata.ast);
 
   if (replacements) {
     metadata.placeholders.forEach(placeholder => {
@@ -61,9 +72,9 @@ function applyReplacement(
   // once to avoid injecting the same node multiple times.
   if (placeholder.isDuplicate) {
     if (Array.isArray(replacement)) {
-      replacement = replacement.map(node => t.cloneNode(node));
+      replacement = replacement.map(node => cloneNode(node));
     } else if (typeof replacement === "object") {
-      replacement = t.cloneNode(replacement);
+      replacement = cloneNode(replacement);
     }
   }
 
@@ -71,41 +82,41 @@ function applyReplacement(
 
   if (placeholder.type === "string") {
     if (typeof replacement === "string") {
-      replacement = t.stringLiteral(replacement);
+      replacement = stringLiteral(replacement);
     }
-    if (!replacement || !t.isStringLiteral(replacement)) {
+    if (!replacement || !isStringLiteral(replacement)) {
       throw new Error("Expected string substitution");
     }
   } else if (placeholder.type === "statement") {
     if (index === undefined) {
       if (!replacement) {
-        replacement = t.emptyStatement();
+        replacement = emptyStatement();
       } else if (Array.isArray(replacement)) {
-        replacement = t.blockStatement(replacement);
+        replacement = blockStatement(replacement);
       } else if (typeof replacement === "string") {
-        replacement = t.expressionStatement(t.identifier(replacement));
-      } else if (!t.isStatement(replacement)) {
-        replacement = t.expressionStatement(replacement as any);
+        replacement = expressionStatement(identifier(replacement));
+      } else if (!isStatement(replacement)) {
+        replacement = expressionStatement(replacement as any);
       }
     } else {
       if (replacement && !Array.isArray(replacement)) {
         if (typeof replacement === "string") {
-          replacement = t.identifier(replacement);
+          replacement = identifier(replacement);
         }
-        if (!t.isStatement(replacement)) {
-          replacement = t.expressionStatement(replacement as any);
+        if (!isStatement(replacement)) {
+          replacement = expressionStatement(replacement as any);
         }
       }
     }
   } else if (placeholder.type === "param") {
     if (typeof replacement === "string") {
-      replacement = t.identifier(replacement);
+      replacement = identifier(replacement);
     }
 
     if (index === undefined) throw new Error("Assertion failure.");
   } else {
     if (typeof replacement === "string") {
-      replacement = t.identifier(replacement);
+      replacement = identifier(replacement);
     }
     if (Array.isArray(replacement)) {
       throw new Error("Cannot replace single expression with an array.");
@@ -113,7 +124,7 @@ function applyReplacement(
   }
 
   if (index === undefined) {
-    t.validate(parent, key, replacement);
+    validate(parent, key, replacement);
 
     (parent as any)[key] = replacement;
   } else {
@@ -131,7 +142,7 @@ function applyReplacement(
       items[index] = replacement;
     }
 
-    t.validate(parent, key, items);
+    validate(parent, key, items);
     (parent as any)[key] = items;
   }
 }

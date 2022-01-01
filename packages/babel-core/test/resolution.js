@@ -1,8 +1,13 @@
-import * as babel from "../lib/index";
+import * as babel from "../lib/index.js";
 import path from "path";
+import { fileURLToPath } from "url";
 
 describe("addon resolution", function () {
-  const base = path.join(__dirname, "fixtures", "resolution");
+  const base = path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "fixtures",
+    "resolution",
+  );
   let cwd;
 
   beforeEach(function () {
@@ -334,6 +339,7 @@ describe("addon resolution", function () {
     });
   });
 
+  // TODO(Babel 8): remove node version check.
   it("should throw about module: usage for presets", function () {
     process.chdir("throw-module-paths");
 
@@ -344,7 +350,13 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      /Cannot resolve module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+      // Todo(Babel 8): remove node checks in this file. We cannot test the desired behaviour
+      // because Jest 24 has an issue on setting the MODULE_NOT_FOUND error when the native
+      // `require.resolve` is provided.
+      // see https://github.com/babel/babel/pull/12439/files#r535996000
+      process.versions.node.startsWith("8.")
+        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
+        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 
@@ -358,7 +370,9 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      /Cannot resolve module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+      process.versions.node.startsWith("8.")
+        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
+        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 
@@ -372,7 +386,9 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      /Cannot resolve module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/,
+      process.versions.node.startsWith("8.")
+        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
+        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -386,7 +402,9 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      /Cannot resolve module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/,
+      process.versions.node.startsWith("8.")
+        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
+        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -400,7 +418,9 @@ describe("addon resolution", function () {
         presets: ["testplugin"],
       });
     }).toThrow(
-      /Cannot resolve module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/,
+      process.versions.node.startsWith("8.")
+        ? /Cannot (?:find|resolve) module 'babel-preset-testplugin'/
+        : /Cannot (?:find|resolve) module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/s,
     );
   });
 
@@ -414,7 +434,9 @@ describe("addon resolution", function () {
         plugins: ["testpreset"],
       });
     }).toThrow(
-      /Cannot resolve module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/,
+      process.versions.node.startsWith("8.")
+        ? /Cannot (?:find|resolve) module 'babel-plugin-testpreset'/
+        : /Cannot (?:find|resolve) module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/s,
     );
   });
 
@@ -427,7 +449,7 @@ describe("addon resolution", function () {
         babelrc: false,
         presets: ["foo"],
       });
-    }).toThrow(/Cannot resolve module 'babel-preset-foo'/);
+    }).toThrow(/Cannot (?:find|resolve) module 'babel-preset-foo'/);
   });
 
   it("should throw about missing plugins", function () {
@@ -439,6 +461,6 @@ describe("addon resolution", function () {
         babelrc: false,
         plugins: ["foo"],
       });
-    }).toThrow(/Cannot resolve module 'babel-plugin-foo'/);
+    }).toThrow(/Cannot (?:find|resolve) module 'babel-plugin-foo'/);
   });
 });

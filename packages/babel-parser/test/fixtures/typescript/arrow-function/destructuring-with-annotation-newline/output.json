@@ -37,10 +37,7 @@
                 {
                   "type": "ObjectProperty",
                   "start":6,"end":7,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5}},
-                  "extra": {
-                    "shorthand": true
-                  },
-                  "method":false,
+                  "method": false,
                   "key": {
                     "type": "Identifier",
                     "start":6,"end":7,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5},"identifierName":"a"},
@@ -52,14 +49,14 @@
                     "type": "Identifier",
                     "start":6,"end":7,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5},"identifierName":"a"},
                     "name": "a"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
                   "type": "ObjectProperty",
                   "start":9,"end":10,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8}},
-                  "extra": {
-                    "shorthand": true
-                  },
                   "method": false,
                   "key": {
                     "type": "Identifier",
@@ -72,6 +69,9 @@
                     "type": "Identifier",
                     "start":9,"end":10,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8},"identifierName":"b"},
                     "name": "b"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 }
               ],

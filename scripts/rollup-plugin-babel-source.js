@@ -29,13 +29,24 @@ export default function () {
           typeof packageJson["browser"] === "object"
         ) {
           for (const nodeFile in packageJson["browser"]) {
-            const browserFile = packageJson["browser"][nodeFile].replace(
+            const browserFileAsJs = packageJson["browser"][nodeFile].replace(
               /^(\.\/)?lib\//,
               "src/"
             );
-            const nodeFileSrc = path.normalize(
+
+            const browserFileAsTs = browserFileAsJs.replace(/.js$/, ".ts");
+            const browserFile = fs.existsSync(browserFileAsTs)
+              ? browserFileAsTs
+              : browserFileAsJs;
+
+            const nodeFileSrcAsJs = path.normalize(
               nodeFile.replace(/^(\.\/)?lib\//, "src/")
             );
+            const nodeFileSrcAsTs = nodeFileSrcAsJs.replace(/.js$/, ".ts");
+            const nodeFileSrc = fs.existsSync(nodeFileSrcAsTs)
+              ? nodeFileSrcAsTs
+              : nodeFileSrcAsJs;
+
             if (id.endsWith(nodeFileSrc)) {
               if (browserFile === false) {
                 return "";
@@ -98,12 +109,7 @@ export default function () {
       if (!/\.[a-z]+$/.test(asJS)) asJS += ".js";
       const asTS = asJS.replace(/\.js$/, ".ts");
 
-      try {
-        fs.statSync(asTS);
-        return asTS;
-      } catch {
-        return asJS;
-      }
+      return fs.existsSync(asTS) ? asTS : asJS;
     },
   };
 }

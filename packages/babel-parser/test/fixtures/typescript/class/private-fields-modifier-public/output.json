@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: Private elements cannot have an accessibility modifier ('public') (2:2)"
+    "SyntaxError: Private elements cannot have an accessibility modifier ('public'). (2:2)"
   ],
   "program": {
     "type": "Program",

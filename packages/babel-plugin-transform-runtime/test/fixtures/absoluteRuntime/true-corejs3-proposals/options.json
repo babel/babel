@@ -1,7 +1,10 @@
 {
-  "presets": ["env"],
+  "externalHelpers": true,
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
   "plugins": [
-    ["transform-runtime", { "absoluteRuntime": true, "corejs": { "version": 3, "proposals": true } }],
-    ["external-helpers", { "helperVersion": "7.100.0" }]
+    [
+      "transform-runtime",
+      { "absoluteRuntime": true, "corejs": { "version": 3, "proposals": true } }
+    ]
   ]
 }

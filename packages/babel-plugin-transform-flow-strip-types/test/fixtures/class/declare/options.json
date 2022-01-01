@@ -1,7 +1,4 @@
 {
   "BABEL_8_BREAKING": true,
-  "plugins": [
-    "transform-flow-strip-types",
-    "syntax-class-properties"
-  ]
+  "plugins": ["transform-flow-strip-types"]
 }

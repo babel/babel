@@ -21,12 +21,12 @@
               "start":9,"end":10,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1},"identifierName":"o"},
               "name": "o"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":11,"end":12,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3},"identifierName":"m"},
               "name": "m"
-            },
-            "computed": false
+            }
           },
           "typeArguments": {
             "type": "TypeParameterInstantiation",

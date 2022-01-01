@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":51}},
   "errors": [
-    "SyntaxError: super() is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (1:40)"
+    "SyntaxError: `super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (1:40)"
   ],
   "program": {
     "type": "Program",
@@ -78,11 +78,12 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
+            "rawValue": "use strict",
             "raw": "\"use strict\"",
-            "rawValue": "use strict"
-          }
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
         }
       }
     ]

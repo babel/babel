@@ -1,6 +1,6 @@
-import cloneDeep from "lodash/cloneDeep";
-import rule from "../../src/rules/no-invalid-this";
-import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
+import cloneDeep from "clone-deep";
+import rule from "../../lib/rules/no-invalid-this.js";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 /**
  * A constant value for non strict mode environment.
@@ -93,6 +93,30 @@ const patterns = [
     invalid: [],
   },
 
+  {
+    code: "class A {a = () => { function b() { return this.b;} };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
+  },
+
+  {
+    code: "class A {a = () => { (function b() { return this.b;}); };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
+  },
+
   // Class Private methods
   {
     code: "class A {#a = this.b;};",
@@ -109,6 +133,30 @@ const patterns = [
   },
 
   {
+    code: "class A {#a = () => { function b() { return this.b;} };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
+  },
+
+  {
+    code: "class A {#a = () => { (function b() { return this.b;}); };};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [],
+    invalid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    errors: [
+      {
+        message: "Unexpected 'this'.",
+      },
+    ],
+  },
+
+  {
     code: "class A {#a() {return this.b;};};",
     parserOptions: { ecmaVersion: 6 },
     valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
@@ -117,7 +165,7 @@ const patterns = [
 ];
 
 const ruleTester = new RuleTester();
-ruleTester.run("@babel/no-invalid-this", rule, {
+ruleTester.run("@babel/no-invalid-this", rule.default, {
   valid: extractPatterns(patterns, "valid"),
   invalid: extractPatterns(patterns, "invalid"),
 });

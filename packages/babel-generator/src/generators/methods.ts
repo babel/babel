@@ -1,5 +1,6 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import { isIdentifier } from "@babel/types";
+import type * as t from "@babel/types";
 
 export function _params(this: Printer, node: any) {
   this.print(node.typeParameters, node);
@@ -83,6 +84,7 @@ export function _functionHead(this: Printer, node: any) {
   }
   this.word("function");
   if (node.generator) this.token("*");
+  this.printInnerComments(node);
 
   this.space();
   if (node.id) {
@@ -112,30 +114,18 @@ export function ArrowFunctionExpression(
 
   const firstParam = node.params[0];
 
+  // Try to avoid printing parens in simple cases, but only if we're pretty
+  // sure that they aren't needed by type annotations or potential newlines.
   if (
+    !this.format.retainLines &&
+    // Auxiliary comments can introduce unexpected newlines
+    !this.format.auxiliaryCommentBefore &&
+    !this.format.auxiliaryCommentAfter &&
     node.params.length === 1 &&
-    t.isIdentifier(firstParam) &&
-    !hasTypes(node, firstParam)
+    isIdentifier(firstParam) &&
+    !hasTypesOrComments(node, firstParam)
   ) {
-    if (
-      (this.format.retainLines || node.async) &&
-      node.loc &&
-      node.body.loc &&
-      node.loc.start.line < node.body.loc.start.line
-    ) {
-      this.token("(");
-      if (firstParam.loc && firstParam.loc.start.line > node.loc.start.line) {
-        this.indent();
-        this.print(firstParam, node);
-        this.dedent();
-        this._catchUp("start", node.body.loc);
-      } else {
-        this.print(firstParam, node);
-      }
-      this.token(")");
-    } else {
-      this.print(firstParam, node);
-    }
+    this.print(firstParam, node);
   } else {
     this._params(node);
   }
@@ -149,12 +139,18 @@ export function ArrowFunctionExpression(
   this.print(node.body, node);
 }
 
-function hasTypes(node, param) {
-  return (
+function hasTypesOrComments(
+  node: t.ArrowFunctionExpression,
+  param: t.Identifier,
+): boolean {
+  return !!(
     node.typeParameters ||
     node.returnType ||
+    // @ts-expect-error
+    node.predicate ||
     param.typeAnnotation ||
     param.optional ||
-    param.trailingComments
+    param.leadingComments?.length ||
+    param.trailingComments?.length
   );
 }

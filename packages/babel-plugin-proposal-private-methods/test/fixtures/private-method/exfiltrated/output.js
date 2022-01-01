@@ -1,10 +1,10 @@
 var exfiltrated;
 
-var _privateMethod = new WeakSet();
+var _privateMethod = /*#__PURE__*/new WeakSet();
 
 class Foo {
   constructor() {
-    _privateMethod.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _privateMethod);
 
     if (exfiltrated === undefined) {
       exfiltrated = babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2);
@@ -13,4 +13,4 @@ class Foo {
 
 }
 
-var _privateMethod2 = function _privateMethod2() {};
+function _privateMethod2() {}

@@ -1,5 +1,15 @@
 import type NodePath from "../index";
-import * as t from "@babel/types";
+import {
+  BOOLEAN_NUMBER_BINARY_OPERATORS,
+  createFlowUnionType,
+  createTSUnionType,
+  createTypeAnnotationBasedOnTypeof,
+  createUnionTypeAnnotation,
+  isTSTypeAnnotation,
+  numberTypeAnnotation,
+  voidTypeAnnotation,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import type Binding from "../../scope/binding";
 
 export default function (node: any) {
@@ -22,9 +32,9 @@ export default function (node: any) {
 
   // built-in values
   if (node.name === "undefined") {
-    return t.voidTypeAnnotation();
+    return voidTypeAnnotation();
   } else if (node.name === "NaN" || node.name === "Infinity") {
-    return t.numberTypeAnnotation();
+    return numberTypeAnnotation();
   } else if (node.name === "arguments") {
     // todo
   }
@@ -84,7 +94,7 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     }*/
 
     // add back on function constant violations since we can't track calls
-    constantViolations = constantViolations.concat(functionConstantViolations);
+    constantViolations.push(...functionConstantViolations);
 
     // push on inferred types of violated paths
     for (const violation of constantViolations) {
@@ -96,15 +106,15 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     return;
   }
 
-  if (t.isTSTypeAnnotation(types[0]) && t.createTSUnionType) {
-    return t.createTSUnionType(types);
+  if (isTSTypeAnnotation(types[0]) && createTSUnionType) {
+    return createTSUnionType(types);
   }
 
-  if (t.createFlowUnionType) {
-    return t.createFlowUnionType(types);
+  if (createFlowUnionType) {
+    return createFlowUnionType(types);
   }
 
-  return t.createUnionTypeAnnotation(types);
+  return createUnionTypeAnnotation(types);
 }
 
 function getConstantViolationsBefore(binding: Binding, path, functions?) {
@@ -138,8 +148,8 @@ function inferAnnotationFromBinaryExpression(
     if (operator === "===") {
       return target.getTypeAnnotation();
     }
-    if (t.BOOLEAN_NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
-      return t.numberTypeAnnotation();
+    if (BOOLEAN_NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
+      return numberTypeAnnotation();
     }
 
     return;
@@ -173,7 +183,7 @@ function inferAnnotationFromBinaryExpression(
 
   // turn type value into a type annotation
   // @ts-expect-error todo(flow->ts): move validation from helper or relax type constraint to just a string
-  return t.createTypeAnnotationBasedOnTypeof(typeValue);
+  return createTypeAnnotationBasedOnTypeof(typeValue);
 }
 
 function getParentConditionalPath(binding, path, name) {
@@ -221,22 +231,22 @@ function getConditionalAnnotation<T extends t.Node>(
   }
 
   if (types.length) {
-    if (t.isTSTypeAnnotation(types[0]) && t.createTSUnionType) {
+    if (isTSTypeAnnotation(types[0]) && createTSUnionType) {
       return {
-        typeAnnotation: t.createTSUnionType(types),
+        typeAnnotation: createTSUnionType(types),
         ifStatement,
       };
     }
 
-    if (t.createFlowUnionType) {
+    if (createFlowUnionType) {
       return {
-        typeAnnotation: t.createFlowUnionType(types),
+        typeAnnotation: createFlowUnionType(types),
         ifStatement,
       };
     }
 
     return {
-      typeAnnotation: t.createUnionTypeAnnotation(types),
+      typeAnnotation: createUnionTypeAnnotation(types),
       ifStatement,
     };
   }

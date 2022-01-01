@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":76}},
   "errors": [
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (1:36)",
-    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (1:57)"
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:36)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:57)"
   ],
   "program": {
     "type": "Program",
@@ -34,8 +34,9 @@
                 "type": "DirectiveLiteral",
                 "start":19,"end":38,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":38}},
                 "extra": {
+                  "rawValue": "octal directive\\1",
                   "raw": "\"octal directive\\1\"",
-                  "rawValue": "octal directive\\1"
+                  "expressionValue": "octal directive\u0001"
                 },
                 "value": "octal directive\\1"
               }
@@ -47,8 +48,9 @@
                 "type": "DirectiveLiteral",
                 "start":40,"end":59,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":59}},
                 "extra": {
+                  "rawValue": "octal directive\\2",
                   "raw": "\"octal directive\\2\"",
-                  "rawValue": "octal directive\\2"
+                  "expressionValue": "octal directive\u0002"
                 },
                 "value": "octal directive\\2"
               }
@@ -60,8 +62,9 @@
                 "type": "DirectiveLiteral",
                 "start":61,"end":73,"loc":{"start":{"line":1,"column":61},"end":{"line":1,"column":73}},
                 "extra": {
+                  "rawValue": "use strict",
                   "raw": "\"use strict\"",
-                  "rawValue": "use strict"
+                  "expressionValue": "use strict"
                 },
                 "value": "use strict"
               }

@@ -5,6 +5,8 @@
 <PROJECT_ROOT>/codemods/.*/lib
 <PROJECT_ROOT>/codemods/.*/test
 <PROJECT_ROOT>/node_modules/module-deps/
+<PROJECT_ROOT>/node_modules/webpack-cli/
+<PROJECT_ROOT>/test/runtime-integration/
 
 [include]
 packages/*/src
@@ -15,6 +17,7 @@ lib/file.js
 lib/parser.js
 lib/third-party-libs.js.flow
 lib/preset-modules.js.flow
+lib/babel-polyfills.js.flow
 packages/babel-types/lib/index.js.flow
 lib/babel-packages.js.flow
 lib/package-json.js.flow

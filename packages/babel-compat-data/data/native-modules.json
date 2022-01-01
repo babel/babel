@@ -9,9 +9,10 @@
     "opera": "48",
     "op_mob": "48",
     "safari": "10.1",
-    "ios_saf": "10.3",
+    "ios": "10.3",
     "samsung": "8.2",
     "android": "61",
-    "electron": "2.0"
+    "electron": "2.0",
+    "ios_saf": "10.3"
   }
 }

@@ -32,20 +32,20 @@ class Cl {
 
 }
 
-var _set_privateFieldValue = function (newValue) {
-  babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateField, newValue);
-};
-
-var _get_privateFieldValue = function () {
+function _get_privateFieldValue() {
   return babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateField);
-};
+}
 
+function _set_privateFieldValue(newValue) {
+  babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateField, newValue);
+}
+
+var _privateFieldValue = {
+  get: _get_privateFieldValue,
+  set: _set_privateFieldValue
+};
 var _privateField = {
   writable: true,
   value: "top secret string"
 };
 babelHelpers.defineProperty(Cl, "publicField", "not secret string");
-var _privateFieldValue = {
-  get: _get_privateFieldValue,
-  set: _set_privateFieldValue
-};

@@ -67,10 +67,6 @@
         "expression": {
           "type": "FunctionExpression",
           "start":37,"end":70,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":34}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 36
-          },
           "id": null,
           "generator": false,
           "async": false,
@@ -116,6 +112,10 @@
             "start":68,"end":70,"loc":{"start":{"line":2,"column":32},"end":{"line":2,"column":34}},
             "body": [],
             "directives": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 36
           }
         }
       }

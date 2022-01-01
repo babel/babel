@@ -2,10 +2,24 @@
 
 const path = require("path");
 
+const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
+
+const testFiles = [
+  "packages/*/test/**/*.js",
+  "codemods/*/test/**/*.js",
+  "eslint/*/test/**/*.js",
+];
+const sourceFiles = exts => [
+  `packages/*/src/**/*.{${exts}}`,
+  `codemods/*/src/**/*.{${exts}}`,
+  `eslint/*/src/**/*.{${exts}}`,
+];
+
 module.exports = {
   root: true,
   plugins: [
     "import",
+    "node",
     "jest",
     "prettier",
     "@babel/development",
@@ -34,11 +48,7 @@ module.exports = {
       },
     },
     {
-      files: [
-        "packages/*/src/**/*.{js,ts}",
-        "codemods/*/src/**/*.{js,ts}",
-        "eslint/*/src/**/*.{js,ts}",
-      ],
+      files: sourceFiles("js,ts,cjs,mjs"),
       rules: {
         "@babel/development/no-undefined-identifier": "error",
         "@babel/development/no-deprecated-clone": "error",
@@ -49,9 +59,7 @@ module.exports = {
     },
     {
       files: [
-        "packages/*/test/**/*.js",
-        "codemods/*/test/**/*.js",
-        "eslint/*/test/**/*.js",
+        ...testFiles,
         "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
         "test/**/*.js",
       ],
@@ -65,7 +73,28 @@ module.exports = {
         "jest/no-standalone-expect": "off",
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
-        "import/extensions": ["error", { json: "always", cjs: "always" }],
+        "import/extensions": ["error", "always"],
+        "import/no-extraneous-dependencies": "off",
+        "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
+      },
+    },
+    {
+      files: testFiles,
+      rules: {
+        "node/no-unsupported-features": [
+          "error",
+          { version: "12.17.0", ignores: ["modules"] },
+        ],
+      },
+    },
+    {
+      files: [...sourceFiles("js,ts,mjs"), ...testFiles, "test/**/*.js"],
+      excludedFiles: [
+        // @babel/register is the require() hook, so it will always be CJS-based
+        "packages/babel-register/**/*.{js,ts}",
+      ],
+      rules: {
+        "no-restricted-globals": ["error", ...cjsGlobals],
       },
     },
     {
@@ -88,6 +117,16 @@ module.exports = {
             ),
           },
         ],
+        "@babel/development-internal/report-error-message-format": "error",
+      },
+    },
+    {
+      files: ["packages/babel-helpers/src/helpers/**.js"],
+      rules: {
+        "no-var": "off",
+        "comma-dangle": "off",
+        "no-func-assign": "off",
+        "import/no-extraneous-dependencies": "off",
       },
     },
     {
@@ -97,6 +136,12 @@ module.exports = {
           "error",
           { packageDir: "./packages/babel-traverse" },
         ],
+      },
+    },
+    {
+      files: ["eslint/babel-eslint-parser/src/**/*.js"],
+      rules: {
+        "no-restricted-imports": ["error", "@babel/core"],
       },
     },
     {

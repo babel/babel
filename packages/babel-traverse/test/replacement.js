@@ -1,7 +1,10 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+import _generate from "@babel/generator";
+const traverse = _traverse.default;
+const generate = _generate.default;
 
 describe("path/replacement", function () {
   describe("replaceWith", function () {
@@ -122,7 +125,7 @@ describe("path/replacement", function () {
         OptionalMemberExpression(path) {
           path.node.type = "MemberExpression";
           // force `replaceWith` to replace `path.node`
-          path.replaceWith(path.node.__clone());
+          path.replaceWith(t.cloneNode(path.node));
           path.parentPath.ensureBlock();
 
           const aQuestionDotBNode = path.node.object.expression;

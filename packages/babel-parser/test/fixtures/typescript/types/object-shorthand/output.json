@@ -40,7 +40,11 @@
                       {
                         "type": "TSTypeParameter",
                         "start":22,"end":46,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":30}},
-                        "name": "T",
+                        "name": {
+                          "type": "Identifier",
+                          "start":22,"end":23,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"T"},
+                          "name": "T"
+                        },
                         "constraint": {
                           "type": "TSTypeLiteral",
                           "start":32,"end":46,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":30}},

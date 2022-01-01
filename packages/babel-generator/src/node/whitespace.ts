@@ -1,5 +1,21 @@
-import * as t from "@babel/types";
+import {
+  FLIPPED_ALIAS_KEYS,
+  isArrayExpression,
+  isAssignmentExpression,
+  isBinary,
+  isBlockStatement,
+  isCallExpression,
+  isFunction,
+  isIdentifier,
+  isLiteral,
+  isMemberExpression,
+  isObjectExpression,
+  isOptionalCallExpression,
+  isOptionalMemberExpression,
+  isStringLiteral,
+} from "@babel/types";
 
+import type * as t from "@babel/types";
 type WhitespaceObject = {
   before?: boolean;
   after?: boolean;
@@ -17,18 +33,18 @@ function crawl(
   node: t.Node,
   state: { hasCall?: boolean; hasFunction?: boolean; hasHelper?: boolean } = {},
 ) {
-  if (t.isMemberExpression(node) || t.isOptionalMemberExpression(node)) {
+  if (isMemberExpression(node) || isOptionalMemberExpression(node)) {
     crawl(node.object, state);
     if (node.computed) crawl(node.property, state);
-  } else if (t.isBinary(node) || t.isAssignmentExpression(node)) {
+  } else if (isBinary(node) || isAssignmentExpression(node)) {
     crawl(node.left, state);
     crawl(node.right, state);
-  } else if (t.isCallExpression(node) || t.isOptionalCallExpression(node)) {
+  } else if (isCallExpression(node) || isOptionalCallExpression(node)) {
     state.hasCall = true;
     crawl(node.callee, state);
-  } else if (t.isFunction(node)) {
+  } else if (isFunction(node)) {
     state.hasFunction = true;
-  } else if (t.isIdentifier(node)) {
+  } else if (isIdentifier(node)) {
     // @ts-expect-error todo(flow->ts): node.callee is not really expected here…
     state.hasHelper = state.hasHelper || isHelper(node.callee);
   }
@@ -41,15 +57,15 @@ function crawl(
  */
 
 function isHelper(node: t.Node): boolean {
-  if (t.isMemberExpression(node)) {
+  if (isMemberExpression(node)) {
     return isHelper(node.object) || isHelper(node.property);
-  } else if (t.isIdentifier(node)) {
+  } else if (isIdentifier(node)) {
     return node.name === "require" || node.name[0] === "_";
-  } else if (t.isCallExpression(node)) {
+  } else if (isCallExpression(node)) {
     return isHelper(node.callee);
-  } else if (t.isBinary(node) || t.isAssignmentExpression(node)) {
+  } else if (isBinary(node) || isAssignmentExpression(node)) {
     return (
-      (t.isIdentifier(node.left) && isHelper(node.left)) || isHelper(node.right)
+      (isIdentifier(node.left) && isHelper(node.left)) || isHelper(node.right)
     );
   } else {
     return false;
@@ -58,11 +74,11 @@ function isHelper(node: t.Node): boolean {
 
 function isType(node) {
   return (
-    t.isLiteral(node) ||
-    t.isObjectExpression(node) ||
-    t.isArrayExpression(node) ||
-    t.isIdentifier(node) ||
-    t.isMemberExpression(node)
+    isLiteral(node) ||
+    isObjectExpression(node) ||
+    isArrayExpression(node) ||
+    isIdentifier(node) ||
+    isMemberExpression(node)
   );
 }
 
@@ -114,7 +130,7 @@ export const nodes: {
    */
 
   LogicalExpression(node: t.LogicalExpression): WhitespaceObject | undefined {
-    if (t.isFunction(node.left) || t.isFunction(node.right)) {
+    if (isFunction(node.left) || isFunction(node.right)) {
       return {
         after: true,
       };
@@ -126,7 +142,7 @@ export const nodes: {
    */
 
   Literal(node: t.Literal): WhitespaceObject | undefined | null {
-    if (t.isStringLiteral(node) && node.value === "use strict") {
+    if (isStringLiteral(node) && node.value === "use strict") {
       return {
         after: true,
       };
@@ -138,7 +154,7 @@ export const nodes: {
    */
 
   CallExpression(node: t.CallExpression): WhitespaceObject | undefined | null {
-    if (t.isFunction(node.callee) || isHelper(node)) {
+    if (isFunction(node.callee) || isHelper(node)) {
       return {
         before: true,
         after: true,
@@ -149,7 +165,7 @@ export const nodes: {
   OptionalCallExpression(
     node: t.OptionalCallExpression,
   ): WhitespaceObject | undefined | null {
-    if (t.isFunction(node.callee)) {
+    if (isFunction(node.callee)) {
       return {
         before: true,
         after: true,
@@ -187,7 +203,7 @@ export const nodes: {
    */
 
   IfStatement(node: t.IfStatement): WhitespaceObject | undefined | null {
-    if (t.isBlockStatement(node.consequent)) {
+    if (isBlockStatement(node.consequent)) {
       return {
         before: true,
         after: true,
@@ -200,16 +216,19 @@ export const nodes: {
  * Test if Property needs whitespace.
  */
 
-nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function (
-  node: t.ObjectProperty | t.ObjectTypeProperty | t.ObjectMethod,
-  parent: any,
-): WhitespaceObject | undefined | null {
-  if (parent.properties[0] === node) {
-    return {
-      before: true,
+nodes.ObjectProperty =
+  nodes.ObjectTypeProperty =
+  nodes.ObjectMethod =
+    function (
+      node: t.ObjectProperty | t.ObjectTypeProperty | t.ObjectMethod,
+      parent: any,
+    ): WhitespaceObject | undefined | null {
+      if (parent.properties[0] === node) {
+        return {
+          before: true,
+        };
+      }
     };
-  }
-};
 
 nodes.ObjectTypeCallProperty = function (
   node: t.ObjectTypeCallProperty,
@@ -287,19 +306,21 @@ export const list = {
  * Add whitespace tests for nodes and their aliases.
  */
 
-([
-  ["Function", true],
-  ["Class", true],
-  ["Loop", true],
-  ["LabeledStatement", true],
-  ["SwitchStatement", true],
-  ["TryStatement", true],
-] as Array<[string, any]>).forEach(function ([type, amounts]) {
+(
+  [
+    ["Function", true],
+    ["Class", true],
+    ["Loop", true],
+    ["LabeledStatement", true],
+    ["SwitchStatement", true],
+    ["TryStatement", true],
+  ] as Array<[string, any]>
+).forEach(function ([type, amounts]) {
   if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
   [type as string]
-    .concat(t.FLIPPED_ALIAS_KEYS[type] || [])
+    .concat(FLIPPED_ALIAS_KEYS[type] || [])
     .forEach(function (type) {
       nodes[type] = function () {
         return amounts;

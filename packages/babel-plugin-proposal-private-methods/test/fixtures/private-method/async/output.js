@@ -1,8 +1,8 @@
-var _foo = new WeakSet();
+var _foo = /*#__PURE__*/new WeakSet();
 
 class Cl {
   constructor() {
-    _foo.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _foo);
   }
 
   test() {
@@ -11,6 +11,6 @@ class Cl {
 
 }
 
-var _foo2 = async function _foo2() {
+async function _foo2() {
   return 2;
-};
+}

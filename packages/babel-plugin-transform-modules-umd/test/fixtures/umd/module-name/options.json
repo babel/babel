@@ -1,9 +1,11 @@
 {
   "sourceType": "module",
   "plugins": [
-    "external-helpers",
-    ["transform-modules-umd", {
-      "moduleIds": true
-    }]
+    [
+      "transform-modules-umd",
+      {
+        "moduleIds": true
+      }
+    ]
   ]
 }

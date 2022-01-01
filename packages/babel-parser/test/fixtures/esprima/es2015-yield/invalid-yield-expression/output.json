@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
   "errors": [
-    "SyntaxError: Missing semicolon (1:19)"
+    "SyntaxError: Missing semicolon. (1:19)"
   ],
   "program": {
     "type": "Program",
@@ -16,10 +16,6 @@
         "expression": {
           "type": "FunctionExpression",
           "start":1,"end":24,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":24}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "id": null,
           "generator": false,
           "async": false,
@@ -52,6 +48,10 @@
               }
             ],
             "directives": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

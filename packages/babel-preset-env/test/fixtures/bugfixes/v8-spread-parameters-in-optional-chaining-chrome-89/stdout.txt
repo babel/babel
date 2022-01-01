@@ -1,0 +1,26 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "89"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { chrome < 94 }
+  proposal-private-property-in-object { chrome < 91 }
+  syntax-class-properties
+  syntax-numeric-separator
+  syntax-nullish-coalescing-operator
+  syntax-optional-chaining
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome < 91 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+  proposal-export-namespace-from { }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

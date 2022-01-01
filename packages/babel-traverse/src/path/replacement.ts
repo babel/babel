@@ -5,36 +5,30 @@ import traverse from "../index";
 import NodePath from "./index";
 import { path as pathCache } from "../cache";
 import { parse } from "@babel/parser";
-import * as t from "@babel/types";
-
-const hoistVariablesVisitor = {
-  Function(path) {
-    path.skip();
-  },
-
-  VariableDeclaration(path) {
-    if (path.node.kind !== "var") return;
-
-    const bindings = path.getBindingIdentifiers();
-    for (const key of Object.keys(bindings)) {
-      path.scope.push({ id: bindings[key] });
-    }
-
-    const exprs = [];
-
-    for (const declar of path.node.declarations as Array<any>) {
-      if (declar.init) {
-        exprs.push(
-          t.expressionStatement(
-            t.assignmentExpression("=", declar.id, declar.init),
-          ),
-        );
-      }
-    }
-
-    path.replaceWithMultiple(exprs);
-  },
-};
+import {
+  FUNCTION_TYPES,
+  arrowFunctionExpression,
+  assignmentExpression,
+  awaitExpression,
+  blockStatement,
+  callExpression,
+  cloneNode,
+  expressionStatement,
+  identifier,
+  inheritLeadingComments,
+  inheritTrailingComments,
+  inheritsComments,
+  isExpression,
+  isProgram,
+  isStatement,
+  removeComments,
+  returnStatement,
+  toSequenceExpression,
+  validate,
+  yieldExpression,
+} from "@babel/types";
+import type * as t from "@babel/types";
+import hoistVariables from "@babel/helper-hoist-variables";
 
 /**
  * Replace a node with an array of multiple. This method performs the following steps:
@@ -51,8 +45,8 @@ export function replaceWithMultiple<Nodes extends Array<t.Node>>(
   this.resync();
 
   nodes = this._verifyNodeList(nodes);
-  t.inheritLeadingComments(nodes[0], this.node);
-  t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
+  inheritLeadingComments(nodes[0], this.node);
+  inheritTrailingComments(nodes[nodes.length - 1], this.node);
   pathCache.get(this.parent)?.delete(this.node);
   this.node = this.container[this.key] = null;
   const paths = this.insertAfter(nodes);
@@ -125,7 +119,7 @@ export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
     return [this];
   }
 
-  if (this.isProgram() && !t.isProgram(replacement)) {
+  if (this.isProgram() && !isProgram(replacement)) {
     throw new Error(
       "You can only replace a Program root node with another Program node",
     );
@@ -145,19 +139,19 @@ export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
 
   let nodePath = "";
 
-  if (this.isNodeType("Statement") && t.isExpression(replacement)) {
+  if (this.isNodeType("Statement") && isExpression(replacement)) {
     if (
       !this.canHaveVariableDeclarationOrExpression() &&
       !this.canSwapBetweenExpressionAndStatement(replacement) &&
       !this.parentPath.isExportDefaultDeclaration()
     ) {
       // replacing a statement with an expression so wrap it in an expression statement
-      replacement = t.expressionStatement(replacement);
+      replacement = expressionStatement(replacement);
       nodePath = "expression";
     }
   }
 
-  if (this.isNodeType("Expression") && t.isStatement(replacement)) {
+  if (this.isNodeType("Expression") && isStatement(replacement)) {
     if (
       !this.canHaveVariableDeclarationOrExpression() &&
       !this.canSwapBetweenExpressionAndStatement(replacement)
@@ -169,8 +163,8 @@ export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
 
   const oldNode = this.node;
   if (oldNode) {
-    t.inheritsComments(replacement, oldNode);
-    t.removeComments(oldNode);
+    inheritsComments(replacement, oldNode);
+    removeComments(oldNode);
   }
 
   // replace the node
@@ -196,10 +190,10 @@ export function _replaceWith(this: NodePath, node) {
   }
 
   if (this.inList) {
-    // @ts-expect-error todo(flow->ts): check if t.validate accepts a numeric key
-    t.validate(this.parent, this.key, [node]);
+    // @ts-expect-error todo(flow->ts): check if validate accepts a numeric key
+    validate(this.parent, this.key, [node]);
   } else {
-    t.validate(this.parent, this.key as string, node);
+    validate(this.parent, this.key as string, node);
   }
 
   this.debug(`Replace with ${node?.type}`);
@@ -220,24 +214,34 @@ export function replaceExpressionWithStatements(
 ) {
   this.resync();
 
-  const toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
+  const nodesAsSequenceExpression = toSequenceExpression(nodes, this.scope);
 
-  if (toSequenceExpression) {
-    return this.replaceWith(toSequenceExpression)[0].get("expressions");
+  if (nodesAsSequenceExpression) {
+    return this.replaceWith(nodesAsSequenceExpression)[0].get("expressions");
   }
 
   const functionParent = this.getFunctionParent();
   const isParentAsync = functionParent?.is("async");
+  const isParentGenerator = functionParent?.is("generator");
 
-  const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
+  const container = arrowFunctionExpression([], blockStatement(nodes));
 
-  this.replaceWith(t.callExpression(container, []));
+  this.replaceWith(callExpression(container, []));
   // replaceWith changes the type of "this", but it isn't trackable by TS
   type ThisType = NodePath<
     t.CallExpression & { callee: t.ArrowFunctionExpression }
   >;
 
-  this.traverse(hoistVariablesVisitor);
+  // hoist variable declaration in do block
+  // `(do { var x = 1; x;})` -> `var x; (() => { x = 1; return x; })()`
+  const callee = (this as ThisType).get("callee");
+  hoistVariables(
+    callee.get("body"),
+    (id: t.Identifier) => {
+      this.scope.push({ id });
+    },
+    "var",
+  );
 
   // add implicit returns to all ending expression statements
   const completionRecords: Array<NodePath> = (this as ThisType)
@@ -251,43 +255,59 @@ export function replaceExpressionWithStatements(
       let uid = loop.getData("expressionReplacementReturnUid");
 
       if (!uid) {
-        const callee = (this as ThisType).get("callee");
         uid = callee.scope.generateDeclaredUidIdentifier("ret");
         callee
           .get("body")
-          .pushContainer("body", t.returnStatement(t.cloneNode(uid)));
+          .pushContainer("body", returnStatement(cloneNode(uid)));
         loop.setData("expressionReplacementReturnUid", uid);
       } else {
-        uid = t.identifier(uid.name);
+        uid = identifier(uid.name);
       }
 
       path
         .get("expression")
         .replaceWith(
-          t.assignmentExpression("=", t.cloneNode(uid), path.node.expression),
+          assignmentExpression("=", cloneNode(uid), path.node.expression),
         );
     } else {
-      path.replaceWith(t.returnStatement(path.node.expression));
+      path.replaceWith(returnStatement(path.node.expression));
     }
   }
 
-  const callee = this.get("callee") as NodePath<t.FunctionExpression>;
+  // This is an IIFE, so we don't need to worry about the noNewArrows assumption
   callee.arrowFunctionToExpression();
+  // Fixme: we can not `assert this is NodePath<t.FunctionExpression>` in `arrowFunctionToExpression`
+  // because it is not a class method known at compile time.
+  const newCallee = callee as unknown as NodePath<t.FunctionExpression>;
 
   // (() => await xxx)() -> await (async () => await xxx)();
-  if (
+  const needToAwaitFunction =
     isParentAsync &&
     traverse.hasType(
       (this.get("callee.body") as NodePath<t.BlockStatement>).node,
       "AwaitExpression",
-      t.FUNCTION_TYPES,
-    )
-  ) {
-    callee.set("async", true);
-    this.replaceWith(t.awaitExpression((this as ThisType).node));
+      FUNCTION_TYPES,
+    );
+  const needToYieldFunction =
+    isParentGenerator &&
+    traverse.hasType(
+      (this.get("callee.body") as NodePath<t.BlockStatement>).node,
+      "YieldExpression",
+      FUNCTION_TYPES,
+    );
+  if (needToAwaitFunction) {
+    newCallee.set("async", true);
+    // yield* will await the generator return result
+    if (!needToYieldFunction) {
+      this.replaceWith(awaitExpression((this as ThisType).node));
+    }
+  }
+  if (needToYieldFunction) {
+    newCallee.set("generator", true);
+    this.replaceWith(yieldExpression((this as ThisType).node, true));
   }
 
-  return callee.get("body.body");
+  return newCallee.get("body.body");
 }
 
 export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {

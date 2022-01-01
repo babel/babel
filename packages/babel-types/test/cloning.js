@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
 describe("cloneNode", function () {
@@ -120,6 +120,9 @@ describe("cloneNode", function () {
     node.declarations[0].id.loc = {};
 
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ false);
+    expect(cloned.declarations[0].id.leadingComments[0]).not.toBe(
+      node.declarations[0].id.leadingComments[0],
+    );
     expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(
       node.declarations[0].id.leadingComments[0].loc,
     );

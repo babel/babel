@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3}},
   "errors": [
-    "SyntaxError: Invalid left-hand side in postfix operation (1:0)"
+    "SyntaxError: Invalid left-hand side in postfix operation. (1:0)"
   ],
   "program": {
     "type": "Program",

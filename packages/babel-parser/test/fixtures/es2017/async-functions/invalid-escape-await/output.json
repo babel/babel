@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":35}},
   "errors": [
-    "SyntaxError: Can not use 'await' as identifier inside an async function (1:20)",
-    "SyntaxError: Missing semicolon (1:30)"
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (1:20)",
+    "SyntaxError: Missing semicolon. (1:30)"
   ],
   "program": {
     "type": "Program",
@@ -17,10 +17,6 @@
         "expression": {
           "type": "FunctionExpression",
           "start":1,"end":34,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":34}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "id": null,
           "generator": false,
           "async": true,
@@ -49,6 +45,10 @@
               }
             ],
             "directives": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

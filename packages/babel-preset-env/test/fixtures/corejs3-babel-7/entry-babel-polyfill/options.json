@@ -1,0 +1,13 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "modules": false,
+        "useBuiltIns": "entry",
+        "corejs": 3
+      }
+    ]
+  ]
+}

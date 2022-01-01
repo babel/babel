@@ -15,7 +15,7 @@ export default function removeTypeDuplicates(
   const bases = {};
 
   // store union type groups to circular references
-  const typeGroups = [];
+  const typeGroups = new Set<t.TSType[]>();
 
   const types = [];
 
@@ -40,9 +40,9 @@ export default function removeTypeDuplicates(
     }
 
     if (isTSUnionType(node)) {
-      if (typeGroups.indexOf(node.types) < 0) {
-        nodes = nodes.concat(node.types);
-        typeGroups.push(node.types);
+      if (!typeGroups.has(node.types)) {
+        nodes.push(...node.types);
+        typeGroups.add(node.types);
       }
       continue;
     }

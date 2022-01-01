@@ -4,6 +4,7 @@
  */
 import * as t from "@babel/types";
 import NodePath from "../index";
+import type { VirtualTypeAliases } from "./virtual-types";
 
 export interface NodePathValidators {
   isAnyTypeAnnotation(opts?: object): this is NodePath<t.AnyTypeAnnotation>;
@@ -149,6 +150,7 @@ export interface NodePathValidators {
     opts?: object,
   ): this is NodePath<t.ImportNamespaceSpecifier>;
   isImportSpecifier(opts?: object): this is NodePath<t.ImportSpecifier>;
+  isIndexedAccessType(opts?: object): this is NodePath<t.IndexedAccessType>;
   isInferredPredicate(opts?: object): this is NodePath<t.InferredPredicate>;
   isInterfaceDeclaration(
     opts?: object,
@@ -189,8 +191,10 @@ export interface NodePathValidators {
   isMemberExpression(opts?: object): this is NodePath<t.MemberExpression>;
   isMetaProperty(opts?: object): this is NodePath<t.MetaProperty>;
   isMethod(opts?: object): this is NodePath<t.Method>;
+  isMiscellaneous(opts?: object): this is NodePath<t.Miscellaneous>;
   isMixedTypeAnnotation(opts?: object): this is NodePath<t.MixedTypeAnnotation>;
   isModuleDeclaration(opts?: object): this is NodePath<t.ModuleDeclaration>;
+  isModuleExpression(opts?: object): this is NodePath<t.ModuleExpression>;
   isModuleSpecifier(opts?: object): this is NodePath<t.ModuleSpecifier>;
   isNewExpression(opts?: object): this is NodePath<t.NewExpression>;
   isNoop(opts?: object): this is NodePath<t.Noop>;
@@ -232,6 +236,9 @@ export interface NodePathValidators {
   isOptionalCallExpression(
     opts?: object,
   ): this is NodePath<t.OptionalCallExpression>;
+  isOptionalIndexedAccessType(
+    opts?: object,
+  ): this is NodePath<t.OptionalIndexedAccessType>;
   isOptionalMemberExpression(
     opts?: object,
   ): this is NodePath<t.OptionalMemberExpression>;
@@ -268,6 +275,7 @@ export interface NodePathValidators {
   isSequenceExpression(opts?: object): this is NodePath<t.SequenceExpression>;
   isSpreadElement(opts?: object): this is NodePath<t.SpreadElement>;
   isSpreadProperty(opts?: object): this is NodePath<t.SpreadProperty>;
+  isStandardized(opts?: object): this is NodePath<t.Standardized>;
   isStatement(opts?: object): this is NodePath<t.Statement>;
   isStaticBlock(opts?: object): this is NodePath<t.StaticBlock>;
   isStringLiteral(opts?: object): this is NodePath<t.StringLiteral>;
@@ -379,6 +387,7 @@ export interface NodePathValidators {
   isThisExpression(opts?: object): this is NodePath<t.ThisExpression>;
   isThisTypeAnnotation(opts?: object): this is NodePath<t.ThisTypeAnnotation>;
   isThrowStatement(opts?: object): this is NodePath<t.ThrowStatement>;
+  isTopicReference(opts?: object): this is NodePath<t.TopicReference>;
   isTryStatement(opts?: object): this is NodePath<t.TryStatement>;
   isTupleExpression(opts?: object): this is NodePath<t.TupleExpression>;
   isTupleTypeAnnotation(opts?: object): this is NodePath<t.TupleTypeAnnotation>;
@@ -392,6 +401,7 @@ export interface NodePathValidators {
   isTypeParameterInstantiation(
     opts?: object,
   ): this is NodePath<t.TypeParameterInstantiation>;
+  isTypeScript(opts?: object): this is NodePath<t.TypeScript>;
   isTypeofTypeAnnotation(
     opts?: object,
   ): this is NodePath<t.TypeofTypeAnnotation>;
@@ -411,22 +421,38 @@ export interface NodePathValidators {
   isWhileStatement(opts?: object): this is NodePath<t.WhileStatement>;
   isWithStatement(opts?: object): this is NodePath<t.WithStatement>;
   isYieldExpression(opts?: object): this is NodePath<t.YieldExpression>;
-  isReferencedIdentifier(opts?: object): boolean;
-  isReferencedMemberExpression(opts?: object): boolean;
-  isBindingIdentifier(opts?: object): boolean;
-  isStatement(opts?: object): this is NodePath<t.Statement>;
-  isExpression(opts?: object): this is NodePath<t.Expression>;
-  isScope(opts?: object): boolean;
-  isReferenced(opts?: object): boolean;
+  isBindingIdentifier(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
   isBlockScoped(opts?: object): boolean;
-  isVar(opts?: object): boolean;
-  isUser(opts?: object): boolean;
-  isGenerated(opts?: object): boolean;
-  isPure(opts?: object): boolean;
+  isExistentialTypeParam(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ExistentialTypeParam"]>;
+  isExpression(opts?: object): this is NodePath<t.Expression>;
   isFlow(opts?: object): this is NodePath<t.Flow>;
-  isRestProperty(opts?: object): boolean;
-  isSpreadProperty(opts?: object): boolean;
-  isExistentialTypeParam(opts?: object): boolean;
-  isNumericLiteralTypeAnnotation(opts?: object): boolean;
-  isForAwaitStatement(opts?: object): boolean;
+  isForAwaitStatement(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]>;
+  isGenerated(opts?: object): boolean;
+  isNumericLiteralTypeAnnotation(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
+  isPure(opts?: object): boolean;
+  isReferenced(opts?: object): boolean;
+  isReferencedIdentifier(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"]>;
+  isReferencedMemberExpression(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]>;
+  isRestProperty(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["RestProperty"]>;
+  isScope(opts?: object): this is NodePath<VirtualTypeAliases["Scope"]>;
+  isSpreadProperty(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["SpreadProperty"]>;
+  isStatement(opts?: object): this is NodePath<t.Statement>;
+  isUser(opts?: object): boolean;
+  isVar(opts?: object): this is NodePath<VirtualTypeAliases["Var"]>;
 }

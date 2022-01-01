@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":20}},
   "errors": [
-    "SyntaxError: Unexpected reserved type _ (2:13)",
-    "SyntaxError: `_` is only allowed as a type argument to call or new (2:19)"
+    "SyntaxError: Unexpected reserved type _. (2:13)",
+    "SyntaxError: `_` is only allowed as a type argument to call or new. (2:19)"
   ],
   "program": {
     "type": "Program",

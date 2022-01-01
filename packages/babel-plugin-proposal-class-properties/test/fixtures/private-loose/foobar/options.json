@@ -1,3 +1,7 @@
 {
-  "presets": ["env"]
+  "plugins": [
+    ["proposal-class-properties", { "loose": true }],
+    "transform-classes",
+    "transform-arrow-functions"
+  ]
 }

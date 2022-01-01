@@ -1,4 +1,4 @@
-var _a = babelHelpers.classPrivateFieldLooseKey("a");
+var _a = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("a");
 
 class C {
   static testIf(o) {

@@ -43,12 +43,15 @@ interface BaseNode {
   end: number | null;
   loc: SourceLocation | null;
   type: Node["type"];
+  range?: [number, number];
   extra?: Record<string, unknown>;
 }
 
 export type CommentTypeShorthand = "leading" | "inner" | "trailing";
 
-export type Node = ${t.TYPES.sort().join(" | ")};\n\n`;
+export type Node = ${t.TYPES.filter(k => !t.FLIPPED_ALIAS_KEYS[k])
+    .sort()
+    .join(" | ")};\n\n`;
 
   const deprecatedAlias = {};
   for (const type in t.DEPRECATED_KEYS) {
@@ -114,6 +117,9 @@ export interface ${deprecatedAlias[type]} extends BaseNode {
     code += `  ${type}: ${type};\n`;
   }
   code += "}\n\n";
+  code += `export type DeprecatedAliases = ${Object.keys(
+    t.DEPRECATED_KEYS
+  ).join(" | ")}\n\n`;
 
   return code;
 }

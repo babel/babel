@@ -90,6 +90,7 @@
                     "expression": {
                       "type": "DoExpression",
                       "start":69,"end":197,"loc":{"start":{"line":6,"column":8},"end":{"line":12,"column":9}},
+                      "async": false,
                       "body": {
                         "type": "BlockStatement",
                         "start":72,"end":197,"loc":{"start":{"line":6,"column":11},"end":{"line":12,"column":9}},

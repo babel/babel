@@ -1,13 +1,13 @@
-var _g = new WeakSet();
+var _g = /*#__PURE__*/new WeakSet();
 
 class C {
   constructor() {
-    _g.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _g);
   }
 
 }
 
-var _g2 = function _g2() {
+function _g2() {
   var _this = this;
 
   return babelHelpers.wrapAsyncGenerator(function* () {
@@ -16,4 +16,4 @@ var _g2 = function _g2() {
     yield 2;
     return 3;
   })();
-};
+}

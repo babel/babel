@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
   "errors": [
-    "SyntaxError: A numeric separator is only allowed between two digits (1:3)"
+    "SyntaxError: A numeric separator is only allowed between two digits. (1:3)"
   ],
   "program": {
     "type": "Program",

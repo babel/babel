@@ -1,11 +1,11 @@
-import { loadOptions as loadOptionsOrig } from "../lib";
+import { loadOptions as loadOptionsOrig } from "../lib/index.js";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function loadOptions(opts) {
-  return loadOptionsOrig({
-    cwd: __dirname,
-    ...opts,
-  });
+  return loadOptionsOrig({ cwd, ...opts });
 }
 
 describe("option-manager", () => {
@@ -220,9 +220,7 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return expect(() => {
         loadOptions({
-          presets: [
-            path.join(__dirname, "fixtures/option-manager/not-a-preset"),
-          ],
+          presets: [path.join(cwd, "fixtures/option-manager/not-a-preset")],
         });
       }).toThrow(
         /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/,
@@ -231,42 +229,31 @@ describe("option-manager", () => {
   });
 
   describe("presets", function () {
-    function presetTest(name) {
-      it(name, function () {
-        const options = loadOptions({
-          presets: [
-            path.join(__dirname, "fixtures/option-manager/presets", name),
-          ],
-        });
-
-        expect(Array.isArray(options.plugins)).toBe(true);
-        expect(options.plugins).toHaveLength(1);
-        expect(options.presets).toHaveLength(0);
+    it.each([
+      "es5_function",
+      "es5_object",
+      "es2015_default_function",
+      "es2015_default_object",
+    ])("%p should work", name => {
+      const options = loadOptions({
+        presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
       });
-    }
 
-    function presetThrowsTest(name, msg) {
-      it(name, function () {
-        expect(() =>
-          loadOptions({
-            presets: [
-              path.join(__dirname, "fixtures/option-manager/presets", name),
-            ],
-          }),
-        ).toThrow(msg);
-      });
-    }
+      expect(Array.isArray(options.plugins)).toBe(true);
+      expect(options.plugins).toHaveLength(1);
+      expect(options.presets).toHaveLength(0);
+    });
 
-    presetTest("es5_function");
-    presetTest("es5_object");
-    presetTest("es2015_default_function");
-    presetTest("es2015_default_object");
-
-    presetThrowsTest(
-      "es2015_named",
-      /Must export a default export when using ES6 modules/,
-    );
-    presetThrowsTest("es2015_invalid", /Unsupported format: string/);
-    presetThrowsTest("es5_invalid", /Unsupported format: string/);
+    it.each([
+      ["es2015_named", /Must export a default export when using ES6 modules/],
+      ["es2015_invalid", /Unsupported format: string/],
+      ["es5_invalid", /Unsupported format: string/],
+    ])("%p should throw %p", (name, msg) => {
+      expect(() =>
+        loadOptions({
+          presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
+        }),
+      ).toThrow(msg);
+    });
   });
 });

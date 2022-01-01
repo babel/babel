@@ -1,3 +1,4 @@
 {
+  "externalHelpers": false,
   "plugins": ["transform-modules-commonjs", "transform-runtime", "./plugin"]
 }

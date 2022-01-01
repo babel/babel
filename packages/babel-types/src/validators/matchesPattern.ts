@@ -1,4 +1,9 @@
-import { isIdentifier, isMemberExpression, isStringLiteral } from "./generated";
+import {
+  isIdentifier,
+  isMemberExpression,
+  isStringLiteral,
+  isThisExpression,
+} from "./generated";
 import type * as t from "..";
 
 /**
@@ -35,6 +40,8 @@ export default function matchesPattern(
       value = node.name;
     } else if (isStringLiteral(node)) {
       value = node.value;
+    } else if (isThisExpression(node)) {
+      value = "this";
     } else {
       return false;
     }

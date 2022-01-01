@@ -13,173 +13,191 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-logical-assignment-operators { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-nullish-coalescing-operator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-optional-chaining { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-json-strings { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-optional-catch-binding { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-parameters { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-async-generator-functions { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-object-rest-spread { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-dotall-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-unicode-property-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-named-capturing-groups-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-async-to-generator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-exponentiation-operator { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-template-literals { "ie":"10", "ios":"9", "safari":"7" }
-  transform-literals { "firefox":"49", "ie":"10", "safari":"7" }
-  transform-function-name { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
-  transform-block-scoped-functions { "ie":"10", "ios":"9", "safari":"7" }
-  transform-classes { "ie":"10", "ios":"9", "safari":"7" }
-  transform-object-super { "ie":"10", "ios":"9", "safari":"7" }
-  transform-shorthand-properties { "ie":"10", "safari":"7" }
-  transform-duplicate-keys { "ie":"10", "safari":"7" }
-  transform-computed-properties { "ie":"10", "safari":"7" }
-  transform-for-of { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-sticky-regex { "ie":"10", "ios":"9", "safari":"7" }
-  transform-unicode-escapes { "firefox":"49", "ie":"10", "safari":"7" }
-  transform-unicode-regex { "ie":"10", "ios":"9", "safari":"7" }
-  transform-spread { "ie":"10", "ios":"9", "safari":"7" }
-  transform-destructuring { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-typeof-symbol { "ie":"10", "safari":"7" }
-  transform-new-target { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  transform-regenerator { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-export-namespace-from { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-modules-commonjs { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-dynamic-import { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  proposal-class-static-block { chrome < 94, edge < 94, firefox < 93, ie, ios, safari }
+  proposal-private-property-in-object { chrome < 91, edge < 91, firefox < 90, ie, ios < 15, safari < 15 }
+  proposal-class-properties { chrome < 84, edge < 84, firefox < 90, ie, ios < 15, safari < 15 }
+  proposal-private-methods { chrome < 84, edge < 84, firefox < 90, ie, ios < 15, safari < 15 }
+  proposal-numeric-separator { chrome < 75, edge < 79, firefox < 70, ie, ios < 13, safari < 13 }
+  proposal-logical-assignment-operators { chrome < 85, edge < 85, firefox < 79, ie, ios < 14, safari < 14 }
+  proposal-nullish-coalescing-operator { chrome < 80, edge < 80, firefox < 72, ie, ios < 13.4, safari < 13.1 }
+  proposal-optional-chaining { chrome < 80, edge < 80, firefox < 74, ie, ios < 13.4, safari < 13.1 }
+  proposal-json-strings { chrome < 66, edge < 79, firefox < 62, ie, ios < 12, safari < 12 }
+  proposal-optional-catch-binding { chrome < 66, edge < 79, firefox < 58, ie, ios < 11.3, safari < 11.1 }
+  transform-parameters { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
+  proposal-async-generator-functions { chrome < 63, edge < 79, firefox < 57, ie, ios < 12, safari < 12 }
+  proposal-object-rest-spread { chrome < 60, edge < 79, firefox < 55, ie, ios < 11.3, safari < 11.1 }
+  transform-dotall-regex { chrome < 62, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }
+  proposal-unicode-property-regex { chrome < 64, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }
+  transform-named-capturing-groups-regex { chrome < 64, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }
+  transform-async-to-generator { chrome < 55, edge < 15, firefox < 52, ie, ios < 10.3, safari < 10.1 }
+  transform-exponentiation-operator { edge < 14, firefox < 52, ie, ios < 10.3, safari < 10.1 }
+  transform-template-literals { ie, safari < 9 }
+  transform-literals { firefox < 53, ie, safari < 9 }
+  transform-function-name { edge < 14, firefox < 53, ie, ios < 10, safari < 10 }
+  transform-arrow-functions { ie, ios < 10, safari < 10 }
+  transform-block-scoped-functions { ie < 11, ios < 10, safari < 10 }
+  transform-classes { ie, ios < 10, safari < 10 }
+  transform-object-super { ie, ios < 10, safari < 10 }
+  transform-shorthand-properties { ie, safari < 9 }
+  transform-duplicate-keys { ie, safari < 9 }
+  transform-computed-properties { ie, safari < 7.1 }
+  transform-for-of { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
+  transform-sticky-regex { ie, ios < 10, safari < 10 }
+  transform-unicode-escapes { firefox < 53, ie, safari < 9 }
+  transform-unicode-regex { ie, ios < 12, safari < 12 }
+  transform-spread { ie, ios < 10, safari < 10 }
+  transform-destructuring { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
+  transform-block-scoping { edge < 14, firefox < 51, ie, ios < 10, safari < 10 }
+  transform-typeof-symbol { ie, safari < 9 }
+  transform-new-target { edge < 14, ie, ios < 10, safari < 10 }
+  transform-regenerator { firefox < 53, ie, ios < 10, safari < 10 }
+  proposal-export-namespace-from { chrome < 72, edge < 79, firefox < 80, ie, ios, safari }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs2: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "chrome": "54",
+  "edge": "13",
+  "firefox": "49",
+  "ie": "10",
+  "ios": "9",
+  "safari": "7"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-specific-targets/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
-  es6.array.copy-within { "ie":"10", "safari":"7" }
-  es6.array.fill { "ie":"10", "safari":"7" }
-  es6.array.find { "ie":"10", "safari":"7" }
-  es6.array.find-index { "ie":"10", "safari":"7" }
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-specific-targets/input.mjs]
+The corejs2 polyfill entry has been replaced with the following polyfills:
+  es6.array.copy-within { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.fill { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.filter { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.find { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.find-index { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es7.array.flat-map { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.array.from { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es7.array.includes { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.array.iterator { "chrome":"54", "firefox":"49", "ie":"10", "safari":"7" }
-  es6.array.of { "ie":"10", "safari":"7" }
-  es6.array.sort { "chrome":"54", "ios":"9", "safari":"7" }
-  es6.array.species { "ie":"10", "ios":"9", "safari":"7" }
-  es6.date.to-json { "ios":"9", "safari":"7" }
-  es6.date.to-primitive { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.function.has-instance { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.function.name { "edge":"13", "ie":"10" }
-  es6.map { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.math.acosh { "ie":"10", "safari":"7" }
-  es6.math.asinh { "ie":"10", "safari":"7" }
-  es6.math.atanh { "ie":"10", "safari":"7" }
-  es6.math.cbrt { "ie":"10", "safari":"7" }
-  es6.math.clz32 { "ie":"10", "safari":"7" }
-  es6.math.cosh { "ie":"10", "safari":"7" }
-  es6.math.expm1 { "ie":"10", "safari":"7" }
-  es6.math.fround { "ie":"10", "safari":"7" }
-  es6.math.hypot { "ie":"10", "safari":"7" }
-  es6.math.imul { "ie":"10" }
-  es6.math.log1p { "ie":"10", "safari":"7" }
-  es6.math.log10 { "ie":"10", "safari":"7" }
-  es6.math.log2 { "ie":"10", "safari":"7" }
-  es6.math.sign { "ie":"10", "safari":"7" }
-  es6.math.sinh { "ie":"10", "safari":"7" }
-  es6.math.tanh { "ie":"10", "safari":"7" }
-  es6.math.trunc { "ie":"10", "safari":"7" }
-  es6.number.constructor { "ie":"10", "safari":"7" }
-  es6.number.epsilon { "ie":"10", "safari":"7" }
-  es6.number.is-finite { "ie":"10", "safari":"7" }
-  es6.number.is-integer { "ie":"10", "safari":"7" }
-  es6.number.is-nan { "ie":"10", "safari":"7" }
-  es6.number.is-safe-integer { "ie":"10", "safari":"7" }
-  es6.number.max-safe-integer { "ie":"10", "safari":"7" }
-  es6.number.min-safe-integer { "ie":"10", "safari":"7" }
-  es6.number.parse-float { "ie":"10", "safari":"7" }
-  es6.number.parse-int { "ie":"10", "safari":"7" }
-  es6.object.assign { "ie":"10", "ios":"9", "safari":"7" }
-  es7.object.define-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es7.object.define-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es7.object.entries { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.object.freeze { "ie":"10", "safari":"7" }
-  es6.object.get-own-property-descriptor { "ie":"10", "safari":"7" }
-  es7.object.get-own-property-descriptors { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.object.get-own-property-names { "ie":"10", "safari":"7" }
-  es6.object.get-prototype-of { "ie":"10", "safari":"7" }
-  es7.object.lookup-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es7.object.lookup-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es6.object.prevent-extensions { "ie":"10", "safari":"7" }
+  es6.array.from { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.array.includes { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.map { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.of { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.slice { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.sort { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.array.species { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.date.to-json { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.date.to-primitive { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.function.has-instance { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.function.name { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.map { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.acosh { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.asinh { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.atanh { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.cbrt { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.clz32 { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.cosh { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.expm1 { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.fround { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.hypot { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.imul { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.log1p { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.log10 { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.log2 { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.sign { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.sinh { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.tanh { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.math.trunc { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.constructor { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.epsilon { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.is-finite { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.is-integer { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.is-nan { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.is-safe-integer { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.max-safe-integer { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.min-safe-integer { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.parse-float { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.number.parse-int { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.assign { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.object.define-getter { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.object.define-setter { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.object.entries { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.freeze { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.get-own-property-descriptor { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.object.get-own-property-descriptors { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.get-own-property-names { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.get-prototype-of { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.object.lookup-getter { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.object.lookup-setter { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.prevent-extensions { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.object.to-string { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.object.is { "ie":"10", "safari":"7" }
-  es6.object.is-frozen { "ie":"10", "safari":"7" }
-  es6.object.is-sealed { "ie":"10", "safari":"7" }
-  es6.object.is-extensible { "ie":"10", "safari":"7" }
-  es6.object.keys { "ie":"10", "safari":"7" }
-  es6.object.seal { "ie":"10", "safari":"7" }
-  es6.object.set-prototype-of { "ie":"10", "safari":"7" }
-  es7.object.values { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.promise { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.is { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.is-frozen { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.is-sealed { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.is-extensible { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.keys { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.seal { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.object.set-prototype-of { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.object.values { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.promise { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es7.promise.finally { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.apply { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.construct { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.define-property { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.delete-property { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.get { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.get-own-property-descriptor { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.get-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.has { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.is-extensible { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.own-keys { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.prevent-extensions { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.set { "ie":"10", "ios":"9", "safari":"7" }
-  es6.reflect.set-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
-  es6.regexp.constructor { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.regexp.flags { "edge":"13", "ie":"10", "safari":"7" }
-  es6.regexp.match { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.regexp.replace { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.regexp.split { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.regexp.search { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.regexp.to-string { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.set { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.symbol { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.apply { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.construct { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.define-property { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.delete-property { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.get { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.get-own-property-descriptor { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.get-prototype-of { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.has { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.is-extensible { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.own-keys { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.prevent-extensions { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.set { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.reflect.set-prototype-of { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.regexp.constructor { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.regexp.flags { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.regexp.match { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.regexp.replace { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.regexp.split { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.regexp.search { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.regexp.to-string { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.set { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.symbol { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es7.symbol.async-iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.string.anchor { "ie":"10" }
-  es6.string.big { "ie":"10" }
-  es6.string.blink { "ie":"10" }
-  es6.string.bold { "ie":"10" }
-  es6.string.code-point-at { "ie":"10", "safari":"7" }
-  es6.string.ends-with { "ie":"10", "safari":"7" }
-  es6.string.fixed { "ie":"10" }
-  es6.string.fontcolor { "ie":"10" }
-  es6.string.fontsize { "ie":"10" }
-  es6.string.from-code-point { "ie":"10", "safari":"7" }
-  es6.string.includes { "ie":"10", "safari":"7" }
-  es6.string.italics { "ie":"10" }
-  es6.string.iterator { "ie":"10", "safari":"7" }
-  es6.string.link { "ie":"10" }
-  es7.string.pad-start { "chrome":"54", "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es7.string.pad-end { "chrome":"54", "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es6.string.raw { "ie":"10", "safari":"7" }
-  es6.string.repeat { "ie":"10", "safari":"7" }
-  es6.string.small { "ie":"10" }
-  es6.string.starts-with { "ie":"10", "safari":"7" }
-  es6.string.strike { "ie":"10" }
-  es6.string.sub { "ie":"10" }
-  es6.string.sup { "ie":"10" }
+  es6.string.anchor { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.big { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.blink { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.bold { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.code-point-at { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.ends-with { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.fixed { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.fontcolor { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.fontsize { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.from-code-point { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.includes { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.italics { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.link { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.string.pad-start { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es7.string.pad-end { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.raw { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.repeat { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.small { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.starts-with { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.strike { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.sub { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.string.sup { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es7.string.trim-left { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es7.string.trim-right { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.array-buffer { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.int8-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.uint8-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.uint8-clamped-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.int16-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.uint16-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.int32-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.uint32-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.float32-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.typed.float64-array { "ie":"10", "ios":"9", "safari":"7" }
-  es6.weak-map { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
-  es6.weak-set { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
+  es6.typed.array-buffer { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.int8-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.uint8-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.uint8-clamped-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.int16-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.uint16-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.int32-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.uint32-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.float32-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.typed.float64-array { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.weak-map { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es6.weak-set { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.timers { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.immediate { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.dom.iterable { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

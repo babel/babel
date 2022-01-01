@@ -5,16 +5,20 @@ import TestRunner from "../utils/parser-test-runner.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const ignoredFeatures = [
+const ignoredFeatures = new Set([
   "__getter__",
+  "__proto__",
   "__setter__",
   "AggregateError",
+  "Array.prototype.at",
   "Array.prototype.flat",
   "Array.prototype.flatMap",
   "Array.prototype.item",
   "Array.prototype.values",
   "ArrayBuffer",
   "align-detached-buffer-semantics-with-web-reality",
+  "arbitrary-module-namespace-names",
+  "array-find-from-last",
   "async-functions",
   "async-iteration",
   "arrow-function",
@@ -23,6 +27,14 @@ const ignoredFeatures = [
   "BigInt",
   "caller",
   "class",
+  "class-fields-private",
+  "class-fields-private-in",
+  "class-fields-public",
+  "class-methods-private",
+  "class-static-block",
+  "class-static-fields-private",
+  "class-static-fields-public",
+  "class-static-methods-private",
   "cleanupSome",
   "coalesce-expression",
   "computed-property-names",
@@ -41,6 +53,7 @@ const ignoredFeatures = [
   "destructuring-assignment",
   "destructuring-binding",
   "dynamic-import",
+  "error-cause",
   "export-star-as-namespace-from-module",
   "FinalizationGroup",
   "FinalizationRegistry",
@@ -56,18 +69,25 @@ const ignoredFeatures = [
   "Int8Array",
   "Int16Array",
   "Int32Array",
+  "Intl-enumeration",
   "Intl.DateTimeFormat-datetimestyle",
   "Intl.DateTimeFormat-dayPeriod",
+  "Intl.DateTimeFormat-extend-timezonename",
   "Intl.DateTimeFormat-fractionalSecondDigits",
   "Intl.DateTimeFormat-formatRange",
   "Intl.DisplayNames",
+  "Intl.DisplayNames-v2",
   "Intl.ListFormat",
   "Intl.Locale",
+  "Intl.Locale-info",
   "Intl.NumberFormat-unified",
+  "Intl.NumberFormat-v3",
   "Intl.RelativeTimeFormat",
   "Intl.Segmenter",
   "IsHTMLDDA",
   "import.meta",
+  "intl-normative-optional",
+  "json-modules",
   "json-superset",
   "legacy-regexp",
   "let",
@@ -76,6 +96,7 @@ const ignoredFeatures = [
   "new.target",
   "numeric-separator-literal",
   "Object.fromEntries",
+  "Object.hasOwn",
   "Object.is",
   "object-rest",
   "object-spread",
@@ -95,10 +116,13 @@ const ignoredFeatures = [
   "regexp-lookbehind",
   "regexp-named-groups",
   "regexp-unicode-property-escapes",
+  "resizable-arraybuffer",
   "rest-parameters",
+  "ShadowRealm",
   "SharedArrayBuffer",
   "Set",
   "String.fromCodePoint",
+  "String.prototype.at",
   "String.prototype.endsWith",
   "String.prototype.includes",
   "String.prototype.item",
@@ -125,7 +149,10 @@ const ignoredFeatures = [
   "Symbol.unscopables",
   "tail-call-optimization",
   "template",
+  "top-level-await",
+  "Temporal",
   "TypedArray",
+  "TypedArray.prototype.at",
   "TypedArray.prototype.item",
   "u180e",
   "Uint8Array",
@@ -136,20 +163,11 @@ const ignoredFeatures = [
   "WeakSet",
   "WeakRef",
   "well-formed-json-stringify",
-];
+]);
 
 const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
-const featuresToPlugins = {
-  "arbitrary-module-namespace-names": "moduleStringNames",
-  "class-fields-private": "classPrivateProperties",
-  "class-fields-public": "classProperties",
-  "class-methods-private": "classPrivateMethods",
-  "class-static-fields-public": "classProperties",
-  "class-static-fields-private": "classPrivateProperties",
-  "class-static-methods-private": "classPrivateMethods",
-  "top-level-await": "topLevelAwait",
-};
+const featuresToPlugins = new Map([["import-assertions", "importAssertions"]]);
 
 const unmappedFeatures = new Set();
 
@@ -157,9 +175,9 @@ function* getPlugins(features) {
   if (!features) return;
 
   for (const f of features) {
-    if (featuresToPlugins[f]) {
-      yield featuresToPlugins[f];
-    } else if (!ignoredFeatures.includes(f)) {
+    if (featuresToPlugins.has(f)) {
+      yield featuresToPlugins.get(f);
+    } else if (!ignoredFeatures.has(f)) {
       unmappedFeatures.add(f);
     }
   }
@@ -201,13 +219,15 @@ runner
   .run()
   .then(() => {
     if (unmappedFeatures.size) {
-      console.log("");
-      console.log(
+      console.warn("");
+      console.warn(
         "The following Features are not currently mapped or ignored:"
       );
-      console.log(
+      console.warn(
         Array.from(unmappedFeatures).join("\n").replace(/^/gm, "   ")
       );
+
+      process.exitCode = 1;
     }
   })
   .catch(err => {

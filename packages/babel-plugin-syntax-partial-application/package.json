@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-partial-application",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "description": "Allow parsing of partial application syntax",
   "repository": {
     "type": "git",
@@ -12,17 +12,33 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.12.13"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*"
+    "@babel/core": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }

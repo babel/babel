@@ -1,5 +1,11 @@
 import { react } from "@babel/types";
-import * as t from "@babel/types";
+import {
+  cloneNode,
+  jsxExpressionContainer,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import type Scope from "../../scope";
 import type NodePath from "../index";
 import type Binding from "../../scope/binding";
@@ -235,23 +241,23 @@ export default class PathHoister<T extends t.Node = t.Node> {
     let uid = attachTo.scope.generateUidIdentifier("ref");
 
     // @ts-expect-error todo(flow->ts): more specific type for this.path
-    const declarator = t.variableDeclarator(uid, this.path.node);
+    const declarator = variableDeclarator(uid, this.path.node);
 
     const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";
     const [attached] = attachTo[insertFn]([
       attachTo.isVariableDeclarator()
         ? declarator
-        : t.variableDeclaration("var", [declarator]),
+        : variableDeclaration("var", [declarator]),
     ]);
 
     const parent = this.path.parentPath;
     if (parent.isJSXElement() && this.path.container === parent.node.children) {
       // turning the `span` in `<div><span /></div>` to an expression so we need to wrap it with
       // an expression container
-      uid = t.jsxExpressionContainer(uid);
+      uid = jsxExpressionContainer(uid);
     }
 
-    this.path.replaceWith(t.cloneNode(uid));
+    this.path.replaceWith(cloneNode(uid));
 
     return attachTo.isVariableDeclarator()
       ? attached.get("init")

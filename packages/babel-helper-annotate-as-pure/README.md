@@ -9,11 +9,11 @@ See our website [@babel/helper-annotate-as-pure](https://babeljs.io/docs/en/babe
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-annotate-as-pure
+npm install --save @babel/helper-annotate-as-pure
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-annotate-as-pure --dev
+yarn add @babel/helper-annotate-as-pure
 ```

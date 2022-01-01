@@ -20,7 +20,11 @@
               {
                 "type": "TSTypeParameter",
                 "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8}},
-                "name": "T"
+                "name": {
+                  "type": "Identifier",
+                  "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"T"},
+                  "name": "T"
+                }
               }
             ]
           },
@@ -96,8 +100,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": 7,
-        "updateContext": null
+        "binop": 7
       },
       "value": "<",
       "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}}
@@ -127,8 +130,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": 7,
-        "updateContext": null
+        "binop": 7
       },
       "value": ">",
       "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}}
@@ -172,8 +174,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12}}
     },
@@ -216,8 +217,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16}}
     },
@@ -246,8 +246,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start":19,"end":21,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":21}}
     },
@@ -276,8 +275,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start":23,"end":24,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":24}}
     },
@@ -291,8 +289,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start":24,"end":24,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":24}}
     }

@@ -257,6 +257,9 @@ export interface NodePathAssetions {
   assertImportSpecifier(
     opts?: object,
   ): asserts this is NodePath<t.ImportSpecifier>;
+  assertIndexedAccessType(
+    opts?: object,
+  ): asserts this is NodePath<t.IndexedAccessType>;
   assertInferredPredicate(
     opts?: object,
   ): asserts this is NodePath<t.InferredPredicate>;
@@ -325,12 +328,16 @@ export interface NodePathAssetions {
   ): asserts this is NodePath<t.MemberExpression>;
   assertMetaProperty(opts?: object): asserts this is NodePath<t.MetaProperty>;
   assertMethod(opts?: object): asserts this is NodePath<t.Method>;
+  assertMiscellaneous(opts?: object): asserts this is NodePath<t.Miscellaneous>;
   assertMixedTypeAnnotation(
     opts?: object,
   ): asserts this is NodePath<t.MixedTypeAnnotation>;
   assertModuleDeclaration(
     opts?: object,
   ): asserts this is NodePath<t.ModuleDeclaration>;
+  assertModuleExpression(
+    opts?: object,
+  ): asserts this is NodePath<t.ModuleExpression>;
   assertModuleSpecifier(
     opts?: object,
   ): asserts this is NodePath<t.ModuleSpecifier>;
@@ -384,6 +391,9 @@ export interface NodePathAssetions {
   assertOptionalCallExpression(
     opts?: object,
   ): asserts this is NodePath<t.OptionalCallExpression>;
+  assertOptionalIndexedAccessType(
+    opts?: object,
+  ): asserts this is NodePath<t.OptionalIndexedAccessType>;
   assertOptionalMemberExpression(
     opts?: object,
   ): asserts this is NodePath<t.OptionalMemberExpression>;
@@ -428,6 +438,7 @@ export interface NodePathAssetions {
   assertSpreadProperty(
     opts?: object,
   ): asserts this is NodePath<t.SpreadProperty>;
+  assertStandardized(opts?: object): asserts this is NodePath<t.Standardized>;
   assertStatement(opts?: object): asserts this is NodePath<t.Statement>;
   assertStaticBlock(opts?: object): asserts this is NodePath<t.StaticBlock>;
   assertStringLiteral(opts?: object): asserts this is NodePath<t.StringLiteral>;
@@ -627,6 +638,9 @@ export interface NodePathAssetions {
   assertThrowStatement(
     opts?: object,
   ): asserts this is NodePath<t.ThrowStatement>;
+  assertTopicReference(
+    opts?: object,
+  ): asserts this is NodePath<t.TopicReference>;
   assertTryStatement(opts?: object): asserts this is NodePath<t.TryStatement>;
   assertTupleExpression(
     opts?: object,
@@ -648,6 +662,7 @@ export interface NodePathAssetions {
   assertTypeParameterInstantiation(
     opts?: object,
   ): asserts this is NodePath<t.TypeParameterInstantiation>;
+  assertTypeScript(opts?: object): asserts this is NodePath<t.TypeScript>;
   assertTypeofTypeAnnotation(
     opts?: object,
   ): asserts this is NodePath<t.TypeofTypeAnnotation>;

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-optimise-call-expression",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "description": "Helper function to optimise call expression",
   "repository": {
     "type": "git",
@@ -12,12 +12,28 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.12.13"
+    "@babel/types": "workspace:^"
   },
   "devDependencies": {
-    "@babel/generator": "workspace:*",
-    "@babel/parser": "workspace:*"
+    "@babel/generator": "workspace:^",
+    "@babel/parser": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }

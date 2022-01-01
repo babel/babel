@@ -1,9 +1,0 @@
-{
-  "presets": [
-    ["env", {
-      "targets": { "node": 12 },
-      "shippedProposals": true
-    }]
-  ],
-  "plugins": [["external-helpers", { "helperVersion": "7.100" }]]
-}

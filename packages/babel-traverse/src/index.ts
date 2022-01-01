@@ -1,12 +1,13 @@
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
-import * as t from "@babel/types";
+import { VISITOR_KEYS, removeProperties, traverseFast } from "@babel/types";
+import type * as t from "@babel/types";
 import * as cache from "./cache";
 import type NodePath from "./path";
-import type Scope from "./scope";
+import type { default as Scope, Binding } from "./scope";
 import type { Visitor } from "./types";
 
-export type { Visitor };
+export type { Visitor, Binding };
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
@@ -57,7 +58,7 @@ function traverse(
     }
   }
 
-  if (!t.VISITOR_KEYS[parent.type]) {
+  if (!VISITOR_KEYS[parent.type]) {
     return;
   }
 
@@ -73,7 +74,7 @@ traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
 traverse.cheap = function (node, enter) {
-  return t.traverseFast(node, enter);
+  return traverseFast(node, enter);
 };
 
 traverse.node = function (
@@ -84,7 +85,7 @@ traverse.node = function (
   parentPath?: NodePath,
   skipKeys?,
 ) {
-  const keys = t.VISITOR_KEYS[node.type];
+  const keys = VISITOR_KEYS[node.type];
   if (!keys) return;
 
   const context = new TraversalContext(scope, opts, state, parentPath);
@@ -95,13 +96,13 @@ traverse.node = function (
 };
 
 traverse.clearNode = function (node: t.Node, opts?) {
-  t.removeProperties(node, opts);
+  removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
 traverse.removeProperties = function (tree, opts?) {
-  t.traverseFast(tree, traverse.clearNode, opts);
+  traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 

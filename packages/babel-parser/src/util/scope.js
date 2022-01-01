@@ -17,24 +17,22 @@ import {
   type BindingTypes,
 } from "./scopeflags";
 import * as N from "../types";
-import { Errors } from "../parser/error";
+import { Errors, type raiseFunction } from "../parser/error";
 
 // Start an AST node, attaching a start offset.
 export class Scope {
-  flags: ScopeFlags;
-  // A list of var-declared names in the current lexical scope
-  var: string[] = [];
-  // A list of lexically-declared names in the current lexical scope
-  lexical: string[] = [];
-  // A list of lexically-declared FunctionDeclaration names in the current lexical scope
-  functions: string[] = [];
+  declare flags: ScopeFlags;
+  // A set of var-declared names in the current lexical scope
+  var: Set<string> = new Set();
+  // A set of lexically-declared names in the current lexical scope
+  lexical: Set<string> = new Set();
+  // A set of lexically-declared FunctionDeclaration names in the current lexical scope
+  functions: Set<string> = new Set();
 
   constructor(flags: ScopeFlags) {
     this.flags = flags;
   }
 }
-
-type raiseFunction = (number, string, ...any) => void;
 
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
@@ -51,22 +49,35 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   }
 
   get inFunction() {
-    return (this.currentVarScope().flags & SCOPE_FUNCTION) > 0;
+    return (this.currentVarScopeFlags() & SCOPE_FUNCTION) > 0;
   }
   get allowSuper() {
-    return (this.currentThisScope().flags & SCOPE_SUPER) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_SUPER) > 0;
   }
   get allowDirectSuper() {
-    return (this.currentThisScope().flags & SCOPE_DIRECT_SUPER) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_DIRECT_SUPER) > 0;
   }
   get inClass() {
-    return (this.currentThisScope().flags & SCOPE_CLASS) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_CLASS) > 0;
+  }
+  get inClassAndNotInNonArrowFunction() {
+    const flags = this.currentThisScopeFlags();
+    return (flags & SCOPE_CLASS) > 0 && (flags & SCOPE_FUNCTION) === 0;
   }
   get inStaticBlock() {
-    return (this.currentThisScope().flags & SCOPE_STATIC_BLOCK) > 0;
+    for (let i = this.scopeStack.length - 1; ; i--) {
+      const { flags } = this.scopeStack[i];
+      if (flags & SCOPE_STATIC_BLOCK) {
+        return true;
+      }
+      if (flags & (SCOPE_VAR | SCOPE_CLASS)) {
+        // function body, module body, class property initializers
+        return false;
+      }
+    }
   }
   get inNonArrowFunction() {
-    return (this.currentThisScope().flags & SCOPE_FUNCTION) > 0;
+    return (this.currentThisScopeFlags() & SCOPE_FUNCTION) > 0;
   }
   get treatFunctionsAsVar() {
     return this.treatFunctionsAsVarInScope(this.currentScope());
@@ -102,9 +113,9 @@ export default class ScopeHandler<IScope: Scope = Scope> {
       this.checkRedeclarationInScope(scope, name, bindingType, pos);
 
       if (bindingType & BIND_SCOPE_FUNCTION) {
-        scope.functions.push(name);
+        scope.functions.add(name);
       } else {
-        scope.lexical.push(name);
+        scope.lexical.add(name);
       }
 
       if (bindingType & BIND_SCOPE_LEXICAL) {
@@ -114,7 +125,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         scope = this.scopeStack[i];
         this.checkRedeclarationInScope(scope, name, bindingType, pos);
-        scope.var.push(name);
+        scope.var.add(name);
         this.maybeExportDefined(scope, name);
 
         if (scope.flags & SCOPE_VAR) break;
@@ -151,38 +162,41 @@ export default class ScopeHandler<IScope: Scope = Scope> {
 
     if (bindingType & BIND_SCOPE_LEXICAL) {
       return (
-        scope.lexical.indexOf(name) > -1 ||
-        scope.functions.indexOf(name) > -1 ||
-        scope.var.indexOf(name) > -1
+        scope.lexical.has(name) ||
+        scope.functions.has(name) ||
+        scope.var.has(name)
       );
     }
 
     if (bindingType & BIND_SCOPE_FUNCTION) {
       return (
-        scope.lexical.indexOf(name) > -1 ||
-        (!this.treatFunctionsAsVarInScope(scope) &&
-          scope.var.indexOf(name) > -1)
+        scope.lexical.has(name) ||
+        (!this.treatFunctionsAsVarInScope(scope) && scope.var.has(name))
       );
     }
 
     return (
-      (scope.lexical.indexOf(name) > -1 &&
-        !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)) ||
-      (!this.treatFunctionsAsVarInScope(scope) &&
-        scope.functions.indexOf(name) > -1)
+      (scope.lexical.has(name) &&
+        !(
+          scope.flags & SCOPE_SIMPLE_CATCH &&
+          scope.lexical.values().next().value === name
+        )) ||
+      (!this.treatFunctionsAsVarInScope(scope) && scope.functions.has(name))
     );
   }
 
   checkLocalExport(id: N.Identifier) {
+    const { name } = id;
+    const topLevelScope = this.scopeStack[0];
     if (
-      this.scopeStack[0].lexical.indexOf(id.name) === -1 &&
-      this.scopeStack[0].var.indexOf(id.name) === -1 &&
+      !topLevelScope.lexical.has(name) &&
+      !topLevelScope.var.has(name) &&
       // In strict mode, scope.functions will always be empty.
       // Modules are strict by default, but the `scriptMode` option
       // can overwrite this behavior.
-      this.scopeStack[0].functions.indexOf(id.name) === -1
+      !topLevelScope.functions.has(name)
     ) {
-      this.undefinedExports.set(id.name, id.start);
+      this.undefinedExports.set(name, id.start);
     }
   }
 
@@ -191,25 +205,22 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   }
 
   // $FlowIgnore
-  currentVarScope(): IScope {
+  currentVarScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
-      const scope = this.scopeStack[i];
-      if (scope.flags & SCOPE_VAR) {
-        return scope;
+      const { flags } = this.scopeStack[i];
+      if (flags & SCOPE_VAR) {
+        return flags;
       }
     }
   }
 
   // Could be useful for `arguments`, `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
   // $FlowIgnore
-  currentThisScope(): IScope {
+  currentThisScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
-      const scope = this.scopeStack[i];
-      if (
-        (scope.flags & SCOPE_VAR || scope.flags & SCOPE_CLASS) &&
-        !(scope.flags & SCOPE_ARROW)
-      ) {
-        return scope;
+      const { flags } = this.scopeStack[i];
+      if (flags & (SCOPE_VAR | SCOPE_CLASS) && !(flags & SCOPE_ARROW)) {
+        return flags;
       }
     }
   }

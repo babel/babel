@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "loose": true,
+        "targets": { "browsers": "ie 6" },
+        "include": ["transform-typeof-symbol"]
+      }
+    ]
+  ]
+}

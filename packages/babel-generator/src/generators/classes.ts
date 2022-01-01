@@ -1,5 +1,10 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import {
+  isExportDefaultDeclaration,
+  isExportNamedDeclaration,
+} from "@babel/types";
+import type * as t from "@babel/types";
+import * as charCodes from "charcodes";
 
 export function ClassDeclaration(
   this: Printer,
@@ -8,8 +13,7 @@ export function ClassDeclaration(
 ) {
   if (
     !this.format.decoratorsBeforeExport ||
-    (!t.isExportDefaultDeclaration(parent) &&
-      !t.isExportNamedDeclaration(parent))
+    (!isExportDefaultDeclaration(parent) && !isExportNamedDeclaration(parent))
   ) {
     this.printJoin(node.decorators, node);
   }
@@ -27,6 +31,7 @@ export function ClassDeclaration(
   }
 
   this.word("class");
+  this.printInnerComments(node);
 
   if (node.id) {
     this.space();
@@ -68,7 +73,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
     this.printSequence(node.body, node);
     this.dedent();
 
-    if (!this.endsWith("\n")) this.newline();
+    if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
     this.rightBrace();
   }

@@ -1,7 +1,7 @@
 "use strict";
 
 const path = require("path");
-const compatData = require("mdn-browser-compat-data").javascript;
+const compatData = require("@mdn/browser-compat-data").javascript;
 const { process } = require("./build-modules-support");
 const { generateData, environments, writeFile } = require("./utils-build-data");
 
@@ -11,7 +11,7 @@ for (const target of ["plugin", "corejs2-built-in"]) {
     require(`./data/${target}-features`)
   );
   if (target === "plugin") {
-    // add export-namespace-from from mdn-browser-compat-data
+    // add export-namespace-from from @mdn/browser-compat-data
     const exportNamespaceFromCompatData = process(
       compatData.statements.export.namespace
     );

@@ -65,12 +65,12 @@
                 "start":18,"end":19,"loc":{"start":{"line":3,"column":1},"end":{"line":3,"column":2},"identifierName":"a"},
                 "name": "a"
               },
+              "computed": false,
               "property": {
                 "type": "Identifier",
                 "start":20,"end":21,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":4},"identifierName":"b"},
                 "name": "b"
-              },
-              "computed": false
+              }
             }
           },
           "right": {
@@ -98,6 +98,7 @@
                 "start":30,"end":31,"loc":{"start":{"line":4,"column":1},"end":{"line":4,"column":2},"identifierName":"a"},
                 "name": "a"
               },
+              "computed": true,
               "property": {
                 "type": "StringLiteral",
                 "start":32,"end":35,"loc":{"start":{"line":4,"column":3},"end":{"line":4,"column":6}},
@@ -106,8 +107,7 @@
                   "raw": "'c'"
                 },
                 "value": "c"
-              },
-              "computed": true
+              }
             }
           },
           "right": {

@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "modules": false,
+        "targets": {
+          "node": "4.0.0"
+        },
+        "useBuiltIns": "usage",
+        "corejs": 2,
+        "shippedProposals": true
+      }
+    ]
+  ]
+}

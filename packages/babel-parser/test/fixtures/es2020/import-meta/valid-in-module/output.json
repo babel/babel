@@ -66,12 +66,12 @@
                   "name": "meta"
                 }
               },
+              "computed": false,
               "property": {
                 "type": "Identifier",
                 "start":47,"end":50,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":27},"identifierName":"url"},
                 "name": "url"
-              },
-              "computed": false
+              }
             }
           }
         ],
@@ -115,12 +115,12 @@
               "name": "meta"
             }
           },
+          "computed": false,
           "property": {
             "type": "Identifier",
             "start":77,"end":80,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"url"},
             "name": "url"
-          },
-          "computed": false
+          }
         }
       },
       {
@@ -147,12 +147,12 @@
                 "name": "meta"
               }
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":94,"end":108,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":26},"identifierName":"couldBeMutable"},
               "name": "couldBeMutable"
-            },
-            "computed": false
+            }
           },
           "right": {
             "type": "BooleanLiteral",

@@ -1,3 +1,4 @@
+var _excluded = ["x"];
 var z = {};
 var _z = z,
     x = babelHelpers.extends({}, _z);
@@ -10,7 +11,7 @@ var _z3 = z,
 
 (function (_ref) {
   var x = _ref.x,
-      y = babelHelpers.objectWithoutProperties(_ref, ["x"]);
+      y = babelHelpers.objectWithoutProperties(_ref, _excluded);
 });
 
 var _o = o;

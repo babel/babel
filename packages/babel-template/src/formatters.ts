@@ -1,4 +1,5 @@
-import * as t from "@babel/types";
+import { assertExpressionStatement } from "@babel/types";
+import type * as t from "@babel/types";
 
 export type Formatter<T> = {
   code: (source: string) => string;
@@ -58,7 +59,7 @@ export const expression: Formatter<t.Expression> = {
   },
   unwrap: ({ program }) => {
     const [stmt] = program.body;
-    t.assertExpressionStatement(stmt);
+    assertExpressionStatement(stmt);
     return stmt.expression;
   },
 };

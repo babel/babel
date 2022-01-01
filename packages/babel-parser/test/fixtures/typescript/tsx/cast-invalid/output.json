@@ -32,10 +32,6 @@
               "argument": {
                 "type": "JSXElement",
                 "start":32,"end":78,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":50}},
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 26
-                },
                 "openingElement": {
                   "type": "JSXOpeningElement",
                   "start":32,"end":78,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":50}},
@@ -100,10 +96,6 @@
                         "expression": {
                           "type": "TSTypeCastExpression",
                           "start":69,"end":73,"loc":{"start":{"line":3,"column":41},"end":{"line":3,"column":45}},
-                          "extra": {
-                            "parenthesized": true,
-                            "parenStart": 68
-                          },
                           "expression": {
                             "type": "Identifier",
                             "start":69,"end":70,"loc":{"start":{"line":3,"column":41},"end":{"line":3,"column":42},"identifierName":"a"},
@@ -121,6 +113,10 @@
                                 "name": "b"
                               }
                             }
+                          },
+                          "extra": {
+                            "parenthesized": true,
+                            "parenStart": 68
                           }
                         }
                       }
@@ -129,7 +125,11 @@
                   "selfClosing": true
                 },
                 "closingElement": null,
-                "children": []
+                "children": [],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 26
+                }
               }
             }
           ],

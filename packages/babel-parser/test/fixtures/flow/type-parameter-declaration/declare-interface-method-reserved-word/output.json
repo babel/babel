@@ -53,6 +53,7 @@
                     }
                   ]
                 },
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":37,"end":41,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":19}}
@@ -89,6 +90,7 @@
                     }
                   ]
                 },
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":58,"end":62,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":19}}
@@ -125,6 +127,7 @@
                     }
                   ]
                 },
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":78,"end":82,"loc":{"start":{"line":4,"column":14},"end":{"line":4,"column":18}}
@@ -161,6 +164,7 @@
                     }
                   ]
                 },
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":95,"end":99,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":15}}

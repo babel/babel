@@ -31,9 +31,11 @@ toFastProperties(DEPRECATED_KEYS);
 toFastProperties(PLACEHOLDERS_ALIAS);
 toFastProperties(PLACEHOLDERS_FLIPPED_ALIAS);
 
-const TYPES: Array<string> = Object.keys(VISITOR_KEYS)
-  .concat(Object.keys(FLIPPED_ALIAS_KEYS))
-  .concat(Object.keys(DEPRECATED_KEYS));
+const TYPES: Array<string> = [].concat(
+  Object.keys(VISITOR_KEYS),
+  Object.keys(FLIPPED_ALIAS_KEYS),
+  Object.keys(DEPRECATED_KEYS),
+);
 
 export {
   VISITOR_KEYS,

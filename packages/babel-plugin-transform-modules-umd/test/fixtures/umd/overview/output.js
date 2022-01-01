@@ -16,7 +16,7 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.default = _exports.test2 = _exports.test = void 0;
+  _exports.test2 = _exports.test = _exports.default = void 0;
   foo2 = babelHelpers.interopRequireWildcard(foo2);
   var test;
   _exports.test = test;

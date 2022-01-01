@@ -1,6 +1,6 @@
-var _privateField = babelHelpers.classPrivateFieldLooseKey("privateField");
+var _privateField = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateField");
 
-var _privateFieldValue = babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
+var _privateFieldValue = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
 
 class Cl {
   static publicGetPrivateField() {
@@ -34,20 +34,20 @@ class Cl {
 
 }
 
-var _set_privateFieldValue = function (newValue) {
-  babelHelpers.classPrivateFieldLooseBase(Cl, _privateField)[_privateField] = newValue;
-};
-
-var _get_privateFieldValue = function () {
+function _get_privateFieldValue() {
   return babelHelpers.classPrivateFieldLooseBase(Cl, _privateField)[_privateField];
-};
+}
 
+function _set_privateFieldValue(newValue) {
+  babelHelpers.classPrivateFieldLooseBase(Cl, _privateField)[_privateField] = newValue;
+}
+
+Object.defineProperty(Cl, _privateFieldValue, {
+  get: _get_privateFieldValue,
+  set: _set_privateFieldValue
+});
 Object.defineProperty(Cl, _privateField, {
   writable: true,
   value: "top secret string"
 });
 Cl.publicField = "not secret string";
-Object.defineProperty(Cl, _privateFieldValue, {
-  get: _get_privateFieldValue,
-  set: _set_privateFieldValue
-});

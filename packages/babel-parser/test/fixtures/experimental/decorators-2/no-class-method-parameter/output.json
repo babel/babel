@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: Decorators cannot be used to decorate parameters (2:14)"
+    "SyntaxError: Decorators cannot be used to decorate parameters. (2:14)"
   ],
   "program": {
     "type": "Program",

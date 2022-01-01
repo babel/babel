@@ -41,12 +41,12 @@
               "start":9,"end":12,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3},"identifierName":"obj"},
               "name": "obj"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":13,"end":14,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5},"identifierName":"a"},
               "name": "a"
-            },
-            "computed": false
+            }
           },
           "right": {
             "type": "Identifier",

@@ -62,6 +62,7 @@ function normalizeOptions(code, opts): Format {
       ...opts.jsescOption,
     },
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
+    topicToken: opts.topicToken,
   };
 
   if (!process.env.BABEL_8_BREAKING) {
@@ -197,6 +198,12 @@ export interface GeneratorOptions {
      */
     wrap?: boolean;
   };
+
+  /**
+   * For use with the Hack-style pipe operator.
+   * Changes what token is used for pipe bodies’ topic references.
+   */
+  topicToken?: "^" | "%" | "#";
 }
 
 export interface GeneratorResult {
@@ -239,7 +246,7 @@ export default function generate(
   ast: t.Node,
   opts?: GeneratorOptions,
   code?: string | { [filename: string]: string },
-): any {
+) {
   const gen = new Generator(ast, opts, code);
   return gen.generate();
 }

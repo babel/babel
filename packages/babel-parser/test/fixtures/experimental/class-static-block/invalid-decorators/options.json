@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "classStaticBlock",
-    ["decorators", { "decoratorsBeforeExport": true }]
-  ]
+  "plugins": [["decorators", { "decoratorsBeforeExport": true }]]
 }

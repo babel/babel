@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-object-rest-spread",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "description": "Compile object rest and spread to ES5",
   "repository": {
     "type": "git",
@@ -12,20 +12,39 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.12.13",
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.0",
-    "@babel/plugin-transform-parameters": "workspace:^7.12.13"
+    "@babel/compat-data": "workspace:^",
+    "@babel/helper-compilation-targets": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
+    "@babel/plugin-transform-parameters": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/parser": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }

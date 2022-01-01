@@ -2,11 +2,10 @@
 
 import * as charCodes from "charcodes";
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-
-tt.placeholder = new TokenType("%%", { startsExpr: true });
+import { makeErrorTemplates, ErrorCodes } from "../parser/error";
 
 export type PlaceholderTypes =
   | "Identifier"
@@ -46,6 +45,13 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 // Placeholder<T> breaks everything, because its type is incompatible with
 // the substituted nodes.
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
+
+const PlaceHolderErrors = makeErrorTemplates(
+  {
+    ClassNameIsRequired: "A class name is required.",
+  },
+  /* code */ ErrorCodes.SyntaxError,
+);
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
@@ -157,7 +163,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // Replicate the original checks that lead to looking ahead for an
       // identifier.
-      if (!this.isContextual("let")) {
+      if (!this.isContextual(tt._let)) {
         return false;
       }
       if (context) return false;
@@ -240,7 +246,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.body = this.finishPlaceholder(placeholder, "ClassBody");
           return this.finishNode(node, type);
         } else {
-          this.unexpected(null, "A class name is required");
+          this.unexpected(null, PlaceHolderErrors.ClassNameIsRequired);
         }
       } else {
         this.parseClassId(node, isStatement, optionalId);
@@ -257,7 +263,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const placeholder = this.parsePlaceholder("Identifier");
       if (!placeholder) return super.parseExport(...arguments);
 
-      if (!this.isContextual("from") && !this.match(tt.comma)) {
+      if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // export %%DECL%%;
         node.specifiers = [];
         node.source = null;
@@ -280,7 +286,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.isUnparsedContextual(next, "from")) {
           if (
             this.input.startsWith(
-              tt.placeholder.label,
+              tokenLabelName(tt.placeholder),
               this.nextTokenStartSince(next + 4),
             )
           ) {
@@ -318,7 +324,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       node.specifiers = [];
 
-      if (!this.isContextual("from") && !this.match(tt.comma)) {
+      if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // import %%STRING%%;
         node.source = this.finishPlaceholder(placeholder, "StringLiteral");
         this.semicolon();
@@ -339,7 +345,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (!hasStarImport) this.parseNamedImportSpecifiers(node);
       }
 
-      this.expectContextual("from");
+      this.expectContextual(tt._from);
       node.source = this.parseImportSource();
       this.semicolon();
       return this.finishNode(node, "ImportDeclaration");

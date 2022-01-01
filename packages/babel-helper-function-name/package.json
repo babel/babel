@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-function-name",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "description": "Helper function to change the property 'name' of every function",
   "repository": {
     "type": "git",
@@ -12,10 +12,26 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-get-function-arity": "workspace:^7.12.13",
-    "@babel/template": "workspace:^7.12.13",
-    "@babel/types": "workspace:^7.12.13"
+    "@babel/helper-get-function-arity": "workspace:^",
+    "@babel/template": "workspace:^",
+    "@babel/types": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }

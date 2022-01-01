@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":25,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":25}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":25,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":25},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":5,"end":25,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":25}},
+                "typeAnnotation": {
+                  "type": "TSLiteralType",
+                  "start":7,"end":25,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":25}},
+                  "literal": {
+                    "type": "TemplateLiteral",
+                    "start":7,"end":25,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":25}},
+                    "expressions": [
+                      {
+                        "type": "TSInferType",
+                        "start":14,"end":23,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":23}},
+                        "typeParameter": {
+                          "type": "TSTypeParameter",
+                          "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23}},
+                          "name": "bar"
+                        }
+                      }
+                    ],
+                    "quasis": [
+                      {
+                        "type": "TemplateElement",
+                        "start":8,"end":12,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":12}},
+                        "value": {
+                          "raw": "foo-",
+                          "cooked": "foo-"
+                        },
+                        "tail": false
+                      },
+                      {
+                        "type": "TemplateElement",
+                        "start":24,"end":24,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":24}},
+                        "value": {
+                          "raw": "",
+                          "cooked": ""
+                        },
+                        "tail": true
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -35,12 +35,12 @@
                       "start":15,"end":18,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":6},"identifierName":"foo"},
                       "name": "foo"
                     },
+                    "computed": true,
                     "property": {
                       "type": "Identifier",
                       "start":19,"end":22,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":10},"identifierName":"bar"},
                       "name": "bar"
-                    },
-                    "computed": true
+                    }
                   }
                 }
               ],

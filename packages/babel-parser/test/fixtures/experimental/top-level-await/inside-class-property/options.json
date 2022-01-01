@@ -1,4 +1,0 @@
-{
-  "plugins": ["topLevelAwati", "classProperties"],
-  "sourceType": "module"
-}

@@ -7,5 +7,6 @@
       }
     ]
   ],
-  "sourceType": "module"
+  "sourceType": "module",
+  "BABEL_8_BREAKING": false
 }

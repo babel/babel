@@ -16,12 +16,12 @@ class B extends A {
 
 }
 
-var _getB = function _getB() {
-  return this.b;
-};
-
-var _getA = function _getA() {
+function _getA() {
   return babelHelpers.get(babelHelpers.getPrototypeOf(B), "a", this);
-};
+}
+
+function _getB() {
+  return this.b;
+}
 
 var [getA, getB] = B.extract();

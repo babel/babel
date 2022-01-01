@@ -1,1 +1,1 @@
-SyntaxError: <CWD>/test.js: Missing semicolon (2:10)
+SyntaxError: <CWD>/test.js: Missing semicolon. (2:10)

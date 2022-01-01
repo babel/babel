@@ -1,0 +1,65 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":16}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":16}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":13,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":13},"identifierName":"abstract"},
+          "name": "abstract"
+        },
+        "typeAnnotation": {
+          "type": "TSLiteralType",
+          "start":16,"end":26,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":26}},
+          "literal": {
+            "type": "StringLiteral",
+            "start":16,"end":26,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":26}},
+            "extra": {
+              "rawValue": "abstract",
+              "raw": "\"abstract\""
+            },
+            "value": "abstract"
+          }
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":28,"end":44,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":16}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":32,"end":43,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":15}},
+            "id": {
+              "type": "Identifier",
+              "start":32,"end":43,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":15},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":33,"end":43,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":15}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":35,"end":43,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":15}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":35,"end":43,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":15},"identifierName":"abstract"},
+                    "name": "abstract"
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":14}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'interface' (2:0)"
+    "SyntaxError: Unexpected reserved word 'interface'. (2:0)"
   ],
   "program": {
     "type": "Program",

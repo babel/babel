@@ -29,3 +29,4 @@ programmatic options from @babel/cli
   },
   "filename": "src//foo.js"
 }
+-----End Babel configs-----

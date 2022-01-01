@@ -1,5 +1,3 @@
-import isPlainObject from "lodash/isPlainObject";
-import isRegExp from "lodash/isRegExp";
 import isValidIdentifier from "../validators/isValidIdentifier";
 import {
   identifier,
@@ -26,12 +24,35 @@ export default valueToNode as {
   (value: RegExp): t.RegExpLiteral;
   (value: ReadonlyArray<unknown>): t.ArrayExpression;
 
-  // this throws with objects that are not PlainObject according to lodash,
+  // this throws with objects that are not plain objects,
   // or if there are non-valueToNode-able values
   (value: object): t.ObjectExpression;
 
   (value: unknown): t.Expression;
 };
+
+const objectToString: (value: object) => string = Function.call.bind(
+  Object.prototype.toString,
+);
+
+function isRegExp(value): value is RegExp {
+  return objectToString(value) === "[object RegExp]";
+}
+
+function isPlainObject(value): value is object {
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    Object.prototype.toString.call(value) !== "[object Object]"
+  ) {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  // Object.prototype's __proto__ is null. Every other class's __proto__.__proto__ is
+  // not null by default. We cannot check if proto === Object.prototype because it
+  // could come from another realm.
+  return proto === null || Object.getPrototypeOf(proto) === null;
+}
 
 function valueToNode(value: unknown): t.Expression {
   // undefined

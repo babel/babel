@@ -1,5 +1,11 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import {
+  isCallExpression,
+  isLiteral,
+  isMemberExpression,
+  isNewExpression,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import * as n from "../node";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
@@ -20,6 +26,10 @@ export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
 }
 
 export function DoExpression(this: Printer, node: t.DoExpression) {
+  if (node.async) {
+    this.word("async");
+    this.space();
+  }
   this.word("do");
   this.space();
   this.print(node.body, node);
@@ -73,9 +83,9 @@ export function NewExpression(
     this.format.minified &&
     node.arguments.length === 0 &&
     !node.optional &&
-    !t.isCallExpression(parent, { callee: node }) &&
-    !t.isMemberExpression(parent) &&
-    !t.isNewExpression(parent)
+    !isCallExpression(parent, { callee: node }) &&
+    !isMemberExpression(parent) &&
+    !isNewExpression(parent)
   ) {
     return;
   }
@@ -115,13 +125,13 @@ export function OptionalMemberExpression(
 ) {
   this.print(node.object, node);
 
-  if (!node.computed && t.isMemberExpression(node.property)) {
+  if (!node.computed && isMemberExpression(node.property)) {
     throw new TypeError("Got a MemberExpression for MemberExpression property");
   }
 
   let computed = node.computed;
   // @ts-expect-error todo(flow->ts) maybe instead of typeof check specific literal types?
-  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
+  if (isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
   if (node.optional) {
@@ -262,13 +272,13 @@ export {
 export function MemberExpression(this: Printer, node: t.MemberExpression) {
   this.print(node.object, node);
 
-  if (!node.computed && t.isMemberExpression(node.property)) {
+  if (!node.computed && isMemberExpression(node.property)) {
     throw new TypeError("Got a MemberExpression for MemberExpression property");
   }
 
   let computed = node.computed;
   // @ts-expect-error todo(flow->ts) maybe use specific literal types
-  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
+  if (isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
 
@@ -299,4 +309,17 @@ export function V8IntrinsicIdentifier(
 ) {
   this.token("%");
   this.word(node.name);
+}
+
+export function ModuleExpression(node: t.ModuleExpression) {
+  this.word("module");
+  this.space();
+  this.token("{");
+  if (node.body.body.length === 0) {
+    this.token("}");
+  } else {
+    this.newline();
+    this.printSequence(node.body.body, node, { indent: true });
+    this.rightBrace();
+  }
 }

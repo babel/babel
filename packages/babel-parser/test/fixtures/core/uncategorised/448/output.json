@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2}},
   "errors": [
-    "SyntaxError: Expecting Unicode escape sequence \\uXXXX (1:1)"
+    "SyntaxError: Expecting Unicode escape sequence \\uXXXX. (1:1)"
   ],
   "program": {
     "type": "Program",

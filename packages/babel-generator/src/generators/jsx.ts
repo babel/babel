@@ -1,5 +1,5 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import type * as t from "@babel/types";
 
 export function JSXAttribute(this: Printer, node: t.JSXAttribute) {
   this.print(node.name, node);
@@ -67,7 +67,7 @@ export function JSXElement(this: Printer, node: t.JSXElement) {
   if (open.selfClosing) return;
 
   this.indent();
-  for (const child of node.children as Array<any>) {
+  for (const child of node.children) {
     this.print(child, node);
   }
   this.dedent();
@@ -109,7 +109,7 @@ export function JSXFragment(this: Printer, node: t.JSXFragment) {
   this.print(node.openingFragment, node);
 
   this.indent();
-  for (const child of node.children as Array<any>) {
+  for (const child of node.children) {
     this.print(child, node);
   }
   this.dedent();

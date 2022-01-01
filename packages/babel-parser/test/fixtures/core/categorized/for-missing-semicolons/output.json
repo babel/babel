@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
   "errors": [
-    "SyntaxError: Missing semicolon (2:11)",
-    "SyntaxError: Missing semicolon (3:7)"
+    "SyntaxError: Missing semicolon. (2:11)",
+    "SyntaxError: Missing semicolon. (3:7)"
   ],
   "program": {
     "type": "Program",

@@ -1,14 +1,14 @@
 const path = require("path");
 const fs = require("fs");
 
-const compatData = require("mdn-browser-compat-data").javascript;
+const compatData = require("@mdn/browser-compat-data").javascript;
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
 // Map mdn-browser-compat-data to browserslist browser names
 const browserNameMap = {
   chrome_android: "and_chr",
   firefox_android: "and_ff",
-  safari_ios: "ios_saf",
+  safari_ios: "ios",
   nodejs: "node",
   webview_android: "android",
   opera_android: "op_mob",
@@ -37,11 +37,17 @@ function process(source) {
 
   Object.keys(stats).forEach(browser => {
     const browserName = browserNameMap[browser] || browser;
+    // todo: remove this when we support deno
+    if (browserName === "deno") return;
     let browserSupport = stats[browserSupportMap[browserName] || browser];
     if (Array.isArray(browserSupport)) {
       browserSupport = browserSupport[0]; // The first item is the most progressive support
     }
-    if (browserSupport.version_added && !browserSupport.flags) {
+    if (
+      browserSupport.version_added &&
+      !browserSupport.flags &&
+      !browserSupport.partial_implementation
+    ) {
       allowedBrowsers[browserName] = browserVersion(
         browser,
         browserSupport.version_added
@@ -54,8 +60,13 @@ function process(source) {
 }
 
 const dataPath = path.join(__dirname, "../data/native-modules.json");
+const processed = process(compatData.statements.export);
+// Todo(Babel 8): remove `ios_saf` as it is identical to ios
+if (processed.ios) {
+  processed.ios_saf = processed.ios;
+}
 const data = {
-  "es6.module": process(compatData.statements.export),
+  "es6.module": processed,
 };
 fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
 exports.process = process;

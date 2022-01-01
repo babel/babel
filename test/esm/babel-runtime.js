@@ -10,18 +10,18 @@ export default {
           async () => import("@babel/runtime/helpers/esm/unknown-helper"),
           {
             name: "Error",
-            code: "ERR_MODULE_NOT_FOUND",
+            code: "ERR_PACKAGE_PATH_NOT_EXPORTED",
           }
         ),
     ],
-    [
+    /*[
       "it supports importing with explicit extension",
       () =>
         assert.doesNotReject(
           async () => import("@babel/runtime/helpers/esm/wrapNativeSuper.js"),
           Error
         ),
-    ],
+    ],*/
     [
       "it should not throw on helpers importing internal helpers",
       () =>

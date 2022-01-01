@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
   "errors": [
-    "SyntaxError: Imports within a `declare module` body must always be `import type` or `import typeof` (1:21)"
+    "SyntaxError: Imports within a `declare module` body must always be `import type` or `import typeof`. (1:21)"
   ],
   "program": {
     "type": "Program",

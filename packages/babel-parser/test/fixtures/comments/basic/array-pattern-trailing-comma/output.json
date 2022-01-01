@@ -22,13 +22,6 @@
                   "type": "Identifier",
                   "start":22,"end":23,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3},"identifierName":"x"},
                   "name": "x",
-                  "leadingComments": [
-                    {
-                      "type": "CommentBlock",
-                      "value": " One ",
-                      "start":10,"end":19,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":11}}
-                    }
-                  ],
                   "trailingComments": [
                     {
                       "type": "CommentBlock",
@@ -39,6 +32,13 @@
                       "type": "CommentBlock",
                       "value": " Three ",
                       "start":39,"end":50,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":13}}
+                    }
+                  ],
+                  "leadingComments": [
+                    {
+                      "type": "CommentBlock",
+                      "value": " One ",
+                      "start":10,"end":19,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":11}}
                     }
                   ]
                 }

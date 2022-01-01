@@ -45,11 +45,11 @@
                         "left": {
                           "type": "Identifier",
                           "start":19,"end":20,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":20},"identifierName":"f"},
+                          "name": "f",
                           "extra": {
                             "parenthesized": true,
                             "parenStart": 18
-                          },
-                          "name": "f"
+                          }
                         },
                         "right": {
                           "type": "ArrayExpression",

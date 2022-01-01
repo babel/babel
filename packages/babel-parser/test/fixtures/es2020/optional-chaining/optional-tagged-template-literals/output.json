@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
   "errors": [
-    "SyntaxError: Tagged Template Literals are not allowed in optionalChain (1:0)"
+    "SyntaxError: Tagged Template Literals are not allowed in optionalChain. (1:0)"
   ],
   "program": {
     "type": "Program",
@@ -24,12 +24,12 @@
               "start":0,"end":1,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":1},"identifierName":"a"},
               "name": "a"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":3,"end":4,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":4},"identifierName":"b"},
               "name": "b"
             },
-            "computed": false,
             "optional": true
           },
           "quasi": {

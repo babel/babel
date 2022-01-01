@@ -26,18 +26,18 @@
               "type": "ReturnStatement",
               "start":36,"end":43,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":11}},
               "argument": null,
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " before ",
-                  "start":19,"end":31,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":16}}
-                }
-              ],
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " after ",
                   "start":48,"end":59,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":15}}
+                }
+              ],
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " before ",
+                  "start":19,"end":31,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":16}}
                 }
               ]
             }

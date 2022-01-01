@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 3,
+        "targets": { "node": "8.10.0" }
+      }
+    ]
+  ]
+}

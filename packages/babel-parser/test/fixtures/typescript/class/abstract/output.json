@@ -43,13 +43,6 @@
       {
         "type": "ExportNamedDeclaration",
         "start":50,"end":77,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":27}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " `export abstract class {}` is not valid TypeScript.",
-            "start":78,"end":132,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":54}}
-          }
-        ],
         "exportKind": "value",
         "specifiers": [],
         "source": null,
@@ -68,18 +61,18 @@
             "start":75,"end":77,"loc":{"start":{"line":3,"column":25},"end":{"line":3,"column":27}},
             "body": []
           }
-        }
-      },
-      {
-        "type": "ExportDefaultDeclaration",
-        "start":133,"end":166,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":33}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " `export abstract class {}` is not valid TypeScript.",
             "start":78,"end":132,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":54}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":133,"end":166,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":33}},
         "exportKind": "value",
         "declaration": {
           "type": "ClassDeclaration",
@@ -92,18 +85,18 @@
             "start":163,"end":166,"loc":{"start":{"line":5,"column":30},"end":{"line":5,"column":33}},
             "body": []
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `export abstract class {}` is not valid TypeScript.",
+            "start":78,"end":132,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":54}}
+          }
+        ]
       },
       {
         "type": "ExportDefaultDeclaration",
         "start":167,"end":203,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":36}},
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " `abstract class` is not valid as an expression.",
-            "start":204,"end":254,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":50}}
-          }
-        ],
         "exportKind": "value",
         "declaration": {
           "type": "ClassDeclaration",
@@ -120,18 +113,18 @@
             "start":200,"end":203,"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":36}},
             "body": []
           }
-        }
-      },
-      {
-        "type": "ExportDefaultDeclaration",
-        "start":255,"end":313,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":58}},
-        "leadingComments": [
+        },
+        "trailingComments": [
           {
             "type": "CommentLine",
             "value": " `abstract class` is not valid as an expression.",
             "start":204,"end":254,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":50}}
           }
-        ],
+        ]
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":255,"end":313,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":58}},
         "exportKind": "value",
         "declaration": {
           "type": "ClassDeclaration",
@@ -174,7 +167,14 @@
               }
             ]
           }
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `abstract class` is not valid as an expression.",
+            "start":204,"end":254,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":50}}
+          }
+        ]
       }
     ],
     "directives": []

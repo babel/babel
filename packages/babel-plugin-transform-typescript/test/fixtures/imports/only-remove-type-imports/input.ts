@@ -10,4 +10,6 @@ import "g";
 import type H from "h";
 import type { I, I2 } from "i";
 import type * as J from "j";
+import { type K1, type K2 } from "k";
+import { type L1, L2, type L3 } from "l";
 ;

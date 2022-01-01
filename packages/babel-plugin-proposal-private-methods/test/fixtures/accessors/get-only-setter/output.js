@@ -1,24 +1,22 @@
-var _privateField = new WeakMap();
+var _privateField = /*#__PURE__*/new WeakMap();
 
-var _privateFieldValue = new WeakMap();
+var _privateFieldValue = /*#__PURE__*/new WeakMap();
 
 class Cl {
   constructor() {
-    _privateFieldValue.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _privateFieldValue, {
       get: void 0,
       set: _set_privateFieldValue
     });
-
-    _privateField.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _privateField, {
       writable: true,
       value: 0
     });
-
-    this.publicField = babelHelpers.writeOnlyError("#privateFieldValue");
+    this.publicField = (this, babelHelpers.writeOnlyError("#privateFieldValue"));
   }
 
 }
 
-var _set_privateFieldValue = function (newValue) {
+function _set_privateFieldValue(newValue) {
   babelHelpers.classPrivateFieldSet(this, _privateField, newValue);
-};
+}

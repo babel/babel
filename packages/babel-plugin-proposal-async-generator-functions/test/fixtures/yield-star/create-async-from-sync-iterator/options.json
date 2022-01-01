@@ -1,0 +1,6 @@
+{
+  "plugins": ["proposal-async-generator-functions"],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

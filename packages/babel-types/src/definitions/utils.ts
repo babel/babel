@@ -19,12 +19,30 @@ function getType(val) {
   }
 }
 
-// TODO: Import and use Node instead of any
-type Validator = { chainOf?: Validator[] } & ((
-  parent: any,
-  key: string,
-  node: any,
-) => void);
+type DefineTypeOpts = {
+  fields?: {
+    [x: string]: FieldOptions;
+  };
+  visitor?: Array<string>;
+  aliases?: Array<string>;
+  builder?: Array<string>;
+  inherits?: string;
+  deprecatedAlias?: string;
+  validate?: Validator;
+};
+
+type Validator = (
+  | { type: string }
+  | { each: Validator }
+  | { chainOf: Validator[] }
+  | { oneOf: any[] }
+  | { oneOfNodeTypes: string[] }
+  | { oneOfNodeOrValueTypes: string[] }
+  | { shapeOf: { [x: string]: FieldOptions } }
+  | {}
+) &
+  // TODO: Import and use Node instead of any
+  ((parent: any, key: string, node: any) => void);
 
 type FieldOptions = {
   default?: any;
@@ -218,12 +236,24 @@ export function assertOptionalChainStart(): Validator {
 }
 
 export function chain(...fns: Array<Validator>): Validator {
-  const validate: Validator = function (...args) {
+  function validate(...args: Parameters<Validator>) {
     for (const fn of fns) {
       fn(...args);
     }
-  };
+  }
   validate.chainOf = fns;
+
+  if (
+    fns.length >= 2 &&
+    "type" in fns[0] &&
+    fns[0].type === "array" &&
+    !("each" in fns[1])
+  ) {
+    throw new Error(
+      `An assertValueType("array") validator can only be followed by an assertEach(...) validator.`,
+    );
+  }
+
   return validate;
 }
 
@@ -238,20 +268,22 @@ const validTypeOpts = [
 ];
 const validFieldKeys = ["default", "optional", "validate"];
 
-export default function defineType(
-  type: string,
-  opts: {
-    fields?: {
-      [x: string]: FieldOptions;
-    };
-    visitor?: Array<string>;
-    aliases?: Array<string>;
-    builder?: Array<string>;
-    inherits?: string;
-    deprecatedAlias?: string;
-    validate?: Validator;
-  } = {},
-) {
+// Wraps defineType to ensure these aliases are included.
+export function defineAliasedType(...aliases: string[]) {
+  return (type: string, opts: DefineTypeOpts = {}) => {
+    let defined = opts.aliases;
+    if (!defined) {
+      if (opts.inherits) defined = store[opts.inherits].aliases?.slice();
+      defined ??= [];
+      opts.aliases = defined;
+    }
+    const additional = aliases.filter(a => !defined.includes(a));
+    defined.unshift(...additional);
+    return defineType(type, opts);
+  };
+}
+
+export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
   let fields = opts.fields;
@@ -261,8 +293,16 @@ export default function defineType(
       const keys = Object.getOwnPropertyNames(inherits.fields);
       for (const key of keys) {
         const field = inherits.fields[key];
+        const def = field.default;
+        if (
+          Array.isArray(def) ? def.length > 0 : def && typeof def === "object"
+        ) {
+          throw new Error(
+            "field defaults can only be primitives or empty arrays currently",
+          );
+        }
         fields[key] = {
-          default: field.default,
+          default: Array.isArray(def) ? [] : def,
           optional: field.optional,
           validate: field.validate,
         };

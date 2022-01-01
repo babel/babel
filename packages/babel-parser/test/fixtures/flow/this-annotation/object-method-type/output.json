@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":42,"loc":{"start":{"line":1,"column":9},"end":{"line":3,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":15,"end":40,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":29}},
+              "key": {
+                "type": "Identifier",
+                "start":15,"end":18,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":15,"end":40,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":29}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "this": {
+                  "type": "FunctionTypeParam",
+                  "start":19,"end":32,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":21}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start":26,"end":32,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21}}
+                  }
+                },
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":36,"end":40,"loc":{"start":{"line":2,"column":25},"end":{"line":2,"column":29}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

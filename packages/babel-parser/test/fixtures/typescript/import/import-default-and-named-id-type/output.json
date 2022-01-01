@@ -29,6 +29,7 @@
               "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18},"identifierName":"bar"},
               "name": "bar"
             },
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18},"identifierName":"bar"},

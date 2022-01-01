@@ -6,6 +6,5 @@
         "targets": ["chrome 48"]
       }
     ]
-  ],
-  "plugins": ["external-helpers"]
+  ]
 }

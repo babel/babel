@@ -1,3 +1,6 @@
-var _templateObject;
+var _ = function _(t) {
+  return t;
+},
+    _t;
 
-tag(_templateObject || (_templateObject = babelHelpers.taggedTemplateLiteral(["Safari 12 borked"])));
+tag(_t || (_t = _`Safari 12 borked`));

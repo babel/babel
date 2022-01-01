@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
   "errors": [
-    "SyntaxError: setter function argument must not be a rest parameter (1:6)"
+    "SyntaxError: A 'set' accesor function argument must not be a rest parameter. (1:6)"
   ],
   "program": {
     "type": "Program",

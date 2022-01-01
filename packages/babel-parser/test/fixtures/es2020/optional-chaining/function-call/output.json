@@ -62,12 +62,12 @@
               "start":24,"end":25,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":1},"identifierName":"a"},
               "name": "a"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":27,"end":31,"loc":{"start":{"line":5,"column":3},"end":{"line":5,"column":7},"identifierName":"func"},
               "name": "func"
             },
-            "computed": false,
             "optional": true
           },
           "optional": true,
@@ -88,12 +88,12 @@
               "start":37,"end":38,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":1},"identifierName":"a"},
               "name": "a"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":40,"end":44,"loc":{"start":{"line":7,"column":3},"end":{"line":7,"column":7},"identifierName":"func"},
               "name": "func"
             },
-            "computed": false,
             "optional": true
           },
           "optional": true,
@@ -125,12 +125,12 @@
               "start":54,"end":55,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":1},"identifierName":"a"},
               "name": "a"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":56,"end":60,"loc":{"start":{"line":9,"column":2},"end":{"line":9,"column":6},"identifierName":"func"},
               "name": "func"
-            },
-            "computed": false
+            }
           },
           "optional": true,
           "arguments": []

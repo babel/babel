@@ -1,13 +1,15 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "7.12.1",
+  "version": "7.16.0",
   "description": "Tests for babel/eslint-* packages",
-  "license": "MIT",
   "private": true,
   "dependencies": {
-    "@babel/eslint-parser": "workspace:^7.12.1",
+    "@babel/core": "workspace:^",
+    "@babel/eslint-parser": "workspace:^",
+    "@babel/preset-react": "workspace:^",
     "dedent": "^0.7.0",
-    "eslint": "^7.5.0",
-    "eslint-plugin-import": "^2.22.0"
+    "eslint": "^7.27.0",
+    "eslint-plugin-import": "^2.23.4",
+    "npm-babel-parser": "npm:@babel/parser@^7.14.0"
   }
 }

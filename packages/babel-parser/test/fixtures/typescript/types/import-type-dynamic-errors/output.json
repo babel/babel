@@ -2,9 +2,9 @@
   "type": "File",
   "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":19}},
   "errors": [
-    "SyntaxError: Argument in a type import must be a string literal (1:16)",
-    "SyntaxError: Argument in a type import must be a string literal (2:16)",
-    "SyntaxError: Argument in a type import must be a string literal (3:16)"
+    "SyntaxError: Argument in a type import must be a string literal. (1:16)",
+    "SyntaxError: Argument in a type import must be a string literal. (2:16)",
+    "SyntaxError: Argument in a type import must be a string literal. (3:16)"
   ],
   "program": {
     "type": "Program",

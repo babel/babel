@@ -95,12 +95,12 @@
                                     "type": "ThisExpression",
                                     "start":97,"end":101,"loc":{"start":{"line":4,"column":24},"end":{"line":4,"column":28}}
                                   },
+                                  "computed": false,
                                   "property": {
                                     "type": "Identifier",
                                     "start":102,"end":107,"loc":{"start":{"line":4,"column":29},"end":{"line":4,"column":34},"identifierName":"query"},
                                     "name": "query"
-                                  },
-                                  "computed": false
+                                  }
                                 },
                                 "arguments": [
                                   {

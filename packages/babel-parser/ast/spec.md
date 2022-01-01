@@ -87,6 +87,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [SequenceExpression](#sequenceexpression)
   - [ParenthesizedExpression](#parenthesizedexpression)
   - [DoExpression](#doexpression)
+  - [ModuleExpression](#moduleexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
   - [TaggedTemplateExpression](#taggedtemplateexpression)
@@ -118,6 +119,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [Exports](#exports)
     - [ExportNamedDeclaration](#exportnameddeclaration)
     - [ExportSpecifier](#exportspecifier)
+    - [ExportNamespaceSpecifier](#exportnamespacespecifier)
     - [ExportDefaultDeclaration](#exportdefaultdeclaration)
     - [ExportAllDeclaration](#exportalldeclaration)
 
@@ -959,54 +961,6 @@ interface BindExpression <: Expression {
 
 If `object` is `null`, then `callee` should be a `MemberExpression`.
 
-### Pipeline
-
-These nodes are used by the Smart Pipeline to determine the type of the expression in a Pipeline Operator Expression. The F# Pipeline uses simple `BinaryExpression`s.
-
-#### PipelineBody
-
-```js
-interface PipelineBody <: NodeBase {
-    type: "PipelineBody";
-}
-```
-
-#### PipelineBareFunctionBody
-
-```js
-interface PipelineBody <: NodeBase {
-    type: "PipelineBareFunctionBody";
-    callee: Expression;
-}
-```
-
-#### PipelineBareConstructorBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineBareConstructorBody";
-    callee: Expression;
-}
-```
-
-#### PipelineBareAwaitedFunctionBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineTopicBody";
-    expression: Expression;
-}
-```
-
-#### PipelineTopicBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineBareAwaitedFunctionBody";
-    callee: Expression;
-}
-```
-
 ## ConditionalExpression
 
 ```js
@@ -1083,8 +1037,31 @@ An expression wrapped by parentheses. By default `@babel/parser` does not create
 interface DoExpression <: Expression {
   type: "DoExpression";
   body: BlockStatement;
+  async: boolean;
 }
 ```
+
+## ModuleExpression
+
+```js
+interface ModuleExpression <: Expression {
+  type: "ModuleExpression";
+  body: Program
+}
+```
+
+A inline module expression proposed in https://github.com/tc39/proposal-js-module-blocks.
+
+## TopicReference
+
+```js
+interface TopicReference <: Expression {
+  type: "TopicReference";
+}
+```
+
+A topic reference to be used inside the body of
+a [Hack-style pipe expression](https://github.com/js-choi/proposal-hack-pipes).
 
 # Template Literals
 
@@ -1363,7 +1340,7 @@ An attribute specified on the ImportDeclaration.
 interface ExportNamedDeclaration <: ModuleDeclaration {
   type: "ExportNamedDeclaration";
   declaration: Declaration | null;
-  specifiers: [ ExportSpecifier ];
+  specifiers: [ ExportSpecifier | ExportNamespaceSpecifier ];
   source: StringLiteral | null;
   assertions?: [ ImportAttribute ];
 }
@@ -1375,6 +1352,7 @@ Note:
 
 - Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state.
 - If `source` is `null`, for each `specifier` of `specifiers`, `specifier.local` can not be a `StringLiteral`.
+- If `specifiers` contains `ExportNamespaceSpecifier`, it must have only one `ExportNamespaceSpecifier`.
 
 ### ExportSpecifier
 
@@ -1387,6 +1365,17 @@ interface ExportSpecifier <: ModuleSpecifier {
 ```
 
 An exported variable binding, e.g., `{foo}` in `export {foo}` or `{bar as foo}` in `export {bar as foo}`. The `exported` field refers to the name exported in the module. The `local` field refers to the binding into the local module scope. If it is a basic named export, such as in `export {foo}`, both `exported` and `local` are equivalent `Identifier` nodes; in this case an `Identifier` node representing `foo`. If it is an aliased export, such as in `export {bar as foo}`, the `exported` field is an `Identifier` node representing `foo`, and the `local` field is an `Identifier` node representing `bar`.
+
+### ExportNamespaceSpecifier
+
+```js
+interface ExportNamespaceSpecifier <: ModuleSpecifier {
+  type: "ExportNamespaceSpecifier";
+  exported: Identifier;
+}
+```
+
+A namespace export specifier, e.g., `* as foo` in `export * as foo from "mod.js"`.
 
 ### ExportDefaultDeclaration
 
@@ -1418,3 +1407,53 @@ interface ExportAllDeclaration <: ModuleDeclaration {
 ```
 
 An export batch declaration, e.g., `export * from "mod";`.
+
+### Smart-mix pipelines
+
+These types are **deprecated**.
+They are used by the deprecated smart-mix pipe operator to determine
+the type of a pipe expression's the body expression.
+The Hack and F# pipe operators use simple `BinaryExpression`s.
+
+#### PipelineBody
+
+```js
+interface PipelineBody <: NodeBase {
+    type: "PipelineBody";
+}
+```
+
+#### PipelineBareFunctionBody
+
+```js
+interface PipelineBody <: NodeBase {
+    type: "PipelineBareFunctionBody";
+    callee: Expression;
+}
+```
+
+#### PipelineBareConstructorBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineBareConstructorBody";
+    callee: Expression;
+}
+```
+
+#### PipelineBareAwaitedFunctionBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineTopicBody";
+    expression: Expression;
+}
+```
+
+#### PipelineTopicBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineBareAwaitedFunctionBody";
+    callee: Expression;
+}

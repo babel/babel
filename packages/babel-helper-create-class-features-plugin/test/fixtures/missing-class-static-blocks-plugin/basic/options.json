@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "proposal-class-properties",
+    "@babel/plugin-syntax-class-static-block"
+  ],
+  "throws": "Static class blocks are not enabled. Please add `@babel/plugin-proposal-class-static-block` to your configuration."
+}

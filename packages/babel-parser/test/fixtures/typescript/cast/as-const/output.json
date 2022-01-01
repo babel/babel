@@ -1208,12 +1208,12 @@
                                 "type": "ThisExpression",
                                 "start":786,"end":790,"loc":{"start":{"line":26,"column":26},"end":{"line":26,"column":30}}
                               },
+                              "computed": false,
                               "property": {
                                 "type": "Identifier",
                                 "start":791,"end":792,"loc":{"start":{"line":26,"column":31},"end":{"line":26,"column":32},"identifierName":"x"},
                                 "name": "x"
-                              },
-                              "computed": false
+                              }
                             },
                             "right": {
                               "type": "NumericLiteral",

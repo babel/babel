@@ -21,12 +21,12 @@
               "start":0,"end":1,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":1},"identifierName":"a"},
               "name": "a"
             },
+            "computed": false,
             "property": {
               "type": "Identifier",
               "start":2,"end":4,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":4},"identifierName":"in"},
               "name": "in"
-            },
-            "computed": false
+            }
           },
           "operator": "/",
           "right": {

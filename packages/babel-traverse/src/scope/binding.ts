@@ -3,14 +3,14 @@ import type * as t from "@babel/types";
 import type Scope from "./index";
 
 type BindingKind =
-  | "var"
-  | "let"
-  | "const"
-  | "module"
-  | "hoisted"
-  | "param"
-  | "local"
-  | "unknown";
+  | "var" /* var declarator */
+  | "let" /* let declarator, class declaration id, catch clause parameters */
+  | "const" /* const declarator */
+  | "module" /* import specifiers */
+  | "hoisted" /* function declaration id */
+  | "param" /* function declaration parameters */
+  | "local" /* function expression id, class expression id */
+  | "unknown"; /* export specifiers */
 /**
  * This class is responsible for a binding inside of a scope.
  *

@@ -1,26 +1,19 @@
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-let A = /*#__PURE__*/function () {
+let A = /*#__PURE__*/function (_x, _ref, _x2) {
   "use strict";
 
   function A() {
-    _classCallCheck(this, A);
+    babelHelpers.classCallCheck(this, A);
   }
 
-  _createClass(A, [{
-    key: x,
+  babelHelpers.createClass(A, [{
+    key: _x,
     get: function () {}
   }, {
-    key: (x = 2, 3),
+    key: _ref,
     value: function () {}
   }, {
-    key: x,
+    key: _x2,
     set: function (_) {}
   }]);
-
   return A;
-}();
+}(x, (x = 2, 3), x);

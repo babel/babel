@@ -1,8 +1,8 @@
-import rule from "../../src/rules/no-unused-expressions";
-import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
+import rule from "../../lib/rules/no-unused-expressions.js";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const ruleTester = new RuleTester();
-ruleTester.run("@babel/no-unused-expressions", rule, {
+ruleTester.run("@babel/no-unused-expressions", rule.default, {
   valid: [
     "let a = do { if (foo) { foo.bar; } }",
     "let a = do { foo; }",

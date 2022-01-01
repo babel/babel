@@ -2,7 +2,7 @@
 
 /*:: declare var invariant; */
 import * as charCodes from "charcodes";
-import { types as tt, type TokenType } from "../tokenizer/types";
+import { tt, type TokenType } from "../tokenizer/types";
 import type {
   TSParameterProperty,
   Decorator,
@@ -11,6 +11,10 @@ import type {
   Pattern,
   RestElement,
   SpreadElement,
+  /*:: ObjectOrClassMember, */
+  /*:: ClassMember, */
+  /*:: ObjectMember, */
+  /*:: TsNamedTypeElementBase, */
   /*:: Identifier, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
@@ -46,6 +50,19 @@ export default class LValParser extends NodeUtils {
     isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ) => T;
+  +parseObjPropValue: (
+    prop: any,
+    startPos: ?number,
+    startLoc: ?Position,
+    isGenerator: boolean,
+    isAsync: boolean,
+    isPattern: boolean,
+    isAccessor: boolean,
+    refExpressionErrors?: ?ExpressionErrors,
+  ) => void;
+  +parsePropertyName: (
+    prop: ObjectOrClassMember | ClassMember | TsNamedTypeElementBase,
+  ) => Expression | Identifier;
   */
   // Forward-declaration: defined in statement.js
   /*::
@@ -60,7 +77,7 @@ export default class LValParser extends NodeUtils {
    - RestElement is not the last element
    - Missing `=` in assignment pattern
 
-   NOTE: There is a corresponding "isAssignable" method in flow.js.
+   NOTE: There is a corresponding "isAssignable" method.
    When this one is updated, please check if also that one needs to be updated.
 
    * @param {Node} node The expression atom
@@ -100,6 +117,7 @@ export default class LValParser extends NodeUtils {
       case "ObjectPattern":
       case "ArrayPattern":
       case "AssignmentPattern":
+      case "RestElement":
         break;
 
       case "ObjectExpression":
@@ -229,6 +247,52 @@ export default class LValParser extends NodeUtils {
     return exprList;
   }
 
+  isAssignable(node: Node, isBinding?: boolean): boolean {
+    switch (node.type) {
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+      case "RestElement":
+        return true;
+
+      case "ObjectExpression": {
+        const last = node.properties.length - 1;
+        return node.properties.every((prop, i) => {
+          return (
+            prop.type !== "ObjectMethod" &&
+            (i === last || prop.type !== "SpreadElement") &&
+            this.isAssignable(prop)
+          );
+        });
+      }
+
+      case "ObjectProperty":
+        return this.isAssignable(node.value);
+
+      case "SpreadElement":
+        return this.isAssignable(node.argument);
+
+      case "ArrayExpression":
+        return node.elements.every(
+          element => element === null || this.isAssignable(element),
+        );
+
+      case "AssignmentExpression":
+        return node.operator === "=";
+
+      case "ParenthesizedExpression":
+        return this.isAssignable(node.expression);
+
+      case "MemberExpression":
+      case "OptionalMemberExpression":
+        return !isBinding;
+
+      default:
+        return false;
+    }
+  }
+
   // Convert list of expression atoms to a list of
 
   toReferencedList(
@@ -337,6 +401,38 @@ export default class LValParser extends NodeUtils {
       }
     }
     return elts;
+  }
+
+  // https://tc39.es/ecma262/#prod-BindingRestProperty
+  parseBindingRestProperty(prop: RestElement): RestElement {
+    this.next(); // eat '...'
+    // Don't use parseRestBinding() as we only allow Identifier here.
+    prop.argument = this.parseIdentifier();
+    this.checkCommaAfterRest(charCodes.rightCurlyBrace);
+    return this.finishNode(prop, "RestElement");
+  }
+
+  // https://tc39.es/ecma262/#prod-BindingProperty
+  parseBindingProperty(): ObjectMember | RestElement {
+    const prop = this.startNode();
+    const { type, start: startPos, startLoc } = this.state;
+    if (type === tt.ellipsis) {
+      return this.parseBindingRestProperty(prop);
+    } else {
+      this.parsePropertyName(prop);
+    }
+    prop.method = false;
+    this.parseObjPropValue(
+      prop,
+      startPos,
+      startLoc,
+      false /* isGenerator */,
+      false /* isAsync */,
+      true /* isPattern */,
+      false /* isAccessor */,
+    );
+
+    return prop;
   }
 
   parseAssignableListItem(

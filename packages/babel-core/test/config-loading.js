@@ -1,11 +1,18 @@
-import loadConfigRunner, { loadPartialConfig } from "../lib/config";
+import _loadConfigRunner, {
+  loadPartialConfig,
+  createConfigItem,
+} from "../lib/config/index.js";
 import path from "path";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
 
-const loadConfig = loadConfigRunner.sync;
+const require = createRequire(import.meta.url);
+
+const loadConfig = _loadConfigRunner.default.sync;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
-    __dirname,
+    path.dirname(fileURLToPath(import.meta.url)),
     "fixtures",
     "config-loading",
     "folder",
@@ -31,12 +38,47 @@ describe("@babel/core config loading", () => {
       filename: FILEPATH,
       presets: skipProgrammatic
         ? null
-        : [[require("./fixtures/config-loading/preset3"), {}]],
+        : [[require("./fixtures/config-loading/preset3.js"), {}]],
       plugins: skipProgrammatic
         ? null
-        : [[require("./fixtures/config-loading/plugin6"), {}]],
+        : [[require("./fixtures/config-loading/plugin6.js"), {}]],
     };
   }
+
+  describe("createConfigItem", () => {
+    // Windows uses different file paths
+    const noWin = process.platform === "win32" ? it.skip : it;
+
+    noWin("can be called synchronously with one param", () => {
+      function myPlugin() {
+        return {};
+      }
+
+      expect(createConfigItem(myPlugin)).toEqual({
+        dirname: process.cwd(),
+        file: undefined,
+        name: undefined,
+        options: undefined,
+        value: myPlugin,
+      });
+    });
+
+    noWin("can be called synchronously with two params", () => {
+      function myPlugin() {
+        return {};
+      }
+
+      expect(
+        createConfigItem(myPlugin, { dirname: "/foo", type: "plugin" }),
+      ).toEqual({
+        dirname: "/foo",
+        file: undefined,
+        name: undefined,
+        options: undefined,
+        value: myPlugin,
+      });
+    });
+  });
 
   describe("loadPartialConfig", () => {
     it("should preserve disabled plugins in the partial config", () => {
@@ -75,6 +117,25 @@ describe("@babel/core config loading", () => {
 
       expect(item.value).toBe(preset);
       expect(item.options).toBe(false);
+    });
+
+    it("should always set 'rootMode' to 'root'", async () => {
+      const cwd = path.join(
+        path.dirname(fileURLToPath(import.meta.url)),
+        "fixtures",
+        "config-loading",
+        "root",
+        "nested",
+      );
+
+      const { options } = await loadPartialConfig({
+        cwd,
+        filename: path.join(cwd, "file.js"),
+        rootMode: "upward",
+      });
+
+      expect(options.root).toBe(path.join(cwd, ".."));
+      expect(options.rootMode).toBe("root");
     });
   });
 
@@ -127,25 +188,20 @@ describe("@babel/core config loading", () => {
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 0) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options2.plugins[0]).not.toBe(options1.plugins[0]);
+      for (let i = 1; i < options1.plugins.length; i++) {
+        expect(options2.plugins[i]).toBe(options1.plugins[i]);
       }
 
       process.env.INVALIDATE_PLUGIN3 = true;
 
       const options3 = loadConfig(opts).options;
       expect(options3.plugins.length).toBe(options1.plugins.length);
-
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 0 || i === 5) {
-          expect(options3.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options3.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options3.plugins.length).toBe(6);
+      expect(options3.plugins[0]).not.toBe(options1.plugins[0]);
+      expect(options3.plugins[5]).not.toBe(options1.plugins[5]);
+      for (let i = 1; i < 5; i++) {
+        expect(options3.plugins[i]).toBe(options1.plugins[i]);
       }
     });
 
@@ -158,26 +214,21 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
-
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 5) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options2.plugins.length).toBe(6);
+      expect(options2.plugins[5]).not.toBe(options1.plugins[5]);
+      for (let i = 0; i < 5; i++) {
+        expect(options2.plugins[i]).toBe(options1.plugins[i]);
       }
 
       process.env.INVALIDATE_PRESET2 = true;
 
       const options3 = loadConfig(opts).options;
       expect(options3.plugins.length).toBe(options1.plugins.length);
-
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 4 || i === 5) {
-          expect(options3.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options3.plugins[i]).toBe(options1.plugins[i]);
-        }
+      expect(options3.plugins.length).toBe(6);
+      expect(options3.plugins[4]).not.toBe(options1.plugins[4]);
+      expect(options3.plugins[5]).not.toBe(options1.plugins[5]);
+      for (let i = 0; i < 4; i++) {
+        expect(options3.plugins[i]).toBe(options1.plugins[i]);
       }
     });
 
@@ -190,14 +241,14 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
+      expect(options2.plugins[0]).not.toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).not.toBe(options1.plugins[1]);
+      expect(options2.plugins[4]).not.toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).not.toBe(options1.plugins[5]);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 0 || i === 1 || i === 4 || i === 5 || i === 6) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[2]).toBe(options1.plugins[2]);
+      expect(options2.plugins[3]).toBe(options1.plugins[3]);
     });
   });
 
@@ -257,14 +308,15 @@ describe("@babel/core config loading", () => {
         plugins: opts.plugins.map(([plg, opt]) => [plg, { ...opt }]),
       }).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options2.plugins.length; i++) {
-        if (i === 2) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[2]).not.toBe(options1.plugins[2]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[3]).toBe(options1.plugins[3]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should invalidate the presets when given a fresh options", () => {
@@ -277,14 +329,15 @@ describe("@babel/core config loading", () => {
         presets: opts.presets.map(([plg, opt]) => [plg, { ...opt }]),
       }).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options2.plugins.length; i++) {
-        if (i === 3) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[3]).not.toBe(options1.plugins[3]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[2]).toBe(options1.plugins[2]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should invalidate the programmatic plugins", () => {
@@ -296,14 +349,15 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 2) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[2]).not.toBe(options1.plugins[2]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[3]).toBe(options1.plugins[3]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should invalidate the programmatic presets and their children", () => {
@@ -315,14 +369,15 @@ describe("@babel/core config loading", () => {
 
       const options2 = loadConfig(opts).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
+      expect(options2.plugins.length).toBe(6);
 
-      for (let i = 0; i < options1.plugins.length; i++) {
-        if (i === 3) {
-          expect(options2.plugins[i]).not.toBe(options1.plugins[i]);
-        } else {
-          expect(options2.plugins[i]).toBe(options1.plugins[i]);
-        }
-      }
+      expect(options2.plugins[3]).not.toBe(options1.plugins[3]);
+
+      expect(options2.plugins[0]).toBe(options1.plugins[0]);
+      expect(options2.plugins[1]).toBe(options1.plugins[1]);
+      expect(options2.plugins[2]).toBe(options1.plugins[2]);
+      expect(options2.plugins[4]).toBe(options1.plugins[4]);
+      expect(options2.plugins[5]).toBe(options1.plugins[5]);
     });
 
     it("should thrown when plugin is not valid", () => {

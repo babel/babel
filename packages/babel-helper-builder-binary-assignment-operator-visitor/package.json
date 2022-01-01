@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-binary-assignment-operator-visitor",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "description": "Helper function to build binary assignment operator visitors",
   "repository": {
     "type": "git",
@@ -12,9 +12,25 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-explode-assignable-expression": "workspace:^7.12.13",
-    "@babel/types": "workspace:^7.12.13"
+    "@babel/helper-explode-assignable-expression": "workspace:^",
+    "@babel/types": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }

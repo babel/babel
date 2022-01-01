@@ -11,7 +11,6 @@ module.exports = {
             "@foo/babel-preset-1",
             [
               {
-                name: "@foo/inline-babel-preset-1",
                 plugins: [
                   {
                     name: "@foo/inline-babel-plugin-1",

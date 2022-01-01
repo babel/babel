@@ -13,10 +13,6 @@
         "expression": {
           "type": "AssignmentExpression",
           "start":1,"end":26,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":26}},
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -39,10 +35,6 @@
                   "left": {
                     "type": "MemberExpression",
                     "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10}},
-                    "extra": {
-                      "parenthesized": true,
-                      "parenStart": 6
-                    },
                     "object": {
                       "type": "Identifier",
                       "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"a"},
@@ -53,15 +45,15 @@
                       "type": "Identifier",
                       "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"b"},
                       "name": "b"
+                    },
+                    "extra": {
+                      "parenthesized": true,
+                      "parenStart": 6
                     }
                   },
                   "right": {
                     "type": "MemberExpression",
                     "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18}},
-                    "extra": {
-                      "parenthesized": true,
-                      "parenStart": 14
-                    },
                     "object": {
                       "type": "Identifier",
                       "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"c"},
@@ -72,6 +64,10 @@
                       "type": "Identifier",
                       "start":17,"end":18,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":18},"identifierName":"d"},
                       "name": "d"
+                    },
+                    "extra": {
+                      "parenthesized": true,
+                      "parenStart": 14
                     }
                   }
                 }
@@ -82,6 +78,10 @@
             "type": "ObjectExpression",
             "start":24,"end":26,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":26}},
             "properties": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

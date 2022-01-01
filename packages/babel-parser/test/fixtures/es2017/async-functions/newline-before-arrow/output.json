@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":4}},
   "errors": [
-    "SyntaxError: No line break is allowed before '=>' (2:2)"
+    "SyntaxError: No line break is allowed before '=>'. (2:2)"
   ],
   "program": {
     "type": "Program",

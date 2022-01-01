@@ -1,0 +1,123 @@
+{
+  "type": "File",
+  "start":0,"end":106,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":32}},
+  "errors": [
+    "SyntaxError: Identifier 'as' has already been declared. (3:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":106,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":9,"end":41,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":32}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":18,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":18}},
+            "imported": {
+              "type": "Identifier",
+              "start":18,"end":21,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":25,"end":27,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":18},"identifierName":"as"},
+              "name": "as"
+            }
+          }
+        ],
+        "importKind": "value",
+        "source": {
+          "type": "StringLiteral",
+          "start":35,"end":40,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":31}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ]
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":42,"end":73,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":31}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":51,"end":59,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":17}},
+            "imported": {
+              "type": "Identifier",
+              "start":51,"end":53,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":11},"identifierName":"as"},
+              "name": "as"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":57,"end":59,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":17},"identifierName":"as"},
+              "name": "as"
+            }
+          }
+        ],
+        "importKind": "value",
+        "source": {
+          "type": "StringLiteral",
+          "start":67,"end":72,"loc":{"start":{"line":3,"column":25},"end":{"line":3,"column":30}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":74,"end":106,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":32}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":83,"end":92,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":18}},
+            "imported": {
+              "type": "Identifier",
+              "start":83,"end":85,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":11},"identifierName":"as"},
+              "name": "as"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":89,"end":92,"loc":{"start":{"line":4,"column":15},"end":{"line":4,"column":18},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "importKind": "value",
+        "source": {
+          "type": "StringLiteral",
+          "start":100,"end":105,"loc":{"start":{"line":4,"column":26},"end":{"line":4,"column":31}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+    }
+  ]
+}

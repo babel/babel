@@ -1,4 +1,5 @@
-import defineType, {
+import {
+  defineAliasedType,
   arrayOfType,
   assertEach,
   assertNodeType,
@@ -15,16 +16,23 @@ import {
   functionDeclarationCommon,
   classMethodOrDeclareMethodCommon,
 } from "./core";
+import is from "../validators/is";
+
+const defineType = defineAliasedType("TypeScript");
 
 const bool = assertValueType("boolean");
 
 const tSFunctionTypeAnnotationCommon = {
   returnType: {
-    validate: assertNodeType("TSTypeAnnotation", "Noop"),
+    validate: process.env.BABEL_8_BREAKING
+      ? assertNodeType("TSTypeAnnotation")
+      : assertNodeType("TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
-    validate: assertNodeType("TSTypeParameterDeclaration", "Noop"),
+    validate: process.env.BABEL_8_BREAKING
+      ? assertNodeType("TSTypeParameterDeclaration")
+      : assertNodeType("TSTypeParameterDeclaration", "Noop"),
     optional: true,
   },
 };
@@ -43,6 +51,17 @@ defineType("TSParameterProperty", {
     },
     parameter: {
       validate: assertNodeType("Identifier", "AssignmentPattern"),
+    },
+    override: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
     },
   },
 });
@@ -105,6 +124,9 @@ defineType("TSPropertySignature", {
     readonly: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     initializer: validateOptionalType("Expression"),
+    kind: {
+      validate: assertOneOf("get", "set"),
+    },
   },
 });
 
@@ -114,6 +136,9 @@ defineType("TSMethodSignature", {
   fields: {
     ...signatureDeclarationCommon,
     ...namedTypeElementCommon,
+    kind: {
+      validate: assertOneOf("method", "get", "set"),
+    },
   },
 });
 
@@ -122,6 +147,7 @@ defineType("TSIndexSignature", {
   visitor: ["parameters", "typeAnnotation"],
   fields: {
     readonly: validateOptional(bool),
+    static: validateOptional(bool),
     parameters: validateArrayOfType("Identifier"), // Length must be 1
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
   },
@@ -157,14 +183,22 @@ defineType("TSThisType", {
   fields: {},
 });
 
-const fnOrCtr = {
+const fnOrCtrBase = {
   aliases: ["TSType"],
   visitor: ["typeParameters", "parameters", "typeAnnotation"],
-  fields: signatureDeclarationCommon,
 };
 
-defineType("TSFunctionType", fnOrCtr);
-defineType("TSConstructorType", fnOrCtr);
+defineType("TSFunctionType", {
+  ...fnOrCtrBase,
+  fields: signatureDeclarationCommon,
+});
+defineType("TSConstructorType", {
+  ...fnOrCtrBase,
+  fields: {
+    ...signatureDeclarationCommon,
+    abstract: validateOptional(bool),
+  },
+});
 
 defineType("TSTypeReference", {
   aliases: ["TSType"],
@@ -319,12 +353,43 @@ defineType("TSLiteralType", {
   aliases: ["TSType", "TSBaseType"],
   visitor: ["literal"],
   fields: {
-    literal: validateType([
-      "NumericLiteral",
-      "StringLiteral",
-      "BooleanLiteral",
-      "BigIntLiteral",
-    ]),
+    literal: {
+      validate: (function () {
+        const unaryExpression = assertNodeType(
+          "NumericLiteral",
+          "BigIntLiteral",
+        );
+        const unaryOperator = assertOneOf("-");
+
+        const literal = assertNodeType(
+          "NumericLiteral",
+          "StringLiteral",
+          "BooleanLiteral",
+          "BigIntLiteral",
+        );
+        function validator(parent, key: string, node) {
+          // type A = -1 | 1;
+          if (is("UnaryExpression", node)) {
+            // check operator first
+            unaryOperator(node, "operator", node.operator);
+            unaryExpression(node, "argument", node.argument);
+          } else {
+            // type A = 'foo' | 'bar' | false | 1;
+            literal(parent, key, node);
+          }
+        }
+
+        validator.oneOfNodeTypes = [
+          "NumericLiteral",
+          "StringLiteral",
+          "BooleanLiteral",
+          "BigIntLiteral",
+          "UnaryExpression",
+        ];
+
+        return validator;
+      })(),
+    },
   },
 });
 
@@ -446,6 +511,10 @@ defineType("TSImportEqualsDeclaration", {
       "TSEntityName",
       "TSExternalModuleReference",
     ]),
+    importKind: {
+      validate: assertOneOf("type", "value"),
+      optional: true,
+    },
   },
 });
 
@@ -518,7 +587,9 @@ defineType("TSTypeParameter", {
   visitor: ["constraint", "default"],
   fields: {
     name: {
-      validate: assertValueType("string"),
+      validate: !process.env.BABEL_8_BREAKING
+        ? assertValueType("string")
+        : assertNodeType("Identifier"),
     },
     constraint: {
       validate: assertNodeType("TSType"),

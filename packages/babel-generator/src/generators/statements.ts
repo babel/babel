@@ -1,5 +1,12 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import {
+  isFor,
+  isForStatement,
+  isIfStatement,
+  isStatement,
+} from "@babel/types";
+import type * as t from "@babel/types";
+import * as charCodes from "charcodes";
 
 export function WithStatement(this: Printer, node: t.WithStatement) {
   this.word("with");
@@ -19,7 +26,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
   this.space();
 
   const needsBlock =
-    node.alternate && t.isIfStatement(getLastStatement(node.consequent));
+    node.alternate && isIfStatement(getLastStatement(node.consequent));
   if (needsBlock) {
     this.token("{");
     this.newline();
@@ -35,7 +42,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
   }
 
   if (node.alternate) {
-    if (this.endsWith("}")) this.space();
+    if (this.endsWith(charCodes.rightCurlyBrace)) this.space();
     this.word("else");
     this.space();
     this.printAndIndentOnComments(node.alternate, node);
@@ -44,7 +51,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
 
 // Recursively get the last statement.
 function getLastStatement(statement) {
-  if (!t.isStatement(statement.body)) return statement;
+  if (!isStatement(statement.body)) return statement;
   return getLastStatement(statement.body);
 }
 
@@ -229,14 +236,18 @@ function variableDeclarationIndent() {
   // "let " or "var " indentation.
   this.token(",");
   this.newline();
-  if (this.endsWith("\n")) for (let i = 0; i < 4; i++) this.space(true);
+  if (this.endsWith(charCodes.lineFeed)) {
+    for (let i = 0; i < 4; i++) this.space(true);
+  }
 }
 
 function constDeclarationIndent() {
   // "const " indentation.
   this.token(",");
   this.newline();
-  if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
+  if (this.endsWith(charCodes.lineFeed)) {
+    for (let i = 0; i < 6; i++) this.space(true);
+  }
 }
 
 export function VariableDeclaration(
@@ -255,8 +266,8 @@ export function VariableDeclaration(
 
   let hasInits = false;
   // don't add whitespace to loop heads
-  if (!t.isFor(parent)) {
-    for (const declar of node.declarations as Array<any>) {
+  if (!isFor(parent)) {
+    for (const declar of node.declarations) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -288,9 +299,9 @@ export function VariableDeclaration(
 
   this.printList(node.declarations, node, { separator });
 
-  if (t.isFor(parent)) {
+  if (isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator
-    if (t.isForStatement(parent)) {
+    if (isForStatement(parent)) {
       if (parent.init === node) return;
     } else {
       if (parent.left === node) return;

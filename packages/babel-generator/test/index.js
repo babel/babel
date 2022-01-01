@@ -1,11 +1,15 @@
-import Printer from "../lib/printer";
-import generate, { CodeGenerator } from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
 import sourcemap from "source-map";
+import { fileURLToPath } from "url";
+
+import _Printer from "../lib/printer.js";
+import _generate, { CodeGenerator } from "../lib/index.js";
+const Printer = _Printer.default;
+const generate = _generate.default;
 
 describe("generation", function () {
   it("completeness", function () {
@@ -341,11 +345,31 @@ describe("generation", function () {
 
   it("wraps around infer inside an array type", () => {
     const type = t.tsArrayType(
-      t.tsInferType(t.tsTypeParameter(null, null, "T")),
+      t.tsInferType(
+        t.tsTypeParameter(
+          null,
+          null,
+          !process.env.BABEL_8_BREAKING ? "T" : t.identifier("T"),
+        ),
+      ),
     );
 
     const output = generate(type).code;
     expect(output).toBe("(infer T)[]");
+  });
+
+  it("should not deduplicate comments with same start index", () => {
+    const code1 = "/*#__PURE__*/ a();";
+    const code2 = "/*#__PURE__*/ b();";
+
+    const ast1 = parse(code1).program;
+    const ast2 = parse(code2).program;
+
+    const ast = t.program([...ast1.body, ...ast2.body]);
+
+    expect(generate(ast).code).toBe(
+      "/*#__PURE__*/\na();\n\n/*#__PURE__*/\nb();",
+    );
   });
 });
 
@@ -460,6 +484,28 @@ describe("programmatic generation", function () {
     expect(output).toBe(`{
   [key: any]: number
 }`);
+  });
+
+  it("flow interface with nullish extends", () => {
+    const interfaceDeclaration = t.interfaceDeclaration(
+      t.identifier("A"),
+      undefined,
+      undefined,
+      t.objectTypeAnnotation([]),
+    );
+    const output = generate(interfaceDeclaration).code;
+    expect(output).toBe("interface A {}");
+  });
+
+  it("flow function type annotation with no parent", () => {
+    const functionTypeAnnotation = t.functionTypeAnnotation(
+      null,
+      [],
+      null,
+      t.voidTypeAnnotation(),
+    );
+    const output = generate(functionTypeAnnotation).code;
+    expect(output).toBe("() => void");
   });
 
   describe("directives", function () {
@@ -714,14 +760,43 @@ describe("programmatic generation", function () {
       expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
     });
 
-    it("default", () => {
-      const output = generate(string).code;
+    if (process.env.BABEL_8_BREAKING) {
+      it("default", () => {
+        const output = generate(string).code;
 
-      if (process.env.BABEL_8_BREAKING) {
         expect(output).toBe(`"表格_副本"`);
-      } else {
+      });
+    } else {
+      it("default in Babel 7", () => {
+        const output = generate(string).code;
+
         expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
-      }
+      });
+    }
+  });
+
+  describe("typescript interface declaration", () => {
+    it("empty extends array", () => {
+      const tsInterfaceDeclaration = t.tsInterfaceDeclaration(
+        t.identifier("A"),
+        undefined,
+        [],
+        t.tsInterfaceBody([]),
+      );
+      const output = generate(tsInterfaceDeclaration).code;
+      expect(output).toBe("interface A {}");
+    });
+  });
+
+  describe("identifier let", () => {
+    it("detects open bracket from non-optional OptionalMemberExpression", () => {
+      const ast = parse(`for (let?.[x];;);`, {
+        sourceType: "script",
+        strictMode: "false",
+      });
+      ast.program.body[0].init.optional = false;
+      const output = generate(ast).code;
+      expect(output).toBe("for ((let)[x];;);");
     });
   });
 });
@@ -734,7 +809,9 @@ describe("CodeGenerator", function () {
   });
 });
 
-const suites = fixtures(`${__dirname}/fixtures`);
+const suites = fixtures.default(
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
+);
 
 suites.forEach(function (testSuite) {
   describe("generation/" + testSuite.title, function () {
@@ -759,7 +836,10 @@ suites.forEach(function (testSuite) {
               ...task.options.parserOpts,
             });
             const options = {
-              sourceFileName: path.relative(__dirname, actual.loc),
+              sourceFileName: path.relative(
+                path.dirname(fileURLToPath(import.meta.url)),
+                actual.loc,
+              ),
               ...task.options,
               sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
             };
@@ -789,7 +869,13 @@ suites.forEach(function (testSuite) {
                 console.log(`New test file created: ${expected.loc}`);
                 fs.writeFileSync(expected.loc, result.code);
               } else {
-                expect(result.code).toBe(expected.code);
+                try {
+                  expect(result.code).toBe(expected.code);
+                } catch (e) {
+                  if (!process.env.OVERWRITE) throw e;
+                  console.log(`Updated test file: ${expected.loc}`);
+                  fs.writeFileSync(expected.loc, result.code);
+                }
               }
             }
           }

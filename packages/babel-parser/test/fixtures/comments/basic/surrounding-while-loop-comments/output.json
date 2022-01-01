@@ -36,18 +36,18 @@
                 "body": [],
                 "directives": []
               },
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " infinite ",
-                  "start":15,"end":29,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":29}}
-                }
-              ],
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " bar ",
                   "start":47,"end":56,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":56}}
+                }
+              ],
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " infinite ",
+                  "start":15,"end":29,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":29}}
                 }
               ]
             },

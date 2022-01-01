@@ -25,18 +25,18 @@
             {
               "type": "DebuggerStatement",
               "start":36,"end":45,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":13}},
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " before ",
-                  "start":19,"end":31,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":16}}
-                }
-              ],
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " after ",
                   "start":50,"end":61,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":15}}
+                }
+              ],
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " before ",
+                  "start":19,"end":31,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":16}}
                 }
               ]
             }

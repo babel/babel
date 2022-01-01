@@ -1,4 +1,12 @@
-import * as t from "@babel/types";
+import {
+  callExpression,
+  identifier,
+  isIdentifier,
+  isSpreadElement,
+  memberExpression,
+  optionalCallExpression,
+  optionalMemberExpression,
+} from "@babel/types";
 import type {
   CallExpression,
   Expression,
@@ -25,33 +33,33 @@ export default function optimiseCallExpression(
 ): CallExpression | OptionalCallExpression {
   if (
     args.length === 1 &&
-    t.isSpreadElement(args[0]) &&
-    t.isIdentifier(args[0].argument, { name: "arguments" })
+    isSpreadElement(args[0]) &&
+    isIdentifier(args[0].argument, { name: "arguments" })
   ) {
     // a.b?.(...arguments);
     if (optional) {
-      return t.optionalCallExpression(
-        t.optionalMemberExpression(callee, t.identifier("apply"), false, true),
+      return optionalCallExpression(
+        optionalMemberExpression(callee, identifier("apply"), false, true),
         [thisNode, args[0].argument],
         false,
       );
     }
     // a.b(...arguments);
-    return t.callExpression(t.memberExpression(callee, t.identifier("apply")), [
+    return callExpression(memberExpression(callee, identifier("apply")), [
       thisNode,
       args[0].argument,
     ]);
   } else {
     // a.b?.(arg1, arg2)
     if (optional) {
-      return t.optionalCallExpression(
-        t.optionalMemberExpression(callee, t.identifier("call"), false, true),
+      return optionalCallExpression(
+        optionalMemberExpression(callee, identifier("call"), false, true),
         [thisNode, ...args],
         false,
       );
     }
     // a.b(arg1, arg2)
-    return t.callExpression(t.memberExpression(callee, t.identifier("call")), [
+    return callExpression(memberExpression(callee, identifier("call")), [
       thisNode,
       ...args,
     ]);

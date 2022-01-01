@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    ["transform-block-scoping", { "tdz": true }],
-    ["external-helpers", { "helperVersion": "7.1000.0" }]
-  ]
+  "plugins": [["transform-block-scoping", { "tdz": true }]]
 }

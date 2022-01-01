@@ -1,4 +1,4 @@
-import * as t from "@babel/types";
+import { addComment } from "@babel/types";
 import type { Node } from "@babel/types";
 
 const PURE_ANNOTATION = "#__PURE__";
@@ -14,5 +14,5 @@ export default function annotateAsPure(
   if (isPureAnnotated(node)) {
     return;
   }
-  t.addComment(node, "leading", PURE_ANNOTATION);
+  addComment(node, "leading", PURE_ANNOTATION);
 }

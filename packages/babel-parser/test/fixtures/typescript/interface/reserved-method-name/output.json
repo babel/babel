@@ -36,7 +36,8 @@
                   "type": "TSVoidKeyword",
                   "start":27,"end":31,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":17}}
                 }
-              }
+              },
+              "kind": "method"
             }
           ]
         }

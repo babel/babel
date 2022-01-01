@@ -5,15 +5,21 @@
   "semi": true,
   "singleQuote": false,
   "bracketSpacing": true,
-  "jsxBracketSameLine": false,
+  "bracketSameLine": false,
   "tabWidth": 2,
   "printWidth": 80,
   "overrides": [{
     "files": [
-      "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts}"
+      "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts,cjs}"
     ],
+    "excludeFiles": ["**/packages/babel-helpers/src/helpers/**/*.js"],
     "options": {
       "trailingComma": "all"
+    }
+  }, {
+    "files": "**/packages/babel-helpers/src/helpers/**/*.js",
+    "options": {
+      "trailingComma": "es5"
     }
   }, {
     "files": [

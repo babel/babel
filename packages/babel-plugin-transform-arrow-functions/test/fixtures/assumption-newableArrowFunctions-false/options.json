@@ -1,0 +1,6 @@
+{
+  "plugins": ["transform-arrow-functions"],
+  "assumptions": {
+    "noNewArrows": false
+  }
+}

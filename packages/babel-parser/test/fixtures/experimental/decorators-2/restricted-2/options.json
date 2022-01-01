@@ -1,3 +1,11 @@
 {
-  "throws": "Leading decorators must be attached to a class declaration (1:6)"
+  "plugins": [
+    [
+      "decorators",
+      {
+        "decoratorsBeforeExport": false
+      }
+    ]
+  ],
+  "throws": "Leading decorators must be attached to a class declaration. (1:6)"
 }

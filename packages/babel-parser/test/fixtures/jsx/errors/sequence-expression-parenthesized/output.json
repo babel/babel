@@ -40,10 +40,6 @@
               "expression": {
                 "type": "SequenceExpression",
                 "start":7,"end":48,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":48}},
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 6
-                },
                 "expressions": [
                   {
                     "type": "CallExpression",
@@ -101,7 +97,11 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 6
+                }
               }
             }
           ]

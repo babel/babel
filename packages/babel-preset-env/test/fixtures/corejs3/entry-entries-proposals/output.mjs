@@ -1,10 +1,8 @@
-import "core-js/modules/es.map.js";
 import "core-js/modules/esnext.aggregate-error.js";
 import "core-js/modules/esnext.array.last-index.js";
 import "core-js/modules/esnext.array.last-item.js";
 import "core-js/modules/esnext.composite-key.js";
 import "core-js/modules/esnext.composite-symbol.js";
-import "core-js/modules/esnext.global-this.js";
 import "core-js/modules/esnext.map.delete-all.js";
 import "core-js/modules/esnext.map.every.js";
 import "core-js/modules/esnext.map.filter.js";
@@ -84,4 +82,3 @@ import "core-js/modules/esnext.weak-set.of.js";
 import "core-js/modules/web.url.js";
 import "core-js/modules/web.url.to-json.js";
 import "core-js/modules/web.url-search-params.js";
-import 'regenerator-runtime/runtime';

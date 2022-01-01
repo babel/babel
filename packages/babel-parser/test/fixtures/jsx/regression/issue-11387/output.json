@@ -48,12 +48,12 @@
                       "type": "ThisExpression",
                       "start":7,"end":11,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":11}}
                     },
+                    "computed": false,
                     "property": {
                       "type": "Identifier",
                       "start":13,"end":18,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":18},"identifierName":"class"},
                       "name": "class"
                     },
-                    "computed": false,
                     "optional": true
                   },
                   {
@@ -63,12 +63,12 @@
                       "type": "ThisExpression",
                       "start":20,"end":24,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":24}}
                     },
+                    "computed": false,
                     "property": {
                       "type": "Identifier",
                       "start":25,"end":30,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":30},"identifierName":"class"},
                       "name": "class"
-                    },
-                    "computed": false
+                    }
                   },
                   {
                     "type": "OptionalMemberExpression",
@@ -77,12 +77,12 @@
                       "type": "ThisExpression",
                       "start":32,"end":36,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":36}}
                     },
+                    "computed": false,
                     "property": {
                       "type": "Identifier",
                       "start":38,"end":46,"loc":{"start":{"line":1,"column":38},"end":{"line":1,"column":46},"identifierName":"function"},
                       "name": "function"
                     },
-                    "computed": false,
                     "optional": true
                   },
                   {
@@ -92,12 +92,12 @@
                       "type": "ThisExpression",
                       "start":48,"end":52,"loc":{"start":{"line":1,"column":48},"end":{"line":1,"column":52}}
                     },
+                    "computed": false,
                     "property": {
                       "type": "Identifier",
                       "start":53,"end":61,"loc":{"start":{"line":1,"column":53},"end":{"line":1,"column":61},"identifierName":"function"},
                       "name": "function"
-                    },
-                    "computed": false
+                    }
                   }
                 ],
                 "extra": {

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":86,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":86}},
   "errors": [
-    "SyntaxError: Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module (1:53)"
+    "SyntaxError: Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module. (1:53)"
   ],
   "program": {
     "type": "Program",

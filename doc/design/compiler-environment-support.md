@@ -1,4 +1,4 @@
-# Compiler environment support
+# Compiler Environment Support
 
 **NOTE:** Compiler support does not dictate the runtime requirements of compiled code.
 

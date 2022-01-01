@@ -8,22 +8,30 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties { "chrome":"71" }
-  proposal-private-methods { "chrome":"71" }
-  proposal-numeric-separator { "chrome":"71" }
-  proposal-logical-assignment-operators { "chrome":"71" }
-  proposal-nullish-coalescing-operator { "chrome":"71" }
-  proposal-optional-chaining { "chrome":"71" }
-  syntax-json-strings { "chrome":"71" }
-  syntax-optional-catch-binding { "chrome":"71" }
-  syntax-async-generators { "chrome":"71" }
-  syntax-object-rest-spread { "chrome":"71" }
-  proposal-export-namespace-from { "chrome":"71" }
-  transform-modules-commonjs { "chrome":"71" }
-  proposal-dynamic-import { "chrome":"71" }
+  proposal-class-static-block { chrome < 94 }
+  proposal-private-property-in-object { chrome < 91 }
+  proposal-class-properties { chrome < 84 }
+  proposal-private-methods { chrome < 84 }
+  proposal-numeric-separator { chrome < 75 }
+  proposal-logical-assignment-operators { chrome < 85 }
+  proposal-nullish-coalescing-operator { chrome < 80 }
+  proposal-optional-chaining { chrome < 80 }
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-export-namespace-from { chrome < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs3: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "chrome": "71"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-runtime-only/input.mjs] Import of core-js was not found.
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-runtime-only/input.mjs]
+The entry point for the corejs3 polyfill has not been found.
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-runtime-only/input.mjs] Based on your targets, regenerator-runtime import excluded.

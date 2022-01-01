@@ -4,7 +4,6 @@
     "transform-parameters",
     "transform-spread",
     "transform-react-constant-elements",
-    "syntax-jsx",
-    "external-helpers"
+    "syntax-jsx"
   ]
 }

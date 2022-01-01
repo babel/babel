@@ -2,6 +2,7 @@
 /* eslint sort-keys: "error" */
 import { getLineInfo, type Position } from "../util/location";
 import CommentsParser from "./comments";
+import { type ErrorCode, ErrorCodes } from "./error-codes";
 
 // This function is used to raise exceptions on parse errors. It
 // takes an offset integer (into the current `input`) to indicate
@@ -14,11 +15,56 @@ type ErrorContext = {
   loc: Position,
   missingPlugin?: Array<string>,
   code?: string,
+  reasonCode?: String,
 };
-
 export type ParsingError = SyntaxError & ErrorContext;
 
-export { ErrorMessages as Errors } from "./error-message";
+export type ErrorTemplate = {
+  code: ErrorCode,
+  template: string,
+  reasonCode: string,
+};
+export type ErrorTemplates = {
+  [key: string]: ErrorTemplate,
+};
+
+type SyntaxPlugin = "flow" | "typescript" | "jsx" | typeof undefined;
+
+function keepReasonCodeCompat(reasonCode: string, syntaxPlugin: SyntaxPlugin) {
+  if (!process.env.BABEL_8_BREAKING) {
+    // For consistency in TypeScript and Flow error codes
+    if (syntaxPlugin === "flow" && reasonCode === "PatternIsOptional") {
+      return "OptionalBindingPattern";
+    }
+  }
+  return reasonCode;
+}
+
+export function makeErrorTemplates(
+  messages: {
+    [key: string]: string,
+  },
+  code: ErrorCode,
+  syntaxPlugin?: SyntaxPlugin,
+): ErrorTemplates {
+  const templates: ErrorTemplates = {};
+  Object.keys(messages).forEach(reasonCode => {
+    templates[reasonCode] = Object.freeze({
+      code,
+      reasonCode: keepReasonCodeCompat(reasonCode, syntaxPlugin),
+      template: messages[reasonCode],
+    });
+  });
+  return Object.freeze(templates);
+}
+
+export { ErrorCodes };
+export {
+  ErrorMessages as Errors,
+  SourceTypeModuleErrorMessages as SourceTypeModuleErrors,
+} from "./error-message";
+
+export type raiseFunction = (number, ErrorTemplate, ...any) => void;
 
 export default class ParserError extends CommentsParser {
   // Forward-declaration: defined in tokenizer/index.js
@@ -37,12 +83,16 @@ export default class ParserError extends CommentsParser {
     return loc;
   }
 
-  raise(pos: number, errorTemplate: string, ...params: any): Error | empty {
-    return this.raiseWithData(pos, undefined, errorTemplate, ...params);
+  raise(
+    pos: number,
+    { code, reasonCode, template }: ErrorTemplate,
+    ...params: any
+  ): Error | empty {
+    return this.raiseWithData(pos, { code, reasonCode }, template, ...params);
   }
 
   /**
-   * Raise a parsing error on given postion pos. If errorRecovery is true,
+   * Raise a parsing error on given position pos. If errorRecovery is true,
    * it will first search current errors and overwrite the error thrown on the exact
    * position before with the new error message. If errorRecovery is false, it
    * fallbacks to `raise`.
@@ -55,12 +105,12 @@ export default class ParserError extends CommentsParser {
    */
   raiseOverwrite(
     pos: number,
-    errorTemplate: string,
+    { code, template }: ErrorTemplate,
     ...params: any
   ): Error | empty {
     const loc = this.getLocationForPosition(pos);
     const message =
-      errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
+      template.replace(/%(\d+)/g, (_, i: number) => params[i]) +
       ` (${loc.line}:${loc.column})`;
     if (this.options.errorRecovery) {
       const errors = this.state.errors;
@@ -73,7 +123,7 @@ export default class ParserError extends CommentsParser {
         }
       }
     }
-    return this._raise({ loc, pos }, message);
+    return this._raise({ code, loc, pos }, message);
   }
 
   raiseWithData(

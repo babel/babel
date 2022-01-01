@@ -1,5 +1,6 @@
 import type Printer from "../printer";
-import * as t from "@babel/types";
+import { isAssignmentPattern, isIdentifier } from "@babel/types";
+import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
 export function Identifier(this: Printer, node: t.Identifier) {
@@ -53,8 +54,8 @@ export function ObjectProperty(this: Printer, node: t.ObjectProperty) {
   } else {
     // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
     if (
-      t.isAssignmentPattern(node.value) &&
-      t.isIdentifier(node.key) &&
+      isAssignmentPattern(node.value) &&
+      isIdentifier(node.key) &&
       // @ts-expect-error todo(flow->ts) `.name` does not exist on some types in union
       node.key.name === node.value.left.name
     ) {
@@ -67,8 +68,8 @@ export function ObjectProperty(this: Printer, node: t.ObjectProperty) {
     // shorthand!
     if (
       node.shorthand &&
-      t.isIdentifier(node.key) &&
-      t.isIdentifier(node.value) &&
+      isIdentifier(node.key) &&
+      isIdentifier(node.value) &&
       node.key.name === node.value.name
     ) {
       return;
@@ -236,6 +237,24 @@ export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
   this.word(node.value + "m");
 }
 
+// Hack pipe operator
+const validTopicTokenSet = new Set(["^", "%", "#"]);
+export function TopicReference(this: Printer) {
+  const { topicToken } = this.format;
+
+  if (validTopicTokenSet.has(topicToken)) {
+    this.token(topicToken);
+  } else {
+    const givenTopicTokenJSON = JSON.stringify(topicToken);
+    const validTopics = Array.from(validTopicTokenSet, v => JSON.stringify(v));
+    throw new Error(
+      `The "topicToken" generator option must be one of ` +
+        `${validTopics.join(", ")} (${givenTopicTokenJSON} received instead).`,
+    );
+  }
+}
+
+// Smart-mix pipe operator
 export function PipelineTopicExpression(
   this: Printer,
   node: t.PipelineTopicExpression,

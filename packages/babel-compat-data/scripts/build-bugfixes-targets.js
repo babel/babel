@@ -44,7 +44,10 @@ for (const [plugin, { replaces, features }] of Object.entries(data)) {
 
 for (const [replaced, features] of Object.entries(allReplacedFeatures)) {
   let replacedFeatures = pluginFeatures[replaced];
-  if (!Array.isArray(replacedFeatures)) {
+  if (
+    typeof replacedFeatures === "object" &&
+    !Array.isArray(replacedFeatures)
+  ) {
     replacedFeatures = replacedFeatures.features;
   }
 

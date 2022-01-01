@@ -2,9 +2,9 @@
   "type": "File",
   "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":18}},
   "errors": [
-    "SyntaxError: Unexpected keyword 'export' (1:4)",
-    "SyntaxError: Escape sequence in keyword export (1:4)",
-    "SyntaxError: Escape sequence in keyword export (4:0)"
+    "SyntaxError: Unexpected keyword 'export'. (1:4)",
+    "SyntaxError: Escape sequence in keyword export. (1:4)",
+    "SyntaxError: Escape sequence in keyword export. (4:0)"
   ],
   "program": {
     "type": "Program",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-class-static-block",
-  "version": "7.12.13",
+  "version": "7.16.7",
   "description": "Allow parsing of class static blocks",
   "repository": {
     "type": "git",
@@ -13,21 +13,29 @@
   },
   "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js"
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   },
   "keywords": [
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.12.13",
-    "@babel/plugin-syntax-class-static-block": "workspace:^7.12.13"
+    "@babel/helper-create-class-features-plugin": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-class-static-block": "^7.14.5"
   },
   "peerDependencies": {
     "@babel/core": "^7.12.0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
-    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-class-static-block"
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-class-static-block",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)"
 }

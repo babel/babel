@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
   "errors": [
-    "SyntaxError: In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement (1:10)"
+    "SyntaxError: In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement. (1:10)"
   ],
   "program": {
     "type": "Program",

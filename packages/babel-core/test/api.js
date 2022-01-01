@@ -1,8 +1,17 @@
-import * as babel from "../lib/index";
+import babel from "../lib/index.js";
 import sourceMap from "source-map";
 import path from "path";
-import Plugin from "../lib/config/plugin";
 import generator from "@babel/generator";
+import { fileURLToPath } from "url";
+
+import _Plugin from "../lib/config/plugin.js";
+const Plugin = _Plugin.default;
+
+import presetEnv from "../../babel-preset-env/lib/index.js";
+import pluginSyntaxFlow from "../../babel-plugin-syntax-flow/lib/index.js";
+import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types/lib/index.js";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function assertIgnored(result) {
   expect(result).toBeNull();
@@ -13,48 +22,33 @@ function assertNotIgnored(result) {
 }
 
 function parse(code, opts) {
-  return babel.parse(code, {
-    cwd: __dirname,
-    ...opts,
-  });
+  return babel.parse(code, { cwd, configFile: false, ...opts });
 }
 
 function transform(code, opts) {
-  return babel.transform(code, {
-    cwd: __dirname,
-    ...opts,
-  });
+  return babel.transform(code, { cwd, configFile: false, ...opts });
 }
 
 function transformFile(filename, opts, cb) {
-  return babel.transformFile(
-    filename,
-    {
-      cwd: __dirname,
-      ...opts,
-    },
-    cb,
-  );
+  return babel.transformFile(filename, { cwd, configFile: false, ...opts }, cb);
 }
 function transformFileSync(filename, opts) {
-  return babel.transformFileSync(filename, {
-    cwd: __dirname,
+  return babel.transformFileSync(filename, { cwd, configFile: false, ...opts });
+}
+function transformFileAsync(filename, opts) {
+  return babel.transformFileAsync(filename, {
+    cwd,
+    configFile: false,
     ...opts,
   });
 }
 
 function transformAsync(code, opts) {
-  return babel.transformAsync(code, {
-    cwd: __dirname,
-    ...opts,
-  });
+  return babel.transformAsync(code, { cwd, configFile: false, ...opts });
 }
 
 function transformFromAst(ast, code, opts) {
-  return babel.transformFromAst(ast, code, {
-    cwd: __dirname,
-    ...opts,
-  });
+  return babel.transformFromAst(ast, code, { cwd, configFile: false, ...opts });
 }
 
 describe("parser and generator options", function () {
@@ -105,7 +99,7 @@ describe("parser and generator options", function () {
     function newTransformWithPlugins(string) {
       return transform(string, {
         ast: true,
-        plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
+        plugins: [cwd + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
           parser: recast.parse,
         },
@@ -144,13 +138,13 @@ describe("parser and generator options", function () {
 describe("api", function () {
   it("exposes the resolvePlugin method", function () {
     expect(() => babel.resolvePlugin("nonexistent-plugin")).toThrow(
-      /Cannot resolve module 'babel-plugin-nonexistent-plugin'/,
+      /Cannot (?:find|resolve) module 'babel-plugin-nonexistent-plugin'/,
     );
   });
 
   it("exposes the resolvePreset method", function () {
     expect(() => babel.resolvePreset("nonexistent-preset")).toThrow(
-      /Cannot resolve module 'babel-preset-nonexistent-preset'/,
+      /Cannot (?:find|resolve) module 'babel-preset-nonexistent-preset'/,
     );
   });
 
@@ -162,22 +156,38 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
-  it("transformFile", function (done) {
+  it("transformFile", function () {
     const options = {
       babelrc: false,
     };
     Object.freeze(options);
-    transformFile(
-      __dirname + "/fixtures/api/file.js",
+    return new Promise((resolve, reject) => {
+      transformFile(
+        cwd + "/fixtures/api/file.js",
+        options,
+        function (err, res) {
+          if (err) return reject(err);
+          expect(res.code).toBe("foo();");
+          // keep user options untouched
+          expect(options).toEqual({ babelrc: false });
+          resolve();
+        },
+      );
+    });
+  });
+
+  it("transformFileAsync", async function () {
+    const options = {
+      babelrc: false,
+    };
+    Object.freeze(options);
+    const res = await transformFileAsync(
+      cwd + "/fixtures/api/file.js",
       options,
-      function (err, res) {
-        if (err) return done(err);
-        expect(res.code).toBe("foo();");
-        // keep user options untouched
-        expect(options).toEqual({ babelrc: false });
-        done();
-      },
     );
+    expect(res.code).toBe("foo();");
+    // keep user options untouched
+    expect(options).toEqual({ babelrc: false });
   });
 
   it("transformFileSync", function () {
@@ -185,9 +195,9 @@ describe("api", function () {
       babelrc: false,
     };
     Object.freeze(options);
-    expect(
-      transformFileSync(__dirname + "/fixtures/api/file.js", options).code,
-    ).toBe("foo();");
+    expect(transformFileSync(cwd + "/fixtures/api/file.js", options).code).toBe(
+      "foo();",
+    );
     expect(options).toEqual({ babelrc: false });
   });
 
@@ -243,15 +253,15 @@ describe("api", function () {
   it("options throw on falsy true", function () {
     return expect(function () {
       transform("", {
-        plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
+        plugins: [cwd + "/../../babel-plugin-syntax-jsx", false],
       });
     }).toThrow(/.plugins\[1\] must be a string, object, function/);
   });
 
   it("options merge backwards", function () {
     return transformAsync("", {
-      presets: [__dirname + "/../../babel-preset-env"],
-      plugins: [__dirname + "/../../babel-plugin-syntax-jsx"],
+      presets: [cwd + "/../../babel-preset-env"],
+      plugins: [cwd + "/../../babel-plugin-syntax-jsx"],
     }).then(function (result) {
       expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
         expect.stringContaining("jsx"),
@@ -330,18 +340,12 @@ describe("api", function () {
           },
 
           // env preset
-          require(__dirname + "/../../babel-preset-env"),
+          [presetEnv, { targets: { browsers: "ie 6" } }],
 
           // Third preset for Flow.
-          function () {
-            return {
-              plugins: [
-                require(__dirname + "/../../babel-plugin-syntax-flow"),
-                require(__dirname +
-                  "/../../babel-plugin-transform-flow-strip-types"),
-              ],
-            };
-          },
+          () => ({
+            plugins: [pluginSyntaxFlow, pluginFlowStripTypes],
+          }),
         ],
       });
     }
@@ -387,9 +391,9 @@ describe("api", function () {
     process.env.BABEL_ENV = "development";
 
     const result = transform("", {
-      cwd: path.join(__dirname, "fixtures", "config", "complex-plugin-config"),
+      cwd: path.join(cwd, "fixtures", "config", "complex-plugin-config"),
       filename: path.join(
-        __dirname,
+        cwd,
         "fixtures",
         "config",
         "complex-plugin-config",
@@ -784,38 +788,42 @@ describe("api", function () {
       babelrc: false,
     };
 
-    it("only syntax plugin available", function (done) {
-      transformFile(
-        __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
-        options,
-        function (err) {
-          expect(err.message).toMatch(
-            "Support for the experimental syntax 'pipelineOperator' isn't currently enabled (1:3):",
-          );
-          expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-pipeline-operator (https://git.io/vb4SU) to the " +
-              "'plugins' section of your Babel config to enable transformation.",
-          );
-          done();
-        },
-      );
+    it("only syntax plugin available", function () {
+      return new Promise(resolve => {
+        transformFile(
+          cwd + "/fixtures/api/parsing-errors/only-syntax/file.js",
+          options,
+          function (err) {
+            expect(err.message).toMatch(
+              "Support for the experimental syntax 'pipelineOperator' isn't currently enabled (1:3):",
+            );
+            expect(err.message).toMatch(
+              "Add @babel/plugin-proposal-pipeline-operator (https://git.io/vb4SU) to the " +
+                "'plugins' section of your Babel config to enable transformation.",
+            );
+            resolve();
+          },
+        );
+      });
     });
 
-    it("both syntax and transform plugin available", function (done) {
-      transformFile(
-        __dirname + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
-        options,
-        function (err) {
-          expect(err.message).toMatch(
-            "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
-          );
-          expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
-              "'plugins' section of your Babel config to enable transformation.",
-          );
-          done();
-        },
-      );
+    it("both syntax and transform plugin available", function () {
+      return new Promise(resolve => {
+        transformFile(
+          cwd + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
+          options,
+          function (err) {
+            expect(err.message).toMatch(
+              "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
+            );
+            expect(err.message).toMatch(
+              "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
+                "'plugins' section of your Babel config to enable transformation.",
+            );
+            resolve();
+          },
+        );
+      });
     });
   });
 

@@ -166,7 +166,9 @@ declare module "@babel/helper-function-name" {
 }
 
 declare module "@babel/helper-split-export-declaration" {
-  declare export default function splitExportDeclaration(exportDeclaration: any): any;
+  declare export default function splitExportDeclaration(
+    exportDeclaration: any
+  ): any;
 }
 
 declare module "@babel/traverse" {
@@ -177,3 +179,44 @@ declare module "@babel/generator" {
   declare module.exports: any;
 }
 
+declare module "@babel/highlight" {
+  import typeof { Chalk } from "chalk";
+  declare type Options = {
+    forceColor?: boolean,
+  };
+
+  /**
+   * Whether the code should be highlighted given the passed options.
+   */
+  declare function shouldHighlight(options: Options): boolean;
+
+  /**
+   * The Chalk instance that should be used given the passed options.
+   */
+  declare function getChalk(options: Options): Chalk;
+
+  /**
+   * Highlight `code`.
+   */
+  declare export default function highlight(
+    code: string,
+    options?: Options
+  ): string;
+  declare export { getChalk, shouldHighlight };
+}
+
+declare module "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining" {
+  declare module.exports: any;
+}
+
+declare module "@babel/helper-module-transforms" {
+  declare module.exports: any;
+}
+
+declare module "@babel/plugin-transform-classes" {
+  declare module.exports: any;
+}
+
+declare module "@babel/helper-compilation-targets" {
+  declare module.exports: any;
+}

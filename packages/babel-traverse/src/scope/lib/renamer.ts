@@ -1,6 +1,13 @@
 import Binding from "../binding";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
-import * as t from "@babel/types";
+import {
+  VISITOR_KEYS,
+  assignmentExpression,
+  identifier,
+  toExpression,
+  variableDeclaration,
+  variableDeclarator,
+} from "@babel/types";
 import type { Visitor } from "../../types";
 
 const renameVisitor: Visitor<Renamer> = {
@@ -17,7 +24,7 @@ const renameVisitor: Visitor<Renamer> = {
         state.binding.identifier,
       )
     ) {
-      path.skip();
+      skipAllButComputedMethodKey(path);
     }
   },
 
@@ -68,15 +75,12 @@ export default class Renamer {
     if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
     if (this.binding.kind !== "hoisted") return;
 
-    path.node.id = t.identifier(this.oldName);
+    path.node.id = identifier(this.oldName);
     path.node._blockHoist = 3;
 
     path.replaceWith(
-      t.variableDeclaration("let", [
-        t.variableDeclarator(
-          t.identifier(this.newName),
-          t.toExpression(path.node),
-        ),
+      variableDeclaration("let", [
+        variableDeclarator(identifier(this.newName), toExpression(path.node)),
       ]),
     );
   }
@@ -90,14 +94,14 @@ export default class Renamer {
     if (!path.isFunctionExpression() && !path.isClassExpression()) return;
     if (this.binding.kind !== "local") return;
 
-    path.node.id = t.identifier(this.oldName);
+    path.node.id = identifier(this.oldName);
 
     this.binding.scope.parent.push({
-      id: t.identifier(this.newName),
+      id: identifier(this.newName),
     });
 
     path.replaceWith(
-      t.assignmentExpression("=", t.identifier(this.newName), path.node),
+      assignmentExpression("=", identifier(this.newName), path.node),
     );
   }
 
@@ -140,5 +144,20 @@ export default class Renamer {
       this.maybeConvertFromClassFunctionDeclaration(parentDeclar);
       this.maybeConvertFromClassFunctionExpression(parentDeclar);
     }
+  }
+}
+
+function skipAllButComputedMethodKey(path) {
+  // If the path isn't method with computed key, just skip everything.
+  if (!path.isMethod() || !path.node.computed) {
+    path.skip();
+    return;
+  }
+
+  // So it's a method with a computed key. Make sure to skip every other key the
+  // traversal would visit.
+  const keys = VISITOR_KEYS[path.type];
+  for (const key of keys) {
+    if (key !== "key") path.skipKey(key);
   }
 }

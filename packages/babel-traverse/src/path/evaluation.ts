@@ -139,8 +139,8 @@ function _evaluate(path: NodePath, state) {
     path.isMemberExpression() &&
     !path.parentPath.isCallExpression({ callee: path.node })
   ) {
-    const property = path.get("property") as NodePath;
-    const object = path.get("object") as NodePath;
+    const property = path.get("property");
+    const object = path.get("object");
 
     if (object.isLiteral() && property.isIdentifier()) {
       // @ts-expect-error todo(flow->ts): instead of typeof - would it be better to check type of ast node?
@@ -153,7 +153,6 @@ function _evaluate(path: NodePath, state) {
   }
 
   if (path.isReferencedIdentifier()) {
-    // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
     const binding = path.scope.getBinding(path.node.name);
 
     if (binding && binding.constantViolations.length > 0) {
@@ -167,13 +166,10 @@ function _evaluate(path: NodePath, state) {
     if (binding?.hasValue) {
       return binding.value;
     } else {
-      // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       if (path.node.name === "undefined") {
         return binding ? deopt(binding.path, state) : undefined;
-        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       } else if (path.node.name === "Infinity") {
         return binding ? deopt(binding.path, state) : Infinity;
-        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       } else if (path.node.name === "NaN") {
         return binding ? deopt(binding.path, state) : NaN;
       }
@@ -357,8 +353,7 @@ function _evaluate(path: NodePath, state) {
 
     if (callee.isMemberExpression()) {
       const object = callee.get("object");
-      // todo: improve babel-types
-      const property = callee.get("property") as NodePath;
+      const property = callee.get("property");
 
       // Math.min(1, 2)
       if (
@@ -432,9 +427,7 @@ function evaluateQuasis(path, quasis: Array<any>, state, raw = false) {
  *
  */
 
-export function evaluate(
-  this: NodePath,
-): {
+export function evaluate(this: NodePath): {
   confident: boolean;
   value: any;
   deopt?: NodePath;

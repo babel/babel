@@ -1,7 +1,10 @@
 import * as babel from "@babel/core";
 import fs from "fs";
+import { createRequire } from "module";
 
-import transformTypeofSymbol from "..";
+import transformTypeofSymbol from "../lib/index.js";
+
+const require = createRequire(import.meta.url);
 
 const readFile = path =>
   new Promise((resolve, reject) =>
@@ -23,9 +26,8 @@ describe("@babel/plugin-transform-typeof-symbol", () => {
   `(
     "shouldn't transpile the $type $runtime helper",
     async ({ type, runtime }) => {
-      const path = require.resolve(
-        `${runtime}/helpers${type === "esm" ? "/esm/" : "/"}typeof`,
-      );
+      let path = require.resolve(`${runtime}/helpers/typeof`);
+      if (runtime === "esm") path = path.replace(".js", ".mjs");
       const src = await readFile(path);
 
       const ast = babel.parseSync(src, {

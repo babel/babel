@@ -1,5 +1,6 @@
 import * as virtualTypes from "./path/lib/virtual-types";
-import * as t from "@babel/types";
+import { DEPRECATED_KEYS, FLIPPED_ALIAS_KEYS, TYPES } from "@babel/types";
+import type { Visitor } from "./types";
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -85,14 +86,14 @@ export function explode(visitor) {
 
     const fns = visitor[nodeType];
 
-    let aliases: Array<string> | undefined = t.FLIPPED_ALIAS_KEYS[nodeType];
+    let aliases: Array<string> | undefined = FLIPPED_ALIAS_KEYS[nodeType];
 
-    const deprecratedKey = t.DEPRECATED_KEYS[nodeType];
-    if (deprecratedKey) {
+    const deprecatedKey = DEPRECATED_KEYS[nodeType];
+    if (deprecatedKey) {
       console.trace(
-        `Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`,
+        `Visitor defined for ${nodeType} but it has been renamed to ${deprecatedKey}`,
       );
-      aliases = [deprecratedKey];
+      aliases = [deprecatedKey];
     }
 
     if (!aliases) continue;
@@ -136,7 +137,7 @@ export function verify(visitor) {
 
     if (shouldIgnoreKey(nodeType)) continue;
 
-    if (t.TYPES.indexOf(nodeType) < 0) {
+    if (TYPES.indexOf(nodeType) < 0) {
       throw new Error(
         `You gave us a visitor for the node type ${nodeType} but it's not a valid type`,
       );
@@ -175,6 +176,12 @@ function validateVisitorMethods(path, val) {
   }
 }
 
+export function merge<State>(visitors: Visitor<State>[]): Visitor<State>;
+export function merge(
+  visitors: Visitor<unknown>[],
+  states?: any[],
+  wrapper?: Function | null,
+): Visitor<unknown>;
 export function merge(
   visitors: any[],
   states: any[] = [],

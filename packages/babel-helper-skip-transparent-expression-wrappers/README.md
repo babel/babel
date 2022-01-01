@@ -9,11 +9,11 @@ See our website [@babel/helper-skip-transparent-expression-wrappers](https://bab
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-skip-transparent-expression-wrappers
+npm install --save @babel/helper-skip-transparent-expression-wrappers
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-skip-transparent-expression-wrappers --dev
+yarn add @babel/helper-skip-transparent-expression-wrappers
 ```

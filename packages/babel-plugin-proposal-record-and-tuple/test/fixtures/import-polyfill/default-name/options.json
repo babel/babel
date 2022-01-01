@@ -1,0 +1,6 @@
+{
+  "plugins": [["../../../../", {
+    "syntaxType": "hash",
+    "importPolyfill": true
+  }]]
+}

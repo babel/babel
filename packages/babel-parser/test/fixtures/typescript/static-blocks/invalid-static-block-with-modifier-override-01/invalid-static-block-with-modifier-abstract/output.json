@@ -1,0 +1,38 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Static class blocks cannot have any modifier. (2:20)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":34,"loc":{"start":{"line":1,"column":10},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "StaticBlock",
+              "start":14,"end":32,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":20}},
+              "abstract": true,
+              "body": []
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

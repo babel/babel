@@ -1,0 +1,118 @@
+{
+  "type": "File",
+  "start":0,"end":70,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":70,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":70,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":70,"loc":{"start":{"line":1,"column":8},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start":12,"end":35,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":25}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":12,"end":16,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":6}},
+                "id": {
+                  "type": "Identifier",
+                  "start":13,"end":16,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":6},"identifierName":"foo"},
+                  "name": "foo"
+                }
+              },
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start":16,"end":35,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":25}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":17,"end":20,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":10},"identifierName":"arg"},
+                    "name": "arg"
+                  },
+                  {
+                    "type": "RestElement",
+                    "start":22,"end":31,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":21}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":25,"end":31,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21},"identifierName":"others"},
+                      "name": "others"
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":33,"end":35,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":25}},
+                  "body": []
+                }
+              },
+              "computed": false
+            },
+            {
+              "type": "MethodDefinition",
+              "start":38,"end":68,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":32}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":45,"end":49,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":13}},
+                "id": {
+                  "type": "Identifier",
+                  "start":46,"end":49,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":13},"identifierName":"bar"},
+                  "name": "bar"
+                }
+              },
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start":49,"end":68,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":32}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":50,"end":53,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":17},"identifierName":"arg"},
+                    "name": "arg"
+                  },
+                  {
+                    "type": "RestElement",
+                    "start":55,"end":64,"loc":{"start":{"line":3,"column":19},"end":{"line":3,"column":28}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":58,"end":64,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":28},"identifierName":"others"},
+                      "name": "others"
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":66,"end":68,"loc":{"start":{"line":3,"column":30},"end":{"line":3,"column":32}},
+                  "body": []
+                }
+              },
+              "computed": false
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
