@@ -10,7 +10,8 @@ var Foo;
 var Bar;
 
 (function (Bar) {
-  Bar[Bar["b"] = Foo.a] = "b";
-  Bar[Bar["E"] = b] = "E";
+  Bar[Bar["D"] = Foo.a] = "D";
+  Bar[Bar["E"] = Bar.D] = "E";
   Bar[Bar["F"] = Math.E] = "F";
+  Bar[Bar["G"] = Bar.E + Foo.c] = "G";
 })(Bar || (Bar = {}));

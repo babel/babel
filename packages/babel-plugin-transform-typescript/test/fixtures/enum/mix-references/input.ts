@@ -7,7 +7,8 @@ enum Foo {
 }
 
 enum Bar {
-    b = Foo.a,
-    E = b,
+    D = Foo.a,
+    E = D,
     F = Math.E,
+    G = E + Foo.c,
 }

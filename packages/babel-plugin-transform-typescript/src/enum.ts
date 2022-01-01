@@ -134,6 +134,7 @@ export function translateEnumValues(
                   t.cloneNode(expr.node),
                 ),
               );
+              expr.skip();
             }
           },
           MemberExpression(expr) {
@@ -141,9 +142,12 @@ export function translateEnumValues(
           },
         };
 
-        traverse(initializer, IdentifierVisitor, path.scope);
+        const exprStmt = t.expressionStatement(initializer);
 
-        value = initializer;
+        traverse(t.program([exprStmt]), IdentifierVisitor);
+
+        value = exprStmt.expression;
+        seen.set(name, undefined);
       }
     } else if (typeof constValue === "number") {
       constValue += 1;
@@ -159,6 +163,7 @@ export function translateEnumValues(
         true,
       );
       value = t.binaryExpression("+", t.numericLiteral(1), lastRef);
+      seen.set(name, undefined);
     }
 
     lastName = name;
