@@ -548,6 +548,20 @@ describe("programmatic generation", function () {
         generate(directive);
       }).toThrow();
     });
+
+    it("preserves single quotes if not minified", function () {
+      const directive = parse("'use strict';").program.directives[0];
+      const output = generate(directive).code;
+
+      expect(output).toBe("'use strict';");
+    });
+
+    it("converts single quotes to double quotes if minified", function () {
+      const directive = parse("'use strict';").program.directives[0];
+      const output = generate(directive, { minified: true }).code;
+
+      expect(output).toBe('"use strict";');
+    });
   });
 
   describe("typescript generate parentheses if necessary", function () {
