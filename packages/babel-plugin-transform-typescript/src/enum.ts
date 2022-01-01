@@ -1,8 +1,7 @@
-import assert from "assert";
 import { template } from "@babel/core";
-import type * as t from "@babel/types";
-import traverse from "@babel/traverse";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath } from "@babel/traverse";
+import * as t from "@babel/types";
+import assert from "assert";
 
 export default function transpileEnum(path, t) {
   const { node } = path;
@@ -101,6 +100,28 @@ function enumFill(path, t, id) {
  */
 type PreviousEnumMembers = Map<string, number | string>;
 
+type EnumSelfReferenceVisitorState = {
+  seen: PreviousEnumMembers;
+  path: NodePath<t.TSEnumDeclaration>;
+};
+
+function ReferencedIdentifier(
+  expr: NodePath<t.Identifier>,
+  state: EnumSelfReferenceVisitorState,
+) {
+  const { seen, path } = state;
+  if (expr.isIdentifier() && seen.has(expr.node.name)) {
+    expr.replaceWith(
+      t.memberExpression(t.cloneNode(path.node.id), t.cloneNode(expr.node)),
+    );
+    expr.skip();
+  }
+}
+
+const enumSelfReferenceVisitor = {
+  ReferencedIdentifier,
+};
+
 export function translateEnumValues(
   path: NodePath<t.TSEnumDeclaration>,
   t: typeof import("@babel/types"),
@@ -110,7 +131,8 @@ export function translateEnumValues(
   let constValue: number | string | undefined = -1;
   let lastName: string;
 
-  return path.node.members.map(member => {
+  return path.get("members").map(memberPath => {
+    const member = memberPath.node;
     const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
     const initializer = member.initializer;
     let value: t.Expression;
@@ -125,28 +147,18 @@ export function translateEnumValues(
           value = t.stringLiteral(constValue);
         }
       } else {
-        const IdentifierVisitor: Visitor = {
-          Identifier(expr) {
-            if (seen.has(expr.node.name)) {
-              expr.replaceWith(
-                t.memberExpression(
-                  t.cloneNode(path.node.id),
-                  t.cloneNode(expr.node),
-                ),
-              );
-              expr.skip();
-            }
-          },
-          MemberExpression(expr) {
-            expr.skip();
-          },
-        };
+        const initializerPath = memberPath.get("initializer");
 
-        const exprStmt = t.expressionStatement(initializer);
+        if (initializerPath.isReferencedIdentifier()) {
+          ReferencedIdentifier(initializerPath, {
+            seen,
+            path,
+          });
+        } else {
+          initializerPath.traverse(enumSelfReferenceVisitor, { seen, path });
+        }
 
-        traverse(t.program([exprStmt]), IdentifierVisitor);
-
-        value = exprStmt.expression;
+        value = initializerPath.node;
         seen.set(name, undefined);
       }
     } else if (typeof constValue === "number") {

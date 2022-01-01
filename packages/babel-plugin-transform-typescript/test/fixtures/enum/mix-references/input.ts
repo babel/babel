@@ -12,3 +12,10 @@ enum Bar {
     F = Math.E,
     G = E + Foo.c,
 }
+
+enum Baz {
+    a = 0,
+    b = 1,
+    // @ts-ignore
+    x = a.toString(),
+}
