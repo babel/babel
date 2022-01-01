@@ -2,7 +2,7 @@ name: Issue Triage
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened, labeled] 
 
 jobs:
   welcome:
