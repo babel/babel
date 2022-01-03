@@ -44,7 +44,9 @@ const visitor = {
     for (const declar of declarations) {
       firstId = declar.node.id;
       if (needsRename) {
-        declar.scope.rename(declar.node.id.name);
+        for (const name of Object.keys(declar.getBindingIdentifiers())) {
+          declar.scope.rename(name);
+        }
       }
 
       if (declar.node.init) {
