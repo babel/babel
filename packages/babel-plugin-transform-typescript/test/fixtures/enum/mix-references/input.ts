@@ -19,3 +19,9 @@ enum Baz {
     // @ts-ignore
     x = a.toString(),
 }
+
+enum A {
+    a = 0,
+    b = (() => { let a = 1; return a + 1 })(), // a is shadowed
+    c = (() => { return a + 2 })(), // a refers to A.a
+}

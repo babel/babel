@@ -23,3 +23,16 @@ var Baz;
   Baz[Baz["b"] = 1] = "b";
   Baz[Baz["x"] = Baz.a.toString()] = "x";
 })(Baz || (Baz = {}));
+
+var A;
+
+(function (A) {
+  A[A["a"] = 0] = "a";
+  A[A["b"] = (() => {
+    let a = 1;
+    return a + 1;
+  })()] = "b";
+  A[A["c"] = (() => {
+    return A.a + 2;
+  })()] = "c";
+})(A || (A = {}));

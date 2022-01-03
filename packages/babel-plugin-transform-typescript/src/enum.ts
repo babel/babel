@@ -1,9 +1,14 @@
 import { template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
-import * as t from "@babel/types";
+import type * as t from "@babel/types";
 import assert from "assert";
 
-export default function transpileEnum(path, t) {
+type t = typeof t;
+
+export default function transpileEnum(
+  path: NodePath<t.TSEnumDeclaration>,
+  t: t,
+) {
   const { node } = path;
 
   if (node.declare) {
@@ -48,7 +53,7 @@ export default function transpileEnum(path, t) {
   }
 }
 
-function makeVar(id, t, kind) {
+function makeVar(id: t.Identifier, t: t, kind: "var" | "let" | "const") {
   return t.variableDeclaration(kind, [t.variableDeclarator(id)]);
 }
 
@@ -66,14 +71,14 @@ const buildNumericAssignment = template(`
   ENUM[ENUM["NAME"] = VALUE] = "NAME";
 `);
 
-const buildEnumMember = (isString, options) =>
+const buildEnumMember = (isString: boolean, options: Record<string, unknown>) =>
   (isString ? buildStringAssignment : buildNumericAssignment)(options);
 
 /**
  * Generates the statement that fills in the variable declared by the enum.
  * `(function (E) { ... assignments ... })(E || (E = {}));`
  */
-function enumFill(path, t, id) {
+function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
   const x = translateEnumValues(path, t);
   const assignments = x.map(([memberName, memberValue]) =>
     buildEnumMember(t.isStringLiteral(memberValue), {
@@ -103,14 +108,16 @@ type PreviousEnumMembers = Map<string, number | string>;
 type EnumSelfReferenceVisitorState = {
   seen: PreviousEnumMembers;
   path: NodePath<t.TSEnumDeclaration>;
+  t: t;
 };
 
 function ReferencedIdentifier(
   expr: NodePath<t.Identifier>,
   state: EnumSelfReferenceVisitorState,
 ) {
-  const { seen, path } = state;
-  if (expr.isIdentifier() && seen.has(expr.node.name)) {
+  const { seen, path, t } = state;
+  const name = expr.node.name;
+  if (seen.has(name) && !expr.scope.hasOwnBinding(name)) {
     expr.replaceWith(
       t.memberExpression(t.cloneNode(path.node.id), t.cloneNode(expr.node)),
     );
@@ -124,7 +131,7 @@ const enumSelfReferenceVisitor = {
 
 export function translateEnumValues(
   path: NodePath<t.TSEnumDeclaration>,
-  t: typeof import("@babel/types"),
+  t: t,
 ): Array<[name: string, value: t.Expression]> {
   const seen: PreviousEnumMembers = new Map();
   // Start at -1 so the first enum member is its increment, 0.
@@ -151,11 +158,12 @@ export function translateEnumValues(
 
         if (initializerPath.isReferencedIdentifier()) {
           ReferencedIdentifier(initializerPath, {
+            t,
             seen,
             path,
           });
         } else {
-          initializerPath.traverse(enumSelfReferenceVisitor, { seen, path });
+          initializerPath.traverse(enumSelfReferenceVisitor, { t, seen, path });
         }
 
         value = initializerPath.node;
