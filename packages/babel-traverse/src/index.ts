@@ -91,7 +91,10 @@ traverse.node = function (
   const context = new TraversalContext(scope, opts, state, parentPath);
   for (const key of keys) {
     if (skipKeys && skipKeys[key]) continue;
-    if (context.visit(node, key)) return;
+    if (context.visit(node, key)) {
+      parentPath?.stop();
+      return;
+    }
   }
 };
 

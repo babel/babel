@@ -277,4 +277,20 @@ describe("traverse", function () {
       expect(blockStatementVisitedCounter).toBe(1);
     });
   });
+  describe("path.stop()", () => {
+    it("should stop the traversal when a grand child is stopped", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          visitedCounter += 1;
+          path.stop();
+        },
+      });
+
+      expect(visitedCounter).toBe(1);
+    });
+  });
 });
