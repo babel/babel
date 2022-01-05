@@ -313,5 +313,28 @@ describe("traverse", function () {
 
       expect(visitedCounter).toBe(2);
     });
+
+    it("should not affect root traversal", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      let programShouldStop;
+      traverse(ast, {
+        noScope: true,
+        Program(path) {
+          path.traverse({
+            noScope: true,
+            Identifier(path) {
+              visitedCounter += 1;
+              path.stop();
+            },
+          });
+          programShouldStop = path.shouldStop;
+        },
+      });
+
+      expect(visitedCounter).toBe(1);
+      expect(programShouldStop).toBe(false);
+    });
   });
 });

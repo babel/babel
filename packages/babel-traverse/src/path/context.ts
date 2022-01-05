@@ -1,6 +1,6 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
-import traverse from "../index";
+import { traverseNode } from "../traverse-node";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 import type TraversalContext from "../context";
 import type NodePath from "./index";
@@ -95,7 +95,7 @@ export function visit(this: NodePath): boolean {
   restoreContext(this, currentContext);
 
   this.debug("Recursing into...");
-  traverse.node(
+  this.shouldStop = traverseNode(
     this.node,
     this.opts,
     this.scope,
