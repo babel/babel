@@ -1,6 +1,8 @@
 import TraversalContext from "./context";
 import type { TraverseOptions } from "./index";
 import type NodePath from "./path";
+import type Scope from "./scope";
+import type * as t from "@babel/types";
 import { VISITOR_KEYS } from "@babel/types";
 
 /**
