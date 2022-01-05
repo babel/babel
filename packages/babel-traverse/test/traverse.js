@@ -292,5 +292,26 @@ describe("traverse", function () {
 
       expect(visitedCounter).toBe(1);
     });
+
+    it("can be reverted in the exit listener of the parent whose child is stopped", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          visitedCounter += 1;
+          path.stop();
+        },
+        ExpressionStatement: {
+          exit(path) {
+            path.shouldStop = false;
+            path.shouldSkip = false;
+          },
+        },
+      });
+
+      expect(visitedCounter).toBe(2);
+    });
   });
 });
