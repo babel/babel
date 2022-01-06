@@ -252,7 +252,6 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   web.dom-collections.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.immediate { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.queue-microtask { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  web.timers { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.url { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.url.to-json { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.url-search-params { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
