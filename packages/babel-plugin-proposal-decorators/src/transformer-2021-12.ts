@@ -1,5 +1,5 @@
 import type { NodePath } from "@babel/traverse";
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import * as charCodes from "charcodes";
@@ -447,6 +447,19 @@ function isClassDecoratableElementPath(
   );
 }
 
+function staticBlockToIIFE(block: t.StaticBlock) {
+  return t.callExpression(
+    t.arrowFunctionExpression([], t.blockStatement(block.body)),
+    [],
+  );
+}
+
+function maybeSequenceExpression(exprs: t.Expression[]) {
+  if (exprs.length === 0) return t.unaryExpression("void", t.numericLiteral(0));
+  if (exprs.length === 1) return exprs[0];
+  return t.sequenceExpression(exprs);
+}
+
 function transformClass(
   path: NodePath<t.ClassExpression | t.ClassDeclaration>,
   state: any,
@@ -836,38 +849,6 @@ function transformClass(
     locals.push(staticInitLocal);
   }
 
-  const staticBlock = t.staticBlock(
-    [
-      t.expressionStatement(
-        t.assignmentExpression(
-          "=",
-          t.arrayPattern(locals),
-          t.callExpression(state.addHelper("applyDecs"), [
-            t.thisExpression(),
-            elementDecorations,
-            classDecorations,
-          ]),
-        ),
-      ),
-      requiresStaticInit &&
-        t.expressionStatement(
-          t.callExpression(t.cloneNode(staticInitLocal), [t.thisExpression()]),
-        ),
-    ].filter(v => v),
-  );
-
-  path.node.body.body.unshift(staticBlock as unknown as ClassElement);
-
-  if (classInitLocal) {
-    path.node.body.body.push(
-      t.staticBlock([
-        t.expressionStatement(
-          t.callExpression(t.cloneNode(classInitLocal), []),
-        ),
-      ]),
-    );
-  }
-
   if (decoratedPrivateMethods.size > 0) {
     path.traverse({
       PrivateName(path) {
@@ -901,6 +882,116 @@ function transformClass(
       },
     });
   }
+
+  let classInitInjected = false;
+  const classInitCall =
+    classInitLocal && t.callExpression(t.cloneNode(classInitLocal), []);
+
+  const originalClass = path.node;
+
+  if (classDecorators) {
+    const statics = [];
+    let staticBlocks: t.StaticBlock[] = [];
+    path.get("body.body").forEach(element => {
+      // Static blocks cannot be compiled to "instance blocks", but we can inline
+      // them as IIFEs in the next property.
+      if (element.isStaticBlock()) {
+        staticBlocks.push(element.node);
+        element.remove();
+        return;
+      }
+
+      const isProperty =
+        element.isClassProperty() || element.isClassPrivateProperty();
+
+      if (
+        (isProperty || element.isClassPrivateMethod()) &&
+        element.node.static
+      ) {
+        if (isProperty && staticBlocks.length > 0) {
+          const allValues: t.Expression[] = staticBlocks.map(staticBlockToIIFE);
+          if (element.node.value) allValues.push(element.node.value);
+          element.node.value = maybeSequenceExpression(allValues);
+          staticBlocks = [];
+        }
+
+        element.node.static = false;
+        statics.push(element.node);
+        element.remove();
+      }
+    });
+
+    if (statics.length > 0 || staticBlocks.length > 0) {
+      const staticsClass = template.expression.ast`
+        class extends ${state.addHelper("identity")} {}
+      ` as t.ClassExpression;
+      staticsClass.body.body = [
+        t.staticBlock([t.toStatement(path.node, false)]),
+        ...statics,
+      ];
+
+      const constructorBody: t.Expression[] = [];
+
+      const newExpr = t.newExpression(staticsClass, []);
+
+      if (staticBlocks.length > 0) {
+        constructorBody.push(...staticBlocks.map(staticBlockToIIFE));
+      }
+      if (classInitCall) {
+        classInitInjected = true;
+        constructorBody.push(classInitCall);
+      }
+      if (constructorBody.length > 0) {
+        constructorBody.unshift(
+          t.callExpression(t.super(), [t.cloneNode(classLocal)]),
+        );
+
+        staticsClass.body.body.push(
+          t.classMethod(
+            "constructor",
+            t.identifier("constructor"),
+            [],
+            t.blockStatement([
+              t.expressionStatement(t.sequenceExpression(constructorBody)),
+            ]),
+          ),
+        );
+      } else {
+        newExpr.arguments.push(t.cloneNode(classLocal));
+      }
+
+      path.replaceWith(newExpr);
+    }
+  }
+  if (!classInitInjected && classInitCall) {
+    path.node.body.body.push(
+      t.staticBlock([t.expressionStatement(classInitCall)]),
+    );
+  }
+
+  originalClass.body.body.unshift(
+    t.staticBlock(
+      [
+        t.expressionStatement(
+          t.assignmentExpression(
+            "=",
+            t.arrayPattern(locals),
+            t.callExpression(state.addHelper("applyDecs"), [
+              t.thisExpression(),
+              elementDecorations,
+              classDecorations,
+            ]),
+          ),
+        ),
+        requiresStaticInit &&
+          t.expressionStatement(
+            t.callExpression(t.cloneNode(staticInitLocal), [
+              t.thisExpression(),
+            ]),
+          ),
+      ].filter(Boolean),
+    ),
+  );
 
   // Recrawl the scope to make sure new identifiers are properly synced
   path.scope.crawl();

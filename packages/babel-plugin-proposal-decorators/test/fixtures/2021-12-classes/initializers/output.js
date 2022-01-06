@@ -2,29 +2,40 @@ var _initClass, _initClass2;
 
 let _Foo;
 
-class Foo {
+new class extends babelHelpers.identity {
   static {
-    [_Foo, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
-  }
-  static field = 123;
-  static {
-    _initClass();
+    class Foo {
+      static {
+        [_Foo, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
+      }
+    }
 
   }
-}
+  field = 123;
+
+  constructor() {
+    super(_Foo), _initClass();
+  }
+
+}();
 
 let _Bar;
 
-class Bar extends _Foo {
+new class extends babelHelpers.identity {
   static {
-    [_Bar, _initClass2] = babelHelpers.applyDecs(this, [], [dec]);
-  }
-  static {
-    this.otherField = 456;
-  }
-  static field = 123;
-  static {
-    _initClass2();
+    class Bar extends _Foo {
+      static {
+        [_Bar, _initClass2] = babelHelpers.applyDecs(this, [], [dec]);
+      }
+    }
 
   }
-}
+  field = ((() => {
+    this.otherField = 456;
+  })(), 123);
+
+  constructor() {
+    super(_Bar), _initClass2();
+  }
+
+}();

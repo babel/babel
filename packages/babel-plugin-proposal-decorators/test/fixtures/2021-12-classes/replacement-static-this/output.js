@@ -11,11 +11,14 @@ new class extends babelHelpers.identity {
     }
 
   }
-  foo = new _Foo();
+  field = ((() => {
+    this;
+  })(), this);
 
   constructor() {
-    super(_Foo), _initClass();
+    super(_Foo), (() => {
+      this;
+    })(), _initClass();
   }
 
 }();
-const foo = new _Foo();

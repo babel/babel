@@ -1,33 +1,37 @@
-var _initClass, _initClass2;
+var _initClass, _temp2, _initClass2, _temp4;
 
 let _Foo;
 
-class Foo {}
+new (_temp2 = class extends babelHelpers.identity {
+  constructor() {
+    var _temp;
 
-(() => {
-  [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
-})();
+    (_temp = super(_Foo), babelHelpers.defineProperty(this, "field", 123), _temp), _initClass();
+  }
 
-babelHelpers.defineProperty(Foo, "field", 123);
+}, (() => {
+  class Foo {}
 
-(() => {
-  _initClass();
-})();
+  (() => {
+    [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
+  })();
+})(), _temp2)();
 
 let _Bar;
 
-class Bar extends _Foo {}
+new (_temp4 = class extends babelHelpers.identity {
+  constructor() {
+    var _temp3;
 
-(() => {
-  [_Bar, _initClass2] = babelHelpers.applyDecs(Bar, [], [dec]);
-})();
+    (_temp3 = super(_Bar), babelHelpers.defineProperty(this, "field", ((() => {
+      this.otherField = 456;
+    })(), 123)), _temp3), _initClass2();
+  }
 
-(() => {
-  Bar.otherField = 456;
-})();
+}, (() => {
+  class Bar extends _Foo {}
 
-babelHelpers.defineProperty(Bar, "field", 123);
-
-(() => {
-  _initClass2();
-})();
+  (() => {
+    [_Bar, _initClass2] = babelHelpers.applyDecs(Bar, [], [dec]);
+  })();
+})(), _temp4)();

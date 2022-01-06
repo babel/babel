@@ -1,5 +1,7 @@
 var _initClass;
 
+let hasX, hasM;
+
 let _Foo;
 
 new class extends babelHelpers.identity {
@@ -8,14 +10,24 @@ new class extends babelHelpers.identity {
       static {
         [_Foo, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
       }
+
+      static m() {}
+
     }
 
   }
-  foo = new _Foo();
+  #x;
+
+  #m() {}
+
+  x;
 
   constructor() {
-    super(_Foo), _initClass();
+    super(_Foo), (() => {
+      hasX = o => #x in o;
+
+      hasM = o => #m in o;
+    })(), _initClass();
   }
 
 }();
-const foo = new _Foo();
