@@ -277,4 +277,64 @@ describe("traverse", function () {
       expect(blockStatementVisitedCounter).toBe(1);
     });
   });
+  describe("path.stop()", () => {
+    it("should stop the traversal when a grand child is stopped", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          visitedCounter += 1;
+          path.stop();
+        },
+      });
+
+      expect(visitedCounter).toBe(1);
+    });
+
+    it("can be reverted in the exit listener of the parent whose child is stopped", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          visitedCounter += 1;
+          path.stop();
+        },
+        ExpressionStatement: {
+          exit(path) {
+            path.shouldStop = false;
+            path.shouldSkip = false;
+          },
+        },
+      });
+
+      expect(visitedCounter).toBe(2);
+    });
+
+    it("should not affect root traversal", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      let programShouldStop;
+      traverse(ast, {
+        noScope: true,
+        Program(path) {
+          path.traverse({
+            noScope: true,
+            Identifier(path) {
+              visitedCounter += 1;
+              path.stop();
+            },
+          });
+          programShouldStop = path.shouldStop;
+        },
+      });
+
+      expect(visitedCounter).toBe(1);
+      expect(programShouldStop).toBe(false);
+    });
+  });
 });
