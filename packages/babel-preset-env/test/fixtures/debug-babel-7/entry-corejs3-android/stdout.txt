@@ -143,6 +143,8 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.number.to-precision { "android":"4" }
   es.object.assign { "android":"4" }
   es.object.define-getter { "android":"4" }
+  es.object.define-properties { "android":"4" }
+  es.object.define-property { "android":"4" }
   es.object.define-setter { "android":"4" }
   es.object.entries { "android":"4" }
   es.object.freeze { "android":"4" }

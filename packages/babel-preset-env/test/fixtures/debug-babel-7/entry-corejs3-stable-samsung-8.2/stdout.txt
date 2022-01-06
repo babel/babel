@@ -53,6 +53,7 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.string.replace { "samsung":"8.2" }
   es.string.trim-end { "samsung":"8.2" }
   es.string.trim-start { "samsung":"8.2" }
+  es.typed-array.set { "samsung":"8.2" }
   es.typed-array.sort { "samsung":"8.2" }
   web.dom-collections.iterator { "samsung":"8.2" }
   web.immediate { "samsung":"8.2" }
