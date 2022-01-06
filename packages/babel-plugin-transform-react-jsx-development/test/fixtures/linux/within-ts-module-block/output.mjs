@@ -7,5 +7,5 @@ export namespace Namespaced {
     fileName: _jsxFileName,
     lineNumber: 3,
     columnNumber: 3
-  }, void 0);
+  }, this);
 }

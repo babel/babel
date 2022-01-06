@@ -4788,7 +4788,8 @@ export function isFunctionParent(
     "ArrowFunctionExpression" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
-    "StaticBlock" === nodeType
+    "StaticBlock" === nodeType ||
+    "TSModuleBlock" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
