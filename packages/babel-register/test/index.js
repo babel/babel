@@ -118,7 +118,33 @@ describe("@babel/register", function () {
         });
       }
 
-      buildTests(require.resolve(".."));
+      const { setupRegister } = buildTests(require.resolve(".."));
+
+      it("does not mutate options", () => {
+        const proxyHandler = {
+          defineProperty: jest.fn(Reflect.defineProperty),
+          deleteProperty: jest.fn(Reflect.deleteProperty),
+          set: jest.fn(Reflect.set),
+        };
+
+        setupRegister(
+          new Proxy(
+            {
+              babelrc: true,
+              sourceMaps: false,
+              cwd: path.dirname(testFileMjs),
+              extensions: [".js"],
+            },
+            proxyHandler,
+          ),
+        );
+
+        currentHook(testFileContent, testFile);
+
+        expect(proxyHandler.defineProperty).not.toHaveBeenCalled();
+        expect(proxyHandler.deleteProperty).not.toHaveBeenCalled();
+        expect(proxyHandler.set).not.toHaveBeenCalled();
+      });
     });
   }
 
@@ -342,6 +368,32 @@ describe("@babel/register", function () {
       ]);
       const { convertSourceMap } = JSON.parse(output);
       expect(convertSourceMap).toMatch("/* transformed */");
+    });
+
+    test("does not mutate options", () => {
+      const proxyHandler = {
+        defineProperty: jest.fn(Reflect.defineProperty),
+        deleteProperty: jest.fn(Reflect.deleteProperty),
+        set: jest.fn(Reflect.set),
+      };
+
+      setupRegister(
+        new Proxy(
+          {
+            babelrc: true,
+            sourceMaps: false,
+            cwd: path.dirname(testFileMjs),
+            extensions: [".js"],
+          },
+          proxyHandler,
+        ),
+      );
+
+      currentHook(testFileContent, testFile);
+
+      expect(proxyHandler.defineProperty).not.toHaveBeenCalled();
+      expect(proxyHandler.deleteProperty).not.toHaveBeenCalled();
+      expect(proxyHandler.set).not.toHaveBeenCalled();
     });
 
     return { setupRegister, revertRegister };
