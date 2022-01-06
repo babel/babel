@@ -1,6 +1,10 @@
 var _initProto;
 
 class Foo {
+  static {
+    [_initProto] = babelHelpers.applyDecs(this, [[dec, 2, "a"], [dec, 2, "a"]], []);
+  }
+
   constructor(...args) {
     _initProto(this);
   }
@@ -14,7 +18,3 @@ class Foo {
   }
 
 }
-
-(() => {
-  [_initProto] = babelHelpers.applyDecs(Foo, [[dec, 2, "a"], [dec, 2, "a"]], []);
-})();

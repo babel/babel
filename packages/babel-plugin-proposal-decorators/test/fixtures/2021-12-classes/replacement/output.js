@@ -2,16 +2,15 @@ var _initClass;
 
 let _Foo;
 
-class Foo {}
+class Foo {
+  static {
+    [_Foo, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
+  }
+  static foo = new _Foo();
+  static {
+    _initClass();
 
-(() => {
-  [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
-})();
-
-babelHelpers.defineProperty(Foo, "foo", new _Foo());
-
-(() => {
-  _initClass();
-})();
+  }
+}
 
 const foo = new _Foo();

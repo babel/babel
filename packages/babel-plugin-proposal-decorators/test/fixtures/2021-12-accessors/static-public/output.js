@@ -6,47 +6,40 @@ _computedKey = 'c'
 _dec3 = dec
 
 class Foo {
+  static {
+    [_init_a, _init_b, _init_computedKey, _initStatic] = babelHelpers.applyDecs(this, [[_dec, 6, "a"], [_dec2, 6, "b"], [_dec3, 6, _computedKey]], []);
+
+    _initStatic(this);
+
+  }
+  static #A = _init_a(this);
+
   static get a() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
+    return this.#A;
   }
 
   static set a(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _A, v);
+    this.#A = v;
   }
 
+  static #B = _init_b(this, 123);
+
   static get b() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _B);
+    return this.#B;
   }
 
   static set b(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, v);
+    this.#B = v;
   }
 
+  static #C = _init_computedKey(this, 456);
+
   static get [_computedKey]() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _C);
+    return this.#C;
   }
 
   static set [_computedKey](v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _C, v);
+    this.#C = v;
   }
 
 }
-
-(() => {
-  [_init_a, _init_b, _init_computedKey, _initStatic] = babelHelpers.applyDecs(Foo, [[_dec, 6, "a"], [_dec2, 6, "b"], [_dec3, 6, _computedKey]], []);
-
-  _initStatic(Foo);
-})();
-
-var _A = {
-  writable: true,
-  value: _init_a(Foo)
-};
-var _B = {
-  writable: true,
-  value: _init_b(Foo, 123)
-};
-var _C = {
-  writable: true,
-  value: _init_computedKey(Foo, 456)
-};

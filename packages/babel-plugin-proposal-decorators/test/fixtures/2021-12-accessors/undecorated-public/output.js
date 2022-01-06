@@ -1,47 +1,32 @@
-var _A = /*#__PURE__*/new WeakMap();
-
-var _B = /*#__PURE__*/new WeakMap();
-
-var _C = /*#__PURE__*/new WeakMap();
-
 class Foo {
-  constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _A, {
-      writable: true,
-      value: void 0
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _B, {
-      writable: true,
-      value: 123
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _C, {
-      writable: true,
-      value: 456
-    });
-  }
+  #A;
 
   get a() {
-    return babelHelpers.classPrivateFieldGet(this, _A);
+    return this.#A;
   }
 
   set a(v) {
-    babelHelpers.classPrivateFieldSet(this, _A, v);
+    this.#A = v;
   }
 
+  #B = 123;
+
   get b() {
-    return babelHelpers.classPrivateFieldGet(this, _B);
+    return this.#B;
   }
 
   set b(v) {
-    babelHelpers.classPrivateFieldSet(this, _B, v);
+    this.#B = v;
   }
 
+  #C = 456;
+
   get 'c'() {
-    return babelHelpers.classPrivateFieldGet(this, _C);
+    return this.#C;
   }
 
   set 'c'(v) {
-    babelHelpers.classPrivateFieldSet(this, _C, v);
+    this.#C = v;
   }
 
 }

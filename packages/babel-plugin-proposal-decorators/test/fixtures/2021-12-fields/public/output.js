@@ -6,14 +6,10 @@ _computedKey = 'c'
 _dec3 = dec
 
 class Foo {
-  constructor() {
-    babelHelpers.defineProperty(this, "a", _init_a(this));
-    babelHelpers.defineProperty(this, "b", _init_b(this, 123));
-    babelHelpers.defineProperty(this, _computedKey, _init_computedKey(this, 456));
+  static {
+    [_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs(this, [[_dec, 0, "a"], [_dec2, 0, "b"], [_dec3, 0, _computedKey]], []);
   }
-
+  a = _init_a(this);
+  b = _init_b(this, 123);
+  [_computedKey] = _init_computedKey(this, 456);
 }
-
-(() => {
-  [_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs(Foo, [[_dec, 0, "a"], [_dec2, 0, "b"], [_dec3, 0, _computedKey]], []);
-})();

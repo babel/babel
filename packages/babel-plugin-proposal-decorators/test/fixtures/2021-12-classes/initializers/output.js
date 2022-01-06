@@ -2,32 +2,29 @@ var _initClass, _initClass2;
 
 let _Foo;
 
-class Foo {}
+class Foo {
+  static {
+    [_Foo, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
+  }
+  static field = 123;
+  static {
+    _initClass();
 
-(() => {
-  [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
-})();
-
-babelHelpers.defineProperty(Foo, "field", 123);
-
-(() => {
-  _initClass();
-})();
+  }
+}
 
 let _Bar;
 
-class Bar extends _Foo {}
+class Bar extends _Foo {
+  static {
+    [_Bar, _initClass2] = babelHelpers.applyDecs(this, [], [dec]);
+  }
+  static {
+    this.otherField = 456;
+  }
+  static field = 123;
+  static {
+    _initClass2();
 
-(() => {
-  [_Bar, _initClass2] = babelHelpers.applyDecs(Bar, [], [dec]);
-})();
-
-(() => {
-  Bar.otherField = 456;
-})();
-
-babelHelpers.defineProperty(Bar, "field", 123);
-
-(() => {
-  _initClass2();
-})();
+  }
+}

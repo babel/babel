@@ -8,11 +8,15 @@ _computedKey2 = 'b'
 _dec4 = dec
 
 class Foo {
-  constructor(...args) {
-    babelHelpers.defineProperty(this, "value", 1);
+  static {
+    [_initProto] = babelHelpers.applyDecs(this, [[_dec, 3, "a"], [_dec2, 4, "a"], [_dec3, 3, _computedKey], [_dec4, 4, _computedKey2]], []);
+  }
 
+  constructor(...args) {
     _initProto(this);
   }
+
+  value = 1;
 
   get a() {
     return this.value;
@@ -31,7 +35,3 @@ class Foo {
   }
 
 }
-
-(() => {
-  [_initProto] = babelHelpers.applyDecs(Foo, [[_dec, 3, "a"], [_dec2, 4, "a"], [_dec3, 3, _computedKey], [_dec4, 4, _computedKey2]], []);
-})();

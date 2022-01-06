@@ -5,6 +5,14 @@ _computedKey = 'b'
 _dec2 = dec
 
 class Foo {
+  static {
+    [_initStatic] = babelHelpers.applyDecs(this, [[_dec, 8, "a"], [_dec2, 8, _computedKey]], []);
+
+    _initStatic(this);
+
+  }
+  static value = 1;
+
   static get a() {
     return this.value;
   }
@@ -14,11 +22,3 @@ class Foo {
   }
 
 }
-
-(() => {
-  [_initStatic] = babelHelpers.applyDecs(Foo, [[_dec, 8, "a"], [_dec2, 8, _computedKey]], []);
-
-  _initStatic(Foo);
-})();
-
-babelHelpers.defineProperty(Foo, "value", 1);
