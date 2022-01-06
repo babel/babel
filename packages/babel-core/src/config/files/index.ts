@@ -21,9 +21,10 @@ export type {
   RelativeConfig,
   FilePackageData,
 } from "./types";
-export {
-  resolvePlugin,
-  resolvePreset,
-  loadPlugin,
-  loadPreset,
-} from "./plugins";
+export { loadPlugin, loadPreset } from "./plugins";
+
+import gensync from "gensync";
+import * as plugins from "./plugins";
+
+export const resolvePlugin = gensync(plugins.resolvePlugin).sync;
+export const resolvePreset = gensync(plugins.resolvePreset).sync;
