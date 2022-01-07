@@ -15,6 +15,7 @@ export function TSTypeParameterInstantiation(
 ): void {
   this.token("<");
   this.printList(node.params, node, {});
+  if(node.extra?.trailingComma) this.token(",");
   this.token(">");
 }
 
