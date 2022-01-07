@@ -1212,4 +1212,9 @@ export default class Scope {
       }
     } while ((scope = scope.parent));
   }
+
+  isSameBinding(scope2: Scope, name: string) {
+    const binding = this.getBinding(name);
+    return !!binding && binding === scope2.getBinding(name);
+  }
 }

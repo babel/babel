@@ -44,13 +44,6 @@ interface RewriteBindingInitVisitorState {
   scope: Scope;
 }
 
-function isSameBinding(scope1, scope2, name) {
-  const binding = scope1.getBinding(name);
-  // TODO: In Babel 8, check if the next code can be uncommented
-  // https://github.com/babel/babel/pull/10628#discussion_r342282695
-  return /* !!binding && */ binding === scope2.getBinding(name);
-}
-
 function isInType(path) {
   do {
     switch (path.parent.type) {
@@ -258,7 +251,13 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       }
 
       // redeclared in this scope
-      if (!isSameBinding(scope, path.scope, localName)) return;
+      if (process.env.BABEL_8_BREAKING) {
+        if (!scope.isSameBinding(path.scope, localName)) return;
+      } else {
+        if (path.scope.getBinding(localName) !== scope.getBinding(localName)) {
+          return;
+        }
+      }
 
       const ref = buildImportReference(importData, path.node);
 
@@ -319,7 +318,15 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         const localName = left.node.name;
 
         // redeclared in this scope
-        if (!isSameBinding(scope, path.scope, localName)) return;
+        if (process.env.BABEL_8_BREAKING) {
+          if (!scope.isSameBinding(path.scope, localName)) return;
+        } else {
+          if (
+            scope.getBinding(localName) !== path.scope.getBinding(localName)
+          ) {
+            return;
+          }
+        }
 
         const exportedNames = exported.get(localName);
         const importData = imported.get(localName);
@@ -348,8 +355,12 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         }
       } else {
         const ids = left.getOuterBindingIdentifiers();
-        const programScopeIds = Object.keys(ids).filter(localName =>
-          isSameBinding(scope, path.scope, localName),
+        const programScopeIds = Object.keys(ids).filter(
+          process.env.BABEL_8_BREAKING
+            ? localName => scope.isSameBinding(path.scope, localName)
+            : localName =>
+                scope.getBinding(localName) ===
+                path.scope.getBinding(localName),
         );
         const id = programScopeIds.find(localName => imported.has(localName));
 
