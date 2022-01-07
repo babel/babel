@@ -1,5 +1,7 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
+import fs from "fs";
+import { parse as acornParse } from "acorn";
 
 // Basic smoke tests for @babel/standalone
 (process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
@@ -259,6 +261,20 @@ const require = createRequire(import.meta.url);
       it("#14425 - numeric separators should be parsed correctly", () => {
         expect(() => Babel.transform("1_1", {})).not.toThrow();
       });
+    });
+
+    it("should be built into ES5", () => {
+      const babelStandloneSource = fs.readFileSync(
+        new URL("../babel.js", import.meta.url),
+        { encoding: "utf8" },
+      );
+
+      expect(() => {
+        acornParse(babelStandloneSource, {
+          ecmaVersion: 5,
+          sourceType: "script",
+        });
+      }).not.toThrow();
     });
   },
 );
