@@ -8,6 +8,7 @@ export default declare((api, options) => {
 
   const { method, module } = options;
   const noNewArrows = api.assumption("noNewArrows");
+  const ignoreFunctionLength = api.assumption("ignoreFunctionLength");
 
   if (method && module) {
     return {
@@ -24,7 +25,12 @@ export default declare((api, options) => {
             wrapAsync = state.methodWrapper = addNamed(path, method, module);
           }
 
-          remapAsyncToGenerator(path, { wrapAsync }, noNewArrows);
+          remapAsyncToGenerator(
+            path,
+            { wrapAsync },
+            noNewArrows,
+            ignoreFunctionLength,
+          );
         },
       },
     };
@@ -41,6 +47,7 @@ export default declare((api, options) => {
           path,
           { wrapAsync: state.addHelper("asyncToGenerator") },
           noNewArrows,
+          ignoreFunctionLength,
         );
       },
     },
