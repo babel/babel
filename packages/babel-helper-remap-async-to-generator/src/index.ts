@@ -36,6 +36,7 @@ export default function (
     wrapAwait?: any;
   },
   noNewArrows?: boolean,
+  ignoreFunctionLength?: boolean,
 ) {
   path.traverse(awaitVisitor, {
     wrapAwait: helpers.wrapAwait,
@@ -46,7 +47,12 @@ export default function (
   path.node.async = false;
   path.node.generator = true;
 
-  wrapFunction(path, cloneNode(helpers.wrapAsync), noNewArrows);
+  wrapFunction(
+    path,
+    cloneNode(helpers.wrapAsync),
+    noNewArrows,
+    ignoreFunctionLength,
+  );
 
   const isProperty =
     path.isObjectMethod() ||

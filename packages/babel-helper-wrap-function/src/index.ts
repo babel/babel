@@ -66,7 +66,12 @@ function classOrObjectMethod(
   ).unwrapFunctionEnvironment();
 }
 
-function plainFunction(path: NodePath<any>, callId: any, noNewArrows: boolean) {
+function plainFunction(
+  path: NodePath<any>,
+  callId: any,
+  noNewArrows: boolean,
+  ignoreFunctionLength: boolean,
+) {
   const node = path.node;
   const isDeclaration = path.isFunctionDeclaration();
   const functionId = node.id;
@@ -87,26 +92,20 @@ function plainFunction(path: NodePath<any>, callId: any, noNewArrows: boolean) {
   }
 
   const built = callExpression(callId, [node]);
+
+  const params: t.Identifier[] = [];
+  for (const param of node.params) {
+    if (isAssignmentPattern(param) || isRestElement(param)) {
+      break;
+    }
+    params.push(path.scope.generateUidIdentifier("x"));
+  }
+
   const container = wrapper({
     NAME: functionId || null,
     REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
     FUNCTION: built,
-    PARAMS: node.params.reduce(
-      (acc, param) => {
-        acc.done =
-          acc.done || isAssignmentPattern(param) || isRestElement(param);
-
-        if (!acc.done) {
-          acc.params.push(path.scope.generateUidIdentifier("x"));
-        }
-
-        return acc;
-      },
-      {
-        params: [],
-        done: false,
-      },
-    ).params,
+    PARAMS: params,
   });
 
   if (isDeclaration) {
@@ -123,7 +122,11 @@ function plainFunction(path: NodePath<any>, callId: any, noNewArrows: boolean) {
       });
     }
 
-    if (!retFunction || retFunction.id || node.params.length) {
+    if (
+      !retFunction ||
+      retFunction.id ||
+      (!ignoreFunctionLength && params.length)
+    ) {
       // we have an inferred function id or params so we need this wrapper
       // @ts-expect-error todo(flow->ts) separate `wrapper` for `isDeclaration` and `else` branches
       path.replaceWith(container);
@@ -139,10 +142,11 @@ export default function wrapFunction(
   callId: any,
   // TODO(Babel 8): Consider defaulting to false for spec compliancy
   noNewArrows: boolean = true,
+  ignoreFunctionLength: boolean = false,
 ) {
   if (path.isMethod()) {
     classOrObjectMethod(path, callId);
   } else {
-    plainFunction(path, callId, noNewArrows);
+    plainFunction(path, callId, noNewArrows, ignoreFunctionLength);
   }
 }
