@@ -25,16 +25,16 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
 
       var metadataForKey = metadataMap[key];
 
-      if (metadataForKey === undefined) return undefined;
+      if (metadataForKey === void 0) return void 0;
 
       if (kind === 1 /* PUBLIC */) {
         var pub = metadataForKey.public;
-        if (pub !== undefined) {
+        if (pub !== void 0) {
           return pub[property];
         }
       } else if (kind === 2 /* PRIVATE */) {
         var priv = metadataForKey.private;
-        if (priv !== undefined) {
+        if (priv !== void 0) {
           return priv.get(property);
         }
       } else if (Object.hasOwnProperty.call(metadataForKey, "constructor")) {
@@ -48,14 +48,14 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
 
       var metadataForKey = metadataMap[key];
 
-      if (metadataForKey === undefined) {
+      if (metadataForKey === void 0) {
         metadataForKey = metadataMap[key] = {};
       }
 
       if (kind === 1 /* PUBLIC */) {
         var pub = metadataForKey.public;
 
-        if (pub === undefined) {
+        if (pub === void 0) {
           pub = metadataForKey.public = Object.create(null);
         }
 
@@ -63,7 +63,7 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
       } else if (kind === 2 /* PRIVATE */) {
         var priv = metadataForKey.priv;
 
-        if (priv === undefined) {
+        if (priv === void 0) {
           priv = metadataForKey.private = new Map();
         }
 
@@ -219,16 +219,16 @@ function assertValidReturnValue(kind, value) {
   if (kind === 1 /* ACCESSOR */) {
     if (type !== "object" || value === null) {
       throw new Error(
-        "accessor decorators must return an object with get, set, or initializer properties or undefined"
+        "accessor decorators must return an object with get, set, or initializer properties or void 0"
       );
     }
   } else if (type !== "function") {
     if (kind === 0 /* FIELD */) {
       throw new Error(
-        "field decorators must return a initializer function or undefined"
+        "field decorators must return a initializer function or void 0"
       );
     } else {
-      throw new Error("method decorators must return a function or undefined");
+      throw new Error("method decorators must return a function or void 0");
     }
   }
 }
@@ -300,7 +300,7 @@ function applyMemberDec(
   if (typeof decs === "function") {
     newValue = decs(value, ctx);
 
-    if (newValue !== undefined) {
+    if (newValue !== void 0) {
       assertValidReturnValue(kind, newValue);
 
       if (kind === 0 /* FIELD */) {
@@ -322,7 +322,7 @@ function applyMemberDec(
 
       newValue = dec(value, ctx);
 
-      if (newValue !== undefined) {
+      if (newValue !== void 0) {
         assertValidReturnValue(kind, newValue);
         var newInit;
 
@@ -339,8 +339,8 @@ function applyMemberDec(
           value = newValue;
         }
 
-        if (newInit !== undefined) {
-          if (initializer === undefined) {
+        if (newInit !== void 0) {
+          if (initializer === void 0) {
             initializer = newInit;
           } else if (typeof initializer === "function") {
             initializer = [initializer, newInit];
@@ -353,8 +353,8 @@ function applyMemberDec(
   }
 
   if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
-    if (initializer === undefined) {
-      // If the initializer was undefined, sub in a dummy initializer
+    if (initializer === void 0) {
+      // If the initializer was void 0, sub in a dummy initializer
       initializer = function (instance, init) {
         return init;
       };
@@ -566,7 +566,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
         dec,                // dec or array of decs
         0,                  // kind of value being decorated
         'prop',             // name of public prop on class containing the value being decorated,
-        '#p',               // the name of the private property (if is private, undefined otherwise),
+        '#p',               // the name of the private property (if is private, void 0 otherwise),
       ]
     ],
     [
