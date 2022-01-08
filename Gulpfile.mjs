@@ -348,8 +348,6 @@ function buildRollup(packages, targetBrowsers) {
                 // Rollup doesn't read export maps, so it loads the cjs fallback
                 "packages/babel-compat-data/*.js",
                 "packages/*/src/**/*.cjs",
-                // See the comment in this file for the reason to include it
-                "packages/babel-standalone/src/dynamic-require-entrypoint.cjs",
               ],
               dynamicRequireTargets: [
                 // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
