@@ -586,7 +586,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    regexpu-core: ^4.7.1
+    regexpu-core: ^5.0.0
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -13251,6 +13251,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"regenerate-unicode-properties@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "regenerate-unicode-properties@npm:10.0.1"
+  dependencies:
+    regenerate: ^1.4.2
+  checksum: 1b638b7087d8143e5be3e20e2cda197ea0440fa0bc2cc49646b2f50c5a2b1acdc54b21e4215805a5a2dd487c686b2291accd5ad00619534098d2667e76247754
+  languageName: node
+  linkType: hard
+
 "regenerate-unicode-properties@npm:^9.0.0":
   version: 9.0.0
   resolution: "regenerate-unicode-properties@npm:9.0.0"
@@ -13315,10 +13324,31 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"regexpu-core@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "regexpu-core@npm:5.0.0"
+  dependencies:
+    regenerate: ^1.4.2
+    regenerate-unicode-properties: ^10.0.1
+    regjsgen: ^0.6.0
+    regjsparser: ^0.8.2
+    unicode-match-property-ecmascript: ^2.0.0
+    unicode-match-property-value-ecmascript: ^2.0.0
+  checksum: e03ca9d9d17e2179d92bfc37baca23143058ee978dddf986a37842fe2866a41a6ed1b847d707df743287da99d1370220a5468633dcc1aea2d3934a3f3a055516
+  languageName: node
+  linkType: hard
+
 "regjsgen@npm:^0.5.2":
   version: 0.5.2
   resolution: "regjsgen@npm:0.5.2"
   checksum: 87c83d8488affae2493a823904de1a29a1867a07433c5e1142ad749b5606c5589b305fe35bfcc0972cf5a3b0d66b1f7999009e541be39a5d42c6041c59e2fb52
+  languageName: node
+  linkType: hard
+
+"regjsgen@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "regjsgen@npm:0.6.0"
+  checksum: c5158ebd735e75074e41292ade1ff05d85566d205426cc61501e360c450a63baced8512ee3ae238e5c0a0e42969563c7875b08fa69d6f0402daf36bcb3e4d348
   languageName: node
   linkType: hard
 
@@ -13330,6 +13360,17 @@ fsevents@^1.2.7:
   bin:
     regjsparser: bin/parser
   checksum: fefff9adcab47650817d2c492aac774f11a44b824a4a814e466ebc76313e03e79c50d2babde7e04888296f6ec0fd094e3eeeafa8122c60184de92cdb30636a57
+  languageName: node
+  linkType: hard
+
+"regjsparser@npm:^0.8.2":
+  version: 0.8.3
+  resolution: "regjsparser@npm:0.8.3"
+  dependencies:
+    jsesc: ~0.5.0
+  bin:
+    regjsparser: bin/parser
+  checksum: b113328c3bb9c5f607e1fb42120b686f5ab3b7efc687fef1ce593effc36dfee091929ba6d7180d501d84137d977dd3b029b9129d07f76490d6fd035afdcbff5b
   languageName: node
   linkType: hard
 
