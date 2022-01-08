@@ -553,11 +553,8 @@ function transformClass(
         name = key.name;
       }
 
-      if (
-        element.node.type === "ClassMethod" &&
-        element.node.kind === "constructor"
-      ) {
-        constructorPath = element as NodePath<t.ClassMethod>;
+      if (element.isClassMethod({ kind: "constructor" })) {
+        constructorPath = element;
       }
 
       if (isComputed) {
