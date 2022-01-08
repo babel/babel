@@ -1,6 +1,6 @@
 "use strict";
 
-var _interopRequireDefault3 = require("@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault3 = require("@babel/runtime/helpers/interopRequireDefault").default;
 
 exports.__esModule = true;
 

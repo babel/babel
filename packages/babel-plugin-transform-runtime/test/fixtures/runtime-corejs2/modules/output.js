@@ -4,7 +4,7 @@ var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/defi
 
 var _Object$keys = require("@babel/runtime-corejs2/core-js/object/keys");
 
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault").default;
 
 _Object$defineProperty(exports, "__esModule", {
   value: true

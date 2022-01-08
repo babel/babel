@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-runtime", "transform-classes"]
+  "plugins": [
+    ["transform-runtime", { "version": "7.100.0" }],
+    "transform-classes"
+  ]
 }
