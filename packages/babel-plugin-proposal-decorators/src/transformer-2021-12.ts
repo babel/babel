@@ -796,11 +796,7 @@ function transformClass(
               if (!path.get("callee").isSuper()) return;
 
               path.replaceWith(
-                t.sequenceExpression([
-                  path.node,
-                  t.cloneNode(protoInitCall),
-                  t.thisExpression(),
-                ]),
+                t.callExpression(t.cloneNode(protoInitLocal), [path.node]),
               );
 
               path.skip();

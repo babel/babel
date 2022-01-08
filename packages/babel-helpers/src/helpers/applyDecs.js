@@ -518,9 +518,12 @@ function pushInitializers(ret, initializers) {
       for (var i = 0; i < initializers.length; i++) {
         initializers[i].call(instance, instance);
       }
+      return instance;
     });
   } else {
-    ret.push(function () {});
+    ret.push(function (instance) {
+      return instance;
+    });
   }
 }
 

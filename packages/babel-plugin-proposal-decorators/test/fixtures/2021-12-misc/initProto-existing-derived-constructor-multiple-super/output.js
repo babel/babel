@@ -7,9 +7,9 @@ class A extends B {
 
   constructor() {
     if (Math.random() > 0.5) {
-      super(true), _initProto(this), this;
+      _initProto(super(true));
     } else {
-      super(false), _initProto(this), this;
+      _initProto(super(false));
     }
   }
 
@@ -24,7 +24,7 @@ class C extends B {
 
   constructor() {
     try {
-      super((super(), _initProto2(this), this), null.x), _initProto2(this), this;
+      _initProto2(super(_initProto2(super()), null.x));
     } catch {}
   }
 
