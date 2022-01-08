@@ -1,4 +1,4 @@
-var _initProto, _super;
+var _initProto;
 
 class A extends B {
   static {
@@ -7,7 +7,7 @@ class A extends B {
 
   constructor() {
     let a = 2;
-    _super = super(a), _initProto(this), _super;
+    super(a), _initProto(this), this;
     foo();
   }
 

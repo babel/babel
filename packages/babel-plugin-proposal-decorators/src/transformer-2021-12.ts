@@ -790,25 +790,21 @@ function transformClass(
       value.replaceWith(t.sequenceExpression(body));
     } else if (constructorPath) {
       if (path.node.superClass) {
-        let found = false;
-
         path.traverse({
-          Super(path) {
-            const { parentPath } = path;
+          CallExpression: {
+            exit(path) {
+              if (!path.get("callee").isSuper()) return;
 
-            if (found || parentPath.node.type !== "CallExpression") return;
+              path.replaceWith(
+                t.sequenceExpression([
+                  path.node,
+                  t.cloneNode(protoInitCall),
+                  t.thisExpression(),
+                ]),
+              );
 
-            found = true;
-
-            const prop =
-              path.scope.parent.generateDeclaredUidIdentifier("super");
-            parentPath.replaceWith(
-              t.sequenceExpression([
-                t.assignmentExpression("=", t.cloneNode(prop), parentPath.node),
-                protoInitCall,
-                t.cloneNode(prop),
-              ]),
-            );
+              path.skip();
+            },
           },
         });
       } else {

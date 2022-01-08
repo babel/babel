@@ -10,3 +10,14 @@ class A extends B {
   @deco
   method() {}
 }
+
+class C extends B {
+  constructor() {
+    try {
+      super(super(), null.x);
+    } catch {}
+  }
+
+  @deco
+  method() {}
+}
