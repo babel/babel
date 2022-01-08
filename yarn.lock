@@ -1730,6 +1730,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-async-do-expressions@workspace:^, @babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions"
@@ -2100,6 +2113,19 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-syntax-unicode-sets-regex@workspace:packages/babel-plugin-syntax-unicode-sets-regex":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-unicode-sets-regex@workspace:packages/babel-plugin-syntax-unicode-sets-regex"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 

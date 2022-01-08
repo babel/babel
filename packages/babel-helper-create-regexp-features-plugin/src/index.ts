@@ -20,9 +20,13 @@ export function createRegExpFeaturePlugin({
   name,
   feature,
   options = {} as any,
+  manipulateOptions = (() => {}) as (opts: any, parserOpts: any) => void,
 }) {
   return {
     name,
+
+    manipulateOptions,
+
     pre() {
       const { file } = this;
       const features = file.get(featuresKey) ?? 0;
