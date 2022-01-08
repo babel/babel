@@ -115,12 +115,12 @@ process.on("uncaughtException", function (err) {
 });
 
 export function requireChokidar(): any {
-  // $FlowIgnore - https://github.com/facebook/flow/issues/6913#issuecomment-662787504
-  const require = createRequire(import /*::("")*/.meta.url);
+  const require = createRequire(import.meta.url);
 
   try {
-    // todo(babel 8): revert `@nicolo-ribaudo/chokidar-2` hack
-    return parseInt(process.versions.node) >= 8
+    return process.env.BABEL_8_BREAKING
+      ? require("chokidar")
+      : parseInt(process.versions.node) >= 8
       ? require("chokidar")
       : require("@nicolo-ribaudo/chokidar-2");
   } catch (err) {
