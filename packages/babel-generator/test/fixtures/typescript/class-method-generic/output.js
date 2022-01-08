@@ -1,6 +1,6 @@
 class C {
-  f<T,>(a: T, b?: T, ...c: T[]): T {}
+  f<T>(a: T, b?: T, ...c: T[]): T {}
 
-  [Symbol.iterator]<T,>(): T {}
+  [Symbol.iterator]<T>(): T {}
 
 }

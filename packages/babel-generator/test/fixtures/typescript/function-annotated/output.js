@@ -1,1 +1,1 @@
-function f<T,>(x?: T): T {}
+function f<T>(x?: T): T {}

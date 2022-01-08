@@ -1,1 +1,1 @@
-let f: <T,>(a: T) => T;
+let f: <T>(a: T) => T;

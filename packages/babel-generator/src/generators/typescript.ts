@@ -11,11 +11,12 @@ export function TSTypeAnnotation(this: Printer, node: t.TSTypeAnnotation) {
 
 export function TSTypeParameterInstantiation(
   this: Printer,
-  node: t.TSTypeParameterInstantiation | t.TSTypeParameterDeclaration,
+  node: t.TSTypeParameterInstantiation,
+  parent: t.Node,
 ): void {
   this.token("<");
   this.printList(node.params, node, {});
-  if (node.type === "TSTypeParameterDeclaration" && node.params.length === 1) {
+  if (parent.type === "ArrowFunctionExpression" && node.params.length === 1) {
     this.token(",");
   }
   this.token(">");

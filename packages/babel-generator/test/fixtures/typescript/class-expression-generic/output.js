@@ -1,3 +1,3 @@
-(class<T,> {});
+(class<T> {});
 
-(class C<T,> {});
+(class C<T> {});
