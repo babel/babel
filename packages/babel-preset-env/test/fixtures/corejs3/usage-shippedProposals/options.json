@@ -2,7 +2,7 @@
   "sourceType": "module",
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "shippedProposals": true,
         "useBuiltIns": "usage",

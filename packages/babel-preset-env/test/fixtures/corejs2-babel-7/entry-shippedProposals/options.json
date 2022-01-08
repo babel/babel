@@ -2,7 +2,7 @@
   "externalHelpers": true,
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "shippedProposals": true,
         "targets": { "browsers": "ie 6" },

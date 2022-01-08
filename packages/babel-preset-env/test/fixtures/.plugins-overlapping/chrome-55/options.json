@@ -2,7 +2,7 @@
   "plugins": [],
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "targets": { "chrome": "55" }
       }

@@ -2,7 +2,7 @@
   "validateLogs": true,
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "configPath": "../fixtures/preset-options-add-used-built-ins/browserslist-config-ignore",
         "modules": false,
