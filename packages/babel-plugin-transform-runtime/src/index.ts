@@ -85,12 +85,14 @@ export default declare((api, options, dirname) => {
     throw new Error(`The 'version' option must be a version string.`);
   }
 
-  // In recent @babel/runtime versions, we can use require("helper").default
-  // instead of require("helper") so that it has the same interface as the
-  // ESM helper, and bundlers can better exchange one format for the other.
-  // TODO(Babel 8): Remove this check, it's always true
-  const DUAL_MODE_RUNTIME = "7.13.0";
-  const supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
+  if (!process.env.BABEL_8_BREAKING) {
+    // In recent @babel/runtime versions, we can use require("helper").default
+    // instead of require("helper") so that it has the same interface as the
+    // ESM helper, and bundlers can better exchange one format for the other.
+    const DUAL_MODE_RUNTIME = "7.13.0";
+    // eslint-disable-next-line no-var
+    var supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
+  }
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
@@ -260,8 +262,13 @@ export default declare((api, options, dirname) => {
           cached = t.cloneNode(cached);
         } else {
           cached = addDefault(file.path, source, {
-            importedInterop:
-              isHelper && supportsCJSDefault ? "compiled" : "uncompiled",
+            importedInterop: (
+              process.env.BABEL_8_BREAKING
+                ? isHelper
+                : isHelper && supportsCJSDefault
+            )
+              ? "compiled"
+              : "uncompiled",
             nameHint,
             blockHoist,
           });
