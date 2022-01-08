@@ -1,3 +1,3 @@
 declare class C {
-  get<T>(): void;
+  get<T,>(): void;
 }

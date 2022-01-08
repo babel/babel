@@ -4,6 +4,6 @@ function a() {
 }
 
 function d() {
-  let e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : <T>() => {};
+  let e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : <T,>() => {};
   let T;
 }

@@ -1,1 +1,1 @@
-const f = function <T>(x?: T): T {};
+const f = function <T,>(x?: T): T {};

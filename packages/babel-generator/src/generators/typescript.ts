@@ -11,11 +11,13 @@ export function TSTypeAnnotation(this: Printer, node: t.TSTypeAnnotation) {
 
 export function TSTypeParameterInstantiation(
   this: Printer,
-  node: t.TSTypeParameterInstantiation,
+  node: t.TSTypeParameterInstantiation | t.TSTypeParameterDeclaration,
 ): void {
   this.token("<");
   this.printList(node.params, node, {});
-  if(node.extra?.trailingComma) this.token(",");
+  if (node.type === "TSTypeParameterDeclaration" && node.params.length === 1) {
+    this.token(",");
+  }
   this.token(">");
 }
 
