@@ -298,7 +298,8 @@ function wrapPackagesArray(type, names, optionsDir) {
 
       const monorepoPath = path.join(
         path.dirname(fileURLToPath(import.meta.url)),
-        "../..",
+        "../../..",
+        name.startsWith("codemod") ? "codemods" : "packages",
         `babel-${type}-${name}`,
       );
 
