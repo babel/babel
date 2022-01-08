@@ -92,21 +92,15 @@ function plainFunction(
   }
 
   const built = callExpression(callId, [node]);
-  const params = node.params.reduce(
-    (acc, param) => {
-      acc.done = acc.done || isAssignmentPattern(param) || isRestElement(param);
 
-      if (!acc.done) {
-        acc.params.push(path.scope.generateUidIdentifier("x"));
-      }
+  const params: t.Identifier[] = [];
+  for (const param of node.params) {
+    if (isAssignmentPattern(param) || isRestElement(param)) {
+      break;
+    }
+    params.push(path.scope.generateUidIdentifier("x"));
+  }
 
-      return acc;
-    },
-    {
-      params: [],
-      done: false,
-    },
-  ).params;
   const container = wrapper({
     NAME: functionId || null,
     REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
