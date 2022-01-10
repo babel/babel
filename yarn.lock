@@ -586,7 +586,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    regexpu-core: ^5.0.0
+    regexpu-core: ^5.0.1
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -13350,9 +13350,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regexpu-core@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "regexpu-core@npm:5.0.0"
+"regexpu-core@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "regexpu-core@npm:5.0.1"
   dependencies:
     regenerate: ^1.4.2
     regenerate-unicode-properties: ^10.0.1
@@ -13360,7 +13360,7 @@ fsevents@^1.2.7:
     regjsparser: ^0.8.2
     unicode-match-property-ecmascript: ^2.0.0
     unicode-match-property-value-ecmascript: ^2.0.0
-  checksum: e03ca9d9d17e2179d92bfc37baca23143058ee978dddf986a37842fe2866a41a6ed1b847d707df743287da99d1370220a5468633dcc1aea2d3934a3f3a055516
+  checksum: 6151a9700dad512fadb5564ad23246d54c880eb9417efa5e5c3658b910c1ff894d622dfd159af2ed527ffd44751bfe98682ae06c717155c254d8e2b4bab62785
   languageName: node
   linkType: hard
 
