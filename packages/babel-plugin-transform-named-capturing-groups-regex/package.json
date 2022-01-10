@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-named-capturing-groups-regex",
-  "version": "7.16.7",
+  "version": "7.16.8",
   "description": "Compile regular expressions using named groups to ES5.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-named-capturing-groups-regex",
   "license": "MIT",
