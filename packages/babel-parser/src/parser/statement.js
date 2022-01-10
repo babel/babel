@@ -40,7 +40,7 @@ import {
 } from "../util/expression-scope";
 import type { SourceType } from "../options";
 import { Token } from "../tokenizer";
-import { createPositionWithColumnOffset } from "../util/location";
+import { Position, createPositionWithColumnOffset } from "../util/location";
 import { cloneStringLiteral, cloneIdentifier } from "./node";
 
 const loopLabel = { kind: "loop" },
@@ -217,10 +217,8 @@ export default class StatementParser extends ExpressionParser {
       !this.options.allowUndeclaredExports &&
       this.scope.undefinedExports.size > 0
     ) {
-      for (const [name] of Array.from(this.scope.undefinedExports)) {
-        const pos = this.scope.undefinedExports.get(name);
-        // $FlowIssue
-        this.raise(pos, Errors.ModuleExportUndefined, name);
+      for (const [name, loc] of Array.from(this.scope.undefinedExports)) {
+        this.raise(Errors.ModuleExportUndefined, { at: loc }, name);
       }
     }
     return this.finishNode<N.Program>(program, "Program");
@@ -360,9 +358,9 @@ export default class StatementParser extends ExpressionParser {
         if (this.lookaheadCharCode() === charCodes.dot) break;
         if (context) {
           if (this.state.strict) {
-            this.raise(this.state.start, Errors.StrictFunction);
+            this.raise(Errors.StrictFunction, { at: this.state.startLoc });
           } else if (context !== "if" && context !== "label") {
-            this.raise(this.state.start, Errors.SloppyFunction);
+            this.raise(Errors.SloppyFunction, { at: this.state.startLoc });
           }
         }
         return this.parseFunctionStatement(node, false, !context);
@@ -386,7 +384,9 @@ export default class StatementParser extends ExpressionParser {
       case tt._var:
         kind = kind || this.state.value;
         if (context && kind !== "var") {
-          this.raise(this.state.start, Errors.UnexpectedLexicalDeclaration);
+          this.raise(Errors.UnexpectedLexicalDeclaration, {
+            at: this.state.startLoc,
+          });
         }
         return this.parseVarStatement(node, kind);
 
@@ -410,7 +410,9 @@ export default class StatementParser extends ExpressionParser {
       // fall through
       case tt._export: {
         if (!this.options.allowImportExportEverywhere && !topLevel) {
-          this.raise(this.state.start, Errors.UnexpectedImportExport);
+          this.raise(Errors.UnexpectedImportExport, {
+            at: this.state.startLoc,
+          });
         }
 
         this.next(); // eat `import`/`export`
@@ -447,10 +449,9 @@ export default class StatementParser extends ExpressionParser {
       default: {
         if (this.isAsyncFunction()) {
           if (context) {
-            this.raise(
-              this.state.start,
-              Errors.AsyncFunctionInSingleStatementContext,
-            );
+            this.raise(Errors.AsyncFunctionInSingleStatementContext, {
+              at: this.state.startLoc,
+            });
           }
           this.next();
           return this.parseFunctionStatement(node, true, !context);
@@ -479,7 +480,7 @@ export default class StatementParser extends ExpressionParser {
 
   assertModuleNodeAllowed(node: N.Node): void {
     if (!this.options.allowImportExportEverywhere && !this.inModule) {
-      this.raise(node.start, SourceTypeModuleErrors.ImportOutsideModule);
+      this.raise(SourceTypeModuleErrors.ImportOutsideModule, { node });
     }
   }
 
@@ -514,10 +515,12 @@ export default class StatementParser extends ExpressionParser {
         this.hasPlugin("decorators") &&
         !this.getPluginOption("decorators", "decoratorsBeforeExport")
       ) {
-        this.raise(this.state.start, Errors.DecoratorExportClass);
+        this.raise(Errors.DecoratorExportClass, { at: this.state.startLoc });
       }
     } else if (!this.canHaveLeadingDecorator()) {
-      throw this.raise(this.state.start, Errors.UnexpectedLeadingDecorator);
+      throw this.raise(Errors.UnexpectedLeadingDecorator, {
+        at: this.state.startLoc,
+      });
     }
   }
 
@@ -606,8 +609,8 @@ export default class StatementParser extends ExpressionParser {
     }
     if (i === this.state.labels.length) {
       this.raise(
-        node.start,
         Errors.IllegalBreakContinue,
+        { node },
         isBreak ? "break" : "continue",
       );
     }
@@ -660,15 +663,16 @@ export default class StatementParser extends ExpressionParser {
     this.next();
     this.state.labels.push(loopLabel);
 
-    let awaitAt = -1;
+    let awaitAt = null;
+
     if (this.isAwaitAllowed() && this.eatContextual(tt._await)) {
-      awaitAt = this.state.lastTokStart;
+      awaitAt = this.state.lastTokStartLoc;
     }
     this.scope.enter(SCOPE_OTHER);
     this.expect(tt.parenL);
 
     if (this.match(tt.semi)) {
-      if (awaitAt > -1) {
+      if (awaitAt !== null) {
         this.unexpected(awaitAt);
       }
       return this.parseFor(node, null);
@@ -689,7 +693,7 @@ export default class StatementParser extends ExpressionParser {
       ) {
         return this.parseForIn(node, init, awaitAt);
       }
-      if (awaitAt > -1) {
+      if (awaitAt !== null) {
         this.unexpected(awaitAt);
       }
       return this.parseFor(node, init);
@@ -705,10 +709,12 @@ export default class StatementParser extends ExpressionParser {
     if (isForOf) {
       // Check for leading tokens that are forbidden in for-of loops:
       if (startsWithLet) {
-        this.raise(init.start, Errors.ForOfLet);
-      } else if (
+        this.raise(Errors.ForOfLet, { node: init });
+      }
+
+      if (
         // `for await (async of []);` is allowed.
-        awaitAt === -1 &&
+        awaitAt === null &&
         startsWithAsync &&
         init.type === "Identifier"
       ) {
@@ -716,7 +722,7 @@ export default class StatementParser extends ExpressionParser {
         // parsed as an identifier. If it was parsed as the start of an async
         // arrow function (e.g. `for (async of => {} of []);`), the LVal check
         // further down will raise a more appropriate error.
-        this.raise(init.start, Errors.ForOfAsync);
+        this.raise(Errors.ForOfAsync, { node: init });
       }
     }
     if (isForOf || this.match(tt._in)) {
@@ -727,7 +733,7 @@ export default class StatementParser extends ExpressionParser {
     } else {
       this.checkExpressionErrors(refExpressionErrors, true);
     }
-    if (awaitAt > -1) {
+    if (awaitAt !== null) {
       this.unexpected(awaitAt);
     }
     return this.parseFor(node, init);
@@ -756,7 +762,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseReturnStatement(node: N.ReturnStatement): N.ReturnStatement {
     if (!this.prodParam.hasReturn && !this.options.allowReturnOutsideFunction) {
-      this.raise(this.state.start, Errors.IllegalReturn);
+      this.raise(Errors.IllegalReturn, { at: this.state.startLoc });
     }
 
     this.next();
@@ -799,10 +805,9 @@ export default class StatementParser extends ExpressionParser {
           cur.test = this.parseExpression();
         } else {
           if (sawDefault) {
-            this.raise(
-              this.state.lastTokStart,
-              Errors.MultipleDefaultsInSwitch,
-            );
+            this.raise(Errors.MultipleDefaultsInSwitch, {
+              at: this.state.lastTokStartLoc,
+            });
           }
           sawDefault = true;
           cur.test = null;
@@ -826,7 +831,7 @@ export default class StatementParser extends ExpressionParser {
   parseThrowStatement(node: N.ThrowStatement): N.ThrowStatement {
     this.next();
     if (this.hasPrecedingLineBreak()) {
-      this.raise(this.state.lastTokEnd, Errors.NewlineAfterThrow);
+      this.raise(Errors.NewlineAfterThrow, { at: this.state.lastTokEndLoc });
     }
     node.argument = this.parseExpression();
     this.semicolon();
@@ -877,7 +882,7 @@ export default class StatementParser extends ExpressionParser {
     node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
 
     if (!node.handler && !node.finalizer) {
-      this.raise(node.start, Errors.NoCatchOrFinally);
+      this.raise(Errors.NoCatchOrFinally, { node });
     }
 
     return this.finishNode(node, "TryStatement");
@@ -915,7 +920,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseWithStatement(node: N.WithStatement): N.WithStatement {
     if (this.state.strict) {
-      this.raise(this.state.start, Errors.StrictWith);
+      this.raise(Errors.StrictWith, { at: this.state.startLoc });
     }
     this.next();
     node.object = this.parseHeaderExpression();
@@ -947,7 +952,7 @@ export default class StatementParser extends ExpressionParser {
   ): N.LabeledStatement {
     for (const label of this.state.labels) {
       if (label.name === maybeName) {
-        this.raise(expr.start, Errors.LabelRedeclaration, maybeName);
+        this.raise(Errors.LabelRedeclaration, { node: expr }, maybeName);
       }
     }
 
@@ -1136,15 +1141,15 @@ export default class StatementParser extends ExpressionParser {
   parseForIn(
     node: N.ForInOf,
     init: N.VariableDeclaration | N.AssignmentPattern,
-    awaitAt: number,
+    awaitAt: ?Position,
   ): N.ForInOf {
     const isForIn = this.match(tt._in);
     this.next();
 
     if (isForIn) {
-      if (awaitAt > -1) this.unexpected(awaitAt);
+      if (awaitAt !== null) this.unexpected(awaitAt);
     } else {
-      node.await = awaitAt > -1;
+      node.await = awaitAt !== null;
     }
 
     if (
@@ -1156,12 +1161,14 @@ export default class StatementParser extends ExpressionParser {
         init.declarations[0].id.type !== "Identifier")
     ) {
       this.raise(
-        init.start,
         Errors.ForInOfLoopInitializer,
+        { node: init },
         isForIn ? "for-in" : "for-of",
       );
-    } else if (init.type === "AssignmentPattern") {
-      this.raise(init.start, Errors.InvalidLhs, "for-loop");
+    }
+
+    if (init.type === "AssignmentPattern") {
+      this.raise(Errors.InvalidLhs, { node: init }, "for-loop");
     }
 
     node.left = init;
@@ -1212,8 +1219,8 @@ export default class StatementParser extends ExpressionParser {
           // It could be a declaration like `const x: number;`.
           if (!isTypescript) {
             this.raise(
-              this.state.lastTokEnd,
               Errors.DeclarationMissingInitializer,
+              { at: this.state.lastTokEndLoc },
               "Const declarations",
             );
           }
@@ -1222,8 +1229,8 @@ export default class StatementParser extends ExpressionParser {
           !(isFor && (this.match(tt._in) || this.isContextual(tt._of)))
         ) {
           this.raise(
-            this.state.lastTokEnd,
             Errors.DeclarationMissingInitializer,
+            { at: this.state.lastTokEndLoc },
             "Complex binding patterns",
           );
         }
@@ -1261,7 +1268,9 @@ export default class StatementParser extends ExpressionParser {
     this.initFunction(node, isAsync);
 
     if (this.match(tt.star) && isHangingStatement) {
-      this.raise(this.state.start, Errors.GeneratorInSingleStatementContext);
+      this.raise(Errors.GeneratorInSingleStatementContext, {
+        at: this.state.startLoc,
+      });
     }
     node.generator = this.eat(tt.star);
 
@@ -1338,7 +1347,7 @@ export default class StatementParser extends ExpressionParser {
           ? BIND_VAR
           : BIND_LEXICAL
         : BIND_FUNCTION,
-      node.id.start,
+      node.id.loc.start,
     );
   }
 
@@ -1406,7 +1415,9 @@ export default class StatementParser extends ExpressionParser {
       while (!this.match(tt.braceR)) {
         if (this.eat(tt.semi)) {
           if (decorators.length > 0) {
-            throw this.raise(this.state.lastTokEnd, Errors.DecoratorSemicolon);
+            throw this.raise(Errors.DecoratorSemicolon, {
+              at: this.state.lastTokEndLoc,
+            });
           }
           continue;
         }
@@ -1432,7 +1443,7 @@ export default class StatementParser extends ExpressionParser {
           member.decorators &&
           member.decorators.length > 0
         ) {
-          this.raise(member.start, Errors.DecoratorConstructor);
+          this.raise(Errors.DecoratorConstructor, { node: member });
         }
       }
     });
@@ -1442,7 +1453,7 @@ export default class StatementParser extends ExpressionParser {
     this.next(); // eat `}`
 
     if (decorators.length) {
-      throw this.raise(this.state.start, Errors.TrailingDecorator);
+      throw this.raise(Errors.TrailingDecorator, { at: this.state.startLoc });
     }
 
     this.classScope.exit();
@@ -1540,7 +1551,9 @@ export default class StatementParser extends ExpressionParser {
       }
 
       if (this.isNonstaticConstructor(publicMethod)) {
-        this.raise(publicMethod.key.start, Errors.ConstructorIsGenerator);
+        this.raise(Errors.ConstructorIsGenerator, {
+          node: publicMethod.key,
+        });
       }
 
       this.pushClassMethod(
@@ -1559,7 +1572,7 @@ export default class StatementParser extends ExpressionParser {
       tokenIsIdentifier(this.state.type) && !this.state.containsEsc;
     const isPrivate = this.match(tt.privateName);
     const key = this.parseClassElementName(member);
-    const maybeQuestionTokenStart = this.state.start;
+    const maybeQuestionTokenStartLoc = this.state.startLoc;
 
     this.parsePostMemberNameModifiers(publicMember);
 
@@ -1579,10 +1592,10 @@ export default class StatementParser extends ExpressionParser {
 
         // TypeScript allows multiple overloaded constructor declarations.
         if (state.hadConstructor && !this.hasPlugin("typescript")) {
-          this.raise(key.start, Errors.DuplicateConstructor);
+          this.raise(Errors.DuplicateConstructor, { node: key });
         }
         if (isConstructor && this.hasPlugin("typescript") && member.override) {
-          this.raise(key.start, Errors.OverrideOnConstructor);
+          this.raise(Errors.OverrideOnConstructor, { node: key });
         }
         state.hadConstructor = true;
         allowsDirectSuper = state.hadSuperClass;
@@ -1612,7 +1625,7 @@ export default class StatementParser extends ExpressionParser {
       const isGenerator = this.eat(tt.star);
 
       if (publicMember.optional) {
-        this.unexpected(maybeQuestionTokenStart);
+        this.unexpected(maybeQuestionTokenStartLoc);
       }
 
       method.kind = "method";
@@ -1631,7 +1644,7 @@ export default class StatementParser extends ExpressionParser {
         );
       } else {
         if (this.isNonstaticConstructor(publicMethod)) {
-          this.raise(publicMethod.key.start, Errors.ConstructorIsAsync);
+          this.raise(Errors.ConstructorIsAsync, { node: publicMethod.key });
         }
 
         this.pushClassMethod(
@@ -1661,7 +1674,7 @@ export default class StatementParser extends ExpressionParser {
         this.pushClassPrivateMethod(classBody, privateMethod, false, false);
       } else {
         if (this.isNonstaticConstructor(publicMethod)) {
-          this.raise(publicMethod.key.start, Errors.ConstructorIsAccessor);
+          this.raise(Errors.ConstructorIsAccessor, { node: publicMethod.key });
         }
         this.pushClassMethod(
           classBody,
@@ -1688,18 +1701,20 @@ export default class StatementParser extends ExpressionParser {
 
   // https://tc39.es/ecma262/#prod-ClassElementName
   parseClassElementName(member: N.ClassMember): N.Expression | N.Identifier {
-    const { type, value, start } = this.state;
+    const { type, value } = this.state;
     if (
       (type === tt.name || type === tt.string) &&
       member.static &&
       value === "prototype"
     ) {
-      this.raise(start, Errors.StaticPrototype);
+      this.raise(Errors.StaticPrototype, { at: this.state.startLoc });
     }
 
     if (type === tt.privateName) {
       if (value === "constructor") {
-        this.raise(start, Errors.ConstructorClassPrivateField);
+        this.raise(Errors.ConstructorClassPrivateField, {
+          at: this.state.startLoc,
+        });
       }
       const key = this.parsePrivateName();
       member.key = key;
@@ -1728,7 +1743,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels = oldLabels;
     classBody.body.push(this.finishNode<N.StaticBlock>(member, "StaticBlock"));
     if (member.decorators?.length) {
-      this.raise(member.start, Errors.DecoratorStaticBlock);
+      this.raise(Errors.DecoratorStaticBlock, { node: member });
     }
   }
 
@@ -1739,7 +1754,7 @@ export default class StatementParser extends ExpressionParser {
     ) {
       // Non-computed field, which is either an identifier named "constructor"
       // or a string literal named "constructor"
-      this.raise(prop.key.start, Errors.ConstructorClassField);
+      this.raise(Errors.ConstructorClassField, { node: prop.key });
     }
 
     classBody.body.push(this.parseClassProperty(prop));
@@ -1755,7 +1770,7 @@ export default class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
       CLASS_ELEMENT_OTHER,
-      node.key.start,
+      node.key.loc.start,
     );
   }
 
@@ -1817,7 +1832,7 @@ export default class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
       kind,
-      node.key.start,
+      node.key.loc.start,
     );
   }
 
@@ -1869,7 +1884,7 @@ export default class StatementParser extends ExpressionParser {
       if (optionalId || !isStatement) {
         node.id = null;
       } else {
-        this.unexpected(null, Errors.MissingClassName);
+        throw this.raise(Errors.MissingClassName, { at: this.state.startLoc });
       }
     }
   }
@@ -2024,24 +2039,32 @@ export default class StatementParser extends ExpressionParser {
         FUNC_STATEMENT | FUNC_NULLABLE_ID,
         isAsync,
       );
-    } else if (this.match(tt._class)) {
+    }
+
+    if (this.match(tt._class)) {
       return this.parseClass(expr, true, true);
-    } else if (this.match(tt.at)) {
+    }
+
+    if (this.match(tt.at)) {
       if (
         this.hasPlugin("decorators") &&
         this.getPluginOption("decorators", "decoratorsBeforeExport")
       ) {
-        this.raise(this.state.start, Errors.DecoratorBeforeExport);
+        this.raise(Errors.DecoratorBeforeExport, { at: this.state.startLoc });
       }
       this.parseDecorators(false);
       return this.parseClass(expr, true, true);
-    } else if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
-      throw this.raise(this.state.start, Errors.UnsupportedDefaultExport);
-    } else {
-      const res = this.parseMaybeAssignAllowIn();
-      this.semicolon();
-      return res;
     }
+
+    if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
+      throw this.raise(Errors.UnsupportedDefaultExport, {
+        at: this.state.startLoc,
+      });
+    }
+
+    const res = this.parseMaybeAssignAllowIn();
+    this.semicolon();
+    return res;
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -2118,10 +2141,12 @@ export default class StatementParser extends ExpressionParser {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
         if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
-          this.unexpected(this.state.start, Errors.DecoratorBeforeExport);
-        } else {
-          return true;
+          throw this.raise(Errors.DecoratorBeforeExport, {
+            at: this.state.startLoc,
+          });
         }
+
+        return true;
       }
     }
 
@@ -2155,7 +2180,9 @@ export default class StatementParser extends ExpressionParser {
             declaration.end - declaration.start === 4 && // does not contain escape
             !declaration.extra?.parenthesized
           ) {
-            this.raise(declaration.start, Errors.ExportDefaultFromAsIdentifier);
+            this.raise(Errors.ExportDefaultFromAsIdentifier, {
+              node: declaration,
+            });
           }
         }
       } else if (node.specifiers && node.specifiers.length) {
@@ -2170,14 +2197,14 @@ export default class StatementParser extends ExpressionParser {
             const { local } = specifier;
             if (local.type !== "Identifier") {
               this.raise(
-                specifier.start,
                 Errors.ExportBindingIsString,
+                { node: specifier },
                 local.value,
                 exportedName,
               );
             } else {
               // check for keywords used as local names
-              this.checkReservedWord(local.name, local.start, true, false);
+              this.checkReservedWord(local.name, local.loc.start, true, false);
               // check if export is defined
               this.scope.checkLocalExport(local);
             }
@@ -2206,7 +2233,7 @@ export default class StatementParser extends ExpressionParser {
     // If node.declaration is a class, it will take all decorators in the current context.
     // Thus we should throw if we see non-empty decorators here.
     if (currentContextDecorators.length) {
-      throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
+      throw this.raise(Errors.UnsupportedDecoratorExport, { node });
     }
   }
 
@@ -2243,10 +2270,10 @@ export default class StatementParser extends ExpressionParser {
   ): void {
     if (this.exportedIdentifiers.has(name)) {
       this.raise(
-        node.start,
         name === "default"
           ? Errors.DuplicateDefaultExport
           : Errors.DuplicateExport,
+        { node },
         name,
       );
     }
@@ -2311,8 +2338,8 @@ export default class StatementParser extends ExpressionParser {
       const surrogate = result.value.match(loneSurrogate);
       if (surrogate) {
         this.raise(
-          result.start,
           Errors.ModuleExportNameHasLoneSurrogate,
+          { node: result },
           surrogate[0].charCodeAt(0).toString(16),
         );
       }
@@ -2410,8 +2437,8 @@ export default class StatementParser extends ExpressionParser {
       // for now this logic will come into play only when someone declares `type` twice
       if (attrNames.has(keyName)) {
         this.raise(
-          this.state.start,
           Errors.ModuleAttributesWithDuplicateKeys,
+          { at: this.state.startLoc },
           keyName,
         );
       }
@@ -2424,10 +2451,9 @@ export default class StatementParser extends ExpressionParser {
       this.expect(tt.colon);
 
       if (!this.match(tt.string)) {
-        throw this.unexpected(
-          this.state.start,
-          Errors.ModuleAttributeInvalidValue,
-        );
+        throw this.raise(Errors.ModuleAttributeInvalidValue, {
+          at: this.state.startLoc,
+        });
       }
       node.value = this.parseStringLiteral(this.state.value);
       this.finishNode<N.ImportAttribute>(node, "ImportAttribute");
@@ -2459,26 +2485,25 @@ export default class StatementParser extends ExpressionParser {
 
       if (node.key.name !== "type") {
         this.raise(
-          node.key.start,
           Errors.ModuleAttributeDifferentFromType,
+          { node: node.key },
           node.key.name,
         );
       }
 
       if (attributes.has(node.key.name)) {
         this.raise(
-          node.key.start,
           Errors.ModuleAttributesWithDuplicateKeys,
+          { node: node.key },
           node.key.name,
         );
       }
       attributes.add(node.key.name);
       this.expect(tt.colon);
       if (!this.match(tt.string)) {
-        throw this.unexpected(
-          this.state.start,
-          Errors.ModuleAttributeInvalidValue,
-        );
+        throw this.raise(Errors.ModuleAttributeInvalidValue, {
+          at: this.state.startLoc,
+        });
       }
       node.value = this.parseStringLiteral(this.state.value);
       this.finishNode(node, "ImportAttribute");
@@ -2545,7 +2570,9 @@ export default class StatementParser extends ExpressionParser {
       } else {
         // Detect an attempt to deep destructure
         if (this.eat(tt.colon)) {
-          throw this.raise(this.state.start, Errors.DestructureNamedImport);
+          throw this.raise(Errors.DestructureNamedImport, {
+            at: this.state.startLoc,
+          });
         }
 
         this.expect(tt.comma);
@@ -2581,12 +2608,12 @@ export default class StatementParser extends ExpressionParser {
       const { imported } = specifier;
       if (importedIsString) {
         throw this.raise(
-          specifier.start,
           Errors.ImportBindingIsString,
+          { node: specifier },
           imported.value,
         );
       }
-      this.checkReservedWord(imported.name, specifier.start, true, true);
+      this.checkReservedWord(imported.name, specifier.loc.start, true, true);
       if (!specifier.local) {
         specifier.local = cloneIdentifier(imported);
       }

@@ -1,8 +1,9 @@
 // @flow
 /* eslint sort-keys: "error" */
-import { getLineInfo, type Position } from "../util/location";
+import { type Position } from "../util/location";
 import CommentsParser from "./comments";
 import { type ErrorCode, ErrorCodes } from "./error-codes";
+import { type Node } from "../types";
 
 // This function is used to raise exceptions on parse errors. It
 // takes an offset integer (into the current `input`) to indicate
@@ -28,7 +29,14 @@ export type ErrorTemplates = {
   [key: string]: ErrorTemplate,
 };
 
-type SyntaxPlugin = "flow" | "typescript" | "jsx" | typeof undefined;
+type Origin = {| node: Node |} | {| at: Position |};
+
+type SyntaxPlugin =
+  | "flow"
+  | "typescript"
+  | "jsx"
+  | "placeholders"
+  | typeof undefined;
 
 function keepReasonCodeCompat(reasonCode: string, syntaxPlugin: SyntaxPlugin) {
   if (!process.env.BABEL_8_BREAKING) {
@@ -64,7 +72,8 @@ export {
   SourceTypeModuleErrorMessages as SourceTypeModuleErrors,
 } from "./error-message";
 
-export type raiseFunction = (number, ErrorTemplate, ...any) => void;
+export type raiseFunction = (ErrorTemplate, Origin, ...any) => void;
+export type ErrorData = {| message: ErrorTemplate, loc: Position |};
 
 export default class ParserError extends CommentsParser {
   // Forward-declaration: defined in tokenizer/index.js
@@ -72,23 +81,17 @@ export default class ParserError extends CommentsParser {
   +isLookahead: boolean;
   */
 
-  getLocationForPosition(pos: number): Position {
-    let loc;
-    if (pos === this.state.start) loc = this.state.startLoc;
-    else if (pos === this.state.lastTokStart) loc = this.state.lastTokStartLoc;
-    else if (pos === this.state.end) loc = this.state.endLoc;
-    else if (pos === this.state.lastTokEnd) loc = this.state.lastTokEndLoc;
-    else loc = getLineInfo(this.input, pos);
-
-    return loc;
-  }
-
   raise(
-    pos: number,
     { code, reasonCode, template }: ErrorTemplate,
+    origin: Origin,
     ...params: any
   ): Error | empty {
-    return this.raiseWithData(pos, { code, reasonCode }, template, ...params);
+    return this.raiseWithData(
+      origin.node ? origin.node.loc.start : origin.at,
+      { code, reasonCode },
+      template,
+      ...params,
+    );
   }
 
   /**
@@ -104,11 +107,11 @@ export default class ParserError extends CommentsParser {
    * @memberof ParserError
    */
   raiseOverwrite(
-    pos: number,
+    loc: Position,
     { code, template }: ErrorTemplate,
     ...params: any
   ): Error | empty {
-    const loc = this.getLocationForPosition(pos);
+    const pos = loc.index;
     const message =
       template.replace(/%(\d+)/g, (_, i: number) => params[i]) +
       ` (${loc.line}:${loc.column})`;
@@ -127,7 +130,7 @@ export default class ParserError extends CommentsParser {
   }
 
   raiseWithData(
-    pos: number,
+    loc: Position,
     data?: {
       missingPlugin?: Array<string>,
       code?: string,
@@ -135,7 +138,7 @@ export default class ParserError extends CommentsParser {
     errorTemplate: string,
     ...params: any
   ): Error | empty {
-    const loc = this.getLocationForPosition(pos);
+    const pos = loc.index;
     const message =
       errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
       ` (${loc.line}:${loc.column})`;

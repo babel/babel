@@ -1,6 +1,7 @@
 // @flow
 
-import type { ErrorTemplate, raiseFunction } from "../parser/error";
+import type { ErrorData, ErrorTemplate, raiseFunction } from "../parser/error";
+import { Position } from "./location";
 
 /*:: declare var invariant; */
 /**
@@ -74,17 +75,17 @@ class ExpressionScope {
 }
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  errors: Map</* pos */ number, /* message */ ErrorTemplate> = new Map();
+  errors: Map</* pos */ number, ErrorData> = new Map();
   constructor(type: 1 | 2) {
     super(type);
   }
-  recordDeclarationError(pos: number, template: ErrorTemplate) {
-    this.errors.set(pos, template);
+  recordDeclarationError(message: ErrorTemplate, loc: Position) {
+    this.errors.set(loc.index, { message, loc });
   }
-  clearDeclarationError(pos: number) {
-    this.errors.delete(pos);
+  clearDeclarationError(loc: Position) {
+    this.errors.delete(loc.index);
   }
-  iterateErrors(iterator: (template: ErrorTemplate, pos: number) => void) {
+  iterateErrors(iterator: (data: ErrorData) => void) {
     this.errors.forEach(iterator);
   }
 }
@@ -113,14 +114,17 @@ export default class ExpressionScopeHandler {
    * @param {ErrorTemplate} template Error template
    * @memberof ExpressionScopeHandler
    */
-  recordParameterInitializerError(pos: number, template: ErrorTemplate): void {
+  recordParameterInitializerError(
+    loc: Position,
+    template: ErrorTemplate,
+  ): void {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
     while (!scope.isCertainlyParameterDeclaration()) {
       if (scope.canBeArrowParameterDeclaration()) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-        scope.recordDeclarationError(pos, template);
+        scope.recordDeclarationError(template, loc);
       } else {
         /*:: invariant(scope.type == kExpression) */
         // Type-Expression is the boundary where initializer error can populate to
@@ -129,7 +133,7 @@ export default class ExpressionScopeHandler {
       scope = stack[--i];
     }
     /* eslint-disable @babel/development-internal/dry-error-messages */
-    this.raise(pos, template);
+    this.raise(template, { at: loc });
   }
 
   /**
@@ -154,16 +158,16 @@ export default class ExpressionScopeHandler {
    * @memberof ExpressionScopeHandler
    */
   recordParenthesizedIdentifierError(
-    pos: number,
     template: ErrorTemplate,
+    loc: Position,
   ): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];
     if (scope.isCertainlyParameterDeclaration()) {
-      this.raise(pos, template);
+      this.raise(template, { at: loc });
     } else if (scope.canBeArrowParameterDeclaration()) {
       /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-      scope.recordDeclarationError(pos, template);
+      scope.recordDeclarationError(template, loc);
     } else {
       return;
     }
@@ -178,14 +182,17 @@ export default class ExpressionScopeHandler {
    * @param {ErrorTemplate} template
    * @memberof ExpressionScopeHandler
    */
-  recordAsyncArrowParametersError(pos: number, template: ErrorTemplate): void {
+  recordAsyncArrowParametersError(
+    template: ErrorTemplate,
+    loc: Position,
+  ): void {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
     while (scope.canBeArrowParameterDeclaration()) {
       if (scope.type === kMaybeAsyncArrowParameterDeclaration) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-        scope.recordDeclarationError(pos, template);
+        scope.recordDeclarationError(template, loc);
       }
       scope = stack[--i];
     }
@@ -196,15 +203,15 @@ export default class ExpressionScopeHandler {
     const currentScope = stack[stack.length - 1];
     if (!currentScope.canBeArrowParameterDeclaration()) return;
     /*:: invariant(currentScope instanceof ArrowHeadParsingScope) */
-    currentScope.iterateErrors((template, pos) => {
+    currentScope.iterateErrors(({ message, loc }) => {
       /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(pos, template);
+      this.raise(message, { at: loc });
       // iterate from parent scope
       let i = stack.length - 2;
       let scope = stack[i];
       while (scope.canBeArrowParameterDeclaration()) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-        scope.clearDeclarationError(pos);
+        scope.clearDeclarationError(loc);
         scope = stack[--i];
       }
     });

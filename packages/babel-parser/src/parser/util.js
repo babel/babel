@@ -1,7 +1,7 @@
 // @flow
 
+import { type Position } from "../util/location";
 import {
-  isTokenType,
   tokenIsLiteralPropertyName,
   tokenLabelName,
   tt,
@@ -44,11 +44,20 @@ export default class UtilParser extends Tokenizer {
 
   // TODO
 
-  addExtra(node: Node, key: string, val: any): void {
+  addExtra(
+    node: Node,
+    key: string,
+    value: any,
+    enumerable: boolean = true,
+  ): void {
     if (!node) return;
 
     const extra = (node.extra = node.extra || {});
-    extra[key] = val;
+    if (enumerable) {
+      extra[key] = value;
+    } else {
+      Object.defineProperty(extra, key, { enumerable, value });
+    }
   }
 
   // Tests whether parsed token is a contextual keyword.
@@ -90,7 +99,13 @@ export default class UtilParser extends Tokenizer {
   // Asserts that following token is given contextual keyword.
 
   expectContextual(token: TokenType, template?: ErrorTemplate): void {
-    if (!this.eatContextual(token)) this.unexpected(null, template);
+    if (!this.eatContextual(token)) {
+      if (template != null) {
+        /* eslint-disable @babel/development-internal/dry-error-messages */
+        throw this.raise(template, { at: this.state.startLoc });
+      }
+      throw this.unexpected(null, token);
+    }
   }
 
   // Test whether a semicolon can be inserted at the current position.
@@ -105,7 +120,7 @@ export default class UtilParser extends Tokenizer {
 
   hasPrecedingLineBreak(): boolean {
     return lineBreak.test(
-      this.input.slice(this.state.lastTokEnd, this.state.start),
+      this.input.slice(this.state.lastTokEndLoc.index, this.state.start),
     );
   }
 
@@ -125,54 +140,48 @@ export default class UtilParser extends Tokenizer {
 
   semicolon(allowAsi: boolean = true): void {
     if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
-    this.raise(this.state.lastTokEnd, Errors.MissingSemicolon);
+    this.raise(Errors.MissingSemicolon, { at: this.state.lastTokEndLoc });
   }
 
   // Expect a token of a given type. If found, consume it, otherwise,
   // raise an unexpected token error at given pos.
 
-  expect(type: TokenType, pos?: ?number): void {
-    this.eat(type) || this.unexpected(pos, type);
+  expect(type: TokenType, loc?: ?Position): void {
+    this.eat(type) || this.unexpected(loc, type);
   }
 
   // Throws if the current token and the prev one are separated by a space.
   assertNoSpace(message: string = "Unexpected space."): void {
-    if (this.state.start > this.state.lastTokEnd) {
+    if (this.state.start > this.state.lastTokEndLoc.index) {
       /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(this.state.lastTokEnd, {
-        code: ErrorCodes.SyntaxError,
-        reasonCode: "UnexpectedSpace",
-        template: message,
-      });
-      /* eslint-enable @babel/development-internal/dry-error-messages */
+      this.raise(
+        {
+          code: ErrorCodes.SyntaxError,
+          reasonCode: "UnexpectedSpace",
+          template: message,
+        },
+        { at: this.state.lastTokEndLoc },
+        /* eslint-enable @babel/development-internal/dry-error-messages */
+      );
     }
   }
 
   // Raise an unexpected token error. Can take the expected token type
   // instead of a message string.
 
-  unexpected(
-    pos: ?number,
-    messageOrType: ErrorTemplate | TokenType = {
-      code: ErrorCodes.SyntaxError,
-      reasonCode: "UnexpectedToken",
-      template: "Unexpected token",
-    },
-  ): empty {
-    if (isTokenType(messageOrType)) {
-      messageOrType = {
+  unexpected(loc?: ?Position, type?: ?TokenType): empty {
+    /* eslint-disable @babel/development-internal/dry-error-messages */
+    throw this.raise(
+      {
         code: ErrorCodes.SyntaxError,
         reasonCode: "UnexpectedToken",
-        template: `Unexpected token, expected "${tokenLabelName(
-          // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
-          messageOrType,
-        )}"`,
-      };
-    }
-
-    /* eslint-disable @babel/development-internal/dry-error-messages */
-    // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
-    throw this.raise(pos != null ? pos : this.state.start, messageOrType);
+        template:
+          type != null
+            ? `Unexpected token, expected "${tokenLabelName(type)}"`
+            : "Unexpected token",
+      },
+      { at: loc != null ? loc : this.state.startLoc },
+    );
     /* eslint-enable @babel/development-internal/dry-error-messages */
   }
 
@@ -186,10 +195,10 @@ export default class UtilParser extends Tokenizer {
     });
   }
 
-  expectPlugin(pluginConfig: PluginConfig, pos?: ?number): true {
+  expectPlugin(pluginConfig: PluginConfig, loc?: ?Position): true {
     if (!this.hasPlugin(pluginConfig)) {
       throw this.raiseWithData(
-        pos != null ? pos : this.state.start,
+        loc != null ? loc : this.state.startLoc,
         { missingPlugin: this.getPluginNamesFromConfigs([pluginConfig]) },
         `This experimental syntax requires enabling the parser plugin: ${JSON.stringify(
           pluginConfig,
@@ -200,10 +209,10 @@ export default class UtilParser extends Tokenizer {
     return true;
   }
 
-  expectOnePlugin(pluginConfigs: Array<PluginConfig>, pos?: ?number): void {
+  expectOnePlugin(pluginConfigs: Array<PluginConfig>): void {
     if (!pluginConfigs.some(c => this.hasPlugin(c))) {
       throw this.raiseWithData(
-        pos != null ? pos : this.state.start,
+        this.state.startLoc,
         { missingPlugin: this.getPluginNamesFromConfigs(pluginConfigs) },
         `This experimental syntax requires enabling one of the following parser plugin(s): ${pluginConfigs
           .map(c => JSON.stringify(c))
@@ -273,24 +282,26 @@ export default class UtilParser extends Tokenizer {
   checkExpressionErrors(
     refExpressionErrors: ?ExpressionErrors,
     andThrow: boolean,
-  ) {
-    if (!refExpressionErrors) return false;
-    const { shorthandAssign, doubleProto, optionalParameters } =
+  ): void {
+    if (!andThrow || !refExpressionErrors) {
+      return;
+    }
+
+    const { shorthandAssignLoc, doubleProtoLoc, optionalParametersLoc } =
       refExpressionErrors;
-    // shorthandAssign >= 0 || doubleProto >= 0 || optionalParameters >= 0
-    const hasErrors = shorthandAssign + doubleProto + optionalParameters > -3;
-    if (!andThrow) {
-      return hasErrors;
-    } else if (hasErrors) {
-      if (shorthandAssign >= 0) {
-        this.raise(shorthandAssign, Errors.InvalidCoverInitializedName);
-      }
-      if (doubleProto >= 0) {
-        this.raise(doubleProto, Errors.DuplicateProto);
-      }
-      if (optionalParameters >= 0) {
-        this.unexpected(optionalParameters);
-      }
+
+    if (shorthandAssignLoc != null) {
+      this.raise(Errors.InvalidCoverInitializedName, {
+        at: shorthandAssignLoc,
+      });
+    }
+
+    if (doubleProtoLoc != null) {
+      this.raise(Errors.DuplicateProto, { at: doubleProtoLoc });
+    }
+
+    if (optionalParametersLoc != null) {
+      this.unexpected(optionalParametersLoc);
     }
   }
 
@@ -410,13 +421,13 @@ export default class UtilParser extends Tokenizer {
  *
  * Types of ExpressionErrors:
  *
- * - **shorthandAssign**: track initializer `=` position
- * - **doubleProto**: track the duplicate `__proto__` key position
- * - **optionalParameters**: track the optional paramter (`?`).
+ * - **shorthandAssignLoc**: track initializer `=` position
+ * - **doubleProtoLoc**: track the duplicate `__proto__` key position
+ * - **optionalParametersLoc**: track the optional paramter (`?`).
  * It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
-  shorthandAssign = -1;
-  doubleProto = -1;
-  optionalParameters = -1;
+  shorthandAssignLoc: ?Position = null;
+  doubleProtoLoc: ?Position = null;
+  optionalParametersLoc: ?Position = null;
 }

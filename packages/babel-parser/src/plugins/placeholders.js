@@ -1,5 +1,8 @@
 // @flow
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import * as charCodes from "charcodes";
 
 import { tokenLabelName, tt } from "../tokenizer/types";
@@ -46,12 +49,15 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 // the substituted nodes.
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
-const PlaceHolderErrors = makeErrorTemplates(
+/* eslint sort-keys: "error" */
+const PlaceholderErrors = makeErrorTemplates(
   {
     ClassNameIsRequired: "A class name is required.",
   },
   /* code */ ErrorCodes.SyntaxError,
+  /* syntaxPlugin */ "placeholders",
 );
+/* eslint-disable sort-keys */
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
@@ -246,7 +252,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.body = this.finishPlaceholder(placeholder, "ClassBody");
           return this.finishNode(node, type);
         } else {
-          this.unexpected(null, PlaceHolderErrors.ClassNameIsRequired);
+          throw this.raise(PlaceholderErrors.ClassNameIsRequired, {
+            at: this.state.startLoc,
+          });
         }
       } else {
         this.parseClassId(node, isStatement, optionalId);

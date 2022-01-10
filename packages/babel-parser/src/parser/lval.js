@@ -98,17 +98,17 @@ export default class LValParser extends NodeUtils {
         // see also `recordParenthesizedIdentifierError` signature in packages/babel-parser/src/util/expression-scope.js
         if (parenthesized.type === "Identifier") {
           this.expressionScope.recordParenthesizedIdentifierError(
-            node.start,
             Errors.InvalidParenthesizedAssignment,
+            node.loc.start,
           );
         } else if (parenthesized.type !== "MemberExpression") {
           // A parenthesized member expression can be in LHS but not in pattern.
           // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
           // i.e. `([(a.b) = []] = []) => {}`
-          this.raise(node.start, Errors.InvalidParenthesizedAssignment);
+          this.raise(Errors.InvalidParenthesizedAssignment, { node });
         }
       } else {
-        this.raise(node.start, Errors.InvalidParenthesizedAssignment);
+        this.raise(Errors.InvalidParenthesizedAssignment, { node });
       }
     }
 
@@ -134,9 +134,11 @@ export default class LValParser extends NodeUtils {
           if (
             isLast &&
             prop.type === "RestElement" &&
-            node.extra?.trailingComma
+            node.extra?.trailingCommaLoc
           ) {
-            this.raiseRestNotLast(node.extra.trailingComma);
+            this.raise(Errors.RestTrailingComma, {
+              at: node.extra.trailingCommaLoc,
+            });
           }
         }
         break;
@@ -156,12 +158,16 @@ export default class LValParser extends NodeUtils {
 
       case "ArrayExpression":
         node.type = "ArrayPattern";
-        this.toAssignableList(node.elements, node.extra?.trailingComma, isLHS);
+        this.toAssignableList(
+          node.elements,
+          node.extra?.trailingCommaLoc,
+          isLHS,
+        );
         break;
 
       case "AssignmentExpression":
         if (node.operator !== "=") {
-          this.raise(node.left.end, Errors.MissingEqInAssignment);
+          this.raise(Errors.MissingEqInAssignment, { at: node.left.loc.end });
         }
 
         node.type = "AssignmentPattern";
@@ -187,16 +193,16 @@ export default class LValParser extends NodeUtils {
     isLHS: boolean,
   ) {
     if (prop.type === "ObjectMethod") {
-      const error =
+      /* eslint-disable @babel/development-internal/dry-error-messages */
+      this.raise(
         prop.kind === "get" || prop.kind === "set"
           ? Errors.PatternHasAccessor
-          : Errors.PatternHasMethod;
-
-      /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(prop.key.start, error);
+          : Errors.PatternHasMethod,
+        { node: prop.key },
+      );
       /* eslint-enable @babel/development-internal/dry-error-messages */
     } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raiseRestNotLast(prop.start);
+      this.raise(Errors.RestTrailingComma, { node: prop });
     } else {
       this.toAssignable(prop, isLHS);
     }
@@ -206,7 +212,7 @@ export default class LValParser extends NodeUtils {
 
   toAssignableList(
     exprList: Expression[],
-    trailingCommaPos?: ?number,
+    trailingCommaLoc?: ?Position,
     isLHS: boolean,
   ): $ReadOnlyArray<Pattern> {
     let end = exprList.length;
@@ -228,8 +234,8 @@ export default class LValParser extends NodeUtils {
           this.unexpected(arg.start);
         }
 
-        if (trailingCommaPos) {
-          this.raiseTrailingCommaAfterRest(trailingCommaPos);
+        if (trailingCommaLoc) {
+          this.raise(Errors.RestTrailingComma, { at: trailingCommaLoc });
         }
 
         --end;
@@ -240,7 +246,7 @@ export default class LValParser extends NodeUtils {
       if (elt) {
         this.toAssignable(elt, isLHS);
         if (elt.type === "RestElement") {
-          this.raiseRestNotLast(elt.start);
+          this.raise(Errors.RestTrailingComma, { node: elt });
         }
       }
     }
@@ -385,13 +391,16 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRestBinding()));
-        this.checkCommaAfterRest(closeCharCode);
-        this.expect(close);
-        break;
+        if (!this.checkCommaAfterRest(closeCharCode)) {
+          this.expect(close);
+          break;
+        }
       } else {
         const decorators = [];
         if (this.match(tt.at) && this.hasPlugin("decorators")) {
-          this.raise(this.state.start, Errors.UnsupportedParameterDecorator);
+          this.raise(Errors.UnsupportedParameterDecorator, {
+            at: this.state.startLoc,
+          });
         }
         // invariant: hasPlugin("decorators-legacy")
         while (this.match(tt.at)) {
@@ -509,33 +518,35 @@ export default class LValParser extends NodeUtils {
             : isStrictBindOnlyReservedWord(name))
         ) {
           this.raise(
-            expr.start,
             bindingType === BIND_NONE
               ? Errors.StrictEvalArguments
               : Errors.StrictEvalArgumentsBinding,
+            { node: expr },
             name,
           );
         }
 
         if (checkClashes) {
           if (checkClashes.has(name)) {
-            this.raise(expr.start, Errors.ParamDupe);
+            this.raise(Errors.ParamDupe, { node: expr });
           } else {
             checkClashes.add(name);
           }
         }
         if (disallowLetBinding && name === "let") {
-          this.raise(expr.start, Errors.LetInLexicalBinding);
+          this.raise(Errors.LetInLexicalBinding, { node: expr });
         }
         if (!(bindingType & BIND_NONE)) {
-          this.scope.declareName(name, bindingType, expr.start);
+          this.scope.declareName(name, bindingType, expr.loc.start);
         }
         break;
       }
 
       case "MemberExpression":
         if (bindingType !== BIND_NONE) {
-          this.raise(expr.start, Errors.InvalidPropertyBindingPattern);
+          this.raise(Errors.InvalidPropertyBindingPattern, {
+            node: expr,
+          });
         }
         break;
 
@@ -600,10 +611,10 @@ export default class LValParser extends NodeUtils {
 
       default: {
         this.raise(
-          expr.start,
           bindingType === BIND_NONE
             ? Errors.InvalidLhs
             : Errors.InvalidLhsBinding,
+          { node: expr },
           contextDescription,
         );
       }
@@ -615,25 +626,24 @@ export default class LValParser extends NodeUtils {
       node.argument.type !== "Identifier" &&
       node.argument.type !== "MemberExpression"
     ) {
-      this.raise(node.argument.start, Errors.InvalidRestAssignmentPattern);
+      this.raise(Errors.InvalidRestAssignmentPattern, {
+        node: node.argument,
+      });
     }
   }
 
   checkCommaAfterRest(close: $Values<typeof charCodes>): void {
-    if (this.match(tt.comma)) {
-      if (this.lookaheadCharCode() === close) {
-        this.raiseTrailingCommaAfterRest(this.state.start);
-      } else {
-        this.raiseRestNotLast(this.state.start);
-      }
+    if (!this.match(tt.comma)) {
+      return false;
     }
-  }
 
-  raiseRestNotLast(pos: number) {
-    throw this.raise(pos, Errors.ElementAfterRest);
-  }
+    this.raise(
+      this.lookaheadCharCode() === close
+        ? Errors.RestTrailingComma
+        : Errors.ElementAfterRest,
+      { at: this.state.startLoc },
+    );
 
-  raiseTrailingCommaAfterRest(pos: number) {
-    this.raise(pos, Errors.RestTrailingComma);
+    return true;
   }
 }

@@ -67,164 +67,164 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from 'errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { Errors } from 'errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from './errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { Errors } from './errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from '../errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { Errors } from '../errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from 'errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { NotErrors, Errors } from 'errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from './errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { NotErrors, Errors } from './errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from '../errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { NotErrors, Errors } from '../errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from 'errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { Errors } from 'errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from './errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { Errors } from './errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from '../errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { Errors } from '../errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from 'errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { NotErrors, Errors } from 'errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from './errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { NotErrors, Errors } from './errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from '../errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { NotErrors, Errors } from '../errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors from 'errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors from 'errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import Errors from './errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors from './errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors from '../errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors from '../errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from './errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors, { NotErrors } from './errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from '../errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors, { NotErrors } from '../errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from 'errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import NotErrors, { Errors } from 'errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from './errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import NotErrors, { Errors } from './errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from '../errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import NotErrors, { Errors } from '../errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors from 'errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors from 'errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import Errors from './errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors from './errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors from '../errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors from '../errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors, { NotErrors } from 'errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from './errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors, { NotErrors } from './errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from '../errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors, { NotErrors } from '../errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from 'errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import NotErrors, { Errors } from 'errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from './errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import NotErrors, { Errors } from './errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from '../errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import NotErrors, { Errors } from '../errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
     },
 
     // Do not warn when file linted is error module.
     {
       filename: FILENAME,
-      code: "this.raise(loc, 'Oh no!');",
+      code: "this.raise( 'Oh no!', loc);",
       options: [{ errorModule: FILENAME }],
     },
     {
       filename: MODULE_SAME_DIR,
-      code: "this.raise(loc, 'Oh no!');",
+      code: "this.raise('Oh no!', loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
     },
 
@@ -238,14 +238,14 @@ ruleTester.run("dry-error-messages", rule.default, {
     // Support ternary as second argument
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? Errors.someErrorMessage : Errors.someOtherErrorMessage);",
+      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(a ? Errors.someErrorMessage : Errors.someOtherErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
     },
   ],
   invalid: [
     {
       filename: FILENAME,
-      code: "this.raise(loc, new Error('Uh oh'));",
+      code: "this.raise(new Error('Uh oh'), loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -256,7 +256,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "throw this.raise(loc, new Error('Uh oh'));",
+      code: "throw this.raise(new Error('Uh oh'), loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -267,7 +267,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "this.raise(loc, Errors.someErrorMessage);",
+      code: "this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -278,7 +278,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "const Errors = { someErrorMessage: 'Uh oh!' }; this.raise(loc, Errors.someErrorMessage);",
+      code: "const Errors = { someErrorMessage: 'Uh oh!' }; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -289,7 +289,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from 'errorsModule'; this.raise(loc, 'Uh oh!');",
+      code: "import { Errors } from 'errorsModule'; this.raise('Uh oh!', loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -300,7 +300,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from 'errorsModule'; const msg = 'Uh oh!'; this.raise(loc, msg);",
+      code: "import { Errors } from 'errorsModule'; const msg = 'Uh oh!'; this.raise(msg, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -311,7 +311,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from 'not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { Errors } from 'not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -322,7 +322,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from './not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { Errors } from './not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -333,7 +333,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from '../not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { Errors } from '../not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -344,7 +344,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from 'not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { NotErrors, Errors } from 'not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -355,7 +355,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from './not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { NotErrors, Errors } from './not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -366,7 +366,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from '../not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import { NotErrors, Errors } from '../not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -377,7 +377,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from 'not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { Errors } from 'not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -388,7 +388,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from './not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { Errors } from './not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -399,7 +399,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { Errors } from '../not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { Errors } from '../not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -410,7 +410,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from 'not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { NotErrors, Errors } from 'not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -421,7 +421,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from './not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { NotErrors, Errors } from './not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -432,7 +432,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import { NotErrors, Errors } from '../not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import { NotErrors, Errors } from '../not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -443,7 +443,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors from 'not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors from 'not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -454,7 +454,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors from './not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors from './not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -465,7 +465,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors from '../not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors from '../not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -476,7 +476,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors, { NotErrors } from 'not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -487,7 +487,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from './not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors, { NotErrors } from './not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -498,7 +498,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from '../not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import Errors, { NotErrors } from '../not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -509,7 +509,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from 'not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import NotErrors, { Errors } from 'not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -520,7 +520,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from './not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import NotErrors, { Errors } from './not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -531,7 +531,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from '../not-errorsModule'; this.raise(loc, Errors.someErrorMessage);",
+      code: "import NotErrors, { Errors } from '../not-errorsModule'; this.raise(Errors.someErrorMessage, loc);",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -542,7 +542,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors from 'not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors from 'not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -553,7 +553,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors from './not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors from './not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -564,7 +564,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors from '../not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors from '../not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -575,7 +575,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors, { NotErrors } from 'not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -586,7 +586,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from './not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors, { NotErrors } from './not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -597,7 +597,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from '../not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import Errors, { NotErrors } from '../not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -608,7 +608,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from 'not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import NotErrors, { Errors } from 'not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -619,7 +619,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from './not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import NotErrors, { Errors } from './not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_SAME_DIR }],
       errors: [
         {
@@ -630,7 +630,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import NotErrors, { Errors } from '../not-errorsModule'; function fn() { this.raise(loc, Errors.someErrorMessage); }",
+      code: "import NotErrors, { Errors } from '../not-errorsModule'; function fn() { this.raise(Errors.someErrorMessage, loc); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
       errors: [
         {
@@ -643,7 +643,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     // Should error if either part of a ternary isn't from error module
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? Errors.someErrorMessage : 'hello');",
+      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(a ? Errors.someErrorMessage : 'hello', loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -654,7 +654,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? 'hello' : Errors.someErrorMessage);",
+      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise( a ? 'hello' : Errors.someErrorMessage, loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {
@@ -665,7 +665,7 @@ ruleTester.run("dry-error-messages", rule.default, {
     },
     {
       filename: FILENAME,
-      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? 'hello' : 'world');",
+      code: "import Errors, { NotErrors } from 'errorsModule'; this.raise(a ? 'hello' : 'world', loc);",
       options: [{ errorModule: ERRORS_MODULE }],
       errors: [
         {

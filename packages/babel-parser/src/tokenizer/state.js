@@ -7,7 +7,7 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import { tt, type TokenType } from "./types";
-import type { ParsingError, ErrorTemplate } from "../parser/error";
+import type { ErrorData, ParsingError } from "../parser/error";
 
 type TopicContextState = {
   // When a topic binding has been currently established,
@@ -42,7 +42,7 @@ export default class State {
 
     this.curLine = startLine;
     this.lineStart = -startColumn;
-    this.startLoc = this.endLoc = new Position(startLine, startColumn);
+    this.startLoc = this.endLoc = new Position(startLine, startColumn, 0);
   }
 
   errors: ParsingError[] = [];
@@ -120,7 +120,6 @@ export default class State {
   // $FlowIgnore this is initialized when generating the second token.
   lastTokStartLoc: Position = null;
   lastTokStart: number = 0;
-  lastTokEnd: number = 0;
 
   // The context stack is used to track whether the apostrophe "`" starts
   // or ends a string template
@@ -141,13 +140,13 @@ export default class State {
 
   // todo(JLHwung): set strictErrors to null and avoid recording string errors
   // after a non-directive is parsed
-  strictErrors: Map<number, ErrorTemplate> = new Map();
+  strictErrors: Map<number, ErrorData> = new Map();
 
   // Tokens length in token store
   tokensLength: number = 0;
 
   curPosition(): Position {
-    return new Position(this.curLine, this.pos - this.lineStart);
+    return new Position(this.curLine, this.pos - this.lineStart, this.pos);
   }
 
   clone(skipArrays?: boolean): State {

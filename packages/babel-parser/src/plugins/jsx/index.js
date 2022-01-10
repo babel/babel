@@ -87,7 +87,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          throw this.raise(this.state.start, JsxErrors.UnterminatedJsxContent);
+          throw this.raise(JsxErrors.UnterminatedJsxContent, {
+            at: this.state.startLoc,
+          });
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -117,11 +119,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               const htmlEntity =
                 ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
               const char = this.input[this.state.pos];
-              this.raise(this.state.pos, {
-                code: ErrorCodes.SyntaxError,
-                reasonCode: "UnexpectedToken",
-                template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
-              });
+              this.raise(
+                {
+                  code: ErrorCodes.SyntaxError,
+                  reasonCode: "UnexpectedToken",
+                  template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
+                },
+                { at: this.state.curPosition() },
+              );
             }
           /* falls through */
 
@@ -161,7 +166,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = ++this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          throw this.raise(this.state.start, Errors.UnterminatedString);
+          throw this.raise(Errors.UnterminatedString, {
+            at: this.state.startLoc,
+          });
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -299,7 +306,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.next();
           node = this.jsxParseExpressionContainer(node, tc.j_oTag);
           if (node.expression.type === "JSXEmptyExpression") {
-            this.raise(node.start, JsxErrors.AttributeIsEmpty);
+            this.raise(JsxErrors.AttributeIsEmpty, { node });
           }
           return node;
 
@@ -308,7 +315,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.parseExprAtom();
 
         default:
-          throw this.raise(this.state.start, JsxErrors.UnsupportedJsxValue);
+          throw this.raise(JsxErrors.UnsupportedJsxValue, {
+            at: this.state.startLoc,
+          });
       }
     }
 
@@ -318,15 +327,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     jsxParseEmptyExpression(): N.JSXEmptyExpression {
       const node = this.startNodeAt(
-        this.state.lastTokEnd,
+        this.state.lastTokEndLoc.index,
         this.state.lastTokEndLoc,
       );
-      return this.finishNodeAt(
-        node,
-        "JSXEmptyExpression",
-        this.state.start,
-        this.state.startLoc,
-      );
+      return this.finishNodeAt(node, "JSXEmptyExpression", this.state.startLoc);
     }
 
     // Parse JSX spread child
@@ -356,10 +360,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             expression.type === "SequenceExpression" &&
             !expression.extra?.parenthesized
           ) {
-            this.raise(
-              expression.expressions[1].start,
-              JsxErrors.UnexpectedSequenceExpression,
-            );
+            this.raise(JsxErrors.UnexpectedSequenceExpression, {
+              node: expression.expressions[1],
+            });
           }
         }
 
@@ -483,17 +486,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         }
 
-        if (isFragment(openingElement) && !isFragment(closingElement)) {
-          this.raise(
-            // $FlowIgnore
-            closingElement.start,
-            JsxErrors.MissingClosingTagFragment,
-          );
+        if (
+          isFragment(openingElement) &&
+          !isFragment(closingElement) &&
+          closingElement !== null
+        ) {
+          this.raise(JsxErrors.MissingClosingTagFragment, {
+            node: closingElement,
+          });
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
           this.raise(
-            // $FlowIgnore
-            closingElement.start,
             JsxErrors.MissingClosingTagElement,
+            // $FlowIgnore
+            { node: closingElement },
             getQualifiedJSXName(openingElement.name),
           );
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
@@ -503,9 +508,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             getQualifiedJSXName(openingElement.name)
           ) {
             this.raise(
-              // $FlowIgnore
-              closingElement.start,
               JsxErrors.MissingClosingTagElement,
+              // $FlowIgnore
+              { node: closingElement },
               getQualifiedJSXName(openingElement.name),
             );
           }
@@ -521,10 +526,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       node.children = children;
       if (this.match(tt.lt)) {
-        throw this.raise(
-          this.state.start,
-          JsxErrors.UnwrappedAdjacentJSXElements,
-        );
+        throw this.raise(JsxErrors.UnwrappedAdjacentJSXElements, {
+          at: this.state.startLoc,
+        });
       }
 
       return isFragment(openingElement)

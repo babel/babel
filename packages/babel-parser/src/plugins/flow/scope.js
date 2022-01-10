@@ -1,5 +1,6 @@
 // @flow
 
+import { Position } from "../../util/location";
 import ScopeHandler, { Scope } from "../../util/scope";
 import {
   BIND_FLAGS_FLOW_DECLARE_FN,
@@ -19,10 +20,10 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
     return new FlowScope(flags);
   }
 
-  declareName(name: string, bindingType: BindingTypes, pos: number) {
+  declareName(name: string, bindingType: BindingTypes, loc: Position) {
     const scope = this.currentScope();
     if (bindingType & BIND_FLAGS_FLOW_DECLARE_FN) {
-      this.checkRedeclarationInScope(scope, name, bindingType, pos);
+      this.checkRedeclarationInScope(scope, name, bindingType, loc);
       this.maybeExportDefined(scope, name);
       scope.declareFunctions.add(name);
       return;
