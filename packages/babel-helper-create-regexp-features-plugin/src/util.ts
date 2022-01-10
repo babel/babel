@@ -10,23 +10,24 @@ type RegexpuOptions = {
   onNamedGroup: (name: string, index: number) => void;
 };
 
-type Stable = 0;
-
 export function generateRegexpuOptions(toTransform: number): RegexpuOptions {
-  const feat = <IsStable extends 0 | 1>(
+  type Experimental = 1;
+
+  const feat = <Stability extends 0 | 1 = 0>(
     name: keyof typeof FEATURES,
-    ok: "transform" | (IsStable extends Stable ? never : "parse") = "transform",
+    ok: "transform" | (Stability extends 0 ? never : "parse") = "transform",
   ) => {
     return hasFeature(toTransform, FEATURES[name]) ? ok : false;
   };
 
   return {
-    unicodeFlag: feat<Stable>("unicodeFlag"),
+    unicodeFlag: feat("unicodeFlag"),
     unicodeSetsFlag:
-      feat("unicodeSetsFlag") || feat("unicodeSetsFlag_syntax", "parse"),
-    dotAllFlag: feat<Stable>("dotAllFlag"),
-    unicodePropertyEscapes: feat<Stable>("unicodePropertyEscape"),
-    namedGroups: feat<Stable>("namedCaptureGroups"),
+      feat<Experimental>("unicodeSetsFlag") ||
+      feat<Experimental>("unicodeSetsFlag_syntax", "parse"),
+    dotAllFlag: feat("dotAllFlag"),
+    unicodePropertyEscapes: feat("unicodePropertyEscape"),
+    namedGroups: feat("namedCaptureGroups"),
     onNamedGroup: () => {},
   };
 }
