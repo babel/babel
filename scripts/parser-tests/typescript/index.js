@@ -16,7 +16,7 @@ async function* loadTests(dir) {
   }
 }
 
-const plugins = ["typescript", "decorators-legacy"];
+const plugins = ["typescript", "decorators-legacy", "importAssertions"];
 
 const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 
