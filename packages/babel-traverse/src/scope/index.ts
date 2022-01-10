@@ -3,6 +3,7 @@ import type NodePath from "../path";
 import traverse from "../index";
 import type { TraverseOptions } from "../index";
 import Binding from "./binding";
+import type { BindingKind } from "./binding";
 import globals from "globals";
 import {
   NOT_LOCAL_BINDING,
@@ -569,7 +570,7 @@ export default class Scope {
 
   checkBlockScopedCollisions(
     local: Binding,
-    kind: string,
+    kind: BindingKind,
     name: string,
     id: any,
   ) {
@@ -587,7 +588,7 @@ export default class Scope {
       local.kind === "const" ||
       local.kind === "module" ||
       // don't allow a local of param with a kind of let
-      (local.kind === "param" && (kind === "let" || kind === "const"));
+      (local.kind === "param" && kind === "const");
 
     if (duplicate) {
       throw this.hub.buildError(
