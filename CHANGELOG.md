@@ -20,6 +20,31 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.8 (2022-01-10)
+
+#### :bug: Bug Fix
+* `babel-generator`, `babel-plugin-syntax-typescript`, `babel-plugin-transform-parameters`
+  * [#14113](https://github.com/babel/babel/pull/14113) Print trailing comma after a single TS generic in arrow fns ([@ozanhonamlioglu](https://github.com/ozanhonamlioglu))
+* `babel-traverse`
+  * [#14105](https://github.com/babel/babel/pull/14105) fix: forward stop signal to parent path ([@JLHwung](https://github.com/JLHwung))
+* `babel-register`
+  * [#14107](https://github.com/babel/babel/pull/14107) Don't mutate `@babel/register` options ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-modules-commonjs`
+  * [#14097](https://github.com/babel/babel/pull/14097) Register binding for newly created vars for commonjs transforms ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-plugin-transform-typescript`
+  * [#14093](https://github.com/babel/babel/pull/14093) Fix TypeScript Enum self-references ([@magic-akari](https://github.com/magic-akari))
+
+#### :nail_care: Polish
+* `babel-generator`
+  * [#14094](https://github.com/babel/babel/pull/14094) Always print directives with double quotes when minified ([@overlookmotel](https://github.com/overlookmotel))
+
+#### :house: Internal
+* `babel-helper-fixtures`, `babel-plugin-proposal-record-and-tuple`, `babel-preset-env`
+  * [#14118](https://github.com/babel/babel/pull/14118) Always use the plugin/preset name in fixtures options ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-helper-remap-async-to-generator`, `babel-helper-wrap-function`, `babel-plugin-transform-async-to-generator`
+  * [#14122](https://github.com/babel/babel/pull/14122) Optimize `transform-async-to-generator` output ([@magic-akari](https://github.com/magic-akari))
 ## v7.16.7 (2021-12-31)
 
 #### :eyeglasses: Spec Compliance
