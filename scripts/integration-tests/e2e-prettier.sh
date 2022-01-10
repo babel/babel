@@ -39,6 +39,7 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 
 # Only run js,jsx,misc format tests
-yarn test "tests/format/(jsx?|misc)/" --update-snapshot
+# Without --runInBand CircleCI hangs.
+yarn test "tests/format/(jsx?|misc)/" --update-snapshot --runInBand
 
 cleanup
