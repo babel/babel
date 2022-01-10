@@ -28,7 +28,7 @@
                 "name": "foo"
               },
               "computed": false,
-              "parameters": [
+              "params": [
                 {
                   "type": "ArrayPattern",
                   "start":20,"end":23,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9}},
@@ -36,7 +36,7 @@
                   "optional": true
                 }
               ],
-              "typeAnnotation": {
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":24,"end":30,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":16}},
                 "typeAnnotation": {
@@ -55,7 +55,7 @@
                 "name": "bar"
               },
               "computed": false,
-              "parameters": [
+              "params": [
                 {
                   "type": "ObjectPattern",
                   "start":38,"end":40,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":8}},
@@ -68,7 +68,7 @@
                   "optional": true
                 }
               ],
-              "typeAnnotation": {
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":46,"end":51,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":19}},
                 "typeAnnotation": {
@@ -87,7 +87,7 @@
                 "name": "baz"
               },
               "computed": false,
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":59,"end":68,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":15},"identifierName":"a"},
@@ -121,7 +121,7 @@
                   "optional": true
                 }
               ],
-              "typeAnnotation": {
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":85,"end":91,"loc":{"start":{"line":4,"column":32},"end":{"line":4,"column":38}},
                 "typeAnnotation": {

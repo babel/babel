@@ -94,13 +94,20 @@ defineType("TSQualifiedName", {
 
 const signatureDeclarationCommon = {
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
-  parameters: validateArrayOfType(["Identifier", "RestElement"]),
-  typeAnnotation: validateOptionalType("TSTypeAnnotation"),
+  [process.env.BABEL_8_BREAKING ? "params" : "parameters"]: validateArrayOfType(
+    ["Identifier", "RestElement"],
+  ),
+  [process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
+    validateOptionalType("TSTypeAnnotation"),
 };
 
 const callConstructSignatureDeclaration = {
   aliases: ["TSTypeElement"],
-  visitor: ["typeParameters", "parameters", "typeAnnotation"],
+  visitor: [
+    "typeParameters",
+    process.env.BABEL_8_BREAKING ? "params" : "parameters",
+    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
+  ],
   fields: signatureDeclarationCommon,
 };
 
@@ -132,7 +139,12 @@ defineType("TSPropertySignature", {
 
 defineType("TSMethodSignature", {
   aliases: ["TSTypeElement"],
-  visitor: ["key", "typeParameters", "parameters", "typeAnnotation"],
+  visitor: [
+    "key",
+    "typeParameters",
+    process.env.BABEL_8_BREAKING ? "params" : "parameters",
+    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
+  ],
   fields: {
     ...signatureDeclarationCommon,
     ...namedTypeElementCommon,
@@ -185,7 +197,11 @@ defineType("TSThisType", {
 
 const fnOrCtrBase = {
   aliases: ["TSType"],
-  visitor: ["typeParameters", "parameters", "typeAnnotation"],
+  visitor: [
+    "typeParameters",
+    process.env.BABEL_8_BREAKING ? "params" : "parameters",
+    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
+  ],
 };
 
 defineType("TSFunctionType", {

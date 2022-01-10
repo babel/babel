@@ -48,8 +48,8 @@
                   }
                 ]
               },
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":30,"end":38,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":22}},
                 "typeAnnotation": {
@@ -83,7 +83,7 @@
                   }
                 ]
               },
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":53,"end":54,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":14},"identifierName":"v"},

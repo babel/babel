@@ -34,7 +34,7 @@
               },
               "computed": false,
               "kind": "get",
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":26,"end":35,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":19},"identifierName":"this"},
@@ -65,7 +65,7 @@
               },
               "computed": false,
               "kind": "set",
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":48,"end":57,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":19},"identifierName":"this"},

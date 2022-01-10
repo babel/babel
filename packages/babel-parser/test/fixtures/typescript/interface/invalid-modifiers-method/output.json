@@ -38,7 +38,7 @@
                 "name": "a"
               },
               "computed": false,
-              "parameters": [],
+              "params": [],
               "kind": "method"
             },
             {
@@ -51,7 +51,7 @@
                 "name": "b"
               },
               "computed": false,
-              "parameters": [],
+              "params": [],
               "kind": "method"
             },
             {
@@ -64,7 +64,7 @@
                 "name": "c"
               },
               "computed": false,
-              "parameters": [],
+              "params": [],
               "kind": "method"
             },
             {
@@ -77,7 +77,7 @@
                 "name": "d"
               },
               "computed": false,
-              "parameters": [],
+              "params": [],
               "kind": "method"
             },
             {
@@ -90,7 +90,7 @@
                 "name": "e"
               },
               "computed": false,
-              "parameters": [],
+              "params": [],
               "kind": "method"
             },
             {
@@ -103,7 +103,7 @@
                 "name": "f"
               },
               "computed": false,
-              "parameters": [],
+              "params": [],
               "kind": "method"
             },
             {
@@ -116,7 +116,7 @@
                 "name": "g"
               },
               "computed": false,
-              "parameters": [],
+              "params": [],
               "kind": "method"
             }
           ]

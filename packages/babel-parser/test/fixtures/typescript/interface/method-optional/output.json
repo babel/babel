@@ -29,8 +29,8 @@
               },
               "computed": false,
               "optional": true,
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":22,"end":28,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":14}},
                 "typeAnnotation": {

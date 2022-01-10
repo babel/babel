@@ -225,7 +225,10 @@ export function tsPrintFunctionOrConstructorType(
   // todo: missing type FunctionOrConstructorType
   node: any,
 ) {
-  const { typeParameters, parameters } = node;
+  const { typeParameters } = node;
+  const parameters = process.env.BABEL_8_BREAKING
+    ? node.params
+    : node.parameters;
   this.print(typeParameters, node);
   this.token("(");
   this._parameters(parameters, node);
@@ -233,7 +236,10 @@ export function tsPrintFunctionOrConstructorType(
   this.space();
   this.token("=>");
   this.space();
-  this.print(node.typeAnnotation.typeAnnotation, node);
+  const returnType = process.env.BABEL_8_BREAKING
+    ? node.returnType
+    : node.typeAnnotation;
+  this.print(returnType.typeAnnotation, node);
 }
 
 export function TSTypeReference(this: Printer, node: t.TSTypeReference) {
@@ -648,12 +654,18 @@ export function TSNamespaceExportDeclaration(
 }
 
 export function tsPrintSignatureDeclarationBase(this: Printer, node: any) {
-  const { typeParameters, parameters } = node;
+  const { typeParameters } = node;
+  const parameters = process.env.BABEL_8_BREAKING
+    ? node.params
+    : node.parameters;
   this.print(typeParameters, node);
   this.token("(");
   this._parameters(parameters, node);
   this.token(")");
-  this.print(node.typeAnnotation, node);
+  const returnType = process.env.BABEL_8_BREAKING
+    ? node.returnType
+    : node.typeAnnotation;
+  this.print(returnType, node);
 }
 
 export function tsPrintClassMemberModifiers(this: Printer, node: any, isField) {

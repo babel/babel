@@ -25,8 +25,8 @@
                   "type": "TSConstructorType",
                   "start":7,"end":30,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":30}},
                   "abstract": true,
-                  "parameters": [],
-                  "typeAnnotation": {
+                  "params": [],
+                  "returnType": {
                     "type": "TSTypeAnnotation",
                     "start":23,"end":30,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":30}},
                     "typeAnnotation": {

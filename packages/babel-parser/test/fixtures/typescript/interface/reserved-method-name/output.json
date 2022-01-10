@@ -28,8 +28,8 @@
                 "name": "catch"
               },
               "computed": false,
-              "parameters": [],
-              "typeAnnotation": {
+              "params": [],
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":25,"end":31,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":17}},
                 "typeAnnotation": {

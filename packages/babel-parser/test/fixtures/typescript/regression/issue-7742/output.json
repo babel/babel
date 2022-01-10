@@ -52,7 +52,7 @@
                   }
                 ]
               },
-              "parameters": [
+              "params": [
                 {
                   "type": "Identifier",
                   "start":27,"end":33,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":14},"identifierName":"bar"},
@@ -72,7 +72,7 @@
                   }
                 }
               ],
-              "typeAnnotation": {
+              "returnType": {
                 "type": "TSTypeAnnotation",
                 "start":34,"end":37,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":18}},
                 "typeAnnotation": {
