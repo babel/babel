@@ -7,7 +7,7 @@ function initialize(babel) {
   exports.getEnv = babel.getEnv;
 
   if (!process.env.BABEL_8_BREAKING) {
-    exports.loadOptionsSync = babel.loadOptionsSync;
+    exports.OptionManager = babel.OptionManager;
     exports.transformSync = babel.transformSync;
   }
 }
