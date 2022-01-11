@@ -30,7 +30,18 @@ describe("externalDependencies", () => {
       plugins: [makePlugin("./foo")],
     });
 
-    expect(new Set(externalDependencies)).toEqual(new Set(["./foo"]));
+    expect(externalDependencies).toEqual(new Set(["./foo"]));
+  });
+
+  it("returns a fresh set", () => {
+    const options = {
+      plugins: [makePlugin("./foo")],
+    };
+    const res1 = transform("", options);
+    const res2 = transform("", options);
+
+    expect(res1.externalDependencies).toEqual(res2.externalDependencies);
+    expect(res1.externalDependencies).not.toBe(res2.externalDependencies);
   });
 
   it("can be set multiple times by the same plugin", () => {
@@ -45,7 +56,7 @@ describe("externalDependencies", () => {
       ],
     });
 
-    expect(new Set(externalDependencies)).toEqual(new Set(["./foo", "./bar"]));
+    expect(externalDependencies).toEqual(new Set(["./foo", "./bar"]));
   });
 
   it("can be set by presets", () => {
@@ -53,7 +64,7 @@ describe("externalDependencies", () => {
       presets: [makePreset("./foo")],
     });
 
-    expect(new Set(externalDependencies)).toEqual(new Set(["./foo"]));
+    expect(externalDependencies).toEqual(new Set(["./foo"]));
   });
 
   it("can be set multiple times by the same preset", () => {
@@ -68,7 +79,7 @@ describe("externalDependencies", () => {
       ],
     });
 
-    expect(new Set(externalDependencies)).toEqual(new Set(["./foo", "./bar"]));
+    expect(externalDependencies).toEqual(new Set(["./foo", "./bar"]));
   });
 
   it("can be set by multiple plugins and presets", () => {
@@ -82,7 +93,7 @@ describe("externalDependencies", () => {
       ],
     });
 
-    expect(new Set(externalDependencies)).toEqual(
+    expect(externalDependencies).toEqual(
       new Set([
         "./plugin1",
         "./plugin2",
