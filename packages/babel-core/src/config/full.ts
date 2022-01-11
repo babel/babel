@@ -316,7 +316,7 @@ const makeDescriptorLoader = <Context, API>(
       error +=
         `Plugins/presets should configure their cache to be invalidated when the external ` +
         `dependencies change, for example using \`api.cache.invalidate(() => ` +
-        `+statSync(filepath).mtime)\` or \`api.cache.never()\`\n` +
+        `statSync(filepath).mtimeMs)\` or \`api.cache.never()\`\n` +
         `(While processing: ${JSON.stringify(alias)})`;
 
       throw new Error(error);
