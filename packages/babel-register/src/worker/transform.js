@@ -78,7 +78,7 @@ exports.transform = async function (input, filename) {
 
 if (!process.env.BABEL_8_BREAKING) {
   exports.transformSync = function (input, filename) {
-    const opts = babel.loadOptions({
+    const opts = new babel.OptionManager().init({
       // sourceRoot can be overwritten
       sourceRoot: path.dirname(filename) + path.sep,
       ...cloneDeep(transformOpts),
