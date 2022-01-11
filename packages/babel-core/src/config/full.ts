@@ -7,6 +7,8 @@ import * as context from "../index";
 import Plugin from "./plugin";
 import { getItemDescriptor } from "./item";
 import { buildPresetChain } from "./config-chain";
+import { finalize as freezeDeepArray } from "./helpers/deep-array";
+import type { DeepArray, ReadonlyDeepArray } from "./helpers/deep-array";
 import type {
   ConfigContext,
   ConfigChain,
@@ -29,14 +31,13 @@ import loadPrivatePartialConfig from "./partial";
 import type { ValidatedOptions } from "./validation/options";
 
 import * as Context from "./cache-contexts";
-import ReadonlySet from "./helpers/readonly-set";
 
 type LoadedDescriptor = {
   value: {};
   options: {};
   dirname: string;
   alias: string;
-  externalDependencies: Set<string>;
+  externalDependencies: DeepArray<string>;
 };
 
 export type { InputOptions } from "./validation/options";
@@ -44,16 +45,12 @@ export type { InputOptions } from "./validation/options";
 export type ResolvedConfig = {
   options: any;
   passes: PluginPasses;
-  externalDependencies: ReadonlySet<string>;
+  externalDependencies: ReadonlyDeepArray<string>;
 };
 
 export type { Plugin };
 export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
-
-function copy<T>(dest: Set<T>, src: ReadonlySet<T>) {
-  src.forEach(dest.add, dest);
-}
 
 export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
   function* loadFullConfig(inputOpts) {
@@ -94,7 +91,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
     const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor>> = [[]];
     const passes: Array<Array<Plugin>> = [];
 
-    const externalDependencies = new Set<string>();
+    const externalDependencies: DeepArray<string> = [];
 
     const ignored = yield* enhanceError(
       context,
@@ -123,7 +120,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
               throw e;
             }
 
-            copy(externalDependencies, preset.externalDependencies);
+            externalDependencies.push(preset.externalDependencies);
 
             // Presets normally run in reverse order, but if they
             // have their own pass they run after the presets
@@ -205,7 +202,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
             }
             pass.push(plugin);
 
-            copy(externalDependencies, plugin.externalDependencies);
+            externalDependencies.push(plugin.externalDependencies);
           }
         }
       }
@@ -221,7 +218,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
     return {
       options: opts,
       passes: passes,
-      externalDependencies: new ReadonlySet(externalDependencies),
+      externalDependencies: freezeDeepArray(externalDependencies),
     };
   },
 );
@@ -248,7 +245,7 @@ function enhanceError<T extends Function>(context, fn: T): T {
 const makeDescriptorLoader = <Context, API>(
   apiFactory: (
     cache: CacheConfigurator<Context>,
-    externalDependencies: Set<string>,
+    externalDependencies: Array<string>,
   ) => API,
 ) =>
   makeWeakCache(function* (
@@ -260,7 +257,7 @@ const makeDescriptorLoader = <Context, API>(
 
     options = options || {};
 
-    const externalDependencies = new Set<string>();
+    const externalDependencies: Array<string> = [];
 
     let item = value;
     if (typeof value === "function") {
@@ -302,12 +299,12 @@ const makeDescriptorLoader = <Context, API>(
     }
 
     if (
-      externalDependencies.size > 0 &&
+      externalDependencies.length > 0 &&
       (!cache.configured() || cache.mode() === "forever")
     ) {
-      const [firstDep] = externalDependencies;
-
-      let error = `A plugin/preset has external untracked dependencies (${firstDep}), but the cache `;
+      let error =
+        `A plugin/preset has external untracked dependencies ` +
+        `(${externalDependencies[0]}), but the cache `;
       if (!cache.configured()) {
         error += `has not been configured to be invalidated when the external dependencies change. `;
       } else {
@@ -400,7 +397,7 @@ const instantiatePlugin = makeWeakCache(function* (
       plugin.visitor || {},
     ]);
 
-    copy(externalDependencies, inherits.externalDependencies);
+    externalDependencies.push(inherits.externalDependencies);
   }
 
   return new Plugin(plugin, options, alias, externalDependencies);
@@ -450,7 +447,7 @@ function* loadPresetDescriptor(
   context: Context.FullPreset,
 ): Handler<{
   chain: ConfigChain | null;
-  externalDependencies: ReadonlySet<string>;
+  externalDependencies: ReadonlyDeepArray<string>;
 }> {
   const preset = instantiatePreset(
     yield* presetDescriptorLoader(descriptor, context),
@@ -473,7 +470,7 @@ const instantiatePreset = makeWeakCacheSync(
       options: validate("preset", value),
       alias,
       dirname,
-      externalDependencies: new ReadonlySet(externalDependencies),
+      externalDependencies: freezeDeepArray(externalDependencies),
     };
   },
 );

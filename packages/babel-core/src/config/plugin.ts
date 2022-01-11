@@ -1,5 +1,6 @@
+import { finalize } from "./helpers/deep-array";
+import type { DeepArray, ReadonlyDeepArray } from "./helpers/deep-array";
 import type { PluginObject } from "./validation/plugins";
-import ReadonlySet from "./helpers/readonly-set";
 
 export default class Plugin {
   key: string | undefined | null;
@@ -13,13 +14,13 @@ export default class Plugin {
 
   options: {};
 
-  externalDependencies: ReadonlySet<string>;
+  externalDependencies: ReadonlyDeepArray<string>;
 
   constructor(
     plugin: PluginObject,
     options: {},
     key?: string,
-    externalDependencies: Set<string> = new Set(),
+    externalDependencies: DeepArray<string> = [],
   ) {
     this.key = plugin.name || key;
 
@@ -32,6 +33,6 @@ export default class Plugin {
 
     this.options = options;
 
-    this.externalDependencies = new ReadonlySet(externalDependencies);
+    this.externalDependencies = finalize(externalDependencies);
   }
 }

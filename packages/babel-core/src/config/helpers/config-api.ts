@@ -78,7 +78,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
 
 export function makePresetAPI<SideChannel extends Context.SimplePreset>(
   cache: CacheConfigurator<SideChannel>,
-  externalDependencies: Set<string>,
+  externalDependencies: Array<string>,
 ): PresetAPI {
   const targets = () =>
     // We are using JSON.parse/JSON.stringify because it's only possible to cache
@@ -88,7 +88,7 @@ export function makePresetAPI<SideChannel extends Context.SimplePreset>(
     JSON.parse(cache.using(data => JSON.stringify(data.targets)));
 
   const addExternalDependency = (ref: string) => {
-    externalDependencies.add(ref);
+    externalDependencies.push(ref);
   };
 
   return { ...makeConfigAPI(cache), targets, addExternalDependency };
@@ -96,7 +96,7 @@ export function makePresetAPI<SideChannel extends Context.SimplePreset>(
 
 export function makePluginAPI<SideChannel extends Context.SimplePlugin>(
   cache: CacheConfigurator<SideChannel>,
-  externalDependencies: Set<string>,
+  externalDependencies: Array<string>,
 ): PluginAPI {
   const assumption = name => cache.using(data => data.assumptions[name]);
 
