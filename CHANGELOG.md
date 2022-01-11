@@ -20,6 +20,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.9 (2022-01-11)
+
+#### :bug: Bug Fix
+* `babel-register`
+  * [#14136](https://github.com/babel/babel/pull/14136) Restore `@babel/register` compat with `@babel/core@7.5.x` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.16.8 (2022-01-10)
 
 #### :bug: Bug Fix
