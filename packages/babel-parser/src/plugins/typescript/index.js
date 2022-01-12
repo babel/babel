@@ -148,6 +148,8 @@ const TSErrors = makeErrorTemplates(
       "A 'set' accessor cannot have rest parameter.",
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
+    SingleTypeWithoutTrailingComma:
+      "Single type definition %0 should have a trailing comma end of it. Example usage: <%0,>.",
     StaticBlockCannotHaveModifier:
       "Static class blocks cannot have any modifier.",
     TypeAnnotationAfterAssign:
@@ -2943,6 +2945,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         expr.typeParameters = typeParameters;
         return expr;
       }, state);
+
+      // report error if single type parameter used without trailing comma.
+      if (
+        this.hasPlugin("jsx") &&
+        arrow.node?.type === "ArrowFunctionExpression" &&
+        arrow.node.typeParameters?.params.length === 1 &&
+        !arrow.node.typeParameters.extra?.trailingComma
+      ) {
+        const parameter = arrow.node.typeParameters.params[0];
+        const node = parameter.name;
+        let identifierName = "";
+        if (typeof node === "object") identifierName = node.name;
+        else identifierName = node;
+
+        const start = parameter.start;
+        this.raise(
+          start,
+          TSErrors.SingleTypeWithoutTrailingComma,
+          identifierName,
+        );
+      }
 
       /*:: invariant(arrow.node != null) */
       if (!arrow.error && !arrow.aborted) {
