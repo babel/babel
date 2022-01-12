@@ -387,7 +387,6 @@ outModuleConcatUmd.ts
 outModuleTripleSlashRefs.ts
 parameterInitializerBeforeDestructuringEmit.ts
 parameterPropertyOutsideConstructor.ts
-parseGenericArrowRatherThanLeftShift.ts
 parserConstructorDeclaration12.ts
 pathMappingBasedModuleResolution3_classic.ts
 pathMappingBasedModuleResolution3_node.ts
