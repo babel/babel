@@ -1,27 +1,27 @@
 {
   "type": "File",
-  "start":0,"end":79,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
+  "start":0,"end":80,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
   "program": {
     "type": "Program",
-    "start":0,"end":79,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
+    "start":0,"end":80,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":61,"end":79,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
+        "start":61,"end":80,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":19}},
         "expression": {
           "type": "ArrowFunctionExpression",
-          "start":61,"end":78,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":17}},
+          "start":61,"end":79,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
           "returnType": {
             "type": "TSTypeAnnotation",
-            "start":70,"end":73,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12}},
+            "start":71,"end":74,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13}},
             "typeAnnotation": {
               "type": "TSTypeReference",
-              "start":72,"end":73,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12}},
+              "start":73,"end":74,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13}},
               "typeName": {
                 "type": "Identifier",
-                "start":72,"end":73,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12},"identifierName":"T"},
+                "start":73,"end":74,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"T"},
                 "name": "T"
               }
             }
@@ -32,17 +32,17 @@
           "params": [
             {
               "type": "Identifier",
-              "start":65,"end":69,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":8},"identifierName":"a"},
+              "start":66,"end":70,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":9},"identifierName":"a"},
               "name": "a",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":66,"end":69,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":8}},
+                "start":67,"end":70,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9}},
                 "typeAnnotation": {
                   "type": "TSTypeReference",
-                  "start":68,"end":69,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8}},
+                  "start":69,"end":70,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9}},
                   "typeName": {
                     "type": "Identifier",
-                    "start":68,"end":69,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8},"identifierName":"T"},
+                    "start":69,"end":70,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"T"},
                     "name": "T"
                   }
                 }
@@ -51,12 +51,12 @@
           ],
           "body": {
             "type": "Identifier",
-            "start":77,"end":78,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":17},"identifierName":"a"},
+            "start":78,"end":79,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"a"},
             "name": "a"
           },
           "typeParameters": {
             "type": "TSTypeParameterDeclaration",
-            "start":61,"end":64,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3}},
+            "start":61,"end":65,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":4}},
             "params": [
               {
                 "type": "TSTypeParameter",
@@ -67,7 +67,10 @@
                   "name": "T"
                 }
               }
-            ]
+            ],
+            "extra": {
+              "trailingComma": 63
+            }
           }
         },
         "leadingComments": [
