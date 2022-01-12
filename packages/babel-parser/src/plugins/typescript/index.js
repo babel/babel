@@ -1974,6 +1974,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
+    // Used when parsing type arguments from ES productions, where the first token
+    // has been created without state.inType. Thus we need to rescan the lt token.
+    tsParseTypeArgumentsInExpression(): N.TsTypeParameterInstantiation | void {
+      if (this.reScan_lt() !== tt.lt) {
+        return undefined;
+      }
+      return this.tsParseTypeArguments();
+    }
+
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
       const node = this.startNode();
       node.params = this.tsInType(() =>
@@ -2172,7 +2181,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
       }
 
-      if (this.match(tt.lt)) {
+      // handles 'f<<T>'
+      if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
         let missingParenErrorLoc;
         // tsTryParseAndCatch is expensive, so avoid if not necessary.
         // There are number of things we are going to "maybe" parse, like type arguments on
@@ -2193,7 +2203,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
           node.callee = base;
 
-          const typeArguments = this.tsParseTypeArguments();
+          const typeArguments = this.tsParseTypeArgumentsInExpression();
 
           if (typeArguments) {
             if (isOptionalCall && !this.match(tt.parenL)) {
@@ -2245,11 +2255,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseNewArguments(node: N.NewExpression): void {
-      if (this.match(tt.lt)) {
-        // tsTryParseAndCatch is expensive, so avoid if not necessary.
-        // 99% certain this is `new C<T>();`. But may be `new C < T;`, which is also legal.
+      // tsTryParseAndCatch is expensive, so avoid if not necessary.
+      // 99% certain this is `new C<T>();`. But may be `new C < T;`, which is also legal.
+      // Also handles `new C<<T>`
+      if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
         const typeParameters = this.tsTryParseAndCatch(() => {
-          const args = this.tsParseTypeArguments();
+          const args = this.tsParseTypeArgumentsInExpression();
           if (!this.match(tt.parenL)) this.unexpected();
           return args;
         });
@@ -2832,8 +2843,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassSuper(node: N.Class): void {
       super.parseClassSuper(node);
-      if (node.superClass && this.match(tt.lt)) {
-        node.superTypeParameters = this.tsParseTypeArguments();
+      // handle `extends f()<<T>
+      if (node.superClass && (this.match(tt.lt) || this.match(tt.bitShiftL))) {
+        node.superTypeParameters = this.tsParseTypeArgumentsInExpression();
       }
       if (this.eatContextual(tt._implements)) {
         node.implements = this.tsParseHeritageClause("implements");
@@ -3146,8 +3158,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseMaybeDecoratorArguments(expr: N.Expression): N.Expression {
-      if (this.match(tt.lt)) {
-        const typeArguments = this.tsParseTypeArguments();
+      // handles `@f<<T>`
+      if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
+        const typeArguments = this.tsParseTypeArgumentsInExpression();
 
         if (this.match(tt.parenL)) {
           const call = super.parseMaybeDecoratorArguments(expr);
@@ -3230,6 +3243,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    reScan_lt() {
+      const { type } = this.state;
+      if (type === tt.bitShiftL) {
+        this.state.pos -= 2;
+        this.finishOp(tt.lt, 1);
+        return tt.lt;
+      }
+      return type;
+    }
+
     toAssignableList(exprList: N.Expression[]): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
@@ -3280,9 +3303,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseOpeningElementAfterName(
       node: N.JSXOpeningElement,
     ): N.JSXOpeningElement {
-      if (this.match(tt.lt)) {
+      // handles `<Component<<T>`
+      if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
         const typeArguments = this.tsTryParseAndCatch(() =>
-          this.tsParseTypeArguments(),
+          this.tsParseTypeArgumentsInExpression(),
         );
         if (typeArguments) node.typeParameters = typeArguments;
       }
