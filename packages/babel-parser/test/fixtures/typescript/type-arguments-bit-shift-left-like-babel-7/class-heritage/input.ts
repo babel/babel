@@ -1,1 +1,1 @@
-(class extends f()<<T>(v: T) => void> {});
+(class extends f<<T>(v: T) => void> {});

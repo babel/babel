@@ -2843,7 +2843,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassSuper(node: N.Class): void {
       super.parseClassSuper(node);
-      // handle `extends f()<<T>
+      // handle `extends f<<T>
       if (node.superClass && (this.match(tt.lt) || this.match(tt.bitShiftL))) {
         node.superTypeParameters = this.tsParseTypeArgumentsInExpression();
       }
