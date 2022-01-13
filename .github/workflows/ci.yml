@@ -446,6 +446,7 @@ jobs:
           - vue-cli
           - jest
           - react-native
+          - prettier
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
