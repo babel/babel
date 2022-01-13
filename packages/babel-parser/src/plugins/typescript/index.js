@@ -149,7 +149,7 @@ const TSErrors = makeErrorTemplates(
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
     SingleTypeWithoutTrailingComma:
-      "Single type definition %0 should have a trailing comma end of it. Example usage: <%0,>.",
+      "Single type parameter %0 should have a trailing comma. Example usage: <%0,>.",
     StaticBlockCannotHaveModifier:
       "Static class blocks cannot have any modifier.",
     TypeAnnotationAfterAssign:
@@ -2924,6 +2924,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
 
       let typeParameters: ?N.TsTypeParameterDeclaration;
+      let hasSingleTypeError = { status: false, start: 0, identifierName: "" };
       state = state || this.state.clone();
 
       const arrow = this.tryParse(abort => {
@@ -2943,34 +2944,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.resetStartLocationFromNode(expr, typeParameters);
         }
         expr.typeParameters = typeParameters;
+
+        // report error if single type parameter used without trailing comma.
+        if (
+          this.hasPlugin("jsx") &&
+          typeParameters.params.length === 1 &&
+          !typeParameters.extra?.trailingComma
+        ) {
+          const parameter = typeParameters.params[0];
+          if (parameter.constraint) {
+            // If parameter has any constraints, it must contain multiple tokens.
+            // <T extends U> is a valid declaration.
+            // <T extends {name: string}> is also a valid declaration.
+          } else {
+            const node = parameter.name;
+            let identifierName = "";
+            if (typeof node === "object") identifierName = node.name;
+            else identifierName = node;
+
+            const start = parameter.start;
+            hasSingleTypeError = { status: true, start, identifierName };
+          }
+        }
+
         return expr;
       }, state);
 
-      // report error if single type parameter used without trailing comma.
-      if (
-        this.hasPlugin("jsx") &&
-        arrow.node?.type === "ArrowFunctionExpression" &&
-        arrow.node.typeParameters?.params.length === 1 &&
-        !arrow.node.typeParameters.extra?.trailingComma
-      ) {
-        const parameter = arrow.node.typeParameters.params[0];
-        if (parameter.constraint) {
-          // If Type has any constraints, means that it is not alone their.
-          // <T extends U> is a valid declaration.
-          // <T extends {name: string}> is also a valid declaration.
-        } else {
-          const node = parameter.name;
-          let identifierName = "";
-          if (typeof node === "object") identifierName = node.name;
-          else identifierName = node;
-
-          const start = parameter.start;
-          this.raise(
-            start,
-            TSErrors.SingleTypeWithoutTrailingComma,
-            identifierName,
-          );
-        }
+      if (hasSingleTypeError.status) {
+        this.raise(
+          hasSingleTypeError.start,
+          TSErrors.SingleTypeWithoutTrailingComma,
+          hasSingleTypeError.identifierName,
+        );
       }
 
       /*:: invariant(arrow.node != null) */
