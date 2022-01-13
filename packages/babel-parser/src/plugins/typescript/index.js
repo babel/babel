@@ -2954,17 +2954,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         !arrow.node.typeParameters.extra?.trailingComma
       ) {
         const parameter = arrow.node.typeParameters.params[0];
-        const node = parameter.name;
-        let identifierName = "";
-        if (typeof node === "object") identifierName = node.name;
-        else identifierName = node;
+        if (parameter.constraint) {
+          // If Type has any constraints, means that it is not alone their.
+          // <T extends U> is a valid declaration.
+          // <T extends {name: string}> is also a valid declaration.
+        } else {
+          const node = parameter.name;
+          let identifierName = "";
+          if (typeof node === "object") identifierName = node.name;
+          else identifierName = node;
 
-        const start = parameter.start;
-        this.raise(
-          start,
-          TSErrors.SingleTypeWithoutTrailingComma,
-          identifierName,
-        );
+          const start = parameter.start;
+          this.raise(
+            start,
+            TSErrors.SingleTypeWithoutTrailingComma,
+            identifierName,
+          );
+        }
       }
 
       /*:: invariant(arrow.node != null) */
