@@ -16,6 +16,7 @@ export default declare((api, options) => {
   if (typeof legacy !== "boolean") {
     throw new Error("'legacy' must be a boolean.");
   }
+  const { decoratorsBeforeExport, version } = options;
   if (version !== undefined && options.legacy !== undefined) {
     throw new Error(
       'You can either specify `legacy: true` or `version: "legacy"` with decorators, not both.',
@@ -23,7 +24,6 @@ export default declare((api, options) => {
   }
   legacy ||= version === "legacy";
 
-  const { decoratorsBeforeExport, version } = options;
   if (decoratorsBeforeExport === undefined) {
     if (!legacy) {
       throw new Error(
