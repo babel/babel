@@ -632,7 +632,7 @@ export default class LValParser extends NodeUtils {
     }
   }
 
-  checkCommaAfterRest(close: $Values<typeof charCodes>): void {
+  checkCommaAfterRest(close: $Values<typeof charCodes>): boolean {
     if (!this.match(tt.comma)) {
       return false;
     }
