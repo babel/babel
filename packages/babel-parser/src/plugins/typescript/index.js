@@ -2948,19 +2948,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // report error if single type parameter used without trailing comma.
         if (
           this.hasPlugin("jsx") &&
-          typeParameters.params.length === 1 &&
-          !typeParameters.extra?.trailingComma
+          expr.typeParameters.params.length === 1 &&
+          !expr.typeParameters.extra?.trailingComma
         ) {
-          const parameter = typeParameters.params[0];
+          const parameter = expr.typeParameters.params[0];
           if (parameter.constraint) {
             // If parameter has any constraints, it must contain multiple tokens.
             // <T extends U> is a valid declaration.
             // <T extends {name: string}> is also a valid declaration.
           } else {
-            const node = parameter.name;
-            let identifierName = "";
-            if (typeof node === "object") identifierName = node.name;
-            else identifierName = node;
+            const identifierName = process.env.BABEL_8_BREAKING
+              ? parameter.name.name
+              : parameter.name;
 
             const start = parameter.start;
             hasSingleTypeError = { status: true, start, identifierName };
