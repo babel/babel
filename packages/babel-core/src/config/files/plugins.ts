@@ -6,6 +6,7 @@ import buildDebug from "debug";
 import path from "path";
 import type { Handler } from "gensync";
 import loadCjsOrMjsDefault from "./module-types";
+import { isAsync } from "../../gensync-utils/async";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -149,18 +150,25 @@ function resolveStandardizedName(
   }
 }
 
-const LOADING_MODULES = new Set();
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var LOADING_MODULES = new Set();
+}
 function* requireModule(type: string, name: string): Handler<unknown> {
-  if (LOADING_MODULES.has(name)) {
-    throw new Error(
-      `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
-        "and is trying to load itself while compiling itself, leading to a dependency cycle. " +
-        'We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.',
-    );
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!(yield* isAsync()) && LOADING_MODULES.has(name)) {
+      throw new Error(
+        `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
+          "and is trying to load itself while compiling itself, leading to a dependency cycle. " +
+          'We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.',
+      );
+    }
   }
 
   try {
-    LOADING_MODULES.add(name);
+    if (!process.env.BABEL_8_BREAKING) {
+      LOADING_MODULES.add(name);
+    }
     return yield* loadCjsOrMjsDefault(
       name,
       `You appear to be using a native ECMAScript module ${type}, ` +
@@ -175,6 +183,8 @@ function* requireModule(type: string, name: string): Handler<unknown> {
     err.message = `[BABEL]: ${err.message} (While processing: ${name})`;
     throw err;
   } finally {
-    LOADING_MODULES.delete(name);
+    if (!process.env.BABEL_8_BREAKING) {
+      LOADING_MODULES.delete(name);
+    }
   }
 }
