@@ -3161,15 +3161,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseMaybeDecoratorArguments(expr);
     }
 
-    checkCommaAfterRest(close) {
+    checkCommaAfterRest(close): boolean {
       if (
         this.state.isAmbientContext &&
         this.match(tt.comma) &&
         this.lookaheadCharCode() === close
       ) {
         this.next();
+        return false;
       } else {
-        super.checkCommaAfterRest(close);
+        return super.checkCommaAfterRest(close);
       }
     }
 
