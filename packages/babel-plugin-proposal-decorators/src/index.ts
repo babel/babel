@@ -12,10 +12,16 @@ import transformer2021_12 from "./transformer-2021-12";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { legacy = false } = options;
+  let { legacy = false } = options;
   if (typeof legacy !== "boolean") {
     throw new Error("'legacy' must be a boolean.");
   }
+  if (version !== undefined && options.legacy !== undefined) {
+    throw new Error(
+      'You can either specify `legacy: true` or `version: "legacy"` with decorators, not both.',
+    );
+  }
+  legacy ||= version === "legacy";
 
   const { decoratorsBeforeExport, version } = options;
   if (decoratorsBeforeExport === undefined) {
@@ -23,7 +29,7 @@ export default declare((api, options) => {
       throw new Error(
         "The decorators plugin requires a 'decoratorsBeforeExport' option," +
           " whose value must be a boolean. If you want to use the legacy" +
-          " decorators semantics, you can set the 'legacy: true' option.",
+          " decorators semantics, you can set the `version: 'legacy'` option.",
       );
     }
   } else {
@@ -37,13 +43,7 @@ export default declare((api, options) => {
     }
   }
 
-  if (version === "legacy" || legacy) {
-    if (version !== undefined && legacy) {
-      throw new Error(
-        'You can either specify `legacy: true` or `version: "legacy"` with decorators, not both.',
-      );
-    }
-
+  if (legacy) {
     return {
       name: "proposal-decorators",
       inherits: syntaxDecorators,
