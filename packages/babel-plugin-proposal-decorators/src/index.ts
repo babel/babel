@@ -26,18 +26,17 @@ export default declare((api, options) => {
   } else if (version === "2021-12") {
     return transformer2021_12(api, options);
   } else {
-    const plugin = createClassFeaturePlugin({
+    return createClassFeaturePlugin({
       name: "proposal-decorators",
 
       api,
       feature: FEATURES.decorators,
+      inherits: syntaxDecorators,
       // loose: options.loose, Not supported
 
       manipulateOptions({ generatorOpts }) {
         generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
       },
     });
-    plugin.inherits = syntaxDecorators;
-    return plugin;
   }
 });
