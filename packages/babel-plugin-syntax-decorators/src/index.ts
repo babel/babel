@@ -51,7 +51,6 @@ export default declare((api, options) => {
 
       if (version === "2021-12") {
         parserOpts.plugins.push("decoratorAutoAccessors");
-        parserOpts.plugins.push("classStaticBlock");
       }
     },
   };
