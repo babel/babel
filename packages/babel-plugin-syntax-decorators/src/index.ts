@@ -13,7 +13,7 @@ export default declare((api, options) => {
   ) {
     throw new Error("Unsupported decorators version: " + version);
   }
-  if (version !== undefined && options.legacy !== undefined) {
+  if (options.version !== undefined && options.legacy !== undefined) {
     throw new Error(
       'You can either specify `legacy: true` or `version: "legacy"` with decorators, not both.',
     );

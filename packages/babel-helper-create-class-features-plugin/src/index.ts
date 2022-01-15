@@ -38,6 +38,7 @@ interface Options {
   name: string;
   feature: number;
   loose?: boolean;
+  inherits?: () => Options;
   // same as PluginObject.manipulateOptions
   manipulateOptions: (options: unknown, parserOpts: ParserOptions) => void;
   // TODO(flow->ts): change to babel api
