@@ -12,36 +12,7 @@ import transformer2021_12 from "./transformer-2021-12";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  let { legacy = false } = options;
-  if (typeof legacy !== "boolean") {
-    throw new Error("'legacy' must be a boolean.");
-  }
-  const { decoratorsBeforeExport, version } = options;
-  if (version !== undefined && options.legacy !== undefined) {
-    throw new Error(
-      'You can either specify `legacy: true` or `version: "legacy"` with decorators, not both.',
-    );
-  }
-  legacy ||= version === "legacy";
-
-  if (decoratorsBeforeExport === undefined) {
-    if (!legacy) {
-      throw new Error(
-        "The decorators plugin requires a 'decoratorsBeforeExport' option," +
-          " whose value must be a boolean. If you want to use the legacy" +
-          " decorators semantics, you can set the `version: 'legacy'` option.",
-      );
-    }
-  } else {
-    if (legacy) {
-      throw new Error(
-        "'decoratorsBeforeExport' can't be used with legacy decorators.",
-      );
-    }
-    if (typeof decoratorsBeforeExport !== "boolean") {
-      throw new Error("'decoratorsBeforeExport' must be a boolean.");
-    }
-  }
+  const { legacy, decoratorsBeforeExport, version } = options;
 
   if (legacy) {
     return {
@@ -52,24 +23,21 @@ export default declare((api, options) => {
       },
       visitor: legacyVisitor,
     };
-  }
-
-  if (version === "2021-12") {
+  } else if (version === "2021-12") {
     return transformer2021_12(api, options);
-  } else if (!(version === "2018-09" || version === undefined)) {
-    throw new Error("Unsupported decorators version: " + version);
+  } else {
+    const plugin = createClassFeaturePlugin({
+      name: "proposal-decorators",
+
+      api,
+      feature: FEATURES.decorators,
+      // loose: options.loose, Not supported
+
+      manipulateOptions({ generatorOpts }) {
+        generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
+      },
+    });
+    plugin.inherits = syntaxDecorators;
+    return plugin;
   }
-
-  return createClassFeaturePlugin({
-    name: "proposal-decorators",
-
-    api,
-    feature: FEATURES.decorators,
-    // loose: options.loose, Not supported
-
-    manipulateOptions({ generatorOpts, parserOpts }) {
-      parserOpts.plugins.push(["decorators", { decoratorsBeforeExport }]);
-      generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
-    },
-  });
 });
