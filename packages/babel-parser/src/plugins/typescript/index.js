@@ -148,7 +148,7 @@ const TSErrors = makeErrorTemplates(
       "A 'set' accessor cannot have rest parameter.",
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
-    SingleTypeWithoutTrailingComma:
+    SingleTypeParameterWithoutTrailingComma:
       "Single type parameter %0 should have a trailing comma. Example usage: <%0,>.",
     StaticBlockCannotHaveModifier:
       "Static class blocks cannot have any modifier.",
@@ -2924,7 +2924,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
 
       let typeParameters: ?N.TsTypeParameterDeclaration;
-      let hasSingleTypeError = { status: false, start: 0, identifierName: "" };
+      let invalidSingleType: ?N.TSTypeParameter;
       state = state || this.state.clone();
 
       const arrow = this.tryParse(abort => {
@@ -2956,24 +2956,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             // If parameter has any constraints, it must contain multiple tokens.
             // <T extends U> is a valid declaration.
             // <T extends {name: string}> is also a valid declaration.
-          } else {
-            const identifierName = process.env.BABEL_8_BREAKING
-              ? parameter.name.name
-              : parameter.name;
-
-            const start = parameter.start;
-            hasSingleTypeError = { status: true, start, identifierName };
-          }
+          } else invalidSingleType = parameter;
         }
 
         return expr;
       }, state);
 
-      if (hasSingleTypeError.status) {
+      if (invalidSingleType) {
         this.raise(
-          hasSingleTypeError.start,
-          TSErrors.SingleTypeWithoutTrailingComma,
-          hasSingleTypeError.identifierName,
+          invalidSingleType.end + 1,
+          TSErrors.SingleTypeParameterWithoutTrailingComma,
+          process.env.BABEL_8_BREAKING
+            ? invalidSingleType.name.name
+            : invalidSingleType.name,
         );
       }
 
