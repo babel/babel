@@ -188,7 +188,7 @@ jobs:
 
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
+          BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes
