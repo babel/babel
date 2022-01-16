@@ -7,4 +7,4 @@ function dec(_, { setMetadata }) {
 @dec
 class Foo {}
 
-expect(Foo[Symbol.metadata][key].constructor).toBe(123);
+expect(Foo[Symbol.for("Symbol.metadata")][key].constructor).toBe(123);

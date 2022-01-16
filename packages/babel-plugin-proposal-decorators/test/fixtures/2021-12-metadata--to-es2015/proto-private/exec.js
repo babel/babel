@@ -8,4 +8,4 @@ class Foo {
   @dec #a;
 }
 
-expect(Foo.prototype[Symbol.metadata][key].private[0]).toBe(123);
+expect(Foo.prototype[Symbol.for("Symbol.metadata")][key].private[0]).toBe(123);

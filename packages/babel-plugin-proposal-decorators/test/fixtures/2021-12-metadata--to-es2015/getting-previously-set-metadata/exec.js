@@ -26,5 +26,5 @@ class Bar extends Foo {
   @dec3 a;
 }
 
-expect(Foo.prototype[Symbol.metadata][key].public.a).toBe(456);
-expect(Bar.prototype[Symbol.metadata][key].public.a).toBe(789);
+expect(Foo.prototype[Symbol.for("Symbol.metadata")][key].public.a).toBe(456);
+expect(Bar.prototype[Symbol.for("Symbol.metadata")][key].public.a).toBe(789);

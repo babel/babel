@@ -12,5 +12,5 @@ class Bar extends Foo {
   @dec #b;
 }
 
-expect(Foo.prototype[Symbol.metadata][key].private).toEqual([123]);
-expect(Bar.prototype[Symbol.metadata][key].private).toEqual([123, 123]);
+expect(Foo.prototype[Symbol.for("Symbol.metadata")][key].private).toEqual([123]);
+expect(Bar.prototype[Symbol.for("Symbol.metadata")][key].private).toEqual([123, 123]);

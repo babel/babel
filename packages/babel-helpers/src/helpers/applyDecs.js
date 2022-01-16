@@ -76,7 +76,7 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
 }
 
 function convertMetadataMapToFinal(obj, metadataMap) {
-  var parentMetadataMap = obj[Symbol.metadata];
+  var parentMetadataMap = obj[Symbol.metadata || Symbol.for("Symbol.metadata")];
   var metadataKeys = Object.getOwnPropertySymbols(metadataMap);
 
   if (metadataKeys.length === 0) return;
@@ -115,7 +115,7 @@ function convertMetadataMapToFinal(obj, metadataMap) {
     Object.setPrototypeOf(metadataMap, parentMetadataMap);
   }
 
-  obj[Symbol.metadata] = metadataMap;
+  obj[Symbol.metadata || Symbol.for("Symbol.metadata")] = metadataMap;
 }
 
 function createAddInitializerMethod(initializers) {
