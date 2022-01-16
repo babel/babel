@@ -485,7 +485,12 @@ function standardizeSuperProperty(superProp) {
           computedKey ? identifier(computedKey.name) : superProp.node.property,
           superProp.node.computed,
         ),
-        binaryExpression("+", identifier(tmp.name), numericLiteral(1)),
+        binaryExpression(
+          // map `++` to `+`, and `--` to `-`
+          superProp.parentPath.node.operator[0] as "+" | "-",
+          identifier(tmp.name),
+          numericLiteral(1),
+        ),
       ),
     ];
 
