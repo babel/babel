@@ -5866,6 +5866,7 @@ __metadata:
     gulp-filter: ^7.0.0
     gulp-plumber: ^1.2.1
     husky: ^7.0.4
+    import-meta-resolve: ^1.1.1
     jest: ^27.4.0
     jest-worker: ^27.4.0
     lint-staged: ^9.2.0
@@ -6278,6 +6279,15 @@ __metadata:
   version: 3.0.0
   resolution: "builtin-status-codes@npm:3.0.0"
   checksum: 1119429cf4b0d57bf76b248ad6f529167d343156ebbcc4d4e4ad600484f6bc63002595cbb61b67ad03ce55cd1d3c4711c03bbf198bf24653b8392420482f3773
+  languageName: node
+  linkType: hard
+
+"builtins@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "builtins@npm:4.0.0"
+  dependencies:
+    semver: ^7.0.0
+  checksum: 3c8b3b96ed88dd8e21286a3590292862ad62a59085bbcd77a4470848fed0f59fcd67f366afdf9ca8d7e77abce7ccf336bf662c12ead949294aa03bc563a57a1c
   languageName: node
   linkType: hard
 
@@ -9624,6 +9634,15 @@ fsevents@^1.2.7:
   bin:
     import-local-fixture: fixtures/cli.js
   checksum: c74d9f9484c878cda1de3434613c7ff72d5dadcf20e5482542232d7c2575b713ff88701d6675fcf09a3684cb23fb407c8b333b9cbc59438712723d058d8e976c
+  languageName: node
+  linkType: hard
+
+"import-meta-resolve@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "import-meta-resolve@npm:1.1.1"
+  dependencies:
+    builtins: ^4.0.0
+  checksum: 2024161e169c45ed25a9f51d984a432a9cc342c35737f9410266bab237ca2f756c1f80c15e2297df83c92f585743d5105291f2ad24094a513f804c6023ea1472
   languageName: node
   linkType: hard
 
@@ -13813,7 +13832,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.5":
+"semver@npm:^7.0.0, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.5":
   version: 7.3.5
   resolution: "semver@npm:7.3.5"
   dependencies:
