@@ -479,7 +479,7 @@ function transformClass(
       continue;
     }
 
-    if (element.node.decorators) {
+    if (element.node.decorators && element.node.decorators.length > 0) {
       hasElementDecorators = true;
     } else if (element.node.type === "ClassAccessorProperty") {
       const { key, value, static: isStatic } = element.node;
@@ -572,7 +572,7 @@ function transformClass(
         hasComputedProps = true;
       }
 
-      if (Array.isArray(decorators)) {
+      if (Array.isArray(decorators) && decorators.length > 0) {
         let locals: t.Identifier | t.Identifier[];
         let privateMethods: t.FunctionExpression | t.FunctionExpression[];
 
