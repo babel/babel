@@ -56,7 +56,7 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
         var pub = metadataForKey.public;
 
         if (pub === void 0) {
-          pub = metadataForKey.public = Object.create(null);
+          pub = metadataForKey.public = {};
         }
 
         pub[property] = value;
