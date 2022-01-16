@@ -14,7 +14,7 @@ export default declare((api, options) => {
 
   const { legacy, decoratorsBeforeExport, version } = options;
 
-  if (legacy) {
+  if (legacy || version === "legacy") {
     return {
       name: "proposal-decorators",
       inherits: syntaxDecorators,
