@@ -472,7 +472,7 @@ function standardizeSuperProperty(superProp: NodePath<t.MemberExpression>) {
     if (isLogicalAssignment) {
       assignmentPath.replaceWith(
         logicalExpression(
-          op as LogicalOp,
+          op,
           assignmentPath.node.left as t.Expression,
           assignmentPath.node.right as t.Expression,
         ),
@@ -549,7 +549,7 @@ function standardizeSuperProperty(superProp: NodePath<t.MemberExpression>) {
     if (op === "=") {
       return assignmentExpression("=", left, right);
     } else {
-      return binaryExpression(op as BinaryOp, left, right);
+      return binaryExpression(op, left, right);
     }
   }
 }
