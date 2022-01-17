@@ -11,6 +11,8 @@ import {
   identifier,
   isIdentifier,
   jsxIdentifier,
+  logicalExpression,
+  LOGICAL_OPERATORS,
   memberExpression,
   metaProperty,
   numericLiteral,
@@ -397,26 +399,46 @@ function hoistFunctionEnvironment(
   return { thisBinding, fnPath };
 }
 
-function standardizeSuperProperty(superProp) {
+type LogicalOp = Parameters<typeof logicalExpression>[0];
+type BinaryOp = Parameters<typeof binaryExpression>[0];
+
+function isLogicalOp(op: string): op is LogicalOp {
+  return LOGICAL_OPERATORS.includes(op);
+}
+
+function standardizeSuperProperty(superProp: NodePath<t.MemberExpression>) {
   if (
     superProp.parentPath.isAssignmentExpression() &&
     superProp.parentPath.node.operator !== "="
   ) {
     const assignmentPath = superProp.parentPath;
 
-    const op = assignmentPath.node.operator.slice(0, -1);
+    const op = assignmentPath.node.operator.slice(0, -1) as
+      | LogicalOp
+      | BinaryOp;
+
     const value = assignmentPath.node.right;
 
-    assignmentPath.node.operator = "=";
+    const isLogicalAssignment = isLogicalOp(op);
+
     if (superProp.node.computed) {
+      // from: super[foo] **= 4;
+      // to:   super[tmp = foo] = super[tmp] ** 4;
+
+      // from: super[foo] ??= 4;
+      // to:   super[tmp = foo] ?? super[tmp] = 4;
+
       const tmp = superProp.scope.generateDeclaredUidIdentifier("tmp");
+
+      const object = superProp.node.object;
+      const property = superProp.node.property as t.Expression;
 
       assignmentPath
         .get("left")
         .replaceWith(
           memberExpression(
-            superProp.node.object,
-            assignmentExpression("=", tmp, superProp.node.property),
+            object,
+            assignmentExpression("=", tmp, property),
             true /* computed */,
           ),
         );
@@ -424,36 +446,49 @@ function standardizeSuperProperty(superProp) {
       assignmentPath
         .get("right")
         .replaceWith(
-          binaryExpression(
-            op,
-            memberExpression(
-              superProp.node.object,
-              identifier(tmp.name),
-              true /* computed */,
-            ),
+          rightExpression(
+            isLogicalAssignment ? "=" : op,
+            memberExpression(object, identifier(tmp.name), true /* computed */),
             value,
           ),
         );
     } else {
+      // from: super.foo **= 4;
+      // to:   super.foo = super.foo ** 4;
+
+      // from: super.foo ??= 4;
+      // to:   super.foo ?? super.foo = 4;
+
+      const object = superProp.node.object;
+      const property = superProp.node.property as t.Identifier;
+
       assignmentPath
         .get("left")
-        .replaceWith(
-          memberExpression(superProp.node.object, superProp.node.property),
-        );
+        .replaceWith(memberExpression(object, property));
 
       assignmentPath
         .get("right")
         .replaceWith(
-          binaryExpression(
-            op,
-            memberExpression(
-              superProp.node.object,
-              identifier(superProp.node.property.name),
-            ),
+          rightExpression(
+            isLogicalAssignment ? "=" : op,
+            memberExpression(object, identifier(property.name)),
             value,
           ),
         );
     }
+
+    if (isLogicalAssignment) {
+      assignmentPath.replaceWith(
+        logicalExpression(
+          op,
+          assignmentPath.node.left as t.Expression,
+          assignmentPath.node.right as t.Expression,
+        ),
+      );
+    } else {
+      assignmentPath.node.operator = "=";
+    }
+
     return [
       assignmentPath.get("left"),
       assignmentPath.get("right").get("left"),
@@ -473,7 +508,11 @@ function standardizeSuperProperty(superProp) {
         memberExpression(
           superProp.node.object,
           computedKey
-            ? assignmentExpression("=", computedKey, superProp.node.property)
+            ? assignmentExpression(
+                "=",
+                computedKey,
+                superProp.node.property as t.Expression,
+              )
             : superProp.node.property,
           superProp.node.computed,
         ),
@@ -506,6 +545,18 @@ function standardizeSuperProperty(superProp) {
   }
 
   return [superProp];
+
+  function rightExpression(
+    op: BinaryOp | "=",
+    left: t.MemberExpression,
+    right: t.Expression,
+  ) {
+    if (op === "=") {
+      return assignmentExpression("=", left, right);
+    } else {
+      return binaryExpression(op, left, right);
+    }
+  }
 }
 
 function hasSuperClass(thisEnvFn) {
