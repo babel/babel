@@ -528,14 +528,16 @@ describe("arrow function conversion", () => {
       () => super.foo ??= 4;
     `,
       `
-      var _superprop_setFoo = _value => super.foo = _value,
-          _superprop_getFoo = () => super.foo;
+     var _superprop_getFoo = () => super.foo,
+         _superprop_setFoo = _value => super.foo = _value;
 
-      (function () {
-        _superprop_setFoo(_superprop_getFoo() ?? 4);
-      });
-      super.foo ??= 4;
-      () => super.foo ??= 4;
+     (function () {
+       _superprop_getFoo() ?? _superprop_setFoo(4);
+     });
+
+     super.foo ??= 4;
+
+     () => super.foo ??= 4;
     `,
     );
   });
@@ -550,14 +552,16 @@ describe("arrow function conversion", () => {
       () => super.foo &&= true;
     `,
       `
-      var _superprop_setFoo = _value => super.foo = _value,
-          _superprop_getFoo = () => super.foo;
+     var _superprop_getFoo = () => super.foo,
+         _superprop_setFoo = _value => super.foo = _value;
 
-      (function () {
-        _superprop_setFoo(_superprop_getFoo() && true);
-      });
-      super.foo &&= true;
-      () => super.foo &&= true;
+     (function () {
+       _superprop_getFoo() && _superprop_setFoo(true);
+     });
+
+     super.foo &&= true;
+
+     () => super.foo &&= true;
     `,
     );
   });
@@ -572,19 +576,19 @@ describe("arrow function conversion", () => {
       () => super.foo ||= true;
     `,
       `
-      var _superprop_setFoo = _value => super.foo = _value,
-          _superprop_getFoo = () => super.foo;
+     var _superprop_getFoo = () => super.foo,
+         _superprop_setFoo = _value => super.foo = _value;
 
-      (function () {
-        _superprop_setFoo(_superprop_getFoo() || true);
-      });
-      super.foo ||= true;
-      () => super.foo ||= true;
+     (function () {
+       _superprop_getFoo() || _superprop_setFoo(true);
+     });
+
+     super.foo ||= true;
+
+     () => super.foo ||= true;
     `,
     );
   });
-
-  //
 
   it("should convert super[prop] operator logical assign `??=`", () => {
     assertConversion(
@@ -596,13 +600,13 @@ describe("arrow function conversion", () => {
       () => super[foo] ??= 4;
     `,
       `
-     var _superprop_set = (_prop, _value) => super[_prop] = _value,
-         _superprop_get = _prop2 => super[_prop2];
+     var _superprop_get = _prop => super[_prop],
+         _superprop_set = (_prop2, _value) => super[_prop2] = _value;
 
      (function () {
        var _tmp;
 
-       _superprop_set(_tmp = foo, _superprop_get(_tmp) ?? 4);
+       _superprop_get(_tmp = foo) ?? _superprop_set(_tmp, 4);
      });
 
      super[foo] ??= 4;
@@ -622,13 +626,13 @@ describe("arrow function conversion", () => {
       () => super[foo] &&= true;
     `,
       `
-     var _superprop_set = (_prop, _value) => super[_prop] = _value,
-         _superprop_get = _prop2 => super[_prop2];
+     var _superprop_get = _prop => super[_prop],
+         _superprop_set = (_prop2, _value) => super[_prop2] = _value;
 
      (function () {
        var _tmp;
 
-       _superprop_set(_tmp = foo, _superprop_get(_tmp) && true);
+       _superprop_get(_tmp = foo) && _superprop_set(_tmp, true);
      });
 
      super[foo] &&= true;
@@ -648,13 +652,13 @@ describe("arrow function conversion", () => {
       () => super[foo] ||= true;
     `,
       `
-     var _superprop_set = (_prop, _value) => super[_prop] = _value,
-         _superprop_get = _prop2 => super[_prop2];
+     var _superprop_get = _prop => super[_prop],
+         _superprop_set = (_prop2, _value) => super[_prop2] = _value;
 
      (function () {
        var _tmp;
 
-       _superprop_set(_tmp = foo, _superprop_get(_tmp) || true);
+       _superprop_get(_tmp = foo) || _superprop_set(_tmp, true);
      });
 
      super[foo] ||= true;
