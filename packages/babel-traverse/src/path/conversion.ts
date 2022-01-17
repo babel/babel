@@ -12,6 +12,7 @@ import {
   isIdentifier,
   jsxIdentifier,
   logicalExpression,
+  LOGICAL_OPERATORS,
   memberExpression,
   metaProperty,
   numericLiteral,
@@ -398,6 +399,13 @@ function hoistFunctionEnvironment(
   return { thisBinding, fnPath };
 }
 
+type LogicalOp = Parameters<typeof logicalExpression>[0];
+type BinaryOp = Parameters<typeof binaryExpression>[0];
+
+function isLogicalOp(op: string): op is LogicalOp {
+  return LOGICAL_OPERATORS.includes(op);
+}
+
 function standardizeSuperProperty(superProp: NodePath<t.MemberExpression>) {
   if (
     superProp.parentPath.isAssignmentExpression() &&
@@ -411,7 +419,7 @@ function standardizeSuperProperty(superProp: NodePath<t.MemberExpression>) {
 
     const value = assignmentPath.node.right;
 
-    const isLogicalAssignment = op === "||" || op === "&&" || op === "??";
+    const isLogicalAssignment = isLogicalOp(op);
 
     if (superProp.node.computed) {
       // from: super[foo] **= 4;
@@ -537,9 +545,6 @@ function standardizeSuperProperty(superProp: NodePath<t.MemberExpression>) {
   }
 
   return [superProp];
-
-  type LogicalOp = Parameters<typeof logicalExpression>[0];
-  type BinaryOp = Parameters<typeof binaryExpression>[0];
 
   function rightExpression(
     op: BinaryOp | "=",
