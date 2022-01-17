@@ -44,7 +44,11 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import { Position, createPositionWithColumnOffset } from "../util/location";
+import {
+  indexes,
+  Position,
+  createPositionWithColumnOffset,
+} from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -313,13 +317,15 @@ export default class ExpressionParser extends LValParser {
 
         if (
           refExpressionErrors.doubleProtoLoc != null &&
-          refExpressionErrors.doubleProtoLoc.index >= startPos
+          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+          indexes.get(refExpressionErrors.doubleProtoLoc) >= startPos
         ) {
           refExpressionErrors.doubleProtoLoc = null; // reset because double __proto__ is valid in assignment expression
         }
         if (
           refExpressionErrors.shorthandAssignLoc != null &&
-          refExpressionErrors.shorthandAssignLoc.index >= startPos
+          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+          indexes.get(refExpressionErrors.shorthandAssignLoc) >= startPos
         ) {
           refExpressionErrors.shorthandAssignLoc = null; // reset because shorthand default was used correctly
         }
@@ -912,7 +918,7 @@ export default class ExpressionParser extends LValParser {
     return (
       base.type === "Identifier" &&
       base.name === "async" &&
-      this.state.lastTokEndLoc.index === base.end &&
+      indexes.get(this.state.lastTokEndLoc) === base.end &&
       !this.canInsertSemicolon() &&
       // check there are no escape sequences, such as \u{61}sync
       base.end - base.start === 5 &&
@@ -1764,7 +1770,8 @@ export default class ExpressionParser extends LValParser {
       this.takeSurroundingComments(
         val,
         startPos,
-        this.state.lastTokEndLoc.index,
+        // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+        indexes.get(this.state.lastTokEndLoc),
       );
 
       return val;

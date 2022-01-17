@@ -17,7 +17,8 @@ export class Position {
     this.column = col;
 
     // this.index = index;
-    Object.defineProperty(this, "index", { enumerable: false, value: index });
+    // Object.defineProperty(this, "index", { enumerable: false, value: index });
+    indexes.set(this, index);
   }
 }
 
@@ -34,6 +35,8 @@ export class SourceLocation {
   }
 }
 
+export const indexes: WeakMap<Position, number> = new WeakMap();
+
 /**
  * creates a new position with a non-zero column offset from the given position.
  * This function should be only be used when we create AST node out of the token
@@ -49,6 +52,10 @@ export function createPositionWithColumnOffset(
   position: Position,
   columnOffset: number,
 ) {
-  const { line, column, index } = position;
-  return new Position(line, column + columnOffset, index + columnOffset);
+  const { line, column } = position;
+  return new Position(
+    line,
+    column + columnOffset,
+    indexes.get(position) + columnOffset,
+  );
 }

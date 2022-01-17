@@ -3,7 +3,11 @@
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
-import { Position, createPositionWithColumnOffset } from "../util/location";
+import {
+  indexes,
+  Position,
+  createPositionWithColumnOffset,
+} from "../util/location";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -1249,7 +1253,7 @@ export default class Tokenizer extends ParserErrors {
 
     if (isBigInt) {
       const str = this.input
-        .slice(startLoc.index, this.state.pos)
+        .slice(indexes.get(startLoc), this.state.pos)
         .replace(/[_n]/g, "");
       this.finishToken(tt.bigint, str);
       return;
@@ -1494,10 +1498,12 @@ export default class Tokenizer extends ParserErrors {
   }
 
   recordStrictModeErrors(message: ErrorTemplate, loc: Position) {
-    if (this.state.strict && !this.state.strictErrors.has(loc.index)) {
+    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+    const index: number = indexes.get(loc);
+    if (this.state.strict && !this.state.strictErrors.has(index)) {
       this.raise(message, { at: loc });
     } else {
-      this.state.strictErrors.set(loc.index, { loc, message });
+      this.state.strictErrors.set(index, { loc, message });
     }
   }
 
@@ -1607,7 +1613,8 @@ export default class Tokenizer extends ParserErrors {
       if (throwOnInvalid) {
         this.raise(Errors.InvalidEscapeSequence, { at: codeLoc });
       } else {
-        this.state.pos = codeLoc.index - 1;
+        // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+        this.state.pos = indexes.get(codeLoc) - 1;
       }
     }
     return n;

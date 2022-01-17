@@ -2,7 +2,7 @@
 
 import type Parser from "./index";
 import UtilParser from "./util";
-import { SourceLocation, type Position } from "../util/location";
+import { indexes, type Position, SourceLocation } from "../util/location";
 import type { Comment, Node as NodeType, NodeBase } from "../types";
 
 // Start an AST node, attaching a start offset.
@@ -126,9 +126,9 @@ export class NodeUtils extends UtilParser {
       );
     }
     node.type = type;
-    node.end = endLoc.index;
+    node.end = indexes.get(endLoc);
     node.loc.end = endLoc;
-    if (this.options.ranges) node.range[1] = endLoc.index;
+    if (this.options.ranges) node.range[1] = node.end;
     if (this.options.attachComment) this.processComment(node);
     return node;
   }
@@ -143,9 +143,10 @@ export class NodeUtils extends UtilParser {
     node: NodeBase,
     endLoc?: Position = this.state.lastTokEndLoc,
   ): void {
-    node.end = endLoc.index;
+    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+    node.end = indexes.get(endLoc);
     node.loc.end = endLoc;
-    if (this.options.ranges) node.range[1] = endLoc.index;
+    if (this.options.ranges) node.range[1] = node.end;
   }
 
   /**

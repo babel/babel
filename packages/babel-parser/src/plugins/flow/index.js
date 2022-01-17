@@ -17,7 +17,7 @@ import {
   tokenIsFlowInterfaceOrTypeOrOpaque,
 } from "../../tokenizer/types";
 import * as N from "../../types";
-import { Position } from "../../util/location";
+import { indexes, Position } from "../../util/location";
 import { types as tc } from "../../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../../util/identifier";
@@ -269,7 +269,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.next(); // eat `%`
       this.expectContextual(tt._checks);
       // Force '%' and 'checks' to be adjacent
-      if (this.state.lastTokStart > moduloLoc.index + 1) {
+      if (this.state.lastTokStart > indexes.get(moduloLoc) + 1) {
         this.raise(FlowErrors.UnexpectedSpaceBetweenModuloChecks, {
           at: moduloLoc,
         });

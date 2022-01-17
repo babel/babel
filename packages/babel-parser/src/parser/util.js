@@ -1,6 +1,6 @@
 // @flow
 
-import { type Position } from "../util/location";
+import { indexes, type Position } from "../util/location";
 import {
   tokenIsLiteralPropertyName,
   tokenLabelName,
@@ -120,7 +120,7 @@ export default class UtilParser extends Tokenizer {
 
   hasPrecedingLineBreak(): boolean {
     return lineBreak.test(
-      this.input.slice(this.state.lastTokEndLoc.index, this.state.start),
+      this.input.slice(indexes.get(this.state.lastTokEndLoc), this.state.start),
     );
   }
 
@@ -152,7 +152,8 @@ export default class UtilParser extends Tokenizer {
 
   // Throws if the current token and the prev one are separated by a space.
   assertNoSpace(message: string = "Unexpected space."): void {
-    if (this.state.start > this.state.lastTokEndLoc.index) {
+    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+    if (this.state.start > indexes.get(this.state.lastTokEndLoc)) {
       /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(
         {

@@ -1,7 +1,7 @@
 // @flow
 
 import type { ErrorData, ErrorTemplate, raiseFunction } from "../parser/error";
-import { Position } from "./location";
+import { indexes, Position } from "./location";
 
 /*:: declare var invariant; */
 /**
@@ -80,10 +80,12 @@ class ArrowHeadParsingScope extends ExpressionScope {
     super(type);
   }
   recordDeclarationError(message: ErrorTemplate, loc: Position) {
-    this.errors.set(loc.index, { message, loc });
+    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+    this.errors.set(indexes.get(loc), { message, loc });
   }
   clearDeclarationError(loc: Position) {
-    this.errors.delete(loc.index);
+    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+    this.errors.delete(indexes.get(loc));
   }
   iterateErrors(iterator: (data: ErrorData) => void) {
     this.errors.forEach(iterator);

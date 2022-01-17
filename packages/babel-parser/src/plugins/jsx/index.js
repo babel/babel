@@ -18,7 +18,7 @@ import {
 import { TokContext, types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
-import type { Position } from "../../util/location";
+import { indexes, type Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
 import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
 
@@ -327,7 +327,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     jsxParseEmptyExpression(): N.JSXEmptyExpression {
       const node = this.startNodeAt(
-        this.state.lastTokEndLoc.index,
+        // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+        indexes.get(this.state.lastTokEndLoc),
         this.state.lastTokEndLoc,
       );
       return this.finishNodeAt(node, "JSXEmptyExpression", this.state.startLoc);
