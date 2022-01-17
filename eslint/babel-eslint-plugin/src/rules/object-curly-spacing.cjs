@@ -1,9 +1,9 @@
-import ruleComposer from "eslint-rule-composer";
-import eslint from "eslint";
+const ruleComposer = require("eslint-rule-composer");
+const eslint = require("eslint");
 
 const rule = new eslint.Linter().getRules().get("object-curly-spacing");
 
-export default ruleComposer.filterReports(rule, problem => {
+module.exports = ruleComposer.filterReports(rule, problem => {
   const node = problem.node;
 
   // Allow exportDefaultFrom syntax:

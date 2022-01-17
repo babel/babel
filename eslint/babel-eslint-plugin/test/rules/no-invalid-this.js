@@ -1,5 +1,5 @@
 import cloneDeep from "clone-deep";
-import rule from "../../lib/rules/no-invalid-this.js";
+import rule from "../../lib/rules/no-invalid-this.cjs";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 /**
@@ -165,7 +165,7 @@ const patterns = [
 ];
 
 const ruleTester = new RuleTester();
-ruleTester.run("@babel/no-invalid-this", rule.default, {
+ruleTester.run("@babel/no-invalid-this", rule, {
   valid: extractPatterns(patterns, "valid"),
   invalid: extractPatterns(patterns, "invalid"),
 });
