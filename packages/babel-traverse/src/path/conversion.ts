@@ -11,6 +11,7 @@ import {
   identifier,
   isIdentifier,
   jsxIdentifier,
+  logicalExpression,
   memberExpression,
   metaProperty,
   numericLiteral,
@@ -424,7 +425,7 @@ function standardizeSuperProperty(superProp) {
       assignmentPath
         .get("right")
         .replaceWith(
-          binaryExpression(
+          rightExpression(
             op,
             memberExpression(
               superProp.node.object,
@@ -444,7 +445,7 @@ function standardizeSuperProperty(superProp) {
       assignmentPath
         .get("right")
         .replaceWith(
-          binaryExpression(
+          rightExpression(
             op,
             memberExpression(
               superProp.node.object,
@@ -506,6 +507,21 @@ function standardizeSuperProperty(superProp) {
   }
 
   return [superProp];
+
+  type LogicalOp = Parameters<typeof logicalExpression>[0];
+  type BinaryOp = Parameters<typeof binaryExpression>[0];
+
+  function rightExpression(
+    op: LogicalOp | BinaryOp,
+    left: t.Expression,
+    right: t.Expression,
+  ) {
+    if (["||", "&&", "??"].includes(op)) {
+      return logicalExpression(op as LogicalOp, left, right);
+    } else {
+      return binaryExpression(op as BinaryOp, left, right);
+    }
+  }
 }
 
 function hasSuperClass(thisEnvFn) {
