@@ -282,13 +282,17 @@ export default class UtilParser extends Tokenizer {
   checkExpressionErrors(
     refExpressionErrors: ?ExpressionErrors,
     andThrow: boolean,
-  ): void {
-    if (!andThrow || !refExpressionErrors) {
-      return;
-    }
-
+  ) {
+    if (!refExpressionErrors) return false;
     const { shorthandAssignLoc, doubleProtoLoc, optionalParametersLoc } =
       refExpressionErrors;
+
+    const hasErrors =
+      !!shorthandAssignLoc || !!doubleProtoLoc || !!optionalParametersLoc;
+
+    if (!andThrow) {
+      return hasErrors;
+    }
 
     if (shorthandAssignLoc != null) {
       this.raise(Errors.InvalidCoverInitializedName, {
