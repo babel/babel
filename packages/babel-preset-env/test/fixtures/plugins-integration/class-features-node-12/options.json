@@ -1,0 +1,7 @@
+{
+  "validateLogs": true,
+  "targets": "node 12",
+  "presets": [
+    ["env", { "debug": true }]
+  ]
+}
