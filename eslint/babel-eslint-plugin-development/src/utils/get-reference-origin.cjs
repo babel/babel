@@ -22,7 +22,7 @@ type ReferenceOrigin =
 // from.
 // It resolves imports, parameters of exported functions and property accesses.
 // See the ReferenceOrigin type for more information.
-export default function getReferenceOrigin(
+module.exports = function getReferenceOrigin(
   node,
   scope,
 ) /*: ?ReferenceOrigin */ {
@@ -69,7 +69,7 @@ export default function getReferenceOrigin(
   }
 
   return null;
-}
+};
 
 function getVariableDefinition(name, scope) {
   let currentScope = scope;

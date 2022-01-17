@@ -1,4 +1,4 @@
-import rule from "../../lib/rules/no-undefined-identifier.js";
+import rule from "../../lib/rules/no-undefined-identifier.cjs";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const error =
@@ -8,7 +8,7 @@ const ruleTester = new RuleTester({
   parserOptions: { sourceType: "module" },
 });
 
-ruleTester.run("no-undefined-identifier", rule.default, {
+ruleTester.run("no-undefined-identifier", rule, {
   valid: [
     `_.identifier("undefined")`,
     `_.Identifier("undefined")`,
