@@ -17,7 +17,7 @@ Using modules transform: auto
 Using plugins:
   proposal-class-static-block { chrome < 94, edge < 94, firefox < 93, ios, opera < 80, safari, samsung }
   proposal-private-property-in-object { firefox < 90, ios < 15, safari < 15, samsung }
-  proposal-class-properties { firefox < 90, ios < 15, safari < 15 }
+  proposal-class-properties { firefox < 90, ios < 15, safari < 14.1 }
   proposal-private-methods { firefox < 90, ios < 15, safari < 15 }
   proposal-numeric-separator { ios < 13 }
   proposal-logical-assignment-operators { firefox < 79, ios < 14, safari < 14 }

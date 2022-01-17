@@ -10,7 +10,7 @@ Using modules transform: auto
 Using plugins:
   proposal-class-static-block { electron }
   proposal-private-property-in-object { electron < 13.0 }
-  proposal-class-properties { electron < 10.0 }
+  proposal-class-properties { electron < 6.0 }
   proposal-private-methods { electron < 10.0 }
   proposal-numeric-separator { electron < 6.0 }
   proposal-logical-assignment-operators { electron < 10.0 }
