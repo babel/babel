@@ -518,6 +518,152 @@ describe("arrow function conversion", () => {
     );
   });
 
+  it("should convert super.prop operator logical assign `??=`", () => {
+    assertConversion(
+      `
+      () => {
+        super.foo ??= 4;
+      };
+      super.foo ??= 4;
+      () => super.foo ??= 4;
+    `,
+      `
+      var _superprop_setFoo = _value => super.foo = _value,
+          _superprop_getFoo = () => super.foo;
+
+      (function () {
+        _superprop_setFoo(_superprop_getFoo() ?? 4);
+      });
+      super.foo ??= 4;
+      () => super.foo ??= 4;
+    `,
+    );
+  });
+
+  it("should convert super.prop operator logical assign `&&=`", () => {
+    assertConversion(
+      `
+      () => {
+        super.foo &&= true;
+      };
+      super.foo &&= true;
+      () => super.foo &&= true;
+    `,
+      `
+      var _superprop_setFoo = _value => super.foo = _value,
+          _superprop_getFoo = () => super.foo;
+
+      (function () {
+        _superprop_setFoo(_superprop_getFoo() && true);
+      });
+      super.foo &&= true;
+      () => super.foo &&= true;
+    `,
+    );
+  });
+
+  it("should convert super.prop operator logical assign `||=`", () => {
+    assertConversion(
+      `
+      () => {
+        super.foo ||= true;
+      };
+      super.foo ||= true;
+      () => super.foo ||= true;
+    `,
+      `
+      var _superprop_setFoo = _value => super.foo = _value,
+          _superprop_getFoo = () => super.foo;
+
+      (function () {
+        _superprop_setFoo(_superprop_getFoo() || true);
+      });
+      super.foo ||= true;
+      () => super.foo ||= true;
+    `,
+    );
+  });
+
+  //
+
+  it("should convert super[prop] operator logical assign `??=`", () => {
+    assertConversion(
+      `
+      () => {
+        super[foo] ??= 4;
+      };
+      super[foo] ??= 4;
+      () => super[foo] ??= 4;
+    `,
+      `
+     var _superprop_set = (_prop, _value) => super[_prop] = _value,
+         _superprop_get = _prop2 => super[_prop2];
+
+     (function () {
+       var _tmp;
+
+       _superprop_set(_tmp = foo, _superprop_get(_tmp) ?? 4);
+     });
+
+     super[foo] ??= 4;
+
+     () => super[foo] ??= 4;
+    `,
+    );
+  });
+
+  it("should convert super[prop] operator logical assign `&&=`", () => {
+    assertConversion(
+      `
+      () => {
+        super[foo] &&= true;
+      };
+      super[foo] &&= true;
+      () => super[foo] &&= true;
+    `,
+      `
+     var _superprop_set = (_prop, _value) => super[_prop] = _value,
+         _superprop_get = _prop2 => super[_prop2];
+
+     (function () {
+       var _tmp;
+
+       _superprop_set(_tmp = foo, _superprop_get(_tmp) && true);
+     });
+
+     super[foo] &&= true;
+
+     () => super[foo] &&= true;
+    `,
+    );
+  });
+
+  it("should convert super[prop] operator logical assign `||=`", () => {
+    assertConversion(
+      `
+      () => {
+        super[foo] ||= true;
+      };
+      super[foo] ||= true;
+      () => super[foo] ||= true;
+    `,
+      `
+     var _superprop_set = (_prop, _value) => super[_prop] = _value,
+         _superprop_get = _prop2 => super[_prop2];
+
+     (function () {
+       var _tmp;
+
+       _superprop_set(_tmp = foo, _superprop_get(_tmp) || true);
+     });
+
+     super[foo] ||= true;
+
+     () => super[foo] ||= true;
+    `,
+    );
+  });
+
   it("should convert `++super.prop` prefix update", () => {
     assertConversion(
       `
