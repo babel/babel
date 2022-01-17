@@ -11,7 +11,7 @@ Using modules transform: auto
 Using plugins:
   proposal-class-static-block { firefox < 93, node < 16.11 }
   proposal-private-property-in-object { firefox < 90, node < 16.9 }
-  proposal-class-properties { firefox < 90, node < 14.6 }
+  proposal-class-properties { firefox < 90, node < 12 }
   proposal-private-methods { firefox < 90, node < 14.6 }
   proposal-numeric-separator { firefox < 70, node < 12.5 }
   proposal-logical-assignment-operators { firefox < 79, node < 15 }
