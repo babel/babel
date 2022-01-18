@@ -3,6 +3,11 @@
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
+import {
+  indexes,
+  Position,
+  createPositionWithColumnOffset,
+} from "../util/location";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -128,8 +133,8 @@ export default class Tokenizer extends ParserErrors {
   // parser/util.js
   /*::
   +hasPrecedingLineBreak: () => boolean;
-  +unexpected: (pos?: ?number, messageOrType?: ErrorTemplate | TokenType) => empty;
-  +expectPlugin: (name: string, pos?: ?number) => true;
+  +unexpected: (loc?: ?Position, type?: TokenType) => empty;
+  +expectPlugin: (name: string, loc?: Position) => true;
   */
 
   isLookahead: boolean;
@@ -162,7 +167,6 @@ export default class Tokenizer extends ParserErrors {
       this.pushToken(new Token(this.state));
     }
 
-    this.state.lastTokEnd = this.state.end;
     this.state.lastTokStart = this.state.start;
     this.state.lastTokEndLoc = this.state.endLoc;
     this.state.lastTokStartLoc = this.state.startLoc;
@@ -205,9 +209,13 @@ export default class Tokenizer extends ParserErrors {
       type: state.type,
       start: state.start,
       end: state.end,
-      lastTokEnd: state.end,
       context: [this.curContext()],
       inType: state.inType,
+      startLoc: state.startLoc,
+      lastTokEndLoc: state.lastTokEndLoc,
+      curLine: state.curLine,
+      lineStart: state.lineStart,
+      curPosition: state.curPosition,
     };
   }
 
@@ -280,9 +288,9 @@ export default class Tokenizer extends ParserErrors {
       // after a "use strict" directive. Strict mode will be set at parse
       // time for any literals that occur after the next node of the strict
       // directive.
-      this.state.strictErrors.forEach((message, pos) =>
+      this.state.strictErrors.forEach(({ message, loc }) =>
         /* eslint-disable @babel/development-internal/dry-error-messages */
-        this.raise(pos, message),
+        this.raise(message, { at: loc }),
       );
       this.state.strictErrors.clear();
     }
@@ -312,7 +320,14 @@ export default class Tokenizer extends ParserErrors {
     if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
     const end = this.input.indexOf("*/", start + 2);
-    if (end === -1) throw this.raise(start, Errors.UnterminatedComment);
+    if (end === -1) {
+      // We have to call this again here because startLoc may not be set...
+      // This seems to be for performance reasons:
+      // https://github.com/babel/babel/commit/acf2a10899f696a8aaf34df78bf9725b5ea7f2da
+      throw this.raise(Errors.UnterminatedComment, {
+        at: this.state.curPosition(),
+      });
+    }
 
     this.state.pos = end + 2;
     lineBreakG.lastIndex = start + 2;
@@ -483,12 +498,12 @@ export default class Tokenizer extends ParserErrors {
 
   finishToken(type: TokenType, val: any): void {
     this.state.end = this.state.pos;
+    this.state.endLoc = this.state.curPosition();
     const prevType = this.state.type;
     this.state.type = type;
     this.state.value = val;
 
     if (!this.isLookahead) {
-      this.state.endLoc = this.state.curPosition();
       this.updateContext(prevType);
     }
   }
@@ -519,7 +534,9 @@ export default class Tokenizer extends ParserErrors {
     const nextPos = this.state.pos + 1;
     const next = this.codePointAtPos(nextPos);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
-      throw this.raise(this.state.pos, Errors.UnexpectedDigitAfterHash);
+      throw this.raise(Errors.UnexpectedDigitAfterHash, {
+        at: this.state.curPosition(),
+      });
     }
 
     if (
@@ -533,10 +550,10 @@ export default class Tokenizer extends ParserErrors {
       this.expectPlugin("recordAndTuple");
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
         throw this.raise(
-          this.state.pos,
           next === charCodes.leftCurlyBrace
             ? Errors.RecordExpressionHashIncorrectStartSyntaxType
             : Errors.TupleExpressionHashIncorrectStartSyntaxType,
+          { at: this.state.curPosition() },
         );
       }
 
@@ -660,10 +677,9 @@ export default class Tokenizer extends ParserErrors {
         next === charCodes.rightCurlyBrace
       ) {
         if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            this.state.pos,
-            Errors.RecordExpressionBarIncorrectEndSyntaxType,
-          );
+          throw this.raise(Errors.RecordExpressionBarIncorrectEndSyntaxType, {
+            at: this.state.curPosition(),
+          });
         }
         this.state.pos += 2;
         this.finishToken(tt.braceBarR);
@@ -676,10 +692,9 @@ export default class Tokenizer extends ParserErrors {
         next === charCodes.rightSquareBracket
       ) {
         if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            this.state.pos,
-            Errors.TupleExpressionBarIncorrectEndSyntaxType,
-          );
+          throw this.raise(Errors.TupleExpressionBarIncorrectEndSyntaxType, {
+            at: this.state.curPosition(),
+          });
         }
         this.state.pos += 2;
         this.finishToken(tt.bracketBarR);
@@ -857,8 +872,8 @@ export default class Tokenizer extends ParserErrors {
         ) {
           if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
             throw this.raise(
-              this.state.pos,
               Errors.TupleExpressionBarIncorrectStartSyntaxType,
+              { at: this.state.curPosition() },
             );
           }
 
@@ -881,8 +896,8 @@ export default class Tokenizer extends ParserErrors {
         ) {
           if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
             throw this.raise(
-              this.state.pos,
               Errors.RecordExpressionBarIncorrectStartSyntaxType,
+              { at: this.state.curPosition() },
             );
           }
 
@@ -1023,8 +1038,8 @@ export default class Tokenizer extends ParserErrors {
     }
 
     throw this.raise(
-      this.state.pos,
       Errors.InvalidOrUnexpectedToken,
+      { at: this.state.curPosition() },
       String.fromCodePoint(code),
     );
   }
@@ -1036,16 +1051,22 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readRegexp(): void {
+    const startLoc = this.state.startLoc;
     const start = this.state.start + 1;
     let escaped, inClass;
     let { pos } = this.state;
     for (; ; ++pos) {
       if (pos >= this.length) {
-        throw this.raise(start, Errors.UnterminatedRegExp);
+        // FIXME: explain
+        throw this.raise(Errors.UnterminatedRegExp, {
+          at: createPositionWithColumnOffset(startLoc, 1),
+        });
       }
       const ch = this.input.charCodeAt(pos);
       if (isNewLine(ch)) {
-        throw this.raise(start, Errors.UnterminatedRegExp);
+        throw this.raise(Errors.UnterminatedRegExp, {
+          at: createPositionWithColumnOffset(startLoc, 1),
+        });
       }
       if (escaped) {
         escaped = false;
@@ -1072,10 +1093,15 @@ export default class Tokenizer extends ParserErrors {
 
       if (VALID_REGEX_FLAGS.has(cp)) {
         if (mods.includes(char)) {
-          this.raise(pos + 1, Errors.DuplicateRegExpFlags);
+          // (pos + 1) + 1 - start
+          this.raise(Errors.DuplicateRegExpFlags, {
+            at: createPositionWithColumnOffset(startLoc, pos + 2 - start),
+          });
         }
       } else if (isIdentifierChar(cp) || cp === charCodes.backslash) {
-        this.raise(pos + 1, Errors.MalformedRegExpFlags);
+        this.raise(Errors.MalformedRegExpFlags, {
+          at: createPositionWithColumnOffset(startLoc, pos + 2 - start),
+        });
       } else {
         break;
       }
@@ -1131,17 +1157,23 @@ export default class Tokenizer extends ParserErrors {
         const prev = this.input.charCodeAt(this.state.pos - 1);
         const next = this.input.charCodeAt(this.state.pos + 1);
         if (allowedSiblings.indexOf(next) === -1) {
-          this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
+          this.raise(Errors.UnexpectedNumericSeparator, {
+            at: this.state.curPosition(),
+          });
         } else if (
           forbiddenSiblings.indexOf(prev) > -1 ||
           forbiddenSiblings.indexOf(next) > -1 ||
           Number.isNaN(next)
         ) {
-          this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
+          this.raise(Errors.UnexpectedNumericSeparator, {
+            at: this.state.curPosition(),
+          });
         }
 
         if (!allowNumSeparator) {
-          this.raise(this.state.pos, Errors.NumericSeparatorInEscapeSequence);
+          this.raise(Errors.NumericSeparatorInEscapeSequence, {
+            at: this.state.curPosition(),
+          });
         }
 
         // Ignore this _ character
@@ -1164,7 +1196,11 @@ export default class Tokenizer extends ParserErrors {
 
         if (this.options.errorRecovery && val <= 9) {
           val = 0;
-          this.raise(this.state.start + i + 2, Errors.InvalidDigit, radix);
+          this.raise(
+            Errors.InvalidDigit,
+            { at: this.state.curPosition() },
+            radix,
+          );
         } else if (forceLen) {
           val = 0;
           invalid = true;
@@ -1187,13 +1223,18 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readRadixNumber(radix: number): void {
-    const start = this.state.pos;
+    const startLoc = this.state.curPosition();
     let isBigInt = false;
 
     this.state.pos += 2; // 0x
     const val = this.readInt(radix);
     if (val == null) {
-      this.raise(this.state.start + 2, Errors.InvalidDigit, radix);
+      this.raise(
+        Errors.InvalidDigit,
+        // Numeric literals can't have newlines, so this is safe to do.
+        { at: createPositionWithColumnOffset(startLoc, 2) },
+        radix,
+      );
     }
     const next = this.input.charCodeAt(this.state.pos);
 
@@ -1201,15 +1242,19 @@ export default class Tokenizer extends ParserErrors {
       ++this.state.pos;
       isBigInt = true;
     } else if (next === charCodes.lowercaseM) {
-      throw this.raise(start, Errors.InvalidDecimal);
+      throw this.raise(Errors.InvalidDecimal, { at: startLoc });
     }
 
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
-      throw this.raise(this.state.pos, Errors.NumberIdentifier);
+      throw this.raise(Errors.NumberIdentifier, {
+        at: this.state.curPosition(),
+      });
     }
 
     if (isBigInt) {
-      const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
+      const str = this.input
+        .slice(indexes.get(startLoc), this.state.pos)
+        .replace(/[_n]/g, "");
       this.finishToken(tt.bigint, str);
       return;
     }
@@ -1221,6 +1266,7 @@ export default class Tokenizer extends ParserErrors {
 
   readNumber(startsWithDot: boolean): void {
     const start = this.state.pos;
+    const startLoc = this.state.curPosition();
     let isFloat = false;
     let isBigInt = false;
     let isDecimal = false;
@@ -1228,7 +1274,7 @@ export default class Tokenizer extends ParserErrors {
     let isOctal = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
-      this.raise(start, Errors.InvalidNumber);
+      this.raise(Errors.InvalidNumber, { at: this.state.curPosition() });
     }
     const hasLeadingZero =
       this.state.pos - start >= 2 &&
@@ -1236,12 +1282,15 @@ export default class Tokenizer extends ParserErrors {
 
     if (hasLeadingZero) {
       const integer = this.input.slice(start, this.state.pos);
-      this.recordStrictModeErrors(start, Errors.StrictOctalLiteral);
+      this.recordStrictModeErrors(Errors.StrictOctalLiteral, startLoc);
       if (!this.state.strict) {
         // disallow numeric separators in non octal decimals and legacy octal likes
         const underscorePos = integer.indexOf("_");
         if (underscorePos > 0) {
-          this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
+          // Numeric literals can't have newlines, so this is safe to do.
+          this.raise(Errors.ZeroDigitNumericSeparator, {
+            at: createPositionWithColumnOffset(startLoc, underscorePos),
+          });
         }
       }
       isOctal = hasLeadingZero && !/[89]/.test(integer);
@@ -1264,7 +1313,7 @@ export default class Tokenizer extends ParserErrors {
         ++this.state.pos;
       }
       if (this.readInt(10) === null) {
-        this.raise(start, Errors.InvalidOrMissingExponent);
+        this.raise(Errors.InvalidOrMissingExponent, { at: startLoc });
       }
       isFloat = true;
       hasExponent = true;
@@ -1275,23 +1324,25 @@ export default class Tokenizer extends ParserErrors {
       // disallow floats, legacy octal syntax and non octal decimals
       // new style octal ("0o") is handled in this.readRadixNumber
       if (isFloat || hasLeadingZero) {
-        this.raise(start, Errors.InvalidBigIntLiteral);
+        this.raise(Errors.InvalidBigIntLiteral, { at: startLoc });
       }
       ++this.state.pos;
       isBigInt = true;
     }
 
     if (next === charCodes.lowercaseM) {
-      this.expectPlugin("decimal", this.state.pos);
+      this.expectPlugin("decimal", this.state.curPosition());
       if (hasExponent || hasLeadingZero) {
-        this.raise(start, Errors.InvalidDecimal);
+        this.raise(Errors.InvalidDecimal, { at: startLoc });
       }
       ++this.state.pos;
       isDecimal = true;
     }
 
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
-      throw this.raise(this.state.pos, Errors.NumberIdentifier);
+      throw this.raise(Errors.NumberIdentifier, {
+        at: this.state.curPosition(),
+      });
     }
 
     // remove "_" for numeric literal separator, and trailing `m` or `n`
@@ -1318,7 +1369,7 @@ export default class Tokenizer extends ParserErrors {
     let code;
 
     if (ch === charCodes.leftCurlyBrace) {
-      const codePos = ++this.state.pos;
+      ++this.state.pos;
       code = this.readHexChar(
         this.input.indexOf("}", this.state.pos) - this.state.pos,
         true,
@@ -1327,7 +1378,7 @@ export default class Tokenizer extends ParserErrors {
       ++this.state.pos;
       if (code !== null && code > 0x10ffff) {
         if (throwOnInvalid) {
-          this.raise(codePos, Errors.InvalidCodePoint);
+          this.raise(Errors.InvalidCodePoint, { at: this.state.curPosition() });
         } else {
           return null;
         }
@@ -1343,7 +1394,9 @@ export default class Tokenizer extends ParserErrors {
       chunkStart = ++this.state.pos;
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(this.state.start, Errors.UnterminatedString);
+        throw this.raise(Errors.UnterminatedString, {
+          at: this.state.startLoc,
+        });
       }
       const ch = this.input.charCodeAt(this.state.pos);
       if (ch === quote) break;
@@ -1360,7 +1413,9 @@ export default class Tokenizer extends ParserErrors {
         ++this.state.curLine;
         this.state.lineStart = this.state.pos;
       } else if (isNewLine(ch)) {
-        throw this.raise(this.state.start, Errors.UnterminatedString);
+        throw this.raise(Errors.UnterminatedString, {
+          at: this.state.startLoc,
+        });
       } else {
         ++this.state.pos;
       }
@@ -1372,7 +1427,7 @@ export default class Tokenizer extends ParserErrors {
   // Reads tempalte continuation `}...`
   readTemplateContinuation(): void {
     if (!this.match(tt.braceR)) {
-      this.unexpected(this.state.start, tt.braceR);
+      this.unexpected(null, tt.braceR);
     }
     // rewind pos to `}`
     this.state.pos--;
@@ -1387,7 +1442,10 @@ export default class Tokenizer extends ParserErrors {
     ++this.state.pos; // eat '`' or `}`
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(this.state.start + 1, Errors.UnterminatedTemplate);
+        // FIXME: explain
+        throw this.raise(Errors.UnterminatedTemplate, {
+          at: createPositionWithColumnOffset(this.state.startLoc, 1),
+        });
       }
       const ch = this.input.charCodeAt(this.state.pos);
       if (ch === charCodes.graveAccent) {
@@ -1439,11 +1497,13 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  recordStrictModeErrors(pos: number, message: ErrorTemplate) {
-    if (this.state.strict && !this.state.strictErrors.has(pos)) {
-      this.raise(pos, message);
+  recordStrictModeErrors(message: ErrorTemplate, loc: Position) {
+    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+    const index: number = indexes.get(loc);
+    if (this.state.strict && !this.state.strictErrors.has(index)) {
+      this.raise(message, { at: loc });
     } else {
-      this.state.strictErrors.set(pos, message);
+      this.state.strictErrors.set(index, { loc, message });
     }
   }
 
@@ -1491,14 +1551,21 @@ export default class Tokenizer extends ParserErrors {
           return null;
         } else {
           this.recordStrictModeErrors(
-            this.state.pos - 1,
             Errors.StrictNumericEscape,
+            // We immediately follow a "\\", and we're an 8 or a 9, so we must
+            // be on the same line.
+            createPositionWithColumnOffset(this.state.curPosition(), -1),
           );
         }
       // fall through
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
-          const codePos = this.state.pos - 1;
+          // We immediately follow a "\\", and we're something between 0 and 7,
+          // so we must be on the same line.
+          const codePos = createPositionWithColumnOffset(
+            this.state.curPosition(),
+            -1,
+          );
           const match = this.input
             .substr(this.state.pos - 1, 3)
             .match(/^[0-7]+/);
@@ -1522,7 +1589,7 @@ export default class Tokenizer extends ParserErrors {
             if (inTemplate) {
               return null;
             } else {
-              this.recordStrictModeErrors(codePos, Errors.StrictNumericEscape);
+              this.recordStrictModeErrors(Errors.StrictNumericEscape, codePos);
             }
           }
 
@@ -1540,13 +1607,14 @@ export default class Tokenizer extends ParserErrors {
     forceLen: boolean,
     throwOnInvalid: boolean,
   ): number | null {
-    const codePos = this.state.pos;
+    const codeLoc = this.state.curPosition();
     const n = this.readInt(16, len, forceLen, false);
     if (n === null) {
       if (throwOnInvalid) {
-        this.raise(codePos, Errors.InvalidEscapeSequence);
+        this.raise(Errors.InvalidEscapeSequence, { at: codeLoc });
       } else {
-        this.state.pos = codePos - 1;
+        // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
+        this.state.pos = indexes.get(codeLoc) - 1;
       }
     }
     return n;
@@ -1578,12 +1646,14 @@ export default class Tokenizer extends ParserErrors {
         this.state.containsEsc = true;
 
         word += this.input.slice(chunkStart, this.state.pos);
-        const escStart = this.state.pos;
+        const escStart = this.state.curPosition();
         const identifierCheck =
           this.state.pos === start ? isIdentifierStart : isIdentifierChar;
 
         if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
-          this.raise(this.state.pos, Errors.MissingUnicodeEscape);
+          this.raise(Errors.MissingUnicodeEscape, {
+            at: this.state.curPosition(),
+          });
           chunkStart = this.state.pos - 1;
           continue;
         }
@@ -1592,7 +1662,7 @@ export default class Tokenizer extends ParserErrors {
         const esc = this.readCodePoint(true);
         if (esc !== null) {
           if (!identifierCheck(esc)) {
-            this.raise(escStart, Errors.EscapedCharNotAnIdentifier);
+            this.raise(Errors.EscapedCharNotAnIdentifier, { at: escStart });
           }
 
           word += String.fromCodePoint(esc);
@@ -1624,8 +1694,8 @@ export default class Tokenizer extends ParserErrors {
     const { type } = this.state;
     if (tokenIsKeyword(type) && this.state.containsEsc) {
       this.raise(
-        this.state.start,
         Errors.InvalidEscapedReservedWord,
+        { at: this.state.startLoc },
         tokenLabelName(type),
       );
     }

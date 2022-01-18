@@ -83,17 +83,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       stmt.expression = this.finishNodeAt(
         expression,
         "Literal",
-        directiveLiteral.end,
         directiveLiteral.loc.end,
       );
       stmt.directive = directiveLiteral.extra.raw.slice(1, -1);
 
-      return this.finishNodeAt(
-        stmt,
-        "ExpressionStatement",
-        directive.end,
-        directive.loc.end,
-      );
+      return this.finishNodeAt(stmt, "ExpressionStatement", directive.loc.end);
     }
 
     // ==================================
@@ -346,9 +340,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(prop.key.start, Errors.PatternHasAccessor);
+        this.raise(Errors.PatternHasAccessor, { node: prop.key });
       } else if (prop.method) {
-        this.raise(prop.key.start, Errors.PatternHasMethod);
+        this.raise(Errors.PatternHasMethod, { node: prop.key });
       } else {
         super.toAssignableObjectExpressionProp(prop, ...args);
       }

@@ -1,3 +1,8 @@
 {
-  "throws": "Unexpected token (1:12)"
+  "sourceType": "module",
+  "plugins": [
+    "jsx",
+    "flow"
+  ],
+  "throws": "Unexpected token, expected \"*\" (1:7)"
 }

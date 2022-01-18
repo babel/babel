@@ -6,7 +6,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     parseV8Intrinsic(): N.Expression {
       if (this.match(tt.modulo)) {
-        const v8IntrinsicStart = this.state.start;
+        const v8IntrinsicStartLoc = this.state.startLoc;
         // let the `loc` of Identifier starts from `%`
         const node = this.startNode();
         this.next(); // eat '%'
@@ -18,7 +18,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return identifier;
           }
         }
-        this.unexpected(v8IntrinsicStart);
+        this.unexpected(v8IntrinsicStartLoc);
       }
     }
 

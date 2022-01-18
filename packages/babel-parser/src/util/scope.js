@@ -16,6 +16,7 @@ import {
   type ScopeFlags,
   type BindingTypes,
 } from "./scopeflags";
+import { Position } from "./location";
 import * as N from "../types";
 import { Errors, type raiseFunction } from "../parser/error";
 
@@ -40,8 +41,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   scopeStack: Array<IScope> = [];
   declare raise: raiseFunction;
   declare inModule: boolean;
-  undefinedExports: Map<string, number> = new Map();
-  undefinedPrivateNames: Map<string, number> = new Map();
+  undefinedExports: Map<string, Position> = new Map();
 
   constructor(raise: raiseFunction, inModule: boolean) {
     this.raise = raise;
@@ -107,10 +107,10 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     );
   }
 
-  declareName(name: string, bindingType: BindingTypes, pos: number) {
+  declareName(name: string, bindingType: BindingTypes, loc: Position) {
     let scope = this.currentScope();
     if (bindingType & BIND_SCOPE_LEXICAL || bindingType & BIND_SCOPE_FUNCTION) {
-      this.checkRedeclarationInScope(scope, name, bindingType, pos);
+      this.checkRedeclarationInScope(scope, name, bindingType, loc);
 
       if (bindingType & BIND_SCOPE_FUNCTION) {
         scope.functions.add(name);
@@ -124,7 +124,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     } else if (bindingType & BIND_SCOPE_VAR) {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         scope = this.scopeStack[i];
-        this.checkRedeclarationInScope(scope, name, bindingType, pos);
+        this.checkRedeclarationInScope(scope, name, bindingType, loc);
         scope.var.add(name);
         this.maybeExportDefined(scope, name);
 
@@ -146,10 +146,10 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     scope: IScope,
     name: string,
     bindingType: BindingTypes,
-    pos: number,
+    loc: Position,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
-      this.raise(pos, Errors.VarRedeclaration, name);
+      this.raise(Errors.VarRedeclaration, { at: loc }, name);
     }
   }
 
@@ -196,7 +196,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
       // can overwrite this behavior.
       !topLevelScope.functions.has(name)
     ) {
-      this.undefinedExports.set(name, id.start);
+      this.undefinedExports.set(name, id.loc.start);
     }
   }
 

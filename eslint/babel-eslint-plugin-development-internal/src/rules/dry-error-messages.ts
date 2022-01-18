@@ -146,7 +146,7 @@ export default {
       "CallExpression[callee.type='MemberExpression'][callee.object.type='ThisExpression'][callee.property.name='raise'][arguments.length>=2]"(
         node,
       ) {
-        const [, errorMsgNode] = node.arguments;
+        const [errorMsgNode] = node.arguments;
         const nodesToCheck = findIdNodes(errorMsgNode);
 
         if (

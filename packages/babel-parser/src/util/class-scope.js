@@ -5,6 +5,7 @@ import {
   CLASS_ELEMENT_FLAG_STATIC,
   type ClassElementTypes,
 } from "./scopeflags";
+import { Position } from "./location";
 import { Errors, type raiseFunction } from "../parser/error";
 
 export class ClassScope {
@@ -16,13 +17,13 @@ export class ClassScope {
 
   // A list of private names used before being defined, mapping to
   // their position.
-  undefinedPrivateNames: Map<string, number> = new Map();
+  undefinedPrivateNames: Map<string, Position> = new Map();
 }
 
 export default class ClassScopeHandler {
   stack: Array<ClassScope> = [];
   declare raise: raiseFunction;
-  undefinedPrivateNames: Map<string, number> = new Map();
+  undefinedPrivateNames: Map<string, Position> = new Map();
 
   constructor(raise: raiseFunction) {
     this.raise = raise;
@@ -45,13 +46,13 @@ export default class ClassScopeHandler {
     const current = this.current();
 
     // Array.from is needed because this is compiled to an array-like for loop
-    for (const [name, pos] of Array.from(oldClassScope.undefinedPrivateNames)) {
+    for (const [name, loc] of Array.from(oldClassScope.undefinedPrivateNames)) {
       if (current) {
         if (!current.undefinedPrivateNames.has(name)) {
-          current.undefinedPrivateNames.set(name, pos);
+          current.undefinedPrivateNames.set(name, loc);
         }
       } else {
-        this.raise(pos, Errors.InvalidPrivateFieldResolution, name);
+        this.raise(Errors.InvalidPrivateFieldResolution, { at: loc }, name);
       }
     }
   }
@@ -59,7 +60,7 @@ export default class ClassScopeHandler {
   declarePrivateName(
     name: string,
     elementType: ClassElementTypes,
-    pos: number,
+    loc: Position,
   ) {
     const { privateNames, loneAccessors, undefinedPrivateNames } =
       this.current();
@@ -86,24 +87,24 @@ export default class ClassScopeHandler {
     }
 
     if (redefined) {
-      this.raise(pos, Errors.PrivateNameRedeclaration, name);
+      this.raise(Errors.PrivateNameRedeclaration, { at: loc }, name);
     }
 
     privateNames.add(name);
     undefinedPrivateNames.delete(name);
   }
 
-  usePrivateName(name: string, pos: number) {
+  usePrivateName(name: string, loc: Position) {
     let classScope;
     for (classScope of this.stack) {
       if (classScope.privateNames.has(name)) return;
     }
 
     if (classScope) {
-      classScope.undefinedPrivateNames.set(name, pos);
+      classScope.undefinedPrivateNames.set(name, loc);
     } else {
       // top-level
-      this.raise(pos, Errors.InvalidPrivateFieldResolution, name);
+      this.raise(Errors.InvalidPrivateFieldResolution, { at: loc }, name);
     }
   }
 }
