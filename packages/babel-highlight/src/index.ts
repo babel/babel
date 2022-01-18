@@ -262,8 +262,7 @@ export function getChalk(options: Options) {
  * Highlight `code`.
  */
 export default function highlight(code: string, options: Options = {}): string {
-  if (!code) return code;
-  if (shouldHighlight(options)) {
+  if (code !== "" && shouldHighlight(options)) {
     const chalk = getChalk(options);
     const defs = getDefs(chalk);
     return highlightTokens(defs, code);
