@@ -12,12 +12,7 @@ import {
 import type { PropPath } from "./fields";
 import { buildDecoratedClass, hasDecorators } from "./decorators";
 import { injectInitialization, extractComputedKeys } from "./misc";
-import {
-  enableFeature,
-  verifyUsedFeatures,
-  FEATURES,
-  isLoose,
-} from "./features";
+import { enableFeature, FEATURES, isLoose, shouldTransform } from "./features";
 import { assertFieldTransformed } from "./typescript";
 import type { ParserOptions } from "@babel/parser";
 
@@ -98,7 +93,7 @@ export function createClassFeaturePlugin({
       Class(path: NodePath<t.Class>, state: File) {
         if (this.file.get(versionKey) !== version) return;
 
-        verifyUsedFeatures(path, this.file);
+        if (!shouldTransform(path, this.file)) return;
 
         if (path.isClassDeclaration()) assertFieldTransformed(path);
 
@@ -113,8 +108,6 @@ export function createClassFeaturePlugin({
         const body = path.get("body");
 
         for (const path of body.get("body")) {
-          verifyUsedFeatures(path, this.file);
-
           if (
             // check path.node.computed is enough, but ts will complain
             (path.isClassProperty() || path.isClassMethod()) &&
@@ -264,17 +257,6 @@ export function createClassFeaturePlugin({
             .find(parent => parent.isStatement() || parent.isDeclaration())
             .insertAfter(pureStaticNodes);
         }
-      },
-
-      PrivateName(path: NodePath<t.PrivateName>) {
-        if (
-          this.file.get(versionKey) !== version ||
-          path.parentPath.isPrivate({ key: path.node })
-        ) {
-          return;
-        }
-
-        throw path.buildCodeFrameError(`Unknown PrivateName "${path}"`);
       },
 
       ExportDefaultDeclaration(path: NodePath<t.ExportDefaultDeclaration>) {

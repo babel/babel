@@ -12,7 +12,7 @@ Using modules transform: auto
 Using plugins:
   proposal-class-static-block { chrome < 94, ie, node < 16.11 }
   proposal-private-property-in-object { chrome < 91, ie, node < 16.9 }
-  proposal-class-properties { chrome < 84, ie, node < 14.6 }
+  proposal-class-properties { chrome < 74, ie, node < 12 }
   proposal-private-methods { chrome < 84, ie, node < 14.6 }
   proposal-numeric-separator { chrome < 75, ie, node < 12.5 }
   proposal-logical-assignment-operators { chrome < 85, ie, node < 15 }
