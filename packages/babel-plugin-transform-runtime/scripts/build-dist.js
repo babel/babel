@@ -237,23 +237,12 @@ function buildHelper(
 
   return babel.transformFromAst(tree, null, {
     filename: helperFilename,
-    presets: [
-      [
-        "@babel/preset-env",
-        { modules: false, exclude: ["@babel/plugin-transform-typeof-symbol"] },
-      ],
-    ],
+    presets: [["@babel/preset-env", { modules: false }]],
     plugins: [
       [transformRuntime, { corejs, version: runtimeVersion }],
       buildRuntimeRewritePlugin(runtimeName, helperName),
       esm ? null : addDefaultCJSExport,
     ].filter(Boolean),
-    overrides: [
-      {
-        exclude: /typeof/,
-        plugins: ["@babel/plugin-transform-typeof-symbol"],
-      },
-    ],
   }).code;
 }
 
