@@ -31,7 +31,7 @@ export default class LightRunner {
    * @param {*} onFailure
    */
   runTests(tests, watcher, onStart, onResult, onFailure) {
-    const { updateSnapshot } = this.#config;
+    const { updateSnapshot, testNamePattern } = this.#config;
 
     return Promise.all(
       tests.map(test => {
@@ -41,7 +41,7 @@ export default class LightRunner {
 
         return piscina
           .run(
-            { test, updateSnapshot, port: mc.port1 },
+            { test, updateSnapshot, testNamePattern, port: mc.port1 },
             { transferList: [mc.port1] }
           )
           .then(

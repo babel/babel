@@ -23,8 +23,16 @@ import "./global-setup.js";
   };
 }
 
-export default async function ({ test, updateSnapshot, port }) {
+export default async function ({
+  test,
+  updateSnapshot,
+  testNamePattern,
+  port,
+}) {
   port.postMessage("start");
+
+  const testNamePatternRE =
+    testNamePattern != null ? new RegExp(testNamePattern, "i") : null;
 
   /** @type {Stats} */
   const stats = { passes: 0, failures: 0, pending: 0, start: 0, end: 0 };
@@ -40,7 +48,7 @@ export default async function ({ test, updateSnapshot, port }) {
   expect.setState({ snapshotState });
 
   stats.start = performance.now();
-  await runTestBlock(tests, hasFocusedTests, results, stats);
+  await runTestBlock(tests, hasFocusedTests, testNamePatternRE, results, stats);
   stats.end = performance.now();
 
   snapshotState._inlineSnapshots.forEach(({ frame }) => {
@@ -63,6 +71,7 @@ async function loadTests(testFile) {
 async function runTestBlock(
   block,
   hasFocusedTests,
+  testNamePatternRE,
   results,
   stats,
   ancestors = []
@@ -75,12 +84,20 @@ async function runTestBlock(
 
     if (
       mode === "skip" ||
-      (hasFocusedTests && type === "test" && mode !== "only")
+      (hasFocusedTests && type === "test" && mode !== "only") ||
+      shouldSkip(testNamePatternRE, getFullName(nextAncestors))
     ) {
       stats.pending++;
       results.push({ ancestors, title: name, errors: [], skipped: true });
     } else if (type === "describeBlock") {
-      await runTestBlock(child, hasFocusedTests, results, stats, nextAncestors);
+      await runTestBlock(
+        child,
+        hasFocusedTests,
+        testNamePatternRE,
+        results,
+        stats,
+        nextAncestors
+      );
     } else if (type === "test") {
       await runHooks("beforeEach", block, results, stats, nextAncestors, true);
       await runTest(fn, stats, results, ancestors, name);
@@ -93,6 +110,17 @@ async function runTestBlock(
   return results;
 }
 
+function shouldSkip(testNamePatternRE, testName) {
+  return testNamePatternRE && !testNamePatternRE.test(testName);
+}
+
+/**
+ * @param {string[]} pieces
+ */
+function getFullName(pieces) {
+  return pieces.join(" ");
+}
+
 /**
  * @param {Function} fn
  * @param {Stats} stats
@@ -103,7 +131,7 @@ async function runTestBlock(
 async function runTest(fn, stats, results, ancestors, name) {
   expect.setState({
     suppressedErrors: [],
-    currentTestName: ancestors.concat(name).join(" "),
+    currentTestName: getFullName(ancestors.concat(name)),
   });
 
   const errors = [];
