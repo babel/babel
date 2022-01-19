@@ -1,5 +1,5 @@
 import path from "path";
-import rule from "../../lib/rules/dry-error-messages.js";
+import rule from "../../lib/rules/dry-error-messages.cjs";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 import { fileURLToPath } from "url";
 
@@ -12,7 +12,7 @@ const MODULE_PARENT_DIR = path.resolve(dirname, "test/errorsModule.js");
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("dry-error-messages", rule.default, {
+ruleTester.run("dry-error-messages", rule, {
   valid: [
     // Ignores malformed `this.raise` invocations.
     {
