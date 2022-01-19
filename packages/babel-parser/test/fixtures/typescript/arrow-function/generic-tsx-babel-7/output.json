@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":79,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
   "errors": [
-    "SyntaxError: Single type parameter T should have a trailing comma. Example usage: <T,>. (2:17)"
+    "SyntaxError: Single type parameter T should have a trailing comma. Example usage: <T,>. (2:3)"
   ],
   "program": {
     "type": "Program",

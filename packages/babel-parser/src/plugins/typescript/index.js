@@ -2965,7 +2965,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (invalidSingleType) {
         this.raise(
           TSErrors.SingleTypeParameterWithoutTrailingComma,
-          { at: this.state.startLoc },
+          {
+            at: {
+              ...invalidSingleType.loc.end,
+              column: invalidSingleType.loc.end.column + 1,
+            },
+          },
           process.env.BABEL_8_BREAKING
             ? invalidSingleType.name.name
             : invalidSingleType.name,
