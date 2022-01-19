@@ -430,6 +430,11 @@ function buildRollup(packages, targetBrowsers) {
           exports: "named",
         });
 
+        // Only minify @babel/standalone
+        if (src !== "packages/babel-standalone") {
+          return;
+        }
+
         if (!process.env.IS_PUBLISH) {
           log(
             chalk.yellow(
