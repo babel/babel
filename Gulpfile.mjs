@@ -525,7 +525,6 @@ gulp.task("generate-type-helpers", () => {
     generateTypeHelpers("ast-types"),
     generateTraverseHelpers("asserts"),
     generateTraverseHelpers("validators"),
-    generateTraverseHelpers("virtual-types"),
   ]);
 });
 

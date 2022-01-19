@@ -1,6 +1,6 @@
 import type * as t from "@babel/types";
 import { NodePath } from "./index";
-import { VirtualTypeAliases } from "./path/generated/virtual-types";
+import type { VirtualTypeAliases } from "./path/lib/virtual-types";
 
 export type Visitor<S = {}> = VisitNodeObject<S, t.Node> & {
   [Type in t.Node["type"]]?: VisitNode<S, Extract<t.Node, { type: Type }>>;

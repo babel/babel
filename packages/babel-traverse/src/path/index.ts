@@ -22,6 +22,7 @@ import * as NodePath_removal from "./removal";
 import * as NodePath_modification from "./modification";
 import * as NodePath_family from "./family";
 import * as NodePath_comments from "./comments";
+import * as NodePath_virtual_types_validator from "./lib/virtual-types-validator";
 import type { NodePathAssetions } from "./generated/asserts";
 import type { NodePathValidators } from "./generated/validators";
 
@@ -234,6 +235,7 @@ Object.assign(
   NodePath_modification,
   NodePath_family,
   NodePath_comments,
+  NodePath_virtual_types_validator,
 );
 
 if (!process.env.BABEL_8_BREAKING) {
@@ -268,14 +270,7 @@ for (const type of t.TYPES) {
 
 for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
   if (type[0] === "_") continue;
-  if (t.TYPES.indexOf(type) < 0) t.TYPES.push(type);
-
-  const virtualType = virtualTypes[type];
-
-  NodePath.prototype[`is${type}`] = function (opts?: any) {
-    // @ts-expect-error checkPath will throw when type is ExistentialTypeParam/NumericLiteralTypeAnnotation
-    return virtualType.checkPath(this, opts);
-  };
+  if (!t.TYPES.includes(type)) t.TYPES.push(type);
 }
 
 type NodePathMixins = typeof NodePath_ancestry &
@@ -288,7 +283,8 @@ type NodePathMixins = typeof NodePath_ancestry &
   typeof NodePath_removal &
   typeof NodePath_modification &
   typeof NodePath_family &
-  typeof NodePath_comments;
+  typeof NodePath_comments &
+  typeof NodePath_virtual_types_validator;
 
 // @ts-expect-error TS throws because ensureBlock returns the body node path
 // however, we don't use the return value and treat it as a transform and
