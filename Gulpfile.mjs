@@ -316,15 +316,23 @@ function buildRollup(packages, targetBrowsers) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(
-      async ({ src, format, dest, name, filename, envName = "rollup" }) => {
+      async ({
+        src,
+        format,
+        input,
+        dest,
+        name,
+        filename,
+        envName = "rollup",
+      }) => {
         const pkgJSON = require("./" + src + "/package.json");
         const version = pkgJSON.version + versionSuffix;
         const { dependencies = {}, peerDependencies = {} } = pkgJSON;
-        const external = Object.keys(dependencies).concat(
-          Object.keys(peerDependencies)
-        );
+        const external = Object.keys(dependencies)
+          .concat(Object.keys(peerDependencies))
+          // kexec is used by babel-node without declaring dependencies
+          .concat("kexec");
 
-        const input = getIndexFromPackage(src);
         log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
           input,
@@ -419,6 +427,10 @@ function buildRollup(packages, targetBrowsers) {
                 include: "**/*.{js,cjs,ts}",
               }),
           ].filter(Boolean),
+          acorn: {
+            // babel-cli/src/babel/index.ts has shebang
+            allowHashBang: true,
+          },
         });
 
         const outputFile = path.join(src, dest, filename || "index.js");
@@ -500,32 +512,66 @@ function copyDts(packages) {
     .pipe(gulp.dest(monorepoRoot));
 }
 
+function* libBundlesIterator() {
+  for (const packageDir of ["packages", "codemods"]) {
+    for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
+      if (
+        // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
+        dir === "babel-helper-fixtures" ||
+        // babel-standalone is handled by rollup-babel-standalone task
+        dir === "babel-standalone" ||
+        // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
+        dir === "babel-cli" ||
+        // todo: Rollup bundles only the browser entry of babel-register
+        dir === "babel-register"
+      ) {
+        continue;
+      }
+
+      let pkgJSON;
+      try {
+        pkgJSON = JSON.parse(
+          fs.readFileSync(
+            new URL(`${packageDir}/${dir}/package.json`, import.meta.url)
+          )
+        );
+      } catch (err) {
+        if (err.code !== "ENOENT" && err.code !== "ENOTDIR") throw err;
+      }
+      if (pkgJSON === undefined) continue;
+      const src = packageDir + "/" + dir;
+      if (pkgJSON.main) {
+        yield {
+          src,
+          // todo: output es format when we generate type: "module" on Babel 8 build
+          format: "cjs",
+          dest: "lib",
+          input: getIndexFromPackage(src),
+        };
+      } else if (pkgJSON.bin) {
+        for (const binPath of Object.values(pkgJSON.bin)) {
+          const filename = binPath.slice(binPath.lastIndexOf("/") + 1);
+          const input =
+            dir === "babel-cli" && filename === "babel.js"
+              ? `${src}/src/babel/index.ts`
+              : `${src}/src/${filename.slice(0, -3) + ".ts"}`;
+          yield {
+            src,
+            // todo: output es format when we generate type: "module" on Babel 8 build
+            format: "cjs",
+            dest: "lib",
+            filename,
+            input,
+          };
+        }
+      }
+    }
+  }
+}
+
 let libBundles;
 if (process.env.BABEL_8_BREAKING) {
-  libBundles = fs
-    .readdirSync(new URL("./packages", import.meta.url))
-    .filter(dir => {
-      return (
-        ![
-          "babel-compat-data",
-          "babel-cli",
-          "babel-standalone",
-          "babel-node",
-          "babel-helper-fixtures",
-          "babel-runtime",
-          "babel-runtime-corejs2",
-          "babel-runtime-corejs3",
-        ].includes(dir) &&
-        fs.existsSync(
-          new URL("./packages/" + dir + "/package.json", import.meta.url)
-        )
-      );
-    })
-    .map(dir => ({
-      src: "packages/" + dir,
-      format: "mjs",
-      dest: "lib",
-    }));
+  libBundles = [...libBundlesIterator()];
 } else {
   libBundles = [
     "packages/babel-parser",
@@ -542,6 +588,7 @@ if (process.env.BABEL_8_BREAKING) {
     src,
     format: USE_ESM ? "esm" : "cjs",
     dest: "lib",
+    input: getIndexFromPackage(src),
   }));
 }
 
@@ -561,6 +608,7 @@ const standaloneBundle = [
     dest: "",
     version: babelVersion,
     envName: "standalone",
+    input: getIndexFromPackage("packages/babel-standalone"),
   },
 ];
 
