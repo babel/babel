@@ -2924,7 +2924,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
 
       let typeParameters: ?N.TsTypeParameterDeclaration;
-      let invalidSingleType: ?N.TSTypeParameter;
+      let invalidSingleType: ?N.TsTypeParameter;
       state = state || this.state.clone();
 
       const arrow = this.tryParse(abort => {
@@ -2964,8 +2964,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (invalidSingleType) {
         this.raise(
-          invalidSingleType.end + 1,
           TSErrors.SingleTypeParameterWithoutTrailingComma,
+          { at: this.state.startLoc },
           process.env.BABEL_8_BREAKING
             ? invalidSingleType.name.name
             : invalidSingleType.name,
