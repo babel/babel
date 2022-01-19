@@ -495,22 +495,50 @@ function copyDts(packages) {
     .pipe(gulp.dest(monorepoRoot));
 }
 
-const libBundles = [
-  "packages/babel-parser",
-  "packages/babel-plugin-proposal-destructuring-private",
-  "packages/babel-plugin-proposal-object-rest-spread",
-  "packages/babel-plugin-proposal-optional-chaining",
-  "packages/babel-preset-react",
-  "packages/babel-plugin-transform-destructuring",
-  "packages/babel-preset-typescript",
-  "packages/babel-helper-member-expression-to-functions",
-  "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
-  "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
-].map(src => ({
-  src,
-  format: USE_ESM ? "esm" : "cjs",
-  dest: "lib",
-}));
+let libBundles;
+if (process.env.BABEL_8_BREAKING) {
+  libBundles = fs
+    .readdirSync(new URL("./packages", import.meta.url))
+    .filter(dir => {
+      return (
+        ![
+          "babel-compat-data",
+          "babel-cli",
+          "babel-standalone",
+          "babel-node",
+          "babel-helper-fixtures",
+          "babel-runtime",
+          "babel-runtime-corejs2",
+          "babel-runtime-corejs3",
+        ].includes(dir) &&
+        fs.existsSync(
+          new URL("./packages/" + dir + "/package.json", import.meta.url)
+        )
+      );
+    })
+    .map(dir => ({
+      src: "packages/" + dir,
+      format: "mjs",
+      dest: "lib",
+    }));
+} else {
+  libBundles = [
+    "packages/babel-parser",
+    "packages/babel-plugin-proposal-destructuring-private",
+    "packages/babel-plugin-proposal-object-rest-spread",
+    "packages/babel-plugin-proposal-optional-chaining",
+    "packages/babel-preset-react",
+    "packages/babel-plugin-transform-destructuring",
+    "packages/babel-preset-typescript",
+    "packages/babel-helper-member-expression-to-functions",
+    "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
+    "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
+  ].map(src => ({
+    src,
+    format: USE_ESM ? "esm" : "cjs",
+    dest: "lib",
+  }));
+}
 
 const cjsBundles = [
   // This is used by @babel/register and @babel/eslint-parser
