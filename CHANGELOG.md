@@ -20,6 +20,27 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.10 (2022-01-19)
+
+#### :bug: Bug Fix
+* `babel-highlight`
+  * [#14165](https://github.com/babel/babel/pull/14165) Avoid infinite loop when highlighting an empty input ([@blankPen](https://github.com/blankPen))
+* `babel-traverse`
+  * [#14164](https://github.com/babel/babel/pull/14164) Handle logical assignment in super property transforms ([@magic-akari](https://github.com/magic-akari))
+  * [#14162](https://github.com/babel/babel/pull/14162) Fix the transform of `super.foo--`/`super[foo]--` (and prefix) ([@magic-akari](https://github.com/magic-akari))
+* `babel-core`
+  * [#14110](https://github.com/babel/babel/pull/14110) Respect `package.json#exports` when resolving plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14153](https://github.com/babel/babel/pull/14153) Disable "Reentrant plugin detected" error in async mode ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-plugin-transform-runtime`
+  * [#14157](https://github.com/babel/babel/pull/14157) Remove workaround for `_typeof` in runtime build script ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14130](https://github.com/babel/babel/pull/14130) Improve errors location tracking ([@tolmasky](https://github.com/tolmasky))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-preset-env`
+  * [#14169](https://github.com/babel/babel/pull/14169) Skip class fields transform when not necessary for private methods ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.16.9 (2022-01-11)
 
 #### :bug: Bug Fix
