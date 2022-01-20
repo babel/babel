@@ -1,3 +1,4 @@
+import type NodePath from "../index";
 import type * as t from "@babel/types";
 
 export interface VirtualTypeAliases {

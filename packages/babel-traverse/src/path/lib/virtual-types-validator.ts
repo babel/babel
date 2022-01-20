@@ -13,6 +13,7 @@ import {
   isJSXIdentifier,
   isJSXMemberExpression,
   isMemberExpression,
+  isRestElement as nodeIsRestElement,
   isReferenced as nodeIsReferenced,
   isScope as nodeIsScope,
   isStatement as nodeIsStatement,
@@ -25,36 +26,66 @@ const { isCompatTag } = react;
 import type { VirtualTypeAliases } from "./virtual-types";
 
 export interface VirtualTypeNodePathValidators {
-  isBindingIdentifier(
+  isBindingIdentifier<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
+  ): this is NodePath<T & VirtualTypeAliases["BindingIdentifier"]>;
   isBlockScoped(opts?: object): boolean;
-  isExistentialTypeParam(
+  /**
+   * @deprecated
+   */
+  isExistentialTypeParam<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ExistentialTypeParam"]>;
-  isExpression(opts?: object): this is NodePath<t.Expression>;
-  isFlow(opts?: object): this is NodePath<t.Flow>;
-  isForAwaitStatement(
+  ): this is NodePath<T & VirtualTypeAliases["ExistentialTypeParam"]>;
+  isExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]>;
+  ): this is NodePath<T & t.Expression>;
+  isFlow<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Flow>;
+  isForAwaitStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & VirtualTypeAliases["ForAwaitStatement"]>;
   isGenerated(opts?: object): boolean;
-  isNumericLiteralTypeAnnotation(
-    opts?: object,
-  ): this is NodePath<VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
+  /**
+   * @deprecated
+   */
+  isNumericLiteralTypeAnnotation(opts?: object): void;
   isPure(opts?: object): boolean;
   isReferenced(opts?: object): boolean;
-  isReferencedIdentifier(
+  isReferencedIdentifier<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"]>;
-  isReferencedMemberExpression(
+  ): this is NodePath<T & VirtualTypeAliases["ReferencedIdentifier"]>;
+  isReferencedMemberExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]>;
-  isRestProperty(opts?: object): this is NodePath<t.RestProperty>;
-  isScope(opts?: object): this is NodePath<VirtualTypeAliases["Scope"]>;
-  isSpreadProperty(opts?: object): this is NodePath<t.SpreadProperty>;
-  isStatement(opts?: object): this is NodePath<t.Statement>;
+  ): this is NodePath<T & VirtualTypeAliases["ReferencedMemberExpression"]>;
+  isRestProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.RestProperty>;
+  isScope<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & VirtualTypeAliases["Scope"]>;
+  isSpreadProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.SpreadProperty>;
+  isStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Statement>;
   isUser(opts?: object): boolean;
-  isVar(opts?: object): this is NodePath<VirtualTypeAliases["Var"]>;
+  isVar<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & VirtualTypeAliases["Var"]>;
 }
 
 export function isReferencedIdentifier(this: NodePath, opts?: any): boolean {
@@ -129,8 +160,8 @@ export function isGenerated(this: NodePath): boolean {
   return !this.isUser();
 }
 
-export function isPure(this: NodePath, opts?): boolean {
-  return this.scope.isPure(this.node, opts);
+export function isPure(this: NodePath, constantsOnly?: boolean): boolean {
+  return this.scope.isPure(this.node, constantsOnly);
 }
 
 export function isFlow(this: NodePath): boolean {
@@ -149,17 +180,34 @@ export function isFlow(this: NodePath): boolean {
 }
 
 // TODO: 7.0 Backwards Compat
-// todo: we should check RestProperty first
 export function isRestProperty(this: NodePath): boolean {
-  return this.parentPath && this.parentPath.isObjectPattern();
+  return (
+    nodeIsRestElement(this.node) &&
+    this.parentPath &&
+    this.parentPath.isObjectPattern()
+  );
 }
 
-// todo: we should check RestProperty first
 export function isSpreadProperty(this: NodePath): boolean {
-  return this.parentPath && this.parentPath.isObjectExpression();
+  return (
+    nodeIsRestElement(this.node) &&
+    this.parentPath &&
+    this.parentPath.isObjectExpression()
+  );
 }
 
-// todo: we should check isForOfStatement first
-export function isForAwaitStatement(this: NodePath<t.ForOfStatement>): boolean {
-  return this.node.await === true;
+export function isForAwaitStatement(this: NodePath): boolean {
+  return isForStatement(this.node, { await: true });
+}
+
+export function isExistentialTypeParam(this: NodePath): void {
+  throw new Error(
+    "`path.isExistentialTypeParam` has been renamed to `path.isExistsTypeAnnotation()` in Babel 7.",
+  );
+}
+
+export function isNumericLiteralTypeAnnotation(this: NodePath): void {
+  throw new Error(
+    "`path.isNumericLiteralTypeAnnotation()` has been renamed to `path.isNumberLiteralTypeAnnotation()` in Babel 7.",
+  );
 }
