@@ -114,7 +114,7 @@ export function isReferenced(this: NodePath): boolean {
 }
 
 export function isBlockScoped(this: NodePath): boolean {
-  return nodeIsBlockScoped(this.node, this.parent);
+  return nodeIsBlockScoped(this.node);
 }
 
 export function isVar(this: NodePath): boolean {
