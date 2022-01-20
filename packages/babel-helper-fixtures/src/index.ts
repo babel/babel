@@ -105,6 +105,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
 
   const expectLoc =
     findFile(taskDir + "/output", true /* allowJSON */) ||
+    findFile(`${taskDir}/output.serialized`, true) ||
     taskDir + "/output.js";
   const stdoutLoc = taskDir + "/stdout.txt";
   const stderrLoc = taskDir + "/stderr.txt";
