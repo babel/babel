@@ -2373,8 +2373,10 @@ export default class ExpressionParser extends LValParser {
   ): N.ArrowFunctionExpression {
     this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
     let flags = functionFlags(isAsync, false);
-    // ConciseBody and AsyncConciseBody inherit [In]
-    if (!this.match(tt.bracketL) && this.prodParam.hasIn) {
+    // ConciseBody[In] :
+    //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
+    //   { FunctionBody[~Yield, ~Await] }
+    if (!this.match(tt.braceL) && this.prodParam.hasIn) {
       flags |= PARAM_IN;
     }
     this.prodParam.enter(flags);
