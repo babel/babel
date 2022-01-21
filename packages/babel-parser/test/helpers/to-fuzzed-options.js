@@ -36,6 +36,13 @@ const toAdjustedErrorMessage = adjust => message =>
   });
 
 export default function toFuzzedOptions(options) {
+  // Don't fuzz test in node 8, since for whatever reason Jest 23 on node 8
+  // takes forever after a certain number of tests, even if those tests are
+  // empty.
+  if (/v8\./.test(process.version)) {
+    return [[false, options]];
+  }
+
   const { startLine = 1, startColumn = 0 } = options;
 
   // If the test supplies its own position, then make sure we choose
