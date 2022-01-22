@@ -20,6 +20,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.16.12 (2022-01-22)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#14192](https://github.com/babel/babel/pull/14192) Avoid dynamic import when it's not needed ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14194](https://github.com/babel/babel/pull/14194) fix: incorrect `in` parsing in arrow ConciseBody ([@JLHwung](https://github.com/JLHwung))
 
 ## v7.16.10 (2022-01-19)
 
