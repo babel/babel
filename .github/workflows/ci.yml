@@ -215,7 +215,7 @@ jobs:
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
-        run: make lint
+        run: make -j tscheck flowcheck-ci lint-ci
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
