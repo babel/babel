@@ -95,7 +95,7 @@ function runParseTest(parse, test, onlyCompareErrors) {
   );
 
   if (difference !== Difference.None) {
-    throw FixtureError.fromDifference(difference);
+    throw FixtureError.fromDifference(difference, actual);
   }
 }
 

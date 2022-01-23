@@ -19,7 +19,7 @@ export default class FixtureError extends Error {
       ? new FixtureError.UnexpectedError(difference)
       : difference.actual
       ? new FixtureError.DifferentError(difference)
-      : actual.ast.errors
+      : actual.ast && actual.ast.errors
       ? new FixtureError.UnexpectedRecovery(difference, actual.ast.errors)
       : new FixtureError.UnexpectedSuccess(difference);
   }
@@ -38,11 +38,11 @@ Object.assign(
       UnexpectedError: () => `Encountered unexpected unrecoverable error.\n`,
 
       UnexpectedSuccess: ({ expected }) =>
-        `Expected non-recoverable error message:\n\n${expected}\n\n` +
+        `Expected unrecoverable error:\n\n    ${expected}\n\n` +
         `But parsing succeeded without errors.`,
 
       UnexpectedRecovery: ({ expected }, errors) =>
-        `Expected non-recoverable error message:\n\n${expected}\n\n` +
+        `Expected unrecoverable error:\n\n    ${expected}\n\n` +
         `But instead parsing recovered from errors:\n\n${JSON.stringify(
           errors,
           null,
