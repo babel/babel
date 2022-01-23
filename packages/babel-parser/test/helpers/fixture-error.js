@@ -58,9 +58,8 @@ Object.assign(
             super(toMessage(difference, ...args), difference);
 
             this.cause =
-              (!!(difference.actual instanceof Error) &&
-                difference.actual.context) ||
-              difference.actual;
+              (difference.actual instanceof Error) &&
+              (difference.actual.context || difference.actual);
           }
 
           // Don't show the stack of FixtureErrors, it's irrelevant.
