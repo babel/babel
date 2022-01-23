@@ -45,18 +45,12 @@ const toAdjustedSyntaxError = (adjust, error) =>
       )
     : error;
 
-const DefaultAdjust = toAdjust({
-  threw: (adjust, error) => error && toAdjustedSyntaxError(adjust, error),
-  errors: (adjust, errors) =>
-    errors && errors.map(error => toAdjustedSyntaxError(adjust, error)),
-});
-
 export default function toFuzzedOptions(options) {
   // Don't fuzz test in node 8, since for whatever reason Jest 23 on node 8
   // takes forever after a certain number of tests, even if those tests are
   // empty.
   if (/v8\./.test(process.version)) {
-    return [[DefaultAdjust, options]];
+    return [[false, options]];
   }
 
   const { startLine = 1, startColumn = 0 } = options;
@@ -98,7 +92,6 @@ export default function toFuzzedOptions(options) {
     .map(options => [options, options.startLine || 1, options.startColumn || 0])
     .map(([options, fStartLine, fStartColumn]) => [
       toAdjust({
-        ...DefaultAdjust,
         ...(startLine !== fStartLine && {
           line: (_, line) => line - startLine + fStartLine,
         }),
@@ -107,6 +100,17 @@ export default function toFuzzedOptions(options) {
             line !== startLine ? column : column - startColumn + fStartColumn,
         }),
       }),
+      options,
+    ])
+    .map(([adjust, options]) => [
+      adjust &&
+        toAdjust({
+          ...adjust,
+          threw: (adjust, error) =>
+            error && toAdjustedSyntaxError(adjust, error),
+          errors: (adjust, errors) =>
+            errors && errors.map(error => toAdjustedSyntaxError(adjust, error)),
+        }),
       options,
     ]);
 }
