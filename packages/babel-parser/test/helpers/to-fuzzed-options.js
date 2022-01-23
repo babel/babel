@@ -19,28 +19,46 @@ const toAdjust = adjustments =>
   !adjustments || Object.keys(adjustments).length === 0
     ? null
     : Object.assign(
-        (value, key, parent) =>
-          key in adjustments ? adjustments[key](value, key, parent) : value,
-        adjustments,
+        (adjust, value, key, parent) =>
+          key in adjustments
+            ? adjustments[key](adjust, value, key, parent)
+            : value,
+        adjustments
       );
 
-const toAdjustedErrorMessage = adjust => message =>
-  message &&
-  message.replace(/\((\d+):(\d+)\)$/, function (_, line, column) {
-    const loc = { line: parseInt(line, 10), column: parseInt(column, 10) };
-    return `(${adjust(
-      loc.line,
-      "line",
-      loc,
-    )}:${adjust(loc.column, "column", loc)})`;
-  });
+const SyntaxErrorMessageRegExp = /\((\d+):(\d+)\)$/;
+const toAdjustedSyntaxError = (adjust, error) =>
+  error && SyntaxErrorMessageRegExp.test(error.message)
+    ? SyntaxError(
+        error.message.replace(/\((\d+):(\d+)\)$/, function (_, line, column) {
+          const loc = {
+            line: parseInt(line, 10),
+            column: parseInt(column, 10),
+          };
+          return `(${adjust(
+            adjust,
+            loc.line,
+            "line",
+            loc
+          )}:${adjust(adjust, loc.column, "column", loc)})`;
+        })
+      )
+    : error;
+
+const DefaultAdjust = toAdjust({
+  filename: () => void 0,
+  threw: (adjust, error) =>
+    error && toAdjustedSyntaxError(adjust, error),
+  errors: (adjust, errors) =>
+    errors && errors.map(error => toAdjustedSyntaxError(adjust, error)),
+});
 
 export default function toFuzzedOptions(options) {
   // Don't fuzz test in node 8, since for whatever reason Jest 23 on node 8
   // takes forever after a certain number of tests, even if those tests are
   // empty.
   if (/v8\./.test(process.version)) {
-    return [[false, options]];
+    return [[DefaultAdjust, options]];
   }
 
   const { startLine = 1, startColumn = 0 } = options;
@@ -82,23 +100,13 @@ export default function toFuzzedOptions(options) {
     .map(options => [options, options.startLine || 1, options.startColumn || 0])
     .map(([options, fStartLine, fStartColumn]) => [
       toAdjust({
+        ...DefaultAdjust,
         ...(startLine !== fStartLine && {
-          line: line => line - startLine + fStartLine,
+          line: (_, line) => line - startLine + fStartLine,
         }),
         ...(startColumn !== fStartColumn && {
-          column: (column, _, { line }) =>
+          column: (_, column, __, { line }) =>
             line !== startLine ? column : column - startColumn + fStartColumn,
-        }),
-      }),
-      options,
-    ])
-    .map(([adjust, options]) => [
-      toAdjust({
-        ...adjust,
-        ...(adjust && { threw: toAdjustedErrorMessage(adjust) }),
-        ...(adjust && {
-          errors: errors =>
-            errors && errors.map(toAdjustedErrorMessage(adjust)),
         }),
       }),
       options,

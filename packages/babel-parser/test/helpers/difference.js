@@ -33,6 +33,8 @@ const toType = value =>
     ? "Array"
     : value instanceof RegExp
     ? "RegExp"
+    : value instanceof Error
+    ? "Error"
     : "Object";
 
 function compare(adjust, expected, actual) {
@@ -55,6 +57,10 @@ function compare(adjust, expected, actual) {
 
   if (typeActual === "RegExp" && expected + "" === actual + "") {
     return false;
+  }
+
+  if (typeActual === "Error") {
+    return compare(adjust, { message: expected.message }, { message: actual.message });
   }
 
   if (typeActual !== "Object" && typeActual !== "Array") {
@@ -91,7 +97,7 @@ function compare(adjust, expected, actual) {
     }
 
     const original = expected[key];
-    const adjusted = adjust ? adjust(original, key, expected) : original;
+    const adjusted = adjust ? adjust(adjust, original, key, expected) : original;
     const difference = compare(adjust, adjusted, actual[key]);
     if (difference) {
       return [key, difference];

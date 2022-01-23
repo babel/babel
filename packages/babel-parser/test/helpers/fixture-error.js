@@ -1,3 +1,4 @@
+import { inspect } from "util";
 import "./polyfill.js";
 
 const { defineProperty, entries, fromEntries } = Object;
@@ -35,7 +36,7 @@ Object.assign(
       DifferentAST: ({ message }) => message,
 
       UnexpectedError: ({ actual }) =>
-        `Encountered unexpected non-recoverable message:\n\n${actual}`,
+        `Encountered unexpected unrecoverable error.\n`,
 
       UnexpectedSuccess: ({ expected }) =>
         `Expected non-recoverable error message:\n\n${expected}\n\n` +
@@ -56,9 +57,25 @@ Object.assign(
         class extends FixtureError {
           constructor(difference, ...args) {
             super(toMessage(difference, ...args), difference);
+
+            this.cause =
+              (!!(difference.actual instanceof Error) &&
+                difference.actual.context) ||
+              difference.actual;
           }
-        },
+
+          // Don't show the stack of FixtureErrors, it's irrelevant.
+          // Instead, show the cause, if present.
+          [inspect.custom](depth, options) {
+            return `${this.message.replace(/\.\n$/, ":\n")}${
+              this.cause
+                ? `\n${inspect(this.cause, options)}`.replace(/\n/g, "\n    ")
+                : ""
+            }`;
+          }
+        }
       ),
-    ],
-  ),
+    ]
+  )
 );
+
