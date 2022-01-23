@@ -16,9 +16,9 @@ export default class FixtureError extends Error {
     return difference.path[0] !== "threw"
       ? new FixtureError.DifferentAST(difference)
       : !difference.expected
-      ? new FixtureError.UnexpectedError(difference)
+      ? new FixtureError.UnexpectedError(difference, actual.threw)
       : difference.actual
-      ? new FixtureError.DifferentError(difference)
+      ? new FixtureError.DifferentError(difference, actual.threw)
       : actual.ast && actual.ast.errors
       ? new FixtureError.UnexpectedRecovery(difference, actual.ast.errors)
       : new FixtureError.UnexpectedSuccess(difference);
@@ -29,9 +29,9 @@ Object.assign(
   FixtureError,
   mapEntries(
     {
-      DifferentError: ({ expected, actual }) =>
-        `Expected error message:\n\n${expected}\n\n` +
-        `But instead found error message:\n\n${actual}`,
+      DifferentError: ({ expected }) =>
+        `Expected unrecoverable error:    \n\n${expected}\n\n`+
+        `But instead encountered different unrecoverable error.\n`,
 
       DifferentAST: ({ message }) => message,
 
@@ -54,12 +54,10 @@ Object.assign(
       named(
         name,
         class extends FixtureError {
-          constructor(difference, ...args) {
-            super(toMessage(difference, ...args), difference);
+          constructor(difference, cause) {
+            super(toMessage(difference, cause), difference);
 
-            this.cause =
-              (difference.actual instanceof Error) &&
-              (difference.actual.context || difference.actual);
+            this.cause = (cause instanceof Error) && (cause.context || cause);
           }
 
           // Don't show the stack of FixtureErrors, it's irrelevant.
