@@ -60,7 +60,11 @@ function compare(adjust, expected, actual) {
   }
 
   if (typeActual === "Error") {
-    return compare(adjust, { message: expected.message }, { message: actual.message });
+    return compare(
+      adjust,
+      { message: expected.message },
+      { message: actual.message },
+    );
   }
 
   if (typeActual !== "Object" && typeActual !== "Array") {
@@ -97,8 +101,11 @@ function compare(adjust, expected, actual) {
     }
 
     const original = expected[key];
-    const adjusted = adjust ? adjust(adjust, original, key, expected) : original;
+    const adjusted = adjust
+      ? adjust(adjust, original, key, expected)
+      : original;
     const difference = compare(adjust, adjusted, actual[key]);
+
     if (difference) {
       return [key, difference];
     }

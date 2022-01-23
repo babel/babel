@@ -1,7 +1,12 @@
 import { codeFrameColumns } from "@babel/code-frame";
 import { runInThisContext } from "vm";
 
-export default function toContextualSyntaxError(error, source, options) {
+export default function toContextualSyntaxError(
+  error,
+  source,
+  filename,
+  options,
+) {
   if (!(error instanceof SyntaxError)) return error;
 
   const { startLine = 1, startColumn = 0, sourceFilename } = options || {};
@@ -11,7 +16,7 @@ export default function toContextualSyntaxError(error, source, options) {
   const frame = codeFrameColumns(
     source,
     { start: { line, column } },
-    { highlightCode: true }
+    { highlightCode: true },
   );
 
   // Limit this stack trace to 1. Everything after that is just stuff from the
@@ -23,7 +28,7 @@ export default function toContextualSyntaxError(error, source, options) {
     value: (error.context = runInThisContext("(f => f())", {
       filename: sourceFilename,
     })(() => SyntaxError(`${error.message}\n${frame}`))),
-    enumerable: false
+    enumerable: false,
   });
 
   Error.stackTraceLimit = originalStackTraceLimit;

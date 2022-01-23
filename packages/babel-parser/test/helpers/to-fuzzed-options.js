@@ -23,7 +23,7 @@ const toAdjust = adjustments =>
           key in adjustments
             ? adjustments[key](adjust, value, key, parent)
             : value,
-        adjustments
+        adjustments,
       );
 
 const SyntaxErrorMessageRegExp = /\((\d+):(\d+)\)$/;
@@ -39,16 +39,14 @@ const toAdjustedSyntaxError = (adjust, error) =>
             adjust,
             loc.line,
             "line",
-            loc
+            loc,
           )}:${adjust(adjust, loc.column, "column", loc)})`;
-        })
+        }),
       )
     : error;
 
 const DefaultAdjust = toAdjust({
-  filename: () => void 0,
-  threw: (adjust, error) =>
-    error && toAdjustedSyntaxError(adjust, error),
+  threw: (adjust, error) => error && toAdjustedSyntaxError(adjust, error),
   errors: (adjust, errors) =>
     errors && errors.map(error => toAdjustedSyntaxError(adjust, error)),
 });

@@ -35,8 +35,7 @@ Object.assign(
 
       DifferentAST: ({ message }) => message,
 
-      UnexpectedError: ({ actual }) =>
-        `Encountered unexpected unrecoverable error.\n`,
+      UnexpectedError: () => `Encountered unexpected unrecoverable error.\n`,
 
       UnexpectedSuccess: ({ expected }) =>
         `Expected non-recoverable error message:\n\n${expected}\n\n` +
@@ -73,9 +72,8 @@ Object.assign(
                 : ""
             }`;
           }
-        }
+        },
       ),
-    ]
-  )
+    ],
+  ),
 );
-
