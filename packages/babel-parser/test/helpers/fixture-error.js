@@ -30,7 +30,7 @@ Object.assign(
   mapEntries(
     {
       DifferentError: ({ expected }) =>
-        `Expected unrecoverable error:    \n\n${expected}\n\n`+
+        `Expected unrecoverable error:    \n\n${expected}\n\n` +
         `But instead encountered different unrecoverable error.\n`,
 
       DifferentAST: ({ message }) => message,
@@ -57,7 +57,7 @@ Object.assign(
           constructor(difference, cause) {
             super(toMessage(difference, cause), difference);
 
-            this.cause = (cause instanceof Error) && (cause.context || cause);
+            if (cause) this.cause = cause.context || cause;
           }
 
           // Don't show the stack of FixtureErrors, it's irrelevant.
