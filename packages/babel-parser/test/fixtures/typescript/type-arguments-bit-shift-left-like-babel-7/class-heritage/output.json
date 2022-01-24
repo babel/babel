@@ -1,0 +1,85 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":40}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":40}},
+        "expression": {
+          "type": "ClassExpression",
+          "start":1,"end":38,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":38}},
+          "id": null,
+          "superClass": {
+            "type": "Identifier",
+            "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"f"},
+            "name": "f"
+          },
+          "superTypeParameters": {
+            "type": "TSTypeParameterInstantiation",
+            "start":16,"end":35,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":35}},
+            "params": [
+              {
+                "type": "TSFunctionType",
+                "start":17,"end":34,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":34}},
+                "typeParameters": {
+                  "type": "TSTypeParameterDeclaration",
+                  "start":17,"end":20,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":20}},
+                  "params": [
+                    {
+                      "type": "TSTypeParameter",
+                      "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}},
+                      "name": "T"
+                    }
+                  ]
+                },
+                "parameters": [
+                  {
+                    "type": "Identifier",
+                    "start":21,"end":25,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":25},"identifierName":"v"},
+                    "name": "v",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":22,"end":25,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":25}},
+                      "typeAnnotation": {
+                        "type": "TSTypeReference",
+                        "start":24,"end":25,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":25}},
+                        "typeName": {
+                          "type": "Identifier",
+                          "start":24,"end":25,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":25},"identifierName":"T"},
+                          "name": "T"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "typeAnnotation": {
+                  "type": "TSTypeAnnotation",
+                  "start":27,"end":34,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":34}},
+                  "typeAnnotation": {
+                    "type": "TSVoidKeyword",
+                    "start":30,"end":34,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":34}}
+                  }
+                }
+              }
+            ]
+          },
+          "body": {
+            "type": "ClassBody",
+            "start":36,"end":38,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":38}},
+            "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

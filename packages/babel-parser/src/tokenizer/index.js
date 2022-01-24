@@ -755,7 +755,7 @@ export default class Tokenizer extends ParserErrors {
         this.finishOp(tt.assign, 3);
         return;
       }
-      this.finishOp(tt.bitShift, 2);
+      this.finishOp(tt.bitShiftL, 2);
       return;
     }
 
@@ -780,7 +780,7 @@ export default class Tokenizer extends ParserErrors {
         this.finishOp(tt.assign, size + 1);
         return;
       }
-      this.finishOp(tt.bitShift, size);
+      this.finishOp(tt.bitShiftR, size);
       return;
     }
 

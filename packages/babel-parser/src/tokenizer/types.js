@@ -208,6 +208,8 @@ export const tt: { [name: string]: TokenType } = {
   gt: createBinop("</>/<=/>=", 7),
   relational: createBinop("</>/<=/>=", 7),
   bitShift: createBinop("<</>>/>>>", 8),
+  bitShiftL: createBinop("<</>>/>>>", 8),
+  bitShiftR: createBinop("<</>>/>>>", 8),
   plusMin: createToken("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
   // startsExpr: required by v8intrinsic plugin
   modulo: createToken("%", { binop: 10, startsExpr }),
