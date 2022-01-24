@@ -312,7 +312,7 @@ if (process.env.CIRCLE_PR_NUMBER) {
 
 const babelVersion =
   require("./packages/babel-core/package.json").version + versionSuffix;
-function buildRollup(packages, targetBrowsers) {
+function buildRollup(packages, buildStandalone) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(
@@ -331,6 +331,12 @@ function buildRollup(packages, targetBrowsers) {
         const external = [
           ...Object.keys(dependencies),
           ...Object.keys(peerDependencies),
+          // @babel/compat-data sub exports
+          "@babel/compat-data/overlapping-plugins",
+          "@babel/compat-data/plugins",
+          "@babel/compat-data/plugin-bugfixes",
+          "@babel/compat-data/native-modules",
+          "@babel/compat-data/corejs2-built-ins",
           // Ideally they should be constructed from package.json exports
           // required by modules-commonjs
           "babel-plugin-dynamic-import-node/utils",
@@ -347,6 +353,8 @@ function buildRollup(packages, targetBrowsers) {
         const bundle = await rollup({
           input,
           external,
+          // all node modules are resolved as if they were placed in the n_m folder of package root
+          preserveSymlinks: true,
           onwarn(warning, warn) {
             switch (warning.code) {
               case "CIRCULAR_DEPENDENCY":
@@ -392,14 +400,15 @@ function buildRollup(packages, targetBrowsers) {
             }),
             rollupCommonJs({
               include: [
-                /node_modules/,
+                // Only bundle node modules when building standalone
+                buildStandalone ? /node_modules/ : "./node_modules/*/*.js",
                 "packages/babel-runtime/regenerator/**",
                 "packages/babel-runtime/helpers/*.js",
                 "packages/babel-preset-env/data/*.js",
                 // Rollup doesn't read export maps, so it loads the cjs fallback
                 "packages/babel-compat-data/*.js",
                 "packages/*/src/**/*.cjs",
-              ],
+              ].filter(Boolean),
               dynamicRequireTargets: [
                 // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
                 resolveChain(
@@ -424,14 +433,14 @@ function buildRollup(packages, targetBrowsers) {
             }),
             rollupNodeResolve({
               extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
-              browser: targetBrowsers,
-              exportConditions: targetBrowsers ? ["browser"] : [],
+              browser: buildStandalone,
+              exportConditions: buildStandalone ? ["browser"] : [],
               // It needs to be set to 'false' when using rollupNodePolyfills
               // https://github.com/rollup/plugins/issues/772
-              preferBuiltins: !targetBrowsers,
+              preferBuiltins: !buildStandalone,
             }),
             rollupJson(),
-            targetBrowsers &&
+            buildStandalone &&
               rollupPolyfillNode({
                 sourceMap: sourcemap,
                 include: "**/*.{js,cjs,ts}",
@@ -473,7 +482,7 @@ function buildRollup(packages, targetBrowsers) {
         });
 
         // Only minify @babel/standalone
-        if (src !== "packages/babel-standalone") {
+        if (!buildStandalone) {
           return;
         }
 
@@ -607,7 +616,7 @@ function* libBundlesIterator() {
 }
 
 let libBundles;
-if (process.env.BABEL_8_BREAKING) {
+if (process.env.B_ALL) {
   libBundles = [...libBundlesIterator()];
 } else {
   libBundles = [
