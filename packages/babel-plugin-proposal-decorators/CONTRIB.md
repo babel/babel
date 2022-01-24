@@ -42,59 +42,70 @@ It's output would be something like the following:
 ```js
 import { applyDecs } from '@babel/helpers';
 
-let initInstance, initClass, initA, callB, computedKey, initC, getC, setC;
+let _initInstance, _initClass, _initStatic, _init_a, _call_b, _computedKey, _init_c, _get_c, _set_c;
 
-const elementDecs = [
-  [dec, 0, 'a'],
-  [dec, 7, 'x', '#b']
-  (computedKey = someVal, null)
-  [[dec, dec2], 1, 'y', '#c']
-];
+let _dec = dec,
+  _dec2 = dec,
+  _computedKey = someVal,
+  _dec3 = dec,
+  _dec4 = dec2;
 
-const classDecs = [dec];
-
-let Class;
-class _Class {
+let _Class;
+class Class {
   static {
-    let ret = applyDecs(
-      this,
-      elementDecs,
+    [
+      _init_a,
+      _call_b,
+      _init_c,
+      _get_c,
+      _set_c,
+      _Class,
+      _initClass,
+      _initProto,
+      _initStatic,
+    ] = _applyDecs(Class,
+      [
+        [_dec, 0, "a"],
+        [
+          _dec2,
+          7,
+          "b",
+          function () {
+            console.log('foo');
+          }
+        ],
+        [
+          [_dec4, _dec5],
+          1,
+          "c",
+          function () {
+            return this.#a;
+          },
+          function (value) {
+            this.#a = value;
+          }
+        ]
+      ],
       [dec]
     );
 
-    initA = ret[0];
-    callB = ret[1];
-    initC = ret[2];
-    getC = ret[3];
-    setC = ret[4];
-    initInstance = ret[5];
-    Class = ret[6];
-    initClass = ret[7];
+    _initStatic(Class);
   }
 
-  a = (initInstance(this), initA(this, 123));
+  a = (initInstance(this), _init_a(this, 123));
 
   static #b(...args) {
-    callB(this, args);
-  }
-  static x() {
-    console.log('foo');
+    _call_b(this, args);
   }
 
-  [computedKey]() {}
+  [_computedKey]() {}
 
-  #y = initC(this, 123);
-  get y() {
-    return this.#y;
-  }
-  set y(v) {
-    this.#y = v;
-  }
+  #a = _init_c(this, 123);
   get #c() {
-    return getC(this);
+    return _get_c(this);
   }
   set #c(v) {
-    setC(this, v);
+    _set_c(this, v);
   }
 
   static {
@@ -106,7 +117,7 @@ class _Class {
 Let's break this output down a bit:
 
 ```js
-let initInstance, initClass, initA, callB, initC, getC, setC;
+let initInstance, initClass, _init_a, _call_b, _init_c, _get_c, _set_c;
 ```
 
 First, we need to setup some local variables outside of the class. These are
@@ -121,25 +132,22 @@ These are essentially all values that cannot be defined on the class itself via
 ahead of time and populate them when we run our decorators.
 
 ```js
-const elementDecs = [
-  [dec, 0, 'a'],
-  [dec, 7, 'x', '#b']
-  (computedKey = someVal, null)
-  [[dec, dec2], 1, 'y', '#c']
-];
-
-const classDecs = [dec];
+let _dec = dec,
+  _dec2 = dec,
+  _computedKey = someVal,
+  _dec3 = dec,
+  _dec4 = dec2;
 ```
 
-Next up, we define and evaluate the decorator member expressions. The reason we
+Next up, we define and evaluate the decorator expressions. The reason we
 do this _before_ defining the class is because we must interleave decorator
 expressions with computed property key expressions, since computed properties
 and decorators can run arbitrary code which can modify the runtime of subsequent
 decorators or computed property keys.
 
 ```js
-let Class;
-class _Class {
+let _Class;
+class Class {
 ```
 
 This class is being decorated directly, which means that the decorator may
@@ -149,20 +157,43 @@ new `let` variable for the decorated class.
 
 ```js
   static {
-    let ret = applyDecs(
-      this,
-      elementDecs,
-      classDecs
+    [
+      _init_a,
+      _call_b,
+      _init_c,
+      _get_c,
+      _set_c,
+      _Class,
+      _initClass,
+      _initProto,
+      _initStatic,
+    ] = _applyDecs(Class,
+      [
+        [_dec, 0, "a"],
+        [
+          _dec2,
+          7,
+          "b",
+          function () {
+            console.log('foo');
+          }
+        ],
+        [
+          [_dec4, _dec5],
+          1,
+          "c",
+          function () {
+            return this.#a;
+          },
+          function (value) {
+            this.#a = value;
+          }
+        ]
+      ],
+      [dec]
     );
 
-    initA = ret[0];
-    callB = ret[1];
-    initC = ret[2];
-    getC = ret[3];
-    setC = ret[4];
-    initInstance = ret[5];
-    Class = ret[6];
-    initClass = ret[7];
+    _initStatic(Class);
   }
 ```
 
@@ -176,35 +207,39 @@ application returns an array of values that are used to populate all of the
 local variables we defined earlier. The array's order is fully deterministic, so
 we can assign the values based on an index we can calculate ahead of time.
 
+Another important thing to note here is that we're passing some functions here.
+These are for private methods and accessors, which cannot be replaced directly
+so we have to extract their code so it can be decorated. Because we define these
+within the static block, they can access any private identifiers which were
+defined within the class, so it's not an issue that we're extracting the method
+logic here.
+
 We'll come back to `applyDecs` in a bit to dig into what its format is exactly,
 but now let's dig into the new definitions of our class elements.
 
 ```js
-  a = (initInstance(this), initA(this, 123));
+  a = (_initInstance(this), _init_a(this, 123));
 ```
 
 Alright, so previously this was a simple class field. Since it's the first field
 on the class, we've updated it to immediately call `initInstance` in its
 initializer. This calls any initializers added with `addInitializer` for all of
 the per-class values (methods and accessors), which should all be setup on the
-instance before class fields are assigned. Then, it calls `initA` to get the
+instance before class fields are assigned. Then, it calls `_init_a` to get the
 initial value of the field, which allows initializers returned from the
 decorator to intercept and decorate it. It's important that the initial value
 is used/defined _within_ the class body, because initializers can now refer to
 private class fields, e.g. `a = this.#b` is a valid field initializer and would
-become `a = initA(this, this.#b)`, which would also be valid. We cannot
+become `a = _init_a(this, this.#b)`, which would also be valid. We cannot
 extract initializer code, or any other code, from the class body because of
 this.
 
 Overall, this decoration is pretty straightforward other than the fact that we
-have to reference `initA` externally.
+have to reference `_init_a` externally.
 
 ```js
   static #b(...args) {
-    callB(this, args);
-  }
-  static x() {
-    console.log('foo');
+    _call_b(this, args);
   }
 ```
 
@@ -214,42 +249,27 @@ complex, as our definition has been broken out into 2 parts:
 1. `static #b`: This is the method itself, which being a private method we
   cannot overwrite with `defineProperty`. We also can't convert it into a
   private field because that would change its semantics (would make it
-  writable). So, we instead have it proxy to the locally scoped `callB`
+  writable). So, we instead have it proxy to the locally scoped `_call_b`
   variable, which will be populated with the fully decorated method.
-2. `static x`: This contains the _code_ of the original method. Once again, this
-  code cannot be removed from the class body because it may reference private
-  identifiers. However, we have moved the code to a _public_ method, which means
-  we can now read its value using `Object.getOwnPropertyDescriptor`. Decorators
-  use this to get the initial implementation of the method, which can then be
-  wrapped with decorator code/logic. They then `delete` this temporary property,
-  which is necessary because no additional elements should be added to a class
-  definition.
-
-  The name for this method is unimportant, but because public method names
-  cannot be minified and we also need to pass the name into `applyDecs`, we
-  generate as small of a unique identifier as possible here, starting with 1
-  char names which are not taken and growing until we find one that is free.
+2. The definition of the method, kept in `_call_b`. As we mentioned above, the
+  original method's code is moved during the decoration process, and the wrapped
+  version is populated in `_call_b` and called whenever the private method is
+  called.
 
 ```js
-  [computedKey]() {}
+  [_computedKey]() {}
 ```
 
 Next is the undecorated method with a computed key. This uses the previously
 calculated and stored computed key.
 
 ```js
-  #y = initC(this, 123);
-  get y() {
-    return this.#y;
-  }
-  set y(v) {
-    this.#y = v;
-  }
+  #a = _init_c(this, 123);
   get #c() {
-    return getC(this);
+    return _get_c(this);
   }
   set #c(v) {
-    setC(this, v);
+    _set_c(this, v);
   }
 ```
 
@@ -258,49 +278,36 @@ case, since we have to transpile the decorators, the `accessor` keyword, and
 target a private field. Breaking it down piece by piece:
 
 ```js
-  #y = initC(this, 123);
+  #a = _init_c(this, 123);
 ```
 
 `accessor #c` desugars to a getter and setter which are backed by a new private
-field, `#y`. Like before, the name of this field doesn't really matter, we'll
+field, `#a`. Like before, the name of this field doesn't really matter, we'll
 just generate a short, unique name. We call the decorated initializer for `#c`
 and return that value to assign to the field.
 
 ```js
-  get y() {
-    return this.#y;
-  }
-  set y(v) {
-    this.#y = v;
-  }
-```
-
-Next we have a getter and setter named `y` which provide access to the backing
-storage for the accessor. These are the base getter/setter for the accessor,
-which the decorator will get via `Object.getOwnPropertyDescriptor`. They will be
-deleted from the class fully, so again the name is not important here, just
-needs to be short.
-
-```js
   get #c() {
-    return getC(this);
+    return _get_c(this);
   }
   set #c(v) {
-    setC(this, v);
+    _set_c(this, v);
   }
 ```
 
 Next, we have the getter and setter for `#c` itself. These methods defer to
-the `getC` and `setC` local variables, which will be the decorated versions of
-the `get y` and `set y` methods from the previous step.
+the `_get_c` and `_set_c` local variables, which will be the decorated versions
+of the two getter functions that we passed for decoration in the static block
+above. Those two functions are essentially just accessors for the private `#a`
+field, but the decorator may add additional logic to them.
 
 ```js
   static {
-    initClass(C);
+    _initClass(_Class);
   }
 ```
 
-Finally, we call `initClass` in another static block, running any class and
+Finally, we call `_initClass` in another static block, running any class and
 static method initializers on the final class. This is done in a static block
 for convenience with class expressions, but it could run immediately after the
 class is defined.
@@ -308,21 +315,40 @@ class is defined.
 Ok, so now that we understand the general output, let's go back to `applyDecs`:
 
 ```js
-const elementDecs = [
-  [dec, 0, 'a'],
-  [dec, 7, 'x', '#b']
-  (computedKey = someVal, null)
-  [[dec, dec2], 1, 'y', '#c']
-];
-
-const classDecs = [dec];
-
-// ...
-
-let ret = applyDecs(
-  this,
-  elementDecs,
-  classDecs
+[
+  _init_a,
+  _call_b,
+  _init_c,
+  _get_c,
+  _set_c,
+  _Class,
+  _initClass,
+  _initProto,
+  _initStatic,
+] = _applyDecs(Class,
+  [
+    [_dec, 0, "a"],
+    [
+      _dec2,
+      7,
+      "b",
+      function () {
+        console.log('foo');
+      }
+    ],
+    [
+      [_dec4, _dec5],
+      1,
+      "c",
+      function () {
+        return this.#a;
+      },
+      function (value) {
+        this.#a = value;
+      }
+    ]
+  ],
+  [dec]
 );
 ```
 
@@ -356,16 +382,12 @@ annotated version of the member descriptors:
   //   9 === SETTER + STATIC
   1,
 
-  // The name of the public property that can be used to access the value.
-  // For public members this is the actual name, for private members this is
-  // the name of the public property which can be used to access the value
-  // (see descriptions of #b and #c above)
+  // The name of the member
   'y',
 
-  // Optional fourth value, this is the spelling of the private element's name,
-  // which signals that the element is private to `applyDecs` and is used in the
-  // decorator's context object
-  '#c'
+  // Optional fourth and fifth values, these are functions passed for private
+  // decorators
+  function() {}
 ],
 ```
 
