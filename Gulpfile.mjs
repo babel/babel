@@ -352,7 +352,7 @@ function buildRollup(packages, buildStandalone) {
         log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
           input,
-          external,
+          external: buildStandalone ? [] : external,
           // all node modules are resolved as if they were placed in the n_m folder of package root
           preserveSymlinks: true,
           onwarn(warning, warn) {
@@ -616,7 +616,7 @@ function* libBundlesIterator() {
 }
 
 let libBundles;
-if (process.env.B_ALL) {
+if (process.env.BABEL_8_BREAKING) {
   libBundles = [...libBundlesIterator()];
 } else {
   libBundles = [
