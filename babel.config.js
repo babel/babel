@@ -194,7 +194,10 @@ module.exports = function (api) {
         assumptions: parserAssumptions,
       },
       {
-        test: ["packages/babel-generator"].map(normalize),
+        test: [
+          "packages/babel-generator",
+          "packages/babel-plugin-proposal-decorators",
+        ].map(normalize),
         plugins: ["babel-plugin-transform-charcodes"],
       },
       convertESM && {

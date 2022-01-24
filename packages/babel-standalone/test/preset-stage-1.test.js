@@ -55,5 +55,20 @@ _ref = x, _ref;"
 _ref = x, _ref;"
 `);
     });
+    it("should support decorators versioned 2021-12", () => {
+      const output = Babel.transform("@dec class C {}", {
+        plugins: [["external-helpers", { helperVersion: "7.100.0" }]],
+        presets: [
+          [
+            "stage-1",
+            {
+              decoratorsVersion: "2021-12",
+              decoratorsBeforeExport: false,
+            },
+          ],
+        ],
+      }).code;
+      expect(output).toMatch("babelHelpers.applyDecs");
+    });
   },
 );

@@ -736,8 +736,10 @@ export interface ClassBody extends BaseNode {
     | ClassPrivateMethod
     | ClassProperty
     | ClassPrivateProperty
+    | ClassAccessorProperty
     | TSDeclareMethod
     | TSIndexSignature
+    | StaticBlock
   >;
 }
 

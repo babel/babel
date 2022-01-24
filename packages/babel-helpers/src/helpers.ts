@@ -2052,3 +2052,9 @@ if (!process.env.BABEL_8_BREAKING) {
     }
   `;
 }
+
+helpers.identity = helper("7.16.7")`
+  export default function _identity(x) {
+    return x;
+  }
+`;

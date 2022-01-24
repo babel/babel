@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "proposal-decorators",
+      { "version": "2021-12", "decoratorsBeforeExport": false }
+    ],
+    "proposal-class-properties",
+    "proposal-private-methods",
+    "proposal-class-static-block"
+  ]
+}
