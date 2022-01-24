@@ -22,7 +22,9 @@
   "dependencies": {
     "@babel/helper-create-class-features-plugin": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-decorators": "workspace:^"
+    "@babel/helper-replace-supers": "workspace:^",
+    "@babel/plugin-syntax-decorators": "workspace:^",
+    "charcodes": "^0.2.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

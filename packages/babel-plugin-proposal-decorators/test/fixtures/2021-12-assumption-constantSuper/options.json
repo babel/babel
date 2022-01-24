@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "proposal-decorators",
+      { "version": "2021-12", "decoratorsBeforeExport": false }
+    ]
+  ],
+  "assumptions": {
+    "constantSuper": true
+  }
+}

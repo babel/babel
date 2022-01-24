@@ -344,8 +344,10 @@ export function classBody(
     | t.ClassPrivateMethod
     | t.ClassProperty
     | t.ClassPrivateProperty
+    | t.ClassAccessorProperty
     | t.TSDeclareMethod
     | t.TSIndexSignature
+    | t.StaticBlock
   >,
 ): t.ClassBody {
   return builder.apply("ClassBody", arguments);

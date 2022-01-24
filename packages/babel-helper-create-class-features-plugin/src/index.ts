@@ -33,6 +33,7 @@ interface Options {
   name: string;
   feature: number;
   loose?: boolean;
+  inherits?: (api: any, options: any) => any;
   // same as PluginObject.manipulateOptions
   manipulateOptions: (options: unknown, parserOpts: ParserOptions) => void;
   // TODO(flow->ts): change to babel api
@@ -46,6 +47,7 @@ export function createClassFeaturePlugin({
   manipulateOptions,
   // TODO(Babel 8): Remove the default value
   api = { assumption: () => void 0 },
+  inherits,
 }: Options) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
@@ -80,6 +82,7 @@ export function createClassFeaturePlugin({
   return {
     name,
     manipulateOptions,
+    inherits,
 
     pre() {
       enableFeature(this.file, feature, loose);
@@ -163,7 +166,7 @@ export function createClassFeaturePlugin({
               path.isPrivate() ||
               path.isStaticBlock?.()
             ) {
-              props.push(path);
+              props.push(path as PropPath);
             }
           }
         }
@@ -239,7 +242,7 @@ export function createClassFeaturePlugin({
             (referenceVisitor, state) => {
               if (isDecorated) return;
               for (const prop of props) {
-                if (prop.node.static) continue;
+                if (t.isStaticBlock(prop.node) || prop.node.static) continue;
                 prop.traverse(referenceVisitor, state);
               }
             },
