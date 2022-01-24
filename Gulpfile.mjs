@@ -440,6 +440,26 @@ function buildRollup(packages, targetBrowsers) {
           name,
           sourcemap: sourcemap,
           exports: "named",
+          interop(id) {
+            // We have manually applied commonjs-esm interop to the source
+            // for library not in this monorepo
+            // https://github.com/babel/babel/pull/12795
+            if (id.startsWith("@babel/")) {
+              // Some syntax plugins have been archived
+              if (id.includes("plugin-syntax")) {
+                const srcPath = id.replace("@babel/", "babel-");
+                if (
+                  !fs.existsSync(
+                    new URL("./packages/" + srcPath, import.meta.url)
+                  )
+                ) {
+                  return false;
+                }
+              }
+              return true;
+            }
+            return false;
+          },
         });
 
         // Only minify @babel/standalone
@@ -522,8 +542,15 @@ function* libBundlesIterator() {
         dir === "babel-standalone" ||
         // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
         dir === "babel-cli" ||
-        // todo: Rollup bundles only the browser entry of babel-register
-        dir === "babel-register"
+        // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
+        // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
+        dir === "babel-register" ||
+        dir === "babel-core" ||
+        dir === "babel-plugin-transform-runtime" ||
+        // @babel/node invokes internal lib/_babel-node.js
+        dir === "babel-node" ||
+        // todo: test/helpers/define-helper requires internal lib/helpers access
+        dir === "babel-helpers"
       ) {
         continue;
       }
