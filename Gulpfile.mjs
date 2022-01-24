@@ -328,10 +328,20 @@ function buildRollup(packages, targetBrowsers) {
         const pkgJSON = require("./" + src + "/package.json");
         const version = pkgJSON.version + versionSuffix;
         const { dependencies = {}, peerDependencies = {} } = pkgJSON;
-        const external = Object.keys(dependencies)
-          .concat(Object.keys(peerDependencies))
-          // kexec is used by babel-node without declaring dependencies
-          .concat("kexec");
+        const external = [
+          ...Object.keys(dependencies),
+          ...Object.keys(peerDependencies),
+          // Ideally they should be constructed from package.json exports
+          // required by modules-commonjs
+          "babel-plugin-dynamic-import-node/utils",
+          // required by preset-env
+          "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class",
+          "@babel/preset-modules/lib/plugins/transform-edge-default-parameters",
+          "@babel/preset-modules/lib/plugins/transform-edge-function-name",
+          "@babel/preset-modules/lib/plugins/transform-tagged-template-caching",
+          "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing",
+          "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing",
+        ];
 
         log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
