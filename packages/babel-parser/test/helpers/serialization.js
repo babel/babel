@@ -73,6 +73,8 @@ const toError = message =>
     : SyntaxError(message.replace(ErrorPrefixRegExp, ""));
 
 const LocRegExp = /"loc":(\s*\{(?:[^}{]+|\{(?:[^}{]+|\([^}{]*\})*\})*\})/gm;
+const StartEndRegExp = /("(start|end)":\s*(\d+),\s*){2}/gm;
+const CompactRegExp = new RegExp(`${StartEndRegExp.source}${LocRegExp.source}`, "gm");
 
 export function serialize(value) {
   let extended = false;
@@ -88,10 +90,9 @@ export function serialize(value) {
       ? value + ""
       : value;
   const serialized = stringify(value, encode, 2).replace(
-    LocRegExp,
-    // This is safe since none of the values can have spaces in them, otherwise
-    // we could also do `stringify(parse(string), null, 0)`.
-    (_, string) => `"loc":${string.replace(/\s+/gm, () => "")}`,
+    CompactRegExp,
+    // This is safe since none of the values can have spaces in them.
+    string => string.replace(/\s+/gm, () => ""),
   );
 
   return [extended, serialized];
