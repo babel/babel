@@ -763,7 +763,7 @@ describe("scope", () => {
       });
       it("in function declaration", () => {
         const functionDeclaration = getPath("function f() { var foo; }").get(
-          "body.0.expression",
+          "body.0",
         );
         expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
       });
@@ -851,7 +851,7 @@ describe("scope", () => {
       });
       it("in function declaration", () => {
         const functionDeclaration = getPath("function f() { let foo; }").get(
-          "body.0.expression",
+          "body.0",
         );
         expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
       });
