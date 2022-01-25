@@ -1,4 +1,5 @@
 import { inspect } from "util";
+import Difference from "./difference.js";
 import "./polyfill.js";
 
 const { isArray } = Array;
@@ -14,7 +15,9 @@ export default class FixtureError extends Error {
   }
 
   static fromDifference(difference, actual) {
-    return difference.path[0] !== "threw"
+    return difference === Difference.None
+      ? FixtureError.None
+      : difference.path[0] !== "threw"
       ? new FixtureError.DifferentAST(difference)
       : !difference.expected
       ? new FixtureError.UnexpectedError(difference, actual.threw)
@@ -25,6 +28,10 @@ export default class FixtureError extends Error {
       : new FixtureError.UnexpectedSuccess(difference);
   }
 }
+
+FixtureError.None = Object.freeze(
+  Object.setPrototypeOf({}, FixtureError.prototype),
+);
 
 Object.assign(
   FixtureError,

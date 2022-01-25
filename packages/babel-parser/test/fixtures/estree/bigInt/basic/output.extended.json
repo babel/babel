@@ -23,7 +23,7 @@
               "type": "Literal",
               "start":10,"end":12,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":12}},
               "value": {
-                "$$ babel internal serialized type": "BigInt",
+                "$$ babel internal serialized type": "bigint",
                 "value": "1"
               },
               "raw": "1n",

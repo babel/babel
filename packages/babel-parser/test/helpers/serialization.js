@@ -5,7 +5,7 @@ const { parse: JSONParse, stringify } = JSON;
 // deserialization function in those cases (which is slower), and in all
 // other instances just rely on normal JSON.parse with no deserialization
 // function.
-const isSerialized = filename => /\.serialized\.json$/.test(filename);
+const isExtended = filename => /\.extended\.json$/.test(filename);
 
 // We've only serialized one BigInt in the entire test suite:
 //
@@ -27,7 +27,7 @@ export const deserialize = (filename, options, string) =>
     !!string &&
       JSONParse(
         string,
-        isSerialized(filename) &&
+        isExtended(filename) &&
           ((key, value) =>
             key !== "value" ||
             !value ||
@@ -75,15 +75,15 @@ const toError = message =>
 const LocRegExp = /"loc":(\s*\{(?:[^}{]+|\{(?:[^}{]+|\([^}{]*\})*\})*\})/gm;
 
 export function serialize(value) {
-  let encoded = false;
-  const toEncoded = (name, data) => (
-    (encoded = true), { [SerializationKey]: name, ...data }
+  let extended = false;
+  const toExended = (name, data) => (
+    (extended = true), { [SerializationKey]: name, ...data }
   );
   const encode = (key, value) =>
     typeof value === "bigint"
-      ? toEncoded("BigInt", { value: value + "" })
+      ? toExended("bigint", { value: value + "" })
       : value instanceof RegExp
-      ? toEncoded("RegExp", { source: value.source, flags: value.flags })
+      ? toExended("RegExp", { source: value.source, flags: value.flags })
       : value instanceof Error
       ? value + ""
       : value;
@@ -94,5 +94,5 @@ export function serialize(value) {
     (_, string) => `"loc":${string.replace(/\s+/gm, () => "")}`,
   );
 
-  return [encoded, serialized];
+  return [extended, serialized];
 }
