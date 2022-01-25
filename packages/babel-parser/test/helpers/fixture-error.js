@@ -1,6 +1,7 @@
 import { inspect } from "util";
 import "./polyfill.js";
 
+const { isArray } = Array;
 const { defineProperty, entries, fromEntries } = Object;
 
 const named = (name, object) => defineProperty(object, "name", { value: name });
@@ -31,11 +32,11 @@ Object.assign(
     {
       DifferentError: ({ expected }) =>
         `Expected unrecoverable error:    \n\n${expected}\n\n` +
-        `But instead encountered different unrecoverable error.\n`,
+        `But instead encountered different unrecoverable error.`,
 
       DifferentAST: ({ message }) => message,
 
-      UnexpectedError: () => `Encountered unexpected unrecoverable error.\n`,
+      UnexpectedError: () => `Encountered unexpected unrecoverable error.`,
 
       UnexpectedSuccess: ({ expected }) =>
         `Expected unrecoverable error:\n\n    ${expected}\n\n` +
@@ -43,11 +44,7 @@ Object.assign(
 
       UnexpectedRecovery: ({ expected }, errors) =>
         `Expected unrecoverable error:\n\n    ${expected}\n\n` +
-        `But instead parsing recovered from errors:\n\n${JSON.stringify(
-          errors,
-          null,
-          2,
-        )}`,
+        `But instead parsing recovered from ${errors.length} errors.`,
     },
     ([name, toMessage]) => [
       name,
@@ -57,13 +54,17 @@ Object.assign(
           constructor(difference, cause) {
             super(toMessage(difference, cause), difference);
 
-            if (cause) this.cause = cause.context || cause;
+            if (cause) {
+              this.cause = isArray(cause)
+                ? cause.map(cause => cause.context || cause)
+                : cause;
+            }
           }
 
           // Don't show the stack of FixtureErrors, it's irrelevant.
           // Instead, show the cause, if present.
           [inspect.custom](depth, options) {
-            return `${this.message.replace(/\.\n$/, ":\n")}${
+            return `${this.message.replace(/(?<=error(s?))\.$/, ":\n")}${
               this.cause
                 ? `\n${inspect(this.cause, options)}`.replace(/\n/g, "\n    ")
                 : ""

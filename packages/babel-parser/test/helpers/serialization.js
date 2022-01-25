@@ -79,11 +79,13 @@ export function serialize(value) {
   const toEncoded = (name, data) => (
     (encoded = true), { [SerializationKey]: name, ...data }
   );
-  const encode = (_, value) =>
+  const encode = (key, value) =>
     typeof value === "bigint"
       ? toEncoded("BigInt", { value: value + "" })
       : value instanceof RegExp
       ? toEncoded("RegExp", { source: value.source, flags: value.flags })
+      : value instanceof Error
+      ? value + ""
       : value;
   const serialized = stringify(value, encode, 2).replace(
     LocRegExp,
