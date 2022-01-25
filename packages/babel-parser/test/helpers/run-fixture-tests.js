@@ -136,7 +136,7 @@ function runParseTest(parse, test, onlyCompareErrors) {
 
   // Remove any previous output files that are no longer valid, either because
   // extension changed, or because we aren't writing it out at all anymore.
-  for (location of [normalLocation, extendedLocation]) {
+  for (const location of [normalLocation, extendedLocation]) {
     if (location !== outputLocation && existsSync(location)) {
       unlinkSync(location);
     }
