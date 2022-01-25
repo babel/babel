@@ -2,7 +2,7 @@
 
 const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 const clone = value => JSON.parse(JSON.stringify(value));
-// const dedupe = array => Object.values(Object.fromEntries(array));
+const { FUZZ } = process.env;
 
 const toDescriptorAssignedObject = (delta, object) =>
   delta.reduce(
@@ -46,12 +46,7 @@ const toAdjustedSyntaxError = (adjust, error) =>
     : error;
 
 export default function toFuzzedOptions(options) {
-  // Don't fuzz test in node 8, since for whatever reason Jest 23 on node 8
-  // takes forever after a certain number of tests, even if those tests are
-  // empty.
-  if (/v8\./.test(process.version)) {
-    return [[false, options]];
-  }
+  if (FUZZ === "false") return [[false, options]];
 
   const { startLine = 1, startColumn = 0 } = options;
 
