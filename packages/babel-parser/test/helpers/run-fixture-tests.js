@@ -103,7 +103,11 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // serialize the full error to be able to property test locations,
   // reasonCodes, etc.
   const throws = !!actual.threw && actual.threw.message;
+
+  // We want to throw away the contents of `throw` here.
+  // eslint-disable-next-line no-unused-vars
   const { throws: _, ...oldOptions } = test.originalOptions;
+
   const newOptions = { ...oldOptions, ...(throws && { throws }) };
   const optionsLocation = join(testLocation, "options.json");
 
@@ -119,20 +123,24 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // it belongs to a different test.
   if (onlyCompareErrors) return;
 
-  const [extended, serialized] = serialize(actual.ast);
-  const extension = extended ? ".extended.json" : ".json";
-  const outputLocation = join(testLocation, `output${extension}`);
+  const normalLocation = join(testLocation, "output.json");
+  const extendedLocation = join(testLocation, "output.extended.json");
 
-  const reverseExtension = extended ? ".json" : ".extended.json";
-  const previousLocation = join(testLocation, `output${reverseExtension}`);
+  const [extended, serialized] = actual.ast ? serialize(actual.ast) : [];
+  const outputLocation =
+    serialized && (extended ? extendedLocation : normalLocation);
 
-  // If we're switching formats, make sure to remove the old format.
-  if (previousLocation !== outputLocation && existsSync(previousLocation)) {
-    unlinkSync(reverseExtension);
+  if (outputLocation) {
+    writeFileSync(outputLocation, serialized, "utf-8");
   }
 
-  // Remove the other one...
-  writeFileSync(outputLocation, serialized, "utf-8");
+  // Remove any previous output files that are no longer valid, either because
+  // extension changed, or because we aren't writing it out at all anymore.
+  for (location of [normalLocation, extendedLocation]) {
+    if (location !== outputLocation && existsSync(location)) {
+      unlinkSync(location);
+    }
+  }
 }
 
 function parseWithRecovery(parse, source, filename, options) {
