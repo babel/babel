@@ -144,7 +144,9 @@ function runParseTest(parse, test, onlyCompareErrors) {
 function readJSON(filename) {
   try {
     return JSONParse(readFileSync(filename, "utf-8"));
-  } catch (error) { return {}; }
+  } catch (error) {
+    return {};
+  }
 }
 
 function parseWithRecovery(parse, source, filename, options) {

@@ -74,7 +74,10 @@ const toError = message =>
 
 const LocRegExp = /"loc":(\s*\{(?:[^}{]+|\{(?:[^}{]+|\([^}{]*\})*\})*\})/gm;
 const StartEndRegExp = /("(start|end)":\s*(\d+),\s*){2}/gm;
-const CompactRegExp = new RegExp(`${StartEndRegExp.source}${LocRegExp.source}`, "gm");
+const CompactRegExp = new RegExp(
+  `${StartEndRegExp.source}${LocRegExp.source}`,
+  "gm",
+);
 
 export function serialize(value) {
   let extended = false;
