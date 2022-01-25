@@ -1,4 +1,4 @@
-const { parse: JSONParse } = JSON;
+const { parse: JSONParse, stringify } = JSON;
 
 // We give JSON files that needed our special serialization the extension
 // ".serialized.json" instead of just ".json" so that we can only use our
@@ -9,7 +9,7 @@ const isSerialized = filename => /\.serialized\.json$/.test(filename);
 
 // We've only serialized one BigInt in the entire test suite:
 //
-// packages/babel-parser/test/fixtures/estree/basic/bigint/output.serialized.json
+// packages/babel-parser/test/fixtures/estree/bigInt/basic/output.serialized.json
 //
 // This is because only estree actually includes the BigInt value in the Literal
 // node. If the JS environemnt doesn't support bigint, then estree will just
@@ -71,3 +71,26 @@ const toError = message =>
   /^Error/.test(message.replace(ErrorPrefixRegExp, ""))
     ? Error(message.replace(ErrorPrefixRegExp, ""))
     : SyntaxError(message.replace(ErrorPrefixRegExp, ""));
+
+const LocRegExp = /"loc":(\s*\{(?:[^}{]+|\{(?:[^}{]+|\([^}{]*\})*\})*\})/gm;
+
+export function serialize(value) {
+  let encoded = false;
+  const toEncoded = (name, data) => (
+    (encoded = true), { [SerializationKey]: name, ...data }
+  );
+  const encode = (_, value) =>
+    typeof value === "bigint"
+      ? toEncoded("BigInt", { value: value + "" })
+      : value instanceof RegExp
+      ? toEncoded("RegExp", { source: value.source, flags: value.flags })
+      : value;
+  const serialized = stringify(value, encode, 2).replace(
+    LocRegExp,
+    // This is safe since none of the values can have spaces in them, otherwise
+    // we could also do `stringify(parse(string), null, 0)`.
+    (_, string) => `"loc":${string.replace(/\s+/gm, () => "")}`,
+  );
+
+  return [encoded, serialized];
+}
