@@ -1,7 +1,7 @@
 const { parse: JSONParse, stringify } = JSON;
 
 // We give JSON files that needed our special serialization the extension
-// ".serialized.json" instead of just ".json" so that we can only use our
+// ".extended.json" instead of just ".json" so that we can only use our
 // deserialization function in those cases (which is slower), and in all
 // other instances just rely on normal JSON.parse with no deserialization
 // function.
@@ -9,7 +9,7 @@ const isExtended = filename => /\.extended\.json$/.test(filename);
 
 // We've only serialized one BigInt in the entire test suite:
 //
-// packages/babel-parser/test/fixtures/estree/bigInt/basic/output.serialized.json
+// packages/babel-parser/test/fixtures/estree/bigInt/basic/output.extended.json
 //
 // This is because only estree actually includes the BigInt value in the Literal
 // node. If the JS environemnt doesn't support bigint, then estree will just

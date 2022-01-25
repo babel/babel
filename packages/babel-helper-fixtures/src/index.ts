@@ -105,7 +105,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
 
   const expectLoc =
     findFile(taskDir + "/output", true /* allowJSON */) ||
-    findFile(`${taskDir}/output.serialized`, true) ||
+    findFile(`${taskDir}/output.extended`, true) ||
     taskDir + "/output.js";
   const stdoutLoc = taskDir + "/stdout.txt";
   const stderrLoc = taskDir + "/stderr.txt";
@@ -131,6 +131,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
   const test = {
+    taskDir,
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
     disabled:
