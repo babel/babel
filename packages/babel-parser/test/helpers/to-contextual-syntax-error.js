@@ -19,15 +19,21 @@ export default function toContextualSyntaxError(
     { highlightCode: true },
   );
 
-  // Limit this stack trace to 1. Everything after that is just stuff from the
-  // test.
+  // We make this a lazy property since we don't want pay the price of creating
+  // this new error unless we are going to display it.
   Object.defineProperty(error, "context", {
     get() {
       const message = JSON.stringify(`${error.message}\n${frame}`);
       const originalStackTraceLimit = Error.stackTraceLimit;
 
+      // Limit this stack trace to 1. Everything after that is just stuff from
+      // the test.
       Error.stackTraceLimit = 1;
 
+      // The only way to manipulate the file in which a SyntaxError reports it
+      // is coming from is to roundtrip through vm.runInThisContext. If v8
+      // supported Firefox's non-standard Error.fileName property, that could be
+      // used instead, but unfortunately it does not.
       const context = runInThisContext(`SyntaxError(${message})`, { filename });
 
       Error.stackTraceLimit = originalStackTraceLimit;

@@ -81,10 +81,11 @@ function runParseTest(parse, test, onlyCompareErrors) {
     onlyCompareErrors ? toJustErrors(expected) : expected,
     onlyCompareErrors ? toJustErrors(actual) : actual,
   );
-  const error = FixtureError.fromDifference(difference, actual);
 
   // No differences means we passed and there's nothing left to do.
-  if (error === FixtureError.None) return;
+  if (difference === Difference.None) return;
+
+  const error = FixtureError.fromDifference(difference, actual);
 
   // If we're not overwriting the current values with whatever we get this time
   // around, then we have a legitimate error that we need to report.
