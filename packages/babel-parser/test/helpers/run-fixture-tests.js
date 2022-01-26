@@ -7,9 +7,23 @@ import toFuzzedOptions from "./to-fuzzed-options.js";
 import { serialize, deserialize } from "./serialization.js";
 import toContextualSyntaxError from "./to-contextual-syntax-error.js";
 
-const { OVERWRITE } = process.env;
+const { CI, OVERWRITE } = process.env;
 const { stringify, parse: JSONParse } = JSON;
 
+/**
+ * run parser on given tests
+ *
+ * @param {Test} A {@link packages/babel-helper-fixtures/src/index.js Test}
+ * instance
+ generated from `getFixtures`
+ * @param {*} parseFunction A parser with the same interface of
+ * `@babel/parser#parse`
+ * @param {boolean} [compareErrorsOnly=false] Whether we should only compare the
+ * "errors" of generated ast against the expected AST. Used for tests where an
+ * ESTree AST is generated but we want to make sure `@babel/parser` still throws
+ * expected recoverable recoverable errors on given code locations.
+ * @returns {void}
+ */
 export default function runFixtureTests(
   fixturesPath,
   parseFunction,
@@ -89,7 +103,7 @@ function runParseTest(parse, test, onlyCompareErrors) {
 
   // If we're not overwriting the current values with whatever we get this time
   // around, then we have a legitimate error that we need to report.
-  if (!OVERWRITE) throw error;
+  if (CI || !OVERWRITE) throw error;
 
   // We only write the output of the original test, not all it's auto-generated
   // variations.
