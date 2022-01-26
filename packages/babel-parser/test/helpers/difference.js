@@ -3,6 +3,7 @@
 import { isIdentifierName } from "@babel/helper-validator-identifier";
 
 const { isArray } = Array;
+const { isInteger } = Number;
 const { hasOwnProperty } = Object;
 
 export default class Difference {
@@ -139,11 +140,9 @@ const toExplanationString = ({ discrepancy, expected, actual, key }) =>
     ? `Did not expect a property ${toValueString(key)}`
     : discrepancy === "missing-key"
     ? `${toType(actual)} is missing property ${toValueString(key)}`
-    : discrepancy === "type"
-    ? `Wrong type "${expected}" != "${actual}"`
     : `${toValueString(expected)} != ${toValueString(actual)}`;
 
-const isInt = key => parseInt(key, 10) + "" === key;
+const isInt = key => isInteger(+key);
 const toAccess = key =>
   isInt(key) ? `[${key}]` : isIdentifierName(key) ? `.${key}` : `["${key}"]`;
 

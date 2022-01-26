@@ -1,8 +1,8 @@
 /* eslint-disable no-confusing-arrow */
-
 const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 const clone = value => JSON.parse(JSON.stringify(value));
-const { FUZZ } = process.env;
+
+const { TEST_FUZZ } = process.env;
 
 const toDescriptorAssignedObject = (delta, object) =>
   delta.reduce(
@@ -46,7 +46,7 @@ const toAdjustedSyntaxError = (adjust, error) =>
     : error;
 
 export default function toFuzzedOptions(options) {
-  if (FUZZ === "false") return [[false, options]];
+  if (TEST_FUZZ === "false") return [[false, options]];
 
   const { startLine = 1, startColumn = 0 } = options;
 

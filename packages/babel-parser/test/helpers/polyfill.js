@@ -1,3 +1,4 @@
+// TODO(Babel 8): Remove this file.
 // We run these tests as far back as Node 6, so we need these there.
 
 if (!Object.entries) {
