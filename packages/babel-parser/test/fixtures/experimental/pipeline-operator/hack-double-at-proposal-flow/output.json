@@ -1,0 +1,128 @@
+{
+  "type": "File",
+  "start":0,"end":87,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":87,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":11,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":11}},
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5},"identifierName":"value"},
+            "name": "value"
+          },
+          "operator": "|>",
+          "right": {
+            "type": "TopicReference",
+            "start":9,"end":11,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":11}}
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":25,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":11}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":14,"end":25,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":11}},
+          "left": {
+            "type": "Identifier",
+            "start":14,"end":19,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":5},"identifierName":"value"},
+            "name": "value"
+          },
+          "operator": "|>",
+          "right": {
+            "type": "TopicReference",
+            "start":23,"end":25,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":11}}
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":26,"end":34,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":8}},
+        "expression": {
+          "type": "Identifier",
+          "start":26,"end":34,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":8},"identifierName":"iterator"},
+          "name": "iterator"
+        }
+      },
+      {
+        "type": "DeclareClass",
+        "start":36,"end":87,"loc":{"start":{"line":6,"column":0},"end":{"line":8,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":50,"end":51,"loc":{"start":{"line":6,"column":14},"end":{"line":6,"column":15},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":52,"end":87,"loc":{"start":{"line":6,"column":16},"end":{"line":8,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":56,"end":84,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":30}},
+              "key": {
+                "type": "Identifier",
+                "start":56,"end":66,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":12},"identifierName":"@@iterator"},
+                "name": "@@iterator"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":56,"end":84,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":30}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "this": null,
+                "returnType": {
+                  "type": "GenericTypeAnnotation",
+                  "start":70,"end":84,"loc":{"start":{"line":7,"column":16},"end":{"line":7,"column":30}},
+                  "typeParameters": {
+                    "type": "TypeParameterInstantiation",
+                    "start":78,"end":84,"loc":{"start":{"line":7,"column":24},"end":{"line":7,"column":30}},
+                    "params": [
+                      {
+                        "type": "GenericTypeAnnotation",
+                        "start":79,"end":83,"loc":{"start":{"line":7,"column":25},"end":{"line":7,"column":29}},
+                        "typeParameters": null,
+                        "id": {
+                          "type": "Identifier",
+                          "start":79,"end":83,"loc":{"start":{"line":7,"column":25},"end":{"line":7,"column":29},"identifierName":"File"},
+                          "name": "File"
+                        }
+                      }
+                    ]
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start":70,"end":78,"loc":{"start":{"line":7,"column":16},"end":{"line":7,"column":24},"identifierName":"Iterator"},
+                    "name": "Iterator"
+                  }
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

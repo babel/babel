@@ -2256,7 +2256,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         // allow double nullable types in Flow: ??string
         return this.finishOp(tt.question, 1);
-      } else if (isIteratorStart(code, next)) {
+      } else if (
+        isIteratorStart(code, next, this.input.charCodeAt(this.state.pos + 2))
+      ) {
         this.state.pos += 2; // eat "@@"
         return this.readIterator();
       } else {
