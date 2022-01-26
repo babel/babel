@@ -197,10 +197,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Node.js 14.15
+      - name: Use Node.js 14.17
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "14.15" # Node.js 14.15 is the first LTS supported by Babel 8
+          node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
