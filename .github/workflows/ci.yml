@@ -183,21 +183,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test on node.js ${{ matrix.node-version }}
-        if: matrix.node-version == '8'
-        # Hack: --color has supports-color@5 returned true for GitHub CI
-        # Remove once `chalk` is bumped to 4.0.
-
-        # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
-        run: |
-          BABEL_ENV=test TEST_FUZZ=false node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
-      - name: Test on node.js ${{ matrix.node-version }}
-        if: matrix.node-version != '8'
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
 
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
           BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
+        env:
+          TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes
