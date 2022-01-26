@@ -15,7 +15,7 @@ const toDescriptorAssignedObject = (delta, object) =>
     clone(object),
   );
 
-const toAdjust = adjustments =>
+const toAdjustFunction = adjustments =>
   !adjustments || Object.keys(adjustments).length === 0
     ? null
     : Object.assign(
@@ -86,7 +86,7 @@ export default function toFuzzedOptions(options) {
   return totalOptions
     .map(options => [options, options.startLine || 1, options.startColumn || 0])
     .map(([options, fStartLine, fStartColumn]) => [
-      toAdjust({
+      toAdjustFunction({
         ...(startLine !== fStartLine && {
           line: (_, line) => line - startLine + fStartLine,
         }),
@@ -99,7 +99,7 @@ export default function toFuzzedOptions(options) {
     ])
     .map(([adjust, options]) => [
       adjust &&
-        toAdjust({
+        toAdjustFunction({
           ...adjust,
           threw: (adjust, error) =>
             error && toAdjustedSyntaxError(adjust, error),

@@ -129,9 +129,9 @@ const toValueString = (value, type = toType(value)) =>
     ? value.toString()
     : type === "bigint"
     ? `${value}n`
-    : type !== "number" || 1 / value !== -Infinity
-    ? value + ""
-    : "-0";
+    : Object.is(value, -0)
+    ? "-0"
+    : value + ""
 
 const toExplanationString = ({ discrepancy, expected, actual, key }) =>
   discrepancy === "length"
