@@ -691,6 +691,31 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[16]).toMatchObject(topicToken);
   });
 
+  it.each(["^", "%", "^^", "@@"])("pipeline %s topic token", tok => {
+    const code = `
+        x |> ${tok}
+        y |> ${tok}[0]
+      `;
+
+    const babylonAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: {
+        filename: "test.js",
+        parserOpts: {
+          plugins: [
+            ["pipelineOperator", { proposal: "hack", topicToken: tok }],
+          ],
+          tokens: true,
+        },
+      },
+    }).ast;
+
+    const topicToken = { type: "Punctuator", value: tok };
+    expect(babylonAST.tokens[2]).toMatchObject(topicToken);
+    expect(babylonAST.tokens[5]).toMatchObject(topicToken);
+  });
+
   it("empty program with line comment", () => {
     parseAndAssertSame("// single comment");
   });
