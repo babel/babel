@@ -49,6 +49,7 @@ import {
   isVariableDeclarator,
   isWhileStatement,
   isYieldExpression,
+  isTSSatisfiesExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 const PRECEDENCE = {
@@ -225,9 +226,10 @@ export function TSAsExpression() {
   return true;
 }
 
-export function TSTypeAssertion() {
-  return true;
-}
+export {
+  TSAsExpression as TSSatisfiesExpression,
+  TSAsExpression as TSTypeAssertion,
+};
 
 export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
   return (
@@ -368,7 +370,8 @@ export function ConditionalExpression(
     isConditionalExpression(parent, { test: node }) ||
     isAwaitExpression(parent) ||
     isTSTypeAssertion(parent) ||
-    isTSAsExpression(parent)
+    isTSAsExpression(parent) ||
+    isTSSatisfiesExpression(parent)
   ) {
     return true;
   }

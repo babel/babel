@@ -1412,6 +1412,12 @@ export function assertTSAsExpression(
 ): asserts node is t.TSAsExpression {
   assert("TSAsExpression", node, opts);
 }
+export function assertTSSatisfiesExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.TSSatisfiesExpression {
+  assert("TSSatisfiesExpression", node, opts);
+}
 export function assertTSTypeAssertion(
   node: object | null | undefined,
   opts?: object | null,

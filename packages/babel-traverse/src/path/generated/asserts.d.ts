@@ -577,6 +577,9 @@ export interface NodePathAssetions {
     opts?: object,
   ): asserts this is NodePath<t.TSQualifiedName>;
   assertTSRestType(opts?: object): asserts this is NodePath<t.TSRestType>;
+  assertTSSatisfiesExpression(
+    opts?: object,
+  ): asserts this is NodePath<t.TSSatisfiesExpression>;
   assertTSStringKeyword(
     opts?: object,
   ): asserts this is NodePath<t.TSStringKeyword>;

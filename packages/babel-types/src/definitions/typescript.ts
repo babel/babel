@@ -463,14 +463,17 @@ defineType("TSInstantiationExpression", {
   },
 });
 
-defineType("TSAsExpression", {
+const TSTypeExpression = {
   aliases: ["Expression", "LVal", "PatternLike"],
   visitor: ["expression", "typeAnnotation"],
   fields: {
     expression: validateType("Expression"),
     typeAnnotation: validateType("TSType"),
   },
-});
+};
+
+defineType("TSAsExpression", TSTypeExpression);
+defineType("TSSatisfiesExpression", TSTypeExpression);
 
 defineType("TSTypeAssertion", {
   aliases: ["Expression", "LVal", "PatternLike"],
