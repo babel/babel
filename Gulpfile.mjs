@@ -574,7 +574,9 @@ function* libBundlesIterator() {
         // @babel/node invokes internal lib/_babel-node.js
         dir === "babel-node" ||
         // todo: test/helpers/define-helper requires internal lib/helpers access
-        dir === "babel-helpers"
+        dir === "babel-helpers" ||
+        // multiple exports
+        dir === "babel-plugin-transform-react-jsx"
       ) {
         continue;
       }
