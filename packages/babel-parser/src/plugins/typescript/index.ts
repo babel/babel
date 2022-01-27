@@ -721,26 +721,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSTypeParameterDeclaration");
     }
 
-    tsTryNextParseConstantContext(): N.TsTypeReference | undefined | null {
-      if (this.lookahead().type !== tt._const) return null;
-
-      this.next();
-      const typeReference = this.tsParseTypeReference();
-
-      // If the type reference has type parameters, then you are using it as a
-      // type and not as a const signifier. We'll *never* be able to find this
-      // name, since const isn't allowed as a type name. So in this instance we
-      // get to pretend we're the type checker.
-      if (typeReference.typeParameters) {
-        this.raise(TSErrors.CannotFindName, {
-          at: typeReference.typeName,
-          name: "const",
-        });
-      }
-
-      return typeReference;
-    }
-
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
     // but here it's always false, because this is only used for types.
     tsFillSignature(
@@ -1659,8 +1639,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const node = this.startNode<N.TsTypeAssertion>();
-      const _const = this.tsTryNextParseConstantContext();
-      node.typeAnnotation = _const || this.tsNextThenParseType();
+      node.typeAnnotation = this.tsInType(() => {
+        this.next(); // "<"
+        return this.match(tt._const)
+          ? this.tsParseTypeReference()
+          : this.tsParseType();
+      });
       this.expect(tt.gt);
       node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
@@ -2563,12 +2547,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       ) {
         const node = this.startNodeAt<N.TsAsExpression>(leftStartLoc);
         node.expression = left;
-        const _const = this.tsTryNextParseConstantContext();
-        if (_const) {
-          node.typeAnnotation = _const;
-        } else {
-          node.typeAnnotation = this.tsNextThenParseType();
-        }
+        node.typeAnnotation = this.tsInType(() => {
+          this.next(); // "as"
+          return this.match(tt._const)
+            ? this.tsParseTypeReference()
+            : this.tsParseType();
+        });
         this.finishNode(node, "TSAsExpression");
         // rescan `<`, `>` because they were scanned when this.state.inType was true
         this.reScan_lt_gt();
