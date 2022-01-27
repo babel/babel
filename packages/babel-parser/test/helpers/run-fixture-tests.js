@@ -13,12 +13,10 @@ const { stringify, parse: JSONParse } = JSON;
 /**
  * run parser on given tests
  *
- * @param {Test} A {@link packages/babel-helper-fixtures/src/index.js Test}
- * instance
- generated from `getFixtures`
+ * @param {string} fixturesPath A base search path for finding fixtures.
  * @param {*} parseFunction A parser with the same interface of
  * `@babel/parser#parse`
- * @param {boolean} [compareErrorsOnly=false] Whether we should only compare the
+ * @param {boolean} [onlyCompareErrors=false] Whether we should only compare the
  * "errors" of generated ast against the expected AST. Used for tests where an
  * ESTree AST is generated but we want to make sure `@babel/parser` still throws
  * expected recoverable recoverable errors on given code locations.
