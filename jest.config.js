@@ -1,8 +1,17 @@
-const supportsESM = parseInt(process.versions.node) >= 12;
+const semver = require("semver");
+const nodeVersion = process.versions.node;
+const supportsESMAndJestLightRunner = semver.satisfies(
+  nodeVersion,
+  // ^12.22 || >=14.17 : Node will throw "t.isIdentifier is not a function" when test is running in worker threads.
+  // ^13.7: `resolve.exports` specifies conditional exports in package.json
+  "^12.22 || ^13.7 || >=14.17"
+);
 const isPublishBundle = process.env.IS_PUBLISH;
 
 module.exports = {
-  runner: supportsESM ? "./test/jest-light-runner" : "jest-runner",
+  runner: supportsESMAndJestLightRunner
+    ? "./test/jest-light-runner"
+    : "jest-runner",
 
   collectCoverageFrom: [
     "packages/*/src/**/*.{js,mjs,ts}",
@@ -12,7 +21,7 @@ module.exports = {
   // The eslint/* packages use ESLint v6, which has dropped support for Node v6.
   // TODO: Remove this process.version check in Babel 8.
   testRegex: `./(packages|codemods${
-    Number(process.versions.node.split(".")[0]) < 10 ? "" : "|eslint"
+    semver.satisfies(nodeVersion, "<10") ? "" : "|eslint"
   })/[^/]+/test/.+\\.m?js$`,
   testPathIgnorePatterns: [
     "/node_modules/",
