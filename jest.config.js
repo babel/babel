@@ -6,7 +6,6 @@ const supportsESMAndJestLightRunner = semver.satisfies(
   // ^13.7: `resolve.exports` specifies conditional exports in package.json
   "^12.22 || ^13.7 || >=14.17"
 );
-//
 const isPublishBundle = process.env.IS_PUBLISH;
 
 module.exports = {
