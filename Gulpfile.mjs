@@ -47,6 +47,11 @@ const buildTypingsWatchGlob = [
   "./packages/babel-types/scripts/generators/*.js",
 ];
 
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return value && value !== "false" && value !== "0";
+}
+
 /**
  * map source code path to the generated artifacts path
  * @example
@@ -616,7 +621,7 @@ function* libBundlesIterator() {
 }
 
 let libBundles;
-if (process.env.BABEL_8_BREAKING) {
+if (bool(process.env.BABEL_8_BREAKING)) {
   libBundles = [...libBundlesIterator()];
 } else {
   libBundles = [
