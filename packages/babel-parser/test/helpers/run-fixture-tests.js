@@ -1,5 +1,5 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs";
+import { readFileSync, unlinkSync, writeFileSync } from "fs";
 import { join } from "path";
 import Difference from "./difference.js";
 import FixtureError from "./fixture-error.js";
@@ -124,10 +124,13 @@ function runParseTest(parse, test, onlyCompareErrors) {
 
   // Store (or overwrite) the options file if there's anything to record,
   // otherwise remove it.
-  if (Object.keys(newOptions).length > 0) {
+  if (Object.keys(newOptions).length <= 0) {
+    rmf(optionsLocation);
+  } else if (throws) {
+    // The idea here is that we shouldn't need to change anything if this doesn't
+    // throw, and stringify will produce different output than what prettier
+    // wants.
     writeFileSync(optionsLocation, stringify(newOptions, null, 2), "utf-8");
-  } else if (existsSync(optionsLocation)) {
-    unlinkSync(optionsLocation);
   }
 
   // When only comparing errors, we don't want to overwrite the AST JSON because
@@ -148,8 +151,8 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // Remove any previous output files that are no longer valid, either because
   // extension changed, or because we aren't writing it out at all anymore.
   for (const location of [normalLocation, extendedLocation]) {
-    if (location !== outputLocation && existsSync(location)) {
-      unlinkSync(location);
+    if (location !== outputLocation) {
+      rmf(location);
     }
   }
 }
@@ -160,6 +163,12 @@ function readJSON(filename) {
   } catch (error) {
     return {};
   }
+}
+
+function rmf(path) {
+  try {
+    unlinkSync(path);
+  } catch (error) {}
 }
 
 function parseWithRecovery(parse, source, filename, options) {
