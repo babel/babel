@@ -2540,20 +2540,35 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       leftStartLoc: Position,
       minPrec: number,
     ): N.Expression {
+      let isSatisfies: boolean;
       if (
         tokenOperatorPrecedence(tt._in) > minPrec &&
         !this.hasPrecedingLineBreak() &&
-        this.isContextual(tt._as)
+        (this.isContextual(tt._as) ||
+          (isSatisfies = this.isContextual(tt._satisfies)))
       ) {
-        const node = this.startNodeAt<N.TsAsExpression>(leftStartLoc);
+        const node = this.startNodeAt<
+          N.TsAsExpression | N.TsSatisfiesExpression
+        >(leftStartLoc);
         node.expression = left;
         node.typeAnnotation = this.tsInType(() => {
-          this.next(); // "as"
-          return this.match(tt._const)
-            ? this.tsParseTypeReference()
-            : this.tsParseType();
+          this.next(); // "as" or "satisfies"
+          if (this.match(tt._const)) {
+            if (isSatisfies) {
+              this.raise(Errors.UnexpectedKeyword, {
+                at: this.state.startLoc,
+                keyword: "const",
+              });
+            }
+            return this.tsParseTypeReference();
+          }
+
+          return this.tsParseType();
         });
-        this.finishNode(node, "TSAsExpression");
+        this.finishNode(
+          node,
+          isSatisfies ? "TSSatisfiesExpression" : "TSAsExpression",
+        );
         // rescan `<`, `>` because they were scanned when this.state.inType was true
         this.reScan_lt_gt();
         return this.parseExprOp(
