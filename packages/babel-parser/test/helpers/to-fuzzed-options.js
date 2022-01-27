@@ -46,7 +46,7 @@ const toAdjustedSyntaxError = (adjust, error) =>
     : error;
 
 export default function toFuzzedOptions(options) {
-  if (TEST_FUZZ === "false") return [[false, options]];
+  if (TEST_FUZZ !== "true") return [[false, options]];
 
   const { startLine = 1, startColumn = 0 } = options;
 
