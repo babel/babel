@@ -14153,17 +14153,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"sourcemap-codec@npm:1.4.8":
+"sourcemap-codec@npm:1.4.8, sourcemap-codec@npm:^1.4.4":
   version: 1.4.8
   resolution: "sourcemap-codec@npm:1.4.8"
   checksum: b57981c05611afef31605732b598ccf65124a9fcb03b833532659ac4d29ac0f7bfacbc0d6c5a28a03e84c7510e7e556d758d0bb57786e214660016fb94279316
-  languageName: node
-  linkType: hard
-
-"sourcemap-codec@npm:^1.4.4":
-  version: 1.4.6
-  resolution: "sourcemap-codec@npm:1.4.6"
-  checksum: c8797dbe3767e6741f0d65e740ea5e1f7cb23395d6311d9202b827de8f85b862e106450c888f25a06b2ba11c638b58c2bf71ea81eb597e6f35de568a425a6836
   languageName: node
   linkType: hard
 
