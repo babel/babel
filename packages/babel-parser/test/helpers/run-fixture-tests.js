@@ -10,6 +10,9 @@ import toContextualSyntaxError from "./to-contextual-syntax-error.js";
 const { CI, OVERWRITE } = process.env;
 const { stringify, parse: JSONParse } = JSON;
 
+const writeFileWithNewline = (path, string) =>
+  writeFileSync(path, `${string}\n`, "utf-8");
+
 /**
  * run parser on given tests
  *
@@ -130,7 +133,7 @@ function runParseTest(parse, test, onlyCompareErrors) {
     // The idea here is that we shouldn't need to change anything if this doesn't
     // throw, and stringify will produce different output than what prettier
     // wants.
-    writeFileSync(optionsLocation, stringify(newOptions, null, 2), "utf-8");
+    writeFileWithNewline(optionsLocation, stringify(newOptions, null, 2));
   }
 
   // When only comparing errors, we don't want to overwrite the AST JSON because
@@ -145,7 +148,7 @@ function runParseTest(parse, test, onlyCompareErrors) {
     serialized && (extended ? extendedLocation : normalLocation);
 
   if (outputLocation) {
-    writeFileSync(outputLocation, serialized, "utf-8");
+    writeFileWithNewline(outputLocation, serialized);
   }
 
   // Remove any previous output files that are no longer valid, either because
