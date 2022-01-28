@@ -37,14 +37,12 @@ export default class FixtureError extends Error {
   // Don't show the stack of FixtureErrors, it's irrelevant.
   // Instead, show the cause, if present.
   [inspect.custom](depth, options) {
-    return `${this.message.replace(/(?<=error(s?))\.$/, ":\n")}${
-      this.cause
-        ? `\n${inspect(toContextError(this.cause), options)}`.replace(
-            /\n/g,
-            "\n    ",
-          )
-        : ""
-    }`;
+    return this.cause
+      ? `${this.message.replace(/(?<=error(s?))\.$/, ":\n")}\n${inspect(
+          toContextError(this.cause),
+          options
+        )}`.replace(/\n/g, "\n    ")
+      : this.message;
   }
 
   static fromDifference(difference, actual) {

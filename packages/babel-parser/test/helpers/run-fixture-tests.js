@@ -171,7 +171,9 @@ function readJSON(filename) {
 function rmf(path) {
   try {
     unlinkSync(path);
-  } catch (error) {}
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
 }
 
 function parseWithRecovery(parse, source, filename, options) {
