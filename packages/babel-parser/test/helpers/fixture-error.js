@@ -40,7 +40,7 @@ export default class FixtureError extends Error {
     return this.cause
       ? `${this.message.replace(/(?<=error(s?))\.$/, ":\n")}\n${inspect(
           toContextError(this.cause),
-          options
+          options,
         )}`.replace(/\n/g, "\n    ")
       : this.message;
   }
