@@ -1,5 +1,7 @@
 function foo() {
-  return bar.apply(void 0, ["test"].concat(Array.prototype.slice.call(arguments)));
+  var _sprd;
+
+  return bar.apply(void 0, ((_sprd = ["test"]).push.apply(_sprd, arguments), _sprd));
 }
 
 function bar(one, two, three) {

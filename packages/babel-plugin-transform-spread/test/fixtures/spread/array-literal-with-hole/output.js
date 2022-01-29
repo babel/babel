@@ -1,1 +1,1 @@
-var arr = ['a',, 'b'].concat(babelHelpers.toConsumableArray(c));
+var arr = babelHelpers.spreadIterableOrArray(['a',, 'b'], c);

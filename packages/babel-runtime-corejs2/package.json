@@ -18,6 +18,15 @@
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
+    "./helpers/appendArrayLike": [
+      {
+        "node": "./helpers/appendArrayLike.js",
+        "import": "./helpers/esm/appendArrayLike.js",
+        "default": "./helpers/appendArrayLike.js"
+      },
+      "./helpers/appendArrayLike.js"
+    ],
+    "./helpers/esm/appendArrayLike": "./helpers/esm/appendArrayLike.js",
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator.js",
@@ -27,6 +36,60 @@
       "./helpers/asyncIterator.js"
     ],
     "./helpers/esm/asyncIterator": "./helpers/esm/asyncIterator.js",
+    "./helpers/concatArrayLike": [
+      {
+        "node": "./helpers/concatArrayLike.js",
+        "import": "./helpers/esm/concatArrayLike.js",
+        "default": "./helpers/concatArrayLike.js"
+      },
+      "./helpers/concatArrayLike.js"
+    ],
+    "./helpers/esm/concatArrayLike": "./helpers/esm/concatArrayLike.js",
+    "./helpers/getIterator": [
+      {
+        "node": "./helpers/getIterator.js",
+        "import": "./helpers/esm/getIterator.js",
+        "default": "./helpers/getIterator.js"
+      },
+      "./helpers/getIterator.js"
+    ],
+    "./helpers/esm/getIterator": "./helpers/esm/getIterator.js",
+    "./helpers/isArrayLike": [
+      {
+        "node": "./helpers/isArrayLike.js",
+        "import": "./helpers/esm/isArrayLike.js",
+        "default": "./helpers/isArrayLike.js"
+      },
+      "./helpers/isArrayLike.js"
+    ],
+    "./helpers/esm/isArrayLike": "./helpers/esm/isArrayLike.js",
+    "./helpers/isObjectType": [
+      {
+        "node": "./helpers/isObjectType.js",
+        "import": "./helpers/esm/isObjectType.js",
+        "default": "./helpers/isObjectType.js"
+      },
+      "./helpers/isObjectType.js"
+    ],
+    "./helpers/esm/isObjectType": "./helpers/esm/isObjectType.js",
+    "./helpers/iteratorClose": [
+      {
+        "node": "./helpers/iteratorClose.js",
+        "import": "./helpers/esm/iteratorClose.js",
+        "default": "./helpers/iteratorClose.js"
+      },
+      "./helpers/iteratorClose.js"
+    ],
+    "./helpers/esm/iteratorClose": "./helpers/esm/iteratorClose.js",
+    "./helpers/iteratorCloseQuiet": [
+      {
+        "node": "./helpers/iteratorCloseQuiet.js",
+        "import": "./helpers/esm/iteratorCloseQuiet.js",
+        "default": "./helpers/iteratorCloseQuiet.js"
+      },
+      "./helpers/iteratorCloseQuiet.js"
+    ],
+    "./helpers/esm/iteratorCloseQuiet": "./helpers/esm/iteratorCloseQuiet.js",
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx.js",
@@ -36,6 +99,24 @@
       "./helpers/jsx.js"
     ],
     "./helpers/esm/jsx": "./helpers/esm/jsx.js",
+    "./helpers/maybeAppendIterable": [
+      {
+        "node": "./helpers/maybeAppendIterable.js",
+        "import": "./helpers/esm/maybeAppendIterable.js",
+        "default": "./helpers/maybeAppendIterable.js"
+      },
+      "./helpers/maybeAppendIterable.js"
+    ],
+    "./helpers/esm/maybeAppendIterable": "./helpers/esm/maybeAppendIterable.js",
+    "./helpers/maybeAppendUnsupportedIterable": [
+      {
+        "node": "./helpers/maybeAppendUnsupportedIterable.js",
+        "import": "./helpers/esm/maybeAppendUnsupportedIterable.js",
+        "default": "./helpers/maybeAppendUnsupportedIterable.js"
+      },
+      "./helpers/maybeAppendUnsupportedIterable.js"
+    ],
+    "./helpers/esm/maybeAppendUnsupportedIterable": "./helpers/esm/maybeAppendUnsupportedIterable.js",
     "./helpers/objectSpread2": [
       {
         "node": "./helpers/objectSpread2.js",
@@ -45,6 +126,42 @@
       "./helpers/objectSpread2.js"
     ],
     "./helpers/esm/objectSpread2": "./helpers/esm/objectSpread2.js",
+    "./helpers/spreadCoerceToArray": [
+      {
+        "node": "./helpers/spreadCoerceToArray.js",
+        "import": "./helpers/esm/spreadCoerceToArray.js",
+        "default": "./helpers/spreadCoerceToArray.js"
+      },
+      "./helpers/spreadCoerceToArray.js"
+    ],
+    "./helpers/esm/spreadCoerceToArray": "./helpers/esm/spreadCoerceToArray.js",
+    "./helpers/spreadCoerceToArrayLike": [
+      {
+        "node": "./helpers/spreadCoerceToArrayLike.js",
+        "import": "./helpers/esm/spreadCoerceToArrayLike.js",
+        "default": "./helpers/spreadCoerceToArrayLike.js"
+      },
+      "./helpers/spreadCoerceToArrayLike.js"
+    ],
+    "./helpers/esm/spreadCoerceToArrayLike": "./helpers/esm/spreadCoerceToArrayLike.js",
+    "./helpers/spreadIterableOrArray": [
+      {
+        "node": "./helpers/spreadIterableOrArray.js",
+        "import": "./helpers/esm/spreadIterableOrArray.js",
+        "default": "./helpers/spreadIterableOrArray.js"
+      },
+      "./helpers/spreadIterableOrArray.js"
+    ],
+    "./helpers/esm/spreadIterableOrArray": "./helpers/esm/spreadIterableOrArray.js",
+    "./helpers/spreadIterableOrArrayLike": [
+      {
+        "node": "./helpers/spreadIterableOrArrayLike.js",
+        "import": "./helpers/esm/spreadIterableOrArrayLike.js",
+        "default": "./helpers/spreadIterableOrArrayLike.js"
+      },
+      "./helpers/spreadIterableOrArrayLike.js"
+    ],
+    "./helpers/esm/spreadIterableOrArrayLike": "./helpers/esm/spreadIterableOrArrayLike.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",

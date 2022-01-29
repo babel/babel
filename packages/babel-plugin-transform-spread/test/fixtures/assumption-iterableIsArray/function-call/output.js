@@ -1,1 +1,1 @@
-lyrics(["head", "and", "toes"].concat(parts));
+lyrics(babelHelpers.concatArrayLike(["head", "and", "toes"], parts));

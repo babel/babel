@@ -1,1 +1,1 @@
-var a = [b].concat(babelHelpers.toConsumableArray(c), [d]);
+var a = babelHelpers.concatArrayLike([b], babelHelpers.spreadCoerceToArray(c), [d]);
