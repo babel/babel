@@ -540,7 +540,7 @@ describe("api", function () {
         column: 4,
       }),
     ).toEqual({
-      name: null,
+      name: "Foo",
       source: "stdout",
       line: 1,
       column: 6,
