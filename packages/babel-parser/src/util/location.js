@@ -15,9 +15,7 @@ export class Position {
   constructor(line: number, col: number, index: number) {
     this.line = line;
     this.column = col;
-
-    // this.index = index;
-    Object.defineProperty(this, "index", { enumerable: false, value: index });
+    this.index = index;
   }
 }
 
