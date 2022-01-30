@@ -1,13 +1,13 @@
 import { createRequire } from "module";
 import path from "path";
 
-const fileToDeps = new Map();
-const depToFiles = new Map();
+const fileToDeps = new Map<string, Set<string>>();
+const depToFiles = new Map<string, Set<string>>();
 
 let isWatchMode = false;
 let watcher;
 
-export function enable({ enableGlobbing }) {
+export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
   isWatchMode = true;
 
   const { FSWatcher } = requireChokidar();
@@ -26,6 +26,12 @@ export function enable({ enableGlobbing }) {
 }
 
 export function watch(filename: string): void {
+  if (!isWatchMode) {
+    throw new Error(
+      "Internal Babel error: .watch called when not in watch mode.",
+    );
+  }
+
   watcher.add(path.resolve(filename));
 }
 
@@ -39,6 +45,12 @@ export function watch(filename: string): void {
 export function onFilesChange(
   callback: (filenames: string[], event: string, cause: string) => void,
 ): void {
+  if (!isWatchMode) {
+    throw new Error(
+      "Internal Babel error: .onFilesChange called when not in watch mode.",
+    );
+  }
+
   watcher.on("all", (event, filename) => {
     if (event !== "change" && event !== "add") return;
 
