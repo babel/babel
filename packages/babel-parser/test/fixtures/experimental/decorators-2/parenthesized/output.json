@@ -1,28 +1,28 @@
 {
   "type": "File",
-  "start":0,"end":91,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+  "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":91}},
   "program": {
     "type": "Program",
-    "start":0,"end":91,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+    "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":91}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start":0,"end":91,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+        "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":91}},
         "decorators": [
           {
             "type": "Decorator",
-            "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+            "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
             "expression": {
               "type": "MemberExpression",
-              "start":2,"end":11,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":11}},
+              "start":2,"end":11,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":11,"index":11}},
               "object": {
                 "type": "CallExpression",
-                "start":2,"end":7,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":7}},
+                "start":2,"end":7,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":7,"index":7}},
                 "callee": {
                   "type": "Identifier",
-                  "start":2,"end":5,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":5},"identifierName":"foo"},
+                  "start":2,"end":5,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":5,"index":5},"identifierName":"foo"},
                   "name": "foo"
                 },
                 "arguments": []
@@ -30,7 +30,7 @@
               "computed": false,
               "property": {
                 "type": "Identifier",
-                "start":8,"end":11,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":11},"identifierName":"bar"},
+                "start":8,"end":11,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":11,"index":11},"identifierName":"bar"},
                 "name": "bar"
               }
             }
@@ -38,33 +38,33 @@
         ],
         "id": {
           "type": "Identifier",
-          "start":19,"end":22,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9},"identifierName":"Foo"},
+          "start":19,"end":22,"loc":{"start":{"line":2,"column":6,"index":19},"end":{"line":2,"column":9,"index":22},"identifierName":"Foo"},
           "name": "Foo"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":23,"end":91,"loc":{"start":{"line":2,"column":10},"end":{"line":6,"column":1}},
+          "start":23,"end":91,"loc":{"start":{"line":2,"column":10,"index":23},"end":{"line":6,"column":1,"index":91}},
           "body": [
             {
               "type": "ClassMethod",
-              "start":27,"end":60,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":35}},
+              "start":27,"end":60,"loc":{"start":{"line":3,"column":2,"index":27},"end":{"line":3,"column":35,"index":60}},
               "decorators": [
                 {
                   "type": "Decorator",
-                  "start":27,"end":48,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":23}},
+                  "start":27,"end":48,"loc":{"start":{"line":3,"column":2,"index":27},"end":{"line":3,"column":23,"index":48}},
                   "expression": {
                     "type": "MemberExpression",
-                    "start":29,"end":47,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":22}},
+                    "start":29,"end":47,"loc":{"start":{"line":3,"column":4,"index":29},"end":{"line":3,"column":22,"index":47}},
                     "object": {
                       "type": "Identifier",
-                      "start":29,"end":35,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":10},"identifierName":"member"},
+                      "start":29,"end":35,"loc":{"start":{"line":3,"column":4,"index":29},"end":{"line":3,"column":10,"index":35},"identifierName":"member"},
                       "name": "member"
                     },
                     "computed": true,
                     "property": {
                       "type": "Identifier",
-                      "start":36,"end":46,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":21},"identifierName":"expression"},
+                      "start":36,"end":46,"loc":{"start":{"line":3,"column":11,"index":36},"end":{"line":3,"column":21,"index":46},"identifierName":"expression"},
                       "name": "expression"
                     }
                   }
@@ -73,7 +73,7 @@
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start":49,"end":55,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":30},"identifierName":"method"},
+                "start":49,"end":55,"loc":{"start":{"line":3,"column":24,"index":49},"end":{"line":3,"column":30,"index":55},"identifierName":"method"},
                 "name": "method"
               },
               "computed": false,
@@ -84,30 +84,30 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start":58,"end":60,"loc":{"start":{"line":3,"column":33},"end":{"line":3,"column":35}},
+                "start":58,"end":60,"loc":{"start":{"line":3,"column":33,"index":58},"end":{"line":3,"column":35,"index":60}},
                 "body": [],
                 "directives": []
               }
             },
             {
               "type": "ClassMethod",
-              "start":64,"end":89,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":27}},
+              "start":64,"end":89,"loc":{"start":{"line":5,"column":2,"index":64},"end":{"line":5,"column":27,"index":89}},
               "decorators": [
                 {
                   "type": "Decorator",
-                  "start":64,"end":76,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":14}},
+                  "start":64,"end":76,"loc":{"start":{"line":5,"column":2,"index":64},"end":{"line":5,"column":14,"index":76}},
                   "expression": {
                     "type": "BinaryExpression",
-                    "start":66,"end":75,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":13}},
+                    "start":66,"end":75,"loc":{"start":{"line":5,"column":4,"index":66},"end":{"line":5,"column":13,"index":75}},
                     "left": {
                       "type": "Identifier",
-                      "start":66,"end":69,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":7},"identifierName":"foo"},
+                      "start":66,"end":69,"loc":{"start":{"line":5,"column":4,"index":66},"end":{"line":5,"column":7,"index":69},"identifierName":"foo"},
                       "name": "foo"
                     },
                     "operator": "+",
                     "right": {
                       "type": "Identifier",
-                      "start":72,"end":75,"loc":{"start":{"line":5,"column":10},"end":{"line":5,"column":13},"identifierName":"bar"},
+                      "start":72,"end":75,"loc":{"start":{"line":5,"column":10,"index":72},"end":{"line":5,"column":13,"index":75},"identifierName":"bar"},
                       "name": "bar"
                     }
                   }
@@ -116,7 +116,7 @@
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start":77,"end":84,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":22},"identifierName":"method2"},
+                "start":77,"end":84,"loc":{"start":{"line":5,"column":15,"index":77},"end":{"line":5,"column":22,"index":84},"identifierName":"method2"},
                 "name": "method2"
               },
               "computed": false,
@@ -127,7 +127,7 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start":87,"end":89,"loc":{"start":{"line":5,"column":25},"end":{"line":5,"column":27}},
+                "start":87,"end":89,"loc":{"start":{"line":5,"column":25,"index":87},"end":{"line":5,"column":27,"index":89}},
                 "body": [],
                 "directives": []
               }

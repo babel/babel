@@ -1,31 +1,31 @@
 {
   "type": "File",
-  "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":13}},
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":13,"index":27}},
   "program": {
     "type": "Program",
-    "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":13}},
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":13,"index":27}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
         "expression": {
           "type": "TupleExpression",
-          "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
           "extra": {
             "trailingComma": 4
           },
           "elements": [
             {
               "type": "Identifier",
-              "start":3,"end":4,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":4},"identifierName":"a"},
+              "start":3,"end":4,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":4,"index":4},"identifierName":"a"},
               "name": "a",
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " 1 ",
-                  "start":5,"end":12,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":12}}
+                  "start":5,"end":12,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":12,"index":12}}
                 }
               ]
             }
@@ -34,25 +34,25 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":14,"end":27,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":13}},
+        "start":14,"end":27,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":13,"index":27}},
         "expression": {
           "type": "RecordExpression",
-          "start":14,"end":27,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":13}},
+          "start":14,"end":27,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":13,"index":27}},
           "properties": [
             {
               "type": "ObjectProperty",
-              "start":17,"end":18,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":4}},
+              "start":17,"end":18,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":4,"index":18}},
               "method": false,
               "key": {
                 "type": "Identifier",
-                "start":17,"end":18,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":4},"identifierName":"a"},
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":4,"index":18},"identifierName":"a"},
                 "name": "a"
               },
               "computed": false,
               "shorthand": true,
               "value": {
                 "type": "Identifier",
-                "start":17,"end":18,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":4},"identifierName":"a"},
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":4,"index":18},"identifierName":"a"},
                 "name": "a"
               },
               "extra": {
@@ -62,7 +62,7 @@
                 {
                   "type": "CommentBlock",
                   "value": " 1 ",
-                  "start":19,"end":26,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":12}}
+                  "start":19,"end":26,"loc":{"start":{"line":2,"column":5,"index":19},"end":{"line":2,"column":12,"index":26}}
                 }
               ]
             }
@@ -79,12 +79,12 @@
     {
       "type": "CommentBlock",
       "value": " 1 ",
-      "start":5,"end":12,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":12}}
+      "start":5,"end":12,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":12,"index":12}}
     },
     {
       "type": "CommentBlock",
       "value": " 1 ",
-      "start":19,"end":26,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":12}}
+      "start":19,"end":26,"loc":{"start":{"line":2,"column":5,"index":19},"end":{"line":2,"column":12,"index":26}}
     }
   ]
 }
