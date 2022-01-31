@@ -988,10 +988,7 @@ function transformClass(
   return path;
 }
 
-export default function (
-  { assertVersion, assumption },
-  { decoratorsBeforeExport, loose },
-) {
+export default function ({ assertVersion, assumption }, { loose }) {
   assertVersion("^7.16.0");
 
   const VISITED = new WeakSet<NodePath>();
@@ -1000,9 +997,6 @@ export default function (
   return {
     name: "proposal-decorators",
     inherits: syntaxDecorators,
-    manipulateOptions({ generatorOpts }) {
-      generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
-    },
 
     visitor: {
       ClassDeclaration(path: NodePath<t.ClassDeclaration>, state: any) {
