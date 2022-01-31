@@ -3,5 +3,6 @@ function foo() {
     _ref[_key] = arguments[_key];
   }
 
-  var _a = _ref[0];
+  var _x = _ref[0];
+  var x = 1;
 }

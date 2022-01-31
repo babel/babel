@@ -243,6 +243,12 @@ export default function convertFunctionRest(path) {
   let rest = node.params.pop().argument;
 
   if (rest.name === "arguments") scope.rename(rest.name);
+  if (rest.type === "ArrayPattern") {
+    rest.elements.forEach(
+      element =>
+        (element.name = scope.generateUidIdentifier(element.name).name),
+    );
+  }
 
   const argsId = t.identifier("arguments");
 
