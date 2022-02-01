@@ -3,33 +3,35 @@ import { declare } from "@babel/helper-plugin-utils";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  let { legacy = false } = options;
-  if (typeof legacy !== "boolean") {
-    throw new Error("'legacy' must be a boolean.");
-  }
-  const { decoratorsBeforeExport, version = "2018-09" } = options;
-  if (
-    !(version === "2021-12" || version === "2018-09" || version === "legacy")
-  ) {
+  const {
+    legacy, // TODO: Remove in Babel 8
+
+    version = legacy ? "legacy" : "2018-09",
+    decoratorsBeforeExport = version === "2021-12" ? false : undefined,
+  } = options;
+  if (version !== "2021-12" && version !== "2018-09" && version !== "legacy") {
     throw new Error("Unsupported decorators version: " + version);
   }
-  if (options.version !== undefined && options.legacy !== undefined) {
-    throw new Error(
-      'You can either specify `legacy: true` or `version: "legacy"` with decorators, not both.',
-    );
+  if (legacy !== undefined) {
+    if (typeof legacy !== "boolean") {
+      throw new Error(".legacy must be a boolean.");
+    }
+    if (options.version !== undefined) {
+      throw new Error(
+        "You can either use the .legacy or the .version option, not both.",
+      );
+    }
   }
-  legacy ||= version === "legacy";
 
   if (decoratorsBeforeExport === undefined) {
-    if (!legacy) {
+    if (version === "2018-09") {
       throw new Error(
-        "The decorators plugin requires a 'decoratorsBeforeExport' option," +
-          " whose value must be a boolean. If you want to use the legacy" +
-          " decorators semantics, you can set the `version: 'legacy'` option.",
+        "The decorators plugin, when .version is '2018-09' or not specified," +
+          " requires a 'decoratorsBeforeExport' option, whose value must be a boolean.",
       );
     }
   } else {
-    if (legacy) {
+    if (version === "legacy") {
       throw new Error(
         "'decoratorsBeforeExport' can't be used with legacy decorators.",
       );
@@ -42,15 +44,19 @@ export default declare((api, options) => {
   return {
     name: "syntax-decorators",
 
-    manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push(
-        legacy
-          ? "decorators-legacy"
-          : ["decorators", { decoratorsBeforeExport }],
-      );
-
-      if (version === "2021-12") {
-        parserOpts.plugins.push("decoratorAutoAccessors");
+    manipulateOptions({ generatorOpts }, parserOpts) {
+      if (version === "legacy") {
+        parserOpts.plugins.push("decorators-legacy");
+      } else if (version === "2018-09") {
+        parserOpts.plugins.push(["decorators", { decoratorsBeforeExport }]);
+        generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
+      } else {
+        // version === "2021-12"
+        parserOpts.plugins.push(
+          ["decorators", { decoratorsBeforeExport }],
+          "decoratorAutoAccessors",
+        );
+        generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
       }
     },
   };
