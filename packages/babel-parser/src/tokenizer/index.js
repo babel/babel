@@ -715,10 +715,6 @@ export default class Tokenizer extends ParserErrors {
 
   readToken_caret(): void {
     const next = this.input.charCodeAt(this.state.pos + 1);
-    const pipeProposal = this.getPluginOption("pipelineOperator", "proposal");
-    const topicToken = this.getPluginOption("pipelineOperator", "topicToken");
-    const hackPipeWithDoubleCaretIsActive =
-      pipeProposal === "hack" && topicToken === "^^";
 
     // '^='
     if (next === charCodes.equalsTo && !this.state.inType) {
@@ -728,11 +724,15 @@ export default class Tokenizer extends ParserErrors {
       this.finishOp(tt.xorAssign, 2);
     }
     // '^^'
-    else if (hackPipeWithDoubleCaretIsActive && next === charCodes.caret) {
-      // `tt.doubleCaret` is only needed to support ^^
-      // as a Hack-pipe topic token.
-      // If the proposal ends up choosing a different token,
-      // it may be removed.
+    else if (
+      next === charCodes.caret &&
+      // If the ^^ token is not enabled, we don't throw but parse two single ^s
+      // because it could be a ^ hack token followed by a ^ binary operator.
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "^^" },
+      ])
+    ) {
       this.finishOp(tt.doubleCaret, 2);
 
       // `^^^` is forbidden and must be separated by a space.
@@ -751,11 +751,13 @@ export default class Tokenizer extends ParserErrors {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     // '@@'
-    if (next === charCodes.atSign) {
-      // `tt.doubleAt` is only needed to support @@
-      // as a Hack-pipe topic token.
-      // If the proposal ends up choosing a different token,
-      // it may be removed.
+    if (
+      next === charCodes.atSign &&
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "@@" },
+      ])
+    ) {
       this.finishOp(tt.doubleAt, 2);
     }
     // '@'

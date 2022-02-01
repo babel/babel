@@ -1204,30 +1204,11 @@ export default class ExpressionParser extends LValParser {
         return this.parseTopicReferenceThenEqualsSign(tt.bitwiseXOR, "^");
       }
 
-      case tt.doubleCaret: {
-        const pipeProposal = this.getPluginOption(
-          "pipelineOperator",
-          "proposal",
-        );
-        const pluginTopicToken = this.getPluginOption(
-          "pipelineOperator",
-          "topicToken",
-        );
-
-        // The `^^` token is valid only when:
-        // the pipe-operator proposal is active,
-        // its "pipeProposal" is configured as "hack",
-        // and "topicToken" is configured as "^^".
-        // If the pipe-operator proposal settles on a token that is not ^^,
-        // then this token type may be removed.
-        if (pipeProposal === "hack" && pluginTopicToken === "^^") {
-          return this.parseTopicReference(pipeProposal);
-        } else {
-          throw this.unexpected();
-        }
+      case tt.doubleCaret:
+      case tt.doubleAt: {
+        return this.parseTopicReference("hack");
       }
 
-      case tt.doubleAt:
       case tt.bitwiseXOR:
       case tt.modulo:
       case tt.hash: {
