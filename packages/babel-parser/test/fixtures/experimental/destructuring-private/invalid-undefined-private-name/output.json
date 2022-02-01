@@ -2,11 +2,11 @@
   "type": "File",
   "start":0,"end":140,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
   "errors": [
-    "SyntaxError: Private name #a is not defined. (undefined:undefined)",
-    "SyntaxError: Private name #b is not defined. (undefined:undefined)",
-    "SyntaxError: Private name #c is not defined. (undefined:undefined)",
-    "SyntaxError: Private name #d is not defined. (undefined:undefined)",
-    "SyntaxError: Private name #e is not defined. (undefined:undefined)"
+    "SyntaxError: Private name #a is not defined. (3:6)",
+    "SyntaxError: Private name #b is not defined. (4:12)",
+    "SyntaxError: Private name #c is not defined. (5:9)",
+    "SyntaxError: Private name #d is not defined. (6:10)",
+    "SyntaxError: Private name #e is not defined. (7:7)"
   ],
   "program": {
     "type": "Program",

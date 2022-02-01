@@ -148,7 +148,10 @@ export default class LValParser extends NodeUtils {
       case "ObjectProperty": {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
-          this.classScope.usePrivateName(this.getPrivateNameSV(key), key.start);
+          this.classScope.usePrivateName(
+            this.getPrivateNameSV(key),
+            key.loc.start,
+          );
         }
         this.toAssignable(value, isLHS);
         break;
@@ -436,7 +439,7 @@ export default class LValParser extends NodeUtils {
       return this.parseBindingRestProperty(prop);
     } else if (type === tt.privateName) {
       this.expectPlugin("destructuringPrivate", startLoc);
-      this.classScope.usePrivateName(this.state.value, startPos);
+      this.classScope.usePrivateName(this.state.value, startLoc);
       prop.key = this.parsePrivateName();
     } else {
       this.parsePropertyName(prop);

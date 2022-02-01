@@ -332,7 +332,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node != null && this.isObjectProperty(node)) {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
-          this.classScope.usePrivateName(this.getPrivateNameSV(key), key.start);
+          this.classScope.usePrivateName(
+            this.getPrivateNameSV(key),
+            key.loc.start,
+          );
         }
         this.toAssignable(value, isLHS);
         return node;
