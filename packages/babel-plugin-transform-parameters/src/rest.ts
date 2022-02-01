@@ -239,15 +239,15 @@ function optimiseLengthGetter(path, argsId, offset) {
 export default function convertFunctionRest(path) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
-
   let rest = node.params.pop().argument;
 
   if (rest.name === "arguments") scope.rename(rest.name);
   if (rest.type === "ArrayPattern") {
-    rest.elements.forEach(
-      element =>
-        (element.name = scope.generateUidIdentifier(element.name).name),
-    );
+    rest.elements.forEach(element => {
+      if (scope.getBinding(element.name).constantViolations.length) {
+        element.name = scope.generateUidIdentifier(element.name).name;
+      }
+    });
   }
 
   const argsId = t.identifier("arguments");
