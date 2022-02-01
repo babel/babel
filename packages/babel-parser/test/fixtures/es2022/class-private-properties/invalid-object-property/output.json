@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: Unexpected private name. (2:11)"
+    "SyntaxError: Unexpected private name. (2:10)"
   ],
   "program": {
     "type": "Program",

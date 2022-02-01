@@ -16,6 +16,7 @@ import type {
   /*:: ObjectMember, */
   /*:: TsNamedTypeElementBase, */
   /*:: Identifier, */
+  /*:: PrivateName, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
 } from "../types";
@@ -63,6 +64,7 @@ export default class LValParser extends NodeUtils {
   +parsePropertyName: (
     prop: ObjectOrClassMember | ClassMember | TsNamedTypeElementBase,
   ) => Expression | Identifier;
+  +parsePrivateName: () => PrivateName
   */
   // Forward-declaration: defined in statement.js
   /*::
@@ -143,9 +145,14 @@ export default class LValParser extends NodeUtils {
         }
         break;
 
-      case "ObjectProperty":
-        this.toAssignable(node.value, isLHS);
+      case "ObjectProperty": {
+        const { key, value } = node;
+        if (this.isPrivateName(key)) {
+          this.classScope.usePrivateName(this.getPrivateNameSV(key), key.start);
+        }
+        this.toAssignable(value, isLHS);
         break;
+      }
 
       case "SpreadElement": {
         this.checkToRestConversion(node);
@@ -427,6 +434,10 @@ export default class LValParser extends NodeUtils {
     const { type, start: startPos, startLoc } = this.state;
     if (type === tt.ellipsis) {
       return this.parseBindingRestProperty(prop);
+    } else if (type === tt.privateName) {
+      this.expectPlugin("destructuringPrivate", startLoc);
+      this.classScope.usePrivateName(this.state.value, startPos);
+      prop.key = this.parsePrivateName();
     } else {
       this.parsePropertyName(prop);
     }

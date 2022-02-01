@@ -726,6 +726,7 @@ export default class StatementParser extends ExpressionParser {
       }
     }
     if (isForOf || this.match(tt._in)) {
+      this.checkDestructuringPrivate(refExpressionErrors);
       this.toAssignable(init, /* isLHS */ true);
       const description = isForOf ? "for-of statement" : "for-in statement";
       this.checkLVal(init, description);

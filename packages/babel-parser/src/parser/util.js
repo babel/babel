@@ -285,11 +285,18 @@ export default class UtilParser extends Tokenizer {
     andThrow: boolean,
   ) {
     if (!refExpressionErrors) return false;
-    const { shorthandAssignLoc, doubleProtoLoc, optionalParametersLoc } =
-      refExpressionErrors;
+    const {
+      shorthandAssignLoc,
+      doubleProtoLoc,
+      privateKeyLoc,
+      optionalParametersLoc,
+    } = refExpressionErrors;
 
     const hasErrors =
-      !!shorthandAssignLoc || !!doubleProtoLoc || !!optionalParametersLoc;
+      !!shorthandAssignLoc ||
+      !!doubleProtoLoc ||
+      !!optionalParametersLoc ||
+      !!privateKeyLoc;
 
     if (!andThrow) {
       return hasErrors;
@@ -303,6 +310,10 @@ export default class UtilParser extends Tokenizer {
 
     if (doubleProtoLoc != null) {
       this.raise(Errors.DuplicateProto, { at: doubleProtoLoc });
+    }
+
+    if (privateKeyLoc != null) {
+      this.raise(Errors.UnexpectedPrivateField, { at: privateKeyLoc });
     }
 
     if (optionalParametersLoc != null) {
@@ -417,6 +428,13 @@ export default class UtilParser extends Tokenizer {
     this.scope.enter(SCOPE_PROGRAM);
     this.prodParam.enter(paramFlags);
   }
+
+  checkDestructuringPrivate(refExpressionErrors: ExpressionErrors) {
+    const { privateKeyLoc } = refExpressionErrors;
+    if (privateKeyLoc !== null) {
+      this.expectPlugin("destructuringPrivate", privateKeyLoc);
+    }
+  }
 }
 
 /**
@@ -428,11 +446,13 @@ export default class UtilParser extends Tokenizer {
  *
  * - **shorthandAssignLoc**: track initializer `=` position
  * - **doubleProtoLoc**: track the duplicate `__proto__` key position
+ * - **privateKey**: track private key `#p` position
  * - **optionalParametersLoc**: track the optional paramter (`?`).
  * It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
   shorthandAssignLoc: ?Position = null;
   doubleProtoLoc: ?Position = null;
+  privateKeyLoc: ?Position = null;
   optionalParametersLoc: ?Position = null;
 }
