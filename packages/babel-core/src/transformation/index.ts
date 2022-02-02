@@ -13,6 +13,8 @@ import normalizeFile from "./normalize-file";
 import generateCode from "./file/generate";
 import type File from "./file/file";
 
+import { flattenToSet } from "../config/helpers/deep-array";
+
 export type FileResultCallback = {
   (err: Error, file: null): any;
   (err: null, file: FileResult | null): any;
@@ -25,6 +27,7 @@ export type FileResult = {
   code: string | null;
   map: SourceMap | null;
   sourceType: "string" | "module";
+  externalDependencies: Set<string>;
 };
 
 export function* run(
@@ -70,6 +73,7 @@ export function* run(
     code: outputCode === undefined ? null : outputCode,
     map: outputMap === undefined ? null : outputMap,
     sourceType: file.ast.program.sourceType,
+    externalDependencies: flattenToSet(config.externalDependencies),
   };
 }
 

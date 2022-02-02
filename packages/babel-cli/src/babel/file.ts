@@ -6,6 +6,7 @@ import fs from "fs";
 
 import * as util from "./util";
 import type { CmdOptions } from "./options";
+import * as watcher from "./watcher";
 
 type CompilationOutput = {
   code: string;
@@ -123,7 +124,7 @@ export default async function ({
   async function stdin(): Promise<void> {
     const code = await readStdin();
 
-    const res = await util.transform(cliOptions.filename, code, {
+    const res = await util.transformRepl(cliOptions.filename, code, {
       ...babelOptions,
       sourceFileName: "stdin",
     });
@@ -193,40 +194,33 @@ export default async function ({
   }
 
   async function files(filenames: Array<string>): Promise<void> {
+    if (cliOptions.watch) {
+      watcher.enable({ enableGlobbing: false });
+    }
+
     if (!cliOptions.skipInitialBuild) {
       await walk(filenames);
     }
 
     if (cliOptions.watch) {
-      const chokidar = util.requireChokidar();
-      chokidar
-        .watch(filenames, {
-          disableGlobbing: true,
-          persistent: true,
-          ignoreInitial: true,
-          awaitWriteFinish: {
-            stabilityThreshold: 50,
-            pollInterval: 10,
-          },
-        })
-        .on("all", function (type: string, filename: string): void {
-          if (
-            !util.isCompilableExtension(filename, cliOptions.extensions) &&
-            !filenames.includes(filename)
-          ) {
-            return;
-          }
+      filenames.forEach(watcher.watch);
 
-          if (type === "add" || type === "change") {
-            if (cliOptions.verbose) {
-              console.log(type + " " + filename);
-            }
+      watcher.onFilesChange((changes, event, cause) => {
+        const actionableChange = changes.some(
+          filename =>
+            util.isCompilableExtension(filename, cliOptions.extensions) ||
+            filenames.includes(filename),
+        );
+        if (!actionableChange) return;
 
-            walk(filenames).catch(err => {
-              console.error(err);
-            });
-          }
+        if (cliOptions.verbose) {
+          console.log(`${event} ${cause}`);
+        }
+
+        walk(filenames).catch(err => {
+          console.error(err);
         });
+      });
     }
   }
 

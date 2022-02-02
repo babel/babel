@@ -12,6 +12,7 @@ import type {
 } from "./validation/options";
 import pathPatternToRegex from "./pattern-to-regex";
 import { ConfigPrinter, ChainFormatter } from "./printer";
+import type { ReadonlyDeepArray } from "./helpers/deep-array";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -46,6 +47,7 @@ export type PresetInstance = {
   options: ValidatedOptions;
   alias: string;
   dirname: string;
+  externalDependencies: ReadonlyDeepArray<string>;
 };
 
 export type ConfigContext = {

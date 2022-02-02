@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
+import * as watcher from "./watcher";
 import type { CmdOptions } from "./options";
 
 const FILE_TYPE = Object.freeze({
@@ -21,8 +22,6 @@ export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
-  const filenames = cliOptions.filenames;
-
   async function write(
     src: string,
     base: string,
@@ -66,7 +65,7 @@ export default async function ({
       util.chmod(src, dest);
 
       if (cliOptions.verbose) {
-        console.log(src + " -> " + dest);
+        console.log(path.relative(process.cwd(), src) + " -> " + dest);
       }
 
       return FILE_TYPE.COMPILED;
@@ -150,6 +149,8 @@ export default async function ({
     startTime = null;
   }, 100);
 
+  if (cliOptions.watch) watcher.enable({ enableGlobbing: true });
+
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
       util.deleteDir(cliOptions.outDir);
@@ -173,43 +174,36 @@ export default async function ({
   }
 
   if (cliOptions.watch) {
-    const chokidar = util.requireChokidar();
+    // This, alongside with debounce, allows us to only log
+    // when we are sure that all the files have been compiled.
+    let processing = 0;
 
-    filenames.forEach(function (filenameOrDir: string): void {
-      const watcher = chokidar.watch(filenameOrDir, {
-        persistent: true,
-        ignoreInitial: true,
-        awaitWriteFinish: {
-          stabilityThreshold: 50,
-          pollInterval: 10,
-        },
-      });
+    cliOptions.filenames.forEach(filenameOrDir => {
+      watcher.watch(filenameOrDir);
 
-      // This, alongside with debounce, allows us to only log
-      // when we are sure that all the files have been compiled.
-      let processing = 0;
+      watcher.onFilesChange(async filenames => {
+        processing++;
+        if (startTime === null) startTime = process.hrtime();
 
-      ["add", "change"].forEach(function (type: string): void {
-        watcher.on(type, async function (filename: string) {
-          processing++;
-          if (startTime === null) startTime = process.hrtime();
+        try {
+          const written = await Promise.all(
+            filenames.map(filename =>
+              handleFile(
+                filename,
+                filename === filenameOrDir
+                  ? path.dirname(filenameOrDir)
+                  : filenameOrDir,
+              ),
+            ),
+          );
 
-          try {
-            await handleFile(
-              filename,
-              filename === filenameOrDir
-                ? path.dirname(filenameOrDir)
-                : filenameOrDir,
-            );
+          compiledFiles += written.filter(Boolean).length;
+        } catch (err) {
+          console.error(err);
+        }
 
-            compiledFiles++;
-          } catch (err) {
-            console.error(err);
-          }
-
-          processing--;
-          if (processing === 0 && !cliOptions.quiet) logSuccess();
-        });
+        processing--;
+        if (processing === 0 && !cliOptions.quiet) logSuccess();
       });
     });
   }
