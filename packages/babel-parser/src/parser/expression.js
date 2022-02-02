@@ -326,8 +326,7 @@ export default class ExpressionParser extends LValParser {
         }
         if (
           refExpressionErrors.privateKeyLoc != null &&
-          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-          indexes.get(refExpressionErrors.privateKeyLoc) >= startPos
+          refExpressionErrors.privateKeyLoc.index >= startPos
         ) {
           this.checkDestructuringPrivate(refExpressionErrors);
           refExpressionErrors.privateKeyLoc = null; // reset because `({ #x: x })` is an assignable pattern

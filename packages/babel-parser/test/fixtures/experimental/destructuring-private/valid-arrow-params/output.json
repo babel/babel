@@ -1,9 +1,6 @@
 {
   "type": "File",
   "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":46}},
-  "errors": [
-    "SyntaxError: Unexpected private name. (3:11)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":46}},
