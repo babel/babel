@@ -1,6 +1,6 @@
 {
   "type": "File",
-  "start":0,"end":124,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+  "start":0,"end":124,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":124}},
   "errors": [
     "SyntaxError: Property 'prop' cannot have an initializer because it is marked abstract. (2:16)",
     "SyntaxError: Property '[Bar.foo]' cannot have an initializer because it is marked abstract. (3:21)",
@@ -10,38 +10,38 @@
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":124,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+    "start":0,"end":124,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":124}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start":0,"end":124,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+        "start":0,"end":124,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":124}},
         "abstract": true,
         "id": {
           "type": "Identifier",
-          "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18},"identifierName":"Foo"},
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"Foo"},
           "name": "Foo"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":19,"end":124,"loc":{"start":{"line":1,"column":19},"end":{"line":7,"column":1}},
+          "start":19,"end":124,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":7,"column":1,"index":124}},
           "body": [
             {
               "type": "ClassProperty",
-              "start":23,"end":40,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":19}},
+              "start":23,"end":40,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":19,"index":40}},
               "abstract": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start":32,"end":36,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":15},"identifierName":"prop"},
+                "start":32,"end":36,"loc":{"start":{"line":2,"column":11,"index":32},"end":{"line":2,"column":15,"index":36},"identifierName":"prop"},
                 "name": "prop"
               },
               "computed": false,
               "value": {
                 "type": "NumericLiteral",
-                "start":39,"end":40,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":19}},
+                "start":39,"end":40,"loc":{"start":{"line":2,"column":18,"index":39},"end":{"line":2,"column":19,"index":40}},
                 "extra": {
                   "rawValue": 1,
                   "raw": "1"
@@ -51,28 +51,28 @@
             },
             {
               "type": "ClassProperty",
-              "start":43,"end":65,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":24}},
+              "start":43,"end":65,"loc":{"start":{"line":3,"column":2,"index":43},"end":{"line":3,"column":24,"index":65}},
               "abstract": true,
               "static": false,
               "computed": true,
               "key": {
                 "type": "MemberExpression",
-                "start":53,"end":60,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":19}},
+                "start":53,"end":60,"loc":{"start":{"line":3,"column":12,"index":53},"end":{"line":3,"column":19,"index":60}},
                 "object": {
                   "type": "Identifier",
-                  "start":53,"end":56,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":15},"identifierName":"Bar"},
+                  "start":53,"end":56,"loc":{"start":{"line":3,"column":12,"index":53},"end":{"line":3,"column":15,"index":56},"identifierName":"Bar"},
                   "name": "Bar"
                 },
                 "computed": false,
                 "property": {
                   "type": "Identifier",
-                  "start":57,"end":60,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":19},"identifierName":"foo"},
+                  "start":57,"end":60,"loc":{"start":{"line":3,"column":16,"index":57},"end":{"line":3,"column":19,"index":60},"identifierName":"foo"},
                   "name": "foo"
                 }
               },
               "value": {
                 "type": "NumericLiteral",
-                "start":64,"end":65,"loc":{"start":{"line":3,"column":23},"end":{"line":3,"column":24}},
+                "start":64,"end":65,"loc":{"start":{"line":3,"column":23,"index":64},"end":{"line":3,"column":24,"index":65}},
                 "extra": {
                   "rawValue": 2,
                   "raw": "2"
@@ -82,18 +82,18 @@
             },
             {
               "type": "ClassProperty",
-              "start":68,"end":86,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":20}},
+              "start":68,"end":86,"loc":{"start":{"line":4,"column":2,"index":68},"end":{"line":4,"column":20,"index":86}},
               "abstract": true,
               "static": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
-                "start":78,"end":81,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"Bar"},
+                "start":78,"end":81,"loc":{"start":{"line":4,"column":12,"index":78},"end":{"line":4,"column":15,"index":81},"identifierName":"Bar"},
                 "name": "Bar"
               },
               "value": {
                 "type": "NumericLiteral",
-                "start":85,"end":86,"loc":{"start":{"line":4,"column":19},"end":{"line":4,"column":20}},
+                "start":85,"end":86,"loc":{"start":{"line":4,"column":19,"index":85},"end":{"line":4,"column":20,"index":86}},
                 "extra": {
                   "rawValue": 3,
                   "raw": "3"
@@ -103,12 +103,12 @@
             },
             {
               "type": "ClassProperty",
-              "start":89,"end":103,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":16}},
+              "start":89,"end":103,"loc":{"start":{"line":5,"column":2,"index":89},"end":{"line":5,"column":16,"index":103}},
               "abstract": true,
               "static": false,
               "key": {
                 "type": "NumericLiteral",
-                "start":98,"end":99,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":12}},
+                "start":98,"end":99,"loc":{"start":{"line":5,"column":11,"index":98},"end":{"line":5,"column":12,"index":99}},
                 "extra": {
                   "rawValue": 2,
                   "raw": "2"
@@ -118,7 +118,7 @@
               "computed": false,
               "value": {
                 "type": "NumericLiteral",
-                "start":102,"end":103,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":16}},
+                "start":102,"end":103,"loc":{"start":{"line":5,"column":15,"index":102},"end":{"line":5,"column":16,"index":103}},
                 "extra": {
                   "rawValue": 4,
                   "raw": "4"
@@ -128,12 +128,12 @@
             },
             {
               "type": "ClassProperty",
-              "start":106,"end":122,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":18}},
+              "start":106,"end":122,"loc":{"start":{"line":6,"column":2,"index":106},"end":{"line":6,"column":18,"index":122}},
               "abstract": true,
               "static": false,
               "key": {
                 "type": "StringLiteral",
-                "start":115,"end":118,"loc":{"start":{"line":6,"column":11},"end":{"line":6,"column":14}},
+                "start":115,"end":118,"loc":{"start":{"line":6,"column":11,"index":115},"end":{"line":6,"column":14,"index":118}},
                 "extra": {
                   "rawValue": "c",
                   "raw": "\"c\""
@@ -143,7 +143,7 @@
               "computed": false,
               "value": {
                 "type": "NumericLiteral",
-                "start":121,"end":122,"loc":{"start":{"line":6,"column":17},"end":{"line":6,"column":18}},
+                "start":121,"end":122,"loc":{"start":{"line":6,"column":17,"index":121},"end":{"line":6,"column":18,"index":122}},
                 "extra": {
                   "rawValue": 5,
                   "raw": "5"

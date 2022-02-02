@@ -67,6 +67,7 @@
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-decimal/src/**/*.ts",
     "./packages/babel-plugin-syntax-decorators/src/**/*.ts",
+    "./packages/babel-plugin-syntax-destructuring-private/src/**/*.ts",
     "./packages/babel-plugin-syntax-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-export-default-from/src/**/*.ts",
     "./packages/babel-plugin-syntax-flow/src/**/*.ts",
@@ -344,6 +345,9 @@
       ],
       "@babel/plugin-syntax-decorators": [
         "./packages/babel-plugin-syntax-decorators/src"
+      ],
+      "@babel/plugin-syntax-destructuring-private": [
+        "./packages/babel-plugin-syntax-destructuring-private/src"
       ],
       "@babel/plugin-syntax-do-expressions": [
         "./packages/babel-plugin-syntax-do-expressions/src"

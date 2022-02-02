@@ -442,10 +442,12 @@ describe("scope", () => {
         expect(referencePaths[0].node.loc.start).toEqual({
           line: 1,
           column: 28,
+          index: 28,
         });
         expect(referencePaths[1].node.loc.start).toEqual({
           line: 1,
           column: 32,
+          index: 32,
         });
       });
       it("id referenced in function body", () => {

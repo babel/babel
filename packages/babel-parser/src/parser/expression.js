@@ -44,11 +44,7 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import {
-  indexes,
-  Position,
-  createPositionWithColumnOffset,
-} from "../util/location";
+import { Position, createPositionWithColumnOffset } from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -318,22 +314,19 @@ export default class ExpressionParser extends LValParser {
 
         if (
           refExpressionErrors.doubleProtoLoc != null &&
-          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-          indexes.get(refExpressionErrors.doubleProtoLoc) >= startPos
+          refExpressionErrors.doubleProtoLoc.index >= startPos
         ) {
           refExpressionErrors.doubleProtoLoc = null; // reset because double __proto__ is valid in assignment expression
         }
         if (
           refExpressionErrors.shorthandAssignLoc != null &&
-          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-          indexes.get(refExpressionErrors.shorthandAssignLoc) >= startPos
+          refExpressionErrors.shorthandAssignLoc.index >= startPos
         ) {
           refExpressionErrors.shorthandAssignLoc = null; // reset because shorthand default was used correctly
         }
         if (
           refExpressionErrors.privateKeyLoc != null &&
-          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-          indexes.get(refExpressionErrors.privateKeyLoc) >= startPos
+          refExpressionErrors.privateKeyLoc.index >= startPos
         ) {
           this.checkDestructuringPrivate(refExpressionErrors);
           refExpressionErrors.privateKeyLoc = null; // reset because `({ #x: x })` is an assignable pattern
@@ -930,7 +923,7 @@ export default class ExpressionParser extends LValParser {
     return (
       base.type === "Identifier" &&
       base.name === "async" &&
-      indexes.get(this.state.lastTokEndLoc) === base.end &&
+      this.state.lastTokEndLoc.index === base.end &&
       !this.canInsertSemicolon() &&
       // check there are no escape sequences, such as \u{61}sync
       base.end - base.start === 5 &&
@@ -1788,8 +1781,7 @@ export default class ExpressionParser extends LValParser {
       this.takeSurroundingComments(
         val,
         startPos,
-        // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-        indexes.get(this.state.lastTokEndLoc),
+        this.state.lastTokEndLoc.index,
       );
 
       return val;

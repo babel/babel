@@ -1,29 +1,29 @@
 {
   "type": "File",
-  "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
   "program": {
     "type": "Program",
-    "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
         "expression": {
           "type": "TemplateLiteral",
-          "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+          "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
           "expressions": [
             {
               "type": "Identifier",
-              "start":3,"end":4,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":4},"identifierName":"a"},
+              "start":3,"end":4,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":4,"index":4},"identifierName":"a"},
               "name": "a"
             }
           ],
           "quasis": [
             {
               "type": "TemplateElement",
-              "start":1,"end":1,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":1}},
+              "start":1,"end":1,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":1,"index":1}},
               "value": {
                 "raw": "",
                 "cooked": ""
@@ -32,7 +32,7 @@
             },
             {
               "type": "TemplateElement",
-              "start":5,"end":5,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":5}},
+              "start":5,"end":5,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":5,"index":5}},
               "value": {
                 "raw": "",
                 "cooked": ""
@@ -45,7 +45,7 @@
           {
             "type": "CommentLine",
             "value": " comment",
-            "start":7,"end":17,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":17}}
+            "start":7,"end":17,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":17,"index":17}}
           }
         ]
       }
@@ -56,7 +56,7 @@
     {
       "type": "CommentLine",
       "value": " comment",
-      "start":7,"end":17,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":17}}
+      "start":7,"end":17,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":17,"index":17}}
     }
   ]
 }

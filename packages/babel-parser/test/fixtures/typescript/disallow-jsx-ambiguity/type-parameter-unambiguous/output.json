@@ -1,25 +1,25 @@
 {
   "type": "File",
-  "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":13}},
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":13,"index":26}},
   "program": {
     "type": "Program",
-    "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":13}},
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":13,"index":26}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
         "expression": {
           "type": "ArrowFunctionExpression",
-          "start":0,"end":11,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":11}},
+          "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
           "id": null,
           "generator": false,
           "async": false,
           "params": [],
           "body": {
             "type": "NumericLiteral",
-            "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}},
+            "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
             "extra": {
               "rawValue": 1,
               "raw": "1"
@@ -28,14 +28,14 @@
           },
           "typeParameters": {
             "type": "TSTypeParameterDeclaration",
-            "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
             "params": [
               {
                 "type": "TSTypeParameter",
-                "start":1,"end":2,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":2}},
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2}},
                 "name": {
                   "type": "Identifier",
-                  "start":1,"end":2,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":2},"identifierName":"T"},
+                  "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"T"},
                   "name": "T"
                 }
               }
@@ -48,23 +48,23 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":13,"end":26,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":13}},
+        "start":13,"end":26,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":13,"index":26}},
         "expression": {
           "type": "ArrowFunctionExpression",
-          "start":13,"end":25,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":12}},
+          "start":13,"end":25,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":12,"index":25}},
           "id": null,
           "generator": false,
           "async": false,
           "params": [
             {
               "type": "Identifier",
-              "start":18,"end":19,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"x"},
+              "start":18,"end":19,"loc":{"start":{"line":2,"column":5,"index":18},"end":{"line":2,"column":6,"index":19},"identifierName":"x"},
               "name": "x"
             }
           ],
           "body": {
             "type": "NumericLiteral",
-            "start":24,"end":25,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12}},
+            "start":24,"end":25,"loc":{"start":{"line":2,"column":11,"index":24},"end":{"line":2,"column":12,"index":25}},
             "extra": {
               "rawValue": 1,
               "raw": "1"
@@ -73,14 +73,14 @@
           },
           "typeParameters": {
             "type": "TSTypeParameterDeclaration",
-            "start":13,"end":17,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":4}},
+            "start":13,"end":17,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":4,"index":17}},
             "params": [
               {
                 "type": "TSTypeParameter",
-                "start":14,"end":15,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2}},
+                "start":14,"end":15,"loc":{"start":{"line":2,"column":1,"index":14},"end":{"line":2,"column":2,"index":15}},
                 "name": {
                   "type": "Identifier",
-                  "start":14,"end":15,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2},"identifierName":"T"},
+                  "start":14,"end":15,"loc":{"start":{"line":2,"column":1,"index":14},"end":{"line":2,"column":2,"index":15},"identifierName":"T"},
                   "name": "T"
                 }
               }

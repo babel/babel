@@ -1,34 +1,34 @@
 {
   "type": "File",
-  "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":3}},
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":51}},
   "program": {
     "type": "Program",
-    "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":3}},
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":51}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ExportNamedDeclaration",
-        "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10}},
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
             "local": {
               "type": "Identifier",
-              "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"x"},
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
               "name": "x"
             },
             "exported": {
               "type": "Identifier",
-              "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"x"},
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
               "name": "x"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start":18,"end":23,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":23}},
+          "start":18,"end":23,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":23,"index":23}},
           "extra": {
             "rawValue": "foo",
             "raw": "\"foo\""
@@ -39,15 +39,15 @@
         "assertions": [
           {
             "type": "ImportAttribute",
-            "start":33,"end":45,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":45}},
+            "start":33,"end":45,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":45,"index":45}},
             "key": {
               "type": "Identifier",
-              "start":33,"end":37,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":37},"identifierName":"type"},
+              "start":33,"end":37,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":37,"index":37},"identifierName":"type"},
               "name": "type"
             },
             "value": {
               "type": "StringLiteral",
-              "start":39,"end":45,"loc":{"start":{"line":1,"column":39},"end":{"line":1,"column":45}},
+              "start":39,"end":45,"loc":{"start":{"line":1,"column":39,"index":39},"end":{"line":1,"column":45,"index":45}},
               "extra": {
                 "rawValue": "json",
                 "raw": "\"json\""
@@ -59,14 +59,14 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":48,"end":51,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3}},
+        "start":48,"end":51,"loc":{"start":{"line":2,"column":0,"index":48},"end":{"line":2,"column":3,"index":51}},
         "expression": {
           "type": "ArrayExpression",
-          "start":48,"end":51,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3}},
+          "start":48,"end":51,"loc":{"start":{"line":2,"column":0,"index":48},"end":{"line":2,"column":3,"index":51}},
           "elements": [
             {
               "type": "NumericLiteral",
-              "start":49,"end":50,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2}},
+              "start":49,"end":50,"loc":{"start":{"line":2,"column":1,"index":49},"end":{"line":2,"column":2,"index":50}},
               "extra": {
                 "rawValue": 0,
                 "raw": "0"

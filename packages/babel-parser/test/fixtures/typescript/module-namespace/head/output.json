@@ -1,53 +1,53 @@
 {
   "type": "File",
-  "start":0,"end":59,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":13}},
+  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":13,"index":59}},
   "program": {
     "type": "Program",
-    "start":0,"end":59,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":13}},
+    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":13,"index":59}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSModuleDeclaration",
-        "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
         "id": {
           "type": "Identifier",
-          "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"N"},
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"N"},
           "name": "N"
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":12,"end":14,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":14}},
+          "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14}},
           "body": []
         }
       },
       {
         "type": "TSModuleDeclaration",
-        "start":15,"end":33,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
+        "start":15,"end":33,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":18,"index":33}},
         "id": {
           "type": "Identifier",
-          "start":25,"end":26,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"M"},
+          "start":25,"end":26,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":11,"index":26},"identifierName":"M"},
           "name": "M"
         },
         "body": {
           "type": "TSModuleDeclaration",
-          "start":27,"end":33,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":18}},
+          "start":27,"end":33,"loc":{"start":{"line":2,"column":12,"index":27},"end":{"line":2,"column":18,"index":33}},
           "id": {
             "type": "Identifier",
-            "start":27,"end":28,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"N"},
+            "start":27,"end":28,"loc":{"start":{"line":2,"column":12,"index":27},"end":{"line":2,"column":13,"index":28},"identifierName":"N"},
             "name": "N"
           },
           "body": {
             "type": "TSModuleDeclaration",
-            "start":29,"end":33,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":18}},
+            "start":29,"end":33,"loc":{"start":{"line":2,"column":14,"index":29},"end":{"line":2,"column":18,"index":33}},
             "id": {
               "type": "Identifier",
-              "start":29,"end":30,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15},"identifierName":"O"},
+              "start":29,"end":30,"loc":{"start":{"line":2,"column":14,"index":29},"end":{"line":2,"column":15,"index":30},"identifierName":"O"},
               "name": "O"
             },
             "body": {
               "type": "TSModuleBlock",
-              "start":31,"end":33,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":18}},
+              "start":31,"end":33,"loc":{"start":{"line":2,"column":16,"index":31},"end":{"line":2,"column":18,"index":33}},
               "body": []
             }
           }
@@ -55,24 +55,24 @@
       },
       {
         "type": "TSModuleDeclaration",
-        "start":34,"end":45,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":11}},
+        "start":34,"end":45,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":11,"index":45}},
         "id": {
           "type": "Identifier",
-          "start":41,"end":42,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":8},"identifierName":"M"},
+          "start":41,"end":42,"loc":{"start":{"line":3,"column":7,"index":41},"end":{"line":3,"column":8,"index":42},"identifierName":"M"},
           "name": "M"
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":43,"end":45,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":11}},
+          "start":43,"end":45,"loc":{"start":{"line":3,"column":9,"index":43},"end":{"line":3,"column":11,"index":45}},
           "body": []
         }
       },
       {
         "type": "TSModuleDeclaration",
-        "start":46,"end":59,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":13}},
+        "start":46,"end":59,"loc":{"start":{"line":4,"column":0,"index":46},"end":{"line":4,"column":13,"index":59}},
         "id": {
           "type": "StringLiteral",
-          "start":53,"end":56,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":10}},
+          "start":53,"end":56,"loc":{"start":{"line":4,"column":7,"index":53},"end":{"line":4,"column":10,"index":56}},
           "extra": {
             "rawValue": "m",
             "raw": "\"m\""
@@ -81,7 +81,7 @@
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":57,"end":59,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":13}},
+          "start":57,"end":59,"loc":{"start":{"line":4,"column":11,"index":57},"end":{"line":4,"column":13,"index":59}},
           "body": []
         }
       }

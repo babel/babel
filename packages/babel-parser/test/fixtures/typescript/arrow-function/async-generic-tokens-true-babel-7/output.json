@@ -1,25 +1,25 @@
 {
   "type": "File",
-  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
   "program": {
     "type": "Program",
-    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
         "expression": {
           "type": "ArrowFunctionExpression",
-          "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":23}},
+          "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
           "typeParameters": {
             "type": "TSTypeParameterDeclaration",
-            "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9}},
+            "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9}},
             "params": [
               {
                 "type": "TSTypeParameter",
-                "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8}},
+                "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}},
                 "name": "T"
               }
             ]
@@ -27,17 +27,17 @@
           "params": [
             {
               "type": "Identifier",
-              "start":10,"end":14,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":14},"identifierName":"a"},
+              "start":10,"end":14,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":14,"index":14},"identifierName":"a"},
               "name": "a",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":11,"end":14,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":14}},
+                "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14}},
                 "typeAnnotation": {
                   "type": "TSTypeReference",
-                  "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14}},
+                  "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
                   "typeName": {
                     "type": "Identifier",
-                    "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14},"identifierName":"T"},
+                    "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"T"},
                     "name": "T"
                   }
                 }
@@ -46,13 +46,13 @@
           ],
           "returnType": {
             "type": "TSTypeAnnotation",
-            "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18}},
+            "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
             "typeAnnotation": {
               "type": "TSTypeReference",
-              "start":17,"end":18,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":18}},
+              "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}},
               "typeName": {
                 "type": "Identifier",
-                "start":17,"end":18,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":18},"identifierName":"T"},
+                "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18},"identifierName":"T"},
                 "name": "T"
               }
             }
@@ -62,7 +62,7 @@
           "async": true,
           "body": {
             "type": "Identifier",
-            "start":22,"end":23,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":23},"identifierName":"a"},
+            "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23},"identifierName":"a"},
             "name": "a"
           }
         }
@@ -85,7 +85,7 @@
         "updateContext": null
       },
       "value": "async",
-      "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}}
+      "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}}
     },
     {
       "type": {
@@ -101,7 +101,7 @@
         "updateContext": null
       },
       "value": "<",
-      "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}}
+      "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}}
     },
     {
       "type": {
@@ -117,7 +117,7 @@
         "updateContext": null
       },
       "value": "T",
-      "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8}}
+      "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}}
     },
     {
       "type": {
@@ -133,7 +133,7 @@
         "updateContext": null
       },
       "value": ">",
-      "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}}
+      "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}}
     },
     {
       "type": {
@@ -148,7 +148,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10}}
+      "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}}
     },
     {
       "type": {
@@ -164,7 +164,7 @@
         "updateContext": null
       },
       "value": "a",
-      "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}}
+      "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}}
     },
     {
       "type": {
@@ -179,7 +179,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12}}
+      "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12}}
     },
     {
       "type": {
@@ -195,7 +195,7 @@
         "updateContext": null
       },
       "value": "T",
-      "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14}}
+      "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}}
     },
     {
       "type": {
@@ -210,7 +210,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15}}
+      "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15}}
     },
     {
       "type": {
@@ -225,7 +225,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16}}
+      "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16}}
     },
     {
       "type": {
@@ -241,7 +241,7 @@
         "updateContext": null
       },
       "value": "T",
-      "start":17,"end":18,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":18}}
+      "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}}
     },
     {
       "type": {
@@ -256,7 +256,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":19,"end":21,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":21}}
+      "start":19,"end":21,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":21,"index":21}}
     },
     {
       "type": {
@@ -272,7 +272,7 @@
         "updateContext": null
       },
       "value": "a",
-      "start":22,"end":23,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":23}}
+      "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23}}
     },
     {
       "type": {
@@ -287,7 +287,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":23,"end":24,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":24}}
+      "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24}}
     },
     {
       "type": {
@@ -302,7 +302,7 @@
         "binop": null,
         "updateContext": null
       },
-      "start":24,"end":24,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":24}}
+      "start":24,"end":24,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":24,"index":24}}
     }
   ]
 }
