@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-unicode-sets-regex",
-  "version": "7.16.7",
+  "version": "7.17.0",
   "description": "Parse regular expressions' unicodeSets (v) flag.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-unicode-sets-regex",
   "license": "MIT",
