@@ -725,9 +725,46 @@ export default class Tokenizer extends ParserErrors {
       // it can be merged with tt.assign.
       this.finishOp(tt.xorAssign, 2);
     }
+    // '^^'
+    else if (
+      next === charCodes.caret &&
+      // If the ^^ token is not enabled, we don't throw but parse two single ^s
+      // because it could be a ^ hack token followed by a ^ binary operator.
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "^^" },
+      ])
+    ) {
+      this.finishOp(tt.doubleCaret, 2);
+
+      // `^^^` is forbidden and must be separated by a space.
+      const lookaheadCh = this.input.codePointAt(this.state.pos);
+      if (lookaheadCh === charCodes.caret) {
+        throw this.unexpected();
+      }
+    }
     // '^'
     else {
       this.finishOp(tt.bitwiseXOR, 1);
+    }
+  }
+
+  readToken_atSign(): void {
+    const next = this.input.charCodeAt(this.state.pos + 1);
+
+    // '@@'
+    if (
+      next === charCodes.atSign &&
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "@@" },
+      ])
+    ) {
+      this.finishOp(tt.doubleAt, 2);
+    }
+    // '@'
+    else {
+      this.finishOp(tt.at, 1);
     }
   }
 
@@ -1020,8 +1057,7 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.atSign:
-        ++this.state.pos;
-        this.finishToken(tt.at);
+        this.readToken_atSign();
         return;
 
       case charCodes.numberSign:

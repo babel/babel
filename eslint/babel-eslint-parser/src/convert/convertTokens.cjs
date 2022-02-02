@@ -140,6 +140,8 @@ function convertToken(token, source, tl) {
     label === tl.bracketHashL ||
     label === tl.bracketBarL ||
     label === tl.bracketBarR ||
+    label === tl.doubleCaret ||
+    label === tl.doubleAt ||
     type.isAssign
   ) {
     token.type = "Punctuator";

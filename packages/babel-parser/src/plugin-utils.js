@@ -67,7 +67,7 @@ export function getPluginOption(
 }
 
 const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
-const TOPIC_TOKENS = ["^", "%", "#"];
+const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
 const RECORD_AND_TUPLE_SYNTAX_TYPES = ["hash", "bar"];
 
 export function validatePlugins(plugins: PluginList) {

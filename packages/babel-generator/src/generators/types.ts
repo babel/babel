@@ -238,7 +238,7 @@ export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
 }
 
 // Hack pipe operator
-const validTopicTokenSet = new Set(["^", "%", "#"]);
+const validTopicTokenSet = new Set(["^^", "@@", "^", "%", "#"]);
 export function TopicReference(this: Printer) {
   const { topicToken } = this.format;
 

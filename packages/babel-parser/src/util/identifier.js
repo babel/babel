@@ -3,6 +3,7 @@
 // @flow
 
 import * as charCodes from "charcodes";
+import { isIdentifierStart } from "@babel/helper-validator-identifier";
 
 export {
   isIdentifierStart,
@@ -18,8 +19,16 @@ export const keywordRelationalOperator = /^in(stanceof)?$/;
 
 // Test whether a current state character code and next character code is @
 
-export function isIteratorStart(current: number, next: number): boolean {
-  return current === charCodes.atSign && next === charCodes.atSign;
+export function isIteratorStart(
+  current: number,
+  next: number,
+  next2: number,
+): boolean {
+  return (
+    current === charCodes.atSign &&
+    next === charCodes.atSign &&
+    isIdentifierStart(next2)
+  );
 }
 
 // This is the comprehensive set of JavaScript reserved words
