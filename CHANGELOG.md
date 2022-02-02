@@ -20,6 +20,50 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.0 (2022-02-02)
+
+#### :rocket: New Feature
+* `babel-cli`, `babel-core`
+  * [#14065](https://github.com/babel/babel/pull/14065) Allow plugins/presets to indicate external dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-parser`, `babel-traverse`
+  * [#14174](https://github.com/babel/babel/pull/14174) Expose `.index` on Position to internally track nodes location ([@tolmasky](https://github.com/tolmasky))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`
+  * [#13973](https://github.com/babel/babel/pull/13973) proposal-pipe: Add support for `^^` and `@@` topics ([@js-choi](https://github.com/js-choi))
+* `babel-traverse`
+  * [#13940](https://github.com/babel/babel/pull/13940) Add new method to check if node is null or not ([@danez](https://github.com/danez))
+* `babel-generator`, `babel-parser`, `babel-plugin-syntax-destructuring-private`, `babel-standalone`
+  * [#13931](https://github.com/babel/babel/pull/13931) Parse destructuring private fields ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-syntax-decorators`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`, `babel-types`
+  * [#14004](https://github.com/babel/babel/pull/14004) Add new decorators transform ([@pzuraq](https://github.com/pzuraq))
+* `babel-generator`, `babel-parser`, `babel-traverse`, `babel-types`
+  * [#13681](https://github.com/babel/babel/pull/13681) Add the `decoratorsAutoAccessors` parser plugin ([@pzuraq](https://github.com/pzuraq))
+* `babel-core`, `babel-helper-create-regexp-features-plugin`, `babel-plugin-proposal-unicode-sets-regex`, `babel-plugin-syntax-unicode-sets-regex`, `babel-plugin-transform-dotall-regex`
+  * [#14125](https://github.com/babel/babel/pull/14125) Add transform support for the "regexp unicode sets" proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14086](https://github.com/babel/babel/pull/14086) Add parser support for the "regexp unicode sets" proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-register`
+  * [#14087](https://github.com/babel/babel/pull/14087) Expose `@babel/register/experimental-worker` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#14145](https://github.com/babel/babel/pull/14145) Reinterpret << when parsing TS type arguments ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-runtime`
+  * [#14187](https://github.com/babel/babel/pull/14187) Normalize absolute paths on Windows ([@atti187](https://github.com/atti187))
+
+#### :memo: Documentation
+* [#14223](https://github.com/babel/babel/pull/14223) Remove Babel 6 from SECURITY.md ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-fixtures`, `babel-parser`
+  * [#14201](https://github.com/babel/babel/pull/14201) Fuzz test location-related parser options ([@tolmasky](https://github.com/tolmasky))
+* `babel-compat-data`
+  * [#14208](https://github.com/babel/babel/pull/14208) Update compat data (specifically for rhino 1.7.14) ([@phulin](https://github.com/phulin))
+* Other
+  * [#14190](https://github.com/babel/babel/pull/14190) chore: run tscheck on babel 8 breaking test ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-cli`, `babel-core`
+  * [#14209](https://github.com/babel/babel/pull/14209) Switch to `@ampproject/remapping` to merge source maps ([@jridgewell](https://github.com/jridgewell))
 ## v7.16.12 (2022-01-22)
 
 #### :bug: Bug Fix
