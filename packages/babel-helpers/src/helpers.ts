@@ -2053,7 +2053,7 @@ if (!process.env.BABEL_8_BREAKING) {
   `;
 }
 
-helpers.identity = helper("7.16.7")`
+helpers.identity = helper("7.17.0")`
   export default function _identity(x) {
     return x;
   }

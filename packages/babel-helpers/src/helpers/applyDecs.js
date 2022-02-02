@@ -1,4 +1,4 @@
-/* @minVersion 7.16.6 */
+/* @minVersion 7.17.0 */
 
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
