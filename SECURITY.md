@@ -8,8 +8,9 @@ currently being supported with security updates.
 | Version  | Supported          |
 | -------- | ------------------ |
 | 7.x      | :white_check_mark: |
-| 6.26.x   | :white_check_mark: |
-| < 6.26.0 | :x:                |
+| 6.x      | :x:                |
+
+Note that for each supported major version, we will only provide security fixes for the last minor version. This means that if, for example, the last released version is 7.16.4 we will only release security fixes as 7.16.5 and not for 7.15.x or older.
 
 ## Reporting a Vulnerability
 
