@@ -53,7 +53,8 @@ jobs:
           - jest
           - react-native
           - prettier
-    # if: matrix.project != 'babel-old-version' || !inputs.BABEL_8_BREAKING
+        exclude:
+          - project: ${{ inputs.BABEL_8_BREAKING && 'babel-old-version' || '_' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -68,5 +69,9 @@ jobs:
       - name: Test
         run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
         env:
-          BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING }}
+          # We don't use true/false, but 'true'/''. This is because false,
+          # when stringified (env vars are strings), it's a truthy value.
+          # This is a probem here, because babel and babel-old-version tests are run
+          # without STRIP_BABEL_8_FLAG, so 'false' is not properly casted to false.
+          BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING && 'true' || '' }}
           VERDACCIO_CONFIG: verdaccio-config${{ inputs.BABEL_8_BREAKING && '-breaking' || '' }}
