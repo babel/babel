@@ -33,7 +33,7 @@ process.stdin.on("data", function listener(chunk) {
   const str = String(chunk).trim();
   if (!str) return;
 
-  if (str.startsWith("src/")) {
+  if (str.startsWith("src")) {
     batchedStrings.push(str);
   } else {
     // "src/index.js -> lib/index.js"-like strings don't always come in order,
