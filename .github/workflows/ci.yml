@@ -409,4 +409,4 @@ jobs:
   e2e-tests:
     name: E2E tests
     needs: prepare-yarn-cache
-    uses: ./.github/workflows/reusable/e2e-tests.yml
+    uses: ./.github/workflows/__reusable__e2e-tests.yml
