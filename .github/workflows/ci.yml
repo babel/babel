@@ -407,7 +407,7 @@ jobs:
         run: yarn test:runtime:node
 
   e2e-tests:
-    name: E2E tests
+    name: E2E
     needs: prepare-yarn-cache
     uses: ./.github/workflows/__reusable__e2e-tests.yml
     with:

@@ -36,7 +36,6 @@ jobs:
           path: /tmp/verdaccio-workspace
 
   e2e-tests:
-    name: E2E
     needs: e2e-publish
     runs-on: ubuntu-latest
     strategy:
