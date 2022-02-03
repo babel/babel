@@ -465,6 +465,7 @@ const libBundles = [
   "packages/babel-plugin-proposal-object-rest-spread",
   "packages/babel-plugin-proposal-optional-chaining",
   "packages/babel-preset-react",
+  "packages/babel-plugin-transform-destructuring",
   "packages/babel-preset-typescript",
   "packages/babel-helper-member-expression-to-functions",
   "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
