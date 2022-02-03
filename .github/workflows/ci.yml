@@ -413,9 +413,25 @@ jobs:
     with:
       BABEL_8_BREAKING: false
 
+  e2e-breaking-tests-pr-approval:
+    name: E2E (breaking) manual approval
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    if: github.event != 'pull_request'
+    # This environment does not contain any variable, but since usually
+    # breaking e2e tests are not necessary for PRs we use it to wait
+    # for manual approval before running them.
+    environment: Pull Request - e2e Babel 8
+    steps:
+      - run: echo "Approved"
+
   e2e-breaking-tests:
     name: E2E (breaking)
-    needs: prepare-yarn-cache
+    needs: e2e-breaking-tests-pr-approval
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      (needs.e2e-breaking-tests-pr-approval.result == 'success' || needs.e2e-breaking-tests-pr-approval.result == 'skipped')
     uses: ./.github/workflows/__reusable__e2e-tests.yml
     with:
       BABEL_8_BREAKING: true
