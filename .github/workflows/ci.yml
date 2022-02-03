@@ -410,3 +410,5 @@ jobs:
     name: E2E tests
     needs: prepare-yarn-cache
     uses: ./.github/workflows/__reusable__e2e-tests.yml
+    with:
+      BABEL_8_BREAKING: false
