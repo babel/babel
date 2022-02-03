@@ -30,12 +30,15 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
+        env:
+          BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING }}
       - uses: actions/upload-artifact@v2
         with:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace
 
   e2e-tests:
+    name: Test
     needs: e2e-publish
     runs-on: ubuntu-latest
     strategy:
@@ -62,3 +65,5 @@ jobs:
           path: /tmp/verdaccio-workspace
       - name: Test
         run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
+        env:
+          BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING }}

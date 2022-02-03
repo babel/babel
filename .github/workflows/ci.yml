@@ -412,3 +412,10 @@ jobs:
     uses: ./.github/workflows/__reusable__e2e-tests.yml
     with:
       BABEL_8_BREAKING: false
+
+  e2e-breaking-tests:
+    name: E2E (breaking)
+    needs: prepare-yarn-cache
+    uses: ./.github/workflows/__reusable__e2e-tests.yml
+    with:
+      BABEL_8_BREAKING: true
