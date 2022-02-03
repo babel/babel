@@ -6,13 +6,12 @@ __metadata:
   cacheKey: 8
 
 "@ampproject/remapping@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@ampproject/remapping@npm:2.0.0"
+  version: 2.0.2
+  resolution: "@ampproject/remapping@npm:2.0.2"
   dependencies:
-    "@jridgewell/resolve-uri": ^3.0.3
-    "@jridgewell/trace-mapping": ^0.2.0
+    "@jridgewell/trace-mapping": ^0.2.2
     sourcemap-codec: 1.4.8
-  checksum: 01165f814ffb39acb385be8f5e9debdd94faf5b582efca167df87b74a3240b96aada76a13875a479127beb3543dfe26cfab41867e88c98f528c1a72e433b4896
+  checksum: 5759df3715f0291cbf97099a9bb7202201a1a267e232ee1505418c768b9ae7281cd550b1da563a12808a06529eb1298744a6cabde21ac354fc8450044c7f2213
   languageName: node
   linkType: hard
 
@@ -4093,13 +4092,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@jridgewell/trace-mapping@npm:0.2.0"
+"@jridgewell/trace-mapping@npm:^0.2.2":
+  version: 0.2.5
+  resolution: "@jridgewell/trace-mapping@npm:0.2.5"
   dependencies:
     "@jridgewell/resolve-uri": ^3.0.3
     sourcemap-codec: 1.4.8
-  checksum: 378284cb50374953437cd4e3b1e9bd9a8973f2f5d62d155ee646da9d7bcaaad8988087c6bfc54970ff730adb8a75fb06585d51544d53d7afccec61d20e5edaa7
+  checksum: 7ac0a2992f4a8d16c1cbe03bccbcfbd1e96bf5071b0a794dd97904a7588cc248b73e8091fabcb13dac8f40bc51297ee4ef98a6a870ca5a4dfb8e2dcbf6f33956
   languageName: node
   linkType: hard
 
