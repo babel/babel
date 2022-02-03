@@ -82,7 +82,8 @@ function extractElementDescriptor(
     prop("decorators", takeDecorators(node as Decorable)),
     prop(
       "static",
-      !t.isStaticBlock(node) && node.static && t.booleanLiteral(true),
+      // @ts-expect-error: TS doesn't infer that node is not a StaticBlock
+      !t.isStaticBlock?.(node) && node.static && t.booleanLiteral(true),
     ),
     prop("key", getKey(node)),
   ].filter(Boolean);
