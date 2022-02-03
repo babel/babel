@@ -20,6 +20,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.1 (2022-02-03)
+
+#### :bug: Bug Fix
+* `babel-helper-create-class-features-plugin`
+  * [#14231](https://github.com/babel/babel/pull/14231) Restore class fields transform compat with old `@babel/types` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.17.0 (2022-02-02)
 
 #### :rocket: New Feature
