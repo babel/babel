@@ -81,7 +81,7 @@ interface DestructuringTransformerOption {
 export class DestructuringTransformer {
   private blockHoist: number;
   private operator: t.AssignmentExpression["operator"];
-  arrays: Record<string, boolean>;
+  arrayRefSet: Set<string>;
   private nodes: DestructuringTransformerNode[];
   private scope: Scope;
   private kind: t.VariableDeclaration["kind"];
@@ -93,7 +93,7 @@ export class DestructuringTransformer {
   constructor(opts: DestructuringTransformerOption) {
     this.blockHoist = opts.blockHoist;
     this.operator = opts.operator;
-    this.arrays = {};
+    this.arrayRefSet = new Set();
     this.nodes = opts.nodes || [];
     this.scope = opts.scope;
     this.kind = opts.kind;
@@ -168,7 +168,7 @@ export class DestructuringTransformer {
   toArray(node: t.Expression, count?: boolean | number) {
     if (
       this.iterableIsArray ||
-      (t.isIdentifier(node) && this.arrays[node.name])
+      (t.isIdentifier(node) && this.arrayRefSet.has(node.name))
     ) {
       return node;
     } else {
@@ -462,7 +462,7 @@ export class DestructuringTransformer {
       arrayRef = toArray;
     } else {
       arrayRef = this.scope.generateUidIdentifierBasedOnNode(arrayRef);
-      this.arrays[arrayRef.name] = true;
+      this.arrayRefSet.add(arrayRef.name);
       this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
     }
 
@@ -634,7 +634,7 @@ export function convertAssignmentExpression(
     );
 
     if (t.isArrayExpression(node.right)) {
-      destructuring.arrays[ref.name] = true;
+      destructuring.arrayRefSet.add(ref.name);
     }
   }
 
