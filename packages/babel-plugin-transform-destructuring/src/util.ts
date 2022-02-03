@@ -1,17 +1,13 @@
 import { types as t } from "@babel/core";
-import type { Scope } from "@babel/traverse";
-
-function getExtendsHelper(file) {
-  return file.useBuiltIns
-    ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-    : file.addHelper("extends");
-}
+import type { File } from "@babel/core";
+import type { Scope, NodePath } from "@babel/traverse";
+import type { TraversalAncestors } from "@babel/types";
 
 /**
  * Test if an ArrayPattern's elements contain any RestElements.
  */
 
-function hasRest(pattern) {
+function hasRest(pattern: t.ArrayPattern) {
   for (const elem of pattern.elements) {
     if (t.isRestElement(elem)) {
       return true;
@@ -24,7 +20,7 @@ function hasRest(pattern) {
  * Test if an ObjectPattern's elements contain any RestElements.
  */
 
-function hasObjectRest(pattern) {
+function hasObjectRest(pattern: t.ObjectPattern) {
   for (const elem of pattern.properties) {
     if (t.isRestElement(elem)) {
       return true;
@@ -33,10 +29,23 @@ function hasObjectRest(pattern) {
   return false;
 }
 
+interface Unpackable {
+  elements: Array<null | t.Expression>;
+}
+
 const STOP_TRAVERSAL = {};
 
+interface ArrayUnpackVisitorState {
+  deopt: boolean;
+  bindings: Record<string, t.Identifier>;
+}
+
 // NOTE: This visitor is meant to be used via t.traverse
-const arrayUnpackVisitor = (node, ancestors, state) => {
+const arrayUnpackVisitor = (
+  node: t.Node,
+  ancestors: TraversalAncestors,
+  state: ArrayUnpackVisitorState,
+) => {
   if (!ancestors.length) {
     // Top-level node: this is the array literal.
     return;
@@ -44,7 +53,7 @@ const arrayUnpackVisitor = (node, ancestors, state) => {
 
   if (
     t.isIdentifier(node) &&
-    t.isReferenced(node, ancestors[ancestors.length - 1]) &&
+    t.isReferenced(node, ancestors[ancestors.length - 1].node) &&
     state.bindings[node.name]
   ) {
     state.deopt = true;
@@ -52,19 +61,36 @@ const arrayUnpackVisitor = (node, ancestors, state) => {
   }
 };
 
+type DestructuringTransformerNode =
+  | t.VariableDeclaration
+  | t.ExpressionStatement
+  | t.ReturnStatement;
+
+interface DestructuringTransformerOption {
+  blockHoist?: number;
+  operator?: t.AssignmentExpression["operator"];
+  nodes?: DestructuringTransformerNode[];
+  kind?: t.VariableDeclaration["kind"];
+  scope: Scope;
+  arrayLikeIsIterable: boolean;
+  iterableIsArray: boolean;
+  objectRestNoSymbols: boolean;
+  useBuiltIns: boolean;
+  addHelper: File["addHelper"];
+}
 export class DestructuringTransformer {
-  private blockHoist: any;
-  private operator: any;
-  arrays: any;
-  private nodes: any;
+  private blockHoist: number;
+  private operator: t.AssignmentExpression["operator"];
+  arrays: Record<string, boolean>;
+  private nodes: DestructuringTransformerNode[];
   private scope: Scope;
-  private kind: any;
+  private kind: t.VariableDeclaration["kind"];
   private iterableIsArray: boolean;
   private arrayLikeIsIterable: boolean;
   private objectRestNoSymbols: boolean;
   private useBuiltIns: boolean;
-  private addHelper: any;
-  constructor(opts) {
+  private addHelper: File["addHelper"];
+  constructor(opts: DestructuringTransformerOption) {
     this.blockHoist = opts.blockHoist;
     this.operator = opts.operator;
     this.arrays = {};
@@ -78,11 +104,24 @@ export class DestructuringTransformer {
     this.addHelper = opts.addHelper;
   }
 
-  buildVariableAssignment(id, init) {
+  getExtendsHelper() {
+    return this.useBuiltIns
+      ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+      : this.addHelper("extends");
+  }
+
+  buildVariableAssignment(
+    id:
+      | t.Identifier
+      | t.MemberExpression
+      | t.RestElement
+      | t.TSParameterProperty,
+    init: t.Expression,
+  ) {
     let op = this.operator;
     if (t.isMemberExpression(id)) op = "=";
 
-    let node;
+    let node: t.ExpressionStatement | t.VariableDeclaration;
 
     if (op) {
       node = t.expressionStatement(
@@ -98,12 +137,13 @@ export class DestructuringTransformer {
       ]);
     }
 
+    //@ts-expect-error(todo): document block hoist property
     node._blockHoist = this.blockHoist;
 
     return node;
   }
 
-  buildVariableDeclaration(id, init) {
+  buildVariableDeclaration(id: t.Identifier, init: t.Expression) {
     const declar = t.variableDeclaration("var", [
       t.variableDeclarator(t.cloneNode(id), t.cloneNode(init)),
     ]);
@@ -112,7 +152,7 @@ export class DestructuringTransformer {
     return declar;
   }
 
-  push(id, _init) {
+  push(id: t.LVal, _init: t.Expression) {
     const init = t.cloneNode(_init);
     if (t.isObjectPattern(id)) {
       this.pushObjectPattern(id, init);
@@ -125,7 +165,7 @@ export class DestructuringTransformer {
     }
   }
 
-  toArray(node, count?) {
+  toArray(node: t.Expression, count?: boolean | number) {
     if (
       this.iterableIsArray ||
       (t.isIdentifier(node) && this.arrays[node.name])
@@ -136,7 +176,10 @@ export class DestructuringTransformer {
     }
   }
 
-  pushAssignmentPattern({ left, right }, valueRef) {
+  pushAssignmentPattern(
+    { left, right }: t.AssignmentPattern,
+    valueRef: t.Expression,
+  ) {
     // we need to assign the current value of the assignment to avoid evaluating
     // it more than once
     const tempId = this.scope.generateUidIdentifierBasedOnNode(valueRef);
@@ -175,7 +218,12 @@ export class DestructuringTransformer {
     }
   }
 
-  pushObjectRest(pattern, objRef, spreadProp, spreadPropIndex) {
+  pushObjectRest(
+    pattern: t.ObjectPattern,
+    objRef: t.Expression,
+    spreadProp: t.RestElement,
+    spreadPropIndex: number,
+  ) {
     // get all the keys that appear in this object before the current spread
 
     const keys = [];
@@ -208,7 +256,7 @@ export class DestructuringTransformer {
 
     let value;
     if (keys.length === 0) {
-      value = t.callExpression(getExtendsHelper(this), [
+      value = t.callExpression(this.getExtendsHelper(), [
         t.objectExpression([]),
         t.cloneNode(objRef),
       ]);
@@ -242,13 +290,14 @@ export class DestructuringTransformer {
       );
     }
 
+    // @ts-expect-error: The argument of a RestElement in ObjectPattern must not be an ArrayPattern
     this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
   }
 
-  pushObjectProperty(prop, propRef) {
+  pushObjectProperty(prop: t.ObjectProperty, propRef: t.Expression) {
     if (t.isLiteral(prop.key)) prop.computed = true;
 
-    const pattern = prop.value;
+    const pattern = prop.value as t.LVal;
     const objRef = t.memberExpression(
       t.cloneNode(propRef),
       prop.key,
@@ -262,7 +311,7 @@ export class DestructuringTransformer {
     }
   }
 
-  pushObjectPattern(pattern, objRef) {
+  pushObjectPattern(pattern: t.ObjectPattern, objRef: t.Expression) {
     // https://github.com/babel/babel/issues/681
 
     if (!pattern.properties.length) {
@@ -322,7 +371,10 @@ export class DestructuringTransformer {
     }
   }
 
-  canUnpackArrayPattern(pattern, arr) {
+  canUnpackArrayPattern(
+    pattern: t.ArrayPattern,
+    arr: t.Expression,
+  ): arr is t.ArrayExpression & Unpackable {
     // not an array so there's no way we can deal with this
     if (!t.isArrayExpression(arr)) return false;
 
@@ -354,7 +406,7 @@ export class DestructuringTransformer {
 
     // deopt on reference to left side identifiers
     const bindings = t.getBindingIdentifiers(pattern);
-    const state = { deopt: false, bindings };
+    const state: ArrayUnpackVisitorState = { deopt: false, bindings };
 
     try {
       t.traverse(arr, arrayUnpackVisitor, state);
@@ -365,7 +417,10 @@ export class DestructuringTransformer {
     return !state.deopt;
   }
 
-  pushUnpackedArrayPattern(pattern, arr) {
+  pushUnpackedArrayPattern(
+    pattern: t.ArrayPattern,
+    arr: t.ArrayExpression & Unpackable,
+  ) {
     for (let i = 0; i < pattern.elements.length; i++) {
       const elem = pattern.elements[i];
       if (t.isRestElement(elem)) {
@@ -376,7 +431,7 @@ export class DestructuringTransformer {
     }
   }
 
-  pushArrayPattern(pattern, arrayRef) {
+  pushArrayPattern(pattern: t.ArrayPattern, arrayRef: t.Expression) {
     if (!pattern.elements) return;
 
     // optimise basic array destructuring of an array expression
@@ -414,7 +469,7 @@ export class DestructuringTransformer {
     //
 
     for (let i = 0; i < pattern.elements.length; i++) {
-      let elem = pattern.elements[i];
+      const elem = pattern.elements[i];
 
       // hole
       if (!elem) continue;
@@ -430,16 +485,15 @@ export class DestructuringTransformer {
 
         // set the element to the rest element argument since we've dealt with it
         // being a rest already
-        elem = elem.argument;
+        this.push(elem.argument, elemRef);
       } else {
         elemRef = t.memberExpression(arrayRef, t.numericLiteral(i), true);
+        this.push(elem, elemRef);
       }
-
-      this.push(elem, elemRef);
     }
   }
 
-  init(pattern, ref) {
+  init(pattern: t.LVal, ref: t.Expression) {
     // trying to destructure a value that we can't evaluate more than once so we
     // need to save it to a variable
 
@@ -460,27 +514,27 @@ export class DestructuringTransformer {
 }
 
 export function convertVariableDeclaration(
-  path,
-  addHelper,
-  arrayLikeIsIterable,
-  iterableIsArray,
-  objectRestNoSymbols,
-  useBuiltIns,
+  path: NodePath<t.VariableDeclaration>,
+  addHelper: File["addHelper"],
+  arrayLikeIsIterable: boolean,
+  iterableIsArray: boolean,
+  objectRestNoSymbols: boolean,
+  useBuiltIns: boolean,
 ) {
   const { node, scope } = path;
 
   const nodeKind = node.kind;
   const nodeLoc = node.loc;
   const nodes = [];
-  let declar;
 
   for (let i = 0; i < node.declarations.length; i++) {
-    declar = node.declarations[i];
+    const declar = node.declarations[i];
 
     const patternId = declar.init;
     const pattern = declar.id;
 
     const destructuring = new DestructuringTransformer({
+      // @ts-expect-error(todo): avoid internal properties access
       blockHoist: node._blockHoist,
       nodes: nodes,
       scope: scope,
@@ -503,17 +557,14 @@ export function convertVariableDeclaration(
     } else {
       nodes.push(
         t.inherits(
-          destructuring.buildVariableAssignment(
-            declar.id,
-            t.cloneNode(declar.init),
-          ),
+          destructuring.buildVariableAssignment(pattern, patternId),
           declar,
         ),
       );
     }
   }
 
-  let tail = null;
+  let tail: t.VariableDeclaration | null = null;
   const nodesOut = [];
   for (const node of nodes) {
     if (tail !== null && t.isVariableDeclaration(node)) {
@@ -552,12 +603,12 @@ export function convertVariableDeclaration(
 }
 
 export function convertAssignmentExpression(
-  path,
-  addHelper,
-  arrayLikeIsIterable,
-  iterableIsArray,
-  objectRestNoSymbols,
-  useBuiltIns,
+  path: NodePath<t.AssignmentExpression>,
+  addHelper: File["addHelper"],
+  arrayLikeIsIterable: boolean,
+  iterableIsArray: boolean,
+  objectRestNoSymbols: boolean,
+  useBuiltIns: boolean,
 ) {
   const { node, scope } = path;
 
@@ -574,7 +625,7 @@ export function convertAssignmentExpression(
     addHelper,
   });
 
-  let ref;
+  let ref: t.Identifier | void;
   if (path.isCompletionRecord() || !path.parentPath.isExpressionStatement()) {
     ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 

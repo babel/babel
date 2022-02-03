@@ -101,8 +101,10 @@ export default declare((api, options) => {
           kind: left.kind,
           scope: scope,
           nodes: nodes,
-          iterableIsArray,
           arrayLikeIsIterable,
+          iterableIsArray,
+          objectRestNoSymbols,
+          useBuiltIns,
           addHelper: name => this.addHelper(name),
         });
 
@@ -128,8 +130,10 @@ export default declare((api, options) => {
           kind: "let",
           scope: scope,
           nodes: nodes,
-          iterableIsArray,
           arrayLikeIsIterable,
+          iterableIsArray,
+          objectRestNoSymbols,
+          useBuiltIns,
           addHelper: name => this.addHelper(name),
         });
         destructuring.init(pattern, ref);
