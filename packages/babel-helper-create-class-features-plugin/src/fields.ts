@@ -911,7 +911,8 @@ function replaceThisContext(
     getSuperRef,
     getObjectRef() {
       state.needsClassRef = true;
-      return t.isStaticBlock(path.node) || path.node.static
+      // @ts-expect-error: TS doesn't infer that path.node is not a StaticBlock
+      return t.isStaticBlock?.(path.node) || path.node.static
         ? ref
         : t.memberExpression(ref, t.identifier("prototype"));
     },
@@ -964,7 +965,8 @@ export function buildFieldsInitNodes(
   for (const prop of props) {
     prop.isClassProperty() && ts.assertFieldTransformed(prop);
 
-    const isStatic = !t.isStaticBlock(prop.node) && prop.node.static;
+    // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
+    const isStatic = !t.isStaticBlock?.(prop.node) && prop.node.static;
     const isInstance = !isStatic;
     const isPrivate = prop.isPrivate();
     const isPublic = !isPrivate;

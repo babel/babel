@@ -242,7 +242,8 @@ export function createClassFeaturePlugin({
             (referenceVisitor, state) => {
               if (isDecorated) return;
               for (const prop of props) {
-                if (t.isStaticBlock(prop.node) || prop.node.static) continue;
+                // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
+                if (t.isStaticBlock?.(prop.node) || prop.node.static) continue;
                 prop.traverse(referenceVisitor, state);
               }
             },
