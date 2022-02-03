@@ -20,12 +20,12 @@ cd ../..
 #                                   TEST                                       #
 #==============================================================================#
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
+if [ "$BABEL_8_BREAKING" = "true" ] ; then
   # This option is removed in Babel 8
   sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
 fi
 
-startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
+startLocalRegistry "$PWD"/scripts/integration-tests/"$VERDACCIO_CONFIG".yml
 
 # We only bump dependencies in the top-level package.json, because workspaces
 # already use the workspace: protocol so will get the version in the monorepo

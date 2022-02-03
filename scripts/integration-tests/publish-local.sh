@@ -25,7 +25,7 @@ initializeE2Egit
 
 yarn
 
-startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
+startLocalRegistry "$PWD"/scripts/integration-tests/"$VERDACCIO_CONFIG".yml
 loginLocalRegistry
 
 # This script gets the last root package.json version,

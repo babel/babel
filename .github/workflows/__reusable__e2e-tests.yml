@@ -32,10 +32,11 @@ jobs:
         run: ./scripts/integration-tests/publish-local.sh
         env:
           BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING }}
+          VERDACCIO_CONFIG: verdaccio-config${{ inputs.BABEL_8_BREAKING && '-breaking' || '' }}
       - uses: actions/upload-artifact@v2
         with:
-          name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
+          name: verdaccio-workspace${{ inputs.BABEL_8_BREAKING && '-breaking' || '' }}
+          path: /tmp/verdaccio-workspace${{ inputs.BABEL_8_BREAKING && '-breaking' || '' }}
 
   e2e-tests:
     name: Test
@@ -52,6 +53,7 @@ jobs:
           - jest
           - react-native
           - prettier
+    # if: matrix.project != 'babel-old-version' || !inputs.BABEL_8_BREAKING
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -61,9 +63,10 @@ jobs:
           node-version: "*"
       - uses: actions/download-artifact@v2
         with:
-          name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
+          name: verdaccio-workspace${{ inputs.BABEL_8_BREAKING && '-breaking' || '' }}
+          path: /tmp/verdaccio-workspace${{ inputs.BABEL_8_BREAKING && '-breaking' || '' }}
       - name: Test
         run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
         env:
           BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING }}
+          VERDACCIO_CONFIG: verdaccio-config${{ inputs.BABEL_8_BREAKING && '-breaking' || '' }}

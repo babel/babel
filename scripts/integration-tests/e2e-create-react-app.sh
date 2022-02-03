@@ -45,7 +45,7 @@ if [[ "$(node --version)" == v17.* ]]; then
   export NODE_OPTIONS=--openssl-legacy-provider
 fi
 
-startLocalRegistry "$PWD"/../../verdaccio-config.yml
+startLocalRegistry "$PWD"/../../"$VERDACCIO_CONFIG".yml
 
 # Remove this when CRA updates jest-worker in their lockfile
 node -e "
