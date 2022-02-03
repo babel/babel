@@ -103,9 +103,9 @@ __metadata:
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
   dependencies:
     "@babel/runtime": "workspace:^"
-    "@rollup/plugin-commonjs": 22.0.0-4
+    "@rollup/plugin-commonjs": 22.0.0-9
     "@rollup/plugin-node-resolve": ^13.1.3
-    rollup: ^2.63.0
+    rollup: ^2.67.0
   languageName: unknown
   linkType: soft
 
@@ -4161,9 +4161,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:22.0.0-4":
-  version: 22.0.0-4
-  resolution: "@rollup/plugin-commonjs@npm:22.0.0-4"
+"@rollup/plugin-commonjs@npm:22.0.0-9":
+  version: 22.0.0-9
+  resolution: "@rollup/plugin-commonjs@npm:22.0.0-9"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -4173,8 +4173,8 @@ __metadata:
     magic-string: ^0.25.7
     resolve: ^1.17.0
   peerDependencies:
-    rollup: ^2.61.1
-  checksum: e8d28ccace4aafc284e9d9b217e37b1d9545584ecf5121af0ce97a441cc614dc47aa78128a2bbd143537992b82e5cceb9ccb5b8dcde77ce11a798b1192289404
+    rollup: ^2.67.0
+  checksum: 6fd496a3b0d7646ffd9db9a51b7f1ac591ec3372b8f5b12d2c56edd16163a1b9dcf1f0c4afe57d57e46c5410c70a5e14097df771327052f4a0578178f46c74fd
   languageName: node
   linkType: hard
 
@@ -5916,7 +5916,7 @@ __metadata:
     "@babel/preset-typescript": ^7.16.7
     "@babel/runtime": ^7.17.0
     "@rollup/plugin-babel": ^5.3.0
-    "@rollup/plugin-commonjs": 22.0.0-4
+    "@rollup/plugin-commonjs": 22.0.0-9
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^13.1.3
     "@rollup/plugin-replace": ^3.0.1
@@ -5948,7 +5948,7 @@ __metadata:
     lint-staged: ^9.2.0
     mergeiterator: ^1.4.4
     prettier: 2.5.0
-    rollup: ^2.63.0
+    rollup: ^2.67.0
     rollup-plugin-dts: ^2.0.0
     rollup-plugin-polyfill-node: ^0.7.0
     rollup-plugin-terser: ^7.0.2
@@ -13691,9 +13691,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.63.0":
-  version: 2.63.0
-  resolution: "rollup@npm:2.63.0"
+"rollup@npm:^2.67.0":
+  version: 2.67.0
+  resolution: "rollup@npm:2.67.0"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -13701,7 +13701,7 @@ fsevents@^1.2.7:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 23db16ea9d222ad5ae9620ba51d4f45c834927038c1e43d87f7dd3d240aa54422e51c2660437479af4b771e13f9529df236a3d43a3b9f4229bf241347d5f2c8f
+  checksum: 300ddb6c63f1bcaadaac98f705e3804d8d22ddbc595e34c0582850dc1f464bde3edc3312a7cdc5f1544e35df80300d7bc7bf81f56575b24c4124924d140ec947
   languageName: node
   linkType: hard
 
