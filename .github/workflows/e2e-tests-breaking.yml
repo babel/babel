@@ -27,6 +27,6 @@ jobs:
     if: |
       always() &&
       (needs.e2e-breaking-tests-pr-approval.result == 'success' || needs.e2e-breaking-tests-pr-approval.result == 'skipped')
-    uses: ./.github/workflows/e2e-tests.yml
+    uses: ./.github/workflows/e2e-tests.yml@main
     with:
       BABEL_8_BREAKING: true
