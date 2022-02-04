@@ -232,22 +232,53 @@ describe("externalDependencies", () => {
   });
 
   describe("regressions", () => {
-    it("#14233", () => {
-      const code = `let a = 1`;
+    describe("#14233", () => {
+      it("no external dependencies", () => {
+        const code = `let a = 1`;
 
-      function pluginA(api) {
-        api.cache.never();
-        return { name: "plugin-a" };
-      }
-      function pluginB() {
-        return { name: "plugin-b", inherits: pluginA };
-      }
+        function pluginA(api) {
+          api.cache.never();
+          return { name: "plugin-a" };
+        }
+        function pluginB() {
+          return { name: "plugin-b", inherits: pluginA };
+        }
 
-      expect(() => {
-        transform(code, { plugins: [pluginB] });
+        expect(() => {
+          transform(code, { plugins: [pluginB] });
 
-        transform(code, { plugins: [pluginB] });
-      }).not.toThrow();
+          transform(code, { plugins: [pluginB] });
+        }).not.toThrow();
+      });
+
+      it("with external dependencies", () => {
+        const code = `let a = 1`;
+
+        let pluginAdep = "./a-foo";
+
+        function pluginA(api) {
+          api.cache.never();
+          api.addExternalDependency(pluginAdep);
+          return { name: "plugin-a" };
+        }
+        const pluginB = jest.fn(function pluginB(api) {
+          api.cache.using(() => 0);
+          api.addExternalDependency("./b-foo");
+          return { name: "plugin-b", inherits: pluginA };
+        });
+
+        const result1 = transform(code, { plugins: [pluginB] });
+        pluginAdep = "./a-bar";
+        const result2 = transform(code, { plugins: [pluginB] });
+
+        expect(pluginB).toHaveBeenCalledTimes(1);
+        expect(new Set(result1.externalDependencies)).toEqual(
+          new Set(["./a-foo", "./b-foo"]),
+        );
+        expect(new Set(result2.externalDependencies)).toEqual(
+          new Set(["./a-bar", "./b-foo"]),
+        );
+      });
     });
   });
 });
