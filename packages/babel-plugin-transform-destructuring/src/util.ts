@@ -7,26 +7,16 @@ import type { TraversalAncestors } from "@babel/types";
  * Test if an ArrayPattern's elements contain any RestElements.
  */
 
-function hasRest(pattern: t.ArrayPattern) {
-  for (const elem of pattern.elements) {
-    if (t.isRestElement(elem)) {
-      return true;
-    }
-  }
-  return false;
+function hasArrayRest(pattern: t.ArrayPattern) {
+  return pattern.elements.some(elem => t.isRestElement(elem));
 }
 
 /**
- * Test if an ObjectPattern's elements contain any RestElements.
+ * Test if an ObjectPattern's properties contain any RestElements.
  */
 
 function hasObjectRest(pattern: t.ObjectPattern) {
-  for (const elem of pattern.properties) {
-    if (t.isRestElement(elem)) {
-      return true;
-    }
-  }
-  return false;
+  return pattern.properties.some(prop => t.isRestElement(prop));
 }
 
 interface Unpackable {
@@ -381,7 +371,10 @@ export class DestructuringTransformer {
     // pattern has less elements than the array and doesn't have a rest so some
     // elements wont be evaluated
     if (pattern.elements.length > arr.elements.length) return;
-    if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) {
+    if (
+      pattern.elements.length < arr.elements.length &&
+      !hasArrayRest(pattern)
+    ) {
       return false;
     }
 
@@ -448,7 +441,7 @@ export class DestructuringTransformer {
     // if we have a rest then we need all the elements so don't tell
     // `scope.toArray` to only get a certain amount
 
-    const count = !hasRest(pattern) && pattern.elements.length;
+    const count = !hasArrayRest(pattern) && pattern.elements.length;
 
     // so we need to ensure that the `arrayRef` is an array, `scope.toArray` will
     // return a locally bound identifier if it's been inferred to be an array,
