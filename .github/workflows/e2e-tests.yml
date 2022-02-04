@@ -1,10 +1,11 @@
 name: E2E tests
 
 on:
+  push:
+  pull_request:
   workflow_call:
     inputs:
       BABEL_8_BREAKING:
-        required: true
         type: boolean
 
 jobs:
