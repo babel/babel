@@ -1,12 +1,18 @@
 name: E2E tests (breaking)
 
-on: [push, pull_request]
+on:
+  - push
+  # pull_request_target is generally unsafe, because it lets people run
+  # aribitrary code (whatever they put in our tests) in our build env.
+  # However, we require manual approval in e2e-breaking-tests-pr-approval
+  # so in this specific case it's safer.
+  - pull_request_target
 
 jobs:
   e2e-breaking-tests-pr-approval:
     name: Manual approval
     runs-on: ubuntu-latest
-    if: github.event == 'pull_request'
+    if: github.event == 'pull_request_target'
     # This environment does not contain any variable, but since usually
     # breaking e2e tests are not necessary for PRs we use it to wait
     # for manual approval before running them.
