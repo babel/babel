@@ -417,7 +417,7 @@ jobs:
     name: E2E (breaking) manual approval
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
-    if: github.event != 'pull_request'
+    if: github.event == 'pull_request'
     # This environment does not contain any variable, but since usually
     # breaking e2e tests are not necessary for PRs we use it to wait
     # for manual approval before running them.
