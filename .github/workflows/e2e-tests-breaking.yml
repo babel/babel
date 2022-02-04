@@ -21,12 +21,12 @@ jobs:
       - run: echo "Approved"
 
   e2e-breaking-tests:
-    name: ""
+    name: "/"
     needs: e2e-breaking-tests-pr-approval
     # The default condition is success(), but this is false when one of the previous jobs is skipped
     if: |
       always() &&
       (needs.e2e-breaking-tests-pr-approval.result == 'success' || needs.e2e-breaking-tests-pr-approval.result == 'skipped')
-    uses: ./.github/workflows/e2e-tests.yml@main
+    uses: babel/babel/.github/workflows/e2e-tests.yml@main
     with:
       BABEL_8_BREAKING: true
