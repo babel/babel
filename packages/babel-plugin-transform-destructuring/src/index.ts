@@ -158,6 +158,14 @@ export default declare((api, options) => {
     }
 
     pushAssignmentPattern({ left, right }, valueRef) {
+      // handle array init hole
+      // const [x = 42] = [,];
+      // -> const x = 42;
+      if (valueRef === null) {
+        this.nodes.push(this.buildVariableAssignment(left, right));
+        return;
+      }
+
       // we need to assign the current value of the assignment to avoid evaluating
       // it more than once
       const tempId = this.scope.generateUidIdentifierBasedOnNode(valueRef);
