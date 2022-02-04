@@ -766,10 +766,6 @@ function transformClass(
   const locals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
 
-  if (classDecorators) {
-    locals.push(classLocal, classInitLocal);
-  }
-
   if (requiresProtoInit) {
     protoInitLocal =
       path.scope.parent.generateDeclaredUidIdentifier("initProto");
@@ -879,6 +875,7 @@ function transformClass(
   const originalClass = path.node;
 
   if (classDecorators) {
+    locals.push(classLocal, classInitLocal);
     const statics = [];
     let staticBlocks: t.StaticBlock[] = [];
     path.get("body.body").forEach(element => {

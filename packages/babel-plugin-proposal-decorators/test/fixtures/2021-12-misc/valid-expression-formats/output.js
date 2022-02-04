@@ -4,7 +4,7 @@ let _Foo;
 
 class Foo {
   static {
-    [_Foo, _initClass, _initProto] = babelHelpers.applyDecs(this, [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]], [dec, call(), chain.expr(), arbitrary + expr, array[expr]]);
+    [_initProto, _Foo, _initClass] = babelHelpers.applyDecs(this, [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]], [dec, call(), chain.expr(), arbitrary + expr, array[expr]]);
   }
 
   constructor(...args) {

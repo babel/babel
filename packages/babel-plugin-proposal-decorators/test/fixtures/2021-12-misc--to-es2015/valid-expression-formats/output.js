@@ -32,7 +32,7 @@ class Foo {
 }
 
 (() => {
-  [_Foo, _initClass, _initProto] = babelHelpers.applyDecs(Foo, [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]], [dec, call(), chain.expr(), arbitrary + expr, array[expr]]);
+  [_initProto, _Foo, _initClass] = babelHelpers.applyDecs(Foo, [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]], [dec, call(), chain.expr(), arbitrary + expr, array[expr]]);
 })();
 
 (() => {
