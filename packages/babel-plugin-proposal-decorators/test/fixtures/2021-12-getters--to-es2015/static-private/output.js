@@ -17,9 +17,9 @@ var _a = {
 };
 
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs(Foo, [[dec, 8, "a", function () {
+  [_call_a, _initStatic] = babelHelpers.applyDecs(Foo, [], [[dec, 8, "a", function () {
     return this.value;
-  }]], []);
+  }]]);
 
   _initStatic(Foo);
 })();

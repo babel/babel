@@ -32,9 +32,9 @@ function _set_a(v) {
 }
 
 (() => {
-  [_call_a, _call_a2, _initProto] = babelHelpers.applyDecs(Foo, [[dec, 3, "a", function () {
+  [_call_a, _call_a2, _initProto] = babelHelpers.applyDecs(Foo, [], [[dec, 3, "a", function () {
     return this.value;
   }], [dec, 4, "a", function (v) {
     this.value = v;
-  }]], []);
+  }]]);
 })();

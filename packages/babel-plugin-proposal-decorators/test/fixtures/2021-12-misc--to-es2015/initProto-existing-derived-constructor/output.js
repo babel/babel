@@ -14,5 +14,5 @@ class A extends B {
 }
 
 (() => {
-  [_initProto] = babelHelpers.applyDecs(A, [[deco, 2, "method"]], []);
+  [_initProto] = babelHelpers.applyDecs(A, [], [[deco, 2, "method"]]);
 })();

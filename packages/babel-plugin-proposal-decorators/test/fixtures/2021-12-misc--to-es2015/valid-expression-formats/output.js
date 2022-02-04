@@ -25,14 +25,14 @@ class Foo {
       }
 
     }, (() => {
-      [_init_bar] = babelHelpers.applyDecs(_class, [[babelHelpers.classPrivateFieldGet(_class, _a), 0, "bar"]], []);
+      [_init_bar] = babelHelpers.applyDecs(_class, [], [[babelHelpers.classPrivateFieldGet(_class, _a), 0, "bar"]]);
     })(), _temp;
   }
 
 }
 
 (() => {
-  [_initProto, _Foo, _initClass] = babelHelpers.applyDecs(Foo, [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]], [dec, call(), chain.expr(), arbitrary + expr, array[expr]]);
+  [_initProto, _Foo, _initClass] = babelHelpers.applyDecs(Foo, [dec, call(), chain.expr(), arbitrary + expr, array[expr]], [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]]);
 })();
 
 (() => {

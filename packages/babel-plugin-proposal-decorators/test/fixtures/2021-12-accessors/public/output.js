@@ -7,7 +7,7 @@ _dec3 = dec
 
 class Foo {
   static {
-    [_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs(this, [[_dec, 1, "a"], [_dec2, 1, "b"], [_dec3, 1, _computedKey]], []);
+    [_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs(this, [], [[_dec, 1, "a"], [_dec2, 1, "b"], [_dec3, 1, _computedKey]]);
   }
   #A = (_initProto(this), _init_a(this));
 

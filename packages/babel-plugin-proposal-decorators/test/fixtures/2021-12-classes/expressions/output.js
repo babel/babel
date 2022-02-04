@@ -2,7 +2,7 @@ var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_cl
 
 const A = (class A {
   static {
-    [_A, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
+    [_A, _initClass] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass();
@@ -11,7 +11,7 @@ const A = (class A {
 }, _A);
 const B = (class C {
   static {
-    [_C, _initClass2] = babelHelpers.applyDecs(this, [], [dec]);
+    [_C, _initClass2] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass2();
@@ -20,7 +20,7 @@ const B = (class C {
 }, _C);
 const D = (class D {
   static {
-    [_D, _initClass3] = babelHelpers.applyDecs(this, [], [dec]);
+    [_D, _initClass3] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass3();
@@ -29,7 +29,7 @@ const D = (class D {
 }, _D);
 const E = ((class {
   static {
-    [_decorated_class, _initClass4] = babelHelpers.applyDecs(this, [], [dec]);
+    [_decorated_class, _initClass4] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass4();
@@ -38,7 +38,7 @@ const E = ((class {
 }, _decorated_class), 123);
 const F = [(class G {
   static {
-    [_G, _initClass5] = babelHelpers.applyDecs(this, [], [dec]);
+    [_G, _initClass5] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass5();
@@ -46,7 +46,7 @@ const F = [(class G {
   }
 }, _G), (class {
   static {
-    [_decorated_class2, _initClass6] = babelHelpers.applyDecs(this, [], [dec]);
+    [_decorated_class2, _initClass6] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass6();
@@ -55,7 +55,7 @@ const F = [(class G {
 }, _decorated_class2)];
 const H = (class H extends I {
   static {
-    [_H, _initClass7] = babelHelpers.applyDecs(this, [], [dec]);
+    [_H, _initClass7] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass7();
@@ -64,7 +64,7 @@ const H = (class H extends I {
 }, _H);
 const J = (class K extends L {
   static {
-    [_K, _initClass8] = babelHelpers.applyDecs(this, [], [dec]);
+    [_K, _initClass8] = babelHelpers.applyDecs(this, [dec], []);
   }
   static {
     _initClass8();
@@ -77,7 +77,7 @@ function classFactory() {
 
   return class {
     static {
-      [_decorated_class3, _initClass9] = babelHelpers.applyDecs(this, [], [dec]);
+      [_decorated_class3, _initClass9] = babelHelpers.applyDecs(this, [dec], []);
     }
     static {
       _initClass9();

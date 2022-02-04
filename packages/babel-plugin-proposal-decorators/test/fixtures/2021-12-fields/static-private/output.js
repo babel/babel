@@ -2,7 +2,7 @@ var _init_a, _init_b;
 
 class Foo {
   static {
-    [_init_a, _init_b] = babelHelpers.applyDecs(this, [[dec, 5, "a", function () {
+    [_init_a, _init_b] = babelHelpers.applyDecs(this, [], [[dec, 5, "a", function () {
       return this.#a;
     }, function (value) {
       this.#a = value;
@@ -10,7 +10,7 @@ class Foo {
       return this.#b;
     }, function (value) {
       this.#b = value;
-    }]], []);
+    }]]);
   }
   static #a = _init_a(this);
   static #b = _init_b(this, 123);

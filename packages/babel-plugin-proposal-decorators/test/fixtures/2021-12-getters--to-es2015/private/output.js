@@ -24,7 +24,7 @@ function _get_a() {
 }
 
 (() => {
-  [_call_a, _initProto] = babelHelpers.applyDecs(Foo, [[dec, 3, "a", function () {
+  [_call_a, _initProto] = babelHelpers.applyDecs(Foo, [], [[dec, 3, "a", function () {
     return this.value;
-  }]], []);
+  }]]);
 })();

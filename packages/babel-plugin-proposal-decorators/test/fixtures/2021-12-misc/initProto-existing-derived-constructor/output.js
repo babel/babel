@@ -2,7 +2,7 @@ var _initProto;
 
 class A extends B {
   static {
-    [_initProto] = babelHelpers.applyDecs(this, [[deco, 2, "method"]], []);
+    [_initProto] = babelHelpers.applyDecs(this, [], [[deco, 2, "method"]]);
   }
 
   constructor() {

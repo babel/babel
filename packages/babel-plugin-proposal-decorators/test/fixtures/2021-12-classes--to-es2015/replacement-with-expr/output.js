@@ -6,7 +6,7 @@ const Foo = ((_temp = _class = class Bar {
   }
 
 }, (() => {
-  [_Bar, _initClass] = babelHelpers.applyDecs(_class, [], [dec]);
+  [_Bar, _initClass] = babelHelpers.applyDecs(_class, [dec], []);
 })(), (() => {
   _initClass();
 })(), _temp), _Bar);

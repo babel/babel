@@ -703,7 +703,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
 
   initializeClass(Class);
  */
-export default function applyDecs(targetClass, memberDecs, classDecs) {
+export default function applyDecs(targetClass, classDecs, memberDecs) {
   var ret = [];
   var staticMetadataMap = {};
 

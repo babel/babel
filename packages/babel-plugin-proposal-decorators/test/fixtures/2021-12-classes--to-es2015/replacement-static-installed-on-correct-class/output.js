@@ -25,7 +25,7 @@ new (_temp2 = (_x = /*#__PURE__*/new WeakMap(), _m = /*#__PURE__*/new WeakSet(),
   }
 
   (() => {
-    [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
+    [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [dec], []);
   })();
 })(), _temp2)();
 
