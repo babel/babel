@@ -230,4 +230,24 @@ describe("externalDependencies", () => {
       ).not.toThrow();
     });
   });
+
+  describe("regressions", () => {
+    it("#14233", () => {
+      const code = `let a = 1`;
+
+      function pluginA(api) {
+        api.cache.never();
+        return { name: "plugin-a" };
+      }
+      function pluginB() {
+        return { name: "plugin-b", inherits: pluginA };
+      }
+
+      expect(() => {
+        transform(code, { plugins: [pluginB] });
+
+        transform(code, { plugins: [pluginB] });
+      }).not.toThrow();
+    });
+  });
 });
