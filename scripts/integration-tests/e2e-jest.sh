@@ -37,7 +37,7 @@ python --version
 #                                   TEST                                       #
 #==============================================================================#
 
-startLocalRegistry "$root"/"$VERDACCIO_CONFIG".yml
+startLocalRegistry "$root"/verdaccio-config.yml
 # yarn.lock will be modified by @babel/* bumps
 yarn install --no-immutable
 yarn dedupe '@babel/*'

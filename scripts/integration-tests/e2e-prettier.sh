@@ -35,7 +35,7 @@ yarn --version
 # Don't use Yarn 2
 export YARN_IGNORE_PATH=1
 
-startLocalRegistry "$root"/"$VERDACCIO_CONFIG".yml
+startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 
 # Only run js,jsx,misc format tests

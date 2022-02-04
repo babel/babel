@@ -25,7 +25,7 @@ yarn --version
 #                                   TEST                                       #
 #==============================================================================#
 
-startLocalRegistry "$root"/"$VERDACCIO_CONFIG".yml
+startLocalRegistry "$root"/verdaccio-config.yml
 
 
 # Create a React Native project
