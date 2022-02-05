@@ -317,7 +317,7 @@ function applyMemberDec(
       }
     }
   } else {
-    for (var i = 0; i < decs.length; i++) {
+    for (var i = decs.length - 1; i >= 0; i--) {
       var dec = decs[i];
 
       newValue = dec(value, ctx);
@@ -541,7 +541,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     createMetadataMethodsForProperty(metadataMap, 0 /* CONSTRUCTOR */, name)
   );
 
-  for (var i = 0; i < classDecs.length; i++) {
+  for (var i = classDecs.length - 1; i >= 0; i--) {
     newClass = classDecs[i](newClass, ctx) || newClass;
   }
 
