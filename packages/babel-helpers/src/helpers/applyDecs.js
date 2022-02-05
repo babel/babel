@@ -421,8 +421,8 @@ function applyMemberDecs(
   staticMetadataMap,
   decInfos
 ) {
-  var protoInitializers;
-  var staticInitializers;
+  var protoInitializers = [];
+  var staticInitializers = [];
 
   var existingProtoNonFields = new Map();
   var existingStaticNonFields = new Map();
@@ -447,18 +447,10 @@ function applyMemberDecs(
       metadataMap = staticMetadataMap;
       kind = kind - 5 /* STATIC */;
 
-      if (!staticInitializers) {
-        staticInitializers = [];
-      }
-
       initializers = staticInitializers;
     } else {
       base = Class.prototype;
       metadataMap = protoMetadataMap;
-
-      if (!protoInitializers) {
-        protoInitializers = [];
-      }
 
       initializers = protoInitializers;
     }
@@ -499,11 +491,11 @@ function applyMemberDecs(
     );
   }
 
-  if (protoInitializers) {
+  if (protoInitializers.length > 0) {
     pushInitializers(ret, protoInitializers);
   }
 
-  if (staticInitializers) {
+  if (staticInitializers.length > 0) {
     pushInitializers(ret, staticInitializers);
   }
 }
