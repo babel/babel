@@ -18,7 +18,7 @@
 
 function createMetadataMethodsForProperty(metadataMap, kind, property) {
   return {
-    getMetadata(key) {
+    getMetadata: function (key) {
       if (typeof key !== "symbol") {
         throw new TypeError("Metadata keys must be symbols, received: " + key);
       }
@@ -41,7 +41,7 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
         return metadataForKey.constructor;
       }
     },
-    setMetadata(key, value) {
+    setMetadata: function (key, value) {
       if (typeof key !== "symbol") {
         throw new TypeError("Metadata keys must be symbols, received: " + key);
       }
