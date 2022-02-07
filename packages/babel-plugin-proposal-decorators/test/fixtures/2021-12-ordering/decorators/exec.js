@@ -7,25 +7,25 @@ function logDecoratorRun(a, b) {
   return function (el) { push(b); return el; };
 }
 
-@logDecoratorRun(0, 19)
-@logDecoratorRun(1, 18)
+@logDecoratorRun(0, 21)
+@logDecoratorRun(1, 20)
 class A {
-  @logDecoratorRun(2, 11)
-  @logDecoratorRun(3, 10)
-  a;
+  @logDecoratorRun(2, 13)
+  @logDecoratorRun(3, 12)
+  [push(4)];
 
-  @logDecoratorRun(4, 13)
-  @logDecoratorRun(5, 12)
-  static b;
-
-  @logDecoratorRun(6, 15)
-  @logDecoratorRun(7, 14)
-  static #c;
+  @logDecoratorRun(5, 15)
+  @logDecoratorRun(6, 14)
+  static [push(7)];
 
   @logDecoratorRun(8, 17)
   @logDecoratorRun(9, 16)
+  static #c;
+
+  @logDecoratorRun(10, 19)
+  @logDecoratorRun(11, 18)
   #d;
 }
 
-var nums = Array.from({ length: 20 }, (_, i) => i);
+var nums = Array.from({ length: 22 }, (_, i) => i);
 expect(log).toEqual(nums);
