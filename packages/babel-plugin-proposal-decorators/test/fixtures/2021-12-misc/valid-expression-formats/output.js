@@ -4,7 +4,7 @@ let _Foo;
 
 class Foo {
   static {
-    [_initProto, _Foo, _initClass] = babelHelpers.applyDecs(this, [dec, call(), chain.expr(), arbitrary + expr, array[expr]], [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]]);
+    [_initProto, _Foo, _initClass] = babelHelpers.applyDecs(this, [[[dec, call(), chain.expr(), arbitrary + expr, array[expr]], 2, "method"]], [dec, call(), chain.expr(), arbitrary + expr, array[expr]]);
   }
 
   constructor(...args) {
@@ -20,7 +20,7 @@ class Foo {
 
     return class Nested {
       static {
-        [_init_bar] = babelHelpers.applyDecs(this, [], [[this.#a, 0, "bar"]]);
+        [_init_bar] = babelHelpers.applyDecs(this, [[this.#a, 0, "bar"]], []);
       }
       bar = _init_bar(this);
     };

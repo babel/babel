@@ -964,8 +964,8 @@ function transformClass(
             t.arrayPattern(locals),
             t.callExpression(state.addHelper("applyDecs"), [
               t.thisExpression(),
-              classDecorations,
               elementDecorations,
+              classDecorations,
             ]),
           ),
         ),

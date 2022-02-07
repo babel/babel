@@ -1,4 +1,4 @@
-/* @minVersion 7.17.2 */
+/* @minVersion 7.17.0 */
 
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
@@ -695,7 +695,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
 
   initializeClass(Class);
  */
-export default function applyDecs(targetClass, classDecs, memberDecs) {
+export default function applyDecs(targetClass, memberDecs, classDecs) {
   var ret = [];
   var staticMetadataMap = {};
 

@@ -35,7 +35,7 @@ function _get_b2() {
 }
 
 (() => {
-  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs(Foo, [], [[dec, 6, "a", function () {
+  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs(Foo, [[dec, 6, "a", function () {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
   }, function (value) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _A, value);
@@ -43,7 +43,7 @@ function _get_b2() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _B);
   }, function (value) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, value);
-  }]]);
+  }]], []);
 
   _initStatic(Foo);
 })();

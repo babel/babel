@@ -27,7 +27,7 @@ class Foo {
 }
 
 (() => {
-  [_initStatic] = babelHelpers.applyDecs(Foo, [], [[_dec, 8, "a"], [_dec2, 9, "a"], [_dec3, 8, _computedKey], [_dec4, 9, _computedKey2]]);
+  [_initStatic] = babelHelpers.applyDecs(Foo, [[_dec, 8, "a"], [_dec2, 9, "a"], [_dec3, 8, _computedKey], [_dec4, 9, _computedKey2]], []);
 
   _initStatic(Foo);
 })();

@@ -8,7 +8,7 @@ _dec3 = dec
 class Foo {}
 
 (() => {
-  [_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs(Foo, [], [[_dec, 5, "a"], [_dec2, 5, "b"], [_dec3, 5, _computedKey]]);
+  [_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs(Foo, [[_dec, 5, "a"], [_dec2, 5, "b"], [_dec3, 5, _computedKey]], []);
 })();
 
 babelHelpers.defineProperty(Foo, "a", _init_a(Foo));

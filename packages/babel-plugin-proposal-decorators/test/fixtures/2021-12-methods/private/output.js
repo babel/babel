@@ -2,9 +2,9 @@ var _call_a, _initProto;
 
 class Foo {
   static {
-    [_call_a, _initProto] = babelHelpers.applyDecs(this, [], [[dec, 2, "a", function () {
+    [_call_a, _initProto] = babelHelpers.applyDecs(this, [[dec, 2, "a", function () {
       return this.value;
-    }]]);
+    }]], []);
   }
 
   constructor(...args) {

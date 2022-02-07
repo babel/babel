@@ -22,5 +22,5 @@ class Foo {
 }
 
 (() => {
-  [_initProto] = babelHelpers.applyDecs(Foo, [], [[_dec, 4, "a"], [_dec2, 4, _computedKey]]);
+  [_initProto] = babelHelpers.applyDecs(Foo, [[_dec, 4, "a"], [_dec2, 4, _computedKey]], []);
 })();

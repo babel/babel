@@ -4,7 +4,7 @@ let _Foo;
 
 class Foo extends Bar {
   static {
-    [_Foo, _initClass] = babelHelpers.applyDecs(this, [dec], []);
+    [_Foo, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
   }
 
   constructor() {
