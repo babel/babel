@@ -1,0 +1,13 @@
+{
+  "mappings": "AAAC;ACAD,K",
+  "names": [],
+  "sources": [
+    "bar.js",
+    "baz.js"
+  ],
+  "sourcesContent": [
+    "<bar />",
+    "baz();"
+  ],
+  "version": 3
+}
