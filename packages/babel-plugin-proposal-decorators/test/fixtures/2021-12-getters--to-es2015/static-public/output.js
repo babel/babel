@@ -1,8 +1,8 @@
-var _computedKey, _dec, _dec2, _initStatic;
+var _computedKey, _initStatic;
 
-_dec = dec
+const dec = () => {};
+
 _computedKey = 'b'
-_dec2 = dec
 
 class Foo {
   static get a() {
@@ -16,7 +16,7 @@ class Foo {
 }
 
 (() => {
-  [_initStatic] = babelHelpers.applyDecs(Foo, [[_dec, 8, "a"], [_dec2, 8, _computedKey]], []);
+  [_initStatic] = babelHelpers.applyDecs(Foo, [[dec, 8, "a"], [dec, 8, _computedKey]], []);
 
   _initStatic(Foo);
 })();

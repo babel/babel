@@ -1,3 +1,4 @@
+const dec = () => {}; 
 @dec
 @call()
 @chain.expr()

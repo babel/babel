@@ -1,3 +1,4 @@
+const dec = () => {}; 
 class A extends B {
   constructor() {
     if (Math.random() > 0.5) {

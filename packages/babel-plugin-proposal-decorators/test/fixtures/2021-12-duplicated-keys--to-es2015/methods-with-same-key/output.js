@@ -1,5 +1,7 @@
 var _initProto;
 
+const dec = () => {};
+
 class Foo {
   constructor(...args) {
     _initProto(this);

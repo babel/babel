@@ -1,5 +1,7 @@
 var _init_a, _initProto;
 
+const dec = () => {};
+
 class Foo {
   constructor() {
     babelHelpers.defineProperty(this, "a", (_initProto(this), _init_a(this, 123)));

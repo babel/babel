@@ -1,9 +1,9 @@
-var _computedKey, _computedKey2, _dec, _dec2, _initProto;
+var _computedKey, _computedKey2, _initProto;
+
+const dec = () => {};
 
 _computedKey = getKeyI()
-_dec = dec
 _computedKey2 = getKeyJ()
-_dec2 = dec
 
 class Foo {
   constructor(...args) {
@@ -21,5 +21,5 @@ class Foo {
 }
 
 (() => {
-  [_initProto] = babelHelpers.applyDecs(Foo, [[_dec, 2, _computedKey], [_dec2, 2, _computedKey2]], []);
+  [_initProto] = babelHelpers.applyDecs(Foo, [[dec, 2, _computedKey], [dec, 2, _computedKey2]], []);
 })();

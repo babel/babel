@@ -1,3 +1,4 @@
+const dec = () => {}; 
 @dec
 class Foo extends Bar  {
   constructor() {

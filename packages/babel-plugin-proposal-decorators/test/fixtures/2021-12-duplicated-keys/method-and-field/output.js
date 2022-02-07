@@ -1,5 +1,7 @@
 var _init_a, _initProto;
 
+const dec = () => {};
+
 class Foo {
   static {
     [_init_a, _initProto] = babelHelpers.applyDecs(this, [[dec, 0, "a"], [dec, 2, "a"]], []);

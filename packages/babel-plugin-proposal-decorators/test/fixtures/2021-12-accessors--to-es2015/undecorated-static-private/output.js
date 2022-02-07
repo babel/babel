@@ -1,3 +1,5 @@
+const dec = () => {};
+
 class Foo {}
 
 function _get_a() {

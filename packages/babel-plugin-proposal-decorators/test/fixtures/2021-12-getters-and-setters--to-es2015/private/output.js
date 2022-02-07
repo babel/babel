@@ -1,5 +1,7 @@
 var _call_a, _call_a2, _initProto;
 
+const dec = () => {};
+
 var _a = /*#__PURE__*/new WeakMap();
 
 class Foo {

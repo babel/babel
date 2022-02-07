@@ -1,5 +1,7 @@
 var _initClass;
 
+const dec = () => {};
+
 let hasX, hasM;
 
 let _Foo;

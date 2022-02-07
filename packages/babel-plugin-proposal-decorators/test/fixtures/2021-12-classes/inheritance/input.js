@@ -1,3 +1,4 @@
+const dec = () => {}; 
 @dec1
 class Bar {}
 

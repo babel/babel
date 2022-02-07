@@ -1,5 +1,7 @@
 var _init_a, _init_b;
 
+const dec = () => {};
+
 class Foo {}
 
 (() => {

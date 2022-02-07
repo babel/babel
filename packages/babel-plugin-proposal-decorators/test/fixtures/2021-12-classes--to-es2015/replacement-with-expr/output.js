@@ -1,5 +1,7 @@
 var _initClass, _Bar, _class, _temp;
 
+const dec = () => {};
+
 const Foo = ((_temp = _class = class Bar {
   constructor() {
     babelHelpers.defineProperty(this, "bar", new _Bar());

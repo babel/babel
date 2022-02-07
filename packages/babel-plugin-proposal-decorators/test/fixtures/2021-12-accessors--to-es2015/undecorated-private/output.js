@@ -1,3 +1,5 @@
+const dec = () => {};
+
 var _A = /*#__PURE__*/new WeakMap();
 
 var _a = /*#__PURE__*/new WeakMap();
