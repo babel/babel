@@ -37,7 +37,7 @@ type LoadedDescriptor = {
   options: {};
   dirname: string;
   alias: string;
-  externalDependencies: DeepArray<string>;
+  externalDependencies: ReadonlyDeepArray<string>;
 };
 
 export type { InputOptions } from "./validation/options";
@@ -319,7 +319,13 @@ const makeDescriptorLoader = <Context, API>(
       throw new Error(error);
     }
 
-    return { value: item, options, dirname, alias, externalDependencies };
+    return {
+      value: item,
+      options,
+      dirname,
+      alias,
+      externalDependencies: freezeDeepArray(externalDependencies),
+    };
   });
 
 const pluginDescriptorLoader = makeDescriptorLoader<
@@ -397,7 +403,16 @@ const instantiatePlugin = makeWeakCache(function* (
       plugin.visitor || {},
     ]);
 
-    externalDependencies.push(inherits.externalDependencies);
+    if (inherits.externalDependencies.length > 0) {
+      if (externalDependencies.length === 0) {
+        externalDependencies = inherits.externalDependencies;
+      } else {
+        externalDependencies = freezeDeepArray([
+          externalDependencies,
+          inherits.externalDependencies,
+        ]);
+      }
+    }
   }
 
   return new Plugin(plugin, options, alias, externalDependencies);
@@ -470,7 +485,7 @@ const instantiatePreset = makeWeakCacheSync(
       options: validate("preset", value),
       alias,
       dirname,
-      externalDependencies: freezeDeepArray(externalDependencies),
+      externalDependencies,
     };
   },
 );

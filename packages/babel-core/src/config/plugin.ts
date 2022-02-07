@@ -1,5 +1,5 @@
 import { finalize } from "./helpers/deep-array";
-import type { DeepArray, ReadonlyDeepArray } from "./helpers/deep-array";
+import type { ReadonlyDeepArray } from "./helpers/deep-array";
 import type { PluginObject } from "./validation/plugins";
 
 export default class Plugin {
@@ -20,7 +20,7 @@ export default class Plugin {
     plugin: PluginObject,
     options: {},
     key?: string,
-    externalDependencies: DeepArray<string> = [],
+    externalDependencies: ReadonlyDeepArray<string> = finalize([]),
   ) {
     this.key = plugin.name || key;
 
@@ -32,7 +32,6 @@ export default class Plugin {
     this.generatorOverride = plugin.generatorOverride;
 
     this.options = options;
-
-    this.externalDependencies = finalize(externalDependencies);
+    this.externalDependencies = externalDependencies;
   }
 }
