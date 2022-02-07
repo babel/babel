@@ -522,8 +522,7 @@ function transformClass(
   };
 
   if (classDecorators) {
-    classInitLocal =
-      path.scope.parent.generateDeclaredUidIdentifier("initClass");
+    classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
 
     const [localId, classPath] = replaceClassWithVar(path);
     path = classPath;
@@ -762,8 +761,7 @@ function transformClass(
     extractElementLocalAssignments(elementDecoratorInfo);
 
   if (requiresProtoInit) {
-    protoInitLocal =
-      path.scope.parent.generateDeclaredUidIdentifier("initProto");
+    protoInitLocal = scopeParent.generateDeclaredUidIdentifier("initProto");
     locals.push(protoInitLocal);
 
     const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
@@ -824,8 +822,7 @@ function transformClass(
   }
 
   if (requiresStaticInit) {
-    staticInitLocal =
-      path.scope.parent.generateDeclaredUidIdentifier("initStatic");
+    staticInitLocal = scopeParent.generateDeclaredUidIdentifier("initStatic");
     locals.push(staticInitLocal);
   }
 
