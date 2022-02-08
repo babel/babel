@@ -5,7 +5,17 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@ampproject/remapping@npm:^2.0.0, @ampproject/remapping@npm:^2.1.0":
+"@ampproject/remapping@npm:^2.0.0":
+  version: 2.0.2
+  resolution: "@ampproject/remapping@npm:2.0.2"
+  dependencies:
+    "@jridgewell/trace-mapping": ^0.2.2
+    sourcemap-codec: 1.4.8
+  checksum: 5759df3715f0291cbf97099a9bb7202201a1a267e232ee1505418c768b9ae7281cd550b1da563a12808a06529eb1298744a6cabde21ac354fc8450044c7f2213
+  languageName: node
+  linkType: hard
+
+"@ampproject/remapping@npm:^2.1.0":
   version: 2.1.0
   resolution: "@ampproject/remapping@npm:2.1.0"
   dependencies:
@@ -955,11 +965,11 @@ __metadata:
     "@babel/code-frame": "workspace:^"
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
+    "@jridgewell/trace-mapping": ^0.3.2
     "@types/jest": ^25.2.2
     babel-check-duplicated-nodes: ^1.0.0
     quick-lru: 5.1.0
     regenerator-runtime: ^0.13.7
-    source-map: ^0.5.0
   languageName: unknown
   linkType: soft
 
@@ -4097,13 +4107,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.0":
-  version: 0.3.2
-  resolution: "@jridgewell/trace-mapping@npm:0.3.2"
+"@jridgewell/trace-mapping@npm:^0.2.2":
+  version: 0.2.5
+  resolution: "@jridgewell/trace-mapping@npm:0.2.5"
+  dependencies:
+    "@jridgewell/resolve-uri": ^3.0.3
+    sourcemap-codec: 1.4.8
+  checksum: 7ac0a2992f4a8d16c1cbe03bccbcfbd1e96bf5071b0a794dd97904a7588cc248b73e8091fabcb13dac8f40bc51297ee4ef98a6a870ca5a4dfb8e2dcbf6f33956
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:^0.3.0, @jridgewell/trace-mapping@npm:^0.3.2":
+  version: 0.3.3
+  resolution: "@jridgewell/trace-mapping@npm:0.3.3"
   dependencies:
     "@jridgewell/resolve-uri": ^3.0.3
     "@jridgewell/sourcemap-codec": ^1.4.10
-  checksum: b58be6b4133cbcb20bfd28c9ca843b8db9efa0bf1d7e0e9e26b2228dace94ad53161c996ab1d762d7c3955dfc398a7734e7b84a2493ae36b451f232234fbb257
+  checksum: 42993e022e54540ad640466f98aa0cd100b9d0ad05dc3a3020599ffc3fdab6009a90bac3c1e70dee67c7e8e1e9d7b454c82ff2b945ee41efb3196ca7b322cf43
   languageName: node
   linkType: hard
 
@@ -14174,7 +14194,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"sourcemap-codec@npm:^1.4.4":
+"sourcemap-codec@npm:1.4.8, sourcemap-codec@npm:^1.4.4":
   version: 1.4.8
   resolution: "sourcemap-codec@npm:1.4.8"
   checksum: b57981c05611afef31605732b598ccf65124a9fcb03b833532659ac4d29ac0f7bfacbc0d6c5a28a03e84c7510e7e556d758d0bb57786e214660016fb94279316
