@@ -3,7 +3,8 @@
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
-import { Position, createPositionWithColumnOffset } from "../util/location";
+import { Position, SourceLocation, createPositionWithColumnOffset } from "../util/location";
+import CommentsParser from "../parser/comments";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -15,8 +16,7 @@ import {
   type TokenType,
 } from "./types";
 import { type TokContext } from "./context";
-import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
-import { SourceLocation } from "../util/location";
+import { Errors, ParseErrorClass, RaiseErrorProperties } from "../parse-error";
 import {
   lineBreakG,
   isNewLine,
@@ -126,7 +126,7 @@ export class Token {
 
 // ## Tokenizer
 
-export default class Tokenizer extends ParserErrors {
+export default class Tokenizer extends CommentsParser {
   // Forward-declarations
   // parser/util.js
   /*::
@@ -1740,6 +1740,32 @@ export default class Tokenizer extends ParserErrors {
         tokenLabelName(type),
       );
     }
+  }
+
+  raise<
+    ErrorProperties,
+    ParseErrorClass: Class<ParseError<ErrorProperties>>>
+  (
+    SomeParseError: ParseErrorClass,
+    raiseProperties: RaiseProperties<ErrorProperties>
+  ) : ParseError<ErrorProperties> {
+    const { at, ...rest } = raiseProperties;
+    const loc = at instanceof Position ? at : at.loc;
+    const error = new SomeParseError({ ...rest, loc: at });
+
+    /*!SyntaxError.recoverable || */
+    if (!this.options.errorRecovery) throw error;
+    if (!this.isLookahead) this.state.errors.push(error);
+
+    return error;
+  }
+
+  // Raise an unexpected token error. Can take the expected token type.
+  unexpected(loc?: Position | null, type?: TokenType): void {
+    throw this.raise(Errors.UnexpectedToken, {
+      expected: !!type ? tokenLabelName(type) : null,
+      at: loc != null ? loc : this.state.startLoc,
+    });
   }
 
   // updateContext is used by the jsx plugin
