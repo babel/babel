@@ -3,9 +3,19 @@ module.exports = function (babel) {
 
   return {
     visitor: {
-      CallExpression(path) {
+      Program(path) {
         const { file } = this;
         const { sourceFileName } = file.opts.generatorOpts;
+
+        // This injects the sourcesContent, though I don't imagine anyone's
+        // doing it.
+        file.code = {
+            [sourceFileName]: file.code,
+            'test.js': '<bar />',
+        };
+      },
+
+      CallExpression(path) {
         const callee = path.node;
         const { loc } = callee;
 
@@ -18,14 +28,10 @@ module.exports = function (babel) {
         const node = t.stringLiteral('bar');
         node.loc = loc;
         path.replaceWith(node);
+      },
 
-        // This injects the sourcesContent, though I don't imagine anyone's
-        // doing it.
-        file.code = {
-            [sourceFileName]: file.code,
-            'test.js': '<bar />',
-        };
-        path.stop();
+      Function(path) {
+        path.remove();
       },
     },
   };

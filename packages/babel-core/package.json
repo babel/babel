@@ -48,7 +48,7 @@
     "./src/transformation/util/clone-deep.ts": "./src/transformation/util/clone-deep-browser.ts"
   },
   "dependencies": {
-    "@ampproject/remapping": "^2.0.0",
+    "@ampproject/remapping": "^2.1.0",
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
