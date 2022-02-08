@@ -1,3 +1,4 @@
+const dec = () => {};
 class A extends B {
   constructor() {
     let a = 2;
@@ -5,6 +6,6 @@ class A extends B {
     foo();
   }
 
-  @deco
+  @dec
   method() {}
 }

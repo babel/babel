@@ -1,3 +1,4 @@
+const dec = () => {}; 
 let hasX, hasM;
 
 @dec

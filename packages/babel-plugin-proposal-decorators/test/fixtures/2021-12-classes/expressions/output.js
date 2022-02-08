@@ -1,5 +1,7 @@
 var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _initClass8, _K;
 
+const dec = () => {};
+
 const A = (class A {
   static {
     [_A, _initClass] = babelHelpers.applyDecs(this, [], [dec]);

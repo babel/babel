@@ -13,7 +13,7 @@ function dec2(_, { setMetadata, getMetadata }) {
 }
 
 class Foo {
-  @dec1 @dec2 a;
+  @dec2 @dec1 a;
 }
 
 function dec3(_, { setMetadata, getMetadata }) {

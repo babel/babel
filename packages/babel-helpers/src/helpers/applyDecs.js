@@ -18,7 +18,7 @@
 
 function createMetadataMethodsForProperty(metadataMap, kind, property) {
   return {
-    getMetadata(key) {
+    getMetadata: function (key) {
       if (typeof key !== "symbol") {
         throw new TypeError("Metadata keys must be symbols, received: " + key);
       }
@@ -41,7 +41,7 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
         return metadataForKey.constructor;
       }
     },
-    setMetadata(key, value) {
+    setMetadata: function (key, value) {
       if (typeof key !== "symbol") {
         throw new TypeError("Metadata keys must be symbols, received: " + key);
       }
@@ -317,7 +317,7 @@ function applyMemberDec(
       }
     }
   } else {
-    for (var i = 0; i < decs.length; i++) {
+    for (var i = decs.length - 1; i >= 0; i--) {
       var dec = decs[i];
 
       newValue = dec(value, ctx);
@@ -421,8 +421,8 @@ function applyMemberDecs(
   staticMetadataMap,
   decInfos
 ) {
-  var protoInitializers;
-  var staticInitializers;
+  var protoInitializers = [];
+  var staticInitializers = [];
 
   var existingProtoNonFields = new Map();
   var existingStaticNonFields = new Map();
@@ -447,18 +447,10 @@ function applyMemberDecs(
       metadataMap = staticMetadataMap;
       kind = kind - 5 /* STATIC */;
 
-      if (!staticInitializers) {
-        staticInitializers = [];
-      }
-
       initializers = staticInitializers;
     } else {
       base = Class.prototype;
       metadataMap = protoMetadataMap;
-
-      if (!protoInitializers) {
-        protoInitializers = [];
-      }
 
       initializers = protoInitializers;
     }
@@ -499,11 +491,11 @@ function applyMemberDecs(
     );
   }
 
-  if (protoInitializers) {
+  if (protoInitializers.length > 0) {
     pushInitializers(ret, protoInitializers);
   }
 
-  if (staticInitializers) {
+  if (staticInitializers.length > 0) {
     pushInitializers(ret, staticInitializers);
   }
 }
@@ -541,7 +533,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     createMetadataMethodsForProperty(metadataMap, 0 /* CONSTRUCTOR */, name)
   );
 
-  for (var i = 0; i < classDecs.length; i++) {
+  for (var i = classDecs.length - 1; i >= 0; i--) {
     newClass = classDecs[i](newClass, ctx) || newClass;
   }
 

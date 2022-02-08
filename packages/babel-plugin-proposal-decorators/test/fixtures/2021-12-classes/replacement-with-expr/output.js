@@ -1,5 +1,7 @@
 var _initClass, _Bar;
 
+const dec = () => {};
+
 const Foo = (class Bar {
   static {
     [_Bar, _initClass] = babelHelpers.applyDecs(this, [], [dec]);

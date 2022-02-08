@@ -1,5 +1,7 @@
 var _init_a, _init_b;
 
+const dec = () => {};
+
 var _a = /*#__PURE__*/new WeakMap();
 
 var _b = /*#__PURE__*/new WeakMap();

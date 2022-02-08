@@ -1,3 +1,4 @@
+const dec = () => {}; 
 class Foo extends Bar {
   @dec
   get #x() {

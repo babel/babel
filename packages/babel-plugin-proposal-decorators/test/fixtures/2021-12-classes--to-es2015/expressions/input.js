@@ -1,3 +1,4 @@
+const dec = () => {}; 
 const A = @dec class A {}
 const B = @dec class C {}
 const D = @dec class {}

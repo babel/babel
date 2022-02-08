@@ -1,4 +1,4 @@
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Scope } from "@babel/traverse";
 import { types as t, template } from "@babel/core";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
@@ -506,23 +506,38 @@ function transformClass(
   let constructorPath: NodePath<t.ClassMethod> | undefined;
   let requiresProtoInit = false;
   let requiresStaticInit = false;
-  let hasComputedProps = false;
   const decoratedPrivateMethods = new Set<string>();
 
   let protoInitLocal: t.Identifier,
     staticInitLocal: t.Identifier,
     classInitLocal: t.Identifier,
     classLocal: t.Identifier;
+  const assignments: t.AssignmentExpression[] = [];
+  const scopeParent: Scope = path.scope.parent;
+
+  const memoiseExpression = (expression: t.Expression, hint: string) => {
+    const localEvaluatedId = scopeParent.generateDeclaredUidIdentifier(hint);
+    assignments.push(t.assignmentExpression("=", localEvaluatedId, expression));
+    return t.cloneNode(localEvaluatedId);
+  };
 
   if (classDecorators) {
-    classInitLocal =
-      path.scope.parent.generateDeclaredUidIdentifier("initClass");
+    classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
 
     const [localId, classPath] = replaceClassWithVar(path);
     path = classPath;
     classLocal = localId;
 
     path.node.decorators = null;
+
+    for (const classDecorator of classDecorators) {
+      if (!scopeParent.isStatic(classDecorator.expression)) {
+        classDecorator.expression = memoiseExpression(
+          classDecorator.expression,
+          "dec",
+        );
+      }
+    }
   } else {
     if (!path.node.id) {
       path.node.id = path.scope.generateUidIdentifier("Class");
@@ -536,20 +551,42 @@ function transformClass(
         continue;
       }
 
-      let { key } = element.node;
-      const kind = getElementKind(element);
+      const { node } = element;
       const decorators = element.get("decorators");
 
-      const isPrivate = key.type === "PrivateName";
+      const hasDecorators = Array.isArray(decorators) && decorators.length > 0;
+
+      if (hasDecorators) {
+        for (const decoratorPath of decorators) {
+          if (!scopeParent.isStatic(decoratorPath.node.expression)) {
+            decoratorPath.node.expression = memoiseExpression(
+              decoratorPath.node.expression,
+              "dec",
+            );
+          }
+        }
+      }
+
       const isComputed =
         "computed" in element.node && element.node.computed === true;
+      if (isComputed) {
+        if (!scopeParent.isStatic(node.key)) {
+          node.key = memoiseExpression(node.key as t.Expression, "computedKey");
+        }
+      }
+
+      const kind = getElementKind(element);
+      const { key } = node;
+
+      const isPrivate = key.type === "PrivateName";
+
       const isStatic = !!element.node.static;
 
       let name = "computedKey";
 
       if (isPrivate) {
         name = (key as t.PrivateName).id.name;
-      } else if (key.type === "Identifier") {
+      } else if (!isComputed && key.type === "Identifier") {
         name = key.name;
       }
 
@@ -557,22 +594,7 @@ function transformClass(
         constructorPath = element;
       }
 
-      if (isComputed) {
-        const keyPath = element.get("key");
-        const localComputedNameId =
-          keyPath.scope.parent.generateDeclaredUidIdentifier(name);
-        keyPath.replaceWith(localComputedNameId);
-
-        elementDecoratorInfo.push({
-          localComputedNameId: t.cloneNode(localComputedNameId),
-          keyNode: t.cloneNode(key as t.Expression),
-        });
-
-        key = localComputedNameId;
-        hasComputedProps = true;
-      }
-
-      if (Array.isArray(decorators) && decorators.length > 0) {
+      if (hasDecorators) {
         let locals: t.Identifier | t.Identifier[];
         let privateMethods: t.FunctionExpression | t.FunctionExpression[];
 
@@ -730,34 +752,6 @@ function transformClass(
     }
   }
 
-  if (hasComputedProps) {
-    const assignments: t.AssignmentExpression[] = [];
-
-    for (const info of elementDecoratorInfo) {
-      if (isDecoratorInfo(info)) {
-        const { decorators } = info;
-        const newDecorators: t.Identifier[] = [];
-
-        for (const decorator of decorators) {
-          const localComputedNameId =
-            path.scope.parent.generateDeclaredUidIdentifier("dec");
-          assignments.push(
-            t.assignmentExpression("=", localComputedNameId, decorator),
-          );
-          newDecorators.push(t.cloneNode(localComputedNameId));
-        }
-
-        info.decorators = newDecorators;
-      } else {
-        assignments.push(
-          t.assignmentExpression("=", info.localComputedNameId, info.keyNode),
-        );
-      }
-    }
-
-    path.insertBefore(assignments);
-  }
-
   const elementDecorations = generateDecorationExprs(elementDecoratorInfo);
   const classDecorations = t.arrayExpression(
     (classDecorators || []).map(d => d.expression),
@@ -766,13 +760,8 @@ function transformClass(
   const locals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
 
-  if (classDecorators) {
-    locals.push(classLocal, classInitLocal);
-  }
-
   if (requiresProtoInit) {
-    protoInitLocal =
-      path.scope.parent.generateDeclaredUidIdentifier("initProto");
+    protoInitLocal = scopeParent.generateDeclaredUidIdentifier("initProto");
     locals.push(protoInitLocal);
 
     const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
@@ -833,8 +822,7 @@ function transformClass(
   }
 
   if (requiresStaticInit) {
-    staticInitLocal =
-      path.scope.parent.generateDeclaredUidIdentifier("initStatic");
+    staticInitLocal = scopeParent.generateDeclaredUidIdentifier("initStatic");
     locals.push(staticInitLocal);
   }
 
@@ -879,6 +867,7 @@ function transformClass(
   const originalClass = path.node;
 
   if (classDecorators) {
+    locals.push(classLocal, classInitLocal);
     const statics = [];
     let staticBlocks: t.StaticBlock[] = [];
     path.get("body.body").forEach(element => {
@@ -981,6 +970,10 @@ function transformClass(
       ].filter(Boolean),
     ),
   );
+
+  // When path is a ClassExpression, path.insertBefore will convert `path`
+  // into a SequenceExpression
+  path.insertBefore(assignments);
 
   // Recrawl the scope to make sure new identifiers are properly synced
   path.scope.crawl();

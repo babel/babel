@@ -1,12 +1,14 @@
 var _initClass, _init_a, _init_d, _init_e, _call_f, _call_g, _call_g2, _init_h, _get_h, _set_h, _init_i, _init_m, _init_n, _call_o, _call_p, _call_q, _init_r, _get_r, _set_r, _initProto, _initStatic;
 
+const dec = () => {};
+
 let _Class;
 
 new class extends babelHelpers.identity {
   static {
     class Class {
       static {
-        [_init_a, _init_d, _init_e, _call_f, _call_g, _call_g2, _init_h, _get_h, _set_h, _init_i, _init_m, _init_n, _call_o, _call_p, _call_q, _init_r, _get_r, _set_r, _Class, _initClass, _initProto, _initStatic] = babelHelpers.applyDecs(this, [[dec, 0, "a"], [dec, 2, "b"], [dec, 3, "c"], [dec, 4, "c"], [dec, 1, "d"], [dec, 0, "e", function () {
+        [_init_a, _init_d, _init_e, _call_f, _call_g, _call_g2, _init_h, _get_h, _set_h, _init_i, _init_m, _init_n, _call_o, _call_p, _call_q, _init_r, _get_r, _set_r, _initProto, _initStatic, _Class, _initClass] = babelHelpers.applyDecs(this, [[dec, 0, "a"], [dec, 2, "b"], [dec, 3, "c"], [dec, 4, "c"], [dec, 1, "d"], [dec, 0, "e", function () {
           return this.#e;
         }, function (value) {
           this.#e = value;

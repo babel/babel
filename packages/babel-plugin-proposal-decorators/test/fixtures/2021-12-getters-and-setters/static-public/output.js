@@ -1,15 +1,13 @@
-var _computedKey, _computedKey2, _dec, _dec2, _dec3, _dec4, _initStatic;
+var _computedKey, _computedKey2, _initStatic;
 
-_dec = dec
-_dec2 = dec
+const dec = () => {};
+
 _computedKey = 'b'
-_dec3 = dec
 _computedKey2 = 'b'
-_dec4 = dec
 
 class Foo {
   static {
-    [_initStatic] = babelHelpers.applyDecs(this, [[_dec, 8, "a"], [_dec2, 9, "a"], [_dec3, 8, _computedKey], [_dec4, 9, _computedKey2]], []);
+    [_initStatic] = babelHelpers.applyDecs(this, [[dec, 8, "a"], [dec, 9, "a"], [dec, 8, _computedKey], [dec, 9, _computedKey2]], []);
 
     _initStatic(this);
 

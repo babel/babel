@@ -1,3 +1,5 @@
+const dec = () => {};
+
 class Foo {
   static get a() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);

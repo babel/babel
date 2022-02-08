@@ -1,5 +1,7 @@
 var _initClass, _temp2;
 
+const dec = () => {};
+
 let _Foo;
 
 new (_temp2 = class extends babelHelpers.identity {

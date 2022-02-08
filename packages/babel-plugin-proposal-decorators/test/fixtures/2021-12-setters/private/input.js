@@ -1,3 +1,4 @@
+const dec = () => {}; 
 class Foo {
   value = 1;
 
