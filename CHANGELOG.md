@@ -20,6 +20,14 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.2 (2022-02-08)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#14244](https://github.com/babel/babel/pull/14244) Fix 2021-12 decorators application order ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#14241](https://github.com/babel/babel/pull/14241) Fix reinstantiation of inherited plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14246](https://github.com/babel/babel/pull/14246) Merge multi-source output sourcemaps ([@jridgewell](https://github.com/jridgewell))
 ## v7.17.1 (2022-02-03)
 
 #### :bug: Bug Fix
