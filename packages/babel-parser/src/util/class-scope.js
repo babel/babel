@@ -6,7 +6,8 @@ import {
   type ClassElementTypes,
 } from "./scopeflags";
 import { Position } from "./location";
-import { Errors, type raiseFunction } from "../parser/error";
+import { Errors } from "../parse-error";
+import Tokenizer from "../tokenizer";
 
 export class ClassScope {
   // A list of private named declared in the current class
@@ -21,12 +22,12 @@ export class ClassScope {
 }
 
 export default class ClassScopeHandler {
+  parser: Tokenizer;
   stack: Array<ClassScope> = [];
-  declare raise: raiseFunction;
   undefinedPrivateNames: Map<string, Position> = new Map();
 
-  constructor(raise: raiseFunction) {
-    this.raise = raise;
+  constructor(parser: Tokenizer) {
+    this.parser = parser;
   }
 
   current(): ClassScope {
@@ -52,7 +53,10 @@ export default class ClassScopeHandler {
           current.undefinedPrivateNames.set(name, loc);
         }
       } else {
-        this.raise(Errors.InvalidPrivateFieldResolution, { at: loc }, name);
+        this.parser.raise(Errors.InvalidPrivateFieldResolution, {
+          at: loc,
+          name,
+        });
       }
     }
   }
@@ -87,7 +91,7 @@ export default class ClassScopeHandler {
     }
 
     if (redefined) {
-      this.raise(Errors.PrivateNameRedeclaration, { at: loc }, name);
+      this.parser.raise(Errors.PrivateNameRedeclaration, { at: loc, name });
     }
 
     privateNames.add(name);
@@ -104,7 +108,10 @@ export default class ClassScopeHandler {
       classScope.undefinedPrivateNames.set(name, loc);
     } else {
       // top-level
-      this.raise(Errors.InvalidPrivateFieldResolution, { at: loc }, name);
+      this.parser.raise(Errors.InvalidPrivateFieldResolution, {
+        at: loc,
+        name
+      });
     }
   }
 }

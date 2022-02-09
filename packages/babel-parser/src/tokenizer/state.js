@@ -7,7 +7,7 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import { tt, type TokenType } from "./types";
-import type { ParseError, DeferredParseErrorMap } from "../parse-error";
+import type { ParseError } from "../parse-error";
 import StrictErrors from "../parse-error/strict-mode";
 
 export type DeferredStrictErrorClass =
@@ -145,7 +145,7 @@ export default class State {
 
   // todo(JLHwung): set strictErrors to null and avoid recording string errors
   // after a non-directive is parsed
-  strictErrors: DeferredParseErrorMap<DeferredStrictErrorClass> = new Map();
+  strictErrors: Map<DeferredStrictErrorClass, Position> = new Map();
 
   // Tokens length in token store
   tokensLength: number = 0;

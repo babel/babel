@@ -161,32 +161,6 @@ export default class UtilParser extends Tokenizer {
     });
   }
 
-  expectPlugin(pluginConfig: PluginConfig, loc?: ?Position): true {
-    if (!this.hasPlugin(pluginConfig)) {
-      throw this.raiseWithData(
-        loc != null ? loc : this.state.startLoc,
-        { missingPlugin: this.getPluginNamesFromConfigs([pluginConfig]) },
-        `This experimental syntax requires enabling the parser plugin: ${JSON.stringify(
-          pluginConfig,
-        )}.`,
-      );
-    }
-
-    return true;
-  }
-
-  expectOnePlugin(pluginConfigs: Array<PluginConfig>): void {
-    if (!pluginConfigs.some(c => this.hasPlugin(c))) {
-      throw this.raiseWithData(
-        this.state.startLoc,
-        { missingPlugin: this.getPluginNamesFromConfigs(pluginConfigs) },
-        `This experimental syntax requires enabling one of the following parser plugin(s): ${pluginConfigs
-          .map(c => JSON.stringify(c))
-          .join(", ")}.`,
-      );
-    }
-  }
-
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
   tryParse<T: Node | $ReadOnlyArray<Node>>(
@@ -194,7 +168,7 @@ export default class UtilParser extends Tokenizer {
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
-    | TryParse<T | null, SyntaxError, boolean, false, State>
+    | TryParse<T | null, ParseError<any>, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
     const abortSignal: { node: T | null } = { node: null };
     try {
@@ -211,7 +185,7 @@ export default class UtilParser extends Tokenizer {
         this.state.tokensLength = failState.tokensLength;
         return {
           node,
-          error: (failState.errors[oldState.errors.length]: SyntaxError),
+          error: (failState.errors[oldState.errors.length]: ParseError<any>),
           thrown: false,
           aborted: false,
           failState,
@@ -228,7 +202,7 @@ export default class UtilParser extends Tokenizer {
     } catch (error) {
       const failState = this.state;
       this.state = oldState;
-      if (error instanceof SyntaxError) {
+      if (error instanceof ParseError) {
         return { node: null, error, thrown: true, aborted: false, failState };
       }
       if (error === abortSignal) {
@@ -360,16 +334,16 @@ export default class UtilParser extends Tokenizer {
 
     const oldScope = this.scope;
     const ScopeHandler = this.getScopeHandler();
-    this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
+    this.scope = new ScopeHandler(this, inModule);
 
     const oldProdParam = this.prodParam;
     this.prodParam = new ProductionParameterHandler();
 
     const oldClassScope = this.classScope;
-    this.classScope = new ClassScopeHandler(this.raise.bind(this));
+    this.classScope = new ClassScopeHandler(this);
 
     const oldExpressionScope = this.expressionScope;
-    this.expressionScope = new ExpressionScopeHandler(this.raise.bind(this));
+    this.expressionScope = new ExpressionScopeHandler(this);
 
     return () => {
       // Revert state

@@ -28,7 +28,7 @@ import {
 import { NodeUtils } from "./node";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
-import { Errors } from "./error";
+import { Errors } from "../parse-error";
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
@@ -99,10 +99,7 @@ export default class LValParser extends NodeUtils {
         // i.e. `([(a) = []] = []) => {}`
         // see also `recordParenthesizedIdentifierError` signature in packages/babel-parser/src/util/expression-scope.js
         if (parenthesized.type === "Identifier") {
-          this.expressionScope.recordParenthesizedIdentifierError(
-            Errors.InvalidParenthesizedAssignment,
-            node.loc.start,
-          );
+          this.expressionScope.recordParenthesizedIdentifierError({ at: node });
         } else if (parenthesized.type !== "MemberExpression") {
           // A parenthesized member expression can be in LHS but not in pattern.
           // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
@@ -203,14 +200,12 @@ export default class LValParser extends NodeUtils {
     isLHS: boolean,
   ) {
     if (prop.type === "ObjectMethod") {
-      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(
         prop.kind === "get" || prop.kind === "set"
           ? Errors.PatternHasAccessor
           : Errors.PatternHasMethod,
         { at: prop.key },
       );
-      /* eslint-enable @babel/development-internal/dry-error-messages */
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raise(Errors.RestTrailingComma, { at: prop });
     } else {

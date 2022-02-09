@@ -16,7 +16,7 @@ import {
   type TokenType,
 } from "./types";
 import { type TokContext } from "./context";
-import { Errors, ParseError, RaiseErrorProperties } from "../parse-error";
+import { Errors, ParseError, RaiseProperties } from "../parse-error";
 import {
   lineBreakG,
   isNewLine,
@@ -286,9 +286,8 @@ export default class Tokenizer extends CommentsParser {
       // after a "use strict" directive. Strict mode will be set at parse
       // time for any literals that occur after the next node of the strict
       // directive.
-      this.state.strictErrors.forEach(({ message, loc }) =>
-        /* eslint-disable @babel/development-internal/dry-error-messages */
-        this.raise(message, { at: loc }),
+      this.state.strictErrors.forEach(([ParseErrorClass, at]) =>
+        this.raise(ParseErrorClass, { at }),
       );
       this.state.strictErrors.clear();
     }
@@ -1538,26 +1537,19 @@ export default class Tokenizer extends CommentsParser {
     }
   }
 
-//    ErrorProperties,
-//    ParseErrorClass: Class<ParseError<ErrorProperties>>>
-/*
-  recordStrictModeErrors<
-    ErrorProperties,
-    T: DeferredStrictErrorClass>(
-    ParseErrorClass: T,
-    raiseProperties: RaiseErrorProperties<T>,
+  recordStrictModeErrors(
+    ParseErrorClass: DeferredStrictErrorClass,
+    { at } : { at: Position },
   ) {
-    const { at } = raiseProperties;
-    const loc = at instanceof Position ? at : at.loc.start;
-    const index = loc.index;
+    const index = at.index;
 
     if (this.state.strict && !this.state.strictErrors.has(index)) {
-      this.raise(ParseErrorClass, raiseProperties);
+      this.raise(ParseErrorClass, { at });
     } else {
-      this.state.strictErrors.set(index, [ParseErrorClass, raiseProperties]);
+      this.state.strictErrors.set(index, [ParseErrorClass, at]);
     }
   }
-*/
+
   // Used to read escaped characters
   readEscapedChar(inTemplate: boolean): string | null {
     const throwOnInvalid = !inTemplate;
@@ -1756,7 +1748,7 @@ export default class Tokenizer extends CommentsParser {
     T: Class<ParseError<ErrorProperties>>>
   (
     ParseErrorClass: T,
-    raiseProperties: RaiseErrorProperties<ErrorProperties>
+    raiseProperties: RaiseProperties<ErrorProperties>
   ) : ParseError<ErrorProperties> {
     const { at, ...rest } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc;
@@ -1783,7 +1775,7 @@ export default class Tokenizer extends CommentsParser {
    */
   raiseOverwrite<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
     ParseErrorClass: T,
-    raiseProperties: RaiseErrorProperties<ErrorProperties>
+    raiseProperties: RaiseProperties<ErrorProperties>
   ): ParseError<ErrorProperties> | empty {
     const { at, ...rest } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc;
@@ -1801,6 +1793,9 @@ export default class Tokenizer extends CommentsParser {
     return this.raise(ParseErrorClass, raiseProperties);
   }
 
+  // updateContext is used by the jsx plugin
+  // eslint-disable-next-line no-unused-vars
+  updateContext(prevType: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.
   unexpected(loc?: Position | null, type?: TokenType): void {
@@ -1810,7 +1805,23 @@ export default class Tokenizer extends CommentsParser {
     });
   }
 
-  // updateContext is used by the jsx plugin
-  // eslint-disable-next-line no-unused-vars
-  updateContext(prevType: TokenType): void {}
+  expectPlugin(pluginName: string, loc?: Position): true {
+    if (this.hasPlugin(pluginName)) {
+      return true;
+    }
+
+    throw this.raise(Errors.MissingPlugin, {
+      at: loc != null ? loc : this.state.startLoc,
+      missingPlugin: pluginName
+    });
+  }
+
+  expectOnePlugin(pluginNames: string[]): void {
+    if (!pluginNames.some(name => this.hasPlugin(name))) {
+      throw this.raise(Errors.MissingOneOfPlugins, {
+        at: this.state.startLoc,
+        missingPlugin: pluginNames
+      });
+    }
+  }
 }

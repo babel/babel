@@ -6,7 +6,7 @@ import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Node as NodeType, NodeBase, File } from "../types";
 import type { Position } from "../util/location";
-import { Errors } from "../parser/error";
+import { Errors } from "../parse-error";
 
 const { defineProperty } = Object;
 const toUnenumerable = (object, key) =>

@@ -4,7 +4,7 @@ import type { SourceType } from "./options";
 import type { Token } from "./tokenizer";
 import type { SourceLocation } from "./util/location";
 import type { PlaceholderTypes } from "./plugins/placeholders";
-import type { ParsingError } from "./parser/error";
+import type { ParseError } from "./parse-error";
 
 /*
  * If making any changes to the AST, update:
@@ -159,7 +159,7 @@ export type DecimalLiteral = NodeBase & {
 
 export type ParserOutput = {
   comments: $ReadOnlyArray<Comment>,
-  errors: Array<ParsingError>,
+  errors: Array<ParseError<any>>,
   tokens?: $ReadOnlyArray<Token | Comment>,
 };
 // Programs

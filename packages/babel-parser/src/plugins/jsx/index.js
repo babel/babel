@@ -1,8 +1,5 @@
 // @flow
 
-// Error messages are colocated with the plugin.
-/* eslint-disable @babel/development-internal/dry-error-messages */
-
 import * as charCodes from "charcodes";
 
 import XHTMLEntities from "./xhtml";

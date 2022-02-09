@@ -18,7 +18,8 @@ import {
 } from "./scopeflags";
 import { Position } from "./location";
 import * as N from "../types";
-import { Errors, type raiseFunction } from "../parser/error";
+import { Errors } from "../parse-error";
+import Tokenizer from "../tokenizer";
 
 // Start an AST node, attaching a start offset.
 export class Scope {
@@ -38,13 +39,14 @@ export class Scope {
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope: Scope = Scope> {
+
+  parser: Tokenizer;
   scopeStack: Array<IScope> = [];
-  declare raise: raiseFunction;
-  declare inModule: boolean;
+  inModule: boolean;
   undefinedExports: Map<string, Position> = new Map();
 
-  constructor(raise: raiseFunction, inModule: boolean) {
-    this.raise = raise;
+  constructor(parser: Tokenizer, inModule: boolean) {
+    this.parser = parser;
     this.inModule = inModule;
   }
 
@@ -103,7 +105,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   treatFunctionsAsVarInScope(scope: IScope): boolean {
     return !!(
       scope.flags & SCOPE_FUNCTION ||
-      (!this.inModule && scope.flags & SCOPE_PROGRAM)
+      (!this.parser.inModule && scope.flags & SCOPE_PROGRAM)
     );
   }
 
@@ -131,13 +133,13 @@ export default class ScopeHandler<IScope: Scope = Scope> {
         if (scope.flags & SCOPE_VAR) break;
       }
     }
-    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+    if (this.parser.inModule && scope.flags & SCOPE_PROGRAM) {
       this.undefinedExports.delete(name);
     }
   }
 
   maybeExportDefined(scope: IScope, name: string) {
-    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+    if (this.parser.inModule && scope.flags & SCOPE_PROGRAM) {
       this.undefinedExports.delete(name);
     }
   }
@@ -149,7 +151,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     loc: Position,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
-      this.raise(Errors.VarRedeclaration, { at: loc }, name);
+      this.parser.raise(Errors.VarRedeclaration, { at: loc, name });
     }
   }
 

@@ -2,9 +2,6 @@
 
 /*:: declare var invariant; */
 
-// Error messages are colocated with the plugin.
-/* eslint-disable @babel/development-internal/dry-error-messages */
-
 import type State from "../../tokenizer/state";
 import {
   tokenIsIdentifier,

@@ -12,7 +12,7 @@ export enum ParseErrorCode {
 
 type ToMessage<ErrorProperties> = (self: ErrorProperties) => string;
 
-class ParseError<ErrorProperties> extends SyntaxError {
+export class ParseError<ErrorProperties> extends SyntaxError {
   static reasonCode: string;
   static toMessage: ToMessage<ErrorProperties>;
 
@@ -77,17 +77,6 @@ export type RaiseProperties<ErrorProperties> = {|
   ...ErrorProperties,
   ...Origin,
 |};
-
-
-export type DeferredErrorDescription<T: Class<ParseError<any>>> = [
-  T,
-  T["ErrorProperties"]
-];
-
-export type DeferredParseErrorMap<T: Class<ParseError<any>>> = Map<
-  number,
-  DeferredErrorDescription<T>
->;
 
 import StandardErrors from "./parse-error/standard";
 import StrictErrors from "./parse-error/strict-mode";

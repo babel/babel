@@ -1,7 +1,9 @@
 // @flow
 
-import type { ErrorData, ErrorTemplate, raiseFunction } from "../parser/error";
+import { Errors, ParseError } from "../parse-error";
 import { Position } from "./location";
+import type { Node } from "../types";
+import Tokenizer from "../tokenizer";
 
 /*:: declare var invariant; */
 /**
@@ -74,27 +76,48 @@ class ExpressionScope {
   }
 }
 
+type ArrowHeadParsingParameterInitializerErrorClass =
+  | typeof Errors.AwaitExpressionFormalParameter
+  | typeof Errors.YieldInParameter
+
+type ArrowHeadParsingDeclarationErrorClass =
+  | ArrowHeadParsingParameterInitializerErrorClass
+  | typeof Errors.InvalidParenthesizedAssignment
+  | typeof Errors.AwaitBindingIdentifier;
+
 class ArrowHeadParsingScope extends ExpressionScope {
-  errors: Map</* pos */ number, ErrorData> = new Map();
+  declarationErrors: Map<
+    ArrowHeadParsingDeclarationErrorClass,
+    [Class<ParseError<any>>, Position]
+  > = new Map();
   constructor(type: 1 | 2) {
     super(type);
   }
-  recordDeclarationError(message: ErrorTemplate, loc: Position) {
-    this.errors.set(loc.index, { message, loc });
+  recordDeclarationError<T: ArrowHeadParsingDeclarationErrorClass>(
+    ParsingError: T,
+    { at }: { at: Position }
+  ) {
+    const index = at.index;
+
+    this.declarationErrors.set(index, [ParsingError, at]);
   }
-  clearDeclarationError(loc: Position) {
-    this.errors.delete(loc.index);
+  clearDeclarationError(index: number) {
+    this.declarationErrors.delete(index);
   }
-  iterateErrors(iterator: (data: ErrorData) => void) {
-    this.errors.forEach(iterator);
+  iterateErrors<T: ArrowHeadParsingDeclarationErrorClass>(
+    iterator: ([T, Position]) => void
+  ) {
+    this.declarationErrors.forEach(iterator);
   }
 }
 
+
 export default class ExpressionScopeHandler {
+  parser: Tokenizer;
   stack: Array<ExpressionScope> = [new ExpressionScope()];
-  declare raise: raiseFunction;
-  constructor(raise: raiseFunction) {
-    this.raise = raise;
+
+  constructor(parser: Tokenizer) {
+    this.parser = parser;
   }
   enter(scope: ExpressionScope) {
     this.stack.push(scope);
@@ -115,16 +138,17 @@ export default class ExpressionScopeHandler {
    * @memberof ExpressionScopeHandler
    */
   recordParameterInitializerError(
-    loc: Position,
-    template: ErrorTemplate,
+    ParseErrorClass: ArrowHeadParsingParameterInitializerErrorClass,
+    { at: node } : { at: Node }
   ): void {
+    const origin = { at: node.loc.start };
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
     while (!scope.isCertainlyParameterDeclaration()) {
       if (scope.canBeArrowParameterDeclaration()) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-        scope.recordDeclarationError(template, loc);
+        scope.recordDeclarationError(ParseErrorClass, origin);
       } else {
         /*:: invariant(scope.type == kExpression) */
         // Type-Expression is the boundary where initializer error can populate to
@@ -132,8 +156,7 @@ export default class ExpressionScopeHandler {
       }
       scope = stack[--i];
     }
-    /* eslint-disable @babel/development-internal/dry-error-messages */
-    this.raise(template, { at: loc });
+    this.parser.raise(ParseErrorClass, origin);
   }
 
   /**
@@ -157,17 +180,15 @@ export default class ExpressionScopeHandler {
    * @returns {void}
    * @memberof ExpressionScopeHandler
    */
-  recordParenthesizedIdentifierError(
-    template: ErrorTemplate,
-    loc: Position,
-  ): void {
+  recordParenthesizedIdentifierError({ at: node } : { at: Node }): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];
+    const origin = { at: node.loc.start };
     if (scope.isCertainlyParameterDeclaration()) {
-      this.raise(template, { at: loc });
+      this.parser.raise(Errors.InvalidParenthesizedAssignment, origin);
     } else if (scope.canBeArrowParameterDeclaration()) {
       /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-      scope.recordDeclarationError(template, loc);
+      scope.recordDeclarationError(Errors.InvalidParenthesizedAssignment, origin);
     } else {
       return;
     }
@@ -182,17 +203,14 @@ export default class ExpressionScopeHandler {
    * @param {ErrorTemplate} template
    * @memberof ExpressionScopeHandler
    */
-  recordAsyncArrowParametersError(
-    template: ErrorTemplate,
-    loc: Position,
-  ): void {
+  recordAsyncArrowParametersError({ at }: { at: Position }): void {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
     while (scope.canBeArrowParameterDeclaration()) {
       if (scope.type === kMaybeAsyncArrowParameterDeclaration) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-        scope.recordDeclarationError(template, loc);
+        scope.recordDeclarationError(Errors.AwaitBindingIdentifier, { at });
       }
       scope = stack[--i];
     }
@@ -203,15 +221,14 @@ export default class ExpressionScopeHandler {
     const currentScope = stack[stack.length - 1];
     if (!currentScope.canBeArrowParameterDeclaration()) return;
     /*:: invariant(currentScope instanceof ArrowHeadParsingScope) */
-    currentScope.iterateErrors(({ message, loc }) => {
-      /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(message, { at: loc });
+    currentScope.iterateErrors(([ParseErrorClass, loc]) => {
+      this.parser.raise(ParseErrorClass, { at: loc });
       // iterate from parent scope
       let i = stack.length - 2;
       let scope = stack[i];
       while (scope.canBeArrowParameterDeclaration()) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-        scope.clearDeclarationError(loc);
+        scope.clearDeclarationError(loc.index);
         scope = stack[--i];
       }
     });

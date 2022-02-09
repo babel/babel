@@ -67,8 +67,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope";
-import { Errors, SourceTypeModuleErrors } from "./error";
-import type { ParsingError } from "./error";
+import { Errors, ParseError, SourceTypeModuleErrors } from "../parse-error";
 import { setInnerComments } from "./comments";
 import { cloneIdentifier } from "./node";
 
@@ -262,7 +261,7 @@ export default class ExpressionParser extends LValParser {
   // the typescript and flow plugins.
   setOptionalParametersError(
     refExpressionErrors: ExpressionErrors,
-    resultError?: ParsingError,
+    resultError?: ParseError<any>,
   ) {
     refExpressionErrors.optionalParametersLoc =
       resultError?.loc ?? this.state.startLoc;
@@ -2688,10 +2687,7 @@ export default class ExpressionParser extends LValParser {
         return;
       }
 
-      this.expressionScope.recordAsyncArrowParametersError(
-        Errors.AwaitBindingIdentifier,
-        startLoc,
-      );
+      this.expressionScope.recordAsyncArrowParametersError({ at: startLoc });
     } else if (word === "arguments") {
       if (this.scope.inClassAndNotInNonArrowFunction) {
         this.raise(Errors.ArgumentsInClass, { at: startLoc });
@@ -2735,8 +2731,8 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNodeAt(startPos, startLoc);
 
     this.expressionScope.recordParameterInitializerError(
-      node.loc.start,
       Errors.AwaitExpressionFormalParameter,
+      { at: node },
     );
 
     if (this.eat(tt.star)) {
@@ -2784,8 +2780,8 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNode();
 
     this.expressionScope.recordParameterInitializerError(
-      node.loc.start,
       Errors.YieldInParameter,
+      { at: node }
     );
 
     this.next();

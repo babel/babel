@@ -10,7 +10,7 @@ import {
   getExportedToken,
 } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { Errors, SourceTypeModuleErrors } from "./error";
+import { Errors, SourceTypeModuleErrors } from "../parse-error";
 import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
 import { lineBreak } from "../util/whitespace";
 import * as charCodes from "charcodes";
