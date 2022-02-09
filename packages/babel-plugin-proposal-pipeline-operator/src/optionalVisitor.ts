@@ -1,6 +1,6 @@
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 
-import optionalVisitor from "./optionalVisitor";
+const { ast } = template.expression;
 
 const topicReferenceReplacementVisitor = {
   TopicReference(path) {
@@ -9,20 +9,19 @@ const topicReferenceReplacementVisitor = {
 };
 
 // This visitor traverses `BinaryExpression`
-// and replaces any that use `|>`
+// and replaces any that use `?>`
 // with sequence expressions containing assignment expressions
+// and conditional expressions
 // with automatically generated variables,
 // from inside to outside, from left to right.
 export default {
   BinaryExpression: {
     exit(path) {
-      optionalVisitor.BinaryExpression.exit(path);
-
       const { scope, node } = path;
 
-      if (node.operator !== "|>") {
+      if (node.operator !== "?>") {
         // The path node is a binary expression,
-        // but it is not a pipe expression.
+        // but it is not an optional pipe expression.
         return;
       }
 
@@ -42,11 +41,16 @@ export default {
         });
       }
 
-      // Replace the pipe expression itself with an assignment expression.
+      // Replace the pipe expression itself with an assignment expression
+      // and conditional (ternary).
       path.replaceWith(
         t.sequenceExpression([
           t.assignmentExpression("=", t.cloneNode(topicVariable), node.left),
-          node.right,
+          t.conditionalExpression(
+            t.binaryExpression("==", t.cloneNode(topicVariable), ast`null`),
+            ast`void 0`,
+            node.right,
+          ),
         ]),
       );
     },

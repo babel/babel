@@ -204,6 +204,7 @@ export const tt: { [name: string]: TokenType } = {
 
   // start: isBinop
   pipeline: createBinop("|>", 0),
+  optionalPipeline: createBinop("?>", 0),
   nullishCoalescing: createBinop("??", 1),
   logicalOR: createBinop("||", 1),
   logicalAND: createBinop("&&", 2),

@@ -504,6 +504,11 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     switch (op) {
+      case tt.optionalPipeline:
+        return this.withTopicBindingContext(() => {
+          return this.parseHackPipeBody();
+        });
+
       case tt.pipeline:
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
           case "hack":

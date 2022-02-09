@@ -853,7 +853,9 @@ export default class Tokenizer extends ParserErrors {
     // '?'
     const next = this.input.charCodeAt(this.state.pos + 1);
     const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === charCodes.questionMark) {
+    if (next === charCodes.greaterThan) {
+      this.finishOp(tt.optionalPipeline, 2);
+    } else if (next === charCodes.questionMark) {
       if (next2 === charCodes.equalsTo) {
         // '??='
         this.finishOp(tt.assign, 3);
