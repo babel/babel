@@ -1,6 +1,13 @@
 import { types as t } from "@babel/core";
 
-const { isObjectProperty, isArrayPattern, isObjectPattern, isAssignmentPattern, isRestElement, isIdentifier } = t;
+const {
+  isObjectProperty,
+  isArrayPattern,
+  isObjectPattern,
+  isAssignmentPattern,
+  isRestElement,
+  isIdentifier
+} = t;
 /**
  * This is a helper function to determine if we should create an intermediate variable
  * such that the RHS of an assignment is not duplicated.
