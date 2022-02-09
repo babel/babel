@@ -8,7 +8,7 @@ import * as charCodes from "charcodes";
 import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-import { makeErrorTemplates, ErrorCodes } from "../parser/error";
+import { Errors, toParseErrorClasses } from "../parse-error";
 
 export type PlaceholderTypes =
   | "Identifier"
@@ -50,11 +50,11 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
 /* eslint sort-keys: "error" */
-const PlaceholderErrors = makeErrorTemplates(
-  {
-    ClassNameIsRequired: "A class name is required.",
-  },
-  /* code */ ErrorCodes.SyntaxError,
+const PlaceholderErrors = toParseErrorClasses(
+  _ => ({
+    ClassNameIsRequired: _("A class name is required."),
+    UnexpectedSpace: _("Unexpected space in placeholder.")
+  }),
   /* syntaxPlugin */ "placeholders",
 );
 /* eslint-disable sort-keys */
@@ -67,13 +67,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.placeholder)) {
         const node = this.startNode();
         this.next();
-        this.assertNoSpace("Unexpected space in placeholder.");
+        this.assertNoSpace();
 
         // We can't use this.parseIdentifier because
         // we don't want nested placeholders.
         node.name = super.parseIdentifier(/* liberal */ true);
 
-        this.assertNoSpace("Unexpected space in placeholder.");
+        this.assertNoSpace();
         this.expect(tt.placeholder);
         return this.finishPlaceholder(node, expectedNode);
       }
@@ -366,5 +366,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.parsePlaceholder("StringLiteral") ||
         super.parseImportSource(...arguments)
       );
+    }
+
+    // Throws if the current token and the prev one are separated by a space.
+    assertNoSpace(): void {
+      if (this.state.start > this.state.lastTokEndLoc.index) {
+        this.raise(PlaceholderErrors.UnexpectedSpace, {
+          at: this.state.lastTokEndLoc
+        });
+      }
     }
   };

@@ -107,10 +107,10 @@ export default class LValParser extends NodeUtils {
           // A parenthesized member expression can be in LHS but not in pattern.
           // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
           // i.e. `([(a.b) = []] = []) => {}`
-          this.raise(Errors.InvalidParenthesizedAssignment, { node });
+          this.raise(Errors.InvalidParenthesizedAssignment, { at: node });
         }
       } else {
-        this.raise(Errors.InvalidParenthesizedAssignment, { node });
+        this.raise(Errors.InvalidParenthesizedAssignment, { at: node });
       }
     }
 
@@ -208,11 +208,11 @@ export default class LValParser extends NodeUtils {
         prop.kind === "get" || prop.kind === "set"
           ? Errors.PatternHasAccessor
           : Errors.PatternHasMethod,
-        { node: prop.key },
+        { at: prop.key },
       );
       /* eslint-enable @babel/development-internal/dry-error-messages */
     } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raise(Errors.RestTrailingComma, { node: prop });
+      this.raise(Errors.RestTrailingComma, { at: prop });
     } else {
       this.toAssignable(prop, isLHS);
     }
@@ -256,7 +256,7 @@ export default class LValParser extends NodeUtils {
       if (elt) {
         this.toAssignable(elt, isLHS);
         if (elt.type === "RestElement") {
-          this.raise(Errors.RestTrailingComma, { node: elt });
+          this.raise(Errors.RestTrailingComma, { at: elt });
         }
       }
     }
@@ -535,20 +535,19 @@ export default class LValParser extends NodeUtils {
             bindingType === BIND_NONE
               ? Errors.StrictEvalArguments
               : Errors.StrictEvalArgumentsBinding,
-            { node: expr },
-            name,
+            { at: expr, binding: name },
           );
         }
 
         if (checkClashes) {
           if (checkClashes.has(name)) {
-            this.raise(Errors.ParamDupe, { node: expr });
+            this.raise(Errors.ParamDupe, { at: expr });
           } else {
             checkClashes.add(name);
           }
         }
         if (disallowLetBinding && name === "let") {
-          this.raise(Errors.LetInLexicalBinding, { node: expr });
+          this.raise(Errors.LetInLexicalBinding, { at: expr });
         }
         if (!(bindingType & BIND_NONE)) {
           this.scope.declareName(name, bindingType, expr.loc.start);
@@ -559,7 +558,7 @@ export default class LValParser extends NodeUtils {
       case "MemberExpression":
         if (bindingType !== BIND_NONE) {
           this.raise(Errors.InvalidPropertyBindingPattern, {
-            node: expr,
+            at: expr,
           });
         }
         break;
@@ -628,8 +627,7 @@ export default class LValParser extends NodeUtils {
           bindingType === BIND_NONE
             ? Errors.InvalidLhs
             : Errors.InvalidLhsBinding,
-          { node: expr },
-          contextDescription,
+          { at: expr, contextDescription },
         );
       }
     }
@@ -641,7 +639,7 @@ export default class LValParser extends NodeUtils {
       node.argument.type !== "MemberExpression"
     ) {
       this.raise(Errors.InvalidRestAssignmentPattern, {
-        node: node.argument,
+        at: node.argument,
       });
     }
   }

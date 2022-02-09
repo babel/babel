@@ -58,7 +58,7 @@ function fromToMessage<T>(toMessage: ToMessage<T>): Class<ParseError<T>> {
   };
 }
 
-export function toParseErrorClasses<T>(
+export function toParseErrorClasses<T: Object>(
   toClasses: (typeof toReasonCodelessParseErrorClass) => T
 ): T {
   // $FlowIgnore
@@ -77,6 +77,17 @@ export type RaiseProperties<ErrorProperties> = {|
   ...ErrorProperties,
   ...Origin,
 |};
+
+
+export type DeferredErrorDescription<T: Class<ParseError<any>>> = [
+  T,
+  T["ErrorProperties"]
+];
+
+export type DeferredParseErrorMap<T: Class<ParseError<any>>> = Map<
+  number,
+  DeferredErrorDescription<T>
+>;
 
 import StandardErrors from "./parse-error/standard";
 import StrictErrors from "./parse-error/strict-mode";

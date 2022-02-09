@@ -23,6 +23,7 @@ lib/babel-packages.js.flow
 lib/package-json.js.flow
 
 [options]
+experimental.enums=true
 include_warnings=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment= \\(.\\|\n\\)*\\$FlowIssue

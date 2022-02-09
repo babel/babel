@@ -20,27 +20,41 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
+import { Errors, toParseErrorClasses } from "../../parse-error";
 
 /* eslint sort-keys: "error" */
-const JsxErrors = makeErrorTemplates(
-  {
-    AttributeIsEmpty:
-      "JSX attributes must only be assigned a non-empty expression.",
-    MissingClosingTagElement:
-      "Expected corresponding JSX closing tag for <%0>.",
-    MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>.",
-    UnexpectedSequenceExpression:
-      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-    UnsupportedJsxValue:
-      "JSX value should be either an expression or a quoted JSX text.",
-    UnterminatedJsxContent: "Unterminated JSX contents.",
-    UnwrappedAdjacentJSXElements:
-      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-  },
-  /* code */ ErrorCodes.SyntaxError,
-  /* syntaxPlugin */ "jsx",
+const JsxErrors = toParseErrorClasses(
+  _ => ({
+    AttributeIsEmpty: _(
+      "JSX attributes must only be assigned a non-empty expression."
+    ),
+    MissingClosingTagElement: _<{ openingTagName: string }>(
+      ({ openingTagName }) =>
+        `Expected corresponding JSX closing tag for <${openingTagName}>.`
+    ),
+    MissingClosingTagFragment: _(
+      "Expected corresponding JSX closing tag for <>."
+    ),
+    UnexpectedSequenceExpression: _(
+      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?"
+    ),
+    UnsupportedJsxValue: _(
+      "JSX value should be either an expression or a quoted JSX text."
+    ),
+    UnterminatedJsxContent: _("Unterminated JSX contents."),
+    UnwrappedAdjacentJSXElements: _(
+      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?"
+    ),
+    // FIXME: Unify with Errors.UnexpectedToken
+    UnexpectedToken: _<{ found: string, HTMLEntity: string }>(
+      ({ found, HTMLEntity }) =>
+        `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`
+    ),
+  }),
+  /* syntaxPlugin */ "jsx"
 );
+
+
 /* eslint-disable sort-keys */
 
 function isFragment(object: ?N.JSXElement): boolean {
@@ -113,17 +127,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           case charCodes.greaterThan:
           case charCodes.rightCurlyBrace:
             if (process.env.BABEL_8_BREAKING) {
-              const htmlEntity =
-                ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
-              const char = this.input[this.state.pos];
-              this.raise(
-                {
-                  code: ErrorCodes.SyntaxError,
-                  reasonCode: "UnexpectedToken",
-                  template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
-                },
-                { at: this.state.curPosition() },
-              );
+              this.raise(JsxErrors.UnexpectedToken, {
+                at: this.state.curPosition(),
+                found: this.input[this.state.pos],
+                HTMLEntity: ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;"
+              });
             }
           /* falls through */
 
@@ -507,24 +515,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             node: closingElement,
           });
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
-          this.raise(
-            JsxErrors.MissingClosingTagElement,
-            // $FlowIgnore
-            { node: closingElement },
-            getQualifiedJSXName(openingElement.name),
-          );
+          this.raise(JsxErrors.MissingClosingTagElement, {
+            at: closingElement,
+            openingElement: getQualifiedJSXName(openingElement.name),
+          });
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
           if (
             // $FlowIgnore
             getQualifiedJSXName(closingElement.name) !==
             getQualifiedJSXName(openingElement.name)
           ) {
-            this.raise(
-              JsxErrors.MissingClosingTagElement,
-              // $FlowIgnore
-              { node: closingElement },
-              getQualifiedJSXName(openingElement.name),
-            );
+            this.raise(JsxErrors.MissingClosingTagElement, {
+              at: closingElement,
+              openingElement: getQualifiedJSXName(openingElement.name),
+            });
           }
         }
       }

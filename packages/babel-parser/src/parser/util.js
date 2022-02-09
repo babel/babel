@@ -19,8 +19,7 @@ import ProductionParameterHandler, {
   PARAM_AWAIT,
   PARAM,
 } from "../util/production-parameter";
-import { Errors, type ErrorTemplate, ErrorCodes } from "./error";
-import type { ParsingError } from "./error";
+import { Errors, ParseError } from "../parse-error";
 import type { PluginConfig } from "./base";
 /*::
 import type ScopeHandler from "../util/scope";
@@ -98,11 +97,13 @@ export default class UtilParser extends Tokenizer {
 
   // Asserts that following token is given contextual keyword.
 
-  expectContextual(token: TokenType, template?: ErrorTemplate): void {
+  expectContextual(
+    token: TokenType,
+    ParseErrorClass?: Class<ParseError<any>>
+  ): void {
     if (!this.eatContextual(token)) {
-      if (template != null) {
-        /* eslint-disable @babel/development-internal/dry-error-messages */
-        throw this.raise(template, { at: this.state.startLoc });
+      if (ParseErrorClass != null) {
+        throw this.raise(ParseErrorClass, { at: this.state.startLoc });
       }
       throw this.unexpected(null, token);
     }
@@ -150,41 +151,6 @@ export default class UtilParser extends Tokenizer {
     this.eat(type) || this.unexpected(loc, type);
   }
 
-  // Throws if the current token and the prev one are separated by a space.
-  assertNoSpace(message: string = "Unexpected space."): void {
-    if (this.state.start > this.state.lastTokEndLoc.index) {
-      /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(
-        {
-          code: ErrorCodes.SyntaxError,
-          reasonCode: "UnexpectedSpace",
-          template: message,
-        },
-        { at: this.state.lastTokEndLoc },
-        /* eslint-enable @babel/development-internal/dry-error-messages */
-      );
-    }
-  }
-
-  // Raise an unexpected token error. Can take the expected token type
-  // instead of a message string.
-
-  unexpected(loc?: ?Position, type?: ?TokenType): empty {
-    /* eslint-disable @babel/development-internal/dry-error-messages */
-    throw this.raise(
-      {
-        code: ErrorCodes.SyntaxError,
-        reasonCode: "UnexpectedToken",
-        template:
-          type != null
-            ? `Unexpected token, expected "${tokenLabelName(type)}"`
-            : "Unexpected token",
-      },
-      { at: loc != null ? loc : this.state.startLoc },
-    );
-    /* eslint-enable @babel/development-internal/dry-error-messages */
-  }
-
   getPluginNamesFromConfigs(pluginConfigs: Array<PluginConfig>): Array<string> {
     return pluginConfigs.map(c => {
       if (typeof c === "string") {
@@ -228,7 +194,7 @@ export default class UtilParser extends Tokenizer {
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
-    | TryParse<T | null, ParsingError, boolean, false, State>
+    | TryParse<T | null, SyntaxError, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
     const abortSignal: { node: T | null } = { node: null };
     try {
@@ -245,7 +211,7 @@ export default class UtilParser extends Tokenizer {
         this.state.tokensLength = failState.tokensLength;
         return {
           node,
-          error: (failState.errors[oldState.errors.length]: ParsingError),
+          error: (failState.errors[oldState.errors.length]: SyntaxError),
           thrown: false,
           aborted: false,
           failState,

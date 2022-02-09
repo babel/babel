@@ -16,7 +16,7 @@ import {
   type TokenType,
 } from "./types";
 import { type TokContext } from "./context";
-import { Errors, ParseErrorClass, RaiseErrorProperties } from "../parse-error";
+import { Errors, ParseError, RaiseErrorProperties } from "../parse-error";
 import {
   lineBreakG,
   isNewLine,
@@ -24,7 +24,7 @@ import {
   skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
-import type { LookaheadState } from "./state";
+import type { LookaheadState, DeferredStrictErrorClass } from "./state";
 
 const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseG,
@@ -1071,11 +1071,10 @@ export default class Tokenizer extends CommentsParser {
         }
     }
 
-    throw this.raise(
-      Errors.InvalidOrUnexpectedToken,
-      { at: this.state.curPosition() },
-      String.fromCodePoint(code),
-    );
+    throw this.raise(Errors.InvalidOrUnexpectedToken, {
+      at: this.state.curPosition(),
+      found: String.fromCodePoint(code)
+    });
   }
 
   finishOp(type: TokenType, size: number): void {
@@ -1240,11 +1239,10 @@ export default class Tokenizer extends CommentsParser {
 
         if (this.options.errorRecovery && val <= 9) {
           val = 0;
-          this.raise(
-            Errors.InvalidDigit,
-            { at: this.state.curPosition() },
+          this.raise(Errors.InvalidDigit, {
+            at: this.state.curPosition(),
             radix,
-          );
+          });
         } else if (forceLen) {
           val = 0;
           invalid = true;
@@ -1273,12 +1271,11 @@ export default class Tokenizer extends CommentsParser {
     this.state.pos += 2; // 0x
     const val = this.readInt(radix);
     if (val == null) {
-      this.raise(
-        Errors.InvalidDigit,
+      this.raise(Errors.InvalidDigit, {
         // Numeric literals can't have newlines, so this is safe to do.
-        { at: createPositionWithColumnOffset(startLoc, 2) },
+        at: createPositionWithColumnOffset(startLoc, 2),
         radix,
-      );
+      });
     }
     const next = this.input.charCodeAt(this.state.pos);
 
@@ -1326,7 +1323,7 @@ export default class Tokenizer extends CommentsParser {
 
     if (hasLeadingZero) {
       const integer = this.input.slice(start, this.state.pos);
-      this.recordStrictModeErrors(Errors.StrictOctalLiteral, startLoc);
+      this.recordStrictModeErrors(Errors.StrictOctalLiteral, { at: startLoc });
       if (!this.state.strict) {
         // disallow numeric separators in non octal decimals and legacy octal likes
         const underscorePos = integer.indexOf("_");
@@ -1541,14 +1538,26 @@ export default class Tokenizer extends CommentsParser {
     }
   }
 
-  recordStrictModeErrors(message: ErrorTemplate, loc: Position) {
-    if (this.state.strict && !this.state.strictErrors.has(loc.index)) {
-      this.raise(message, { at: loc });
+//    ErrorProperties,
+//    ParseErrorClass: Class<ParseError<ErrorProperties>>>
+/*
+  recordStrictModeErrors<
+    ErrorProperties,
+    T: DeferredStrictErrorClass>(
+    ParseErrorClass: T,
+    raiseProperties: RaiseErrorProperties<T>,
+  ) {
+    const { at } = raiseProperties;
+    const loc = at instanceof Position ? at : at.loc.start;
+    const index = loc.index;
+
+    if (this.state.strict && !this.state.strictErrors.has(index)) {
+      this.raise(ParseErrorClass, raiseProperties);
     } else {
-      this.state.strictErrors.set(loc.index, { loc, message });
+      this.state.strictErrors.set(index, [ParseErrorClass, raiseProperties]);
     }
   }
-
+*/
   // Used to read escaped characters
   readEscapedChar(inTemplate: boolean): string | null {
     const throwOnInvalid = !inTemplate;
@@ -1592,12 +1601,11 @@ export default class Tokenizer extends CommentsParser {
         if (inTemplate) {
           return null;
         } else {
-          this.recordStrictModeErrors(
-            Errors.StrictNumericEscape,
+          this.recordStrictModeErrors(Errors.StrictNumericEscape, {
             // We immediately follow a "\\", and we're an 8 or a 9, so we must
             // be on the same line.
-            createPositionWithColumnOffset(this.state.curPosition(), -1),
-          );
+            at: createPositionWithColumnOffset(this.state.curPosition(), -1),
+          });
         }
       // fall through
       default:
@@ -1631,7 +1639,9 @@ export default class Tokenizer extends CommentsParser {
             if (inTemplate) {
               return null;
             } else {
-              this.recordStrictModeErrors(Errors.StrictNumericEscape, codePos);
+              this.recordStrictModeErrors(Errors.StrictNumericEscape, {
+                at: codePos
+              });
             }
           }
 
@@ -1734,31 +1744,63 @@ export default class Tokenizer extends CommentsParser {
   checkKeywordEscapes(): void {
     const { type } = this.state;
     if (tokenIsKeyword(type) && this.state.containsEsc) {
-      this.raise(
-        Errors.InvalidEscapedReservedWord,
-        { at: this.state.startLoc },
-        tokenLabelName(type),
-      );
+      this.raise(Errors.InvalidEscapedReservedWord, {
+        at: this.state.startLoc,
+        reservedWord: tokenLabelName(type),
+      });
     }
   }
 
   raise<
     ErrorProperties,
-    ParseErrorClass: Class<ParseError<ErrorProperties>>>
+    T: Class<ParseError<ErrorProperties>>>
   (
-    SomeParseError: ParseErrorClass,
-    raiseProperties: RaiseProperties<ErrorProperties>
+    ParseErrorClass: T,
+    raiseProperties: RaiseErrorProperties<ErrorProperties>
   ) : ParseError<ErrorProperties> {
     const { at, ...rest } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc;
-    const error = new SomeParseError({ ...rest, loc: at });
+    const error = new ParseErrorClass({ ...rest, loc: at });
 
-    /*!SyntaxError.recoverable || */
     if (!this.options.errorRecovery) throw error;
     if (!this.isLookahead) this.state.errors.push(error);
 
     return error;
   }
+
+/*
+  /**
+   * Raise a parsing error on given position pos. If errorRecovery is true,
+   * it will first search current errors and overwrite the error thrown on the exact
+   * position before with the new error message. If errorRecovery is false, it
+   * fallbacks to `raise`.
+   *
+   * @param {number} pos
+   * @param {string} errorTemplate
+   * @param {...any} params
+   * @returns {(Error | empty)}
+   * @memberof ParserError
+   */
+  raiseOverwrite<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
+    ParseErrorClass: T,
+    raiseProperties: RaiseErrorProperties<ErrorProperties>
+  ): ParseError<ErrorProperties> | empty {
+    const { at, ...rest } = raiseProperties;
+    const loc = at instanceof Position ? at : at.loc;
+    const pos = loc.index;
+    const errors = this.state.errors;
+
+    for (let i = errors.length - 1; i >= 0; i--) {
+      const error = errors[i];
+      if (error.pos === pos) {
+        return (errors[i] = new ParseErrorClass({ ...rest, loc }));
+      }
+      if (error.pos < pos) break;
+    }
+
+    return this.raise(ParseErrorClass, raiseProperties);
+  }
+
 
   // Raise an unexpected token error. Can take the expected token type.
   unexpected(loc?: Position | null, type?: TokenType): void {

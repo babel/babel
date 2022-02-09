@@ -98,7 +98,7 @@ export default toParseErrorClasses(_ => ({
   ImportCallArgumentTrailingComma: _(
     "Trailing comma is disallowed inside import(...) arguments."
   ),
-  ImportCallArity: _<{ required: 1 | 1 }>(
+  ImportCallArity: _<{ required: 1 | 2 }>(
     ({ required }) =>
       `\`import()\` requires exactly ${
         required === 1 ? "one argument" : "one or two arguments"
