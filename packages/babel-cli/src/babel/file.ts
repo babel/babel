@@ -1,4 +1,5 @@
 import convertSourceMap from "convert-source-map";
+import { TraceMap, eachMapping } from "@jridgewell/trace-mapping";
 import sourceMap from "source-map";
 import slash from "slash";
 import path from "path";
@@ -35,12 +36,9 @@ export default async function ({
       code += result.code + "\n";
 
       if (result.map) {
-        const consumer = new sourceMap.SourceMapConsumer(result.map);
-        const sources = new Set<string>();
+        const consumer = new TraceMap(result.map);
 
-        consumer.eachMapping(function (mapping) {
-          if (mapping.source != null) sources.add(mapping.source);
-
+        eachMapping(consumer, mapping => {
           map.addMapping({
             generated: {
               line: mapping.generatedLine + offset,
@@ -57,11 +55,10 @@ export default async function ({
           });
         });
 
-        sources.forEach(source => {
-          const content = consumer.sourceContentFor(source, true);
-          if (content !== null) {
-            map.setSourceContent(source, content);
-          }
+        const { resolvedSources, sourcesContent } = consumer;
+        sourcesContent?.forEach((content, i) => {
+          if (content === null) return;
+          map.setSourceContent(resolvedSources[i], content);
         });
 
         offset = code.split("\n").length - 1;

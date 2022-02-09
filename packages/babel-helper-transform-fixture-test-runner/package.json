@@ -18,7 +18,7 @@
     "@babel/code-frame": "workspace:^",
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
-    "@jridgewell/trace-mapping": "^0.3.2",
+    "@jridgewell/trace-mapping": "^0.3.3",
     "babel-check-duplicated-nodes": "^1.0.0",
     "quick-lru": "5.1.0",
     "regenerator-runtime": "^0.13.7"

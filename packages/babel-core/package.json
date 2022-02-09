@@ -67,7 +67,7 @@
   "devDependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
-    "@jridgewell/trace-mapping": "^0.3.2",
+    "@jridgewell/trace-mapping": "^0.3.3",
     "@types/convert-source-map": "^1.5.1",
     "@types/debug": "^4.1.0",
     "@types/resolve": "^1.3.2",
