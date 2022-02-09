@@ -31,3 +31,9 @@ for (const [x = 23] = [,]; iterCount < 1; ) {
 }
 
 expect(iterCount).toEqual(1);
+
+const [...d] = [,];
+const [...{ 0: e }] = [,];
+
+expect(d).toEqual([,]);
+expect(e).toEqual(undefined);
