@@ -6,7 +6,7 @@ const {
   isObjectPattern,
   isAssignmentPattern,
   isRestElement,
-  isIdentifier
+  isIdentifier,
 } = t;
 /**
  * This is a helper function to determine if we should create an intermediate variable
