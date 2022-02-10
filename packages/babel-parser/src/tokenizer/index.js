@@ -1751,8 +1751,8 @@ export default class Tokenizer extends CommentsParser {
     raiseProperties: RaiseProperties<ErrorProperties>
   ) : ParseError<ErrorProperties> {
     const { at, ...rest } = raiseProperties;
-    const loc = at instanceof Position ? at : at.loc;
-    const error = new ParseErrorClass({ ...rest, loc: at });
+    const loc = at instanceof Position ? at : at.loc.start;
+    const error = new ParseErrorClass({ ...rest, loc });
 
     if (!this.options.errorRecovery) throw error;
     if (!this.isLookahead) this.state.errors.push(error);
@@ -1778,7 +1778,7 @@ export default class Tokenizer extends CommentsParser {
     raiseProperties: RaiseProperties<ErrorProperties>
   ): ParseError<ErrorProperties> | empty {
     const { at, ...rest } = raiseProperties;
-    const loc = at instanceof Position ? at : at.loc;
+    const loc = at instanceof Position ? at : at.loc.start;
     const pos = loc.index;
     const errors = this.state.errors;
 
