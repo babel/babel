@@ -38,7 +38,8 @@ python --version
 #==============================================================================#
 
 startLocalRegistry "$root"/verdaccio-config.yml
-yarn install
+# yarn.lock will be modified by @babel/* bumps
+yarn install --no-immutable
 yarn dedupe '@babel/*'
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
