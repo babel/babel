@@ -25,7 +25,7 @@ const JsxErrors = toParseErrorClasses(
     AttributeIsEmpty: _(
       "JSX attributes must only be assigned a non-empty expression."
     ),
-    MissingClosingTagElement: _<{ openingTagName: string }>(
+    MissingClosingTagElement: _<{| openingTagName: string |}>(
       ({ openingTagName }) =>
         `Expected corresponding JSX closing tag for <${openingTagName}>.`
     ),
@@ -43,7 +43,7 @@ const JsxErrors = toParseErrorClasses(
       "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?"
     ),
     // FIXME: Unify with Errors.UnexpectedToken
-    UnexpectedToken: _<{ found: string, HTMLEntity: string }>(
+    UnexpectedToken: _<{| found: string, HTMLEntity: string |}>(
       ({ found, HTMLEntity }) =>
         `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`
     ),

@@ -62,7 +62,7 @@ const FlowErrors = toParseErrorClasses(
     AmbiguousDeclareModuleKind: _(
       "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module."
     ),
-    AssignReservedType: _<{ reservedType: string }>(
+    AssignReservedType: _<{| reservedType: string |}>(
       ({ reservedType }) => `Cannot overwrite reserved type ${reservedType}.`
     ),
     DeclareClassElement: _(
@@ -74,41 +74,41 @@ const FlowErrors = toParseErrorClasses(
     DuplicateDeclareModuleExports: _(
       "Duplicate `declare module.exports` statement."
     ),
-    EnumBooleanMemberNotInitialized: _<{
+    EnumBooleanMemberNotInitialized: _<{|
       memberName: string,
       enumName: string,
-    }>(
+    |}>(
       ({ memberName, enumName }) =>
         `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` or \`${memberName} = false,\` in enum \`${enumName}\`.`
     ),
-    EnumDuplicateMemberName: _<{ memberName: string, enumName: string }>(
+    EnumDuplicateMemberName: _<{| memberName: string, enumName: string |}>(
       ({ memberName, enumName }) =>
         `Enum member names need to be unique, but the name \`${memberName}\` has already been used before in enum \`${enumName}\`.`
     ),
-    EnumInconsistentMemberValues: _<{ enumName: string }>(
+    EnumInconsistentMemberValues: _<{| enumName: string |}>(
       ({ enumName }) =>
         `Enum \`${enumName}\` has inconsistent member initializers. Either use no initializers, or consistently use literals (either booleans, numbers, or strings) for all member initializers.`
     ),
-    EnumInvalidExplicitType: _<{ invalidEnumType: string, enumName: string }>(
+    EnumInvalidExplicitType: _<{| invalidEnumType: string, enumName: string |}>(
       ({ invalidEnumType, enumName }) =>
         `Enum type \`${invalidEnumType}\` is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`
     ),
-    EnumInvalidExplicitTypeUnknownSupplied: _<{ enumName: string }>(
+    EnumInvalidExplicitTypeUnknownSupplied: _<{| enumName: string |}>(
       ({ enumName }) =>
         `Supplied enum type is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`
     ),
-    EnumInvalidMemberInitializerPrimaryType: _<{ enumName: string, memberName: string,
-        explicitType: string }>(({ enumName, memberName, explicitType }) =>
+    EnumInvalidMemberInitializerPrimaryType: _<{| enumName: string, memberName: string,
+        explicitType: string |}>(({ enumName, memberName, explicitType }) =>
       `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of \`${memberName}\` needs to be a ${explicitType} literal.`),
-    EnumInvalidMemberInitializerSymbolType: _<{ enumName: string, memberName: string, explicitType: string }>(({ enumName, memberName }) =>
+    EnumInvalidMemberInitializerSymbolType: _<{| enumName: string, memberName: string, explicitType: string |}>(({ enumName, memberName }) =>
       `Symbol enum members cannot be initialized. Use \`${memberName},\` in enum \`${enumName}\`.`),
-    EnumInvalidMemberInitializerUnknownType: _<{ enumName: string, memberName: string, explicitType: null }>(({ enumName, memberName }) =>
+    EnumInvalidMemberInitializerUnknownType: _<{| enumName: string, memberName: string, explicitType: string |}>(({ enumName, memberName }) =>
       `The enum member initializer for \`${memberName}\` needs to be a literal (either a boolean, number, or string) in enum \`${enumName}\`.`),
-    EnumInvalidMemberName: _<{ enumName: string, memberName: string, suggestion: string }>(({ enumName, memberName, suggestion }) =>
+    EnumInvalidMemberName: _<{| enumName: string, memberName: string, suggestion: string |}>(({ enumName, memberName, suggestion }) =>
       `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using \`${enumName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`),
-    EnumNumberMemberNotInitialized: _<{ enumName: string, memberName: string }>(({ enumName, memberName }) =>
+    EnumNumberMemberNotInitialized: _<{| enumName: string, memberName: string |}>(({ enumName, memberName }) =>
       `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`),
-    EnumStringMemberInconsistentlyInitailized: _<{ enumName: string }>(({ enumName }) =>
+    EnumStringMemberInconsistentlyInitailized: _<{| enumName: string |}>(({ enumName }) =>
       `String enum members need to consistently either all use initializers, or use no initializers, in enum \`${enumName}\`.`),
     GetterMayNotHaveThisParam: _("A getter cannot have a `this` parameter."),
     ImportTypeShorthandOnlyInPureImport: _(
@@ -158,7 +158,7 @@ const FlowErrors = toParseErrorClasses(
     UnexpectedExplicitInexactInObject: _(
       "Explicit inexact syntax must appear at the end of an inexact object."
     ),
-    UnexpectedReservedType: _<{ reservedType: string }>(
+    UnexpectedReservedType: _<{| reservedType: string |}>(
       ({ reservedType }) => `Unexpected reserved type ${reservedType}.`
     ),
     UnexpectedReservedUnderscore: _(
@@ -179,10 +179,10 @@ const FlowErrors = toParseErrorClasses(
     UnexpectedTypeParameterBeforeAsyncArrowFunction: _(
       "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`."
     ),
-    UnsupportedDeclareExportKind: _<{
+    UnsupportedDeclareExportKind: _<{|
       unsupported: string,
       suggestion: string,
-    }>(
+    |}>(
       ({ unsupported, suggestion }) =>
         `\`declare export ${unsupported}\` is not supported. Use \`${suggestion}\` instead.`
     ),
@@ -3319,7 +3319,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         { at: loc,
         enumName,
         memberName,
-        explicitType,
+        // FIXME: ?
+        explicitType: "hi"/*explicitType || "unknown"*/,
       });
     }
 

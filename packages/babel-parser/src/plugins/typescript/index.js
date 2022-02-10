@@ -69,10 +69,10 @@ type ParsingContext =
 /* eslint sort-keys: "error" */
 const TSErrors = toParseErrorClasses(
   _ => ({
-    AbstractMethodHasImplementation: _<{ methodName: string }>(({ methodName }) =>
+    AbstractMethodHasImplementation: _<{| methodName: string |}>(({ methodName }) =>
       `Method '${methodName}' cannot have an implementation because it is marked abstract.`
     ),
-    AbstractPropertyHasInitializer: _<{ propertyName: string }>(({ propertyName }) =>
+    AbstractPropertyHasInitializer: _<{| propertyName: string |}>(({ propertyName }) =>
       `Property '${propertyName}' cannot have an initializer because it is marked abstract.`
     ),
     AccesorCannotDeclareThisParameter: _(
@@ -91,29 +91,29 @@ const TSErrors = toParseErrorClasses(
       "Type parameters cannot appear on a constructor declaration."
     ),
     // kind?
-    DeclareAccessor: _<{ accessorKind: "get" | "set" }>(({ accessorKind }) => `'declare' is not allowed in ${accessorKind}ters.`),
+    DeclareAccessor: _<{| accessorKind: "get" | "set" |}>(({ accessorKind }) => `'declare' is not allowed in ${accessorKind}ters.`),
     DeclareClassFieldHasInitializer: _(
       "Initializers are not allowed in ambient contexts."
     ),
     DeclareFunctionHasImplementation: _(
       "An implementation cannot be declared in ambient contexts."
     ),
-    DuplicateAccessibilityModifier: _<{ modifier: N.Accessibility }>(({ modifier }) => "Accessibility modifier ${modifier} already seen."),
-    DuplicateModifier: _<{ modifier: TsModifier }>(({ modifier }) => `Duplicate modifier: '${modifier}'.`),
-    EmptyHeritageClauseType: _<{ descriptor: string }>(({ descriptor }) => `'${descriptor}' list cannot be empty.`),
+    DuplicateAccessibilityModifier: _<{| modifier: N.Accessibility |}>(({ modifier }) => "Accessibility modifier ${modifier} already seen."),
+    DuplicateModifier: _<{| modifier: TsModifier |}>(({ modifier }) => `Duplicate modifier: '${modifier}'.`),
+    EmptyHeritageClauseType: _<{| descriptor: string |}>(({ descriptor }) => `'${descriptor}' list cannot be empty.`),
     EmptyTypeArguments: _("Type argument list cannot be empty."),
     EmptyTypeParameters: _("Type parameter list cannot be empty."),
     ExpectedAmbientAfterExportDeclare: _(
       "'export declare' must be followed by an ambient declaration."
     ),
     ImportAliasHasImportType: _("An import alias can not use 'import type'."),
-    IncompatibleModifiers: _<{ modifiers: [TsModifier, TsModifier] }>(({ modifiers }) =>
+    IncompatibleModifiers: _<{| modifiers: [TsModifier, TsModifier] |}>(({ modifiers }) =>
       `'${modifiers[0]}' modifier cannot be used with '${modifiers[1]}' modifier.`
     ),
     IndexSignatureHasAbstract: _(
       "Index signatures cannot have the 'abstract' modifier."
     ),
-    IndexSignatureHasAccessibility: _<{ modifier: N.Accessibility }>(({ modifier }) =>
+    IndexSignatureHasAccessibility: _<{| modifier: N.Accessibility |}>(({ modifier }) =>
       `Index signatures cannot have an accessibility modifier ('${modifier}').`
     ),
     IndexSignatureHasDeclare: _(
@@ -125,10 +125,10 @@ const TSErrors = toParseErrorClasses(
     IndexSignatureHasStatic: _(
       "Index signatures cannot have the 'static' modifier."
     ),
-    InvalidModifierOnTypeMember: _<{ modifier: TsModifier }>(({ modifier }) =>
+    InvalidModifierOnTypeMember: _<{| modifier: TsModifier |}>(({ modifier }) =>
       `'${modifier}' modifier cannot appear on a type member.`
     ),
-    InvalidModifiersOrder: _<{ orderedModifiers: [TsModifier, TsModifier] }>(({ orderedModifiers }) => `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`),
+    InvalidModifiersOrder: _<{| orderedModifiers: [TsModifier, TsModifier] |}>(({ orderedModifiers }) => `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`),
     InvalidTupleMemberLabel: _(
       "Tuple members must be labeled with a simple identifier."
     ),
@@ -156,7 +156,7 @@ const TSErrors = toParseErrorClasses(
     PrivateElementHasAbstract: _(
       "Private elements cannot have the 'abstract' modifier."
     ),
-    PrivateElementHasAccessibility: _<{ modifier: N.Accessibility }>(({ modifier }) =>
+    PrivateElementHasAccessibility: _<{| modifier: N.Accessibility |}>(({ modifier }) =>
       `Private elements cannot have an accessibility modifier ('${modifier}').`
     ),
     ReadonlyForMethodSignature: _(
@@ -211,7 +211,7 @@ const TSErrors = toParseErrorClasses(
     UnsupportedParameterPropertyKind: _(
       "A parameter property may not be declared using a binding pattern."
     ),
-    UnsupportedSignatureParameterKind: _<{ unsupportedParameterType: string }>(({ unsupportedParameterType }) =>
+    UnsupportedSignatureParameterKind: _<{| unsupportedParameterType: string |}>(({ unsupportedParameterType }) =>
       `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${unsupportedParameterType}.`
     ),
   }),

@@ -1,7 +1,7 @@
 // @flow
 
 import { Position } from "./util/location";
-import type { Node } from "./types";
+import type { NodeBase } from "./types";
 
 const { assign: ObjectAssign } = Object;
 
@@ -76,10 +76,9 @@ export function toParseErrorClasses<T: Object>(
 }
 
 
-type Origin = {| at: Position | Node |};
-export type RaiseProperties<ErrorProperties: Object> = {|
-  ...$Exact<ErrorProperties>,
-  ...Origin,
+export type RaiseProperties<ErrorProperties> = {|
+  ...ErrorProperties,
+  at: Position | NodeBase,
 |};
 
 export { default as ModuleErrors } from "./parse-error/module";
