@@ -87,8 +87,8 @@ type ArrowHeadParsingDeclarationErrorClass =
 
 class ArrowHeadParsingScope extends ExpressionScope {
   declarationErrors: Map<
-    ArrowHeadParsingDeclarationErrorClass,
-    [Class<ParseError<any>>, Position]
+    number,
+    [ArrowHeadParsingDeclarationErrorClass, Position]
   > = new Map();
   constructor(type: 1 | 2) {
     super(type);

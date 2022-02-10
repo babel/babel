@@ -52,7 +52,7 @@ const PlaceholderErrors = toParseErrorClasses(
     ClassNameIsRequired: _("A class name is required."),
     UnexpectedSpace: _("Unexpected space in placeholder.")
   }),
-  /* syntaxPlugin */ "placeholders",
+  { syntaxPlugin: "placeholders" }
 );
 /* eslint-disable sort-keys */
 

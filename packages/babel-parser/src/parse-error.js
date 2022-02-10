@@ -24,10 +24,10 @@ export class ParseError<ErrorProperties> extends SyntaxError {
   loc: Position;
   pos: number;
 
-  constructor(properties: {|
+  constructor(properties: {
     ...ErrorProperties,
     loc: Position,
-  |}): ParseError<ErrorProperties> {
+  }): ParseError<ErrorProperties> {
     super();
 
     return ObjectAssign(this, {
@@ -59,24 +59,30 @@ function fromToMessage<T>(toMessage: ToMessage<T>): Class<ParseError<T>> {
 }
 
 export function toParseErrorClasses<T: Object>(
-  toClasses: (typeof toReasonCodelessParseErrorClass) => T
+  toClasses: (typeof toReasonCodelessParseErrorClass) => T,
+  { syntaxPlugin, code } : Object = {}
 ): T {
   // $FlowIgnore
   return Object.fromEntries(
     Object.entries(toClasses(toReasonCodelessParseErrorClass)).map(
       ([reasonCode, ParseErrorClass]) =>
         // $FlowIgnore
-        Object.assign(ParseErrorClass, { reasonCode })
+        Object.assign(ParseErrorClass,
+            { reasonCode },
+            !!syntaxPlugin && { syntaxPlugin },
+            !!code && { code })
     )
   );
 }
 
 
-type Origin = {| at: Position |} | {| at: Node |};
-export type RaiseProperties<ErrorProperties> = {|
-  ...ErrorProperties,
+type Origin = {| at: Position | Node |};
+export type RaiseProperties<ErrorProperties: Object> = {|
+  ...$Exact<ErrorProperties>,
   ...Origin,
 |};
+
+export { default as ModuleErrors } from "./parse-error/module";
 
 import StandardErrors from "./parse-error/standard";
 import StrictErrors from "./parse-error/strict-mode";

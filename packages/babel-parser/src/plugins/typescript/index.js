@@ -90,7 +90,8 @@ const TSErrors = toParseErrorClasses(
     ConstructorHasTypeParameters: _(
       "Type parameters cannot appear on a constructor declaration."
     ),
-    DeclareAccessor: _<{ accessorKind: "getter" | "setter" }>(({ accessorKind }) => `'declare' is not allowed in ${accessorKind}s.`),
+    // kind?
+    DeclareAccessor: _<{ accessorKind: "get" | "set" }>(({ accessorKind }) => `'declare' is not allowed in ${accessorKind}ters.`),
     DeclareClassFieldHasInitializer: _(
       "Initializers are not allowed in ambient contexts."
     ),
@@ -214,7 +215,7 @@ const TSErrors = toParseErrorClasses(
       `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${unsupportedParameterType}.`
     ),
   }),
-  /* syntaxPlugin */ "typescript"
+  { syntaxPlugin: "typescript" }
 );
 
 /* eslint-disable sort-keys */

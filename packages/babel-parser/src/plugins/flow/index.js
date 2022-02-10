@@ -97,18 +97,19 @@ const FlowErrors = toParseErrorClasses(
       ({ enumName }) =>
         `Supplied enum type is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`
     ),
-    EnumInvalidMemberInitializerPrimaryType:
-      "Enum `%0` has type `%2`, so the initializer of `%1` needs to be a %2 literal.",
-    EnumInvalidMemberInitializerSymbolType:
-      "Symbol enum members cannot be initialized. Use `%1,` in enum `%0`.",
-    EnumInvalidMemberInitializerUnknownType:
-      "The enum member initializer for `%1` needs to be a literal (either a boolean, number, or string) in enum `%0`.",
-    EnumInvalidMemberName:
-      "Enum member names cannot start with lowercase 'a' through 'z'. Instead of using `%0`, consider using `%1`, in enum `%2`.",
-    EnumNumberMemberNotInitialized:
-      "Number enum members need to be initialized, e.g. `%1 = 1` in enum `%0`.",
-    EnumStringMemberInconsistentlyInitailized:
-      "String enum members need to consistently either all use initializers, or use no initializers, in enum `%0`.",
+    EnumInvalidMemberInitializerPrimaryType: _<{ enumName: string, memberName: string,
+        explicitType: string }>(({ enumName, memberName, explicitType }) =>
+      `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of \`${memberName}\` needs to be a ${explicitType} literal.`),
+    EnumInvalidMemberInitializerSymbolType: _<{ enumName: string, memberName: string, explicitType: string }>(({ enumName, memberName }) =>
+      `Symbol enum members cannot be initialized. Use \`${memberName},\` in enum \`${enumName}\`.`),
+    EnumInvalidMemberInitializerUnknownType: _<{ enumName: string, memberName: string, explicitType: null }>(({ enumName, memberName }) =>
+      `The enum member initializer for \`${memberName}\` needs to be a literal (either a boolean, number, or string) in enum \`${enumName}\`.`),
+    EnumInvalidMemberName: _<{ enumName: string, memberName: string, suggestion: string }>(({ enumName, memberName, suggestion }) =>
+      `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using \`${enumName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`),
+    EnumNumberMemberNotInitialized: _<{ enumName: string, memberName: string }>(({ enumName, memberName }) =>
+      `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`),
+    EnumStringMemberInconsistentlyInitailized: _<{ enumName: string }>(({ enumName }) =>
+      `String enum members need to consistently either all use initializers, or use no initializers, in enum \`${enumName}\`.`),
     GetterMayNotHaveThisParam: _("A getter cannot have a `this` parameter."),
     ImportTypeShorthandOnlyInPureImport: _(
       "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements."
@@ -190,7 +191,7 @@ const FlowErrors = toParseErrorClasses(
     ),
     UnterminatedFlowComment: _("Unterminated flow-comment."),
   }),
-  /* syntaxPlugin */ "flow"
+  { syntaxPlugin: "flow" }
 );
 /* eslint-disable sort-keys */
 
@@ -3303,21 +3304,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       });
     }
 
-    flowEnumErrorInvalidExplicitType(
-      loc: Position,
-      {
-        enumName,
-        suppliedType,
-      }: { enumName: string, suppliedType: null | string },
-    ) {
-      return this.raise(
-        suppliedType === null
-          ? FlowErrors.EnumInvalidExplicitTypeUnknownSupplied
-          : FlowErrors.EnumInvalidExplicitType,
-        { at: loc, enumName, suppliedType },
-      );
-    }
-
     flowEnumErrorInvalidMemberInitializer(
       loc: Position,
       { enumName, explicitType, memberName }: EnumContext,
@@ -3557,32 +3543,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }: {
       enumName: string,
     }): EnumExplicitType {
-      if (this.eatContextual(tt._of)) {
-        if (!tokenIsIdentifier(this.state.type)) {
-          throw this.flowEnumErrorInvalidExplicitType(this.state.startLoc, {
-            enumName,
-            suppliedType: null,
-          });
-        }
+      if (!this.eatContextual(tt._of)) return null;
 
-        const { value } = this.state;
-        this.next();
-
-        if (
-          value !== "boolean" &&
-          value !== "number" &&
-          value !== "string" &&
-          value !== "symbol"
-        ) {
-          this.flowEnumErrorInvalidExplicitType(this.state.startLoc, {
-            enumName,
-            suppliedType: value,
-          });
-        }
-
-        return value;
+      if (!tokenIsIdentifier(this.state.type)) {
+        throw this.raise(FlowErrors.EnumInvalidExplicitTypeUnknownSupplied, {
+          at: this.state.startLoc,
+          enumName,
+        });
       }
-      return null;
+
+      const { value } = this.state;
+      this.next();
+
+      if (
+        value !== "boolean" &&
+        value !== "number" &&
+        value !== "string" &&
+        value !== "symbol"
+      ) {
+        this.raise(FlowErrors.EnumInvalidExplicitType, {
+          at: this.state.startLoc,
+          enumName,
+          invalidEnumType: value
+        });
+      }
+
+      return value;
     }
 
     flowEnumBody(node: N.Node, id: N.Node): N.Node {

@@ -67,7 +67,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope";
-import { Errors, ParseError, SourceTypeModuleErrors } from "../parse-error";
+import { Errors, ModuleErrors, ParseError } from "../parse-error";
 import { setInnerComments } from "./comments";
 import { cloneIdentifier } from "./node";
 
@@ -1601,9 +1601,7 @@ export default class ExpressionParser extends LValParser {
 
     if (this.isContextual(tt._meta)) {
       if (!this.inModule) {
-        this.raise(SourceTypeModuleErrors.ImportMetaOutsideModule, {
-          at: id,
-        });
+        this.raise(ModuleErrors.ImportMetaOutsideModule, { at: id });
       }
       this.sawUnambiguousESM = true;
     }

@@ -16,7 +16,7 @@ import {
   type TokenType,
 } from "./types";
 import { type TokContext } from "./context";
-import { Errors, ParseError, RaiseProperties } from "../parse-error";
+import { Errors, ParseError, type RaiseProperties } from "../parse-error";
 import {
   lineBreakG,
   isNewLine,
