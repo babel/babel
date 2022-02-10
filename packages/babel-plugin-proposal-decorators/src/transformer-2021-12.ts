@@ -873,7 +873,7 @@ function transformClass(
     path.get("body.body").forEach(element => {
       // Static blocks cannot be compiled to "instance blocks", but we can inline
       // them as IIFEs in the next property.
-      if (element.isStaticBlock()) {
+      if (element.isStaticBlock?.()) {
         staticBlocks.push(element.node);
         element.remove();
         return;

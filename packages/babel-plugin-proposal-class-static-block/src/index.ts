@@ -53,7 +53,7 @@ export default declare(({ types: t, template, assertVersion }) => {
           }
         }
         for (const path of body) {
-          if (!path.isStaticBlock()) continue;
+          if (!path.isStaticBlock?.()) continue;
           const staticBlockPrivateId = generateUid(scope, privateNames);
           privateNames.add(staticBlockPrivateId);
           const staticBlockRef = t.privateName(
