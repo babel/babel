@@ -368,9 +368,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(Errors.PatternHasAccessor, { node: prop.key });
+        this.raise(Errors.PatternHasAccessor, { at: prop.key });
       } else if (prop.method) {
-        this.raise(Errors.PatternHasMethod, { node: prop.key });
+        this.raise(Errors.PatternHasMethod, { at: prop.key });
       } else {
         super.toAssignableObjectExpressionProp(prop, ...args);
       }

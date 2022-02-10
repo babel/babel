@@ -1228,7 +1228,7 @@ export default class StatementParser extends ExpressionParser {
           if (!isTypescript) {
             this.raise(Errors.DeclarationMissingInitializer, {
               at: this.state.lastTokEndLoc,
-              contextDescription: "Const declarations",
+              declaration: "Const declarations",
             });
           }
         } else if (
@@ -1237,7 +1237,7 @@ export default class StatementParser extends ExpressionParser {
         ) {
           this.raise(Errors.DeclarationMissingInitializer, {
             at: this.state.lastTokEndLoc,
-            contextDescription: "Complex binding patterns",
+            declaration: "Complex binding patterns",
           });
         }
         decl.init = null;
@@ -2539,7 +2539,7 @@ export default class StatementParser extends ExpressionParser {
       if (node.key.name !== "type") {
         this.raise(Errors.ModuleAttributeDifferentFromType, {
           at: node.key,
-          key: node.key.name,
+//          key: node.key.name,
         });
       }
 

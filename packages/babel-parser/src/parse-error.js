@@ -5,10 +5,12 @@ import type { NodeBase } from "./types";
 
 const { assign: ObjectAssign } = Object;
 
-export enum ParseErrorCode {
-  SyntaxError = "BABEL_PARSER_SYNTAX_ERROR",
-  SourceTypeModuleError = "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
-}
+export const ParseErrorCodes = Object.freeze({
+  SyntaxError: "BABEL_PARSER_SYNTAX_ERROR",
+  SourceTypeModuleError: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
+});
+
+export type ParseErrorCode = $Values<typeof ParseErrorCodes>;
 
 type ToMessage<ErrorProperties> = (self: ErrorProperties) => string;
 
@@ -18,7 +20,7 @@ export class ParseError<ErrorProperties> extends SyntaxError {
 
   name: string = "SyntaxError";
 
-  code: ParseErrorCode = ParseErrorCode.SyntaxError;
+  code: ParseErrorCode = ParseErrorCodes.SyntaxError;
   reasonCode: string = this.constructor.reasonCode;
 
   loc: Position;
@@ -74,7 +76,6 @@ export function toParseErrorClasses<T: Object>(
     )
   );
 }
-
 
 export type RaiseProperties<ErrorProperties> = {|
   ...ErrorProperties,

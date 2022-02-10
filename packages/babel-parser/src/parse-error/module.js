@@ -1,4 +1,4 @@
-import { ErrorCodes, toParseErrorClasses } from "../parse-error";
+import { ParseErrorCodes, toParseErrorClasses } from "../parse-error";
 
 export default toParseErrorClasses(
   _ => ({
@@ -9,5 +9,5 @@ export default toParseErrorClasses(
       `'import' and 'export' may appear only with 'sourceType: "module"'`,
     ),
   }),
-  { code: ErrorCodes.SourceTypeModuleError },
+  { code: ParseErrorCodes.SourceTypeModuleError },
 );

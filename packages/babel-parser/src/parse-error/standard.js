@@ -59,17 +59,17 @@ export default toParseErrorClasses(_ => ({
   ),
   DuplicateConstructor: _("Duplicate constructor in the same class."),
   DuplicateDefaultExport: _("Only one default export allowed per module."),
-  DuplicateExport: _<{| export: string |}>(
-    ({ export: name }) =>
-      `\`${name}\` has already been exported. Exported identifiers must be unique.`,
+  DuplicateExport: _<{| exportedBinding: string |}>(
+    ({ exportedBinding: name }) =>
+      `\`${exportedBinding}\` has already been exported. Exported identifiers must be unique.`,
   ),
   DuplicateProto: _("Redefinition of __proto__ property."),
   DuplicateRegExpFlags: _("Duplicate regular expression flag."),
   ElementAfterRest: _("Rest element must be last element."),
   EscapedCharNotAnIdentifier: _("Invalid Unicode escape."),
-  ExportBindingIsString: _<{ localBinding: string, exportBinding: string }>(
-    ({ localBinding, exportBinding }) =>
-      `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localBinding}' as '${exportBinding}' } from 'some-module'?\``,
+  ExportBindingIsString: _<{ localBinding: string, exportedBinding: string }>(
+    ({ localBinding, exportedBinding }) =>
+      `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localBinding}' as '${exportedBinding}' } from 'some-module'?\``,
   ),
   ExportDefaultFromAsIdentifier: _(
     "'from' is not allowed as an identifier after 'export default'.",
@@ -94,9 +94,9 @@ export default toParseErrorClasses(_ => ({
     "Illegal 'use strict' directive in function with non-simple parameter list.",
   ),
   IllegalReturn: _("'return' outside of function."),
-  ImportBindingIsString: _<{ importBinding: string }>(
-    ({ importBinding }) =>
-      `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importBinding}" as foo }\`?`,
+  ImportBindingIsString: _<{ importedBinding: string }>(
+    ({ importedBinding }) =>
+      `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importedBinding}" as foo }\`?`,
   ),
   ImportCallArgumentTrailingComma: _(
     "Trailing comma is disallowed inside import(...) arguments.",
@@ -121,8 +121,8 @@ export default toParseErrorClasses(_ => ({
   ),
   InvalidEscapeSequence: _("Bad character escape sequence."),
   InvalidEscapeSequenceTemplate: _("Invalid escape sequence in template."),
-  InvalidEscapedReservedWord: _<{ keyword: string }>(
-    ({ keyword }) => `Escape sequence in keyword ${keyword}.`,
+  InvalidEscapedReservedWord: _<{ reservedWord: string }>(
+    ({ reservedWord }) => `Escape sequence in keyword ${reservedWord}.`,
   ),
   InvalidIdentifier: _<{ identifier: string }>(
     ({ identifier }) => `Invalid identifier ${identifier}.`,

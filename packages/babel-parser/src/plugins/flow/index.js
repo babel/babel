@@ -2762,7 +2762,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             /*:: invariant(firstIdent instanceof N.StringLiteral) */
             throw this.raise(Errors.ImportBindingIsString, {
               at: specifier,
-              importBinding: firstIdent.value,
+              importedBinding: firstIdent.value,
             });
           }
           /*:: invariant(firstIdent instanceof N.Node) */

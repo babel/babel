@@ -2459,8 +2459,8 @@ export default class ExpressionParser extends LValParser {
           if (hasStrictModeDirective && nonSimple) {
             // This logic is here to align the error location with the ESTree plugin.
             this.raise(Errors.IllegalLanguageModeDirective, {
-              // $FlowIgnore
               at:
+                // $FlowIgnore
                 (node.kind === "method" || node.kind === "constructor") &&
                 // $FlowIgnore
                 !!node.key
