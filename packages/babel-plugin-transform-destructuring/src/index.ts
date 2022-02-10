@@ -114,12 +114,16 @@ export default declare((api, options) => {
           ),
         );
       } else {
+        let nodeInit: t.Expression;
+
         if (this.kind === "const" && init === null) {
-          init = this.scope.buildUndefinedNode();
+          nodeInit = this.scope.buildUndefinedNode();
+        } else {
+          nodeInit = t.cloneNode(init);
         }
 
         node = t.variableDeclaration(this.kind, [
-          t.variableDeclarator(id, t.cloneNode(init)),
+          t.variableDeclarator(id, nodeInit),
         ]);
       }
 
