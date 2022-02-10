@@ -1587,7 +1587,7 @@ export default class ExpressionParser extends LValParser {
       this.raise(Errors.UnsupportedMetaProperty, {
         at: node.property,
         target: meta.name,
-        property: propertyName,
+        onlyValidProperty: propertyName,
       });
     }
 
@@ -2572,7 +2572,7 @@ export default class ExpressionParser extends LValParser {
       if (!allowEmpty) {
         this.raise(Errors.UnexpectedToken, {
           at: this.state.curPosition(),
-          found: ",",
+//          found: ",",
         });
       }
       elt = null;

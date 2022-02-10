@@ -622,7 +622,7 @@ export default class LValParser extends NodeUtils {
           bindingType === BIND_NONE
             ? Errors.InvalidLhs
             : Errors.InvalidLhsBinding,
-          { at: expr, contextDescription },
+          { at: expr, construct: contextDescription },
         );
       }
     }

@@ -3226,7 +3226,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             contextDescription !== "parenthesized expression" &&
             !expr.extra?.parenthesized
           ) {
-            this.raise(Errors.InvalidLhs, { at: expr, contextDescription });
+            this.raise(Errors.InvalidLhs, { at: expr, construct: contextDescription });
             break;
           }
           this.checkLVal(expr.expression, "parenthesized expression", ...args);

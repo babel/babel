@@ -4,7 +4,7 @@ import { Position } from "../util/location";
 import { toParseErrorClasses } from "../parse-error";
 
 export default toParseErrorClasses(_ => ({
-  AccessorIsGenerator: _<{ accessor: string }>(
+  AccessorIsGenerator: _<{| accessor: string |}>(
     ({ accessor }) => `A ${accessor} cannot be a generator`,
   ),
 
@@ -39,7 +39,7 @@ export default toParseErrorClasses(_ => ({
   ConstructorIsAccessor: _("Class constructor may not be an accessor."),
   ConstructorIsAsync: _("Constructor can't be an async function."),
   ConstructorIsGenerator: _("Constructor can't be a generator."),
-  DeclarationMissingInitializer: _<{ declaration: string }>(
+  DeclarationMissingInitializer: _<{| declaration: string |}>(
     ({ declaration }) => `${declaration}' require an initialization value.`,
   ),
   DecoratorBeforeExport: _(
@@ -67,7 +67,7 @@ export default toParseErrorClasses(_ => ({
   DuplicateRegExpFlags: _("Duplicate regular expression flag."),
   ElementAfterRest: _("Rest element must be last element."),
   EscapedCharNotAnIdentifier: _("Invalid Unicode escape."),
-  ExportBindingIsString: _<{ localBinding: string, exportedBinding: string }>(
+  ExportBindingIsString: _<{| localBinding: string, exportedBinding: string |}>(
     ({ localBinding, exportedBinding }) =>
       `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localBinding}' as '${exportedBinding}' } from 'some-module'?\``,
   ),
@@ -75,7 +75,7 @@ export default toParseErrorClasses(_ => ({
     "'from' is not allowed as an identifier after 'export default'.",
   ),
 
-  ForInOfLoopInitializer: _<{ construct: "for-in" | "for-of" }>(
+  ForInOfLoopInitializer: _<{| construct: "for-in" | "for-of" |}>(
     ({ construct }) =>
       `'${construct}' loop variable declaration may not have an initializer.`,
   ),
@@ -86,7 +86,7 @@ export default toParseErrorClasses(_ => ({
     "Generators can only be declared at the top level or inside a block.",
   ),
 
-  IllegalBreakContinue: _<{ construct: "break" | "continue" }>(
+  IllegalBreakContinue: _<{| construct: "break" | "continue" |}>(
     ({ construct }) => `Unsyntactic ${construct}.`,
   ),
 
@@ -94,14 +94,14 @@ export default toParseErrorClasses(_ => ({
     "Illegal 'use strict' directive in function with non-simple parameter list.",
   ),
   IllegalReturn: _("'return' outside of function."),
-  ImportBindingIsString: _<{ importedBinding: string }>(
+  ImportBindingIsString: _<{| importedBinding: string |}>(
     ({ importedBinding }) =>
       `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importedBinding}" as foo }\`?`,
   ),
   ImportCallArgumentTrailingComma: _(
     "Trailing comma is disallowed inside import(...) arguments.",
   ),
-  ImportCallArity: _<{ required: 1 | 2 }>(
+  ImportCallArity: _<{| required: 1 | 2 |}>(
     ({ required }) =>
       `\`import()\` requires exactly ${
         required === 1 ? "one argument" : "one or two arguments"
@@ -116,36 +116,36 @@ export default toParseErrorClasses(_ => ({
   InvalidCodePoint: _("Code point out of bounds."),
   InvalidCoverInitializedName: _("Invalid shorthand property initializer."),
   InvalidDecimal: _("Invalid decimal."),
-  InvalidDigit: _<{ radix: number }>(
+  InvalidDigit: _<{| radix: number |}>(
     ({ radix }) => `Expected number in radix ${radix}.`,
   ),
   InvalidEscapeSequence: _("Bad character escape sequence."),
   InvalidEscapeSequenceTemplate: _("Invalid escape sequence in template."),
-  InvalidEscapedReservedWord: _<{ reservedWord: string }>(
+  InvalidEscapedReservedWord: _<{| reservedWord: string |}>(
     ({ reservedWord }) => `Escape sequence in keyword ${reservedWord}.`,
   ),
-  InvalidIdentifier: _<{ identifier: string }>(
+  InvalidIdentifier: _<{| identifier: string |}>(
     ({ identifier }) => `Invalid identifier ${identifier}.`,
   ),
-  InvalidLhs: _<{ contextDescription: string }>(
-    ({ contextDescription }) =>
-      `Invalid left-hand side in ${contextDescription}.`,
+  InvalidLhs: _<{| construct: string /*"for-loop"*/ |}>(
+    ({ construct }) =>
+      `Invalid left-hand side in ${construct}.`,
   ),
-  InvalidLhsBinding: _<{ contextDescription: string }>(
-    ({ contextDescription }) =>
-      `Binding invalid left-hand side in ${contextDescription}.`,
+  InvalidLhsBinding: _<{| construct: string |}>(
+    ({ construct }) =>
+      `Binding invalid left-hand side in ${construct}.`,
   ),
   InvalidNumber: _("Invalid number."),
   InvalidOrMissingExponent: _(
     "Floating-point numbers require a valid exponent after the 'e'.",
   ),
-  InvalidOrUnexpectedToken: _<{ found: string }>(
+  InvalidOrUnexpectedToken: _<{| found: string |}>(
     ({ found }) => `Unexpected character '${found}'.`,
   ),
   InvalidParenthesizedAssignment: _(
     "Invalid parenthesized assignment pattern.",
   ),
-  InvalidPrivateFieldResolution: _<{ name: string }>(
+  InvalidPrivateFieldResolution: _<{| name: string |}>(
     ({ name }) => `Private name #${name} is not defined.`,
   ),
   InvalidPropertyBindingPattern: _("Binding member expression."),
@@ -153,7 +153,7 @@ export default toParseErrorClasses(_ => ({
     "Only properties and spread elements are allowed in record definitions.",
   ),
   InvalidRestAssignmentPattern: _("Invalid rest operator's argument."),
-  LabelRedeclaration: _<{ label: string }>(
+  LabelRedeclaration: _<{| label: string |}>(
     ({ label }) => `Label '${label}' is already declared.`,
   ),
   LetInLexicalBinding: _(
@@ -166,13 +166,13 @@ export default toParseErrorClasses(_ => ({
     "Only '=' operator can be used for specifying default value.",
   ),
   MissingSemicolon: _("Missing semicolon."),
-  MissingPlugin: _<{ missingPlugin: string }>(
+  MissingPlugin: _<{| missingPlugin: string |}>(
     ({ missingPlugin }) =>
       `This experimental syntax requires enabling the parser plugin: "${missingPlugin}".`,
   ),
   // FIXME: Would be nice to make this "missingPlugins" instead.
   // Also), seems like we can drop the "(s)" from the message and just make it "s".
-  MissingOneOfPlugins: _<{ missingPlugin: string[] }>(
+  MissingOneOfPlugins: _<{| missingPlugin: string[] |}>(
     ({ missingPlugin }) =>
       `This experimental syntax requires enabling one of the following parser plugin(s): ${missingPlugin
         .map(name => JSON.stringify(name))
@@ -188,17 +188,17 @@ export default toParseErrorClasses(_ => ({
   ModuleAttributeInvalidValue: _(
     "Only string literals are allowed as module attribute values.",
   ),
-  ModuleAttributesWithDuplicateKeys: _<{ key: string }>(
+  ModuleAttributesWithDuplicateKeys: _<{| key: string |}>(
     ({ key }) => `Duplicate key "${key}" is not allowed in module attributes.`,
   ),
-  ModuleExportNameHasLoneSurrogate: _<{ surrogateCharCode: number }>(
+  ModuleExportNameHasLoneSurrogate: _<{| surrogateCharCode: number |}>(
     ({ surrogateCharCode }) =>
       `An export name cannot include a lone surrogate), found '\\u${surrogateCharCode.toString(
         16,
       )}'.`,
   ),
-  ModuleExportUndefined: _<{ moduleExportName: string }>(
-    ({ moduleExportName }) => `Export '${moduleExportName}' is not defined.`,
+  ModuleExportUndefined: _<{| exportedBinding: string |}>(
+    ({ exportedBinding }) => `Export '${exportedBinding}' is not defined.`,
   ),
   MultipleDefaultsInSwitch: _("Multiple default clauses."),
   NewlineAfterThrow: _("Illegal newline after throw."),
@@ -223,7 +223,7 @@ export default toParseErrorClasses(_ => ({
   PatternHasAccessor: _("Object pattern can't contain getter or setter."),
   PatternHasMethod: _("Object pattern can't contain methods."),
   // This error is only used by the smart-mix proposal
-  PipeBodyIsTighter: _<{ expressionDescription: string }>(
+  PipeBodyIsTighter: _<{| expressionDescription: string |}>(
     ({ expressionDescription }) =>
       `Unexpected ${expressionDescription} after pipeline body; any ${expressionDescription} expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.`,
   ),
@@ -233,14 +233,14 @@ export default toParseErrorClasses(_ => ({
   PipeTopicUnbound: _(
     "Topic reference is unbound; it must be inside a pipe body.",
   ),
-  PipeTopicUnconfiguredToken: _<{ token: string }>(
+  PipeTopicUnconfiguredToken: _<{| token: string |}>(
     ({ token }) =>
       `Invalid topic token ${token}. In order to use ${token} as a topic reference), the pipelineOperator plugin must be configured with { "proposal": _("hack"), "topicToken": _("${token}" }.`,
   ),
   PipeTopicUnused: _(
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
   ),
-  PipeUnparenthesizedBody: _<{ expressionDescription: string }>(
+  PipeUnparenthesizedBody: _<{| expressionDescription: string |}>(
     ({ expressionDescription }) =>
       `Hack-style pipe body cannot be an unparenthesized ${expressionDescription} expression; please wrap it in parentheses.`,
   ),
@@ -268,11 +268,11 @@ export default toParseErrorClasses(_ => ({
     'Topic reference is used), but the pipelineOperator plugin was not passed a "proposal": _("hack" or "smart" option.',
   ),
 
-  PrivateInExpectedIn: _<{ name: string }>(
+  PrivateInExpectedIn: _<{| name: string |}>(
     ({ name }) =>
       `Private names are only allowed in property accesses (\`obj.#${name}\`) or in \`in\` expressions (\`#${name} in obj\`).`,
   ),
-  PrivateNameRedeclaration: _<{ name: string }>(
+  PrivateNameRedeclaration: _<{| name: string |}>(
     ({ name }) => `Duplicate private name #${name}.`,
   ),
   RecordExpressionBarIncorrectEndSyntaxType: _(
@@ -312,7 +312,7 @@ export default toParseErrorClasses(_ => ({
   UnexpectedImportExport: _(
     "'import' and 'export' may only appear at the top level.",
   ),
-  UnexpectedKeyword: _<{ keyword: string }>(
+  UnexpectedKeyword: _<{| keyword: string |}>(
     ({ keyword }) => `Unexpected keyword '${keyword}'.`,
   ),
   UnexpectedLeadingDecorator: _(
@@ -328,15 +328,15 @@ export default toParseErrorClasses(_ => ({
     "A numeric separator is only allowed between two digits.",
   ),
   UnexpectedPrivateField: _("Unexpected private name."),
-  UnexpectedReservedWord: _<{ reservedWord: string }>(
+  UnexpectedReservedWord: _<{| reservedWord: string |}>(
     ({ reservedWord }) => `Unexpected reserved word '${reservedWord}'.`,
   ),
   UnexpectedSuper: _("'super' is only allowed in object methods and classes."),
-  UnexpectedToken: _<{
+  UnexpectedToken: _<{|
     loc: Position,
-    expected?: string,
+    expected?: ?string,
     /* eslint-disable no-confusing-arrow */
-  }>(({ loc: { line, column }, expected }) =>
+  |}>(({ loc: { line, column }, expected }) =>
     expected
       ? `Unexpected token, expected "${expected} (${line}:${column})"`
       : "Unexpected token",
@@ -354,7 +354,7 @@ export default toParseErrorClasses(_ => ({
   UnsupportedImport: _(
     "`import` can only be used in `import()` or `import.meta`.",
   ),
-  UnsupportedMetaProperty: _<{ target: string, onlyValidProperty: string }>(
+  UnsupportedMetaProperty: _<{| target: string, onlyValidProperty: string |}>(
     ({ target, onlyValidProperty }) =>
       `The only valid meta property for ${target} is ${target}.${onlyValidProperty}.`,
   ),
@@ -371,7 +371,7 @@ export default toParseErrorClasses(_ => ({
   UnterminatedRegExp: _("Unterminated regular expression."),
   UnterminatedString: _("Unterminated string constant."),
   UnterminatedTemplate: _("Unterminated template."),
-  VarRedeclaration: _<{ name: string }>(
+  VarRedeclaration: _<{| name: string |}>(
     ({ name }) => `Identifier '${name}' has already been declared.`,
   ),
   YieldBindingIdentifier: _(

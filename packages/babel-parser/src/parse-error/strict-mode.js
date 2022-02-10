@@ -4,10 +4,10 @@ import { toParseErrorClasses } from "../parse-error";
 
 export default toParseErrorClasses(_ => ({
   StrictDelete: _("Deleting local variable in strict mode."),
-  StrictEvalArguments: _<{ binding: string }>(
+  StrictEvalArguments: _<{| binding: string |}>(
     ({ binding }) => `Assigning to '${binding}' in strict mode.`,
   ),
-  StrictEvalArgumentsBinding: _<{ binding: string }>(
+  StrictEvalArgumentsBinding: _<{| binding: string |}>(
     ({ binding }) => `Binding '${binding}' in strict mode.`,
   ),
   StrictFunction: _(

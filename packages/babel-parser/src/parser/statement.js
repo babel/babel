@@ -220,7 +220,7 @@ export default class StatementParser extends ExpressionParser {
       for (const [name, loc] of Array.from(this.scope.undefinedExports)) {
         this.raise(Errors.ModuleExportUndefined, {
           at: loc,
-          exportBinding: name,
+          exportedBinding: name,
         });
       }
     }
@@ -2325,12 +2325,11 @@ export default class StatementParser extends ExpressionParser {
     name: string,
   ): void {
     if (this.exportedIdentifiers.has(name)) {
-      this.raise(
-        name === "default"
-          ? Errors.DuplicateDefaultExport
-          : Errors.DuplicateExport,
-        { at: node, name },
-      );
+      if (name === "default") {
+        this.raise(Errors.DuplicateDefaultExport, { at: node });
+      } else {
+        this.raise(Errors.DuplicateExport, { at: node, exportedBinding: name });
+      }
     }
     this.exportedIdentifiers.add(name);
   }
