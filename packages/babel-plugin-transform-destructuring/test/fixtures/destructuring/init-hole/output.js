@@ -35,3 +35,7 @@ const d = [,];
 const e = [,][0];
 expect(d).toEqual([,]);
 expect(e).toEqual(undefined);
+const f = void 0;
+expect(f).toEqual(undefined);
+let g;
+expect(g).toEqual(undefined);

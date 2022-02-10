@@ -114,6 +114,10 @@ export default declare((api, options) => {
           ),
         );
       } else {
+        if (this.kind === "const" && init === null) {
+          init = this.scope.buildUndefinedNode();
+        }
+
         node = t.variableDeclaration(this.kind, [
           t.variableDeclarator(id, t.cloneNode(init)),
         ]);

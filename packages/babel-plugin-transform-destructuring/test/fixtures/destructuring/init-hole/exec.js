@@ -37,3 +37,9 @@ const [...{ 0: e }] = [,];
 
 expect(d).toEqual([,]);
 expect(e).toEqual(undefined);
+
+const [f] = [,];
+expect(f).toEqual(undefined);
+
+let [g] = [,];
+expect(g).toEqual(undefined);
