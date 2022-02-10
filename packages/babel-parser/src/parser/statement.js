@@ -220,7 +220,7 @@ export default class StatementParser extends ExpressionParser {
       for (const [name, loc] of Array.from(this.scope.undefinedExports)) {
         this.raise(Errors.ModuleExportUndefined, {
           at: loc,
-          exportBinding: name
+          exportBinding: name,
         });
       }
     }
@@ -957,7 +957,7 @@ export default class StatementParser extends ExpressionParser {
       if (label.name === maybeName) {
         this.raise(Errors.LabelRedeclaration, {
           at: expr,
-          label: maybeName
+          label: maybeName,
         });
       }
     }
@@ -1175,7 +1175,7 @@ export default class StatementParser extends ExpressionParser {
     if (init.type === "AssignmentPattern") {
       this.raise(Errors.InvalidLhs, {
         at: init,
-        construct: "for-loop"
+        construct: "for-loop",
       });
     }
 
@@ -1228,7 +1228,7 @@ export default class StatementParser extends ExpressionParser {
           if (!isTypescript) {
             this.raise(Errors.DeclarationMissingInitializer, {
               at: this.state.lastTokEndLoc,
-              contextDescription: "Const declarations"
+              contextDescription: "Const declarations",
             });
           }
         } else if (
@@ -2329,7 +2329,7 @@ export default class StatementParser extends ExpressionParser {
         name === "default"
           ? Errors.DuplicateDefaultExport
           : Errors.DuplicateExport,
-        { at: node, name }
+        { at: node, name },
       );
     }
     this.exportedIdentifiers.add(name);
@@ -2537,10 +2537,9 @@ export default class StatementParser extends ExpressionParser {
       node.key = this.parseIdentifier(true);
 
       if (node.key.name !== "type") {
-        this.raise(
-          Errors.ModuleAttributeDifferentFromType, {
-            at: node.key,
-            key: node.key.name,
+        this.raise(Errors.ModuleAttributeDifferentFromType, {
+          at: node.key,
+          key: node.key.name,
         });
       }
 

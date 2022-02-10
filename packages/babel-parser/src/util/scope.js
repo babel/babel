@@ -39,7 +39,6 @@ export class Scope {
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope: Scope = Scope> {
-
   parser: Tokenizer;
   scopeStack: Array<IScope> = [];
   inModule: boolean;

@@ -11,8 +11,8 @@ import type { ParseError } from "../parse-error";
 import StrictErrors from "../parse-error/strict-mode";
 
 export type DeferredStrictErrorClass =
-    | typeof StrictErrors.StrictNumericEscape
-    | typeof StrictErrors.StrictOctalLiteral;
+  | typeof StrictErrors.StrictNumericEscape
+  | typeof StrictErrors.StrictOctalLiteral;
 
 type TopicContextState = {
   // When a topic binding has been currently established,

@@ -110,7 +110,7 @@ export default class ClassScopeHandler {
       // top-level
       this.parser.raise(Errors.InvalidPrivateFieldResolution, {
         at: loc,
-        name
+        name,
       });
     }
   }

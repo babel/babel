@@ -78,7 +78,7 @@ class ExpressionScope {
 
 type ArrowHeadParsingParameterInitializerErrorClass =
   | typeof Errors.AwaitExpressionFormalParameter
-  | typeof Errors.YieldInParameter
+  | typeof Errors.YieldInParameter;
 
 type ArrowHeadParsingDeclarationErrorClass =
   | ArrowHeadParsingParameterInitializerErrorClass
@@ -88,14 +88,14 @@ type ArrowHeadParsingDeclarationErrorClass =
 class ArrowHeadParsingScope extends ExpressionScope {
   declarationErrors: Map<
     number,
-    [ArrowHeadParsingDeclarationErrorClass, Position]
+    [ArrowHeadParsingDeclarationErrorClass, Position],
   > = new Map();
   constructor(type: 1 | 2) {
     super(type);
   }
   recordDeclarationError<T: ArrowHeadParsingDeclarationErrorClass>(
     ParsingError: T,
-    { at }: { at: Position }
+    { at }: { at: Position },
   ) {
     const index = at.index;
 
@@ -105,12 +105,11 @@ class ArrowHeadParsingScope extends ExpressionScope {
     this.declarationErrors.delete(index);
   }
   iterateErrors<T: ArrowHeadParsingDeclarationErrorClass>(
-    iterator: ([T, Position]) => void
+    iterator: ([T, Position]) => void,
   ) {
     this.declarationErrors.forEach(iterator);
   }
 }
-
 
 export default class ExpressionScopeHandler {
   parser: Tokenizer;
@@ -139,7 +138,7 @@ export default class ExpressionScopeHandler {
    */
   recordParameterInitializerError(
     ParseErrorClass: ArrowHeadParsingParameterInitializerErrorClass,
-    { at: node } : { at: Node }
+    { at: node }: { at: Node },
   ): void {
     const origin = { at: node.loc.start };
     const { stack } = this;
@@ -180,7 +179,7 @@ export default class ExpressionScopeHandler {
    * @returns {void}
    * @memberof ExpressionScopeHandler
    */
-  recordParenthesizedIdentifierError({ at: node } : { at: Node }): void {
+  recordParenthesizedIdentifierError({ at: node }: { at: Node }): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];
     const origin = { at: node.loc.start };
@@ -188,7 +187,10 @@ export default class ExpressionScopeHandler {
       this.parser.raise(Errors.InvalidParenthesizedAssignment, origin);
     } else if (scope.canBeArrowParameterDeclaration()) {
       /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-      scope.recordDeclarationError(Errors.InvalidParenthesizedAssignment, origin);
+      scope.recordDeclarationError(
+        Errors.InvalidParenthesizedAssignment,
+        origin,
+      );
     } else {
       return;
     }

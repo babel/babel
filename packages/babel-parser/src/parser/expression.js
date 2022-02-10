@@ -2460,11 +2460,12 @@ export default class ExpressionParser extends LValParser {
             // This logic is here to align the error location with the ESTree plugin.
             this.raise(Errors.IllegalLanguageModeDirective, {
               // $FlowIgnore
-              at: (node.kind === "method" || node.kind === "constructor") &&
-              // $FlowIgnore
-              !!node.key
-                ? node.key.loc.end
-                : node
+              at:
+                (node.kind === "method" || node.kind === "constructor") &&
+                // $FlowIgnore
+                !!node.key
+                  ? node.key.loc.end
+                  : node,
             });
           }
 
@@ -2571,7 +2572,7 @@ export default class ExpressionParser extends LValParser {
       if (!allowEmpty) {
         this.raise(Errors.UnexpectedToken, {
           at: this.state.curPosition(),
-          found: ","
+          found: ",",
         });
       }
       elt = null;
@@ -2696,7 +2697,7 @@ export default class ExpressionParser extends LValParser {
     if (checkKeywords && isKeyword(word)) {
       this.raise(Errors.UnexpectedKeyword, {
         at: startLoc,
-        keyword: word
+        keyword: word,
       });
       return;
     }
@@ -2710,7 +2711,7 @@ export default class ExpressionParser extends LValParser {
     if (reservedTest(word, this.inModule)) {
       this.raise(Errors.UnexpectedReservedWord, {
         at: startLoc,
-        reservedWord: word
+        reservedWord: word,
       });
     }
   }
@@ -2779,7 +2780,7 @@ export default class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      { at: node }
+      { at: node },
     );
 
     this.next();

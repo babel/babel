@@ -3,7 +3,11 @@
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
-import { Position, SourceLocation, createPositionWithColumnOffset } from "../util/location";
+import {
+  Position,
+  SourceLocation,
+  createPositionWithColumnOffset,
+} from "../util/location";
 import CommentsParser from "../parser/comments";
 import * as N from "../types";
 import * as charCodes from "charcodes";
@@ -1072,7 +1076,7 @@ export default class Tokenizer extends CommentsParser {
 
     throw this.raise(Errors.InvalidOrUnexpectedToken, {
       at: this.state.curPosition(),
-      found: String.fromCodePoint(code)
+      found: String.fromCodePoint(code),
     });
   }
 
@@ -1539,7 +1543,7 @@ export default class Tokenizer extends CommentsParser {
 
   recordStrictModeErrors(
     ParseErrorClass: DeferredStrictErrorClass,
-    { at } : { at: Position },
+    { at }: { at: Position },
   ) {
     const index = at.index;
 
@@ -1632,7 +1636,7 @@ export default class Tokenizer extends CommentsParser {
               return null;
             } else {
               this.recordStrictModeErrors(Errors.StrictNumericEscape, {
-                at: codePos
+                at: codePos,
               });
             }
           }
@@ -1743,13 +1747,10 @@ export default class Tokenizer extends CommentsParser {
     }
   }
 
-  raise<
-    ErrorProperties,
-    T: Class<ParseError<ErrorProperties>>>
-  (
+  raise<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
     ParseErrorClass: T,
-    raiseProperties: RaiseProperties<ErrorProperties>
-  ) : ParseError<ErrorProperties> {
+    raiseProperties: RaiseProperties<ErrorProperties>,
+  ): ParseError<ErrorProperties> {
     const { at, ...rest } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc.start;
     const error = new ParseErrorClass({ ...rest, loc });
@@ -1760,7 +1761,7 @@ export default class Tokenizer extends CommentsParser {
     return error;
   }
 
-/*
+  /*
   /**
    * Raise a parsing error on given position pos. If errorRecovery is true,
    * it will first search current errors and overwrite the error thrown on the exact
@@ -1775,7 +1776,7 @@ export default class Tokenizer extends CommentsParser {
    */
   raiseOverwrite<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
     ParseErrorClass: T,
-    raiseProperties: RaiseProperties<ErrorProperties>
+    raiseProperties: RaiseProperties<ErrorProperties>,
   ): ParseError<ErrorProperties> | empty {
     const { at, ...rest } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc.start;
@@ -1800,7 +1801,7 @@ export default class Tokenizer extends CommentsParser {
   // Raise an unexpected token error. Can take the expected token type.
   unexpected(loc?: Position | null, type?: TokenType): void {
     throw this.raise(Errors.UnexpectedToken, {
-      expected: !!type ? tokenLabelName(type) : null,
+      expected: type ? tokenLabelName(type) : null,
       at: loc != null ? loc : this.state.startLoc,
     });
   }
@@ -1812,7 +1813,7 @@ export default class Tokenizer extends CommentsParser {
 
     throw this.raise(Errors.MissingPlugin, {
       at: loc != null ? loc : this.state.startLoc,
-      missingPlugin: pluginName
+      missingPlugin: pluginName,
     });
   }
 
@@ -1820,7 +1821,7 @@ export default class Tokenizer extends CommentsParser {
     if (!pluginNames.some(name => this.hasPlugin(name))) {
       throw this.raise(Errors.MissingOneOfPlugins, {
         at: this.state.startLoc,
-        missingPlugin: pluginNames
+        missingPlugin: pluginNames,
       });
     }
   }

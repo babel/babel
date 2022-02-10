@@ -50,9 +50,9 @@ type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 const PlaceholderErrors = toParseErrorClasses(
   _ => ({
     ClassNameIsRequired: _("A class name is required."),
-    UnexpectedSpace: _("Unexpected space in placeholder.")
+    UnexpectedSpace: _("Unexpected space in placeholder."),
   }),
-  { syntaxPlugin: "placeholders" }
+  { syntaxPlugin: "placeholders" },
 );
 /* eslint-disable sort-keys */
 
@@ -369,7 +369,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     assertNoSpace(): void {
       if (this.state.start > this.state.lastTokEndLoc.index) {
         this.raise(PlaceholderErrors.UnexpectedSpace, {
-          at: this.state.lastTokEndLoc
+          at: this.state.lastTokEndLoc,
         });
       }
     }

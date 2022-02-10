@@ -69,153 +69,173 @@ type ParsingContext =
 /* eslint sort-keys: "error" */
 const TSErrors = toParseErrorClasses(
   _ => ({
-    AbstractMethodHasImplementation: _<{| methodName: string |}>(({ methodName }) =>
-      `Method '${methodName}' cannot have an implementation because it is marked abstract.`
+    AbstractMethodHasImplementation: _<{| methodName: string |}>(
+      ({ methodName }) =>
+        `Method '${methodName}' cannot have an implementation because it is marked abstract.`,
     ),
-    AbstractPropertyHasInitializer: _<{| propertyName: string |}>(({ propertyName }) =>
-      `Property '${propertyName}' cannot have an initializer because it is marked abstract.`
+    AbstractPropertyHasInitializer: _<{| propertyName: string |}>(
+      ({ propertyName }) =>
+        `Property '${propertyName}' cannot have an initializer because it is marked abstract.`,
     ),
     AccesorCannotDeclareThisParameter: _(
-      "'get' and 'set' accessors cannot declare 'this' parameters."
+      "'get' and 'set' accessors cannot declare 'this' parameters.",
     ),
     AccesorCannotHaveTypeParameters: _(
-      "An accessor cannot have type parameters."
+      "An accessor cannot have type parameters.",
     ),
     ClassMethodHasDeclare: _(
-      "Class methods cannot have the 'declare' modifier."
+      "Class methods cannot have the 'declare' modifier.",
     ),
     ClassMethodHasReadonly: _(
-      "Class methods cannot have the 'readonly' modifier."
+      "Class methods cannot have the 'readonly' modifier.",
     ),
     ConstructorHasTypeParameters: _(
-      "Type parameters cannot appear on a constructor declaration."
+      "Type parameters cannot appear on a constructor declaration.",
     ),
     // kind?
-    DeclareAccessor: _<{| accessorKind: "get" | "set" |}>(({ accessorKind }) => `'declare' is not allowed in ${accessorKind}ters.`),
+    DeclareAccessor: _<{| accessorKind: "get" | "set" |}>(
+      ({ accessorKind }) => `'declare' is not allowed in ${accessorKind}ters.`,
+    ),
     DeclareClassFieldHasInitializer: _(
-      "Initializers are not allowed in ambient contexts."
+      "Initializers are not allowed in ambient contexts.",
     ),
     DeclareFunctionHasImplementation: _(
-      "An implementation cannot be declared in ambient contexts."
+      "An implementation cannot be declared in ambient contexts.",
     ),
-    DuplicateAccessibilityModifier: _<{| modifier: N.Accessibility |}>(({ modifier }) => "Accessibility modifier ${modifier} already seen."),
-    DuplicateModifier: _<{| modifier: TsModifier |}>(({ modifier }) => `Duplicate modifier: '${modifier}'.`),
-    EmptyHeritageClauseType: _<{| descriptor: string |}>(({ descriptor }) => `'${descriptor}' list cannot be empty.`),
+    DuplicateAccessibilityModifier: _<{| modifier: N.Accessibility |}>(
+      ({ modifier }) => "Accessibility modifier ${modifier} already seen.",
+    ),
+    DuplicateModifier: _<{| modifier: TsModifier |}>(
+      ({ modifier }) => `Duplicate modifier: '${modifier}'.`,
+    ),
+    EmptyHeritageClauseType: _<{| descriptor: string |}>(
+      ({ descriptor }) => `'${descriptor}' list cannot be empty.`,
+    ),
     EmptyTypeArguments: _("Type argument list cannot be empty."),
     EmptyTypeParameters: _("Type parameter list cannot be empty."),
     ExpectedAmbientAfterExportDeclare: _(
-      "'export declare' must be followed by an ambient declaration."
+      "'export declare' must be followed by an ambient declaration.",
     ),
     ImportAliasHasImportType: _("An import alias can not use 'import type'."),
-    IncompatibleModifiers: _<{| modifiers: [TsModifier, TsModifier] |}>(({ modifiers }) =>
-      `'${modifiers[0]}' modifier cannot be used with '${modifiers[1]}' modifier.`
+    IncompatibleModifiers: _<{| modifiers: [TsModifier, TsModifier] |}>(
+      ({ modifiers }) =>
+        `'${modifiers[0]}' modifier cannot be used with '${modifiers[1]}' modifier.`,
     ),
     IndexSignatureHasAbstract: _(
-      "Index signatures cannot have the 'abstract' modifier."
+      "Index signatures cannot have the 'abstract' modifier.",
     ),
-    IndexSignatureHasAccessibility: _<{| modifier: N.Accessibility |}>(({ modifier }) =>
-      `Index signatures cannot have an accessibility modifier ('${modifier}').`
+    IndexSignatureHasAccessibility: _<{| modifier: N.Accessibility |}>(
+      ({ modifier }) =>
+        `Index signatures cannot have an accessibility modifier ('${modifier}').`,
     ),
     IndexSignatureHasDeclare: _(
-      "Index signatures cannot have the 'declare' modifier."
+      "Index signatures cannot have the 'declare' modifier.",
     ),
     IndexSignatureHasOverride: _(
-      "'override' modifier cannot appear on an index signature."
+      "'override' modifier cannot appear on an index signature.",
     ),
     IndexSignatureHasStatic: _(
-      "Index signatures cannot have the 'static' modifier."
+      "Index signatures cannot have the 'static' modifier.",
     ),
-    InvalidModifierOnTypeMember: _<{| modifier: TsModifier |}>(({ modifier }) =>
-      `'${modifier}' modifier cannot appear on a type member.`
+    InvalidModifierOnTypeMember: _<{| modifier: TsModifier |}>(
+      ({ modifier }) =>
+        `'${modifier}' modifier cannot appear on a type member.`,
     ),
-    InvalidModifiersOrder: _<{| orderedModifiers: [TsModifier, TsModifier] |}>(({ orderedModifiers }) => `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`),
+    InvalidModifiersOrder: _<{| orderedModifiers: [TsModifier, TsModifier] |}>(
+      ({ orderedModifiers }) =>
+        `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`,
+    ),
     InvalidTupleMemberLabel: _(
-      "Tuple members must be labeled with a simple identifier."
+      "Tuple members must be labeled with a simple identifier.",
     ),
     MissingInterfaceName: _(
-      "'interface' declarations must be followed by an identifier."
+      "'interface' declarations must be followed by an identifier.",
     ),
     MixedLabeledAndUnlabeledElements: _(
-      "Tuple members must all have names or all not have names."
+      "Tuple members must all have names or all not have names.",
     ),
     NonAbstractClassHasAbstractMethod: _(
-      "Abstract methods can only appear within an abstract class."
+      "Abstract methods can only appear within an abstract class.",
     ),
     NonClassMethodPropertyHasAbstractModifer: _(
-      "'abstract' modifier can only appear on a class, method, or property declaration."
+      "'abstract' modifier can only appear on a class, method, or property declaration.",
     ),
     OptionalTypeBeforeRequired: _(
-      "A required element cannot follow an optional element."
+      "A required element cannot follow an optional element.",
     ),
     OverrideNotInSubClass: _(
-      "This member cannot have an 'override' modifier because its containing class does not extend another class."
+      "This member cannot have an 'override' modifier because its containing class does not extend another class.",
     ),
     PatternIsOptional: _(
-      "A binding pattern parameter cannot be optional in an implementation signature."
+      "A binding pattern parameter cannot be optional in an implementation signature.",
     ),
     PrivateElementHasAbstract: _(
-      "Private elements cannot have the 'abstract' modifier."
+      "Private elements cannot have the 'abstract' modifier.",
     ),
-    PrivateElementHasAccessibility: _<{| modifier: N.Accessibility |}>(({ modifier }) =>
-      `Private elements cannot have an accessibility modifier ('${modifier}').`
+    PrivateElementHasAccessibility: _<{| modifier: N.Accessibility |}>(
+      ({ modifier }) =>
+        `Private elements cannot have an accessibility modifier ('${modifier}').`,
     ),
     ReadonlyForMethodSignature: _(
-      "'readonly' modifier can only appear on a property declaration or index signature."
+      "'readonly' modifier can only appear on a property declaration or index signature.",
     ),
     ReservedArrowTypeParam: _(
-      "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`."
+      "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
     ),
     ReservedTypeAssertion: _(
-      "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead."
+      "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
     ),
     SetAccesorCannotHaveOptionalParameter: _(
-      "A 'set' accessor cannot have an optional parameter."
+      "A 'set' accessor cannot have an optional parameter.",
     ),
     SetAccesorCannotHaveRestParameter: _(
-      "A 'set' accessor cannot have rest parameter."
+      "A 'set' accessor cannot have rest parameter.",
     ),
     SetAccesorCannotHaveReturnType: _(
-      "A 'set' accessor cannot have a return type annotation."
+      "A 'set' accessor cannot have a return type annotation.",
     ),
     SingleTypeParameterWithoutTrailingComma: _<{ name: string }>(({ name }) =>
       `Single type parameter ${name} should have a trailing comma. Example usage: <${name},>.`
     ),
     StaticBlockCannotHaveModifier: _(
-      "Static class blocks cannot have any modifier."
+      "Static class blocks cannot have any modifier.",
     ),
     TypeAnnotationAfterAssign: _(
-      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`."
+      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
     ),
     TypeImportCannotSpecifyDefaultAndNamed: _(
-      "A type-only import can specify a default import or named bindings, but not both."
+      "A type-only import can specify a default import or named bindings, but not both.",
     ),
     TypeModifierIsUsedInTypeExports: _(
-      "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement."
+      "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
     ),
     TypeModifierIsUsedInTypeImports: _(
-      "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement."
+      "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
     ),
     UnexpectedParameterModifier: _(
-      "A parameter property is only allowed in a constructor implementation."
+      "A parameter property is only allowed in a constructor implementation.",
     ),
     UnexpectedReadonly: _(
-      "'readonly' type modifier is only permitted on array and tuple literal types."
+      "'readonly' type modifier is only permitted on array and tuple literal types.",
     ),
     UnexpectedTypeAnnotation: _("Did not expect a type annotation here."),
     UnexpectedTypeCastInParameter: _(
-      "Unexpected type cast in parameter position."
+      "Unexpected type cast in parameter position.",
     ),
     UnsupportedImportTypeArgument: _(
-      "Argument in a type import must be a string literal."
+      "Argument in a type import must be a string literal.",
     ),
     UnsupportedParameterPropertyKind: _(
-      "A parameter property may not be declared using a binding pattern."
+      "A parameter property may not be declared using a binding pattern.",
     ),
-    UnsupportedSignatureParameterKind: _<{| unsupportedParameterType: string |}>(({ unsupportedParameterType }) =>
-      `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${unsupportedParameterType}.`
+    UnsupportedSignatureParameterKind: _<{|
+      unsupportedParameterType: string,
+    |}>(
+      ({ unsupportedParameterType }) =>
+        `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${unsupportedParameterType}.`,
     ),
   }),
-  { syntaxPlugin: "typescript" }
+  { syntaxPlugin: "typescript" },
 );
 
 /* eslint-disable sort-keys */
@@ -363,7 +383,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (modified.accessibility) {
             this.raise(TSErrors.DuplicateAccessibilityModifier, {
               at: startLoc,
-              modifier
+              modifier,
             });
           } else {
             enforceOrder(startLoc, modifier, modifier, "override");
@@ -390,7 +410,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (disallowedModifiers?.includes(modifier)) {
           this.raise(TSErrors.InvalidModifierOnTypeMember, {
             at: startLoc,
-            modifier
+            modifier,
           });
         }
       }
@@ -2082,7 +2102,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             "protected",
             "override",
             "readonly",
-          ]
+          ],
         });
         accessibility = modified.accessibility;
         override = modified.override;
@@ -2804,9 +2824,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const { key } = node;
         this.raise(TSErrors.AbstractPropertyHasInitializer, {
           at: this.state.startLoc,
-          propertyName: key.type === "Identifier" && !node.computed
-            ? key.name
-            : `[${this.input.slice(key.start, key.end)}]`,
+          propertyName:
+            key.type === "Identifier" && !node.computed
+              ? key.name
+              : `[${this.input.slice(key.start, key.end)}]`,
         });
       }
 
@@ -2816,7 +2837,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassPrivateProperty(
       node: N.ClassPrivateProperty,
     ): N.ClassPrivateProperty {
-      // $FlowIgnore    
+      // $FlowIgnore
       if (node.abstract) {
         this.raise(TSErrors.PrivateElementHasAbstract, { at: node });
       }
@@ -2852,7 +2873,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (method.declare && (method.kind === "get" || method.kind === "set")) {
         this.raise(TSErrors.DeclareAccessor, {
           at: method,
-          accessorKind: method.kind
+          accessorKind: method.kind,
         });
       }
       if (typeParameters) method.typeParameters = typeParameters;
@@ -3469,9 +3490,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const { key } = method;
           this.raise(TSErrors.AbstractMethodHasImplementation, {
             at: method,
-            methodName: key.type === "Identifier" && !method.computed
-              ? key.name
-              : `[${this.input.slice(key.start, key.end)}]`,
+            methodName:
+              key.type === "Identifier" && !method.computed
+                ? key.name
+                : `[${this.input.slice(key.start, key.end)}]`,
           });
         }
       }

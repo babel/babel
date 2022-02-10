@@ -99,7 +99,7 @@ export default class UtilParser extends Tokenizer {
 
   expectContextual(
     token: TokenType,
-    ParseErrorClass?: Class<ParseError<any>>
+    ParseErrorClass?: Class<ParseError<any>>,
   ): void {
     if (!this.eatContextual(token)) {
       if (ParseErrorClass != null) {

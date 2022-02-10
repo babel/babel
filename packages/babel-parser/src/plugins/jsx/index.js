@@ -23,34 +23,33 @@ import { Errors, toParseErrorClasses } from "../../parse-error";
 const JsxErrors = toParseErrorClasses(
   _ => ({
     AttributeIsEmpty: _(
-      "JSX attributes must only be assigned a non-empty expression."
+      "JSX attributes must only be assigned a non-empty expression.",
     ),
     MissingClosingTagElement: _<{| openingTagName: string |}>(
       ({ openingTagName }) =>
-        `Expected corresponding JSX closing tag for <${openingTagName}>.`
+        `Expected corresponding JSX closing tag for <${openingTagName}>.`,
     ),
     MissingClosingTagFragment: _(
-      "Expected corresponding JSX closing tag for <>."
+      "Expected corresponding JSX closing tag for <>.",
     ),
     UnexpectedSequenceExpression: _(
-      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?"
+      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
     ),
     UnsupportedJsxValue: _(
-      "JSX value should be either an expression or a quoted JSX text."
+      "JSX value should be either an expression or a quoted JSX text.",
     ),
     UnterminatedJsxContent: _("Unterminated JSX contents."),
     UnwrappedAdjacentJSXElements: _(
-      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?"
+      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
     ),
     // FIXME: Unify with Errors.UnexpectedToken
     UnexpectedToken: _<{| found: string, HTMLEntity: string |}>(
       ({ found, HTMLEntity }) =>
-        `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`
+        `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`,
     ),
   }),
-  { syntaxPlugin: "jsx" }
+  { syntaxPlugin: "jsx" },
 );
-
 
 /* eslint-disable sort-keys */
 
@@ -127,7 +126,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               this.raise(JsxErrors.UnexpectedToken, {
                 at: this.state.curPosition(),
                 found: this.input[this.state.pos],
-                HTMLEntity: ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;"
+                HTMLEntity:
+                  ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;",
               });
             }
           /* falls through */
