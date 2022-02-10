@@ -103,7 +103,7 @@ const TSErrors = toParseErrorClasses(
       "An implementation cannot be declared in ambient contexts.",
     ),
     DuplicateAccessibilityModifier: _<{| modifier: N.Accessibility |}>(
-      ({ modifier }) => "Accessibility modifier ${modifier} already seen.",
+      ({ modifier }) => `Accessibility modifier ${modifier} already seen.`,
     ),
     DuplicateModifier: _<{| modifier: TsModifier |}>(
       ({ modifier }) => `Duplicate modifier: '${modifier}'.`,

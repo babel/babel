@@ -1,6 +1,6 @@
 // @flow
 
-import { Errors, ParseError } from "../parse-error";
+import { Errors } from "../parse-error";
 import { Position } from "./location";
 import type { Node } from "../types";
 import Tokenizer from "../tokenizer";
@@ -19,7 +19,7 @@ ExpressionScope is used to track declaration errors in these ambiguous patterns:
    e.g. we don't know if `async({ x })` is a call expression or an async arrow
    function parameters until we see an `=>` after `)`
 
-The following declaration errors (@see parser/error-message) will be recorded in
+The following declaration errors (@see parser-errors/standard) will be recorded in
 some expression scopes and thrown later when we know what the ambigous pattern is
 
 - AwaitBindingIdentifier

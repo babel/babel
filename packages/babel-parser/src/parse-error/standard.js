@@ -2,7 +2,6 @@
 
 import { Position } from "../util/location";
 import { toParseErrorClasses } from "../parse-error";
-import { type TokenType, tokenLabelName } from "../tokenizer/types";
 
 export default toParseErrorClasses(_ => ({
   AccessorIsGenerator: _<{ accessor: string }>(
@@ -70,7 +69,7 @@ export default toParseErrorClasses(_ => ({
   EscapedCharNotAnIdentifier: _("Invalid Unicode escape."),
   ExportBindingIsString: _<{ localBinding: string, exportBinding: string }>(
     ({ localBinding, exportBinding }) =>
-      "A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export { '${localBinding}' as '{exportBinding}' } from 'some-module'`?",
+      `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localBinding}' as '${exportBinding}' } from 'some-module'?\``,
   ),
   ExportDefaultFromAsIdentifier: _(
     "'from' is not allowed as an identifier after 'export default'.",
@@ -336,8 +335,11 @@ export default toParseErrorClasses(_ => ({
   UnexpectedToken: _<{
     loc: Position,
     expected?: string,
+    /* eslint-disable no-confusing-arrow */
   }>(({ loc: { line, column }, expected }) =>
-    (expected ? `Unexpected token), expected "${expected}"` : "Unexpected token"),
+    expected
+      ? `Unexpected token, expected "${expected} (${line}:${column})"`
+      : "Unexpected token",
   ),
   UnexpectedTokenUnaryExponentiation: _(
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
@@ -354,7 +356,7 @@ export default toParseErrorClasses(_ => ({
   ),
   UnsupportedMetaProperty: _<{ target: string, onlyValidProperty: string }>(
     ({ target, onlyValidProperty }) =>
-      "The only valid meta property for ${target} is ${target}.${onlyValidProperty}.",
+      `The only valid meta property for ${target} is ${target}.${onlyValidProperty}.`,
   ),
   UnsupportedParameterDecorator: _(
     "Decorators cannot be used to decorate parameters.",

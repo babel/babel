@@ -3,7 +3,6 @@
 import { type Position } from "../util/location";
 import {
   tokenIsLiteralPropertyName,
-  tokenLabelName,
   tt,
   type TokenType,
 } from "../tokenizer/types";

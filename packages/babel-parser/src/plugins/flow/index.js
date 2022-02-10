@@ -127,7 +127,7 @@ const FlowErrors = toParseErrorClasses(
       suggestion: string,
     |}>(
       ({ enumName, memberName, suggestion }) =>
-        `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using \`${enumName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
+        `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using \`${memberName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
     ),
     EnumNumberMemberNotInitialized: _<{|
       enumName: string,

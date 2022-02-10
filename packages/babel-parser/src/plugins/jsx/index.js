@@ -35,17 +35,17 @@ const JsxErrors = toParseErrorClasses(
     UnexpectedSequenceExpression: _(
       "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
     ),
+    // FIXME: Unify with Errors.UnexpectedToken
+    UnexpectedToken: _<{| found: string, HTMLEntity: string |}>(
+      ({ found, HTMLEntity }) =>
+        `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`,
+    ),
     UnsupportedJsxValue: _(
       "JSX value should be either an expression or a quoted JSX text.",
     ),
     UnterminatedJsxContent: _("Unterminated JSX contents."),
     UnwrappedAdjacentJSXElements: _(
       "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-    ),
-    // FIXME: Unify with Errors.UnexpectedToken
-    UnexpectedToken: _<{| found: string, HTMLEntity: string |}>(
-      ({ found, HTMLEntity }) =>
-        `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`,
     ),
   }),
   { syntaxPlugin: "jsx" },

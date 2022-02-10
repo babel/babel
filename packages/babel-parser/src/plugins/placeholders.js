@@ -5,7 +5,7 @@ import * as charCodes from "charcodes";
 import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-import { Errors, toParseErrorClasses } from "../parse-error";
+import { toParseErrorClasses } from "../parse-error";
 
 export type PlaceholderTypes =
   | "Identifier"
