@@ -2,31 +2,36 @@ name: E2E tests (breaking)
 
 on:
   - push
+  # TODO: If we want to require manual approval, this shold run on
+  # pull_request_target because it needs to be tied to an environment.
   # pull_request_target is generally unsafe, because it lets people run
   # aribitrary code (whatever they put in our tests) in our build env.
-  # However, we require manual approval in e2e-breaking-tests-pr-approval
-  # so in this specific case it's safer.
-  - pull_request_target
+  # However, we require manual approval so in this specific case it's safe enough.
+  - pull_request
 
 jobs:
-  e2e-breaking-tests-pr-approval:
-    name: Manual approval
-    runs-on: ubuntu-latest
-    if: github.event == 'pull_request_target'
-    # This environment does not contain any variable, but since usually
-    # breaking e2e tests are not necessary for PRs we use it to wait
-    # for manual approval before running them.
-    environment: Pull Request - e2e Babel 8
-    steps:
-      - run: echo "Approved"
+  # TODO: Uncomment this if we want to require manual approval. Note that manual
+  # approval will send an email to everyone who can approve the job, every time
+  # that the job is run.
+  # e2e-breaking-tests-pr-approval:
+  #   name: Manual approval
+  #   runs-on: ubuntu-latest
+  #   if: github.event == 'pull_request_target'
+  #   # This environment does not contain any variable, but since usually
+  #   # breaking e2e tests are not necessary for PRs we use it to wait
+  #   # for manual approval before running them.
+  #   environment: Pull Request - e2e Babel 8
+  #   steps:
+  #     - run: echo "Approved"
 
   e2e-breaking-tests:
     name: "/"
-    needs: e2e-breaking-tests-pr-approval
-    # The default condition is success(), but this is false when one of the previous jobs is skipped
-    if: |
-      always() &&
-      (needs.e2e-breaking-tests-pr-approval.result == 'success' || needs.e2e-breaking-tests-pr-approval.result == 'skipped')
-    uses: babel/babel/.github/workflows/e2e-tests.yml@main
+    # TODO: Uncomment this if we want to require manual approval
+    # needs: e2e-breaking-tests-pr-approval
+    # # The default condition is success(), but this is false when one of the previous jobs is skipped
+    # if: |
+    #   always() &&
+    #   (needs.e2e-breaking-tests-pr-approval.result == 'success' || needs.e2e-breaking-tests-pr-approval.result == 'skipped')
+    uses: .github/workflows/e2e-tests.yml
     with:
       BABEL_8_BREAKING: true
