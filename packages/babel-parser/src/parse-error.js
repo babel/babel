@@ -12,6 +12,8 @@ export const ParseErrorCodes = Object.freeze({
 
 export type ParseErrorCode = $Values<typeof ParseErrorCodes>;
 
+var instantiated = false;
+
 type ToMessage<ErrorProperties> = (self: ErrorProperties) => string;
 
 export class ParseError<ErrorProperties> extends SyntaxError {
@@ -56,7 +58,9 @@ function toReasonCodelessParseErrorClass(toMessageOrMessage) {
 
 function fromToMessage<T>(toMessage: ToMessage<T>): Class<ParseError<T>> {
   return class extends ParseError<T> {
-    static toMessage = toMessage;
+    get message() {
+      return toMessage(this);
+    }
   };
 }
 
@@ -65,15 +69,28 @@ export function toParseErrorClasses<T: Object>(
   { syntaxPlugin, code } : Object = {}
 ): T {
   // $FlowIgnore
+  if (!instantiated) {
+    const classes = {
+      _instantiate() {
+        delete classes._instantiate,
+        Object.assign(classes, toParseErrorClasses(toClasses, { syntaxPlugin, code }));
+        return classes;
+      }
+    };
+
+    return classes;
+  }
+
   return Object.fromEntries(
     Object.entries(toClasses(toReasonCodelessParseErrorClass)).map(
-      ([reasonCode, ParseErrorClass]) =>
+      ([reasonCode, ParseErrorClass]) => [
+        reasonCode,
         // $FlowIgnore
         Object.assign(ParseErrorClass,
             { reasonCode },
             !!syntaxPlugin && { syntaxPlugin },
             !!code && { code })
-    )
+    ])
   );
 }
 
@@ -87,4 +104,6 @@ export { default as ModuleErrors } from "./parse-error/module";
 import StandardErrors from "./parse-error/standard";
 import StrictErrors from "./parse-error/strict-mode";
 
-export const Errors = { ...StandardErrors, ...StrictErrors };
+instantiated = true;
+
+export const Errors = { ...StandardErrors._instantiate(), ...StrictErrors._instantiate() };

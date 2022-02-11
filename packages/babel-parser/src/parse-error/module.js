@@ -9,5 +9,5 @@ export default toParseErrorClasses(
       `'import' and 'export' may appear only with 'sourceType: "module"'`,
     ),
   }),
-  { code: ParseErrorCodes.SourceTypeModuleError },
+  //{ code: ParseErrorCodes.SourceTypeModuleError },
 );
