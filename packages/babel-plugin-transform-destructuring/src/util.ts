@@ -19,8 +19,8 @@ function hasObjectRest(pattern: t.ObjectPattern) {
   return pattern.properties.some(prop => t.isRestElement(prop));
 }
 
-interface Unpackable {
-  elements: Array<null | t.Expression>;
+interface UnpackableArrayExpression extends t.ArrayExpression {
+  elements: (null | t.Expression)[];
 }
 
 const STOP_TRAVERSAL = {};
@@ -150,7 +150,7 @@ export class DestructuringTransformer {
     return declar;
   }
 
-  push(id: t.LVal, _init: t.Expression) {
+  push(id: t.LVal, _init: t.Expression | null) {
     const init = t.cloneNode(_init);
     if (t.isObjectPattern(id)) {
       this.pushObjectPattern(id, init);
@@ -176,13 +176,13 @@ export class DestructuringTransformer {
 
   pushAssignmentPattern(
     { left, right }: t.AssignmentPattern,
-    valueRef: t.Expression,
+    valueRef: t.Expression | null,
   ) {
     // handle array init hole
     // const [x = 42] = [,];
     // -> const x = 42;
     if (valueRef === null) {
-      this.nodes.push(this.buildVariableAssignment(left, right));
+      this.push(left, right);
       return;
     }
 
@@ -317,17 +317,19 @@ export class DestructuringTransformer {
     }
   }
 
-  pushObjectPattern(pattern: t.ObjectPattern, objRef: t.Expression) {
+  pushObjectPattern(pattern: t.ObjectPattern, objRef: t.Expression | null) {
     // https://github.com/babel/babel/issues/681
 
-    if (!pattern.properties.length) {
+    if (!pattern.properties.length || objRef === null) {
       this.nodes.push(
         t.expressionStatement(
-          t.callExpression(this.addHelper("objectDestructuringEmpty"), [
-            objRef,
-          ]),
+          t.callExpression(
+            this.addHelper("objectDestructuringEmpty"),
+            objRef !== null ? [objRef] : [],
+          ),
         ),
       );
+      return;
     }
 
     // if we have more than one properties in this pattern and the objectRef is a
@@ -380,7 +382,7 @@ export class DestructuringTransformer {
   canUnpackArrayPattern(
     pattern: t.ArrayPattern,
     arr: t.Expression,
-  ): arr is t.ArrayExpression & Unpackable {
+  ): arr is UnpackableArrayExpression {
     // not an array so there's no way we can deal with this
     if (!t.isArrayExpression(arr)) return false;
 
@@ -428,7 +430,7 @@ export class DestructuringTransformer {
 
   pushUnpackedArrayPattern(
     pattern: t.ArrayPattern,
-    arr: t.ArrayExpression & Unpackable,
+    arr: UnpackableArrayExpression,
   ) {
     for (let i = 0; i < pattern.elements.length; i++) {
       const elem = pattern.elements[i];
@@ -440,7 +442,15 @@ export class DestructuringTransformer {
     }
   }
 
-  pushArrayPattern(pattern: t.ArrayPattern, arrayRef: t.Expression) {
+  pushArrayPattern(pattern: t.ArrayPattern, arrayRef: t.Expression | null) {
+    if (arrayRef === null) {
+      this.nodes.push(
+        t.expressionStatement(
+          t.callExpression(this.addHelper("objectDestructuringEmpty"), []),
+        ),
+      );
+      return;
+    }
     if (!pattern.elements) return;
 
     // optimise basic array destructuring of an array expression
