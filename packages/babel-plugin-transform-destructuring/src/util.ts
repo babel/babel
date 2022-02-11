@@ -122,8 +122,16 @@ export class DestructuringTransformer {
         ),
       );
     } else {
+      let nodeInit: t.Expression;
+
+      if (this.kind === "const" && init === null) {
+        nodeInit = this.scope.buildUndefinedNode();
+      } else {
+        nodeInit = t.cloneNode(init);
+      }
+
       node = t.variableDeclaration(this.kind, [
-        t.variableDeclarator(id, t.cloneNode(init)),
+        t.variableDeclarator(id, nodeInit),
       ]);
     }
 
@@ -170,6 +178,14 @@ export class DestructuringTransformer {
     { left, right }: t.AssignmentPattern,
     valueRef: t.Expression,
   ) {
+    // handle array init hole
+    // const [x = 42] = [,];
+    // -> const x = 42;
+    if (valueRef === null) {
+      this.nodes.push(this.buildVariableAssignment(left, right));
+      return;
+    }
+
     // we need to assign the current value of the assignment to avoid evaluating
     // it more than once
     const tempId = this.scope.generateUidIdentifierBasedOnNode(valueRef);
