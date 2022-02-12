@@ -10,7 +10,7 @@ import {
   getExportedToken,
 } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { Errors, ModuleErrors } from "../parse-error";
+import { Errors } from "../parse-error";
 import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
 import { lineBreak } from "../util/whitespace";
 import * as charCodes from "charcodes";
@@ -483,7 +483,7 @@ export default class StatementParser extends ExpressionParser {
 
   assertModuleNodeAllowed(node: N.Node): void {
     if (!this.options.allowImportExportEverywhere && !this.inModule) {
-      this.raise(ModuleErrors.ImportOutsideModule, { at: node });
+      this.raise(Errors.ImportOutsideModule, { at: node });
     }
   }
 

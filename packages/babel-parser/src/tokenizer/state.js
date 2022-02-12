@@ -7,12 +7,11 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import { tt, type TokenType } from "./types";
-import type { ParseError } from "../parse-error";
-import StrictErrors from "../parse-error/strict-mode";
+import { Errors, ParseError } from "../parse-error";
 
 export type DeferredStrictErrorClass =
-  | typeof StrictErrors.StrictNumericEscape
-  | typeof StrictErrors.StrictOctalLiteral;
+  | typeof Errors.StrictNumericEscape
+  | typeof Errors.StrictOctalLiteral;
 
 type TopicContextState = {
   // When a topic binding has been currently established,

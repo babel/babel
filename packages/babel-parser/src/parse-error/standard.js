@@ -1,9 +1,8 @@
 // @flow
 
-import { Position } from "../util/location";
-import { toParseErrorClasses } from "../parse-error";
+import { toParseErrorClass } from "../parse-error";
 
-export default toParseErrorClasses(_ => ({
+export default (_: typeof toParseErrorClass) => ({
   AccessorIsGenerator: _<{| accessor: string |}>(
     ({ accessor }) => `A ${accessor}ter cannot be a generator.`,
   ),
@@ -380,4 +379,4 @@ export default toParseErrorClasses(_ => ({
   ZeroDigitNumericSeparator: _(
     "Numeric separator can not be used after leading 0.",
   ),
-}));
+});

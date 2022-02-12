@@ -1,8 +1,8 @@
 // @flow
 
-import { toParseErrorClasses } from "../parse-error";
+import { toParseErrorClass } from "../parse-error";
 
-export default toParseErrorClasses(_ => ({
+export default (_: typeof toParseErrorClass) => ({
   StrictDelete: _("Deleting local variable in strict mode."),
   StrictEvalArguments: _<{| binding: string |}>(
     ({ binding }) => `Assigning to '${binding}' in strict mode.`,
@@ -20,4 +20,4 @@ export default toParseErrorClasses(_ => ({
     "Legacy octal literals are not allowed in strict mode.",
   ),
   StrictWith: _("'with' in strict mode."),
-}));
+});
