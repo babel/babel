@@ -1,3 +1,5 @@
+// @flow
+
 import { ParseErrorCodes, toParseErrorClasses } from "../parse-error";
 
 export default toParseErrorClasses(

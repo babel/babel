@@ -5,7 +5,7 @@ import { toParseErrorClasses } from "../parse-error";
 
 export default toParseErrorClasses(_ => ({
   AccessorIsGenerator: _<{| accessor: string |}>(
-    ({ accessor }) => `A ${accessor} cannot be a generator`,
+    ({ accessor }) => `A ${accessor}ter cannot be a generator.`,
   ),
 
   ArgumentsInClass: _(
@@ -40,7 +40,7 @@ export default toParseErrorClasses(_ => ({
   ConstructorIsAsync: _("Constructor can't be an async function."),
   ConstructorIsGenerator: _("Constructor can't be a generator."),
   DeclarationMissingInitializer: _<{| declaration: string |}>(
-    ({ declaration }) => `${declaration}' require an initialization value.`,
+    ({ declaration }) => `'${declaration}' require an initialization value.`,
   ),
   DecoratorBeforeExport: _(
     "Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax.",
@@ -60,7 +60,7 @@ export default toParseErrorClasses(_ => ({
   DuplicateConstructor: _("Duplicate constructor in the same class."),
   DuplicateDefaultExport: _("Only one default export allowed per module."),
   DuplicateExport: _<{| exportedBinding: string |}>(
-    ({ exportedBinding: name }) =>
+    ({ exportedBinding }) =>
       `\`${exportedBinding}\` has already been exported. Exported identifiers must be unique.`,
   ),
   DuplicateProto: _("Redefinition of __proto__ property."),
@@ -69,7 +69,7 @@ export default toParseErrorClasses(_ => ({
   EscapedCharNotAnIdentifier: _("Invalid Unicode escape."),
   ExportBindingIsString: _<{| localBinding: string, exportedBinding: string |}>(
     ({ localBinding, exportedBinding }) =>
-      `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localBinding}' as '${exportedBinding}' } from 'some-module'?\``,
+      `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localBinding}' as '${exportedBinding}' } from 'some-module'\`?`,
   ),
   ExportDefaultFromAsIdentifier: _(
     "'from' is not allowed as an identifier after 'export default'.",
@@ -166,9 +166,11 @@ export default toParseErrorClasses(_ => ({
     "Only '=' operator can be used for specifying default value.",
   ),
   MissingSemicolon: _("Missing semicolon."),
-  MissingPlugin: _<{| missingPlugin: string |}>(
+  MissingPlugin: _<{| missingPlugin: [string] |}>(
     ({ missingPlugin }) =>
-      `This experimental syntax requires enabling the parser plugin: "${missingPlugin}".`,
+      `This experimental syntax requires enabling the parser plugin: ${missingPlugin
+        .map(name => JSON.stringify(name))
+        .join(", ")}.`,
   ),
   // FIXME: Would be nice to make this "missingPlugins" instead.
   // Also), seems like we can drop the "(s)" from the message and just make it "s".
@@ -176,7 +178,7 @@ export default toParseErrorClasses(_ => ({
     ({ missingPlugin }) =>
       `This experimental syntax requires enabling one of the following parser plugin(s): ${missingPlugin
         .map(name => JSON.stringify(name))
-        .join("), ")}.`,
+        .join(", ")}.`,
   ),
   MissingUnicodeEscape: _("Expecting Unicode escape sequence \\uXXXX."),
   MixingCoalesceWithLogical: _(
@@ -193,7 +195,7 @@ export default toParseErrorClasses(_ => ({
   ),
   ModuleExportNameHasLoneSurrogate: _<{| surrogateCharCode: number |}>(
     ({ surrogateCharCode }) =>
-      `An export name cannot include a lone surrogate), found '\\u${surrogateCharCode.toString(
+      `An export name cannot include a lone surrogate, found '\\u${surrogateCharCode.toString(
         16,
       )}'.`,
   ),
@@ -228,14 +230,14 @@ export default toParseErrorClasses(_ => ({
       `Unexpected ${expressionDescription} after pipeline body; any ${expressionDescription} expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.`,
   ),
   PipeTopicRequiresHackPipes: _(
-    'Topic reference is used), but the pipelineOperator plugin was not passed a "proposal": _("hack" or "smart" option.',
+    'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
   ),
   PipeTopicUnbound: _(
     "Topic reference is unbound; it must be inside a pipe body.",
   ),
   PipeTopicUnconfiguredToken: _<{| token: string |}>(
     ({ token }) =>
-      `Invalid topic token ${token}. In order to use ${token} as a topic reference), the pipelineOperator plugin must be configured with { "proposal": _("hack"), "topicToken": _("${token}" }.`,
+      `Invalid topic token ${token}. In order to use ${token} as a topic reference, the pipelineOperator plugin must be configured with { "proposal": "hack", "topicToken": "${token}" }.`,
   ),
   PipeTopicUnused: _(
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
@@ -265,7 +267,7 @@ export default toParseErrorClasses(_ => ({
     "Topic reference was used in a lexical context without topic binding.",
   ),
   PrimaryTopicRequiresSmartPipeline: _(
-    'Topic reference is used), but the pipelineOperator plugin was not passed a "proposal": _("hack" or "smart" option.',
+    'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
   ),
 
   PrivateInExpectedIn: _<{| name: string |}>(
@@ -287,7 +289,7 @@ export default toParseErrorClasses(_ => ({
   RecordNoProto: _("'__proto__' is not allowed in Record expressions."),
   RestTrailingComma: _("Unexpected trailing comma after rest element."),
   SloppyFunction: _(
-    "In non-strict mode code), functions can only be declared at top level), inside a block), or as the body of an if statement.",
+    "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement.",
   ),
   StaticPrototype: _("Classes may not have static property named prototype."),
   SuperNotAllowed: _(
@@ -333,13 +335,10 @@ export default toParseErrorClasses(_ => ({
   ),
   UnexpectedSuper: _("'super' is only allowed in object methods and classes."),
   UnexpectedToken: _<{|
-    loc: Position,
     expected?: ?string,
-    /* eslint-disable no-confusing-arrow */
-  |}>(({ loc: { line, column }, expected }) =>
-    expected
-      ? `Unexpected token, expected "${expected} (${line}:${column})"`
-      : "Unexpected token",
+    unexpected?: ?string,
+  |}>(({ expected, unexpected }) =>
+    `Unexpected token${ unexpected ? ` '${unexpected}'.` : ""}${ expected ? `, expected "${expected}"` : ""}`
   ),
   UnexpectedTokenUnaryExponentiation: _(
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
@@ -349,7 +348,7 @@ export default toParseErrorClasses(_ => ({
     "A decorated export must export a class declaration.",
   ),
   UnsupportedDefaultExport: _(
-    "Only expressions), functions or classes are allowed as the `default` export.",
+    "Only expressions, functions or classes are allowed as the `default` export.",
   ),
   UnsupportedImport: _(
     "`import` can only be used in `import()` or `import.meta`.",

@@ -1813,7 +1813,7 @@ export default class Tokenizer extends CommentsParser {
 
     throw this.raise(Errors.MissingPlugin, {
       at: loc != null ? loc : this.state.startLoc,
-      missingPlugin: pluginName,
+      missingPlugin: [pluginName],
     });
   }
 

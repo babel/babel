@@ -103,7 +103,9 @@ const TSErrors = toParseErrorClasses(
       "An implementation cannot be declared in ambient contexts.",
     ),
     DuplicateAccessibilityModifier: _<{| modifier: N.Accessibility |}>(
-      ({ modifier }) => `Accessibility modifier ${modifier} already seen.`,
+      // `Accessibility modifier ${modifier} already seen.` would be more helpful.
+      // eslint-disable-line no-unused-vars
+      ({ modifier }) => `Accessibility modifier already seen.`,
     ),
     DuplicateModifier: _<{| modifier: TsModifier |}>(
       ({ modifier }) => `Duplicate modifier: '${modifier}'.`,

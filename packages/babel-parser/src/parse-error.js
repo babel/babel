@@ -5,6 +5,8 @@ import type { NodeBase } from "./types";
 
 const { assign: ObjectAssign } = Object;
 
+const ManuallyAssignedErrorMessages = new WeakMap();
+
 export const ParseErrorCodes = Object.freeze({
   SyntaxError: "BABEL_PARSER_SYNTAX_ERROR",
   SourceTypeModuleError: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
@@ -20,7 +22,7 @@ export class ParseError<ErrorProperties> extends SyntaxError {
   static reasonCode: string;
   static toMessage: ToMessage<ErrorProperties>;
 
-  name: string = "SyntaxError";
+//  static name: string = "SyntaxError";
 
   code: ParseErrorCode = ParseErrorCodes.SyntaxError;
   reasonCode: string = this.constructor.reasonCode;
@@ -41,6 +43,8 @@ export class ParseError<ErrorProperties> extends SyntaxError {
   }
 }
 
+Object.defineProperty(ParseError, "name", { value: "SyntaxError" });
+
 declare function toReasonCodelessParseErrorClass<T: string>(
   T
 ): Class<ParseError<{||}>>;
@@ -59,7 +63,12 @@ function toReasonCodelessParseErrorClass(toMessageOrMessage) {
 function fromToMessage<T>(toMessage: ToMessage<T>): Class<ParseError<T>> {
   return class extends ParseError<T> {
     get message() {
-      return toMessage(this);
+      return ManuallyAssignedErrorMessages.has(this)
+        ? ManuallyAssignedErrorMessages.get(this)
+        : `${toMessage(this)} (${this.loc.line}:${this.loc.column})`;
+    }
+    set message(message) {
+      ManuallyAssignedErrorMessages.set(this, message);
     }
   };
 }
@@ -99,11 +108,13 @@ export type RaiseProperties<ErrorProperties> = {|
   at: Position | NodeBase,
 |};
 
-export { default as ModuleErrors } from "./parse-error/module";
+import { default as ModuleErrorsUninstantiated } from "./parse-error/module";
 
 import StandardErrors from "./parse-error/standard";
 import StrictErrors from "./parse-error/strict-mode";
 
 instantiated = true;
+
+export const ModuleErrors = ModuleErrorsUninstantiated._instantiate();
 
 export const Errors = { ...StandardErrors._instantiate(), ...StrictErrors._instantiate() };

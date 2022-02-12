@@ -116,6 +116,7 @@ const FlowErrors = toParseErrorClasses(
     EnumInvalidMemberInitializerUnknownType: _<{|
       enumName: string,
       memberName: string,
+      // eslint-disable-next-line no-unused-vars
       explicitType: string,
     |}>(
       ({ enumName, memberName }) =>
@@ -3341,9 +3342,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       { enumName, explicitType, memberName }: EnumContext,
     ) {
       return this.raise(
-        explicitType === "boolean" ||
-          explicitType === "number" ||
-          explicitType === "string"
+        /^(boolean|number|string)$/.test(explicitType)
           ? FlowErrors.EnumInvalidMemberInitializerPrimaryType
           : explicitType === "symbol"
           ? FlowErrors.EnumInvalidMemberInitializerSymbolType
@@ -3352,8 +3351,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           at: loc,
           enumName,
           memberName,
-          // FIXME: ?
-          explicitType: "hi" /*explicitType || "unknown"*/,
+          explicitType
         },
       );
     }

@@ -2572,7 +2572,7 @@ export default class ExpressionParser extends LValParser {
       if (!allowEmpty) {
         this.raise(Errors.UnexpectedToken, {
           at: this.state.curPosition(),
-//          found: ",",
+          unexpected: ",",
         });
       }
       elt = null;
