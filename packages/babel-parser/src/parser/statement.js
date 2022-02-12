@@ -1174,7 +1174,7 @@ export default class StatementParser extends ExpressionParser {
     if (init.type === "AssignmentPattern") {
       this.raise(Errors.InvalidLhs, {
         at: init,
-        construct: "for-loop",
+        inNodeType: "for-loop",
       });
     }
 

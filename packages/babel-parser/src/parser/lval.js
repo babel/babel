@@ -506,123 +506,86 @@ export default class LValParser extends NodeUtils {
                                                 strict-mode. e.g. `(arguments) => { "use strict "}`
    * @memberof LValParser
    */
+
   checkLVal(
-    expr: Expression,
-    contextDescription: string,
+    expr: Expression | ObjectMethod | ObjectProperty | RestElement,
+    inNodeType: string = expr.type,
     bindingType: BindingTypes = BIND_NONE,
     checkClashes: ?Set<string>,
     disallowLetBinding?: boolean,
     strictModeChanged?: boolean = false,
   ): void {
-    switch (expr.type) {
-      case "Identifier": {
-        const { name } = expr;
-        if (
-          this.state.strict &&
-          // "Global" reserved words have already been checked by parseIdentifier,
-          // unless they have been found in the id or parameters of a strict-mode
-          // function in a sloppy context.
-          (strictModeChanged
-            ? isStrictBindReservedWord(name, this.inModule)
-            : isStrictBindOnlyReservedWord(name))
-        ) {
-          this.raise(
-            bindingType === BIND_NONE
-              ? Errors.StrictEvalArguments
-              : Errors.StrictEvalArgumentsBinding,
-            { at: expr, binding: name },
-          );
-        }
+    const type = expr.type;
 
-        if (checkClashes) {
-          if (checkClashes.has(name)) {
-            this.raise(Errors.ParamDupe, { at: expr });
-          } else {
-            checkClashes.add(name);
-          }
-        }
-        if (disallowLetBinding && name === "let") {
-          this.raise(Errors.LetInLexicalBinding, { at: expr });
-        }
-        if (!(bindingType & BIND_NONE)) {
-          this.scope.declareName(name, bindingType, expr.loc.start);
-        }
-        break;
+    // If we find here an ObjectMethod, it's because this was originally
+    // an ObjectExpression which has then been converted.
+    // toAssignable already reported this error with a nicer message.
+    if (this.isObjectMethod(expr)) return;
+
+    if (type === "MemberExpression") {
+      if (bindingType !== BIND_NONE) {
+        this.raise(Errors.InvalidPropertyBindingPattern, { at: expr });
       }
+      return;
+    }
 
-      case "MemberExpression":
-        if (bindingType !== BIND_NONE) {
-          this.raise(Errors.InvalidPropertyBindingPattern, {
-            at: expr,
-          });
-        }
-        break;
-
-      case "ObjectPattern":
-        for (let prop of expr.properties) {
-          if (this.isObjectProperty(prop)) prop = prop.value;
-          // If we find here an ObjectMethod, it's because this was originally
-          // an ObjectExpression which has then been converted.
-          // toAssignable already reported this error with a nicer message.
-          else if (this.isObjectMethod(prop)) continue;
-
-          this.checkLVal(
-            prop,
-            "object destructuring pattern",
-            bindingType,
-            checkClashes,
-            disallowLetBinding,
-          );
-        }
-        break;
-
-      case "ArrayPattern":
-        for (const elem of expr.elements) {
-          if (elem) {
-            this.checkLVal(
-              elem,
-              "array destructuring pattern",
-              bindingType,
-              checkClashes,
-              disallowLetBinding,
-            );
-          }
-        }
-        break;
-
-      case "AssignmentPattern":
-        this.checkLVal(
-          expr.left,
-          "assignment pattern",
-          bindingType,
-          checkClashes,
-        );
-        break;
-
-      case "RestElement":
-        this.checkLVal(
-          expr.argument,
-          "rest element",
-          bindingType,
-          checkClashes,
-        );
-        break;
-
-      case "ParenthesizedExpression":
-        this.checkLVal(
-          expr.expression,
-          "parenthesized expression",
-          bindingType,
-          checkClashes,
-        );
-        break;
-
-      default: {
+    if (type === "Identifier") {
+      const { name } = expr;
+      if (
+        this.state.strict &&
+        // "Global" reserved words have already been checked by parseIdentifier,
+        // unless they have been found in the id or parameters of a strict-mode
+        // function in a sloppy context.
+        (strictModeChanged
+          ? isStrictBindReservedWord(name, this.inModule)
+          : isStrictBindOnlyReservedWord(name))
+      ) {
         this.raise(
           bindingType === BIND_NONE
-            ? Errors.InvalidLhs
-            : Errors.InvalidLhsBinding,
-          { at: expr, construct: contextDescription },
+            ? Errors.StrictEvalArguments
+            : Errors.StrictEvalArgumentsBinding,
+          { at: expr, binding: name },
+        );
+      }
+
+      if (checkClashes) {
+        if (checkClashes.has(name)) {
+          this.raise(Errors.ParamDupe, { at: expr });
+        } else {
+          checkClashes.add(name);
+        }
+      }
+      if (disallowLetBinding && name === "let") {
+        this.raise(Errors.LetInLexicalBinding, { at: expr });
+      }
+      if (!(bindingType & BIND_NONE)) {
+        this.scope.declareName(name, bindingType, expr.loc.start);
+      }
+      return;
+    }
+
+    const [isRelevantType, key] = LValTraversalKeys[type] || [false, false];
+
+    if (!key) {
+      this.raise(
+        bindingType === BIND_NONE
+          ? Errors.InvalidLhs
+          : Errors.InvalidLhsBinding,
+        { at: expr, inNodeType },
+      );
+      return;
+    }
+
+    const relevantType = isRelevantType ? type : inNodeType;
+
+    for (const child of [].concat(expr[key])) {
+      if (child) {
+        this.checkLVal(
+          child,
+          relevantType,
+          bindingType,
+          checkClashes,
+          disallowLetBinding,
         );
       }
     }
@@ -654,3 +617,13 @@ export default class LValParser extends NodeUtils {
     return true;
   }
 }
+
+const LValTraversalKeys = Object.assign(Object.create(null), {
+  AssignmentPattern: [true, "left"],
+  RestElement: [true, "argument"],
+  ParenthesizedExpression: [true, "expression"],
+  ObjectProperty: [false, "value"],
+  Property: [false, "value"],
+  ArrayPattern: [true, "elements"],
+  ObjectPattern: [true, "properties"],
+});
