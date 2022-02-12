@@ -2538,7 +2538,7 @@ export default class StatementParser extends ExpressionParser {
       if (node.key.name !== "type") {
         this.raise(Errors.ModuleAttributeDifferentFromType, {
           at: node.key,
-//          key: node.key.name,
+          // key: node.key.name,
         });
       }
 

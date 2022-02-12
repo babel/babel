@@ -21,7 +21,11 @@ export class ParseError<ErrorProperties> extends SyntaxError {
   static reasonCode: string;
   static toMessage: ToMessage<ErrorProperties>;
 
-//  static name: string = "SyntaxError";
+  // Unfortunately babel-standalone turns this into a straight assigmnent
+  // instead of a defineProperty, so it throws an error. We do it manually
+  // below instead.
+  //
+  // static name: string = "SyntaxError";
 
   code: ParseErrorCode = this.constructor.code;
   reasonCode: string = this.constructor.reasonCode;
@@ -42,39 +46,46 @@ export class ParseError<ErrorProperties> extends SyntaxError {
   }
 }
 
+// We do this for backwards compatibility so that all errors just have the
+// "SyntaxError" name in their messages instead of leaking the private subclass
+// name.
 Object.defineProperty(ParseError, "name", { value: "SyntaxError" });
 
 declare function toParseErrorClass<T: string>(
   T,
-  ?{ code?: ParseErrorCode }
+  ?{ code?: ParseErrorCode },
 ): Class<ParseError<{||}>>;
+
+// eslint-disable-next-line no-redeclare
 declare function toParseErrorClass<T>(
   (T) => string,
-  ?{ code?: ParseErrorCode }
+  ?{ code?: ParseErrorCode },
 ): Class<ParseError<T>>;
 
+// eslint-disable-next-line no-redeclare
 export function toParseErrorClass(toMessageOrMessage, properties) {
   return fromToMessage(
     typeof toMessageOrMessage === "string"
       ? () => toMessageOrMessage
       : toMessageOrMessage,
-    properties
+    properties,
   );
 }
 
 function fromToMessage<T>(
   toMessage: ToMessage<T>,
-  { code = ParseErrorCodes.SyntaxError } = {}
+  { code = ParseErrorCodes.SyntaxError, reasonCode = "" } = {},
 ): Class<ParseError<T>> {
   return class extends ParseError<T> {
-    code: ParseErrorCode = code;
+    static code: ParseErrorCode = code;
+    static reasonCode: string = reasonCode;
 
     get message() {
       return ManuallyAssignedErrorMessages.has(this)
         ? // $FlowIgnore
-        ManuallyAssignedErrorMessages.get(this)
+          ManuallyAssignedErrorMessages.get(this)
         : // $FlowIgnore
-        `${toMessage(this)} (${this.loc.line}:${this.loc.column})`;
+          `${toMessage(this)} (${this.loc.line}:${this.loc.column})`;
     }
     set message(message) {
       ManuallyAssignedErrorMessages.set(this, message);
@@ -82,21 +93,22 @@ function fromToMessage<T>(
   };
 }
 
-
 export function toParseErrorClasses<T: Object>(
   toClasses: (typeof toParseErrorClass) => T,
-  { syntaxPlugin, code } : Object = {}
+  { syntaxPlugin }: Object = {},
 ): T {
   // $FlowIgnore
   return Object.fromEntries(
     Object.entries(toClasses(toParseErrorClass)).map(
       ([reasonCode, ParseErrorClass]) => [
         reasonCode,
-        // $FlowIgnore
-        Object.assign(ParseErrorClass,
-            { reasonCode },
-            !!syntaxPlugin && { syntaxPlugin })
-    ])
+        ObjectAssign(
+          ParseErrorClass,
+          !ParseErrorClass.reasonCode && { reasonCode },
+          !!syntaxPlugin && { syntaxPlugin },
+        ),
+      ],
+    ),
   );
 }
 
@@ -112,5 +124,5 @@ import StrictErrors from "./parse-error/strict-mode";
 export const Errors = {
   ...toParseErrorClasses(ModuleErrors),
   ...toParseErrorClasses(StandardErrors),
-  ...toParseErrorClasses(StrictErrors)
+  ...toParseErrorClasses(StrictErrors),
 };

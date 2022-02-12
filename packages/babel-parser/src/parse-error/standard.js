@@ -127,12 +127,10 @@ export default (_: typeof toParseErrorClass) => ({
     ({ identifier }) => `Invalid identifier ${identifier}.`,
   ),
   InvalidLhs: _<{| construct: string /*"for-loop"*/ |}>(
-    ({ construct }) =>
-      `Invalid left-hand side in ${construct}.`,
+    ({ construct }) => `Invalid left-hand side in ${construct}.`,
   ),
   InvalidLhsBinding: _<{| construct: string |}>(
-    ({ construct }) =>
-      `Binding invalid left-hand side in ${construct}.`,
+    ({ construct }) => `Binding invalid left-hand side in ${construct}.`,
   ),
   InvalidNumber: _("Invalid number."),
   InvalidOrMissingExponent: _(
@@ -336,8 +334,11 @@ export default (_: typeof toParseErrorClass) => ({
   UnexpectedToken: _<{|
     expected?: ?string,
     unexpected?: ?string,
-  |}>(({ expected, unexpected }) =>
-    `Unexpected token${ unexpected ? ` '${unexpected}'.` : ""}${ expected ? `, expected "${expected}"` : ""}`
+  |}>(
+    ({ expected, unexpected }) =>
+      `Unexpected token${unexpected ? ` '${unexpected}'.` : ""}${
+        expected ? `, expected "${expected}"` : ""
+      }`,
   ),
   UnexpectedTokenUnaryExponentiation: _(
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",

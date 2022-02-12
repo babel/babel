@@ -104,7 +104,7 @@ const TSErrors = toParseErrorClasses(
     ),
     DuplicateAccessibilityModifier: _<{| modifier: N.Accessibility |}>(
       // `Accessibility modifier ${modifier} already seen.` would be more helpful.
-      // eslint-disable-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
       ({ modifier }) => `Accessibility modifier already seen.`,
     ),
     DuplicateModifier: _<{| modifier: TsModifier |}>(
@@ -3228,7 +3228,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             contextDescription !== "parenthesized expression" &&
             !expr.extra?.parenthesized
           ) {
-            this.raise(Errors.InvalidLhs, { at: expr, construct: contextDescription });
+            this.raise(Errors.InvalidLhs, {
+              at: expr,
+              construct: contextDescription,
+            });
             break;
           }
           this.checkLVal(expr.expression, "parenthesized expression", ...args);
