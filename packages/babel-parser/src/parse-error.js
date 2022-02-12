@@ -5,7 +5,7 @@ import type { NodeBase } from "./types";
 
 const { assign: ObjectAssign } = Object;
 
-const ManuallyAssignedErrorMessages = new WeakMap();
+const ManuallyAssignedErrorMessages = new WeakMap<ParseError<any>, string>();
 
 export const ParseErrorCodes = Object.freeze({
   SyntaxError: "BABEL_PARSER_SYNTAX_ERROR",
@@ -64,7 +64,9 @@ function fromToMessage<T>(toMessage: ToMessage<T>): Class<ParseError<T>> {
   return class extends ParseError<T> {
     get message() {
       return ManuallyAssignedErrorMessages.has(this)
+        // $FlowIgnore
         ? ManuallyAssignedErrorMessages.get(this)
+        // $FlowIgnore
         : `${toMessage(this)} (${this.loc.line}:${this.loc.column})`;
     }
     set message(message) {
@@ -77,7 +79,6 @@ export function toParseErrorClasses<T: Object>(
   toClasses: (typeof toReasonCodelessParseErrorClass) => T,
   { syntaxPlugin, code } : Object = {}
 ): T {
-  // $FlowIgnore
   if (!instantiated) {
     const classes = {
       _instantiate() {
@@ -90,6 +91,7 @@ export function toParseErrorClasses<T: Object>(
     return classes;
   }
 
+  // $FlowIgnore
   return Object.fromEntries(
     Object.entries(toClasses(toReasonCodelessParseErrorClass)).map(
       ([reasonCode, ParseErrorClass]) => [
