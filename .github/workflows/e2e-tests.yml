@@ -3,10 +3,6 @@ name: E2E tests
 on:
   push:
   pull_request:
-  workflow_call:
-    inputs:
-      BABEL_8_BREAKING:
-        type: boolean
 
 jobs:
   e2e-publish:
@@ -31,8 +27,6 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
-        env:
-          BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING }}
       - uses: actions/upload-artifact@v2
         with:
           name: verdaccio-workspace
@@ -53,8 +47,6 @@ jobs:
           - jest
           - react-native
           - prettier
-        exclude:
-          - project: ${{ inputs.BABEL_8_BREAKING && 'babel-old-version' || '_' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -68,9 +60,3 @@ jobs:
           path: /tmp/verdaccio-workspace
       - name: Test
         run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
-        env:
-          # We don't use true/false, but 'true'/''. This is because false,
-          # when stringified (env vars are strings), it's a truthy value.
-          # This is a probem here, because babel and babel-old-version tests are run
-          # without STRIP_BABEL_8_FLAG, so 'false' is not properly casted to false.
-          BABEL_8_BREAKING: ${{ inputs.BABEL_8_BREAKING && 'true' || '' }}

@@ -1,37 +1,65 @@
 name: E2E tests (breaking)
 
 on:
-  - push
-  # TODO: If we want to require manual approval, this shold run on
-  # pull_request_target because it needs to be tied to an environment.
-  # pull_request_target is generally unsafe, because it lets people run
-  # aribitrary code (whatever they put in our tests) in our build env.
-  # However, we require manual approval so in this specific case it's safe enough.
-  - pull_request
+  push:
+  pull_request:
 
 jobs:
-  # TODO: Uncomment this if we want to require manual approval. Note that manual
-  # approval will send an email to everyone who can approve the job, every time
-  # that the job is run.
-  # e2e-breaking-tests-pr-approval:
-  #   name: Manual approval
-  #   runs-on: ubuntu-latest
-  #   if: github.event == 'pull_request_target'
-  #   # This environment does not contain any variable, but since usually
-  #   # breaking e2e tests are not necessary for PRs we use it to wait
-  #   # for manual approval before running them.
-  #   environment: Pull Request - e2e Babel 8
-  #   steps:
-  #     - run: echo "Approved"
+  e2e-publish:
+    name: Publish to local Verdaccio registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Setup Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Publish
+        run: ./scripts/integration-tests/publish-local.sh
+        env:
+          BABEL_8_BREAKING: true
+      - uses: actions/upload-artifact@v2
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
 
-  e2e-breaking-tests:
-    name: "/"
-    # TODO: Uncomment this if we want to require manual approval
-    # needs: e2e-breaking-tests-pr-approval
-    # # The default condition is success(), but this is false when one of the previous jobs is skipped
-    # if: |
-    #   always() &&
-    #   (needs.e2e-breaking-tests-pr-approval.result == 'success' || needs.e2e-breaking-tests-pr-approval.result == 'skipped')
-    uses: ./.github/workflows/e2e-tests.yml
-    with:
-      BABEL_8_BREAKING: true
+  e2e-tests:
+    name: Test
+    needs: e2e-publish
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - babel
+          - create-react-app
+          - vue-cli
+          - jest
+          - react-native
+          - prettier
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - uses: actions/download-artifact@v2
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+      - name: Test
+        run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
+        env:
+          BABEL_8_BREAKING: true
