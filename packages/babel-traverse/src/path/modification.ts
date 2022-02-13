@@ -12,6 +12,7 @@ import {
   cloneNode,
   expressionStatement,
   isExpression,
+  isSequenceExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type Scope from "../scope";
@@ -100,6 +101,16 @@ export function _containerInsertAfter(this: NodePath, nodes) {
   return this._containerInsert(this.key + 1, nodes);
 }
 
+const last = arr => arr[arr.length - 1];
+
+function isHiddenInSequenceExpression(path: NodePath) {
+  return (
+    isSequenceExpression(path.parent) &&
+    (last(path.parent.expressions) !== path.node ||
+      isHiddenInSequenceExpression(path.parentPath))
+  );
+}
+
 /**
  * Insert the provided nodes after the current one. When inserting nodes after an
  * expression, ensure that the completion record is correct by pushing the current node.
@@ -149,21 +160,27 @@ export function insertAfter(
         return [this];
       }
 
-      // Inserting after the computed key of a method should insert the
-      // temporary binding in the method's parent's scope.
-      if (parentPath.isMethod({ computed: true, key: node })) {
-        scope = scope.parent;
+      if (isHiddenInSequenceExpression(this)) {
+        nodes.unshift(node);
+      } else {
+        // We need to preserve the value of this expression.
+
+        // Inserting after the computed key of a method should insert the
+        // temporary binding in the method's parent's scope.
+        if (parentPath.isMethod({ computed: true, key: node })) {
+          scope = scope.parent;
+        }
+        const temp = scope.generateDeclaredUidIdentifier();
+        nodes.unshift(
+          expressionStatement(
+            // @ts-expect-error todo(flow->ts): This can be a variable
+            // declaraion in the "init" of a for statement, but that's
+            // invalid here.
+            assignmentExpression("=", cloneNode(temp), node),
+          ),
+        );
+        nodes.push(expressionStatement(cloneNode(temp)));
       }
-      const temp = scope.generateDeclaredUidIdentifier();
-      nodes.unshift(
-        expressionStatement(
-          // @ts-expect-error todo(flow->ts): This can be a variable
-          // declaraion in the "init" of a for statement, but that's
-          // invalid here.
-          assignmentExpression("=", cloneNode(temp), node),
-        ),
-      );
-      nodes.push(expressionStatement(cloneNode(temp)));
     }
     // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
