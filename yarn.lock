@@ -6000,7 +6000,7 @@ __metadata:
     jest: ^27.4.0
     jest-worker: ^27.4.0
     lint-staged: ^9.2.0
-    mergeiterator: ^1.2.5
+    mergeiterator: ^1.4.4
     prettier: 2.5.0
     rollup: ~2.54.0
     rollup-plugin-dts: ^2.0.0
@@ -11794,10 +11794,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mergeiterator@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "mergeiterator@npm:1.2.5"
-  checksum: 60f318607df26cfea3f9b61a1b103376dff62daa34810d04c90cee9583f33ab74038cd4185367ca076d6732f0e9b587983696c1e4b863adeae5b5b460771f30b
+"mergeiterator@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "mergeiterator@npm:1.4.4"
+  dependencies:
+    type-any-iterable: ^1.0.5
+  checksum: ef0071ed9da6e14059cc1a0efe39e3c19636f994b83d0b11c65f5c465485fca1bf1c53fa3d6605d6fce2dc52e845758c797cbb53b33a9926ab43279db7eb67b7
   languageName: node
   linkType: hard
 
@@ -15141,6 +15143,22 @@ fsevents@^1.2.7:
   version: 0.14.5
   resolution: "tweetnacl@npm:0.14.5"
   checksum: 6061daba1724f59473d99a7bb82e13f211cdf6e31315510ae9656fefd4779851cb927adad90f3b488c8ed77c106adc0421ea8055f6f976ff21b27c5c4e918487
+  languageName: node
+  linkType: hard
+
+"type-any-iterable@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "type-any-iterable@npm:1.0.5"
+  dependencies:
+    type-async-value: ^1.0.4
+  checksum: efdf300e760342315ef91ca7a310ead9cc9cf7689fcdb2b8879c43c69eaa3b59d202abf37f4da796a6991da19beb3ece4bd7fc8bb81faea628436cc53dd19e9f
+  languageName: node
+  linkType: hard
+
+"type-async-value@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "type-async-value@npm:1.0.4"
+  checksum: eb0c4655fd6173fd70e2aed56370d32702d2ade3da32767a4d351ffd06440955ee157d3421b56116903eeceb39375a8eae1b60572f3ee690b306455e556cbf18
   languageName: node
   linkType: hard
 

@@ -64,7 +64,7 @@
     "jest": "^27.4.0",
     "jest-worker": "^27.4.0",
     "lint-staged": "^9.2.0",
-    "mergeiterator": "^1.2.5",
+    "mergeiterator": "^1.4.4",
     "prettier": "2.5.0",
     "rollup": "~2.54.0",
     "rollup-plugin-dts": "^2.0.0",
