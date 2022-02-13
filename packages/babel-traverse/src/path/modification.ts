@@ -116,6 +116,26 @@ function isHiddenInSequenceExpression(path: NodePath) {
   );
 }
 
+function isAlmostConstantAssignment(
+  node: t.Node,
+  scope: Scope,
+): node is t.AssignmentExpression & { left: t.Identifier } {
+  if (!isAssignmentExpression(node) || !isIdentifier(node.left)) {
+    return false;
+  }
+
+  // Not every scope can contain variables. For example, we might be in
+  // a ClassScope either in the ClassHeritage or in a computed key.
+  const blockScope = scope.getBlockParent();
+
+  // If the variable is defined in the current scope and only assigned here,
+  // we can be sure that its value won't change.
+  return (
+    blockScope.hasOwnBinding(node.left.name) &&
+    blockScope.getOwnBinding(node.left.name).constantViolations.length <= 1
+  );
+}
+
 /**
  * Insert the provided nodes after the current one. When inserting nodes after an
  * expression, ensure that the completion record is correct by pushing the current node.
@@ -177,14 +197,7 @@ export function insertAfter(
         nodes.unshift(node);
         // `super(...)` always evaluates to `this`.
         nodes.push(thisExpression());
-      } else if (
-        isAssignmentExpression(node) &&
-        isIdentifier(node.left) &&
-        // If the variable is defined in the current scope and only assigned here,
-        // we can be sure that its value won't change.
-        scope.hasOwnBinding(node.left.name) &&
-        scope.getOwnBinding(node.left.name).constantViolations.length <= 1
-      ) {
+      } else if (isAlmostConstantAssignment(node, scope)) {
         nodes.unshift(node);
         nodes.push(cloneNode(node.left));
       } else {
