@@ -129,6 +129,7 @@ export type ParserPlugin =
   | "decimal"
   | "decorators"
   | "decorators-legacy"
+  | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
   | "dynamicImport"
@@ -174,7 +175,7 @@ export interface DecoratorsPluginOptions {
 
 export interface PipelineOperatorPluginOptions {
   proposal: "minimal" | "fsharp" | "hack" | "smart";
-  topicToken?: "%" | "#";
+  topicToken?: "%" | "#" | "@@" | "^^";
 }
 
 export interface RecordAndTuplePluginOptions {
