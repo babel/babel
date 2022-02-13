@@ -129,6 +129,7 @@ export type ParserPlugin =
   | "decimal"
   | "decorators"
   | "decorators-legacy"
+  | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
   | "dynamicImport"
