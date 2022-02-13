@@ -3,9 +3,7 @@ let Sub = babelHelpers.decorate([decorator(parameter)], function (_initialize, _
 
   class Sub extends _Super {
     constructor() {
-      var _temp;
-
-      (_temp = super(), _initialize(this), _temp).method();
+      (super(), _initialize(this), this).method();
     }
 
   }

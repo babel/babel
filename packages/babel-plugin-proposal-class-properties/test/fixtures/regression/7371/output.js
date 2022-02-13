@@ -51,15 +51,13 @@ new SuperClass(); // ensure ComputedKey Method is still transformed
 
 class ComputedMethod extends Obj {
   constructor() {
-    var _temp;
-
     class B extends Obj {
       constructor() {
         super();
         expect(this.field).toBeUndefined();
       }
 
-      [(_temp = super(), babelHelpers.defineProperty(this, "field", 1), _temp)]() {}
+      [(super(), babelHelpers.defineProperty(this, "field", 1), this)]() {}
 
     }
 
@@ -75,9 +73,7 @@ class ComputedField extends Obj {
   constructor() {
     let _ref;
 
-    var _temp2;
-
-    _ref = (_temp2 = super(), babelHelpers.defineProperty(this, "field", 1), _temp2);
+    _ref = (super(), babelHelpers.defineProperty(this, "field", 1), this);
 
     class B extends Obj {
       constructor() {

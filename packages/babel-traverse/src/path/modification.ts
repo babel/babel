@@ -12,9 +12,12 @@ import {
   cloneNode,
   expressionStatement,
   isAssignmentExpression,
+  isCallExpression,
   isExpression,
   isIdentifier,
   isSequenceExpression,
+  isSuper,
+  thisExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type Scope from "../scope";
@@ -166,7 +169,11 @@ export function insertAfter(
         nodes.unshift(node);
       }
       // We need to preserve the value of this expression.
-      else if (
+      else if (isCallExpression(node) && isSuper(node.callee)) {
+        nodes.unshift(node);
+        // `super(...)` always evaluates to `this`.
+        nodes.push(thisExpression());
+      } else if (
         isAssignmentExpression(node) &&
         isIdentifier(node.left) &&
         // If the variable is defined in the current scope and only assigned here,
