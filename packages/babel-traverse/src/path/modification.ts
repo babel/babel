@@ -200,6 +200,9 @@ export function insertAfter(
       } else if (isAlmostConstantAssignment(node, scope)) {
         nodes.unshift(node);
         nodes.push(cloneNode(node.left));
+      } else if (scope.isPure(node, true)) {
+        // Insert the nodes before rather than after; it's not observable.
+        nodes.push(node);
       } else {
         // Inserting after the computed key of a method should insert the
         // temporary binding in the method's parent's scope.

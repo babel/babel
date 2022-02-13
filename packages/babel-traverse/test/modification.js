@@ -222,13 +222,13 @@ describe("modification", function () {
       });
 
       it("the exported expression", function () {
-        const declPath = getPath("export default 2;", {
+        const declPath = getPath("export default fn();", {
           sourceType: "module",
         });
         const path = declPath.get("declaration");
         path.insertBefore(t.identifier("x"));
 
-        expect(generateCode(declPath)).toBe("export default (x, 2);");
+        expect(generateCode(declPath)).toBe("export default (x, fn());");
       });
     });
   });
@@ -336,14 +336,14 @@ describe("modification", function () {
       });
 
       it("the exported expression", function () {
-        const bodyPath = getPath("export default 2;", {
+        const bodyPath = getPath("export default fn();", {
           sourceType: "module",
         }).parentPath;
         const path = bodyPath.get("body.0.declaration");
         path.insertAfter(t.identifier("x"));
 
         expect(generateCode({ parentPath: bodyPath })).toBe(
-          "var _temp;\n\nexport default (_temp = 2, x, _temp);",
+          "var _temp;\n\nexport default (_temp = fn(), x, _temp);",
         );
       });
     });
