@@ -10,7 +10,11 @@ function makeParser(code, options) {
     });
 }
 
-describe("'legacy' option", function () {
+const babel7 = process.env.BABEL_8_BREAKING ? test.skip : test;
+const babel8 = process.env.BABEL_8_BREAKING ? test : test.skip;
+const babel7describe = process.env.BABEL_8_BREAKING ? describe.skip : describe;
+
+babel7describe("'legacy' option", function () {
   test("must be boolean", function () {
     expect(makeParser("", { legacy: "legacy" })).toThrow();
   });
@@ -30,10 +34,12 @@ describe("'legacy' option", function () {
 
 describe("'decoratorsBeforeExport' option", function () {
   test("must be boolean", function () {
-    expect(makeParser("", { decoratorsBeforeExport: "before" })).toThrow();
+    expect(
+      makeParser("", { version: "2021-12", decoratorsBeforeExport: "before" }),
+    ).toThrow();
   });
 
-  test("is required with 2018-09 decorators", function () {
+  babel7("is required with 2018-09 decorators", function () {
     expect(makeParser("", { legacy: false })).toThrow(/decoratorsBeforeExport/);
     expect(makeParser("", { version: "2018-09" })).toThrow(
       /decoratorsBeforeExport/,
@@ -42,10 +48,13 @@ describe("'decoratorsBeforeExport' option", function () {
 
   test("is incompatible with legacy", function () {
     expect(
-      makeParser("", { decoratorsBeforeExport: false, legacy: true }),
-    ).toThrow();
-    expect(
       makeParser("", { decoratorsBeforeExport: false, version: "legacy" }),
+    ).toThrow();
+  });
+
+  babel7("is incompatible with legacy when using the 'legacy' option", () => {
+    expect(
+      makeParser("", { decoratorsBeforeExport: false, legacy: true }),
     ).toThrow();
   });
 
@@ -72,12 +81,20 @@ describe("'decoratorsBeforeExport' option", function () {
     const codeTitle = code === BEFORE ? "before" : "after";
     if (throws) {
       test(`${before} - decorators ${codeTitle} export should throw`, function () {
-        expect(makeParser(code, { decoratorsBeforeExport: before })).toThrow();
+        expect(
+          makeParser(code, {
+            version: "2021-12",
+            decoratorsBeforeExport: before,
+          }),
+        ).toThrow();
       });
     } else {
       test(`${before} - decorators ${codeTitle} export should not throw`, function () {
         expect(
-          makeParser(code, { decoratorsBeforeExport: before }),
+          makeParser(code, {
+            version: "2021-12",
+            decoratorsBeforeExport: before,
+          }),
         ).not.toThrow();
       });
     }
@@ -94,5 +111,9 @@ describe("'version' option", function () {
     expect(
       makeParser("", { version: "2015-02", decoratorsBeforeExport: true }),
     ).toThrow();
+  });
+
+  babel8("is required", function () {
+    expect(makeParser("", {})).toThrow();
   });
 });

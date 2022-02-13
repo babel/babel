@@ -170,10 +170,10 @@ export function shouldTransform(path: NodePath<t.Class>, file: File): boolean {
     throw path.buildCodeFrameError(
       "Decorators are not enabled." +
         "\nIf you are using " +
-        '["@babel/plugin-proposal-decorators", { "legacy": true }], ' +
+        '["@babel/plugin-proposal-decorators", { "version": "legacy" }], ' +
         'make sure it comes *before* "@babel/plugin-proposal-class-properties" ' +
         "and enable loose mode, like so:\n" +
-        '\t["@babel/plugin-proposal-decorators", { "legacy": true }]\n' +
+        '\t["@babel/plugin-proposal-decorators", { "version": "legacy" }]\n' +
         '\t["@babel/plugin-proposal-class-properties", { "loose": true }]',
     );
   }
