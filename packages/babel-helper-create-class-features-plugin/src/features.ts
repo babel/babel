@@ -6,6 +6,7 @@ export const FEATURES = Object.freeze({
   //classes: 1 << 0,
   fields: 1 << 1,
   privateMethods: 1 << 2,
+  // TODO(Babel 8): Remove this
   decorators: 1 << 3,
   privateIn: 1 << 4,
   staticBlocks: 1 << 5,

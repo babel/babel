@@ -1,3 +1,5 @@
+// TODO(Babel 8): Remove this file
+
 import { types as t, template } from "@babel/core";
 import type { File } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
