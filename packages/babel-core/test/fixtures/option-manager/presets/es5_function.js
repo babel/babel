@@ -4,7 +4,7 @@ module.exports = function () {
       [
         __dirname +
           "/../../../../../babel-plugin-syntax-decorators/lib/index.js",
-        { legacy: true },
+        { version: "legacy" },
       ],
     ],
   };

@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 
     it("should parser decimal literal", () => {
       const output = Babel.transform("0.3m", {
-        presets: [["stage-1", { decoratorsBeforeExport: true }]],
+        presets: [["stage-1", { decoratorsLegacy: true }]],
       }).code;
       expect(output).toBe("0.3m;");
     });
@@ -23,7 +23,7 @@ const require = createRequire(import.meta.url);
             "stage-1",
             {
               pipelineProposal: "hack",
-              decoratorsBeforeExport: true,
+              decoratorsLegacy: true,
             },
           ],
         ],
@@ -40,7 +40,7 @@ const require = createRequire(import.meta.url);
               pipelineProposal: "hack",
               pipelineTopicToken: "#",
               recordAndTupleSyntax: "bar",
-              decoratorsBeforeExport: true,
+              decoratorsLegacy: true,
             },
           ],
         ],
