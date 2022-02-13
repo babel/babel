@@ -1886,7 +1886,7 @@ export default class StatementParser extends ExpressionParser {
 
   // Overridden in typescript.js
   parsePostMemberNameModifiers(
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     methodOrProp: N.ClassMethod | N.ClassProperty,
   ): void {}
 
@@ -2005,7 +2005,7 @@ export default class StatementParser extends ExpressionParser {
     throw this.unexpected(null, tt.braceL);
   }
 
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   eatExportStar(node: N.Node): boolean {
     return this.eat(tt.star);
   }
@@ -2125,8 +2125,8 @@ export default class StatementParser extends ExpressionParser {
     return res;
   }
 
-  // eslint-disable-next-line no-unused-vars
   parseExportDeclaration(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     node: N.ExportNamedDeclaration,
   ): N.Declaration | undefined | null {
     return this.parseStatement(null);
@@ -2374,10 +2374,10 @@ export default class StatementParser extends ExpressionParser {
   parseExportSpecifier(
     node: any,
     isString: boolean,
-    /* eslint-disable no-unused-vars -- used in TypeScript parser */
+    /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript parser */
     isInTypeExport: boolean,
     isMaybeTypeOnly: boolean,
-    /* eslint-enable no-unused-vars */
+    /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ExportSpecifier {
     if (this.eatContextual(tt._as)) {
       node.exported = this.parseModuleExportName();
@@ -2504,7 +2504,7 @@ export default class StatementParser extends ExpressionParser {
     return this.parseExprAtom();
   }
 
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   shouldParseDefaultImport(node: N.ImportDeclaration): boolean {
     return tokenIsIdentifier(this.state.type);
   }
@@ -2705,10 +2705,10 @@ export default class StatementParser extends ExpressionParser {
   parseImportSpecifier(
     specifier: any,
     importedIsString: boolean,
-    /* eslint-disable no-unused-vars -- used in TypeScript and Flow parser */
+    /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript and Flow parser */
     isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
-    /* eslint-enable no-unused-vars */
+    /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();

@@ -116,7 +116,7 @@ const TSErrors = ParseErrorEnum`typescript`(_ => ({
     modifier: N.Accessibility;
   }>(
     // `Accessibility modifier already seen: ${modifier}` would be more helpful.
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ({ modifier }) => `Accessibility modifier already seen.`,
   ),
   DuplicateModifier: _<{
@@ -2408,7 +2408,7 @@ export default (superClass: {
 
     toReferencedList(
       exprList: ReadonlyArray<N.Expression | undefined | null>,
-      // eslint-disable-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isInParens?: boolean,
     ): ReadonlyArray<N.Expression | undefined | null> {
       // Handles invalid scenarios like: `f(a:b)`, `(a:b);`, and `(a:b,c:d)`.

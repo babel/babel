@@ -1511,7 +1511,7 @@ export default class Tokenizer extends CommentsParser {
   }
 
   // updateContext is used by the jsx plugin
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateContext(prevType: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.

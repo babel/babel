@@ -306,7 +306,7 @@ export default class LValParser extends NodeUtils {
 
   toReferencedList(
     exprList: ReadonlyArray<Expression | undefined | null>,
-    // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isParenthesizedExpr?: boolean,
   ): ReadonlyArray<Expression | undefined | null> {
     return exprList;
@@ -520,9 +520,9 @@ export default class LValParser extends NodeUtils {
    */
   isValidLVal(
     type: string,
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isUnparenthesizedInAssign: boolean,
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     binding: BindingTypes,
   ) {
     return getOwn(

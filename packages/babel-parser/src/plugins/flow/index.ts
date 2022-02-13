@@ -2763,7 +2763,7 @@ export default (superClass: {
       specifier: any,
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isMaybeTypeOnly: boolean,
     ): N.ImportSpecifier {
       const firstIdent = specifier.imported;
