@@ -5981,7 +5981,6 @@ __metadata:
     babel-plugin-transform-charcodes: ^0.2.0
     chalk: ^2.4.2
     charcodes: ^0.2.0
-    enhanced-resolve: ^5.8.2
     eslint: ^8.9.0
     eslint-formatter-codeframe: ^7.32.1
     eslint-import-resolver-node: ^0.3.6
@@ -6001,7 +6000,6 @@ __metadata:
     jest: ^27.4.0
     jest-worker: ^27.4.0
     lint-staged: ^9.2.0
-    lodash: ^4.17.21
     mergeiterator: ^1.2.5
     prettier: 2.5.0
     rollup: ~2.54.0
@@ -7671,7 +7669,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.7.0, enhanced-resolve@npm:^5.8.2":
+"enhanced-resolve@npm:^5.7.0":
   version: 5.9.0
   resolution: "enhanced-resolve@npm:5.9.0"
   dependencies:
