@@ -4,7 +4,7 @@ var _class, _descriptor;
 
 function dec() {}
 
-let A = (_class = (_Symbol$search = Symbol.search, /*#__PURE__*/function (_Symbol$search2) {
+let A = (_class = (_Symbol$search = Symbol.search, /*#__PURE__*/function () {
   "use strict";
 
   function A() {
@@ -13,11 +13,11 @@ let A = (_class = (_Symbol$search = Symbol.search, /*#__PURE__*/function (_Symbo
   }
 
   babelHelpers.createClass(A, [{
-    key: _Symbol$search2,
+    key: _Symbol$search,
     value: function () {}
   }]);
   return A;
-}(_Symbol$search)), (_descriptor = babelHelpers.applyDecoratedDescriptor(_class.prototype, "a", [dec], {
+}()), (_descriptor = babelHelpers.applyDecoratedDescriptor(_class.prototype, "a", [dec], {
   configurable: true,
   enumerable: true,
   writable: true,

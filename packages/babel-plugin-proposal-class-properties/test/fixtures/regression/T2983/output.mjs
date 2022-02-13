@@ -1,8 +1,8 @@
-var _class, _temp;
+var _class;
 
-call((_temp = _class = /*#__PURE__*/babelHelpers.createClass(function _class() {
+call((_class = /*#__PURE__*/babelHelpers.createClass(function _class() {
   babelHelpers.classCallCheck(this, _class);
-}), _class.test = true, _temp));
+}), _class.test = true, _class));
 
 var _default = /*#__PURE__*/babelHelpers.createClass(function _default() {
   babelHelpers.classCallCheck(this, _default);

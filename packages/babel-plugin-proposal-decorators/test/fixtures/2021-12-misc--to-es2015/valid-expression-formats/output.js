@@ -28,16 +28,16 @@ class Foo {
   method() {}
 
   makeClass() {
-    var _dec9, _init_bar, _class, _temp;
+    var _dec9, _init_bar, _class;
 
-    return _dec9 = babelHelpers.classPrivateFieldGet(this, _a), (_temp = _class = class Nested {
+    return _dec9 = babelHelpers.classPrivateFieldGet(this, _a), (_class = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
       }
 
     }, (() => {
       [_init_bar] = babelHelpers.applyDecs(_class, [[_dec9, 0, "bar"]], []);
-    })(), _temp);
+    })(), _class);
   }
 
 }

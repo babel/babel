@@ -11,7 +11,9 @@ import {
   callExpression,
   cloneNode,
   expressionStatement,
+  isAssignmentExpression,
   isExpression,
+  isIdentifier,
   isSequenceExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
@@ -162,9 +164,19 @@ export function insertAfter(
 
       if (isHiddenInSequenceExpression(this)) {
         nodes.unshift(node);
+      }
+      // We need to preserve the value of this expression.
+      else if (
+        isAssignmentExpression(node) &&
+        isIdentifier(node.left) &&
+        // If the variable is defined in the current scope and only assigned here,
+        // we can be sure that its value won't change.
+        scope.hasOwnBinding(node.left.name) &&
+        scope.getOwnBinding(node.left.name).constantViolations.length <= 1
+      ) {
+        nodes.unshift(node);
+        nodes.push(cloneNode(node.left));
       } else {
-        // We need to preserve the value of this expression.
-
         // Inserting after the computed key of a method should insert the
         // temporary binding in the method's parent's scope.
         if (parentPath.isMethod({ computed: true, key: node })) {
