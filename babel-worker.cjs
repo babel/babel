@@ -1,8 +1,12 @@
 const { transformSync } = require("@babel/core");
 const { mkdirSync, statSync, readFileSync, writeFileSync } = require("fs");
 const { dirname } = require("path");
-const chalk = require("chalk");
 const fancyLog = require("fancy-log");
+
+let chalk;
+const chalkP = import("chalk").then(ns => {
+  chalk = ns.default;
+});
 
 function needCompile(src, dest) {
   let destStat;
@@ -19,7 +23,9 @@ function needCompile(src, dest) {
   return srcStat.mtimeMs > destStat.mtimeMs;
 }
 
-exports.transform = function (src, dest) {
+exports.transform = function transform(src, dest) {
+  if (!chalk) return chalkP.then(() => transform(src, dest));
+
   mkdirSync(dirname(dest), { recursive: true });
   if (!needCompile(src, dest)) {
     return;

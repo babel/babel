@@ -43,7 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "babel-plugin-transform-charcodes": "^0.2.0",
-    "chalk": "^2.4.2",
+    "chalk": "^5.0.0",
     "charcodes": "^0.2.0",
     "eslint": "^8.9.0",
     "eslint-formatter-codeframe": "^7.32.1",
