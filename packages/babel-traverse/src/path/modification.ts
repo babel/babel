@@ -127,6 +127,10 @@ export function insertAfter(
 ): NodePath[] {
   this._assertUnremoved();
 
+  if (this.isSequenceExpression()) {
+    return last(this.get("expressions")).insertAfter(nodes_);
+  }
+
   const nodes = this._verifyNodeList(nodes_);
 
   const { parentPath } = this;

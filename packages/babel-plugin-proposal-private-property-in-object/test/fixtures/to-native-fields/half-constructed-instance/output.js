@@ -19,7 +19,7 @@ class F {
 
   get #w() {}
 
-  #x = (_temp = (_FBrandCheck.add(this), 0), _xBrandCheck.add(this), _temp);
+  #x = (_FBrandCheck.add(this), (_temp = 0, _xBrandCheck.add(this), _temp));
   #y = (_temp2 = (() => {
     throw 'error';
   })(), _yBrandCheck.add(this), _temp2);
