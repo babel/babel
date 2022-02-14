@@ -2064,7 +2064,7 @@ export default class ExpressionParser extends LValParser {
           isGenerator = true;
           this.raise(Errors.AccessorIsGenerator, {
             at: this.state.curPosition(),
-            accessor: keyName,
+            kind: keyName,
           });
           this.next();
         }

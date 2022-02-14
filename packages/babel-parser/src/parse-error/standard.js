@@ -3,8 +3,8 @@
 import { toParseErrorClass } from "../parse-error";
 
 export default (_: typeof toParseErrorClass) => ({
-  AccessorIsGenerator: _<{| accessor: string |}>(
-    ({ accessor }) => `A ${accessor}ter cannot be a generator.`,
+  AccessorIsGenerator: _<{| kind: "get" | " set" |}>(
+    ({ kind }) => `A ${kind}ter cannot be a generator.`,
   ),
 
   ArgumentsInClass: _(
