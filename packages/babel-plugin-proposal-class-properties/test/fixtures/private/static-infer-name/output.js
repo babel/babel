@@ -1,6 +1,6 @@
-var _class, _temp, _num;
+var _class, _num;
 
-var Foo = (_temp = _class = class Foo {}, _num = {
+var Foo = (_class = class Foo {}, _num = {
   writable: true,
   value: 0
-}, _temp);
+}, _class);

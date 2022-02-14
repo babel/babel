@@ -1,8 +1,8 @@
-var _ref, _class, _temp;
+var _ref, _class;
 
-class Foo extends (_ref = (_temp = _class = class _ref {}, (() => {
+class Foo extends (_ref = (_class = class _ref {}, (() => {
   _class.bar = 42;
-})(), _temp)) {}
+})(), _class)) {}
 
 Foo.bar = 21;
 

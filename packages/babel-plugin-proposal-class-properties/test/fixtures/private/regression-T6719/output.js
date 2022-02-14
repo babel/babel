@@ -1,7 +1,7 @@
 function withContext(ComposedComponent) {
-  var _class, _temp, _propTypes;
+  var _class, _propTypes;
 
-  return _temp = _class = class WithContext extends Component {}, _propTypes = {
+  return _class = class WithContext extends Component {}, _propTypes = {
     writable: true,
     value: {
       context: PropTypes.shape({
@@ -10,5 +10,5 @@ function withContext(ComposedComponent) {
         setMeta: PropTypes.func
       })
     }
-  }, _temp;
+  }, _class;
 }

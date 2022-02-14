@@ -922,4 +922,18 @@ describe("scope", () => {
       });
     });
   });
+
+  describe(".push", () => {
+    it("registers the new binding in the correct scope", () => {
+      const program = getPath("class A {}");
+      const classDeclaration = program.get("body.0");
+      classDeclaration.scope.push({ id: t.identifier("class") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "var class;
+
+        class A {}"
+      `);
+      expect(program.scope.hasOwnBinding("class")).toBe(true);
+    });
+  });
 });

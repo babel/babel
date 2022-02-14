@@ -1,9 +1,7 @@
-var _temp;
-
 var _fooBrandCheck = /*#__PURE__*/new WeakSet();
 
 class Foo {
-  #foo = (_temp = 1, _fooBrandCheck.add(this), _temp);
+  #foo = (_fooBrandCheck.add(this), 1);
 
   test() {
     class Nested {

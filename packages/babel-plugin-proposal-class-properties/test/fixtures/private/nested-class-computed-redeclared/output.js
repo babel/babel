@@ -20,7 +20,7 @@ var Foo = /*#__PURE__*/function () {
 
       _babelHelpers$classPr = babelHelpers.classPrivateFieldGet(this, _foo2);
 
-      var Nested = /*#__PURE__*/function (_babelHelpers$classPr2) {
+      var Nested = /*#__PURE__*/function () {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
           babelHelpers.classPrivateFieldInitSpec(this, _foo2, {
@@ -30,11 +30,11 @@ var Foo = /*#__PURE__*/function () {
         }
 
         babelHelpers.createClass(Nested, [{
-          key: _babelHelpers$classPr2,
+          key: _babelHelpers$classPr,
           value: function () {}
         }]);
         return Nested;
-      }(_babelHelpers$classPr);
+      }();
 
       babelHelpers.classPrivateFieldGet(this, _foo);
     }
