@@ -2454,11 +2454,14 @@ export default class StatementParser extends ExpressionParser {
     node: N.ImportDeclaration,
     specifier: N.Node,
     type: string,
-    contextDescription: string,
   ): void {
     specifier.local = this.parseIdentifier();
-    this.checkLVal(specifier.local, contextDescription, BIND_LEXICAL);
-    node.specifiers.push(this.finishNode(specifier, type));
+    node.specifiers.push(this.finishImportSpecifier(specifier, type));
+  }
+
+  finishImportSpecifier(specifier, type) {
+    this.checkLVal(specifier.local, type, BIND_LEXICAL);
+    return this.finishNode(specifier, type);
   }
 
   /**
@@ -2583,7 +2586,6 @@ export default class StatementParser extends ExpressionParser {
         node,
         this.startNode(),
         "ImportDefaultSpecifier",
-        "default import specifier",
       );
       return true;
     }
@@ -2600,7 +2602,6 @@ export default class StatementParser extends ExpressionParser {
         node,
         specifier,
         "ImportNamespaceSpecifier",
-        "import namespace specifier",
       );
       return true;
     }
@@ -2663,8 +2664,7 @@ export default class StatementParser extends ExpressionParser {
         specifier.local = cloneIdentifier(imported);
       }
     }
-    this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
-    return this.finishNode(specifier, "ImportSpecifier");
+    return this.finishImportSpecifier(specifier, "ImportSpecifier");
   }
 
   // This is used in flow and typescript plugin

@@ -334,7 +334,7 @@ export default class ExpressionParser extends LValParser {
         node.left = left;
       }
 
-      this.checkLVal(left, "assignment expression");
+      this.checkLVal(left, "AssignmentExpression");
       this.next();
       node.right = this.parseMaybeAssign();
       return this.finishNode(node, "AssignmentExpression");

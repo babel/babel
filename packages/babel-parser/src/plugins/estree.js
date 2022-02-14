@@ -343,6 +343,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
+    isValidLVal(type: string, ...rest) {
+      return { Property: "value" }[type] || super.isValidLVal(type, ...rest);
+    }
+
     isAssignable(node: N.Node, isBinding?: boolean): boolean {
       if (node != null && this.isObjectProperty(node)) {
         return this.isAssignable(node.value, isBinding);

@@ -490,6 +490,20 @@ export default class LValParser extends NodeUtils {
     return this.finishNode(node, "AssignmentPattern");
   }
 
+  // eslint-disable-next-line no-unused-vars
+  isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+    return (
+      {
+        AssignmentPattern: "left",
+        RestElement: "argument",
+        ObjectProperty: "value",
+        ParenthesizedExpression: "expression",
+        ArrayPattern: "elements",
+        ObjectPattern: "properties",
+      }[type] || false
+    );
+  }
+
   /**
    * Verify that if a node is an lval - something that can be assigned to.
    *
@@ -514,6 +528,7 @@ export default class LValParser extends NodeUtils {
     checkClashes: ?Set<string>,
     disallowLetBinding?: boolean,
     strictModeChanged?: boolean = false,
+    parentIsParenthesizedExpression?: boolean = false,
   ): void {
     const type = expr.type;
 
@@ -564,9 +579,15 @@ export default class LValParser extends NodeUtils {
       return;
     }
 
-    const [isRelevantType, key] = LValTraversalKeys[type] || [false, false];
+    const validity = this.isValidLVal(
+      expr.type,
+      parentIsParenthesizedExpression || expr.extra?.parenthesized,
+      bindingType,
+    );
 
-    if (!key) {
+    if (validity === true) return;
+
+    if (validity === false) {
       this.raise(
         bindingType === BIND_NONE
           ? Errors.InvalidLhs
@@ -576,7 +597,15 @@ export default class LValParser extends NodeUtils {
       return;
     }
 
-    const relevantType = isRelevantType ? type : inNodeType;
+    const isParenthesizedExpression =
+      type === "ParenthesizedExpression" || Array.isArray(validity);
+    const key = Array.isArray(validity) ? validity[1] : validity;
+    const relevantType =
+      type === "ArrayPattern" ||
+      type === "ObjectPattern" ||
+      type === "ParenthesizedExpression"
+        ? type
+        : inNodeType;
 
     for (const child of [].concat(expr[key])) {
       if (child) {
@@ -586,9 +615,15 @@ export default class LValParser extends NodeUtils {
           bindingType,
           checkClashes,
           disallowLetBinding,
+          strictModeChanged,
+          isParenthesizedExpression,
         );
       }
     }
+  }
+
+  LValTraversalForType(type: string): [boolean, string | false] | false {
+    return LValTraversalKeys[type] || false;
   }
 
   checkToRestConversion(node: SpreadElement): void {
@@ -619,6 +654,7 @@ export default class LValParser extends NodeUtils {
 }
 
 const LValTraversalKeys = Object.assign(Object.create(null), {
+  AssignmentExpression: [true, "left"],
   AssignmentPattern: [true, "left"],
   RestElement: [true, "argument"],
   ParenthesizedExpression: [true, "expression"],

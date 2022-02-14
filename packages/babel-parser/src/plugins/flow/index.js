@@ -2421,21 +2421,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    checkLVal(
-      expr: N.Expression,
-      ...args:
-        | [string, BindingTypes | void]
-        | [
-            string,
-            BindingTypes | void,
-            ?Set<string>,
-            boolean | void,
-            boolean | void,
-          ]
-    ): void {
-      if (expr.type !== "TypeCastExpression") {
-        return super.checkLVal(expr, ...args);
-      }
+    isValidLVal(type: string, ...rest) {
+      return (
+        { TypeCastExpression: true }[type] || super.isValidLVal(type, ...rest)
+      );
     }
 
     // parse class property type annotations
@@ -2670,7 +2659,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.ImportDeclaration,
       specifier: N.Node,
       type: string,
-      contextDescription: string,
     ): void {
       specifier.local = hasTypeImportKind(node)
         ? this.flowParseRestrictedIdentifier(
@@ -2679,8 +2667,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           )
         : this.parseIdentifier();
 
-      this.checkLVal(specifier.local, contextDescription, BIND_LEXICAL);
-      node.specifiers.push(this.finishNode(specifier, type));
+      node.specifiers.push(this.finishImportSpecifier(specifier, type));
     }
 
     // parse typeof and type imports
@@ -2806,8 +2793,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
-      return this.finishNode(specifier, "ImportSpecifier");
+      return this.finishImportSpecifier(specifier, "ImportSpecifier");
     }
 
     parseBindingAtom(): N.Pattern {

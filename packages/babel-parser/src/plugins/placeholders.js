@@ -139,8 +139,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    checkLVal(expr: N.Expression): void {
-      if (expr.type !== "Placeholder") super.checkLVal(...arguments);
+    isValidLVal(type: string, ...rest) {
+      return type === "Placeholder" || super.isValidLVal(type, ...rest);
     }
 
     toAssignable(node: N.Node): N.Node {

@@ -29,6 +29,7 @@ import {
   BIND_TS_NAMESPACE,
   BIND_CLASS,
   BIND_LEXICAL,
+  BIND_NONE,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
@@ -3234,41 +3235,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkLVal(
-      expr: N.Expression,
-      inNodeType: string,
-      ...args:
-        | [BindingTypes | void]
-        | [BindingTypes | void, ?Set<string>, boolean | void, boolean | void]
-    ): void {
-      switch (expr.type) {
-        case "TSTypeCastExpression":
+    isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+      return (
+        {
           // Allow "typecasts" to appear on the left of assignment expressions,
           // because it may be in an arrow function.
           // e.g. `const f = (foo: number = 0) => foo;`
-          return;
-        case "TSParameterProperty":
-          this.checkLVal(expr.parameter, "parameter property", ...args);
-          return;
-        case "TSAsExpression":
-        case "TSTypeAssertion":
-          if (
-            /*bindingType*/ !args[0] &&
-            inNodeType !== "ParenthesizedExpression" &&
-            !expr.extra?.parenthesized
-          ) {
-            this.raise(Errors.InvalidLhs, { at: expr, inNodeType });
-            break;
-          }
-          this.checkLVal(expr.expression, "ParenthesizedExpression", ...args);
-          return;
-        case "TSNonNullExpression":
-          this.checkLVal(expr.expression, inNodeType, ...args);
-          return;
-        default:
-          super.checkLVal(expr, inNodeType, ...args);
-          return;
-      }
+          TSTypeCastExpression: true,
+          TSParameterProperty: "parameter",
+          TSNonNullExpression: "expression",
+          TSAsExpression: (binding !== BIND_NONE || isParenthesized) && [
+            true,
+            "expression",
+          ],
+          TSTypeAssertion: (binding !== BIND_NONE || isParenthesized) && [
+            true,
+            "expression",
+          ],
+        }[type] || super.isValidLVal(type, isParenthesized, binding)
+      );
     }
 
     parseBindingAtom(): N.Pattern {
@@ -3676,7 +3661,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
       }
       if (isImport) {
-        this.checkLVal(node[rightOfAsKey], "import specifier", BIND_LEXICAL);
+        this.checkLVal(node[rightOfAsKey], "ImportSpecifier", BIND_LEXICAL);
       }
     }
   };
