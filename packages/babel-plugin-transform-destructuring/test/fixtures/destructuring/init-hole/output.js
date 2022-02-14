@@ -44,7 +44,7 @@ let thrown;
 try {
   thrown = false;
   babelHelpers.objectDestructuringEmpty();
-} catch {
+} catch (e) {
   thrown = true;
 }
 
@@ -53,7 +53,7 @@ expect(thrown).toEqual(true);
 try {
   thrown = false;
   babelHelpers.objectDestructuringEmpty();
-} catch {
+} catch (e) {
   thrown = true;
 }
 

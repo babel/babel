@@ -48,7 +48,7 @@ let thrown;
 try {
   thrown = false;
   [{}] = [,];
-} catch {
+} catch (e) {
   thrown = true;
 }
 expect(thrown).toEqual(true);
@@ -56,7 +56,7 @@ expect(thrown).toEqual(true);
 try {
   thrown = false;
   [[]] = [,];
-} catch {
+} catch (e) {
   thrown = true;
 }
 expect(thrown).toEqual(true);
