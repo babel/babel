@@ -1931,7 +1931,7 @@ export default class StatementParser extends ExpressionParser {
     if (tokenIsIdentifier(this.state.type)) {
       node.id = this.parseIdentifier();
       if (isStatement) {
-        this.checkLVal(node.id, "class name", bindingType);
+        this.declareNameFromIdentifier(node.id, bindingType);
       }
     } else {
       if (optionalId || !isStatement) {

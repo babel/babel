@@ -574,7 +574,7 @@ export default class LValParser extends NodeUtils {
         this.raise(Errors.LetInLexicalBinding, { at: expr });
       }
       if (!(bindingType & BIND_NONE)) {
-        this.scope.declareName(name, bindingType, expr.loc.start);
+        this.declareNameFromIdentifier(expr, bindingType);
       }
       return;
     }
@@ -620,6 +620,10 @@ export default class LValParser extends NodeUtils {
         );
       }
     }
+  }
+
+  declareNameFromIdentifier(identifier: N.Identifier, binding: BindingType) {
+    this.scope.declareName(identifier.name, binding, identifier.loc.start);
   }
 
   LValTraversalForType(type: string): [boolean, string | false] | false {
