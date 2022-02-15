@@ -13,9 +13,9 @@ import type {
   SpreadElement,
   /*:: ObjectOrClassMember, */
   /*:: ClassMember, */
-  /*:: ObjectMember, */
+  ObjectMember,
   /*:: TsNamedTypeElementBase, */
-  /*:: Identifier, */
+  Identifier,
   /*:: PrivateName, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
@@ -522,7 +522,7 @@ export default class LValParser extends NodeUtils {
    */
 
   checkLVal(
-    expr: Expression | ObjectMethod | ObjectProperty | RestElement,
+    expr: Expression | ObjectMember | RestElement,
     inNodeType: string = expr.type,
     bindingType: BindingTypes = BIND_NONE,
     checkClashes: ?Set<string>,
@@ -544,7 +544,7 @@ export default class LValParser extends NodeUtils {
       return;
     }
 
-    if (type === "Identifier") {
+    if (expr.type === "Identifier") {
       const { name } = expr;
       if (
         this.state.strict &&
@@ -574,7 +574,7 @@ export default class LValParser extends NodeUtils {
         this.raise(Errors.LetInLexicalBinding, { at: expr });
       }
       if (!(bindingType & BIND_NONE)) {
-        this.declareNameFromIdentifier(expr, bindingType);
+        this.declareNameFromIdentifier((expr: Identifier), bindingType);
       }
       return;
     }
@@ -622,7 +622,7 @@ export default class LValParser extends NodeUtils {
     }
   }
 
-  declareNameFromIdentifier(identifier: N.Identifier, binding: BindingType) {
+  declareNameFromIdentifier(identifier: Identifier, binding: BindingTypes) {
     this.scope.declareName(identifier.name, binding, identifier.loc.start);
   }
 

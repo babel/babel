@@ -2459,7 +2459,7 @@ export default class StatementParser extends ExpressionParser {
     node.specifiers.push(this.finishImportSpecifier(specifier, type));
   }
 
-  finishImportSpecifier(specifier, type) {
+  finishImportSpecifier(specifier: N.Node, type: string) {
     this.checkLVal(specifier.local, type, BIND_LEXICAL);
     return this.finishNode(specifier, type);
   }
