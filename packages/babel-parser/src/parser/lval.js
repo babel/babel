@@ -626,10 +626,6 @@ export default class LValParser extends NodeUtils {
     this.scope.declareName(identifier.name, binding, identifier.loc.start);
   }
 
-  LValTraversalForType(type: string): [boolean, string | false] | false {
-    return LValTraversalKeys[type] || false;
-  }
-
   checkToRestConversion(node: SpreadElement): void {
     if (
       node.argument.type !== "Identifier" &&
@@ -656,14 +652,3 @@ export default class LValParser extends NodeUtils {
     return true;
   }
 }
-
-const LValTraversalKeys = Object.assign(Object.create(null), {
-  AssignmentExpression: [true, "left"],
-  AssignmentPattern: [true, "left"],
-  RestElement: [true, "argument"],
-  ParenthesizedExpression: [true, "expression"],
-  ObjectProperty: [false, "value"],
-  Property: [false, "value"],
-  ArrayPattern: [true, "elements"],
-  ObjectPattern: [true, "properties"],
-});
