@@ -3,7 +3,7 @@
 import { Position } from "./util/location";
 import type { NodeBase } from "./types";
 
-const { assign: ObjectAssign } = Object;
+const { assign: ObjectAssign, keys: ObjectKeys } = Object;
 
 const ManuallyAssignedErrorMessages = new WeakMap<ParseError<any>, string>();
 
@@ -101,21 +101,19 @@ export function toParseErrorClasses<T: Object>(
   toClasses: (typeof toParseErrorClass) => T,
   { syntaxPlugin }: Object = {},
 ): T {
-  // $FlowIgnore
-  return Object.fromEntries(
-    Object.entries(toClasses(toParseErrorClass)).map(
-      ([reasonCode, ParseErrorClass: Class<ParseError<any>>]) => [
-        reasonCode,
-        // $FlowIgnore
-        ObjectAssign(
-          ParseErrorClass,
-          // $FlowIgnore
-          !ParseErrorClass.reasonCode && { reasonCode },
-          !!syntaxPlugin && { syntaxPlugin },
-        ),
-      ],
-    ),
-  );
+  const classes = toClasses(toParseErrorClass);
+
+  for (const reasonCode of ObjectKeys(classes)) {
+    const ParseErrorClass = classes[reasonCode];
+
+    classes[reasonCode] = ObjectAssign(
+      ParseErrorClass,
+      !ParseErrorClass.reasonCode && { reasonCode },
+      !!syntaxPlugin && { syntaxPlugin },
+    );
+  }
+
+  return classes;
 }
 
 export type RaiseProperties<ErrorProperties> = {|
