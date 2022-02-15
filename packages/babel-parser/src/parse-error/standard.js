@@ -85,8 +85,9 @@ export default (_: typeof toParseErrorClass) => ({
     "Generators can only be declared at the top level or inside a block.",
   ),
 
-  IllegalBreakContinue: _<{| construct: "break" | "continue" |}>(
-    ({ construct }) => `Unsyntactic ${construct}.`,
+  IllegalBreakContinue: _<{| type: "BreakStatement" | "ContinueStatement" |}>(
+    ({ type }) =>
+      `Unsyntactic ${type === "BreakStatement" ? "break" : "continue"}.`,
   ),
 
   IllegalLanguageModeDirective: _(

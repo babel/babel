@@ -611,10 +611,8 @@ export default class StatementParser extends ExpressionParser {
       }
     }
     if (i === this.state.labels.length) {
-      this.raise(Errors.IllegalBreakContinue, {
-        at: node,
-        construct: isBreak ? "break" : "continue",
-      });
+      const type = isBreak ? "BreakStatement" : "ContinueStatement";
+      this.raise(Errors.IllegalBreakContinue, { at: node, type });
     }
   }
 
