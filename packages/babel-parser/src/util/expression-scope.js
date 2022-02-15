@@ -94,18 +94,18 @@ class ArrowHeadParsingScope extends ExpressionScope {
     super(type);
   }
   recordDeclarationError<T: ArrowHeadParsingDeclarationErrorClass>(
-    ParsingError: T,
+    ParsingErrorClass: T,
     { at }: { at: Position },
   ) {
     const index = at.index;
 
-    this.declarationErrors.set(index, [ParsingError, at]);
+    this.declarationErrors.set(index, [ParsingErrorClass, at]);
   }
   clearDeclarationError(index: number) {
     this.declarationErrors.delete(index);
   }
-  iterateErrors<T: ArrowHeadParsingDeclarationErrorClass>(
-    iterator: ([T, Position]) => void,
+  iterateErrors(
+    iterator: ([ArrowHeadParsingDeclarationErrorClass, Position]) => void,
   ) {
     this.declarationErrors.forEach(iterator);
   }

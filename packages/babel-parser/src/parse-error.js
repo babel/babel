@@ -19,6 +19,7 @@ type ToMessage<ErrorProperties> = (self: ErrorProperties) => string;
 export class ParseError<ErrorProperties> extends SyntaxError {
   static code: ParseErrorCode;
   static reasonCode: string;
+  static syntaxPlugin: ?string;
   static toMessage: ToMessage<ErrorProperties>;
 
   // Unfortunately babel-standalone turns this into a straight assigmnent
@@ -29,6 +30,7 @@ export class ParseError<ErrorProperties> extends SyntaxError {
 
   code: ParseErrorCode = this.constructor.code;
   reasonCode: string = this.constructor.reasonCode;
+  syntaxPlugin: ?string = this.constructor.syntaxPlugin;
 
   loc: Position;
   pos: number;
@@ -53,13 +55,13 @@ Object.defineProperty(ParseError, "name", { value: "SyntaxError" });
 
 declare function toParseErrorClass<T: string>(
   T,
-  ?{ code?: ParseErrorCode },
+  ?{ code?: ParseErrorCode } | boolean,
 ): Class<ParseError<{||}>>;
 
 // eslint-disable-next-line no-redeclare
 declare function toParseErrorClass<T>(
   (T) => string,
-  ?{ code?: ParseErrorCode },
+  ?{ code?: ParseErrorCode } | boolean,
 ): Class<ParseError<T>>;
 
 // eslint-disable-next-line no-redeclare
@@ -100,10 +102,12 @@ export function toParseErrorClasses<T: Object>(
   // $FlowIgnore
   return Object.fromEntries(
     Object.entries(toClasses(toParseErrorClass)).map(
-      ([reasonCode, ParseErrorClass]) => [
+      ([reasonCode, ParseErrorClass: Class<ParseError<any>>]) => [
         reasonCode,
+        // $FlowIgnore
         ObjectAssign(
           ParseErrorClass,
+          // $FlowIgnore
           !ParseErrorClass.reasonCode && { reasonCode },
           !!syntaxPlugin && { syntaxPlugin },
         ),

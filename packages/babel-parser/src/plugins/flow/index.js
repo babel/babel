@@ -3344,7 +3344,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       { enumName, explicitType, memberName }: EnumContext,
     ) {
       return this.raise(
-        /^(boolean|number|string)$/.test(explicitType)
+        /^(boolean|number|string)$/.test(explicitType || "")
           ? FlowErrors.EnumInvalidMemberInitializerPrimaryType
           : explicitType === "symbol"
           ? FlowErrors.EnumInvalidMemberInitializerSymbolType
