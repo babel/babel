@@ -20,6 +20,21 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.3 (2022-02-15)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`
+  * [#14271](https://github.com/babel/babel/pull/14271) jsx-development: do not emit `this` within ts module block ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-destructuring`
+  * [#14240](https://github.com/babel/babel/pull/14240) Fix destructuring with holes in assign pattern ([@magic-akari](https://github.com/magic-akari))
+
+#### :house: Internal
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`
+  * [#14253](https://github.com/babel/babel/pull/14253) Convert all SourceMapConsumers to TraceMaps ([@jridgewell](https://github.com/jridgewell))
+
+#### :microscope: Output optimization
+* `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-transform-new-target`, `babel-plugin-transform-parameters`, `babel-traverse`
+  * [#14268](https://github.com/babel/babel/pull/14268) Skip unnecessary temp vars in `path.insertAfter` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.17.2 (2022-02-08)
 
 #### :bug: Bug Fix
