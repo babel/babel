@@ -1,0 +1,5 @@
+var foo = function () {
+  return 4;
+};
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNvdXJjZS1tYXBzL2lucHV0LXNvdXJjZS1tYXAtc2FtZS1sb2NhdGlvbi9pbnB1dC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxVQUFVLFk7U0FBTSxDO0NBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgZm9vID0gKCkgPT4gNDsiXX0=
