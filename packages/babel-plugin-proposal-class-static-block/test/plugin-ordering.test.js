@@ -26,9 +26,7 @@ describe("plugin ordering", () => {
 
       class Foo {}
 
-      (() => {
-        Foo.foo = Foo.bar;
-      })();
+      Foo.foo = Foo.bar;
 
       _defineProperty(Foo, \\"bar\\", 42);"
     `);
