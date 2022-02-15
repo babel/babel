@@ -3,7 +3,7 @@
 import { toParseErrorClass } from "../parse-error";
 
 export default (_: typeof toParseErrorClass) => ({
-  AccessorIsGenerator: _<{| kind: "get" | " set" |}>(
+  AccessorIsGenerator: _<{| kind: "get" | "set" |}>(
     ({ kind }) => `A ${kind}ter cannot be a generator.`,
   ),
 
@@ -38,8 +38,8 @@ export default (_: typeof toParseErrorClass) => ({
   ConstructorIsAccessor: _("Class constructor may not be an accessor."),
   ConstructorIsAsync: _("Constructor can't be an async function."),
   ConstructorIsGenerator: _("Constructor can't be a generator."),
-  DeclarationMissingInitializer: _<{| declaration: string |}>(
-    ({ declaration }) => `'${declaration}' require an initialization value.`,
+  DeclarationMissingInitializer: _<{| kind: "const" | "destructuring" |}>(
+    ({ kind }) => `Missing initializer in ${kind} declaration.`,
   ),
   DecoratorBeforeExport: _(
     "Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax.",

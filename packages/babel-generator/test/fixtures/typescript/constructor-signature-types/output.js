@@ -1,1 +1,1 @@
-const x: new () => void;
+declare const x: new () => void;

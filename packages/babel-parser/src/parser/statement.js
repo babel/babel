@@ -894,9 +894,10 @@ export default class StatementParser extends ExpressionParser {
   parseVarStatement(
     node: N.VariableDeclaration,
     kind: "var" | "let" | "const",
+    allowMissingInitializer: boolean = false,
   ): N.VariableDeclaration {
     this.next();
-    this.parseVar(node, false, kind);
+    this.parseVar(node, false, kind, allowMissingInitializer);
     this.semicolon();
     return this.finishNode(node, "VariableDeclaration");
   }
@@ -1207,40 +1208,37 @@ export default class StatementParser extends ExpressionParser {
     node: N.VariableDeclaration,
     isFor: boolean,
     kind: "var" | "let" | "const",
+    allowMissingInitializer: boolean = false,
   ): N.VariableDeclaration {
     const declarations = (node.declarations = []);
-    const isTypescript = this.hasPlugin("typescript");
     node.kind = kind;
     for (;;) {
       const decl = this.startNode();
       this.parseVarId(decl, kind);
-      if (this.eat(tt.eq)) {
-        decl.init = isFor
-          ? this.parseMaybeAssignDisallowIn()
-          : this.parseMaybeAssignAllowIn();
-      } else {
+      decl.init = !this.eat(tt.eq)
+        ? null
+        : isFor
+        ? this.parseMaybeAssignDisallowIn()
+        : this.parseMaybeAssignAllowIn();
+
+      if (decl.init === null && !allowMissingInitializer) {
         if (
-          kind === "const" &&
-          !(this.match(tt._in) || this.isContextual(tt._of))
-        ) {
-          // `const` with no initializer is allowed in TypeScript.
-          // It could be a declaration like `const x: number;`.
-          if (!isTypescript) {
-            this.raise(Errors.DeclarationMissingInitializer, {
-              at: this.state.lastTokEndLoc,
-              declaration: "Const declarations",
-            });
-          }
-        } else if (
           decl.id.type !== "Identifier" &&
           !(isFor && (this.match(tt._in) || this.isContextual(tt._of)))
         ) {
           this.raise(Errors.DeclarationMissingInitializer, {
             at: this.state.lastTokEndLoc,
-            declaration: "Complex binding patterns",
+            kind: "destructuring",
+          });
+        } else if (
+          kind === "const" &&
+          !(this.match(tt._in) || this.isContextual(tt._of))
+        ) {
+          this.raise(Errors.DeclarationMissingInitializer, {
+            at: this.state.lastTokEndLoc,
+            kind: "const",
           });
         }
-        decl.init = null;
       }
       declarations.push(this.finishNode(decl, "VariableDeclarator"));
       if (!this.eat(tt.comma)) break;

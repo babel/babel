@@ -139,6 +139,9 @@ const TSErrors = toParseErrorClasses(
     IndexSignatureHasStatic: _(
       "Index signatures cannot have the 'static' modifier.",
     ),
+    InitializerNotAllowInAmbientContext: _(
+      "Initializers are not allowed in ambient contexts.",
+    ),
     InvalidModifierOnTypeMember: _<{| modifier: TsModifier |}>(
       ({ modifier }) =>
         `'${modifier}' modifier cannot appear on a type member.`,
@@ -1860,7 +1863,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             );
           case tt._class:
             // While this is also set by tsParseExpressionStatement, we need to set it
-            // before parsing the class declaration to now how to register it in the scope.
+            // before parsing the class declaration to know how to register it in the scope.
             nany.declare = true;
             return this.parseClass(
               nany,
@@ -1877,7 +1880,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // falls through
           case tt._var:
             kind = kind || this.state.value;
-            return this.parseVarStatement(nany, kind);
+            return this.parseVarStatement(nany, kind, true);
           case tt._global:
             return this.tsParseAmbientExternalModuleDeclaration(nany);
           default: {
@@ -2513,6 +2516,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseExportDefaultExpression();
     }
 
+    parseVarStatement(
+      node: N.VariableDeclaration,
+      kind: "var" | "let" | "const",
+      allowMissingInitializer: boolean = false,
+    ) {
+      const { isAmbientContext } = this.state;
+      const declaration = super.parseVarStatement(
+        node,
+        kind,
+        allowMissingInitializer || isAmbientContext,
+      );
+
+      if (isAmbientContext) {
+        for (const declarator of declaration.declarations) {
+          if (declarator.init) {
+            this.raise(TSErrors.InitializerNotAllowInAmbientContext, {
+              at: declarator.init,
+            });
+          }
+        }
+      }
+
+      return declaration;
+    }
+
     parseStatementContent(context: ?string, topLevel: ?boolean): N.Statement {
       if (this.state.type === tt._const) {
         const ahead = this.lookahead();
@@ -2741,11 +2769,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
+      if (!this.state.isAmbientContext && this.isContextual(tt._declare)) {
+        return this.tsInAmbientContext(() => this.parseExportDeclaration(node));
+      }
+
       // Store original location/position
       const startPos = this.state.start;
       const startLoc = this.state.startLoc;
 
-      // "export declare" is equivalent to just "export".
       const isDeclare = this.eatContextual(tt._declare);
 
       if (
@@ -2757,24 +2788,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         });
       }
 
-      let declaration: ?N.Declaration;
+      const isIdentifier = tokenIsIdentifier(this.state.type);
+      const declaration: ?N.Declaration =
+        (isIdentifier && this.tsTryParseExportDeclaration()) ||
+        super.parseExportDeclaration(node);
 
-      if (tokenIsIdentifier(this.state.type)) {
-        declaration = this.tsTryParseExportDeclaration();
-      }
-      if (!declaration) {
-        declaration = super.parseExportDeclaration(node);
-      }
+      if (!declaration) return null;
+
       if (
-        declaration &&
-        (declaration.type === "TSInterfaceDeclaration" ||
-          declaration.type === "TSTypeAliasDeclaration" ||
-          isDeclare)
+        declaration.type === "TSInterfaceDeclaration" ||
+        declaration.type === "TSTypeAliasDeclaration" ||
+        isDeclare
       ) {
         node.exportKind = "type";
       }
 
-      if (declaration && isDeclare) {
+      if (isDeclare) {
         // Reset location to include `declare` in range
         this.resetStartLocation(declaration, startPos, startLoc);
 

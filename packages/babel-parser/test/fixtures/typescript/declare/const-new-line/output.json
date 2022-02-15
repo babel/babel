@@ -1,6 +1,10 @@
 {
   "type": "File",
   "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":27,"index":35}},
+  "errors": [
+    "SyntaxError: Missing initializer in const declaration. (2:15)",
+    "SyntaxError: Missing initializer in const declaration. (2:26)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":27,"index":35}},

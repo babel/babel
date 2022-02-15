@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
   "errors": [
-    "SyntaxError: 'Complex binding patterns' require an initialization value. (1:7)"
+    "SyntaxError: Missing initializer in destructuring declaration. (1:7)"
   ],
   "program": {
     "type": "Program",
