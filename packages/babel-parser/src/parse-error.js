@@ -51,7 +51,9 @@ export class ParseError<ErrorProperties> extends SyntaxError {
 // We do this for backwards compatibility so that all errors just have the
 // "SyntaxError" name in their messages instead of leaking the private subclass
 // name.
-Object.defineProperty(ParseError, "name", { value: "SyntaxError" });
+Object.defineProperty(ParseError.prototype.constructor, "name", {
+  value: "SyntaxError",
+});
 
 declare function toParseErrorClass<T: string>(
   T,
