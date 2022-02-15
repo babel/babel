@@ -3,6 +3,7 @@
   "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":25}},
   "errors": [
     "SyntaxError: Missing semicolon. (1:8)",
+    "SyntaxError: Unexpected reserved word 'interface'. (1:9)",
     "SyntaxError: Missing semicolon. (2:3)"
   ],
   "program": {

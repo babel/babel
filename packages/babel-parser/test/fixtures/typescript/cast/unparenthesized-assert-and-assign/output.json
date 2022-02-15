@@ -3,7 +3,8 @@
   "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":29,"index":46}},
   "errors": [
     "SyntaxError: Invalid left-hand side in assignment expression. (1:0)",
-    "SyntaxError: Invalid left-hand side in assignment expression. (2:6)"
+    "SyntaxError: Invalid left-hand side in assignment expression. (2:6)",
+    "SyntaxError: Invalid left-hand side in object destructuring pattern. (2:6)"
   ],
   "program": {
     "type": "Program",
