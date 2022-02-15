@@ -20,6 +20,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.4 (2022-02-15)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#14274](https://github.com/babel/babel/pull/14274) Fix infinite recursion when merge sourcemaps ([@jridgewell](https://github.com/jridgewell))
 ## v7.17.3 (2022-02-15)
 
 #### :bug: Bug Fix
