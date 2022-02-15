@@ -167,7 +167,9 @@ const FlowErrors = toParseErrorClasses(
     PatternIsOptional: _(
       "A binding pattern parameter cannot be optional in an implementation signature.",
       // For consistency in TypeScript and Flow error codes
-      !process.env.BABEL_8_BREAKING && { reasonCode: "OptionalBindingPattern" },
+      !process.env.BABEL_8_BREAKING
+        ? { reasonCode: "OptionalBindingPattern" }
+        : {},
     ),
     SetterMayNotHaveThisParam: _("A setter cannot have a `this` parameter."),
     SpreadVariance: _("Spread properties cannot have variance."),
