@@ -3339,7 +3339,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           at: loc,
           enumName,
           memberName,
-          explicitType,
+          // FIXME: Handle this being missing better.
+          explicitType: explicitType || "unknown",
         },
       );
     }
