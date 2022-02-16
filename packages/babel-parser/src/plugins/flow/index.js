@@ -20,7 +20,6 @@ import * as charCodes from "charcodes";
 import { isIteratorStart } from "../../util/identifier";
 import FlowScopeHandler from "./scope";
 import {
-  type BindingTypes,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
