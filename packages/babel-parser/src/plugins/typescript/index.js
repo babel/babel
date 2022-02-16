@@ -93,6 +93,9 @@ const TSErrors = toParseErrorClasses(
     ConstructorHasTypeParameters: _(
       "Type parameters cannot appear on a constructor declaration.",
     ),
+    ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference: _(
+      "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
+    ),
     // kind?
     DeclareAccessor: _<{| accessorKind: "get" | "set" |}>(
       ({ accessorKind }) => `'declare' is not allowed in ${accessorKind}ters.`,
@@ -140,7 +143,7 @@ const TSErrors = toParseErrorClasses(
     IndexSignatureHasStatic: _(
       "Index signatures cannot have the 'static' modifier.",
     ),
-    InitializerNotAllowInAmbientContext: _(
+    InitializerNotAllowedInAmbientContext: _(
       "Initializers are not allowed in ambient contexts.",
     ),
     InvalidModifierOnTypeMember: _<{| modifier: TsModifier |}>(
@@ -2529,13 +2532,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         allowMissingInitializer || isAmbientContext,
       );
 
-      if (isAmbientContext) {
-        for (const declarator of declaration.declarations) {
-          if (declarator.init) {
-            this.raise(TSErrors.InitializerNotAllowInAmbientContext, {
-              at: declarator.init,
-            });
-          }
+      if (!isAmbientContext) return declaration;
+
+      for (const { id, init } of declaration.declarations) {
+
+        // Empty initializer is the easy case that we want.
+        if (!init) continue;
+
+        // var and let aren't ever allowed initializers.
+        //
+        // If a const declaration has no type annotation and is initiailized to a
+        // string literal, numeric literal, or (FIXME) enum reference, then it is
+        // allowed.
+        if (kind !== "const" || !!id.typeAnnotation) {
+          this.raise(TSErrors.InitializerNotAllowedInAmbientContext, {
+            at: init,
+          });
+        } else if (
+          init.type !== "BooleanLiteral" &&
+          init.type !== "NumericLiteral" &&
+          init.type !== "BigIntLiteral") {
+          this.raise(
+            TSErrors.ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference,
+            { at: init }
+          );
         }
       }
 
