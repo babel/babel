@@ -8,11 +8,18 @@ const topicReferenceVisitor: Visitor<{
   exit(path, state) {
     if (path.isTopicReference()) {
       state.topicReferences.push(path);
-    } else if (
-      state.topicReferences.length === 0 &&
-      !state.sideEffectsBeforeFirstTopicReference &&
-      !path.isPure()
-    ) {
+    } else {
+      if (
+        state.topicReferences.length === 0 &&
+        !state.sideEffectsBeforeFirstTopicReference &&
+        !path.isPure()
+      ) {
+        state.sideEffectsBeforeFirstTopicReference = true;
+      }
+    }
+  },
+  "ClassBody|Function"(_, state) {
+    if (state.topicReferences.length === 0) {
       state.sideEffectsBeforeFirstTopicReference = true;
     }
   },
@@ -44,7 +51,10 @@ export default {
 
       const visitorState = {
         topicReferences: [],
-        sideEffectsBeforeFirstTopicReference: false,
+        // pipeBodyPath might be a function, and it won't be visited by
+        // topicReferenceVisitor because traverse() skips the top-level
+        // node. We must handle that case here manually.
+        sideEffectsBeforeFirstTopicReference: pipeBodyPath.isFunction(),
       };
       pipeBodyPath.traverse(topicReferenceVisitor, visitorState);
 
