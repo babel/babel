@@ -1,5 +1,3 @@
-var _ref;
-
 const program = '(function() { return this; })()';
-const result = (_ref = program, eval(_ref));
+const result = eval(program);
 expect(result).not.toBeUndefined();

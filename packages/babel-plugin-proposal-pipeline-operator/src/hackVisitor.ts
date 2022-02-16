@@ -1,8 +1,20 @@
 import { types as t } from "@babel/core";
+import type { NodePath, Visitor } from "@babel/traverse";
 
-const topicReferenceReplacementVisitor = {
-  TopicReference(path) {
-    path.replaceWith(t.cloneNode(this.topicVariable));
+const topicReferenceVisitor: Visitor<{
+  topicReferences: NodePath<t.TopicReference>[];
+  sideEffectsBeforeFirstTopicReference: boolean;
+}> = {
+  exit(path, state) {
+    if (path.isTopicReference()) {
+      state.topicReferences.push(path);
+    } else if (
+      state.topicReferences.length === 0 &&
+      !state.sideEffectsBeforeFirstTopicReference &&
+      !path.isPure()
+    ) {
+      state.sideEffectsBeforeFirstTopicReference = true;
+    }
   },
 };
 
@@ -30,13 +42,29 @@ export default {
         return;
       }
 
+      const visitorState = {
+        topicReferences: [],
+        sideEffectsBeforeFirstTopicReference: false,
+      };
+      pipeBodyPath.traverse(topicReferenceVisitor, visitorState);
+
+      if (
+        visitorState.topicReferences.length === 1 &&
+        (!visitorState.sideEffectsBeforeFirstTopicReference ||
+          path.scope.isPure(node.left, true))
+      ) {
+        visitorState.topicReferences[0].replaceWith(node.left);
+        path.replaceWith(node.right);
+        return;
+      }
+
       const topicVariable = scope.generateUidIdentifierBasedOnNode(node);
       scope.push({ id: topicVariable });
 
       // Replace topic references with the topic variable.
-      pipeBodyPath.traverse(topicReferenceReplacementVisitor, {
-        topicVariable,
-      });
+      visitorState.topicReferences.forEach(path =>
+        path.replaceWith(t.cloneNode(topicVariable)),
+      );
 
       // Replace the pipe expression itself with an assignment expression.
       path.replaceWith(

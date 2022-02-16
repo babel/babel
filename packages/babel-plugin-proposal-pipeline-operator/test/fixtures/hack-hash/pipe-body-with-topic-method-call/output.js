@@ -1,4 +1,2 @@
-var _ref;
-
-const result = (_ref = 'Hello', _ref.toUpperCase());
+const result = 'Hello'.toUpperCase();
 expect(result).toBe('HELLO');
