@@ -90,11 +90,11 @@ const TSErrors = toParseErrorClasses(
     ClassMethodHasReadonly: _(
       "Class methods cannot have the 'readonly' modifier.",
     ),
-    ConstructorHasTypeParameters: _(
-      "Type parameters cannot appear on a constructor declaration.",
-    ),
     ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference: _(
       "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
+    ),
+    ConstructorHasTypeParameters: _(
+      "Type parameters cannot appear on a constructor declaration.",
     ),
     // kind?
     DeclareAccessor: _<{| accessorKind: "get" | "set" |}>(
@@ -288,6 +288,16 @@ function tsIsAccessModifier(modifier: string): boolean %checks {
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
+    parseTopLevel(file, program) {
+      // If we're in a .d.ts file, then the whole thing is an ambient context.
+      //
+      // TODO: Maybe provide am option to parse as .d.ts instead of .ts, so you
+      // don't have to necessarily rely on the filename.
+      return this.filename && /\.d\.ts$/.test(this.filename)
+        ? this.tsInAmbientContext(() => super.parseTopLevel(file, program))
+        : super.parseTopLevel(file, program);
+    }
+
     getScopeHandler(): Class<TypeScriptScopeHandler> {
       return TypeScriptScopeHandler;
     }
@@ -2535,7 +2545,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!isAmbientContext) return declaration;
 
       for (const { id, init } of declaration.declarations) {
-
         // Empty initializer is the easy case that we want.
         if (!init) continue;
 
@@ -2549,12 +2558,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             at: init,
           });
         } else if (
+          init.type !== "StringLiteral" &&
           init.type !== "BooleanLiteral" &&
           init.type !== "NumericLiteral" &&
-          init.type !== "BigIntLiteral") {
+          init.type !== "BigIntLiteral" &&
+          (init.type !== "TemplateLiteral" || init.expressions.length > 0) &&
+          !isPossiblyLiteralEnum(init)
+        ) {
           this.raise(
             TSErrors.ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference,
-            { at: init }
+            { at: init },
           );
         }
       }
@@ -3685,3 +3698,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
   };
+
+function isPossiblyLiteralEnum(expression: N.Expression): boolean {
+  if (expression.type !== "MemberExpression") return false;
+
+  const { computed, property } = expression;
+
+  if (
+    computed &&
+    property.type !== "StringLiteral" &&
+    (property.type !== "TemplateLiteral" || property.expressions.length > 0)
+  ) {
+    return false;
+  }
+
+  return isUncomputedMemberExpressionChain(expression.object);
+}
+
+function isUncomputedMemberExpressionChain(expression: N.Expression): boolean {
+  if (expression.type === "Identifier") return true;
+  if (expression.type !== "MemberExpression") return false;
+  if (expression.computed) return false;
+
+  return isUncomputedMemberExpressionChain(expression.object);
+}
