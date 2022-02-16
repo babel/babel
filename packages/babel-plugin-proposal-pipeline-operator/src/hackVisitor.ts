@@ -22,21 +22,21 @@ export default {
         return;
       }
 
-      const topicVariable = scope.generateUidIdentifierBasedOnNode(node);
       const pipeBodyPath = path.get("right");
-
-      scope.push({ id: topicVariable });
-
       if (pipeBodyPath.node.type === "TopicReference") {
         // If the pipe body is itself a lone topic reference,
-        // then replace it with the topic variable.
-        pipeBodyPath.replaceWith(t.cloneNode(topicVariable));
-      } else {
-        // Replace topic references with the topic variable.
-        pipeBodyPath.traverse(topicReferenceReplacementVisitor, {
-          topicVariable,
-        });
+        // then replace the whole expression with its left operand.
+        path.replaceWith(node.left);
+        return;
       }
+
+      const topicVariable = scope.generateUidIdentifierBasedOnNode(node);
+      scope.push({ id: topicVariable });
+
+      // Replace topic references with the topic variable.
+      pipeBodyPath.traverse(topicReferenceReplacementVisitor, {
+        topicVariable,
+      });
 
       // Replace the pipe expression itself with an assignment expression.
       path.replaceWith(
