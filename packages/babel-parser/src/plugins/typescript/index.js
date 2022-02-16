@@ -288,16 +288,6 @@ function tsIsAccessModifier(modifier: string): boolean %checks {
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
-    parseTopLevel(file, program) {
-      // If we're in a .d.ts file, then the whole thing is an ambient context.
-      //
-      // TODO: Maybe provide am option to parse as .d.ts instead of .ts, so you
-      // don't have to necessarily rely on the filename.
-      return this.filename && /\.d\.ts$/.test(this.filename)
-        ? this.tsInAmbientContext(() => super.parseTopLevel(file, program))
-        : super.parseTopLevel(file, program);
-    }
-
     getScopeHandler(): Class<TypeScriptScopeHandler> {
       return TypeScriptScopeHandler;
     }
@@ -3555,7 +3545,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     shouldParseAsAmbientContext(): boolean {
-      return !!this.getPluginOption("typescript", "dts");
+      // If the user took the time to provide a filename and it has the ".d.ts"
+      // file extension, then assume they want ambient context parsing unless
+      // they explicitly specify otherwise.
+      const DTS = this.getPluginOption("typescript", "dts");
+      const DTSTruthy = !!DTS;
+      const DTSFalse = DTS === false;
+
+      return (
+        DTSTruthy ||
+        (!DTSFalse && !!this.filename && /\.d\.ts$/.test(this.filename))
+      );
     }
 
     parse() {
