@@ -41,7 +41,7 @@ export default declare((api, options) => {
     return scope;
   }
 
-  const immutabiltyVisitor = {
+  const immutabilityVisitor = {
     enter(path, state) {
       const stop = () => {
         state.isImmutable = false;
@@ -81,7 +81,10 @@ export default declare((api, options) => {
       // If we allow mutable props, tags with function expressions can be
       // safely hoisted.
       const { mutablePropsAllowed } = state;
-      if (mutablePropsAllowed && path.isFunction()) return skip();
+      if (mutablePropsAllowed && path.isFunction()) {
+        path.traverse(targetScopeVisitor, state);
+        return skip();
+      }
 
       if (!path.isPure()) return stop();
 
@@ -140,6 +143,11 @@ export default declare((api, options) => {
     },
   };
 
+  // We cannot use traverse.visitors.merge because it doesn't support
+  // immutabilityVisitor's bare `enter` visitor.
+  // It's safe to just use ... because the two visitors don't share any key.
+  const hoistingVisitor = { ...immutabilityVisitor, ...targetScopeVisitor };
+
   return {
     name: "transform-react-constant-elements",
 
@@ -166,14 +174,6 @@ export default declare((api, options) => {
           mutablePropsAllowed = allowMutablePropsOnTags.includes(elementName);
         }
 
-        const immutabilityState = {
-          isImmutable: true,
-          mutablePropsAllowed,
-        };
-        // Traverse all props passed to this element for immutability
-        path.traverse(immutabiltyVisitor, immutabilityState);
-        if (!immutabilityState.isImmutable) return;
-
         // In order to avoid hoisting unnecessarily, we need to know which is
         // the scope containing the current JSX element. If a parent of the
         // current element has already been hoisted, we can consider its target
@@ -186,13 +186,16 @@ export default declare((api, options) => {
         }
         jsxScope ??= getHoistingScope(path.scope);
 
-        const targetScopeState = {
+        const visitorState = {
+          isImmutable: true,
+          mutablePropsAllowed,
           jsxScope,
           targetScope: path.scope.getProgramParent(),
         };
-        path.traverse(targetScopeVisitor, targetScopeState);
+        path.traverse(hoistingVisitor, visitorState);
+        if (!visitorState.isImmutable) return;
 
-        const { targetScope } = targetScopeState;
+        const { targetScope } = visitorState;
         HOISTED.set(path.node, targetScope);
 
         // Only hoist if it would give us an advantage.
