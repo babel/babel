@@ -9,7 +9,8 @@ The commented out diagnostic codes will introduce false positive cases that shou
 */
 
 export default [
-  // "TS1005", // '{0}' expected.
+  "TS1003", // Identifier expected.
+  "TS1005", // '{0}' expected.
   "TS1009", // Trailing comma not allowed.
   "TS1014", // A rest parameter must be last in a parameter list.
   "TS1019", // An index signature parameter cannot have a question mark.
@@ -55,9 +56,11 @@ export default [
   "TS1308", // 'await' expression is only allowed within an async function.
   // "TS2300", // Duplicate identifier '{0}'.
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
+  "TS2389", // Function implementation name must be '${0}'.
   "TS2390", // Constructor implementation is missing.
   "TS2391", // Function implementation is missing or not immediately following the declaration.
   "TS2364", // The left-hand side of an assignment expression must be a variable or a property access.
+  "TS2369", // A parameter property is only allowed in a constructor implementation.
   // "TS2371", // A parameter initializer is only allowed in a function or constructor implementation.
   // "TS2393", // Duplicate function implementation.
   "TS2396", // Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
