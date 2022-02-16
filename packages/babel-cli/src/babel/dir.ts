@@ -177,34 +177,69 @@ export default async function ({
     // This, alongside with debounce, allows us to only log
     // when we are sure that all the files have been compiled.
     let processing = 0;
+    const { filenames } = cliOptions;
+    let getBase;
+    if (filenames.length === 1) {
+      // fast path: If there is only one filenames, we know it must be the base
+      const base = filenames[0];
+      const absoluteBase = path.resolve(base);
+      getBase = filename => {
+        return filename === absoluteBase ? path.dirname(base) : base;
+      };
+    } else {
+      // A map from absolute compiled file path to its base, from which
+      // the output destination will be determined
+      const filenameToBaseMap: Map<string, string> = new Map(
+        filenames.map(filename => {
+          const absoluteFilename = path.resolve(filename);
+          return [absoluteFilename, path.dirname(filename)];
+        }),
+      );
 
-    cliOptions.filenames.forEach(filenameOrDir => {
-      watcher.watch(filenameOrDir);
+      const absoluteFilenames: Map<string, string> = new Map(
+        filenames.map(filename => {
+          const absoluteFilename = path.resolve(filename);
+          return [absoluteFilename, filename];
+        }),
+      );
 
-      watcher.onFilesChange(async filenames => {
-        processing++;
-        if (startTime === null) startTime = process.hrtime();
-
-        try {
-          const written = await Promise.all(
-            filenames.map(filename =>
-              handleFile(
-                filename,
-                filename === filenameOrDir
-                  ? path.dirname(filenameOrDir)
-                  : filenameOrDir,
-              ),
-            ),
-          );
-
-          compiledFiles += written.filter(Boolean).length;
-        } catch (err) {
-          console.error(err);
+      // determine base from the absolute file path
+      getBase = filename => {
+        const base = filenameToBaseMap.get(filename);
+        if (base !== undefined) {
+          return base;
         }
+        for (const [absoluteFilenameOrDir, relative] of absoluteFilenames) {
+          if (filename.startsWith(absoluteFilenameOrDir + "/")) {
+            filenameToBaseMap.set(filename, relative);
+            return relative;
+          }
+        }
+        // Can't determine the base, probably external deps
+        return "";
+      };
+    }
 
-        processing--;
-        if (processing === 0 && !cliOptions.quiet) logSuccess();
-      });
+    filenames.forEach(filenameOrDir => {
+      watcher.watch(filenameOrDir);
+    });
+
+    watcher.onFilesChange(async filenames => {
+      processing++;
+      if (startTime === null) startTime = process.hrtime();
+
+      try {
+        const written = await Promise.all(
+          filenames.map(filename => handleFile(filename, getBase(filename))),
+        );
+
+        compiledFiles += written.filter(Boolean).length;
+      } catch (err) {
+        console.error(err);
+      }
+
+      processing--;
+      if (processing === 0 && !cliOptions.quiet) logSuccess();
     });
   }
 }
