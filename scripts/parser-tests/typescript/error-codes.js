@@ -37,6 +37,7 @@ export default [
   "TS1123", // Variable declaration list cannot be empty.
   "TS1141", // String literal expected.
   "TS1142", // Line break not permitted here.
+  "TS1155", // 'const' declarations must be initialized.
   "TS1162", // An object member cannot be declared optional.
   "TS1163", // A 'yield' expression is only allowed in a generator body.
   "TS1184", // Modifiers cannot appear here.
