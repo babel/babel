@@ -48,13 +48,6 @@ export class ParseError<ErrorProperties> extends SyntaxError {
   }
 }
 
-// We do this for backwards compatibility so that all errors just have the
-// "SyntaxError" name in their messages instead of leaking the private subclass
-// name.
-Object.defineProperty(ParseError.prototype.constructor, "name", {
-  value: "SyntaxError",
-});
-
 declare function toParseErrorClass<T: string>(
   T,
   ?{ code?: ParseErrorCode } | boolean,
@@ -105,6 +98,13 @@ export function toParseErrorClasses<T: Object>(
 
   for (const reasonCode of ObjectKeys(classes)) {
     const ParseErrorClass = classes[reasonCode];
+
+    // We do this for backwards compatibility so that all errors just have the
+    // "SyntaxError" name in their messages instead of leaking the private
+    // subclass name.
+    Object.defineProperty(ParseErrorClass.prototype.constructor, "name", {
+      value: "SyntaxError",
+    });
 
     classes[reasonCode] = ObjectAssign(
       ParseErrorClass,
