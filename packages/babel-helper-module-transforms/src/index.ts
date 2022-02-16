@@ -460,11 +460,8 @@ function buildExportInitializationStatements(
     // We generate init statements (`exports.a = exports.b = ... = void 0`)
     // for every 100 exported names to avoid deeply-nested AST structures.
     const chunkSize = 100;
-    for (
-      let i = 0, uninitializedExportNames = [];
-      i < initStatements.length;
-      i += chunkSize
-    ) {
+    for (let i = 0; i < initStatements.length; i += chunkSize) {
+      let uninitializedExportNames = [];
       for (let j = 0; j < chunkSize && i + j < initStatements.length; j++) {
         const [exportName, initStatement] = initStatements[i + j];
         if (initStatement !== null) {
