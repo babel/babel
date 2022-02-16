@@ -17,6 +17,7 @@ export default [
   "TS1029", // '{0}' modifier must precede '{1}' modifier.
   "TS1030", // '{0}' modifier already seen.
   "TS1031", // '{0}' modifier cannot appear on a class element.
+  "TS1039", // Initializers are not allowed in ambient contexts.
   "TS1042", // '{0}' modifier cannot be used here.
   "TS1048", // A rest parameter cannot have an initializer.
   "TS1053", // A 'set' accessor cannot have rest parameter.
