@@ -1957,22 +1957,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
           break;
 
-        case "enum":
-          if (next || tokenIsIdentifier(this.state.type)) {
-            if (next) this.next();
-            return this.tsParseEnumDeclaration(node, /* isConst */ false);
-          }
-          break;
-
-        case "interface":
-          if (
-            this.tsCheckLineTerminator(next) &&
-            tokenIsIdentifier(this.state.type)
-          ) {
-            return this.tsParseInterfaceDeclaration(node);
-          }
-          break;
-
         case "module":
           if (this.tsCheckLineTerminator(next)) {
             if (this.match(tt.string)) {
@@ -2382,15 +2366,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkReservedWord(
-      word: string, // eslint-disable-line no-unused-vars
-      startLoc: Position, // eslint-disable-line no-unused-vars
-      checkKeywords: boolean, // eslint-disable-line no-unused-vars
-      // eslint-disable-next-line no-unused-vars
+      word: string,
+      startLoc: Position,
+      checkKeywords: boolean,
       isBinding: boolean,
     ): void {
-      // Don't bother checking for TypeScript code.
       // Strict mode words may be allowed as in `declare namespace N { const static: number; }`.
       // And we have a type checker anyway, so don't bother having the parser do it.
+      if (!this.state.isAmbientContext) {
+        super.checkReservedWord(word, startLoc, checkKeywords, isBinding);
+      }
     }
 
     /*
@@ -2574,7 +2559,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.expectContextual(tt._enum);
           return this.tsParseEnumDeclaration(node, /* isConst */ true);
         }
+      } else if (this.state.type === tt._enum) {
+        const node: N.TsEnumDeclaration = this.startNode();
+        this.next();
+        return this.tsParseEnumDeclaration(node, /* isConst */ false);
+      } else if (this.state.type === tt._interface) {
+        const interfaceNode = this.startNode();
+        if (
+          this.tsCheckLineTerminator(true) &&
+          tokenIsIdentifier(this.state.type)
+        ) {
+          return this.tsParseInterfaceDeclaration(interfaceNode);
+        }
+        return super.parseStatementContent(context, topLevel);
       }
+
       return super.parseStatementContent(context, topLevel);
     }
 

@@ -53,8 +53,10 @@ export default [
   "TS1247", // A type literal property cannot have an initializer.
   "TS1248", // A class member cannot have the 'const' keyword.
   "TS1308", // 'await' expression is only allowed within an async function.
-  "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
   // "TS2300", // Duplicate identifier '{0}'.
+  "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
+  "TS2390", // Constructor implementation is missing.
+  "TS2391", // Function implementation is missing or not immediately following the declaration.
   "TS2364", // The left-hand side of an assignment expression must be a variable or a property access.
   // "TS2371", // A parameter initializer is only allowed in a function or constructor implementation.
   // "TS2393", // Duplicate function implementation.
