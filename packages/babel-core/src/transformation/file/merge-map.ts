@@ -30,7 +30,13 @@ export default function mergeSourceMap(
   if (typeof inputMap.sourceRoot === "string") {
     result.sourceRoot = inputMap.sourceRoot;
   }
-  return result;
+
+  // remapping returns a SourceMap class type, but this breaks code downstream in
+  // @babel/traverse and @babel/types that relies on data being plain objects.
+  // When it encounters the sourcemap type it outputs a "don't know how to turn
+  // this value into a node" error. As a result, we are converting the merged
+  // sourcemap to a plain js object.
+  return { ...result };
 }
 
 function rootless(map: SourceMap): SourceMap {
