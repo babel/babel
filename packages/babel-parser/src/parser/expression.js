@@ -2500,11 +2500,15 @@ export default class ExpressionParser extends LValParser {
     this.expressionScope.exit();
   }
 
+  isSimpleParameter(node: N.Pattern | N.TSParameterProperty) {
+    return node.type === "Identifier";
+  }
+
   isSimpleParamList(
     params: $ReadOnlyArray<N.Pattern | N.TSParameterProperty>,
   ): boolean {
     for (let i = 0, len = params.length; i < len; i++) {
-      if (params[i].type !== "Identifier") return false;
+      if (!this.isSimpleParameter(params[i])) return false;
     }
     return true;
   }

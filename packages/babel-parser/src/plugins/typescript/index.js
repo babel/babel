@@ -84,6 +84,9 @@ const TSErrors = toParseErrorClasses(
     AccesorCannotHaveTypeParameters: _(
       "An accessor cannot have type parameters.",
     ),
+    CannotFindName: _<{| name: string |}>(
+      ({ name }) => `Cannot find name '${name}'.`,
+    ),
     ClassMethodHasDeclare: _(
       "Class methods cannot have the 'declare' modifier.",
     ),
@@ -566,8 +569,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSImportType");
     }
 
-    tsParseEntityName(allowReservedWords: boolean): N.TsEntityName {
-      let entity: N.TsEntityName = this.parseIdentifier();
+    tsParseEntityName(
+      allowReservedWords: boolean,
+      allowConst: boolean = false,
+    ): N.TsEntityName {
+      let entity: N.TsEntityName = this.parseIdentifier(
+        allowConst && this.match(tt._const),
+      );
       while (this.eat(tt.dot)) {
         const node: N.TsQualifiedName = this.startNodeAtNode(entity);
         node.left = entity;
@@ -577,9 +585,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return entity;
     }
 
-    tsParseTypeReference(): N.TsTypeReference {
+    tsParseTypeReference(allowConst: boolean = false): N.TsTypeReference {
       const node: N.TsTypeReference = this.startNode();
-      node.typeName = this.tsParseEntityName(/* allowReservedWords */ false);
+      node.typeName = this.tsParseEntityName(
+        /* allowReservedWords */ false,
+        allowConst,
+      );
       if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
       }
@@ -654,11 +665,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsTryNextParseConstantContext(): ?N.TsTypeReference {
-      if (this.lookahead().type === tt._const) {
-        this.next();
-        return this.tsParseTypeReference();
+      if (this.lookahead().type !== tt._const) return null;
+
+      this.next();
+      const typeReference = this.tsParseTypeReference(/* allowConst */ true);
+
+      // If the type reference has type parameters, then you are using it as a
+      // type and not as a const signifier. We'll *never* be able to find this
+      // name, since const isn't allowed as a type name. So in this instance we
+      // get to pretend we're the type checker.
+      if (typeReference.typeParameters) {
+        this.raise(TSErrors.CannotFindName, {
+          at: typeReference.typeName,
+          name: typeReference.typeName.name,
+        });
       }
-      return null;
+
+      return typeReference;
     }
 
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
@@ -2131,6 +2154,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return elt;
+    }
+
+    isSimpleParameter(node) {
+      return (
+        (node.type === "TSParameterProperty" &&
+          super.isSimpleParameter(node.parameter)) ||
+        super.isSimpleParameter(node)
+      );
     }
 
     parseFunctionBodyAndFinish(
