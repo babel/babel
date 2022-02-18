@@ -4,16 +4,35 @@ import { fileURLToPath } from "url";
 import TestRunner from "../utils/parser-test-runner.js";
 import ErrorCodes from "./error-codes.js";
 
+import { spawnSync } from "child_process";
+const getEncoding = path =>
+  spawnSync("file", ["--brief", "--mime-encoding", path])
+    .stdout.toString()
+    .slice(0, -1);
+const toNodeEncoding = fileEncoding =>
+  ({
+    "us-ascii": "utf-8",
+    "utf-8": "utf-8",
+    "utf-16le": "utf-16le",
+    "utf-16be": "utf-16be",
+    "iso-8859-1": "latin1",
+  }[fileEncoding] || false);
+
 const ErrorCodeRegExp = new RegExp(ErrorCodes.join("|"));
-console.log("ERROR CODE REGEXP: ", ErrorCodeRegExp);
+
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function* loadTests(dir) {
-  const names = fs.readdirSync(dir);
+  const names = fs.readdirSync(dir).map(name => [name, path.join(dir, name)]);
+  //.filter(([name]) => allowed.has(name));
 
-  for (const name of names) {
-    const contents = fs.readFileSync(path.join(dir, name), "utf8");
-    yield { name, contents };
+  for (const [name, filename] of names) {
+    const encoding = getEncoding(filename);
+    if (encoding === "utf-16be" || encoding === "binary") continue;
+    yield {
+      name,
+      contents: fs.readFileSync(filename, toNodeEncoding(encoding)),
+    };
   }
 }
 
@@ -64,6 +83,8 @@ function baselineContainsParserErrorCodes(testName) {
   }
 }
 
+const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;
+
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
   allowlist: path.join(dirname, "allowlist.txt"),
@@ -72,6 +93,10 @@ const runner = new TestRunner({
 
   *getTests() {
     for (const test of loadTests(this.testDir)) {
+      if (IgnoreRegExp.test(test.contents)) {
+        continue;
+      }
+
       yield {
         contents: splitTwoslashCodeInfoFiles(
           test.contents,
@@ -82,14 +107,15 @@ const runner = new TestRunner({
             filename.replace(/\/default$/, ""),
             lines.join("\n"),
           ])
-          .map(([fileName, contents]) => ({
+          .filter(([sourceFilename]) => !sourceFilename.endsWith(".json"))
+          .map(([sourceFilename, contents]) => ({
             contents,
-            fileName,
+            sourceFilename,
             sourceType: "module",
-            plugins: fileName.endsWith(".tsx") ? pluginsWithJSX : plugins,
+            plugins: sourceFilename.endsWith(".tsx") ? pluginsWithJSX : plugins,
           })),
         expectedError: baselineContainsParserErrorCodes(test.name),
-        fileName: test.name,
+        sourceFilename: test.name,
         id: test.name,
       };
     }
@@ -97,7 +123,7 @@ const runner = new TestRunner({
 });
 
 const BracketedFileRegExp = /\/\/\/\/\s*\[([^\]]+)\][^\n]*(\n|$)/;
-const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s+([^\s]*)\s*(?:\n|$)/i;
+const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*([^\s]*)\s*(?:\n|$)/i;
 
 // Modified from: https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ts-twoslasher/src/index.ts
 function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
