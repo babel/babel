@@ -4,9 +4,11 @@ const assert = require("assert");
 // For Node.js <= 10
 if (!assert.match) assert.match = (val, re) => assert(re.test(val));
 
-const run = (function* () {
+const run = (async function* () {
   assert.match(yield, /Successfully compiled 4 files with Babel \(\d+ms\)\./);
 
+  // wait 200ms for watcher setup
+  await new Promise(resolve => setTimeout(resolve, 200));
   // update ./module1/src/index.js
   fs.writeFileSync(
     "./module1/src/index.js",
@@ -18,13 +20,13 @@ const run = (function* () {
 
 run.next();
 
-process.stdin.on("data", function listener(chunk) {
+process.stdin.on("data", async function listener(chunk) {
   const str = String(chunk).trim();
   if (!str) return;
 
   console.log(str);
 
-  if (run.next(str).done) {
+  if ((await run.next(str)).done) {
     process.exit(0);
   }
 });
