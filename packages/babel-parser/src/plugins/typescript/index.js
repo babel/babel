@@ -1604,7 +1604,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseInterfaceDeclaration(
       node: N.TsInterfaceDeclaration,
-    ): N.TsInterfaceDeclaration {
+      properties: { declare?: true } = {},
+    ): ?N.TsInterfaceDeclaration {
+      if (this.hasFollowingLineBreak()) return null;
+      this.expectContextual(tt._interface);
+      if (properties.declare) node.declare = properties.declare;
       if (tokenIsIdentifier(this.state.type)) {
         node.id = this.parseIdentifier();
         this.checkLVal(
@@ -1711,14 +1715,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseEnumDeclaration(
       node: N.TsEnumDeclaration,
-      isConst: boolean,
+      properties: { const?: true, declare?: true } = {},
     ): N.TsEnumDeclaration {
-      if (isConst) node.const = true;
+      if (properties.const) node.const = properties.const;
+      if (properties.declare) node.declare = properties.declare;
+      this.expectContextual(tt._enum);
       node.id = this.parseIdentifier();
       this.checkLVal(
         node.id,
         "typescript enum declaration",
-        isConst ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
+        node.const ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
       );
 
       this.expect(tt.braceL);
@@ -1887,45 +1893,61 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return this.tsInAmbientContext(() => {
-        switch (starttype) {
-          case tt._function:
+        if (starttype === tt._function) {
+          nany.declare = true;
+          return this.parseFunctionStatement(
+            nany,
+            /* async */ false,
+            /* declarationPosition */ true,
+          );
+        }
+
+        if (starttype === tt._class) {
+          // While this is also set by tsParseExpressionStatement, we need to set it
+          // before parsing the class declaration to know how to register it in the scope.
+          nany.declare = true;
+          return this.parseClass(
+            nany,
+            /* isStatement */ true,
+            /* optionalId */ false,
+          );
+        }
+
+        if (starttype === tt._enum) {
+          return this.tsParseEnumDeclaration(nany, { declare: true });
+        }
+
+        if (starttype === tt._global) {
+          return this.tsParseAmbientExternalModuleDeclaration(nany);
+        }
+
+        if (starttype === tt._const || starttype === tt._var) {
+          if (!this.match(tt._const) || !this.isLookaheadContextual("enum")) {
             nany.declare = true;
-            return this.parseFunctionStatement(
-              nany,
-              /* async */ false,
-              /* declarationPosition */ true,
-            );
-          case tt._class:
-            // While this is also set by tsParseExpressionStatement, we need to set it
-            // before parsing the class declaration to know how to register it in the scope.
-            nany.declare = true;
-            return this.parseClass(
-              nany,
-              /* isStatement */ true,
-              /* optionalId */ false,
-            );
-          case tt._const:
-            if (this.match(tt._const) && this.isLookaheadContextual("enum")) {
-              // `const enum = 0;` not allowed because "enum" is a strict mode reserved word.
-              this.expect(tt._const);
-              this.expectContextual(tt._enum);
-              return this.tsParseEnumDeclaration(nany, /* isConst */ true);
-            }
-          // falls through
-          case tt._var:
-            kind = kind || this.state.value;
-            return this.parseVarStatement(nany, kind, true);
-          case tt._global:
-            return this.tsParseAmbientExternalModuleDeclaration(nany);
-          default: {
-            if (tokenIsIdentifier(starttype)) {
-              return this.tsParseDeclaration(
-                nany,
-                this.state.value,
-                /* next */ true,
-              );
-            }
+            return this.parseVarStatement(nany, kind || this.state.value, true);
           }
+
+          // `const enum = 0;` not allowed because "enum" is a strict mode reserved word.
+          this.expect(tt._const);
+          return this.tsParseEnumDeclaration(nany, {
+            const: true,
+            declare: true,
+          });
+        }
+
+        if (starttype === tt._interface) {
+          const result = this.tsParseInterfaceDeclaration(nany, {
+            declare: true,
+          });
+          if (result) return result;
+        }
+
+        if (tokenIsIdentifier(starttype)) {
+          return this.tsParseDeclaration(
+            nany,
+            this.state.value,
+            /* next */ true,
+          );
         }
       });
     }
@@ -2534,9 +2556,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // export default interface allowed in:
       // https://github.com/Microsoft/TypeScript/pull/16040
       if (this.match(tt._interface)) {
-        const interfaceNode = this.startNode();
-        this.next();
-        const result = this.tsParseInterfaceDeclaration(interfaceNode);
+        const result = this.tsParseInterfaceDeclaration(this.startNode());
         if (result) return result;
       }
 
@@ -2589,27 +2609,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseStatementContent(context: ?string, topLevel: ?boolean): N.Statement {
-      if (this.state.type === tt._const) {
-        const ahead = this.lookahead();
-        if (ahead.type === tt._enum) {
-          const node: N.TsEnumDeclaration = this.startNode();
-          this.next(); // eat 'const'
-          this.expectContextual(tt._enum);
-          return this.tsParseEnumDeclaration(node, /* isConst */ true);
-        }
-      } else if (this.state.type === tt._enum) {
+      if (this.match(tt._const) && this.isLookaheadContextual("enum")) {
         const node: N.TsEnumDeclaration = this.startNode();
-        this.next();
-        return this.tsParseEnumDeclaration(node, /* isConst */ false);
-      } else if (this.state.type === tt._interface) {
-        const interfaceNode = this.startNode();
-        if (
-          this.tsCheckLineTerminator(true) &&
-          tokenIsIdentifier(this.state.type)
-        ) {
-          return this.tsParseInterfaceDeclaration(interfaceNode);
-        }
-        return super.parseStatementContent(context, topLevel);
+        this.expect(tt._const); // eat 'const'
+        return this.tsParseEnumDeclaration(node, { const: true });
+      }
+
+      if (this.isContextual(tt._enum)) {
+        return this.tsParseEnumDeclaration(this.startNode());
+      }
+
+      if (this.isContextual(tt._interface)) {
+        const result = this.tsParseInterfaceDeclaration(this.startNode());
+        if (result) return result;
       }
 
       return super.parseStatementContent(context, topLevel);
@@ -3527,7 +3539,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseAbstractDeclaration(
       node: any,
-    ): N.ClassDeclaration | N.TsInterfaceDeclaration | typeof undefined {
+    ): N.ClassDeclaration | ?N.TsInterfaceDeclaration {
       if (this.match(tt._class)) {
         node.abstract = true;
         return this.parseClass<N.ClassDeclaration>(
@@ -3546,7 +3558,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(TSErrors.NonClassMethodPropertyHasAbstractModifer, {
             at: node,
           });
-          this.next();
           return this.tsParseInterfaceDeclaration(
             (node: N.TsInterfaceDeclaration),
           );
