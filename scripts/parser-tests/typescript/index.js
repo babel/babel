@@ -24,7 +24,6 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function* loadTests(dir) {
   const names = fs.readdirSync(dir).map(name => [name, path.join(dir, name)]);
-  //.filter(([name]) => allowed.has(name));
 
   for (const [name, filename] of names) {
     const encoding = getEncoding(filename);
@@ -44,27 +43,6 @@ const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 // Check if the baseline errors contain the codes that should also be thrown from babel-parser
 function baselineContainsParserErrorCodes(testName) {
   try {
-    if (testName.includes("aliasErrors")) {
-      console.log(
-        "WILL TEST " +
-          path.join(
-            TSTestsPath,
-            "baselines/reference",
-            testName.replace(/\.tsx?$/, ".errors.txt")
-          )
-      );
-      console.log(
-        "WILL TEST " +
-          fs.readFileSync(
-            path.join(
-              TSTestsPath,
-              "baselines/reference",
-              testName.replace(/\.tsx?$/, ".errors.txt")
-            ),
-            "utf8"
-          )
-      );
-    }
     return ErrorCodeRegExp.test(
       fs.readFileSync(
         path.join(
@@ -84,6 +62,7 @@ function baselineContainsParserErrorCodes(testName) {
 }
 
 const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;
+const AlwaysStrictRegExp = /(^|\n)\/\/\s*@alwaysStrict:\s*true/;
 
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
@@ -94,33 +73,39 @@ const runner = new TestRunner({
   *getTests() {
     for (const test of loadTests(this.testDir)) {
       if (IgnoreRegExp.test(test.contents)) {
+        yield { id: test.name, expectedError: false, contents: "" };
         continue;
       }
 
-      yield {
-        contents: splitTwoslashCodeInfoFiles(
-          test.contents,
-          "default",
-          `${test.name}/`
-        )
-          .map(([filename, lines]) => [
-            filename.replace(/\/default$/, ""),
-            lines.join("\n"),
-          ])
-          .filter(([sourceFilename]) => !sourceFilename.endsWith(".json"))
-          .map(([sourceFilename, contents]) => ({
-            contents,
-            sourceFilename,
-            sourceType: "module",
-            plugins: sourceFilename.endsWith(".tsx") ? pluginsWithJSX : plugins,
-          })),
-        expectedError: baselineContainsParserErrorCodes(test.name),
-        sourceFilename: test.name,
-        id: test.name,
-      };
+      const strictMode = AlwaysStrictRegExp.test(test.contents);
+      const files = toFiles(strictMode, test.contents, test.name);
+      const expectedError =
+        files.length > 0 && baselineContainsParserErrorCodes(test.name);
+
+      yield { id: test.name, expectedError, contents: files };
     }
   },
 });
+
+function toFiles(strictMode, contents, name) {
+  return splitTwoslashCodeInfoFiles(contents, "default", `${name}/`)
+    .map(([filename, lines]) => [
+      filename.replace(/\/default$/, ""),
+      lines.join("\n"),
+    ])
+    .filter(
+      ([sourceFilename, contents]) =>
+        !/\.(css|js|json|md)$/.test(sourceFilename) &&
+        contents.split("\n").some(line => !/(^\s*$)|(^\/\/[^\n]*$)/.test(line))
+    )
+    .map(([sourceFilename, contents]) => ({
+      contents,
+      sourceFilename,
+      sourceType: "script",
+      strictMode,
+      plugins: /\.(t|j)sx$/.test(sourceFilename) ? pluginsWithJSX : plugins,
+    }));
+}
 
 const BracketedFileRegExp = /\/\/\/\/\s*\[([^\]]+)\][^\n]*(\n|$)/;
 const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*([^\s]*)\s*(?:\n|$)/i;

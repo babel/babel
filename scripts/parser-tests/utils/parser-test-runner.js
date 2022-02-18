@@ -60,8 +60,8 @@ class TestRunner {
   parse(test, parser) {
     const tests = typeof test.contents === "string" ? [test] : test.contents;
 
-    for (const { contents, sourceType, plugins, sourceFilename } of tests) {
-      parser(contents, { sourceType, plugins, sourceFilename });
+    for (const { contents, ...options } of tests) {
+      parser(contents, options);
     }
   }
 
