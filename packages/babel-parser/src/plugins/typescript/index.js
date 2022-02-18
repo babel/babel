@@ -3697,7 +3697,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             // { type as as something }
             hasTypeSpecifier = true;
             leftOfAs = firstAs;
-            rightOfAs = this.parseIdentifier();
+            rightOfAs = isImport
+              ? this.parseIdentifier()
+              : this.parseModuleExportName();
             canParseAsKeyword = false;
           } else {
             // { type as as }
@@ -3707,7 +3709,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
           // { type as something }
           canParseAsKeyword = false;
-          rightOfAs = this.parseIdentifier();
+          rightOfAs = isImport
+            ? this.parseIdentifier()
+            : this.parseModuleExportName();
         } else {
           // { type as }
           hasTypeSpecifier = true;
