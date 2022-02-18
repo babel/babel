@@ -588,7 +588,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeReference(allowConst: boolean = false): N.TsTypeReference {
       const node: N.TsTypeReference = this.startNode();
       node.typeName = this.tsParseEntityName(
-        /* allowReservedWords */ false,
+        /* allowReservedWords */ true,
         allowConst,
       );
       if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
