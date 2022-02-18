@@ -203,6 +203,7 @@ export default async function ({
         }),
       );
 
+      const { sep } = path;
       // determine base from the absolute file path
       getBase = filename => {
         const base = filenameToBaseMap.get(filename);
@@ -210,7 +211,7 @@ export default async function ({
           return base;
         }
         for (const [absoluteFilenameOrDir, relative] of absoluteFilenames) {
-          if (filename.startsWith(absoluteFilenameOrDir + "/")) {
+          if (filename.startsWith(absoluteFilenameOrDir + sep)) {
             filenameToBaseMap.set(filename, relative);
             return relative;
           }
