@@ -9,6 +9,7 @@ export default declare(api => {
       parserOpts.plugins.push("brand-check");
     },
     visitor: {
+      // todo 这里可能需要与estree做相关的处理
       CallExpression(path) {
         const node = path.node;
         if (node.callee.name === "hasInstance") {
@@ -72,7 +73,7 @@ export default declare(api => {
                     } else if (returnFlag === 0) {
                       expressionList.unshift(addExpression);
                     } else {
-                      expressionList.splice(returnFlag - 1, 0, addExpression);
+                      expressionList.splice(returnFlag, 0, addExpression);
                     }
                   }
                 });

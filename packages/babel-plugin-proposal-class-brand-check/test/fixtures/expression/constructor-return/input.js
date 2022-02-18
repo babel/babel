@@ -1,5 +1,6 @@
 class Range {
   constructor(props) {
+    this.foo = 'foo';
     return this;
   }
 
