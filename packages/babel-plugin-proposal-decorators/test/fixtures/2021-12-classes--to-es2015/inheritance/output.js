@@ -8,22 +8,14 @@ let _Bar;
 
 class Bar {}
 
-(() => {
-  [_Bar, _initClass] = babelHelpers.applyDecs(Bar, [], [dec1]);
-})();
+[_Bar, _initClass] = babelHelpers.applyDecs(Bar, [], [dec1]);
 
-(() => {
-  _initClass();
-})();
+_initClass();
 
 let _Foo;
 
 class Foo extends _Bar {}
 
-(() => {
-  [_Foo, _initClass2] = babelHelpers.applyDecs(Foo, [], [dec2]);
-})();
+[_Foo, _initClass2] = babelHelpers.applyDecs(Foo, [], [dec2]);
 
-(() => {
-  _initClass2();
-})();
+_initClass2();

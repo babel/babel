@@ -48,14 +48,12 @@ function _get_b2() {
   _get_b(this);
 }
 
-(() => {
-  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto] = babelHelpers.applyDecs(Foo, [[dec, 1, "a", function () {
-    return babelHelpers.classPrivateFieldGet(this, _A);
-  }, function (value) {
-    babelHelpers.classPrivateFieldSet(this, _A, value);
-  }], [dec, 1, "b", function () {
-    return babelHelpers.classPrivateFieldGet(this, _B);
-  }, function (value) {
-    babelHelpers.classPrivateFieldSet(this, _B, value);
-  }]], []);
-})();
+[_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto] = babelHelpers.applyDecs(Foo, [[dec, 1, "a", function () {
+  return babelHelpers.classPrivateFieldGet(this, _A);
+}, function (value) {
+  babelHelpers.classPrivateFieldSet(this, _A, value);
+}], [dec, 1, "b", function () {
+  return babelHelpers.classPrivateFieldGet(this, _B);
+}, function (value) {
+  babelHelpers.classPrivateFieldSet(this, _B, value);
+}]], []);

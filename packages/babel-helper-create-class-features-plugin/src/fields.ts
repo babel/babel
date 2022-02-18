@@ -993,12 +993,17 @@ export function buildFieldsInitNodes(
     // a `NodePath<t.StaticBlock>`
     // this maybe a bug for ts
     switch (true) {
-      case isStaticBlock:
-        staticNodes.push(
-          // @ts-expect-error prop is `StaticBlock` here
-          template.statement.ast`(() => ${t.blockStatement(prop.node.body)})()`,
-        );
+      case isStaticBlock: {
+        const blockBody = (prop.node as t.StaticBlock).body;
+        // We special-case the single expression case to avoid the iife, since
+        // it's common.
+        if (blockBody.length === 1 && t.isExpressionStatement(blockBody[0])) {
+          staticNodes.push(blockBody[0] as t.ExpressionStatement);
+        } else {
+          staticNodes.push(template.statement.ast`(() => { ${blockBody} })()`);
+        }
         break;
+      }
       case isStatic && isPrivate && isField && privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(

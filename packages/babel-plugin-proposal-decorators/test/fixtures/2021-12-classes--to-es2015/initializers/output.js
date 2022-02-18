@@ -12,9 +12,7 @@ new (_temp = class extends babelHelpers.identity {
 }, (() => {
   class Foo {}
 
-  (() => {
-    [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
-  })();
+  [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
 })(), _temp)();
 
 let _Bar;
@@ -29,7 +27,5 @@ new (_temp2 = class extends babelHelpers.identity {
 }, (() => {
   class Bar extends _Foo {}
 
-  (() => {
-    [_Bar, _initClass2] = babelHelpers.applyDecs(Bar, [], [dec]);
-  })();
+  [_Bar, _initClass2] = babelHelpers.applyDecs(Bar, [], [dec]);
 })(), _temp2)();

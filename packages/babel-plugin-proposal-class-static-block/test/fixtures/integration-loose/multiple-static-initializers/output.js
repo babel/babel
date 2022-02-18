@@ -13,7 +13,4 @@ Object.defineProperty(Foo, _bar, {
 })();
 
 Foo.qux = 21;
-
-(() => {
-  Foo.qux2 = Foo.qux;
-})();
+Foo.qux2 = Foo.qux;
