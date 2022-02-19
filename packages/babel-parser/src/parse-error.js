@@ -121,12 +121,12 @@ export type RaiseProperties<ErrorProperties> = {|
   at: Position | NodeBase,
 |};
 
-import ModuleErrors from "./parse-error/module";
-import StandardErrors from "./parse-error/standard";
-import StrictErrors from "./parse-error/strict-mode";
+import ModuleErrors from "./parse-error/module-errors";
+import StandardErrors from "./parse-error/standard-errors";
+import StrictModeErrors from "./parse-error/strict-mode-errors";
 
 export const Errors = {
   ...toParseErrorClasses(ModuleErrors),
   ...toParseErrorClasses(StandardErrors),
-  ...toParseErrorClasses(StrictErrors),
+  ...toParseErrorClasses(StrictModeErrors),
 };
