@@ -28,11 +28,7 @@ const require = createRequire(import.meta.url);
           ],
         ],
       }).code;
-      expect(output).toMatchInlineSnapshot(`
-"var _ref;
-
-_ref = x, _ref;"
-`);
+      expect(output).toMatchInlineSnapshot(`"x;"`);
     });
 
     it("should support hack pipeline with `#` topic token", () => {
@@ -49,11 +45,7 @@ _ref = x, _ref;"
           ],
         ],
       }).code;
-      expect(output).toMatchInlineSnapshot(`
-"var _ref;
-
-_ref = x, _ref;"
-`);
+      expect(output).toMatchInlineSnapshot(`"x;"`);
     });
     it("should support decorators versioned 2021-12", () => {
       const output = Babel.transform("@dec class C {}", {

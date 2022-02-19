@@ -1,8 +1,8 @@
 let i = 0;
 let sum = 0;
 
-while (_ref2 = i, (_ref = i = _ref2 + 1, _ref <= 10)) {
-  var _ref, _ref2;
+while (_ref = i, (i = 2 * _ref - _ref + 1) <= 10) {
+  var _ref;
 
   sum += i;
 }

@@ -1,4 +1,2 @@
-var _ref;
-
-const result = (_ref = 5, _ref);
+const result = 5;
 expect(result).toBe(5);
