@@ -61,6 +61,7 @@ class TestRunner {
     parser(test.contents, {
       sourceType: test.sourceType,
       plugins: test.plugins,
+      sourceFilename: test.fileName,
     });
   }
 
