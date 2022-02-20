@@ -1747,6 +1747,20 @@ export default class Tokenizer extends CommentsParser {
     }
   }
 
+  /**
+   * Raise a `ParseError` given the appropriate properties. If passed a
+   *`Position` for the `at` property, raises the `ParseError` at that location.
+   * Otherwise, if passed a `Node`, raises the `ParseError` at the start
+   * location of that `Node`.
+   *
+   * If `errorRecovery` is `true`, the error is pushed to the errors array and
+   * returned. If `errorRecovery` is `false`, the error is instead thrown.
+   *
+   * @param {Class<ParseError<ErrorProperties>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorProperties>} raiseProperties
+   * @returns {(ParseError<ErrorProperties> | empty)}
+   * @memberof Tokenizer
+   */
   raise<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
     ParseErrorClass: T,
     raiseProperties: RaiseProperties<ErrorProperties>,
@@ -1761,18 +1775,16 @@ export default class Tokenizer extends CommentsParser {
     return error;
   }
 
-  /*
   /**
-   * Raise a parsing error on given position pos. If errorRecovery is true,
-   * it will first search current errors and overwrite the error thrown on the exact
-   * position before with the new error message. If errorRecovery is false, it
-   * fallbacks to `raise`.
+   * If `errorRecovery` is `false`, this method behaves identically to `raise`.
+   * If `errorRecovery` is `true`, this method will first see if there is an
+   * already an error stored at the same `Position`, and replaces it with the
+   * one generated here.
    *
-   * @param {number} pos
-   * @param {string} errorTemplate
-   * @param {...any} params
-   * @returns {(Error | empty)}
-   * @memberof ParserError
+   * @param {Class<ParseError<ErrorProperties>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorProperties>} raiseProperties
+   * @returns {(ParseError<ErrorProperties> | empty)}
+   * @memberof Tokenizer
    */
   raiseOverwrite<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
     ParseErrorClass: T,
