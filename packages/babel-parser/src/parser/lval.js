@@ -555,12 +555,16 @@ export default class LValParser extends NodeUtils {
           ? isStrictBindReservedWord(name, this.inModule)
           : isStrictBindOnlyReservedWord(name))
       ) {
-        this.raise(
-          bindingType === BIND_NONE
-            ? Errors.StrictEvalArguments
-            : Errors.StrictEvalArgumentsBinding,
-          { at: expr, binding: name },
-        );
+        const at = expr;
+
+        if (bindingType === BIND_NONE) {
+          this.raise(Errors.StrictEvalArguments, { at, referenceName: name });
+        } else {
+          this.raise(Errors.StrictEvalArgumentsBinding, {
+            at,
+            bindingName: name,
+          });
+        }
       }
 
       if (checkClashes) {
