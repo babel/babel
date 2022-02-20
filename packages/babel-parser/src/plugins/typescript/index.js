@@ -99,9 +99,8 @@ const TSErrors = toParseErrorClasses(
     ConstructorHasTypeParameters: _(
       "Type parameters cannot appear on a constructor declaration.",
     ),
-    // kind?
-    DeclareAccessor: _<{| accessorKind: "get" | "set" |}>(
-      ({ accessorKind }) => `'declare' is not allowed in ${accessorKind}ters.`,
+    DeclareAccessor: _<{| kind: "get" | "set" |}>(
+      ({ kind }) => `'declare' is not allowed in ${kind}ters.`,
     ),
     DeclareClassFieldHasInitializer: _(
       "Initializers are not allowed in ambient contexts.",
@@ -2993,11 +2992,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       // $FlowIgnore
-      if (method.declare && (method.kind === "get" || method.kind === "set")) {
-        this.raise(TSErrors.DeclareAccessor, {
-          at: method,
-          accessorKind: method.kind,
-        });
+      const { declare = false, kind } = method;
+
+      if (declare && (kind === "get" || kind === "set")) {
+        this.raise(TSErrors.DeclareAccessor, { at: method, kind });
       }
       if (typeParameters) method.typeParameters = typeParameters;
       super.pushClassMethod(
