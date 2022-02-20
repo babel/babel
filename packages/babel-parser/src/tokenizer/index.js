@@ -131,14 +131,6 @@ export class Token {
 // ## Tokenizer
 
 export default class Tokenizer extends CommentsParser {
-  // Forward-declarations
-  // parser/util.js
-  /*::
-  +hasPrecedingLineBreak: () => boolean;
-  +unexpected: (loc?: ?Position, type?: TokenType) => empty;
-  +expectPlugin: (name: string, loc?: Position) => true;
-  */
-
   isLookahead: boolean;
 
   // Token store.
