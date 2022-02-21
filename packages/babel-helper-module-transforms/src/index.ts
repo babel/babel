@@ -449,7 +449,11 @@ function buildExportInitializationStatements(
   // https://tc39.es/ecma262/#sec-module-namespace-exotic-objects
   // The [Exports] list is ordered as if an Array of those String values
   // had been sorted using %Array.prototype.sort% using undefined as comparefn
-  initStatements.sort((a, b) => (a[0] > b[0] ? 1 : -1));
+  initStatements.sort(([a], [b]) => {
+    if (a < b) return -1;
+    if (b < a) return 1;
+    return 0;
+  });
 
   const results = [];
   if (noIncompleteNsImportDetection) {
