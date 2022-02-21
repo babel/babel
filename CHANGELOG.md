@@ -20,6 +20,23 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.6 (2022-02-21)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-module-transforms`
+  * [#14287](https://github.com/babel/babel/pull/14287) Make module namespace sort compare function consistent ([@devsnek](https://github.com/devsnek))
+
+#### :bug: Bug Fix
+* `babel-cli`
+  * [#14281](https://github.com/babel/babel/pull/14281) cli: handle multiple input sources in watch mode ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-react-constant-elements`
+  * [#12975](https://github.com/babel/babel/pull/12975) `allowMutablePropsOnTags`: cache JSX constant elements with function props ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-pipeline-operator`, `babel-standalone`
+  * [#14278](https://github.com/babel/babel/pull/14278) [hack pipes] Inline topic token when possible ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-preset-env`
+  * [#14275](https://github.com/babel/babel/pull/14275) Avoid IIFE for single-expression class static blocks ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.17.5 (2022-02-17)
 
 #### :bug: Bug Fix
