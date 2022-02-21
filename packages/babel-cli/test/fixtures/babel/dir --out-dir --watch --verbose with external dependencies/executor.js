@@ -4,7 +4,7 @@ const assert = require("assert");
 // For Node.js <= 10
 if (!assert.match) assert.match = (val, re) => assert(re.test(val));
 
-const run = (function* () {
+const run = (async function* () {
   let files = [yield, yield].sort();
   assert.match(files[0], /src[\\/]index.js -> lib[\\/]index.js/);
   assert.match(files[1], /src[\\/]main.js -> lib[\\/]main.js/);
@@ -12,7 +12,8 @@ const run = (function* () {
 
   logFile("lib/index.js");
   logFile("lib/main.js");
-
+  // wait 200ms for watcher setup
+  await new Promise(resolve => setTimeout(resolve, 200));
   fs.writeFileSync("./file.txt", "Updated!");
 
   files = [yield, yield].sort();
@@ -29,7 +30,7 @@ run.next();
 const batchedStrings = [];
 let batchId = 0;
 
-process.stdin.on("data", function listener(chunk) {
+process.stdin.on("data", async function listener(chunk) {
   const str = String(chunk).trim();
   if (!str) return;
 
@@ -50,7 +51,7 @@ process.stdin.on("data", function listener(chunk) {
     console.log(str);
   }
 
-  if (run.next(str).done) {
+  if ((await run.next(str)).done) {
     process.exit(0);
   }
 });

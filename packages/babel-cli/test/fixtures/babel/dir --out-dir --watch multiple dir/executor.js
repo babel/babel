@@ -5,18 +5,17 @@ const assert = require("assert");
 if (!assert.match) assert.match = (val, re) => assert(re.test(val));
 
 const run = (async function* () {
-  assert.match(yield, /Successfully compiled 2 files with Babel \(\d+ms\)\./);
+  assert.match(yield, /Successfully compiled 4 files with Babel \(\d+ms\)\./);
 
-  logFile("lib/index.js");
-  logFile("lib/main.js");
   // wait 200ms for watcher setup
   await new Promise(resolve => setTimeout(resolve, 200));
-  fs.writeFileSync("./file.txt", "Updated!");
+  // update ./module1/src/index.js
+  fs.writeFileSync(
+    "./module1/src/index.js",
+    `let str = REPLACE_ME + REPLACE_ME;`
+  );
 
-  assert.match(yield, /Successfully compiled 2 files with Babel \(\d+ms\)\./);
-
-  logFile("lib/index.js");
-  logFile("lib/main.js");
+  assert.match(yield, /Successfully compiled 1 file with Babel \(\d+ms\)\./);
 })();
 
 run.next();
@@ -31,10 +30,6 @@ process.stdin.on("data", async function listener(chunk) {
     process.exit(0);
   }
 });
-
-function logFile(file) {
-  console.log("EXECUTOR", file, JSON.stringify(fs.readFileSync(file, "utf8")));
-}
 
 setTimeout(() => {
   console.error("EXECUTOR TIMEOUT");
