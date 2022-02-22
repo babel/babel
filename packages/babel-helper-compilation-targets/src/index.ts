@@ -219,7 +219,7 @@ export default function getTargets(
     esmodules = false;
   }
 
-  if (browsers) {
+  if (browsers?.length) {
     const queryBrowsers = resolveTargets(browsers, options.browserslistEnv);
 
     if (esmodules === "intersect") {
