@@ -88,6 +88,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [ParenthesizedExpression](#parenthesizedexpression)
   - [DoExpression](#doexpression)
   - [ModuleExpression](#moduleexpression)
+  - [ClassHasInstanceExpression] (#classhasinstanceexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
   - [TaggedTemplateExpression](#taggedtemplateexpression)
