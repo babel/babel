@@ -1233,33 +1233,33 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (this.match(tt.braceL)) {
-        let braceStackCounter = 1;
         this.next();
-
-        while (braceStackCounter > 0) {
-          if (this.match(tt.braceL)) {
-            ++braceStackCounter;
-          } else if (this.match(tt.braceR)) {
-            --braceStackCounter;
-          }
-          this.next();
+        // Return true if we can parse an object pattern without errors
+        const { errors } = this.state;
+        const previousErrorCount = errors.length;
+        try {
+          this.parseObjectLike(tt.braceR, true);
+          return errors.length === previousErrorCount;
+        } catch {
+          return false;
         }
-        return true;
       }
 
       if (this.match(tt.bracketL)) {
-        let braceStackCounter = 1;
         this.next();
-
-        while (braceStackCounter > 0) {
-          if (this.match(tt.bracketL)) {
-            ++braceStackCounter;
-          } else if (this.match(tt.bracketR)) {
-            --braceStackCounter;
-          }
-          this.next();
+        // Return true if we can parse an array pattern without errors
+        const { errors } = this.state;
+        const previousErrorCount = errors.length;
+        try {
+          this.parseBindingList(
+            tt.bracketR,
+            charCodes.rightSquareBracket,
+            true,
+          );
+          return errors.length === previousErrorCount;
+        } catch {
+          return false;
         }
-        return true;
       }
 
       return false;
