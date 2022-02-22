@@ -109,15 +109,17 @@ const TSErrors = toParseErrorClasses(
       "An implementation cannot be declared in ambient contexts.",
     ),
     DuplicateAccessibilityModifier: _<{| modifier: N.Accessibility |}>(
-      // `Accessibility modifier ${modifier} already seen.` would be more helpful.
+      // `Accessibility modifier already seen: ${modifier}` would be more helpful.
       // eslint-disable-next-line no-unused-vars
       ({ modifier }) => `Accessibility modifier already seen.`,
     ),
     DuplicateModifier: _<{| modifier: TsModifier |}>(
       ({ modifier }) => `Duplicate modifier: '${modifier}'.`,
     ),
-    EmptyHeritageClauseType: _<{| descriptor: string |}>(
-      ({ descriptor }) => `'${descriptor}' list cannot be empty.`,
+    // `token` matches the terminology used by typescript:
+    // https://github.com/microsoft/TypeScript/blob/main/src/compiler/types.ts#L2915
+    EmptyHeritageClauseType: _<{| token: "extends" | "implements" |}>(
+      ({ token }) => `'${token}' list cannot be empty.`,
     ),
     EmptyTypeArguments: _("Type argument list cannot be empty."),
     EmptyTypeParameters: _("Type parameter list cannot be empty."),
@@ -239,11 +241,9 @@ const TSErrors = toParseErrorClasses(
     UnsupportedParameterPropertyKind: _(
       "A parameter property may not be declared using a binding pattern.",
     ),
-    UnsupportedSignatureParameterKind: _<{|
-      unsupportedParameterType: string,
-    |}>(
-      ({ unsupportedParameterType }) =>
-        `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${unsupportedParameterType}.`,
+    UnsupportedSignatureParameterKind: _<{| type: string |}>(
+      ({ type }) =>
+        `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${type}.`,
     ),
   }),
   { syntaxPlugin: "typescript" },
@@ -743,7 +743,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           ) {
             this.raise(TSErrors.UnsupportedSignatureParameterKind, {
               at: pattern,
-              unsupportedParameterType: pattern.type,
+              type: pattern.type,
             });
           }
           return (pattern: any);
@@ -1583,7 +1583,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseHeritageClause(
-      descriptor: string,
+      token: "extends" | "implements",
     ): $ReadOnlyArray<N.TsExpressionWithTypeArguments> {
       const originalStartLoc = this.state.startLoc;
 
@@ -1595,7 +1595,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!delimitedList.length) {
         this.raise(TSErrors.EmptyHeritageClauseType, {
           at: originalStartLoc,
-          descriptor,
+          token,
         });
       }
 
