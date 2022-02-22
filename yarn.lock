@@ -1378,6 +1378,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/traverse": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-codemod-object-assign-to-object-spread@workspace:codemods/babel-plugin-codemod-object-assign-to-object-spread":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-codemod-object-assign-to-object-spread@workspace:codemods/babel-plugin-codemod-object-assign-to-object-spread"
