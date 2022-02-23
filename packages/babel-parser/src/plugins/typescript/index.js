@@ -1233,7 +1233,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (this.match(tt.braceL)) {
-        this.next();
         // Return true if we can parse an object pattern without errors
         const { errors } = this.state;
         const previousErrorCount = errors.length;
