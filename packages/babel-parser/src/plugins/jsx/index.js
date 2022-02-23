@@ -20,36 +20,33 @@ import { isNewLine } from "../../util/whitespace";
 import { Errors, toParseErrorClasses } from "../../parse-error";
 
 /* eslint sort-keys: "error" */
-const JsxErrors = toParseErrorClasses(
-  _ => ({
-    AttributeIsEmpty: _(
-      "JSX attributes must only be assigned a non-empty expression.",
-    ),
-    MissingClosingTagElement: _<{| openingTagName: string |}>(
-      ({ openingTagName }) =>
-        `Expected corresponding JSX closing tag for <${openingTagName}>.`,
-    ),
-    MissingClosingTagFragment: _(
-      "Expected corresponding JSX closing tag for <>.",
-    ),
-    UnexpectedSequenceExpression: _(
-      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-    ),
-    // FIXME: Unify with Errors.UnexpectedToken
-    UnexpectedToken: _<{| found: string, HTMLEntity: string |}>(
-      ({ found, HTMLEntity }) =>
-        `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`,
-    ),
-    UnsupportedJsxValue: _(
-      "JSX value should be either an expression or a quoted JSX text.",
-    ),
-    UnterminatedJsxContent: _("Unterminated JSX contents."),
-    UnwrappedAdjacentJSXElements: _(
-      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-    ),
-  }),
-  { syntaxPlugin: "jsx" },
-);
+const JsxErrors = toParseErrorClasses`jsx`(_ => ({
+  AttributeIsEmpty: _(
+    "JSX attributes must only be assigned a non-empty expression.",
+  ),
+  MissingClosingTagElement: _<{| openingTagName: string |}>(
+    ({ openingTagName }) =>
+      `Expected corresponding JSX closing tag for <${openingTagName}>.`,
+  ),
+  MissingClosingTagFragment: _(
+    "Expected corresponding JSX closing tag for <>.",
+  ),
+  UnexpectedSequenceExpression: _(
+    "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
+  ),
+  // FIXME: Unify with Errors.UnexpectedToken
+  UnexpectedToken: _<{| found: string, HTMLEntity: string |}>(
+    ({ found, HTMLEntity }) =>
+      `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`,
+  ),
+  UnsupportedJsxValue: _(
+    "JSX value should be either an expression or a quoted JSX text.",
+  ),
+  UnterminatedJsxContent: _("Unterminated JSX contents."),
+  UnwrappedAdjacentJSXElements: _(
+    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+  ),
+}));
 
 /* eslint-disable sort-keys */
 

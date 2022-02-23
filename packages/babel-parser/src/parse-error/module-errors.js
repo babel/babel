@@ -1,8 +1,8 @@
 // @flow
 
-import { ParseErrorCodes, toParseErrorClass } from "../parse-error";
+import { ParseErrorCodes, toParseErrorCredentials } from "../parse-error";
 
-export default (_: typeof toParseErrorClass) => ({
+export default (_: typeof toParseErrorCredentials) => ({
   ImportMetaOutsideModule: _(
     `import.meta may appear only with 'sourceType: "module"'`,
     { code: ParseErrorCodes.SourceTypeModuleError },

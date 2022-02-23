@@ -47,13 +47,10 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
 /* eslint sort-keys: "error" */
-const PlaceholderErrors = toParseErrorClasses(
-  _ => ({
-    ClassNameIsRequired: _("A class name is required."),
-    UnexpectedSpace: _("Unexpected space in placeholder."),
-  }),
-  { syntaxPlugin: "placeholders" },
-);
+const PlaceholderErrors = toParseErrorClasses`placeholders`(_ => ({
+  ClassNameIsRequired: _("A class name is required."),
+  UnexpectedSpace: _("Unexpected space in placeholder."),
+}));
 /* eslint-disable sort-keys */
 
 export default (superClass: Class<Parser>): Class<Parser> =>

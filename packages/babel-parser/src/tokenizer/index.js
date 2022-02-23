@@ -1748,18 +1748,18 @@ export default class Tokenizer extends CommentsParser {
    * If `errorRecovery` is `true`, the error is pushed to the errors array and
    * returned. If `errorRecovery` is `false`, the error is instead thrown.
    *
-   * @param {Class<ParseError<ErrorProperties>>>} ParseErrorClass
-   * @param {RaiseProperties<ErrorProperties>} raiseProperties
-   * @returns {(ParseError<ErrorProperties> | empty)}
+   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorDetails>} raiseProperties
+   * @returns {(ParseError<ErrorDetails> | empty)}
    * @memberof Tokenizer
    */
-  raise<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
+  raise<ErrorDetails, T: Class<ParseError<ErrorDetails>>>(
     ParseErrorClass: T,
-    raiseProperties: RaiseProperties<ErrorProperties>,
-  ): ParseError<ErrorProperties> {
-    const { at, ...rest } = raiseProperties;
+    raiseProperties: RaiseProperties<ErrorDetails>,
+  ): ParseError<ErrorDetails> {
+    const { at, ...details } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc.start;
-    const error = new ParseErrorClass({ ...rest, loc });
+    const error = new ParseErrorClass({ loc, details });
 
     if (!this.options.errorRecovery) throw error;
     if (!this.isLookahead) this.state.errors.push(error);
@@ -1773,16 +1773,16 @@ export default class Tokenizer extends CommentsParser {
    * already an error stored at the same `Position`, and replaces it with the
    * one generated here.
    *
-   * @param {Class<ParseError<ErrorProperties>>>} ParseErrorClass
-   * @param {RaiseProperties<ErrorProperties>} raiseProperties
-   * @returns {(ParseError<ErrorProperties> | empty)}
+   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorDetails>} raiseProperties
+   * @returns {(ParseError<ErrorDetails> | empty)}
    * @memberof Tokenizer
    */
-  raiseOverwrite<ErrorProperties, T: Class<ParseError<ErrorProperties>>>(
+  raiseOverwrite<ErrorDetails, T: Class<ParseError<ErrorDetails>>>(
     ParseErrorClass: T,
-    raiseProperties: RaiseProperties<ErrorProperties>,
-  ): ParseError<ErrorProperties> | empty {
-    const { at, ...rest } = raiseProperties;
+    raiseProperties: RaiseProperties<ErrorDetails>,
+  ): ParseError<ErrorDetails> | empty {
+    const { at, ...details } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc.start;
     const pos = loc.index;
     const errors = this.state.errors;
@@ -1790,7 +1790,7 @@ export default class Tokenizer extends CommentsParser {
     for (let i = errors.length - 1; i >= 0; i--) {
       const error = errors[i];
       if (error.pos === pos) {
-        return (errors[i] = new ParseErrorClass({ ...rest, loc }));
+        return (errors[i] = new ParseErrorClass({ loc, details }));
       }
       if (error.pos < pos) break;
     }

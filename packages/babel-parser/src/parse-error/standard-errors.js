@@ -1,8 +1,8 @@
 // @flow
 
-import { toParseErrorClass } from "../parse-error";
+import { toParseErrorCredentials } from "../parse-error";
 
-export default (_: typeof toParseErrorClass) => ({
+export default (_: typeof toParseErrorCredentials) => ({
   AccessorIsGenerator: _<{| kind: "get" | "set" |}>(
     ({ kind }) => `A ${kind}ter cannot be a generator.`,
   ),

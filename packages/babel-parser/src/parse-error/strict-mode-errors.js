@@ -1,8 +1,8 @@
 // @flow
 
-import { toParseErrorClass } from "../parse-error";
+import { toParseErrorCredentials } from "../parse-error";
 
-export default (_: typeof toParseErrorClass) => ({
+export default (_: typeof toParseErrorCredentials) => ({
   StrictDelete: _("Deleting local variable in strict mode."),
 
   // `bindingName` is the StringValue[1] of an IdentifierReference[2], which is
