@@ -2,7 +2,7 @@ import type { NodePath, Scope } from "@babel/traverse";
 import { types as t, type PluginPass, type File } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 
-import { getPotentiallyBuggyFieldsIndexes, toRanges } from "./util";
+import { getPotentiallyBuggyFieldsIndexes, toRanges } from "./util.ts";
 
 export default declare(api => {
   api.assertVersion(7);

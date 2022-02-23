@@ -1378,7 +1378,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly":
+"@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:^, @babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
   dependencies:
@@ -3959,6 +3959,7 @@ __metadata:
     "@babel/helper-validator-option": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
+    "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "workspace:^"
     "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2"
     "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4"
     "@babel/plugin-syntax-class-properties": "condition:BABEL_8_BREAKING ? : ^7.12.13"
