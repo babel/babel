@@ -391,8 +391,6 @@ const nodeTypeToDescription = type =>
     ? "array destructuring pattern"
     : type === "ObjectPattern"
     ? "object destructuring pattern"
-    : type === "ImportDefaultSpecifier"
-    ? "default import specifier"
     : type
         .replace(/^[A-Z]+(?=[A-Z][a-z])/, "")
         .replace(/[a-z][A-Z]/, ([left, right]) => `${left} ${right}`)
