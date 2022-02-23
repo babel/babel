@@ -60,6 +60,8 @@ const FlowErrors = toParseErrorClasses`flow`(_ => ({
   AmbiguousDeclareModuleKind: _(
     "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module.",
   ),
+  // TODO: When we get proper string enums in typescript make this ReservedType.
+  // Not really worth it to do the whole $Values dance with reservedTypes set.
   AssignReservedType: _<{| reservedType: string |}>(
     ({ reservedType }) => `Cannot overwrite reserved type ${reservedType}.`,
   ),
@@ -95,18 +97,31 @@ const FlowErrors = toParseErrorClasses`flow`(_ => ({
     ({ enumName }) =>
       `Supplied enum type is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`,
   ),
+
+  // TODO: When moving to typescript, we should either have each of the
+  // following errors only accept the specific strings they want:
+  //
+  // ...PrimaryType: explicitType: "string" | "number" | "boolean"
+  // ...SymbolType: explicitType: "symbol"
+  // ...UnknownType: explicitType: null
+  //
+  // Or, alternatively, merge these three errors together into one
+  // `EnumInvalidMemberInitializer` error that can accept `EnumExplicitType`
+  // without alteration, and then just have its message change based on the
+  // explicitType.
   EnumInvalidMemberInitializerPrimaryType: _<{|
     enumName: string,
     memberName: string,
-    explicitType: string,
+    explicitType: EnumExplicitType,
   |}>(
     ({ enumName, memberName, explicitType }) =>
+      // $FlowIgnore (coercing null which never actually happens)
       `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of \`${memberName}\` needs to be a ${explicitType} literal.`,
   ),
   EnumInvalidMemberInitializerSymbolType: _<{|
     enumName: string,
     memberName: string,
-    explicitType: string,
+    explicitType: EnumExplicitType,
   |}>(
     ({ enumName, memberName }) =>
       `Symbol enum members cannot be initialized. Use \`${memberName},\` in enum \`${enumName}\`.`,
@@ -114,8 +129,7 @@ const FlowErrors = toParseErrorClasses`flow`(_ => ({
   EnumInvalidMemberInitializerUnknownType: _<{|
     enumName: string,
     memberName: string,
-    // eslint-disable-next-line no-unused-vars
-    explicitType: string,
+    explicitType: EnumExplicitType,
   |}>(
     ({ enumName, memberName }) =>
       `The enum member initializer for \`${memberName}\` needs to be a literal (either a boolean, number, or string) in enum \`${enumName}\`.`,
@@ -213,11 +227,11 @@ const FlowErrors = toParseErrorClasses`flow`(_ => ({
     "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`.",
   ),
   UnsupportedDeclareExportKind: _<{|
-    unsupported: string,
+    unsupportedExportKind: string,
     suggestion: string,
   |}>(
-    ({ unsupported, suggestion }) =>
-      `\`declare export ${unsupported}\` is not supported. Use \`${suggestion}\` instead.`,
+    ({ unsupportedExportKind, suggestion }) =>
+      `\`declare export ${unsupportedExportKind}\` is not supported. Use \`${suggestion}\` instead.`,
   ),
   UnsupportedStatementInDeclareModule: _(
     "Only declares and type imports are allowed inside declare module.",
@@ -579,7 +593,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const label = this.state.value;
           throw this.raise(FlowErrors.UnsupportedDeclareExportKind, {
             at: this.state.startLoc,
-            unsupported: label,
+            unsupportedExportKind: label,
             suggestion: exportSuggestions[label],
           });
         }
@@ -3325,20 +3339,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowEnumErrorInvalidMemberInitializer(
       loc: Position,
-      { enumName, explicitType, memberName }: EnumContext,
+      enumContext: EnumContext,
     ) {
       return this.raise(
-        /^(boolean|number|string)$/.test(explicitType || "")
-          ? FlowErrors.EnumInvalidMemberInitializerPrimaryType
-          : explicitType === "symbol"
+        !enumContext.explicitType
+          ? FlowErrors.EnumInvalidMemberInitializerUnknownType
+          : enumContext.explicitType === "symbol"
           ? FlowErrors.EnumInvalidMemberInitializerSymbolType
-          : FlowErrors.EnumInvalidMemberInitializerUnknownType,
+          : FlowErrors.EnumInvalidMemberInitializerPrimaryType,
         {
           at: loc,
-          enumName,
-          memberName,
-          // FIXME: Handle this being missing better.
-          explicitType: explicitType || "unknown",
+          ...enumContext,
         },
       );
     }
