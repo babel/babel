@@ -18,7 +18,7 @@ import {
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
-import type { Position } from "../../util/location";
+import { Position, createPositionWithColumnOffset } from "../../util/location";
 import type Parser from "../../parser";
 import {
   type BindingTypes,
@@ -2966,10 +2966,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.raise(
           TSErrors.SingleTypeParameterWithoutTrailingComma,
           {
-            at: {
-              ...invalidSingleType.loc.end,
-              column: invalidSingleType.loc.end.column + 1,
-            },
+            at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
           },
           process.env.BABEL_8_BREAKING
             ? invalidSingleType.name.name
