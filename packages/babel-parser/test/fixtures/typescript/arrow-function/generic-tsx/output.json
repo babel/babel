@@ -1,27 +1,27 @@
 {
   "type": "File",
-  "start":0,"end":80,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+  "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":19,"index":80}},
   "program": {
     "type": "Program",
-    "start":0,"end":80,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+    "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":19,"index":80}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":61,"end":80,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":19}},
+        "start":61,"end":80,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":19,"index":80}},
         "expression": {
           "type": "ArrowFunctionExpression",
-          "start":61,"end":79,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
+          "start":61,"end":79,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":18,"index":79}},
           "returnType": {
             "type": "TSTypeAnnotation",
-            "start":71,"end":74,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13}},
+            "start":71,"end":74,"loc":{"start":{"line":2,"column":10,"index":71},"end":{"line":2,"column":13,"index":74}},
             "typeAnnotation": {
               "type": "TSTypeReference",
-              "start":73,"end":74,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13}},
+              "start":73,"end":74,"loc":{"start":{"line":2,"column":12,"index":73},"end":{"line":2,"column":13,"index":74}},
               "typeName": {
                 "type": "Identifier",
-                "start":73,"end":74,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"T"},
+                "start":73,"end":74,"loc":{"start":{"line":2,"column":12,"index":73},"end":{"line":2,"column":13,"index":74},"identifierName":"T"},
                 "name": "T"
               }
             }
@@ -32,17 +32,17 @@
           "params": [
             {
               "type": "Identifier",
-              "start":66,"end":70,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":9},"identifierName":"a"},
+              "start":66,"end":70,"loc":{"start":{"line":2,"column":5,"index":66},"end":{"line":2,"column":9,"index":70},"identifierName":"a"},
               "name": "a",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":67,"end":70,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9}},
+                "start":67,"end":70,"loc":{"start":{"line":2,"column":6,"index":67},"end":{"line":2,"column":9,"index":70}},
                 "typeAnnotation": {
                   "type": "TSTypeReference",
-                  "start":69,"end":70,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9}},
+                  "start":69,"end":70,"loc":{"start":{"line":2,"column":8,"index":69},"end":{"line":2,"column":9,"index":70}},
                   "typeName": {
                     "type": "Identifier",
-                    "start":69,"end":70,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"T"},
+                    "start":69,"end":70,"loc":{"start":{"line":2,"column":8,"index":69},"end":{"line":2,"column":9,"index":70},"identifierName":"T"},
                     "name": "T"
                   }
                 }
@@ -51,12 +51,12 @@
           ],
           "body": {
             "type": "Identifier",
-            "start":78,"end":79,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"a"},
+            "start":78,"end":79,"loc":{"start":{"line":2,"column":17,"index":78},"end":{"line":2,"column":18,"index":79},"identifierName":"a"},
             "name": "a"
           },
           "typeParameters": {
             "type": "TSTypeParameterDeclaration",
-            "start":61,"end":65,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":4}},
+            "start":61,"end":65,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":4,"index":65}},
             "params": [
               {
                 "type": "TSTypeParameter",
