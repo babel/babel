@@ -20,6 +20,135 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.6 (2022-02-21)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-module-transforms`
+  * [#14287](https://github.com/babel/babel/pull/14287) Make module namespace sort compare function consistent ([@devsnek](https://github.com/devsnek))
+
+#### :bug: Bug Fix
+* `babel-cli`
+  * [#14281](https://github.com/babel/babel/pull/14281) cli: handle multiple input sources in watch mode ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-react-constant-elements`
+  * [#12975](https://github.com/babel/babel/pull/12975) `allowMutablePropsOnTags`: cache JSX constant elements with function props ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-pipeline-operator`, `babel-standalone`
+  * [#14278](https://github.com/babel/babel/pull/14278) [hack pipes] Inline topic token when possible ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-preset-env`
+  * [#14275](https://github.com/babel/babel/pull/14275) Avoid IIFE for single-expression class static blocks ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v7.17.5 (2022-02-17)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#14283](https://github.com/babel/babel/pull/14283) Make source maps plain objects for use with `t.valueToNode` ([@thebanjomatic](https://github.com/thebanjomatic))
+  * [#14282](https://github.com/babel/babel/pull/14282) Fix merging sourcemaps on Windows ([@jridgewell](https://github.com/jridgewell))
+## v7.17.4 (2022-02-15)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#14274](https://github.com/babel/babel/pull/14274) Fix infinite recursion when merge sourcemaps ([@jridgewell](https://github.com/jridgewell))
+## v7.17.3 (2022-02-15)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`
+  * [#14271](https://github.com/babel/babel/pull/14271) jsx-development: do not emit `this` within ts module block ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-destructuring`
+  * [#14240](https://github.com/babel/babel/pull/14240) Fix destructuring with holes in assign pattern ([@magic-akari](https://github.com/magic-akari))
+
+#### :house: Internal
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`
+  * [#14253](https://github.com/babel/babel/pull/14253) Convert all SourceMapConsumers to TraceMaps ([@jridgewell](https://github.com/jridgewell))
+
+#### :microscope: Output optimization
+* `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-transform-new-target`, `babel-plugin-transform-parameters`, `babel-traverse`
+  * [#14268](https://github.com/babel/babel/pull/14268) Skip unnecessary temp vars in `path.insertAfter` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v7.17.2 (2022-02-08)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#14244](https://github.com/babel/babel/pull/14244) Fix 2021-12 decorators application order ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#14241](https://github.com/babel/babel/pull/14241) Fix reinstantiation of inherited plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14246](https://github.com/babel/babel/pull/14246) Merge multi-source output sourcemaps ([@jridgewell](https://github.com/jridgewell))
+## v7.17.1 (2022-02-03)
+
+#### :bug: Bug Fix
+* `babel-helper-create-class-features-plugin`
+  * [#14231](https://github.com/babel/babel/pull/14231) Restore class fields transform compat with old `@babel/types` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v7.17.0 (2022-02-02)
+
+#### :rocket: New Feature
+* `babel-cli`, `babel-core`
+  * [#14065](https://github.com/babel/babel/pull/14065) Allow plugins/presets to indicate external dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-parser`, `babel-traverse`
+  * [#14174](https://github.com/babel/babel/pull/14174) Expose `.index` on Position to internally track nodes location ([@tolmasky](https://github.com/tolmasky))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`
+  * [#13973](https://github.com/babel/babel/pull/13973) proposal-pipe: Add support for `^^` and `@@` topics ([@js-choi](https://github.com/js-choi))
+* `babel-traverse`
+  * [#13940](https://github.com/babel/babel/pull/13940) Add new method to check if node is null or not ([@danez](https://github.com/danez))
+* `babel-generator`, `babel-parser`, `babel-plugin-syntax-destructuring-private`, `babel-standalone`
+  * [#13931](https://github.com/babel/babel/pull/13931) Parse destructuring private fields ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-syntax-decorators`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`, `babel-types`
+  * [#14004](https://github.com/babel/babel/pull/14004) Add new decorators transform ([@pzuraq](https://github.com/pzuraq))
+* `babel-generator`, `babel-parser`, `babel-traverse`, `babel-types`
+  * [#13681](https://github.com/babel/babel/pull/13681) Add the `decoratorsAutoAccessors` parser plugin ([@pzuraq](https://github.com/pzuraq))
+* `babel-core`, `babel-helper-create-regexp-features-plugin`, `babel-plugin-proposal-unicode-sets-regex`, `babel-plugin-syntax-unicode-sets-regex`, `babel-plugin-transform-dotall-regex`
+  * [#14125](https://github.com/babel/babel/pull/14125) Add transform support for the "regexp unicode sets" proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14086](https://github.com/babel/babel/pull/14086) Add parser support for the "regexp unicode sets" proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-register`
+  * [#14087](https://github.com/babel/babel/pull/14087) Expose `@babel/register/experimental-worker` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#14145](https://github.com/babel/babel/pull/14145) Reinterpret << when parsing TS type arguments ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-runtime`
+  * [#14187](https://github.com/babel/babel/pull/14187) Normalize absolute paths on Windows ([@atti187](https://github.com/atti187))
+
+#### :memo: Documentation
+* [#14223](https://github.com/babel/babel/pull/14223) Remove Babel 6 from SECURITY.md ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-fixtures`, `babel-parser`
+  * [#14201](https://github.com/babel/babel/pull/14201) Fuzz test location-related parser options ([@tolmasky](https://github.com/tolmasky))
+* `babel-compat-data`
+  * [#14208](https://github.com/babel/babel/pull/14208) Update compat data (specifically for rhino 1.7.14) ([@phulin](https://github.com/phulin))
+* Other
+  * [#14190](https://github.com/babel/babel/pull/14190) chore: run tscheck on babel 8 breaking test ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-cli`, `babel-core`
+  * [#14209](https://github.com/babel/babel/pull/14209) Switch to `@ampproject/remapping` to merge source maps ([@jridgewell](https://github.com/jridgewell))
+## v7.16.12 (2022-01-22)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#14192](https://github.com/babel/babel/pull/14192) Avoid dynamic import when it's not needed ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14194](https://github.com/babel/babel/pull/14194) fix: incorrect `in` parsing in arrow ConciseBody ([@JLHwung](https://github.com/JLHwung))
+
+## v7.16.10 (2022-01-19)
+
+#### :bug: Bug Fix
+* `babel-highlight`
+  * [#14165](https://github.com/babel/babel/pull/14165) Avoid infinite loop when highlighting an empty input ([@blankPen](https://github.com/blankPen))
+* `babel-traverse`
+  * [#14164](https://github.com/babel/babel/pull/14164) Handle logical assignment in super property transforms ([@magic-akari](https://github.com/magic-akari))
+  * [#14162](https://github.com/babel/babel/pull/14162) Fix the transform of `super.foo--`/`super[foo]--` (and prefix) ([@magic-akari](https://github.com/magic-akari))
+* `babel-core`
+  * [#14110](https://github.com/babel/babel/pull/14110) Respect `package.json#exports` when resolving plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14153](https://github.com/babel/babel/pull/14153) Disable "Reentrant plugin detected" error in async mode ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-plugin-transform-runtime`
+  * [#14157](https://github.com/babel/babel/pull/14157) Remove workaround for `_typeof` in runtime build script ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14130](https://github.com/babel/babel/pull/14130) Improve errors location tracking ([@tolmasky](https://github.com/tolmasky))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-preset-env`
+  * [#14169](https://github.com/babel/babel/pull/14169) Skip class fields transform when not necessary for private methods ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.16.9 (2022-01-11)
 
 #### :bug: Bug Fix

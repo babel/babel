@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-decorators",
-  "version": "7.16.7",
+  "version": "7.17.2",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
@@ -22,7 +22,9 @@
   "dependencies": {
     "@babel/helper-create-class-features-plugin": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-decorators": "workspace:^"
+    "@babel/helper-replace-supers": "workspace:^",
+    "@babel/plugin-syntax-decorators": "workspace:^",
+    "charcodes": "^0.2.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

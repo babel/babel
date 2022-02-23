@@ -33,14 +33,30 @@ describe("'decoratorsBeforeExport' option", function () {
     expect(makeParser("", { decoratorsBeforeExport: "before" })).toThrow();
   });
 
-  test("is required", function () {
+  test("is required with 2018-09 decorators", function () {
     expect(makeParser("", { legacy: false })).toThrow(/decoratorsBeforeExport/);
+    expect(makeParser("", { version: "2018-09" })).toThrow(
+      /decoratorsBeforeExport/,
+    );
   });
 
   test("is incompatible with legacy", function () {
     expect(
       makeParser("", { decoratorsBeforeExport: false, legacy: true }),
     ).toThrow();
+    expect(
+      makeParser("", { decoratorsBeforeExport: false, version: "legacy" }),
+    ).toThrow();
+  });
+
+  test("is optional with 2021-12 decorators", function () {
+    expect(makeParser("", { version: "2021-12" })).not.toThrow();
+    expect(
+      makeParser("", { version: "2021-12", decoratorsBeforeExport: true }),
+    ).not.toThrow();
+    expect(
+      makeParser("", { version: "2021-12", decoratorsBeforeExport: false }),
+    ).not.toThrow();
   });
 
   const BEFORE = "@dec export class Foo {}";
@@ -66,4 +82,17 @@ describe("'decoratorsBeforeExport' option", function () {
       });
     }
   }
+});
+
+describe("'version' option", function () {
+  test("is incompatible with the 'legacy' option", function () {
+    expect(makeParser("", { version: "2018-09", legacy: true })).toThrow();
+  });
+
+  test("throws on invalid values", function () {
+    expect(makeParser("", { version: "2015-02" })).toThrow();
+    expect(
+      makeParser("", { version: "2015-02", decoratorsBeforeExport: true }),
+    ).toThrow();
+  });
 });

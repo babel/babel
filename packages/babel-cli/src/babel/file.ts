@@ -1,4 +1,5 @@
 import convertSourceMap from "convert-source-map";
+import { TraceMap, eachMapping } from "@jridgewell/trace-mapping";
 import sourceMap from "source-map";
 import slash from "slash";
 import path from "path";
@@ -6,6 +7,7 @@ import fs from "fs";
 
 import * as util from "./util";
 import type { CmdOptions } from "./options";
+import * as watcher from "./watcher";
 
 type CompilationOutput = {
   code: string;
@@ -34,12 +36,9 @@ export default async function ({
       code += result.code + "\n";
 
       if (result.map) {
-        const consumer = new sourceMap.SourceMapConsumer(result.map);
-        const sources = new Set<string>();
+        const consumer = new TraceMap(result.map);
 
-        consumer.eachMapping(function (mapping) {
-          if (mapping.source != null) sources.add(mapping.source);
-
+        eachMapping(consumer, mapping => {
           map.addMapping({
             generated: {
               line: mapping.generatedLine + offset,
@@ -56,11 +55,10 @@ export default async function ({
           });
         });
 
-        sources.forEach(source => {
-          const content = consumer.sourceContentFor(source, true);
-          if (content !== null) {
-            map.setSourceContent(source, content);
-          }
+        const { resolvedSources, sourcesContent } = consumer;
+        sourcesContent?.forEach((content, i) => {
+          if (content === null) return;
+          map.setSourceContent(resolvedSources[i], content);
         });
 
         offset = code.split("\n").length - 1;
@@ -123,7 +121,7 @@ export default async function ({
   async function stdin(): Promise<void> {
     const code = await readStdin();
 
-    const res = await util.transform(cliOptions.filename, code, {
+    const res = await util.transformRepl(cliOptions.filename, code, {
       ...babelOptions,
       sourceFileName: "stdin",
     });
@@ -193,40 +191,33 @@ export default async function ({
   }
 
   async function files(filenames: Array<string>): Promise<void> {
+    if (cliOptions.watch) {
+      watcher.enable({ enableGlobbing: false });
+    }
+
     if (!cliOptions.skipInitialBuild) {
       await walk(filenames);
     }
 
     if (cliOptions.watch) {
-      const chokidar = util.requireChokidar();
-      chokidar
-        .watch(filenames, {
-          disableGlobbing: true,
-          persistent: true,
-          ignoreInitial: true,
-          awaitWriteFinish: {
-            stabilityThreshold: 50,
-            pollInterval: 10,
-          },
-        })
-        .on("all", function (type: string, filename: string): void {
-          if (
-            !util.isCompilableExtension(filename, cliOptions.extensions) &&
-            !filenames.includes(filename)
-          ) {
-            return;
-          }
+      filenames.forEach(watcher.watch);
 
-          if (type === "add" || type === "change") {
-            if (cliOptions.verbose) {
-              console.log(type + " " + filename);
-            }
+      watcher.onFilesChange((changes, event, cause) => {
+        const actionableChange = changes.some(
+          filename =>
+            util.isCompilableExtension(filename, cliOptions.extensions) ||
+            filenames.includes(filename),
+        );
+        if (!actionableChange) return;
 
-            walk(filenames).catch(err => {
-              console.error(err);
-            });
-          }
+        if (cliOptions.verbose) {
+          console.log(`${event} ${cause}`);
+        }
+
+        walk(filenames).catch(err => {
+          console.error(err);
         });
+      });
     }
   }
 

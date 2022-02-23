@@ -6,6 +6,7 @@ export default (_: any, opts: any = {}) => {
     loose = false,
     useBuiltIns = false,
     decoratorsLegacy = false,
+    decoratorsVersion = "2018-09",
     decoratorsBeforeExport,
     pipelineProposal = "minimal",
     pipelineTopicToken = "%",
@@ -17,8 +18,12 @@ export default (_: any, opts: any = {}) => {
     plugins: [
       [
         babelPlugins.proposalDecorators,
-        { legacy: decoratorsLegacy, decoratorsBeforeExport },
+        {
+          version: decoratorsLegacy ? "legacy" : decoratorsVersion,
+          decoratorsBeforeExport,
+        },
       ],
+      babelPlugins.syntaxDestructuringPrivate,
       [
         babelPlugins.proposalPipelineOperator,
         { proposal: pipelineProposal, topicToken: pipelineTopicToken },

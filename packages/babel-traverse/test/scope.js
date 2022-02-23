@@ -442,10 +442,12 @@ describe("scope", () => {
         expect(referencePaths[0].node.loc.start).toEqual({
           line: 1,
           column: 28,
+          index: 28,
         });
         expect(referencePaths[1].node.loc.start).toEqual({
           line: 1,
           column: 32,
+          index: 32,
         });
       });
       it("id referenced in function body", () => {
@@ -763,7 +765,7 @@ describe("scope", () => {
       });
       it("in function declaration", () => {
         const functionDeclaration = getPath("function f() { var foo; }").get(
-          "body.0.expression",
+          "body.0",
         );
         expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
       });
@@ -851,7 +853,7 @@ describe("scope", () => {
       });
       it("in function declaration", () => {
         const functionDeclaration = getPath("function f() { let foo; }").get(
-          "body.0.expression",
+          "body.0",
         );
         expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
       });
@@ -918,6 +920,20 @@ describe("scope", () => {
         );
         expect(switchStatement.scope.hasOwnBinding("foo")).toBe(true);
       });
+    });
+  });
+
+  describe(".push", () => {
+    it("registers the new binding in the correct scope", () => {
+      const program = getPath("class A {}");
+      const classDeclaration = program.get("body.0");
+      classDeclaration.scope.push({ id: t.identifier("class") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "var class;
+
+        class A {}"
+      `);
+      expect(program.scope.hasOwnBinding("class")).toBe(true);
     });
   });
 });

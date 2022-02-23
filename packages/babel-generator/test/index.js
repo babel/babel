@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
-import sourcemap from "source-map";
+import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import { fileURLToPath } from "url";
 
 import _Printer from "../lib/printer.js";
@@ -295,8 +295,8 @@ describe("generation", function () {
       code,
     );
 
-    const consumer = new sourcemap.SourceMapConsumer(generated.map);
-    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    const consumer = new TraceMap(generated.map);
+    const loc = originalPositionFor(consumer, { line: 2, column: 1 });
     expect(loc).toMatchObject({
       column: 0,
       line: 2,
@@ -316,8 +316,8 @@ describe("generation", function () {
       code,
     );
 
-    const consumer = new sourcemap.SourceMapConsumer(generated.map);
-    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    const consumer = new TraceMap(generated.map);
+    const loc = originalPositionFor(consumer, { line: 2, column: 1 });
     expect(loc).toMatchObject({
       column: 0,
       line: 2,

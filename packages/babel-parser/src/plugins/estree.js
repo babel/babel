@@ -4,11 +4,33 @@ import { type TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
+import type { Node as NodeType, NodeBase, File } from "../types";
 import type { Position } from "../util/location";
 import { Errors } from "../parser/error";
 
+const { defineProperty } = Object;
+const toUnenumerable = (object, key) =>
+  defineProperty(object, key, { enumerable: false, value: object[key] });
+
+function toESTreeLocation(node: any) {
+  toUnenumerable(node.loc.start, "index");
+  toUnenumerable(node.loc.end, "index");
+
+  return node;
+}
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
+    parse(): File {
+      const file = toESTreeLocation(super.parse());
+
+      if (this.options.tokens) {
+        file.tokens = file.tokens.map(toESTreeLocation);
+      }
+
+      return file;
+    }
+
     parseRegExpLiteral({ pattern, flags }): N.Node {
       let regex = null;
       try {
@@ -330,8 +352,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       if (node != null && this.isObjectProperty(node)) {
-        this.toAssignable(node.value, isLHS);
-
+        const { key, value } = node;
+        if (this.isPrivateName(key)) {
+          this.classScope.usePrivateName(
+            this.getPrivateNameSV(key),
+            key.loc.start,
+          );
+        }
+        this.toAssignable(value, isLHS);
         return node;
       }
 
@@ -464,5 +492,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     isObjectMethod(node: N.Node): boolean {
       return node.method || node.kind === "get" || node.kind === "set";
+    }
+
+    finishNodeAt<T: NodeType>(node: T, type: string, endLoc: Position): T {
+      return toESTreeLocation(super.finishNodeAt(node, type, endLoc));
+    }
+
+    resetEndLocation(
+      node: NodeBase,
+      endLoc?: Position = this.state.lastTokEndLoc,
+    ): void {
+      super.resetEndLocation(node, endLoc);
+      toESTreeLocation(node);
     }
   };

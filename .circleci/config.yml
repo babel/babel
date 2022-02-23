@@ -32,16 +32,6 @@ executors:
     docker:
       - image: cimg/node:current
     working_directory: ~/babel
-  # e2e-vue-cli test requires chromium
-  node-browsers-executor:
-    docker:
-      - image: cimg/node:current-browsers
-    working_directory: ~/babel
-  # e2e-jest test requires python
-  node-python-executor:
-    docker:
-      - image: cimg/python:3.9-node
-    working_directory: ~/babel
 
 jobs:
   build-standalone:
@@ -115,65 +105,6 @@ jobs:
       - store_test_results: *artifact_test262_xunit
       - save_cache: *save-yarn-cache
 
-  publish-verdaccio-babel-8-breaking:
-    executor: node-executor
-    steps:
-      - checkout
-      - restore_cache: *restore-yarn-cache
-      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/publish-local.sh
-      - persist_to_workspace:
-          root: /tmp/verdaccio-workspace
-          paths:
-            - storage
-            - htpasswd
-      - save_cache: *save-yarn-cache
-
-  e2e-breaking-babel:
-    executor: node-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-babel.sh
-
-  e2e-breaking-create-react-app:
-    executor: node-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-create-react-app.sh
-
-  e2e-breaking-vue-cli:
-    executor: node-browsers-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run:
-          # - vue-cli uses puppeteer, and it depends on the libXss.so.1 shared library
-          # - We use fuser (psmisc) in local-registry.sh, and for some reason it's
-          #   missing in this Docker image
-          name: Install Headless Chrome dependencies
-          command: sudo apt-get update && sudo apt-get install -yq libxss1 psmisc
-      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-vue-cli.sh
-
-  e2e-breaking-jest:
-    executor: node-python-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-jest.sh
-
-  e2e-breaking-prettier:
-    executor: node-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/verdaccio-workspace
-      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/e2e-prettier.sh
-
 workflows:
   version: 2
   build-standalone:
@@ -211,48 +142,3 @@ workflows:
   #               - next-8-dev
   #               - next-8-rebased
   #         context: babel-test262
-
-  e2e-breaking:
-    jobs:
-      - publish-verdaccio-babel-8-breaking:
-          filters:
-            branches:
-              only: [main, next-8-dev, next-8-rebased]
-      - e2e-breaking-babel:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-      - e2e-breaking-create-react-app:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-      - e2e-breaking-vue-cli:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-      - e2e-breaking-jest:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-
-  e2e-breaking-pr:
-    jobs:
-      - approve-e2e-breaking-run:
-          type: approval
-          filters:
-            branches:
-              ignore: [main, next-8-dev, next-8-rebased]
-      - publish-verdaccio-babel-8-breaking:
-          requires:
-            - approve-e2e-breaking-run
-      - e2e-breaking-babel:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-      - e2e-breaking-create-react-app:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-      - e2e-breaking-vue-cli:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-      - e2e-breaking-jest:
-          requires:
-            - publish-verdaccio-babel-8-breaking
-      - e2e-breaking-prettier:
-          requires:
-            - publish-verdaccio-babel-8-breaking

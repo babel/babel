@@ -62,7 +62,7 @@ module.exports = function (api) {
 
   let transformRuntimeOptions;
 
-  const nodeVersion = "6.9";
+  const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "14.17" : "6.9";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
   // the modules to be more easily distinguished from CommonJS
@@ -194,7 +194,10 @@ module.exports = function (api) {
         assumptions: parserAssumptions,
       },
       {
-        test: ["packages/babel-generator"].map(normalize),
+        test: [
+          "packages/babel-generator",
+          "packages/babel-plugin-proposal-decorators",
+        ].map(normalize),
         plugins: ["babel-plugin-transform-charcodes"],
       },
       convertESM && {

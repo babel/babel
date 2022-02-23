@@ -60,10 +60,10 @@
             "params": [
               {
                 "type": "TSTypeParameter",
-                "start":62,"end":63,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2}},
+                "start":62,"end":63,"loc":{"start":{"line":2,"column":1,"index":62},"end":{"line":2,"column":2,"index":63}},
                 "name": {
                   "type": "Identifier",
-                  "start":62,"end":63,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":2},"identifierName":"T"},
+                  "start":62,"end":63,"loc":{"start":{"line":2,"column":1,"index":62},"end":{"line":2,"column":2,"index":63},"identifierName":"T"},
                   "name": "T"
                 }
               }
@@ -77,7 +77,7 @@
           {
             "type": "CommentLine",
             "value": " Same as `generic`. Verify that JSX doesn't change things.",
-            "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":60}}
+            "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}}
           }
         ]
       }
@@ -88,7 +88,7 @@
     {
       "type": "CommentLine",
       "value": " Same as `generic`. Verify that JSX doesn't change things.",
-      "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":60}}
+      "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}}
     }
   ]
 }

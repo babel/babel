@@ -14,18 +14,14 @@ export default function generateCode(
   outputMap: SourceMap | null;
 } {
   const { opts, ast, code, inputMap } = file;
+  const { generatorOpts } = opts;
 
   const results = [];
   for (const plugins of pluginPasses) {
     for (const plugin of plugins) {
       const { generatorOverride } = plugin;
       if (generatorOverride) {
-        const result = generatorOverride(
-          ast,
-          opts.generatorOpts,
-          code,
-          generate,
-        );
+        const result = generatorOverride(ast, generatorOpts, code, generate);
 
         if (result !== undefined) results.push(result);
       }
@@ -34,7 +30,7 @@ export default function generateCode(
 
   let result;
   if (results.length === 0) {
-    result = generate(ast, opts.generatorOpts, code);
+    result = generate(ast, generatorOpts, code);
   } else if (results.length === 1) {
     result = results[0];
 
@@ -53,7 +49,11 @@ export default function generateCode(
   let { code: outputCode, map: outputMap } = result;
 
   if (outputMap && inputMap) {
-    outputMap = mergeSourceMap(inputMap.toObject(), outputMap);
+    outputMap = mergeSourceMap(
+      inputMap.toObject(),
+      outputMap,
+      generatorOpts.sourceFileName,
+    );
   }
 
   if (opts.sourceMaps === "inline" || opts.sourceMaps === "both") {

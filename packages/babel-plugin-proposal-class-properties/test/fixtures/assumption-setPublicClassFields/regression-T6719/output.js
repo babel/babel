@@ -1,11 +1,11 @@
 function withContext(ComposedComponent) {
-  var _class, _temp;
+  var _class;
 
-  return _temp = _class = class WithContext extends Component {}, _class.propTypes = {
+  return _class = class WithContext extends Component {}, _class.propTypes = {
     context: PropTypes.shape({
       addCss: PropTypes.func,
       setTitle: PropTypes.func,
       setMeta: PropTypes.func
     })
-  }, _temp;
+  }, _class;
 }

@@ -10,6 +10,4 @@ class A {
 
 }
 
-(() => {
-  register(A, _foo.has(A));
-})();
+register(A, _foo.has(A));

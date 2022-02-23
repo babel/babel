@@ -115,6 +115,49 @@ export function ClassProperty(this: Printer, node: t.ClassProperty) {
   this.semicolon();
 }
 
+export function ClassAccessorProperty(
+  this: Printer,
+  node: t.ClassAccessorProperty,
+) {
+  this.printJoin(node.decorators, node);
+
+  // catch up to property key, avoid line break
+  // between member modifiers and the property key.
+  this.source("end", node.key.loc);
+
+  this.tsPrintClassMemberModifiers(node, /* isField */ true);
+
+  this.word("accessor");
+  this.printInnerComments(node);
+  this.space();
+
+  if (node.computed) {
+    this.token("[");
+    this.print(node.key, node);
+    this.token("]");
+  } else {
+    this._variance(node);
+    this.print(node.key, node);
+  }
+
+  // TS
+  if (node.optional) {
+    this.token("?");
+  }
+  if (node.definite) {
+    this.token("!");
+  }
+
+  this.print(node.typeAnnotation, node);
+  if (node.value) {
+    this.space();
+    this.token("=");
+    this.space();
+    this.print(node.value, node);
+  }
+  this.semicolon();
+}
+
 export function ClassPrivateProperty(
   this: Printer,
   node: t.ClassPrivateProperty,

@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-named-capturing-groups-regex"],
+  "throws": "Support for the experimental syntax 'regexpUnicodeSets' isn't currently enabled"
+}

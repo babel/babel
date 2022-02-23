@@ -9,7 +9,7 @@ import { isAsync } from "../../gensync-utils/async";
 import loadCjsOrMjsDefault, { supportsESM } from "./module-types";
 import { fileURLToPath, pathToFileURL } from "url";
 
-import getImportMetaResolve from "./import-meta-resolve";
+import importMetaResolve from "./import-meta-resolve";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -134,7 +134,6 @@ async function tryImportMetaResolve(
   id: Parameters<ImportMeta["resolve"]>[0],
   options: Parameters<ImportMeta["resolve"]>[1],
 ): Promise<Result<string>> {
-  const importMetaResolve = await getImportMetaResolve();
   try {
     return { error: null, value: await importMetaResolve(id, options) };
   } catch (error) {

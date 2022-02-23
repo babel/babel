@@ -3,11 +3,7 @@
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
-import {
-  indexes,
-  Position,
-  createPositionWithColumnOffset,
-} from "../util/location";
+import { Position, createPositionWithColumnOffset } from "../util/location";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -38,6 +34,8 @@ const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseY,
   charCodes.lowercaseU,
   charCodes.lowercaseD,
+  // This is only valid when using the regexpUnicodeSets plugin
+  charCodes.lowercaseV,
 ]);
 
 // The following character codes are forbidden from being
@@ -723,9 +721,46 @@ export default class Tokenizer extends ParserErrors {
       // it can be merged with tt.assign.
       this.finishOp(tt.xorAssign, 2);
     }
+    // '^^'
+    else if (
+      next === charCodes.caret &&
+      // If the ^^ token is not enabled, we don't throw but parse two single ^s
+      // because it could be a ^ hack token followed by a ^ binary operator.
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "^^" },
+      ])
+    ) {
+      this.finishOp(tt.doubleCaret, 2);
+
+      // `^^^` is forbidden and must be separated by a space.
+      const lookaheadCh = this.input.codePointAt(this.state.pos);
+      if (lookaheadCh === charCodes.caret) {
+        throw this.unexpected();
+      }
+    }
     // '^'
     else {
       this.finishOp(tt.bitwiseXOR, 1);
+    }
+  }
+
+  readToken_atSign(): void {
+    const next = this.input.charCodeAt(this.state.pos + 1);
+
+    // '@@'
+    if (
+      next === charCodes.atSign &&
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "@@" },
+      ])
+    ) {
+      this.finishOp(tt.doubleAt, 2);
+    }
+    // '@'
+    else {
+      this.finishOp(tt.at, 1);
     }
   }
 
@@ -755,7 +790,7 @@ export default class Tokenizer extends ParserErrors {
         this.finishOp(tt.assign, 3);
         return;
       }
-      this.finishOp(tt.bitShift, 2);
+      this.finishOp(tt.bitShiftL, 2);
       return;
     }
 
@@ -780,7 +815,7 @@ export default class Tokenizer extends ParserErrors {
         this.finishOp(tt.assign, size + 1);
         return;
       }
-      this.finishOp(tt.bitShift, size);
+      this.finishOp(tt.bitShiftR, size);
       return;
     }
 
@@ -1018,8 +1053,7 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.atSign:
-        ++this.state.pos;
-        this.finishToken(tt.at);
+        this.readToken_atSign();
         return;
 
       case charCodes.numberSign:
@@ -1086,22 +1120,32 @@ export default class Tokenizer extends ParserErrors {
 
     let mods = "";
 
+    const nextPos = () =>
+      // (pos + 1) + 1 - start
+      createPositionWithColumnOffset(startLoc, pos + 2 - start);
+
     while (pos < this.length) {
       const cp = this.codePointAtPos(pos);
       // It doesn't matter if cp > 0xffff, the loop will either throw or break because we check on cp
       const char = String.fromCharCode(cp);
 
       if (VALID_REGEX_FLAGS.has(cp)) {
+        if (cp === charCodes.lowercaseV) {
+          this.expectPlugin("regexpUnicodeSets", nextPos());
+
+          if (mods.includes("u")) {
+            this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
+          }
+        } else if (cp === charCodes.lowercaseU) {
+          if (mods.includes("v")) {
+            this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
+          }
+        }
         if (mods.includes(char)) {
-          // (pos + 1) + 1 - start
-          this.raise(Errors.DuplicateRegExpFlags, {
-            at: createPositionWithColumnOffset(startLoc, pos + 2 - start),
-          });
+          this.raise(Errors.DuplicateRegExpFlags, { at: nextPos() });
         }
       } else if (isIdentifierChar(cp) || cp === charCodes.backslash) {
-        this.raise(Errors.MalformedRegExpFlags, {
-          at: createPositionWithColumnOffset(startLoc, pos + 2 - start),
-        });
+        this.raise(Errors.MalformedRegExpFlags, { at: nextPos() });
       } else {
         break;
       }
@@ -1253,7 +1297,7 @@ export default class Tokenizer extends ParserErrors {
 
     if (isBigInt) {
       const str = this.input
-        .slice(indexes.get(startLoc), this.state.pos)
+        .slice(startLoc.index, this.state.pos)
         .replace(/[_n]/g, "");
       this.finishToken(tt.bigint, str);
       return;
@@ -1498,12 +1542,10 @@ export default class Tokenizer extends ParserErrors {
   }
 
   recordStrictModeErrors(message: ErrorTemplate, loc: Position) {
-    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-    const index: number = indexes.get(loc);
-    if (this.state.strict && !this.state.strictErrors.has(index)) {
+    if (this.state.strict && !this.state.strictErrors.has(loc.index)) {
       this.raise(message, { at: loc });
     } else {
-      this.state.strictErrors.set(index, { loc, message });
+      this.state.strictErrors.set(loc.index, { loc, message });
     }
   }
 
@@ -1613,8 +1655,7 @@ export default class Tokenizer extends ParserErrors {
       if (throwOnInvalid) {
         this.raise(Errors.InvalidEscapeSequence, { at: codeLoc });
       } else {
-        // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-        this.state.pos = indexes.get(codeLoc) - 1;
+        this.state.pos = codeLoc.index - 1;
       }
     }
     return n;

@@ -44,11 +44,7 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import {
-  indexes,
-  Position,
-  createPositionWithColumnOffset,
-} from "../util/location";
+import { Position, createPositionWithColumnOffset } from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -78,6 +74,7 @@ import { cloneIdentifier } from "./node";
 
 /*::
 import type { SourceType } from "../options";
+declare var invariant;
 */
 
 const invalidHackPipeBodies = new Map([
@@ -317,17 +314,22 @@ export default class ExpressionParser extends LValParser {
 
         if (
           refExpressionErrors.doubleProtoLoc != null &&
-          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-          indexes.get(refExpressionErrors.doubleProtoLoc) >= startPos
+          refExpressionErrors.doubleProtoLoc.index >= startPos
         ) {
           refExpressionErrors.doubleProtoLoc = null; // reset because double __proto__ is valid in assignment expression
         }
         if (
           refExpressionErrors.shorthandAssignLoc != null &&
-          // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-          indexes.get(refExpressionErrors.shorthandAssignLoc) >= startPos
+          refExpressionErrors.shorthandAssignLoc.index >= startPos
         ) {
           refExpressionErrors.shorthandAssignLoc = null; // reset because shorthand default was used correctly
+        }
+        if (
+          refExpressionErrors.privateKeyLoc != null &&
+          refExpressionErrors.privateKeyLoc.index >= startPos
+        ) {
+          this.checkDestructuringPrivate(refExpressionErrors);
+          refExpressionErrors.privateKeyLoc = null; // reset because `({ #x: x })` is an assignable pattern
         }
       } else {
         node.left = left;
@@ -843,13 +845,14 @@ export default class ExpressionParser extends LValParser {
 
     let node = this.startNodeAt(startPos, startLoc);
     node.callee = base;
+    const { maybeAsyncArrow, optionalChainMember } = state;
 
-    if (state.maybeAsyncArrow) {
+    if (maybeAsyncArrow) {
       this.expressionScope.enter(newAsyncArrowScope());
       refExpressionErrors = new ExpressionErrors();
     }
 
-    if (state.optionalChainMember) {
+    if (optionalChainMember) {
       node.optional = optional;
     }
 
@@ -864,10 +867,12 @@ export default class ExpressionParser extends LValParser {
         refExpressionErrors,
       );
     }
-    this.finishCallExpression(node, state.optionalChainMember);
+    this.finishCallExpression(node, optionalChainMember);
 
-    if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
+    if (maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
+      /*:: invariant(refExpressionErrors != null) */
       state.stop = true;
+      this.checkDestructuringPrivate(refExpressionErrors);
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
       node = this.parseAsyncArrowFromCallExpression(
@@ -875,7 +880,7 @@ export default class ExpressionParser extends LValParser {
         node,
       );
     } else {
-      if (state.maybeAsyncArrow) {
+      if (maybeAsyncArrow) {
         this.checkExpressionErrors(refExpressionErrors, true);
         this.expressionScope.exit();
       }
@@ -918,7 +923,7 @@ export default class ExpressionParser extends LValParser {
     return (
       base.type === "Identifier" &&
       base.name === "async" &&
-      indexes.get(this.state.lastTokEndLoc) === base.end &&
+      this.state.lastTokEndLoc.index === base.end &&
       !this.canInsertSemicolon() &&
       // check there are no escape sequences, such as \u{61}sync
       base.end - base.start === 5 &&
@@ -1204,6 +1209,11 @@ export default class ExpressionParser extends LValParser {
         return this.parseTopicReferenceThenEqualsSign(tt.bitwiseXOR, "^");
       }
 
+      case tt.doubleCaret:
+      case tt.doubleAt: {
+        return this.parseTopicReference("hack");
+      }
+
       case tt.bitwiseXOR:
       case tt.modulo:
       case tt.hash: {
@@ -1306,10 +1316,10 @@ export default class ExpressionParser extends LValParser {
   // that is followed by an equals sign.
   // See <https://github.com/js-choi/proposal-hack-pipes>.
   // If we find ^= or %= in an expression position
-  // (i.e., the tt.moduloAssign or tt.xorAssign token types),
-  // and if the Hack-pipes proposal is active with ^ or % as its topicToken,
-  // then the ^ or % could be the topic token (e.g., in x |> ^==y or x |> ^===y),
-  // and so we reparse the current token as ^ or %.
+  // (i.e., the tt.moduloAssign or tt.xorAssign token types), and if the
+  // Hack-pipes proposal is active with ^ or % as its topicToken, then the ^ or
+  // % could be the topic token (e.g., in x |> ^==y or x |> ^===y), and so we
+  // reparse the current token as ^ or %.
   // Otherwise, this throws an unexpected-token error.
   parseTopicReferenceThenEqualsSign(
     topicTokenType: TokenType,
@@ -1324,8 +1334,8 @@ export default class ExpressionParser extends LValParser {
       // will consume that “topic token”.
       this.state.type = topicTokenType;
       this.state.value = topicTokenValue;
-      // Rewind the tokenizer to the end of the “topic token”,
-      // so that the following token starts at the equals sign after that topic token.
+      // Rewind the tokenizer to the end of the “topic token”, so that the
+      // following token starts at the equals sign after that topic token.
       this.state.pos--;
       this.state.end--;
       // This is safe to do since the preceding character was either ^ or %, and
@@ -1738,6 +1748,7 @@ export default class ExpressionParser extends LValParser {
       this.shouldParseArrow(exprList) &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
+      this.checkDestructuringPrivate(refExpressionErrors);
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
       this.parseArrowExpression(arrowNode, exprList, false);
@@ -1770,8 +1781,7 @@ export default class ExpressionParser extends LValParser {
       this.takeSurroundingComments(
         val,
         startPos,
-        // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-        indexes.get(this.state.lastTokEndLoc),
+        this.state.lastTokEndLoc.index,
       );
 
       return val;
@@ -2040,7 +2050,7 @@ export default class ExpressionParser extends LValParser {
     let isGenerator = this.eat(tt.star);
     this.parsePropertyNamePrefixOperator(prop);
     const containsEsc = this.state.containsEsc;
-    const key = this.parsePropertyName(prop);
+    const key = this.parsePropertyName(prop, refExpressionErrors);
 
     if (!isGenerator && !containsEsc && this.maybeAsyncOrAccessorProp(prop)) {
       const keyName = key.name;
@@ -2245,8 +2255,12 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
+  // https://tc39.es/ecma262/#prod-PropertyName
+  // when refExpressionErrors presents, it will parse private name
+  // and record the position of the first private name
   parsePropertyName(
     prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
+    refExpressionErrors?: ?ExpressionErrors,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
       (prop: $FlowSubtype<N.ObjectOrClassMember>).computed = true;
@@ -2275,10 +2289,16 @@ export default class ExpressionParser extends LValParser {
             break;
           case tt.privateName: {
             // the class private key has been handled in parseClassElementName
-            this.raise(Errors.UnexpectedPrivateField, {
-              // FIXME: explain
-              at: createPositionWithColumnOffset(this.state.startLoc, 1),
-            });
+            const privateKeyLoc = this.state.startLoc;
+            if (refExpressionErrors != null) {
+              if (refExpressionErrors.privateKeyLoc === null) {
+                refExpressionErrors.privateKeyLoc = privateKeyLoc;
+              }
+            } else {
+              this.raise(Errors.UnexpectedPrivateField, {
+                at: privateKeyLoc,
+              });
+            }
             key = this.parsePrivateName();
             break;
           }
@@ -2373,8 +2393,10 @@ export default class ExpressionParser extends LValParser {
   ): N.ArrowFunctionExpression {
     this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
     let flags = functionFlags(isAsync, false);
-    // ConciseBody and AsyncConciseBody inherit [In]
-    if (!this.match(tt.bracketL) && this.prodParam.hasIn) {
+    // ConciseBody[In] :
+    //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
+    //   { FunctionBody[~Yield, ~Await] }
+    if (!this.match(tt.braceL) && this.prodParam.hasIn) {
       flags |= PARAM_IN;
     }
     this.prodParam.enter(flags);

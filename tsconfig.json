@@ -63,9 +63,11 @@
     "./packages/babel-plugin-proposal-record-and-tuple/src/**/*.ts",
     "./packages/babel-plugin-proposal-throw-expressions/src/**/*.ts",
     "./packages/babel-plugin-proposal-unicode-property-regex/src/**/*.ts",
+    "./packages/babel-plugin-proposal-unicode-sets-regex/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-decimal/src/**/*.ts",
     "./packages/babel-plugin-syntax-decorators/src/**/*.ts",
+    "./packages/babel-plugin-syntax-destructuring-private/src/**/*.ts",
     "./packages/babel-plugin-syntax-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-export-default-from/src/**/*.ts",
     "./packages/babel-plugin-syntax-flow/src/**/*.ts",
@@ -79,6 +81,7 @@
     "./packages/babel-plugin-syntax-record-and-tuple/src/**/*.ts",
     "./packages/babel-plugin-syntax-throw-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-typescript/src/**/*.ts",
+    "./packages/babel-plugin-syntax-unicode-sets-regex/src/**/*.ts",
     "./packages/babel-plugin-transform-arrow-functions/src/**/*.ts",
     "./packages/babel-plugin-transform-async-to-generator/src/**/*.ts",
     "./packages/babel-plugin-transform-block-scoped-functions/src/**/*.ts",
@@ -331,6 +334,9 @@
       "@babel/plugin-proposal-unicode-property-regex": [
         "./packages/babel-plugin-proposal-unicode-property-regex/src"
       ],
+      "@babel/plugin-proposal-unicode-sets-regex": [
+        "./packages/babel-plugin-proposal-unicode-sets-regex/src"
+      ],
       "@babel/plugin-syntax-async-do-expressions": [
         "./packages/babel-plugin-syntax-async-do-expressions/src"
       ],
@@ -339,6 +345,9 @@
       ],
       "@babel/plugin-syntax-decorators": [
         "./packages/babel-plugin-syntax-decorators/src"
+      ],
+      "@babel/plugin-syntax-destructuring-private": [
+        "./packages/babel-plugin-syntax-destructuring-private/src"
       ],
       "@babel/plugin-syntax-do-expressions": [
         "./packages/babel-plugin-syntax-do-expressions/src"
@@ -378,6 +387,9 @@
       ],
       "@babel/plugin-syntax-typescript": [
         "./packages/babel-plugin-syntax-typescript/src"
+      ],
+      "@babel/plugin-syntax-unicode-sets-regex": [
+        "./packages/babel-plugin-syntax-unicode-sets-regex/src"
       ],
       "@babel/plugin-transform-arrow-functions": [
         "./packages/babel-plugin-transform-arrow-functions/src"

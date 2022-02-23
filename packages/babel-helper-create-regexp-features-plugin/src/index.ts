@@ -1,28 +1,9 @@
 import rewritePattern from "regexpu-core";
-import {
-  featuresKey,
-  FEATURES,
-  enableFeature,
-  runtimeKey,
-  hasFeature,
-} from "./features";
-import { generateRegexpuOptions } from "./util";
+import { featuresKey, FEATURES, enableFeature, runtimeKey } from "./features";
+import { generateRegexpuOptions, canSkipRegexpu, transformFlags } from "./util";
 
 import { types as t } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-
-type RegExpFlags = "i" | "g" | "m" | "s" | "u" | "y";
-
-/**
- * Remove given flag from given RegExpLiteral node
- *
- * @param {RegExpLiteral} node
- * @param {RegExpFlags} flag
- * @returns {void}
- */
-function pullFlag(node, flag: RegExpFlags): void {
-  node.flags = node.flags.replace(flag, "");
-}
 
 declare const PACKAGE_JSON: { name: string; version: string };
 
@@ -39,9 +20,13 @@ export function createRegExpFeaturePlugin({
   name,
   feature,
   options = {} as any,
+  manipulateOptions = (() => {}) as (opts: any, parserOpts: any) => void,
 }) {
   return {
     name,
+
+    manipulateOptions,
+
     pre() {
       const { file } = this;
       const features = file.get(featuresKey) ?? 0;
@@ -70,20 +55,21 @@ export function createRegExpFeaturePlugin({
         const { file } = this;
         const features = file.get(featuresKey);
         const runtime = file.get(runtimeKey) ?? true;
-        const regexpuOptions = generateRegexpuOptions(node, features);
-        if (regexpuOptions === null) {
-          return;
-        }
+
+        const regexpuOptions = generateRegexpuOptions(features);
+        if (canSkipRegexpu(node, regexpuOptions)) return;
+
         const namedCaptureGroups = {};
-        if (regexpuOptions.namedGroup) {
+        if (regexpuOptions.namedGroups === "transform") {
           regexpuOptions.onNamedGroup = (name, index) => {
             namedCaptureGroups[name] = index;
           };
         }
+
         node.pattern = rewritePattern(node.pattern, node.flags, regexpuOptions);
 
         if (
-          regexpuOptions.namedGroup &&
+          regexpuOptions.namedGroups === "transform" &&
           Object.keys(namedCaptureGroups).length > 0 &&
           runtime &&
           !isRegExpTest(path)
@@ -96,12 +82,8 @@ export function createRegExpFeaturePlugin({
 
           path.replaceWith(call);
         }
-        if (hasFeature(features, FEATURES.unicodeFlag)) {
-          pullFlag(node, "u");
-        }
-        if (hasFeature(features, FEATURES.dotAllFlag)) {
-          pullFlag(node, "s");
-        }
+
+        node.flags = transformFlags(regexpuOptions, node.flags);
       },
     },
   };

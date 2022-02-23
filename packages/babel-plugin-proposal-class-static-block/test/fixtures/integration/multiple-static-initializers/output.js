@@ -11,7 +11,4 @@ var _bar = {
 })();
 
 babelHelpers.defineProperty(Foo, "qux", 21);
-
-(() => {
-  Foo.qux2 = Foo.qux;
-})();
+Foo.qux2 = Foo.qux;

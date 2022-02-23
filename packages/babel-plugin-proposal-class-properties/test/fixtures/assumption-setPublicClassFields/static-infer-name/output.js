@@ -1,3 +1,3 @@
-var _class, _temp;
+var _class;
 
-var Foo = (_temp = _class = class Foo {}, _class.num = 0, _temp);
+var Foo = (_class = class Foo {}, _class.num = 0, _class);

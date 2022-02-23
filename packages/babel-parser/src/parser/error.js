@@ -1,6 +1,6 @@
 // @flow
 /* eslint sort-keys: "error" */
-import { type Position, indexes } from "../util/location";
+import { type Position } from "../util/location";
 import CommentsParser from "./comments";
 import { type ErrorCode, ErrorCodes } from "./error-codes";
 import { type Node } from "../types";
@@ -111,8 +111,7 @@ export default class ParserError extends CommentsParser {
     { code, template }: ErrorTemplate,
     ...params: any
   ): Error | empty {
-    // $FlowIgnore[incompatible-type] We know this exists, so it can't be undefined.
-    const pos: number = indexes.get(loc);
+    const pos = loc.index;
     const message =
       template.replace(/%(\d+)/g, (_, i: number) => params[i]) +
       ` (${loc.line}:${loc.column})`;
@@ -139,7 +138,7 @@ export default class ParserError extends CommentsParser {
     errorTemplate: string,
     ...params: any
   ): Error | empty {
-    const pos = indexes.get(loc);
+    const pos = loc.index;
     const message =
       errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
       ` (${loc.line}:${loc.column})`;

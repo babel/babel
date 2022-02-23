@@ -4,6 +4,7 @@ import { performance } from "perf_hooks";
 import snapshot from "jest-snapshot";
 import expect from "expect";
 import * as circus from "jest-circus";
+import { inspect } from "util";
 
 import "./global-setup.js";
 
@@ -248,7 +249,7 @@ function failureToString(test) {
   return (
     test.ancestors.concat(test.title).join(" > ") +
     "\n" +
-    test.errors.map(e => e.toString().replace(/^/gm, "\t")).join("\n") +
+    test.errors.map(error => inspect(error).replace(/^/gm, "    ")).join("\n") +
     "\n"
   );
 }

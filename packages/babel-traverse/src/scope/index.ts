@@ -1020,8 +1020,8 @@ export default class Scope {
     }
 
     const declarator = variableDeclarator(opts.id, opts.init);
-    declarPath.node.declarations.push(declarator);
-    this.registerBinding(kind, declarPath.get("declarations").pop());
+    const len = declarPath.node.declarations.push(declarator);
+    path.scope.registerBinding(kind, declarPath.get("declarations")[len - 1]);
   }
 
   /**

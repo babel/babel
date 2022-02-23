@@ -10,11 +10,6 @@ const ignoredFeatures = new Set([
   "__proto__",
   "__setter__",
   "AggregateError",
-  "Array.prototype.at",
-  "Array.prototype.flat",
-  "Array.prototype.flatMap",
-  "Array.prototype.item",
-  "Array.prototype.values",
   "ArrayBuffer",
   "align-detached-buffer-semantics-with-web-reality",
   "arbitrary-module-namespace-names",
@@ -41,14 +36,6 @@ const ignoredFeatures = new Set([
   "const",
   "cross-realm",
   "DataView",
-  "DataView.prototype.getFloat32",
-  "DataView.prototype.getFloat64",
-  "DataView.prototype.getInt8",
-  "DataView.prototype.getInt16",
-  "DataView.prototype.getInt32",
-  "DataView.prototype.getUint16",
-  "DataView.prototype.getUint32",
-  "DataView.prototype.setUint8",
   "default-parameters",
   "destructuring-assignment",
   "destructuring-binding",
@@ -70,20 +57,6 @@ const ignoredFeatures = new Set([
   "Int16Array",
   "Int32Array",
   "Intl-enumeration",
-  "Intl.DateTimeFormat-datetimestyle",
-  "Intl.DateTimeFormat-dayPeriod",
-  "Intl.DateTimeFormat-extend-timezonename",
-  "Intl.DateTimeFormat-fractionalSecondDigits",
-  "Intl.DateTimeFormat-formatRange",
-  "Intl.DisplayNames",
-  "Intl.DisplayNames-v2",
-  "Intl.ListFormat",
-  "Intl.Locale",
-  "Intl.Locale-info",
-  "Intl.NumberFormat-unified",
-  "Intl.NumberFormat-v3",
-  "Intl.RelativeTimeFormat",
-  "Intl.Segmenter",
   "IsHTMLDDA",
   "import.meta",
   "intl-normative-optional",
@@ -122,14 +95,6 @@ const ignoredFeatures = new Set([
   "SharedArrayBuffer",
   "Set",
   "String.fromCodePoint",
-  "String.prototype.at",
-  "String.prototype.endsWith",
-  "String.prototype.includes",
-  "String.prototype.item",
-  "String.prototype.matchAll",
-  "String.prototype.replaceAll",
-  "String.prototype.trimEnd",
-  "String.prototype.trimStart",
   "string-trimming",
   "super",
   "Symbol",
@@ -152,8 +117,6 @@ const ignoredFeatures = new Set([
   "top-level-await",
   "Temporal",
   "TypedArray",
-  "TypedArray.prototype.at",
-  "TypedArray.prototype.item",
   "u180e",
   "Uint8Array",
   "Uint8ClampedArray",
@@ -164,6 +127,16 @@ const ignoredFeatures = new Set([
   "WeakRef",
   "well-formed-json-stringify",
 ]);
+
+function featureShouldIgnore(feature) {
+  return (
+    ignoredFeatures.has(feature) ||
+    // All prototype method must not introduce new language syntax
+    feature.includes(".prototype.") ||
+    // Ignore Intl features
+    feature.startsWith("Intl.")
+  );
+}
 
 const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
@@ -177,7 +150,7 @@ function* getPlugins(features) {
   for (const f of features) {
     if (featuresToPlugins.has(f)) {
       yield featuresToPlugins.get(f);
-    } else if (!ignoredFeatures.has(f)) {
+    } else if (!featureShouldIgnore(f)) {
       unmappedFeatures.add(f);
     }
   }

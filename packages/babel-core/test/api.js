@@ -1,5 +1,5 @@
 import babel from "../lib/index.js";
-import sourceMap from "source-map";
+import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import path from "path";
 import generator from "@babel/generator";
 import { fileURLToPath } from "url";
@@ -532,15 +532,15 @@ describe("api", function () {
       ].join("\n"),
     ).toBe(result.code);
 
-    const consumer = new sourceMap.SourceMapConsumer(result.map);
+    const consumer = new TraceMap(result.map);
 
     expect(
-      consumer.originalPositionFor({
+      originalPositionFor(consumer, {
         line: 7,
         column: 4,
       }),
     ).toEqual({
-      name: null,
+      name: "Foo",
       source: "stdout",
       line: 1,
       column: 6,
