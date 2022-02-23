@@ -183,11 +183,13 @@ export type RaiseProperties<ErrorDetails> = {|
 import ModuleErrors from "./parse-error/module-errors";
 import StandardErrors from "./parse-error/standard-errors";
 import StrictModeErrors from "./parse-error/strict-mode-errors";
+import PipelineOperatorErrors from "./parse-error/pipeline-operator-errors";
 
 export const Errors = {
   ...toParseErrorClasses(ModuleErrors),
   ...toParseErrorClasses(StandardErrors),
   ...toParseErrorClasses(StrictModeErrors),
+  ...toParseErrorClasses`pipelineOperator`(PipelineOperatorErrors),
 };
 
 export * from "./parse-error/credentials";

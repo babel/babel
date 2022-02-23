@@ -68,6 +68,7 @@ import {
   newExpressionScope,
 } from "../util/expression-scope";
 import { Errors, ParseError } from "../parse-error";
+import { UnparenthesizedPipeBodyDescriptions } from "../parse-error/pipeline-operator-errors";
 import { setInnerComments } from "./comments";
 import { cloneIdentifier } from "./node";
 
@@ -75,13 +76,6 @@ import { cloneIdentifier } from "./node";
 import type { SourceType } from "../options";
 declare var invariant;
 */
-
-const invalidHackPipeBodies = new Map([
-  ["ArrowFunctionExpression", "arrow function"],
-  ["AssignmentExpression", "assignment"],
-  ["ConditionalExpression", "conditional"],
-  ["YieldExpression", "yield"],
-]);
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -515,7 +509,6 @@ export default class ExpressionParser extends LValParser {
               if (this.prodParam.hasYield && this.isContextual(tt._yield)) {
                 throw this.raise(Errors.PipeBodyIsTighter, {
                   at: this.state.startLoc,
-                  expressionDescription: this.state.value,
                 });
               }
               return this.parseSmartPipelineBodyInStyle(
@@ -555,13 +548,13 @@ export default class ExpressionParser extends LValParser {
   parseHackPipeBody(): N.Expression {
     const { startLoc } = this.state;
     const body = this.parseMaybeAssign();
-    const description = invalidHackPipeBodies.get(body.type);
+    const requiredParentheses = UnparenthesizedPipeBodyDescriptions[body.type];
 
     // TODO: Check how to handle type casts in Flow and TS once they are supported
-    if (!!description && !body.extra?.parenthesized) {
+    if (requiredParentheses && !body.extra?.parenthesized) {
       this.raise(Errors.PipeUnparenthesizedBody, {
         at: startLoc,
-        expressionDescription: description,
+        type: body.type,
       });
     }
     if (!this.topicReferenceWasUsedInCurrentContext()) {
