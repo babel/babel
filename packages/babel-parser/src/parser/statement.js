@@ -217,11 +217,8 @@ export default class StatementParser extends ExpressionParser {
       !this.options.allowUndeclaredExports &&
       this.scope.undefinedExports.size > 0
     ) {
-      for (const [name, loc] of Array.from(this.scope.undefinedExports)) {
-        this.raise(Errors.ModuleExportUndefined, {
-          at: loc,
-          exportedBinding: name,
-        });
+      for (const [localName, at] of Array.from(this.scope.undefinedExports)) {
+        this.raise(Errors.ModuleExportUndefined, { at, localName });
       }
     }
     return this.finishNode<N.Program>(program, "Program");
@@ -2242,17 +2239,17 @@ export default class StatementParser extends ExpressionParser {
         // Named exports
         for (const specifier of node.specifiers) {
           const { exported } = specifier;
-          const exportedName =
+          const exportName =
             exported.type === "Identifier" ? exported.name : exported.value;
-          this.checkDuplicateExports(specifier, exportedName);
+          this.checkDuplicateExports(specifier, exportName);
           // $FlowIgnore
           if (!isFrom && specifier.local) {
             const { local } = specifier;
             if (local.type !== "Identifier") {
               this.raise(Errors.ExportBindingIsString, {
                 at: specifier,
-                localBinding: local.value,
-                exportedBinding: exportedName,
+                localName: local.value,
+                exportName,
               });
             } else {
               // check for keywords used as local names
@@ -2318,16 +2315,16 @@ export default class StatementParser extends ExpressionParser {
       | N.ExportNamedDeclaration
       | N.ExportSpecifier
       | N.ExportDefaultSpecifier,
-    name: string,
+    exportName: string,
   ): void {
-    if (this.exportedIdentifiers.has(name)) {
-      if (name === "default") {
+    if (this.exportedIdentifiers.has(exportName)) {
+      if (exportName === "default") {
         this.raise(Errors.DuplicateDefaultExport, { at: node });
       } else {
-        this.raise(Errors.DuplicateExport, { at: node, exportedBinding: name });
+        this.raise(Errors.DuplicateExport, { at: node, exportName });
       }
     }
-    this.exportedIdentifiers.add(name);
+    this.exportedIdentifiers.add(exportName);
   }
 
   // Parses a comma-separated list of module exports.
@@ -2656,7 +2653,7 @@ export default class StatementParser extends ExpressionParser {
       if (importedIsString) {
         throw this.raise(Errors.ImportBindingIsString, {
           at: specifier,
-          importedBinding: imported.value,
+          importName: imported.value,
         });
       }
       this.checkReservedWord(imported.name, specifier.loc.start, true, true);

@@ -35,9 +35,9 @@ const JsxErrors = toParseErrorClasses`jsx`(_ => ({
     "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
   ),
   // FIXME: Unify with Errors.UnexpectedToken
-  UnexpectedToken: _<{| found: string, HTMLEntity: string |}>(
-    ({ found, HTMLEntity }) =>
-      `Unexpected token \`${found}\`. Did you mean \`${HTMLEntity}\` or \`{'${found}'}\`?`,
+  UnexpectedToken: _<{| unexpected: string, HTMLEntity: string |}>(
+    ({ unexpected, HTMLEntity }) =>
+      `Unexpected token \`${unexpected}\`. Did you mean \`${HTMLEntity}\` or \`{'${unexpected}'}\`?`,
   ),
   UnsupportedJsxValue: _(
     "JSX value should be either an expression or a quoted JSX text.",
@@ -122,7 +122,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             if (process.env.BABEL_8_BREAKING) {
               this.raise(JsxErrors.UnexpectedToken, {
                 at: this.state.curPosition(),
-                found: this.input[this.state.pos],
+                unexpected: this.input[this.state.pos],
                 HTMLEntity:
                   ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;",
               });

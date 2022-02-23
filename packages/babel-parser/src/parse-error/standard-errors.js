@@ -58,17 +58,17 @@ export default (_: typeof toParseErrorCredentials) => ({
   ),
   DuplicateConstructor: _("Duplicate constructor in the same class."),
   DuplicateDefaultExport: _("Only one default export allowed per module."),
-  DuplicateExport: _<{| exportedBinding: string |}>(
-    ({ exportedBinding }) =>
-      `\`${exportedBinding}\` has already been exported. Exported identifiers must be unique.`,
+  DuplicateExport: _<{| exportName: string |}>(
+    ({ exportName }) =>
+      `\`${exportName}\` has already been exported. Exported identifiers must be unique.`,
   ),
   DuplicateProto: _("Redefinition of __proto__ property."),
   DuplicateRegExpFlags: _("Duplicate regular expression flag."),
   ElementAfterRest: _("Rest element must be last element."),
   EscapedCharNotAnIdentifier: _("Invalid Unicode escape."),
-  ExportBindingIsString: _<{| localBinding: string, exportedBinding: string |}>(
-    ({ localBinding, exportedBinding }) =>
-      `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localBinding}' as '${exportedBinding}' } from 'some-module'\`?`,
+  ExportBindingIsString: _<{| localName: string, exportName: string |}>(
+    ({ localName, exportName }) =>
+      `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localName}' as '${exportName}' } from 'some-module'\`?`,
   ),
   ExportDefaultFromAsIdentifier: _(
     "'from' is not allowed as an identifier after 'export default'.",
@@ -94,9 +94,9 @@ export default (_: typeof toParseErrorCredentials) => ({
     "Illegal 'use strict' directive in function with non-simple parameter list.",
   ),
   IllegalReturn: _("'return' outside of function."),
-  ImportBindingIsString: _<{| importedBinding: string |}>(
-    ({ importedBinding }) =>
-      `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importedBinding}" as foo }\`?`,
+  ImportBindingIsString: _<{| importName: string |}>(
+    ({ importName }) =>
+      `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importName}" as foo }\`?`,
   ),
   ImportCallArgumentTrailingComma: _(
     "Trailing comma is disallowed inside import(...) arguments.",
@@ -139,8 +139,8 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidOrMissingExponent: _(
     "Floating-point numbers require a valid exponent after the 'e'.",
   ),
-  InvalidOrUnexpectedToken: _<{| found: string |}>(
-    ({ found }) => `Unexpected character '${found}'.`,
+  InvalidOrUnexpectedToken: _<{| unexpected: string |}>(
+    ({ unexpected }) => `Unexpected character '${unexpected}'.`,
   ),
   InvalidParenthesizedAssignment: _(
     "Invalid parenthesized assignment pattern.",
@@ -199,8 +199,8 @@ export default (_: typeof toParseErrorCredentials) => ({
         16,
       )}'.`,
   ),
-  ModuleExportUndefined: _<{| exportedBinding: string |}>(
-    ({ exportedBinding }) => `Export '${exportedBinding}' is not defined.`,
+  ModuleExportUndefined: _<{| localName: string |}>(
+    ({ localName }) => `Export '${localName}' is not defined.`,
   ),
   MultipleDefaultsInSwitch: _("Multiple default clauses."),
   NewlineAfterThrow: _("Illegal newline after throw."),

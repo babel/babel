@@ -1068,7 +1068,7 @@ export default class Tokenizer extends CommentsParser {
 
     throw this.raise(Errors.InvalidOrUnexpectedToken, {
       at: this.state.curPosition(),
-      found: String.fromCodePoint(code),
+      unexpected: String.fromCodePoint(code),
     });
   }
 
