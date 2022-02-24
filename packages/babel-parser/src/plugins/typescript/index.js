@@ -2963,11 +2963,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           !expr.typeParameters.extra?.trailingComma
         ) {
           const parameter = expr.typeParameters.params[0];
-          if (parameter.constraint) {
-            // If parameter has any constraints, it must contain multiple tokens.
-            // <T extends U> is a valid declaration.
-            // <T extends {name: string}> is also a valid declaration.
-          } else invalidSingleType = parameter;
+          if (!parameter.constraint) {
+            // A single type parameter must either have constraints
+            // or a trailing comma, otherwise it's ambiguous with JSX.
+            invalidSingleType = parameter;
+          }
         }
 
         return expr;
