@@ -7,6 +7,7 @@ import type {
   TSParameterProperty,
   Decorator,
   Expression,
+  Identifier,
   Node,
   Pattern,
   RestElement,
@@ -15,7 +16,6 @@ import type {
   /*:: ClassMember, */
   ObjectMember,
   /*:: TsNamedTypeElementBase, */
-  Identifier,
   /*:: PrivateName, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
@@ -26,9 +26,13 @@ import {
   isStrictBindReservedWord,
 } from "../util/identifier";
 import { NodeUtils } from "./node";
-import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
+import {
+  type BindingTypes,
+  BIND_NONE,
+  BIND_SCOPE_LEXICAL,
+} from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
-import { Errors } from "../parse-error";
+import { Errors, type LHSParent } from "../parse-error";
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
@@ -522,107 +526,132 @@ export default class LValParser extends NodeUtils {
    */
 
   checkLVal(
-    expr: Expression | ObjectMember | RestElement,
-    inNodeType: string = expr.type,
-    bindingType: BindingTypes = BIND_NONE,
-    checkClashes: ?Set<string>,
-    disallowLetBinding?: boolean,
-    strictModeChanged?: boolean = false,
-    parentIsParenthesizedExpression?: boolean = false,
+    expression: Expression | ObjectMember | RestElement,
+    {
+      in: ancestor,
+      binding = BIND_NONE,
+      checkClashes = false,
+      strictModeChanged = false,
+      allowingSloppyLetBinding = !(binding & BIND_SCOPE_LEXICAL),
+      parentIsParenthesizedExpression = false,
+    }: {
+      in: LHSParent,
+      binding?: BindingTypes,
+      checkClashes?: Set<string> | false,
+      strictModeChanged?: boolean,
+      allowingSloppyLetBinding?: boolean,
+      parentIsParenthesizedExpression?: boolean,
+    },
   ): void {
-    const type = expr.type;
+    const type = expression.type;
 
     // If we find here an ObjectMethod, it's because this was originally
     // an ObjectExpression which has then been converted.
     // toAssignable already reported this error with a nicer message.
-    if (this.isObjectMethod(expr)) return;
+    if (this.isObjectMethod(expression)) return;
 
     if (type === "MemberExpression") {
-      if (bindingType !== BIND_NONE) {
-        this.raise(Errors.InvalidPropertyBindingPattern, { at: expr });
+      if (binding !== BIND_NONE) {
+        this.raise(Errors.InvalidPropertyBindingPattern, { at: expression });
       }
       return;
     }
 
-    if (expr.type === "Identifier") {
-      const { name } = expr;
-      if (
-        this.state.strict &&
-        // "Global" reserved words have already been checked by parseIdentifier,
-        // unless they have been found in the id or parameters of a strict-mode
-        // function in a sloppy context.
-        (strictModeChanged
-          ? isStrictBindReservedWord(name, this.inModule)
-          : isStrictBindOnlyReservedWord(name))
-      ) {
-        const at = expr;
+    if (expression.type === "Identifier") {
+      this.checkIdentifier(
+        expression,
+        binding,
+        strictModeChanged,
+        allowingSloppyLetBinding,
+      );
 
-        if (bindingType === BIND_NONE) {
-          this.raise(Errors.StrictEvalArguments, { at, referenceName: name });
-        } else {
-          this.raise(Errors.StrictEvalArgumentsBinding, {
-            at,
-            bindingName: name,
-          });
-        }
-      }
+      const { name } = expression;
 
       if (checkClashes) {
         if (checkClashes.has(name)) {
-          this.raise(Errors.ParamDupe, { at: expr });
+          this.raise(Errors.ParamDupe, { at: expression });
         } else {
           checkClashes.add(name);
         }
       }
-      if (disallowLetBinding && name === "let") {
-        this.raise(Errors.LetInLexicalBinding, { at: expr });
-      }
-      if (!(bindingType & BIND_NONE)) {
-        this.declareNameFromIdentifier((expr: Identifier), bindingType);
-      }
+
       return;
     }
 
     const validity = this.isValidLVal(
-      expr.type,
-      parentIsParenthesizedExpression || expr.extra?.parenthesized,
-      bindingType,
+      expression.type,
+      parentIsParenthesizedExpression || expression.extra?.parenthesized,
+      binding,
     );
 
     if (validity === true) return;
 
     if (validity === false) {
-      this.raise(
-        bindingType === BIND_NONE
-          ? Errors.InvalidLhs
-          : Errors.InvalidLhsBinding,
-        { at: expr, inNodeType },
-      );
+      const ParseErrorClass =
+        binding === BIND_NONE ? Errors.InvalidLhs : Errors.InvalidLhsBinding;
+
+      this.raise(ParseErrorClass, {
+        at: expression,
+        context:
+          ancestor.type === "UpdateExpression"
+            ? { type: "UpdateExpression", prefix: ancestor.prefix }
+            : { type: ancestor.type },
+      });
       return;
     }
 
     const isParenthesizedExpression =
       type === "ParenthesizedExpression" || Array.isArray(validity);
     const key = Array.isArray(validity) ? validity[1] : validity;
-    const relevantType =
-      type === "ArrayPattern" ||
-      type === "ObjectPattern" ||
-      type === "ParenthesizedExpression"
-        ? type
-        : inNodeType;
+    const nextAncestor =
+      expression.type === "ArrayPattern" ||
+      expression.type === "ObjectPattern" ||
+      expression.type === "ParenthesizedExpression"
+        ? expression
+        : ancestor;
 
-    for (const child of [].concat(expr[key])) {
+    for (const child of [].concat(expression[key])) {
       if (child) {
-        this.checkLVal(
-          child,
-          relevantType,
-          bindingType,
+        this.checkLVal(child, {
+          in: nextAncestor,
+          binding,
           checkClashes,
-          disallowLetBinding,
+          allowingSloppyLetBinding,
           strictModeChanged,
-          isParenthesizedExpression,
-        );
+          parentIsParenthesizedExpression: isParenthesizedExpression,
+        });
       }
+    }
+  }
+
+  checkIdentifier(
+    at: Identifier,
+    bindingType: BindingTypes,
+    strictModeChanged: boolean = false,
+    allowLetBinding: boolean = !(bindingType & BIND_SCOPE_LEXICAL),
+  ) {
+    if (
+      this.state.strict &&
+      (strictModeChanged
+        ? isStrictBindReservedWord(at.name, this.inModule)
+        : isStrictBindOnlyReservedWord(at.name))
+    ) {
+      if (bindingType === BIND_NONE) {
+        this.raise(Errors.StrictEvalArguments, { at, referenceName: at.name });
+      } else {
+        this.raise(Errors.StrictEvalArgumentsBinding, {
+          at,
+          bindingName: at.name,
+        });
+      }
+    }
+
+    if (!allowLetBinding && at.name === "let") {
+      this.raise(Errors.LetInLexicalBinding, { at });
+    }
+
+    if (!(bindingType & BIND_NONE)) {
+      this.declareNameFromIdentifier(at, bindingType);
     }
   }
 

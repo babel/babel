@@ -328,10 +328,12 @@ export default class ExpressionParser extends LValParser {
         node.left = left;
       }
 
-      this.checkLVal(left, "AssignmentExpression");
       this.next();
       node.right = this.parseMaybeAssign();
-      return this.finishNode(node, "AssignmentExpression");
+      this.checkLVal(left, {
+        in: this.finishNode(node, "AssignmentExpression"),
+      });
+      return node;
     } else if (ownExpressionErrors) {
       this.checkExpressionErrors(refExpressionErrors, true);
     }
@@ -644,8 +646,10 @@ export default class ExpressionParser extends LValParser {
     refExpressionErrors: ?ExpressionErrors,
   ): N.Expression {
     if (update) {
-      this.checkLVal(node.argument, "prefix operation");
-      return this.finishNode(node, "UpdateExpression");
+      this.checkLVal(node.argument, {
+        in: (node = this.finishNode(node, "UpdateExpression")),
+      });
+      return node;
     }
 
     const startPos = this.state.start;
@@ -657,9 +661,10 @@ export default class ExpressionParser extends LValParser {
       node.operator = this.state.value;
       node.prefix = false;
       node.argument = expr;
-      this.checkLVal(expr, "postfix operation");
       this.next();
-      expr = this.finishNode(node, "UpdateExpression");
+      this.checkLVal(expr, {
+        in: (expr = this.finishNode(node, "UpdateExpression")),
+      });
     }
     return expr;
   }
@@ -2476,14 +2481,7 @@ export default class ExpressionParser extends LValParser {
 
           // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
           if (this.state.strict && node.id) {
-            this.checkLVal(
-              node.id,
-              "function name",
-              BIND_OUTSIDE,
-              undefined,
-              undefined,
-              strictModeChanged,
-            );
+            this.checkIdentifier(node.id, BIND_OUTSIDE, strictModeChanged);
           }
         },
       );
@@ -2513,16 +2511,21 @@ export default class ExpressionParser extends LValParser {
     isArrowFunction: ?boolean,
     strictModeChanged?: boolean = true,
   ): void {
-    const checkClashes = new Set();
+    const checkClashes = !allowDuplicates && new Set();
+    // We create a fake node with the "ephemeral" type `FormalParameters`[1]
+    // since we just store an array of parameters. Perhaps someday we can have
+    // something like class FormalParameters extends Array { ... }, which would
+    // also be helpful when traversing this node.
+    //
+    // 1. https://tc39.es/ecma262/#prod-FormalParameters
+    const formalParameters = { type: "FormalParameters" };
     for (const param of node.params) {
-      this.checkLVal(
-        param,
-        "function parameter list",
-        BIND_VAR,
-        allowDuplicates ? null : checkClashes,
-        undefined,
+      this.checkLVal(param, {
+        in: formalParameters,
+        binding: BIND_VAR,
+        checkClashes,
         strictModeChanged,
-      );
+      });
     }
   }
 

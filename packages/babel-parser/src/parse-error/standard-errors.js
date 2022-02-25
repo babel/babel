@@ -1,6 +1,24 @@
 // @flow
 
 import { toParseErrorCredentials } from "../parse-error";
+import toNodeDescription from "./to-node-description";
+
+export type LHSParent =
+  | { type: "UpdateExpression", prefix: boolean }
+  | {
+      type:
+        | "ArrayPattern"
+        | "AssignmentExpression"
+        | "CatchClause"
+        | "ForOfStatement"
+        | "FormalParameters"
+        | "ForInStatement"
+        | "ForStatement"
+        | "Identfier"
+        | "ObjectPattern"
+        | "RestElement"
+        | "VariableDeclarator",
+    };
 
 export default (_: typeof toParseErrorCredentials) => ({
   AccessorIsGenerator: _<{| kind: "get" | "set" |}>(
@@ -127,13 +145,12 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidIdentifier: _<{| identifier: string |}>(
     ({ identifier }) => `Invalid identifier ${identifier}.`,
   ),
-  InvalidLhs: _<{| inNodeType: string |}>(
-    ({ inNodeType }) =>
-      `Invalid left-hand side in ${nodeTypeToDescription(inNodeType)}.`,
+  InvalidLhs: _<{| context: LHSParent |}>(
+    ({ context }) => `Invalid left-hand side in ${toNodeDescription(context)}.`,
   ),
-  InvalidLhsBinding: _<{| inNodeType: string |}>(
-    ({ inNodeType }) =>
-      `Binding invalid left-hand side in ${nodeTypeToDescription(inNodeType)}.`,
+  InvalidLhsBinding: _<{| context: LHSParent |}>(
+    ({ context }) =>
+      `Binding invalid left-hand side in ${toNodeDescription(context)}.`,
   ),
   InvalidNumber: _("Invalid number."),
   InvalidOrMissingExponent: _(
@@ -338,14 +355,3 @@ export default (_: typeof toParseErrorCredentials) => ({
     "Numeric separator can not be used after leading 0.",
   ),
 });
-
-// eslint-disable-next-line no-confusing-arrow
-const nodeTypeToDescription = type =>
-  type === "ArrayPattern"
-    ? "array destructuring pattern"
-    : type === "ObjectPattern"
-    ? "object destructuring pattern"
-    : type
-        .replace(/^[A-Z]+(?=[A-Z][a-z])/, "")
-        .replace(/[a-z][A-Z]/, ([left, right]) => `${left} ${right}`)
-        .toLowerCase();

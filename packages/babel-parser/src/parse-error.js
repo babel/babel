@@ -192,4 +192,6 @@ export const Errors = {
   ...toParseErrorClasses`pipelineOperator`(PipelineOperatorErrors),
 };
 
+export type { LHSParent } from "./parse-error/standard-errors";
+
 export * from "./parse-error/credentials";

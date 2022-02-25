@@ -1620,11 +1620,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (properties.declare) node.declare = properties.declare;
       if (tokenIsIdentifier(this.state.type)) {
         node.id = this.parseIdentifier();
-        this.checkLVal(
-          node.id,
-          "typescript interface declaration",
-          BIND_TS_INTERFACE,
-        );
+        this.checkIdentifier(node.id, BIND_TS_INTERFACE);
       } else {
         node.id = null;
         this.raise(TSErrors.MissingInterfaceName, { at: this.state.startLoc });
@@ -1644,7 +1640,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsTypeAliasDeclaration,
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
-      this.checkLVal(node.id, "typescript type alias", BIND_TS_TYPE);
+      this.checkIdentifier(node.id, BIND_TS_TYPE);
 
       node.typeParameters = this.tsTryParseTypeParameters();
       node.typeAnnotation = this.tsInType(() => {
@@ -1730,9 +1726,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (properties.declare) node.declare = properties.declare;
       this.expectContextual(tt._enum);
       node.id = this.parseIdentifier();
-      this.checkLVal(
+      this.checkIdentifier(
         node.id,
-        "typescript enum declaration",
         node.const ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
       );
 
@@ -1768,11 +1763,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
 
       if (!nested) {
-        this.checkLVal(
-          node.id,
-          "module or namespace declaration",
-          BIND_TS_NAMESPACE,
-        );
+        this.checkIdentifier(node.id, BIND_TS_NAMESPACE);
       }
 
       if (this.eat(tt.dot)) {
@@ -1819,7 +1810,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsImportEqualsDeclaration {
       node.isExport = isExport || false;
       node.id = this.parseIdentifier();
-      this.checkLVal(node.id, "import equals declaration", BIND_LEXICAL);
+      this.checkIdentifier(node.id, BIND_LEXICAL);
       this.expect(tt.eq);
       const moduleReference = this.tsParseModuleReference();
       if (
@@ -2242,7 +2233,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!node.body && node.id) {
         // Function ids are validated after parsing their body.
         // For bodyless function, we need to do it here.
-        this.checkLVal(node.id, "function name", BIND_TS_AMBIENT);
+        this.checkIdentifier(node.id, BIND_TS_AMBIENT);
       } else {
         super.registerFunctionStatementId(...arguments);
       }
@@ -3757,7 +3748,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
       }
       if (isImport) {
-        this.checkLVal(node[rightOfAsKey], "ImportSpecifier", BIND_LEXICAL);
+        this.checkIdentifier(node[rightOfAsKey], BIND_LEXICAL);
       }
     }
   };

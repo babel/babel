@@ -725,8 +725,8 @@ export default class StatementParser extends ExpressionParser {
     if (isForOf || this.match(tt._in)) {
       this.checkDestructuringPrivate(refExpressionErrors);
       this.toAssignable(init, /* isLHS */ true);
-      const description = isForOf ? "for-of statement" : "for-in statement";
-      this.checkLVal(init, description);
+      const type = isForOf ? "ForOfStatement" : "ForInStatement";
+      this.checkLVal(init, { in: { type } });
       return this.parseForIn(node, init, awaitAt);
     } else {
       this.checkExpressionErrors(refExpressionErrors, true);
@@ -841,7 +841,11 @@ export default class StatementParser extends ExpressionParser {
 
     const simple = param.type === "Identifier";
     this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
-    this.checkLVal(param, "catch clause", BIND_LEXICAL);
+    this.checkLVal(param, {
+      in: { type: "CatchClause" },
+      binding: BIND_LEXICAL,
+      allowingSloppyLetBinding: true,
+    });
 
     return param;
   }
@@ -1171,7 +1175,7 @@ export default class StatementParser extends ExpressionParser {
     if (init.type === "AssignmentPattern") {
       this.raise(Errors.InvalidLhs, {
         at: init,
-        inNodeType: "for-loop",
+        context: { type: "ForStatement" },
       });
     }
 
@@ -1243,13 +1247,10 @@ export default class StatementParser extends ExpressionParser {
 
   parseVarId(decl: N.VariableDeclarator, kind: "var" | "let" | "const"): void {
     decl.id = this.parseBindingAtom();
-    this.checkLVal(
-      decl.id,
-      "variable declaration",
-      kind === "var" ? BIND_VAR : BIND_LEXICAL,
-      undefined,
-      kind !== "var",
-    );
+    this.checkLVal(decl.id, {
+      in: { type: "VariableDeclarator" },
+      binding: kind === "var" ? BIND_VAR : BIND_LEXICAL,
+    });
   }
 
   // Parse a function declaration or literal (depending on the
@@ -2457,7 +2458,10 @@ export default class StatementParser extends ExpressionParser {
   }
 
   finishImportSpecifier(specifier: N.Node, type: string) {
-    this.checkLVal(specifier.local, type, BIND_LEXICAL);
+    this.checkLVal(specifier.local, {
+      in: specifier,
+      binding: BIND_LEXICAL,
+    });
     return this.finishNode(specifier, type);
   }
 
