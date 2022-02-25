@@ -77,7 +77,7 @@ const runner = new TestRunner({
         continue;
       }
 
-      const strictMode = AlwaysStrictRegExp.test(test.contents);
+      const strictMode = AlwaysStrictRegExp.test(test.contents) || void 0;
       const files = toFiles(strictMode, test.contents, test.name);
       const expectedError =
         files.length > 0 && baselineContainsParserErrorCodes(test.name);
@@ -101,7 +101,7 @@ function toFiles(strictMode, contents, name) {
     .map(([sourceFilename, contents]) => ({
       contents,
       sourceFilename,
-      sourceType: "script",
+      sourceType: "unambiguous",
       strictMode,
       plugins: /\.(t|j)sx$/.test(sourceFilename) ? pluginsWithJSX : plugins,
     }));

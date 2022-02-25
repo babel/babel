@@ -288,13 +288,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return TypeScriptScopeHandler;
     }
 
-    // import and export are always allowed in TypeScript, regardless of whether
-    // you are parsing as "script" or "module". However, this is different than
-    // `allowImportExportEverywhere`, as it is only allowed in the same places
-    // that it would be allowed in a module context, not *anywhere*.
-    // eslint-disable-next-line no-unused-vars
-    assertModuleNodeAllowed(node: N.Node): void {}
-
     tsIsIdentifier(): boolean {
       // TODO: actually a bit more complex in TypeScript, but shouldn't matter.
       // See https://github.com/Microsoft/TypeScript/issues/15008

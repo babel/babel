@@ -73,6 +73,7 @@ export default [
   "TS1385", // Function type notation must be parenthesized when used in a union type.
   "TS1386", // Constructor type notation must be parenthesized when used in a union type.
   "TS1437", // Namespace must be given a name.
+  "TS1194", // Export declarations are not permitted in a namespace.
   // "TS2300", // Duplicate identifier '{0}'.
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
   // "TS2340", // Only public and protected methods of the base class are accessible via the 'super' keyword.
