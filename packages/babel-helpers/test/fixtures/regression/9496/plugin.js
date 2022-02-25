@@ -1,10 +1,14 @@
 const defineHelper = require("../../../helpers/define-helper.cjs");
 
-const main = defineHelper(__dirname, "main", `
+const main = defineHelper(
+  __dirname,
+  "main",
+  `
   export default function helper() {}
-`);
+`
+);
 
-module.exports = function() {
+module.exports = function () {
   return {
     visitor: {
       Identifier(path) {

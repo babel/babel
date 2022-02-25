@@ -1,2 +1,3 @@
-exports.default = function () { return 5 };
-
+exports.default = function () {
+  return 5;
+};

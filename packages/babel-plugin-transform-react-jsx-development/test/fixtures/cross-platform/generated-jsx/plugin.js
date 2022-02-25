@@ -11,8 +11,8 @@ module.exports = function ({ types: t }) {
               []
             )
           );
-        }
-      }
-    }
+        },
+      },
+    },
   };
 };

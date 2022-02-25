@@ -1,1 +1,1 @@
-universe[galaxyName, otherUselessName]
+universe[(galaxyName, otherUselessName)];

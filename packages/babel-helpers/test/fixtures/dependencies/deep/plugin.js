@@ -1,23 +1,35 @@
 const defineHelper = require("../../../helpers/define-helper.cjs");
 
-const dependencyDeep = defineHelper(__dirname, "dependencyDeep", `
+const dependencyDeep = defineHelper(
+  __dirname,
+  "dependencyDeep",
+  `
   export default function fn() {}
-`)
+`
+);
 
-const dependency = defineHelper(__dirname, "dependency", `
+const dependency = defineHelper(
+  __dirname,
+  "dependency",
+  `
   import f from "${dependencyDeep}";
   export default function fn() { return f; }
-`);
+`
+);
 
-const main = defineHelper(__dirname, "main", `
+const main = defineHelper(
+  __dirname,
+  "main",
+  `
   import dep from "${dependency}";
 
   export default function helper() {
     return dep();
   }
-`);
+`
+);
 
-module.exports = function() {
+module.exports = function () {
   return {
     visitor: {
       Identifier(path) {

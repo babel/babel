@@ -1,1 +1,1 @@
-earth.asia.Indonesia.prepareForElection(2014)
+earth.asia.Indonesia.prepareForElection(2014);

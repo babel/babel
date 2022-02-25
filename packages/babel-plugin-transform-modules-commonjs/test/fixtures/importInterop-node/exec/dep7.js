@@ -1,2 +1,3 @@
-exports.named = function () { return 7 };
-
+exports.named = function () {
+  return 7;
+};

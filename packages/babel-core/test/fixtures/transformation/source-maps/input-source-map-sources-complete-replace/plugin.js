@@ -10,8 +10,8 @@ module.exports = function (babel) {
         // This injects the sourcesContent, though I don't imagine anyone's
         // doing it.
         file.code = {
-            [sourceFileName]: file.code,
-            'test.js': '<bar />',
+          [sourceFileName]: file.code,
+          "test.js": "<bar />",
         };
       },
 
@@ -25,7 +25,7 @@ module.exports = function (babel) {
         loc.start.column = 1;
         loc.end.column = 4;
 
-        const node = t.stringLiteral('bar');
+        const node = t.stringLiteral("bar");
         node.loc = loc;
         path.replaceWith(node);
       },

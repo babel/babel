@@ -1,7 +1,9 @@
 var fns = [];
 
 for (let i = 0; i < 10; i++) {
-  fns.push(function () { return i; });
+  fns.push(function () {
+    return i;
+  });
   i += 1;
 }
 

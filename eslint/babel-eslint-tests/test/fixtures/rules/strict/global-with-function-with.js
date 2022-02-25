@@ -1,5 +1,5 @@
 "use strict";
 
-function x () {
+function x() {
   "use strict";
 }

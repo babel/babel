@@ -9,7 +9,7 @@ function Bar() {
   Foo.call(this);
 }
 
-new Foo;
+new Foo();
 new Bar();
 
 expect(targets[0]).toBe(Foo);

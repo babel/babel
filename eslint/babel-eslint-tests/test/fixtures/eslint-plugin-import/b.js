@@ -1,1 +1,1 @@
-import foo from './a.js';
+import foo from "./a.js";

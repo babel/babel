@@ -1,1 +1,1 @@
-["an", "array", "'s"].indexOf("index")
+["an", "array", "'s"].indexOf("index");

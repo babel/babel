@@ -1,7 +1,7 @@
 expect(do {
   if (false) {
-    "foo";
+    ("foo");
   } else {
-    "bar";
+    ("bar");
   }
 }).toBe("bar");

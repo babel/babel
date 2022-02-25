@@ -1,1 +1,1 @@
-Object.assign({test: 1});
+Object.assign({ test: 1 });

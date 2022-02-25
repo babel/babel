@@ -1,1 +1,1 @@
-function x () {}
+function x() {}

@@ -1,1 +1,1 @@
-abc // my comment
+abc; // my comment

@@ -6,4 +6,4 @@ class Foo {
 
 var Bar = Foo;
 Foo = 5;
-expect((new Bar).bar()).toBe(Bar);
+expect(new Bar().bar()).toBe(Bar);

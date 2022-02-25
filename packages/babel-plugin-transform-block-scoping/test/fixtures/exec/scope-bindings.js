@@ -12,7 +12,7 @@ var res = transform(code, {
       return {
         visitor: {
           Scope: {
-            exit: function(path) {
+            exit: function (path) {
               if (innerScope) {
                 expect(Object.keys(path.scope.bindings)).toHaveLength(0);
                 innerScope = false;
@@ -20,11 +20,11 @@ var res = transform(code, {
               }
 
               expect(Object.keys(path.scope.bindings)).toHaveLength(2);
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      };
+    },
   ]),
 });
 

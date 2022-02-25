@@ -1,4 +1,6 @@
-function getArgs() { return arguments; }
+function getArgs() {
+  return arguments;
+}
 
 let args = getArgs(1, 2, 3);
 let res = [];
@@ -15,4 +17,3 @@ try {
 } finally {
   Symbol = _Symbol;
 }
-

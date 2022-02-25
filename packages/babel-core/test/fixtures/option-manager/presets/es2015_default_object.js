@@ -4,16 +4,16 @@
 //     require('../../../../../babel-plugin-syntax-decorators'),
 //   ]
 // };
-'use strict';
+"use strict";
 
 exports.__esModule = true;
-module.exports = function() {
+module.exports = function () {
   return {
     plugins: [
       [
-        require('../../../../../babel-plugin-syntax-decorators'),
-        { legacy: true }
+        require("../../../../../babel-plugin-syntax-decorators"),
+        { legacy: true },
       ],
-    ]
+    ],
   };
 };

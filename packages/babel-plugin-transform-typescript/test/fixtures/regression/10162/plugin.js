@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function({ template, types: t }) {
+module.exports = function ({ template, types: t }) {
   const warnings = [];
   let consoleWarn;
 

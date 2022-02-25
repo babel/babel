@@ -14,8 +14,8 @@ class Bar extends Foo {
   }
 }
 
-new Foo;
-new Bar;
+new Foo();
+new Bar();
 
 expect(targets[0]).toBe(Foo);
 expect(targets[1]).toBe(Bar);

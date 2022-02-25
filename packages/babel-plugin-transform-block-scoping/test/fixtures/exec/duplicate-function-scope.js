@@ -1,10 +1,10 @@
-function test () {
+function test() {
   let value = "outer";
 
-  return function () {
+  return (function () {
     let value = "inner";
     return value;
-  }();
+  })();
 }
 
 expect(test()).toBe("inner");

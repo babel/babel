@@ -1,2 +1,4 @@
 const a = 1;
-expect(() => { a = 2 }).toThrow(TypeError);
+expect(() => {
+  a = 2;
+}).toThrow(TypeError);

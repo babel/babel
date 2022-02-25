@@ -1,1 +1,4 @@
-"use strict";(function(){return 42});
+"use strict";
+(function () {
+  return 42;
+});

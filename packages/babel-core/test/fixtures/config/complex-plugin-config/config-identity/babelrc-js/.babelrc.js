@@ -1,9 +1,7 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.env();
 
   return {
-    plugins: [
-      require("./plugin"),
-    ],
+    plugins: [require("./plugin")],
   };
-}
+};

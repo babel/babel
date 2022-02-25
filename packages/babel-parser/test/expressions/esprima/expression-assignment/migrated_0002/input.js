@@ -1,1 +1,1 @@
-arguments = 42
+arguments = 42;

@@ -2,7 +2,9 @@
 // export const plugins = [
 //   require('../../../../../babel-plugin-syntax-decorators'),
 // ];
-'use strict';
+"use strict";
 
 exports.__esModule = true;
-var plugins = exports.plugins = [require('../../../../../babel-plugin-syntax-decorators')];
+var plugins = (exports.plugins = [
+  require("../../../../../babel-plugin-syntax-decorators"),
+]);

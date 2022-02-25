@@ -1,1 +1,1 @@
-delete x
+delete x;

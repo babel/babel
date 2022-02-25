@@ -1,5 +1,5 @@
 expect(do {
   if (true) {
-    "bar";
+    ("bar");
   }
 }).toBe("bar");

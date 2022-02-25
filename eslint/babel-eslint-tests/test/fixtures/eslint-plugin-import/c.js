@@ -1,4 +1,4 @@
 // @flow
 type Foo = {};
 
-const FlowTypeButton = ({ }: Foo) => { };
+const FlowTypeButton = ({}: Foo) => {};

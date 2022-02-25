@@ -1,4 +1,5 @@
-let done = false, value = 0;
+let done = false,
+  value = 0;
 
 // jest.fn isn't available in exec tests
 function fn(impl = () => {}) {
@@ -13,7 +14,9 @@ function fn(impl = () => {}) {
 const iterator = {
   next: fn(() => ({ done, value })),
   throw: fn(),
-  return: fn(() => { throw {} }),
+  return: fn(() => {
+    throw {};
+  }),
 };
 
 const obj = {

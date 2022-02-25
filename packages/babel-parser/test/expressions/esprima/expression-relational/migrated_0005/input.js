@@ -1,1 +1,1 @@
-x instanceof y
+x instanceof y;

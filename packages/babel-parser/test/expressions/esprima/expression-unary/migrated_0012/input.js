@@ -1,1 +1,1 @@
-typeof x
+typeof x;

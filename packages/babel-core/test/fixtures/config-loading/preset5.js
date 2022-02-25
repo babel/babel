@@ -1,8 +1,10 @@
-module.exports = function() {
+module.exports = function () {
   return {
-    overrides: [{
-      test: /\.ts$/,
-      plugins: []
-    }]
-  }
+    overrides: [
+      {
+        test: /\.ts$/,
+        plugins: [],
+      },
+    ],
+  };
 };

@@ -1,3 +1,3 @@
 expect(do {
-  "foo";
+  ("foo");
 }).toBe("foo");

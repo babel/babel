@@ -5,7 +5,7 @@ exports.default = function (api) {
     visitor: {
       Program: function () {
         api.traverse.cache.clearScope();
-      }
-    }
+      },
+    },
   };
 };

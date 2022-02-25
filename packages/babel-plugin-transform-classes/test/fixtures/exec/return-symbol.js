@@ -4,6 +4,6 @@ class Foo {
   }
 }
 
-const f = new Foo;
+const f = new Foo();
 expect(f).toBeInstanceOf(Foo);
 expect(typeof f).toBe("object");

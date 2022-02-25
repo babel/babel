@@ -4,7 +4,8 @@ var a = (() => [1, 2, 3])();
 let _Symbol = Symbol;
 Symbol = void 0;
 try {
-  let didErr = false, err;
+  let didErr = false,
+    err;
   let obj = {};
 
   try {

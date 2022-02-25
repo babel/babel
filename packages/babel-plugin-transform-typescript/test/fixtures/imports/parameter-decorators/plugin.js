@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true,
 });
 
-exports.default = function(_ref) {
+exports.default = function (_ref) {
   var types = _ref.types;
 
   return {
@@ -14,7 +14,7 @@ exports.default = function(_ref) {
         (path.get("params") || [])
           .slice()
           .reverse()
-          .forEach(function(param) {
+          .forEach(function (param) {
             var name = param.node.name;
             var paramUidName = path.scope.generateUidIdentifier(name).name;
             var resultantDecorator = void 0;
@@ -22,7 +22,7 @@ exports.default = function(_ref) {
             (param.node.decorators || [])
               .slice()
               .reverse()
-              .forEach(function(decorator) {
+              .forEach(function (decorator) {
                 resultantDecorator = types.callExpression(
                   decorator.expression,
                   [resultantDecorator || types.identifier(paramUidName)]
@@ -30,8 +30,8 @@ exports.default = function(_ref) {
               });
 
             if (resultantDecorator) {
-              var decoratedParamUidName = path.scope.generateUidIdentifier(name)
-                .name;
+              var decoratedParamUidName =
+                path.scope.generateUidIdentifier(name).name;
 
               path.scope.rename(name, decoratedParamUidName);
               param.parentPath

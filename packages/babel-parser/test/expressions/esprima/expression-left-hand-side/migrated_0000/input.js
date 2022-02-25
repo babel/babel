@@ -1,1 +1,1 @@
-new Button
+new Button();

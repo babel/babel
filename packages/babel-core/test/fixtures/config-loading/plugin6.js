@@ -1,4 +1,4 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache.using(() => process.env.INVALIDATE_PLUGIN6);
 
   return {
