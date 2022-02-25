@@ -183,6 +183,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   }
 
   const specifiers = node.specifiers.slice(0);
+  const specifiersLength = specifiers.length;
   if (specifiers?.length) {
     // print "special" specifiers first
     for (;;) {
@@ -209,6 +210,18 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
       this.token("}");
     }
 
+    if (node.importKind !== "type" && node.importKind !== "typeof") {
+      this.space();
+      this.word("from");
+      this.space();
+    }
+  }
+
+  if (node.importKind === "type" || node.importKind === "typeof") {
+    if (!specifiersLength) {
+      this.token("{");
+      this.token("}");
+    }
     this.space();
     this.word("from");
     this.space();
