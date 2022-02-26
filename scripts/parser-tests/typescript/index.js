@@ -140,7 +140,10 @@ function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
   // ["index.ts", []]
   // ["index.ts", [""]]
   const nameContent = fileMap.filter(
-    n => n[1].length > 0 && (n[1].length > 1 || n[1][0] !== "")
+    n =>
+      n[1].length > 2 ||
+      (n[1].length === 1 && n[1][0] !== "") ||
+      (n[1].length === 2 && n[1][0] !== "content not parsed" && n[1][0] !== "")
   );
   return nameContent;
 }

@@ -72,11 +72,16 @@ exportAssignmentWithDeclareModifier.ts
 exportAssignmentWithExportModifier.ts
 exportClassWithoutName.ts
 exportDeclarationsInAmbientNamespaces.ts
+exportDeclarationsInAmbientNamespaces2.ts
 exportDefaultAsyncFunction2.ts
 exportEqualsOfModule.ts
 exportSameNameFuncVar.ts
 exportSpecifierAndExportedMemberDeclaration.ts
 exportSpecifierAndLocalMemberDeclaration.ts
+# We handle this fine, but it doesn't consider the different files together
+exportSpecifierForAGlobal.ts
+# We handle this fine, but it doesn't consider the different files together
+exportSpecifierReferencingOuterDeclaration2.ts
 expressionsForbiddenInParameterInitializers.ts
 extendsClauseAlreadySeen.ts
 extendsClauseAlreadySeen2.ts
@@ -125,6 +130,7 @@ moduleSharesNameWithImportDeclarationInsideIt3.ts
 moduleSharesNameWithImportDeclarationInsideIt5.ts
 multipleClassPropertyModifiersErrors.ts
 multipleInheritance.ts
+multipleExports.ts
 nameCollisions.ts
 noImplicitAnyDestructuringVarDeclaration.ts
 nonMergedOverloads.ts
@@ -134,6 +140,12 @@ parserConstructorDeclaration12.ts
 readonlyInNonPropertyParameters.ts
 redeclareParameterInCatchBlock.ts
 reExportGlobalDeclaration1.ts
+# We handle this fine, but it doesn't consider the different files together
+reExportGlobalDeclaration2.ts
+# We handle this fine, but it doesn't consider the different files together
+reExportGlobalDeclaration3.ts
+# We handle this fine, but it doesn't consider the different files together
+reExportGlobalDeclaration4.ts
 reExportUndefined1.ts
 restParamModifier2.ts
 shadowedReservedCompilerDeclarationsWithNoEmit.ts
