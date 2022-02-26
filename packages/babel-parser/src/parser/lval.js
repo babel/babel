@@ -533,14 +533,14 @@ export default class LValParser extends NodeUtils {
       checkClashes = false,
       strictModeChanged = false,
       allowingSloppyLetBinding = !(binding & BIND_SCOPE_LEXICAL),
-      parentIsParenthesizedExpression = false,
+      hasParenthesizedAncestor = false,
     }: {
       in: LHSParent,
       binding?: BindingTypes,
       checkClashes?: Set<string> | false,
       strictModeChanged?: boolean,
       allowingSloppyLetBinding?: boolean,
-      parentIsParenthesizedExpression?: boolean,
+      hasParenthesizedAncestor?: boolean,
     },
   ): void {
     const type = expression.type;
@@ -580,7 +580,7 @@ export default class LValParser extends NodeUtils {
 
     const validity = this.isValidLVal(
       expression.type,
-      parentIsParenthesizedExpression || expression.extra?.parenthesized,
+      hasParenthesizedAncestor || expression.extra?.parenthesized,
       binding,
     );
 
@@ -618,7 +618,7 @@ export default class LValParser extends NodeUtils {
           checkClashes,
           allowingSloppyLetBinding,
           strictModeChanged,
-          parentIsParenthesizedExpression: isParenthesizedExpression,
+          hasParenthesizedAncestor: isParenthesizedExpression,
         });
       }
     }
