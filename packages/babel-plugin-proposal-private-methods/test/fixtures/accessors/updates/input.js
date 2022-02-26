@@ -43,5 +43,19 @@ class Cl {
 
     this.#privateFieldValue = -(this.#privateFieldValue ** this.#privateFieldValue);
     this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
+
+    this.#privateField = 0n;
+    this.publicField = 0n;
+    this.#privateFieldValue = this.#privateFieldValue++;
+    this.publicFieldValue = this.publicFieldValue++;
+
+    ++this.#privateFieldValue;
+    ++this.publicFieldValue;
+
+    this.#privateFieldValue += 1n;
+    this.publicFieldValue += 1n;
+
+    this.#privateFieldValue = -(this.#privateFieldValue ** this.#privateFieldValue);
+    this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
   }
 }

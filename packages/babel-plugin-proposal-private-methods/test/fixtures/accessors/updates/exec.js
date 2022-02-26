@@ -43,6 +43,20 @@ class Cl {
     this.#privateFieldValue += 1;
     this.publicFieldValue += 1;
     expect(this.#privateField).toEqual(this.publicField);
+
+    this.#privateField = 0n;
+    this.publicField = 0n;
+    this.#privateFieldValue = this.#privateFieldValue++;
+    this.publicFieldValue = this.publicFieldValue++;
+    expect(this.#privateField).toEqual(this.publicField);
+
+    ++this.#privateFieldValue;
+    ++this.publicFieldValue;
+    expect(this.#privateField).toEqual(this.publicField);
+
+    this.#privateFieldValue += 1n;
+    this.publicFieldValue += 1n;
+    expect(this.#privateField).toEqual(this.publicField);
   }
 }
 
