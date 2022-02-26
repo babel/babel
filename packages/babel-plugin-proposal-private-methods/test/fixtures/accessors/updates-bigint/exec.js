@@ -30,8 +30,8 @@ class Cl {
   }
 
   testUpdates() {
-    this.#privateField = 0;
-    this.publicField = 0;
+    this.#privateField = 0n;
+    this.publicField = 0n;
     this.#privateFieldValue = this.#privateFieldValue++;
     this.publicFieldValue = this.publicFieldValue++;
     expect(this.#privateField).toEqual(this.publicField);
@@ -40,8 +40,8 @@ class Cl {
     ++this.publicFieldValue;
     expect(this.#privateField).toEqual(this.publicField);
 
-    this.#privateFieldValue += 1;
-    this.publicFieldValue += 1;
+    this.#privateFieldValue += 1n;
+    this.publicFieldValue += 1n;
     expect(this.#privateField).toEqual(this.publicField);
   }
 }
