@@ -16,11 +16,10 @@ import {
   logicalExpression,
   memberExpression,
   nullLiteral,
-  numericLiteral,
   optionalCallExpression,
   optionalMemberExpression,
   sequenceExpression,
-  unaryExpression,
+  updateExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { willPathCastToBoolean } from "./util";
@@ -350,8 +349,8 @@ const handle = {
       return;
     }
 
-    // MEMBER++   ->   _set(MEMBER, (_ref = (+_get(MEMBER))) + 1), _ref
-    // ++MEMBER   ->   _set(MEMBER, (+_get(MEMBER)) + 1)
+    // MEMBER++   ->   _set(MEMBER, (ref = _get(MEMBER), ref2 = ref++, ref)), ref2
+    // ++MEMBER   ->   _set(MEMBER, (ref = _get(MEMBER), ++ref))
     if (isUpdateExpression(parent, { argument: node })) {
       if (this.simpleSet) {
         member.replaceWith(this.simpleSet(member));
@@ -365,31 +364,43 @@ const handle = {
       // assignment.
       this.memoise(member, 2);
 
-      const value = binaryExpression(
-        operator[0] as "+" | "-",
-        unaryExpression("+", this.get(member)),
-        numericLiteral(1),
-      );
+      const ref = scope.generateUidIdentifierBasedOnNode(node);
+      scope.push({ id: ref });
+
+      const seq: t.Expression[] = [
+        // ref = _get(MEMBER)
+        assignmentExpression("=", cloneNode(ref), this.get(member)),
+      ];
 
       if (prefix) {
+        seq.push(updateExpression(operator, cloneNode(ref), prefix));
+
+        // (ref = _get(MEMBER), ++ref)
+        const value = sequenceExpression(seq);
         parentPath.replaceWith(this.set(member, value));
+
+        return;
       } else {
-        const { scope } = member;
-        const ref = scope.generateUidIdentifierBasedOnNode(node);
-        scope.push({ id: ref });
+        const ref2 = scope.generateUidIdentifierBasedOnNode(node);
+        scope.push({ id: ref2 });
 
-        value.left = assignmentExpression(
-          "=",
+        seq.push(
+          assignmentExpression(
+            "=",
+            cloneNode(ref2),
+            updateExpression(operator, cloneNode(ref), prefix),
+          ),
           cloneNode(ref),
-          // @ts-expect-error todo(flow->ts) value.left is possibly PrivateName, which is not usable here
-          value.left,
         );
 
+        // (ref = _get(MEMBER), ref2 = ref++, ref)
+        const value = sequenceExpression(seq);
         parentPath.replaceWith(
-          sequenceExpression([this.set(member, value), cloneNode(ref)]),
+          sequenceExpression([this.set(member, value), cloneNode(ref2)]),
         );
+
+        return;
       }
-      return;
     }
 
     // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
