@@ -18,7 +18,7 @@ import {
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
-import type { Position } from "../../util/location";
+import { Position, createPositionWithColumnOffset } from "../../util/location";
 import type Parser from "../../parser";
 import {
   type BindingTypes,
@@ -148,6 +148,8 @@ const TSErrors = makeErrorTemplates(
       "A 'set' accessor cannot have rest parameter.",
     SetAccesorCannotHaveReturnType:
       "A 'set' accessor cannot have a return type annotation.",
+    SingleTypeParameterWithoutTrailingComma:
+      "Single type parameter %0 should have a trailing comma. Example usage: <%0,>.",
     StaticBlockCannotHaveModifier:
       "Static class blocks cannot have any modifier.",
     TypeAnnotationAfterAssign:
@@ -2933,6 +2935,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
 
       let typeParameters: ?N.TsTypeParameterDeclaration;
+      let invalidSingleType: ?N.TsTypeParameter;
       state = state || this.state.clone();
 
       const arrow = this.tryParse(abort => {
@@ -2952,8 +2955,35 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.resetStartLocationFromNode(expr, typeParameters);
         }
         expr.typeParameters = typeParameters;
+
+        // report error if single type parameter used without trailing comma.
+        if (
+          this.hasPlugin("jsx") &&
+          expr.typeParameters.params.length === 1 &&
+          !expr.typeParameters.extra?.trailingComma
+        ) {
+          const parameter = expr.typeParameters.params[0];
+          if (!parameter.constraint) {
+            // A single type parameter must either have constraints
+            // or a trailing comma, otherwise it's ambiguous with JSX.
+            invalidSingleType = parameter;
+          }
+        }
+
         return expr;
       }, state);
+
+      if (invalidSingleType) {
+        this.raise(
+          TSErrors.SingleTypeParameterWithoutTrailingComma,
+          {
+            at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
+          },
+          process.env.BABEL_8_BREAKING
+            ? invalidSingleType.name.name
+            : invalidSingleType.name,
+        );
+      }
 
       /*:: invariant(arrow.node != null) */
       if (!arrow.error && !arrow.aborted) {
