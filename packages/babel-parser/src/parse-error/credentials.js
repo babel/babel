@@ -7,7 +7,12 @@ export const ParseErrorCodes = Object.freeze({
 
 export type ParseErrorCode = $Values<typeof ParseErrorCodes>;
 
-export type SyntaxPlugin = "flow" | "typescript" | "jsx" | "placeholders";
+export type SyntaxPlugin =
+  | "flow"
+  | "typescript"
+  | "jsx"
+  | "pipelineOperator"
+  | "placeholders";
 
 export type ParseErrorCredentials = {
   code: ParseErrorCode,

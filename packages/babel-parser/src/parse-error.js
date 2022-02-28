@@ -12,12 +12,13 @@ const ArrayIsArray = Array.isArray;
 const {
   assign: ObjectAssign,
   defineProperty: ObjectDefineProperty,
+  getPrototypeOf: ObjectGetPrototypeOf,
   keys: ObjectKeys,
 } = Object;
 
 type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
 
-const NoMessage = Symbol("NoMessage");
+const DefaultMessage = Symbol("DefaultMessage");
 
 // This should really be an abstract class, but that concept doesn't exist in
 // Flow, outside of just creating an interface, but then you can't specify that
@@ -72,6 +73,19 @@ export class ParseError<ErrorDetails> extends SyntaxError {
     return this;
   }
 
+  clone({
+    loc,
+    details,
+  }: {
+    loc?: Position,
+    details?: ErrorDetails,
+  } = {}) {
+    return new (ObjectGetPrototypeOf(this).constructor)({
+      loc: loc || this.loc,
+      details: { ...this.details, ...details },
+    });
+  }
+
   get pos() {
     return this.loc.index;
   }
@@ -82,7 +96,7 @@ function toParseErrorClass<ErrorDetails>(
   credentials: ParseErrorCredentials,
 ): Class<ParseError<ErrorDetails>> {
   return class extends ParseError<ErrorDetails> {
-    #message: typeof NoMessage | string = NoMessage;
+    #message: typeof DefaultMessage | string = DefaultMessage;
 
     constructor(...args): ParseError<ErrorDetails> {
       super(...args);
@@ -92,7 +106,7 @@ function toParseErrorClass<ErrorDetails>(
     }
 
     get message() {
-      return this.#message !== NoMessage
+      return this.#message !== DefaultMessage
         ? String(this.#message)
         : `${toMessage(this.details)} (${this.loc.line}:${this.loc.column})`;
     }
