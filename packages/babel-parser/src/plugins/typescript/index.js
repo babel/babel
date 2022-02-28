@@ -185,9 +185,6 @@ const TSErrors = toParseErrorClasses`typescript`(_ => ({
     ({ modifier }) =>
       `Private elements cannot have an accessibility modifier ('${modifier}').`,
   ),
-  SingleTypeParameterWithoutTrailingComma: _<{ name: string }>(({ name }) =>
-    `Single type parameter ${name} should have a trailing comma. Example usage: <${name},>.`
-  ),
   ReadonlyForMethodSignature: _(
     "'readonly' modifier can only appear on a property declaration or index signature.",
   ),
@@ -205,6 +202,10 @@ const TSErrors = toParseErrorClasses`typescript`(_ => ({
   ),
   SetAccesorCannotHaveReturnType: _(
     "A 'set' accessor cannot have a return type annotation.",
+  ),
+  SingleTypeParameterWithoutTrailingComma: _<{| name: string |}>(
+    ({ name }) =>
+      `Single type parameter ${name} should have a trailing comma. Example usage: <${name},>.`,
   ),
   StaticBlockCannotHaveModifier: _(
     "Static class blocks cannot have any modifier.",

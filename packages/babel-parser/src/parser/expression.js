@@ -550,7 +550,9 @@ export default class ExpressionParser extends LValParser {
   parseHackPipeBody(): N.Expression {
     const { startLoc } = this.state;
     const body = this.parseMaybeAssign();
-    const requiredParentheses = UnparenthesizedPipeBodyDescriptions[body.type];
+    const requiredParentheses = UnparenthesizedPipeBodyDescriptions.has(
+      body.type,
+    );
 
     // TODO: Check how to handle type casts in Flow and TS once they are supported
     if (requiredParentheses && !body.extra?.parenthesized) {

@@ -1,17 +1,14 @@
 // @flow
 
 import { toParseErrorCredentials } from "../parse-error";
+import toNodeDescription from "./to-node-description";
 
-export const UnparenthesizedPipeBodyDescriptions = {
-  ArrowFunctionExpression: "arrow function",
-  AssignmentExpression: "assignment",
-  ConditionalExpression: "conditional",
-  YieldExpression: "yield",
-};
-
-type UnparenthesizedPipeBodyTypes = $Keys<
-  typeof UnparenthesizedPipeBodyDescriptions,
->;
+export const UnparenthesizedPipeBodyDescriptions = new Set<string>([
+  "ArrowFunctionExpression",
+  "AssignmentExpression",
+  "ConditionalExpression",
+  "YieldExpression",
+]);
 
 export default (_: typeof toParseErrorCredentials) => ({
   // This error is only used by the smart-mix proposal
@@ -31,9 +28,11 @@ export default (_: typeof toParseErrorCredentials) => ({
   PipeTopicUnused: _(
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
   ),
-  PipeUnparenthesizedBody: _<{| type: UnparenthesizedPipeBodyTypes |}>(
+  PipeUnparenthesizedBody: _<{| type: string |}>(
     ({ type }) =>
-      `Hack-style pipe body cannot be an unparenthesized ${UnparenthesizedPipeBodyDescriptions[type]} expression; please wrap it in parentheses.`,
+      `Hack-style pipe body cannot be an unparenthesized ${toNodeDescription({
+        type,
+      })}; please wrap it in parentheses.`,
   ),
 
   // Messages whose codes start with “Pipeline” or “PrimaryTopic”
