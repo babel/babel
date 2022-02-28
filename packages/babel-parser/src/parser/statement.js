@@ -1175,7 +1175,7 @@ export default class StatementParser extends ExpressionParser {
     if (init.type === "AssignmentPattern") {
       this.raise(Errors.InvalidLhs, {
         at: init,
-        context: { type: "ForStatement" },
+        ancestor: { type: "ForStatement" },
       });
     }
 

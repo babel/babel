@@ -3,7 +3,7 @@
 import { toParseErrorCredentials } from "../parse-error";
 import toNodeDescription from "./to-node-description";
 
-export type LHSParent =
+export type LValAncestor =
   | { type: "UpdateExpression", prefix: boolean }
   | {
       type:
@@ -145,12 +145,13 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidIdentifier: _<{| identifier: string |}>(
     ({ identifier }) => `Invalid identifier ${identifier}.`,
   ),
-  InvalidLhs: _<{| context: LHSParent |}>(
-    ({ context }) => `Invalid left-hand side in ${toNodeDescription(context)}.`,
+  InvalidLhs: _<{| ancestor: LValAncestor |}>(
+    ({ ancestor }) =>
+      `Invalid left-hand side in ${toNodeDescription(ancestor)}.`,
   ),
-  InvalidLhsBinding: _<{| context: LHSParent |}>(
-    ({ context }) =>
-      `Binding invalid left-hand side in ${toNodeDescription(context)}.`,
+  InvalidLhsBinding: _<{| ancestor: LValAncestor |}>(
+    ({ ancestor }) =>
+      `Binding invalid left-hand side in ${toNodeDescription(ancestor)}.`,
   ),
   InvalidNumber: _("Invalid number."),
   InvalidOrMissingExponent: _(

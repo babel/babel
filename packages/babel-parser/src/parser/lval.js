@@ -32,7 +32,7 @@ import {
   BIND_SCOPE_LEXICAL,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
-import { Errors, type LHSParent } from "../parse-error";
+import { Errors, type LValAncestor } from "../parse-error";
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
@@ -535,7 +535,7 @@ export default class LValParser extends NodeUtils {
       allowingSloppyLetBinding = !(binding & BIND_SCOPE_LEXICAL),
       hasParenthesizedAncestor = false,
     }: {
-      in: LHSParent,
+      in: LValAncestor,
       binding?: BindingTypes,
       checkClashes?: Set<string> | false,
       strictModeChanged?: boolean,
@@ -592,7 +592,7 @@ export default class LValParser extends NodeUtils {
 
       this.raise(ParseErrorClass, {
         at: expression,
-        context:
+        ancestor:
           ancestor.type === "UpdateExpression"
             ? { type: "UpdateExpression", prefix: ancestor.prefix }
             : { type: ancestor.type },
