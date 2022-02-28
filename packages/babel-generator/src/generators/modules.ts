@@ -177,38 +177,41 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   this.word("import");
   this.space();
 
-  if (node.importKind === "type" || node.importKind === "typeof") {
+  const isTypeKind = node.importKind === "type" || node.importKind === "typeof";
+  if (isTypeKind) {
     this.word(node.importKind);
     this.space();
   }
 
   const specifiers = node.specifiers.slice(0);
-  if (specifiers?.length) {
-    // print "special" specifiers first
-    for (;;) {
-      const first = specifiers[0];
-      if (
-        isImportDefaultSpecifier(first) ||
-        isImportNamespaceSpecifier(first)
-      ) {
-        this.print(specifiers.shift(), node);
-        if (specifiers.length) {
-          this.token(",");
-          this.space();
-        }
-      } else {
-        break;
+  const hasSpecifiers = !!specifiers.length;
+  // print "special" specifiers first. The loop condition is constant,
+  // but there is a "break" in the body.
+  while (hasSpecifiers) {
+    const first = specifiers[0];
+    if (isImportDefaultSpecifier(first) || isImportNamespaceSpecifier(first)) {
+      this.print(specifiers.shift(), node);
+      if (specifiers.length) {
+        this.token(",");
+        this.space();
       }
+    } else {
+      break;
     }
+  }
 
-    if (specifiers.length) {
-      this.token("{");
-      this.space();
-      this.printList(specifiers, node);
-      this.space();
-      this.token("}");
-    }
+  if (specifiers.length) {
+    this.token("{");
+    this.space();
+    this.printList(specifiers, node);
+    this.space();
+    this.token("}");
+  } else if (isTypeKind && !hasSpecifiers) {
+    this.token("{");
+    this.token("}");
+  }
 
+  if (hasSpecifiers || isTypeKind) {
     this.space();
     this.word("from");
     this.space();
