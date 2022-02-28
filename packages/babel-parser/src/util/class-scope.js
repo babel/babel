@@ -55,7 +55,7 @@ export default class ClassScopeHandler {
       } else {
         this.parser.raise(Errors.InvalidPrivateFieldResolution, {
           at: loc,
-          name,
+          identifierName: name,
         });
       }
     }
@@ -91,7 +91,10 @@ export default class ClassScopeHandler {
     }
 
     if (redefined) {
-      this.parser.raise(Errors.PrivateNameRedeclaration, { at: loc, name });
+      this.parser.raise(Errors.PrivateNameRedeclaration, {
+        at: loc,
+        identifierName: name,
+      });
     }
 
     privateNames.add(name);
@@ -110,7 +113,7 @@ export default class ClassScopeHandler {
       // top-level
       this.parser.raise(Errors.InvalidPrivateFieldResolution, {
         at: loc,
-        name,
+        identifierName: name,
       });
     }
   }

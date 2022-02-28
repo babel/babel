@@ -423,7 +423,10 @@ export default class ExpressionParser extends LValParser {
         !this.prodParam.hasIn ||
         !this.match(tt._in)
       ) {
-        this.raise(Errors.PrivateInExpectedIn, { at: left, name: value });
+        this.raise(Errors.PrivateInExpectedIn, {
+          at: left,
+          identifierName: value,
+        });
       }
 
       this.classScope.usePrivateName(value, left.loc.start);
@@ -1193,7 +1196,7 @@ export default class ExpressionParser extends LValParser {
         // behavior of this big switch statement).
         this.raise(Errors.PrivateInExpectedIn, {
           at: this.state.startLoc,
-          name: this.state.value,
+          identifierName: this.state.value,
         });
         return this.parsePrivateName();
       }

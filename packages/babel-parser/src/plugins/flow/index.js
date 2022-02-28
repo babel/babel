@@ -2321,7 +2321,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!this.isIterator(word) || !this.state.inType) {
         this.raise(Errors.InvalidIdentifier, {
           at: this.state.curPosition(),
-          identifier: fullWord,
+          identifierName: fullWord,
         });
       }
 

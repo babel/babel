@@ -142,8 +142,8 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidEscapedReservedWord: _<{| reservedWord: string |}>(
     ({ reservedWord }) => `Escape sequence in keyword ${reservedWord}.`,
   ),
-  InvalidIdentifier: _<{| identifier: string |}>(
-    ({ identifier }) => `Invalid identifier ${identifier}.`,
+  InvalidIdentifier: _<{| identifierName: string |}>(
+    ({ identifierName }) => `Invalid identifier ${identifierName}.`,
   ),
   InvalidLhs: _<{| ancestor: LValAncestor |}>(
     ({ ancestor }) =>
@@ -163,8 +163,8 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidParenthesizedAssignment: _(
     "Invalid parenthesized assignment pattern.",
   ),
-  InvalidPrivateFieldResolution: _<{| name: string |}>(
-    ({ name }) => `Private name #${name} is not defined.`,
+  InvalidPrivateFieldResolution: _<{| identifierName: string |}>(
+    ({ identifierName }) => `Private name #${identifierName} is not defined.`,
   ),
   InvalidPropertyBindingPattern: _("Binding member expression."),
   InvalidRecordProperty: _(
@@ -242,12 +242,12 @@ export default (_: typeof toParseErrorCredentials) => ({
   ParamDupe: _("Argument name clash."),
   PatternHasAccessor: _("Object pattern can't contain getter or setter."),
   PatternHasMethod: _("Object pattern can't contain methods."),
-  PrivateInExpectedIn: _<{| name: string |}>(
-    ({ name }) =>
-      `Private names are only allowed in property accesses (\`obj.#${name}\`) or in \`in\` expressions (\`#${name} in obj\`).`,
+  PrivateInExpectedIn: _<{| identifierName: string |}>(
+    ({ identifierName }) =>
+      `Private names are only allowed in property accesses (\`obj.#${identifierName}\`) or in \`in\` expressions (\`#${identifierName} in obj\`).`,
   ),
-  PrivateNameRedeclaration: _<{| name: string |}>(
-    ({ name }) => `Duplicate private name #${name}.`,
+  PrivateNameRedeclaration: _<{| identifierName: string |}>(
+    ({ identifierName }) => `Duplicate private name #${identifierName}.`,
   ),
   RecordExpressionBarIncorrectEndSyntaxType: _(
     "Record expressions ending with '|}' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'.",
@@ -345,8 +345,9 @@ export default (_: typeof toParseErrorCredentials) => ({
   UnterminatedRegExp: _("Unterminated regular expression."),
   UnterminatedString: _("Unterminated string constant."),
   UnterminatedTemplate: _("Unterminated template."),
-  VarRedeclaration: _<{| name: string |}>(
-    ({ name }) => `Identifier '${name}' has already been declared.`,
+  VarRedeclaration: _<{| identifierName: string |}>(
+    ({ identifierName }) =>
+      `Identifier '${identifierName}' has already been declared.`,
   ),
   YieldBindingIdentifier: _(
     "Can not use 'yield' as identifier inside a generator.",
