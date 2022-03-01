@@ -5,6 +5,7 @@ import {
   convertVariableDeclaration,
   convertAssignmentExpression,
 } from "./util";
+export { buildObjectExcludingKeys } from "./util";
 
 /**
  * Test if a VariableDeclaration's declarations contains any Patterns.
