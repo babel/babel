@@ -330,9 +330,12 @@ export default (_: typeof toParseErrorCredentials) => ({
   UnsupportedImport: _(
     "`import` can only be used in `import()` or `import.meta`.",
   ),
-  UnsupportedMetaProperty: _<{| target: string, onlyValidProperty: string |}>(
-    ({ target, onlyValidProperty }) =>
-      `The only valid meta property for ${target} is ${target}.${onlyValidProperty}.`,
+  UnsupportedMetaProperty: _<{|
+    target: string,
+    onlyValidPropertyName: string,
+  |}>(
+    ({ target, onlyValidPropertyName }) =>
+      `The only valid meta property for ${target} is ${target}.${onlyValidPropertyName}.`,
   ),
   UnsupportedParameterDecorator: _(
     "Decorators cannot be used to decorate parameters.",

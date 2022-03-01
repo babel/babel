@@ -1591,7 +1591,7 @@ export default class ExpressionParser extends LValParser {
       this.raise(Errors.UnsupportedMetaProperty, {
         at: node.property,
         target: meta.name,
-        onlyValidProperty: propertyName,
+        onlyValidPropertyName: propertyName,
       });
     }
 

@@ -203,9 +203,9 @@ const TSErrors = toParseErrorClasses`typescript`(_ => ({
   SetAccesorCannotHaveReturnType: _(
     "A 'set' accessor cannot have a return type annotation.",
   ),
-  SingleTypeParameterWithoutTrailingComma: _<{| name: string |}>(
-    ({ name }) =>
-      `Single type parameter ${name} should have a trailing comma. Example usage: <${name},>.`,
+  SingleTypeParameterWithoutTrailingComma: _<{| typeParameterName: string |}>(
+    ({ typeParameterName }) =>
+      `Single type parameter ${typeParameterName} should have a trailing comma. Example usage: <${typeParameterName},>.`,
   ),
   StaticBlockCannotHaveModifier: _(
     "Static class blocks cannot have any modifier.",
@@ -3143,7 +3143,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (invalidSingleType) {
         this.raise(TSErrors.SingleTypeParameterWithoutTrailingComma, {
           at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
-          name: process.env.BABEL_8_BREAKING
+          typeParameterName: process.env.BABEL_8_BREAKING
             ? invalidSingleType.name.name
             : invalidSingleType.name,
         });
