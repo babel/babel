@@ -18,7 +18,7 @@ const {
 
 type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
 
-const DefaultMessage = Symbol("DefaultMessage");
+const StandardMessage = Symbol("StandardMessage");
 
 // This should really be an abstract class, but that concept doesn't exist in
 // Flow, outside of just creating an interface, but then you can't specify that
@@ -96,7 +96,7 @@ function toParseErrorClass<ErrorDetails>(
   credentials: ParseErrorCredentials,
 ): Class<ParseError<ErrorDetails>> {
   return class extends ParseError<ErrorDetails> {
-    #message: typeof DefaultMessage | string = DefaultMessage;
+    #message: typeof StandardMessage | string = StandardMessage;
 
     constructor(...args): ParseError<ErrorDetails> {
       super(...args);
@@ -106,7 +106,7 @@ function toParseErrorClass<ErrorDetails>(
     }
 
     get message() {
-      return this.#message !== DefaultMessage
+      return this.#message !== StandardMessage
         ? String(this.#message)
         : `${toMessage(this.details)} (${this.loc.line}:${this.loc.column})`;
     }
