@@ -3313,12 +3313,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           TSParameterProperty: "parameter",
           TSNonNullExpression: "expression",
           TSAsExpression: (binding !== BIND_NONE || isParenthesized) && [
-            true,
             "expression",
+            true,
           ],
           TSTypeAssertion: (binding !== BIND_NONE || isParenthesized) && [
-            true,
             "expression",
+            true,
           ],
         }[type] || super.isValidLVal(type, isParenthesized, binding)
       );

@@ -34,6 +34,8 @@ import {
 import { ExpressionErrors } from "./util";
 import { Errors, type LValAncestor } from "../parse-error";
 
+const { isArray: ArrayIsArray } = Array;
+
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
     ? unwrapParenthesizedExpression(node.expression)
@@ -493,7 +495,35 @@ export default class LValParser extends NodeUtils {
     node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");
   }
-
+  /**
+   * Return information use in determining whether a Node of a given type is an LVal,
+   * possibly given certain additional context information.
+   *
+   * Subclasser notes: This method has kind of a lot of mixed, but related,
+   * responsibilities. If we can definitively determine with the information
+   * provided that this either *is* or *isn't* a valid `LVal`, then the return
+   * value is easy: just return `true` or `false`. However, if it is a valid
+   * LVal *ancestor*, and thus it's descendents must be subsquently visited to
+   * continue the "investigation", then this method should return the relevant
+   * child key as a `string`. In some special cases, you additionally want to
+   * convey that this node should be treated as if it were parenthesized. In
+   * that case, a tuple of [key: string, parenthesized: boolean] is returned.
+   * The `string`-only return option is actually just a shorthand for:
+   * `[key: string, parenthesized: false]`.
+   *
+   * @param {NodeType} type A Node `type` string
+   * @param {boolean} isParenthesized
+   *        Whether the node in question is parenthesized.
+   * @param {BindingTypes} binding
+   *        The binding operation that is being considered for this potential
+   *        LVal.
+   * @returns { boolean | string | [string, boolean] }
+   *          `true` or `false` if we can immediately determine whether the node
+   *          type in question can be treated as an `LVal`.
+   *          A `string` key to traverse if we must check this child.
+   *          A `[string, boolean]` tuple if we need to check this child and
+   *          treat is as parenthesized.
+   */
   // eslint-disable-next-line no-unused-vars
   isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
     return (
@@ -509,19 +539,32 @@ export default class LValParser extends NodeUtils {
   }
 
   /**
-   * Verify that if a node is an lval - something that can be assigned to.
+   * Verify that a target expression is an val (something that can be assigned to).
    *
-   * @param {Expression} expr The given node
-   * @param {string} contextDescription The auxiliary context information printed when error is thrown
-   * @param {BindingTypes} [bindingType=BIND_NONE] The desired binding type. If the given node is an identifier and `bindingType` is not
-                                                   BIND_NONE, `checkLVal` will register binding to the parser scope
-                                                   See also src/util/scopeflags.js
-   * @param {?Set<string>} checkClashes An optional string set to check if an identifier name is included. `checkLVal` will add checked
-                                        identifier name to `checkClashes` It is used in tracking duplicates in function parameter lists. If
-                                        it is nullish, `checkLVal` will skip duplicate checks
-   * @param {boolean} [disallowLetBinding] Whether an identifier named "let" should be disallowed
-   * @param {boolean} [strictModeChanged=false] Whether an identifier has been parsed in a sloppy context but should be reinterpreted as
-                                                strict-mode. e.g. `(arguments) => { "use strict "}`
+   * @param {Expression} expression The expression in question to check.
+   * @param {Object} options A set of options described below.
+   * @param {LValAncestor} options.in
+   *        The relevant ancestor to provide context information for the error
+   *        if the check fails.
+   * @param {BindingTypes} [options.binding=BIND_NONE]
+   *        The desired binding type. If the given expression is an identifier
+   *        and `binding` is not `BIND_NONE`, `checkLVal` will register binding
+   *        to the parser scope See also `src/util/scopeflags.js`
+   * @param {Set<string>|false} [options.checkClashes=false]
+   *        An optional string set to check if an identifier name is included.
+   *        `checkLVal` will add checked identifier name to `checkClashes` It is
+   *        used in tracking duplicates in function parameter lists. If it is
+   *        nullish, `checkLVal` will skip duplicate checks
+   * @param {boolean} [options.allowingSloppyLetBinding]
+   *        Whether an identifier named "let" should be allowed in sloppy mode.
+   *        Defaults to `true` unless lexical scope its being used. This property
+   *        is only relevant if the parser's state is in sloppy mode.
+   * @param {boolean} [options.strictModeChanged=false]
+   *        Whether an identifier has been parsed in a sloppy context but should
+   *        be reinterpreted as strict-mode. e.g. `(arguments) => { "use strict "}`
+   * @param {boolean} [options.hasParenthesizedAncestor=false]
+   *        This is only used internally during recursive calls, and you should
+   *        not have to set it yourself.
    * @memberof LValParser
    */
 
@@ -600,9 +643,9 @@ export default class LValParser extends NodeUtils {
       return;
     }
 
-    const isParenthesizedExpression =
-      type === "ParenthesizedExpression" || Array.isArray(validity);
-    const key = Array.isArray(validity) ? validity[1] : validity;
+    const [key, isParenthesizedExpression] = ArrayIsArray(validity)
+      ? validity
+      : [validity, type === "ParenthesizedExpression"];
     const nextAncestor =
       expression.type === "ArrayPattern" ||
       expression.type === "ObjectPattern" ||
