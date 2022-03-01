@@ -290,7 +290,10 @@ export class DestructuringTransformer {
         const key = prop.key;
         if (prop.computed && !this.scope.isPure(key)) {
           const name = this.scope.generateUidIdentifierBasedOnNode(key);
-          this.nodes.push(this.buildVariableDeclaration(name, key));
+          this.nodes.push(
+            //@ts-expect-error PrivateName has been handled by destructuring-private
+            this.buildVariableDeclaration(name, key),
+          );
           if (!copiedPattern) {
             copiedPattern = pattern = {
               ...pattern,
@@ -630,7 +633,7 @@ export function convertAssignmentExpression(
   objectRestNoSymbols: boolean,
   useBuiltIns: boolean,
 ) {
-  const { node, scope } = path;
+  const { node, scope, parentPath } = path;
 
   const nodes = [];
 
@@ -646,7 +649,11 @@ export function convertAssignmentExpression(
   });
 
   let ref: t.Identifier | void;
-  if (path.isCompletionRecord() || !path.parentPath.isExpressionStatement()) {
+  if (
+    (!parentPath.isExpressionStatement() &&
+      !parentPath.isSequenceExpression()) ||
+    path.isCompletionRecord()
+  ) {
     ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
     nodes.push(
@@ -661,7 +668,7 @@ export function convertAssignmentExpression(
   destructuring.init(node.left, ref || node.right);
 
   if (ref) {
-    if (path.parentPath.isArrowFunctionExpression()) {
+    if (parentPath.isArrowFunctionExpression()) {
       path.replaceWith(t.blockStatement([]));
       nodes.push(t.returnStatement(t.cloneNode(ref)));
     } else {
