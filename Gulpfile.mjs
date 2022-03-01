@@ -459,6 +459,7 @@ function copyDts(packages) {
 
 const libBundles = [
   "packages/babel-parser",
+  "packages/babel-plugin-proposal-destructuring-private",
   "packages/babel-plugin-proposal-object-rest-spread",
   "packages/babel-plugin-proposal-optional-chaining",
   "packages/babel-preset-react",
