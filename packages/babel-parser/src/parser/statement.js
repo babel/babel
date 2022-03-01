@@ -957,7 +957,7 @@ export default class StatementParser extends ExpressionParser {
       if (label.name === maybeName) {
         this.raise(Errors.LabelRedeclaration, {
           at: expr,
-          label: maybeName,
+          labelName: maybeName,
         });
       }
     }

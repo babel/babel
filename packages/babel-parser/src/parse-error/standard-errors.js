@@ -173,8 +173,8 @@ export default (_: typeof toParseErrorCredentials) => ({
     "Only properties and spread elements are allowed in record definitions.",
   ),
   InvalidRestAssignmentPattern: _("Invalid rest operator's argument."),
-  LabelRedeclaration: _<{| label: string |}>(
-    ({ label }) => `Label '${label}' is already declared.`,
+  LabelRedeclaration: _<{| labelName: string |}>(
+    ({ labelName }) => `Label '${labelName}' is already declared.`,
   ),
   LetInLexicalBinding: _(
     "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
