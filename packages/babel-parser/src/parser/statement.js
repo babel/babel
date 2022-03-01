@@ -1168,7 +1168,7 @@ export default class StatementParser extends ExpressionParser {
     ) {
       this.raise(Errors.ForInOfLoopInitializer, {
         at: init,
-        construct: isForIn ? "for-in" : "for-of",
+        type: isForIn ? "ForInStatement" : "ForOfStatement",
       });
     }
 

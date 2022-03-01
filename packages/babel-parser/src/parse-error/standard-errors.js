@@ -92,9 +92,11 @@ export default (_: typeof toParseErrorCredentials) => ({
     "'from' is not allowed as an identifier after 'export default'.",
   ),
 
-  ForInOfLoopInitializer: _<{| construct: "for-in" | "for-of" |}>(
-    ({ construct }) =>
-      `'${construct}' loop variable declaration may not have an initializer.`,
+  ForInOfLoopInitializer: _<{| type: "ForInStatement" | "ForOfStatement" |}>(
+    ({ type }) =>
+      `'${
+        type === "ForInStatement" ? "for-in" : "for-of"
+      }' loop variable declaration may not have an initializer.`,
   ),
 
   ForOfAsync: _("The left-hand side of a for-of loop may not be 'async'."),
