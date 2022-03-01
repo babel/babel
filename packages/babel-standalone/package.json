@@ -14,6 +14,7 @@
     "@babel/plugin-proposal-class-properties": "workspace:^",
     "@babel/plugin-proposal-class-static-block": "workspace:^",
     "@babel/plugin-proposal-decorators": "workspace:^",
+    "@babel/plugin-proposal-destructuring-private": "workspace:^",
     "@babel/plugin-proposal-do-expressions": "workspace:^",
     "@babel/plugin-proposal-dynamic-import": "workspace:^",
     "@babel/plugin-proposal-export-default-from": "workspace:^",

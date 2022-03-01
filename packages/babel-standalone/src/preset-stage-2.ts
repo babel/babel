@@ -23,7 +23,7 @@ export default (_: any, opts: any = {}) => {
           decoratorsBeforeExport,
         },
       ],
-      babelPlugins.syntaxDestructuringPrivate,
+      babelPlugins.proposalDestructuringPrivate,
       [
         babelPlugins.proposalPipelineOperator,
         { proposal: pipelineProposal, topicToken: pipelineTopicToken },

@@ -62,5 +62,19 @@ const require = createRequire(import.meta.url);
       }).code;
       expect(output).toMatch("babelHelpers.applyDecs");
     });
+    it("should support private destructuring", () => {
+      const output = Babel.transform("class C { #x; m({ #x: x}) {} }", {
+        plugins: [["external-helpers", { helperVersion: "7.100.0" }]],
+        presets: [
+          [
+            "stage-1",
+            {
+              decoratorsVersion: "2021-12",
+            },
+          ],
+        ],
+      }).code;
+      expect(output).not.toContain("#x:");
+    });
   },
 );
