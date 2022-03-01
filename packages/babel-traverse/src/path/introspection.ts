@@ -135,10 +135,10 @@ export function isCompletionRecord(
   let first = true;
 
   do {
-    const container = path.container;
+    const { type, container } = path;
 
     // we're in a function so can't be a completion record
-    if (path.isFunction() && !first) {
+    if (!first && (path.isFunction() || type === "StaticBlock")) {
       return !!allowInsideFunction;
     }
 
