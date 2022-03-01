@@ -833,6 +833,9 @@ defineType("ObjectProperty", {
           "Identifier",
           "StringLiteral",
           "NumericLiteral",
+          "BigIntLiteral",
+          "DecimalLiteral",
+          "PrivateName",
         );
         const computed = assertNodeType("Expression");
 
@@ -846,6 +849,9 @@ defineType("ObjectProperty", {
           "Identifier",
           "StringLiteral",
           "NumericLiteral",
+          "BigIntLiteral",
+          "DecimalLiteral",
+          "PrivateName",
         ];
         return validator;
       })(),

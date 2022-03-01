@@ -12,7 +12,7 @@ export default function toComputedKey(
     | t.MemberExpression
     | t.OptionalMemberExpression,
   // @ts-expect-error todo(flow->ts): maybe check the type of node before accessing .key and .property
-  key: t.Expression = node.key || node.property,
+  key: t.Expression | t.PrivateName = node.key || node.property,
 ) {
   if (!node.computed && isIdentifier(key)) key = stringLiteral(key.name);
 

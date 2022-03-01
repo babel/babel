@@ -383,7 +383,14 @@ export function objectMethod(
   });
 }
 export function objectProperty(
-  key: t.Expression | t.Identifier | t.StringLiteral | t.NumericLiteral,
+  key:
+    | t.Expression
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.DecimalLiteral
+    | t.PrivateName,
   value: t.Expression | t.PatternLike,
   computed: boolean = false,
   shorthand: boolean = false,

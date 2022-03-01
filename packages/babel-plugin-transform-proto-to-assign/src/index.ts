@@ -12,7 +12,6 @@ export default declare(api => {
     const left = node;
     return (
       t.isMemberExpression(left) &&
-      // @ts-expect-error todo(flow->ts): property can be t.PrivateName
       t.isLiteral(t.toComputedKey(left, left.property), { value: "__proto__" })
     );
   }
