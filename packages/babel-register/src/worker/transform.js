@@ -122,6 +122,7 @@ function cacheLookup(opts, filename) {
     cached: null,
     store(value) {
       cache[cacheKey] = { value, mtime: fileMtime };
+      registerCache.setDirty();
       return value;
     },
   };

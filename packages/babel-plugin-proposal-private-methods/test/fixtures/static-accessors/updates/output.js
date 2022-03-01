@@ -16,13 +16,13 @@ class Cl {
   }
 
   static testUpdates() {
-    var _Cl$privateFieldValue, _Cl$privateFieldValue2;
+    var _Cl$privateFieldValue, _Cl$privateFieldValue2, _Cl$privateFieldValue3, _Cl$privateFieldValue4, _Cl$privateFieldValue5;
 
     babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateField, 0);
     Cl.publicField = 0;
-    babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateFieldValue, (babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateFieldValue, (_Cl$privateFieldValue2 = +babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateFieldValue)) + 1), _Cl$privateFieldValue2));
+    babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateFieldValue, (babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateFieldValue, (_Cl$privateFieldValue3 = babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateFieldValue), _Cl$privateFieldValue4 = _Cl$privateFieldValue3++, _Cl$privateFieldValue3)), _Cl$privateFieldValue4));
     Cl.publicFieldValue = Cl.publicFieldValue++;
-    babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateFieldValue, +babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateFieldValue) + 1);
+    babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateFieldValue, (_Cl$privateFieldValue5 = babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateFieldValue), ++_Cl$privateFieldValue5));
     ++Cl.publicFieldValue;
     babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateFieldValue, babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateFieldValue) + 1);
     Cl.publicFieldValue += 1;
