@@ -230,72 +230,14 @@ export class DestructuringTransformer {
     spreadProp: t.RestElement,
     spreadPropIndex: number,
   ) {
-    // get all the keys that appear in this object before the current spread
-
-    const keys = [];
-    let allLiteral = true;
-    let hasTemplateLiteral = false;
-    for (let i = 0; i < pattern.properties.length; i++) {
-      const prop = pattern.properties[i];
-
-      // we've exceeded the index of the spread property to all properties to the
-      // right need to be ignored
-      if (i >= spreadPropIndex) break;
-
-      // ignore other spread properties
-      if (t.isRestElement(prop)) continue;
-
-      const key = prop.key;
-      if (t.isIdentifier(key) && !prop.computed) {
-        keys.push(t.stringLiteral(key.name));
-      } else if (t.isTemplateLiteral(key)) {
-        keys.push(t.cloneNode(key));
-        hasTemplateLiteral = true;
-      } else if (t.isLiteral(key)) {
-        // @ts-expect-error todo(flow->ts) NullLiteral
-        keys.push(t.stringLiteral(String(key.value)));
-      } else {
-        keys.push(t.cloneNode(key));
-        allLiteral = false;
-      }
-    }
-
-    let value;
-    if (keys.length === 0) {
-      value = t.callExpression(this.getExtendsHelper(), [
-        t.objectExpression([]),
-        t.cloneNode(objRef),
-      ]);
-    } else {
-      let keyExpression: t.Expression = t.arrayExpression(keys);
-
-      if (!allLiteral) {
-        keyExpression = t.callExpression(
-          t.memberExpression(keyExpression, t.identifier("map")),
-          [this.addHelper("toPropertyKey")],
-        );
-      } else if (!hasTemplateLiteral && !t.isProgram(this.scope.block)) {
-        // Hoist definition of excluded keys, so that it's not created each time.
-        const program = this.scope.path.findParent(path => path.isProgram());
-        const id = this.scope.generateUidIdentifier("excluded");
-
-        program.scope.push({
-          id,
-          init: keyExpression,
-          kind: "const",
-        });
-
-        keyExpression = t.cloneNode(id);
-      }
-
-      value = t.callExpression(
-        this.addHelper(
-          `objectWithoutProperties${this.objectRestNoSymbols ? "Loose" : ""}`,
-        ),
-        [t.cloneNode(objRef), keyExpression],
-      );
-    }
-
+    const value = buildObjectExcludingKeys(
+      pattern.properties.slice(0, spreadPropIndex) as t.ObjectProperty[],
+      objRef,
+      this.scope,
+      name => this.addHelper(name),
+      this.objectRestNoSymbols,
+      this.useBuiltIns,
+    );
     // @ts-expect-error: The argument of a RestElement in ObjectPattern must not be an ArrayPattern
     this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
   }
@@ -530,6 +472,82 @@ export class DestructuringTransformer {
 
     return this.nodes;
   }
+}
+
+interface ExcludingKey {
+  key: t.Expression | t.PrivateName;
+  computed: boolean;
+}
+
+export function buildObjectExcludingKeys<T extends ExcludingKey>(
+  excludedKeys: T[],
+  objRef: t.Expression,
+  scope: Scope,
+  addHelper: File["addHelper"],
+  objectRestNoSymbols: boolean,
+  useBuiltIns: boolean,
+): t.CallExpression {
+  // get all the keys that appear in this object before the current spread
+
+  const keys = [];
+  let allLiteral = true;
+  let hasTemplateLiteral = false;
+  for (let i = 0; i < excludedKeys.length; i++) {
+    const prop = excludedKeys[i];
+    const key = prop.key;
+    if (t.isIdentifier(key) && !prop.computed) {
+      keys.push(t.stringLiteral(key.name));
+    } else if (t.isTemplateLiteral(key)) {
+      keys.push(t.cloneNode(key));
+      hasTemplateLiteral = true;
+    } else if (t.isLiteral(key)) {
+      // @ts-expect-error todo(flow->ts) NullLiteral
+      keys.push(t.stringLiteral(String(key.value)));
+    } else if (t.isPrivateName(key)) {
+      // private key is not enumerable
+    } else {
+      keys.push(t.cloneNode(key));
+      allLiteral = false;
+    }
+  }
+
+  let value;
+  if (keys.length === 0) {
+    const extendsHelper = useBuiltIns
+      ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+      : addHelper("extends");
+    value = t.callExpression(extendsHelper, [
+      t.objectExpression([]),
+      t.cloneNode(objRef),
+    ]);
+  } else {
+    let keyExpression: t.Expression = t.arrayExpression(keys);
+
+    if (!allLiteral) {
+      keyExpression = t.callExpression(
+        t.memberExpression(keyExpression, t.identifier("map")),
+        [addHelper("toPropertyKey")],
+      );
+    } else if (!hasTemplateLiteral && !t.isProgram(scope.block)) {
+      // Hoist definition of excluded keys, so that it's not created each time.
+      const programScope = scope.getProgramParent();
+      const id = programScope.generateUidIdentifier("excluded");
+
+      programScope.push({
+        id,
+        init: keyExpression,
+        kind: "const",
+      });
+
+      keyExpression = t.cloneNode(id);
+    }
+
+    value = t.callExpression(
+      addHelper(`objectWithoutProperties${objectRestNoSymbols ? "Loose" : ""}`),
+      [t.cloneNode(objRef), keyExpression],
+    );
+  }
+  return value;
 }
 
 export function convertVariableDeclaration(
