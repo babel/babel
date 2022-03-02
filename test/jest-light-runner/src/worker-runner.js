@@ -4,14 +4,14 @@ import { performance } from "perf_hooks";
 import snapshot from "jest-snapshot";
 import expect from "expect";
 import * as circus from "jest-circus";
-import { inspect } from "util"
+import { inspect } from "util";
 
 import "./global-setup.js";
 
-/** @typedef {{ failures: number, passses: number, pending: number, start: number, end: number }} Stats */
-/** @typedef {{ ancestors: string[], title: string, errors: Error[], skipped: boolean }} InternalTestResult */
+/** @typedef {{ failures: number, passes: number, pending: number, start: number, end: number }} Stats */
+/** @typedef {{ ancestors: string[], title: string, duration: number, errors: Error[], skipped: boolean }} InternalTestResult */
 
-// Node.js workers (worker_therads) don't support
+// Node.js workers (worker_threads) don't support
 // process.chdir, that we use multiple times in our tests.
 // We can "polyfill" it for process.cwd() usage, but it
 // won't affect path.* and fs.* functions.
@@ -53,7 +53,7 @@ export default async function ({
   stats.end = performance.now();
 
   snapshotState._inlineSnapshots.forEach(({ frame }) => {
-    // When using native ESM, errors have an URL location.
+    // When using native ESM, errors have a URL location.
     // Jest expects paths.
     frame.file = fileURLToPath(frame.file);
   });
@@ -140,7 +140,7 @@ async function runTest(fn, stats, results, ancestors, name) {
     errors.push(error);
   });
 
-  // Get suppressed errors from ``jest-matchers`` that weren't throw during
+  // Get suppressed errors from ``jest-matchers`` that weren't thrown during
   // test execution and add them to the test result, potentially failing
   // a passing test.
   const { suppressedErrors } = expect.getState();

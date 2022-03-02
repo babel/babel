@@ -33,13 +33,12 @@ function test(name, command, directory, output, first) {
   });
 
   const expectedPath = path.join(__dirname, "expected-bundler.txt");
-  let expected = fs.readFileSync(expectedPath, "utf8");
+  const expected = fs.readFileSync(expectedPath, "utf8");
 
   if (expected === out) {
     console.log("OK");
   } else if (first && process.env.OVERWRITE) {
     fs.writeFileSync(expectedPath, out);
-    expected = out;
     console.log("UPDATED");
   } else {
     console.error("FAILED\n");
