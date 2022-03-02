@@ -166,36 +166,35 @@ export default declare((api, opts: Options) => {
       // property is only added once. This is necessary for cases like
       // using `transform-classes`, which causes this visitor to run
       // twice.
-      const parameterProperties = [];
-      for (const param of path.node.params) {
-        if (
-          param.type === "TSParameterProperty" &&
-          !PARSED_PARAMS.has(param.parameter)
-        ) {
-          PARSED_PARAMS.add(param.parameter);
-          parameterProperties.push(param.parameter);
-        }
-      }
-
-      if (parameterProperties.length) {
-        const assigns = parameterProperties.map(p => {
+      const assigns = [];
+      const { scope } = path;
+      for (const paramPath of path.get("params")) {
+        const param = paramPath.node;
+        if (param.type === "TSParameterProperty") {
+          const parameter = param.parameter;
+          if (PARSED_PARAMS.has(parameter)) continue;
+          PARSED_PARAMS.add(parameter);
           let id;
-          if (t.isIdentifier(p)) {
-            id = p;
-          } else if (t.isAssignmentPattern(p) && t.isIdentifier(p.left)) {
-            id = p.left;
+          if (t.isIdentifier(parameter)) {
+            id = parameter;
+          } else if (
+            t.isAssignmentPattern(parameter) &&
+            t.isIdentifier(parameter.left)
+          ) {
+            id = parameter.left;
           } else {
-            throw path.buildCodeFrameError(
+            throw paramPath.buildCodeFrameError(
               "Parameter properties can not be destructuring patterns.",
             );
           }
+          assigns.push(template.statement.ast`
+          this.${t.cloneNode(id)} = ${t.cloneNode(id)}`);
 
-          return template.statement.ast`
-              this.${t.cloneNode(id)} = ${t.cloneNode(id)}`;
-        });
-
-        injectInitialization(classPath, path, assigns);
+          paramPath.replaceWith(paramPath.get("parameter"));
+          scope.registerBinding("param", paramPath);
+        }
       }
+      injectInitialization(classPath, path, assigns);
     },
   };
 
@@ -502,24 +501,13 @@ export default declare((api, opts: Options) => {
       },
 
       Function(path) {
-        const { node, scope } = path;
+        const { node } = path;
         if (node.typeParameters) node.typeParameters = null;
         if (node.returnType) node.returnType = null;
 
         const params = node.params;
         if (params.length > 0 && t.isIdentifier(params[0], { name: "this" })) {
           params.shift();
-        }
-
-        // We replace `TSParameterProperty` here so that transforms that
-        // rely on a `Function` visitor to deal with arguments, like
-        // `transform-parameters`, work properly.
-        const paramsPath = path.get("params");
-        for (const p of paramsPath) {
-          if (p.type === "TSParameterProperty") {
-            p.replaceWith(p.get("parameter"));
-            scope.registerBinding("param", p);
-          }
         }
       },
 
