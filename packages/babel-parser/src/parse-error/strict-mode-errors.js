@@ -5,8 +5,8 @@ import { toParseErrorCredentials } from "../parse-error";
 export default (_: typeof toParseErrorCredentials) => ({
   StrictDelete: _("Deleting local variable in strict mode."),
 
-  // `bindingName` is the StringValue[1] of an IdentifierReference[2], which is
-  // represented as just an `Identifier`[3] in the Babel AST.
+  // `referenceName` is the StringValue[1] of an IdentifierReference[2], which
+  // is represented as just an `Identifier`[3] in the Babel AST.
   // 1. https://tc39.es/ecma262/#sec-static-semantics-stringvalue
   // 2. https://tc39.es/ecma262/#prod-IdentifierReference
   // 3. https://github.com/babel/babel/blob/main/packages/babel-parser/ast/spec.md#identifier
