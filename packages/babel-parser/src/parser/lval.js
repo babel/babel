@@ -554,7 +554,7 @@ export default class LValParser extends NodeUtils {
    *        An optional string set to check if an identifier name is included.
    *        `checkLVal` will add checked identifier name to `checkClashes` It is
    *        used in tracking duplicates in function parameter lists. If it is
-   *        nullish, `checkLVal` will skip duplicate checks
+   *        false, `checkLVal` will skip duplicate checks
    * @param {boolean} [options.allowingSloppyLetBinding]
    *        Whether an identifier named "let" should be allowed in sloppy mode.
    *        Defaults to `true` unless lexical scope its being used. This property
