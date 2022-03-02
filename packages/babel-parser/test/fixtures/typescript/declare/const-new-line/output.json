@@ -1,13 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":27,"index":35}},
-  "errors": [
-    "SyntaxError: Missing initializer in const declaration. (2:15)",
-    "SyntaxError: Missing initializer in const declaration. (2:26)"
-  ],
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":46,"index":54}},
   "program": {
     "type": "Program",
-    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":27,"index":35}},
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":46,"index":54}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -22,11 +18,11 @@
       },
       {
         "type": "VariableDeclaration",
-        "start":8,"end":35,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":27,"index":35}},
+        "start":8,"end":54,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":46,"index":54}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start":14,"end":23,"loc":{"start":{"line":2,"column":6,"index":14},"end":{"line":2,"column":15,"index":23}},
+            "start":14,"end":28,"loc":{"start":{"line":2,"column":6,"index":14},"end":{"line":2,"column":20,"index":28}},
             "id": {
               "type": "Identifier",
               "start":14,"end":23,"loc":{"start":{"line":2,"column":6,"index":14},"end":{"line":2,"column":15,"index":23},"identifierName":"x"},
@@ -40,25 +36,41 @@
                 }
               }
             },
-            "init": null
+            "init": {
+              "type": "NumericLiteral",
+              "start":26,"end":28,"loc":{"start":{"line":2,"column":18,"index":26},"end":{"line":2,"column":20,"index":28}},
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
+            }
           },
           {
             "type": "VariableDeclarator",
-            "start":25,"end":34,"loc":{"start":{"line":2,"column":17,"index":25},"end":{"line":2,"column":26,"index":34}},
+            "start":30,"end":53,"loc":{"start":{"line":2,"column":22,"index":30},"end":{"line":2,"column":45,"index":53}},
             "id": {
               "type": "Identifier",
-              "start":25,"end":34,"loc":{"start":{"line":2,"column":17,"index":25},"end":{"line":2,"column":26,"index":34},"identifierName":"y"},
+              "start":30,"end":39,"loc":{"start":{"line":2,"column":22,"index":30},"end":{"line":2,"column":31,"index":39},"identifierName":"y"},
               "name": "y",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":26,"end":34,"loc":{"start":{"line":2,"column":18,"index":26},"end":{"line":2,"column":26,"index":34}},
+                "start":31,"end":39,"loc":{"start":{"line":2,"column":23,"index":31},"end":{"line":2,"column":31,"index":39}},
                 "typeAnnotation": {
                   "type": "TSStringKeyword",
-                  "start":28,"end":34,"loc":{"start":{"line":2,"column":20,"index":28},"end":{"line":2,"column":26,"index":34}}
+                  "start":33,"end":39,"loc":{"start":{"line":2,"column":25,"index":33},"end":{"line":2,"column":31,"index":39}}
                 }
               }
             },
-            "init": null
+            "init": {
+              "type": "StringLiteral",
+              "start":42,"end":53,"loc":{"start":{"line":2,"column":34,"index":42},"end":{"line":2,"column":45,"index":53}},
+              "extra": {
+                "rawValue": "something",
+                "raw": "\"something\""
+              },
+              "value": "something"
+            }
           }
         ],
         "kind": "const"
