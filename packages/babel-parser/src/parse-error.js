@@ -159,9 +159,17 @@ declare function toParseErrorClasses<T: Object>(
   syntaxPlugin?: string,
 ): T;
 
+// toParseErrorClasses can optionally be template tagged to provide a
+// syntaxPlugin:
+//
+// toParseErrorClasses`syntaxPlugin` (_ => ... )
+//
 // See comment about eslint and Flow overloading above.
 // eslint-disable-next-line no-redeclare
 export function toParseErrorClasses(argument, syntaxPlugin) {
+  // If the first parameter is an array, that means we were called with a tagged
+  // template literal. Extract the syntaxPlugin from this, and call again in
+  // the "normalized" form.
   if (ArrayIsArray(argument)) {
     return toClasses => toParseErrorClasses(toClasses, argument[0]);
   }
