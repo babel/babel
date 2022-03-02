@@ -20,7 +20,9 @@ const NodeDescriptions = {
   YieldExpression: "yield expression",
 };
 
-type NodeTypesWithDescriptions = $Keys<typeof NodeDescriptions>;
+type NodeTypesWithDescriptions = $Keys<
+  $Diff<typeof NodeDescriptions, { UpdateExpression: any }>,
+>;
 type NodeWithDescription =
   | { type: "UpdateExpression", prefix: boolean }
   | { type: NodeTypesWithDescriptions };
