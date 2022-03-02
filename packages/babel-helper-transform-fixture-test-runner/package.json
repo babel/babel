@@ -24,7 +24,7 @@
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.2"
+    "@types/jest": "^27.4.1"
   },
   "engines": {
     "node": ">=6.9.0"

@@ -30,15 +30,15 @@ let Obj = /*#__PURE__*/function (_Base) {
   var _proto = Obj.prototype;
 
   _proto.update = function update() {
-    var _proper$prop, _super$proper$prop;
+    var _proper$prop, _super$proper$prop, _super$proper$prop2;
 
-    this[_proper$prop = proper.prop] = (_super$proper$prop = +_Base.prototype[_proper$prop]) + 1, _super$proper$prop;
+    this[_proper$prop = proper.prop] = (_super$proper$prop = _Base.prototype[_proper$prop], _super$proper$prop2 = _super$proper$prop++, _super$proper$prop), _super$proper$prop2;
   };
 
   _proto.update2 = function update2() {
-    var _i, _super$i;
+    var _i, _super$i, _super$i2;
 
-    this[_i = i] = (_super$i = +_Base.prototype[_i]) + 1, _super$i;
+    this[_i = i] = (_super$i = _Base.prototype[_i], _super$i2 = _super$i++, _super$i), _super$i2;
   };
 
   return Obj;

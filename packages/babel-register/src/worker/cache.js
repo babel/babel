@@ -35,7 +35,7 @@ function save() {
   let serialised = "{}";
 
   try {
-    serialised = JSON.stringify(data, null, "  ");
+    serialised = JSON.stringify(data);
   } catch (err) {
     if (err.message === "Invalid string length") {
       err.message = "Cache too large so it's been cleared.";
