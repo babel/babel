@@ -8,7 +8,7 @@ import { spawnSync } from "child_process";
 const getEncoding = path =>
   spawnSync("file", ["--brief", "--mime-encoding", path])
     .stdout.toString()
-    .slice(0, -1);
+    .trim();
 const toNodeEncoding = fileEncoding =>
   ({
     "us-ascii": "utf-8",
