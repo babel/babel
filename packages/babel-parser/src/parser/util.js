@@ -19,7 +19,6 @@ import ProductionParameterHandler, {
   PARAM,
 } from "../util/production-parameter";
 import { Errors, ParseError } from "../parse-error";
-import type { PluginConfig } from "./base";
 /*::
 import type ScopeHandler from "../util/scope";
 */
@@ -148,16 +147,6 @@ export default class UtilParser extends Tokenizer {
 
   expect(type: TokenType, loc?: ?Position): void {
     this.eat(type) || this.unexpected(loc, type);
-  }
-
-  getPluginNamesFromConfigs(pluginConfigs: Array<PluginConfig>): Array<string> {
-    return pluginConfigs.map(c => {
-      if (typeof c === "string") {
-        return c;
-      } else {
-        return c[0];
-      }
-    });
   }
 
   // tryParse will clone parser state.
