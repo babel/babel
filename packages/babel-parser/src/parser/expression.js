@@ -652,7 +652,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (update) {
       this.checkLVal(node.argument, {
-        in: (node = this.finishNode(node, "UpdateExpression")),
+        in: this.finishNode(node, "UpdateExpression"),
       });
       return node;
     }
