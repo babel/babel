@@ -1741,7 +1741,7 @@ export default class Tokenizer extends CommentsParser {
 
   /**
    * Raise a `ParseError` given the appropriate properties. If passed a
-   *`Position` for the `at` property, raises the `ParseError` at that location.
+   * `Position` for the `at` property, raises the `ParseError` at that location.
    * Otherwise, if passed a `Node`, raises the `ParseError` at the start
    * location of that `Node`.
    *
@@ -1769,7 +1769,7 @@ export default class Tokenizer extends CommentsParser {
 
   /**
    * If `errorRecovery` is `false`, this method behaves identically to `raise`.
-   * If `errorRecovery` is `true`, this method will first see if there is an
+   * If `errorRecovery` is `true`, this method will first see if there is
    * already an error stored at the same `Position`, and replaces it with the
    * one generated here.
    *
