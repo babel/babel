@@ -293,6 +293,27 @@ describe("getTargets", () => {
       },
     );
 
+    (process.env.BABEL_8_BREAKING ? it.skip : it)(
+      "'browsers' option will have no effect if it is an empty array - Babel 7",
+      () => {
+        expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
+          getTargets({ esmodules: "intersect" }),
+        );
+      },
+    );
+
+    (process.env.BABEL_8_BREAKING ? it.skip : it)(
+      "The final 'browsers' handled variable will have no effect if it is an empty array - Babel 7",
+      () => {
+        expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
+          getTargets(
+            { esmodules: "intersect" },
+            { ignoreBrowserslistConfig: true },
+          ),
+        );
+      },
+    );
+
     (process.env.BABEL_8_BREAKING ? it : it.skip)(
       "'intersect' behaves like no-op if no browsers are specified",
       () => {
