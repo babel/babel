@@ -539,7 +539,7 @@ export default class LValParser extends NodeUtils {
   }
 
   /**
-   * Verify that a target expression is an val (something that can be assigned to).
+   * Verify that a target expression is an lval (something that can be assigned to).
    *
    * @param {Expression} expression The expression in question to check.
    * @param {Object} options A set of options described below.
