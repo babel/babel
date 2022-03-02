@@ -121,10 +121,10 @@ export default (_: typeof toParseErrorCredentials) => ({
   ImportCallArgumentTrailingComma: _(
     "Trailing comma is disallowed inside import(...) arguments.",
   ),
-  ImportCallArity: _<{| required: 1 | 2 |}>(
-    ({ required }) =>
+  ImportCallArity: _<{| maxArgumentCount: 1 | 2 |}>(
+    ({ maxArgumentCount }) =>
       `\`import()\` requires exactly ${
-        required === 1 ? "one argument" : "one or two arguments"
+        maxArgumentCount === 1 ? "one argument" : "one or two arguments"
       }.`,
   ),
   ImportCallNotNewExpression: _("Cannot use new with import(...)."),

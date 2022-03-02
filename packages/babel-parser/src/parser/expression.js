@@ -949,7 +949,7 @@ export default class ExpressionParser extends LValParser {
       if (node.arguments.length === 0 || node.arguments.length > 2) {
         this.raise(Errors.ImportCallArity, {
           at: node,
-          required:
+          maxArgumentCount:
             this.hasPlugin("importAssertions") ||
             this.hasPlugin("moduleAttributes")
               ? 2
