@@ -22,9 +22,6 @@ import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
 import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
 
-const HEX_NUMBER = /^[\da-fA-F]+$/;
-const DECIMAL_NUMBER = /^\d+$/;
-
 /* eslint sort-keys: "error" */
 const JsxErrors = makeErrorTemplates(
   {
@@ -190,39 +187,54 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     jsxReadEntity(): string {
-      let str = "";
-      let count = 0;
-      let entity;
-      let ch = this.input[this.state.pos];
-
       const startPos = ++this.state.pos;
-      while (this.state.pos < this.length && count++ < 10) {
-        ch = this.input[this.state.pos++];
-        if (ch === ";") {
-          if (str[0] === "#") {
-            if (str[1] === "x") {
-              str = str.substr(2);
-              if (HEX_NUMBER.test(str)) {
-                entity = String.fromCodePoint(parseInt(str, 16));
-              }
-            } else {
-              str = str.substr(1);
-              if (DECIMAL_NUMBER.test(str)) {
-                entity = String.fromCodePoint(parseInt(str, 10));
-              }
-            }
-          } else {
-            entity = XHTMLEntities[str];
-          }
-          break;
+      if (this.codePointAtPos(this.state.pos) === charCodes.numberSign) {
+        ++this.state.pos;
+
+        let radix = 10;
+        if (this.codePointAtPos(this.state.pos) === charCodes.lowercaseX) {
+          radix = 16;
+          ++this.state.pos;
         }
-        str += ch;
+
+        const codePoint = this.readInt(
+          radix,
+          /* len */ undefined,
+          /* forceLen */ false,
+          /* allowNumSeparator */ "bail",
+        );
+        if (
+          codePoint &&
+          this.codePointAtPos(this.state.pos) === charCodes.semicolon
+        ) {
+          ++this.state.pos;
+          return String.fromCodePoint(codePoint);
+        }
+      } else {
+        let count = 0;
+        let semi = false;
+        while (
+          count++ < 10 &&
+          this.state.pos < this.length &&
+          !(semi = this.codePointAtPos(this.state.pos) == charCodes.semicolon)
+        ) {
+          ++this.state.pos;
+        }
+
+        if (semi) {
+          const desc = this.input.slice(startPos, this.state.pos);
+          const entity = XHTMLEntities[desc];
+          ++this.state.pos;
+
+          if (entity) {
+            return entity;
+          }
+        }
       }
-      if (!entity) {
-        this.state.pos = startPos;
-        return "&";
-      }
-      return entity;
+
+      // Not a valid entity
+      this.state.pos = startPos;
+      return "&";
     }
 
     // Read a JSX identifier (valid tag or attribute name).

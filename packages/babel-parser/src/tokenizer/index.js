@@ -1174,7 +1174,7 @@ export default class Tokenizer extends ParserErrors {
     radix: number,
     len?: number,
     forceLen?: boolean,
-    allowNumSeparator: boolean = true,
+    allowNumSeparator: boolean | "bail" = true,
   ): number | null {
     const start = this.state.pos;
     const forbiddenSiblings =
@@ -1197,7 +1197,7 @@ export default class Tokenizer extends ParserErrors {
       const code = this.input.charCodeAt(this.state.pos);
       let val;
 
-      if (code === charCodes.underscore) {
+      if (code === charCodes.underscore && allowNumSeparator !== "bail") {
         const prev = this.input.charCodeAt(this.state.pos - 1);
         const next = this.input.charCodeAt(this.state.pos + 1);
         if (allowedSiblings.indexOf(next) === -1) {
