@@ -80,9 +80,9 @@ gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package
   \+ workspace_field(WorkspaceCwd, 'private', true),
   % Exclude packages with more complex `exports`
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
-  WorkspaceIdent \= '@babel/eslint-parser',
   WorkspaceIdent \= '@babel/compat-data',
   WorkspaceIdent \= '@babel/plugin-transform-react-jsx', % TODO: Remove in Babel 8
   WorkspaceIdent \= '@babel/helper-plugin-test-runner', % TODO: Remove in Babel 8
   WorkspaceIdent \= '@babel/standalone',
+  \+ atom_concat('@babel/eslint-', _, WorkspaceIdent),
   \+ atom_concat('@babel/runtime', _, WorkspaceIdent).

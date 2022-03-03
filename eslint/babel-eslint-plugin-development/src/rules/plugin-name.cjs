@@ -1,4 +1,4 @@
-import isBabelPluginFactory from "../utils/is-babel-plugin-factory";
+const isBabelPluginFactory = require("../utils/is-babel-plugin-factory.cjs");
 
 function getReturnValue(node) {
   const { body } = node;
@@ -12,7 +12,7 @@ function getReturnValue(node) {
   return body;
 }
 
-export default {
+module.exports = {
   meta: {
     schema: [],
   },

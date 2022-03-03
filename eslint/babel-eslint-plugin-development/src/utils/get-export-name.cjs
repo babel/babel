@@ -1,4 +1,4 @@
-export default function getExportName(node) {
+module.exports = function getExportName(node) {
   const { parent } = node;
 
   if (parent.type === "ExportDefaultDeclaration") {
@@ -19,4 +19,4 @@ export default function getExportName(node) {
   ) {
     return "module.exports";
   }
-}
+};

@@ -143,9 +143,6 @@
     "./packages/babel-template/src/**/*.ts",
     "./packages/babel-traverse/src/**/*.ts",
     "./packages/babel-types/src/**/*.ts",
-    "./eslint/babel-eslint-plugin/src/**/*.ts",
-    "./eslint/babel-eslint-plugin-development/src/**/*.ts",
-    "./eslint/babel-eslint-plugin-development-internal/src/**/*.ts",
     "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src/**/*.ts",
     "./codemods/babel-plugin-codemod-optional-catch-binding/src/**/*.ts"
   ],
@@ -573,15 +570,6 @@
       ],
       "@babel/types": [
         "./packages/babel-types/src"
-      ],
-      "@babel/eslint-plugin": [
-        "./eslint/babel-eslint-plugin/src"
-      ],
-      "@babel/eslint-plugin-development": [
-        "./eslint/babel-eslint-plugin-development/src"
-      ],
-      "@babel/eslint-plugin-development-internal": [
-        "./eslint/babel-eslint-plugin-development-internal/src"
       ],
       "@babel/plugin-codemod-object-assign-to-object-spread": [
         "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src"

@@ -1,4 +1,4 @@
-import path from "path";
+const path = require("path");
 
 const REL_PATH_REGEX = /^\.{1,2}/;
 
@@ -99,7 +99,7 @@ function referencesImportedBinding(node, scope, bindings) {
   return false;
 }
 
-export default {
+module.exports = {
   meta: {
     type: "suggestion",
     docs: {

@@ -1,5 +1,5 @@
-import ruleComposer from "eslint-rule-composer";
-import eslint from "eslint";
+const ruleComposer = require("eslint-rule-composer");
+const eslint = require("eslint");
 
 const OPT_OUT_PATTERN = /^[-[(/+`]/; // One of [(/+-`
 
@@ -76,7 +76,7 @@ function report(context, node, missing?) {
   });
 }
 
-export default ruleComposer.joinReports([
+module.exports = ruleComposer.joinReports([
   rule,
   context => ({
     "ClassProperty, ClassPrivateProperty, PropertyDefinition"(node) {
