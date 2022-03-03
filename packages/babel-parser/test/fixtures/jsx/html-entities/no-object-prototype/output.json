@@ -38,10 +38,10 @@
               "type": "JSXText",
               "start":3,"end":12,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":12,"index":12}},
               "extra": {
-                "rawValue": "function valueOf() { [native code] }",
+                "rawValue": "&valueOf;",
                 "raw": "&valueOf;"
               },
-              "value": "function valueOf() { [native code] }"
+              "value": "&valueOf;"
             }
           ]
         }
