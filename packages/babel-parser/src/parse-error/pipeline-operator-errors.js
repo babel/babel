@@ -13,7 +13,7 @@ export const UnparenthesizedPipeBodyDescriptions = new Set<string>([
 export default (_: typeof toParseErrorCredentials) => ({
   // This error is only used by the smart-mix proposal
   PipeBodyIsTighter: _(
-    `Unexpected yield after pipeline body; any yield expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.`,
+    "Unexpected yield after pipeline body; any yield expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.",
   ),
   PipeTopicRequiresHackPipes: _(
     'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',

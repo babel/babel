@@ -28,7 +28,7 @@ type NodeWithDescription =
   | { type: NodeTypesWithDescriptions };
 
 // eslint-disable-next-line no-confusing-arrow
-const toNodeDescription = ({ type, prefix = false }: NodeWithDescription) =>
+const toNodeDescription = ({ type, prefix }: NodeWithDescription) =>
   type === "UpdateExpression"
     ? NodeDescriptions.UpdateExpression[String(prefix)]
     : NodeDescriptions[type];
