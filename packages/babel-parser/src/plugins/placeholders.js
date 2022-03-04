@@ -5,7 +5,7 @@ import * as charCodes from "charcodes";
 import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-import { toParseErrorClasses } from "../parse-error";
+import { ParseErrorEnum } from "../parse-error";
 
 export type PlaceholderTypes =
   | "Identifier"
@@ -47,7 +47,7 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
 /* eslint sort-keys: "error" */
-const PlaceholderErrors = toParseErrorClasses`placeholders`(_ => ({
+const PlaceholderErrors = ParseErrorEnum`placeholders`(_ => ({
   ClassNameIsRequired: _("A class name is required."),
   UnexpectedSpace: _("Unexpected space in placeholder."),
 }));

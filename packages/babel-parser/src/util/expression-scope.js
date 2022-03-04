@@ -76,24 +76,22 @@ class ExpressionScope {
   }
 }
 
-type ArrowHeadParsingParameterInitializerErrorClass =
+type ArrowHeadParsingParameterInitializerError =
   | typeof Errors.AwaitExpressionFormalParameter
   | typeof Errors.YieldInParameter;
 
-type ArrowHeadParsingDeclarationErrorClass =
-  | ArrowHeadParsingParameterInitializerErrorClass
+type ArrowHeadParsingDeclarationError =
+  | ArrowHeadParsingParameterInitializerError
   | typeof Errors.InvalidParenthesizedAssignment
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors: Map<
-    number,
-    [ArrowHeadParsingDeclarationErrorClass, Position],
-  > = new Map();
+  declarationErrors: Map<number, [ArrowHeadParsingDeclarationError, Position]> =
+    new Map();
   constructor(type: 1 | 2) {
     super(type);
   }
-  recordDeclarationError<T: ArrowHeadParsingDeclarationErrorClass>(
+  recordDeclarationError<T: ArrowHeadParsingDeclarationError>(
     ParsingErrorClass: T,
     { at }: { at: Position },
   ) {
@@ -105,7 +103,7 @@ class ArrowHeadParsingScope extends ExpressionScope {
     this.declarationErrors.delete(index);
   }
   iterateErrors(
-    iterator: ([ArrowHeadParsingDeclarationErrorClass, Position]) => void,
+    iterator: ([ArrowHeadParsingDeclarationError, Position]) => void,
   ) {
     this.declarationErrors.forEach(iterator);
   }
@@ -137,7 +135,7 @@ export default class ExpressionScopeHandler {
    * @memberof ExpressionScopeHandler
    */
   recordParameterInitializerError(
-    ParseErrorClass: ArrowHeadParsingParameterInitializerErrorClass,
+    toParseError: ArrowHeadParsingParameterInitializerError,
     { at: node }: { at: Node },
   ): void {
     const origin = { at: node.loc.start };
@@ -147,7 +145,7 @@ export default class ExpressionScopeHandler {
     while (!scope.isCertainlyParameterDeclaration()) {
       if (scope.canBeArrowParameterDeclaration()) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-        scope.recordDeclarationError(ParseErrorClass, origin);
+        scope.recordDeclarationError(toParseError, origin);
       } else {
         /*:: invariant(scope.type == kExpression) */
         // Type-Expression is the boundary where initializer error can populate to
@@ -155,7 +153,7 @@ export default class ExpressionScopeHandler {
       }
       scope = stack[--i];
     }
-    this.parser.raise(ParseErrorClass, origin);
+    this.parser.raise(toParseError, origin);
   }
 
   /**
@@ -223,8 +221,8 @@ export default class ExpressionScopeHandler {
     const currentScope = stack[stack.length - 1];
     if (!currentScope.canBeArrowParameterDeclaration()) return;
     /*:: invariant(currentScope instanceof ArrowHeadParsingScope) */
-    currentScope.iterateErrors(([ParseErrorClass, loc]) => {
-      this.parser.raise(ParseErrorClass, { at: loc });
+    currentScope.iterateErrors(([toParseError, loc]) => {
+      this.parser.raise(toParseError, { at: loc });
       // iterate from parent scope
       let i = stack.length - 2;
       let scope = stack[i];

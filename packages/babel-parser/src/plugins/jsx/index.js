@@ -17,10 +17,10 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors, toParseErrorClasses } from "../../parse-error";
+import { Errors, ParseErrorEnum } from "../../parse-error";
 
 /* eslint sort-keys: "error" */
-const JsxErrors = toParseErrorClasses`jsx`(_ => ({
+const JsxErrors = ParseErrorEnum`jsx`(_ => ({
   AttributeIsEmpty: _(
     "JSX attributes must only be assigned a non-empty expression.",
   ),

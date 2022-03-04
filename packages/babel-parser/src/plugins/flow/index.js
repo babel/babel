@@ -29,7 +29,7 @@ import {
   SCOPE_OTHER,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
-import { Errors, toParseErrorClasses } from "../../parse-error";
+import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier } from "../../parser/node";
 
 const reservedTypes = new Set([
@@ -53,7 +53,7 @@ const reservedTypes = new Set([
 
 /* eslint sort-keys: "error" */
 // The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
-const FlowErrors = toParseErrorClasses`flow`(_ => ({
+const FlowErrors = ParseErrorEnum`flow`(_ => ({
   AmbiguousConditionalArrow: _(
     "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
   ),

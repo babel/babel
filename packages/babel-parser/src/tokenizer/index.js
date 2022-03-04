@@ -20,7 +20,12 @@ import {
   type TokenType,
 } from "./types";
 import { type TokContext } from "./context";
-import { Errors, ParseError, type RaiseProperties } from "../parse-error";
+import {
+  Errors,
+  type ParseError,
+  type ParseErrorConstructor,
+  type RaiseProperties,
+} from "../parse-error";
 import {
   lineBreakG,
   isNewLine,
@@ -28,7 +33,7 @@ import {
   skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
-import type { LookaheadState, DeferredStrictErrorClass } from "./state";
+import type { LookaheadState, DeferredStrictError } from "./state";
 
 const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseG,
@@ -282,8 +287,8 @@ export default class Tokenizer extends CommentsParser {
       // after a "use strict" directive. Strict mode will be set at parse
       // time for any literals that occur after the next node of the strict
       // directive.
-      this.state.strictErrors.forEach(([ParseErrorClass, at]) =>
-        this.raise(ParseErrorClass, { at }),
+      this.state.strictErrors.forEach(([toParseError, at]) =>
+        this.raise(toParseError, { at }),
       );
       this.state.strictErrors.clear();
     }
@@ -1534,15 +1539,15 @@ export default class Tokenizer extends CommentsParser {
   }
 
   recordStrictModeErrors(
-    ParseErrorClass: DeferredStrictErrorClass,
+    toParseError: DeferredStrictError,
     { at }: { at: Position },
   ) {
     const index = at.index;
 
     if (this.state.strict && !this.state.strictErrors.has(index)) {
-      this.raise(ParseErrorClass, { at });
+      this.raise(toParseError, { at });
     } else {
-      this.state.strictErrors.set(index, [ParseErrorClass, at]);
+      this.state.strictErrors.set(index, [toParseError, at]);
     }
   }
 
@@ -1753,13 +1758,13 @@ export default class Tokenizer extends CommentsParser {
    * @returns {(ParseError<ErrorDetails> | empty)}
    * @memberof Tokenizer
    */
-  raise<ErrorDetails, T: Class<ParseError<ErrorDetails>>>(
-    ParseErrorClass: T,
+  raise<ErrorDetails>(
+    toParseError: ParseErrorConstructor<ErrorDetails>,
     raiseProperties: RaiseProperties<ErrorDetails>,
   ): ParseError<ErrorDetails> {
     const { at, ...details } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc.start;
-    const error = new ParseErrorClass({ loc, details });
+    const error = toParseError({ loc, details });
 
     if (!this.options.errorRecovery) throw error;
     if (!this.isLookahead) this.state.errors.push(error);
@@ -1778,8 +1783,8 @@ export default class Tokenizer extends CommentsParser {
    * @returns {(ParseError<ErrorDetails> | empty)}
    * @memberof Tokenizer
    */
-  raiseOverwrite<ErrorDetails, T: Class<ParseError<ErrorDetails>>>(
-    ParseErrorClass: T,
+  raiseOverwrite<ErrorDetails>(
+    toParseError: ParseErrorConstructor<ErrorDetails>,
     raiseProperties: RaiseProperties<ErrorDetails>,
   ): ParseError<ErrorDetails> | empty {
     const { at, ...details } = raiseProperties;
@@ -1789,13 +1794,13 @@ export default class Tokenizer extends CommentsParser {
 
     for (let i = errors.length - 1; i >= 0; i--) {
       const error = errors[i];
-      if (error.pos === pos) {
-        return (errors[i] = new ParseErrorClass({ loc, details }));
+      if (error.loc.index === pos) {
+        return (errors[i] = toParseError({ loc, details }));
       }
-      if (error.pos < pos) break;
+      if (error.loc.index < pos) break;
     }
 
-    return this.raise(ParseErrorClass, raiseProperties);
+    return this.raise(toParseError, raiseProperties);
   }
 
   // updateContext is used by the jsx plugin

@@ -35,7 +35,7 @@ import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
-import { Errors, toParseErrorClasses } from "../../parse-error";
+import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier } from "../../parser/node";
 
 type TsModifier =
@@ -68,7 +68,7 @@ type ParsingContext =
   | "TypeParametersOrArguments";
 
 /* eslint sort-keys: "error" */
-const TSErrors = toParseErrorClasses`typescript`(_ => ({
+const TSErrors = ParseErrorEnum`typescript`(_ => ({
   AbstractMethodHasImplementation: _<{| methodName: string |}>(
     ({ methodName }) =>
       `Method '${methodName}' cannot have an implementation because it is marked abstract.`,

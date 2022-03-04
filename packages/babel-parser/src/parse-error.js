@@ -3,198 +3,155 @@
 import { Position } from "./util/location";
 import type { NodeBase } from "./types";
 import {
+  instantiate,
   type ParseErrorCode,
   ParseErrorCodes,
   type ParseErrorCredentials,
 } from "./parse-error/credentials";
 
-const ArrayIsArray = Array.isArray;
-const {
-  assign: ObjectAssign,
-  defineProperty: ObjectDefineProperty,
-  getPrototypeOf: ObjectGetPrototypeOf,
-  keys: ObjectKeys,
-} = Object;
-
-type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
-
-const StandardMessage = Symbol("StandardMessage");
-
-// This should really be an abstract class, but that concept doesn't exist in
-// Flow, outside of just creating an interface, but then you can't specify that
-// it's a subclass of `SyntaxError`. You could do something like:
-//
-// interface IParseError<ErrorDetails> { ... }
-// type ParseError<ErrorDetails> = SyntaxError & IParseError<ErrorDetails>;
-//
-// But this is just a more complicated way of getting the same behavior, with
-// the added clumsiness of not being able to extends ParseError directly. So,
-// to keep things simple and prepare for a Typescript future, we just make it a
-// "private" superclass that we exclusively subclass:
-
-export class ParseError<ErrorDetails> extends SyntaxError {
+// Babel uses "normal" SyntaxErrors for it's errors, but adds some extra
+// functionality. This functionality is defined in the
+// `ParseErrorSpecification` interface below. We may choose to change to someday
+// give our errors their own full-blown class, but until then this allow us to
+// keep all the desirable properties of SyntaxErrors (like their name in stack
+// traces, etc.), and also allows us to punt on any publically facing
+// class-hierarchy decisions until Babel 8.
+interface ParseErrorSpecification<ErrorDetails> {
+  // Look, these *could* be readonly, but then Flow complains when we initially
+  // set them. We could do a whole dance and make a special interface that's not
+  // readonly for when we create the error, then cast it to the readonly
+  // interface for public use, but the previous implementation didn't have them
+  // as readonly, so let's just not worry about it for now.
   code: ParseErrorCode;
   reasonCode: string;
+  syntaxPlugin?: string;
+
+  missingPlugin?: string | string[];
 
   loc: Position;
   details: ErrorDetails;
 
-  // There are no optional fields in classes in Flow, so we can't list these
-  // here: https://github.com/facebook/flow/issues/2859
-  // syntaxPlugin?: SyntaxPlugin
-  // missingPlugin?: string[]
+  // We should consider removing this as it now just contains the same
+  // information as `loc.index`.
+  // pos: number;
+}
 
-  constructor({
-    loc,
-    details,
-  }: {
-    loc: Position,
-    details: ErrorDetails,
-  }): ParseError<ErrorDetails> {
-    super();
+export type ParseError<ErrorDetails> = SyntaxError &
+  ParseErrorSpecification<ErrorDetails>;
 
-    this.loc = loc;
+// By `ParseErrorConstructor`, we mean something like the new-less style
+// `ErrorConstructor`[1], since `ParseError`'s are not themselves actually
+// separate classes from `SyntaxError`'s.
+//
+// 1. https://github.com/microsoft/TypeScript/blob/v4.5.5/lib/lib.es5.d.ts#L1027
+export type ParseErrorConstructor<ErrorDetails> = ({
+  loc: Position,
+  details: ErrorDetails,
+}) => ParseError<ErrorDetails>;
 
-    ObjectDefineProperty(this, "details", {
-      value: details,
-      enumerable: false,
-    });
-
-    // $FlowIgnore
-    if (details.missingPlugin) {
-      ObjectDefineProperty(this, "missingPlugin", {
-        get() {
-          return this.details.missingPlugin;
+function toParseErrorConstructor<ErrorDetails: Object>({
+  toMessage,
+  ...properties
+}: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
+  return ({ loc, details }: { loc: Position, details: ErrorDetails }) =>
+    instantiate<ParseError<ErrorDetails>>(
+      SyntaxError,
+      { ...properties, loc },
+      {
+        details: { value: details, enumerable: false },
+        message: {
+          get: ({ details, loc }) =>
+            `${toMessage(details)} (${loc.line}:${loc.column})`,
+          set: (self, value) =>
+            Object.defineProperty(self, "message", { value }),
         },
-        enumerable: true,
-      });
-    }
-
-    return this;
-  }
-
-  clone({
-    loc,
-    details,
-  }: {
-    loc?: Position,
-    details?: ErrorDetails,
-  } = {}) {
-    return new (ObjectGetPrototypeOf(this).constructor)({
-      loc: loc || this.loc,
-      details: { ...this.details, ...details },
-    });
-  }
-
-  get pos() {
-    return this.loc.index;
-  }
+        pos: "loc.index",
+        missingPlugin: "missingPlugin" in details && "details.missingPlugin",
+      },
+    );
 }
 
-function toParseErrorClass<ErrorDetails>(
-  toMessage: ToMessage<ErrorDetails>,
-  credentials: ParseErrorCredentials,
-): Class<ParseError<ErrorDetails>> {
-  return class extends ParseError<ErrorDetails> {
-    #message: typeof StandardMessage | string = StandardMessage;
-
-    constructor(...args): ParseError<ErrorDetails> {
-      super(...args);
-      // $FlowIgnore - Only necessary because we can't make syntaxPlugin optional.
-      ObjectAssign(this, credentials);
-      return this;
-    }
-
-    get message() {
-      return this.#message !== StandardMessage
-        ? String(this.#message)
-        : `${toMessage(this.details)} (${this.loc.line}:${this.loc.column})`;
-    }
-
-    set message(message) {
-      this.#message = message;
-    }
-  };
-}
-
-// This part is tricky, and only necessary due to some bugs in Flow that won't
-// be fixed for a year(?): https://github.com/facebook/flow/issues/8838
-// Flow has a very difficult time extracting the parameter types of functions,
-// so we are forced to pretend the class exists earlier than it does.
-// `toParseErrorCredentials` *does not* actuall return a
-// `Class<ParseError<ErrorDetails>>`, but we simply mark it as such to "carry"
-// the `ErrorDetails` type parameter around. This is not a problem in Typescript
-// where this intermediate function actually won't be needed at all.
+// This part is tricky. You'll probably notice from the name of this function
+// that it is supposed to return `ParseErrorCredentials`, but instead these.
+// declarations seem to instead imply that they return
+// `ParseErrorConstructor<ErrorDetails>` instead. This is because in Flow we
+// can't easily extract parameter types (either from functions, like with
+// Typescript's Parameters<f> utility type, or from generic types either). As
+// such, this function does double duty: packaging up the credentials during
+// its actual runtime operation, but pretending to return the
+// `ParseErrorConstructor<ErrorDetails>` that we won't actually have until later
+// to the type system, avoiding the need to do so with $ObjMap (which doesn't
+// work) in `ParseErrorEnum`. This hack won't be necessary when we switch to
+// Typescript.
 declare function toParseErrorCredentials<T: string>(
   T,
   ?{ code?: ParseErrorCode, reasonCode?: string } | boolean,
-): Class<ParseError<{||}>>;
+): ParseErrorConstructor<{||}>;
 
 // ESLint seems to erroneously think that Flow's overloading syntax is an
 // accidental redeclaration of the function:
 // https://github.com/babel/eslint-plugin-babel/issues/162
 // eslint-disable-next-line no-redeclare
-declare function toParseErrorCredentials<T>(
-  (T) => string,
+declare function toParseErrorCredentials<ErrorDetails>(
+  (ErrorDetails) => string,
   ?{ code?: ParseErrorCode, reasonCode?: string } | boolean,
-): Class<ParseError<T>>;
+): ParseErrorConstructor<ErrorDetails>;
 
 // See comment about eslint and Flow overloading above.
 // eslint-disable-next-line no-redeclare
 export function toParseErrorCredentials(toMessageOrMessage, credentials) {
-  return [
-    typeof toMessageOrMessage === "string"
-      ? () => toMessageOrMessage
-      : toMessageOrMessage,
-    credentials,
-  ];
+  return {
+    toMessage:
+      typeof toMessageOrMessage === "string"
+        ? () => toMessageOrMessage
+        : toMessageOrMessage,
+    ...credentials,
+  };
 }
 
-declare function toParseErrorClasses(string[]): typeof toParseErrorClasses;
+// This is the templated form.
+declare function ParseErrorEnum(string[]): typeof ParseErrorEnum;
 
 // See comment about eslint and Flow overloading above.
 // eslint-disable-next-line no-redeclare
-declare function toParseErrorClasses<T: Object>(
-  toClasses: (typeof toParseErrorCredentials) => T,
+declare function ParseErrorEnum<T>(
+  toParseErrorCredentials: (typeof toParseErrorCredentials) => T,
   syntaxPlugin?: string,
 ): T;
 
-// toParseErrorClasses can optionally be template tagged to provide a
-// syntaxPlugin:
+// You call `ParseErrorEnum` with a mapping from `ReasonCode`'s to either error
+// messages, or `toMessage` functions that define additional necessary `details`
+// needed by the `ParseError`:
 //
-// toParseErrorClasses`syntaxPlugin` (_ => ... )
+// ParseErrorEnum`optionalSyntaxPlugin` (_ => ({
+//   ErrorWithStaticMessage: _("message"),
+//   ErrorWithDynamicMessage: _<{ type: string }>(({ type }) => `${type}`),
+// });
 //
 // See comment about eslint and Flow overloading above.
 // eslint-disable-next-line no-redeclare
-export function toParseErrorClasses(argument, syntaxPlugin) {
+export function ParseErrorEnum(argument, syntaxPlugin) {
   // If the first parameter is an array, that means we were called with a tagged
   // template literal. Extract the syntaxPlugin from this, and call again in
   // the "normalized" form.
-  if (ArrayIsArray(argument)) {
-    return toClasses => toParseErrorClasses(toClasses, argument[0]);
+  if (Array.isArray(argument)) {
+    return toParseErrorCredentialsMap =>
+      ParseErrorEnum(toParseErrorCredentialsMap, argument[0]);
   }
 
-  const classes = argument(toParseErrorCredentials);
+  const partialCredentials = argument(toParseErrorCredentials);
+  const ParseErrorConstructors = {};
 
-  for (const reasonCode of ObjectKeys(classes)) {
-    const [toMessage, credentials = {}] = classes[reasonCode];
-    const ParseErrorClass = toParseErrorClass(toMessage, {
-      code: credentials.code || ParseErrorCodes.SyntaxError,
-      reasonCode: credentials.reasonCode || reasonCode,
+  for (const reasonCode of Object.keys(partialCredentials)) {
+    ParseErrorConstructors[reasonCode] = toParseErrorConstructor({
+      code: ParseErrorCodes.SyntaxError,
+      reasonCode,
       ...(syntaxPlugin ? { syntaxPlugin } : {}),
-    });
-
-    classes[reasonCode] = ParseErrorClass;
-
-    // We do this for backwards compatibility so that all errors just have the
-    // "SyntaxError" name in their messages instead of leaking the private
-    // subclass name.
-    ObjectDefineProperty(ParseErrorClass.prototype.constructor, "name", {
-      value: "SyntaxError",
+      ...partialCredentials[reasonCode],
     });
   }
 
-  return classes;
+  return ParseErrorConstructors;
 }
 
 export type RaiseProperties<ErrorDetails> = {|
@@ -208,10 +165,10 @@ import StrictModeErrors from "./parse-error/strict-mode-errors";
 import PipelineOperatorErrors from "./parse-error/pipeline-operator-errors";
 
 export const Errors = {
-  ...toParseErrorClasses(ModuleErrors),
-  ...toParseErrorClasses(StandardErrors),
-  ...toParseErrorClasses(StrictModeErrors),
-  ...toParseErrorClasses`pipelineOperator`(PipelineOperatorErrors),
+  ...ParseErrorEnum(ModuleErrors),
+  ...ParseErrorEnum(StandardErrors),
+  ...ParseErrorEnum(StrictModeErrors),
+  ...ParseErrorEnum`pipelineOperator`(PipelineOperatorErrors),
 };
 
 export type { LValAncestor } from "./parse-error/standard-errors";

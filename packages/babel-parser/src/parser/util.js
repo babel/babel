@@ -18,7 +18,11 @@ import ProductionParameterHandler, {
   PARAM_AWAIT,
   PARAM,
 } from "../util/production-parameter";
-import { Errors, ParseError } from "../parse-error";
+import {
+  Errors,
+  type ParseError,
+  type ParseErrorConstructor,
+} from "../parse-error";
 /*::
 import type ScopeHandler from "../util/scope";
 */
@@ -97,11 +101,11 @@ export default class UtilParser extends Tokenizer {
 
   expectContextual(
     token: TokenType,
-    ParseErrorClass?: Class<ParseError<any>>,
+    toParseError?: ParseErrorConstructor<any>,
   ): void {
     if (!this.eatContextual(token)) {
-      if (ParseErrorClass != null) {
-        throw this.raise(ParseErrorClass, { at: this.state.startLoc });
+      if (toParseError != null) {
+        throw this.raise(toParseError, { at: this.state.startLoc });
       }
       throw this.unexpected(null, token);
     }
@@ -190,7 +194,7 @@ export default class UtilParser extends Tokenizer {
     } catch (error) {
       const failState = this.state;
       this.state = oldState;
-      if (error instanceof ParseError) {
+      if (error instanceof SyntaxError) {
         return { node: null, error, thrown: true, aborted: false, failState };
       }
       if (error === abortSignal) {

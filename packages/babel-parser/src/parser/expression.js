@@ -67,7 +67,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope";
-import { Errors, ParseError } from "../parse-error";
+import { Errors, type ParseError } from "../parse-error";
 import { UnparenthesizedPipeBodyDescriptions } from "../parse-error/pipeline-operator-errors";
 import { setInnerComments } from "./comments";
 import { cloneIdentifier } from "./node";
