@@ -1,9 +1,9 @@
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
-import rule from "../../lib/rules/report-error-message-format.js";
+import rule from "../../lib/rules/report-error-message-format.cjs";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("report-error-message-format", rule.default, {
+ruleTester.run("report-error-message-format", rule, {
   valid: [
     "makeErrorTemplates({});",
     'makeErrorTemplates({ ThisIsAnError: "This is an error." });',

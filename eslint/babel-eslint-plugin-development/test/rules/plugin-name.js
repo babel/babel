@@ -1,4 +1,4 @@
-import rule from "../../lib/rules/plugin-name.js";
+import rule from "../../lib/rules/plugin-name.cjs";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const missingPluginError = "This file does not export a Babel plugin.";
@@ -6,7 +6,7 @@ const missingNameError = "This Babel plugin doesn't have a 'name' property.";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("plugin-name", rule.default, {
+ruleTester.run("plugin-name", rule, {
   valid: [
     `export default function () { return { name: "test-plugin" } }`,
     `import { declare } from "@babel/helper-plugin-utils"; declare(() => { return { name: "test-plugin" } })`,
