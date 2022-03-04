@@ -1,9 +1,9 @@
-import rule from "../../lib/rules/semi.js";
+import rule from "../../lib/rules/semi.cjs";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("semi", rule.default, {
+ruleTester.run("semi", rule, {
   valid: [
     "class Foo { bar = 'example'; }",
     "class Foo { #bar = 'example'; }",
