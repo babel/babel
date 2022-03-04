@@ -14,7 +14,7 @@ import {
 // `ParseErrorSpecification` interface below. We may choose to change to someday
 // give our errors their own full-blown class, but until then this allow us to
 // keep all the desirable properties of SyntaxErrors (like their name in stack
-// traces, etc.), and also allows us to punt on any publically facing
+// traces, etc.), and also allows us to punt on any publicly facing
 // class-hierarchy decisions until Babel 8.
 interface ParseErrorSpecification<ErrorDetails> {
   // Look, these *could* be readonly, but then Flow complains when we initially
