@@ -491,13 +491,8 @@ function applyMemberDecs(
     );
   }
 
-  if (protoInitializers.length > 0) {
-    pushInitializers(ret, protoInitializers);
-  }
-
-  if (staticInitializers.length > 0) {
-    pushInitializers(ret, staticInitializers);
-  }
+  pushInitializers(ret, protoInitializers);
+  pushInitializers(ret, staticInitializers);
 }
 
 function pushInitializers(ret, initializers) {
@@ -521,23 +516,25 @@ function pushInitializers(ret, initializers) {
 
 function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
   var initializers = [];
-  var newClass = targetClass;
+  if (classDecs.length > 0) {
+    var newClass = targetClass;
 
-  var name = targetClass.name;
-  var ctx = Object.assign(
-    {
-      kind: "class",
-      name: name,
-      addInitializer: createAddInitializerMethod(initializers),
-    },
-    createMetadataMethodsForProperty(metadataMap, 0 /* CONSTRUCTOR */, name)
-  );
+    var name = targetClass.name;
+    var ctx = Object.assign(
+      {
+        kind: "class",
+        name: name,
+        addInitializer: createAddInitializerMethod(initializers),
+      },
+      createMetadataMethodsForProperty(metadataMap, 0 /* CONSTRUCTOR */, name)
+    );
 
-  for (var i = classDecs.length - 1; i >= 0; i--) {
-    newClass = classDecs[i](newClass, ctx) || newClass;
+    for (var i = classDecs.length - 1; i >= 0; i--) {
+      newClass = classDecs[i](newClass, ctx) || newClass;
+    }
+
+    ret.push(newClass);
   }
-
-  ret.push(newClass);
 
   if (initializers.length > 0) {
     ret.push(function () {
@@ -699,23 +696,19 @@ export default function applyDecs(targetClass, memberDecs, classDecs) {
   var ret = [];
   var staticMetadataMap = {};
 
-  if (memberDecs) {
-    var protoMetadataMap = {};
+  var protoMetadataMap = {};
 
-    applyMemberDecs(
-      ret,
-      targetClass,
-      protoMetadataMap,
-      staticMetadataMap,
-      memberDecs
-    );
+  applyMemberDecs(
+    ret,
+    targetClass,
+    protoMetadataMap,
+    staticMetadataMap,
+    memberDecs
+  );
 
-    convertMetadataMapToFinal(targetClass.prototype, protoMetadataMap);
-  }
+  convertMetadataMapToFinal(targetClass.prototype, protoMetadataMap);
 
-  if (classDecs) {
-    applyClassDecs(ret, targetClass, staticMetadataMap, classDecs);
-  }
+  applyClassDecs(ret, targetClass, staticMetadataMap, classDecs);
 
   convertMetadataMapToFinal(targetClass, staticMetadataMap);
 
