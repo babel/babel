@@ -219,6 +219,9 @@ export default function getTargets(
     esmodules = false;
   }
 
+  // If current value of `browsers` is undefined (`ignoreBrowserslistConfig` should be `false`)
+  // or an empty array (without any user config, use default config),
+  // we don't need to call `resolveTargets` to execute the related methods of `browserslist` library.
   if (browsers?.length) {
     const queryBrowsers = resolveTargets(browsers, options.browserslistEnv);
 
