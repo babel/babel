@@ -1,18 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":4,"index":50}},
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":61}},
   "program": {
     "type": "Program",
-    "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":4,"index":50}},
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":61}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":4,"index":50}},
+        "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":61}},
         "expression": {
           "type": "JSXElement",
-          "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":4,"index":50}},
+          "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":61}},
           "openingElement": {
             "type": "JSXOpeningElement",
             "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
@@ -26,22 +26,22 @@
           },
           "closingElement": {
             "type": "JSXClosingElement",
-            "start":46,"end":50,"loc":{"start":{"line":6,"column":0,"index":46},"end":{"line":6,"column":4,"index":50}},
+            "start":57,"end":61,"loc":{"start":{"line":7,"column":0,"index":57},"end":{"line":7,"column":4,"index":61}},
             "name": {
               "type": "JSXIdentifier",
-              "start":48,"end":49,"loc":{"start":{"line":6,"column":2,"index":48},"end":{"line":6,"column":3,"index":49}},
+              "start":59,"end":60,"loc":{"start":{"line":7,"column":2,"index":59},"end":{"line":7,"column":3,"index":60}},
               "name": "a"
             }
           },
           "children": [
             {
               "type": "JSXText",
-              "start":3,"end":46,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":6,"column":0,"index":46}},
+              "start":3,"end":57,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":7,"column":0,"index":57}},
               "extra": {
-                "rawValue": "\n    &amp\n    &ampa;\n    &amp ;\n    &xamp;\n",
-                "raw": "\n    &amp\n    &ampa;\n    &amp ;\n    &xamp;\n"
+                "rawValue": "\n    &amp\n    &ampa;\n    &amp ;\n    &xamp;\n    &#0_0;\n",
+                "raw": "\n    &amp\n    &ampa;\n    &amp ;\n    &xamp;\n    &#0_0;\n"
               },
-              "value": "\n    &amp\n    &ampa;\n    &amp ;\n    &xamp;\n"
+              "value": "\n    &amp\n    &ampa;\n    &amp ;\n    &xamp;\n    &#0_0;\n"
             }
           ]
         }
