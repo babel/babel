@@ -24,18 +24,16 @@ export type ParseErrorCredentials<ErrorDetails> = {
   toMessage: ToMessage<ErrorDetails>,
 };
 
-const thisify = <T>(f: (self: any, ...args: any[]) => T): ((...any[]) => T) =>
-  function (...args: any[]): T {
-    return ((f(this, ...args): any): T);
-  };
-
 const reflect = (keys: string[], last = keys.length - 1) => ({
-  get: self => keys.reduce((object, key) => object[key], self),
-  set: (self, value) =>
+  get() {
+    return keys.reduce((object, key) => object[key], this);
+  },
+  set(value) {
     keys.reduce(
       (item, key, i) => (i === last ? (item[key] = value) : item[key]),
-      self,
-    ),
+      this,
+    );
+  },
 });
 
 const instantiate = <T>(
@@ -48,7 +46,9 @@ const instantiate = <T>(
     .filter(([, descriptor]) => !!descriptor)
     .map(([key, descriptor]) => [
       key,
-      typeof descriptor === "string"
+      typeof descriptor === "function"
+        ? { value: descriptor, enumerable: false }
+        : typeof descriptor === "string"
         ? reflect(descriptor.split("."))
         : descriptor,
     ])
@@ -57,8 +57,6 @@ const instantiate = <T>(
         Object.defineProperty(instance, key, {
           configurable: true,
           ...descriptor,
-          ...(descriptor.get && { get: thisify<any>(descriptor.get) }),
-          ...(descriptor.set && { set: thisify<void>(descriptor.set) }),
         }),
       Object.assign((new constructor(): T), properties),
     );

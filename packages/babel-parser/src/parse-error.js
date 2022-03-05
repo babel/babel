@@ -53,22 +53,39 @@ function toParseErrorConstructor<ErrorDetails: Object>({
   toMessage,
   ...properties
 }: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
-  return ({ loc, details }: { loc: Position, details: ErrorDetails }) =>
-    instantiate<ParseError<ErrorDetails>>(
+  type ConstructorArgument = { loc: Position, details: ErrorDetails };
+  return function constructor({ loc, details }: ConstructorArgument) {
+    return instantiate<ParseError<ErrorDetails>>(
       SyntaxError,
       { ...properties, loc },
       {
+        clone(overrides: { loc?: Position, details?: ErrorDetails } = {}) {
+          const loc = overrides.loc || {};
+          return constructor({
+            loc: new Position(
+              "line" in loc ? loc.line : this.loc.line,
+              "column" in loc ? loc.column : this.loc.column,
+              "index" in loc ? loc.index : this.loc.index,
+            ),
+            details: { ...this.details, ...overrides.details },
+          });
+        },
         details: { value: details, enumerable: false },
         message: {
-          get: ({ details, loc }) =>
-            `${toMessage(details)} (${loc.line}:${loc.column})`,
-          set: (self, value) =>
-            Object.defineProperty(self, "message", { value }),
+          get() {
+            return `${toMessage(this.details)} (${this.loc.line}:${
+              this.loc.column
+            })`;
+          },
+          set(value: string) {
+            Object.defineProperty(this, "message", { value });
+          },
         },
         pos: "loc.index",
         missingPlugin: "missingPlugin" in details && "details.missingPlugin",
       },
     );
+  };
 }
 
 // This part is tricky. You'll probably notice from the name of this function
