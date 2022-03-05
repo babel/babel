@@ -204,7 +204,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           /* allowNumSeparator */ "bail",
         );
         if (
-          codePoint &&
+          codePoint !== null &&
           this.codePointAtPos(this.state.pos) === charCodes.semicolon
         ) {
           ++this.state.pos;
