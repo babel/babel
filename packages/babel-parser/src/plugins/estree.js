@@ -344,7 +344,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isValidLVal(type: string, ...rest) {
-      return { Property: "value" }[type] || super.isValidLVal(type, ...rest);
+      return type === "Property" ? "value" : super.isValidLVal(type, ...rest);
     }
 
     isAssignable(node: N.Node, isBinding?: boolean): boolean {
