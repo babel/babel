@@ -534,6 +534,7 @@ export default class LValParser extends NodeUtils {
         ParenthesizedExpression: "expression",
         ArrayPattern: "elements",
         ObjectPattern: "properties",
+        __proto__: null,
       }[type] || false
     );
   }
