@@ -2434,9 +2434,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isValidLVal(type: string, ...rest) {
-      return (
-        { TypeCastExpression: true }[type] || super.isValidLVal(type, ...rest)
-      );
+      return type === "TypeCastExpression" || super.isValidLVal(type, ...rest);
     }
 
     // parse class property type annotations

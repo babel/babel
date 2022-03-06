@@ -34,7 +34,8 @@ import {
 import { ExpressionErrors } from "./util";
 import { Errors, type LValAncestor } from "../parse-error";
 
-const { isArray: ArrayIsArray } = Array;
+const getOwn = (object, key) =>
+  Object.hasOwnProperty.call(object, key) && object[key];
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
@@ -526,7 +527,7 @@ export default class LValParser extends NodeUtils {
    */
   // eslint-disable-next-line no-unused-vars
   isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
-    return (
+    return getOwn(
       {
         AssignmentPattern: "left",
         RestElement: "argument",
@@ -534,8 +535,8 @@ export default class LValParser extends NodeUtils {
         ParenthesizedExpression: "expression",
         ArrayPattern: "elements",
         ObjectPattern: "properties",
-        __proto__: null,
-      }[type] || false
+      },
+      type,
     );
   }
 
@@ -644,7 +645,7 @@ export default class LValParser extends NodeUtils {
       return;
     }
 
-    const [key, isParenthesizedExpression] = ArrayIsArray(validity)
+    const [key, isParenthesizedExpression] = Array.isArray(validity)
       ? validity
       : [validity, type === "ParenthesizedExpression"];
     const nextAncestor =
@@ -654,6 +655,9 @@ export default class LValParser extends NodeUtils {
         ? expression
         : ancestor;
 
+    // Flow has difficulty tracking `key` and `expression`, but only if we use
+    // null-proto objects. If we use normal objects, everything works fine.
+    // $FlowIgnore
     for (const child of [].concat(expression[key])) {
       if (child) {
         this.checkLVal(child, {

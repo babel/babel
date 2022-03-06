@@ -38,6 +38,9 @@ import { PARAM } from "../../util/production-parameter";
 import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier } from "../../parser/node";
 
+const getOwn = (object, key) =>
+  Object.hasOwnProperty.call(object, key) && object[key];
+
 type TsModifier =
   | "readonly"
   | "abstract"
@@ -3308,22 +3311,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
       return (
-        {
-          // Allow "typecasts" to appear on the left of assignment expressions,
-          // because it may be in an arrow function.
-          // e.g. `const f = (foo: number = 0) => foo;`
-          TSTypeCastExpression: true,
-          TSParameterProperty: "parameter",
-          TSNonNullExpression: "expression",
-          TSAsExpression: (binding !== BIND_NONE || isParenthesized) && [
-            "expression",
-            true,
-          ],
-          TSTypeAssertion: (binding !== BIND_NONE || isParenthesized) && [
-            "expression",
-            true,
-          ],
-        }[type] || super.isValidLVal(type, isParenthesized, binding)
+        getOwn(
+          {
+            // Allow "typecasts" to appear on the left of assignment expressions,
+            // because it may be in an arrow function.
+            // e.g. `const f = (foo: number = 0) => foo;`
+            TSTypeCastExpression: true,
+            TSParameterProperty: "parameter",
+            TSNonNullExpression: "expression",
+            TSAsExpression: (binding !== BIND_NONE || isParenthesized) && [
+              "expression",
+              true,
+            ],
+            TSTypeAssertion: (binding !== BIND_NONE || isParenthesized) && [
+              "expression",
+              true,
+            ],
+          },
+          type,
+        ) || super.isValidLVal(type, isParenthesized, binding)
       );
     }
 
