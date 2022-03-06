@@ -26,9 +26,6 @@ function* loadTests(dir) {
   }
 }
 
-const plugins = ["typescript", "decorators-legacy", "importAssertions"];
-const pluginsWithJSX = [...plugins, "jsx"];
-
 const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 
 // Check if the baseline errors contain the codes that should also be thrown from babel-parser
@@ -94,7 +91,12 @@ function toFiles(strictMode, contents, name) {
       sourceFilename,
       sourceType: "unambiguous",
       strictMode,
-      plugins: /\.(t|j)sx$/.test(sourceFilename) ? pluginsWithJSX : plugins,
+      plugins: [
+        ["typescript", { dts: sourceFilename.endsWith(".d.ts") }],
+        "decorators-legacy",
+        "importAssertions",
+        /\.(t|j)sx$/.test(sourceFilename) && "jsx",
+      ].filter(plugin => !!plugin),
     }));
 }
 

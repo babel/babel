@@ -3598,17 +3598,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     shouldParseAsAmbientContext(): boolean {
-      // If the user took the time to provide a filename and it has the ".d.ts"
-      // file extension, then assume they want ambient context parsing unless
-      // they explicitly specify otherwise.
-      const DTS = this.getPluginOption("typescript", "dts");
-      const DTSTruthy = !!DTS;
-      const DTSFalse = DTS === false;
-
-      return (
-        DTSTruthy ||
-        (!DTSFalse && !!this.filename && /\.d\.ts$/.test(this.filename))
-      );
+      return !!this.getPluginOption("typescript", "dts");
     }
 
     parse() {
