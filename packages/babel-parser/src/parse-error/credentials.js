@@ -48,8 +48,8 @@ const instantiate = <T>(
       key,
       typeof descriptor === "function"
         ? { value: descriptor, enumerable: false }
-        : typeof descriptor === "string"
-        ? reflect(descriptor.split("."))
+        : typeof descriptor.reflect === "string"
+        ? { ...descriptor, ...reflect(descriptor.reflect.split(".")) }
         : descriptor,
     ])
     .reduce(

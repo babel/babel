@@ -81,8 +81,11 @@ function toParseErrorConstructor<ErrorDetails: Object>({
             Object.defineProperty(this, "message", { value });
           },
         },
-        pos: "loc.index",
-        missingPlugin: "missingPlugin" in details && "details.missingPlugin",
+        pos: { reflect: "loc.index", enumerable: true },
+        missingPlugin: "missingPlugin" in details && {
+          reflect: "details.missingPlugin",
+          enumerable: true,
+        },
       },
     );
   };
