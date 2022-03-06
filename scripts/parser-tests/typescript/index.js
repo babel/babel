@@ -4,19 +4,10 @@ import { fileURLToPath } from "url";
 import TestRunner from "../utils/parser-test-runner.js";
 import ErrorCodes from "./error-codes.js";
 
-import { spawnSync } from "child_process";
 const getEncoding = path =>
-  spawnSync("file", ["--brief", "--mime-encoding", path])
-    .stdout.toString()
-    .trim();
-const toNodeEncoding = fileEncoding =>
-  ({
-    "us-ascii": "utf-8",
-    "utf-8": "utf-8",
-    "utf-16le": "utf-16le",
-    "utf-16be": "utf-16be",
-    "iso-8859-1": "latin1",
-  }[fileEncoding] || false);
+  ({ fffe: "utf-16le", feff: "utf-16be" }[
+    fs.readFileSync(path).slice(0, 2).toString("hex")
+  ] || "utf-8");
 
 const ErrorCodeRegExp = new RegExp(ErrorCodes.join("|"));
 
@@ -30,7 +21,7 @@ function* loadTests(dir) {
     if (encoding === "utf-16be" || encoding === "binary") continue;
     yield {
       name,
-      contents: fs.readFileSync(filename, toNodeEncoding(encoding)),
+      contents: fs.readFileSync(filename, encoding),
     };
   }
 }
