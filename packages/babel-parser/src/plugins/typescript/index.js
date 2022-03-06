@@ -1611,7 +1611,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.TsInterfaceDeclaration {
       if (this.hasFollowingLineBreak()) return null;
       this.expectContextual(tt._interface);
-      if (properties.declare) node.declare = properties.declare;
+      if (properties.declare) node.declare = true;
       if (tokenIsIdentifier(this.state.type)) {
         node.id = this.parseIdentifier();
         this.checkIdentifier(node.id, BIND_TS_INTERFACE);
