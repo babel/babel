@@ -1716,8 +1716,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsEnumDeclaration,
       properties: { const?: true, declare?: true } = {},
     ): N.TsEnumDeclaration {
-      if (properties.const) node.const = properties.const;
-      if (properties.declare) node.declare = properties.declare;
+      if (properties.const) node.const = true;
+      if (properties.declare) node.declare = true;
       this.expectContextual(tt._enum);
       node.id = this.parseIdentifier();
       this.checkIdentifier(
