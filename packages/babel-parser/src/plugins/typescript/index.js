@@ -2580,9 +2580,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         // var and let aren't ever allowed initializers.
         //
-        // If a const declaration has no type annotation and is initiailized to a
-        // string literal, numeric literal, or (FIXME) enum reference, then it is
-        // allowed.
+        // If a const declaration has no type annotation and is initiailized to
+        // a string literal, numeric literal, or enum reference, then it is
+        // allowed. In an ideal world, we'd check whether init was *actually* an
+        // enum reference, but we allow anything that "could be" a literal enum
+        // in `isPossiblyLiteralEnum` since we don't have all the information
+        // that the typescript compiler has.
         if (kind !== "const" || !!id.typeAnnotation) {
           this.raise(TSErrors.InitializerNotAllowedInAmbientContext, {
             at: init,
