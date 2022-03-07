@@ -1742,7 +1742,7 @@ export default class StatementParser extends ExpressionParser {
     member: N.StaticBlock & { decorators?: Array<N.Decorator> },
   ) {
     // Start a new lexical scope
-    this.scope.enter(SCOPE_CLASS | SCOPE_STATIC_BLOCK | SCOPE_SUPER);
+    this.scope.enter(SCOPE_CLASS | SCOPE_STATIC_BLOCK | SCOPE_SUPER | SCOPE_FUNCTION);
     // Start a new scope with regard to loop labels
     const oldLabels = this.state.labels;
     this.state.labels = [];

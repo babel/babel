@@ -103,7 +103,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   // > treated like var declarations rather than like lexical declarations.
   treatFunctionsAsVarInScope(scope: IScope): boolean {
     return !!(
-      scope.flags & SCOPE_FUNCTION ||
+      scope.flags & SCOPE_FUNCTION || scope.flags & SCOPE_STATIC_BLOCK ||
       (!this.parser.inModule && scope.flags & SCOPE_PROGRAM)
     );
   }
