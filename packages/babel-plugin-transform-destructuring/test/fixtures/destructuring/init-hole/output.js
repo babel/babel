@@ -39,3 +39,22 @@ const f = void 0;
 expect(f).toEqual(undefined);
 let g;
 expect(g).toEqual(undefined);
+let thrown;
+
+try {
+  thrown = false;
+  babelHelpers.objectDestructuringEmpty();
+} catch (e) {
+  thrown = true;
+}
+
+expect(thrown).toEqual(true);
+
+try {
+  thrown = false;
+  babelHelpers.objectDestructuringEmpty();
+} catch (e) {
+  thrown = true;
+}
+
+expect(thrown).toEqual(true);
