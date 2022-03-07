@@ -3715,7 +3715,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
         // { type something ...? }
         hasTypeSpecifier = true;
-        leftOfAs = this.parseIdentifier();
+        leftOfAs = isImport
+          ? this.parseIdentifier()
+          : this.parseModuleExportName();
       }
       if (hasTypeSpecifier && isInTypeOnlyImportExport) {
         this.raise(
