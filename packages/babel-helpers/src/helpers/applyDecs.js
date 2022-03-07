@@ -421,8 +421,8 @@ function applyMemberDecs(
   staticMetadataMap,
   decInfos
 ) {
-  var protoInitializers = [];
-  var staticInitializers = [];
+  var protoInitializers;
+  var staticInitializers;
 
   var existingProtoNonFields = new Map();
   var existingStaticNonFields = new Map();
@@ -446,13 +446,19 @@ function applyMemberDecs(
       base = Class;
       metadataMap = staticMetadataMap;
       kind = kind - 5 /* STATIC */;
-
-      initializers = staticInitializers;
+      // initialize staticInitializers when we see a non-field static member
+      if (kind !== 0 /* FIELD */) {
+        staticInitializers = staticInitializers || [];
+        initializers = staticInitializers;
+      }
     } else {
       base = Class.prototype;
       metadataMap = protoMetadataMap;
-
-      initializers = protoInitializers;
+      // initialize protoInitializers when we see a non-field member
+      if (kind !== 0 /* FIELD */) {
+        protoInitializers = protoInitializers || [];
+        initializers = protoInitializers;
+      }
     }
 
     if (kind !== 0 /* FIELD */ && !isPrivate) {
@@ -496,27 +502,29 @@ function applyMemberDecs(
 }
 
 function pushInitializers(ret, initializers) {
-  if (initializers.length > 0) {
-    // Slice the array, which means that `addInitializer` can no longer add
-    // additional initializers to the array
-    initializers = initializers.slice();
+  if (initializers) {
+    if (initializers.length > 0) {
+      // Slice the array, which means that `addInitializer` can no longer add
+      // additional initializers to the array
+      initializers = initializers.slice();
 
-    ret.push(function (instance) {
-      for (var i = 0; i < initializers.length; i++) {
-        initializers[i].call(instance, instance);
-      }
-      return instance;
-    });
-  } else {
-    ret.push(function (instance) {
-      return instance;
-    });
+      ret.push(function (instance) {
+        for (var i = 0; i < initializers.length; i++) {
+          initializers[i].call(instance, instance);
+        }
+        return instance;
+      });
+    } else {
+      ret.push(function (instance) {
+        return instance;
+      });
+    }
   }
 }
 
 function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
-  var initializers = [];
   if (classDecs.length > 0) {
+    var initializers = [];
     var newClass = targetClass;
 
     var name = targetClass.name;
@@ -534,16 +542,16 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     }
 
     ret.push(newClass);
-  }
 
-  if (initializers.length > 0) {
-    ret.push(function () {
-      for (var i = 0; i < initializers.length; i++) {
-        initializers[i].call(newClass, newClass);
-      }
-    });
-  } else {
-    ret.push(function () {});
+    if (initializers.length > 0) {
+      ret.push(function () {
+        for (var i = 0; i < initializers.length; i++) {
+          initializers[i].call(newClass, newClass);
+        }
+      });
+    } else {
+      ret.push(function () {});
+    }
   }
 }
 
