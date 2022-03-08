@@ -510,7 +510,7 @@ function pushInitializers(ret, initializers) {
 
       ret.push(function (instance) {
         for (var i = 0; i < initializers.length; i++) {
-          initializers[i].call(instance, instance);
+          initializers[i].call(instance);
         }
         return instance;
       });
@@ -546,7 +546,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     if (initializers.length > 0) {
       ret.push(function () {
         for (var i = 0; i < initializers.length; i++) {
-          initializers[i].call(newClass, newClass);
+          initializers[i].call(newClass);
         }
       });
     } else {
