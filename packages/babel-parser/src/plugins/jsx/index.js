@@ -1,8 +1,5 @@
 // @flow
 
-// Error messages are colocated with the plugin.
-/* eslint-disable @babel/development-internal/dry-error-messages */
-
 import * as charCodes from "charcodes";
 
 import XHTMLEntities from "./xhtml";
@@ -20,27 +17,37 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
+import { Errors, ParseErrorEnum } from "../../parse-error";
 
 /* eslint sort-keys: "error" */
-const JsxErrors = makeErrorTemplates(
-  {
-    AttributeIsEmpty:
-      "JSX attributes must only be assigned a non-empty expression.",
-    MissingClosingTagElement:
-      "Expected corresponding JSX closing tag for <%0>.",
-    MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>.",
-    UnexpectedSequenceExpression:
-      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-    UnsupportedJsxValue:
-      "JSX value should be either an expression or a quoted JSX text.",
-    UnterminatedJsxContent: "Unterminated JSX contents.",
-    UnwrappedAdjacentJSXElements:
-      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-  },
-  /* code */ ErrorCodes.SyntaxError,
-  /* syntaxPlugin */ "jsx",
-);
+const JsxErrors = ParseErrorEnum`jsx`(_ => ({
+  AttributeIsEmpty: _(
+    "JSX attributes must only be assigned a non-empty expression.",
+  ),
+  MissingClosingTagElement: _<{| openingTagName: string |}>(
+    ({ openingTagName }) =>
+      `Expected corresponding JSX closing tag for <${openingTagName}>.`,
+  ),
+  MissingClosingTagFragment: _(
+    "Expected corresponding JSX closing tag for <>.",
+  ),
+  UnexpectedSequenceExpression: _(
+    "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
+  ),
+  // FIXME: Unify with Errors.UnexpectedToken
+  UnexpectedToken: _<{| unexpected: string, HTMLEntity: string |}>(
+    ({ unexpected, HTMLEntity }) =>
+      `Unexpected token \`${unexpected}\`. Did you mean \`${HTMLEntity}\` or \`{'${unexpected}'}\`?`,
+  ),
+  UnsupportedJsxValue: _(
+    "JSX value should be either an expression or a quoted JSX text.",
+  ),
+  UnterminatedJsxContent: _("Unterminated JSX contents."),
+  UnwrappedAdjacentJSXElements: _(
+    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+  ),
+}));
+
 /* eslint-disable sort-keys */
 
 function isFragment(object: ?N.JSXElement): boolean {
@@ -113,17 +120,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           case charCodes.greaterThan:
           case charCodes.rightCurlyBrace:
             if (process.env.BABEL_8_BREAKING) {
-              const htmlEntity =
-                ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
-              const char = this.input[this.state.pos];
-              this.raise(
-                {
-                  code: ErrorCodes.SyntaxError,
-                  reasonCode: "UnexpectedToken",
-                  template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
-                },
-                { at: this.state.curPosition() },
-              );
+              this.raise(JsxErrors.UnexpectedToken, {
+                at: this.state.curPosition(),
+                unexpected: this.input[this.state.pos],
+                HTMLEntity:
+                  ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;",
+              });
             }
           /* falls through */
 
@@ -318,7 +320,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.next();
           node = this.jsxParseExpressionContainer(node, tc.j_oTag);
           if (node.expression.type === "JSXEmptyExpression") {
-            this.raise(JsxErrors.AttributeIsEmpty, { node });
+            this.raise(JsxErrors.AttributeIsEmpty, { at: node });
           }
           return node;
 
@@ -373,7 +375,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             !expression.extra?.parenthesized
           ) {
             this.raise(JsxErrors.UnexpectedSequenceExpression, {
-              node: expression.expressions[1],
+              at: expression.expressions[1],
             });
           }
         }
@@ -504,27 +506,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           closingElement !== null
         ) {
           this.raise(JsxErrors.MissingClosingTagFragment, {
-            node: closingElement,
+            at: closingElement,
           });
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
-          this.raise(
-            JsxErrors.MissingClosingTagElement,
+          this.raise(JsxErrors.MissingClosingTagElement, {
             // $FlowIgnore
-            { node: closingElement },
-            getQualifiedJSXName(openingElement.name),
-          );
+            at: closingElement,
+            openingTagName: getQualifiedJSXName(openingElement.name),
+          });
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
           if (
             // $FlowIgnore
             getQualifiedJSXName(closingElement.name) !==
             getQualifiedJSXName(openingElement.name)
           ) {
-            this.raise(
-              JsxErrors.MissingClosingTagElement,
+            this.raise(JsxErrors.MissingClosingTagElement, {
               // $FlowIgnore
-              { node: closingElement },
-              getQualifiedJSXName(openingElement.name),
-            );
+              at: closingElement,
+              openingTagName: getQualifiedJSXName(openingElement.name),
+            });
           }
         }
       }

@@ -39,7 +39,7 @@ declare module "@babel/helper-optimise-call-expression" {
   declare export default function optimiseCallExpression(
     callee: BabelNodeExpression,
     thisNode: BabelNodeExpression,
-    args: $Readonly<Array<BabelNodeExpression | BabelNodeSpreadElement>>,
+    args: $ReadOnly<Array<BabelNodeExpression | BabelNodeSpreadElement>>,
     optional: boolean
   ): BabelNodeCallExpression | BabelNodeOptionalCallExpression;
 }
@@ -154,7 +154,7 @@ declare module "@babel/helper-validator-option" {
   }
   declare function findSuggestion(
     str: string,
-    arr: $ReadonlyArray<string>
+    arr: $ReadOnlyArray<string>
   ): string;
 }
 

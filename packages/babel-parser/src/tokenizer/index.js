@@ -3,7 +3,12 @@
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
-import { Position, createPositionWithColumnOffset } from "../util/location";
+import {
+  Position,
+  SourceLocation,
+  createPositionWithColumnOffset,
+} from "../util/location";
+import CommentsParser from "../parser/comments";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -15,8 +20,12 @@ import {
   type TokenType,
 } from "./types";
 import { type TokContext } from "./context";
-import ParserErrors, { Errors, type ErrorTemplate } from "../parser/error";
-import { SourceLocation } from "../util/location";
+import {
+  Errors,
+  type ParseError,
+  type ParseErrorConstructor,
+  type RaiseProperties,
+} from "../parse-error";
 import {
   lineBreakG,
   isNewLine,
@@ -24,7 +33,7 @@ import {
   skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
-import type { LookaheadState } from "./state";
+import type { LookaheadState, DeferredStrictError } from "./state";
 
 const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseG,
@@ -126,15 +135,7 @@ export class Token {
 
 // ## Tokenizer
 
-export default class Tokenizer extends ParserErrors {
-  // Forward-declarations
-  // parser/util.js
-  /*::
-  +hasPrecedingLineBreak: () => boolean;
-  +unexpected: (loc?: ?Position, type?: TokenType) => empty;
-  +expectPlugin: (name: string, loc?: Position) => true;
-  */
-
+export default class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
   // Token store.
@@ -286,9 +287,8 @@ export default class Tokenizer extends ParserErrors {
       // after a "use strict" directive. Strict mode will be set at parse
       // time for any literals that occur after the next node of the strict
       // directive.
-      this.state.strictErrors.forEach(({ message, loc }) =>
-        /* eslint-disable @babel/development-internal/dry-error-messages */
-        this.raise(message, { at: loc }),
+      this.state.strictErrors.forEach(([toParseError, at]) =>
+        this.raise(toParseError, { at }),
       );
       this.state.strictErrors.clear();
     }
@@ -1071,11 +1071,10 @@ export default class Tokenizer extends ParserErrors {
         }
     }
 
-    throw this.raise(
-      Errors.InvalidOrUnexpectedToken,
-      { at: this.state.curPosition() },
-      String.fromCodePoint(code),
-    );
+    throw this.raise(Errors.InvalidOrUnexpectedToken, {
+      at: this.state.curPosition(),
+      unexpected: String.fromCodePoint(code),
+    });
   }
 
   finishOp(type: TokenType, size: number): void {
@@ -1240,11 +1239,10 @@ export default class Tokenizer extends ParserErrors {
 
         if (this.options.errorRecovery && val <= 9) {
           val = 0;
-          this.raise(
-            Errors.InvalidDigit,
-            { at: this.state.curPosition() },
+          this.raise(Errors.InvalidDigit, {
+            at: this.state.curPosition(),
             radix,
-          );
+          });
         } else if (forceLen) {
           val = 0;
           invalid = true;
@@ -1273,12 +1271,11 @@ export default class Tokenizer extends ParserErrors {
     this.state.pos += 2; // 0x
     const val = this.readInt(radix);
     if (val == null) {
-      this.raise(
-        Errors.InvalidDigit,
+      this.raise(Errors.InvalidDigit, {
         // Numeric literals can't have newlines, so this is safe to do.
-        { at: createPositionWithColumnOffset(startLoc, 2) },
+        at: createPositionWithColumnOffset(startLoc, 2),
         radix,
-      );
+      });
     }
     const next = this.input.charCodeAt(this.state.pos);
 
@@ -1326,7 +1323,7 @@ export default class Tokenizer extends ParserErrors {
 
     if (hasLeadingZero) {
       const integer = this.input.slice(start, this.state.pos);
-      this.recordStrictModeErrors(Errors.StrictOctalLiteral, startLoc);
+      this.recordStrictModeErrors(Errors.StrictOctalLiteral, { at: startLoc });
       if (!this.state.strict) {
         // disallow numeric separators in non octal decimals and legacy octal likes
         const underscorePos = integer.indexOf("_");
@@ -1541,11 +1538,16 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  recordStrictModeErrors(message: ErrorTemplate, loc: Position) {
-    if (this.state.strict && !this.state.strictErrors.has(loc.index)) {
-      this.raise(message, { at: loc });
+  recordStrictModeErrors(
+    toParseError: DeferredStrictError,
+    { at }: { at: Position },
+  ) {
+    const index = at.index;
+
+    if (this.state.strict && !this.state.strictErrors.has(index)) {
+      this.raise(toParseError, { at });
     } else {
-      this.state.strictErrors.set(loc.index, { loc, message });
+      this.state.strictErrors.set(index, [toParseError, at]);
     }
   }
 
@@ -1592,12 +1594,11 @@ export default class Tokenizer extends ParserErrors {
         if (inTemplate) {
           return null;
         } else {
-          this.recordStrictModeErrors(
-            Errors.StrictNumericEscape,
+          this.recordStrictModeErrors(Errors.StrictNumericEscape, {
             // We immediately follow a "\\", and we're an 8 or a 9, so we must
             // be on the same line.
-            createPositionWithColumnOffset(this.state.curPosition(), -1),
-          );
+            at: createPositionWithColumnOffset(this.state.curPosition(), -1),
+          });
         }
       // fall through
       default:
@@ -1631,7 +1632,9 @@ export default class Tokenizer extends ParserErrors {
             if (inTemplate) {
               return null;
             } else {
-              this.recordStrictModeErrors(Errors.StrictNumericEscape, codePos);
+              this.recordStrictModeErrors(Errors.StrictNumericEscape, {
+                at: codePos,
+              });
             }
           }
 
@@ -1734,15 +1737,101 @@ export default class Tokenizer extends ParserErrors {
   checkKeywordEscapes(): void {
     const { type } = this.state;
     if (tokenIsKeyword(type) && this.state.containsEsc) {
-      this.raise(
-        Errors.InvalidEscapedReservedWord,
-        { at: this.state.startLoc },
-        tokenLabelName(type),
-      );
+      this.raise(Errors.InvalidEscapedReservedWord, {
+        at: this.state.startLoc,
+        reservedWord: tokenLabelName(type),
+      });
     }
+  }
+
+  /**
+   * Raise a `ParseError` given the appropriate properties. If passed a
+   * `Position` for the `at` property, raises the `ParseError` at that location.
+   * Otherwise, if passed a `Node`, raises the `ParseError` at the start
+   * location of that `Node`.
+   *
+   * If `errorRecovery` is `true`, the error is pushed to the errors array and
+   * returned. If `errorRecovery` is `false`, the error is instead thrown.
+   *
+   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorDetails>} raiseProperties
+   * @returns {(ParseError<ErrorDetails> | empty)}
+   * @memberof Tokenizer
+   */
+  raise<ErrorDetails>(
+    toParseError: ParseErrorConstructor<ErrorDetails>,
+    raiseProperties: RaiseProperties<ErrorDetails>,
+  ): ParseError<ErrorDetails> {
+    const { at, ...details } = raiseProperties;
+    const loc = at instanceof Position ? at : at.loc.start;
+    const error = toParseError({ loc, details });
+
+    if (!this.options.errorRecovery) throw error;
+    if (!this.isLookahead) this.state.errors.push(error);
+
+    return error;
+  }
+
+  /**
+   * If `errorRecovery` is `false`, this method behaves identically to `raise`.
+   * If `errorRecovery` is `true`, this method will first see if there is
+   * already an error stored at the same `Position`, and replaces it with the
+   * one generated here.
+   *
+   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorDetails>} raiseProperties
+   * @returns {(ParseError<ErrorDetails> | empty)}
+   * @memberof Tokenizer
+   */
+  raiseOverwrite<ErrorDetails>(
+    toParseError: ParseErrorConstructor<ErrorDetails>,
+    raiseProperties: RaiseProperties<ErrorDetails>,
+  ): ParseError<ErrorDetails> | empty {
+    const { at, ...details } = raiseProperties;
+    const loc = at instanceof Position ? at : at.loc.start;
+    const pos = loc.index;
+    const errors = this.state.errors;
+
+    for (let i = errors.length - 1; i >= 0; i--) {
+      const error = errors[i];
+      if (error.loc.index === pos) {
+        return (errors[i] = toParseError({ loc, details }));
+      }
+      if (error.loc.index < pos) break;
+    }
+
+    return this.raise(toParseError, raiseProperties);
   }
 
   // updateContext is used by the jsx plugin
   // eslint-disable-next-line no-unused-vars
   updateContext(prevType: TokenType): void {}
+
+  // Raise an unexpected token error. Can take the expected token type.
+  unexpected(loc?: Position | null, type?: TokenType): void {
+    throw this.raise(Errors.UnexpectedToken, {
+      expected: type ? tokenLabelName(type) : null,
+      at: loc != null ? loc : this.state.startLoc,
+    });
+  }
+
+  expectPlugin(pluginName: string, loc?: Position): true {
+    if (this.hasPlugin(pluginName)) {
+      return true;
+    }
+
+    throw this.raise(Errors.MissingPlugin, {
+      at: loc != null ? loc : this.state.startLoc,
+      missingPlugin: [pluginName],
+    });
+  }
+
+  expectOnePlugin(pluginNames: string[]): void {
+    if (!pluginNames.some(name => this.hasPlugin(name))) {
+      throw this.raise(Errors.MissingOneOfPlugins, {
+        at: this.state.startLoc,
+        missingPlugin: pluginNames,
+      });
+    }
+  }
 }
