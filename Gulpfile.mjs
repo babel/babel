@@ -137,7 +137,7 @@ async function generateTypeHelpers(helperKind, filename = "index.ts") {
  * @typedef {("asserts" | "validators" | "virtual-types")} TraverseHelperKind
  * @param {TraverseHelperKind} helperKind
  */
-async function generateTraverseHelpers(helperKind) {
+function generateTraverseHelpers(helperKind) {
   return generateHelpers(
     `./packages/babel-traverse/scripts/generators/${helperKind}.js`,
     `./packages/babel-traverse/src/path/generated/`,
@@ -146,7 +146,7 @@ async function generateTraverseHelpers(helperKind) {
   );
 }
 
-async function generateRuntimeHelpers() {
+function generateRuntimeHelpers() {
   return generateHelpers(
     `./packages/babel-helpers/scripts/generate-helpers.js`,
     `./packages/babel-helpers/src/`,
@@ -603,6 +603,7 @@ gulp.task(
     "build-no-bundle",
     gulp.parallel(
       "generate-standalone",
+      "generate-runtime-helpers",
       gulp.series(
         "generate-type-helpers",
         // rebuild @babel/types since type-helpers may be changed

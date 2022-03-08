@@ -106,6 +106,9 @@ jobs:
         env:
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
+      - name: Ensure cwd does not contain uncommitted changes
+        run: |
+          ./scripts/assert-dir-git-clean.sh
       - uses: actions/upload-artifact@v2
         with:
           name: babel-artifact
