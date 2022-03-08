@@ -14,6 +14,8 @@
   SETTER = 4;
 
   STATIC = 5;
+
+  CLASS = 10; // only used in assertValidReturnValue
 */
 
 function createMetadataMethodsForProperty(metadataMap, kind, property) {
@@ -209,7 +211,7 @@ function memberDecCtx(
 
 function assertValidInitializer(initializer) {
   if (typeof initializer !== "function") {
-    throw new Error("initializers must be functions");
+    throw new TypeError("initializers must be functions");
   }
 }
 
@@ -218,18 +220,20 @@ function assertValidReturnValue(kind, value) {
 
   if (kind === 1 /* ACCESSOR */) {
     if (type !== "object" || value === null) {
-      throw new Error(
+      throw new TypeError(
         "accessor decorators must return an object with get, set, or initializer properties or void 0"
       );
     }
   } else if (type !== "function") {
+    var hint;
     if (kind === 0 /* FIELD */) {
-      throw new Error(
-        "field decorators must return a initializer function or void 0"
-      );
+      hint = "field";
+    } else if (kind === 10 /* CLASS */) {
+      hint = "class";
     } else {
-      throw new Error("method decorators must return a function or void 0");
+      hint = "method";
     }
+    throw new TypeError(hint + " decorators must return a function or void 0");
   }
 }
 
@@ -538,7 +542,11 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     );
 
     for (var i = classDecs.length - 1; i >= 0; i--) {
-      newClass = classDecs[i](newClass, ctx) || newClass;
+      var nextNewClass = classDecs[i](newClass, ctx);
+      if (nextNewClass !== undefined) {
+        assertValidReturnValue(10 /* CLASS */, nextNewClass);
+        newClass = nextNewClass;
+      }
     }
 
     ret.push(newClass);
