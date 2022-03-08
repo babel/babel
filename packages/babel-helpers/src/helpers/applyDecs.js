@@ -310,7 +310,7 @@ function applyMemberDec(
       if (kind === 0 /* FIELD */) {
         initializer = newValue;
       } else if (kind === 1 /* ACCESSOR */) {
-        initializer = newValue.initializer;
+        initializer = newValue.initialize;
 
         get = newValue.get || value.get;
         set = newValue.set || value.set;
@@ -333,7 +333,7 @@ function applyMemberDec(
         if (kind === 0 /* FIELD */) {
           newInit = newValue;
         } else if (kind === 1 /* ACCESSOR */) {
-          newInit = newValue.initializer;
+          newInit = newValue.initialize;
 
           get = newValue.get || value.get;
           set = newValue.set || value.set;
