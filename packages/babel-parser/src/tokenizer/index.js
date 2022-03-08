@@ -51,7 +51,7 @@ const VALID_REGEX_FLAGS = new Set([
 // an immediate sibling of NumericLiteralSeparator _
 
 const forbiddenNumericSeparatorSiblings = {
-  decBinOct: [
+  decBinOct: new Set([
     charCodes.dot,
     charCodes.uppercaseB,
     charCodes.uppercaseE,
@@ -60,22 +60,22 @@ const forbiddenNumericSeparatorSiblings = {
     charCodes.lowercaseB,
     charCodes.lowercaseE,
     charCodes.lowercaseO,
-  ],
-  hex: [
+  ]),
+  hex: new Set([
     charCodes.dot,
     charCodes.uppercaseX,
     charCodes.underscore, // multiple separators are not allowed
     charCodes.lowercaseX,
-  ],
+  ]),
 };
 
 const allowedNumericSeparatorSiblings = {};
-allowedNumericSeparatorSiblings.bin = [
+allowedNumericSeparatorSiblings.bin = new Set([
   // 0 - 1
   charCodes.digit0,
   charCodes.digit1,
-];
-allowedNumericSeparatorSiblings.oct = [
+]);
+allowedNumericSeparatorSiblings.oct = new Set([
   // 0 - 7
   ...allowedNumericSeparatorSiblings.bin,
 
@@ -85,16 +85,16 @@ allowedNumericSeparatorSiblings.oct = [
   charCodes.digit5,
   charCodes.digit6,
   charCodes.digit7,
-];
-allowedNumericSeparatorSiblings.dec = [
+]);
+allowedNumericSeparatorSiblings.dec = new Set([
   // 0 - 9
   ...allowedNumericSeparatorSiblings.oct,
 
   charCodes.digit8,
   charCodes.digit9,
-];
+]);
 
-allowedNumericSeparatorSiblings.hex = [
+allowedNumericSeparatorSiblings.hex = new Set([
   // 0 - 9, A - F, a - f,
   ...allowedNumericSeparatorSiblings.dec,
 
@@ -111,7 +111,7 @@ allowedNumericSeparatorSiblings.hex = [
   charCodes.lowercaseD,
   charCodes.lowercaseE,
   charCodes.lowercaseF,
-];
+]);
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
@@ -1199,22 +1199,18 @@ export default class Tokenizer extends CommentsParser {
       if (code === charCodes.underscore && allowNumSeparator !== "bail") {
         const prev = this.input.charCodeAt(this.state.pos - 1);
         const next = this.input.charCodeAt(this.state.pos + 1);
-        if (allowedSiblings.indexOf(next) === -1) {
-          this.raise(Errors.UnexpectedNumericSeparator, {
-            at: this.state.curPosition(),
-          });
-        } else if (
-          forbiddenSiblings.indexOf(prev) > -1 ||
-          forbiddenSiblings.indexOf(next) > -1 ||
-          Number.isNaN(next)
-        ) {
-          this.raise(Errors.UnexpectedNumericSeparator, {
-            at: this.state.curPosition(),
-          });
-        }
 
         if (!allowNumSeparator) {
           this.raise(Errors.NumericSeparatorInEscapeSequence, {
+            at: this.state.curPosition(),
+          });
+        } else if (
+          Number.isNaN(next) ||
+          !allowedSiblings.has(next) ||
+          forbiddenSiblings.has(prev) ||
+          forbiddenSiblings.has(next)
+        ) {
+          this.raise(Errors.UnexpectedNumericSeparator, {
             at: this.state.curPosition(),
           });
         }
