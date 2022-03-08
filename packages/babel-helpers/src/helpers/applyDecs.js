@@ -122,7 +122,7 @@ function convertMetadataMapToFinal(obj, metadataMap) {
 
 function createAddInitializerMethod(initializers) {
   return function addInitializer(initializer) {
-    assertValidInitializer(initializer);
+    assertCallable(initializer, "initializers");
     initializers.push(initializer);
   };
 }
@@ -209,9 +209,9 @@ function memberDecCtx(
   );
 }
 
-function assertValidInitializer(initializer) {
-  if (typeof initializer !== "function") {
-    throw new TypeError("initializers must be functions");
+function assertCallable(fn, hint) {
+  if (typeof fn !== "function") {
+    throw new TypeError(hint + " must be functions");
   }
 }
 
@@ -223,6 +223,15 @@ function assertValidReturnValue(kind, value) {
       throw new TypeError(
         "accessor decorators must return an object with get, set, or initializer properties or void 0"
       );
+    }
+    if (value.get !== undefined) {
+      assertCallable(value.get, "accessor.get");
+    }
+    if (value.set !== undefined) {
+      assertCallable(value.set, "accessor.set");
+    }
+    if (value.initialize !== undefined) {
+      assertCallable(value.initialize, "accessor.initialize");
     }
   } else if (type !== "function") {
     var hint;
