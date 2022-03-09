@@ -128,7 +128,6 @@ function createAddInitializerMethod(initializers) {
 }
 
 function memberDecCtx(
-  base,
   name,
   desc,
   metadataMap,
@@ -298,7 +297,6 @@ function applyMemberDec(
   }
 
   var ctx = memberDecCtx(
-    base,
     name,
     desc,
     metadataMap,
