@@ -205,68 +205,61 @@ function permuteHelperAST(
     toRename[exportName] = id.name;
   }
 
-  const visitor: Visitor = {
-    Program(path) {
-      // We need to compute these in advance because removing nodes would
-      // invalidate the paths.
-      const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
-      const imps: NodePath<t.ImportDeclaration>[] = importPaths.map(p =>
-        path.get(p),
+  const { path } = file;
+
+  // We need to compute these in advance because removing nodes would
+  // invalidate the paths.
+  const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
+  const imps: NodePath<t.ImportDeclaration>[] = importPaths.map(p =>
+    path.get(p),
+  );
+  const impsBindingRefs: NodePath<t.Identifier>[] =
+    importBindingsReferences.map(p => path.get(p));
+
+  const decl = exp.get("declaration");
+  if (id.type === "Identifier") {
+    if (decl.isFunctionDeclaration()) {
+      exp.replaceWith(decl);
+    } else {
+      exp.replaceWith(
+        variableDeclaration("var", [
+          variableDeclarator(id, decl.node as t.Expression),
+        ]),
       );
-      const impsBindingRefs: NodePath<t.Identifier>[] =
-        importBindingsReferences.map(p => path.get(p));
-
-      const decl = exp.get("declaration");
-      if (id.type === "Identifier") {
-        if (decl.isFunctionDeclaration()) {
-          exp.replaceWith(decl);
-        } else {
-          exp.replaceWith(
-            variableDeclaration("var", [
-              variableDeclarator(id, decl.node as t.Expression),
-            ]),
-          );
-        }
-      } else if (id.type === "MemberExpression") {
-        if (decl.isFunctionDeclaration()) {
-          exportBindingAssignments.forEach(assignPath => {
-            const assign: NodePath<t.Expression> = path.get(assignPath);
-            assign.replaceWith(assignmentExpression("=", id, assign.node));
-          });
-          exp.replaceWith(decl);
-          path.pushContainer(
-            "body",
-            expressionStatement(
-              assignmentExpression("=", id, identifier(exportName)),
-            ),
-          );
-        } else {
-          exp.replaceWith(
-            expressionStatement(
-              assignmentExpression("=", id, decl.node as t.Expression),
-            ),
-          );
-        }
-      } else {
-        throw new Error("Unexpected helper format.");
-      }
-
-      Object.keys(toRename).forEach(name => {
-        path.scope.rename(name, toRename[name]);
+    }
+  } else if (id.type === "MemberExpression") {
+    if (decl.isFunctionDeclaration()) {
+      exportBindingAssignments.forEach(assignPath => {
+        const assign: NodePath<t.Expression> = path.get(assignPath);
+        assign.replaceWith(assignmentExpression("=", id, assign.node));
       });
+      exp.replaceWith(decl);
+      path.pushContainer(
+        "body",
+        expressionStatement(
+          assignmentExpression("=", id, identifier(exportName)),
+        ),
+      );
+    } else {
+      exp.replaceWith(
+        expressionStatement(
+          assignmentExpression("=", id, decl.node as t.Expression),
+        ),
+      );
+    }
+  } else {
+    throw new Error("Unexpected helper format.");
+  }
 
-      for (const path of imps) path.remove();
-      for (const path of impsBindingRefs) {
-        const node = cloneNode(dependenciesRefs[path.node.name]);
-        path.replaceWith(node);
-      }
+  Object.keys(toRename).forEach(name => {
+    path.scope.rename(name, toRename[name]);
+  });
 
-      // We only use "traverse" for all the handy scoping helpers, so we can stop immediately without
-      // actually doing the traversal.
-      path.stop();
-    },
-  };
-  traverse(file.ast, visitor, file.scope);
+  for (const path of imps) path.remove();
+  for (const path of impsBindingRefs) {
+    const node = cloneNode(dependenciesRefs[path.node.name]);
+    path.replaceWith(node);
+  }
 }
 
 interface HelperData {
