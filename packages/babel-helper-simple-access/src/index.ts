@@ -14,6 +14,7 @@ import type { NodePath } from "@babel/traverse";
 export default function simplifyAccess(
   path: NodePath,
   bindingNames,
+  // TODO(Babel 8): Remove this
   includeUpdateExpression: boolean = true,
 ) {
   path.traverse(simpleAssignmentVisitor, {
