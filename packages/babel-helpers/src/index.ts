@@ -284,11 +284,15 @@ function loadHelper(name: string) {
       );
     };
 
-    const metadata = getHelperMetadata(fn());
+    // We compute the helper metadata lazily, so that we skip that
+    // work if we only need the `.minVersion` (for example because
+    // of a call to `.availableHelper` when `@babel/rutime`).
+    let metadata: HelperMetadata | null = null;
 
     helperData[name] = {
       build(getDependency, id, localBindings) {
         const file = fn();
+        metadata ||= getHelperMetadata(file);
         permuteHelperAST(file, metadata, id, localBindings, getDependency);
 
         return {
@@ -299,7 +303,10 @@ function loadHelper(name: string) {
       minVersion() {
         return helper.minVersion;
       },
-      dependencies: metadata.dependencies,
+      get dependencies() {
+        metadata ||= getHelperMetadata(fn());
+        return metadata.dependencies;
+      },
     };
   }
 
