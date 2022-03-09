@@ -122,7 +122,7 @@ function convertMetadataMapToFinal(obj, metadataMap) {
 
 function createAddInitializerMethod(initializers) {
   return function addInitializer(initializer) {
-    assertCallable(initializer, "initializers");
+    assertCallable(initializer, "An initializer");
     initializers.push(initializer);
   };
 }
@@ -211,7 +211,7 @@ function memberDecCtx(
 
 function assertCallable(fn, hint) {
   if (typeof fn !== "function") {
-    throw new TypeError(hint + " must be functions");
+    throw new TypeError(hint + " must be a function");
   }
 }
 

@@ -11,9 +11,9 @@ const returnsInitializeFalse = () => ({ initialize: false });
 expect(() => class { @returnsNull accessor a }).toThrow("accessor decorators must return an object with get, set, or initializer properties or void 0")
 expect(() => class { @returnsFalse accessor a }).toThrow("accessor decorators must return an object with get, set, or initializer properties or void 0")
 expect(() => class { @returnsFunction accessor a }).toThrow("accessor decorators must return an object with get, set, or initializer properties or void 0")
-expect(() => class { @returnsGetFalse accessor a }).toThrow("accessor.get must be functions");
-expect(() => class { @returnsSetFalse accessor a }).toThrow("accessor.set must be functions");
-expect(() => class { @returnsInitializeFalse accessor a }).toThrow("accessor.initialize must be functions");
+expect(() => class { @returnsGetFalse accessor a }).toThrow("accessor.get must be a function");
+expect(() => class { @returnsSetFalse accessor a }).toThrow("accessor.set must be a function");
+expect(() => class { @returnsInitializeFalse accessor a }).toThrow("accessor.initialize must be a function");
 
 expect(() => class { @returnsGetSet accessor a }).not.toThrow();
 expect(() => class { @returnsInitialize accessor a }).not.toThrow();
