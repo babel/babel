@@ -7,8 +7,6 @@ import {
   expressionStatement,
   file as t_file,
   identifier,
-  variableDeclaration,
-  variableDeclarator,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import helpers from "./helpers";
@@ -74,15 +72,13 @@ function getHelperMetadata(file: File): HelperMetadata {
     ExportDefaultDeclaration(child) {
       const decl = child.get("declaration");
 
-      if (decl.isFunctionDeclaration()) {
-        if (!decl.node.id) {
-          throw decl.buildCodeFrameError(
-            "Helpers should give names to their exported func declaration",
-          );
-        }
-
-        exportName = decl.node.id.name;
+      if (!decl.isFunctionDeclaration() || !decl.node.id) {
+        throw decl.buildCodeFrameError(
+          "Helpers can only export named function declarations",
+        );
       }
+
+      exportName = decl.node.id.name;
       exportPath = makePath(child);
     },
     ExportAllDeclaration(child) {
@@ -140,7 +136,7 @@ function getHelperMetadata(file: File): HelperMetadata {
   traverse(file.ast, dependencyVisitor, file.scope);
   traverse(file.ast, referenceVisitor, file.scope);
 
-  if (!exportPath) throw new Error("Helpers must default-export something.");
+  if (!exportPath) throw new Error("Helpers must have a default export.");
 
   // Process these in reverse so that mutating the references does not invalidate any later paths in
   // the list.
@@ -216,37 +212,23 @@ function permuteHelperAST(
   const impsBindingRefs: NodePath<t.Identifier>[] =
     importBindingsReferences.map(p => path.get(p));
 
-  const decl = exp.get("declaration");
+  // We assert that this is a FunctionDeclaration in dependencyVisitor.
+  const decl = exp.get("declaration") as NodePath<t.FunctionDeclaration>;
+
   if (id.type === "Identifier") {
-    if (decl.isFunctionDeclaration()) {
-      exp.replaceWith(decl);
-    } else {
-      exp.replaceWith(
-        variableDeclaration("var", [
-          variableDeclarator(id, decl.node as t.Expression),
-        ]),
-      );
-    }
+    exp.replaceWith(decl);
   } else if (id.type === "MemberExpression") {
-    if (decl.isFunctionDeclaration()) {
-      exportBindingAssignments.forEach(assignPath => {
-        const assign: NodePath<t.Expression> = path.get(assignPath);
-        assign.replaceWith(assignmentExpression("=", id, assign.node));
-      });
-      exp.replaceWith(decl);
-      path.pushContainer(
-        "body",
-        expressionStatement(
-          assignmentExpression("=", id, identifier(exportName)),
-        ),
-      );
-    } else {
-      exp.replaceWith(
-        expressionStatement(
-          assignmentExpression("=", id, decl.node as t.Expression),
-        ),
-      );
-    }
+    exportBindingAssignments.forEach(assignPath => {
+      const assign: NodePath<t.Expression> = path.get(assignPath);
+      assign.replaceWith(assignmentExpression("=", id, assign.node));
+    });
+    exp.replaceWith(decl);
+    path.pushContainer(
+      "body",
+      expressionStatement(
+        assignmentExpression("=", id, identifier(exportName)),
+      ),
+    );
   } else {
     throw new Error("Unexpected helper format.");
   }
