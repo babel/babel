@@ -81,8 +81,7 @@ export default declare((api, options) => {
         (path.parentPath.isObjectProperty({ value: path.node }) &&
           path.parentPath.parentPath.isObjectPattern()) ||
         path.parentPath.isAssignmentExpression({ left: path.node }) ||
-        path.isAssignmentExpression({ left: path.node }) ||
-        path.parentPath.isUpdateExpression()
+        path.isAssignmentExpression({ left: path.node })
       ) {
         return;
       }
