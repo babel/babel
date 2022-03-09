@@ -81,12 +81,33 @@ export default declare((api, options) => {
         (path.parentPath.isObjectProperty({ value: path.node }) &&
           path.parentPath.parentPath.isObjectPattern()) ||
         path.parentPath.isAssignmentExpression({ left: path.node }) ||
-        path.isAssignmentExpression({ left: path.node })
+        path.isAssignmentExpression({ left: path.node }) ||
+        path.parentPath.isUpdateExpression()
       ) {
         return;
       }
 
       path.replaceWith(getAssertion(localName));
+    },
+
+    UpdateExpression(path) {
+      const arg = path.get("argument");
+      const localName = arg.node.name;
+      if (localName !== "module" && localName !== "exports") return;
+
+      const localBinding = path.scope.getBinding(localName);
+      const rootBinding = this.scope.getBinding(localName);
+
+      // redeclared in this scope
+      if (rootBinding !== localBinding) return;
+
+      path.replaceWith(
+        t.assignmentExpression(
+          path.node.operator[0] + "=",
+          arg.node,
+          getAssertion(localName),
+        ),
+      );
     },
 
     AssignmentExpression(path) {

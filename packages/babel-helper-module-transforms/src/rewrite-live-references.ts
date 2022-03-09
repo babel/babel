@@ -290,6 +290,81 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
     }
   },
 
+  UpdateExpression(path) {
+    const {
+      scope,
+      seen,
+      imported,
+      exported,
+      requeueInParent,
+      buildImportReference,
+    } = this;
+
+    if (seen.has(path.node)) return;
+
+    seen.add(path.node);
+
+    const arg = path.get("argument");
+
+    // No change needed
+    if (arg.isMemberExpression()) return;
+
+    const update = path.node;
+
+    if (arg.isIdentifier()) {
+      const localName = arg.node.name;
+
+      // redeclared in this scope
+      if (scope.getBinding(localName) !== path.scope.getBinding(localName)) {
+        return;
+      }
+
+      const exportedNames = exported.get(localName);
+      const importData = imported.get(localName);
+
+      if (exportedNames?.length > 0 || importData) {
+        if (importData) {
+          path.replaceWith(
+            assignmentExpression(
+              update.operator[0] + "=",
+              buildImportReference(importData, arg.node),
+              buildImportThrow(localName),
+            ),
+          );
+        } else if (update.prefix) {
+          // ++foo
+          // =>   exports.foo = ++foo
+          path.replaceWith(
+            buildBindingExportAssignmentExpression(
+              this.metadata,
+              exportedNames,
+              cloneNode(update),
+            ),
+          );
+        } else {
+          // foo++
+          // =>   (ref = i++, exports.i = i, ref)
+          const ref = scope.generateDeclaredUidIdentifier(localName);
+
+          path.replaceWith(
+            sequenceExpression([
+              assignmentExpression("=", cloneNode(ref), cloneNode(update)),
+              buildBindingExportAssignmentExpression(
+                this.metadata,
+                exportedNames,
+                identifier(localName),
+              ),
+              cloneNode(ref),
+            ]),
+          );
+        }
+      }
+    }
+
+    requeueInParent(path);
+    path.skip();
+  },
+
   AssignmentExpression: {
     exit(path) {
       const {
