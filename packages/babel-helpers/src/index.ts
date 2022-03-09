@@ -5,7 +5,7 @@ import {
   assignmentExpression,
   cloneNode,
   expressionStatement,
-  file as t_file,
+  file,
   identifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
@@ -22,7 +22,7 @@ function makePath(path: NodePath) {
   return parts.reverse().join(".");
 }
 
-let fileClass = undefined;
+let FileClass: typeof File | undefined = undefined;
 
 interface HelperMetadata {
   globals: string[];
@@ -269,16 +269,19 @@ function loadHelper(name: string) {
     }
 
     const fn = (): File => {
-      const file = { ast: t_file(helper.ast()) };
-      if (fileClass) {
-        return new fileClass(
-          {
-            filename: `babel-helper://${name}`,
-          },
-          file,
-        );
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!FileClass) {
+          return { ast: file(helper.ast()) } as File;
+        }
       }
-      return file as File;
+      return new FileClass(
+        { filename: `babel-helper://${name}` },
+        {
+          ast: file(helper.ast()),
+          code: "[internal Babel helper code]",
+          inputMap: null,
+        },
+      );
     };
 
     const metadata = getHelperMetadata(fn());
@@ -320,12 +323,11 @@ export function getDependencies(name: string): ReadonlyArray<string> {
   return Array.from(loadHelper(name).dependencies.values());
 }
 
-export function ensure(name: string, newFileClass?) {
-  if (!fileClass) {
-    // optional fileClass used to wrap helper snippets into File instance,
-    // offering `path.hub` support during traversal
-    fileClass = newFileClass;
-  }
+export function ensure(name: string, newFileClass: typeof File) {
+  // We inject the File class here rather than importing it to avoid
+  // circular dependencies between @babel/core and @babel/helpers.
+  FileClass ||= newFileClass;
+
   loadHelper(name);
 }
 
