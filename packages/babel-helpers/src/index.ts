@@ -271,7 +271,11 @@ function loadHelper(name: string) {
     const fn = (): File => {
       if (!process.env.BABEL_8_BREAKING) {
         if (!FileClass) {
-          return { ast: file(helper.ast()) } as File;
+          const fakeFile = { ast: file(helper.ast()), path: null } as File;
+          traverse(fakeFile.ast, {
+            Program: path => (fakeFile.path = path).stop(),
+          });
+          return fakeFile;
         }
       }
       return new FileClass(
