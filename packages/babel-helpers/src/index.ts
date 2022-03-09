@@ -253,8 +253,8 @@ interface HelperData {
     nodes: t.Program["body"];
     globals: string[];
   };
-  minVersion: () => string;
-  dependencies: Map<t.Identifier, string>;
+  minVersion: string;
+  getDependencies: () => string[];
 }
 
 const helperData: Record<string, HelperData> = Object.create(null);
@@ -290,6 +290,7 @@ function loadHelper(name: string) {
     let metadata: HelperMetadata | null = null;
 
     helperData[name] = {
+      minVersion: helper.minVersion,
       build(getDependency, id, localBindings) {
         const file = fn();
         metadata ||= getHelperMetadata(file);
@@ -300,12 +301,9 @@ function loadHelper(name: string) {
           globals: metadata.globals,
         };
       },
-      minVersion() {
-        return helper.minVersion;
-      },
-      get dependencies() {
+      getDependencies() {
         metadata ||= getHelperMetadata(fn());
-        return metadata.dependencies;
+        return Array.from(metadata.dependencies.values());
       },
     };
   }
@@ -323,11 +321,11 @@ export function get(
 }
 
 export function minVersion(name: string) {
-  return loadHelper(name).minVersion();
+  return loadHelper(name).minVersion;
 }
 
 export function getDependencies(name: string): ReadonlyArray<string> {
-  return Array.from(loadHelper(name).dependencies.values());
+  return loadHelper(name).getDependencies();
 }
 
 export function ensure(name: string, newFileClass: typeof File) {
