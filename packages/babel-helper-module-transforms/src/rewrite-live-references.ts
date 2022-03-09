@@ -112,6 +112,7 @@ export default function rewriteLiveReferences(
     programPath,
     // NOTE(logan): The 'Array.from' calls are to make this code with in loose mode.
     new Set([...Array.from(imported.keys()), ...Array.from(exported.keys())]),
+    false,
   );
 
   // Rewrite reads/writes from imports and exports to have the correct behavior.

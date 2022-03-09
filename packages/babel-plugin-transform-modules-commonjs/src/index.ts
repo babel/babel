@@ -183,7 +183,7 @@ export default declare((api, options) => {
           // These objects are specific to CommonJS and are not available in
           // real ES6 implementations.
           if (!allowCommonJSExports) {
-            simplifyAccess(path, new Set(["module", "exports"]));
+            simplifyAccess(path, new Set(["module", "exports"]), false);
             path.traverse(moduleExportsVisitor, {
               scope: path.scope,
             });
