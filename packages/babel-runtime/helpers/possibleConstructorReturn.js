@@ -1,4 +1,4 @@
-var _typeof = require("./typeof.js")["default"];
+var _typeof = require("@babel/runtime/helpers/typeof")["default"];
 
 var assertThisInitialized = require("./assertThisInitialized.js");
 
