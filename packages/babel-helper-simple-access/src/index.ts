@@ -26,6 +26,7 @@ export default function simplifyAccess(
 }
 
 const simpleAssignmentVisitor = {
+  // TODO(Babel 8): Remove UpdateExpression
   UpdateExpression: {
     exit(path) {
       const { scope, bindingNames, includeUpdateExpression } = this;
