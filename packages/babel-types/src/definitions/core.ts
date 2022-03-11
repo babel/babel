@@ -369,13 +369,13 @@ export const functionCommon = {
 
 export const functionTypeAnnotationCommon = {
   returnType: {
-    validate: process.env.BABEL_8_BREAKING
+    validate: process?.env?.BABEL_8_BREAKING
       ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
       : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
-    validate: process.env.BABEL_8_BREAKING
+    validate: process?.env?.BABEL_8_BREAKING
       ? assertNodeType("TypeParameterDeclaration", "TSTypeParameterDeclaration")
       : assertNodeType(
           "TypeParameterDeclaration",
@@ -455,7 +455,7 @@ defineType("FunctionExpression", {
 
 export const patternLikeCommon = {
   typeAnnotation: {
-    validate: process.env.BABEL_8_BREAKING
+    validate: process?.env?.BABEL_8_BREAKING
       ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
       : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
@@ -1294,7 +1294,7 @@ defineType("ClassExpression", {
       optional: true,
     },
     typeParameters: {
-      validate: process.env.BABEL_8_BREAKING
+      validate: process?.env?.BABEL_8_BREAKING
         ? assertNodeType(
             "TypeParameterDeclaration",
             "TSTypeParameterDeclaration",
@@ -1351,7 +1351,7 @@ defineType("ClassDeclaration", {
       validate: assertNodeType("Identifier"),
     },
     typeParameters: {
-      validate: process.env.BABEL_8_BREAKING
+      validate: process?.env?.BABEL_8_BREAKING
         ? assertNodeType(
             "TypeParameterDeclaration",
             "TSTypeParameterDeclaration",
@@ -2101,7 +2101,7 @@ defineType("ClassProperty", {
       optional: true,
     },
     typeAnnotation: {
-      validate: process.env.BABEL_8_BREAKING
+      validate: process?.env?.BABEL_8_BREAKING
         ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
         : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,
@@ -2175,7 +2175,7 @@ defineType("ClassAccessorProperty", {
       optional: true,
     },
     typeAnnotation: {
-      validate: process.env.BABEL_8_BREAKING
+      validate: process?.env?.BABEL_8_BREAKING
         ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
         : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,
@@ -2215,7 +2215,7 @@ defineType("ClassPrivateProperty", {
       optional: true,
     },
     typeAnnotation: {
-      validate: process.env.BABEL_8_BREAKING
+      validate: process?.env?.BABEL_8_BREAKING
         ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
         : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,
