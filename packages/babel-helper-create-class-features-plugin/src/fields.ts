@@ -936,6 +936,18 @@ export type PropNode =
   | t.StaticBlock;
 export type PropPath = NodePath<PropNode>;
 
+function isNameOrLength(node: t.ClassProperty) {
+  if (node.key.type === "Identifier") {
+    return (
+      !node.computed && (node.key.name === "name" || node.key.name === "length")
+    );
+  }
+  if (node.key.type === "StringLiteral") {
+    return node.key.value === "name" || node.key.value === "length";
+  }
+  return false;
+}
+
 export function buildFieldsInitNodes(
   ref: t.Identifier,
   superRef: t.Expression | undefined,
@@ -1019,10 +1031,19 @@ export function buildFieldsInitNodes(
         );
         break;
       case isStatic && isPublic && isField && setPublicClassFields:
-        needsClassRef = true;
+        // Functions always have non-writable .name and .length properties,
+        // so we must always use [[Define]] for them.
+        // It might still be possible to a computed static fields whose resulting
+        // key is "name" or "length", but the assumption is telling us that it's
+        // not going to happen.
         // @ts-expect-error checked in switch
-        staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
-        break;
+        if (!isNameOrLength(prop.node)) {
+          needsClassRef = true;
+          // @ts-expect-error checked in switch
+          staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
+          break;
+        }
+      // falls through
       case isStatic && isPublic && isField && !setPublicClassFields:
         needsClassRef = true;
         staticNodes.push(
