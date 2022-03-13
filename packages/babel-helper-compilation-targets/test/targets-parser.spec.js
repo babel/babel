@@ -302,14 +302,13 @@ describe("getTargets", () => {
     );
 
     it("The final 'browsers' handled variable will have no effect if it is an empty array", () => {
-        expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
-          getTargets(
-            { esmodules: "intersect" },
-            { ignoreBrowserslistConfig: true },
-          ),
-        );
-      },
-    );
+      expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
+        getTargets(
+          { esmodules: "intersect" },
+          { ignoreBrowserslistConfig: true },
+        ),
+      );
+    });
 
     it("'resolveTargets' will be called rightly if 'browsers' is an array with some value", () => {
       let x = 0;
