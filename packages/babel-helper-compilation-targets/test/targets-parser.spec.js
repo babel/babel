@@ -293,18 +293,14 @@ describe("getTargets", () => {
       },
     );
 
-    (process.env.BABEL_8_BREAKING ? it.skip : it)(
-      "'browsers' option will have no effect if it is an empty array - Babel 7",
-      () => {
+    it("'browsers' option will have no effect if it is an empty array - Babel 7", () => {
         expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
           getTargets({ esmodules: "intersect" }),
         );
       },
     );
 
-    (process.env.BABEL_8_BREAKING ? it.skip : it)(
-      "The final 'browsers' handled variable will have no effect if it is an empty array - Babel 7",
-      () => {
+    it("The final 'browsers' handled variable will have no effect if it is an empty array", () => {
         expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
           getTargets(
             { esmodules: "intersect" },
@@ -313,6 +309,19 @@ describe("getTargets", () => {
         );
       },
     );
+
+    it("'resolveTargets' will be called rightly if 'browsers' is an array with some value", () => {
+      let x = 0;
+
+      // 'test' is an unknown browser query, so methods of 'browserslist' library will throw an error
+      try {
+        getTargets({ esmodules: "intersect", browsers: ["test"] });
+      } catch {
+        x++;
+      }
+
+      expect(x).toBe(1);
+    });
 
     (process.env.BABEL_8_BREAKING ? it : it.skip)(
       "'intersect' behaves like no-op if no browsers are specified",
