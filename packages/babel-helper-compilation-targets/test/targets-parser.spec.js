@@ -294,7 +294,8 @@ describe("getTargets", () => {
     );
 
     (process.env.BABEL_8_BREAKING ? it.skip : it)(
-      "'browsers' option will have no effect if it is an empty array - Babel 7", () => {
+      "'browsers' option will have no effect if it is an empty array - Babel 7",
+      () => {
         expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
           getTargets({ esmodules: "intersect" }),
         );
