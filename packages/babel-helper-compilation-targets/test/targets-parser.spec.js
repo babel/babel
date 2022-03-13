@@ -312,16 +312,8 @@ describe("getTargets", () => {
     });
 
     it("'resolveTargets' will be called rightly if 'browsers' is an array with some value", () => {
-      let x = 0;
-
       // 'test' is an unknown browser query, so methods of 'browserslist' library will throw an error
-      try {
-        getTargets({ esmodules: "intersect", browsers: ["test"] });
-      } catch {
-        x++;
-      }
-
-      expect(x).toBe(1);
+      expect(() => getTargets({ esmodules: "intersect", browsers: ["test"] })).toThrow();
     });
 
     (process.env.BABEL_8_BREAKING ? it : it.skip)(
