@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
   "errors": [
-    "SyntaxError: 'Const declarations' require an initialization value. (1:15)"
+    "SyntaxError: Missing initializer in const declaration. (1:15)"
   ],
   "program": {
     "type": "Program",

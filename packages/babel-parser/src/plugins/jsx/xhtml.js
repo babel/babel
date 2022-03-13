@@ -1,6 +1,7 @@
 // @flow
 
-const entities: { [name: string]: string } = {
+const entities: { [name: string]: string, __proto__: null } = {
+  __proto__: null,
   quot: "\u0022",
   amp: "&",
   apos: "\u0027",

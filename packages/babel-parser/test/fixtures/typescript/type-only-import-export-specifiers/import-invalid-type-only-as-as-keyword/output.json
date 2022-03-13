@@ -1,6 +1,9 @@
 {
   "type": "File",
   "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'if'. (1:20)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},

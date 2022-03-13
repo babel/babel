@@ -43,3 +43,20 @@ expect(f).toEqual(undefined);
 
 let [g] = [,];
 expect(g).toEqual(undefined);
+
+let thrown;
+try {
+  thrown = false;
+  [{}] = [,];
+} catch (e) {
+  thrown = true;
+}
+expect(thrown).toEqual(true);
+
+try {
+  thrown = false;
+  [[]] = [,];
+} catch (e) {
+  thrown = true;
+}
+expect(thrown).toEqual(true);

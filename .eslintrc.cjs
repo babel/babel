@@ -1,7 +1,5 @@
 "use strict";
 
-const path = require("path");
-
 const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
 
 const testFiles = [
@@ -103,21 +101,6 @@ module.exports = {
       rules: {
         "@babel/development/plugin-name": "error",
         eqeqeq: ["error", "always", { null: "ignore" }],
-      },
-    },
-    {
-      files: ["packages/babel-parser/src/**/*.{js,ts}"],
-      rules: {
-        "@babel/development-internal/dry-error-messages": [
-          "error",
-          {
-            errorModule: path.resolve(
-              __dirname,
-              "packages/babel-parser/src/parser/error.js"
-            ),
-          },
-        ],
-        "@babel/development-internal/report-error-message-format": "error",
       },
     },
     {

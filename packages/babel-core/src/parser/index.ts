@@ -1,13 +1,10 @@
 import type { Handler } from "gensync";
 import { parse } from "@babel/parser";
-import type * as t from "@babel/types";
 import { codeFrameColumns } from "@babel/code-frame";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
 import type { PluginPasses } from "../config";
 
-type AstRoot = t.File | t.Program;
-
-export type ParseResult = AstRoot;
+export type ParseResult = ReturnType<typeof parse>;
 
 export default function* parser(
   pluginPasses: PluginPasses,

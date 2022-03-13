@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+  "errors": [
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:1)",
+    "SyntaxError: Only '=' operator can be used for specifying default value. (1:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "operator": "=",
+          "left": {
+            "type": "AssignmentPattern",
+            "start":1,"end":7,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":7,"index":7}},
+            "left": {
+              "type": "Identifier",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"a"},
+              "name": "a"
+            },
+            "right": {
+              "type": "NumericLiteral",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            }
+          },
+          "right": {
+            "type": "Identifier",
+            "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"t"},
+            "name": "t"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

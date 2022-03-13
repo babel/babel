@@ -4,10 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.test = exports.f = exports.e = exports.c = exports.a = void 0;
+
+var _test;
+
 var test = 2;
 exports.test = test;
 exports.test = test = 5;
-exports.test = test = test + 1;
+_test = test++, exports.test = test, _test;
 
 (function () {
   var test = 2;

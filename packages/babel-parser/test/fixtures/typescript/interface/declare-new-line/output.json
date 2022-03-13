@@ -2,7 +2,8 @@
   "type": "File",
   "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":22}},
   "errors": [
-    "SyntaxError: Missing semicolon. (1:7)"
+    "SyntaxError: Missing semicolon. (1:7)",
+    "SyntaxError: Unexpected reserved word 'interface'. (1:8)"
   ],
   "program": {
     "type": "Program",

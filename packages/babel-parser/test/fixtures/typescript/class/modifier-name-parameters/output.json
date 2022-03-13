@@ -1,6 +1,11 @@
 {
   "type": "File",
   "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'private'. (2:14)",
+    "SyntaxError: Unexpected reserved word 'public'. (2:23)",
+    "SyntaxError: Unexpected reserved word 'static'. (2:31)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
