@@ -18,7 +18,7 @@ if (
 
   test("ESM", "./src/main-esm.mjs", expectedEsm);
   // TODO: This never worked in any Babel version
-  // test("ESM - absoluteRuntime", "--esperimental-modules ./src/absolute/main-esm.mjs", "expected-esm-absolute.txt");
+  // test("ESM - absoluteRuntime", "--experimental-modules ./src/absolute/main-esm.mjs", "expected-esm-absolute.txt");
 }
 
 const expectedCjs =
