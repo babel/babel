@@ -18,9 +18,20 @@
   CLASS = 10; // only used in assertValidReturnValue
 */
 
-function createMetadataMethodsForProperty(metadataMap, kind, property) {
+function createMetadataMethodsForProperty(
+  metadataMap,
+  kind,
+  property,
+  decorationState
+) {
   return {
     getMetadata: function (key) {
+      if (decorationState.finished) {
+        throw new Error(
+          "attempted to call getMetadata after decoration was finished"
+        );
+      }
+
       if (typeof key !== "symbol") {
         throw new TypeError("Metadata keys must be symbols, received: " + key);
       }
@@ -44,6 +55,12 @@ function createMetadataMethodsForProperty(metadataMap, kind, property) {
       }
     },
     setMetadata: function (key, value) {
+      if (decorationState.finished) {
+        throw new Error(
+          "attempted to call setMetadata after decoration was finished"
+        );
+      }
+
       if (typeof key !== "symbol") {
         throw new TypeError("Metadata keys must be symbols, received: " + key);
       }
@@ -120,8 +137,14 @@ function convertMetadataMapToFinal(obj, metadataMap) {
   obj[Symbol.metadata || Symbol.for("Symbol.metadata")] = metadataMap;
 }
 
-function createAddInitializerMethod(initializers) {
+function createAddInitializerMethod(initializers, decorationState) {
   return function addInitializer(initializer) {
+    if (decorationState.finished) {
+      throw new Error(
+        "attempted to call addInitializer after decoration was finished"
+      );
+    }
+
     assertCallable(initializer, "An initializer");
     initializers.push(initializer);
   };
@@ -134,7 +157,8 @@ function memberDecCtx(
   initializers,
   kind,
   isStatic,
-  isPrivate
+  isPrivate,
+  decorationState
 ) {
   var kindStr;
 
@@ -163,7 +187,10 @@ function memberDecCtx(
   };
 
   if (kind !== 0 /* FIELD */) {
-    ctx.addInitializer = createAddInitializerMethod(initializers);
+    ctx.addInitializer = createAddInitializerMethod(
+      initializers,
+      decorationState
+    );
   }
 
   var metadataKind, metadataName;
@@ -204,7 +231,12 @@ function memberDecCtx(
 
   return Object.assign(
     ctx,
-    createMetadataMethodsForProperty(metadataMap, metadataKind, metadataName)
+    createMetadataMethodsForProperty(
+      metadataMap,
+      metadataKind,
+      metadataName,
+      decorationState
+    )
   );
 }
 
@@ -220,7 +252,7 @@ function assertValidReturnValue(kind, value) {
   if (kind === 1 /* ACCESSOR */) {
     if (type !== "object" || value === null) {
       throw new TypeError(
-        "accessor decorators must return an object with get, set, or initializer properties or void 0"
+        "accessor decorators must return an object with get, set, or init properties or void 0"
       );
     }
     if (value.get !== undefined) {
@@ -229,8 +261,11 @@ function assertValidReturnValue(kind, value) {
     if (value.set !== undefined) {
       assertCallable(value.set, "accessor.set");
     }
-    if (value.initialize !== undefined) {
-      assertCallable(value.initialize, "accessor.initialize");
+    if (value.init !== undefined) {
+      assertCallable(value.init, "accessor.init");
+    }
+    if (value.initializer !== undefined) {
+      assertCallable(value.initializer, "accessor.initializer");
     }
   } else if (type !== "function") {
     var hint;
@@ -296,20 +331,24 @@ function applyMemberDec(
     value = desc.set;
   }
 
-  var ctx = memberDecCtx(
-    name,
-    desc,
-    metadataMap,
-    initializers,
-    kind,
-    isStatic,
-    isPrivate
-  );
-
-  var newValue, get, set;
+  var newValue, get, set, decorationState, ctx;
 
   if (typeof decs === "function") {
+    decorationState = { finished: false };
+    ctx = memberDecCtx(
+      name,
+      desc,
+      metadataMap,
+      initializers,
+      kind,
+      isStatic,
+      isPrivate,
+      decorationState
+    );
+
     newValue = decs(value, ctx);
+
+    decorationState.finished = true;
 
     if (newValue !== void 0) {
       assertValidReturnValue(kind, newValue);
@@ -317,7 +356,15 @@ function applyMemberDec(
       if (kind === 0 /* FIELD */) {
         initializer = newValue;
       } else if (kind === 1 /* ACCESSOR */) {
-        initializer = newValue.initialize;
+        if (
+          (initializer = newValue.init) == null &&
+          (initializer = newValue.initializer) &&
+          typeof console !== "undefined"
+        ) {
+          console.warn(
+            ".initializer has been renamed to .init as of March 2022"
+          );
+        }
 
         get = newValue.get || value.get;
         set = newValue.set || value.set;
@@ -330,8 +377,21 @@ function applyMemberDec(
   } else {
     for (var i = decs.length - 1; i >= 0; i--) {
       var dec = decs[i];
+      decorationState = { finished: false };
+      ctx = memberDecCtx(
+        name,
+        desc,
+        metadataMap,
+        initializers,
+        kind,
+        isStatic,
+        isPrivate,
+        decorationState
+      );
 
       newValue = dec(value, ctx);
+
+      decorationState.finished = true;
 
       if (newValue !== void 0) {
         assertValidReturnValue(kind, newValue);
@@ -340,7 +400,15 @@ function applyMemberDec(
         if (kind === 0 /* FIELD */) {
           newInit = newValue;
         } else if (kind === 1 /* ACCESSOR */) {
-          newInit = newValue.initialize;
+          if (
+            (newInit = newValue.init) == null &&
+            (newInit = newValue.initializer) &&
+            typeof console !== "undefined"
+          ) {
+            console.warn(
+              ".initializer has been renamed to .init as of March 2022"
+            );
+          }
 
           get = newValue.get || value.get;
           set = newValue.set || value.set;
@@ -537,23 +605,35 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
   if (classDecs.length > 0) {
     var initializers = [];
     var newClass = targetClass;
-
     var name = targetClass.name;
-    var ctx = Object.assign(
-      {
-        kind: "class",
-        name: name,
-        addInitializer: createAddInitializerMethod(initializers),
-      },
-      createMetadataMethodsForProperty(metadataMap, 0 /* CONSTRUCTOR */, name)
-    );
 
     for (var i = classDecs.length - 1; i >= 0; i--) {
+      var decorationState = { finished: false };
+
+      var ctx = Object.assign(
+        {
+          kind: "class",
+          name: name,
+          addInitializer: createAddInitializerMethod(
+            initializers,
+            decorationState
+          ),
+        },
+        createMetadataMethodsForProperty(
+          metadataMap,
+          0 /* CONSTRUCTOR */,
+          name,
+          decorationState
+        )
+      );
+
       var nextNewClass = classDecs[i](newClass, ctx);
       if (nextNewClass !== undefined) {
         assertValidReturnValue(10 /* CLASS */, nextNewClass);
         newClass = nextNewClass;
       }
+
+      decorationState.finished = true;
     }
 
     ret.push(newClass);
