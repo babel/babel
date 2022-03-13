@@ -58,10 +58,11 @@ class TestRunner {
   }
 
   parse(test, parser) {
-    parser(test.contents, {
-      sourceType: test.sourceType,
-      plugins: test.plugins,
-    });
+    const tests = typeof test.contents === "string" ? [test] : test.contents;
+
+    for (const { contents, ...options } of tests) {
+      parser(contents, options);
+    }
   }
 
   async getAllowlist() {
@@ -207,7 +208,12 @@ class TestRunner {
 
       badnews.push(desc);
       badnewsDetails.push(desc + ":");
-      badnewsDetails.push(...tests.map(test => `  ${test.id || test}`));
+      badnewsDetails.push(
+        ...tests.map(
+          test =>
+            `  ${test.id || test} ${test.expectedError} ${test.actualError}`
+        )
+      );
     });
 
     console.log(`Testing complete (${summary.count} tests).`);

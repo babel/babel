@@ -7,15 +7,15 @@ import type {
   TSParameterProperty,
   Decorator,
   Expression,
+  Identifier,
   Node,
   Pattern,
   RestElement,
   SpreadElement,
   /*:: ObjectOrClassMember, */
   /*:: ClassMember, */
-  /*:: ObjectMember, */
+  ObjectMember,
   /*:: TsNamedTypeElementBase, */
-  /*:: Identifier, */
   /*:: PrivateName, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
@@ -26,9 +26,16 @@ import {
   isStrictBindReservedWord,
 } from "../util/identifier";
 import { NodeUtils } from "./node";
-import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
+import {
+  type BindingTypes,
+  BIND_NONE,
+  BIND_SCOPE_LEXICAL,
+} from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
-import { Errors } from "./error";
+import { Errors, type LValAncestor } from "../parse-error";
+
+const getOwn = (object, key) =>
+  Object.hasOwnProperty.call(object, key) && object[key];
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
@@ -99,18 +106,15 @@ export default class LValParser extends NodeUtils {
         // i.e. `([(a) = []] = []) => {}`
         // see also `recordParenthesizedIdentifierError` signature in packages/babel-parser/src/util/expression-scope.js
         if (parenthesized.type === "Identifier") {
-          this.expressionScope.recordParenthesizedIdentifierError(
-            Errors.InvalidParenthesizedAssignment,
-            node.loc.start,
-          );
+          this.expressionScope.recordParenthesizedIdentifierError({ at: node });
         } else if (parenthesized.type !== "MemberExpression") {
           // A parenthesized member expression can be in LHS but not in pattern.
           // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
           // i.e. `([(a.b) = []] = []) => {}`
-          this.raise(Errors.InvalidParenthesizedAssignment, { node });
+          this.raise(Errors.InvalidParenthesizedAssignment, { at: node });
         }
       } else {
-        this.raise(Errors.InvalidParenthesizedAssignment, { node });
+        this.raise(Errors.InvalidParenthesizedAssignment, { at: node });
       }
     }
 
@@ -203,16 +207,14 @@ export default class LValParser extends NodeUtils {
     isLHS: boolean,
   ) {
     if (prop.type === "ObjectMethod") {
-      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(
         prop.kind === "get" || prop.kind === "set"
           ? Errors.PatternHasAccessor
           : Errors.PatternHasMethod,
-        { node: prop.key },
+        { at: prop.key },
       );
-      /* eslint-enable @babel/development-internal/dry-error-messages */
     } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raise(Errors.RestTrailingComma, { node: prop });
+      this.raise(Errors.RestTrailingComma, { at: prop });
     } else {
       this.toAssignable(prop, isLHS);
     }
@@ -256,7 +258,7 @@ export default class LValParser extends NodeUtils {
       if (elt) {
         this.toAssignable(elt, isLHS);
         if (elt.type === "RestElement") {
-          this.raise(Errors.RestTrailingComma, { node: elt });
+          this.raise(Errors.RestTrailingComma, { at: elt });
         }
       }
     }
@@ -494,145 +496,215 @@ export default class LValParser extends NodeUtils {
     node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");
   }
+  /**
+   * Return information use in determining whether a Node of a given type is an LVal,
+   * possibly given certain additional context information.
+   *
+   * Subclasser notes: This method has kind of a lot of mixed, but related,
+   * responsibilities. If we can definitively determine with the information
+   * provided that this either *is* or *isn't* a valid `LVal`, then the return
+   * value is easy: just return `true` or `false`. However, if it is a valid
+   * LVal *ancestor*, and thus it's descendents must be subsquently visited to
+   * continue the "investigation", then this method should return the relevant
+   * child key as a `string`. In some special cases, you additionally want to
+   * convey that this node should be treated as if it were parenthesized. In
+   * that case, a tuple of [key: string, parenthesized: boolean] is returned.
+   * The `string`-only return option is actually just a shorthand for:
+   * `[key: string, parenthesized: false]`.
+   *
+   * @param {NodeType} type A Node `type` string
+   * @param {boolean} isParenthesized
+   *        Whether the node in question is parenthesized.
+   * @param {BindingTypes} binding
+   *        The binding operation that is being considered for this potential
+   *        LVal.
+   * @returns { boolean | string | [string, boolean] }
+   *          `true` or `false` if we can immediately determine whether the node
+   *          type in question can be treated as an `LVal`.
+   *          A `string` key to traverse if we must check this child.
+   *          A `[string, boolean]` tuple if we need to check this child and
+   *          treat is as parenthesized.
+   */
+  // eslint-disable-next-line no-unused-vars
+  isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+    return getOwn(
+      {
+        AssignmentPattern: "left",
+        RestElement: "argument",
+        ObjectProperty: "value",
+        ParenthesizedExpression: "expression",
+        ArrayPattern: "elements",
+        ObjectPattern: "properties",
+      },
+      type,
+    );
+  }
 
   /**
-   * Verify that if a node is an lval - something that can be assigned to.
+   * Verify that a target expression is an lval (something that can be assigned to).
    *
-   * @param {Expression} expr The given node
-   * @param {string} contextDescription The auxiliary context information printed when error is thrown
-   * @param {BindingTypes} [bindingType=BIND_NONE] The desired binding type. If the given node is an identifier and `bindingType` is not
-                                                   BIND_NONE, `checkLVal` will register binding to the parser scope
-                                                   See also src/util/scopeflags.js
-   * @param {?Set<string>} checkClashes An optional string set to check if an identifier name is included. `checkLVal` will add checked
-                                        identifier name to `checkClashes` It is used in tracking duplicates in function parameter lists. If
-                                        it is nullish, `checkLVal` will skip duplicate checks
-   * @param {boolean} [disallowLetBinding] Whether an identifier named "let" should be disallowed
-   * @param {boolean} [strictModeChanged=false] Whether an identifier has been parsed in a sloppy context but should be reinterpreted as
-                                                strict-mode. e.g. `(arguments) => { "use strict "}`
+   * @param {Expression} expression The expression in question to check.
+   * @param {Object} options A set of options described below.
+   * @param {LValAncestor} options.in
+   *        The relevant ancestor to provide context information for the error
+   *        if the check fails.
+   * @param {BindingTypes} [options.binding=BIND_NONE]
+   *        The desired binding type. If the given expression is an identifier
+   *        and `binding` is not `BIND_NONE`, `checkLVal` will register binding
+   *        to the parser scope See also `src/util/scopeflags.js`
+   * @param {Set<string>|false} [options.checkClashes=false]
+   *        An optional string set to check if an identifier name is included.
+   *        `checkLVal` will add checked identifier name to `checkClashes` It is
+   *        used in tracking duplicates in function parameter lists. If it is
+   *        false, `checkLVal` will skip duplicate checks
+   * @param {boolean} [options.allowingSloppyLetBinding]
+   *        Whether an identifier named "let" should be allowed in sloppy mode.
+   *        Defaults to `true` unless lexical scope its being used. This property
+   *        is only relevant if the parser's state is in sloppy mode.
+   * @param {boolean} [options.strictModeChanged=false]
+   *        Whether an identifier has been parsed in a sloppy context but should
+   *        be reinterpreted as strict-mode. e.g. `(arguments) => { "use strict "}`
+   * @param {boolean} [options.hasParenthesizedAncestor=false]
+   *        This is only used internally during recursive calls, and you should
+   *        not have to set it yourself.
    * @memberof LValParser
    */
-  checkLVal(
-    expr: Expression,
-    contextDescription: string,
-    bindingType: BindingTypes = BIND_NONE,
-    checkClashes: ?Set<string>,
-    disallowLetBinding?: boolean,
-    strictModeChanged?: boolean = false,
-  ): void {
-    switch (expr.type) {
-      case "Identifier": {
-        const { name } = expr;
-        if (
-          this.state.strict &&
-          // "Global" reserved words have already been checked by parseIdentifier,
-          // unless they have been found in the id or parameters of a strict-mode
-          // function in a sloppy context.
-          (strictModeChanged
-            ? isStrictBindReservedWord(name, this.inModule)
-            : isStrictBindOnlyReservedWord(name))
-        ) {
-          this.raise(
-            bindingType === BIND_NONE
-              ? Errors.StrictEvalArguments
-              : Errors.StrictEvalArgumentsBinding,
-            { node: expr },
-            name,
-          );
-        }
 
-        if (checkClashes) {
-          if (checkClashes.has(name)) {
-            this.raise(Errors.ParamDupe, { node: expr });
-          } else {
-            checkClashes.add(name);
-          }
+  checkLVal(
+    expression: Expression | ObjectMember | RestElement,
+    {
+      in: ancestor,
+      binding = BIND_NONE,
+      checkClashes = false,
+      strictModeChanged = false,
+      allowingSloppyLetBinding = !(binding & BIND_SCOPE_LEXICAL),
+      hasParenthesizedAncestor = false,
+    }: {
+      in: LValAncestor,
+      binding?: BindingTypes,
+      checkClashes?: Set<string> | false,
+      strictModeChanged?: boolean,
+      allowingSloppyLetBinding?: boolean,
+      hasParenthesizedAncestor?: boolean,
+    },
+  ): void {
+    const type = expression.type;
+
+    // If we find here an ObjectMethod, it's because this was originally
+    // an ObjectExpression which has then been converted.
+    // toAssignable already reported this error with a nicer message.
+    if (this.isObjectMethod(expression)) return;
+
+    if (type === "MemberExpression") {
+      if (binding !== BIND_NONE) {
+        this.raise(Errors.InvalidPropertyBindingPattern, { at: expression });
+      }
+      return;
+    }
+
+    if (expression.type === "Identifier") {
+      this.checkIdentifier(
+        expression,
+        binding,
+        strictModeChanged,
+        allowingSloppyLetBinding,
+      );
+
+      const { name } = expression;
+
+      if (checkClashes) {
+        if (checkClashes.has(name)) {
+          this.raise(Errors.ParamDupe, { at: expression });
+        } else {
+          checkClashes.add(name);
         }
-        if (disallowLetBinding && name === "let") {
-          this.raise(Errors.LetInLexicalBinding, { node: expr });
-        }
-        if (!(bindingType & BIND_NONE)) {
-          this.scope.declareName(name, bindingType, expr.loc.start);
-        }
-        break;
       }
 
-      case "MemberExpression":
-        if (bindingType !== BIND_NONE) {
-          this.raise(Errors.InvalidPropertyBindingPattern, {
-            node: expr,
-          });
-        }
-        break;
+      return;
+    }
 
-      case "ObjectPattern":
-        for (let prop of expr.properties) {
-          if (this.isObjectProperty(prop)) prop = prop.value;
-          // If we find here an ObjectMethod, it's because this was originally
-          // an ObjectExpression which has then been converted.
-          // toAssignable already reported this error with a nicer message.
-          else if (this.isObjectMethod(prop)) continue;
+    const validity = this.isValidLVal(
+      expression.type,
+      hasParenthesizedAncestor || expression.extra?.parenthesized,
+      binding,
+    );
 
-          this.checkLVal(
-            prop,
-            "object destructuring pattern",
-            bindingType,
-            checkClashes,
-            disallowLetBinding,
-          );
-        }
-        break;
+    if (validity === true) return;
 
-      case "ArrayPattern":
-        for (const elem of expr.elements) {
-          if (elem) {
-            this.checkLVal(
-              elem,
-              "array destructuring pattern",
-              bindingType,
-              checkClashes,
-              disallowLetBinding,
-            );
-          }
-        }
-        break;
+    if (validity === false) {
+      const ParseErrorClass =
+        binding === BIND_NONE ? Errors.InvalidLhs : Errors.InvalidLhsBinding;
 
-      case "AssignmentPattern":
-        this.checkLVal(
-          expr.left,
-          "assignment pattern",
-          bindingType,
+      this.raise(ParseErrorClass, {
+        at: expression,
+        ancestor:
+          ancestor.type === "UpdateExpression"
+            ? { type: "UpdateExpression", prefix: ancestor.prefix }
+            : { type: ancestor.type },
+      });
+      return;
+    }
+
+    const [key, isParenthesizedExpression] = Array.isArray(validity)
+      ? validity
+      : [validity, type === "ParenthesizedExpression"];
+    const nextAncestor =
+      expression.type === "ArrayPattern" ||
+      expression.type === "ObjectPattern" ||
+      expression.type === "ParenthesizedExpression"
+        ? expression
+        : ancestor;
+
+    // Flow has difficulty tracking `key` and `expression`, but only if we use
+    // null-proto objects. If we use normal objects, everything works fine.
+    // $FlowIgnore
+    for (const child of [].concat(expression[key])) {
+      if (child) {
+        this.checkLVal(child, {
+          in: nextAncestor,
+          binding,
           checkClashes,
-        );
-        break;
-
-      case "RestElement":
-        this.checkLVal(
-          expr.argument,
-          "rest element",
-          bindingType,
-          checkClashes,
-        );
-        break;
-
-      case "ParenthesizedExpression":
-        this.checkLVal(
-          expr.expression,
-          "parenthesized expression",
-          bindingType,
-          checkClashes,
-        );
-        break;
-
-      default: {
-        this.raise(
-          bindingType === BIND_NONE
-            ? Errors.InvalidLhs
-            : Errors.InvalidLhsBinding,
-          { node: expr },
-          contextDescription,
-        );
+          allowingSloppyLetBinding,
+          strictModeChanged,
+          hasParenthesizedAncestor: isParenthesizedExpression,
+        });
       }
     }
+  }
+
+  checkIdentifier(
+    at: Identifier,
+    bindingType: BindingTypes,
+    strictModeChanged: boolean = false,
+    allowLetBinding: boolean = !(bindingType & BIND_SCOPE_LEXICAL),
+  ) {
+    if (
+      this.state.strict &&
+      (strictModeChanged
+        ? isStrictBindReservedWord(at.name, this.inModule)
+        : isStrictBindOnlyReservedWord(at.name))
+    ) {
+      if (bindingType === BIND_NONE) {
+        this.raise(Errors.StrictEvalArguments, { at, referenceName: at.name });
+      } else {
+        this.raise(Errors.StrictEvalArgumentsBinding, {
+          at,
+          bindingName: at.name,
+        });
+      }
+    }
+
+    if (!allowLetBinding && at.name === "let") {
+      this.raise(Errors.LetInLexicalBinding, { at });
+    }
+
+    if (!(bindingType & BIND_NONE)) {
+      this.declareNameFromIdentifier(at, bindingType);
+    }
+  }
+
+  declareNameFromIdentifier(identifier: Identifier, binding: BindingTypes) {
+    this.scope.declareName(identifier.name, binding, identifier.loc.start);
   }
 
   checkToRestConversion(node: SpreadElement): void {
@@ -641,7 +713,7 @@ export default class LValParser extends NodeUtils {
       node.argument.type !== "MemberExpression"
     ) {
       this.raise(Errors.InvalidRestAssignmentPattern, {
-        node: node.argument,
+        at: node.argument,
       });
     }
   }

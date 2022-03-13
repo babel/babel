@@ -10,3 +10,4 @@ coverage:
       enabled: false
 ignore:
   - packages/babel-types/src/*/generated/*
+  - packages/babel-helpers/src/helpers/*

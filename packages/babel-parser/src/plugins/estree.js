@@ -6,7 +6,7 @@ import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Node as NodeType, NodeBase, File } from "../types";
 import type { Position } from "../util/location";
-import { Errors } from "../parser/error";
+import { Errors } from "../parse-error";
 
 const { defineProperty } = Object;
 const toUnenumerable = (object, key) =>
@@ -343,6 +343,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
+    isValidLVal(type: string, ...rest) {
+      return type === "Property" ? "value" : super.isValidLVal(type, ...rest);
+    }
+
     isAssignable(node: N.Node, isBinding?: boolean): boolean {
       if (node != null && this.isObjectProperty(node)) {
         return this.isAssignable(node.value, isBinding);
@@ -368,9 +372,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(Errors.PatternHasAccessor, { node: prop.key });
+        this.raise(Errors.PatternHasAccessor, { at: prop.key });
       } else if (prop.method) {
-        this.raise(Errors.PatternHasMethod, { node: prop.key });
+        this.raise(Errors.PatternHasMethod, { at: prop.key });
       } else {
         super.toAssignableObjectExpressionProp(prop, ...args);
       }
