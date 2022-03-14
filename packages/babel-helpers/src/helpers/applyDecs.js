@@ -14,6 +14,8 @@
   SETTER = 4;
 
   STATIC = 5;
+
+  CLASS = 10; // only used in assertValidReturnValue
 */
 
 function createMetadataMethodsForProperty(metadataMap, kind, property) {
@@ -120,13 +122,12 @@ function convertMetadataMapToFinal(obj, metadataMap) {
 
 function createAddInitializerMethod(initializers) {
   return function addInitializer(initializer) {
-    assertValidInitializer(initializer);
+    assertCallable(initializer, "An initializer");
     initializers.push(initializer);
   };
 }
 
 function memberDecCtx(
-  base,
   name,
   desc,
   metadataMap,
@@ -207,9 +208,9 @@ function memberDecCtx(
   );
 }
 
-function assertValidInitializer(initializer) {
-  if (typeof initializer !== "function") {
-    throw new Error("initializers must be functions");
+function assertCallable(fn, hint) {
+  if (typeof fn !== "function") {
+    throw new TypeError(hint + " must be a function");
   }
 }
 
@@ -218,18 +219,29 @@ function assertValidReturnValue(kind, value) {
 
   if (kind === 1 /* ACCESSOR */) {
     if (type !== "object" || value === null) {
-      throw new Error(
+      throw new TypeError(
         "accessor decorators must return an object with get, set, or initializer properties or void 0"
       );
     }
-  } else if (type !== "function") {
-    if (kind === 0 /* FIELD */) {
-      throw new Error(
-        "field decorators must return a initializer function or void 0"
-      );
-    } else {
-      throw new Error("method decorators must return a function or void 0");
+    if (value.get !== undefined) {
+      assertCallable(value.get, "accessor.get");
     }
+    if (value.set !== undefined) {
+      assertCallable(value.set, "accessor.set");
+    }
+    if (value.initialize !== undefined) {
+      assertCallable(value.initialize, "accessor.initialize");
+    }
+  } else if (type !== "function") {
+    var hint;
+    if (kind === 0 /* FIELD */) {
+      hint = "field";
+    } else if (kind === 10 /* CLASS */) {
+      hint = "class";
+    } else {
+      hint = "method";
+    }
+    throw new TypeError(hint + " decorators must return a function or void 0");
   }
 }
 
@@ -285,7 +297,6 @@ function applyMemberDec(
   }
 
   var ctx = memberDecCtx(
-    base,
     name,
     desc,
     metadataMap,
@@ -306,7 +317,7 @@ function applyMemberDec(
       if (kind === 0 /* FIELD */) {
         initializer = newValue;
       } else if (kind === 1 /* ACCESSOR */) {
-        initializer = newValue.initializer;
+        initializer = newValue.initialize;
 
         get = newValue.get || value.get;
         set = newValue.set || value.set;
@@ -329,7 +340,7 @@ function applyMemberDec(
         if (kind === 0 /* FIELD */) {
           newInit = newValue;
         } else if (kind === 1 /* ACCESSOR */) {
-          newInit = newValue.initializer;
+          newInit = newValue.initialize;
 
           get = newValue.get || value.get;
           set = newValue.set || value.set;
@@ -510,7 +521,7 @@ function pushInitializers(ret, initializers) {
 
       ret.push(function (instance) {
         for (var i = 0; i < initializers.length; i++) {
-          initializers[i].call(instance, instance);
+          initializers[i].call(instance);
         }
         return instance;
       });
@@ -538,7 +549,11 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     );
 
     for (var i = classDecs.length - 1; i >= 0; i--) {
-      newClass = classDecs[i](newClass, ctx) || newClass;
+      var nextNewClass = classDecs[i](newClass, ctx);
+      if (nextNewClass !== undefined) {
+        assertValidReturnValue(10 /* CLASS */, nextNewClass);
+        newClass = nextNewClass;
+      }
     }
 
     ret.push(newClass);
@@ -546,7 +561,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     if (initializers.length > 0) {
       ret.push(function () {
         for (var i = 0; i < initializers.length; i++) {
-          initializers[i].call(newClass, newClass);
+          initializers[i].call(newClass);
         }
       });
     } else {

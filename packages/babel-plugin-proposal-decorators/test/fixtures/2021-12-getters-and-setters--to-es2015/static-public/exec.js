@@ -1,6 +1,6 @@
 function dec(value, context) {
-  context.addInitializer((instance) => {
-    instance[context.name + '_' + context.kind + 'Context'] = context;
+  context.addInitializer(function() {
+    this[context.name + '_' + context.kind + 'Context'] = context;
   });
 
   if (context.kind === 'getter') {

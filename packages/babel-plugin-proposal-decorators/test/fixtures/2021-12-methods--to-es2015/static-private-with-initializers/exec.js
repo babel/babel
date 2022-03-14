@@ -1,6 +1,6 @@
 function dec(fn, context) {
-  context.addInitializer((instance) => {
-    instance[context.name + 'Context'] = context;
+  context.addInitializer(function() {
+    this[context.name + 'Context'] = context;
   });
 
   return function () {
