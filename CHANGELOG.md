@@ -20,6 +20,44 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.7 (2022-03-14)
+
+#### :eyeglasses: Spec Compliance
+* `babel-generator`, `babel-parser`
+  * [#14135](https://github.com/babel/babel/pull/14135) [tsx] raise error on single arrow type argument without comma ([@ozanhonamlioglu](https://github.com/ozanhonamlioglu))
+
+#### :bug: Bug Fix
+* `babel-helper-compilation-targets`
+  * [#14294](https://github.com/babel/babel/pull/14294) Avoid `resolveTargets` call if `browsers` is an empty array ([@dev-itsheng](https://github.com/dev-itsheng))
+* `babel-helper-module-transforms`, `babel-helper-simple-access`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#14341](https://github.com/babel/babel/pull/14341) Fix update expression for exported bigints ([@magic-akari](https://github.com/magic-akari))
+* `babel-parser`
+  * [#14344](https://github.com/babel/babel/pull/14344) Allow variable and function with the same name in static blocks ([@Yokubjon-J](https://github.com/Yokubjon-J))
+  * [#14327](https://github.com/babel/babel/pull/14327) Remove length restriction from JSX entities, and ignore `Object.prototype` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14293](https://github.com/babel/babel/pull/14293) fix(ts): skip func-type param start on parsing ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#14335](https://github.com/babel/babel/pull/14335) Fix static/proto initializers when there aren't class fields ([@JLHwung](https://github.com/JLHwung))
+  * [#14334](https://github.com/babel/babel/pull/14334) fix: push `newClass` only when class is decorated ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#14309](https://github.com/babel/babel/pull/14309) Fix `import type/typeof` printing with no specifiers ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#14313](https://github.com/babel/babel/pull/14313) Fix duplicate exports initialization with many exports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-member-expression-to-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`, `babel-plugin-transform-classes`, `babel-plugin-transform-object-super`
+  * [#14311](https://github.com/babel/babel/pull/14311) fix: support bigints in update expressions for private fields ([@magic-akari](https://github.com/magic-akari))
+* `babel-register`
+  * [#14303](https://github.com/babel/babel/pull/14303) Fix babel register cache invalidation ([@cha0s](https://github.com/cha0s))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#14338](https://github.com/babel/babel/pull/14338) Report single error for invalid num seps in unicode escapes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-generator`, `babel-parser`
+  * [#14320](https://github.com/babel/babel/pull/14320) Type-safe ParseErrors ([@tolmasky](https://github.com/tolmasky))
+* `babel-plugin-transform-destructuring`
+  * [#14236](https://github.com/babel/babel/pull/14236) Improve `transform-destructuring` typings ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#14180](https://github.com/babel/babel/pull/14180) Convert ESLint plugins to CommonJS ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.17.6 (2022-02-21)
 
 #### :eyeglasses: Spec Compliance
