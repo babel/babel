@@ -936,14 +936,12 @@ export type PropNode =
   | t.StaticBlock;
 export type PropPath = NodePath<PropNode>;
 
-function isNameOrLength(node: t.ClassProperty) {
-  if (node.key.type === "Identifier") {
-    return (
-      !node.computed && (node.key.name === "name" || node.key.name === "length")
-    );
+function isNameOrLength({ key, computed }: t.ClassProperty) {
+  if (key.type === "Identifier") {
+    return !computed && (key.name === "name" || key.name === "length");
   }
-  if (node.key.type === "StringLiteral") {
-    return node.key.value === "name" || node.key.value === "length";
+  if (key.type === "StringLiteral") {
+    return key.value === "name" || key.value === "length";
   }
   return false;
 }
