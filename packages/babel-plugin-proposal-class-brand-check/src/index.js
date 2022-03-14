@@ -80,7 +80,6 @@ export default declare(api => {
             }
           }
         });
-        // gen call expression to moni
         const memberExpression = t.memberExpression(
           t.identifier(setID.name),
           t.identifier("has"),
