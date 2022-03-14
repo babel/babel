@@ -1,4 +1,4 @@
-import * as t from "../../..";
+import * as t from "../../../lib/index.js";
 
 describe("builders", function () {
   describe("es2015", function () {

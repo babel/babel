@@ -375,7 +375,7 @@ class Printer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless(isLabel: boolean = false): any {
+  startTerminatorless(isLabel: boolean = false) {
     if (isLabel) {
       this._noLineTerminator = true;
       return null;

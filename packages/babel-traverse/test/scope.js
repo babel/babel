@@ -1,8 +1,10 @@
-import traverse, { NodePath } from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-function getPath(code, options): NodePath<t.Program> {
+import _traverse, { NodePath } from "../lib/index.js";
+const traverse = _traverse.default;
+
+function getPath(code, options) {
   const ast =
     typeof code === "string" ? parse(code, options) : createNode(code);
   let path;
@@ -440,10 +442,12 @@ describe("scope", () => {
         expect(referencePaths[0].node.loc.start).toEqual({
           line: 1,
           column: 28,
+          index: 28,
         });
         expect(referencePaths[1].node.loc.start).toEqual({
           line: 1,
           column: 32,
+          index: 32,
         });
       });
       it("id referenced in function body", () => {
@@ -653,6 +657,18 @@ describe("scope", () => {
       });
     });
 
+    describe("duplicate declaration", () => {
+      it("should not throw error on duplicate class and function declaration", () => {
+        const ast = [
+          t.classDeclaration(t.identifier("A"), t.super(), t.classBody([]), []),
+          t.functionDeclaration(t.identifier("A"), [], t.blockStatement([])),
+        ];
+
+        ast[0].declare = true;
+        expect(() => getPath(ast)).not.toThrowError();
+      });
+    });
+
     describe("global", () => {
       // node1, node2, success
       // every line will run 2 tests `node1;node2;` and `node2;node1;`
@@ -749,7 +765,7 @@ describe("scope", () => {
       });
       it("in function declaration", () => {
         const functionDeclaration = getPath("function f() { var foo; }").get(
-          "body.0.expression",
+          "body.0",
         );
         expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
       });
@@ -837,7 +853,7 @@ describe("scope", () => {
       });
       it("in function declaration", () => {
         const functionDeclaration = getPath("function f() { let foo; }").get(
-          "body.0.expression",
+          "body.0",
         );
         expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
       });
@@ -904,6 +920,20 @@ describe("scope", () => {
         );
         expect(switchStatement.scope.hasOwnBinding("foo")).toBe(true);
       });
+    });
+  });
+
+  describe(".push", () => {
+    it("registers the new binding in the correct scope", () => {
+      const program = getPath("class A {}");
+      const classDeclaration = program.get("body.0");
+      classDeclaration.scope.push({ id: t.identifier("class") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "var class;
+
+        class A {}"
+      `);
+      expect(program.scope.hasOwnBinding("class")).toBe(true);
     });
   });
 });

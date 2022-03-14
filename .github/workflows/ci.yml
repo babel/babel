@@ -106,6 +106,9 @@ jobs:
         env:
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
+      - name: Ensure cwd does not contain uncommitted changes
+        run: |
+          ./scripts/assert-dir-git-clean.sh
       - uses: actions/upload-artifact@v2
         with:
           name: babel-artifact
@@ -188,7 +191,9 @@ jobs:
 
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
+          BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
+        env:
+          TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes
@@ -197,10 +202,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Node.js 12
+      - name: Use Node.js 14.17
         uses: actions/setup-node@v2-beta
         with:
-          node-version: 12 # Node.js 12 is the first LTS supported by Babel 8
+          node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -215,7 +220,7 @@ jobs:
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
-        run: make lint
+        run: make -j tscheck flowcheck-ci lint-ci
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
@@ -391,59 +396,15 @@ jobs:
           node-version: 14.2
       - name: Test Node.js 14.2
         run: yarn test:runtime:node
-
-  e2e-publish:
-    name: Publish to local Verdaccio registry
-    needs: prepare-yarn-cache
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Use Node.js latest
+      - name: Use Node.js 16.5
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - name: Setup Yarn cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
-      - name: Publish
-        run: ./scripts/integration-tests/publish-local.sh
-      - uses: actions/upload-artifact@v2
-        with:
-          name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
-
-  e2e-tests:
-    name: E2E
-    needs: e2e-publish
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        project:
-          - babel
-          - babel-old-version
-          - create-react-app
-          - vue-cli
-          - jest
-          - react-native
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Use Node.js latest
+          node-version: 16.5
+      - name: Test Node.js 16.5
+        run: yarn test:runtime:node
+      - name: Use Node.js 16.6
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*"
-      - uses: actions/download-artifact@v2
-        with:
-          name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
-      - name: Test
-        run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
+          node-version: 16.6
+      - name: Test Node.js 16.6
+        run: yarn test:runtime:node

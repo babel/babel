@@ -167,7 +167,7 @@ export default declare((api, options) => {
 
         const callee = calleePath.node as t.MemberExpression;
 
-        if (calleePath.isMemberExpression()) {
+        if (t.isMemberExpression(callee)) {
           const temp = scope.maybeGenerateMemoised(callee.object);
           if (temp) {
             callee.object = t.assignmentExpression("=", temp, callee.object);

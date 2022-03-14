@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
   () => {
     let Babel;
     beforeAll(() => {
-      Babel = require("../babel");
+      Babel = require("../babel.js");
     });
 
     it("handles the es2015-no-commonjs preset", () => {

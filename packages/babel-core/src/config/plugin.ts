@@ -1,18 +1,27 @@
+import { finalize } from "./helpers/deep-array";
+import type { ReadonlyDeepArray } from "./helpers/deep-array";
 import type { PluginObject } from "./validation/plugins";
 
 export default class Plugin {
   key: string | undefined | null;
-  manipulateOptions: ((options: unknown, parserOpts: unknown) => void) | void;
-  post: Function | void;
-  pre: Function | void;
+  manipulateOptions?: (options: unknown, parserOpts: unknown) => void;
+  post?: Function;
+  pre?: Function;
   visitor: {};
 
-  parserOverride: Function | void;
-  generatorOverride: Function | void;
+  parserOverride?: Function;
+  generatorOverride?: Function;
 
   options: {};
 
-  constructor(plugin: PluginObject, options: {}, key?: string) {
+  externalDependencies: ReadonlyDeepArray<string>;
+
+  constructor(
+    plugin: PluginObject,
+    options: {},
+    key?: string,
+    externalDependencies: ReadonlyDeepArray<string> = finalize([]),
+  ) {
     this.key = plugin.name || key;
 
     this.manipulateOptions = plugin.manipulateOptions;
@@ -23,5 +32,6 @@ export default class Plugin {
     this.generatorOverride = plugin.generatorOverride;
 
     this.options = options;
+    this.externalDependencies = externalDependencies;
   }
 }

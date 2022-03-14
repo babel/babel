@@ -12,6 +12,7 @@ import NodePath from "./index";
  */
 
 export function findParent(
+  this: NodePath,
   callback: (path: NodePath) => boolean,
 ): NodePath | null {
   let path = this;

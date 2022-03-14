@@ -15,7 +15,7 @@ _ref3 = /regex/;
 _baz = baz;
 _ref4 = `template${expression}`;
 
-var MyClass = /*#__PURE__*/function (_computed3, _computed4, _ref5) {
+var MyClass = /*#__PURE__*/function () {
   "use strict";
 
   function MyClass() {
@@ -36,20 +36,20 @@ var MyClass = /*#__PURE__*/function (_computed3, _computed4, _ref5) {
     get: function () {},
     set: function (value) {}
   }, {
-    key: _computed3,
+    key: _computed,
     get: function () {}
   }, {
-    key: _computed4,
+    key: _computed2,
     set: function (value) {}
   }, {
-    key: _ref5,
+    key: _ref2,
     value: function () {}
   }], [{
     key: "10",
     value: function _() {}
   }]);
   return MyClass;
-}(_computed, _computed2, _ref2);
+}();
 
 MyClass[_one] = "test";
 MyClass[2 * 4 + 7] = "247";

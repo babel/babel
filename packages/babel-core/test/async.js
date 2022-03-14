@@ -1,12 +1,12 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import * as babel from "..";
+import * as babel from "../lib/index.js";
 
 import {
   spawnTransformAsync,
   spawnTransformSync,
   supportsESM,
-} from "./helpers/esm";
+} from "./helpers/esm.js";
 
 const nodeGte8 = (...args) => {
   // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6

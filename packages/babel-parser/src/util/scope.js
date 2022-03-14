@@ -16,8 +16,10 @@ import {
   type ScopeFlags,
   type BindingTypes,
 } from "./scopeflags";
+import { Position } from "./location";
 import * as N from "../types";
-import { Errors, type raiseFunction } from "../parser/error";
+import { Errors } from "../parse-error";
+import Tokenizer from "../tokenizer";
 
 // Start an AST node, attaching a start offset.
 export class Scope {
@@ -37,14 +39,13 @@ export class Scope {
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope: Scope = Scope> {
+  parser: Tokenizer;
   scopeStack: Array<IScope> = [];
-  declare raise: raiseFunction;
-  declare inModule: boolean;
-  undefinedExports: Map<string, number> = new Map();
-  undefinedPrivateNames: Map<string, number> = new Map();
+  inModule: boolean;
+  undefinedExports: Map<string, Position> = new Map();
 
-  constructor(raise: raiseFunction, inModule: boolean) {
-    this.raise = raise;
+  constructor(parser: Tokenizer, inModule: boolean) {
+    this.parser = parser;
     this.inModule = inModule;
   }
 
@@ -102,15 +103,15 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   // > treated like var declarations rather than like lexical declarations.
   treatFunctionsAsVarInScope(scope: IScope): boolean {
     return !!(
-      scope.flags & SCOPE_FUNCTION ||
-      (!this.inModule && scope.flags & SCOPE_PROGRAM)
+      scope.flags & (SCOPE_FUNCTION | SCOPE_STATIC_BLOCK) ||
+      (!this.parser.inModule && scope.flags & SCOPE_PROGRAM)
     );
   }
 
-  declareName(name: string, bindingType: BindingTypes, pos: number) {
+  declareName(name: string, bindingType: BindingTypes, loc: Position) {
     let scope = this.currentScope();
     if (bindingType & BIND_SCOPE_LEXICAL || bindingType & BIND_SCOPE_FUNCTION) {
-      this.checkRedeclarationInScope(scope, name, bindingType, pos);
+      this.checkRedeclarationInScope(scope, name, bindingType, loc);
 
       if (bindingType & BIND_SCOPE_FUNCTION) {
         scope.functions.add(name);
@@ -124,20 +125,20 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     } else if (bindingType & BIND_SCOPE_VAR) {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         scope = this.scopeStack[i];
-        this.checkRedeclarationInScope(scope, name, bindingType, pos);
+        this.checkRedeclarationInScope(scope, name, bindingType, loc);
         scope.var.add(name);
         this.maybeExportDefined(scope, name);
 
         if (scope.flags & SCOPE_VAR) break;
       }
     }
-    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+    if (this.parser.inModule && scope.flags & SCOPE_PROGRAM) {
       this.undefinedExports.delete(name);
     }
   }
 
   maybeExportDefined(scope: IScope, name: string) {
-    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+    if (this.parser.inModule && scope.flags & SCOPE_PROGRAM) {
       this.undefinedExports.delete(name);
     }
   }
@@ -146,10 +147,13 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     scope: IScope,
     name: string,
     bindingType: BindingTypes,
-    pos: number,
+    loc: Position,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
-      this.raise(pos, Errors.VarRedeclaration, name);
+      this.parser.raise(Errors.VarRedeclaration, {
+        at: loc,
+        identifierName: name,
+      });
     }
   }
 
@@ -196,7 +200,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
       // can overwrite this behavior.
       !topLevelScope.functions.has(name)
     ) {
-      this.undefinedExports.set(name, id.start);
+      this.undefinedExports.set(name, id.loc.start);
     }
   }
 

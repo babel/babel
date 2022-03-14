@@ -920,7 +920,7 @@ class BlockScoping {
    * later on.
    */
 
-  checkLoop(): any {
+  checkLoop() {
     const state: LoopVisitorState = {
       hasBreakContinue: false,
       ignoreLabeless: false,

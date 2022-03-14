@@ -25,7 +25,7 @@ try {
       return _super.apply(this, arguments);
     }
 
-    return CustomElement;
+    return babelHelpers.createClass(CustomElement);
   }( /*#__PURE__*/babelHelpers.wrapNativeSuper(HTMLElement));
 
   ;

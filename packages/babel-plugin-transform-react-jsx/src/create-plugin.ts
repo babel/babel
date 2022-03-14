@@ -2,15 +2,13 @@ import jsx from "@babel/plugin-syntax-jsx";
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 import type { PluginPass } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
 import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type {
-  ArrowFunctionExpression,
   CallExpression,
   Class,
   Expression,
-  FunctionParent,
   Identifier,
   JSXAttribute,
   JSXElement,
@@ -22,8 +20,6 @@ import type {
   Program,
 } from "@babel/types";
 
-type Diff<T, U> = T extends U ? never : T;
-
 const DEFAULT = {
   importSource: "react",
   runtime: "automatic",
@@ -31,11 +27,12 @@ const DEFAULT = {
   pragmaFrag: "React.Fragment",
 };
 
-const JSX_SOURCE_ANNOTATION_REGEX = /\*?\s*@jsxImportSource\s+([^\s]+)/;
-const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
+const JSX_SOURCE_ANNOTATION_REGEX =
+  /^\s*\*?\s*@jsxImportSource\s+([^\s]+)\s*$/m;
+const JSX_RUNTIME_ANNOTATION_REGEX = /^\s*\*?\s*@jsxRuntime\s+([^\s]+)\s*$/m;
 
-const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
-const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
+const JSX_ANNOTATION_REGEX = /^\s*\*?\s*@jsx\s+([^\s]+)\s*$/m;
+const JSX_FRAG_ANNOTATION_REGEX = /^\s*\*?\s*@jsxFrag\s+([^\s]+)\s*$/m;
 
 const get = (pass: PluginPass, name: string) =>
   pass.get(`@babel/plugin-react-jsx/${name}`);
@@ -115,7 +112,7 @@ export default function createPlugin({ name, development }) {
     const injectMetaPropertiesVisitor: Visitor<PluginPass> = {
       JSXOpeningElement(path, state) {
         const attributes = [];
-        if (isThisAllowed(path)) {
+        if (isThisAllowed(path.scope)) {
           attributes.push(
             t.jsxAttribute(
               t.jsxIdentifier("__self"),
@@ -294,52 +291,36 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       } as Visitor<PluginPass>,
     };
 
-    // Finds the closest parent function that provides `this`. Specifically, this looks for
-    // the first parent function that isn't an arrow function.
-    //
-    // Derived from `Scope#getFunctionParent`
-    function getThisFunctionParent(
-      path: NodePath,
-    ): NodePath<Diff<FunctionParent, ArrowFunctionExpression>> | null {
-      let scope = path.scope;
-      do {
-        if (
-          scope.path.isFunctionParent() &&
-          !scope.path.isArrowFunctionExpression()
-        ) {
-          // @ts-expect-error ts can not infer scope.path is Diff<FunctionParent, ArrowFunctionExpression>
-          return scope.path;
-        }
-      } while ((scope = scope.parent));
-      return null;
-    }
-
     // Returns whether the class has specified a superclass.
     function isDerivedClass(classPath: NodePath<Class>) {
       return classPath.node.superClass !== null;
     }
 
-    // Returns whether `this` is allowed at given path.
-    function isThisAllowed(path: NodePath<JSXOpeningElement>) {
+    // Returns whether `this` is allowed at given scope.
+    function isThisAllowed(scope: Scope) {
       // This specifically skips arrow functions as they do not rewrite `this`.
-      const parentMethodOrFunction = getThisFunctionParent(path);
-      if (parentMethodOrFunction === null) {
-        // We are not in a method or function. It is fine to use `this`.
-        return true;
-      }
-      if (!parentMethodOrFunction.isMethod()) {
-        // If the closest parent is a regular function, `this` will be rebound, therefore it is fine to use `this`.
-        return true;
-      }
-      // Current node is within a method, so we need to check if the method is a constructor.
-      if (parentMethodOrFunction.node.kind !== "constructor") {
-        // We are not in a constructor, therefore it is always fine to use `this`.
-        return true;
-      }
-      // Now we are in a constructor. If it is a derived class, we do not reference `this`.
-      return !isDerivedClass(
-        parentMethodOrFunction.parentPath.parentPath as NodePath<Class>,
-      );
+      do {
+        const { path } = scope;
+        if (path.isFunctionParent() && !path.isArrowFunctionExpression()) {
+          if (!path.isMethod()) {
+            // If the closest parent is a regular function, `this` will be rebound, therefore it is fine to use `this`.
+            return true;
+          }
+          // Current node is within a method, so we need to check if the method is a constructor.
+          if (path.node.kind !== "constructor") {
+            // We are not in a constructor, therefore it is always fine to use `this`.
+            return true;
+          }
+          // Now we are in a constructor. If it is a derived class, we do not reference `this`.
+          return !isDerivedClass(path.parentPath.parentPath as NodePath<Class>);
+        }
+        if (path.isTSModuleBlock()) {
+          // If the closeset parent is a TS Module block, `this` will not be allowed.
+          return false;
+        }
+      } while ((scope = scope.parent));
+      // We are not in a method or function. It is fine to use `this`.
+      return true;
     }
 
     function call(

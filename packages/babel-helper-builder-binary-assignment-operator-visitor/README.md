@@ -9,11 +9,11 @@ See our website [@babel/helper-builder-binary-assignment-operator-visitor](https
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-builder-binary-assignment-operator-visitor
+npm install --save @babel/helper-builder-binary-assignment-operator-visitor
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-builder-binary-assignment-operator-visitor --dev
+yarn add @babel/helper-builder-binary-assignment-operator-visitor
 ```

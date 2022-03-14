@@ -1,6 +1,6 @@
-var _class, _temp;
+var _class;
 
-call((_temp = _class = class {}, _class.test = true, _temp));
+call((_class = class {}, _class.test = true, _class));
 export default class _class2 {}
 _class2.test = true;
 ;

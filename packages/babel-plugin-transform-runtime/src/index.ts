@@ -3,7 +3,7 @@ import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
 import { hasMinVersion } from "./helpers";
-import getRuntimePath from "./get-runtime-path";
+import getRuntimePath, { resolveFSPath } from "./get-runtime-path";
 
 import _pluginCorejs2 from "babel-plugin-polyfill-corejs2";
 import _pluginCorejs3 from "babel-plugin-polyfill-corejs3";
@@ -85,12 +85,14 @@ export default declare((api, options, dirname) => {
     throw new Error(`The 'version' option must be a version string.`);
   }
 
-  // In recent @babel/runtime versions, we can use require("helper").default
-  // instead of require("helper") so that it has the same interface as the
-  // ESM helper, and bundlers can better exchange one format for the other.
-  // TODO(Babel 8): Remove this check, it's always true
-  const DUAL_MODE_RUNTIME = "7.13.0";
-  const supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
+  if (!process.env.BABEL_8_BREAKING) {
+    // In recent @babel/runtime versions, we can use require("helper").default
+    // instead of require("helper") so that it has the same interface as the
+    // ESM helper, and bundlers can better exchange one format for the other.
+    const DUAL_MODE_RUNTIME = "7.13.0";
+    // eslint-disable-next-line no-var
+    var supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
+  }
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
@@ -165,8 +167,6 @@ export default declare((api, options, dirname) => {
     };
   }
 
-  const corejsExt = absoluteRuntime ? ".js" : "";
-
   return {
     name: "transform-runtime",
 
@@ -175,14 +175,16 @@ export default declare((api, options, dirname) => {
           pluginCorejs2,
           {
             method: "usage-pure",
+            absoluteImports: absoluteRuntime ? modulePath : false,
             [pluginsCompat]: {
               runtimeVersion,
               useBabelRuntime: modulePath,
-              ext: corejsExt,
+              ext: "",
             },
           },
           createRegeneratorPlugin({
             method: "usage-pure",
+            absoluteImports: absoluteRuntime ? modulePath : false,
             [pluginsCompat]: { useBabelRuntime: modulePath },
           }),
         )
@@ -193,15 +195,18 @@ export default declare((api, options, dirname) => {
             method: "usage-pure",
             version: 3,
             proposals,
-            [pluginsCompat]: { useBabelRuntime: modulePath, ext: corejsExt },
+            absoluteImports: absoluteRuntime ? modulePath : false,
+            [pluginsCompat]: { useBabelRuntime: modulePath, ext: "" },
           },
           createRegeneratorPlugin({
             method: "usage-pure",
+            absoluteImports: absoluteRuntime ? modulePath : false,
             [pluginsCompat]: { useBabelRuntime: modulePath },
           }),
         )
       : createRegeneratorPlugin({
           method: "usage-pure",
+          absoluteImports: absoluteRuntime ? modulePath : false,
           [pluginsCompat]: { useBabelRuntime: modulePath },
         }),
 
@@ -232,12 +237,10 @@ export default declare((api, options, dirname) => {
             ? "helpers/esm"
             : "helpers";
 
-        return addDefaultImport(
-          `${modulePath}/${helpersDir}/${name}`,
-          name,
-          blockHoist,
-          true,
-        );
+        let helperPath = `${modulePath}/${helpersDir}/${name}`;
+        if (absoluteRuntime) helperPath = resolveFSPath(helperPath);
+
+        return addDefaultImport(helperPath, name, blockHoist, true);
       });
 
       const cache = new Map();
@@ -259,8 +262,13 @@ export default declare((api, options, dirname) => {
           cached = t.cloneNode(cached);
         } else {
           cached = addDefault(file.path, source, {
-            importedInterop:
-              isHelper && supportsCJSDefault ? "compiled" : "uncompiled",
+            importedInterop: (
+              process.env.BABEL_8_BREAKING
+                ? isHelper
+                : isHelper && supportsCJSDefault
+            )
+              ? "compiled"
+              : "uncompiled",
             nameHint,
             blockHoist,
           });

@@ -1,7 +1,7 @@
 import template from "@babel/template";
 import type * as t from "@babel/types";
 
-import * as generated from "./helpers-generated";
+import generated from "./helpers-generated";
 
 interface Helper {
   minVersion: string;
@@ -223,6 +223,7 @@ helpers.createClass = helper("7.0.0-beta.0")`
   export default function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", { writable: false });
     return Constructor;
   }
 `;
@@ -334,6 +335,9 @@ helpers.inherits = helper("7.0.0-beta.0")`
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
+    // We can't use defineProperty to set the prototype in a single step because it
+    // doesn't work in Chrome <= 36. https://github.com/babel/babel/issues/14056
+    // V8 bug: https://bugs.chromium.org/p/v8/issues/detail?id=3334
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
         value: subClass,
@@ -341,6 +345,7 @@ helpers.inherits = helper("7.0.0-beta.0")`
         configurable: true
       }
     });
+    Object.defineProperty(subClass, "prototype", { writable: false });
     if (superClass) setPrototypeOf(subClass, superClass);
   }
 `;
@@ -651,10 +656,14 @@ helpers.superPropBase = helper("7.0.0-beta.0")`
   }
 `;
 
+// https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get
+//
+//  28.1.5 Reflect.get ( target, propertyKey [ , receiver ] )
+//
 helpers.get = helper("7.0.0-beta.0")`
   import superPropBase from "superPropBase";
 
-  export default function _get(target, property, receiver) {
+  export default function _get() {
     if (typeof Reflect !== "undefined" && Reflect.get) {
       _get = Reflect.get;
     } else {
@@ -665,13 +674,14 @@ helpers.get = helper("7.0.0-beta.0")`
 
         var desc = Object.getOwnPropertyDescriptor(base, property);
         if (desc.get) {
-          return desc.get.call(receiver);
+          // STEP 3. If receiver is not present, then set receiver to target.
+          return desc.get.call(arguments.length < 3 ? target : receiver);
         }
 
         return desc.value;
       };
     }
-    return _get(target, property, receiver || target);
+    return _get.apply(this, arguments);
   }
 `;
 
@@ -2042,3 +2052,9 @@ if (!process.env.BABEL_8_BREAKING) {
     }
   `;
 }
+
+helpers.identity = helper("7.17.0")`
+  export default function _identity(x) {
+    return x;
+  }
+`;

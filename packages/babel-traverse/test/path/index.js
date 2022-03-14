@@ -1,4 +1,4 @@
-import { NodePath } from "../../lib";
+import { NodePath } from "../../lib/index.js";
 
 describe("NodePath", () => {
   describe("setData/getData", () => {
@@ -46,6 +46,21 @@ describe("NodePath", () => {
       path.setData(symbol, 42);
 
       expect(path.getData(symbol)).toBe(42);
+    });
+
+    describe("hasNode", () => {
+      it("returns false if node is null", () => {
+        const path = new NodePath({}, {});
+
+        expect(path.hasNode()).toBe(false);
+      });
+
+      it("returns true if node is not null", () => {
+        const path = new NodePath({}, {});
+        path.node = {};
+
+        expect(path.hasNode()).toBe(true);
+      });
     });
   });
 });

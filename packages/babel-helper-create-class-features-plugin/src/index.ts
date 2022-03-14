@@ -12,13 +12,9 @@ import {
 import type { PropPath } from "./fields";
 import { buildDecoratedClass, hasDecorators } from "./decorators";
 import { injectInitialization, extractComputedKeys } from "./misc";
-import {
-  enableFeature,
-  verifyUsedFeatures,
-  FEATURES,
-  isLoose,
-} from "./features";
+import { enableFeature, FEATURES, isLoose, shouldTransform } from "./features";
 import { assertFieldTransformed } from "./typescript";
+import type { ParserOptions } from "@babel/parser";
 
 export { FEATURES, enableFeature, injectInitialization };
 
@@ -37,8 +33,9 @@ interface Options {
   name: string;
   feature: number;
   loose?: boolean;
+  inherits?: (api: any, options: any) => any;
   // same as PluginObject.manipulateOptions
-  manipulateOptions: (options: unknown, parserOpts: unknown) => void;
+  manipulateOptions?: (options: unknown, parserOpts: ParserOptions) => void;
   // TODO(flow->ts): change to babel api
   api?: { assumption: (key?: string) => boolean | undefined };
 }
@@ -50,6 +47,7 @@ export function createClassFeaturePlugin({
   manipulateOptions,
   // TODO(Babel 8): Remove the default value
   api = { assumption: () => void 0 },
+  inherits,
 }: Options) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
@@ -84,6 +82,7 @@ export function createClassFeaturePlugin({
   return {
     name,
     manipulateOptions,
+    inherits,
 
     pre() {
       enableFeature(this.file, feature, loose);
@@ -97,7 +96,7 @@ export function createClassFeaturePlugin({
       Class(path: NodePath<t.Class>, state: File) {
         if (this.file.get(versionKey) !== version) return;
 
-        verifyUsedFeatures(path, this.file);
+        if (!shouldTransform(path, this.file)) return;
 
         if (path.isClassDeclaration()) assertFieldTransformed(path);
 
@@ -112,8 +111,6 @@ export function createClassFeaturePlugin({
         const body = path.get("body");
 
         for (const path of body.get("body")) {
-          verifyUsedFeatures(path, this.file);
-
           if (
             // check path.node.computed is enough, but ts will complain
             (path.isClassProperty() || path.isClassMethod()) &&
@@ -169,7 +166,7 @@ export function createClassFeaturePlugin({
               path.isPrivate() ||
               path.isStaticBlock?.()
             ) {
-              props.push(path);
+              props.push(path as PropPath);
             }
           }
         }
@@ -245,7 +242,8 @@ export function createClassFeaturePlugin({
             (referenceVisitor, state) => {
               if (isDecorated) return;
               for (const prop of props) {
-                if (prop.node.static) continue;
+                // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
+                if (t.isStaticBlock?.(prop.node) || prop.node.static) continue;
                 prop.traverse(referenceVisitor, state);
               }
             },
@@ -263,17 +261,6 @@ export function createClassFeaturePlugin({
             .find(parent => parent.isStatement() || parent.isDeclaration())
             .insertAfter(pureStaticNodes);
         }
-      },
-
-      PrivateName(path: NodePath<t.PrivateName>) {
-        if (
-          this.file.get(versionKey) !== version ||
-          path.parentPath.isPrivate({ key: path.node })
-        ) {
-          return;
-        }
-
-        throw path.buildCodeFrameError(`Unknown PrivateName "${path}"`);
       },
 
       ExportDefaultDeclaration(path: NodePath<t.ExportDefaultDeclaration>) {

@@ -46,6 +46,20 @@ if [[ "$(node --version)" == v17.* ]]; then
 fi
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
+
+# Remove this when CRA updates jest-worker in their lockfile
+node -e "
+  var pkg = require('./package.json');
+
+  pkg.resolutions = {
+    'jest-worker': '27.4.5'
+  };
+
+  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
+"
+npm install --ignore-scripts
+npx npm-force-resolutions
+
 npm install
 
 # Test

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-classes",
-  "version": "7.16.0",
+  "version": "7.16.7",
   "description": "Compile ES2015 classes to ES5",
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
+    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-function-name": "workspace:^",
     "@babel/helper-optimise-call-expression": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
@@ -36,5 +37,17 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
 }

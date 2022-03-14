@@ -5,8 +5,8 @@ import {
   default as getFixtures,
   resolveOptionPluginOrPreset,
 } from "@babel/helper-fixtures";
-import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
+import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import * as helpers from "./helpers";
 import assert from "assert";
 import fs from "fs";
@@ -346,12 +346,12 @@ function run(task) {
   }
 
   if (task.sourceMappings) {
-    const consumer = new sourceMap.SourceMapConsumer(result.map);
+    const consumer = new TraceMap(result.map);
 
     task.sourceMappings.forEach(function (mapping) {
       const actual = mapping.original;
 
-      const expected = consumer.originalPositionFor(mapping.generated);
+      const expected = originalPositionFor(consumer, mapping.generated);
       expect({ line: expected.line, column: expected.column }).toEqual(actual);
     });
   }

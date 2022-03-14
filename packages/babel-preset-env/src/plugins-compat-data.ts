@@ -17,7 +17,4 @@ for (const plugin of Object.keys(bugfixPlugins)) {
   }
 }
 
-pluginsFiltered["proposal-class-properties"] =
-  pluginsFiltered["proposal-private-methods"];
-
 export { pluginsFiltered as plugins, bugfixPluginsFiltered as pluginsBugfixes };

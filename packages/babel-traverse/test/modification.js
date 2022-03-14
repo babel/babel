@@ -1,7 +1,10 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+import _generate from "@babel/generator";
+const traverse = _traverse.default;
+const generate = _generate.default;
 
 function getPath(code, parserOpts) {
   const ast = parse(code, parserOpts);
@@ -219,13 +222,13 @@ describe("modification", function () {
       });
 
       it("the exported expression", function () {
-        const declPath = getPath("export default 2;", {
+        const declPath = getPath("export default fn();", {
           sourceType: "module",
         });
         const path = declPath.get("declaration");
         path.insertBefore(t.identifier("x"));
 
-        expect(generateCode(declPath)).toBe("export default (x, 2);");
+        expect(generateCode(declPath)).toBe("export default (x, fn());");
       });
     });
   });
@@ -333,14 +336,14 @@ describe("modification", function () {
       });
 
       it("the exported expression", function () {
-        const bodyPath = getPath("export default 2;", {
+        const bodyPath = getPath("export default fn();", {
           sourceType: "module",
         }).parentPath;
         const path = bodyPath.get("body.0.declaration");
         path.insertAfter(t.identifier("x"));
 
         expect(generateCode({ parentPath: bodyPath })).toBe(
-          "var _temp;\n\nexport default (_temp = 2, x, _temp);",
+          "var _temp;\n\nexport default (_temp = fn(), x, _temp);",
         );
       });
     });

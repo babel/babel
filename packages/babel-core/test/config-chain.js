@@ -2,17 +2,19 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
-import * as babel from "../lib";
-import getTargets from "@babel/helper-compilation-targets";
+import babel from "../lib/index.js";
+
+import _getTargets from "@babel/helper-compilation-targets";
+const getTargets = _getTargets.default;
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm";
+import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
 
 // TODO: In Babel 8, we can directly uses fs.promises which is supported by
 // node 8+
 const pfs =
-  fs.promises ??
+  fs.promises ||
   new Proxy(fs, {
     get(target, name) {
       if (name === "copyFile") {
@@ -1340,6 +1342,20 @@ describe("buildConfigChain", function () {
           presets: ["./fixtures/config-loading/preset5"],
         });
       }).toThrow(/Preset \/\* your preset \*\/ requires a filename/);
+    });
+
+    it("should not throw error on $schema property in json config files", () => {
+      const filename = fixture(
+        "config-files",
+        "babel-config-json-$schema-property",
+        "babel.config.json",
+      );
+      expect(() => {
+        babel.loadPartialConfig({
+          filename,
+          cwd: path.dirname(filename),
+        });
+      }).not.toThrow();
     });
   });
 });

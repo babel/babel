@@ -11,6 +11,6 @@ var x = {
       return _super.apply(this, arguments);
     }
 
-    return _class;
+    return babelHelpers.createClass(_class);
   }(Foo)
 };

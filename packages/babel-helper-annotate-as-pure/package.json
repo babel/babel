@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-annotate-as-pure",
-  "version": "7.16.0",
+  "version": "7.16.7",
   "description": "Helper function to annotate paths and nodes with #__PURE__ comment",
   "repository": {
     "type": "git",
@@ -19,5 +19,17 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
 }

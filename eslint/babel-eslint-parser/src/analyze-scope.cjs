@@ -340,8 +340,7 @@ module.exports = function analyzeScope(ast, parserOptions, client) {
     directive: false,
     nodejsScope:
       ast.sourceType === "script" &&
-      (parserOptions.ecmaFeatures &&
-        parserOptions.ecmaFeatures.globalReturn) === true,
+      parserOptions.ecmaFeatures?.globalReturn === true,
     impliedStrict: false,
     sourceType: ast.sourceType,
     ecmaVersion: parserOptions.ecmaVersion,

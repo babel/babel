@@ -2,7 +2,8 @@ import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import path from "path";
 import fs from "fs";
-import { createRequire } from "module";
+
+import * as watcher from "./watcher";
 
 export function chmod(src: string, dest: string): void {
   try {
@@ -60,7 +61,7 @@ const CALLER = {
   name: "@babel/cli",
 };
 
-export function transform(
+export function transformRepl(
   filename: string,
   code: string,
   opts: any,
@@ -79,18 +80,31 @@ export function transform(
   });
 }
 
-export function compile(filename: string, opts: any | Function): Promise<any> {
+export async function compile(
+  filename: string,
+  opts: any | Function,
+): Promise<any> {
   opts = {
     ...opts,
     caller: CALLER,
   };
 
-  return new Promise((resolve, reject) => {
+  // TODO (Babel 8): Use `babel.transformFileAsync`
+  const result: any = await new Promise((resolve, reject) => {
     babel.transformFile(filename, opts, (err, result) => {
       if (err) reject(err);
       else resolve(result);
     });
   });
+
+  if (result) {
+    if (!process.env.BABEL_8_BREAKING) {
+      if (!result.externalDependencies) return result;
+    }
+    watcher.updateExternalDependencies(filename, result.externalDependencies);
+  }
+
+  return result;
 }
 
 export function deleteDir(path: string): void {
@@ -113,24 +127,6 @@ process.on("uncaughtException", function (err) {
   console.error(err);
   process.exitCode = 1;
 });
-
-export function requireChokidar(): any {
-  // $FlowIgnore - https://github.com/facebook/flow/issues/6913#issuecomment-662787504
-  const require = createRequire(import /*::("")*/.meta.url);
-
-  try {
-    // todo(babel 8): revert `@nicolo-ribaudo/chokidar-2` hack
-    return parseInt(process.versions.node) >= 8
-      ? require("chokidar")
-      : require("@nicolo-ribaudo/chokidar-2");
-  } catch (err) {
-    console.error(
-      "The optional dependency chokidar failed to install and is required for " +
-        "--watch. Chokidar is likely not supported on your platform.",
-    );
-    throw err;
-  }
-}
 
 export function withExtension(filename: string, ext: string = ".js") {
   const newBasename = path.basename(filename, path.extname(filename)) + ext;

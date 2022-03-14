@@ -1,13 +1,15 @@
-import * as babel from "../lib/index";
-import sourceMap from "source-map";
+import babel from "../lib/index.js";
+import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import path from "path";
-import Plugin from "../lib/config/plugin";
 import generator from "@babel/generator";
 import { fileURLToPath } from "url";
 
-import presetEnv from "../../babel-preset-env";
-import pluginSyntaxFlow from "../../babel-plugin-syntax-flow";
-import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types";
+import _Plugin from "../lib/config/plugin.js";
+const Plugin = _Plugin.default;
+
+import presetEnv from "../../babel-preset-env/lib/index.js";
+import pluginSyntaxFlow from "../../babel-plugin-syntax-flow/lib/index.js";
+import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types/lib/index.js";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -136,13 +138,13 @@ describe("parser and generator options", function () {
 describe("api", function () {
   it("exposes the resolvePlugin method", function () {
     expect(() => babel.resolvePlugin("nonexistent-plugin")).toThrow(
-      /Cannot resolve module 'babel-plugin-nonexistent-plugin'/,
+      /Cannot (?:find|resolve) module 'babel-plugin-nonexistent-plugin'/,
     );
   });
 
   it("exposes the resolvePreset method", function () {
     expect(() => babel.resolvePreset("nonexistent-preset")).toThrow(
-      /Cannot resolve module 'babel-preset-nonexistent-preset'/,
+      /Cannot (?:find|resolve) module 'babel-preset-nonexistent-preset'/,
     );
   });
 
@@ -530,15 +532,15 @@ describe("api", function () {
       ].join("\n"),
     ).toBe(result.code);
 
-    const consumer = new sourceMap.SourceMapConsumer(result.map);
+    const consumer = new TraceMap(result.map);
 
     expect(
-      consumer.originalPositionFor({
+      originalPositionFor(consumer, {
         line: 7,
         column: 4,
       }),
     ).toEqual({
-      name: null,
+      name: "Foo",
       source: "stdout",
       line: 1,
       column: 6,

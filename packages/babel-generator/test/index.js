@@ -1,12 +1,15 @@
-import Printer from "../lib/printer";
-import generate, { CodeGenerator } from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
-import sourcemap from "source-map";
+import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import { fileURLToPath } from "url";
+
+import _Printer from "../lib/printer.js";
+import _generate, { CodeGenerator } from "../lib/index.js";
+const Printer = _Printer.default;
+const generate = _generate.default;
 
 describe("generation", function () {
   it("completeness", function () {
@@ -292,8 +295,8 @@ describe("generation", function () {
       code,
     );
 
-    const consumer = new sourcemap.SourceMapConsumer(generated.map);
-    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    const consumer = new TraceMap(generated.map);
+    const loc = originalPositionFor(consumer, { line: 2, column: 1 });
     expect(loc).toMatchObject({
       column: 0,
       line: 2,
@@ -313,8 +316,8 @@ describe("generation", function () {
       code,
     );
 
-    const consumer = new sourcemap.SourceMapConsumer(generated.map);
-    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    const consumer = new TraceMap(generated.map);
+    const loc = originalPositionFor(consumer, { line: 2, column: 1 });
     expect(loc).toMatchObject({
       column: 0,
       line: 2,
@@ -494,6 +497,17 @@ describe("programmatic generation", function () {
     expect(output).toBe("interface A {}");
   });
 
+  it("flow function type annotation with no parent", () => {
+    const functionTypeAnnotation = t.functionTypeAnnotation(
+      null,
+      [],
+      null,
+      t.voidTypeAnnotation(),
+    );
+    const output = generate(functionTypeAnnotation).code;
+    expect(output).toBe("() => void");
+  });
+
   describe("directives", function () {
     it("preserves escapes", function () {
       const directive = t.directive(
@@ -533,6 +547,20 @@ describe("programmatic generation", function () {
       expect(() => {
         generate(directive);
       }).toThrow();
+    });
+
+    it("preserves single quotes if not minified", function () {
+      const directive = parse("'use strict';").program.directives[0];
+      const output = generate(directive).code;
+
+      expect(output).toBe("'use strict';");
+    });
+
+    it("converts single quotes to double quotes if minified", function () {
+      const directive = parse("'use strict';").program.directives[0];
+      const output = generate(directive, { minified: true }).code;
+
+      expect(output).toBe('"use strict";');
     });
   });
 
@@ -795,7 +823,7 @@ describe("CodeGenerator", function () {
   });
 });
 
-const suites = fixtures(
+const suites = fixtures.default(
   path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
 );
 

@@ -38,7 +38,7 @@ export default class Buffer {
    * Get the final string output from the buffer, along with the sourcemap if one exists.
    */
 
-  get(): any {
+  get() {
     this._flush();
 
     const map = this._map;

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-react-jsx",
-  "version": "7.16.0",
+  "version": "7.16.7",
   "description": "Helper function to build react jsx",
   "repository": {
     "type": "git",
@@ -17,8 +17,23 @@
     "@babel/helper-annotate-as-pure": "workspace:^",
     "@babel/types": "workspace:^"
   },
+  "devDependencies": {
+    "@babel/traverse": "workspace:^"
+  },
   "engines": {
     "node": ">=6.9.0"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
 }

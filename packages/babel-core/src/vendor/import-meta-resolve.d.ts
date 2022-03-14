@@ -1,0 +1,1 @@
+export function resolve(specifier: stirng, parent: string): Promise<string>;

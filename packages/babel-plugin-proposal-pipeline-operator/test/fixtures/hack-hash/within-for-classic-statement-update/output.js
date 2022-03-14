@@ -1,8 +1,6 @@
 let sum = 0;
 
-for (var i = 0; i <= 10; i = (_ref = i, _ref + 1)) {
-  var _ref;
-
+for (var i = 0; i <= 10; i = i + 1) {
   sum = sum + i;
 }
 

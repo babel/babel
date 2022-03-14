@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "modules": "systemjs",
         "targets": { "browsers": "ie 6" }

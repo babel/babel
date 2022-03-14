@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.16.0",
+  "version": "7.17.0",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -22,9 +22,9 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "babel-plugin-polyfill-corejs2": "^0.2.3",
-    "babel-plugin-polyfill-corejs3": "^0.3.0",
-    "babel-plugin-polyfill-regenerator": "^0.2.3",
+    "babel-plugin-polyfill-corejs2": "^0.3.0",
+    "babel-plugin-polyfill-corejs3": "^0.5.0",
+    "babel-plugin-polyfill-regenerator": "^0.3.0",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {
@@ -34,7 +34,6 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/helpers": "workspace:^",
-    "@babel/plugin-transform-typeof-symbol": "workspace:^",
     "@babel/preset-env": "workspace:^",
     "@babel/runtime": "workspace:^",
     "@babel/runtime-corejs3": "workspace:^",
@@ -46,5 +45,17 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
 }

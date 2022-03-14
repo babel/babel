@@ -2,7 +2,7 @@ import type NodePath from "../path";
 import type * as t from "@babel/types";
 import type Scope from "./index";
 
-type BindingKind =
+export type BindingKind =
   | "var" /* var declarator */
   | "let" /* let declarator, class declaration id, catch clause parameters */
   | "const" /* const declarator */

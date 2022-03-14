@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-test-runner",
-  "version": "7.16.0",
+  "version": "7.16.7",
   "description": "Helper function to support test runner",
   "repository": {
     "type": "git",
@@ -13,11 +13,41 @@
     "access": "public"
   },
   "main": "./lib/index.js",
+  "exports": {
+    ".": [
+      {
+        "import": "./esm.mjs",
+        "default": "./lib/index.js"
+      },
+      "./lib/index.js"
+    ],
+    "./lib": "./lib/index.js",
+    "./lib/index": "./lib/index.js",
+    "./lib/index.js": "./lib/index.js",
+    "./package": "./package.json",
+    "./package.json": "./package.json"
+  },
   "dependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      {
+        "exports": {
+          ".": {
+            "import": "./esm.mjs",
+            "default": "./lib/index.js"
+          },
+          "./package.json": "./package.json"
+        }
+      },
+      {
+        "exports": null
+      }
+    ]
+  }
 }

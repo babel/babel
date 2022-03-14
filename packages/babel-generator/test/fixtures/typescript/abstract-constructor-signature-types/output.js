@@ -1,1 +1,1 @@
-const x: abstract new () => void;
+declare const x: abstract new () => void;

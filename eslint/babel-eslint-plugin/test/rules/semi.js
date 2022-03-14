@@ -1,5 +1,5 @@
-import rule from "../../src/rules/semi";
-import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
+import rule from "../../lib/rules/semi.cjs";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const ruleTester = new RuleTester();
 

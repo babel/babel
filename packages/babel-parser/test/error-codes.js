@@ -1,4 +1,4 @@
-import { parse } from "../lib";
+import { parse } from "../lib/index.js";
 
 describe("error codes", function () {
   it("raises an error with BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED and reasonCode", function () {

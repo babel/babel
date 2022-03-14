@@ -30,5 +30,5 @@ var B = /*#__PURE__*/function (_A) {
     return _this;
   }
 
-  return B;
+  return babelHelpers.createClass(B);
 }(A);

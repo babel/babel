@@ -344,8 +344,10 @@ export function classBody(
     | t.ClassPrivateMethod
     | t.ClassProperty
     | t.ClassPrivateProperty
+    | t.ClassAccessorProperty
     | t.TSDeclareMethod
     | t.TSIndexSignature
+    | t.StaticBlock
   >,
 ): t.ClassBody {
   return builder.apply("ClassBody", arguments);
@@ -524,6 +526,21 @@ export function classProperty(
   _static?: boolean,
 ): t.ClassProperty {
   return builder.apply("ClassProperty", arguments);
+}
+export function classAccessorProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.Expression
+    | t.PrivateName,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: boolean,
+  _static?: boolean,
+): t.ClassAccessorProperty {
+  return builder.apply("ClassAccessorProperty", arguments);
 }
 export function classPrivateProperty(
   key: t.PrivateName,

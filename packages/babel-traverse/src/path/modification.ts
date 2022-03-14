@@ -11,7 +11,13 @@ import {
   callExpression,
   cloneNode,
   expressionStatement,
+  isAssignmentExpression,
+  isCallExpression,
   isExpression,
+  isIdentifier,
+  isSequenceExpression,
+  isSuper,
+  thisExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type Scope from "../scope";
@@ -100,6 +106,36 @@ export function _containerInsertAfter(this: NodePath, nodes) {
   return this._containerInsert(this.key + 1, nodes);
 }
 
+const last = arr => arr[arr.length - 1];
+
+function isHiddenInSequenceExpression(path: NodePath) {
+  return (
+    isSequenceExpression(path.parent) &&
+    (last(path.parent.expressions) !== path.node ||
+      isHiddenInSequenceExpression(path.parentPath))
+  );
+}
+
+function isAlmostConstantAssignment(
+  node: t.Node,
+  scope: Scope,
+): node is t.AssignmentExpression & { left: t.Identifier } {
+  if (!isAssignmentExpression(node) || !isIdentifier(node.left)) {
+    return false;
+  }
+
+  // Not every scope can contain variables. For example, we might be in
+  // a ClassScope either in the ClassHeritage or in a computed key.
+  const blockScope = scope.getBlockParent();
+
+  // If the variable is defined in the current scope and only assigned here,
+  // we can be sure that its value won't change.
+  return (
+    blockScope.hasOwnBinding(node.left.name) &&
+    blockScope.getOwnBinding(node.left.name).constantViolations.length <= 1
+  );
+}
+
 /**
  * Insert the provided nodes after the current one. When inserting nodes after an
  * expression, ensure that the completion record is correct by pushing the current node.
@@ -110,6 +146,10 @@ export function insertAfter(
   nodes_: t.Node | t.Node[],
 ): NodePath[] {
   this._assertUnremoved();
+
+  if (this.isSequenceExpression()) {
+    return last(this.get("expressions")).insertAfter(nodes_);
+  }
 
   const nodes = this._verifyNodeList(nodes_);
 
@@ -149,21 +189,37 @@ export function insertAfter(
         return [this];
       }
 
-      // Inserting after the computed key of a method should insert the
-      // temporary binding in the method's parent's scope.
-      if (parentPath.isMethod({ computed: true, key: node })) {
-        scope = scope.parent;
+      if (isHiddenInSequenceExpression(this)) {
+        nodes.unshift(node);
       }
-      const temp = scope.generateDeclaredUidIdentifier();
-      nodes.unshift(
-        expressionStatement(
-          // @ts-expect-error todo(flow->ts): This can be a variable
-          // declaraion in the "init" of a for statement, but that's
-          // invalid here.
-          assignmentExpression("=", cloneNode(temp), node),
-        ),
-      );
-      nodes.push(expressionStatement(cloneNode(temp)));
+      // We need to preserve the value of this expression.
+      else if (isCallExpression(node) && isSuper(node.callee)) {
+        nodes.unshift(node);
+        // `super(...)` always evaluates to `this`.
+        nodes.push(thisExpression());
+      } else if (isAlmostConstantAssignment(node, scope)) {
+        nodes.unshift(node);
+        nodes.push(cloneNode(node.left));
+      } else if (scope.isPure(node, true)) {
+        // Insert the nodes before rather than after; it's not observable.
+        nodes.push(node);
+      } else {
+        // Inserting after the computed key of a method should insert the
+        // temporary binding in the method's parent's scope.
+        if (parentPath.isMethod({ computed: true, key: node })) {
+          scope = scope.parent;
+        }
+        const temp = scope.generateDeclaredUidIdentifier();
+        nodes.unshift(
+          expressionStatement(
+            // @ts-expect-error todo(flow->ts): This can be a variable
+            // declaraion in the "init" of a for statement, but that's
+            // invalid here.
+            assignmentExpression("=", cloneNode(temp), node),
+          ),
+        );
+        nodes.push(expressionStatement(cloneNode(temp)));
+      }
     }
     // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);

@@ -9,11 +9,11 @@ See our website [@babel/helper-transform-fixture-test-runner](https://babeljs.io
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-transform-fixture-test-runner
+npm install --save @babel/helper-transform-fixture-test-runner
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-transform-fixture-test-runner --dev
+yarn add @babel/helper-transform-fixture-test-runner
 ```

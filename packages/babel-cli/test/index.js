@@ -7,7 +7,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
-import { chmod } from "../lib/babel/util";
+import { chmod } from "../lib/babel/util.js";
 
 const require = createRequire(import.meta.url);
 
@@ -44,14 +44,9 @@ const readDir = function (loc, filter) {
 };
 
 const saveInFiles = function (files) {
-  // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
-  if (!fs.existsSync(".babelrc")) {
-    outputFileSync(".babelrc", "{}");
-  }
-
   Object.keys(files).forEach(function (filename) {
     const content = files[filename];
-    outputFileSync(filename, content);
+    outputFileSync(path.join(tmpLoc, filename), content);
   });
 };
 
@@ -123,7 +118,7 @@ const assertTest = function (stdout, stderr, opts, cwd) {
           const expected = opts.outFiles[filename];
           const actual = actualFiles[filename];
 
-          expect(actual).toBe(expected ?? "");
+          expect(actual).toBe(expected || "");
         }
       } catch (e) {
         e.message += "\n at " + filename;
@@ -145,25 +140,17 @@ const buildTest = function (binName, testName, opts) {
 
     let args = [binLoc];
 
-    if (binName !== "babel-external-helpers") {
+    if (binName !== "babel-external-helpers" && !opts.noDefaultPlugins) {
       args.push("--presets", presetLocs, "--plugins", pluginLocs);
     }
 
     args = args.concat(opts.args);
     const env = { ...process.env, ...opts.env };
 
-    const spawn = child.spawn(process.execPath, args, { env });
+    const spawn = child.spawn(process.execPath, args, { env, cwd: tmpLoc });
 
     let stderr = "";
     let stdout = "";
-
-    spawn.stderr.on("data", function (chunk) {
-      stderr += chunk;
-    });
-
-    spawn.stdout.on("data", function (chunk) {
-      stdout += chunk;
-    });
 
     spawn.on("close", function () {
       let err;
@@ -186,19 +173,42 @@ const buildTest = function (binName, testName, opts) {
       spawn.stdin.write(opts.stdin);
       spawn.stdin.end();
     }
+
+    const captureOutput = proc => {
+      proc.stderr.on("data", function (chunk) {
+        stderr += chunk;
+      });
+
+      proc.stdout.on("data", function (chunk) {
+        stdout += chunk;
+      });
+    };
+
+    if (opts.executor) {
+      const executor = child.spawn(process.execPath, [opts.executor], {
+        cwd: tmpLoc,
+      });
+
+      spawn.stdout.pipe(executor.stdin);
+      spawn.stderr.pipe(executor.stdin);
+
+      executor.on("close", function () {
+        setTimeout(() => spawn.kill("SIGINT"), 250);
+      });
+
+      captureOutput(executor);
+    } else {
+      captureOutput(spawn);
+    }
   };
 };
 
 fs.readdirSync(fixtureLoc).forEach(function (binName) {
-  if (binName.startsWith(".")) return;
+  if (binName.startsWith(".") || binName === "package.json") return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function () {
-    let cwd;
-
     beforeEach(() => {
-      cwd = process.cwd();
-
       if (fs.existsSync(tmpLoc)) {
         for (const child of fs.readdirSync(tmpLoc)) {
           rimraf.sync(path.join(tmpLoc, child));
@@ -206,12 +216,6 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       } else {
         fs.mkdirSync(tmpLoc);
       }
-
-      process.chdir(tmpLoc);
-    });
-
-    afterEach(() => {
-      process.chdir(cwd);
     });
 
     fs.readdirSync(suiteLoc).forEach(function (testName) {
@@ -248,6 +252,11 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         opts = { args: [], ...taskOpts };
       }
 
+      const executorLoc = path.join(testLoc, "executor.js");
+      if (fs.existsSync(executorLoc)) {
+        opts.executor = executorLoc;
+      }
+
       ["stdout", "stdin", "stderr"].forEach(function (key) {
         const loc = path.join(testLoc, key + ".txt");
         opts[key + "Path"] = loc;
@@ -266,14 +275,22 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
-        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
+      } else if (!opts.noBabelrc) {
+        opts.inFiles[".babelrc"] = "{}";
       }
       if (fs.existsSync(babelIgnoreLoc)) {
         // copy .babelignore file to tmp directory
         opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
       }
+
+      const skip =
+        opts.minNodeVersion &&
+        parseInt(process.versions.node, 10) < opts.minNodeVersion;
+
       // eslint-disable-next-line jest/valid-title
-      it(testName, buildTest(binName, testName, opts), 20000);
+      (skip
+        ? it.skip
+        : it)(testName, buildTest(binName, testName, opts), 20000);
     });
   });
 });

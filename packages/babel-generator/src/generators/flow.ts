@@ -290,7 +290,7 @@ export function ExistsTypeAnnotation(this: Printer) {
 export function FunctionTypeAnnotation(
   this: Printer,
   node: t.FunctionTypeAnnotation,
-  parent: any,
+  parent: t.Node | void,
 ) {
   this.print(node.typeParameters, node);
   this.token("(");
@@ -321,9 +321,10 @@ export function FunctionTypeAnnotation(
 
   // this node type is overloaded, not sure why but it makes it EXTREMELY annoying
   if (
-    parent.type === "ObjectTypeCallProperty" ||
-    parent.type === "DeclareFunction" ||
-    (parent.type === "ObjectTypeProperty" && parent.method)
+    parent &&
+    (parent.type === "ObjectTypeCallProperty" ||
+      parent.type === "DeclareFunction" ||
+      (parent.type === "ObjectTypeProperty" && parent.method))
   ) {
     this.token(":");
   } else {

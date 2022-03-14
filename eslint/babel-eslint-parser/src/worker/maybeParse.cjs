@@ -15,7 +15,8 @@ module.exports = function maybeParse(code, options) {
       { dirname: __dirname, type: "plugin" },
     );
   }
-  options.plugins.push(extractParserOptionsConfigItem);
+  const { plugins } = options;
+  options.plugins = plugins.concat(extractParserOptionsConfigItem);
 
   try {
     return {
@@ -28,8 +29,10 @@ module.exports = function maybeParse(code, options) {
     }
   }
 
-  let ast;
+  // There was already a parserOverride, so remove our plugin.
+  options.plugins = plugins;
 
+  let ast;
   try {
     ast = babel.parseSync(code, options);
   } catch (err) {

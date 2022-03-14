@@ -130,6 +130,8 @@ export type ParserPlugin =
   | "decimal"
   | "decorators"
   | "decorators-legacy"
+  | "decoratorAutoAccessors"
+  | "destructuringPrivate"
   | "doExpressions"
   | "dynamicImport"
   | "estree"
@@ -154,6 +156,7 @@ export type ParserPlugin =
   | "pipelineOperator"
   | "placeholders"
   | "privateIn" // Enabled by default
+  | "regexpUnicodeSets"
   | "throwExpressions"
   | "topLevelAwait"
   | "typescript"
@@ -173,7 +176,7 @@ export interface DecoratorsPluginOptions {
 
 export interface PipelineOperatorPluginOptions {
   proposal: "minimal" | "fsharp" | "hack" | "smart";
-  topicToken?: "%" | "#";
+  topicToken?: "%" | "#" | "@@" | "^^";
 }
 
 export interface RecordAndTuplePluginOptions {

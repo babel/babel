@@ -1,12 +1,18 @@
 {
   "proposal-class-static-block": {
     "chrome": "94",
-    "firefox": "93"
+    "opera": "80",
+    "edge": "94",
+    "firefox": "93",
+    "node": "16.11"
   },
   "proposal-private-property-in-object": {
     "chrome": "91",
+    "opera": "77",
+    "edge": "91",
     "firefox": "90",
     "safari": "15",
+    "node": "16.9",
     "ios": "15",
     "electron": "13.0"
   },
@@ -41,6 +47,7 @@
     "node": "12.5",
     "ios": "13",
     "samsung": "11",
+    "rhino": "1.7.14",
     "electron": "6.0"
   },
   "proposal-logical-assignment-operators": {
@@ -67,8 +74,11 @@
   },
   "proposal-optional-chaining": {
     "chrome": "91",
+    "opera": "77",
+    "edge": "91",
     "firefox": "74",
     "safari": "13.1",
+    "node": "16.9",
     "ios": "13.4",
     "electron": "13.0"
   },
@@ -81,6 +91,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "9",
+    "rhino": "1.7.14",
     "electron": "3.0"
   },
   "proposal-optional-catch-binding": {
@@ -178,6 +189,7 @@
     "node": "7",
     "ios": "10.3",
     "samsung": "6",
+    "rhino": "1.7.14",
     "electron": "1.3"
   },
   "transform-template-literals": {
@@ -268,6 +280,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
+    "rhino": "1.7.14",
     "electron": "0.27"
   },
   "transform-duplicate-keys": {

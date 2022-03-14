@@ -19,5 +19,5 @@
     "@babel/types": "workspace:^",
     "benchmark": "^2.1.4"
   },
-  "version": "7.16.0"
+  "version": "7.16.5"
 }

@@ -74,24 +74,30 @@ Bar && (Bar = (4, function () {
 _baz.Baz && (_baz.Baz = (4, function () {
   throw new Error('"' + "Baz" + '" is read-only.');
 }()));
-_foo.default = (_foo.default - 1, function () {
+
+_foo.default -= function () {
   throw new Error('"' + "Foo" + '" is read-only.');
-}());
-Bar = (Bar - 1, function () {
+}();
+
+Bar -= function () {
   throw new Error('"' + "Bar" + '" is read-only.');
-}());
-_baz.Baz = (_baz.Baz - 1, function () {
+}();
+
+_baz.Baz -= function () {
   throw new Error('"' + "Baz" + '" is read-only.');
-}());
-_foo.default = (_foo.default + 1, function () {
+}();
+
+_foo.default += function () {
   throw new Error('"' + "Foo" + '" is read-only.');
-}());
-Bar = (Bar + 1, function () {
+}();
+
+Bar += function () {
   throw new Error('"' + "Bar" + '" is read-only.');
-}());
-_baz.Baz = (_baz.Baz + 1, function () {
+}();
+
+_baz.Baz += function () {
   throw new Error('"' + "Baz" + '" is read-only.');
-}());
+}();
 
 for (let _Foo in {}) {
   (function () {

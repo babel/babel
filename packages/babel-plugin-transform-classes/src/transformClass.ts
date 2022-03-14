@@ -1,8 +1,7 @@
 import type { NodePath, Visitor } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
-import ReplaceSupers, {
-  environmentVisitor,
-} from "@babel/helper-replace-supers";
+import ReplaceSupers from "@babel/helper-replace-supers";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import { traverse, template, types as t } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
@@ -59,6 +58,7 @@ export default function transformClass(
     superThises: [],
     pushedConstructor: false,
     pushedInherits: false,
+    pushedCreateClass: false,
     protoAlias: null,
     isLoose: false,
 
@@ -93,6 +93,10 @@ export default function transformClass(
       },
     },
   ]);
+
+  function createClassHelper(args) {
+    return t.callExpression(classState.file.addHelper("createClass"), args);
+  }
 
   /**
    * Creates a class constructor or bail out if there is none
@@ -241,11 +245,8 @@ export default function transformClass(
       }
       args = args.slice(0, lastNonNullIndex + 1);
 
-      body.push(
-        t.expressionStatement(
-          t.callExpression(classState.file.addHelper("createClass"), args),
-        ),
-      );
+      body.push(t.expressionStatement(createClassHelper(args)));
+      classState.pushedCreateClass = true;
     }
   }
 
@@ -738,10 +739,16 @@ export default function transformClass(
 
     if (constructorOnly) {
       // named class with only a constructor
-      return t.toExpression(body[0]);
+      const expr = t.toExpression(body[0]);
+      return classState.isLoose ? expr : createClassHelper([expr]);
     }
 
-    body.push(t.returnStatement(t.cloneNode(classState.classRef)));
+    let returnArg = t.cloneNode(classState.classRef);
+    if (!classState.pushedCreateClass && !classState.isLoose) {
+      returnArg = createClassHelper([returnArg]);
+    }
+
+    body.push(t.returnStatement(returnArg));
     const container = t.arrowFunctionExpression(
       closureParams,
       t.blockStatement(body, directives),

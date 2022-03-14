@@ -1,5 +1,6 @@
 import * as virtualTypes from "./path/lib/virtual-types";
 import { DEPRECATED_KEYS, FLIPPED_ALIAS_KEYS, TYPES } from "@babel/types";
+import type { Visitor } from "./types";
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -175,6 +176,12 @@ function validateVisitorMethods(path, val) {
   }
 }
 
+export function merge<State>(visitors: Visitor<State>[]): Visitor<State>;
+export function merge(
+  visitors: Visitor<unknown>[],
+  states?: any[],
+  wrapper?: Function | null,
+): Visitor<unknown>;
 export function merge(
   visitors: any[],
   states: any[] = [],

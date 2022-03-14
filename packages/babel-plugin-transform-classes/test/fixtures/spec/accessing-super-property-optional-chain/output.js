@@ -16,5 +16,5 @@ var Test = /*#__PURE__*/function (_Foo) {
     return babelHelpers.possibleConstructorReturn(_this);
   }
 
-  return Test;
+  return babelHelpers.createClass(Test);
 }(Foo);

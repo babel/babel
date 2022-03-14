@@ -3,10 +3,13 @@ define(["exports"], function (_exports) {
 
   _exports.__esModule = true;
   _exports.test = _exports.f = _exports.e = _exports.c = _exports.a = void 0;
+
+  var _test;
+
   var test = 2;
   _exports.test = test;
   _exports.test = test = 5;
-  _exports.test = test = test + 1;
+  _test = test++, _exports.test = test, _test;
 
   (function () {
     var test = 2;

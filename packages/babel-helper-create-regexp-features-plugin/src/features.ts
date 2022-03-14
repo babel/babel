@@ -3,6 +3,8 @@ export const FEATURES = Object.freeze({
   dotAllFlag: 1 << 1,
   unicodePropertyEscape: 1 << 2,
   namedCaptureGroups: 1 << 3,
+  unicodeSetsFlag_syntax: 1 << 4,
+  unicodeSetsFlag: 1 << 5,
 });
 
 // We can't use a symbol because this needs to always be the same, even if

@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":8,"index":8},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "typeAnnotation": {
+          "type": "TSConstructorType",
+          "start":11,"end":28,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":28,"index":28}},
+          "abstract": false,
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17}},
+                "name": {
+                  "type": "Identifier",
+                  "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          },
+          "params": [],
+          "returnType": {
+            "type": "TSTypeAnnotation",
+            "start":21,"end":28,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":28,"index":28}},
+            "typeAnnotation": {
+              "type": "TSVoidKeyword",
+              "start":24,"end":28,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":28,"index":28}}
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

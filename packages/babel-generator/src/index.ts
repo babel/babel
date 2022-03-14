@@ -203,7 +203,7 @@ export interface GeneratorOptions {
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
-  topicToken?: "^" | "%" | "#";
+  topicToken?: "^^" | "@@" | "^" | "%" | "#";
 }
 
 export interface GeneratorResult {
@@ -246,7 +246,7 @@ export default function generate(
   ast: t.Node,
   opts?: GeneratorOptions,
   code?: string | { [filename: string]: string },
-): any {
+) {
   const gen = new Generator(ast, opts, code);
   return gen.generate();
 }

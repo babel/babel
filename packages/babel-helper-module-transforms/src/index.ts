@@ -449,7 +449,11 @@ function buildExportInitializationStatements(
   // https://tc39.es/ecma262/#sec-module-namespace-exotic-objects
   // The [Exports] list is ordered as if an Array of those String values
   // had been sorted using %Array.prototype.sort% using undefined as comparefn
-  initStatements.sort((a, b) => (a[0] > b[0] ? 1 : -1));
+  initStatements.sort(([a], [b]) => {
+    if (a < b) return -1;
+    if (b < a) return 1;
+    return 0;
+  });
 
   const results = [];
   if (noIncompleteNsImportDetection) {
@@ -460,11 +464,8 @@ function buildExportInitializationStatements(
     // We generate init statements (`exports.a = exports.b = ... = void 0`)
     // for every 100 exported names to avoid deeply-nested AST structures.
     const chunkSize = 100;
-    for (
-      let i = 0, uninitializedExportNames = [];
-      i < initStatements.length;
-      i += chunkSize
-    ) {
+    for (let i = 0; i < initStatements.length; i += chunkSize) {
+      let uninitializedExportNames = [];
       for (let j = 0; j < chunkSize && i + j < initStatements.length; j++) {
         const [exportName, initStatement] = initStatements[i + j];
         if (initStatement !== null) {

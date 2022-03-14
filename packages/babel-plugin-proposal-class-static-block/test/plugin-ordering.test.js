@@ -1,5 +1,5 @@
 import * as babel from "@babel/core";
-import proposalClassStaticBlock from "..";
+import proposalClassStaticBlock from "../lib/index.js";
 
 describe("plugin ordering", () => {
   it("should work when @babel/plugin-proposal-class-static-block is after class features plugin", () => {
@@ -26,9 +26,7 @@ describe("plugin ordering", () => {
 
       class Foo {}
 
-      (() => {
-        Foo.foo = Foo.bar;
-      })();
+      Foo.foo = Foo.bar;
 
       _defineProperty(Foo, \\"bar\\", 42);"
     `);

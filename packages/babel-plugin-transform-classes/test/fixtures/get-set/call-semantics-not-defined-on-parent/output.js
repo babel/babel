@@ -1,8 +1,8 @@
 "use strict";
 
-let Base = function Base() {
+let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {
   babelHelpers.classCallCheck(this, Base);
-};
+});
 
 let Obj = /*#__PURE__*/function (_Base) {
   babelHelpers.inherits(Obj, _Base);

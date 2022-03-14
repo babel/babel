@@ -158,6 +158,10 @@ export const tt: { [name: string]: TokenType } = {
   ellipsis: createToken("...", { beforeExpr }),
   backQuote: createToken("`", { startsExpr }),
   dollarBraceL: createToken("${", { beforeExpr, startsExpr }),
+  // start: isTemplate
+  templateTail: createToken("...`", { startsExpr }),
+  templateNonTail: createToken("...${", { beforeExpr, startsExpr }),
+  // end: isTemplate
   at: createToken("@"),
   hash: createToken("#", { startsExpr }),
 
@@ -182,8 +186,9 @@ export const tt: { [name: string]: TokenType } = {
   eq: createToken("=", { beforeExpr, isAssign }),
   assign: createToken("_=", { beforeExpr, isAssign }),
   slashAssign: createToken("_=", { beforeExpr, isAssign }),
-  // These are only needed to support % and ^ as a Hack-pipe topic token. When the
-  // proposal settles on a token, the others can be merged with tt.assign.
+  // These are only needed to support % and ^ as a Hack-pipe topic token.
+  // When the proposal settles on a token, the others can be merged with
+  // tt.assign.
   xorAssign: createToken("_=", { beforeExpr, isAssign }),
   moduloAssign: createToken("_=", { beforeExpr, isAssign }),
   // end: isAssign
@@ -191,6 +196,12 @@ export const tt: { [name: string]: TokenType } = {
   incDec: createToken("++/--", { prefix, postfix, startsExpr }),
   bang: createToken("!", { beforeExpr, prefix, startsExpr }),
   tilde: createToken("~", { beforeExpr, prefix, startsExpr }),
+
+  // More possible topic tokens.
+  // When the proposal settles on a token, at least one of these may be removed.
+  doubleCaret: createToken("^^", { startsExpr }),
+  doubleAt: createToken("@@", { startsExpr }),
+
   // start: isBinop
   pipeline: createBinop("|>", 0),
   nullishCoalescing: createBinop("??", 1),
@@ -204,6 +215,8 @@ export const tt: { [name: string]: TokenType } = {
   gt: createBinop("</>/<=/>=", 7),
   relational: createBinop("</>/<=/>=", 7),
   bitShift: createBinop("<</>>/>>>", 8),
+  bitShiftL: createBinop("<</>>/>>>", 8),
+  bitShiftR: createBinop("<</>>/>>>", 8),
   plusMin: createToken("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
   // startsExpr: required by v8intrinsic plugin
   modulo: createToken("%", { binop: 10, startsExpr }),
@@ -332,6 +345,12 @@ export function tokenIsIdentifier(token: TokenType): boolean {
   return token >= tt._as && token <= tt.name;
 }
 
+export function tokenKeywordOrIdentifierIsKeyword(token: TokenType): boolean {
+  // we can remove the token >= tt._in check when we
+  // know a token is either keyword or identifier
+  return token <= tt._while;
+}
+
 export function tokenIsKeywordOrIdentifier(token: TokenType): boolean {
   return token >= tt._in && token <= tt.name;
 }
@@ -394,6 +413,10 @@ export function tokenOperatorPrecedence(token: TokenType): number {
 
 export function tokenIsRightAssociative(token: TokenType): boolean {
   return token === tt.exponent;
+}
+
+export function tokenIsTemplate(token: TokenType): boolean {
+  return token >= tt.templateTail && token <= tt.templateNonTail;
 }
 
 export function getExportedToken(token: TokenType): ExportedTokenType {

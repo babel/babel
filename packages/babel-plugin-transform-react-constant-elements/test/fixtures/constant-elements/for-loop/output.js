@@ -7,4 +7,3 @@ function render() {
 
   return nodes;
 }
-  

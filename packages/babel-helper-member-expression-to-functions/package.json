@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-member-expression-to-functions",
-  "version": "7.16.0",
+  "version": "7.16.7",
   "description": "Helper function to replace certain member expressions with function calls",
   "repository": {
     "type": "git",
@@ -22,5 +22,17 @@
   },
   "engines": {
     "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }

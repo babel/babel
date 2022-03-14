@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import glob from "glob";
 import path from "path";
 import fs from "fs";
@@ -52,6 +52,24 @@ const ignoredFields = {
   ObjectMethod: { method: true, id: true, predicate: true },
   StaticBlock: { static: true },
   TSDeclareMethod: { id: true },
+  ...(process.env.BABEL_8_BREAKING
+    ? {
+        TSFunctionType: { parameters: true, typeAnnotation: true },
+        TSMethodSignature: { parameters: true, typeAnnotation: true },
+        TSConstructorType: { parameters: true, typeAnnotation: true },
+        TSCallSignatureDeclaration: { parameters: true, typeAnnotation: true },
+        TSConstructSignatureDeclaration: {
+          parameters: true,
+          typeAnnotation: true,
+        },
+      }
+    : {
+        TSFunctionType: { params: true, returnType: true },
+        TSMethodSignature: { params: true, returnType: true },
+        TSConstructorType: { params: true, returnType: true },
+        TSCallSignatureDeclaration: { params: true, returnType: true },
+        TSConstructSignatureDeclaration: { params: true, returnType: true },
+      }),
 };
 
 function isEmpty(obj) {

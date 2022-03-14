@@ -14,5 +14,5 @@ let Employee = /*#__PURE__*/function (_Person) {
     return _this;
   }
 
-  return Employee;
+  return babelHelpers.createClass(Employee);
 }(Person);

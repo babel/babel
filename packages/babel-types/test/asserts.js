@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 
 describe("asserts", () => {
   const consoleTrace = console.trace;

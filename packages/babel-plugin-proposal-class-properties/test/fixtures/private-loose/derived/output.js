@@ -1,6 +1,6 @@
 var _prop = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
 
-var Foo = function Foo() {
+var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
@@ -8,7 +8,7 @@ var Foo = function Foo() {
     writable: true,
     value: "foo"
   });
-};
+});
 
 var _prop2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
 
@@ -31,5 +31,5 @@ var Bar = /*#__PURE__*/function (_Foo) {
     return _this;
   }
 
-  return Bar;
+  return babelHelpers.createClass(Bar);
 }(Foo);

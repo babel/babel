@@ -1,0 +1,95 @@
+{
+  "type": "File",
+  "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":48}},
+  "errors": [
+    "SyntaxError: Redefinition of __proto__ property. (3:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":48}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":48}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":47,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":5,"column":1,"index":47}},
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":5,"end":17,"loc":{"start":{"line":2,"column":2,"index":5},"end":{"line":2,"column":14,"index":17}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":5,"end":14,"loc":{"start":{"line":2,"column":2,"index":5},"end":{"line":2,"column":11,"index":14},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "Identifier",
+                "start":16,"end":17,"loc":{"start":{"line":2,"column":13,"index":16},"end":{"line":2,"column":14,"index":17},"identifierName":"a"},
+                "name": "a"
+              }
+            },
+            {
+              "type": "ObjectProperty",
+              "start":21,"end":33,"loc":{"start":{"line":3,"column":2,"index":21},"end":{"line":3,"column":14,"index":33}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":21,"end":30,"loc":{"start":{"line":3,"column":2,"index":21},"end":{"line":3,"column":11,"index":30},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "Identifier",
+                "start":32,"end":33,"loc":{"start":{"line":3,"column":13,"index":32},"end":{"line":3,"column":14,"index":33},"identifierName":"a"},
+                "name": "a"
+              }
+            },
+            {
+              "type": "ObjectProperty",
+              "start":37,"end":45,"loc":{"start":{"line":4,"column":2,"index":37},"end":{"line":4,"column":10,"index":45}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":37,"end":38,"loc":{"start":{"line":4,"column":2,"index":37},"end":{"line":4,"column":3,"index":38},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "AssignmentExpression",
+                "start":40,"end":45,"loc":{"start":{"line":4,"column":5,"index":40},"end":{"line":4,"column":10,"index":45}},
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start":40,"end":41,"loc":{"start":{"line":4,"column":5,"index":40},"end":{"line":4,"column":6,"index":41},"identifierName":"a"},
+                  "name": "a"
+                },
+                "right": {
+                  "type": "NumericLiteral",
+                  "start":44,"end":45,"loc":{"start":{"line":4,"column":9,"index":44},"end":{"line":4,"column":10,"index":45}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

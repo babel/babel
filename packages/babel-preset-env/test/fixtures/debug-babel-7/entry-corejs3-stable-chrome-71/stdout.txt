@@ -10,7 +10,7 @@ Using modules transform: auto
 Using plugins:
   proposal-class-static-block { chrome < 94 }
   proposal-private-property-in-object { chrome < 91 }
-  proposal-class-properties { chrome < 84 }
+  proposal-class-properties { chrome < 74 }
   proposal-private-methods { chrome < 84 }
   proposal-numeric-separator { chrome < 75 }
   proposal-logical-assignment-operators { chrome < 85 }
@@ -39,6 +39,7 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.array.unscopables.flat-map { "chrome":"71" }
   es.math.hypot { "chrome":"71" }
   es.object.from-entries { "chrome":"71" }
+  es.typed-array.set { "chrome":"71" }
   es.typed-array.sort { "chrome":"71" }
   web.immediate { "chrome":"71" }
 

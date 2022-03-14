@@ -1,7 +1,8 @@
 import * as babelPlugins from "./generated/plugins";
 
 export default (_: any, { loose = false } = {}) => {
-  const plugins = [
+  // todo(flow->ts) improve types
+  const plugins: any[] = [
     babelPlugins.syntaxImportAssertions,
     babelPlugins.proposalClassStaticBlock,
   ];

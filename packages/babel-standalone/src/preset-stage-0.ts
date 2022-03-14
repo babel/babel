@@ -8,7 +8,8 @@ export default (_: any, opts: any = {}) => {
   const {
     loose = false,
     useBuiltIns = false,
-    decoratorsLegacy = false,
+    decoratorsLegacy,
+    decoratorsVersion,
     decoratorsBeforeExport,
     pipelineProposal,
     pipelineTopicToken,
@@ -23,6 +24,7 @@ export default (_: any, opts: any = {}) => {
           loose,
           useBuiltIns,
           decoratorsLegacy,
+          decoratorsVersion,
           decoratorsBeforeExport,
           pipelineProposal,
           pipelineTopicToken,

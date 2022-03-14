@@ -5,6 +5,8 @@
  * and allows register to transform these modules if they are loaded externally.
  */
 
+// TODO: Remove this file in Babel 8
+
 const Module = require("module");
 
 const globalModuleCache = Module._cache;
@@ -12,6 +14,9 @@ const internalModuleCache = Object.create(null);
 
 Module._cache = internalModuleCache;
 const node = require("./node");
+
+// NOTE: This Module._cache set is intercepted by the beforeEach hook in
+// packages/babel-register/test/index.js to install dependencies mocks.
 Module._cache = globalModuleCache;
 
 // Add source-map-support to global cache as it's stateful

@@ -2,7 +2,7 @@ import * as babel from "@babel/core";
 import { fileURLToPath } from "url";
 import path from "path";
 
-import transformCommonJS from "..";
+import transformCommonJS from "../lib/index.js";
 
 test("Doesn't use the same object for two different nodes in the AST", function () {
   const code = 'import Foo from "bar"; Foo; Foo;';

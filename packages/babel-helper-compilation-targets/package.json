@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.16.0",
+  "version": "7.16.7",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Helper functions on Babel compilation targets",
@@ -11,7 +11,8 @@
   },
   "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js"
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   },
   "publishConfig": {
     "access": "public"
@@ -23,7 +24,7 @@
   "dependencies": {
     "@babel/compat-data": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
-    "browserslist": "^4.16.6",
+    "browserslist": "^4.17.5",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {

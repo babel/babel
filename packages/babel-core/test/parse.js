@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { parse } from "../lib";
+import { parse } from "../lib/index.js";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 

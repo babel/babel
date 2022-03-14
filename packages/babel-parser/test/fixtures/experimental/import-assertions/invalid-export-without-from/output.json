@@ -1,31 +1,31 @@
 {
   "type": "File",
-  "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":39}},
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":39,"index":54}},
   "errors": [
     "SyntaxError: Missing semicolon. (2:14)",
     "SyntaxError: Missing semicolon. (2:21)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":39}},
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":39,"index":54}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
-        "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start":6,"end":13,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":13}},
+            "start":6,"end":13,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":13,"index":13}},
             "id": {
               "type": "Identifier",
-              "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"foo"},
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
               "name": "foo"
             },
             "init": {
               "type": "NumericLiteral",
-              "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13}},
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}},
               "extra": {
                 "rawValue": 1,
                 "raw": "1"
@@ -38,48 +38,49 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":15,"end":29,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":14}},
+        "start":15,"end":29,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":14,"index":29}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start":24,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12}},
+            "start":24,"end":27,"loc":{"start":{"line":2,"column":9,"index":24},"end":{"line":2,"column":12,"index":27}},
             "local": {
               "type": "Identifier",
-              "start":24,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+              "start":24,"end":27,"loc":{"start":{"line":2,"column":9,"index":24},"end":{"line":2,"column":12,"index":27},"identifierName":"foo"},
               "name": "foo"
             },
             "exported": {
               "type": "Identifier",
-              "start":24,"end":27,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+              "start":24,"end":27,"loc":{"start":{"line":2,"column":9,"index":24},"end":{"line":2,"column":12,"index":27},"identifierName":"foo"},
               "name": "foo"
             }
           }
         ],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "assertions": []
       },
       {
         "type": "ExpressionStatement",
-        "start":30,"end":36,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21}},
+        "start":30,"end":36,"loc":{"start":{"line":2,"column":15,"index":30},"end":{"line":2,"column":21,"index":36}},
         "expression": {
           "type": "Identifier",
-          "start":30,"end":36,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21},"identifierName":"assert"},
+          "start":30,"end":36,"loc":{"start":{"line":2,"column":15,"index":30},"end":{"line":2,"column":21,"index":36},"identifierName":"assert"},
           "name": "assert"
         }
       },
       {
         "type": "BlockStatement",
-        "start":37,"end":53,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":38}},
+        "start":37,"end":53,"loc":{"start":{"line":2,"column":22,"index":37},"end":{"line":2,"column":38,"index":53}},
         "body": [
           {
             "type": "LabeledStatement",
-            "start":39,"end":51,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":36}},
+            "start":39,"end":51,"loc":{"start":{"line":2,"column":24,"index":39},"end":{"line":2,"column":36,"index":51}},
             "body": {
               "type": "ExpressionStatement",
-              "start":45,"end":51,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":36}},
+              "start":45,"end":51,"loc":{"start":{"line":2,"column":30,"index":45},"end":{"line":2,"column":36,"index":51}},
               "expression": {
                 "type": "StringLiteral",
-                "start":45,"end":51,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":36}},
+                "start":45,"end":51,"loc":{"start":{"line":2,"column":30,"index":45},"end":{"line":2,"column":36,"index":51}},
                 "extra": {
                   "rawValue": "json",
                   "raw": "\"json\""
@@ -89,7 +90,7 @@
             },
             "label": {
               "type": "Identifier",
-              "start":39,"end":43,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":28},"identifierName":"type"},
+              "start":39,"end":43,"loc":{"start":{"line":2,"column":24,"index":39},"end":{"line":2,"column":28,"index":43},"identifierName":"type"},
               "name": "type"
             }
           }
@@ -98,7 +99,7 @@
       },
       {
         "type": "EmptyStatement",
-        "start":53,"end":54,"loc":{"start":{"line":2,"column":38},"end":{"line":2,"column":39}}
+        "start":53,"end":54,"loc":{"start":{"line":2,"column":38,"index":53},"end":{"line":2,"column":39,"index":54}}
       }
     ],
     "directives": []

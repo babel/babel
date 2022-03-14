@@ -4,7 +4,7 @@ import type { SourceType } from "./options";
 import type { Token } from "./tokenizer";
 import type { SourceLocation } from "./util/location";
 import type { PlaceholderTypes } from "./plugins/placeholders";
-import type { ParsingError } from "./parser/error";
+import type { ParseError } from "./parse-error";
 
 /*
  * If making any changes to the AST, update:
@@ -159,7 +159,7 @@ export type DecimalLiteral = NodeBase & {
 
 export type ParserOutput = {
   comments: $ReadOnlyArray<Comment>,
-  errors: Array<ParsingError>,
+  errors: Array<ParseError<any>>,
   tokens?: $ReadOnlyArray<Token | Comment>,
 };
 // Programs
@@ -787,7 +787,8 @@ export type ClassMember =
   | ClassMethod
   | ClassPrivateMethod
   | ClassProperty
-  | ClassPrivateProperty;
+  | ClassPrivateProperty
+  | ClassAccessorProperty;
 
 export type MethodLike =
   | ObjectMethod
@@ -821,6 +822,7 @@ export type ClassPrivateMethod = NodeBase &
     type: "ClassPrivateMethod",
     key: PrivateName,
     computed: false,
+    variance?: ?FlowVariance, // TODO: Not in spec
   };
 
 export type ClassProperty = ClassMemberBase &
@@ -830,6 +832,8 @@ export type ClassProperty = ClassMemberBase &
     value: ?Expression, // TODO: Not in spec that this is nullable.
 
     typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
+
+    // Flow only:
     variance?: ?FlowVariance, // TODO: Not in spec
 
     // TypeScript only: (TODO: Not in spec)
@@ -852,7 +856,24 @@ export type ClassPrivateProperty = NodeBase & {
   definite?: true,
   readonly?: true,
   override?: true,
+
+  // Flow only
+  variance?: ?FlowVariance,
 };
+
+export type ClassAccessorProperty = ClassMemberBase &
+  DeclarationBase & {
+    type: "ClassAccessorProperty",
+    key: Expression | PrivateName,
+    value: ?Expression,
+
+    typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
+    variance?: ?FlowVariance, // TODO: Not in spec
+
+    // TypeScript only: (TODO: Not in spec)
+    readonly?: true,
+    definite?: true,
+  };
 
 export type OptClassDeclaration = ClassBase &
   DeclarationBase &
@@ -1254,6 +1275,11 @@ export type TsSignatureDeclaration =
 
 export type TsSignatureDeclarationOrIndexSignatureBase = NodeBase & {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
+  params: $ReadOnlyArray<
+    Identifier | RestElement | ObjectPattern | ArrayPattern,
+  >,
+  returnType: ?TsTypeAnnotation,
+  // TODO(Babel-8): Remove
   parameters: $ReadOnlyArray<
     Identifier | RestElement | ObjectPattern | ArrayPattern,
   >,

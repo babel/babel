@@ -12,6 +12,8 @@ try {
   import_ = require("./import").default;
 } catch {}
 
+export const supportsESM = !!import_;
+
 export default function* loadCjsOrMjsDefault(
   filepath: string,
   asyncError: string,

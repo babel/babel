@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime",
-  "version": "7.16.0",
+  "version": "7.17.2",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
   "publishConfig": {
@@ -17,6 +17,15 @@
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
+    "./helpers/applyDecs": [
+      {
+        "node": "./helpers/applyDecs.js",
+        "import": "./helpers/esm/applyDecs.js",
+        "default": "./helpers/applyDecs.js"
+      },
+      "./helpers/applyDecs.js"
+    ],
+    "./helpers/esm/applyDecs": "./helpers/esm/applyDecs.js",
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator.js",
@@ -836,6 +845,15 @@
       "./helpers/classPrivateMethodSet.js"
     ],
     "./helpers/esm/classPrivateMethodSet": "./helpers/esm/classPrivateMethodSet.js",
+    "./helpers/identity": [
+      {
+        "node": "./helpers/identity.js",
+        "import": "./helpers/esm/identity.js",
+        "default": "./helpers/identity.js"
+      },
+      "./helpers/identity.js"
+    ],
+    "./helpers/esm/identity": "./helpers/esm/identity.js",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",

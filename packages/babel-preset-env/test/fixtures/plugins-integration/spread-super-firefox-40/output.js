@@ -10,5 +10,5 @@ var A = /*#__PURE__*/function (_B) {
     return _super.call.apply(_super, [this].concat(babelHelpers.toConsumableArray(args)));
   }
 
-  return A;
+  return babelHelpers.createClass(A);
 }(B);

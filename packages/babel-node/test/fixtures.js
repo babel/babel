@@ -34,12 +34,9 @@ const readDir = function (loc, filter) {
 };
 
 const saveInFiles = function (files) {
-  // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
-  outputFileSync(".babelrc", "{}");
-
   Object.keys(files).forEach(function (filename) {
     const content = files[filename];
-    outputFileSync(filename, content);
+    outputFileSync(path.join(tmpLoc, filename), content);
   });
 };
 
@@ -76,14 +73,17 @@ const assertTest = function (stdout, stderr, ipcMessage, opts) {
   }
 
   if (opts.outFiles) {
-    const actualFiles = readDir(path.join(tmpLoc));
+    // For some reaons, on GH actions always appears a file called "null" ¯\_(ツ)_/¯
+    const actualFiles = readDir(tmpLoc, name => name !== "null");
 
     Object.keys(actualFiles).forEach(function (filename) {
       if (!Object.prototype.hasOwnProperty.call(opts.inFiles, filename)) {
         const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
 
-        expect(expected).not.toBeUndefined();
+        if (expected == null) {
+          throw new Error("Unexpected generated file: " + filename);
+        }
 
         if (expected) {
           expect(actual).toBe(expected);
@@ -100,11 +100,9 @@ const assertTest = function (stdout, stderr, ipcMessage, opts) {
 const buildTest = function (testName, opts) {
   return function (callback) {
     saveInFiles(opts.inFiles);
-    let args = [binLoc];
-    args.push("--config-file", "../config.json");
-    args = args.concat(opts.args);
+    const args = [binLoc].concat(opts.args);
 
-    const spawnOpts = {};
+    const spawnOpts = { cwd: tmpLoc, env: { BABEL_DISABLE_CACHE: true } };
     if (opts.ipc) {
       spawnOpts.stdio = ["pipe", "pipe", "pipe", "ipc"];
     }
@@ -136,9 +134,6 @@ const buildTest = function (testName, opts) {
         assertTest(stdout, stderr, ipcMessage, opts);
       } catch (e) {
         err = e;
-      }
-
-      if (err) {
         err.message =
           args.map(arg => `"${arg}"`).join(" ") + ": " + err.message;
       }
@@ -154,24 +149,11 @@ const buildTest = function (testName, opts) {
 };
 
 describe("bin/babel-node", function () {
-  let cwd;
-
   beforeEach(() => {
-    cwd = process.cwd();
-
     if (fs.existsSync(tmpLoc)) {
-      for (const child of fs.readdirSync(tmpLoc)) {
-        rimraf.sync(path.join(tmpLoc, child));
-      }
-    } else {
-      fs.mkdirSync(tmpLoc);
+      rimraf.sync(tmpLoc);
     }
-
-    process.chdir(tmpLoc);
-  });
-
-  afterEach(() => {
-    process.chdir(cwd);
+    fs.mkdirSync(tmpLoc);
   });
 
   fs.readdirSync(fixtureLoc).forEach(function (testName) {
@@ -202,6 +184,12 @@ describe("bin/babel-node", function () {
     if (fs.existsSync(babelrcLoc)) {
       // copy .babelrc file to tmp directory
       opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+    } else {
+      // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
+      opts.inFiles[".babelrc"] = "{}";
+    }
+    if (!opts.inFiles["package.json"]) {
+      opts.inFiles["package.json"] = `{ "type": "commonjs" }`;
     }
 
     // eslint-disable-next-line jest/valid-title

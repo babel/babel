@@ -37,6 +37,8 @@ function process(source) {
 
   Object.keys(stats).forEach(browser => {
     const browserName = browserNameMap[browser] || browser;
+    // todo: remove this when we support deno
+    if (browserName === "deno") return;
     let browserSupport = stats[browserSupportMap[browserName] || browser];
     if (Array.isArray(browserSupport)) {
       browserSupport = browserSupport[0]; // The first item is the most progressive support

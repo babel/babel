@@ -237,37 +237,34 @@ function buildHelper(
 
   return babel.transformFromAst(tree, null, {
     filename: helperFilename,
-    presets: [
-      [
-        "@babel/preset-env",
-        { modules: false, exclude: ["@babel/plugin-transform-typeof-symbol"] },
-      ],
-    ],
+    presets: [["@babel/preset-env", { modules: false }]],
     plugins: [
       [transformRuntime, { corejs, version: runtimeVersion }],
       buildRuntimeRewritePlugin(runtimeName, helperName),
       esm ? null : addDefaultCJSExport,
     ].filter(Boolean),
-    overrides: [
-      {
-        exclude: /typeof/,
-        plugins: ["@babel/plugin-transform-typeof-symbol"],
-      },
-    ],
   }).code;
 }
 
 function buildRuntimeRewritePlugin(runtimeName, helperName) {
   /**
-   * rewrite helpers imports to runtime imports
+   * Rewrite helper imports to load the adequate module format version
    * @example
    * adjustImportPath(ast`"setPrototypeOf"`)
-   * // returns ast`"@babel/runtime/helpers/esm/setPrototypeOf"`
-   * @param {*} node The string literal contains import path
+   * // returns ast`"./setPrototypeOf"`
+   * @example
+   * adjustImportPath(ast`"@babel/runtime/helpers/typeof"`)
+   * // returns ast`"./typeof"`
+   * @param {*} node The string literal that contains the import path
    */
   function adjustImportPath(node) {
-    if (helpers.list.includes(node.value)) {
-      node.value = `./${node.value}.js`;
+    const helpersPath = path.join(runtimeName, "helpers");
+    const helper = node.value.startsWith(helpersPath)
+      ? path.basename(node.value)
+      : node.value;
+
+    if (helpers.list.includes(helper)) {
+      node.value = `./${helper}.js`;
     }
   }
 
@@ -302,14 +299,24 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
 }
 
 function addDefaultCJSExport({ template }) {
+  const transformed = new WeakSet();
+
   return {
     visitor: {
       AssignmentExpression: {
         exit(path) {
           if (path.get("left").matchesPattern("module.exports")) {
-            path.insertAfter(template.expression.ast`
-              module.exports.default = module.exports,
-              module.exports.__esModule = true
+            if (transformed.has(path.node)) return;
+            transformed.add(path.node);
+
+            // Ensure that the completion value is still `module.exports`.
+            // This would be guaranteed by `insertAfter`, but by using `replaceWith`
+            // we can do it by putting `module.exports` last so that we don't need
+            // to inject temporary variables.
+            path.replaceWith(template.expression.ast`
+              ${path.node},
+              module.exports.__esModule = true,
+              module.exports.default = module.exports
             `);
           }
         },

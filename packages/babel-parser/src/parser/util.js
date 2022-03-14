@@ -1,9 +1,8 @@
 // @flow
 
+import { type Position } from "../util/location";
 import {
-  isTokenType,
   tokenIsLiteralPropertyName,
-  tokenLabelName,
   tt,
   type TokenType,
 } from "../tokenizer/types";
@@ -19,8 +18,11 @@ import ProductionParameterHandler, {
   PARAM_AWAIT,
   PARAM,
 } from "../util/production-parameter";
-import { Errors, type ErrorTemplate, ErrorCodes } from "./error";
-import type { ParsingError } from "./error";
+import {
+  Errors,
+  type ParseError,
+  type ParseErrorConstructor,
+} from "../parse-error";
 /*::
 import type ScopeHandler from "../util/scope";
 */
@@ -43,11 +45,20 @@ export default class UtilParser extends Tokenizer {
 
   // TODO
 
-  addExtra(node: Node, key: string, val: any): void {
+  addExtra(
+    node: Node,
+    key: string,
+    value: any,
+    enumerable: boolean = true,
+  ): void {
     if (!node) return;
 
     const extra = (node.extra = node.extra || {});
-    extra[key] = val;
+    if (enumerable) {
+      extra[key] = value;
+    } else {
+      Object.defineProperty(extra, key, { enumerable, value });
+    }
   }
 
   // Tests whether parsed token is a contextual keyword.
@@ -88,8 +99,16 @@ export default class UtilParser extends Tokenizer {
 
   // Asserts that following token is given contextual keyword.
 
-  expectContextual(token: TokenType, template?: ErrorTemplate): void {
-    if (!this.eatContextual(token)) this.unexpected(null, template);
+  expectContextual(
+    token: TokenType,
+    toParseError?: ParseErrorConstructor<any>,
+  ): void {
+    if (!this.eatContextual(token)) {
+      if (toParseError != null) {
+        throw this.raise(toParseError, { at: this.state.startLoc });
+      }
+      throw this.unexpected(null, token);
+    }
   }
 
   // Test whether a semicolon can be inserted at the current position.
@@ -104,7 +123,7 @@ export default class UtilParser extends Tokenizer {
 
   hasPrecedingLineBreak(): boolean {
     return lineBreak.test(
-      this.input.slice(this.state.lastTokEnd, this.state.start),
+      this.input.slice(this.state.lastTokEndLoc.index, this.state.start),
     );
   }
 
@@ -124,79 +143,14 @@ export default class UtilParser extends Tokenizer {
 
   semicolon(allowAsi: boolean = true): void {
     if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
-    this.raise(this.state.lastTokEnd, Errors.MissingSemicolon);
+    this.raise(Errors.MissingSemicolon, { at: this.state.lastTokEndLoc });
   }
 
   // Expect a token of a given type. If found, consume it, otherwise,
   // raise an unexpected token error at given pos.
 
-  expect(type: TokenType, pos?: ?number): void {
-    this.eat(type) || this.unexpected(pos, type);
-  }
-
-  // Throws if the current token and the prev one are separated by a space.
-  assertNoSpace(message: string = "Unexpected space."): void {
-    if (this.state.start > this.state.lastTokEnd) {
-      /* eslint-disable @babel/development-internal/dry-error-messages */
-      this.raise(this.state.lastTokEnd, {
-        code: ErrorCodes.SyntaxError,
-        reasonCode: "UnexpectedSpace",
-        template: message,
-      });
-      /* eslint-enable @babel/development-internal/dry-error-messages */
-    }
-  }
-
-  // Raise an unexpected token error. Can take the expected token type
-  // instead of a message string.
-
-  unexpected(
-    pos: ?number,
-    messageOrType: ErrorTemplate | TokenType = {
-      code: ErrorCodes.SyntaxError,
-      reasonCode: "UnexpectedToken",
-      template: "Unexpected token",
-    },
-  ): empty {
-    if (isTokenType(messageOrType)) {
-      messageOrType = {
-        code: ErrorCodes.SyntaxError,
-        reasonCode: "UnexpectedToken",
-        template: `Unexpected token, expected "${tokenLabelName(
-          // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
-          messageOrType,
-        )}"`,
-      };
-    }
-
-    /* eslint-disable @babel/development-internal/dry-error-messages */
-    // $FlowIgnore: Flow does not support assertion signature and TokenType is opaque
-    throw this.raise(pos != null ? pos : this.state.start, messageOrType);
-    /* eslint-enable @babel/development-internal/dry-error-messages */
-  }
-
-  expectPlugin(name: string, pos?: ?number): true {
-    if (!this.hasPlugin(name)) {
-      throw this.raiseWithData(
-        pos != null ? pos : this.state.start,
-        { missingPlugin: [name] },
-        `This experimental syntax requires enabling the parser plugin: '${name}'`,
-      );
-    }
-
-    return true;
-  }
-
-  expectOnePlugin(names: Array<string>, pos?: ?number): void {
-    if (!names.some(n => this.hasPlugin(n))) {
-      throw this.raiseWithData(
-        pos != null ? pos : this.state.start,
-        { missingPlugin: names },
-        `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
-          ", ",
-        )}'`,
-      );
-    }
+  expect(type: TokenType, loc?: ?Position): void {
+    this.eat(type) || this.unexpected(loc, type);
   }
 
   // tryParse will clone parser state.
@@ -206,7 +160,7 @@ export default class UtilParser extends Tokenizer {
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
-    | TryParse<T | null, ParsingError, boolean, false, State>
+    | TryParse<T | null, ParseError<any>, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
     const abortSignal: { node: T | null } = { node: null };
     try {
@@ -223,7 +177,7 @@ export default class UtilParser extends Tokenizer {
         this.state.tokensLength = failState.tokensLength;
         return {
           node,
-          error: (failState.errors[oldState.errors.length]: ParsingError),
+          error: (failState.errors[oldState.errors.length]: ParseError<any>),
           thrown: false,
           aborted: false,
           failState,
@@ -262,21 +216,39 @@ export default class UtilParser extends Tokenizer {
     andThrow: boolean,
   ) {
     if (!refExpressionErrors) return false;
-    const { shorthandAssign, doubleProto, optionalParameters } =
-      refExpressionErrors;
+    const {
+      shorthandAssignLoc,
+      doubleProtoLoc,
+      privateKeyLoc,
+      optionalParametersLoc,
+    } = refExpressionErrors;
+
+    const hasErrors =
+      !!shorthandAssignLoc ||
+      !!doubleProtoLoc ||
+      !!optionalParametersLoc ||
+      !!privateKeyLoc;
+
     if (!andThrow) {
-      return (
-        shorthandAssign >= 0 || doubleProto >= 0 || optionalParameters >= 0
-      );
+      return hasErrors;
     }
-    if (shorthandAssign >= 0) {
-      this.unexpected(shorthandAssign);
+
+    if (shorthandAssignLoc != null) {
+      this.raise(Errors.InvalidCoverInitializedName, {
+        at: shorthandAssignLoc,
+      });
     }
-    if (doubleProto >= 0) {
-      this.raise(doubleProto, Errors.DuplicateProto);
+
+    if (doubleProtoLoc != null) {
+      this.raise(Errors.DuplicateProto, { at: doubleProtoLoc });
     }
-    if (optionalParameters >= 0) {
-      this.unexpected(optionalParameters);
+
+    if (privateKeyLoc != null) {
+      this.raise(Errors.UnexpectedPrivateField, { at: privateKeyLoc });
+    }
+
+    if (optionalParametersLoc != null) {
+      this.unexpected(optionalParametersLoc);
     }
   }
 
@@ -304,7 +276,7 @@ export default class UtilParser extends Tokenizer {
   /*
    * Return the string value of a given private name
    * WITHOUT `#`
-   * @see {@link https://tc39.es/proposal-class-fields/#sec-private-names-static-semantics-stringvalue}
+   * @see {@link https://tc39.es/ecma262/#sec-static-semantics-stringvalue}
    */
   getPrivateNameSV(node: Node): string {
     return node.id.name;
@@ -354,16 +326,16 @@ export default class UtilParser extends Tokenizer {
 
     const oldScope = this.scope;
     const ScopeHandler = this.getScopeHandler();
-    this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
+    this.scope = new ScopeHandler(this, inModule);
 
     const oldProdParam = this.prodParam;
     this.prodParam = new ProductionParameterHandler();
 
     const oldClassScope = this.classScope;
-    this.classScope = new ClassScopeHandler(this.raise.bind(this));
+    this.classScope = new ClassScopeHandler(this);
 
     const oldExpressionScope = this.expressionScope;
-    this.expressionScope = new ExpressionScopeHandler(this.raise.bind(this));
+    this.expressionScope = new ExpressionScopeHandler(this);
 
     return () => {
       // Revert state
@@ -387,6 +359,13 @@ export default class UtilParser extends Tokenizer {
     this.scope.enter(SCOPE_PROGRAM);
     this.prodParam.enter(paramFlags);
   }
+
+  checkDestructuringPrivate(refExpressionErrors: ExpressionErrors) {
+    const { privateKeyLoc } = refExpressionErrors;
+    if (privateKeyLoc !== null) {
+      this.expectPlugin("destructuringPrivate", privateKeyLoc);
+    }
+  }
 }
 
 /**
@@ -396,13 +375,15 @@ export default class UtilParser extends Tokenizer {
  *
  * Types of ExpressionErrors:
  *
- * - **shorthandAssign**: track initializer `=` position
- * - **doubleProto**: track the duplicate `__proto__` key position
- * - **optionalParameters**: track the optional paramter (`?`).
+ * - **shorthandAssignLoc**: track initializer `=` position
+ * - **doubleProtoLoc**: track the duplicate `__proto__` key position
+ * - **privateKey**: track private key `#p` position
+ * - **optionalParametersLoc**: track the optional paramter (`?`).
  * It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
-  shorthandAssign = -1;
-  doubleProto = -1;
-  optionalParameters = -1;
+  shorthandAssignLoc: ?Position = null;
+  doubleProtoLoc: ?Position = null;
+  privateKeyLoc: ?Position = null;
+  optionalParametersLoc: ?Position = null;
 }

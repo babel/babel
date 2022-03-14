@@ -27,16 +27,14 @@ let Outer = /*#__PURE__*/function (_Hello) {
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
     _babelHelpers$get$cal = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
-
-    let Inner = function Inner() {
+    let Inner = /*#__PURE__*/babelHelpers.createClass(function Inner() {
       babelHelpers.classCallCheck(this, Inner);
       babelHelpers.defineProperty(this, _babelHelpers$get$cal, 'hello');
-    };
-
+    });
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
 
-  return Outer;
+  return babelHelpers.createClass(Outer);
 }(Hello);
 
 expect(new Outer().hello).toBe('hello');

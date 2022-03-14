@@ -1,4 +1,4 @@
-import { isIdentifierName } from "..";
+import { isIdentifierName } from "../lib/index.js";
 
 describe("isIdentifierName", function () {
   it("returns false if provided string is empty", function () {

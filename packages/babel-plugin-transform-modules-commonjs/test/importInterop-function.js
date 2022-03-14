@@ -1,5 +1,5 @@
 import * as babel from "@babel/core";
-import transformCommonjs from "../lib";
+import transformCommonjs from "../lib/index.js";
 import externalHelpers from "@babel/plugin-external-helpers";
 
 it("'importInterop' accepts a function", function () {

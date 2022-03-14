@@ -3,71 +3,34 @@
 // NOTE: This script must be run _after_ build-data.js
 
 const path = require("path");
-const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
-const {
-  getLowestImplementedVersion,
-  environments,
-  writeFile,
-} = require("./utils-build-data");
+const { generateData, environments, writeFile } = require("./utils-build-data");
 
-const data = require("./data/plugin-bugfixes");
+const pluginBugfixes = require("./data/plugin-bugfixes");
 const pluginFeatures = require("./data/plugin-features");
 
-const generatedTargets = {};
-const overlappingPlugins = {};
+const { data: dataWithBugfixes, overlapping } = generateData(
+  environments,
+  Object.assign({}, pluginBugfixes, pluginFeatures)
+);
 
-const allReplacedFeatures = {};
+const dataWithoutBugfixes = require("../data/plugins.json");
 
-const has = Function.call.bind(Object.hasOwnProperty);
-
-for (const [plugin, { replaces, features }] of Object.entries(data)) {
-  if (!has(overlappingPlugins, replaces)) {
-    overlappingPlugins[replaces] = [];
-    generatedTargets[replaces] = {};
-    allReplacedFeatures[replaces] = [];
-  }
-  generatedTargets[plugin] = {};
-
-  allReplacedFeatures[replaces].push(...features);
-
-  overlappingPlugins[replaces].push(plugin);
-
-  for (const env of environments) {
-    const supportedWithBugfix = getLowestImplementedVersion({ features }, env);
-    if (supportedWithBugfix) {
-      generatedTargets[plugin][env] = supportedWithBugfix;
-    }
-  }
-  addElectronSupportFromChromium(generatedTargets[plugin]);
-}
-
-for (const [replaced, features] of Object.entries(allReplacedFeatures)) {
-  let replacedFeatures = pluginFeatures[replaced];
+for (const [key, support] of Object.entries(dataWithBugfixes)) {
+  const originalSupport = dataWithoutBugfixes[key];
   if (
-    typeof replacedFeatures === "object" &&
-    !Array.isArray(replacedFeatures)
+    originalSupport &&
+    Object.keys(support).length === Object.keys(originalSupport).length &&
+    Object.keys(support).every(env => support[env] === originalSupport[env])
   ) {
-    replacedFeatures = replacedFeatures.features;
+    // The data with and without bugfixes is the same; we can avoid saving it twice.
+    delete dataWithBugfixes[key];
   }
-
-  for (const env of environments) {
-    const stillNotSupported = getLowestImplementedVersion(
-      { features: replacedFeatures },
-      env,
-      name => features.some(feat => name.includes(feat))
-    );
-
-    if (stillNotSupported) {
-      generatedTargets[replaced][env] = stillNotSupported;
-    }
-  }
-  addElectronSupportFromChromium(generatedTargets[replaced]);
 }
 
 for (const [filename, data] of [
-  ["plugin-bugfixes", generatedTargets],
-  ["overlapping-plugins", overlappingPlugins],
+  ["plugin-bugfixes", dataWithBugfixes],
+  ["overlapping-plugins", overlapping],
 ]) {
   const dataPath = path.join(__dirname, `../data/${filename}.json`);
 

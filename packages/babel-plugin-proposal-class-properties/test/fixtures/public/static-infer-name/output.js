@@ -1,7 +1,7 @@
-var _class, _temp;
+var _class;
 
-var Foo = (_temp = _class = function Foo() {
+var Foo = (_class = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
-}, babelHelpers.defineProperty(_class, "num", 0), _temp);
+}), babelHelpers.defineProperty(_class, "num", 0), _class);

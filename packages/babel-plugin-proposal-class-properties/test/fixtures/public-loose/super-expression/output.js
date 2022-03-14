@@ -6,12 +6,12 @@ var Foo = /*#__PURE__*/function (_Bar) {
   var _super = babelHelpers.createSuper(Foo);
 
   function Foo() {
-    var _temp, _this;
+    var _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    foo((_temp = _this = _super.call(this), _this.bar = "foo", _temp));
+    foo((_this = _super.call(this), _this.bar = "foo", babelHelpers.assertThisInitialized(_this)));
     return _this;
   }
 
-  return Foo;
+  return babelHelpers.createClass(Foo);
 }(Bar);

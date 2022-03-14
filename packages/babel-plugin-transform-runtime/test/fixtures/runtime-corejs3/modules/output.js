@@ -8,7 +8,7 @@ var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/in
 
 var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
 
 _Object$defineProperty(exports, "__esModule", {
   value: true

@@ -9,6 +9,6 @@ var createClass = k => {
       babelHelpers.defineProperty(this, _k, 2);
     }
 
-    return _class2;
+    return babelHelpers.createClass(_class2);
   }();
 };

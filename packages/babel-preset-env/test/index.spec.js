@@ -1,17 +1,23 @@
+// eslint-disable-next-line import/extensions
 import compatData from "@babel/compat-data/plugins";
 
-import * as babelPresetEnv from "../lib/index";
-import removeRegeneratorEntryPlugin from "../lib/polyfills/regenerator";
-import pluginLegacyBabelPolyfill from "../lib/polyfills/babel-polyfill";
-import transformations from "../lib/module-transformations";
-import availablePlugins from "../lib/available-plugins";
+import babelPresetEnv from "../lib/index.js";
 
-import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
-import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
-import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
-const pluginCoreJS2 = _pluginCoreJS2.default;
-const pluginCoreJS3 = _pluginCoreJS3.default;
-const pluginRegenerator = _pluginRegenerator.default;
+import _removeRegeneratorEntryPlugin from "../lib/polyfills/regenerator.js";
+import _pluginLegacyBabelPolyfill from "../lib/polyfills/babel-polyfill.js";
+import _transformations from "../lib/module-transformations.js";
+import _availablePlugins from "../lib/available-plugins.js";
+const removeRegeneratorEntryPlugin = _removeRegeneratorEntryPlugin.default;
+const pluginLegacyBabelPolyfill = _pluginLegacyBabelPolyfill.default;
+const transformations = _transformations.default;
+const availablePlugins = _availablePlugins.default;
+
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+const pluginCoreJS2 = require("babel-plugin-polyfill-corejs2").default;
+const pluginCoreJS3 = require("babel-plugin-polyfill-corejs3").default;
+const pluginRegenerator = require("babel-plugin-polyfill-regenerator").default;
 
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {

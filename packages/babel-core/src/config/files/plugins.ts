@@ -4,8 +4,12 @@
 
 import buildDebug from "debug";
 import path from "path";
-import type { Handler } from "gensync";
-import loadCjsOrMjsDefault from "./module-types";
+import gensync, { type Gensync, type Handler } from "gensync";
+import { isAsync } from "../../gensync-utils/async";
+import loadCjsOrMjsDefault, { supportsESM } from "./module-types";
+import { fileURLToPath, pathToFileURL } from "url";
+
+import importMetaResolve from "./import-meta-resolve";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -23,22 +27,19 @@ const OTHER_PRESET_ORG_RE =
   /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-preset(?:-|\/|$)|[^/]+\/)/;
 const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
-export function resolvePlugin(name: string, dirname: string): string | null {
-  return resolveStandardizedName("plugin", name, dirname);
+export function* resolvePlugin(name: string, dirname: string): Handler<string> {
+  return yield* resolveStandardizedName("plugin", name, dirname);
 }
 
-export function resolvePreset(name: string, dirname: string): string | null {
-  return resolveStandardizedName("preset", name, dirname);
+export function* resolvePreset(name: string, dirname: string): Handler<string> {
+  return yield* resolveStandardizedName("preset", name, dirname);
 }
 
 export function* loadPlugin(
   name: string,
   dirname: string,
 ): Handler<{ filepath: string; value: unknown }> {
-  const filepath = resolvePlugin(name, dirname);
-  if (!filepath) {
-    throw new Error(`Plugin ${name} not found relative to ${dirname}`);
-  }
+  const filepath = yield* resolvePlugin(name, dirname);
 
   const value = yield* requireModule("plugin", filepath);
   debug("Loaded plugin %o from %o.", name, dirname);
@@ -50,10 +51,7 @@ export function* loadPreset(
   name: string,
   dirname: string,
 ): Handler<{ filepath: string; value: unknown }> {
-  const filepath = resolvePreset(name, dirname);
-  if (!filepath) {
-    throw new Error(`Preset ${name} not found relative to ${dirname}`);
-  }
+  const filepath = yield* resolvePreset(name, dirname);
 
   const value = yield* requireModule("preset", filepath);
 
@@ -92,75 +90,130 @@ function standardizeName(type: "plugin" | "preset", name: string) {
   );
 }
 
-function resolveStandardizedName(
+type Result<T> = { error: Error; value: null } | { error: null; value: T };
+
+function* resolveAlternativesHelper(
   type: "plugin" | "preset",
   name: string,
-  dirname: string = process.cwd(),
-) {
+): Iterator<string, string, Result<string>> {
   const standardizedName = standardizeName(type, name);
+  const { error, value } = yield standardizedName;
+  if (!error) return value;
 
+  // @ts-ignore
+  if (error.code !== "MODULE_NOT_FOUND") throw error;
+
+  if (standardizedName !== name && !(yield name).error) {
+    error.message += `\n- If you want to resolve "${name}", use "module:${name}"`;
+  }
+
+  if (!(yield standardizeName(type, "@babel/" + name)).error) {
+    error.message += `\n- Did you mean "@babel/${name}"?`;
+  }
+
+  const oppositeType = type === "preset" ? "plugin" : "preset";
+  if (!(yield standardizeName(oppositeType, name)).error) {
+    error.message += `\n- Did you accidentally pass a ${oppositeType} as a ${type}?`;
+  }
+
+  throw error;
+}
+
+function tryRequireResolve(
+  id: Parameters<RequireResolve>[0],
+  { paths: [dirname] }: Parameters<RequireResolve>[1],
+): Result<string> {
   try {
-    return require.resolve(standardizedName, {
-      paths: [dirname],
-    });
-  } catch (e) {
-    if (e.code !== "MODULE_NOT_FOUND") throw e;
-
-    if (standardizedName !== name) {
-      let resolvedOriginal = false;
-      try {
-        require.resolve(name, {
-          paths: [dirname],
-        });
-        resolvedOriginal = true;
-      } catch {}
-
-      if (resolvedOriginal) {
-        e.message += `\n- If you want to resolve "${name}", use "module:${name}"`;
-      }
-    }
-
-    let resolvedBabel = false;
-    try {
-      require.resolve(standardizeName(type, "@babel/" + name), {
-        paths: [dirname],
-      });
-      resolvedBabel = true;
-    } catch {}
-
-    if (resolvedBabel) {
-      e.message += `\n- Did you mean "@babel/${name}"?`;
-    }
-
-    let resolvedOppositeType = false;
-    const oppositeType = type === "preset" ? "plugin" : "preset";
-    try {
-      require.resolve(standardizeName(oppositeType, name), {
-        paths: [dirname],
-      });
-      resolvedOppositeType = true;
-    } catch {}
-
-    if (resolvedOppositeType) {
-      e.message += `\n- Did you accidentally pass a ${oppositeType} as a ${type}?`;
-    }
-
-    throw e;
+    return { error: null, value: require.resolve(id, { paths: [dirname] }) };
+  } catch (error) {
+    return { error, value: null };
   }
 }
 
-const LOADING_MODULES = new Set();
+async function tryImportMetaResolve(
+  id: Parameters<ImportMeta["resolve"]>[0],
+  options: Parameters<ImportMeta["resolve"]>[1],
+): Promise<Result<string>> {
+  try {
+    return { error: null, value: await importMetaResolve(id, options) };
+  } catch (error) {
+    return { error, value: null };
+  }
+}
+
+function resolveStandardizedNameForRequrie(
+  type: "plugin" | "preset",
+  name: string,
+  dirname: string,
+) {
+  const it = resolveAlternativesHelper(type, name);
+  let res = it.next();
+  while (!res.done) {
+    res = it.next(tryRequireResolve(res.value, { paths: [dirname] }));
+  }
+  return res.value;
+}
+async function resolveStandardizedNameForImport(
+  type: "plugin" | "preset",
+  name: string,
+  dirname: string,
+) {
+  const parentUrl = pathToFileURL(
+    path.join(dirname, "./babel-virtual-resolve-base.js"),
+  ).href;
+
+  const it = resolveAlternativesHelper(type, name);
+  let res = it.next();
+  while (!res.done) {
+    res = it.next(await tryImportMetaResolve(res.value, parentUrl));
+  }
+  return fileURLToPath(res.value);
+}
+
+const resolveStandardizedName: Gensync<
+  (type: "plugin" | "preset", name: string, dirname?: string) => string
+> = gensync({
+  sync(type, name, dirname = process.cwd()) {
+    return resolveStandardizedNameForRequrie(type, name, dirname);
+  },
+  async async(type, name, dirname = process.cwd()) {
+    if (!supportsESM) {
+      return resolveStandardizedNameForRequrie(type, name, dirname);
+    }
+
+    try {
+      return await resolveStandardizedNameForImport(type, name, dirname);
+    } catch (e) {
+      try {
+        return resolveStandardizedNameForRequrie(type, name, dirname);
+      } catch (e2) {
+        if (e.type === "MODULE_NOT_FOUND") throw e;
+        if (e2.type === "MODULE_NOT_FOUND") throw e2;
+        throw e;
+      }
+    }
+  },
+});
+
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var LOADING_MODULES = new Set();
+}
 function* requireModule(type: string, name: string): Handler<unknown> {
-  if (LOADING_MODULES.has(name)) {
-    throw new Error(
-      `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
-        "and is trying to load itself while compiling itself, leading to a dependency cycle. " +
-        'We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.',
-    );
+  if (!process.env.BABEL_8_BREAKING) {
+    if (!(yield* isAsync()) && LOADING_MODULES.has(name)) {
+      throw new Error(
+        `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
+          "and is trying to load itself while compiling itself, leading to a dependency cycle. " +
+          'We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.',
+      );
+    }
   }
 
   try {
-    LOADING_MODULES.add(name);
+    if (!process.env.BABEL_8_BREAKING) {
+      LOADING_MODULES.add(name);
+    }
     return yield* loadCjsOrMjsDefault(
       name,
       `You appear to be using a native ECMAScript module ${type}, ` +
@@ -175,6 +228,8 @@ function* requireModule(type: string, name: string): Handler<unknown> {
     err.message = `[BABEL]: ${err.message} (While processing: ${name})`;
     throw err;
   } finally {
-    LOADING_MODULES.delete(name);
+    if (!process.env.BABEL_8_BREAKING) {
+      LOADING_MODULES.delete(name);
+    }
   }
 }

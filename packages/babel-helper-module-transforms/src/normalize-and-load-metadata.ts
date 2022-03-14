@@ -482,8 +482,7 @@ function getLocalExportMetadata(
       (initializeReexports || !child.node.source)
     ) {
       if (child.node.declaration) {
-        // todo: flow->ts babel-types node field types
-        const declaration = child.get("declaration") as NodePath;
+        const declaration = child.get("declaration");
         const ids = declaration.getOuterBindingIdentifierPaths();
         Object.keys(ids).forEach(name => {
           if (name === "__esModule") {

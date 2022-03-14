@@ -10,5 +10,5 @@ var Test = /*#__PURE__*/function (_Foo) {
     return _super.apply(this, arguments);
   }
 
-  return Test;
+  return babelHelpers.createClass(Test);
 }(Foo);

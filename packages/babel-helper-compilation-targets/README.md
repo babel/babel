@@ -9,7 +9,7 @@ See our website [@babel/helper-compilation-targets](https://babeljs.io/docs/en/b
 Using npm:
 
 ```sh
-npm install @babel/helper-compilation-targets
+npm install --save @babel/helper-compilation-targets
 ```
 
 or using yarn:

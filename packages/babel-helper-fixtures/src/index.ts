@@ -60,7 +60,11 @@ function shouldIgnore(name, ignore?: Array<string>) {
   const base = path.basename(name, ext);
 
   return (
-    name[0] === "." || ext === ".md" || base === "LICENSE" || base === "options"
+    name[0] === "." ||
+    ext === ".md" ||
+    base === "LICENSE" ||
+    base === "options" ||
+    name === "package.json"
   );
 }
 
@@ -101,6 +105,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
 
   const expectLoc =
     findFile(taskDir + "/output", true /* allowJSON */) ||
+    findFile(`${taskDir}/output.extended`, true) ||
     taskDir + "/output.js";
   const stdoutLoc = taskDir + "/stdout.txt";
   const stderrLoc = taskDir + "/stderr.txt";
@@ -126,6 +131,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
   const test = {
+    taskDir,
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
     disabled:
@@ -294,7 +300,8 @@ function wrapPackagesArray(type, names, optionsDir) {
 
       const monorepoPath = path.join(
         path.dirname(fileURLToPath(import.meta.url)),
-        "../..",
+        "../../..",
+        name.startsWith("codemod") ? "codemods" : "packages",
         `babel-${type}-${name}`,
       );
 

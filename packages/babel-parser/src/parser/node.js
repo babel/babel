@@ -79,12 +79,17 @@ export function cloneStringLiteral(node: any): any {
     return clonePlaceholder(node);
   }
   const cloned = Object.create(NodePrototype);
-  cloned.type = "StringLiteral";
+  cloned.type = type;
   cloned.start = start;
   cloned.end = end;
   cloned.loc = loc;
   cloned.range = range;
-  cloned.extra = extra;
+  if (node.raw !== undefined) {
+    // estree set node.raw instead of node.extra
+    cloned.raw = node.raw;
+  } else {
+    cloned.extra = extra;
+  }
   cloned.value = node.value;
   return cloned;
 }
@@ -108,22 +113,12 @@ export class NodeUtils extends UtilParser {
   // Finish an AST node, adding `type` and `end` properties.
 
   finishNode<T: NodeType>(node: T, type: string): T {
-    return this.finishNodeAt(
-      node,
-      type,
-      this.state.lastTokEnd,
-      this.state.lastTokEndLoc,
-    );
+    return this.finishNodeAt(node, type, this.state.lastTokEndLoc);
   }
 
   // Finish node at given position
 
-  finishNodeAt<T: NodeType>(
-    node: T,
-    type: string,
-    pos: number,
-    loc: Position,
-  ): T {
+  finishNodeAt<T: NodeType>(node: T, type: string, endLoc: Position): T {
     if (process.env.NODE_ENV !== "production" && node.end > 0) {
       throw new Error(
         "Do not call finishNode*() twice on the same node." +
@@ -131,9 +126,9 @@ export class NodeUtils extends UtilParser {
       );
     }
     node.type = type;
-    node.end = pos;
-    node.loc.end = loc;
-    if (this.options.ranges) node.range[1] = pos;
+    node.end = endLoc.index;
+    node.loc.end = endLoc;
+    if (this.options.ranges) node.range[1] = endLoc.index;
     if (this.options.attachComment) this.processComment(node);
     return node;
   }
@@ -146,12 +141,11 @@ export class NodeUtils extends UtilParser {
 
   resetEndLocation(
     node: NodeBase,
-    end?: number = this.state.lastTokEnd,
     endLoc?: Position = this.state.lastTokEndLoc,
   ): void {
-    node.end = end;
+    node.end = endLoc.index;
     node.loc.end = endLoc;
-    if (this.options.ranges) node.range[1] = end;
+    if (this.options.ranges) node.range[1] = endLoc.index;
   }
 
   /**

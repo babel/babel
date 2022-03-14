@@ -1,4 +1,4 @@
-import { runCodeInTestContext } from "..";
+import { runCodeInTestContext } from "../lib/index.js";
 import { fileURLToPath } from "url";
 
 const filename = fileURLToPath(import.meta.url);

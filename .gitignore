@@ -25,34 +25,44 @@ package-lock.json
 
 /packages/babel-compat-data/build
 
+/packages/babel-core/src/vendor/*.js
+/packages/babel-core/src/vendor/*.ts
+
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/toArray.js
 !/packages/babel-runtime/helpers/iterableToArray.js
+!/packages/babel-runtime/helpers/possibleConstructorReturn.js
 !/packages/babel-runtime/helpers/temporalRef.js
 !/packages/babel-runtime/helpers/typeof.js
 /packages/babel-runtime/helpers/esm/*.js
 !/packages/babel-runtime/helpers/esm/toArray.js
 !/packages/babel-runtime/helpers/esm/iterableToArray.js
+!/packages/babel-runtime/helpers/esm/possibleConstructorReturn.js
 !/packages/babel-runtime/helpers/esm/temporalRef.js
 
 /packages/babel-runtime-corejs2/helpers/*.js
 !/packages/babel-runtime-corejs2/helpers/toArray.js
 !/packages/babel-runtime-corejs2/helpers/iterableToArray.js
+!/packages/babel-runtime-corejs2/helpers/possibleConstructorReturn.js
 !/packages/babel-runtime-corejs2/helpers/temporalRef.js
 !/packages/babel-runtime-corejs2/helpers/typeof.js
 /packages/babel-runtime-corejs2/helpers/esm/*.js
 !/packages/babel-runtime-corejs2/helpers/esm/toArray.js
 !/packages/babel-runtime-corejs2/helpers/esm/iterableToArray.js
+!/packages/babel-runtime-corejs2/helpers/esm/possibleConstructorReturn.js
 !/packages/babel-runtime-corejs2/helpers/esm/temporalRef.js
 /packages/babel-runtime-corejs2/core-js/**/*.js
 !/packages/babel-runtime-corejs2/core-js/map.js
 
 /packages/babel-runtime-corejs3/helpers/*.js
+!/packages/babel-runtime-corejs3/helpers/possibleConstructorReturn.js
 /packages/babel-runtime-corejs3/helpers/esm/*.js
+!/packages/babel-runtime-corejs3/helpers/esm/possibleConstructorReturn.js
 /packages/babel-runtime-corejs3/core-js/**/*.js
 /packages/babel-runtime-corejs3/core-js-stable/**/*.js
 
-/packages/babel-register/test/.babel
+/packages/babel-register/test/.cache.babel
+/packages/babel-register/test/.index.babel
 /packages/babel-cli/test/tmp
 /packages/babel-node/test/tmp
 /packages/*/lib

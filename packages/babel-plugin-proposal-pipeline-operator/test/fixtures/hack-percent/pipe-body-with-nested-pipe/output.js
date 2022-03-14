@@ -1,4 +1,4 @@
-var _ref, _ref2, _ref3, _ref4;
+var _ref;
 
-const result = (_ref4 = 5, (_ref3 = Math.pow(_ref4, 2), (_ref2 = _ref3 + 1, (_ref = `${_ref2} apples`, _ref.toUpperCase()))));
+const result = (_ref = Math.pow(5, 2) + 1, `${_ref} apples`.toUpperCase());
 expect(result).toEqual('26 APPLES');

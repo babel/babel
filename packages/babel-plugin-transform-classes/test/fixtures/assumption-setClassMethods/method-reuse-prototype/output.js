@@ -13,5 +13,5 @@ var Test = /*#__PURE__*/function () {
 
   _proto.c = function c() {};
 
-  return Test;
+  return babelHelpers.createClass(Test);
 }();

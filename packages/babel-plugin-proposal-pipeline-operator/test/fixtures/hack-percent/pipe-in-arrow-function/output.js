@@ -1,10 +1,10 @@
 const result = () => {
-  var _ref, _ref2, _ref3;
+  var _ref;
 
-  return _ref3 = -2.2 // -2.2
-  , (_ref2 = Math.floor(_ref3) // -3
-  , (_ref = () => Math.pow(_ref2, 5) // () => -243
-  , _ref()));
+  return _ref = Math.floor(-2.2 // -2.2
+  ) // -3
+  , (() => Math.pow(_ref, 5) // () => -243
+  )();
 }; // -243
 
 

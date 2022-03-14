@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-fixtures",
-  "version": "7.16.0",
+  "version": "7.17.0",
   "description": "Helper function to support fixtures",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -22,5 +22,17 @@
   },
   "engines": {
     "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
   }
 }

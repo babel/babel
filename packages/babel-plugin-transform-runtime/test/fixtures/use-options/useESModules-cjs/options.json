@@ -4,7 +4,7 @@
     "supportsStaticESM": true
   },
   "plugins": [
-    ["transform-runtime", { "useESModules": true }],
+    ["transform-runtime", { "useESModules": true, "version": "7.100.0" }],
     "transform-classes"
   ]
 }

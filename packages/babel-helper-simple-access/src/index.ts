@@ -11,18 +11,28 @@ import {
 } from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
-export default function simplifyAccess(path: NodePath, bindingNames) {
+export default function simplifyAccess(
+  path: NodePath,
+  bindingNames,
+  // TODO(Babel 8): Remove this
+  includeUpdateExpression: boolean = true,
+) {
   path.traverse(simpleAssignmentVisitor, {
     scope: path.scope,
     bindingNames,
     seen: new WeakSet(),
+    includeUpdateExpression,
   });
 }
 
 const simpleAssignmentVisitor = {
+  // TODO(Babel 8): Remove UpdateExpression
   UpdateExpression: {
     exit(path) {
-      const { scope, bindingNames } = this;
+      const { scope, bindingNames, includeUpdateExpression } = this;
+      if (!includeUpdateExpression) {
+        return;
+      }
 
       const arg = path.get("argument");
       if (!arg.isIdentifier()) return;

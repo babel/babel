@@ -3,6 +3,7 @@ import type NodePath from "../path";
 import traverse from "../index";
 import type { TraverseOptions } from "../index";
 import Binding from "./binding";
+import type { BindingKind } from "./binding";
 import globals from "globals";
 import {
   NOT_LOCAL_BINDING,
@@ -569,7 +570,7 @@ export default class Scope {
 
   checkBlockScopedCollisions(
     local: Binding,
-    kind: string,
+    kind: BindingKind,
     name: string,
     id: any,
   ) {
@@ -587,7 +588,7 @@ export default class Scope {
       local.kind === "const" ||
       local.kind === "module" ||
       // don't allow a local of param with a kind of let
-      (local.kind === "param" && (kind === "let" || kind === "const"));
+      (local.kind === "param" && kind === "const");
 
     if (duplicate) {
       throw this.hub.buildError(
@@ -706,6 +707,7 @@ export default class Scope {
         this.registerBinding(path.node.kind, declar);
       }
     } else if (path.isClassDeclaration()) {
+      if (path.node.declare) return;
       this.registerBinding("let", path);
     } else if (path.isImportDeclaration()) {
       const specifiers = path.get("specifiers");
@@ -983,7 +985,7 @@ export default class Scope {
     init?: t.Expression;
     unique?: boolean;
     _blockHoist?: number | undefined;
-    kind?: "var" | "let";
+    kind?: "var" | "let" | "const";
   }) {
     let path = this.path;
 
@@ -1018,8 +1020,8 @@ export default class Scope {
     }
 
     const declarator = variableDeclarator(opts.id, opts.init);
-    declarPath.node.declarations.push(declarator);
-    this.registerBinding(kind, declarPath.get("declarations").pop());
+    const len = declarPath.node.declarations.push(declarator);
+    path.scope.registerBinding(kind, declarPath.get("declarations")[len - 1]);
   }
 
   /**
@@ -1091,7 +1093,7 @@ export default class Scope {
    * Walks the scope tree and gathers all declarations of `kind`.
    */
 
-  getAllBindingsOfKind(...kinds: string[]): any {
+  getAllBindingsOfKind(...kinds: string[]): Record<string, Binding> {
     const ids = Object.create(null);
 
     for (const kind of kinds) {
@@ -1137,6 +1139,13 @@ export default class Scope {
         } else {
           return binding;
         }
+      } else if (
+        !binding &&
+        name === "arguments" &&
+        scope.path.isFunction() &&
+        !scope.path.isArrowFunctionExpression()
+      ) {
+        break;
       }
       previousPath = scope.path;
     } while ((scope = scope.parent));

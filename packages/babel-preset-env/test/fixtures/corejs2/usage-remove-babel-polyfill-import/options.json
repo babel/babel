@@ -2,7 +2,7 @@
   "validateLogs": true,
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "useBuiltIns": "usage",
         "corejs": 2,

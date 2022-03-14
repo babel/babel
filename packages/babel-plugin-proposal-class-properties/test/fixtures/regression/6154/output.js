@@ -1,4 +1,4 @@
-var Test = function Test() {
+var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Test);
@@ -24,10 +24,10 @@ var Test = function Test() {
       return _this;
     }
 
-    return Other;
+    return babelHelpers.createClass(Other);
   }(Test);
 
   babelHelpers.defineProperty(Other, "a", function () {
     return babelHelpers.get(babelHelpers.getPrototypeOf(Other), "test", Other);
   });
-};
+});

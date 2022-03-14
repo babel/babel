@@ -1,7 +1,7 @@
 var _arguments2 = 1;
 
 function fn() {
-  var _arguments = _arguments2;
+  var _arguments = arguments;
 
   var foo = function () {
     return _arguments;

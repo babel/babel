@@ -1,4 +1,3 @@
-import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import { VISITOR_KEYS, removeProperties, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
@@ -6,6 +5,7 @@ import * as cache from "./cache";
 import type NodePath from "./path";
 import type { default as Scope, Binding } from "./scope";
 import type { Visitor } from "./types";
+import { traverseNode } from "./traverse-node";
 
 export type { Visitor, Binding };
 export { default as NodePath } from "./path";
@@ -64,7 +64,7 @@ function traverse(
 
   visitors.explode(opts);
 
-  traverse.node(parent, opts, scope, state, parentPath);
+  traverseNode(parent, opts, scope, state, parentPath);
 }
 
 export default traverse;
@@ -82,17 +82,11 @@ traverse.node = function (
   opts: TraverseOptions,
   scope?: Scope,
   state?: any,
-  parentPath?: NodePath,
-  skipKeys?,
+  path?: NodePath,
+  skipKeys?: string[],
 ) {
-  const keys = VISITOR_KEYS[node.type];
-  if (!keys) return;
-
-  const context = new TraversalContext(scope, opts, state, parentPath);
-  for (const key of keys) {
-    if (skipKeys && skipKeys[key]) continue;
-    if (context.visit(node, key)) return;
-  }
+  traverseNode(node, opts, scope, state, path, skipKeys);
+  // traverse.node always returns undefined
 };
 
 traverse.clearNode = function (node: t.Node, opts?) {

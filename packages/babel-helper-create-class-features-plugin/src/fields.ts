@@ -1,9 +1,8 @@
 import { template, traverse, types as t } from "@babel/core";
 import type { File } from "@babel/core";
 import type { NodePath, Visitor, Scope } from "@babel/traverse";
-import ReplaceSupers, {
-  environmentVisitor,
-} from "@babel/helper-replace-supers";
+import ReplaceSupers from "@babel/helper-replace-supers";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type {
   Handler,
@@ -851,7 +850,11 @@ function buildPrivateMethodDeclaration(
   );
 }
 
-const thisContextVisitor = traverse.visitors.merge([
+const thisContextVisitor = traverse.visitors.merge<{
+  classRef: t.Identifier;
+  needsClassRef: boolean;
+  innerBinding: t.Identifier;
+}>([
   {
     ThisExpression(path, state) {
       state.needsClassRef = true;
@@ -908,7 +911,8 @@ function replaceThisContext(
     getSuperRef,
     getObjectRef() {
       state.needsClassRef = true;
-      return isStaticBlock || path.node.static
+      // @ts-expect-error: TS doesn't infer that path.node is not a StaticBlock
+      return t.isStaticBlock?.(path.node) || path.node.static
         ? ref
         : t.memberExpression(ref, t.identifier("prototype"));
     },
@@ -928,7 +932,8 @@ function replaceThisContext(
 export type PropNode =
   | t.ClassProperty
   | t.ClassPrivateMethod
-  | t.ClassPrivateProperty;
+  | t.ClassPrivateProperty
+  | t.StaticBlock;
 export type PropPath = NodePath<PropNode>;
 
 export function buildFieldsInitNodes(
@@ -960,7 +965,8 @@ export function buildFieldsInitNodes(
   for (const prop of props) {
     prop.isClassProperty() && ts.assertFieldTransformed(prop);
 
-    const isStatic = prop.node.static;
+    // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
+    const isStatic = !t.isStaticBlock?.(prop.node) && prop.node.static;
     const isInstance = !isStatic;
     const isPrivate = prop.isPrivate();
     const isPublic = !isPrivate;
@@ -987,12 +993,17 @@ export function buildFieldsInitNodes(
     // a `NodePath<t.StaticBlock>`
     // this maybe a bug for ts
     switch (true) {
-      case isStaticBlock:
-        staticNodes.push(
-          // @ts-expect-error prop is `StaticBlock` here
-          template.statement.ast`(() => ${t.blockStatement(prop.node.body)})()`,
-        );
+      case isStaticBlock: {
+        const blockBody = (prop.node as t.StaticBlock).body;
+        // We special-case the single expression case to avoid the iife, since
+        // it's common.
+        if (blockBody.length === 1 && t.isExpressionStatement(blockBody[0])) {
+          staticNodes.push(blockBody[0] as t.ExpressionStatement);
+        } else {
+          staticNodes.push(template.statement.ast`(() => { ${blockBody} })()`);
+        }
         break;
+      }
       case isStatic && isPrivate && isField && privateFieldsAsProperties:
         needsClassRef = true;
         staticNodes.push(

@@ -1,4 +1,5 @@
 import _Reflect$construct from "@babel/runtime-corejs2/core-js/reflect/construct";
+import _createClass from "@babel/runtime-corejs2/helpers/esm/createClass";
 import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
 import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
 import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
@@ -19,5 +20,5 @@ let Foo = /*#__PURE__*/function (_Bar) {
     return _super.apply(this, arguments);
   }
 
-  return Foo;
+  return _createClass(Foo);
 }(Bar);
