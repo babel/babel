@@ -1079,6 +1079,11 @@ export function pipelineBareFunction(
 export function pipelinePrimaryTopicReference(): t.PipelinePrimaryTopicReference {
   return builder.apply("PipelinePrimaryTopicReference", arguments);
 }
+export function classHasInstanceExpression(
+  body: any,
+): t.ClassHasInstanceExpression {
+  return builder.apply("ClassHasInstanceExpression", arguments);
+}
 export function tsParameterProperty(
   parameter: t.Identifier | t.AssignmentPattern,
 ): t.TSParameterProperty {

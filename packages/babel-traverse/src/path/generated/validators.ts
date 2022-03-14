@@ -41,6 +41,9 @@ export interface NodePathValidators {
   isClassBody(opts?: object): this is NodePath<t.ClassBody>;
   isClassDeclaration(opts?: object): this is NodePath<t.ClassDeclaration>;
   isClassExpression(opts?: object): this is NodePath<t.ClassExpression>;
+  isClassHasInstanceExpression(
+    opts?: object,
+  ): this is NodePath<t.ClassHasInstanceExpression>;
   isClassImplements(opts?: object): this is NodePath<t.ClassImplements>;
   isClassMethod(opts?: object): this is NodePath<t.ClassMethod>;
   isClassPrivateMethod(opts?: object): this is NodePath<t.ClassPrivateMethod>;

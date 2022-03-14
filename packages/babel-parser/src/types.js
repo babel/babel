@@ -702,6 +702,11 @@ export type ModuleExpression = NodeBase & {
   body: Program,
 };
 
+export type ClassHasInstanceExpression = NodeBase & {
+  type: "ClassHasInstanceExpression",
+  instance: Expression,
+};
+
 // Patterns
 
 // TypeScript access modifiers

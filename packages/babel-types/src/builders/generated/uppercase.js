@@ -192,6 +192,7 @@ export {
   pipelineTopicExpression as PipelineTopicExpression,
   pipelineBareFunction as PipelineBareFunction,
   pipelinePrimaryTopicReference as PipelinePrimaryTopicReference,
+  classHasInstanceExpression as ClassHasInstanceExpression,
   tsParameterProperty as TSParameterProperty,
   tsDeclareFunction as TSDeclareFunction,
   tsDeclareMethod as TSDeclareMethod,

@@ -323,3 +323,9 @@ export function ModuleExpression(node: t.ModuleExpression) {
     this.rightBrace();
   }
 }
+
+export function ClassHasInstanceExpression(node: t.ClassHasInstanceExpression) {
+  this.token("(");
+  this.printList(node.instance);
+  this.token(")");
+}

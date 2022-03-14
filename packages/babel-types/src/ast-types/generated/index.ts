@@ -68,6 +68,7 @@ export type Node =
   | ClassBody
   | ClassDeclaration
   | ClassExpression
+  | ClassHasInstanceExpression
   | ClassImplements
   | ClassMethod
   | ClassPrivateMethod
@@ -1617,6 +1618,11 @@ export interface PipelinePrimaryTopicReference extends BaseNode {
   type: "PipelinePrimaryTopicReference";
 }
 
+export interface ClassHasInstanceExpression extends BaseNode {
+  type: "ClassHasInstanceExpression";
+  instance: Expression;
+}
+
 export interface TSParameterProperty extends BaseNode {
   type: "TSParameterProperty";
   parameter: Identifier | AssignmentPattern;
@@ -2145,6 +2151,7 @@ export type Expression =
   | PipelineTopicExpression
   | PipelineBareFunction
   | PipelinePrimaryTopicReference
+  | ClassHasInstanceExpression
   | TSAsExpression
   | TSTypeAssertion
   | TSNonNullExpression;

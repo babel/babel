@@ -160,3 +160,14 @@ defineType("PipelineBareFunction", {
 defineType("PipelinePrimaryTopicReference", {
   aliases: ["Expression"],
 });
+
+// https://github.com/tc39/proposal-class-brand-check
+defineType("ClassHasInstanceExpression", {
+  visitor: ["body"],
+  fields: {
+    instance: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+  aliases: ["Expression"],
+});

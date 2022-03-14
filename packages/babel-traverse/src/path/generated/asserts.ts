@@ -68,6 +68,9 @@ export interface NodePathAssetions {
   assertClassExpression(
     opts?: object,
   ): asserts this is NodePath<t.ClassExpression>;
+  assertClassHasInstanceExpression(
+    opts?: object,
+  ): asserts this is NodePath<t.ClassHasInstanceExpression>;
   assertClassImplements(
     opts?: object,
   ): asserts this is NodePath<t.ClassImplements>;

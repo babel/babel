@@ -3116,6 +3116,23 @@ export function isPipelinePrimaryTopicReference(
 
   return false;
 }
+export function isClassHasInstanceExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassHasInstanceExpression {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "ClassHasInstanceExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSParameterProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -4350,6 +4367,7 @@ export function isExpression(
     "PipelineTopicExpression" === nodeType ||
     "PipelineBareFunction" === nodeType ||
     "PipelinePrimaryTopicReference" === nodeType ||
+    "ClassHasInstanceExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||

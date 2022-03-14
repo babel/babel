@@ -729,6 +729,14 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!noCalls && this.match(tt.parenL)) {
+      if (base.name === "hasInstance") {
+        return this.parseClassHasInstanceExpression(
+          base,
+          startPos,
+          startLoc,
+          state,
+        );
+      }
       return this.parseCoverCallAndAsyncArrowHead(
         base,
         startPos,
@@ -858,7 +866,6 @@ export default class ExpressionParser extends LValParser {
       );
     }
     this.finishCallExpression(node, state.optionalChainMember);
-
     if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
       state.stop = true;
       this.expressionScope.validateAsPattern();
@@ -878,6 +885,16 @@ export default class ExpressionParser extends LValParser {
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
 
     return node;
+  }
+
+  parseClassHasInstanceExpression(base, startPos, startLoc, state) {
+    this.next(); // eat `class`
+
+    const node = this.startNodeAt(startPos, startLoc);
+    node.instance = this.parseCallExpressionArguments(tt.parenR);
+    state.stop = true;
+
+    return this.finishNode(node, "ClassHasInstanceExpression");
   }
 
   toReferencedArguments(
@@ -1157,8 +1174,8 @@ export default class ExpressionParser extends LValParser {
         node = this.startNode();
         this.takeDecorators(node);
         if (this.lookahead().type === tt.dot) {
-          this.next();
-          this.next();
+          this.next(); // eat `class`
+          this.next(); // eat `.`
           if (this.state.value === "hasInstance") {
             return this.parseIdentifier();
           }
