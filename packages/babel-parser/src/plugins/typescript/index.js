@@ -35,7 +35,11 @@ import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
-import { Errors, ParseErrorEnum } from "../../parse-error";
+import {
+  Errors,
+  type ParseErrorConstructor,
+  ParseErrorEnum,
+} from "../../parse-error";
 import { cloneIdentifier } from "../../parser/node";
 
 const getOwn = (object, key) =>
@@ -47,7 +51,8 @@ type TsModifier =
   | "declare"
   | "static"
   | "override"
-  | N.Accessibility;
+  | N.Accessibility
+  | N.VarianceAnnotations;
 
 function nonNull<T>(x: ?T): T {
   if (x == null) {
@@ -152,6 +157,10 @@ const TSErrors = ParseErrorEnum`typescript`(_ => ({
   ),
   InvalidModifierOnTypeMember: _<{| modifier: TsModifier |}>(
     ({ modifier }) => `'${modifier}' modifier cannot appear on a type member.`,
+  ),
+  InvalidModifierOnTypeParameter: _<{| modifier: TsModifier |}>(
+    ({ modifier }) =>
+      `'${modifier}' modifier cannot appear on a type parameter.`,
   ),
   InvalidModifiersOrder: _<{| orderedModifiers: [TsModifier, TsModifier] |}>(
     ({ orderedModifiers }) =>
@@ -286,6 +295,10 @@ function tsIsAccessModifier(modifier: string): boolean %checks {
   );
 }
 
+function tsIsVarianceAnnotations(modifier: string): boolean %checks {
+  return modifier === "in" || modifier === "out";
+}
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     getScopeHandler(): Class<TypeScriptScopeHandler> {
@@ -324,7 +337,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowedModifiers: T[],
       stopOnStartOfClassStaticBlock?: boolean,
     ): ?T {
-      if (!tokenIsIdentifier(this.state.type)) {
+      if (!tokenIsIdentifier(this.state.type) && this.state.type !== tt._in) {
         return undefined;
       }
 
@@ -345,11 +358,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      *    this.tsParseModifiers({ modified: node, allowedModifiers: ["public"] });
      *    this.tsParseModifiers({ modified: node, allowedModifiers: ["abstract", "readonly"] });
      */
-    tsParseModifiers({
+    tsParseModifiers<ErrorDetails>({
       modified,
       allowedModifiers,
       disallowedModifiers,
       stopOnStartOfClassStaticBlock,
+      errorTemplate,
     }: {
       modified: {
         [key: TsModifier]: ?true,
@@ -358,6 +372,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowedModifiers: TsModifier[],
       disallowedModifiers?: TsModifier[],
       stopOnStartOfClassStaticBlock?: boolean,
+      errorTemplate?: ParseErrorConstructor<ErrorDetails>,
     }): void {
       const enforceOrder = (loc, modifier, before, after) => {
         if (modifier === before && modified[after]) {
@@ -401,6 +416,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
             modified.accessibility = modifier;
           }
+        } else if (tsIsVarianceAnnotations(modifier)) {
+          if (modified[modifier]) {
+            this.raise(TSErrors.DuplicateModifier, { at: startLoc, modifier });
+          }
+          modified[modifier] = true;
+
+          enforceOrder(startLoc, modifier, "in", "out");
         } else {
           if (Object.hasOwnProperty.call(modified, modifier)) {
             this.raise(TSErrors.DuplicateModifier, { at: startLoc, modifier });
@@ -417,7 +439,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
 
         if (disallowedModifiers?.includes(modifier)) {
-          this.raise(TSErrors.InvalidModifierOnTypeMember, {
+          this.raise(errorTemplate ?? TSErrors.InvalidModifierOnTypeMember, {
             at: startLoc,
             modifier,
           });
@@ -635,6 +657,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeParameter(): N.TsTypeParameter {
       const node: N.TsTypeParameter = this.startNode();
+
+      this.tsParseModifiers({
+        modified: node,
+        allowedModifiers: ["in", "out"],
+        disallowedModifiers: [
+          "public",
+          "private",
+          "protected",
+          "readonly",
+          "declare",
+          "abstract",
+          "override",
+        ],
+        errorTemplate: TSErrors.InvalidModifierOnTypeParameter,
+      });
+
       node.name = this.tsParseTypeParameterName();
       node.constraint = this.tsEatThenParseType(tt._extends);
       node.default = this.tsEatThenParseType(tt.eq);

@@ -1,0 +1,214 @@
+{
+  "type": "File",
+  "start":0,"end":142,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":33,"index":142}},
+  "errors": [
+    "SyntaxError: 'public' modifier cannot appear on a type parameter. (1:9)",
+    "SyntaxError: Duplicate modifier: 'in'. (2:16)",
+    "SyntaxError: 'in' modifier must precede 'out' modifier. (2:16)",
+    "SyntaxError: Duplicate modifier: 'out'. (3:16)",
+    "SyntaxError: 'in' modifier must precede 'out' modifier. (4:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":142,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":33,"index":142}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":8,"index":8},"identifierName":"T20"},
+          "name": "T20"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":8,"end":18,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":18,"index":18}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":9,"end":17,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":17,"index":17}},
+              "accessibility": "public",
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSTypeReference",
+          "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22}},
+          "typeName": {
+            "type": "Identifier",
+            "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22},"identifierName":"T"},
+            "name": "T"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":25,"end":33,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":33,"index":33}}
+          }
+        ]
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":34,"end":60,"loc":{"start":{"line":2,"column":0,"index":34},"end":{"line":2,"column":26,"index":60}},
+        "id": {
+          "type": "Identifier",
+          "start":39,"end":42,"loc":{"start":{"line":2,"column":5,"index":39},"end":{"line":2,"column":8,"index":42},"identifierName":"T21"},
+          "name": "T21"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":42,"end":55,"loc":{"start":{"line":2,"column":8,"index":42},"end":{"line":2,"column":21,"index":55}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":43,"end":54,"loc":{"start":{"line":2,"column":9,"index":43},"end":{"line":2,"column":20,"index":54}},
+              "in": true,
+              "out": true,
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSTypeReference",
+          "start":58,"end":59,"loc":{"start":{"line":2,"column":24,"index":58},"end":{"line":2,"column":25,"index":59}},
+          "typeName": {
+            "type": "Identifier",
+            "start":58,"end":59,"loc":{"start":{"line":2,"column":24,"index":58},"end":{"line":2,"column":25,"index":59},"identifierName":"T"},
+            "name": "T"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":62,"end":70,"loc":{"start":{"line":2,"column":28,"index":62},"end":{"line":2,"column":36,"index":70}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":25,"end":33,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":33,"index":33}}
+          }
+        ]
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":71,"end":98,"loc":{"start":{"line":3,"column":0,"index":71},"end":{"line":3,"column":27,"index":98}},
+        "id": {
+          "type": "Identifier",
+          "start":76,"end":79,"loc":{"start":{"line":3,"column":5,"index":76},"end":{"line":3,"column":8,"index":79},"identifierName":"T22"},
+          "name": "T22"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":79,"end":93,"loc":{"start":{"line":3,"column":8,"index":79},"end":{"line":3,"column":22,"index":93}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":80,"end":92,"loc":{"start":{"line":3,"column":9,"index":80},"end":{"line":3,"column":21,"index":92}},
+              "in": true,
+              "out": true,
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSTypeReference",
+          "start":96,"end":97,"loc":{"start":{"line":3,"column":25,"index":96},"end":{"line":3,"column":26,"index":97}},
+          "typeName": {
+            "type": "Identifier",
+            "start":96,"end":97,"loc":{"start":{"line":3,"column":25,"index":96},"end":{"line":3,"column":26,"index":97},"identifierName":"T"},
+            "name": "T"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":100,"end":108,"loc":{"start":{"line":3,"column":29,"index":100},"end":{"line":3,"column":37,"index":108}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":62,"end":70,"loc":{"start":{"line":2,"column":28,"index":62},"end":{"line":2,"column":36,"index":70}}
+          }
+        ]
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":109,"end":132,"loc":{"start":{"line":4,"column":0,"index":109},"end":{"line":4,"column":23,"index":132}},
+        "id": {
+          "type": "Identifier",
+          "start":114,"end":117,"loc":{"start":{"line":4,"column":5,"index":114},"end":{"line":4,"column":8,"index":117},"identifierName":"T23"},
+          "name": "T23"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":117,"end":127,"loc":{"start":{"line":4,"column":8,"index":117},"end":{"line":4,"column":18,"index":127}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":118,"end":126,"loc":{"start":{"line":4,"column":9,"index":118},"end":{"line":4,"column":17,"index":126}},
+              "out": true,
+              "in": true,
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSTypeReference",
+          "start":130,"end":131,"loc":{"start":{"line":4,"column":21,"index":130},"end":{"line":4,"column":22,"index":131}},
+          "typeName": {
+            "type": "Identifier",
+            "start":130,"end":131,"loc":{"start":{"line":4,"column":21,"index":130},"end":{"line":4,"column":22,"index":131},"identifierName":"T"},
+            "name": "T"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":134,"end":142,"loc":{"start":{"line":4,"column":25,"index":134},"end":{"line":4,"column":33,"index":142}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":100,"end":108,"loc":{"start":{"line":3,"column":29,"index":100},"end":{"line":3,"column":37,"index":108}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":25,"end":33,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":33,"index":33}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":62,"end":70,"loc":{"start":{"line":2,"column":28,"index":62},"end":{"line":2,"column":36,"index":70}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":100,"end":108,"loc":{"start":{"line":3,"column":29,"index":100},"end":{"line":3,"column":37,"index":108}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":134,"end":142,"loc":{"start":{"line":4,"column":25,"index":134},"end":{"line":4,"column":33,"index":142}}
+    }
+  ]
+}

@@ -707,6 +707,8 @@ export type ModuleExpression = NodeBase & {
 // TypeScript access modifiers
 export type Accessibility = "public" | "protected" | "private";
 
+export type VarianceAnnotations = "in" | "out";
+
 export type PatternBase = HasDecorators & {
   // TODO: All not in spec
   // Flow/TypeScript only:
@@ -1040,6 +1042,8 @@ export type TsTypeParameter = NodeBase & {
   type: "TSTypeParameter",
   // TODO(Babel-8): remove string type support
   name: string | Identifier,
+  in?: boolean,
+  out?: boolean,
   constraint?: TsType,
   default?: TsType,
 };

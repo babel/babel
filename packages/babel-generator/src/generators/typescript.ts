@@ -25,6 +25,16 @@ export function TSTypeParameterInstantiation(
 export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
 
 export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
+  if (node.in) {
+    this.word("in");
+    this.space();
+  }
+
+  if (node.out) {
+    this.word("out");
+    this.space();
+  }
+
   this.word(
     !process.env.BABEL_8_BREAKING
       ? (node.name as unknown as string)
