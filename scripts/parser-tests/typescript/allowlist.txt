@@ -23,11 +23,8 @@ classExpressionWithDecorator1.ts
 classExtendsMultipleBaseClasses.ts
 classOverloadForFunction.ts
 classWithEmptyTypeParameter.ts
-# TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 collisionArgumentsArrowFunctions.ts
-# TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 collisionArgumentsFunction.ts
-# TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 collisionArgumentsFunctionExpressions.ts
 constDeclarations-invalidContexts.ts
 constDeclarations-scopes.ts
@@ -41,7 +38,6 @@ declareModifierOnImport1.ts
 decoratorsOnComputedProperties.ts
 decrementAndIncrementOperators.ts
 defaultArgsInOverloads.ts
-defaultIsNotVisibleInLocalScope.ts
 defaultValueInFunctionTypes.ts
 deleteOperatorInStrictMode.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
@@ -58,7 +54,6 @@ emptyGenericParamList.ts
 emptyTypeArgumentList.ts
 emptyTypeArgumentListWithNew.ts
 enumGenericTypeClash.ts
-# We don't support ES3-style octal literal errors.
 es3-oldStyleOctalLiteralInEnums.ts
 es3-oldStyleOctalLiteralTypes.ts
 es6ImportDefaultBindingFollowedWithNamedImport1InEs5.ts
@@ -78,9 +73,7 @@ exportEqualsOfModule.ts
 exportSameNameFuncVar.ts
 exportSpecifierAndExportedMemberDeclaration.ts
 exportSpecifierAndLocalMemberDeclaration.ts
-# We handle this fine, but it doesn't consider the different files together
 exportSpecifierForAGlobal.ts
-# We handle this fine, but it doesn't consider the different files together
 exportSpecifierReferencingOuterDeclaration2.ts
 expressionsForbiddenInParameterInitializers.ts
 extendsClauseAlreadySeen.ts
@@ -106,9 +99,8 @@ indexTypeCheck.ts
 indexWithoutParamType.ts
 indexerSignatureWithRestParam.ts
 interfaceMayNotBeExtendedWitACall.ts
-interfaceWithImplements1.ts
-# We correctly identify this error, but we can't bring it in without bringing a bunch of other tests too.
 interfaceNaming1.ts
+interfaceWithImplements1.ts
 jsxAttributeWithoutExpressionReact.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts
@@ -129,24 +121,21 @@ moduleDuplicateIdentifiers.ts
 moduleSharesNameWithImportDeclarationInsideIt3.ts
 moduleSharesNameWithImportDeclarationInsideIt5.ts
 multipleClassPropertyModifiersErrors.ts
-multipleInheritance.ts
 multipleExports.ts
+multipleInheritance.ts
 nameCollisions.ts
 noImplicitAnyDestructuringVarDeclaration.ts
 nonMergedOverloads.ts
 parameterInitializerBeforeDestructuringEmit.ts
 parameterPropertyOutsideConstructor.ts
 parserConstructorDeclaration12.ts
-readonlyInNonPropertyParameters.ts
-redeclareParameterInCatchBlock.ts
 reExportGlobalDeclaration1.ts
-# We handle this fine, but it doesn't consider the different files together
 reExportGlobalDeclaration2.ts
-# We handle this fine, but it doesn't consider the different files together
 reExportGlobalDeclaration3.ts
-# We handle this fine, but it doesn't consider the different files together
 reExportGlobalDeclaration4.ts
 reExportUndefined1.ts
+readonlyInNonPropertyParameters.ts
+redeclareParameterInCatchBlock.ts
 restParamModifier2.ts
 shadowedReservedCompilerDeclarationsWithNoEmit.ts
 sourceMap-LineBreaks.ts
