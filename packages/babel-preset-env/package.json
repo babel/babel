@@ -14,20 +14,6 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-preset-env"
   },
-  "funding": [
-    {
-      "type": "opencollective",
-      "url": "https://opencollective.com/babel"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/babel"
-    },
-    {
-      "type": "gitcoin",
-      "url": "https://gitcoin.co/grants/2906/babel-compiler-for-next-generation-javascript"
-    }
-  ],
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/compat-data": "workspace:^",
