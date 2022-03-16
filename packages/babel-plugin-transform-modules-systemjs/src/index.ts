@@ -350,6 +350,10 @@ export default declare((api, options) => {
                   ),
                 ),
               );
+            } else if (path.isVariableDeclaration()) {
+              // Convert top-level variable declarations to "var",
+              // because they must be hoisted
+              path.node.kind = "var";
             } else if (path.isImportDeclaration()) {
               const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
@@ -429,6 +433,11 @@ export default declare((api, options) => {
                   );
                   addExportName(name, name);
                 } else {
+                  if (declar.isVariableDeclaration()) {
+                    // Convert top-level variable declarations to "var",
+                    // because they must be hoisted
+                    declar.node.kind = "var";
+                  }
                   for (const name of Object.keys(
                     declar.getBindingIdentifiers(),
                   )) {
