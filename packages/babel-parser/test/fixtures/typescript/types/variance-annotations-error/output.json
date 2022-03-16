@@ -30,7 +30,11 @@
               "type": "TSTypeParameter",
               "start":9,"end":17,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":17,"index":17}},
               "accessibility": "public",
-              "name": "T"
+              "name": {
+                "type": "Identifier",
+                "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"T"},
+                "name": "T"
+              }
             }
           ]
         },
@@ -68,7 +72,11 @@
               "start":43,"end":54,"loc":{"start":{"line":2,"column":9,"index":43},"end":{"line":2,"column":20,"index":54}},
               "in": true,
               "out": true,
-              "name": "T"
+              "name": {
+                "type": "Identifier",
+                "start":53,"end":54,"loc":{"start":{"line":2,"column":19,"index":53},"end":{"line":2,"column":20,"index":54},"identifierName":"T"},
+                "name": "T"
+              }
             }
           ]
         },
@@ -113,7 +121,11 @@
               "start":80,"end":92,"loc":{"start":{"line":3,"column":9,"index":80},"end":{"line":3,"column":21,"index":92}},
               "in": true,
               "out": true,
-              "name": "T"
+              "name": {
+                "type": "Identifier",
+                "start":91,"end":92,"loc":{"start":{"line":3,"column":20,"index":91},"end":{"line":3,"column":21,"index":92},"identifierName":"T"},
+                "name": "T"
+              }
             }
           ]
         },
@@ -158,7 +170,11 @@
               "start":118,"end":126,"loc":{"start":{"line":4,"column":9,"index":118},"end":{"line":4,"column":17,"index":126}},
               "out": true,
               "in": true,
-              "name": "T"
+              "name": {
+                "type": "Identifier",
+                "start":125,"end":126,"loc":{"start":{"line":4,"column":16,"index":125},"end":{"line":4,"column":17,"index":126},"identifierName":"T"},
+                "name": "T"
+              }
             }
           ]
         },

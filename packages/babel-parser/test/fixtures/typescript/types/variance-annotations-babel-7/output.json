@@ -23,11 +23,7 @@
               "type": "TSTypeParameter",
               "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":19,"end":20,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":20,"index":20},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -77,11 +73,7 @@
               "type": "TSTypeParameter",
               "start":58,"end":62,"loc":{"start":{"line":5,"column":19,"index":58},"end":{"line":5,"column":23,"index":62}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":61,"end":62,"loc":{"start":{"line":5,"column":22,"index":61},"end":{"line":5,"column":23,"index":62},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -104,7 +96,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":75,"end":89,"loc":{"start":{"line":6,"column":7,"index":75},"end":{"line":6,"column":21,"index":89}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":76,"end":80,"loc":{"start":{"line":6,"column":8,"index":76},"end":{"line":6,"column":12,"index":80},"identifierName":"x"},
@@ -124,7 +116,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":82,"end":89,"loc":{"start":{"line":6,"column":14,"index":82},"end":{"line":6,"column":21,"index":89}},
                     "typeAnnotation": {
@@ -155,11 +147,7 @@
               "start":109,"end":117,"loc":{"start":{"line":9,"column":15,"index":109},"end":{"line":9,"column":23,"index":117}},
               "in": true,
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":116,"end":117,"loc":{"start":{"line":9,"column":22,"index":116},"end":{"line":9,"column":23,"index":117},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -182,7 +170,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":130,"end":141,"loc":{"start":{"line":10,"column":7,"index":130},"end":{"line":10,"column":18,"index":141}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":131,"end":135,"loc":{"start":{"line":10,"column":8,"index":131},"end":{"line":10,"column":12,"index":135},"identifierName":"x"},
@@ -202,7 +190,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":137,"end":141,"loc":{"start":{"line":10,"column":14,"index":137},"end":{"line":10,"column":18,"index":141}},
                     "typeAnnotation": {
