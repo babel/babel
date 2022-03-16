@@ -4,8 +4,9 @@ import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
+import type { NodePath } from "@babel/traverse";
 
-const buildTemplate = template(`
+const buildTemplate = template.statement(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
     "use strict";
     BEFORE_BODY;
@@ -16,7 +17,7 @@ const buildTemplate = template(`
   });
 `);
 
-const buildExportAll = template(`
+const buildExportAll = template.statement(`
   for (var KEY in TARGET) {
     if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
@@ -286,7 +287,7 @@ export default declare((api, options) => {
             rewriteThis(path);
           }
         },
-        exit(path, state: PluginState) {
+        exit(path: NodePath<t.Program>, state: PluginState) {
           const scope = path.scope;
           const exportIdent = scope.generateUid("export");
           const { contextIdent, stringSpecifiers } = state;
@@ -332,7 +333,7 @@ export default declare((api, options) => {
           const exportNames = [];
           const exportValues = [];
 
-          const body: Array<any> = path.get("body");
+          const body = path.get("body");
 
           for (const path of body) {
             if (path.isFunctionDeclaration()) {
@@ -362,8 +363,8 @@ export default declare((api, options) => {
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
               const declar = path.get("declaration");
-              const id = declar.node.id;
               if (declar.isClassDeclaration()) {
+                const id = declar.node.id;
                 if (id) {
                   exportNames.push("default");
                   exportValues.push(scope.buildUndefinedNode());
@@ -384,6 +385,7 @@ export default declare((api, options) => {
                   removedPaths.push(path);
                 }
               } else if (declar.isFunctionDeclaration()) {
+                const id = declar.node.id;
                 if (id) {
                   beforeBody.push(declar.node);
                   exportNames.push("default");
@@ -403,7 +405,7 @@ export default declare((api, options) => {
               if (declar.node) {
                 path.replaceWith(declar);
 
-                if (path.isFunction()) {
+                if (declar.isFunction()) {
                   const node = declar.node;
                   const name = node.id.name;
                   addExportName(name, name);
@@ -411,7 +413,7 @@ export default declare((api, options) => {
                   exportNames.push(name);
                   exportValues.push(t.cloneNode(node.id));
                   removedPaths.push(path);
-                } else if (path.isClass()) {
+                } else if (declar.isClass()) {
                   const name = declar.node.id.name;
                   exportNames.push(name);
                   exportValues.push(scope.buildUndefinedNode());
@@ -443,7 +445,10 @@ export default declare((api, options) => {
                     const nodes = [];
 
                     for (const specifier of specifiers) {
+                      // @ts-expect-error This isn't an "export ... from" declaration
+                      // because path.node.source is falsy, so the local specifier exists.
                       const { local, exported } = specifier;
+
                       const binding = scope.getBinding(local.name);
                       const exportedName = getExportSpecifierName(
                         exported,
@@ -565,19 +570,15 @@ export default declare((api, options) => {
           // @ts-expect-error todo(flow->ts): do not reuse variables
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          hoistVariables(
-            path,
-            (id, name, hasInit) => {
-              variableIds.push(id);
-              if (!hasInit && name in exportMap) {
-                for (const exported of exportMap[name]) {
-                  exportNames.push(exported);
-                  exportValues.push(scope.buildUndefinedNode());
-                }
+          hoistVariables(path, (id, name, hasInit) => {
+            variableIds.push(id);
+            if (!hasInit && name in exportMap) {
+              for (const exported of exportMap[name]) {
+                exportNames.push(exported);
+                exportValues.push(scope.buildUndefinedNode());
               }
-            },
-            null,
-          );
+            }
+          });
 
           if (variableIds.length) {
             beforeBody.unshift(
@@ -620,6 +621,7 @@ export default declare((api, options) => {
             Function(path) {
               path.skip();
             },
+            // @ts-expect-error - todo: add noScope to type definitions
             noScope: true,
           });
 
