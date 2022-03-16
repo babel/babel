@@ -35,11 +35,7 @@ import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
-import {
-  Errors,
-  type ParseErrorConstructor,
-  ParseErrorEnum,
-} from "../../parse-error";
+import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier } from "../../parser/node";
 
 const getOwn = (object, key) =>
@@ -358,12 +354,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      *    this.tsParseModifiers({ modified: node, allowedModifiers: ["public"] });
      *    this.tsParseModifiers({ modified: node, allowedModifiers: ["abstract", "readonly"] });
      */
-    tsParseModifiers<ErrorDetails>({
+    tsParseModifiers({
       modified,
       allowedModifiers,
       disallowedModifiers,
       stopOnStartOfClassStaticBlock,
-      errorTemplate,
+      errorTemplate = TSErrors.InvalidModifierOnTypeMember,
     }: {
       modified: {
         [key: TsModifier]: ?true,
@@ -372,7 +368,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowedModifiers: TsModifier[],
       disallowedModifiers?: TsModifier[],
       stopOnStartOfClassStaticBlock?: boolean,
-      errorTemplate?: ParseErrorConstructor<ErrorDetails>,
+      // FIXME: make sure errorTemplate can receive `modifier`
+      errorTemplate?: any,
     }): void {
       const enforceOrder = (loc, modifier, before, after) => {
         if (modifier === before && modified[after]) {
@@ -439,7 +436,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
 
         if (disallowedModifiers?.includes(modifier)) {
-          this.raise(errorTemplate ?? TSErrors.InvalidModifierOnTypeMember, {
+          this.raise(errorTemplate, {
             at: startLoc,
             modifier,
           });
