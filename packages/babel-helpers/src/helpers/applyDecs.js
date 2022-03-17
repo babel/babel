@@ -168,6 +168,8 @@ function memberDec(
     isPrivate: isPrivate,
   };
 
+  var decoratorFinishedRef = { v: false };
+
   if (kind !== 0 /* FIELD */) {
     ctx.addInitializer = createAddInitializerMethod(
       initializers,
@@ -211,7 +213,6 @@ function memberDec(
     metadataName = name;
   }
 
-  var decoratorFinishedRef = { v: false };
   try {
     return dec(
       value,
