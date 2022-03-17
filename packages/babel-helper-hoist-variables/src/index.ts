@@ -38,16 +38,8 @@ const visitor = {
     > = path.get("declarations");
     let firstId;
 
-    const needsRename =
-      path.node.kind !== "var" && path.parentPath.isBlockStatement();
-
     for (const declar of declarations) {
       firstId = declar.node.id;
-      if (needsRename) {
-        for (const name of Object.keys(declar.getBindingIdentifiers())) {
-          declar.scope.rename(name);
-        }
-      }
 
       if (declar.node.init) {
         nodes.push(
