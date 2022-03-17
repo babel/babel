@@ -131,7 +131,8 @@ function createAddInitializerMethod(initializers, decoratorFinishedRef) {
   };
 }
 
-function memberDecCtx(
+function memberDec(
+  dec,
   name,
   desc,
   metadataMap,
@@ -139,7 +140,7 @@ function memberDecCtx(
   kind,
   isStatic,
   isPrivate,
-  decoratorFinishedRef
+  value
 ) {
   var kindStr;
 
@@ -210,15 +211,23 @@ function memberDecCtx(
     metadataName = name;
   }
 
-  return Object.assign(
-    ctx,
-    createMetadataMethodsForProperty(
-      metadataMap,
-      metadataKind,
-      metadataName,
-      decoratorFinishedRef
-    )
-  );
+  var decoratorFinishedRef = { v: false };
+  try {
+    return dec(
+      value,
+      Object.assign(
+        ctx,
+        createMetadataMethodsForProperty(
+          metadataMap,
+          metadataKind,
+          metadataName,
+          decoratorFinishedRef
+        )
+      )
+    );
+  } finally {
+    decoratorFinishedRef.v = true;
+  }
 }
 
 function assertNotFinished(decoratorFinishedRef, fnName) {
@@ -326,26 +335,20 @@ function applyMemberDec(
     value = desc.set;
   }
 
-  var newValue, get, set, decoratorFinishedRef, ctx;
+  var newValue, get, set;
 
   if (typeof decs === "function") {
-    decoratorFinishedRef = { v: false };
-    try {
-      ctx = memberDecCtx(
-        name,
-        desc,
-        metadataMap,
-        initializers,
-        kind,
-        isStatic,
-        isPrivate,
-        decoratorFinishedRef
-      );
-
-      newValue = decs(value, ctx);
-    } finally {
-      decoratorFinishedRef.v = true;
-    }
+    newValue = memberDec(
+      decs,
+      name,
+      desc,
+      metadataMap,
+      initializers,
+      kind,
+      isStatic,
+      isPrivate,
+      value
+    );
 
     if (newValue !== void 0) {
       assertValidReturnValue(kind, newValue);
@@ -374,23 +377,18 @@ function applyMemberDec(
   } else {
     for (var i = decs.length - 1; i >= 0; i--) {
       var dec = decs[i];
-      decoratorFinishedRef = { v: false };
-      try {
-        ctx = memberDecCtx(
-          name,
-          desc,
-          metadataMap,
-          initializers,
-          kind,
-          isStatic,
-          isPrivate,
-          decoratorFinishedRef
-        );
 
-        newValue = dec(value, ctx);
-      } finally {
-        decoratorFinishedRef.v = true;
-      }
+      newValue = memberDec(
+        dec,
+        name,
+        desc,
+        metadataMap,
+        initializers,
+        kind,
+        isStatic,
+        isPrivate,
+        value
+      );
 
       if (newValue !== void 0) {
         assertValidReturnValue(kind, newValue);
