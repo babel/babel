@@ -330,20 +330,22 @@ function applyMemberDec(
 
   if (typeof decs === "function") {
     decoratorFinishedRef = { v: false };
-    ctx = memberDecCtx(
-      name,
-      desc,
-      metadataMap,
-      initializers,
-      kind,
-      isStatic,
-      isPrivate,
-      decoratorFinishedRef
-    );
+    try {
+      ctx = memberDecCtx(
+        name,
+        desc,
+        metadataMap,
+        initializers,
+        kind,
+        isStatic,
+        isPrivate,
+        decoratorFinishedRef
+      );
 
-    newValue = decs(value, ctx);
-
-    decoratorFinishedRef.v = true;
+      newValue = decs(value, ctx);
+    } finally {
+      decoratorFinishedRef.v = true;
+    }
 
     if (newValue !== void 0) {
       assertValidReturnValue(kind, newValue);
@@ -373,20 +375,22 @@ function applyMemberDec(
     for (var i = decs.length - 1; i >= 0; i--) {
       var dec = decs[i];
       decoratorFinishedRef = { v: false };
-      ctx = memberDecCtx(
-        name,
-        desc,
-        metadataMap,
-        initializers,
-        kind,
-        isStatic,
-        isPrivate,
-        decoratorFinishedRef
-      );
+      try {
+        ctx = memberDecCtx(
+          name,
+          desc,
+          metadataMap,
+          initializers,
+          kind,
+          isStatic,
+          isPrivate,
+          decoratorFinishedRef
+        );
 
-      newValue = dec(value, ctx);
-
-      decoratorFinishedRef.v = true;
+        newValue = dec(value, ctx);
+      } finally {
+        decoratorFinishedRef.v = true;
+      }
 
       if (newValue !== void 0) {
         assertValidReturnValue(kind, newValue);
@@ -605,30 +609,32 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     for (var i = classDecs.length - 1; i >= 0; i--) {
       var decoratorFinishedRef = { v: false };
 
-      var ctx = Object.assign(
-        {
-          kind: "class",
-          name: name,
-          addInitializer: createAddInitializerMethod(
-            initializers,
+      try {
+        var ctx = Object.assign(
+          {
+            kind: "class",
+            name: name,
+            addInitializer: createAddInitializerMethod(
+              initializers,
+              decoratorFinishedRef
+            ),
+          },
+          createMetadataMethodsForProperty(
+            metadataMap,
+            0 /* CONSTRUCTOR */,
+            name,
             decoratorFinishedRef
-          ),
-        },
-        createMetadataMethodsForProperty(
-          metadataMap,
-          0 /* CONSTRUCTOR */,
-          name,
-          decoratorFinishedRef
-        )
-      );
+          )
+        );
+        var nextNewClass = classDecs[i](newClass, ctx);
+      } finally {
+        decoratorFinishedRef.v = true;
+      }
 
-      var nextNewClass = classDecs[i](newClass, ctx);
       if (nextNewClass !== undefined) {
         assertValidReturnValue(10 /* CLASS */, nextNewClass);
         newClass = nextNewClass;
       }
-
-      decoratorFinishedRef.v = true;
     }
 
     ret.push(newClass);
