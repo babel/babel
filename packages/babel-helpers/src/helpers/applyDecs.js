@@ -22,19 +22,12 @@ function createMetadataMethodsForProperty(
   metadataMap,
   kind,
   property,
-  decorationState
+  decoratorFinishedRef
 ) {
   return {
     getMetadata: function (key) {
-      if (decorationState.finished) {
-        throw new Error(
-          "attempted to call getMetadata after decoration was finished"
-        );
-      }
-
-      if (typeof key !== "symbol") {
-        throw new TypeError("Metadata keys must be symbols, received: " + key);
-      }
+      assertNotFinished(decoratorFinishedRef, "getMetadata");
+      assertMetadataKey(key);
 
       var metadataForKey = metadataMap[key];
 
@@ -55,15 +48,8 @@ function createMetadataMethodsForProperty(
       }
     },
     setMetadata: function (key, value) {
-      if (decorationState.finished) {
-        throw new Error(
-          "attempted to call setMetadata after decoration was finished"
-        );
-      }
-
-      if (typeof key !== "symbol") {
-        throw new TypeError("Metadata keys must be symbols, received: " + key);
-      }
+      assertNotFinished(decoratorFinishedRef, "setMetadata");
+      assertMetadataKey(key);
 
       var metadataForKey = metadataMap[key];
 
@@ -137,14 +123,9 @@ function convertMetadataMapToFinal(obj, metadataMap) {
   obj[Symbol.metadata || Symbol.for("Symbol.metadata")] = metadataMap;
 }
 
-function createAddInitializerMethod(initializers, decorationState) {
+function createAddInitializerMethod(initializers, decoratorFinishedRef) {
   return function addInitializer(initializer) {
-    if (decorationState.finished) {
-      throw new Error(
-        "attempted to call addInitializer after decoration was finished"
-      );
-    }
-
+    assertNotFinished(decoratorFinishedRef, "addInitializer");
     assertCallable(initializer, "An initializer");
     initializers.push(initializer);
   };
@@ -158,7 +139,7 @@ function memberDecCtx(
   kind,
   isStatic,
   isPrivate,
-  decorationState
+  decoratorFinishedRef
 ) {
   var kindStr;
 
@@ -189,7 +170,7 @@ function memberDecCtx(
   if (kind !== 0 /* FIELD */) {
     ctx.addInitializer = createAddInitializerMethod(
       initializers,
-      decorationState
+      decoratorFinishedRef
     );
   }
 
@@ -235,9 +216,23 @@ function memberDecCtx(
       metadataMap,
       metadataKind,
       metadataName,
-      decorationState
+      decoratorFinishedRef
     )
   );
+}
+
+function assertNotFinished(decoratorFinishedRef, fnName) {
+  if (decoratorFinishedRef.v) {
+    throw new Error(
+      "attempted to call " + fnName + " after decoration was finished"
+    );
+  }
+}
+
+function assertMetadataKey(key) {
+  if (typeof key !== "symbol") {
+    throw new TypeError("Metadata keys must be symbols, received: " + key);
+  }
 }
 
 function assertCallable(fn, hint) {
@@ -331,10 +326,10 @@ function applyMemberDec(
     value = desc.set;
   }
 
-  var newValue, get, set, decorationState, ctx;
+  var newValue, get, set, decoratorFinishedRef, ctx;
 
   if (typeof decs === "function") {
-    decorationState = { finished: false };
+    decoratorFinishedRef = { v: false };
     ctx = memberDecCtx(
       name,
       desc,
@@ -343,12 +338,12 @@ function applyMemberDec(
       kind,
       isStatic,
       isPrivate,
-      decorationState
+      decoratorFinishedRef
     );
 
     newValue = decs(value, ctx);
 
-    decorationState.finished = true;
+    decoratorFinishedRef.v = true;
 
     if (newValue !== void 0) {
       assertValidReturnValue(kind, newValue);
@@ -377,7 +372,7 @@ function applyMemberDec(
   } else {
     for (var i = decs.length - 1; i >= 0; i--) {
       var dec = decs[i];
-      decorationState = { finished: false };
+      decoratorFinishedRef = { v: false };
       ctx = memberDecCtx(
         name,
         desc,
@@ -386,12 +381,12 @@ function applyMemberDec(
         kind,
         isStatic,
         isPrivate,
-        decorationState
+        decoratorFinishedRef
       );
 
       newValue = dec(value, ctx);
 
-      decorationState.finished = true;
+      decoratorFinishedRef.v = true;
 
       if (newValue !== void 0) {
         assertValidReturnValue(kind, newValue);
@@ -608,7 +603,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
     var name = targetClass.name;
 
     for (var i = classDecs.length - 1; i >= 0; i--) {
-      var decorationState = { finished: false };
+      var decoratorFinishedRef = { v: false };
 
       var ctx = Object.assign(
         {
@@ -616,14 +611,14 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
           name: name,
           addInitializer: createAddInitializerMethod(
             initializers,
-            decorationState
+            decoratorFinishedRef
           ),
         },
         createMetadataMethodsForProperty(
           metadataMap,
           0 /* CONSTRUCTOR */,
           name,
-          decorationState
+          decoratorFinishedRef
         )
       );
 
@@ -633,7 +628,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
         newClass = nextNewClass;
       }
 
-      decorationState.finished = true;
+      decoratorFinishedRef.v = true;
     }
 
     ret.push(newClass);
