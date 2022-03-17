@@ -19,13 +19,14 @@ export default declare((api, options) => {
   const transformImportCall = createDynamicImportTransform(api);
 
   const {
-    // 'true' for non-mjs files to strictly have .default, instead of having
-    // destructuring-like behavior for their properties.
+    // 'true' for imports to strictly have .default, instead of having
+    // destructuring-like behavior for their properties. This matches the behavior
+    // of the initial Node.js (v12) behavior when importing a CommonJS without
+    // the __esMoule property.
+    // .strictNamespace is for non-mjs files, mjsStrictNamespace if for mjs files.
     strictNamespace = false,
+    mjsStrictNamespace = strictNamespace,
 
-    // 'true' for mjs files to strictly have .default, instead of having
-    // destructuring-like behavior for their properties.
-    mjsStrictNamespace = true,
     allowTopLevelThis,
     strict,
     strictMode,
