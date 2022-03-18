@@ -46,4 +46,4 @@ export default {
   ClassProperty(path) {
     skipAndrequeueComputedKeysAndDecorators(path);
   },
-} as Visitor<any>;
+} as Visitor<unknown>;
