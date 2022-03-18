@@ -13,6 +13,23 @@ export function skipAllButComputedKey(
   }
 }
 
+function skipAndrequeueComputedKeysAndDecorators(
+  path: NodePath<t.Method | t.ClassProperty>,
+) {
+  path.skip();
+  const { context } = path;
+  if (path.node.computed) {
+    // requeue the computed key
+    context.maybeQueue(path.get("key"));
+  }
+  if (path.node.decorators) {
+    for (const decorator of path.get("decorators")) {
+      // requeue the decorators
+      context.maybeQueue(decorator);
+    }
+  }
+}
+
 // environmentVisitor should be used when traversing the whole class and not for specific class elements/methods.
 // For perf reasons, the environmentVisitor might be traversed with `{ noScope: true }`, which means `path.scope` is undefined.
 // Avoid using `path.scope` here
@@ -22,12 +39,12 @@ export default {
       // arrows are not skipped because they inherit the context.
       return;
     } else if (path.isMethod()) {
-      skipAllButComputedKey(path);
+      skipAndrequeueComputedKeysAndDecorators(path);
     } else {
       path.skip();
     }
   },
   ClassProperty(path) {
-    skipAllButComputedKey(path);
+    skipAndrequeueComputedKeysAndDecorators(path);
   },
 } as Visitor<PluginPass>;

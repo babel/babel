@@ -1,3 +1,8 @@
 {
-  "plugins": ["proposal-class-properties", "transform-classes"]
+  "plugins": [
+    ["proposal-decorators", { "version": "2021-12" }],
+    "proposal-class-static-block",
+    "proposal-class-properties",
+    "transform-classes"
+  ]
 }
