@@ -580,22 +580,12 @@ function applyMemberDecs(
 
 function pushInitializers(ret, initializers) {
   if (initializers) {
-    if (initializers.length > 0) {
-      // Slice the array, which means that `addInitializer` can no longer add
-      // additional initializers to the array
-      initializers = initializers.slice();
-
-      ret.push(function (instance) {
-        for (var i = 0; i < initializers.length; i++) {
-          initializers[i].call(instance);
-        }
-        return instance;
-      });
-    } else {
-      ret.push(function (instance) {
-        return instance;
-      });
-    }
+    ret.push(function (instance) {
+      for (var i = 0; i < initializers.length; i++) {
+        initializers[i].call(instance);
+      }
+      return instance;
+    });
   }
 }
 
