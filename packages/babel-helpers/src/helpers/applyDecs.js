@@ -626,17 +626,11 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
       }
     }
 
-    ret.push(newClass);
-
-    if (initializers.length > 0) {
-      ret.push(function () {
-        for (var i = 0; i < initializers.length; i++) {
-          initializers[i].call(newClass);
-        }
-      });
-    } else {
-      ret.push(function () {});
-    }
+    ret.push(newClass, function () {
+      for (var i = 0; i < initializers.length; i++) {
+        initializers[i].call(newClass);
+      }
+    });
   }
 }
 
