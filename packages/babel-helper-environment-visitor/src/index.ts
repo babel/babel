@@ -13,10 +13,11 @@ export function skipAllButComputedKey(
 }
 
 function skipAndrequeueComputedKeysAndDecorators(
-  path: NodePath<t.Method | t.ClassProperty>,
+  path: NodePath<t.Method | t.Property>,
 ) {
   path.skip();
   const { context } = path;
+  //@ts-ignore ClassPrivateProperty does not have computed
   if (path.node.computed) {
     // requeue the computed key
     context.maybeQueue(path.get("key"));
@@ -43,7 +44,9 @@ export default {
       path.skip();
     }
   },
-  ClassProperty(path) {
+  "ClassProperty|ClassPrivateProperty"(
+    path: NodePath<t.ClassProperty | t.ClassPrivateProperty>,
+  ) {
     skipAndrequeueComputedKeysAndDecorators(path);
   },
 } as Visitor<unknown>;
