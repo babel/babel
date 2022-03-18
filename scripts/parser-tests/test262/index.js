@@ -14,6 +14,7 @@ const ignoredFeatures = new Set([
   "align-detached-buffer-semantics-with-web-reality",
   "arbitrary-module-namespace-names",
   "array-find-from-last",
+  "array-grouping",
   "async-functions",
   "async-iteration",
   "arrow-function",
