@@ -3119,13 +3119,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return expr;
       }, state);
 
-      if (invalidSingleType) {
-        this.raise(TSErrors.SingleTypeParameterWithoutTrailingComma, {
-          at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
-          typeParameterName: process.env.BABEL_8_BREAKING
-            ? invalidSingleType.name.name
-            : invalidSingleType.name,
-        });
+      if (process.env.BABEL_8_BREAKING) {
+        if (invalidSingleType) {
+          this.raise(TSErrors.SingleTypeParameterWithoutTrailingComma, {
+            at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
+            typeParameterName: invalidSingleType.name.name,
+          });
+        }
       }
 
       /*:: invariant(arrow.node != null) */
