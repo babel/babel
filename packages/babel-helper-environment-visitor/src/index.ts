@@ -1,6 +1,5 @@
 import type { NodePath, Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
-import type { PluginPass } from "@babel/core";
 
 // TODO (Babel 8): Don't export this function.
 export function skipAllButComputedKey(
@@ -47,4 +46,4 @@ export default {
   ClassProperty(path) {
     skipAndrequeueComputedKeysAndDecorators(path);
   },
-} as Visitor<PluginPass>;
+} as Visitor<any>;
