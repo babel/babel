@@ -1,7 +1,6 @@
 import Binding from "../binding";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import {
-  VISITOR_KEYS,
   assignmentExpression,
   identifier,
   toExpression,
@@ -9,6 +8,7 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type { Visitor } from "../../types";
+import type NodePath from "../../path";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -24,7 +24,7 @@ const renameVisitor: Visitor<Renamer> = {
         state.binding.identifier,
       )
     ) {
-      skipAllButComputedMethodKey(path);
+      skipAndrequeueComputedKeysAndDecorators(path);
     }
   },
 
@@ -147,17 +147,19 @@ export default class Renamer {
   }
 }
 
-function skipAllButComputedMethodKey(path) {
-  // If the path isn't method with computed key, just skip everything.
-  if (!path.isMethod() || !path.node.computed) {
-    path.skip();
-    return;
-  }
-
-  // So it's a method with a computed key. Make sure to skip every other key the
-  // traversal would visit.
-  const keys = VISITOR_KEYS[path.type];
-  for (const key of keys) {
-    if (key !== "key") path.skipKey(key);
+function skipAndrequeueComputedKeysAndDecorators(path: NodePath) {
+  path.skip();
+  if (path.isMethod()) {
+    const { context } = path;
+    if (path.node.computed) {
+      // requeue the computed key
+      context.maybeQueue(path.get("key"));
+    }
+    if (path.node.decorators) {
+      for (const decorator of path.get("decorators")) {
+        // requeue the decorators
+        context.maybeQueue(decorator);
+      }
+    }
   }
 }
