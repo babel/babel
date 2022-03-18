@@ -285,6 +285,18 @@ function assertValidReturnValue(kind, value) {
   }
 }
 
+function getInit(desc) {
+  var initializer;
+  if (
+    (initializer = desc.init) == null &&
+    (initializer = desc.initializer) &&
+    typeof console !== "undefined"
+  ) {
+    console.warn(".initializer has been renamed to .init as of March 2022");
+  }
+  return initializer;
+}
+
 function applyMemberDec(
   ret,
   base,
@@ -357,16 +369,7 @@ function applyMemberDec(
       if (kind === 0 /* FIELD */) {
         initializer = newValue;
       } else if (kind === 1 /* ACCESSOR */) {
-        if (
-          (initializer = newValue.init) == null &&
-          (initializer = newValue.initializer) &&
-          typeof console !== "undefined"
-        ) {
-          console.warn(
-            ".initializer has been renamed to .init as of March 2022"
-          );
-        }
-
+        initializer = getInit(newValue);
         get = newValue.get || value.get;
         set = newValue.set || value.set;
 
@@ -398,16 +401,7 @@ function applyMemberDec(
         if (kind === 0 /* FIELD */) {
           newInit = newValue;
         } else if (kind === 1 /* ACCESSOR */) {
-          if (
-            (newInit = newValue.init) == null &&
-            (newInit = newValue.initializer) &&
-            typeof console !== "undefined"
-          ) {
-            console.warn(
-              ".initializer has been renamed to .init as of March 2022"
-            );
-          }
-
+          newInit = getInit(newValue);
           get = newValue.get || value.get;
           set = newValue.set || value.set;
 
