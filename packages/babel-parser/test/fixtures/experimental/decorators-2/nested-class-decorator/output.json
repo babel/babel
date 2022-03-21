@@ -56,7 +56,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 1
+              }
             }
           }
         ],

@@ -539,9 +539,8 @@ export default class StatementParser extends ExpressionParser {
       const startLoc = this.state.startLoc;
       let expr: N.Expression;
 
-      if (this.eat(tt.parenL)) {
+      if (this.match(tt.parenL)) {
         expr = this.parseExpression();
-        this.expect(tt.parenR);
       } else {
         expr = this.parseIdentifier(false);
 
