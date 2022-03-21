@@ -79,7 +79,7 @@ function descriptorToConfig(
       // If the unloaded descriptor is a function, i.e. `plugins: [ require("my-plugin") ]`,
       // we print the first 50 characters of the function source code and hopefully we can see
       // `name: 'my-plugin'` in the source
-      name = `[Function: ${d.value.toString().substr(0, 50)} ... ]`;
+      name = `[Function: ${d.value.toString().slice(0, 50)} ... ]`;
     }
   }
   if (name == null) {
