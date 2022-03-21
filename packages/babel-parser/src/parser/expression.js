@@ -1770,21 +1770,29 @@ export default class ExpressionParser extends LValParser {
       val = exprList[0];
     }
 
+    return this.wrapParenthesis(startPos, startLoc, val);
+  }
+
+  wrapParenthesis(
+    startPos: number,
+    startLoc: Position,
+    expression: N.Expression,
+  ): N.Expression {
     if (!this.options.createParenthesizedExpressions) {
-      this.addExtra(val, "parenthesized", true);
-      this.addExtra(val, "parenStart", startPos);
+      this.addExtra(expression, "parenthesized", true);
+      this.addExtra(expression, "parenStart", startPos);
 
       this.takeSurroundingComments(
-        val,
+        expression,
         startPos,
         this.state.lastTokEndLoc.index,
       );
 
-      return val;
+      return expression;
     }
 
     const parenExpression = this.startNodeAt(startPos, startLoc);
-    parenExpression.expression = val;
+    parenExpression.expression = expression;
     this.finishNode(parenExpression, "ParenthesizedExpression");
     return parenExpression;
   }

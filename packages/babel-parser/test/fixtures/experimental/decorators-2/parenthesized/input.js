@@ -4,5 +4,5 @@ class Foo {
 
   @(foo + bar) method2() {}
 
-  @(this).bar method3() {}
+  @(this.foo)(bar) method3() {}
 }
