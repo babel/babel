@@ -113,9 +113,45 @@ export function Super(this: Printer) {
   this.word("super");
 }
 
+function isDecoratorMemberExpression(
+  node: t.Expression | t.V8IntrinsicIdentifier,
+) {
+  switch (node.type) {
+    case "Identifier":
+      return true;
+    case "MemberExpression":
+      return (
+        !node.computed &&
+        node.property.type === "Identifier" &&
+        isDecoratorMemberExpression(node.object)
+      );
+    default:
+      return false;
+  }
+}
+function shouldParenthesizeDecoratorExpression(
+  node: t.Expression | t.V8IntrinsicIdentifier,
+) {
+  if (node.type === "CallExpression") {
+    node = node.callee;
+  }
+  if (node.type === "ParenthesizedExpression") {
+    // We didn't check extra?.parenthesized here because we don't track decorators in needsParen
+    return false;
+  }
+  return !isDecoratorMemberExpression(node);
+}
+
 export function Decorator(this: Printer, node: t.Decorator) {
   this.token("@");
-  this.print(node.expression, node);
+  const { expression } = node;
+  if (shouldParenthesizeDecoratorExpression(expression)) {
+    this.token("(");
+    this.print(expression, node);
+    this.token(")");
+  } else {
+    this.print(expression, node);
+  }
   this.newline();
 }
 

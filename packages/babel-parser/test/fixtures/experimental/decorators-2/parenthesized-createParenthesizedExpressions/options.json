@@ -1,4 +1,4 @@
 {
   "plugins": [["decorators", { "decoratorsBeforeExport": false }]],
-  "decoratorsBeforeExport": true
+  "createParenthesizedExpressions": true
 }
