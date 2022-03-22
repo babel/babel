@@ -217,6 +217,8 @@ if (process.env.BABEL_8_BREAKING) {
  * Highlight `text` using the token definitions in `defs`.
  */
 function highlightTokens(defs: Record<string, ChalkClass>, text: string) {
+  /** Short-circuit empty source highlighting to prevent infinite iteration */
+  if (text === '') return text
   let highlighted = "";
 
   for (const { type, value } of tokenize(text)) {
