@@ -1,4 +1,8 @@
-import { getPotentiallyBuggyFieldsIndexes, toRanges } from "../lib/util.js";
+import {
+  getPotentiallyBuggyFieldsIndexes,
+  getNameOrLengthStaticFieldsIndexes,
+  toRanges,
+} from "../lib/util.js";
 
 import babel from "@babel/core";
 const { parseSync, traverse } = babel;
@@ -204,6 +208,73 @@ describe("getPotentiallyBuggyFieldsIndexes", () => {
     const path = classPath(code);
 
     expect(getPotentiallyBuggyFieldsIndexes(path)).toEqual(indexes);
+  });
+});
+
+describe("getNameOrLengthStaticFieldsIndexes", () => {
+  const cases = {
+    "'name' static field": {
+      code: `class A { static name = 2 }`,
+      indexes: [0],
+    },
+    "'length' static field": {
+      code: `class A { static length = 2 }`,
+      indexes: [0],
+    },
+    "'name' instance field": {
+      code: `class A { name = 2 }`,
+      indexes: [],
+    },
+    "'length' instance field": {
+      code: `class A { length = 2 }`,
+      indexes: [],
+    },
+    "'#name' static field": {
+      code: `class A { static #name = 2 }`,
+      indexes: [],
+    },
+    "'#length' static field": {
+      code: `class A { static #length = 2 }`,
+      indexes: [],
+    },
+    "'name' static field after other elements": {
+      code: `class A {
+        foo() {}
+        bar = 1;
+        static baz() {}
+        static name = 2
+      }`,
+      indexes: [3],
+    },
+    "'length' static field after other elements": {
+      code: `class A {
+        foo() {}
+        bar = 1;
+        static baz() {}
+        static length = 2
+      }`,
+      indexes: [3],
+    },
+    "computed static field": {
+      code: `class A {
+        static [foo];
+      }`,
+      indexes: [],
+    },
+    "both name and length": {
+      code: `class A {
+        static name = 0;
+        static length = 1;
+      }`,
+      indexes: [0, 1],
+    },
+  };
+
+  test.each(Object.keys(cases))("%s", name => {
+    const { code, indexes } = cases[name];
+    const path = classPath(code);
+
+    expect(getNameOrLengthStaticFieldsIndexes(path)).toEqual(indexes);
   });
 });
 

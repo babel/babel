@@ -2,40 +2,50 @@ import type { NodePath, Scope } from "@babel/traverse";
 import { types as t, type PluginPass, type File } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 
-import { getPotentiallyBuggyFieldsIndexes, toRanges } from "./util.ts";
+import {
+  getPotentiallyBuggyFieldsIndexes,
+  getNameOrLengthStaticFieldsIndexes,
+  toRanges,
+} from "./util.ts";
+
+function buildFieldsReplacement(
+  fields: t.ClassProperty[],
+  scope: Scope,
+  file: File,
+) {
+  return t.staticBlock(
+    fields.map(field => {
+      const key =
+        field.computed || !t.isIdentifier(field.key)
+          ? field.key
+          : t.stringLiteral(field.key.name);
+
+      return t.expressionStatement(
+        t.callExpression(file.addHelper("defineProperty"), [
+          t.thisExpression(),
+          key,
+          field.value || scope.buildUndefinedNode(),
+        ]),
+      );
+    }),
+  );
+}
 
 export default declare(api => {
   api.assertVersion(7);
 
-  function buildFieldsReplacement(
-    fields: t.ClassProperty[],
-    scope: Scope,
-    file: File,
-  ) {
-    return t.staticBlock(
-      fields.map(field => {
-        const key =
-          field.computed || !t.isIdentifier(field.key)
-            ? field.key
-            : t.stringLiteral(field.key.name);
-
-        return t.expressionStatement(
-          t.callExpression(file.addHelper("defineProperty"), [
-            t.thisExpression(),
-            key,
-            field.value || scope.buildUndefinedNode(),
-          ]),
-        );
-      }),
-    );
-  }
+  const setPublicClassFields = api.assumption("setPublicClassFields");
 
   return {
     name: "bugfix-v8-static-class-fields-redefine-readonly",
 
     visitor: {
       Class(this: PluginPass, path: NodePath<t.Class>) {
-        const ranges = toRanges(getPotentiallyBuggyFieldsIndexes(path));
+        const ranges = toRanges(
+          setPublicClassFields
+            ? getNameOrLengthStaticFieldsIndexes(path)
+            : getPotentiallyBuggyFieldsIndexes(path),
+        );
 
         for (let i = ranges.length - 1; i >= 0; i--) {
           const [start, end] = ranges[i];

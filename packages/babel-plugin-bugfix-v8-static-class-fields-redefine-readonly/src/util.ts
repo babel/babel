@@ -172,6 +172,23 @@ export function getPotentiallyBuggyFieldsIndexes(path: NodePath<t.Class>) {
   return buggyPublicStaticFieldsIndexes;
 }
 
+export function getNameOrLengthStaticFieldsIndexes(path: NodePath<t.Class>) {
+  const indexes: number[] = [];
+
+  const { body } = path.node.body;
+  for (let i = 0; i < body.length; i++) {
+    const node = body[i];
+    if (
+      t.isClassProperty(node, { static: true, computed: false }) &&
+      isNameOrLength(node.key)
+    ) {
+      indexes.push(i);
+    }
+  }
+
+  return indexes;
+}
+
 /**
  * Converts a sorted list of numbers into a list of (inclusive-exclusive)
  * ranges representing the same numbers.
