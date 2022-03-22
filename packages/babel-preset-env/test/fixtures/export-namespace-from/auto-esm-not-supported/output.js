@@ -5,6 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.foo = void 0;
 
-var _foo = babelHelpers.interopRequireDefault(require("./foo.mjs"));
+var _foo = babelHelpers.interopRequireWildcard(require("./foo.mjs"));
 
 exports.foo = _foo;

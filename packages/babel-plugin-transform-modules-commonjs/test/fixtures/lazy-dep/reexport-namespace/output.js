@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.namespace = void 0;
 
 function namespace() {
-  const data = babelHelpers.interopRequireDefault(require("foo"));
+  const data = babelHelpers.interopRequireWildcard(require("foo"));
 
   namespace = function () {
     return data;
