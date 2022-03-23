@@ -161,6 +161,11 @@ jobs:
           BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
         env:
           TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
+      - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
+        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes
