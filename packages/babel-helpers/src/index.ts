@@ -5,10 +5,8 @@ import {
   assignmentExpression,
   cloneNode,
   expressionStatement,
-  file as t_file,
+  file,
   identifier,
-  variableDeclaration,
-  variableDeclarator,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import helpers from "./helpers";
@@ -24,7 +22,7 @@ function makePath(path: NodePath) {
   return parts.reverse().join(".");
 }
 
-let fileClass = undefined;
+let FileClass: typeof File | undefined = undefined;
 
 interface HelperMetadata {
   globals: string[];
@@ -74,15 +72,13 @@ function getHelperMetadata(file: File): HelperMetadata {
     ExportDefaultDeclaration(child) {
       const decl = child.get("declaration");
 
-      if (decl.isFunctionDeclaration()) {
-        if (!decl.node.id) {
-          throw decl.buildCodeFrameError(
-            "Helpers should give names to their exported func declaration",
-          );
-        }
-
-        exportName = decl.node.id.name;
+      if (!decl.isFunctionDeclaration() || !decl.node.id) {
+        throw decl.buildCodeFrameError(
+          "Helpers can only export named function declarations",
+        );
       }
+
+      exportName = decl.node.id.name;
       exportPath = makePath(child);
     },
     ExportAllDeclaration(child) {
@@ -140,7 +136,7 @@ function getHelperMetadata(file: File): HelperMetadata {
   traverse(file.ast, dependencyVisitor, file.scope);
   traverse(file.ast, referenceVisitor, file.scope);
 
-  if (!exportPath) throw new Error("Helpers must default-export something.");
+  if (!exportPath) throw new Error("Helpers must have a default export.");
 
   // Process these in reverse so that mutating the references does not invalidate any later paths in
   // the list.
@@ -205,68 +201,47 @@ function permuteHelperAST(
     toRename[exportName] = id.name;
   }
 
-  const visitor: Visitor = {
-    Program(path) {
-      // We need to compute these in advance because removing nodes would
-      // invalidate the paths.
-      const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
-      const imps: NodePath<t.ImportDeclaration>[] = importPaths.map(p =>
-        path.get(p),
-      );
-      const impsBindingRefs: NodePath<t.Identifier>[] =
-        importBindingsReferences.map(p => path.get(p));
+  const { path } = file;
 
-      const decl = exp.get("declaration");
-      if (id.type === "Identifier") {
-        if (decl.isFunctionDeclaration()) {
-          exp.replaceWith(decl);
-        } else {
-          exp.replaceWith(
-            variableDeclaration("var", [
-              variableDeclarator(id, decl.node as t.Expression),
-            ]),
-          );
-        }
-      } else if (id.type === "MemberExpression") {
-        if (decl.isFunctionDeclaration()) {
-          exportBindingAssignments.forEach(assignPath => {
-            const assign: NodePath<t.Expression> = path.get(assignPath);
-            assign.replaceWith(assignmentExpression("=", id, assign.node));
-          });
-          exp.replaceWith(decl);
-          path.pushContainer(
-            "body",
-            expressionStatement(
-              assignmentExpression("=", id, identifier(exportName)),
-            ),
-          );
-        } else {
-          exp.replaceWith(
-            expressionStatement(
-              assignmentExpression("=", id, decl.node as t.Expression),
-            ),
-          );
-        }
-      } else {
-        throw new Error("Unexpected helper format.");
-      }
+  // We need to compute these in advance because removing nodes would
+  // invalidate the paths.
+  const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
+  const imps: NodePath<t.ImportDeclaration>[] = importPaths.map(p =>
+    path.get(p),
+  );
+  const impsBindingRefs: NodePath<t.Identifier>[] =
+    importBindingsReferences.map(p => path.get(p));
 
-      Object.keys(toRename).forEach(name => {
-        path.scope.rename(name, toRename[name]);
-      });
+  // We assert that this is a FunctionDeclaration in dependencyVisitor.
+  const decl = exp.get("declaration") as NodePath<t.FunctionDeclaration>;
 
-      for (const path of imps) path.remove();
-      for (const path of impsBindingRefs) {
-        const node = cloneNode(dependenciesRefs[path.node.name]);
-        path.replaceWith(node);
-      }
+  if (id.type === "Identifier") {
+    exp.replaceWith(decl);
+  } else if (id.type === "MemberExpression") {
+    exportBindingAssignments.forEach(assignPath => {
+      const assign: NodePath<t.Expression> = path.get(assignPath);
+      assign.replaceWith(assignmentExpression("=", id, assign.node));
+    });
+    exp.replaceWith(decl);
+    path.pushContainer(
+      "body",
+      expressionStatement(
+        assignmentExpression("=", id, identifier(exportName)),
+      ),
+    );
+  } else {
+    throw new Error("Unexpected helper format.");
+  }
 
-      // We only use "traverse" for all the handy scoping helpers, so we can stop immediately without
-      // actually doing the traversal.
-      path.stop();
-    },
-  };
-  traverse(file.ast, visitor, file.scope);
+  Object.keys(toRename).forEach(name => {
+    path.scope.rename(name, toRename[name]);
+  });
+
+  for (const path of imps) path.remove();
+  for (const path of impsBindingRefs) {
+    const node = cloneNode(dependenciesRefs[path.node.name]);
+    path.replaceWith(node);
+  }
 }
 
 interface HelperData {
@@ -278,8 +253,8 @@ interface HelperData {
     nodes: t.Program["body"];
     globals: string[];
   };
-  minVersion: () => string;
-  dependencies: Map<t.Identifier, string>;
+  minVersion: string;
+  getDependencies: () => string[];
 }
 
 const helperData: Record<string, HelperData> = Object.create(null);
@@ -294,23 +269,35 @@ function loadHelper(name: string) {
     }
 
     const fn = (): File => {
-      const file = { ast: t_file(helper.ast()) };
-      if (fileClass) {
-        return new fileClass(
-          {
-            filename: `babel-helper://${name}`,
-          },
-          file,
-        );
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!FileClass) {
+          const fakeFile = { ast: file(helper.ast()), path: null } as File;
+          traverse(fakeFile.ast, {
+            Program: path => (fakeFile.path = path).stop(),
+          });
+          return fakeFile;
+        }
       }
-      return file as File;
+      return new FileClass(
+        { filename: `babel-helper://${name}` },
+        {
+          ast: file(helper.ast()),
+          code: "[internal Babel helper code]",
+          inputMap: null,
+        },
+      );
     };
 
-    const metadata = getHelperMetadata(fn());
+    // We compute the helper metadata lazily, so that we skip that
+    // work if we only need the `.minVersion` (for example because
+    // of a call to `.availableHelper` when `@babel/rutime`).
+    let metadata: HelperMetadata | null = null;
 
     helperData[name] = {
+      minVersion: helper.minVersion,
       build(getDependency, id, localBindings) {
         const file = fn();
+        metadata ||= getHelperMetadata(file);
         permuteHelperAST(file, metadata, id, localBindings, getDependency);
 
         return {
@@ -318,10 +305,10 @@ function loadHelper(name: string) {
           globals: metadata.globals,
         };
       },
-      minVersion() {
-        return helper.minVersion;
+      getDependencies() {
+        metadata ||= getHelperMetadata(fn());
+        return Array.from(metadata.dependencies.values());
       },
-      dependencies: metadata.dependencies,
     };
   }
 
@@ -338,19 +325,18 @@ export function get(
 }
 
 export function minVersion(name: string) {
-  return loadHelper(name).minVersion();
+  return loadHelper(name).minVersion;
 }
 
 export function getDependencies(name: string): ReadonlyArray<string> {
-  return Array.from(loadHelper(name).dependencies.values());
+  return loadHelper(name).getDependencies();
 }
 
-export function ensure(name: string, newFileClass?) {
-  if (!fileClass) {
-    // optional fileClass used to wrap helper snippets into File instance,
-    // offering `path.hub` support during traversal
-    fileClass = newFileClass;
-  }
+export function ensure(name: string, newFileClass: typeof File) {
+  // We inject the File class here rather than importing it to avoid
+  // circular dependencies between @babel/core and @babel/helpers.
+  FileClass ||= newFileClass;
+
   loadHelper(name);
 }
 
