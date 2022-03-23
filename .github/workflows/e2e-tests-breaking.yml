@@ -22,7 +22,7 @@ jobs:
         run: ./scripts/integration-tests/publish-local.sh
         env:
           BABEL_8_BREAKING: true
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace

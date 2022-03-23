@@ -20,7 +20,7 @@ jobs:
           cache: "yarn"
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace

@@ -86,7 +86,7 @@ jobs:
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           ./scripts/assert-dir-git-clean.sh
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: babel-artifact
           path: |
