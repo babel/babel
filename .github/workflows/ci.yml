@@ -38,7 +38,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
@@ -60,16 +60,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 17
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       - name: Generate coverage report
         run: |
           make -j test-ci-coverage
@@ -88,18 +82,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            yarn-
+          cache: "yarn"
       - name: Build babel artifacts
         run: |
           BABEL_ENV=test-legacy make -j build-standalone-ci
@@ -127,14 +113,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          node-version: "*"
+          cache: "yarn"
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v2
@@ -154,16 +136,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest # Run yarn on latest node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*" # Build Babel on latest node LTS versions
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       - name: Install
         run: |
           yarn install
@@ -203,16 +179,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js 14.17
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       - name: Install and build
         run: make -j bootstrap
         env:
@@ -243,15 +213,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          node-version: 16
+          cache: "yarn"
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v2
@@ -275,14 +241,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          node-version: "*"
+          cache: "yarn"
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v2
@@ -305,16 +267,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
       - name: Support self-references on old Node.js
         run: |
