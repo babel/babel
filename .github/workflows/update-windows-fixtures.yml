@@ -32,7 +32,7 @@ jobs:
             console.log(`::set-output name=repository::${repository}`);
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: ${{ steps.pr-meta.outputs.repository }}
           ref: ${{ steps.pr-meta.outputs.branch }}
