@@ -48,7 +48,7 @@ jobs:
         with:
           node-version: "*"
           cache: "yarn"
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace
