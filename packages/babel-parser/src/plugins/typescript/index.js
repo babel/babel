@@ -1614,9 +1614,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
       this.checkIdentifier(node.id, BIND_TS_TYPE);
-
-      node.typeParameters = this.tsTryParseTypeParameters();
       node.typeAnnotation = this.tsInType(() => {
+        node.typeParameters = this.tsTryParseTypeParameters();
         this.expect(tt.eq);
 
         if (
