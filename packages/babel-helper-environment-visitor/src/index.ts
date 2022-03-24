@@ -12,16 +12,16 @@ export function skipAllButComputedKey(
   }
 }
 
-export function requeueComputedKeyAndDecorator(
+export function requeueComputedKeyAndDecorators(
   path: NodePath<t.Method | t.Property>,
 ) {
-  const { context } = path;
+  const { context, node } = path;
   //@ts-ignore ClassPrivateProperty does not have computed
-  if (path.node.computed) {
+  if (node.computed) {
     // requeue the computed key
     context.maybeQueue(path.get("key"));
   }
-  if (path.node.decorators) {
+  if (node.decorators) {
     for (const decorator of path.get("decorators")) {
       // requeue the decorators
       context.maybeQueue(decorator);
@@ -40,7 +40,7 @@ export default {
     } else {
       path.skip();
       if (path.isMethod()) {
-        requeueComputedKeyAndDecorator(path);
+        requeueComputedKeyAndDecorators(path);
       }
     }
   },
@@ -48,6 +48,6 @@ export default {
     path: NodePath<t.ClassProperty | t.ClassPrivateProperty>,
   ) {
     path.skip();
-    requeueComputedKeyAndDecorator(path);
+    requeueComputedKeyAndDecorators(path);
   },
 } as Visitor<unknown>;

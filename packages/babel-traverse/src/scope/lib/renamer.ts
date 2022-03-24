@@ -8,7 +8,7 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type { Visitor } from "../../types";
-import { requeueComputedKeyAndDecorator } from "@babel/helper-environment-visitor";
+import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -26,7 +26,7 @@ const renameVisitor: Visitor<Renamer> = {
     ) {
       path.skip();
       if (path.isMethod()) {
-        requeueComputedKeyAndDecorator(path);
+        requeueComputedKeyAndDecorators(path);
       }
     }
   },
