@@ -1193,17 +1193,6 @@ export default class ExpressionParser extends LValParser {
         this.parseDecorators();
       // fall through
       case tt._class:
-        // node = this.startNode();
-        // this.takeDecorators(node);
-        // if (this.lookahead().type === tt.dot) {
-        //   this.next(); // eat `class`
-        //   this.next(); // eat `.`
-        //   if (this.state.value === "hasInstance") {
-        //     return this.parseIdentifier();
-        //   }
-        // }
-        // return this.parseClass(node, false);
-
         return this.parseClassOrClassHasInstanceExpression();
 
       case tt._new:
