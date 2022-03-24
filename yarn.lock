@@ -691,7 +691,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-function-name@workspace:packages/babel-helper-function-name"
   dependencies:
-    "@babel/helper-get-function-arity": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
@@ -705,14 +704,6 @@ __metadata:
   checksum: 25d969fb207ff2ad5f57a90d118f6c42d56a0171022e200aaa919ba7dc95ae7f92ec71cdea6c63ef3629a0dc962ab4c78e09ca2b437185ab44539193f796e0c3
   languageName: node
   linkType: hard
-
-"@babel/helper-get-function-arity@workspace:^, @babel/helper-get-function-arity@workspace:packages/babel-helper-get-function-arity":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-get-function-arity@workspace:packages/babel-helper-get-function-arity"
-  dependencies:
-    "@babel/types": "workspace:^"
-  languageName: unknown
-  linkType: soft
 
 "@babel/helper-hoist-variables@npm:^7.15.4, @babel/helper-hoist-variables@npm:^7.16.7":
   version: 7.16.7

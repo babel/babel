@@ -1,10 +1,10 @@
-import getFunctionArity from "@babel/helper-get-function-arity";
 import template from "@babel/template";
 import {
   NOT_LOCAL_BINDING,
   cloneNode,
   identifier,
   isAssignmentExpression,
+  isAssignmentPattern,
   isFunction,
   isIdentifier,
   isLiteral,
@@ -12,11 +12,19 @@ import {
   isObjectMethod,
   isObjectProperty,
   isRegExpLiteral,
+  isRestElement,
   isTemplateLiteral,
   isVariableDeclarator,
   toBindingIdentifierName,
 } from "@babel/types";
 import type * as t from "@babel/types";
+
+function getFunctionArity(node: t.Function): number {
+  const count = node.params.findIndex(
+    param => isAssignmentPattern(param) || isRestElement(param),
+  );
+  return count === -1 ? node.params.length : count;
+}
 
 const buildPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {
