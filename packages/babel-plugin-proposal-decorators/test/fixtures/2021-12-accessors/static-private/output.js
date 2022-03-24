@@ -24,7 +24,7 @@ class Foo {
   }
 
   get #a() {
-    _get_a(this);
+    return _get_a(this);
   }
 
   static #B = _init_b(this, 123);
@@ -34,7 +34,7 @@ class Foo {
   }
 
   get #b() {
-    _get_b(this);
+    return _get_b(this);
   }
 
 }
