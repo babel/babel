@@ -1641,6 +1641,7 @@ export interface PipelinePrimaryTopicReference extends BaseNode {
 
 export interface ClassHasInstanceExpression extends BaseNode {
   type: "ClassHasInstanceExpression";
+  body: any;
   instance: Expression;
 }
 
