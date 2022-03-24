@@ -8,7 +8,7 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type { Visitor } from "../../types";
-import type NodePath from "../../path";
+import { requeueComputedKeyAndDecorator } from "@babel/helper-environment-visitor";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -24,7 +24,10 @@ const renameVisitor: Visitor<Renamer> = {
         state.binding.identifier,
       )
     ) {
-      skipAndrequeueComputedKeysAndDecorators(path);
+      path.skip();
+      if (path.isMethod()) {
+        requeueComputedKeyAndDecorator(path);
+      }
     }
   },
 
@@ -143,23 +146,6 @@ export default class Renamer {
     if (parentDeclar) {
       this.maybeConvertFromClassFunctionDeclaration(parentDeclar);
       this.maybeConvertFromClassFunctionExpression(parentDeclar);
-    }
-  }
-}
-
-function skipAndrequeueComputedKeysAndDecorators(path: NodePath) {
-  path.skip();
-  if (path.isMethod()) {
-    const { context } = path;
-    if (path.node.computed) {
-      // requeue the computed key
-      context.maybeQueue(path.get("key"));
-    }
-    if (path.node.decorators) {
-      for (const decorator of path.get("decorators")) {
-        // requeue the decorators
-        context.maybeQueue(decorator);
-      }
     }
   }
 }

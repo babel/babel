@@ -12,10 +12,9 @@ export function skipAllButComputedKey(
   }
 }
 
-function skipAndrequeueComputedKeysAndDecorators(
+export function requeueComputedKeyAndDecorator(
   path: NodePath<t.Method | t.Property>,
 ) {
-  path.skip();
   const { context } = path;
   //@ts-ignore ClassPrivateProperty does not have computed
   if (path.node.computed) {
@@ -38,15 +37,17 @@ export default {
     if (path.isArrowFunctionExpression()) {
       // arrows are not skipped because they inherit the context.
       return;
-    } else if (path.isMethod()) {
-      skipAndrequeueComputedKeysAndDecorators(path);
     } else {
       path.skip();
+      if (path.isMethod()) {
+        requeueComputedKeyAndDecorator(path);
+      }
     }
   },
   "ClassProperty|ClassPrivateProperty"(
     path: NodePath<t.ClassProperty | t.ClassPrivateProperty>,
   ) {
-    skipAndrequeueComputedKeysAndDecorators(path);
+    path.skip();
+    requeueComputedKeyAndDecorator(path);
   },
 } as Visitor<unknown>;
