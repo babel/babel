@@ -14,38 +14,40 @@ function logDecoratorRun(a, b, c) {
 @logDecoratorRun(0, 35, 45)
 @logDecoratorRun(1, 34, 44)
 class A {
-  @logDecoratorRun(2, 19)
-  @logDecoratorRun(3, 18)
+  @logDecoratorRun(2, 27, 47)
+  @logDecoratorRun(3, 26, 46)
   a() {};
 
-  @logDecoratorRun(4, 21, 37)
-  @logDecoratorRun(5, 20, 36)
+  @logDecoratorRun(4, 19, 37)
+  @logDecoratorRun(5, 18, 36)
   static b() {};
 
-  @logDecoratorRun(6, 23, 39)
-  @logDecoratorRun(7, 22, 38)
+  @logDecoratorRun(6, 21, 39)
+  @logDecoratorRun(7, 20, 38)
   static #c() {};
 
-  @logDecoratorRun(8, 25)
-  @logDecoratorRun(9, 24)
+  @logDecoratorRun(8, 29, 49)
+  @logDecoratorRun(9, 28, 48)
   #d() {};
 
-  @logDecoratorRun(10, 27)
-  @logDecoratorRun(11, 26)
+  @logDecoratorRun(10, 31, 51)
+  @logDecoratorRun(11, 30, 50)
   accessor e;
 
-  @logDecoratorRun(12, 29, 41)
-  @logDecoratorRun(13, 28, 40)
+  @logDecoratorRun(12, 23, 41)
+  @logDecoratorRun(13, 22, 40)
   static accessor f;
 
-  @logDecoratorRun(14, 31, 43)
-  @logDecoratorRun(15, 30, 42)
+  @logDecoratorRun(14, 25, 43)
+  @logDecoratorRun(15, 24, 42)
   static accessor #g;
 
-  @logDecoratorRun(16, 33)
-  @logDecoratorRun(17, 32)
+  @logDecoratorRun(16, 33, 53)
+  @logDecoratorRun(17, 32, 52)
   accessor #h;
 }
 
-var nums = Array.from({ length: 46 }, (_, i) => i);
+new A();
+
+var nums = Array.from({ length: 54 }, (_, i) => i);
 expect(log).toEqual(nums);

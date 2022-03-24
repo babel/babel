@@ -176,7 +176,7 @@ if (process.env.BABEL_8_BREAKING) {
 
       if (
         JSX_TAG.test(token.value) &&
-        (text[offset - 1] === "<" || text.substr(offset - 2, 2) == "</")
+        (text[offset - 1] === "<" || text.slice(offset - 2, offset) == "</")
       ) {
         return "jsxIdentifier";
       }

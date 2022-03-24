@@ -10,16 +10,16 @@ function logDecoratorRun(a, b) {
 @logDecoratorRun(0, 21)
 @logDecoratorRun(1, 20)
 class A {
-  @logDecoratorRun(2, 13)
-  @logDecoratorRun(3, 12)
+  @logDecoratorRun(2, 17)
+  @logDecoratorRun(3, 16)
   [push(4)];
 
-  @logDecoratorRun(5, 15)
-  @logDecoratorRun(6, 14)
+  @logDecoratorRun(5, 13)
+  @logDecoratorRun(6, 12)
   static [push(7)];
 
-  @logDecoratorRun(8, 17)
-  @logDecoratorRun(9, 16)
+  @logDecoratorRun(8, 15)
+  @logDecoratorRun(9, 14)
   static #c;
 
   @logDecoratorRun(10, 19)

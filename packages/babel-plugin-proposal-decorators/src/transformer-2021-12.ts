@@ -311,11 +311,28 @@ function isDecoratorInfo(
   return "decorators" in info;
 }
 
+function filteredOrderedDecoratorInfo(
+  info: (DecoratorInfo | ComputedPropInfo)[],
+): DecoratorInfo[] {
+  const filtered = info.filter(isDecoratorInfo);
+
+  return [
+    ...filtered.filter(
+      el => el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
+    ),
+    ...filtered.filter(
+      el => !el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
+    ),
+    ...filtered.filter(el => el.isStatic && el.kind === FIELD),
+    ...filtered.filter(el => !el.isStatic && el.kind === FIELD),
+  ];
+}
+
 function generateDecorationExprs(
   info: (DecoratorInfo | ComputedPropInfo)[],
 ): t.ArrayExpression {
   return t.arrayExpression(
-    info.filter(isDecoratorInfo).map(el => {
+    filteredOrderedDecoratorInfo(info).map(el => {
       const decs =
         el.decorators.length > 1
           ? t.arrayExpression(el.decorators)
@@ -341,19 +358,19 @@ function generateDecorationExprs(
 function extractElementLocalAssignments(
   decorationInfo: (DecoratorInfo | ComputedPropInfo)[],
 ) {
-  const locals: t.Identifier[] = [];
+  const localIds: t.Identifier[] = [];
 
-  for (const el of decorationInfo) {
-    if ("locals" in el && el.locals) {
-      if (Array.isArray(el.locals)) {
-        locals.push(...el.locals);
-      } else {
-        locals.push(el.locals);
-      }
+  for (const el of filteredOrderedDecoratorInfo(decorationInfo)) {
+    const { locals } = el;
+
+    if (Array.isArray(locals)) {
+      localIds.push(...locals);
+    } else if (locals !== undefined) {
+      localIds.push(locals);
     }
   }
 
-  return locals;
+  return localIds;
 }
 
 function addCallAccessorsFor(

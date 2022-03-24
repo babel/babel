@@ -327,7 +327,7 @@ __metadata:
     "@babel/code-frame": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.16.7"
+    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.17.7"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/helpers": "workspace:^"
     "@babel/parser": "workspace:^"
@@ -343,7 +343,7 @@ __metadata:
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
-    json5: ^2.1.2
+    json5: ^2.2.1
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   languageName: unknown
   linkType: soft
@@ -769,7 +769,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-module-transforms-BABEL_8_BREAKING-false@npm:@babel/helper-module-transforms@workspace:^7.16.7, @babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
+"@babel/helper-module-transforms-BABEL_8_BREAKING-false@npm:@babel/helper-module-transforms@workspace:^7.17.7, @babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
@@ -784,12 +784,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-module-transforms@condition:BABEL_8_BREAKING ? : workspace:^7.16.7":
-  version: 0.0.0-condition-cea964
-  resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.16.7#cea964"
+"@babel/helper-module-transforms@condition:BABEL_8_BREAKING ? : workspace:^7.17.7":
+  version: 0.0.0-condition-2e33d9
+  resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.17.7#2e33d9"
   dependencies:
-    "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.16.7"
-  checksum: 1efe84b6d7ade352ceb8b7b048caf13009eccc6c69a6898aada73e3914359c97cd70849d75c3851d7b27b3b3d63018ff3bcb7e0c32c12f7de3aa43145845cd25
+    "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.17.7"
+  checksum: 36087eb0b3a60e6457fe151618cc5dec55521efcea4e059e0d87bb6e1b6c587494e4f713aca6e0e46b333577b6ec54098f46b1e1b107799ec0fec5aad95bf922
   languageName: node
   linkType: hard
 
@@ -11153,14 +11153,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.1.2":
-  version: 2.1.3
-  resolution: "json5@npm:2.1.3"
-  dependencies:
-    minimist: ^1.2.5
+"json5@npm:^2.1.2, json5@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "json5@npm:2.2.1"
   bin:
     json5: lib/cli.js
-  checksum: b2de57a66520eca0fbb6c5ef59249b8308efb93fe89a8c75f5a6846e4f5f7d99a5a6f2e4db4d7a1c7047802dd816ed602a052d147a415d0e6b7f834885b62bc3
+  checksum: 74b8a23b102a6f2bf2d224797ae553a75488b5adbaee9c9b6e5ab8b510a2fc6e38f876d4c77dea672d4014a44b2399e15f2051ac2b37b87f74c0c7602003543b
   languageName: node
   linkType: hard
 
@@ -11855,9 +11853,9 @@ fsevents@^1.2.7:
   linkType: hard
 
 "minimist@npm:^1.1.0, minimist@npm:^1.1.1, minimist@npm:^1.2.0, minimist@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "minimist@npm:1.2.5"
-  checksum: 86706ce5b36c16bfc35c5fe3dbb01d5acdc9a22f2b6cc810b6680656a1d2c0e44a0159c9a3ba51fb072bb5c203e49e10b51dcd0eec39c481f4c42086719bae52
+  version: 1.2.6
+  resolution: "minimist@npm:1.2.6"
+  checksum: d15428cd1e11eb14e1233bcfb88ae07ed7a147de251441d61158619dfb32c4d7e9061d09cab4825fdee18ecd6fce323228c8c47b5ba7cd20af378ca4048fb3fb
   languageName: node
   linkType: hard
 
