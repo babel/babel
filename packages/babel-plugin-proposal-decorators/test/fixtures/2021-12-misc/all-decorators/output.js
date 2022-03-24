@@ -65,7 +65,7 @@ new class extends babelHelpers.identity {
       }
 
       get #h() {
-        _get_h(this);
+        return _get_h(this);
       }
 
       static j() {}
@@ -87,7 +87,7 @@ new class extends babelHelpers.identity {
       }
 
       get #r() {
-        _get_r(this);
+        return _get_r(this);
       }
 
     }

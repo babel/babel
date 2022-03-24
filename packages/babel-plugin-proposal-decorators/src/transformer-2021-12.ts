@@ -385,7 +385,7 @@ function addCallAccessorsFor(
       t.cloneNode(key),
       [],
       t.blockStatement([
-        t.expressionStatement(
+        t.returnStatement(
           t.callExpression(t.cloneNode(getId), [t.thisExpression()]),
         ),
       ]),
