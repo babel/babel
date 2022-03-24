@@ -745,14 +745,6 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!noCalls && this.match(tt.parenL)) {
-      if (base.name === "hasInstance") {
-        return this.parseClassHasInstanceExpression(
-          base,
-          startPos,
-          startLoc,
-          state,
-        );
-      }
       return this.parseCoverCallAndAsyncArrowHead(
         base,
         startPos,
@@ -901,11 +893,32 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
-  parseClassHasInstanceExpression(base, startPos, startLoc, state) {
-    this.next(); // eat `class`
+  parseClassOrClassHasInstanceExpression():
+    | N.Class
+    | N.ClassHasInstanceExpression {
+    const node = this.startNode();
+    if (this.lookahead().type === tt.dot) {
+      this.next();
+      const nextToken = this.lookahead();
+      if (nextToken.value === "hasInstance" && !nextToken.containsEsc) {
+        this.next();
+        return this.parseClassHasInstanceExpression(
+          node,
+          this.startPos,
+          this.startLoc,
+          nextToken,
+        );
+      }
+    }
+    return this.parseClass(node, false);
+  }
 
+  parseClassHasInstanceExpression(base, startPos, startLoc, state) {
+    this.next(); // eat `hasinstance`
+    this.next(); // eat `(`
     const node = this.startNodeAt(startPos, startLoc);
-    node.instance = this.parseCallExpressionArguments(tt.parenR);
+    const argus = this.parseCallExpressionArguments(tt.parenR);
+    node.instance = argus.length ? argus[0] : null;
     state.stop = true;
 
     return this.finishNode(node, "ClassHasInstanceExpression");
@@ -1180,16 +1193,18 @@ export default class ExpressionParser extends LValParser {
         this.parseDecorators();
       // fall through
       case tt._class:
-        node = this.startNode();
-        this.takeDecorators(node);
-        if (this.lookahead().type === tt.dot) {
-          this.next(); // eat `class`
-          this.next(); // eat `.`
-          if (this.state.value === "hasInstance") {
-            return this.parseIdentifier();
-          }
-        }
-        return this.parseClass(node, false);
+        // node = this.startNode();
+        // this.takeDecorators(node);
+        // if (this.lookahead().type === tt.dot) {
+        //   this.next(); // eat `class`
+        //   this.next(); // eat `.`
+        //   if (this.state.value === "hasInstance") {
+        //     return this.parseIdentifier();
+        //   }
+        // }
+        // return this.parseClass(node, false);
+
+        return this.parseClassOrClassHasInstanceExpression();
 
       case tt._new:
         return this.parseNewOrNewTarget();

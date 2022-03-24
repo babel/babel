@@ -1255,7 +1255,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-
 "@babel/plugin-proposal-class-brand-check@workspace:^, @babel/plugin-proposal-class-brand-check@workspace:packages/babel-plugin-proposal-class-brand-check":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-class-brand-check@workspace:packages/babel-plugin-proposal-class-brand-check"
@@ -1269,6 +1268,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
+
 "@babel/plugin-proposal-class-properties@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/plugin-proposal-class-properties@npm:7.16.7"
@@ -12161,12 +12161,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-modules-regexp@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "node-modules-regexp@npm:1.0.0"
-  checksum: 99541903536c5ce552786f0fca7f06b88df595e62e423c21fa86a1674ee2363dad1f7482d1bec20b4bd9fa5f262f88e6e5cb788fc56411113f2fe2e97783a3a7
-  languageName: node
-  linkType: hard
 "node-releases@npm:^2.0.1":
   version: 2.0.1
   resolution: "node-releases@npm:2.0.1"
