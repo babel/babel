@@ -910,6 +910,7 @@ export default class ExpressionParser extends LValParser {
         );
       }
     }
+    this.takeDecorators(node);
     return this.parseClass(node, false);
   }
 
