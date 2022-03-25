@@ -39,6 +39,11 @@ fi
 # but we import it from @babel/runtime.
 sed -i 's%toMatch(`regenerator-runtime/runtime`)%toMatch(`@babel/runtime/helpers/regeneratorRuntime`)%' packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
 
+if [ "$BABEL_8_BREAKING" = true ] ; then
+  # This option is renamed in Babel 8
+  sed -i 's/legacy: decoratorsLegacy !== false/version: decoratorsLegacy === false ? "legacy": "2021-12"/g' packages/@vue/babel-preset-app/index.js
+fi
+
 # Test
 CI=true yarn test -p babel,babel-preset-app
 
