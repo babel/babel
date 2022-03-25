@@ -1,9 +1,17 @@
 import {
+  isIdentifier,
   isTSAnyKeyword,
+  isTSTypeReference,
   isTSUnionType,
   isTSBaseType,
 } from "../../validators/generated";
 import type * as t from "../..";
+
+function getQualifiedName(node: t.TSTypeReference["typeName"]): string {
+  return isIdentifier(node)
+    ? node.name
+    : `${node.right.name}.${getQualifiedName(node.left)}`;
+}
 
 /**
  * Dedupe type annotations.
@@ -11,8 +19,8 @@ import type * as t from "../..";
 export default function removeTypeDuplicates(
   nodes: Array<t.TSType>,
 ): Array<t.TSType> {
-  const generics = {};
-  const bases = {} as Record<t.TSBaseType["type"], t.TSBaseType>;
+  const generics = new Map<string, t.TSTypeReference>();
+  const bases = new Map<t.TSBaseType["type"], t.TSBaseType>();
 
   // store union type groups to circular references
   const typeGroups = new Set<t.TSType[]>();
@@ -35,7 +43,7 @@ export default function removeTypeDuplicates(
 
     // Analogue of FlowBaseAnnotation
     if (isTSBaseType(node)) {
-      bases[node.type] = node;
+      bases.set(node.type, node);
       continue;
     }
 
@@ -47,22 +55,39 @@ export default function removeTypeDuplicates(
       continue;
     }
 
-    // TODO: add generic types
+    // todo: support merging tuples: number[]
+    if (isTSTypeReference(node) && node.typeParameters) {
+      const name = getQualifiedName(node.typeName);
+
+      if (generics.has(name)) {
+        let existing: t.TypeScript = generics.get(name);
+        if (existing.typeParameters) {
+          if (node.typeParameters) {
+            existing.typeParameters.params = removeTypeDuplicates(
+              existing.typeParameters.params.concat(node.typeParameters.params),
+            );
+          }
+        } else {
+          existing = node.typeParameters;
+        }
+      } else {
+        generics.set(name, node);
+      }
+
+      continue;
+    }
 
     types.push(node);
   }
 
   // add back in bases
-  for (const type of Object.keys(bases) as (keyof typeof bases)[]) {
-    types.push(bases[type]);
+  for (const [, baseType] of bases) {
+    types.push(baseType);
   }
 
   // add back in generics
-  for (const name of Object.keys(generics)) {
-    types.push(
-      // @ts-ignore generics are not implemented
-      generics[name],
-    );
+  for (const [, genericName] of generics) {
+    types.push(genericName);
   }
 
   return types;

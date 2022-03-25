@@ -8,45 +8,26 @@ import {
   arrayTypeAnnotation,
   booleanTypeAnnotation,
   buildMatchMemberExpression,
-  createFlowUnionType,
-  createTSUnionType,
-  createUnionTypeAnnotation,
   genericTypeAnnotation,
   identifier,
-  isTSTypeAnnotation,
   nullLiteralTypeAnnotation,
   numberTypeAnnotation,
   stringTypeAnnotation,
   tupleTypeAnnotation,
   unionTypeAnnotation,
   voidTypeAnnotation,
+  isIdentifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
 export { default as Identifier } from "./inferer-reference";
 
+import { createUnionType } from "./util";
 import type NodePath from "..";
 
 export function VariableDeclarator(this: NodePath<t.VariableDeclarator>) {
-  const id = this.get("id");
-
-  if (!id.isIdentifier()) return;
-  const init = this.get("init");
-
-  let type = init.getTypeAnnotation();
-
-  if (type?.type === "AnyTypeAnnotation") {
-    // Detect "var foo = Array()" calls so we can optimize for arrays vs iterables.
-    if (
-      init.isCallExpression() &&
-      init.get("callee").isIdentifier({ name: "Array" }) &&
-      !init.scope.hasBinding("Array", true /* noGlobals */)
-    ) {
-      type = ArrayExpression();
-    }
-  }
-
-  return type;
+  if (!this.get("id").isIdentifier()) return;
+  return this.get("init").getTypeAnnotation();
 }
 
 export function TypeCastExpression(node: t.TypeCastExpression) {
@@ -54,6 +35,16 @@ export function TypeCastExpression(node: t.TypeCastExpression) {
 }
 
 TypeCastExpression.validParent = true;
+
+export function TSAsExpression(node: t.TSAsExpression) {
+  return node.typeAnnotation;
+}
+
+TSAsExpression.validParent = true;
+
+export function TSNonNullExpression(this: NodePath<t.TSNonNullExpression>) {
+  return this.get("expression").getTypeAnnotation();
+}
 
 export function NewExpression(
   this: NodePath<t.NewExpression>,
@@ -119,16 +110,7 @@ export function LogicalExpression(this: NodePath<t.LogicalExpression>) {
     this.get("right").getTypeAnnotation(),
   ];
 
-  if (isTSTypeAnnotation(argumentTypes[0]) && createTSUnionType) {
-    // @ts-expect-error Fixme: getTypeAnnotation also returns TS types
-    return createTSUnionType(argumentTypes);
-  }
-
-  if (createFlowUnionType) {
-    return createFlowUnionType(argumentTypes);
-  }
-
-  return createUnionTypeAnnotation(argumentTypes);
+  return createUnionType(argumentTypes);
 }
 
 export function ConditionalExpression(this: NodePath<t.ConditionalExpression>) {
@@ -137,16 +119,7 @@ export function ConditionalExpression(this: NodePath<t.ConditionalExpression>) {
     this.get("alternate").getTypeAnnotation(),
   ];
 
-  if (isTSTypeAnnotation(argumentTypes[0]) && createTSUnionType) {
-    // @ts-expect-error Fixme: getTypeAnnotation also returns TS types
-    return createTSUnionType(argumentTypes);
-  }
-
-  if (createFlowUnionType) {
-    return createFlowUnionType(argumentTypes);
-  }
-
-  return createUnionTypeAnnotation(argumentTypes);
+  return createUnionType(argumentTypes);
 }
 
 export function SequenceExpression(this: NodePath<t.SequenceExpression>) {
@@ -227,7 +200,12 @@ export function CallExpression(this: NodePath<t.CallExpression>) {
   const { callee } = this.node;
   if (isObjectKeys(callee)) {
     return arrayTypeAnnotation(stringTypeAnnotation());
-  } else if (isArrayFrom(callee) || isObjectValues(callee)) {
+  } else if (
+    isArrayFrom(callee) ||
+    isObjectValues(callee) ||
+    // Detect "var foo = Array()" calls so we can optimize for arrays vs iterables.
+    isIdentifier(callee, { name: "Array" })
+  ) {
     return arrayTypeAnnotation(anyTypeAnnotation());
   } else if (isObjectEntries(callee)) {
     return arrayTypeAnnotation(
@@ -248,14 +226,17 @@ function resolveCall(callee: NodePath) {
   callee = callee.resolve();
 
   if (callee.isFunction()) {
-    if (callee.is("async")) {
-      if (callee.is("generator")) {
+    const { node } = callee;
+    if (node.async) {
+      if (node.generator) {
         return genericTypeAnnotation(identifier("AsyncIterator"));
       } else {
         return genericTypeAnnotation(identifier("Promise"));
       }
     } else {
-      if (callee.node.returnType) {
+      if (node.generator) {
+        return genericTypeAnnotation(identifier("Iterator"));
+      } else if (callee.node.returnType) {
         return callee.node.returnType;
       } else {
         // todo: get union type of all return arguments
