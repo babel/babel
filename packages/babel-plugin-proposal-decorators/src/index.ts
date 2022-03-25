@@ -48,5 +48,9 @@ export default declare((api, options: Options) => {
       inherits: syntaxDecorators,
       // loose: options.loose, Not supported
     });
+  } else {
+    throw new Error(
+      "The '.version' option must be one of 'legacy' or '2021-12'",
+    );
   }
 });
