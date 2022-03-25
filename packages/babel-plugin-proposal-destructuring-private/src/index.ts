@@ -114,13 +114,12 @@ export default declare(function ({
           blockBody.unshift(expressionStatement(scope.buildUndefinedNode()));
         }
 
-        // todo: handle shadowed variables referenced in computed keys:
-        // var a = 0, x;for ({ #x: x, [a++]: y } of z) { const a = 1; }
-        blockBody.unshift(
+        node.body = t.blockStatement([
           expressionStatement(
             assignmentExpression("=", leftPath.node, cloneNode(declarator)),
           ),
-        );
+          node.body,
+        ]);
       }
     },
     VariableDeclaration(path, state) {
