@@ -8,21 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            yarn-
+          cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
         env:
           YARN_ENABLE_SCRIPTS: false # disable post-install scripts
@@ -36,16 +27,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*"
+          cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
         run: |
           yarn constraints
       - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: |
           yarn dedupe --check
       - name: Check for dependency cycles
@@ -58,18 +49,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 17
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       - name: Generate coverage report
         run: |
           make -j test-ci-coverage
@@ -86,20 +71,12 @@ jobs:
     #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            yarn-
+          cache: "yarn"
       - name: Build babel artifacts
         run: |
           BABEL_ENV=test-legacy make -j build-standalone-ci
@@ -109,7 +86,7 @@ jobs:
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           ./scripts/assert-dir-git-clean.sh
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: babel-artifact
           path: |
@@ -125,19 +102,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          node-version: "*"
+          cache: "yarn"
       - name: Install
         run: yarn install
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
       - name: Lint
@@ -152,18 +125,12 @@ jobs:
         node-version: [16, 14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest # Run yarn on latest node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*" # Build Babel on latest node LTS versions
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       - name: Install
         run: |
           yarn install
@@ -175,14 +142,14 @@ jobs:
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
       - name: Generate runtime helpers
         run: |
           make build-plugin-transform-runtime-dist
       - name: Use Node.js ${{ matrix.node-version }} # Checkout node version for test executor
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test on node.js ${{ matrix.node-version }}
@@ -194,6 +161,11 @@ jobs:
           BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
         env:
           TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
+      - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
+        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes
@@ -201,18 +173,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js 14.17
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       - name: Install and build
         run: make -j bootstrap
         env:
@@ -242,19 +208,15 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
+        uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          node-version: 16
+          cache: "yarn"
       - name: Install
         run: yarn install
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
       - name: Generate runtime helpers
@@ -273,19 +235,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          node-version: "*"
+          cache: "yarn"
       - name: Install
         run: yarn install
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
       - name: Download tests
@@ -303,18 +261,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "*"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
       - name: Support self-references on old Node.js
         run: |
@@ -336,7 +288,7 @@ jobs:
           # The "Support self-references on old Node.js" step mutates the
           # package.json file, causing a yarn.lock update.
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
       - name: Generate runtime helpers
@@ -349,61 +301,61 @@ jobs:
       - name: Test Node.js
         run: yarn test:runtime:node
       - name: Use Node.js 10
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 10
       - name: Test Node.js 10
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 12.0
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "12.0" # quoted, otherwise it's just 13
       - name: Test Node.js 12.0
         run: yarn test:runtime:node
       - name: Use Node.js 12.17
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 12.17
       - name: Test Node.js  12.17
         run: yarn test:runtime:node
       - name: Use Node.js 13.0
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: "13.0" # quoted, otherwise it's just 13
       - name: Test Node.js 13.0
         run: yarn test:runtime:node
       - name: Use Node.js 13.2
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 13.2
       - name: Test Node.js 13.2
         run: yarn test:runtime:node
       - name: Use Node.js 13.6
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 13.6
       - name: Test Node.js 13.6
         run: yarn test:runtime:node
       - name: Use Node.js 13.7
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 13.7
       - name: Test Node.js 13.7
         run: yarn test:runtime:node
       - name: Use Node.js 14.2
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 14.2
       - name: Test Node.js 14.2
         run: yarn test:runtime:node
       - name: Use Node.js 16.5
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 16.5
       - name: Test Node.js 16.5
         run: yarn test:runtime:node
       - name: Use Node.js 16.6
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 16.6
       - name: Test Node.js 16.6
