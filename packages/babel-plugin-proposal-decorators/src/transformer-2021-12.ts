@@ -2,6 +2,7 @@ import type { NodePath, Scope } from "@babel/traverse";
 import { types as t, template } from "@babel/core";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 
 type ClassDecoratableElement =
@@ -1009,24 +1010,23 @@ export default function ({ assertVersion, assumption }, { loose }) {
     inherits: syntaxDecorators,
 
     visitor: {
-      ClassDeclaration(path: NodePath<t.ClassDeclaration>, state: any) {
-        if (VISITED.has(path)) return;
-
-        const newPath = transformClass(path, state, constantSuper);
-
-        if (newPath) {
-          VISITED.add(newPath);
+      "ExportNamedDeclaration|ExportDefaultDeclaration"(path) {
+        const { declaration } = path.node;
+        if (
+          declaration?.type === "ClassDeclaration" &&
+          // When compiling class decorators we need to replace the class
+          // binding, so we must split it in two separate declarations.
+          declaration.decorators?.length > 0
+        ) {
+          splitExportDeclaration(path);
         }
       },
 
-      ClassExpression(path: NodePath<t.ClassExpression>, state: any) {
+      Class(path: NodePath<t.Class>, state: any) {
         if (VISITED.has(path)) return;
 
         const newPath = transformClass(path, state, constantSuper);
-
-        if (newPath) {
-          VISITED.add(newPath);
-        }
+        if (newPath) VISITED.add(newPath);
       },
     },
   };
