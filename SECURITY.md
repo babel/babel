@@ -10,7 +10,7 @@ currently being supported with security updates.
 | 7.x      | :white_check_mark: |
 | 6.x      | :x:                |
 
-Note that for each supported major version, we only guarantee security fixes for the last minor version. This means that if, for example, the last released version is 7.16.4 we will only release security fixes as 7.16.5 and not for 7.15.x or older. This is because upgrading from a minor to another should be as easy as updating from a patch to another.
+Note that for each supported major version, we only guarantee security fixes for the last minor version. This means that if, for example, the last released version is 7.16.4 we will only release security fixes as 7.16.5 and not for 7.15.x or older. This is because upgrading from a minor to another should be as easy as updating to a new patch version.
 
 ## Reporting a Vulnerability
 
