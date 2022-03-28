@@ -2,7 +2,6 @@
   "name": "@babel/plugin-proposal-class-brand-check",
   "version": "7.16.0",
   "description": "",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
@@ -15,7 +14,7 @@
   "main": "./lib/index.js",
   "exports": {
     ".": "./lib/index.js",
-    "./package.json":"./package.json"
+    "./package.json": "./package.json"
   },
   "keywords": [
     "babel-plugin"
@@ -30,8 +29,16 @@
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=13.0.0"
   },
   "author": "The Babel Team (https://babel.dev/team)"
 }
