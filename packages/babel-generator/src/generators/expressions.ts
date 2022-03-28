@@ -361,6 +361,10 @@ export function ModuleExpression(node: t.ModuleExpression) {
 }
 
 export function ClassHasInstanceExpression(node: t.ClassHasInstanceExpression) {
+  this.word("class");
+  this.token(".");
+  this.word("hasInstance");
+  this.printInnerComments(node);
   this.token("(");
   this.printList(node.instance);
   this.token(")");
