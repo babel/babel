@@ -32,7 +32,7 @@ jobs:
             console.log(`::set-output name=repository::${repository}`);
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: ${{ steps.pr-meta.outputs.repository }}
           ref: ${{ steps.pr-meta.outputs.branch }}
@@ -40,16 +40,10 @@ jobs:
           persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
 
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-      - uses: actions/cache@v2
-        id: cache
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          node-version: "*"
+          cache: "yarn"
 
       - name: Install and build
         # make bootstrap modifies some files (babel-runtime-*/package.json), so we reset them

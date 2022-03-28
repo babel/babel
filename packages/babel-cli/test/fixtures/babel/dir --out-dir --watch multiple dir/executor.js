@@ -7,8 +7,8 @@ if (!assert.match) assert.match = (val, re) => assert(re.test(val));
 const run = (async function* () {
   assert.match(yield, /Successfully compiled 4 files with Babel \(\d+ms\)\./);
 
-  // wait 200ms for watcher setup
-  await new Promise(resolve => setTimeout(resolve, 200));
+  // wait 2s for watcher setup
+  await new Promise(resolve => setTimeout(resolve, 2000));
   // update ./module1/src/index.js
   fs.writeFileSync(
     "./module1/src/index.js",

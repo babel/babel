@@ -16,7 +16,6 @@
     "./packages/babel-helper-explode-assignable-expression/src/**/*.ts",
     "./packages/babel-helper-fixtures/src/**/*.ts",
     "./packages/babel-helper-function-name/src/**/*.ts",
-    "./packages/babel-helper-get-function-arity/src/**/*.ts",
     "./packages/babel-helper-hoist-variables/src/**/*.ts",
     "./packages/babel-helper-member-expression-to-functions/src/**/*.ts",
     "./packages/babel-helper-module-imports/src/**/*.ts",
@@ -189,9 +188,6 @@
       ],
       "@babel/helper-function-name": [
         "./packages/babel-helper-function-name/src"
-      ],
-      "@babel/helper-get-function-arity": [
-        "./packages/babel-helper-get-function-arity/src"
       ],
       "@babel/helper-hoist-variables": [
         "./packages/babel-helper-hoist-variables/src"
