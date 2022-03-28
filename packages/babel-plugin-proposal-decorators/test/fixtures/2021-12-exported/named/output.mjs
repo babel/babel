@@ -2,7 +2,7 @@ var _initClass, _dec;
 
 let _A;
 
-_dec = dec
+_dec = dec;
 
 class A {
   static {

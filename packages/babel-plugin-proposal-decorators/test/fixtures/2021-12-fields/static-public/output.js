@@ -2,7 +2,7 @@ var _init_a, _init_b, _computedKey, _init_computedKey;
 
 const dec = () => {};
 
-_computedKey = 'c'
+_computedKey = 'c';
 
 class Foo {
   static {

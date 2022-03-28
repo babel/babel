@@ -2,7 +2,7 @@ var _computedKey, _initStatic;
 
 const dec = () => {};
 
-_computedKey = 'b'
+_computedKey = 'b';
 
 class Foo {
   static get a() {
