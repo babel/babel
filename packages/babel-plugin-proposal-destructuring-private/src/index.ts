@@ -7,9 +7,10 @@ import {
   buildVariableDeclarationFromParams,
 } from "./util";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
+import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 
 import type { PluginPass } from "@babel/core";
-import type { Visitor, NodePath } from "@babel/traverse";
+import type { Visitor } from "@babel/traverse";
 import { types as t } from "@babel/core";
 
 const {
@@ -23,27 +24,6 @@ const {
   variableDeclaration,
   variableDeclarator,
 } = t;
-
-function unshiftForXStatementBody(
-  statementPath: NodePath<t.ForXStatement>,
-  newStatement: t.Statement,
-) {
-  statementPath.ensureBlock();
-  const { scope, node } = statementPath;
-  const bodyScopeBindings = statementPath.get("body").scope.bindings;
-  const hasShadowedBlockScopedBindings = Object.keys(bodyScopeBindings).some(
-    name => scope.hasBinding(name),
-  );
-
-  if (hasShadowedBlockScopedBindings) {
-    // handle shadowed variables referenced in computed keys:
-    // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
-    node.body = t.blockStatement([newStatement, node.body]);
-  } else {
-    // @ts-ignore statementPath.ensureBlock() has been called, node.body is always a BlockStatement
-    node.body.body.unshift(newStatement);
-  }
-}
 
 export default declare(function ({
   assertVersion,
@@ -107,7 +87,7 @@ export default declare(function ({
           variableDeclarator(temp, null),
         ]);
         left.declarations[0].init = cloneNode(temp);
-        unshiftForXStatementBody(path, left);
+        unshiftForXStatementBody(path, [left]);
         scope.crawl();
         // the pattern will be handled by VariableDeclaration visitor.
       } else if (leftPath.isPattern()) {
@@ -124,7 +104,7 @@ export default declare(function ({
         const assignExpr = expressionStatement(
           assignmentExpression("=", leftPath.node, cloneNode(temp)),
         );
-        unshiftForXStatementBody(path, assignExpr);
+        unshiftForXStatementBody(path, [assignExpr]);
         scope.crawl();
       }
     },

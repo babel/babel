@@ -4,8 +4,9 @@ import {
   DestructuringTransformer,
   convertVariableDeclaration,
   convertAssignmentExpression,
+  unshiftForXStatementBody,
 } from "./util";
-export { buildObjectExcludingKeys } from "./util";
+export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util";
 
 /**
  * Test if a VariableDeclaration's declarations contains any Patterns.
@@ -81,19 +82,22 @@ export default declare((api, options: Options) => {
 
           path.ensureBlock();
           const statementBody = (node.body as t.BlockStatement).body;
-
+          const nodes = [];
+          // todo: the completion of a for statement can only be observed from
+          // a do block (or eval that we don't support),
+          // but do-expression transform already handled the case of for statement well
+          // maybe we can get rid of this
           if (statementBody.length === 0 && path.isCompletionRecord()) {
-            statementBody.unshift(
-              t.expressionStatement(scope.buildUndefinedNode()),
-            );
+            nodes.unshift(t.expressionStatement(scope.buildUndefinedNode()));
           }
 
-          statementBody.unshift(
+          nodes.unshift(
             t.expressionStatement(
               t.assignmentExpression("=", left, t.cloneNode(temp)),
             ),
           );
 
+          unshiftForXStatementBody(path, nodes);
           scope.crawl();
           return;
         }
@@ -123,7 +127,7 @@ export default declare((api, options: Options) => {
 
         destructuring.init(pattern, key);
 
-        path.ensureBlock();
+        unshiftForXStatementBody(path, nodes);
 
         const block = node.body;
         // @ts-expect-error: ensureBlock ensures that node.body is a BlockStatement

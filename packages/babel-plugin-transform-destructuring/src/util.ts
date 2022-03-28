@@ -3,6 +3,27 @@ import type { File } from "@babel/core";
 import type { Scope, NodePath } from "@babel/traverse";
 import type { TraversalAncestors } from "@babel/types";
 
+export function unshiftForXStatementBody(
+  statementPath: NodePath<t.ForXStatement>,
+  newStatements: t.Statement[],
+) {
+  statementPath.ensureBlock();
+  const { scope, node } = statementPath;
+  const bodyScopeBindings = statementPath.get("body").scope.bindings;
+  const hasShadowedBlockScopedBindings = Object.keys(bodyScopeBindings).some(
+    name => scope.hasBinding(name),
+  );
+
+  if (hasShadowedBlockScopedBindings) {
+    // handle shadowed variables referenced in computed keys:
+    // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
+    node.body = t.blockStatement([...newStatements, node.body]);
+  } else {
+    // @ts-ignore statementPath.ensureBlock() has been called, node.body is always a BlockStatement
+    node.body.body.unshift(...newStatements);
+  }
+}
+
 /**
  * Test if an ArrayPattern's elements contain any RestElements.
  */
