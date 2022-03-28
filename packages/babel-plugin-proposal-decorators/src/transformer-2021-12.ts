@@ -991,7 +991,7 @@ function transformClass(
 
   // When path is a ClassExpression, path.insertBefore will convert `path`
   // into a SequenceExpression
-  path.insertBefore(assignments);
+  path.insertBefore(assignments.map(expr => t.expressionStatement(expr)));
 
   // Recrawl the scope to make sure new identifiers are properly synced
   path.scope.crawl();

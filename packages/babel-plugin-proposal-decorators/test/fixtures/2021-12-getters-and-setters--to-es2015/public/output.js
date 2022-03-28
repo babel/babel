@@ -2,8 +2,8 @@ var _computedKey, _computedKey2, _initProto;
 
 const dec = () => {};
 
-_computedKey = 'b'
-_computedKey2 = 'b'
+_computedKey = 'b';
+_computedKey2 = 'b';
 
 class Foo {
   constructor(...args) {

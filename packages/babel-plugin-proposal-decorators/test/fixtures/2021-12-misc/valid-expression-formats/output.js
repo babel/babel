@@ -4,14 +4,14 @@ const dec = () => {};
 
 let _Foo;
 
-_dec = call()
-_dec2 = chain.expr()
-_dec3 = arbitrary + expr
-_dec4 = array[expr]
-_dec5 = call()
-_dec6 = chain.expr()
-_dec7 = arbitrary + expr
-_dec8 = array[expr]
+_dec = call();
+_dec2 = chain.expr();
+_dec3 = arbitrary + expr;
+_dec4 = array[expr];
+_dec5 = call();
+_dec6 = chain.expr();
+_dec7 = arbitrary + expr;
+_dec8 = array[expr];
 
 class Foo {
   static {

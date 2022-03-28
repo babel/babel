@@ -2,7 +2,7 @@ var _dec, _initProto;
 
 const dec = () => {};
 
-_dec = deco
+_dec = deco;
 
 class A extends B {
   constructor() {
