@@ -89,7 +89,9 @@ export default declare((api, options: Options) => {
           }
 
           statementBody.unshift(
-            t.expressionStatement(t.assignmentExpression("=", left, temp)),
+            t.expressionStatement(
+              t.assignmentExpression("=", left, t.cloneNode(temp)),
+            ),
           );
 
           scope.crawl();
