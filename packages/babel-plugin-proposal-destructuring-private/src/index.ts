@@ -9,7 +9,7 @@ import {
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 
 import type { PluginPass } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
+import type { Visitor, NodePath } from "@babel/traverse";
 import { types as t } from "@babel/core";
 
 const {
@@ -23,6 +23,27 @@ const {
   variableDeclaration,
   variableDeclarator,
 } = t;
+
+function unshiftForXStatementBody(
+  statementPath: NodePath<t.ForXStatement>,
+  newStatement: t.Statement,
+) {
+  statementPath.ensureBlock();
+  const { scope, node } = statementPath;
+  const bodyScopeBindings = statementPath.get("body").scope.bindings;
+  const hasShadowedBlockScopedBindings = Object.keys(bodyScopeBindings).some(
+    name => scope.hasBinding(name),
+  );
+
+  if (hasShadowedBlockScopedBindings) {
+    // handle shadowed variables referenced in computed keys:
+    // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
+    node.body = t.blockStatement([newStatement, node.body]);
+  } else {
+    // @ts-ignore statementPath.ensureBlock() has been called, node.body is always a BlockStatement
+    node.body.body.unshift(newStatement);
+  }
+}
 
 export default declare(function ({
   assertVersion,
@@ -81,16 +102,12 @@ export default declare(function ({
         // for (const { #x: x } of cls) body;
         // transforms to:
         // for (const ref of cls) { const { #x: x } = ref; body; }
-        const declarator = scope.generateUidIdentifier("ref");
+        const temp = scope.generateUidIdentifier("ref");
         node.left = variableDeclaration(left.kind, [
-          variableDeclarator(declarator, null),
+          variableDeclarator(temp, null),
         ]);
-        left.declarations[0].init = cloneNode(declarator);
-        path.ensureBlock();
-        // todo: handle shadowed variables referenced in computed keys:
-        // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
-        const blockBody = (node.body as t.BlockStatement).body;
-        blockBody.unshift(left);
+        left.declarations[0].init = cloneNode(temp);
+        unshiftForXStatementBody(path, left);
         scope.crawl();
         // the pattern will be handled by VariableDeclaration visitor.
       } else if (leftPath.isPattern()) {
@@ -100,26 +117,15 @@ export default declare(function ({
         // for (const ref of cls) { ({ #x: x } = ref); body; }
         // This transform assumes that any expression within the pattern
         // does not interfere with the iterable `cls`.
-        const declarator = scope.generateUidIdentifier("ref");
+        const temp = scope.generateUidIdentifier("ref");
         node.left = variableDeclaration("const", [
-          variableDeclarator(declarator, null),
+          variableDeclarator(temp, null),
         ]);
-        path.ensureBlock();
-
-        const blockBody = (node.body as t.BlockStatement).body;
-
-        // preserve completion record:
-        // for ({ #x: x } of []);
-        if (blockBody.length === 0 && path.isCompletionRecord()) {
-          blockBody.unshift(expressionStatement(scope.buildUndefinedNode()));
-        }
-
-        node.body = t.blockStatement([
-          expressionStatement(
-            assignmentExpression("=", leftPath.node, cloneNode(declarator)),
-          ),
-          node.body,
-        ]);
+        const assignExpr = expressionStatement(
+          assignmentExpression("=", leftPath.node, cloneNode(temp)),
+        );
+        unshiftForXStatementBody(path, assignExpr);
+        scope.crawl();
       }
     },
     VariableDeclaration(path, state) {
