@@ -366,6 +366,6 @@ export function ClassHasInstanceExpression(node: t.ClassHasInstanceExpression) {
   this.word("hasInstance");
   this.printInnerComments(node);
   this.token("(");
-  this.printList(node.instance);
+  this.print(node.instance);
   this.token(")");
 }

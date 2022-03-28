@@ -12,6 +12,9 @@ export default declare(api => {
       ClassHasInstanceExpression(path) {
         const node = path.node;
         const instanceItem = node.instance;
+        if (!instanceItem) {
+          throw new Error("Expected 1 arguments, but got " + instanceItem);
+        }
 
         const setID = path.scope.generateUidIdentifier("set");
 

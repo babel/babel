@@ -1363,8 +1363,9 @@ export default class StatementParser extends ExpressionParser {
     isStatement: /* T === ClassDeclaration */ boolean,
     optionalId?: boolean,
   ): T {
-    this.next();
-    this.takeDecorators(node);
+    if (this.eat(tt.class)) {
+      this.takeDecorators(node);
+    }
 
     // A class definition is always strict mode code.
     const oldStrict = this.state.strict;

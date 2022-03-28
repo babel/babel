@@ -320,6 +320,7 @@ export const tt: { [name: string]: TokenType } = {
   _opaque: createKeywordLike("opaque", { startsExpr }),
   // end: isFlowInterfaceOrTypeOrOpaque
   name: createToken("name", { startsExpr }),
+  _hasInstance: createToken("hasInstance", { startsExpr }),
   // end: isIdentifier
 
   string: createToken("string", { startsExpr }),

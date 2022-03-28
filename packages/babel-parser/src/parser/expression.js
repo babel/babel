@@ -897,17 +897,18 @@ export default class ExpressionParser extends LValParser {
     | N.Class
     | N.ClassHasInstanceExpression {
     const node = this.startNode();
-    if (this.lookahead().type === tt.dot) {
-      this.next();
+    this.next();
+    if (this.eat(tt.dot)) {
       const nextToken = this.lookahead();
-      if (nextToken.value === "hasInstance" && !nextToken.containsEsc) {
-        this.next();
+      if (this.isContextual(tt._hasInstance)) {
         return this.parseClassHasInstanceExpression(
           node,
           this.startPos,
           this.startLoc,
           nextToken,
         );
+      } else {
+        throw this.raise(Errors.UnexpectedToken, { at: this.startLoc });
       }
     }
     this.takeDecorators(node);
