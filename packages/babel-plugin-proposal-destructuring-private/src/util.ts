@@ -53,12 +53,13 @@ function initRestExcludingKeys(pattern: t.LVal) {
  */
 function* growRestExcludingKeys(properties: ObjectProperty[], scope: Scope) {
   for (const property of properties) {
-    if (property.computed && !scope.isStatic(property.key)) {
+    const propertyKey = property.key;
+    if (property.computed && !scope.isStatic(propertyKey)) {
       const tempId = scope.generateDeclaredUidIdentifier("m");
       // @ts-expect-error A computed property key must not be a private name
-      property.key = assignmentExpression("=", tempId, property.key);
+      property.key = assignmentExpression("=", tempId, propertyKey);
       yield { key: tempId, computed: true };
-    } else {
+    } else if (propertyKey.type !== "PrivateName") {
       yield property;
     }
   }
@@ -250,14 +251,18 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   });
 }
 
+type ExcludingKey = {
+  key: t.ObjectProperty["key"];
+  computed: t.ObjectProperty["computed"];
+};
 type Item = {
   left: t.LVal;
   right: t.Expression;
-  restExcludingKeys?: t.ObjectProperty[] | null;
+  restExcludingKeys?: ExcludingKey[] | null;
 };
 
 /**
- * Transform private destructuring without object rest element. It returns a generator
+ * Transform private destructuring. It returns a generator
  * which yields a pair of transformed LHS and RHS, which can form VariableDeclaration or
  * AssignmentExpression later.
  *
@@ -345,12 +350,6 @@ export function* transformPrivateKeyDestructuring(
             if (index > 0) {
               // properties[0, index) must not contain private keys
               const propertiesSlice = properties.slice(0, index);
-              if (nextRestExcludingKeys !== null) {
-                nextRestExcludingKeys.push(
-                  // @ts-expect-error
-                  ...growRestExcludingKeys(propertiesSlice, scope),
-                );
-              }
               yield {
                 left: objectPattern(propertiesSlice),
                 right: cloneNode(right),
@@ -358,6 +357,16 @@ export function* transformPrivateKeyDestructuring(
             }
             if (index < properties.length - 1) {
               // for properties after `index`, push them to stack so we can process them later
+              if (nextRestExcludingKeys !== null) {
+                nextRestExcludingKeys.push(
+                  ...growRestExcludingKeys(
+                    // @ts-expect-error properties[0, index] must not contain rest element
+                    // because properties[index] contains a private key
+                    properties.slice(0, index + 1),
+                    scope,
+                  ),
+                );
+              }
               stack.push({
                 left: objectPattern(properties.slice(index + 1)),
                 right: cloneNode(right),
