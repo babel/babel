@@ -1,6 +1,6 @@
 class C {
   #x;
-  m(a, { #x: x }, ...b) {
-    var a = 1;
+  m(a = 1, { #x: x }, b, ...c) {
+    var b = 1;
   }
 }

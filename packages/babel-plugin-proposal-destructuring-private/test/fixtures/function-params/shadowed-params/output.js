@@ -1,13 +1,13 @@
 class C {
   #x;
 
-  m(_p, _p2, ..._p3) {
-    var a = _p,
-        x = _p2.#x,
-        b = _p3;
-    return function (a) {
-      var a = 1;
-    }(a);
+  m(a = 1, _p, _p2, ..._p3) {
+    var x = _p.#x,
+        b = _p2,
+        c = _p3;
+    return function (b) {
+      var b = 1;
+    }(b);
   }
 
 }

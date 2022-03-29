@@ -42,17 +42,20 @@ export default declare(function ({
       // (b, { #x: x } = I) => body
       // transforms to:
       // (p1, p2) => { var b = p1, { #x: x } = p2 === undefined ? I : p2; body; }
-      if (!path.node.params.some(param => hasPrivateKeys(param))) return;
+      const index = path.node.params.findIndex(param => hasPrivateKeys(param));
+      if (index === -1) return;
       // wrap function body within IIFE if any param is shadowed
       convertFunctionParams(path, ignoreFunctionLength, () => false, false);
       const { node, scope } = path;
-      const { params, variableDeclaration } =
-        buildVariableDeclarationFromParams(node.params, scope);
+      const params = node.params;
+      const paramsAfterIndex = params.splice(index);
+      const { params: transformedParams, variableDeclaration } =
+        buildVariableDeclarationFromParams(paramsAfterIndex, scope);
 
       path
         .get("body") // invariant: path.body is always a BlockStatement
         .unshiftContainer("body", variableDeclaration);
-      node.params = params;
+      params.push(...transformedParams);
       scope.crawl();
       // the pattern will be handled by VariableDeclaration visitor.
     },

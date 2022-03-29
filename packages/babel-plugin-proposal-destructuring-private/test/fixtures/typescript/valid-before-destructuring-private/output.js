@@ -1,9 +1,8 @@
 class C {
   #x;
 
-  constructor(_p, _p2) {
-    var foo = _p,
-        x = _p2.#x;
+  constructor(foo, _p) {
+    var x = _p.#x;
     this.foo = foo;
   }
 
