@@ -85,8 +85,8 @@ export default declare((api, options: Options) => {
           const nodes = [];
           // todo: the completion of a for statement can only be observed from
           // a do block (or eval that we don't support),
-          // but do-expression transform already handled the case of for statement well
-          // maybe we can get rid of this
+          // but the new do-expression proposal plans to ban iteration ends in the
+          // do block, maybe we can get rid of this
           if (statementBody.length === 0 && path.isCompletionRecord()) {
             nodes.unshift(t.expressionStatement(scope.buildUndefinedNode()));
           }

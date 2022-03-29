@@ -389,28 +389,23 @@ export function* transformPrivateKeyDestructuring(
             // in RHS. Otherwise we have to pause the iterable and interleave
             // the expressions.
             // See also https://gist.github.com/nicolo-ribaudo/f8ac7916f89450f2ead77d99855b2098
+            const leftElements = left.elements;
+            const leftElementsAfterIndex = leftElements.splice(index);
             const { elements, transformed } = buildAssignmentsFromPatternList(
-              left.elements,
+              leftElementsAfterIndex,
               scope,
               isAssignment,
             );
-            left.elements = elements;
+            leftElements.push(...elements);
             yield { left, right: cloneNode(right) };
-            // we are sure elements[0, index) does not contain private keys
-            for (let i = 0; i < index; i++) {
-              // skipping array holes
-              if (transformed[i] !== null) {
-                yield transformed[i];
-              }
-            }
             // for elements after `index`, push them to stack so we can process them later
-            for (let i = transformed.length - 1; i > index; i--) {
+            for (let i = transformed.length - 1; i > 0; i--) {
               // skipping array holes
               if (transformed[i] !== null) {
                 stack.push(transformed[i]);
               }
             }
-            ({ left, right } = transformed[index]);
+            ({ left, right } = transformed[0]);
             break;
           }
           default:

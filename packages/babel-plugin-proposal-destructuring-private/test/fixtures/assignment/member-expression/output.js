@@ -5,9 +5,9 @@ class C {
   static #y;
   static #z;
   static {
-    var _m, _p, _p2, _p3;
+    var _m, _p, _p2;
 
     let z;
-    _m = [0, C], [_p, _p2, ..._p3] = _m, C.#x = _p, x = _p2.#x, z = _p3;
+    _m = [0, C], [C.#x, _p, ..._p2] = _m, x = _p.#x, z = _p2;
   }
 }
