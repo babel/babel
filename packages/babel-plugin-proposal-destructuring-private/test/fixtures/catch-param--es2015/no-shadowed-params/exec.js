@@ -7,3 +7,4 @@ class C {
     }
   }
 }
+expect(x).toBe("x");

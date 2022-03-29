@@ -1,3 +1,5 @@
+var x;
+
 var _x = /*#__PURE__*/new WeakMap();
 
 class C {
@@ -11,9 +13,11 @@ class C {
 }
 
 (() => {
+  x = "x";
+
   try {
     throw new C();
   } catch (_e) {
-    var x = babelHelpers.classPrivateFieldGet(_e, _x);
+    let x = babelHelpers.classPrivateFieldGet(_e, _x);
   }
 })();

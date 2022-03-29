@@ -71,7 +71,7 @@ export default declare(function ({
         .get("body")
         .unshiftContainer(
           "body",
-          variableDeclaration("var", [variableDeclarator(node.param, ref)]),
+          variableDeclaration("let", [variableDeclarator(node.param, ref)]),
         );
       node.param = cloneNode(ref);
       // the pattern will be handled by VariableDeclaration visitor.

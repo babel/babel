@@ -1,10 +1,14 @@
+var x;
+
 class C {
   #x;
   static {
+    x = "x";
+
     try {
       throw new C();
     } catch (_e) {
-      var x = _e.#x;
+      let x = _e.#x;
     }
 
   }
