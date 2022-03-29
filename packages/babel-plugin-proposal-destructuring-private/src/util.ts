@@ -34,7 +34,7 @@ function transformAssignmentPattern(
   );
 }
 
-function initRestExcludingKeys(pattern: t.LVal) {
+function initRestExcludingKeys(pattern: t.LVal): ExcludingKey[] | null {
   if (pattern.type === "ObjectPattern") {
     const { properties } = pattern;
     if (properties[properties.length - 1].type === "RestElement") {
@@ -45,22 +45,28 @@ function initRestExcludingKeys(pattern: t.LVal) {
 }
 
 /**
- * grow restExcludingKeys on given properties. This routine mutates properties by
+ * grow `excludingKeys` from given properties. This routine mutates properties by
  * memoising the computed non-static keys.
  *
+ * @param {ExcludingKey[]} excludingKeys
  * @param {ObjectProperty[]} properties An array of object properties that should be excluded by rest element transform
  * @param {Scope} scope Where should we register the memoised id
  */
-function* growRestExcludingKeys(properties: ObjectProperty[], scope: Scope) {
+function growRestExcludingKeys(
+  excludingKeys: ExcludingKey[],
+  properties: ObjectProperty[],
+  scope: Scope,
+) {
+  if (excludingKeys === null) return;
   for (const property of properties) {
     const propertyKey = property.key;
     if (property.computed && !scope.isStatic(propertyKey)) {
       const tempId = scope.generateDeclaredUidIdentifier("m");
       // @ts-expect-error A computed property key must not be a private name
       property.key = assignmentExpression("=", tempId, propertyKey);
-      yield { key: tempId, computed: true };
+      excludingKeys.push({ key: tempId, computed: true });
     } else if (propertyKey.type !== "PrivateName") {
-      yield property;
+      excludingKeys.push(property);
     }
   }
 }
@@ -302,7 +308,7 @@ export function* transformPrivateKeyDestructuring(
     let { left, right } = item;
     const searchPrivateKey = privateKeyPathIterator(left).next();
     if (searchPrivateKey.done) {
-      if (restExcludingKeys != null && restExcludingKeys.length > 0) {
+      if (restExcludingKeys?.length > 0) {
         // optimize out the rest element because `objectWithoutProperties`
         // always return a new object
         // `{ ...z } = babelHelpers.objectWithoutProperties(m, ["x"])`
@@ -363,16 +369,13 @@ export function* transformPrivateKeyDestructuring(
               const nextRestExcludingKeys = isFirst
                 ? restExcludingKeys
                 : initRestExcludingKeys(left);
-              if (nextRestExcludingKeys !== null) {
-                nextRestExcludingKeys.push(
-                  ...growRestExcludingKeys(
-                    // @ts-expect-error properties[0, index] must not contain rest element
-                    // because properties[index] contains a private key
-                    properties.slice(0, index + 1),
-                    scope,
-                  ),
-                );
-              }
+              growRestExcludingKeys(
+                nextRestExcludingKeys,
+                // @ts-expect-error properties[0, index] must not contain rest element
+                // because properties[index] contains a private key
+                properties.slice(0, index + 1),
+                scope,
+              );
               stack.push({
                 left: objectPattern(properties.slice(index + 1)),
                 right: cloneNode(right),
