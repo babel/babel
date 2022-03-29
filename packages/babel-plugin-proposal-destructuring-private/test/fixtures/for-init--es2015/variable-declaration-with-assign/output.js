@@ -8,8 +8,8 @@ var _x = {
 (() => {
   let y;
 
-  for (let _m = (_m2 = C, y = babelHelpers.classStaticPrivateFieldSpecGet(C, C, _x), _m2), x = babelHelpers.classStaticPrivateFieldSpecGet(_m, C, _x);;) {
-    var _m2;
+  for (let x = babelHelpers.classStaticPrivateFieldSpecGet((_m = C, y = babelHelpers.classStaticPrivateFieldSpecGet(_m, C, _x), _m), C, _x);;) {
+    var _m;
 
     break;
   }

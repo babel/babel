@@ -281,6 +281,8 @@ function rightWillBeReferencedOnce(left: LHS) {
     case "Identifier":
     case "ArrayPattern":
       return true;
+    case "ObjectPattern":
+      return left.properties.length === 1;
     default:
       return false;
   }
@@ -302,11 +304,13 @@ export function* transformPrivateKeyDestructuring(
   right: t.Expression,
   scope: Scope,
   isAssignment: boolean,
+  shouldPreserveCompletion: boolean,
   addHelper: File["addHelper"],
   objectRestNoSymbols: boolean,
   useBuiltIns: boolean,
 ): Generator<Transformed, void, void> {
   const stack: Item[] = [];
+  const rootRight = right;
   // The stack holds patterns that we don't known whether they contain private key
   stack.push({
     left,
@@ -353,7 +357,14 @@ export function* transformPrivateKeyDestructuring(
         (index = indexPath.shift()) !== undefined ||
         left.type === "AssignmentPattern"
       ) {
-        if (!rightWillBeReferencedOnce(left) && !scope.isStatic(right)) {
+        const isRightSafeToReuse =
+          // If we should preserve completion and the right is the rootRight, then the
+          // right is NOT safe to reuse because we will insert a new memoising statement
+          // in the AssignmentExpression visitor, which causes right to be referenced more
+          // than once
+          !(shouldPreserveCompletion && right === rootRight) &&
+          (rightWillBeReferencedOnce(left) || scope.isStatic(right));
+        if (!isRightSafeToReuse) {
           const tempId = scope.generateUidIdentifier("m");
           if (isAssignment) {
             scope.push({ id: cloneNode(tempId) });

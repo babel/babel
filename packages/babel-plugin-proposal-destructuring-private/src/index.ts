@@ -125,6 +125,7 @@ export default declare(function ({
           declarator.init,
           scope,
           /* isAssignment */ false,
+          /* shouldPreserveCompletion */ false,
           name => state.addHelper(name),
           objectRestNoSymbols,
           /* useBuiltIns */ true,
@@ -140,12 +141,16 @@ export default declare(function ({
       const { node, scope, parent } = path;
       if (!hasPrivateKeys(node.left)) return;
       const assignments = [];
+      const shouldPreserveCompletion =
+        (!isExpressionStatement(parent) && !isSequenceExpression(parent)) ||
+        path.isCompletionRecord();
       for (const { left, right } of transformPrivateKeyDestructuring(
         // @ts-expect-error The left of an assignment expression must not be a RestElement
         node.left,
         node.right,
         scope,
         /* isAssignment */ true,
+        shouldPreserveCompletion,
         name => state.addHelper(name),
         objectRestNoSymbols,
         /* useBuiltIns */ true,
@@ -153,25 +158,25 @@ export default declare(function ({
         assignments.push(assignmentExpression("=", left, right));
       }
       // preserve completion record
-      if (
-        (!isExpressionStatement(parent) && !isSequenceExpression(parent)) ||
-        path.isCompletionRecord()
-      ) {
-        const { left } = assignments[0];
-        if (scope.isStatic(node.right)) {
+      if (shouldPreserveCompletion) {
+        const { left, right } = assignments[0];
+        // If node.right is right and left is an identifier, then the left is an effectively-constant memoised id
+        if (isIdentifier(left) && right === node.right) {
+          if (
+            !isIdentifier(assignments[assignments.length - 1].right, {
+              name: left.name,
+            })
+          ) {
+            // If the last assignment does not end with left, then we push `left` as the completion value
+            assignments.push(cloneNode(left));
+          }
+          // do nothing as `left` is already at the end of assignments
+        } else {
           const tempId = scope.generateDeclaredUidIdentifier("m");
           assignments.unshift(
             assignmentExpression("=", tempId, cloneNode(node.right)),
           );
           assignments.push(cloneNode(tempId));
-        } else if (
-          !isIdentifier(assignments[assignments.length - 1].right, {
-            name: left.name,
-          })
-        ) {
-          // If node.right is non-static and then the left is an effectively-constant memoised id
-          // If the last assignment does not end with left, that we can safely reuse `left` as the completion value
-          assignments.push(cloneNode(left));
         }
       }
 

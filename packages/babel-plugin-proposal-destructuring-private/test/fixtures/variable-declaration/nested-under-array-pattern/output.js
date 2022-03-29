@@ -10,13 +10,10 @@ class C {
 
   static {
     var [_p, _p2,, _p3] = [this, this],
-        _m = _p === void 0 ? C.self : _p,
-        x = _m.#x,
+        x = (_p === void 0 ? C.self : _p).#x,
         [, _p4] = _p2.#y,
-        _m2 = _p4 === void 0 ? C.self : _p4,
-        _m3 = _m2.#z,
-        y = _m3 === void 0 ? C.#self() : _m3,
+        _m = (_p4 === void 0 ? C.self : _p4).#z,
+        y = _m === void 0 ? C.#self() : _m,
         z = _p3 === void 0 ? y.#y : _p3;
-
   }
 }

@@ -11,7 +11,7 @@ class C {
 }
 
 (() => {
-  for (_m = C, x = babelHelpers.classPrivateFieldGet(C, _x), _m;;) {
+  for (_m = C, x = babelHelpers.classPrivateFieldGet(_m, _x), _m;;) {
     var _m;
 
     break;
