@@ -149,7 +149,11 @@ export function isCompletionRecord(
     if (Array.isArray(container) && path.key !== container.length - 1) {
       return false;
     }
-  } while ((path = path.parentPath) && !path.isProgram());
+  } while (
+    (path = path.parentPath) &&
+    !path.isProgram() &&
+    !path.isDoExpression()
+  );
 
   return true;
 }
