@@ -4,11 +4,10 @@ let result;
 class C {
   static #x;
   static {
-    var _m = [C],
-        [..._p] = _m,
-        _m2 = _p[0],
-        _m3 = _m2.#x,
-        x = _m3 === void 0 ? 1 : _m3,
+    var [..._p] = [C],
+        _m = _p[0],
+        _m2 = _m.#x,
+        x = _m2 === void 0 ? 1 : _m2,
         z = babelHelpers.objectWithoutProperties(_p, _excluded);
     result = {
       x,

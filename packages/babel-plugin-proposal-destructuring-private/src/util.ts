@@ -274,6 +274,17 @@ type Item = {
   restExcludingKeys?: ExcludingKey[] | null;
 };
 
+function rightWillBeReferencedOnce(left: LHS) {
+  switch (left.type) {
+    // Skip memoising the right when left is an identifier or
+    // an array pattern
+    case "Identifier":
+    case "ArrayPattern":
+      return true;
+    default:
+      return false;
+  }
+}
 /**
  * Transform private destructuring. It returns a generator
  * which yields a pair of transformed LHS and RHS, which can form VariableDeclaration or
@@ -342,7 +353,7 @@ export function* transformPrivateKeyDestructuring(
         (index = indexPath.shift()) !== undefined ||
         left.type === "AssignmentPattern"
       ) {
-        if (!scope.isStatic(right) && left.type !== "Identifier") {
+        if (!rightWillBeReferencedOnce(left) && !scope.isStatic(right)) {
           const tempId = scope.generateUidIdentifier("m");
           if (isAssignment) {
             scope.push({ id: cloneNode(tempId) });

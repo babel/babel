@@ -3,12 +3,12 @@ let x, y, z;
 class C {
   static #x;
   static {
-    var _m, _p, _p2, _m2;
+    var _p, _p2, _m;
 
-    _m = [{
-      y: 1
-    }, C], [{
+    [{
       y
-    }, _p, ..._p2] = _m, _m2 = _p.#x, x = _m2 === void 0 ? y : _m2, z = _p2;
+    }, _p, ..._p2] = [{
+      y: 1
+    }, C], _m = _p.#x, x = _m === void 0 ? y : _m, z = _p2;
   }
 }

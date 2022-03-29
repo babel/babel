@@ -9,11 +9,10 @@ var _x = {
 };
 
 (() => {
-  var _m = [C],
-      [..._p] = _m,
-      _m2 = _p[0],
-      _m3 = babelHelpers.classStaticPrivateFieldSpecGet(_m2, C, _x),
-      x = _m3 === void 0 ? 1 : _m3,
+  var [..._p] = [C],
+      _m = _p[0],
+      _m2 = babelHelpers.classStaticPrivateFieldSpecGet(_m, C, _x),
+      x = _m2 === void 0 ? 1 : _m2,
       z = babelHelpers.objectWithoutProperties(_p, _excluded);
 
   result = {

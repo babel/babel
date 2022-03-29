@@ -16,8 +16,8 @@ var _z = {
 };
 
 (() => {
-  var _m, _p, _p2;
+  var _p, _p2;
 
   let z;
-  _m = [0, C], [babelHelpers.classStaticPrivateFieldDestructureSet(C, C, _x).value, _p, ..._p2] = _m, x = babelHelpers.classStaticPrivateFieldSpecGet(_p, C, _x), z = _p2;
+  [babelHelpers.classStaticPrivateFieldDestructureSet(C, C, _x).value, _p, ..._p2] = [0, C], x = babelHelpers.classStaticPrivateFieldSpecGet(_p, C, _x), z = _p2;
 })();
