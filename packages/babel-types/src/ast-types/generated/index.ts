@@ -2156,6 +2156,7 @@ export type Expression =
   | OptionalCallExpression
   | TypeCastExpression
   | JSXElement
+  | JSXMemberExpression
   | JSXFragment
   | BindExpression
   | DoExpression

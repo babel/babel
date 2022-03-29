@@ -181,12 +181,12 @@ export function referencesImport(
 ): boolean {
   if (!this.isReferencedIdentifier()) {
     if (
-      (this.isMemberExpression() ||
-        this.isJSXMemberExpression() ||
-        this.isOptionalMemberExpression()) &&
-      (this.node.computed
-        ? isStringLiteral(this.node.property, { value: importName })
-        : (this.node.property as t.Identifier).name === importName)
+      (this.isJSXMemberExpression() &&
+        (this.node.property as t.JSXIdentifier).name === importName) ||
+      ((this.isMemberExpression() || this.isOptionalMemberExpression()) &&
+        (this.node.computed
+          ? isStringLiteral(this.node.property, { value: importName })
+          : (this.node.property as t.Identifier).name === importName))
     ) {
       const object = (
         this as NodePath<t.MemberExpression | t.OptionalMemberExpression>

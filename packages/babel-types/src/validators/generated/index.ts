@@ -4357,6 +4357,7 @@ export function isExpression(
     "OptionalCallExpression" === nodeType ||
     "TypeCastExpression" === nodeType ||
     "JSXElement" === nodeType ||
+    "JSXMemberExpression" === nodeType ||
     "JSXFragment" === nodeType ||
     "BindExpression" === nodeType ||
     "DoExpression" === nodeType ||
