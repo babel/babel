@@ -120,6 +120,7 @@ export default declare(function ({
       const newDeclarations = [];
       for (const declarator of declarations) {
         for (const { left, right } of transformPrivateKeyDestructuring(
+          // @ts-expect-error The id of a variable declarator must not be a RestElement
           declarator.id,
           declarator.init,
           scope,
@@ -140,6 +141,7 @@ export default declare(function ({
       if (!hasPrivateKeys(node.left)) return;
       const assignments = [];
       for (const { left, right } of transformPrivateKeyDestructuring(
+        // @ts-expect-error The left of an assignment expression must not be a RestElement
         node.left,
         node.right,
         scope,

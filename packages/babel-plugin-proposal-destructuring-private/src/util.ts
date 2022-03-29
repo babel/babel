@@ -251,12 +251,19 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   });
 }
 
+type LHS =
+  | t.Identifier
+  | t.MemberExpression
+  | t.ArrayPattern
+  | t.ObjectPattern
+  | t.AssignmentPattern;
+
 type ExcludingKey = {
   key: t.ObjectProperty["key"];
   computed: t.ObjectProperty["computed"];
 };
 type Item = {
-  left: t.LVal;
+  left: LHS;
   right: t.Expression;
   restExcludingKeys?: ExcludingKey[] | null;
 };
@@ -267,14 +274,14 @@ type Item = {
  * AssignmentExpression later.
  *
  * @export
- * @param {t.LVal} left The root pattern
+ * @param {LHS} left The root pattern
  * @param {t.Expression} right The initializer or the RHS of pattern
  * @param {Scope} scope The scope where memoized id should be registered
  * @param {boolean} isAssignment Whether we are transforming from an AssignmengExpression of VariableDeclaration
  * @returns {Generator<Transformed, void, void>}
  */
 export function* transformPrivateKeyDestructuring(
-  left: t.LVal,
+  left: LHS,
   right: t.Expression,
   scope: Scope,
   isAssignment: boolean,
@@ -303,7 +310,8 @@ export function* transformPrivateKeyDestructuring(
         // `z = babelHelpers.objectWithoutProperties(m, ["x"])`
         const { properties } = left as t.ObjectPattern;
         if (properties.length === 1) {
-          left = (properties[0] as t.RestElement).argument;
+          // The argument of an object rest element must be an Identifier
+          left = (properties[0] as t.RestElement).argument as t.Identifier;
         }
         yield {
           left: left as t.ObjectPattern,
@@ -317,7 +325,6 @@ export function* transformPrivateKeyDestructuring(
           ),
         };
       } else {
-        // @ts-expect-error left must not contain RestElement if restExcludingKeys is nullish
         yield { left, right };
       }
     } else {
@@ -341,12 +348,6 @@ export function* transformPrivateKeyDestructuring(
         switch (left.type) {
           case "ObjectPattern": {
             const { properties } = left;
-            // inherit the restExcludingKeys on the stack if we are at
-            // the first level, otherwise initialize a new restExcludingKeys
-            let nextRestExcludingKeys = restExcludingKeys;
-            if (!isFirst) {
-              nextRestExcludingKeys = initRestExcludingKeys(left);
-            }
             if (index > 0) {
               // properties[0, index) must not contain private keys
               const propertiesSlice = properties.slice(0, index);
@@ -357,6 +358,11 @@ export function* transformPrivateKeyDestructuring(
             }
             if (index < properties.length - 1) {
               // for properties after `index`, push them to stack so we can process them later
+              // inherit the restExcludingKeys on the stack if we are at
+              // the first level, otherwise initialize a new restExcludingKeys
+              const nextRestExcludingKeys = isFirst
+                ? restExcludingKeys
+                : initRestExcludingKeys(left);
               if (nextRestExcludingKeys !== null) {
                 nextRestExcludingKeys.push(
                   ...growRestExcludingKeys(
@@ -375,7 +381,8 @@ export function* transformPrivateKeyDestructuring(
             }
             // An object rest element must not contain a private key
             const property = properties[index] as t.ObjectProperty;
-            left = property.value as t.LVal;
+            // The value of ObjectProperty under ObjectPattern must be an LHS
+            left = property.value as LHS;
             const { key } = property;
             const computed =
               property.computed ||
