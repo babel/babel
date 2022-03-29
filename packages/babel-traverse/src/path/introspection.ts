@@ -181,7 +181,9 @@ export function referencesImport(
 ): boolean {
   if (!this.isReferencedIdentifier()) {
     if (
-      (this.isMemberExpression() || this.isOptionalMemberExpression()) &&
+      (this.isMemberExpression() ||
+        this.isJSXMemberExpression() ||
+        this.isOptionalMemberExpression()) &&
       (this.node.computed
         ? isStringLiteral(this.node.property, { value: importName })
         : (this.node.property as t.Identifier).name === importName)
