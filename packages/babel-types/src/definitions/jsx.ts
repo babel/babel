@@ -107,7 +107,6 @@ defineType("JSXIdentifier", {
 
 defineType("JSXMemberExpression", {
   visitor: ["object", "property"],
-  aliases: ["Expression"],
   fields: {
     object: {
       validate: assertNodeType("JSXMemberExpression", "JSXIdentifier"),

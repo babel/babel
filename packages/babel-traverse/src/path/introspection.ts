@@ -175,7 +175,7 @@ export function isStatementOrBlock(this: NodePath): boolean {
  */
 
 export function referencesImport(
-  this: NodePath<t.Expression>,
+  this: NodePath,
   moduleSource: string,
   importName: string,
 ): boolean {
