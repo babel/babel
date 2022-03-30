@@ -182,7 +182,7 @@ export function referencesImport(
   if (!this.isReferencedIdentifier()) {
     if (
       (this.isJSXMemberExpression() &&
-        (this.node.property as t.JSXIdentifier).name === importName) ||
+        this.node.property.name === importName) ||
       ((this.isMemberExpression() || this.isOptionalMemberExpression()) &&
         (this.node.computed
           ? isStringLiteral(this.node.property, { value: importName })
