@@ -175,16 +175,18 @@ export function isStatementOrBlock(this: NodePath): boolean {
  */
 
 export function referencesImport(
-  this: NodePath<t.Expression>,
+  this: NodePath,
   moduleSource: string,
   importName: string,
 ): boolean {
   if (!this.isReferencedIdentifier()) {
     if (
-      (this.isMemberExpression() || this.isOptionalMemberExpression()) &&
-      (this.node.computed
-        ? isStringLiteral(this.node.property, { value: importName })
-        : (this.node.property as t.Identifier).name === importName)
+      (this.isJSXMemberExpression() &&
+        this.node.property.name === importName) ||
+      ((this.isMemberExpression() || this.isOptionalMemberExpression()) &&
+        (this.node.computed
+          ? isStringLiteral(this.node.property, { value: importName })
+          : (this.node.property as t.Identifier).name === importName))
     ) {
       const object = (
         this as NodePath<t.MemberExpression | t.OptionalMemberExpression>
