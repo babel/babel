@@ -24,13 +24,13 @@ const bool = assertValueType("boolean");
 
 const tSFunctionTypeAnnotationCommon = {
   returnType: {
-    validate: process.env.BABEL_8_BREAKING
+    validate: process?.env?.BABEL_8_BREAKING
       ? assertNodeType("TSTypeAnnotation")
       : assertNodeType("TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
-    validate: process.env.BABEL_8_BREAKING
+    validate: process?.env?.BABEL_8_BREAKING
       ? assertNodeType("TSTypeParameterDeclaration")
       : assertNodeType("TSTypeParameterDeclaration", "Noop"),
     optional: true,
@@ -94,10 +94,9 @@ defineType("TSQualifiedName", {
 
 const signatureDeclarationCommon = {
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
-  [process.env.BABEL_8_BREAKING ? "params" : "parameters"]: validateArrayOfType(
-    ["Identifier", "RestElement"],
-  ),
-  [process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
+  [process?.env?.BABEL_8_BREAKING ? "params" : "parameters"]:
+    validateArrayOfType(["Identifier", "RestElement"]),
+  [process?.env?.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
     validateOptionalType("TSTypeAnnotation"),
 };
 
@@ -105,8 +104,8 @@ const callConstructSignatureDeclaration = {
   aliases: ["TSTypeElement"],
   visitor: [
     "typeParameters",
-    process.env.BABEL_8_BREAKING ? "params" : "parameters",
-    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
+    process?.env?.BABEL_8_BREAKING ? "params" : "parameters",
+    process?.env?.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
   ],
   fields: signatureDeclarationCommon,
 };
@@ -142,8 +141,8 @@ defineType("TSMethodSignature", {
   visitor: [
     "key",
     "typeParameters",
-    process.env.BABEL_8_BREAKING ? "params" : "parameters",
-    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
+    process?.env?.BABEL_8_BREAKING ? "params" : "parameters",
+    process?.env?.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
   ],
   fields: {
     ...signatureDeclarationCommon,
@@ -199,8 +198,8 @@ const fnOrCtrBase = {
   aliases: ["TSType"],
   visitor: [
     "typeParameters",
-    process.env.BABEL_8_BREAKING ? "params" : "parameters",
-    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
+    process?.env?.BABEL_8_BREAKING ? "params" : "parameters",
+    process?.env?.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
   ],
 };
 
@@ -603,7 +602,7 @@ defineType("TSTypeParameter", {
   visitor: ["constraint", "default"],
   fields: {
     name: {
-      validate: !process.env.BABEL_8_BREAKING
+      validate: !process?.env?.BABEL_8_BREAKING
         ? assertValueType("string")
         : assertNodeType("Identifier"),
     },
