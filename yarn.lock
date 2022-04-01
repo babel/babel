@@ -2992,7 +2992,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    regenerator-transform: ^0.14.2
+    regenerator-transform: ^0.15.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -13348,6 +13348,15 @@ fsevents@^1.2.7:
     "@babel/runtime": ^7.8.4
     private: ^0.1.8
   checksum: 4ee29eb527561d7aad8808d4a9fff59c32f3dee31de81b2569217168ac5143b6b3f8e6bc684a0fb7509cec8df70d8abbec5bf128a405f2fea305f0ea2a9d4b23
+  languageName: node
+  linkType: hard
+
+"regenerator-transform@npm:^0.15.0":
+  version: 0.15.0
+  resolution: "regenerator-transform@npm:0.15.0"
+  dependencies:
+    "@babel/runtime": ^7.8.4
+  checksum: 86e54849ab1167618d28bb56d214c52a983daf29b0d115c976d79840511420049b6b42c9ebdf187defa8e7129bdd74b6dd266420d0d3868c9fa7f793b5d15d49
   languageName: node
   linkType: hard
 
