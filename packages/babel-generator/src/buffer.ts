@@ -45,7 +45,7 @@ export default class Buffer {
     const result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
-      code: this._buf.trimRight(),
+      code: this._buf.trimEnd(),
       map: null,
       rawMappings: map?.getRawMappings(),
     };
