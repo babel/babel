@@ -2731,7 +2731,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.tsParseModifiers({
         modified: member,
         allowedModifiers: modifiers,
+        disallowedModifiers: ["in", "out"],
         stopOnStartOfClassStaticBlock: true,
+        errorTemplate: TSErrors.InvalidModifierOnTypeParameterPositions,
       });
 
       const callParseClassMemberWithIsStatic = () => {

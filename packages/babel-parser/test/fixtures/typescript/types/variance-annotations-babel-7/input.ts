@@ -100,11 +100,10 @@ type T23<out in T> = T;  // Error
 declare function f1<in T>(x: T): void;  // Error
 declare function f2<out T>(): T;  // Error
 
-// FIXME: this should be recoverable error
-// class C {
-//     in a = 0;  // Error
-//     out b = 0;  // Error
-// }
+class C {
+    in a = 0;  // Error
+    out b = 0;  // Error
+}
 
 // Interface merging
 
