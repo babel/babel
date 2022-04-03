@@ -158,6 +158,10 @@ const TSErrors = ParseErrorEnum`typescript`(_ => ({
     ({ modifier }) =>
       `'${modifier}' modifier cannot appear on a type parameter.`,
   ),
+  InvalidModifierOnTypeParameterPositions: _<{| modifier: TsModifier |}>(
+    ({ modifier }) =>
+      `'${modifier}' modifier can only appear on a type parameter of a class, interface or type alias.`,
+  ),
   InvalidModifiersOrder: _<{| orderedModifiers: [TsModifier, TsModifier] |}>(
     ({ orderedModifiers }) =>
       `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`,
@@ -652,9 +656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeQuery");
     }
 
-    tsParseTypeParameter(): N.TsTypeParameter {
-      const node: N.TsTypeParameter = this.startNode();
-
+    tsParseInOutModifiers(node: N.TsTypeParameter) {
       this.tsParseModifiers({
         modified: node,
         allowedModifiers: ["in", "out"],
@@ -669,6 +671,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ],
         errorTemplate: TSErrors.InvalidModifierOnTypeParameter,
       });
+    }
+
+    // for better error recover
+    tsParseNoneModifiers(node: N.TsTypeParameter) {
+      this.tsParseModifiers({
+        modified: node,
+        allowedModifiers: [],
+        disallowedModifiers: ["in", "out"],
+        errorTemplate: TSErrors.InvalidModifierOnTypeParameterPositions,
+      });
+    }
+
+    tsParseTypeParameter(
+      parseModifiers: ?(
+        node: N.TsTypeParameter,
+      ) => void = this.tsParseNoneModifiers.bind(this),
+    ): N.TsTypeParameter {
+      const node: N.TsTypeParameter = this.startNode();
+
+      parseModifiers(node);
 
       node.name = this.tsParseTypeParameterName();
       node.constraint = this.tsEatThenParseType(tt._extends);
@@ -676,13 +698,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeParameter");
     }
 
-    tsTryParseTypeParameters(): ?N.TsTypeParameterDeclaration {
+    tsTryParseTypeParameters(
+      parseModifiers: ?(node: N.TsTypeParameter) => void,
+    ): ?N.TsTypeParameterDeclaration {
       if (this.match(tt.lt)) {
-        return this.tsParseTypeParameters();
+        return this.tsParseTypeParameters(parseModifiers);
       }
     }
 
-    tsParseTypeParameters() {
+    tsParseTypeParameters(parseModifiers: ?(node: N.TsTypeParameter) => void) {
       const node: N.TsTypeParameterDeclaration = this.startNode();
 
       if (this.match(tt.lt) || this.match(tt.jsxTagStart)) {
@@ -695,7 +719,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       node.params = this.tsParseBracketedList(
         "TypeParametersOrArguments",
-        this.tsParseTypeParameter.bind(this),
+        this.tsParseTypeParameter.bind(this, parseModifiers),
         /* bracket */ false,
         /* skipFirstToken */ true,
         refTrailingCommaPos,
@@ -1658,7 +1682,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.raise(TSErrors.MissingInterfaceName, { at: this.state.startLoc });
       }
 
-      node.typeParameters = this.tsTryParseTypeParameters();
+      node.typeParameters = this.tsTryParseTypeParameters(
+        this.tsParseInOutModifiers.bind(this),
+      );
       if (this.eat(tt._extends)) {
         node.extends = this.tsParseHeritageClause("extends");
       }
@@ -1674,7 +1700,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       this.checkIdentifier(node.id, BIND_TS_TYPE);
 
-      node.typeParameters = this.tsTryParseTypeParameters();
+      node.typeParameters = this.tsTryParseTypeParameters(
+        this.tsParseInOutModifiers.bind(this),
+      );
       node.typeAnnotation = this.tsInType(() => {
         this.expect(tt.eq);
 
@@ -2939,7 +2967,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         optionalId,
         (node: any).declare ? BIND_TS_AMBIENT : BIND_CLASS,
       );
-      const typeParameters = this.tsTryParseTypeParameters();
+      const typeParameters = this.tsTryParseTypeParameters(
+        this.tsParseInOutModifiers.bind(this),
+      );
       if (typeParameters) node.typeParameters = typeParameters;
     }
 

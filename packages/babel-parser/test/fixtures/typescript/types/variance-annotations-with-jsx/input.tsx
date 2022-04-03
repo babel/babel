@@ -1,3 +1,6 @@
+// valid JSX
+<in T>() => {}</in>;
+
 type Covariant<out T> = {
     x: T;
 }
