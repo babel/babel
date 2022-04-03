@@ -1,7 +1,7 @@
 "use strict";
 
 function foo1() {
-  const data = babelHelpers.interopRequireDefault(require("white"));
+  const data = babelHelpers.interopRequireWildcard(require("white"));
 
   foo1 = function () {
     return data;
@@ -10,6 +10,6 @@ function foo1() {
   return data;
 }
 
-var foo2 = babelHelpers.interopRequireDefault(require("black"));
+var foo2 = babelHelpers.interopRequireWildcard(require("black"));
 console.log(foo1());
 console.log(foo2);

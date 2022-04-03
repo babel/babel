@@ -583,10 +583,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt.dot)) {
         // In this instance, the entity name will actually itself be a
         // qualifier, so allow it to be a reserved word as well.
-        node.qualifier = this.tsParseEntityName({
-          allowReservedEntityName: true,
-          allowReservedQualifiers: true,
-        });
+        node.qualifier = this.tsParseEntityName();
       }
       if (this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
@@ -594,33 +591,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSImportType");
     }
 
-    tsParseEntityName({
-      allowReservedEntityName,
-      allowReservedQualifiers,
-    }: {
-      allowReservedEntityName: TokenType | boolean,
-      allowReservedQualifiers: boolean,
-    }): N.TsEntityName {
-      let entity: N.TsEntityName = this.parseIdentifier(
-        allowReservedEntityName === true ||
-          (allowReservedEntityName !== false &&
-            this.match(allowReservedEntityName)),
-      );
+    tsParseEntityName(allowReservedWords: boolean = true): N.TsEntityName {
+      let entity: N.TsEntityName = this.parseIdentifier(allowReservedWords);
       while (this.eat(tt.dot)) {
         const node: N.TsQualifiedName = this.startNodeAtNode(entity);
         node.left = entity;
-        node.right = this.parseIdentifier(allowReservedQualifiers);
+        node.right = this.parseIdentifier(allowReservedWords);
         entity = this.finishNode(node, "TSQualifiedName");
       }
       return entity;
     }
 
-    tsParseTypeReference(allowConst: boolean = false): N.TsTypeReference {
+    tsParseTypeReference(): N.TsTypeReference {
       const node: N.TsTypeReference = this.startNode();
-      node.typeName = this.tsParseEntityName({
-        allowReservedEntityName: allowConst && tt._const,
-        allowReservedQualifiers: true,
-      });
+      node.typeName = this.tsParseEntityName();
       if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
       }
@@ -648,10 +632,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt._import)) {
         node.exprName = this.tsParseImportType();
       } else {
-        node.exprName = this.tsParseEntityName({
-          allowReservedEntityName: false,
-          allowReservedQualifiers: true,
-        });
+        node.exprName = this.tsParseEntityName();
       }
       return this.finishNode(node, "TSTypeQuery");
     }
@@ -737,7 +718,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.lookahead().type !== tt._const) return null;
 
       this.next();
-      const typeReference = this.tsParseTypeReference(/* allowConst */ true);
+      const typeReference = this.tsParseTypeReference();
 
       // If the type reference has type parameters, then you are using it as a
       // type and not as a const signifier. We'll *never* be able to find this
@@ -1654,12 +1635,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseExpressionWithTypeArguments(): N.TsExpressionWithTypeArguments {
       const node: N.TsExpressionWithTypeArguments = this.startNode();
-      // Note: TS uses parseLeftHandSideExpressionOrHigher,
-      // then has grammar errors later if it's not an EntityName.
-      node.expression = this.tsParseEntityName({
-        allowReservedEntityName: false,
-        allowReservedQualifiers: false,
-      });
+      node.expression = this.tsParseEntityName();
       if (this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
       }
@@ -1700,10 +1676,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       this.checkIdentifier(node.id, BIND_TS_TYPE);
 
-      node.typeParameters = this.tsTryParseTypeParameters(
-        this.tsParseInOutModifiers.bind(this),
-      );
       node.typeAnnotation = this.tsInType(() => {
+        node.typeParameters = this.tsTryParseTypeParameters(
+          this.tsParseInOutModifiers.bind(this),
+        );
+
         this.expect(tt.eq);
 
         if (
@@ -1896,10 +1873,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseModuleReference(): N.TsModuleReference {
       return this.tsIsExternalModuleReference()
         ? this.tsParseExternalModuleReference()
-        : this.tsParseEntityName({
-            allowReservedEntityName: false,
-            allowReservedQualifiers: false,
-          });
+        : this.tsParseEntityName(/* allowReservedWords */ false);
     }
 
     tsParseExternalModuleReference(): N.TsExternalModuleReference {
@@ -3213,13 +3187,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return expr;
       }, state);
 
-      if (invalidSingleType) {
-        this.raise(TSErrors.SingleTypeParameterWithoutTrailingComma, {
-          at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
-          typeParameterName: process.env.BABEL_8_BREAKING
-            ? invalidSingleType.name.name
-            : invalidSingleType.name,
-        });
+      if (process.env.BABEL_8_BREAKING) {
+        if (invalidSingleType) {
+          this.raise(TSErrors.SingleTypeParameterWithoutTrailingComma, {
+            at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
+            typeParameterName: invalidSingleType.name.name,
+          });
+        }
       }
 
       /*:: invariant(arrow.node != null) */

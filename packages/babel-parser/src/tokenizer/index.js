@@ -1606,7 +1606,7 @@ export default class Tokenizer extends CommentsParser {
             -1,
           );
           const match = this.input
-            .substr(this.state.pos - 1, 3)
+            .slice(this.state.pos - 1, this.state.pos + 2)
             .match(/^[0-7]+/);
 
           // This is never null, because of the if condition above.

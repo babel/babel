@@ -12,7 +12,7 @@ function dec({ get, set }, context) {
       set.call(this, v + 1);
     },
 
-    initialize(v) {
+    init(v) {
       return v ? v : 1;
     }
   }

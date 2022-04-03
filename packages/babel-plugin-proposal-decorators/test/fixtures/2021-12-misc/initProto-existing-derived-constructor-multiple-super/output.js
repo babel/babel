@@ -2,7 +2,7 @@ var _dec, _initProto, _dec2, _initProto2;
 
 const dec = () => {};
 
-_dec = deco
+_dec = deco;
 
 class A extends B {
   static {
@@ -21,7 +21,7 @@ class A extends B {
 
 }
 
-_dec2 = deco
+_dec2 = deco;
 
 class C extends B {
   static {

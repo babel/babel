@@ -20,6 +20,22 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.8 (2022-03-18)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#14353](https://github.com/babel/babel/pull/14353) Update decorators to match latest spec ([@pzuraq](https://github.com/pzuraq))
+  * [#14339](https://github.com/babel/babel/pull/14339) Decorators misc fixes ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-modules-systemjs`
+  * [#14057](https://github.com/babel/babel/pull/14057) [systemjs] Fix nested `let`/`const` shadowing imported bindings ([@The-x-Theorist](https://github.com/The-x-Theorist))
+* `babel-parser`
+  * [#14362](https://github.com/babel/babel/pull/14362) Allow keywords in TS qualified types ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-parser`
+  * [#14367](https://github.com/babel/babel/pull/14367) Defer `<T>() => {}` TSX error to Babel 8 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.17.7 (2022-03-14)
 
 #### :eyeglasses: Spec Compliance

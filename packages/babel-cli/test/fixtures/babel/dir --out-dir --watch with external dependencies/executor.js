@@ -9,8 +9,8 @@ const run = (async function* () {
 
   logFile("lib/index.js");
   logFile("lib/main.js");
-  // wait 200ms for watcher setup
-  await new Promise(resolve => setTimeout(resolve, 200));
+  // wait 2s for watcher setup
+  await new Promise(resolve => setTimeout(resolve, 2000));
   fs.writeFileSync("./file.txt", "Updated!");
 
   assert.match(yield, /Successfully compiled 2 files with Babel \(\d+ms\)\./);

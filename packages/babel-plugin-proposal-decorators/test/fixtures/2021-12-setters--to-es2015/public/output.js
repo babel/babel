@@ -2,7 +2,7 @@ var _computedKey, _initProto;
 
 const dec = () => {};
 
-_computedKey = 'b'
+_computedKey = 'b';
 
 class Foo {
   constructor(...args) {

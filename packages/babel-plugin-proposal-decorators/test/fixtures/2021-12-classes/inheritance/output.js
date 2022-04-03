@@ -4,7 +4,7 @@ const dec = () => {};
 
 let _Bar;
 
-_dec = dec1
+_dec = dec1;
 
 class Bar {
   static {
@@ -18,7 +18,7 @@ class Bar {
 
 let _Foo;
 
-_dec2 = dec2
+_dec2 = dec2;
 
 class Foo extends _Bar {
   static {

@@ -2,8 +2,8 @@ var _computedKey, _computedKey2, _initProto;
 
 const dec = () => {};
 
-_computedKey = getKeyI()
-_computedKey2 = getKeyJ()
+_computedKey = getKeyI();
+_computedKey2 = getKeyJ();
 
 class Foo {
   constructor(...args) {

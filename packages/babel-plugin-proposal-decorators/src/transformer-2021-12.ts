@@ -2,6 +2,7 @@ import type { NodePath, Scope } from "@babel/traverse";
 import { types as t, template } from "@babel/core";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 
 type ClassDecoratableElement =
@@ -311,11 +312,28 @@ function isDecoratorInfo(
   return "decorators" in info;
 }
 
+function filteredOrderedDecoratorInfo(
+  info: (DecoratorInfo | ComputedPropInfo)[],
+): DecoratorInfo[] {
+  const filtered = info.filter(isDecoratorInfo);
+
+  return [
+    ...filtered.filter(
+      el => el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
+    ),
+    ...filtered.filter(
+      el => !el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
+    ),
+    ...filtered.filter(el => el.isStatic && el.kind === FIELD),
+    ...filtered.filter(el => !el.isStatic && el.kind === FIELD),
+  ];
+}
+
 function generateDecorationExprs(
   info: (DecoratorInfo | ComputedPropInfo)[],
 ): t.ArrayExpression {
   return t.arrayExpression(
-    info.filter(isDecoratorInfo).map(el => {
+    filteredOrderedDecoratorInfo(info).map(el => {
       const decs =
         el.decorators.length > 1
           ? t.arrayExpression(el.decorators)
@@ -341,19 +359,19 @@ function generateDecorationExprs(
 function extractElementLocalAssignments(
   decorationInfo: (DecoratorInfo | ComputedPropInfo)[],
 ) {
-  const locals: t.Identifier[] = [];
+  const localIds: t.Identifier[] = [];
 
-  for (const el of decorationInfo) {
-    if ("locals" in el && el.locals) {
-      if (Array.isArray(el.locals)) {
-        locals.push(...el.locals);
-      } else {
-        locals.push(el.locals);
-      }
+  for (const el of filteredOrderedDecoratorInfo(decorationInfo)) {
+    const { locals } = el;
+
+    if (Array.isArray(locals)) {
+      localIds.push(...locals);
+    } else if (locals !== undefined) {
+      localIds.push(locals);
     }
   }
 
-  return locals;
+  return localIds;
 }
 
 function addCallAccessorsFor(
@@ -368,7 +386,7 @@ function addCallAccessorsFor(
       t.cloneNode(key),
       [],
       t.blockStatement([
-        t.expressionStatement(
+        t.returnStatement(
           t.callExpression(t.cloneNode(getId), [t.thisExpression()]),
         ),
       ]),
@@ -973,7 +991,7 @@ function transformClass(
 
   // When path is a ClassExpression, path.insertBefore will convert `path`
   // into a SequenceExpression
-  path.insertBefore(assignments);
+  path.insertBefore(assignments.map(expr => t.expressionStatement(expr)));
 
   // Recrawl the scope to make sure new identifiers are properly synced
   path.scope.crawl();
@@ -992,24 +1010,23 @@ export default function ({ assertVersion, assumption }, { loose }) {
     inherits: syntaxDecorators,
 
     visitor: {
-      ClassDeclaration(path: NodePath<t.ClassDeclaration>, state: any) {
-        if (VISITED.has(path)) return;
-
-        const newPath = transformClass(path, state, constantSuper);
-
-        if (newPath) {
-          VISITED.add(newPath);
+      "ExportNamedDeclaration|ExportDefaultDeclaration"(path) {
+        const { declaration } = path.node;
+        if (
+          declaration?.type === "ClassDeclaration" &&
+          // When compiling class decorators we need to replace the class
+          // binding, so we must split it in two separate declarations.
+          declaration.decorators?.length > 0
+        ) {
+          splitExportDeclaration(path);
         }
       },
 
-      ClassExpression(path: NodePath<t.ClassExpression>, state: any) {
+      Class(path: NodePath<t.Class>, state: any) {
         if (VISITED.has(path)) return;
 
         const newPath = transformClass(path, state, constantSuper);
-
-        if (newPath) {
-          VISITED.add(newPath);
-        }
+        if (newPath) VISITED.add(newPath);
       },
     },
   };

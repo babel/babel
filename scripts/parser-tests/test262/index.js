@@ -14,6 +14,7 @@ const ignoredFeatures = new Set([
   "align-detached-buffer-semantics-with-web-reality",
   "arbitrary-module-namespace-names",
   "array-find-from-last",
+  "array-grouping",
   "async-functions",
   "async-iteration",
   "arrow-function",
@@ -169,7 +170,7 @@ const runner = new TestRunner({
 
     for await (const test of stream) {
       // strip test/
-      const fileName = test.file.substr(5);
+      const fileName = test.file.slice(5);
 
       if (ignoredTests.some(start => fileName.startsWith(start))) continue;
 
