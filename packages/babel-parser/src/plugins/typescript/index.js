@@ -665,7 +665,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeParameter(
-      parseModifiers: ?(
+      parseModifiers: (
         node: N.TsTypeParameter,
       ) => void = this.tsParseNoneModifiers.bind(this),
     ): N.TsTypeParameter {
