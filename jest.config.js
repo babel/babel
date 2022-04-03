@@ -9,9 +9,7 @@ const supportsESMAndJestLightRunner = semver.satisfies(
 const isPublishBundle = process.env.IS_PUBLISH;
 
 module.exports = {
-  runner: supportsESMAndJestLightRunner
-    ? "./test/jest-light-runner"
-    : "jest-runner",
+  runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
 
   collectCoverageFrom: [
     "packages/*/src/**/*.{js,mjs,ts}",
