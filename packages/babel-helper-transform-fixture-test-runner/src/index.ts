@@ -18,8 +18,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-import _checkDuplicatedNodes from "babel-check-duplicated-nodes";
-const checkDuplicatedNodes = _checkDuplicatedNodes.default;
+import checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
