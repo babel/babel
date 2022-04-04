@@ -269,7 +269,7 @@ function run(task) {
       babel.transform(execCode, execOpts),
     ));
 
-    checkDuplicateNodes(babel, result.ast);
+    checkDuplicateNodes(result.ast);
     execCode = result.code;
 
     try {
@@ -293,7 +293,7 @@ function run(task) {
 
     const outputCode = normalizeOutput(result.code);
 
-    checkDuplicateNodes(babel, result.ast);
+    checkDuplicateNodes(result.ast);
     if (!ignoreOutput) {
       if (
         !expected.code &&

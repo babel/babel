@@ -26,5 +26,8 @@
   "homepage": "https://babel.dev/docs/en/next/babel-helper-check-duplicate-nodes",
   "engines": {
     "node": ">=6.9.0"
+  },
+  "dependencies": {
+    "@babel/types": "workspace:^"
   }
 }

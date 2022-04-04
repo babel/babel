@@ -1,6 +1,5 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import _checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
-import { traverseFast } from "@babel/types";
 import { readFileSync, unlinkSync, writeFileSync } from "fs";
 import { join } from "path";
 import Difference from "./difference.js";
@@ -182,7 +181,7 @@ function rmf(path) {
 function parseWithRecovery(parse, source, filename, options) {
   try {
     const ast = parse(source, { errorRecovery: true, ...options });
-    checkDuplicateNodes({ types: { traverseFast } }, ast);
+    checkDuplicateNodes(ast);
 
     // Normalize the AST
     //
