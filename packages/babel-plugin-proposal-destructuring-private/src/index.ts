@@ -15,6 +15,7 @@ import { types as t } from "@babel/core";
 
 const {
   assignmentExpression,
+  assignmentPattern,
   cloneNode,
   expressionStatement,
   isExpressionStatement,
@@ -42,19 +43,35 @@ export default declare(function ({
       // (b, { #x: x } = I) => body
       // transforms to:
       // (b, p1) => { var { #x: x } = p1 === undefined ? I : p1; body; }
-      const index = path.node.params.findIndex(param => hasPrivateKeys(param));
-      if (index === -1) return;
+      const firstPrivateIndex = path.node.params.findIndex(param =>
+        hasPrivateKeys(param),
+      );
+      if (firstPrivateIndex === -1) return;
       // wrap function body within IIFE if any param is shadowed
       convertFunctionParams(path, ignoreFunctionLength, () => false, false);
       // invariant: path.body is always a BlockStatement after `convertFunctionParams`
       const { node, scope } = path;
       const params = node.params;
-      const paramsAfterIndex = params.splice(index);
+      const firstAssignmentPatternIndex = ignoreFunctionLength
+        ? -1
+        : params.findIndex(param => param.type === "AssignmentPattern");
+      const paramsAfterIndex = params.splice(firstPrivateIndex);
       const { params: transformedParams, variableDeclaration } =
         buildVariableDeclarationFromParams(paramsAfterIndex, scope);
 
       path.get("body").unshiftContainer("body", variableDeclaration);
       params.push(...transformedParams);
+      // preserve function.length
+      // (b, p1) => {}
+      // transforms to
+      // (b, p1 = void 0) => {}
+      if (firstAssignmentPatternIndex >= firstPrivateIndex) {
+        params[firstAssignmentPatternIndex] = assignmentPattern(
+          // @ts-ignore The transformed assignment pattern must not be a RestElement
+          params[firstAssignmentPatternIndex],
+          scope.buildUndefinedNode(),
+        );
+      }
       scope.crawl();
       // the pattern will be handled by VariableDeclaration visitor.
     },
@@ -84,6 +101,11 @@ export default declare(function ({
         // for (const { #x: x } of cls) body;
         // transforms to:
         // for (const ref of cls) { const { #x: x } = ref; body; }
+        // todo: the transform here assumes that any expression within
+        // the destructuring pattern (`{ #x: x }`), when evluated, do not interfere
+        // with the iterator of cls. Otherwise we have to pause the iterator and
+        // interleave the expressions.
+        // See also https://gist.github.com/nicolo-ribaudo/f8ac7916f89450f2ead77d99855b2098
         const temp = scope.generateUidIdentifier("ref");
         node.left = variableDeclaration(left.kind, [
           variableDeclarator(temp, null),
