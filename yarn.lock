@@ -1096,8 +1096,10 @@ __metadata:
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
     "@babel/code-frame": "workspace:^"
+    "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/types": "workspace:^"
     charcodes: ^0.2.0
   bin:
     parser: ./bin/babel-parser.js

@@ -1,4 +1,6 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
+import _checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
+import { traverseFast } from "@babel/types";
 import { readFileSync, unlinkSync, writeFileSync } from "fs";
 import { join } from "path";
 import Difference from "./difference.js";
@@ -9,6 +11,7 @@ import toContextualSyntaxError from "./to-contextual-syntax-error.js";
 
 const { CI, OVERWRITE } = process.env;
 const { stringify, parse: JSONParse } = JSON;
+const checkDuplicateNodes = _checkDuplicateNodes.default;
 
 const writeFileWithNewline = (path, string) =>
   writeFileSync(path, `${string}\n`, "utf-8");
@@ -179,6 +182,7 @@ function rmf(path) {
 function parseWithRecovery(parse, source, filename, options) {
   try {
     const ast = parse(source, { errorRecovery: true, ...options });
+    checkDuplicateNodes({ types: { traverseFast } }, ast);
 
     // Normalize the AST
     //
