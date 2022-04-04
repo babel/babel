@@ -8,6 +8,7 @@
     "./packages/babel-helper-annotate-as-pure/src/**/*.ts",
     "./packages/babel-helper-builder-binary-assignment-operator-visitor/src/**/*.ts",
     "./packages/babel-helper-builder-react-jsx/src/**/*.ts",
+    "./packages/babel-helper-check-duplicate-nodes/src/**/*.ts",
     "./packages/babel-helper-compilation-targets/src/**/*.ts",
     "./packages/babel-helper-create-class-features-plugin/src/**/*.ts",
     "./packages/babel-helper-create-regexp-features-plugin/src/**/*.ts",
@@ -164,6 +165,9 @@
       ],
       "@babel/helper-builder-react-jsx": [
         "./packages/babel-helper-builder-react-jsx/src"
+      ],
+      "@babel/helper-check-duplicate-nodes": [
+        "./packages/babel-helper-check-duplicate-nodes/src"
       ],
       "@babel/helper-compilation-targets": [
         "./packages/babel-helper-compilation-targets/src"

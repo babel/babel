@@ -10,5 +10,5 @@ This piece of code was originally written by @nicolo-ribaudo and is included in
 ## API
 
 ```js
-checkDuplicatedNodes(babel, ast)
+checkDuplicateNodes(babel, ast);
 ```

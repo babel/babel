@@ -18,7 +18,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-import checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
+import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
@@ -269,7 +269,7 @@ function run(task) {
       babel.transform(execCode, execOpts),
     ));
 
-    checkDuplicatedNodes(babel, result.ast);
+    checkDuplicateNodes(babel, result.ast);
     execCode = result.code;
 
     try {
@@ -293,7 +293,7 @@ function run(task) {
 
     const outputCode = normalizeOutput(result.code);
 
-    checkDuplicatedNodes(babel, result.ast);
+    checkDuplicateNodes(babel, result.ast);
     if (!ignoreOutput) {
       if (
         !expected.code &&

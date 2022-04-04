@@ -1,7 +1,5 @@
 // https://github.com/babel/babel/blob/d383659ca6adec54b6054f77cdaa16da88e8a171/packages/babel-helper-transform-fixture-test-runner/src/index.js#L128
-import { traverseFast } from "@babel/types";
-
-export default function checkDuplicatedNodes(babel, ast) {
+export default function checkDuplicateNodes(babel, ast) {
   const nodes = new WeakSet();
   const parents = new WeakMap();
 
@@ -33,7 +31,7 @@ export default function checkDuplicatedNodes(babel, ast) {
     return val;
   };
 
-  traverseFast(ast, node => {
+  babel.types.traverseFast(ast, node => {
     registerChildren(node);
 
     if (nodes.has(node)) {

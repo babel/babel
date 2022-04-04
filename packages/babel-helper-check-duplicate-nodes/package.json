@@ -24,9 +24,6 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-check-duplicate-nodes",
-  "dependencies": {
-    "@babel/types": "workspace:^"
-  },
   "engines": {
     "node": ">=6.9.0"
   }
