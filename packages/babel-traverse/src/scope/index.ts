@@ -42,6 +42,13 @@ import {
   unaryExpression,
   variableDeclaration,
   variableDeclarator,
+  isRecordExpression,
+  isTupleExpression,
+  isClassAccessorProperty,
+  isObjectProperty,
+  isDecorator,
+  isTopicReference,
+  isMetaProperty,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
@@ -535,7 +542,7 @@ export default class Scope {
    */
 
   isStatic(node: t.Node): boolean {
-    if (isThisExpression(node) || isSuper(node)) {
+    if (isThisExpression(node) || isSuper(node) || isTopicReference(node)) {
       return true;
     }
 
@@ -823,9 +830,20 @@ export default class Scope {
       if (!binding) return false;
       if (constantsOnly) return binding.constant;
       return true;
+    } else if (
+      isThisExpression(node) ||
+      isMetaProperty(node) ||
+      isTopicReference(node)
+    ) {
+      return true;
     } else if (isClass(node)) {
       if (node.superClass && !this.isPure(node.superClass, constantsOnly)) {
         return false;
+      }
+      if (node.decorators) {
+        for (const decorator of node.decorators) {
+          if (!this.isPure(decorator, constantsOnly)) return false;
+        }
       }
       return this.isPure(node.body, constantsOnly);
     } else if (isClassBody(node)) {
@@ -838,24 +856,39 @@ export default class Scope {
         this.isPure(node.left, constantsOnly) &&
         this.isPure(node.right, constantsOnly)
       );
-    } else if (isArrayExpression(node)) {
+    } else if (isArrayExpression(node) || isTupleExpression(node)) {
       for (const elem of node.elements) {
-        if (!this.isPure(elem, constantsOnly)) return false;
+        if (elem !== null && !this.isPure(elem, constantsOnly)) return false;
       }
       return true;
-    } else if (isObjectExpression(node)) {
+    } else if (isObjectExpression(node) || isRecordExpression(node)) {
       for (const prop of node.properties) {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
       return true;
+    } else if (isDecorator(node)) {
+      return this.isPure(node.expression, constantsOnly);
     } else if (isMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
+      if (node.decorators) {
+        for (const decorator of node.decorators) {
+          if (!this.isPure(decorator, constantsOnly)) return false;
+        }
+      }
       return true;
-    } else if (isProperty(node)) {
+    } else if (isProperty(node) || isClassAccessorProperty(node)) {
       // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
-      return this.isPure(node.value, constantsOnly);
+      if (node.decorators) {
+        for (const decorator of node.decorators) {
+          if (!this.isPure(decorator, constantsOnly)) return false;
+        }
+      }
+      if (isObjectProperty(node) || node.static) {
+        return this.isPure(node.value, constantsOnly);
+      }
+      return true;
     } else if (isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
     } else if (isTaggedTemplateExpression(node)) {
