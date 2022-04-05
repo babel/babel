@@ -1,32 +1,11 @@
-import { traverseFast } from "@babel/types";
+import { VISITOR_KEYS } from "@babel/types";
 
 export default function checkDuplicateNodes(ast) {
   if (arguments.length !== 1) {
     throw new Error("checkDuplicateNodes accepts only one argument: ast");
   }
-  const nodes = new WeakSet();
-  const parents = new WeakMap();
-
-  const setParent = (child, parent) => {
-    if (typeof child === "object" && child !== null) {
-      let p = parents.get(child);
-      if (!p) {
-        p = [];
-        parents.set(child, p);
-      }
-      p.unshift(parent);
-    }
-  };
-
-  const registerChildren = node => {
-    for (const key in node) {
-      if (Array.isArray(node[key])) {
-        node[key].forEach(child => setParent(child, node));
-      } else {
-        setParent(node[key], node);
-      }
-    }
-  };
+  // A Map from node to its parent
+  const parentsMap = new WeakMap();
 
   const hidePrivateProperties = (key, val) => {
     // Hides properties like _shadowedFunctionLiteral,
@@ -35,18 +14,37 @@ export default function checkDuplicateNodes(ast) {
     return val;
   };
 
-  traverseFast(ast, node => {
-    registerChildren(node);
+  const stack = [{ node: ast, parent: null }];
+  let item;
 
-    if (nodes.has(node)) {
+  while ((item = stack.pop()) !== undefined) {
+    const { node, parent } = item;
+    if (!node) continue;
+
+    const keys = VISITOR_KEYS[node.type];
+    if (!keys) continue;
+
+    if (parentsMap.has(node)) {
+      const parents = [parentsMap.get(node), parent];
       throw new Error(
         "Do not reuse nodes. Use `t.cloneNode` (or `t.clone`/`t.cloneDeep` if using babel@6) to copy them.\n" +
           JSON.stringify(node, hidePrivateProperties, 2) +
           "\nParent:\n" +
-          JSON.stringify(parents.get(node), hidePrivateProperties, 2),
+          JSON.stringify(parents, hidePrivateProperties, 2),
       );
     }
+    parentsMap.set(node, parent);
 
-    nodes.add(node);
-  });
+    for (const key of keys) {
+      const subNode = node[key];
+
+      if (Array.isArray(subNode)) {
+        for (const child of subNode) {
+          stack.push({ node: child, parent: node });
+        }
+      } else {
+        stack.push({ node: subNode, parent: node });
+      }
+    }
+  }
 }
