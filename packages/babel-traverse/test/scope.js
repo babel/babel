@@ -365,39 +365,6 @@ describe("scope", () => {
       ).toBe(false);
     });
 
-    it("purity", function () {
-      expect(
-        getPath("({ x: 1, foo() { return 1 } })")
-          .get("body")[0]
-          .get("expression")
-          .isPure(),
-      ).toBeTruthy();
-      expect(
-        getPath("class X { get foo() { return 1 } }")
-          .get("body")[0]
-          .get("expression")
-          .isPure(),
-      ).toBeFalsy();
-      expect(
-        getPath("`${a}`").get("body")[0].get("expression").isPure(),
-      ).toBeFalsy();
-      expect(
-        getPath("let a = 1; `${a}`").get("body")[1].get("expression").isPure(),
-      ).toBeTruthy();
-      expect(
-        getPath("let a = 1; `${a++}`")
-          .get("body")[1]
-          .get("expression")
-          .isPure(),
-      ).toBeFalsy();
-      expect(
-        getPath("tagged`foo`").get("body")[0].get("expression").isPure(),
-      ).toBeFalsy();
-      expect(
-        getPath("String.raw`foo`").get("body")[0].get("expression").isPure(),
-      ).toBeTruthy();
-    });
-
     test("label", function () {
       expect(getPath("foo: { }").scope.getBinding("foo")).toBeUndefined();
       expect(getPath("foo: { }").scope.getLabel("foo").type).toBe(
@@ -542,7 +509,7 @@ describe("scope", () => {
       path.scope.crawl();
       path.scope.crawl();
 
-      expect(path.scope.references._jsx).toBeTruthy();
+      expect(path.scope.references._jsx).toBe(true);
     });
 
     test("generateUid collision check after re-crawling", function () {
