@@ -3169,9 +3169,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return typeCast.node;
       }
 
-      if (jsx?.thrown) throw jsx.error;
-      if (arrow.thrown) throw arrow.error;
-      if (typeCast?.thrown) throw typeCast.error;
+      if (jsx?.thrown) {
+        this.state = jsx.failState;
+        throw jsx.error;
+      }
+
+      if (arrow.thrown) {
+        this.state = arrow.failState;
+        throw arrow.error;
+      }
+
+      if (typeCast?.thrown) {
+        this.state = typeCast.failState;
+        throw typeCast.error;
+      }
 
       throw jsx?.error || arrow.error || typeCast?.error;
     }

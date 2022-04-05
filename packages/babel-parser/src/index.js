@@ -13,7 +13,7 @@ import Parser from "./parser";
 import { getExportedToken, tt as internalTokenTypes } from "./tokenizer/types";
 import "./tokenizer/context";
 
-import type { Expression, File } from "./types";
+import type { Expression, File, ParserOutput } from "./types";
 
 export function parse(input: string, options?: Options): File {
   if (options?.sourceType === "unambiguous") {
@@ -25,11 +25,13 @@ export function parse(input: string, options?: Options): File {
       const parser = getParser(options, input);
       const ast = parser.parse();
 
-      if (parser.sawUnambiguousESM) {
+      const hasParseErrors = ast.errors.length > 0;
+
+      if (parser.sawUnambiguousESM && !hasParseErrors) {
         return ast;
       }
 
-      if (parser.ambiguousScriptDifferentAst) {
+      if (parser.ambiguousScriptDifferentAst || hasParseErrors) {
         // Top level await introduces code which can be both a valid script and
         // a valid module, but which produces different ASTs:
         //    await
@@ -59,7 +61,10 @@ export function parse(input: string, options?: Options): File {
   }
 }
 
-export function parseExpression(input: string, options?: Options): Expression {
+export function parseExpression(
+  input: string,
+  options?: Options,
+): Expression | ParserOutput {
   const parser = getParser(options, input);
   if (parser.options.strictMode) {
     parser.state.strict = true;

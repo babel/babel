@@ -2984,8 +2984,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return arrowExpression;
         }
 
-        if (jsx?.thrown) throw jsx.error;
-        if (arrow.thrown) throw arrow.error;
+        if (jsx?.thrown) {
+          this.state = jsx.failState;
+          throw jsx.error;
+        }
+        if (arrow.thrown) {
+          this.state = arrow.failState;
+          throw arrow.error;
+        }
 
         /*:: invariant(typeParameters) */
         throw this.raise(FlowErrors.UnexpectedTokenAfterTypeParameter, {
@@ -3245,14 +3251,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.readToken_pipe_amp(code);
     }
 
-    parseTopLevel(file: N.File, program: N.Program): N.File {
-      const fileNode = super.parseTopLevel(file, program);
+    parseTopLevel(file: N.File, program: N.Program) {
+      super.parseTopLevel(file, program);
+
       if (this.state.hasFlowComment) {
         this.raise(FlowErrors.UnterminatedFlowComment, {
           at: this.state.curPosition(),
         });
       }
-      return fileNode;
     }
 
     skipBlockComment(): N.CommentBlock | void {

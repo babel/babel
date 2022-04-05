@@ -165,22 +165,30 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Convenience method to parse an Expression only
-  getExpression(): N.Expression & N.ParserOutput {
-    this.enterInitialScopes();
-    this.nextToken();
-    const expr = this.parseExpression();
-    if (!this.match(tt.eof)) {
-      this.unexpected();
+  getExpression(): N.ParserOutput | (N.Expression & N.ParserOutput) {
+    try {
+      this.enterInitialScopes();
+      this.nextToken();
+      const expr = this.parseExpression();
+      if (!this.match(tt.eof)) {
+        this.unexpected();
+      }
+      // Unlike parseTopLevel, we need to drain remaining commentStacks
+      // because the top level node is _not_ Program.
+      this.finalizeRemainingComments();
+      expr.comments = this.state.comments;
+      expr.errors = this.state.errors;
+      if (this.options.tokens) {
+        expr.tokens = this.tokens;
+      }
+      return expr;
+    } catch (error) {
+      if (!this.options.errorRecovery || !(error instanceof SyntaxError)) {
+        throw error;
+      }
+
+      return { errors: this.state.errors, comments: [] };
     }
-    // Unlike parseTopLevel, we need to drain remaining commentStacks
-    // because the top level node is _not_ Program.
-    this.finalizeRemainingComments();
-    expr.comments = this.state.comments;
-    expr.errors = this.state.errors;
-    if (this.options.tokens) {
-      expr.tokens = this.tokens;
-    }
-    return expr;
   }
 
   // ### Expression parsing
@@ -390,8 +398,8 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
-    const expr = this.parseMaybeUnaryOrPrivate(refExpressionErrors);
 
+    const expr = this.parseMaybeUnaryOrPrivate(refExpressionErrors);
     if (this.shouldExitDescending(expr, potentialArrowAt)) {
       return expr;
     }
@@ -589,7 +597,6 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const isAwait = this.isContextual(tt._await);
-
     if (isAwait && this.isAwaitAllowed()) {
       this.next();
       const expr = this.parseAwait(startPos, startLoc);
@@ -2747,11 +2754,9 @@ export default class ExpressionParser extends LValParser {
       Errors.AwaitExpressionFormalParameter,
       { at: node },
     );
-
     if (this.eat(tt.star)) {
       this.raise(Errors.ObsoleteAwaitStar, { at: node });
     }
-
     if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
       if (this.isAmbiguousAwait()) {
         this.ambiguousScriptDifferentAst = true;
@@ -2759,7 +2764,6 @@ export default class ExpressionParser extends LValParser {
         this.sawUnambiguousESM = true;
       }
     }
-
     if (!this.state.soloAwait) {
       node.argument = this.parseMaybeUnary(null, true);
     }
