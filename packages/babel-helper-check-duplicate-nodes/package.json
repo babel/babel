@@ -29,5 +29,8 @@
   },
   "dependencies": {
     "@babel/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^"
   }
 }

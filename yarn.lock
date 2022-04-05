@@ -516,6 +516,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-check-duplicate-nodes@workspace:packages/babel-helper-check-duplicate-nodes"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft

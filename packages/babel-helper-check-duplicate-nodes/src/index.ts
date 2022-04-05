@@ -1,6 +1,9 @@
 import { traverseFast } from "@babel/types";
 
 export default function checkDuplicateNodes(ast) {
+  if (arguments.length !== 1) {
+    throw new Error("checkDuplicateNodes accepts only one argument: ast");
+  }
   const nodes = new WeakSet();
   const parents = new WeakMap();
 
