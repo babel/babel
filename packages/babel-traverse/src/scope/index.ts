@@ -44,7 +44,6 @@ import {
   variableDeclarator,
   isRecordExpression,
   isTupleExpression,
-  isClassAccessorProperty,
   isObjectProperty,
   isTopicReference,
   isMetaProperty,
@@ -869,7 +868,7 @@ export default class Scope {
         return false;
       }
       return true;
-    } else if (isProperty(node) || isClassAccessorProperty(node)) {
+    } else if (isProperty(node)) {
       // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.decorators?.length > 0) {
