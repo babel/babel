@@ -30,6 +30,7 @@ describe("isPure() returns true", () => {
     "class C { #x = f(); static #y }",
     "class C { static target = new.target }",
     "class X { get foo() { return 1 } set foo(v) {} }",
+    "class C { static #p = #p in C }",
   ])(`NodePath(%p).get("body.0").isPure() should be true`, input => {
     const path = getPath(input).get("body.0");
     expect(path.node).toBeTruthy();

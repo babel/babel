@@ -47,6 +47,7 @@ import {
   isObjectProperty,
   isTopicReference,
   isMetaProperty,
+  isPrivateName,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
@@ -831,7 +832,8 @@ export default class Scope {
     } else if (
       isThisExpression(node) ||
       isMetaProperty(node) ||
-      isTopicReference(node)
+      isTopicReference(node) ||
+      isPrivateName(node)
     ) {
       return true;
     } else if (isClass(node)) {
