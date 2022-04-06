@@ -20,6 +20,43 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.9 (2022-04-06)
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-standalone`
+  * [#14427](https://github.com/babel/babel/pull/14427) Restore numeric seaprators support in `@babel/standalone` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`
+  * [#14403](https://github.com/babel/babel/pull/14403) Fix NodePath.referencesImport for  JSXMemberExpression ([@swandir](https://github.com/swandir))
+* `babel-plugin-proposal-decorators`
+  * [#14396](https://github.com/babel/babel/pull/14396) [2021-12] Support class decorators in export declarations ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14387](https://github.com/babel/babel/pull/14387) fix: forward accessor proxy getter results ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#14384](https://github.com/babel/babel/pull/14384) fix: parse type parameters within correct context ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`
+  * [#14378](https://github.com/babel/babel/pull/14378) Parenthesize non-simple decorator expression ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-classes`, `babel-plugin-transform-modules-commonjs`, `babel-preset-env`
+  * [#14366](https://github.com/babel/babel/pull/14366) Align named imports behavior in `.mjs` and `.js` files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`
+  * [#14351](https://github.com/babel/babel/pull/14351) [setPublicClassFields] Use define for static `name`/`length` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-plugin-proposal-decorators`
+  * [#14398](https://github.com/babel/babel/pull/14398) Add missing semicolons in 2021-12 decorators output ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :memo: Documentation
+* [#14397](https://github.com/babel/babel/pull/14397) Mention how to report vulns in Babel dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#14419](https://github.com/babel/babel/pull/14419) Use `jest-light-runner` from npm ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`
+  * [#14385](https://github.com/babel/babel/pull/14385) Fix flaky @babel/cli test ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-function-name`, `babel-helper-get-function-arity`
+  * [#14389](https://github.com/babel/babel/pull/14389) Inline `@babel/helper-get-function-arity` package ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`
+  * [#14343](https://github.com/babel/babel/pull/14343) Remove unused `@babel/helpers` code ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-highlight`, `babel-parser`
+  * [#14377](https://github.com/babel/babel/pull/14377) refactor: replace deprecated String.prototype.substr() ([@CommanderRoot](https://github.com/CommanderRoot))
 ## v7.17.8 (2022-03-18)
 
 #### :eyeglasses: Spec Compliance
