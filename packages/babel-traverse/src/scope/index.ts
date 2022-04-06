@@ -46,7 +46,6 @@ import {
   isTupleExpression,
   isClassAccessorProperty,
   isObjectProperty,
-  isDecorator,
   isTopicReference,
   isMetaProperty,
 } from "@babel/types";
@@ -864,8 +863,6 @@ export default class Scope {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
       return true;
-    } else if (isDecorator(node)) {
-      return this.isPure(node.expression, constantsOnly);
     } else if (isMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.decorators?.length > 0) {

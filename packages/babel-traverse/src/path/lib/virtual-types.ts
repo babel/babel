@@ -124,8 +124,8 @@ export const Generated = {
 };
 
 export const Pure = {
-  checkPath(path: NodePath, opts?): boolean {
-    return path.scope.isPure(path.node, opts);
+  checkPath(path: NodePath, constantsOnly?: boolean): boolean {
+    return path.scope.isPure(path.node, constantsOnly);
   },
 };
 

@@ -96,3 +96,14 @@ describe("isPure() returns false", () => {
     },
   );
 });
+
+describe("isPure(constantsOnly: true) returns false", () => {
+  it.each(["x", "1 + x", "({ [x]: 0 })", "(class { static x = x })"])(
+    `NodePath(%p).get("body.0.expression").isPure(/* constantsOnly */true) should be false`,
+    input => {
+      const path = getPath(input).get("body.0.expression");
+      expect(path.node).toBeTruthy();
+      expect(path.isPure(true)).toBe(false);
+    },
+  );
+});
