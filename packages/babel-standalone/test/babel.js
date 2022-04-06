@@ -256,6 +256,9 @@ const require = createRequire(import.meta.url);
           }),
         ).not.toThrow();
       });
+      it("#14425 - numeric separators should be parsed correctly", () => {
+        expect(() => Babel.transform("1_1", {})).not.toThrow();
+      });
     });
   },
 );
