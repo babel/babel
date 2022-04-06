@@ -69,49 +69,22 @@ const forbiddenNumericSeparatorSiblings = {
   ]),
 };
 
-const allowedNumericSeparatorSiblings = {};
-allowedNumericSeparatorSiblings.bin = new Set([
+const isAllowedNumericSeparatorSibling = {
   // 0 - 1
-  charCodes.digit0,
-  charCodes.digit1,
-]);
-allowedNumericSeparatorSiblings.oct = new Set([
+  bin: ch => ch === charCodes.digit0 || ch === charCodes.digit1,
+
   // 0 - 7
-  ...allowedNumericSeparatorSiblings.bin,
+  oct: ch => ch >= charCodes.digit0 && ch <= charCodes.digit7,
 
-  charCodes.digit2,
-  charCodes.digit3,
-  charCodes.digit4,
-  charCodes.digit5,
-  charCodes.digit6,
-  charCodes.digit7,
-]);
-allowedNumericSeparatorSiblings.dec = new Set([
   // 0 - 9
-  ...allowedNumericSeparatorSiblings.oct,
+  dec: ch => ch >= charCodes.digit0 && ch <= charCodes.digit9,
 
-  charCodes.digit8,
-  charCodes.digit9,
-]);
-
-allowedNumericSeparatorSiblings.hex = new Set([
   // 0 - 9, A - F, a - f,
-  ...allowedNumericSeparatorSiblings.dec,
-
-  charCodes.uppercaseA,
-  charCodes.uppercaseB,
-  charCodes.uppercaseC,
-  charCodes.uppercaseD,
-  charCodes.uppercaseE,
-  charCodes.uppercaseF,
-
-  charCodes.lowercaseA,
-  charCodes.lowercaseB,
-  charCodes.lowercaseC,
-  charCodes.lowercaseD,
-  charCodes.lowercaseE,
-  charCodes.lowercaseF,
-]);
+  hex: ch =>
+    (ch >= charCodes.digit0 && ch <= charCodes.digit9) ||
+    (ch >= charCodes.uppercaseA && ch <= charCodes.uppercaseF) ||
+    (ch >= charCodes.lowercaseA && ch <= charCodes.lowercaseF),
+};
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
@@ -1180,14 +1153,14 @@ export default class Tokenizer extends CommentsParser {
       radix === 16
         ? forbiddenNumericSeparatorSiblings.hex
         : forbiddenNumericSeparatorSiblings.decBinOct;
-    const allowedSiblings =
+    const isAllowedSibling =
       radix === 16
-        ? allowedNumericSeparatorSiblings.hex
+        ? isAllowedNumericSeparatorSibling.hex
         : radix === 10
-        ? allowedNumericSeparatorSiblings.dec
+        ? isAllowedNumericSeparatorSibling.dec
         : radix === 8
-        ? allowedNumericSeparatorSiblings.oct
-        : allowedNumericSeparatorSiblings.bin;
+        ? isAllowedNumericSeparatorSibling.oct
+        : isAllowedNumericSeparatorSibling.bin;
 
     let invalid = false;
     let total = 0;
@@ -1206,7 +1179,7 @@ export default class Tokenizer extends CommentsParser {
           });
         } else if (
           Number.isNaN(next) ||
-          !allowedSiblings.has(next) ||
+          !isAllowedSibling(next) ||
           forbiddenSiblings.has(prev) ||
           forbiddenSiblings.has(next)
         ) {
