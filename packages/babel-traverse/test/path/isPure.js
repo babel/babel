@@ -26,11 +26,10 @@ describe("isPure() returns true", () => {
   it.each([
     "class C { [0]() {} }",
     "class C extends class {} {}",
-    "class C { static accessor x = 1 }",
-    "class C { accessor x = f() }",
-    "class C { #x = f() }",
-    "@dec class C {}; function dec () {}",
+    "class C { static accessor x = 1; accessor y = f() }",
+    "class C { #x = f(); static #y }",
     "class C { static target = new.target }",
+    "class X { get foo() { return 1 } set foo(v) {} }",
   ])(`NodePath(%p).get("body.0").isPure() should be true`, input => {
     const path = getPath(input).get("body.0");
     expect(path.node).toBeTruthy();
@@ -66,9 +65,11 @@ describe("isPure() returns true", () => {
 
 describe("isPure() returns false", () => {
   it.each([
-    "class X { get foo() { return 1 } }",
     "@dec() class X {}",
+    "@dec class C {}; function dec () {}",
     "class C { @dec foo() {} }",
+    "class C { @dec foo }",
+    "class C { @dec accessor foo = 1 }",
     "class C { static {} }",
     "class C extends class { [f()] } {}",
   ])(`NodePath(%p).get("body.0").isPure() should be false`, input => {

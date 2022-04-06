@@ -840,10 +840,8 @@ export default class Scope {
       if (node.superClass && !this.isPure(node.superClass, constantsOnly)) {
         return false;
       }
-      if (node.decorators) {
-        for (const decorator of node.decorators) {
-          if (!this.isPure(decorator, constantsOnly)) return false;
-        }
+      if (node.decorators?.length > 0) {
+        return false;
       }
       return this.isPure(node.body, constantsOnly);
     } else if (isClassBody(node)) {
@@ -870,23 +868,20 @@ export default class Scope {
       return this.isPure(node.expression, constantsOnly);
     } else if (isMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
-      if (node.kind === "get" || node.kind === "set") return false;
-      if (node.decorators) {
-        for (const decorator of node.decorators) {
-          if (!this.isPure(decorator, constantsOnly)) return false;
-        }
+      if (node.decorators?.length > 0) {
+        return false;
       }
       return true;
     } else if (isProperty(node) || isClassAccessorProperty(node)) {
       // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
-      if (node.decorators) {
-        for (const decorator of node.decorators) {
-          if (!this.isPure(decorator, constantsOnly)) return false;
-        }
+      if (node.decorators?.length > 0) {
+        return false;
       }
       if (isObjectProperty(node) || node.static) {
-        return this.isPure(node.value, constantsOnly);
+        if (node.value !== null && !this.isPure(node.value, constantsOnly)) {
+          return false;
+        }
       }
       return true;
     } else if (isUnaryExpression(node)) {
