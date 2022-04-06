@@ -512,6 +512,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-check-duplicate-nodes@workspace:^, @babel/helper-check-duplicate-nodes@workspace:packages/babel-helper-check-duplicate-nodes":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-check-duplicate-nodes@workspace:packages/babel-helper-check-duplicate-nodes"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/types": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@babel/helper-compilation-targets@npm:^7.13.0, @babel/helper-compilation-targets@npm:^7.15.4, @babel/helper-compilation-targets@npm:^7.16.7, @babel/helper-compilation-targets@npm:^7.17.7":
   version: 7.17.7
   resolution: "@babel/helper-compilation-targets@npm:7.17.7"
@@ -946,10 +955,10 @@ __metadata:
   dependencies:
     "@babel/code-frame": "workspace:^"
     "@babel/core": "workspace:^"
+    "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": ^0.3.4
     "@types/jest": ^27.4.1
-    babel-check-duplicated-nodes: ^1.0.0
     quick-lru: 5.1.0
     regenerator-runtime: ^0.13.7
   languageName: unknown
@@ -1090,6 +1099,7 @@ __metadata:
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
     "@babel/code-frame": "workspace:^"
+    "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     charcodes: ^0.2.0
@@ -5743,13 +5753,6 @@ __metadata:
   version: 1.9.0
   resolution: "aws4@npm:1.9.0"
   checksum: 7e6a6bdb2eac40fd99ac6a29734eee4760f6132aa28aba4bcd35283211ac344cc0bd44ac86febd203b174e6f6f5085dd26f0c29287707cb6bb102f50fa517e38
-  languageName: node
-  linkType: hard
-
-"babel-check-duplicated-nodes@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "babel-check-duplicated-nodes@npm:1.0.0"
-  checksum: 7765f55d309ba72a85583e96a2606e7af4e2ec19e66ba7316bed6995a0d2cd27ce54225c6ee7b723c81978b7505f6b51b0b62298241d89a4ca46efbd5510ee59
   languageName: node
   linkType: hard
 

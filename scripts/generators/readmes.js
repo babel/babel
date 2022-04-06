@@ -77,7 +77,7 @@ ${getYarnAdd(name)}
 
 packages
   .filter(x => x !== "README.md") // ignore root readme
-  .filter(x => x.indexOf("babel-preset-stage-") === -1) // ignore stages
+  .filter(x => x.indexOf("babel-helper-check-duplicate-nodes") === -1) // ignore check-duplicate-nodes
   .forEach(id => {
     const { name, description } = getPackageJson(id);
     const readmePath = join(packageDir, id, "README.md");

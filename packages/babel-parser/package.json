@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@babel/code-frame": "workspace:^",
+    "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
     "charcodes": "^0.2.0"
