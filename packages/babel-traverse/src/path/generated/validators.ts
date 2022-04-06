@@ -441,7 +441,7 @@ export interface NodePathValidators {
   isNumericLiteralTypeAnnotation(
     opts?: object,
   ): this is NodePath<VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
-  isPure(opts?: object): boolean;
+  isPure(constantsOnly?: boolean): boolean;
   isReferenced(opts?: object): boolean;
   isReferencedIdentifier(
     opts?: object,
