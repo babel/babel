@@ -3,7 +3,6 @@
 import { hooks } from "./lib/removal-hooks";
 import { path as pathCache } from "../cache";
 import NodePath, { REMOVED, SHOULD_SKIP } from "./index";
-import { Binding } from "../scope";
 
 export function remove(this: NodePath) {
   this._assertUnremoved();
@@ -24,7 +23,7 @@ export function remove(this: NodePath) {
 }
 
 export function _removeFromScope(this: NodePath) {
-  const allBindings: Binding[] = [];
+  const allBindings = [];
 
   let scope = this.scope;
   do {
