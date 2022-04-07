@@ -49,13 +49,6 @@ export function _removeFromScope(this: NodePath) {
   for (const binding of bindings) {
     if (willRemove.includes(binding.name)) {
       this.scope.removeBinding(binding.name);
-    } else {
-      let scope = this.scope;
-      do {
-        if (scope.uids[binding.name]) {
-          scope.uids[binding.name] = false;
-        }
-      } while ((scope = scope.parent));
     }
   }
 }
