@@ -45,4 +45,14 @@ describe("removal", function () {
 
     expect(generate(ast).code).toBe("");
   });
+
+  it("remove AssignmentExpression and check binding", function () {
+    const ast = parse("var a=1;a=2;");
+    traverse(ast, {
+      AssignmentExpression: function (path) {
+        path.remove();
+        expect(path.scope.getBinding("a")).toBeDefined();
+      },
+    });
+  });
 });

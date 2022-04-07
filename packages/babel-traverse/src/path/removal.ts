@@ -23,8 +23,41 @@ export function remove(this: NodePath) {
 }
 
 export function _removeFromScope(this: NodePath) {
-  const bindings = this.getBindingIdentifiers();
-  Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
+  const bindingIds = this.getBindingIdentifiers();
+  const bindings = [];
+  const willRemove = [];
+
+  for (const name of Object.keys(bindingIds)) {
+    const binding = this.scope.getBinding(name);
+    if (binding != undefined) {
+      bindings.push(binding.identifier);
+    }
+  }
+
+  if (this.isIdentifier() && bindings.includes(this.node)) {
+    willRemove.push(this.node.name);
+  }
+
+  this.traverse({
+    Identifier(p) {
+      if (bindings.includes(p.node)) {
+        willRemove.push(p.node.name);
+      }
+    },
+  });
+
+  for (const binding of bindings) {
+    if (willRemove.includes(binding.name)) {
+      this.scope.removeBinding(binding.name);
+    } else {
+      let scope = this.scope;
+      do {
+        if (scope.uids[binding.name]) {
+          scope.uids[binding.name] = false;
+        }
+      } while ((scope = scope.parent));
+    }
+  }
 }
 
 export function _callRemovalHooks(this: NodePath) {
