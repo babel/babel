@@ -3,6 +3,7 @@
 import { hooks } from "./lib/removal-hooks";
 import { path as pathCache } from "../cache";
 import NodePath, { REMOVED, SHOULD_SKIP } from "./index";
+import { Binding } from "../scope";
 
 export function remove(this: NodePath) {
   this._assertUnremoved();
@@ -23,34 +24,45 @@ export function remove(this: NodePath) {
 }
 
 export function _removeFromScope(this: NodePath) {
-  const bindingIds = this.getBindingIdentifiers();
-  const bindings = [];
-  const willRemove = [];
+  const allBindings: Binding[] = [];
 
-  for (const name of Object.keys(bindingIds)) {
-    const binding = this.scope.getBinding(name);
-    if (binding != undefined) {
-      bindings.push(binding.identifier);
+  let scope = this.scope;
+  do {
+    for (const name of Object.keys(scope.bindings)) {
+      const binding = this.scope.getBinding(name);
+      if (binding != undefined) {
+        allBindings.push(binding);
+      }
     }
+  } while ((scope = scope.parent));
+
+  scope = this.scope;
+
+  function enter(p: NodePath) {
+    allBindings.forEach(binding => {
+      if (binding.identifier == p.node) {
+        scope.removeBinding(binding.identifier.name);
+      }
+      let i;
+      i = binding.constantViolations.indexOf(p);
+      if (i != -1) {
+        binding.constantViolations.splice(i, 1);
+        binding.constant = binding.constantViolations.length == 0;
+      }
+      i = binding.referencePaths.indexOf(p);
+      if (i != -1) {
+        binding.referencePaths.splice(i, 1);
+        binding.references = binding.referencePaths.length;
+        binding.referenced = binding.referencePaths.length != 0;
+      }
+    });
   }
 
-  if (this.isIdentifier() && bindings.includes(this.node)) {
-    willRemove.push(this.node.name);
-  }
+  enter(this);
 
   this.traverse({
-    Identifier(p) {
-      if (bindings.includes(p.node)) {
-        willRemove.push(p.node.name);
-      }
-    },
+    enter: enter,
   });
-
-  for (const binding of bindings) {
-    if (willRemove.includes(binding.name)) {
-      this.scope.removeBinding(binding.name);
-    }
-  }
 }
 
 export function _callRemovalHooks(this: NodePath) {
