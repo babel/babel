@@ -226,16 +226,11 @@ function hoistFunctionEnvironment(
       arrowParent ??= p;
       return false;
     }
-    return (
-      p.isFunction() ||
-      p.isProgram() ||
-      p.isClassProperty({ static: false }) ||
-      p.isClassPrivateProperty({ static: false })
-    );
+    return p.isFunction() || p.isProgram() || p.isProperty({ static: false });
   });
   const inConstructor = thisEnvFn.isClassMethod({ kind: "constructor" });
 
-  if (thisEnvFn.isClassProperty() || thisEnvFn.isClassPrivateProperty()) {
+  if (thisEnvFn.isProperty()) {
     if (arrowParent) {
       thisEnvFn = arrowParent;
     } else if (allowInsertArrow) {

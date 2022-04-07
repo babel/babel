@@ -1,5 +1,5 @@
 class Foo {
-  static accessor #foo
+  static get #foo() {}
 
   test(other) {
     return #foo in other;

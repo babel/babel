@@ -1,8 +1,10 @@
+var _fooBrandCheck = /*#__PURE__*/new WeakSet();
+
 class Foo {
-  static get #foo() {}
+  static accessor #foo = void _fooBrandCheck.add(this);
 
   test(other) {
-    return Foo === other;
+    return _fooBrandCheck.has(other);
   }
 
 }

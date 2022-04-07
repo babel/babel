@@ -55,10 +55,7 @@ export default function (
   );
 
   const isProperty =
-    path.isObjectMethod() ||
-    path.isClassMethod() ||
-    path.parentPath.isObjectProperty() ||
-    path.parentPath.isClassProperty();
+    path.isMethod() || (path.parentPath.isProperty() && path.key === "value");
 
   if (!isProperty && !isIIFE && path.isExpression()) {
     annotateAsPure(path);

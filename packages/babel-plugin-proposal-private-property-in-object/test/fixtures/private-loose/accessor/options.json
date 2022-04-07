@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "proposal-decorators",
+      { "version": "2021-12", "decoratorsBeforeExport": true }
+    ],
+    ["proposal-private-property-in-object", { "loose": true }],
+    ["proposal-class-properties", { "loose": true }],
+    ["proposal-private-methods", { "loose": true }],
+    "transform-classes"
+  ]
+}

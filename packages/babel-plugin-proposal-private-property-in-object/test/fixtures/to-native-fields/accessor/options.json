@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "proposal-private-property-in-object",
+    [
+      "syntax-decorators",
+      { "version": "2021-12", "decoratorsBeforeExport": true }
+    ]
+  ]
+}
