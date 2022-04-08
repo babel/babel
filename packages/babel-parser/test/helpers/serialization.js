@@ -12,7 +12,7 @@ const isExtended = filename => /\.extended\.json$/.test(filename);
 // packages/babel-parser/test/fixtures/estree/bigInt/basic/output.extended.json
 //
 // This is because only estree actually includes the BigInt value in the Literal
-// node. If the JS environemnt doesn't support bigint, then estree will just
+// node. If the JS environment doesn't support bigint, then estree will just
 // use null for the value. We also happen to just throw the AST information away
 // with estree tests, so in the event that we're running on an older version of
 // Node that doesn't support bigint, it is safe to deserialize to null.

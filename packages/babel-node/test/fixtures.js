@@ -73,7 +73,7 @@ const assertTest = function (stdout, stderr, ipcMessage, opts) {
   }
 
   if (opts.outFiles) {
-    // For some reaons, on GH actions always appears a file called "null" ¯\_(ツ)_/¯
+    // For some reasons, on GH actions always appears a file called "null" ¯\_(ツ)_/¯
     const actualFiles = readDir(tmpLoc, name => name !== "null");
 
     Object.keys(actualFiles).forEach(function (filename) {
