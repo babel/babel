@@ -20,7 +20,7 @@ ExpressionScope is used to track declaration errors in these ambiguous patterns:
    function parameters until we see an `=>` after `)`
 
 The following declaration errors (@see parser-errors/standard) will be recorded in
-some expression scopes and thrown later when we know what the ambigous pattern is
+some expression scopes and thrown later when we know what the ambiguous pattern is
 
 - AwaitBindingIdentifier
 - AwaitExpressionFormalParameter

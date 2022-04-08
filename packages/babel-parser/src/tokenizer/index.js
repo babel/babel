@@ -209,7 +209,7 @@ export default class Tokenizer extends CommentsParser {
    */
   lookahead(): LookaheadState {
     const old = this.state;
-    // For performance we use a simpified tokenizer state structure
+    // For performance we use a simplified tokenizer state structure
     // $FlowIgnore
     this.state = this.createLookaheadState(old);
 
@@ -1434,7 +1434,7 @@ export default class Tokenizer extends CommentsParser {
     this.finishToken(tt.string, out);
   }
 
-  // Reads tempalte continuation `}...`
+  // Reads template continuation `}...`
   readTemplateContinuation(): void {
     if (!this.match(tt.braceR)) {
       this.unexpected(null, tt.braceR);

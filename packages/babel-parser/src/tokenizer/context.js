@@ -17,7 +17,7 @@ const types: {
   [key: string]: TokContext,
 } = {
   brace: new TokContext("{"), // normal JavaScript expression
-  j_oTag: new TokContext("<tag"), // JSX openning tag
+  j_oTag: new TokContext("<tag"), // JSX opening tag
   j_cTag: new TokContext("</tag"), // JSX closing tag
   j_expr: new TokContext("<tag>...</tag>", true), // JSX expressions
 };

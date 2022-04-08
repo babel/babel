@@ -52,7 +52,7 @@ and
 
 Given a program source, the set of all the comment whitespaces has the following properties:
 
-**Nonemptiness** (P1): For every `w` of comment whitespaces, `w` satisifies
+**Nonemptiness** (P1): For every `w` of comment whitespaces, `w` satisfies
 
 ```
 w.start < w.end
@@ -72,7 +72,7 @@ w.start ≤ c.start < c.end ≤ w.end
 
 We can also say `w` encompasses `c`.
 
-**Monotonicity** (Corollary from P1 and P2): Given a non-empty list of comment whitespaces orderred by `start`, denoted by `{ w1, w2, ... w_n }`, they must satisify
+**Monotonicity** (Corollary from P1 and P2): Given a non-empty list of comment whitespaces ordered by `start`, denoted by `{ w1, w2, ... w_n }`, they must satisify
 
 ```
 w1.start < w1.end < w2.start < w2.end < ... < w_n.start < w_n.end
@@ -104,7 +104,7 @@ For any given comment `c` and AST node `n`, now we can (in)formally define leadi
 1. there exist a comment whitespace `w`, such that `n` is the innermost containing node of `w` and `w` encompasses `c`.
 2. there does not exist a comment whitespace `w`, such that `n` is the outermost leading or trailing node of `w and `w`encompasses`c`.
 
-The Isolation (P2) of a comment whitespace gaurantees that if two comments `c1`, `c2` belongs to the leading/trailing comments of `n`, `c1` and `c2` must be encompassed by the same comment whitespace `w`. This property simplifies classification of leading/trailing because we can now mark a group of comments instead of checking every comments under the same comment whitespace.
+The Isolation (P2) of a comment whitespace guarantees that if two comments `c1`, `c2` belongs to the leading/trailing comments of `n`, `c1` and `c2` must be encompassed by the same comment whitespace `w`. This property simplifies classification of leading/trailing because we can now mark a group of comments instead of checking every comments under the same comment whitespace.
 
 Note that Babel parser marks certain inner comments after a trailing comma of a list structures to be the trailing comments of the last element in that list. (https://github.com/babel/babel/pull/10369) This behaviour can be considered as conpensation due to lack of a `TrailingCommaElement` AST structure to which a comment can be attached. Although this PR implements such behaviour, we will not be discussing it in the design section.
 

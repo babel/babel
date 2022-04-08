@@ -51,7 +51,7 @@ export default function toFuzzedOptions(options) {
   const { startLine = 1, startColumn = 0 } = options;
 
   // If the test supplies its own position, then make sure we choose
-  // a different position. Also, make sure we stay wihtin the "reasonable"
+  // a different position. Also, make sure we stay within the "reasonable"
   // bounds in case the test is testing negative startLine or startColumn
   // for example.
   const randomLine = Math.max(2, random(startLine + 1, 1000));

@@ -213,7 +213,7 @@ export default class CommentsParser extends BaseParser {
   }
 
   /**
-   * Drains remaning commentStack and applies finalizeComment
+   * Drains remaining commentStack and applies finalizeComment
    * to each comment whitespace. Used only in parseExpression
    * where the top level AST node is _not_ Program
    * {@see {@link CommentsParser#finalizeComment}}
@@ -231,7 +231,7 @@ export default class CommentsParser extends BaseParser {
   /**
    * Reset previous node trailing comments. Used in object / class
    * property parsing. We parse `async`, `static`, `set` and `get`
-   * as an identifier but may reinterepret it into an async/static/accessor
+   * as an identifier but may reinterpret it into an async/static/accessor
    * method later. In this case the identifier is not part of the AST and we
    * should sync the knowledge to commentStacks
    *
