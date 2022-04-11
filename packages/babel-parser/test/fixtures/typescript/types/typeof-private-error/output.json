@@ -1,18 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":199,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":35,"index":199}},
+  "start":0,"end":146,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":35,"index":146}},
   "errors": [
-    "SyntaxError: Private name #a is not defined. (11:18)"
+    "SyntaxError: Private name #a is not defined. (10:18)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":199,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":35,"index":199}},
+    "start":0,"end":146,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":35,"index":146}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start":0,"end":143,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":143}},
+        "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":90}},
         "id": {
           "type": "Identifier",
           "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
@@ -21,7 +21,7 @@
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":8,"end":143,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":8,"column":1,"index":143}},
+          "start":8,"end":90,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":7,"column":1,"index":90}},
           "body": [
             {
               "type": "ClassPrivateProperty",
@@ -48,7 +48,7 @@
             },
             {
               "type": "ClassMethod",
-              "start":29,"end":141,"loc":{"start":{"line":4,"column":4,"index":29},"end":{"line":7,"column":5,"index":141}},
+              "start":29,"end":88,"loc":{"start":{"line":4,"column":4,"index":29},"end":{"line":6,"column":5,"index":88}},
               "static": false,
               "key": {
                 "type": "Identifier",
@@ -63,7 +63,7 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start":43,"end":141,"loc":{"start":{"line":4,"column":18,"index":43},"end":{"line":7,"column":5,"index":141}},
+                "start":43,"end":88,"loc":{"start":{"line":4,"column":18,"index":43},"end":{"line":6,"column":5,"index":88}},
                 "body": [
                   {
                     "type": "VariableDeclaration",
@@ -114,79 +114,7 @@
                         }
                       }
                     ],
-                    "kind": "const",
-                    "trailingComments": [
-                      {
-                        "type": "CommentLine",
-                        "value": " Ok",
-                        "start":83,"end":88,"loc":{"start":{"line":5,"column":38,"index":83},"end":{"line":5,"column":43,"index":88}}
-                      }
-                    ]
-                  },
-                  {
-                    "type": "VariableDeclaration",
-                    "start":97,"end":125,"loc":{"start":{"line":6,"column":8,"index":97},"end":{"line":6,"column":36,"index":125}},
-                    "declarations": [
-                      {
-                        "type": "VariableDeclarator",
-                        "start":103,"end":124,"loc":{"start":{"line":6,"column":14,"index":103},"end":{"line":6,"column":35,"index":124}},
-                        "id": {
-                          "type": "Identifier",
-                          "start":103,"end":120,"loc":{"start":{"line":6,"column":14,"index":103},"end":{"line":6,"column":31,"index":120},"identifierName":"b"},
-                          "name": "b",
-                          "typeAnnotation": {
-                            "type": "TSTypeAnnotation",
-                            "start":104,"end":120,"loc":{"start":{"line":6,"column":15,"index":104},"end":{"line":6,"column":31,"index":120}},
-                            "typeAnnotation": {
-                              "type": "TSTypeQuery",
-                              "start":106,"end":120,"loc":{"start":{"line":6,"column":17,"index":106},"end":{"line":6,"column":31,"index":120}},
-                              "exprName": {
-                                "type": "TSQualifiedName",
-                                "start":113,"end":120,"loc":{"start":{"line":6,"column":24,"index":113},"end":{"line":6,"column":31,"index":120}},
-                                "left": {
-                                  "type": "Identifier",
-                                  "start":113,"end":117,"loc":{"start":{"line":6,"column":24,"index":113},"end":{"line":6,"column":28,"index":117},"identifierName":"this"},
-                                  "name": "this"
-                                },
-                                "right": {
-                                  "type": "PrivateName",
-                                  "start":118,"end":120,"loc":{"start":{"line":6,"column":29,"index":118},"end":{"line":6,"column":31,"index":120}},
-                                  "id": {
-                                    "type": "Identifier",
-                                    "start":119,"end":120,"loc":{"start":{"line":6,"column":30,"index":119},"end":{"line":6,"column":31,"index":120},"identifierName":"a"},
-                                    "name": "a"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "init": {
-                          "type": "NumericLiteral",
-                          "start":123,"end":124,"loc":{"start":{"line":6,"column":34,"index":123},"end":{"line":6,"column":35,"index":124}},
-                          "extra": {
-                            "rawValue": 1,
-                            "raw": "1"
-                          },
-                          "value": 1
-                        }
-                      }
-                    ],
-                    "kind": "const",
-                    "trailingComments": [
-                      {
-                        "type": "CommentLine",
-                        "value": " Error",
-                        "start":127,"end":135,"loc":{"start":{"line":6,"column":38,"index":127},"end":{"line":6,"column":46,"index":135}}
-                      }
-                    ],
-                    "leadingComments": [
-                      {
-                        "type": "CommentLine",
-                        "value": " Ok",
-                        "start":83,"end":88,"loc":{"start":{"line":5,"column":38,"index":83},"end":{"line":5,"column":43,"index":88}}
-                      }
-                    ]
+                    "kind": "const"
                   }
                 ],
                 "directives": []
@@ -197,22 +125,22 @@
       },
       {
         "type": "VariableDeclaration",
-        "start":145,"end":163,"loc":{"start":{"line":10,"column":0,"index":145},"end":{"line":10,"column":18,"index":163}},
+        "start":92,"end":110,"loc":{"start":{"line":9,"column":0,"index":92},"end":{"line":9,"column":18,"index":110}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start":151,"end":162,"loc":{"start":{"line":10,"column":6,"index":151},"end":{"line":10,"column":17,"index":162}},
+            "start":98,"end":109,"loc":{"start":{"line":9,"column":6,"index":98},"end":{"line":9,"column":17,"index":109}},
             "id": {
               "type": "Identifier",
-              "start":151,"end":152,"loc":{"start":{"line":10,"column":6,"index":151},"end":{"line":10,"column":7,"index":152},"identifierName":"c"},
+              "start":98,"end":99,"loc":{"start":{"line":9,"column":6,"index":98},"end":{"line":9,"column":7,"index":99},"identifierName":"c"},
               "name": "c"
             },
             "init": {
               "type": "NewExpression",
-              "start":155,"end":162,"loc":{"start":{"line":10,"column":10,"index":155},"end":{"line":10,"column":17,"index":162}},
+              "start":102,"end":109,"loc":{"start":{"line":9,"column":10,"index":102},"end":{"line":9,"column":17,"index":109}},
               "callee": {
                 "type": "Identifier",
-                "start":159,"end":160,"loc":{"start":{"line":10,"column":14,"index":159},"end":{"line":10,"column":15,"index":160},"identifierName":"C"},
+                "start":106,"end":107,"loc":{"start":{"line":9,"column":14,"index":106},"end":{"line":9,"column":15,"index":107},"identifierName":"C"},
                 "name": "C"
               },
               "arguments": []
@@ -223,35 +151,35 @@
       },
       {
         "type": "VariableDeclaration",
-        "start":164,"end":190,"loc":{"start":{"line":11,"column":0,"index":164},"end":{"line":11,"column":26,"index":190}},
+        "start":111,"end":137,"loc":{"start":{"line":10,"column":0,"index":111},"end":{"line":10,"column":26,"index":137}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start":170,"end":189,"loc":{"start":{"line":11,"column":6,"index":170},"end":{"line":11,"column":25,"index":189}},
+            "start":117,"end":136,"loc":{"start":{"line":10,"column":6,"index":117},"end":{"line":10,"column":25,"index":136}},
             "id": {
               "type": "Identifier",
-              "start":170,"end":184,"loc":{"start":{"line":11,"column":6,"index":170},"end":{"line":11,"column":20,"index":184},"identifierName":"a"},
+              "start":117,"end":131,"loc":{"start":{"line":10,"column":6,"index":117},"end":{"line":10,"column":20,"index":131},"identifierName":"a"},
               "name": "a",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":171,"end":184,"loc":{"start":{"line":11,"column":7,"index":171},"end":{"line":11,"column":20,"index":184}},
+                "start":118,"end":131,"loc":{"start":{"line":10,"column":7,"index":118},"end":{"line":10,"column":20,"index":131}},
                 "typeAnnotation": {
                   "type": "TSTypeQuery",
-                  "start":173,"end":184,"loc":{"start":{"line":11,"column":9,"index":173},"end":{"line":11,"column":20,"index":184}},
+                  "start":120,"end":131,"loc":{"start":{"line":10,"column":9,"index":120},"end":{"line":10,"column":20,"index":131}},
                   "exprName": {
                     "type": "TSQualifiedName",
-                    "start":180,"end":184,"loc":{"start":{"line":11,"column":16,"index":180},"end":{"line":11,"column":20,"index":184}},
+                    "start":127,"end":131,"loc":{"start":{"line":10,"column":16,"index":127},"end":{"line":10,"column":20,"index":131}},
                     "left": {
                       "type": "Identifier",
-                      "start":180,"end":181,"loc":{"start":{"line":11,"column":16,"index":180},"end":{"line":11,"column":17,"index":181},"identifierName":"c"},
+                      "start":127,"end":128,"loc":{"start":{"line":10,"column":16,"index":127},"end":{"line":10,"column":17,"index":128},"identifierName":"c"},
                       "name": "c"
                     },
                     "right": {
                       "type": "PrivateName",
-                      "start":182,"end":184,"loc":{"start":{"line":11,"column":18,"index":182},"end":{"line":11,"column":20,"index":184}},
+                      "start":129,"end":131,"loc":{"start":{"line":10,"column":18,"index":129},"end":{"line":10,"column":20,"index":131}},
                       "id": {
                         "type": "Identifier",
-                        "start":183,"end":184,"loc":{"start":{"line":11,"column":19,"index":183},"end":{"line":11,"column":20,"index":184},"identifierName":"a"},
+                        "start":130,"end":131,"loc":{"start":{"line":10,"column":19,"index":130},"end":{"line":10,"column":20,"index":131},"identifierName":"a"},
                         "name": "a"
                       }
                     }
@@ -261,7 +189,7 @@
             },
             "init": {
               "type": "StringLiteral",
-              "start":187,"end":189,"loc":{"start":{"line":11,"column":23,"index":187},"end":{"line":11,"column":25,"index":189}},
+              "start":134,"end":136,"loc":{"start":{"line":10,"column":23,"index":134},"end":{"line":10,"column":25,"index":136}},
               "extra": {
                 "rawValue": "",
                 "raw": "''"
@@ -275,7 +203,7 @@
           {
             "type": "CommentLine",
             "value": " Error",
-            "start":191,"end":199,"loc":{"start":{"line":11,"column":27,"index":191},"end":{"line":11,"column":35,"index":199}}
+            "start":138,"end":146,"loc":{"start":{"line":10,"column":27,"index":138},"end":{"line":10,"column":35,"index":146}}
           }
         ]
       }
@@ -285,18 +213,8 @@
   "comments": [
     {
       "type": "CommentLine",
-      "value": " Ok",
-      "start":83,"end":88,"loc":{"start":{"line":5,"column":38,"index":83},"end":{"line":5,"column":43,"index":88}}
-    },
-    {
-      "type": "CommentLine",
       "value": " Error",
-      "start":127,"end":135,"loc":{"start":{"line":6,"column":38,"index":127},"end":{"line":6,"column":46,"index":135}}
-    },
-    {
-      "type": "CommentLine",
-      "value": " Error",
-      "start":191,"end":199,"loc":{"start":{"line":11,"column":27,"index":191},"end":{"line":11,"column":35,"index":199}}
+      "start":138,"end":146,"loc":{"start":{"line":10,"column":27,"index":138},"end":{"line":10,"column":35,"index":146}}
     }
   ]
 }
