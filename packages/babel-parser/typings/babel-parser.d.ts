@@ -89,6 +89,13 @@ export interface ParserOptions {
   startLine?: number;
 
   /**
+   * By default, the parsed code is treated as if it starts from line 1, column 0.
+   * You can provide a column number to alternatively start with.
+   * Useful for integration with other source tools.
+   */
+  startColumn?: number;
+
+  /**
    * Array containing the plugins that you want to enable.
    */
   plugins?: ParserPlugin[];
