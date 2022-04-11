@@ -6,6 +6,12 @@ class Range {
   }
 
   equals(range) {
+    /* 1 */
+
+    /* 2 */
+
+    /* 3 */
+    
     _set.has(range);
     _set.has(range);
   }

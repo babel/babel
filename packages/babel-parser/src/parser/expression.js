@@ -893,35 +893,33 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
-  parseClassOrClassHasInstanceExpression():
-    | N.Class
-    | N.ClassHasInstanceExpression {
+  parseClassOrClassHasInstanceExpression(
+    isStatement: boolean,
+  ): N.Class | N.ClassHasInstanceExpression {
     const node = this.startNode();
     this.next();
     if (this.eat(tt.dot)) {
-      const nextToken = this.lookahead();
       if (this.isContextual(tt._hasInstance)) {
         return this.parseClassHasInstanceExpression(
           node,
           this.startPos,
           this.startLoc,
-          nextToken,
         );
       } else {
-        throw this.raise(Errors.UnexpectedToken, { at: this.startLoc });
+        throw this.raise(Errors.UnexpectedToken, { at: node });
       }
     }
     this.takeDecorators(node);
-    return this.parseClass(node, false);
+    return this.parseClass(node, isStatement);
   }
 
-  parseClassHasInstanceExpression(base, startPos, startLoc, state) {
+  parseClassHasInstanceExpression(base, startPos, startLoc) {
     this.next(); // eat `hasinstance`
     this.next(); // eat `(`
     const node = this.startNodeAt(startPos, startLoc);
     const argus = this.parseCallExpressionArguments(tt.parenR);
     node.instance = argus.length ? argus[0] : null;
-    state.stop = true;
+    this.state.stop = true;
 
     return this.finishNode(node, "ClassHasInstanceExpression");
   }
@@ -1195,7 +1193,7 @@ export default class ExpressionParser extends LValParser {
         this.parseDecorators();
       // fall through
       case tt._class:
-        return this.parseClassOrClassHasInstanceExpression();
+        return this.parseClassOrClassHasInstanceExpression(false);
 
       case tt._new:
         return this.parseNewOrNewTarget();

@@ -367,7 +367,7 @@ export default class StatementParser extends ExpressionParser {
 
       case tt._class:
         if (context) this.unexpected();
-        return this.parseClass(node, true);
+        return this.parseClassOrClassHasInstanceExpression(node, true);
 
       case tt._if:
         return this.parseIfStatement(node);
@@ -1363,7 +1363,7 @@ export default class StatementParser extends ExpressionParser {
     isStatement: /* T === ClassDeclaration */ boolean,
     optionalId?: boolean,
   ): T {
-    if (this.eat(tt.class)) {
+    if (this.eat(tt._class)) {
       this.takeDecorators(node);
     }
 

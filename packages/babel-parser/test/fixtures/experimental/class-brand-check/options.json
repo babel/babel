@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-class-brand-check","transform-runtime"]
+}

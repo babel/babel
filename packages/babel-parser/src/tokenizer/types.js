@@ -289,6 +289,7 @@ export const tt: { [name: string]: TokenType } = {
   _set: createKeywordLike("set", { startsExpr }),
   _static: createKeywordLike("static", { startsExpr }),
   _yield: createKeywordLike("yield", { startsExpr }),
+  _hasInstance: createKeywordLike("hasInstance", { startsExpr }),
 
   // Flow and TypeScript Keywordlike
   _asserts: createKeywordLike("asserts", { startsExpr }),
@@ -320,7 +321,6 @@ export const tt: { [name: string]: TokenType } = {
   _opaque: createKeywordLike("opaque", { startsExpr }),
   // end: isFlowInterfaceOrTypeOrOpaque
   name: createToken("name", { startsExpr }),
-  _hasInstance: createToken("hasInstance", { startsExpr }),
   // end: isIdentifier
 
   string: createToken("string", { startsExpr }),
