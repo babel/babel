@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":52}},
+  "errors": [
+    "SyntaxError: Export 'encrypt' is not defined. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":52}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":30,"index":30}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":27,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":27,"index":27}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16},"identifierName":"encrypt"},
+              "name": "encrypt"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":20,"end":27,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":27,"index":27},"identifierName":"decrypt"},
+              "name": "decrypt"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":31,"end":52,"loc":{"start":{"line":2,"column":0,"index":31},"end":{"line":2,"column":21,"index":52}},
+        "id": {
+          "type": "Identifier",
+          "start":40,"end":47,"loc":{"start":{"line":2,"column":9,"index":40},"end":{"line":2,"column":16,"index":47},"identifierName":"decrypt"},
+          "name": "decrypt"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":50,"end":52,"loc":{"start":{"line":2,"column":19,"index":50},"end":{"line":2,"column":21,"index":52}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

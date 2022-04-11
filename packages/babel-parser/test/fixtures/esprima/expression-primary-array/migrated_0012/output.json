@@ -1,0 +1,25 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "errors": [
+    "SyntaxError: Invalid Unicode escape. (1:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18},"identifierName":"ⅣⅡ "},
+          "name": "ⅣⅡ "
+        }
+      }
+    ],
+    "directives": []
+  }
+}

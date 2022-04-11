@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "errors": [
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:5)",
+    "SyntaxError: Invalid left-hand side in for-in statement. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForInStatement",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "left": {
+          "type": "BinaryExpression",
+          "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10}},
+          "left": {
+            "type": "NumericLiteral",
+            "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "operator": "+",
+          "right": {
+            "type": "NumericLiteral",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 4
+          }
+        },
+        "right": {
+          "type": "Identifier",
+          "start":15,"end":19,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":19,"index":19},"identifierName":"list"},
+          "name": "list"
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start":21,"end":32,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":32,"index":32}},
+          "expression": {
+            "type": "CallExpression",
+            "start":21,"end":31,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":31,"index":31}},
+            "callee": {
+              "type": "Identifier",
+              "start":21,"end":28,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":28,"index":28},"identifierName":"process"},
+              "name": "process"
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start":29,"end":30,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":30,"index":30},"identifierName":"x"},
+                "name": "x"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

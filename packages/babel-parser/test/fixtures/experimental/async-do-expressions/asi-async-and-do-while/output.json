@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":14,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":14,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"async"},
+          "name": "async"
+        }
+      },
+      {
+        "type": "DoWhileStatement",
+        "start":6,"end":32,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":5,"column":14,"index":32}},
+        "body": {
+          "type": "BlockStatement",
+          "start":9,"end":17,"loc":{"start":{"line":2,"column":3,"index":9},"end":{"line":4,"column":1,"index":17}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":13,"end":15,"loc":{"start":{"line":3,"column":2,"index":13},"end":{"line":3,"column":4,"index":15}},
+              "expression": {
+                "type": "NumericLiteral",
+                "start":13,"end":15,"loc":{"start":{"line":3,"column":2,"index":13},"end":{"line":3,"column":4,"index":15}},
+                "extra": {
+                  "rawValue": 42,
+                  "raw": "42"
+                },
+                "value": 42
+              }
+            }
+          ],
+          "directives": []
+        },
+        "test": {
+          "type": "BooleanLiteral",
+          "start":25,"end":30,"loc":{"start":{"line":5,"column":7,"index":25},"end":{"line":5,"column":12,"index":30}},
+          "value": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

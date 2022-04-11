@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":30}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":30}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":30}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"test"},
+          "name": "test"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":30,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":3,"column":1,"index":30}},
+          "body": [
+            {
+              "type": "ThrowStatement",
+              "start":20,"end":28,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":10,"index":28}},
+              "argument": {
+                "type": "NumericLiteral",
+                "start":26,"end":27,"loc":{"start":{"line":2,"column":8,"index":26},"end":{"line":2,"column":9,"index":27}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

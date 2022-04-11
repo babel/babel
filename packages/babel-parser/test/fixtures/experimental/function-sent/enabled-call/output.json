@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":40,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":3,"column":1,"index":40}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":20,"end":38,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":20,"index":38}},
+              "expression": {
+                "type": "CallExpression",
+                "start":21,"end":36,"loc":{"start":{"line":2,"column":3,"index":21},"end":{"line":2,"column":18,"index":36}},
+                "callee": {
+                  "type": "MetaProperty",
+                  "start":21,"end":34,"loc":{"start":{"line":2,"column":3,"index":21},"end":{"line":2,"column":16,"index":34}},
+                  "meta": {
+                    "type": "Identifier",
+                    "start":21,"end":29,"loc":{"start":{"line":2,"column":3,"index":21},"end":{"line":2,"column":11,"index":29},"identifierName":"function"},
+                    "name": "function"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start":30,"end":34,"loc":{"start":{"line":2,"column":12,"index":30},"end":{"line":2,"column":16,"index":34},"identifierName":"sent"},
+                    "name": "sent"
+                  }
+                },
+                "arguments": [],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 20
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

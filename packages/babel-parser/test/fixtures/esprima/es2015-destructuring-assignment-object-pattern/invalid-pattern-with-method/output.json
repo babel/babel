@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+  "errors": [
+    "SyntaxError: Object pattern can't contain methods. (1:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":1,"end":10,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":10,"index":10}},
+          "operator": "=",
+          "left": {
+            "type": "ObjectPattern",
+            "start":1,"end":8,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":8,"index":8}},
+            "properties": [
+              {
+                "type": "ObjectMethod",
+                "start":2,"end":7,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":7,"index":7}},
+                "method": true,
+                "key": {
+                  "type": "Identifier",
+                  "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3},"identifierName":"a"},
+                  "name": "a"
+                },
+                "computed": false,
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":5,"end":7,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":7,"index":7}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

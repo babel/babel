@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "moduleAttributes",
+      {
+        "version": "may-2020"
+      }
+    ]
+  ],
+  "sourceType": "module"
+}

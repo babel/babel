@@ -1,0 +1,26 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "expression": {
+          "type": "BigIntLiteral",
+          "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+          "extra": {
+            "rawValue": "9223372036854775807",
+            "raw": "9223372036854775807n"
+          },
+          "value": "9223372036854775807"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

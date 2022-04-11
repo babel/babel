@@ -1,0 +1,11 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": "amd",
+        "loose": true
+      }
+    ]
+  ]
+}

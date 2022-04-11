@@ -1,0 +1,27 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+          "extra": {
+            "rawValue": "\\\\u{714E}\\\\u{8336}",
+            "raw": "\"\\\\u{714E}\\\\u{8336}\"",
+            "expressionValue": "\\u{714E}\\u{8336}"
+          },
+          "value": "\\\\u{714E}\\\\u{8336}"
+        }
+      }
+    ]
+  }
+}

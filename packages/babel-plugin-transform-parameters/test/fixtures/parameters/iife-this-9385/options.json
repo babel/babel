@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-typescript"],
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]]
+}

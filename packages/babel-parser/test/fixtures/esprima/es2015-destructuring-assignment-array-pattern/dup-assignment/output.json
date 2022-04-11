@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+            "elements": [
+              {
+                "type": "Identifier",
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"a"},
+                "name": "a"
+              },
+              {
+                "type": "Identifier",
+                "start":3,"end":4,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":4,"index":4},"identifierName":"a"},
+                "name": "a"
+              },
+              null,
+              {
+                "type": "RestElement",
+                "start":6,"end":10,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":10,"index":10}},
+                "argument": {
+                  "type": "Identifier",
+                  "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+                  "name": "a"
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

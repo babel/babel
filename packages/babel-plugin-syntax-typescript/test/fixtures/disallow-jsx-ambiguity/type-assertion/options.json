@@ -1,0 +1,3 @@
+{
+  "throws": "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead. (1:0)"
+}

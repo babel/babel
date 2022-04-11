@@ -1,0 +1,109 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":41}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":41}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "expression": {
+          "type": "TypeCastExpression",
+          "start":1,"end":17,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":17,"index":17}},
+          "expression": {
+            "type": "ArrowFunctionExpression",
+            "start":1,"end":12,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":12,"index":12}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12}},
+              "body": [],
+              "directives": []
+            },
+            "typeParameters": {
+              "type": "TypeParameterDeclaration",
+              "start":1,"end":4,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":4,"index":4}},
+              "params": [
+                {
+                  "type": "TypeParameter",
+                  "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3}},
+                  "name": "T",
+                  "variance": null
+                }
+              ]
+            }
+          },
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":12,"end":17,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":17,"index":17}},
+            "typeAnnotation": {
+              "type": "AnyTypeAnnotation",
+              "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17}}
+            }
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":20,"end":41,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":2,"column":21,"index":41}},
+        "expression": {
+          "type": "TypeCastExpression",
+          "start":21,"end":39,"loc":{"start":{"line":2,"column":1,"index":21},"end":{"line":2,"column":19,"index":39}},
+          "expression": {
+            "type": "ArrowFunctionExpression",
+            "start":22,"end":33,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":13,"index":33}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":31,"end":33,"loc":{"start":{"line":2,"column":11,"index":31},"end":{"line":2,"column":13,"index":33}},
+              "body": [],
+              "directives": []
+            },
+            "typeParameters": {
+              "type": "TypeParameterDeclaration",
+              "start":22,"end":25,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":5,"index":25}},
+              "params": [
+                {
+                  "type": "TypeParameter",
+                  "start":23,"end":24,"loc":{"start":{"line":2,"column":3,"index":23},"end":{"line":2,"column":4,"index":24}},
+                  "name": "T",
+                  "variance": null
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 21
+            }
+          },
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":34,"end":39,"loc":{"start":{"line":2,"column":14,"index":34},"end":{"line":2,"column":19,"index":39}},
+            "typeAnnotation": {
+              "type": "AnyTypeAnnotation",
+              "start":36,"end":39,"loc":{"start":{"line":2,"column":16,"index":36},"end":{"line":2,"column":19,"index":39}}
+            }
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 20
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

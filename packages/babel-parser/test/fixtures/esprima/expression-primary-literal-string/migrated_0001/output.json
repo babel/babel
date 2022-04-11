@@ -1,0 +1,27 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+          "extra": {
+            "rawValue": "\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0",
+            "raw": "\"\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0\"",
+            "expressionValue": "\n\r\t\u000b\b\f\\'\"\u0000"
+          },
+          "value": "\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0"
+        }
+      }
+    ]
+  }
+}

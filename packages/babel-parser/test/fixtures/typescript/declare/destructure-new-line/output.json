@@ -1,0 +1,129 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":41,"index":49}},
+  "errors": [
+    "SyntaxError: Missing initializer in destructuring declaration. (2:40)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":41,"index":49}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7},"identifierName":"declare"},
+          "name": "declare"
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":8,"end":49,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":41,"index":49}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":14,"end":48,"loc":{"start":{"line":2,"column":6,"index":14},"end":{"line":2,"column":40,"index":48}},
+            "id": {
+              "type": "ObjectPattern",
+              "start":14,"end":48,"loc":{"start":{"line":2,"column":6,"index":14},"end":{"line":2,"column":40,"index":48}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":16,"end":17,"loc":{"start":{"line":2,"column":8,"index":16},"end":{"line":2,"column":9,"index":17}},
+                  "key": {
+                    "type": "Identifier",
+                    "start":16,"end":17,"loc":{"start":{"line":2,"column":8,"index":16},"end":{"line":2,"column":9,"index":17},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "computed": false,
+                  "method": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":16,"end":17,"loc":{"start":{"line":2,"column":8,"index":16},"end":{"line":2,"column":9,"index":17},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "extra": {
+                    "shorthand": true
+                  }
+                },
+                {
+                  "type": "ObjectProperty",
+                  "start":19,"end":20,"loc":{"start":{"line":2,"column":11,"index":19},"end":{"line":2,"column":12,"index":20}},
+                  "key": {
+                    "type": "Identifier",
+                    "start":19,"end":20,"loc":{"start":{"line":2,"column":11,"index":19},"end":{"line":2,"column":12,"index":20},"identifierName":"y"},
+                    "name": "y"
+                  },
+                  "computed": false,
+                  "method": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":19,"end":20,"loc":{"start":{"line":2,"column":11,"index":19},"end":{"line":2,"column":12,"index":20},"identifierName":"y"},
+                    "name": "y"
+                  },
+                  "extra": {
+                    "shorthand": true
+                  }
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":22,"end":48,"loc":{"start":{"line":2,"column":14,"index":22},"end":{"line":2,"column":40,"index":48}},
+                "typeAnnotation": {
+                  "type": "TSTypeLiteral",
+                  "start":24,"end":48,"loc":{"start":{"line":2,"column":16,"index":24},"end":{"line":2,"column":40,"index":48}},
+                  "members": [
+                    {
+                      "type": "TSPropertySignature",
+                      "start":26,"end":36,"loc":{"start":{"line":2,"column":18,"index":26},"end":{"line":2,"column":28,"index":36}},
+                      "key": {
+                        "type": "Identifier",
+                        "start":26,"end":27,"loc":{"start":{"line":2,"column":18,"index":26},"end":{"line":2,"column":19,"index":27},"identifierName":"x"},
+                        "name": "x"
+                      },
+                      "computed": false,
+                      "typeAnnotation": {
+                        "type": "TSTypeAnnotation",
+                        "start":27,"end":35,"loc":{"start":{"line":2,"column":19,"index":27},"end":{"line":2,"column":27,"index":35}},
+                        "typeAnnotation": {
+                          "type": "TSNumberKeyword",
+                          "start":29,"end":35,"loc":{"start":{"line":2,"column":21,"index":29},"end":{"line":2,"column":27,"index":35}}
+                        }
+                      }
+                    },
+                    {
+                      "type": "TSPropertySignature",
+                      "start":37,"end":46,"loc":{"start":{"line":2,"column":29,"index":37},"end":{"line":2,"column":38,"index":46}},
+                      "key": {
+                        "type": "Identifier",
+                        "start":37,"end":38,"loc":{"start":{"line":2,"column":29,"index":37},"end":{"line":2,"column":30,"index":38},"identifierName":"y"},
+                        "name": "y"
+                      },
+                      "computed": false,
+                      "typeAnnotation": {
+                        "type": "TSTypeAnnotation",
+                        "start":38,"end":46,"loc":{"start":{"line":2,"column":30,"index":38},"end":{"line":2,"column":38,"index":46}},
+                        "typeAnnotation": {
+                          "type": "TSNumberKeyword",
+                          "start":40,"end":46,"loc":{"start":{"line":2,"column":32,"index":40},"end":{"line":2,"column":38,"index":46}}
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

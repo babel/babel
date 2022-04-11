@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "./plugin.js",
+    "bugfix-safari-id-destructuring-collision-in-function-expression"
+  ]
+}

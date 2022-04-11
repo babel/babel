@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":28,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":28,"index":28}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":10,"end":26,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":26,"index":26}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":17,"end":20,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":20,"index":20},"identifierName":"set"},
+                "name": "set"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22},"identifierName":"v"},
+                  "name": "v"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":24,"end":26,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":26,"index":26}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

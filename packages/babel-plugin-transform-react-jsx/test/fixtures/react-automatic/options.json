@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["transform-react-jsx", { "runtime": "automatic" }],
+    "transform-react-display-name",
+    "transform-arrow-functions"
+  ],
+  "sourceType": "module"
+}

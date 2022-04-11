@@ -1,0 +1,30 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":14,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":14,"index":14}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":14,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":14,"index":14},"identifierName":"_𞸃"},
+              "name": "_𞸃"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

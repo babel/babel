@@ -1,0 +1,101 @@
+{
+  "type": "File",
+  "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":65,"index":65}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":65,"index":65}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":65,"index":65}},
+        "block": {
+          "type": "BlockStatement",
+          "start":4,"end":17,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":17,"index":17}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":6,"end":15,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":15,"index":15}},
+              "expression": {
+                "type": "CallExpression",
+                "start":6,"end":14,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":14,"index":14}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":6,"end":12,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":12,"index":12},"identifierName":"doThat"},
+                  "name": "doThat"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":18,"end":38,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":38,"index":38}},
+          "param": {
+            "type": "Identifier",
+            "start":25,"end":26,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":26,"index":26},"identifierName":"e"},
+            "name": "e"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":28,"end":38,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":38,"index":38}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":30,"end":36,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":36,"index":36}},
+                "expression": {
+                  "type": "CallExpression",
+                  "start":30,"end":36,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":36,"index":36}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":30,"end":33,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":33,"index":33},"identifierName":"say"},
+                    "name": "say"
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "start":34,"end":35,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":35,"index":35},"identifierName":"e"},
+                      "name": "e"
+                    }
+                  ]
+                }
+              }
+            ],
+            "directives": []
+          }
+        },
+        "finalizer": {
+          "type": "BlockStatement",
+          "start":47,"end":65,"loc":{"start":{"line":1,"column":47,"index":47},"end":{"line":1,"column":65,"index":65}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":49,"end":63,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":63,"index":63}},
+              "expression": {
+                "type": "CallExpression",
+                "start":49,"end":63,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":63,"index":63}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":49,"end":56,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":56,"index":56},"identifierName":"cleanup"},
+                  "name": "cleanup"
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "start":57,"end":62,"loc":{"start":{"line":1,"column":57,"index":57},"end":{"line":1,"column":62,"index":62},"identifierName":"stuff"},
+                    "name": "stuff"
+                  }
+                ]
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

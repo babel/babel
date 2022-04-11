@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16}},
+            "imported": {
+              "type": "Identifier",
+              "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16},"identifierName":"as"},
+              "name": "as"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16},"identifierName":"as"},
+              "name": "as"
+            },
+            "importKind": "type"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":24,"end":34,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":34,"index":34}},
+          "extra": {
+            "rawValue": "./mod.js",
+            "raw": "\"./mod.js\""
+          },
+          "value": "./mod.js"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

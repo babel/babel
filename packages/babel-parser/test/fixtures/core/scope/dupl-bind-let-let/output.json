@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": null
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12}},
+            "id": {
+              "type": "Identifier",
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

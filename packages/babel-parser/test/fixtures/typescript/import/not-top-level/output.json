@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":50}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":50}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":50}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":19,"end":50,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":50}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":25,"end":48,"loc":{"start":{"line":2,"column":4,"index":25},"end":{"line":2,"column":27,"index":48}},
+              "importKind": "value",
+              "specifiers": [
+                {
+                  "type": "ImportNamespaceSpecifier",
+                  "start":32,"end":38,"loc":{"start":{"line":2,"column":11,"index":32},"end":{"line":2,"column":17,"index":38}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":37,"end":38,"loc":{"start":{"line":2,"column":16,"index":37},"end":{"line":2,"column":17,"index":38},"identifierName":"a"},
+                    "name": "a"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":44,"end":47,"loc":{"start":{"line":2,"column":23,"index":44},"end":{"line":2,"column":26,"index":47}},
+                "extra": {
+                  "rawValue": "a",
+                  "raw": "\"a\""
+                },
+                "value": "a"
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": []
+  }
+}

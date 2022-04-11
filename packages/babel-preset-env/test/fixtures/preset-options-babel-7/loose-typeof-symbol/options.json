@@ -1,0 +1,10 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "loose": true
+      }
+    ]
+  ]
+}

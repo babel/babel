@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'if'. (1:17)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":19,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":19,"index":19}},
+            "imported": {
+              "type": "Identifier",
+              "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"type"},
+              "name": "type"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":17,"end":19,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":19,"index":19},"identifierName":"if"},
+              "name": "if"
+            },
+            "importKind": "value"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":27,"end":32,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":32,"index":32}},
+          "extra": {
+            "rawValue": "mod",
+            "raw": "\"mod\""
+          },
+          "value": "mod"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

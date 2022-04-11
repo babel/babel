@@ -1,0 +1,3 @@
+(() => 42)
+
+// some comments

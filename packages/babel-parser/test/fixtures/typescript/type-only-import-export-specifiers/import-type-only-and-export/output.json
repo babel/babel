@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":16,"index":49}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":16,"index":49}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":18,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":18,"index":18}},
+            "imported": {
+              "type": "Identifier",
+              "start":14,"end":18,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":18,"index":18},"identifierName":"Foo1"},
+              "name": "Foo1"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":14,"end":18,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":18,"index":18},"identifierName":"Foo1"},
+              "name": "Foo1"
+            },
+            "importKind": "type"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":26,"end":31,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":31,"index":31}},
+          "extra": {
+            "rawValue": "mod",
+            "raw": "\"mod\""
+          },
+          "value": "mod"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":33,"end":49,"loc":{"start":{"line":2,"column":0,"index":33},"end":{"line":2,"column":16,"index":49}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":42,"end":46,"loc":{"start":{"line":2,"column":9,"index":42},"end":{"line":2,"column":13,"index":46}},
+            "local": {
+              "type": "Identifier",
+              "start":42,"end":46,"loc":{"start":{"line":2,"column":9,"index":42},"end":{"line":2,"column":13,"index":46},"identifierName":"Foo1"},
+              "name": "Foo1"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":42,"end":46,"loc":{"start":{"line":2,"column":9,"index":42},"end":{"line":2,"column":13,"index":46},"identifierName":"Foo1"},
+              "name": "Foo1"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+  "errors": [
+    "SyntaxError: Invalid left-hand side in object destructuring pattern. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":1,"end":14,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":14,"index":14}},
+          "operator": "=",
+          "left": {
+            "type": "ObjectPattern",
+            "start":1,"end":10,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":10,"index":10}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":2,"end":9,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":9,"index":9}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3},"identifierName":"a"},
+                  "name": "a"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "ThisExpression",
+                  "start":5,"end":9,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":9,"index":9}}
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":11,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":11,"index":11},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":12,"end":17,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":17,"index":17},"identifierName":"yield"},
+            "name": "yield"
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":21,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":21,"index":21}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

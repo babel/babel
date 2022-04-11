@@ -1,0 +1,65 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":33}},
+  "errors": [
+    "SyntaxError: `new.target` can only be used in functions or class properties. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":33}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":33}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":33,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":1,"index":33}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":10,"end":33,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":33}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":16,"end":33,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":3,"column":1,"index":33}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":20,"end":31,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":13,"index":31}},
+                    "expression": {
+                      "type": "MetaProperty",
+                      "start":20,"end":30,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":12,"index":30}},
+                      "meta": {
+                        "type": "Identifier",
+                        "start":20,"end":23,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":5,"index":23},"identifierName":"new"},
+                        "name": "new"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start":24,"end":30,"loc":{"start":{"line":2,"column":6,"index":24},"end":{"line":2,"column":12,"index":30},"identifierName":"target"},
+                        "name": "target"
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

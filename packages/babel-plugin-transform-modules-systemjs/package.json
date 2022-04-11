@@ -1,0 +1,50 @@
+{
+  "name": "@babel/plugin-transform-modules-systemjs",
+  "version": "7.17.8",
+  "description": "This plugin transforms ES2015 modules to SystemJS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-modules-systemjs"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/helper-hoist-variables": "workspace:^",
+    "@babel/helper-module-transforms": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-validator-identifier": "workspace:^",
+    "babel-plugin-dynamic-import-node": "^2.3.3"
+  },
+  "keywords": [
+    "babel-plugin"
+  ],
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-systemjs",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
+}

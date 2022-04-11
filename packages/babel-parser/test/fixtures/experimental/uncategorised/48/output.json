@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":38,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":38,"index":38}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":36,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":36,"index":36}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":12,"end":16,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":16,"index":16}},
+                  "expression": {
+                    "type": "Identifier",
+                    "start":13,"end":16,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":16,"index":16},"identifierName":"bar"},
+                    "name": "bar"
+                  }
+                }
+              ],
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":24,"end":27,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":27,"index":27},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "value": {
+                "type": "StringLiteral",
+                "start":30,"end":35,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":35,"index":35}},
+                "extra": {
+                  "rawValue": "bar",
+                  "raw": "\"bar\""
+                },
+                "value": "bar"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

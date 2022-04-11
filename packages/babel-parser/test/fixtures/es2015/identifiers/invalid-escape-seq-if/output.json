@@ -1,0 +1,32 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "errors": [
+    "SyntaxError: Escape sequence in keyword if. (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "test": {
+          "type": "BooleanLiteral",
+          "start":14,"end":18,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":18,"index":18}},
+          "value": true
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22}},
+          "body": [],
+          "directives": []
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}

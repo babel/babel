@@ -1,0 +1,33 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":5,"index":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":5,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":5,"index":22}},
+        "expression": {
+          "type": "TemplateLiteral",
+          "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":5,"index":22}},
+          "expressions": [],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start":1,"end":21,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":3,"column":4,"index":21}},
+              "value": {
+                "raw": "\\n\\r\\b\\v\\t\\f\\\n\\\n\\ \\ ",
+                "cooked": "\n\r\b\u000b\t\f"
+              },
+              "tail": true
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

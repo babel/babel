@@ -1,0 +1,37 @@
+{
+  "type": "File",
+  "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "expression": {
+          "type": "NewExpression",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":4,"end":12,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":12,"index":12}},
+            "object": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "computed": true,
+            "property": {
+              "type": "Identifier",
+              "start":8,"end":11,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":11,"index":11},"identifierName":"bar"},
+              "name": "bar"
+            }
+          },
+          "arguments": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

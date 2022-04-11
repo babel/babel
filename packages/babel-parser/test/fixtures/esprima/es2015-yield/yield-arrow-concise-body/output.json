@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "BinaryExpression",
+            "start":7,"end":16,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":16,"index":16}},
+            "left": {
+              "type": "Identifier",
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"x"},
+              "name": "x"
+            },
+            "operator": "*",
+            "right": {
+              "type": "Identifier",
+              "start":11,"end":16,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":16,"index":16},"identifierName":"yield"},
+              "name": "yield"
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

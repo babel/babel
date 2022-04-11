@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":10,"index":51}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":10,"index":51}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":10,"index":51}},
+        "expression": {
+          "type": "JSXElement",
+          "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":10,"index":51}},
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":32}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":1,"end":8,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":8,"index":8}},
+              "name": "AbC-def"
+            },
+            "attributes": [
+              {
+                "type": "JSXAttribute",
+                "start":11,"end":31,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":22,"index":31}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":11,"end":15,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":6,"index":15}},
+                  "name": "test"
+                },
+                "value": {
+                  "type": "StringLiteral",
+                  "start":16,"end":31,"loc":{"start":{"line":2,"column":7,"index":16},"end":{"line":2,"column":22,"index":31}},
+                  "extra": {
+                    "rawValue": "&&",
+                    "raw": "\"&#x0026;&#38;\""
+                  },
+                  "value": "&&"
+                }
+              }
+            ],
+            "selfClosing": false
+          },
+          "closingElement": {
+            "type": "JSXClosingElement",
+            "start":41,"end":51,"loc":{"start":{"line":5,"column":0,"index":41},"end":{"line":5,"column":10,"index":51}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":43,"end":50,"loc":{"start":{"line":5,"column":2,"index":43},"end":{"line":5,"column":9,"index":50}},
+              "name": "AbC-def"
+            }
+          },
+          "children": [
+            {
+              "type": "JSXText",
+              "start":32,"end":41,"loc":{"start":{"line":2,"column":23,"index":32},"end":{"line":5,"column":0,"index":41}},
+              "extra": {
+                "rawValue": "\nbar\nbaz\n",
+                "raw": "\nbar\nbaz\n"
+              },
+              "value": "\nbar\nbaz\n"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

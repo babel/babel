@@ -1,0 +1,10 @@
+================= require - auto ====================
+typeof objectWithoutProperties: function
+typeof objectWithoutProperties.default: function
+obj: { b: 2, [Symbol(Symbol.toStringTag)]: 5 }
+================= require - esm =====================
+Error: require() of ES Module <ROOT>/packages/babel-runtime/helpers/esm/toPrimitive.js from <ROOT>/test/runtime-integration/src/absolute/require-esm.cjs not supported.
+Instead change the require of toPrimitive.js in <ROOT>/test/runtime-integration/src/absolute/require-esm.cjs to a dynamic import() which is available in all CommonJS modules.
+=============== require - corejs ====================
+typeof Set: function
+arr: 1,2,3

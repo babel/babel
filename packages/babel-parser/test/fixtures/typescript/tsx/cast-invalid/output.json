@@ -1,0 +1,142 @@
+{
+  "type": "File",
+  "start":0,"end":85,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":85}},
+  "errors": [
+    "SyntaxError: Did not expect a type annotation here. (3:21)",
+    "SyntaxError: Did not expect a type annotation here. (3:42)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":85,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":85}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":85,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":85}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":85,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":5,"column":1,"index":85}},
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "start":19,"end":83,"loc":{"start":{"line":2,"column":2,"index":19},"end":{"line":4,"column":4,"index":83}},
+              "argument": {
+                "type": "JSXElement",
+                "start":32,"end":78,"loc":{"start":{"line":3,"column":4,"index":32},"end":{"line":3,"column":50,"index":78}},
+                "openingElement": {
+                  "type": "JSXOpeningElement",
+                  "start":32,"end":78,"loc":{"start":{"line":3,"column":4,"index":32},"end":{"line":3,"column":50,"index":78}},
+                  "name": {
+                    "type": "JSXIdentifier",
+                    "start":33,"end":36,"loc":{"start":{"line":3,"column":5,"index":33},"end":{"line":3,"column":8,"index":36}},
+                    "name": "div"
+                  },
+                  "attributes": [
+                    {
+                      "type": "JSXAttribute",
+                      "start":37,"end":59,"loc":{"start":{"line":3,"column":9,"index":37},"end":{"line":3,"column":31,"index":59}},
+                      "name": {
+                        "type": "JSXIdentifier",
+                        "start":37,"end":42,"loc":{"start":{"line":3,"column":9,"index":37},"end":{"line":3,"column":14,"index":42}},
+                        "name": "propA"
+                      },
+                      "value": {
+                        "type": "JSXExpressionContainer",
+                        "start":43,"end":59,"loc":{"start":{"line":3,"column":15,"index":43},"end":{"line":3,"column":31,"index":59}},
+                        "expression": {
+                          "type": "ArrayExpression",
+                          "start":44,"end":58,"loc":{"start":{"line":3,"column":16,"index":44},"end":{"line":3,"column":30,"index":58}},
+                          "elements": [
+                            {
+                              "type": "TSTypeCastExpression",
+                              "start":46,"end":56,"loc":{"start":{"line":3,"column":18,"index":46},"end":{"line":3,"column":28,"index":56}},
+                              "expression": {
+                                "type": "Identifier",
+                                "start":46,"end":49,"loc":{"start":{"line":3,"column":18,"index":46},"end":{"line":3,"column":21,"index":49},"identifierName":"key"},
+                                "name": "key"
+                              },
+                              "typeAnnotation": {
+                                "type": "TSTypeAnnotation",
+                                "start":49,"end":56,"loc":{"start":{"line":3,"column":21,"index":49},"end":{"line":3,"column":28,"index":56}},
+                                "typeAnnotation": {
+                                  "type": "TSTypeReference",
+                                  "start":51,"end":56,"loc":{"start":{"line":3,"column":23,"index":51},"end":{"line":3,"column":28,"index":56}},
+                                  "typeName": {
+                                    "type": "Identifier",
+                                    "start":51,"end":56,"loc":{"start":{"line":3,"column":23,"index":51},"end":{"line":3,"column":28,"index":56},"identifierName":"value"},
+                                    "name": "value"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "JSXAttribute",
+                      "start":60,"end":75,"loc":{"start":{"line":3,"column":32,"index":60},"end":{"line":3,"column":47,"index":75}},
+                      "name": {
+                        "type": "JSXIdentifier",
+                        "start":60,"end":66,"loc":{"start":{"line":3,"column":32,"index":60},"end":{"line":3,"column":38,"index":66}},
+                        "name": "propsB"
+                      },
+                      "value": {
+                        "type": "JSXExpressionContainer",
+                        "start":67,"end":75,"loc":{"start":{"line":3,"column":39,"index":67},"end":{"line":3,"column":47,"index":75}},
+                        "expression": {
+                          "type": "TSTypeCastExpression",
+                          "start":69,"end":73,"loc":{"start":{"line":3,"column":41,"index":69},"end":{"line":3,"column":45,"index":73}},
+                          "expression": {
+                            "type": "Identifier",
+                            "start":69,"end":70,"loc":{"start":{"line":3,"column":41,"index":69},"end":{"line":3,"column":42,"index":70},"identifierName":"a"},
+                            "name": "a"
+                          },
+                          "typeAnnotation": {
+                            "type": "TSTypeAnnotation",
+                            "start":70,"end":73,"loc":{"start":{"line":3,"column":42,"index":70},"end":{"line":3,"column":45,"index":73}},
+                            "typeAnnotation": {
+                              "type": "TSTypeReference",
+                              "start":72,"end":73,"loc":{"start":{"line":3,"column":44,"index":72},"end":{"line":3,"column":45,"index":73}},
+                              "typeName": {
+                                "type": "Identifier",
+                                "start":72,"end":73,"loc":{"start":{"line":3,"column":44,"index":72},"end":{"line":3,"column":45,"index":73},"identifierName":"b"},
+                                "name": "b"
+                              }
+                            }
+                          },
+                          "extra": {
+                            "parenthesized": true,
+                            "parenStart": 68
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selfClosing": true
+                },
+                "closingElement": null,
+                "children": [],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 26
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+  "errors": [
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (2:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":46,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":3,"column":1,"index":46}},
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start":25,"end":44,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":21,"index":44}},
+              "id": {
+                "type": "Identifier",
+                "start":34,"end":39,"loc":{"start":{"line":2,"column":11,"index":34},"end":{"line":2,"column":16,"index":39},"identifierName":"await"},
+                "name": "await"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":42,"end":44,"loc":{"start":{"line":2,"column":19,"index":42},"end":{"line":2,"column":21,"index":44}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

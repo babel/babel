@@ -1,0 +1,23 @@
+{
+  "type": "File",
+  "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "discriminant": {
+          "type": "Identifier",
+          "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"x"},
+          "name": "x"
+        },
+        "cases": []
+      }
+    ],
+    "directives": []
+  }
+}

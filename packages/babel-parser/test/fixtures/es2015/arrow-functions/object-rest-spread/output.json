@@ -1,0 +1,79 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":44}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":43,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":3,"column":1,"index":43}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":10,"end":43,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":43}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "ObjectPattern",
+                  "start":12,"end":31,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":31,"index":31}},
+                  "properties": [
+                    {
+                      "type": "ObjectProperty",
+                      "start":14,"end":19,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":19,"index":19}},
+                      "method": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":14,"end":19,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":19,"index":19},"identifierName":"title"},
+                        "name": "title"
+                      },
+                      "computed": false,
+                      "shorthand": true,
+                      "value": {
+                        "type": "Identifier",
+                        "start":14,"end":19,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":19,"index":19},"identifierName":"title"},
+                        "name": "title"
+                      },
+                      "extra": {
+                        "shorthand": true
+                      }
+                    },
+                    {
+                      "type": "RestElement",
+                      "start":21,"end":29,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":29,"index":29}},
+                      "argument": {
+                        "type": "Identifier",
+                        "start":24,"end":29,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":29,"index":29},"identifierName":"other"},
+                        "name": "other"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":37,"end":43,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":3,"column":1,"index":43}},
+                "body": [],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":34}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":34}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":34}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":34}},
+          "left": {
+            "type": "BinaryExpression",
+            "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":4,"index":32}},
+            "left": {
+              "type": "UnaryExpression",
+              "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+              "operator": "void",
+              "prefix": true,
+              "argument": {
+                "type": "FunctionExpression",
+                "start":5,"end":27,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":27,"index":27}},
+                "id": {
+                  "type": "Identifier",
+                  "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22},"identifierName":"fn"},
+                  "name": "fn"
+                },
+                "generator": false,
+                "async": true,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":25,"end":27,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":27,"index":27}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            },
+            "operator": "/",
+            "right": {
+              "type": "Identifier",
+              "start":29,"end":32,"loc":{"start":{"line":2,"column":1,"index":29},"end":{"line":2,"column":4,"index":32},"identifierName":"foo"},
+              "name": "foo"
+            }
+          },
+          "operator": "/",
+          "right": {
+            "type": "Identifier",
+            "start":33,"end":34,"loc":{"start":{"line":2,"column":5,"index":33},"end":{"line":2,"column":6,"index":34},"identifierName":"g"},
+            "name": "g"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

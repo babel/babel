@@ -1,0 +1,12 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "modules": "umd",
+        "targets": ["Safari 8", "IE 11"]
+      }
+    ]
+  ]
+}

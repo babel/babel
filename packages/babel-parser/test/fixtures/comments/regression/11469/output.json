@@ -1,0 +1,177 @@
+{
+  "type": "File",
+  "start":0,"end":193,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":193}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":193,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":193}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":82,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":82}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":82,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":7,"column":1,"index":82}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":54,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":4,"column":3,"index":54}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":16,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":6,"index":16},"identifierName":"test"},
+                "name": "test"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":19,"end":54,"loc":{"start":{"line":2,"column":9,"index":19},"end":{"line":4,"column":3,"index":54}},
+                "body": [],
+                "directives": [],
+                "innerComments": [
+                  {
+                    "type": "CommentLine",
+                    "value": " this.member = 'value';",
+                    "start":25,"end":50,"loc":{"start":{"line":3,"column":4,"index":25},"end":{"line":3,"column":29,"index":50}}
+                  }
+                ]
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " Trailing comment ",
+                  "start":58,"end":80,"loc":{"start":{"line":6,"column":2,"index":58},"end":{"line":6,"column":24,"index":80}}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":84,"end":140,"loc":{"start":{"line":9,"column":0,"index":84},"end":{"line":13,"column":1,"index":140}},
+        "id": {
+          "type": "Identifier",
+          "start":90,"end":91,"loc":{"start":{"line":9,"column":6,"index":90},"end":{"line":9,"column":7,"index":91},"identifierName":"B"},
+          "name": "B"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":92,"end":140,"loc":{"start":{"line":9,"column":8,"index":92},"end":{"line":13,"column":1,"index":140}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":96,"end":138,"loc":{"start":{"line":10,"column":2,"index":96},"end":{"line":12,"column":3,"index":138}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":96,"end":100,"loc":{"start":{"line":10,"column":2,"index":96},"end":{"line":10,"column":6,"index":100},"identifierName":"test"},
+                "name": "test"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":103,"end":138,"loc":{"start":{"line":10,"column":9,"index":103},"end":{"line":12,"column":3,"index":138}},
+                "body": [],
+                "directives": [],
+                "innerComments": [
+                  {
+                    "type": "CommentLine",
+                    "value": " this.member = 'value';",
+                    "start":109,"end":134,"loc":{"start":{"line":11,"column":4,"index":109},"end":{"line":11,"column":29,"index":134}}
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":142,"end":193,"loc":{"start":{"line":15,"column":0,"index":142},"end":{"line":18,"column":1,"index":193}},
+        "id": {
+          "type": "Identifier",
+          "start":148,"end":149,"loc":{"start":{"line":15,"column":6,"index":148},"end":{"line":15,"column":7,"index":149},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":150,"end":193,"loc":{"start":{"line":15,"column":8,"index":150},"end":{"line":18,"column":1,"index":193}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":154,"end":163,"loc":{"start":{"line":16,"column":2,"index":154},"end":{"line":16,"column":11,"index":163}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":154,"end":158,"loc":{"start":{"line":16,"column":2,"index":154},"end":{"line":16,"column":6,"index":158},"identifierName":"test"},
+                "name": "test"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":161,"end":163,"loc":{"start":{"line":16,"column":9,"index":161},"end":{"line":16,"column":11,"index":163}},
+                "body": [],
+                "directives": []
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " this.member = 'value';",
+                  "start":166,"end":191,"loc":{"start":{"line":17,"column":2,"index":166},"end":{"line":17,"column":27,"index":191}}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " this.member = 'value';",
+      "start":25,"end":50,"loc":{"start":{"line":3,"column":4,"index":25},"end":{"line":3,"column":29,"index":50}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " Trailing comment ",
+      "start":58,"end":80,"loc":{"start":{"line":6,"column":2,"index":58},"end":{"line":6,"column":24,"index":80}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " this.member = 'value';",
+      "start":109,"end":134,"loc":{"start":{"line":11,"column":4,"index":109},"end":{"line":11,"column":29,"index":134}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " this.member = 'value';",
+      "start":166,"end":191,"loc":{"start":{"line":17,"column":2,"index":166},"end":{"line":17,"column":27,"index":191}}
+    }
+  ]
+}

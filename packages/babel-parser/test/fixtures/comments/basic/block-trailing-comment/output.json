@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":26}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":26}},
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start":6,"end":10,"loc":{"start":{"line":2,"column":4,"index":6},"end":{"line":2,"column":8,"index":10}},
+            "expression": {
+              "type": "CallExpression",
+              "start":6,"end":9,"loc":{"start":{"line":2,"column":4,"index":6},"end":{"line":2,"column":7,"index":9}},
+              "callee": {
+                "type": "Identifier",
+                "start":6,"end":7,"loc":{"start":{"line":2,"column":4,"index":6},"end":{"line":2,"column":5,"index":7},"identifierName":"a"},
+                "name": "a"
+              },
+              "arguments": []
+            },
+            "trailingComments": [
+              {
+                "type": "CommentLine",
+                "value": "comment",
+                "start":15,"end":24,"loc":{"start":{"line":3,"column":4,"index":15},"end":{"line":3,"column":13,"index":24}}
+              }
+            ]
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "comment",
+      "start":15,"end":24,"loc":{"start":{"line":3,"column":4,"index":15},"end":{"line":3,"column":13,"index":24}}
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+            "object": {
+              "type": "NumericLiteral",
+              "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+              "extra": {
+                "rawValue": 123,
+                "raw": "123."
+              },
+              "value": 123
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":5,"end":13,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":13,"index":13},"identifierName":"toString"},
+              "name": "toString"
+            }
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16}},
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

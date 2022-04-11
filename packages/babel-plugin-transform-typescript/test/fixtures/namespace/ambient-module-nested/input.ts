@@ -1,0 +1,3 @@
+namespace X {
+  module "m" {}
+}

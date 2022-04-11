@@ -1,0 +1,248 @@
+{
+  "type": "File",
+  "start":0,"end":192,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":42,"index":192}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":192,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":42,"index":192}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+        "expression": {
+          "type": "TSAsExpression",
+          "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+          "expression": {
+            "type": "Identifier",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1},"identifierName":"x"},
+            "name": "x"
+          },
+          "typeAnnotation": {
+            "type": "TSTypeReference",
+            "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6}},
+            "typeName": {
+              "type": "Identifier",
+              "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"T"},
+              "name": "T"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":25,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":17,"index":25}},
+        "expression": {
+          "type": "TSAsExpression",
+          "start":8,"end":24,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":16,"index":24}},
+          "expression": {
+            "type": "BinaryExpression",
+            "start":8,"end":13,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":5,"index":13}},
+            "left": {
+              "type": "Identifier",
+              "start":8,"end":9,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":1,"index":9},"identifierName":"x"},
+              "name": "x"
+            },
+            "operator": "<",
+            "right": {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":2,"column":4,"index":12},"end":{"line":2,"column":5,"index":13},"identifierName":"y"},
+              "name": "y"
+            }
+          },
+          "typeAnnotation": {
+            "type": "TSBooleanKeyword",
+            "start":17,"end":24,"loc":{"start":{"line":2,"column":9,"index":17},"end":{"line":2,"column":16,"index":24}}
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " (x < y) as boolean;",
+            "start":26,"end":48,"loc":{"start":{"line":2,"column":18,"index":26},"end":{"line":2,"column":40,"index":48}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":49,"end":67,"loc":{"start":{"line":3,"column":0,"index":49},"end":{"line":3,"column":18,"index":67}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":49,"end":66,"loc":{"start":{"line":3,"column":0,"index":49},"end":{"line":3,"column":17,"index":66}},
+          "left": {
+            "type": "TSAsExpression",
+            "start":49,"end":61,"loc":{"start":{"line":3,"column":0,"index":49},"end":{"line":3,"column":12,"index":61}},
+            "expression": {
+              "type": "Identifier",
+              "start":49,"end":50,"loc":{"start":{"line":3,"column":0,"index":49},"end":{"line":3,"column":1,"index":50},"identifierName":"x"},
+              "name": "x"
+            },
+            "typeAnnotation": {
+              "type": "TSBooleanKeyword",
+              "start":54,"end":61,"loc":{"start":{"line":3,"column":5,"index":54},"end":{"line":3,"column":12,"index":61}}
+            }
+          },
+          "operator": "<=",
+          "right": {
+            "type": "Identifier",
+            "start":65,"end":66,"loc":{"start":{"line":3,"column":16,"index":65},"end":{"line":3,"column":17,"index":66},"identifierName":"y"},
+            "name": "y"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " (x as boolean) <= y;",
+            "start":68,"end":91,"loc":{"start":{"line":3,"column":19,"index":68},"end":{"line":3,"column":42,"index":91}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " (x < y) as boolean;",
+            "start":26,"end":48,"loc":{"start":{"line":2,"column":18,"index":26},"end":{"line":2,"column":40,"index":48}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":92,"end":110,"loc":{"start":{"line":4,"column":0,"index":92},"end":{"line":4,"column":18,"index":110}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":92,"end":109,"loc":{"start":{"line":4,"column":0,"index":92},"end":{"line":4,"column":17,"index":109}},
+          "left": {
+            "type": "Identifier",
+            "start":92,"end":93,"loc":{"start":{"line":4,"column":0,"index":92},"end":{"line":4,"column":1,"index":93},"identifierName":"x"},
+            "name": "x"
+          },
+          "operator": "===",
+          "right": {
+            "type": "TSAsExpression",
+            "start":98,"end":109,"loc":{"start":{"line":4,"column":6,"index":98},"end":{"line":4,"column":17,"index":109}},
+            "expression": {
+              "type": "NumericLiteral",
+              "start":98,"end":99,"loc":{"start":{"line":4,"column":6,"index":98},"end":{"line":4,"column":7,"index":99}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            },
+            "typeAnnotation": {
+              "type": "TSNumberKeyword",
+              "start":103,"end":109,"loc":{"start":{"line":4,"column":11,"index":103},"end":{"line":4,"column":17,"index":109}}
+            }
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " x === (1 as number);",
+            "start":111,"end":134,"loc":{"start":{"line":4,"column":19,"index":111},"end":{"line":4,"column":42,"index":134}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " (x as boolean) <= y;",
+            "start":68,"end":91,"loc":{"start":{"line":3,"column":19,"index":68},"end":{"line":3,"column":42,"index":91}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":135,"end":149,"loc":{"start":{"line":5,"column":0,"index":135},"end":{"line":5,"column":14,"index":149}},
+        "expression": {
+          "type": "TSAsExpression",
+          "start":135,"end":148,"loc":{"start":{"line":5,"column":0,"index":135},"end":{"line":5,"column":13,"index":148}},
+          "expression": {
+            "type": "TSAsExpression",
+            "start":135,"end":143,"loc":{"start":{"line":5,"column":0,"index":135},"end":{"line":5,"column":8,"index":143}},
+            "expression": {
+              "type": "Identifier",
+              "start":135,"end":136,"loc":{"start":{"line":5,"column":0,"index":135},"end":{"line":5,"column":1,"index":136},"identifierName":"x"},
+              "name": "x"
+            },
+            "typeAnnotation": {
+              "type": "TSAnyKeyword",
+              "start":140,"end":143,"loc":{"start":{"line":5,"column":5,"index":140},"end":{"line":5,"column":8,"index":143}}
+            }
+          },
+          "typeAnnotation": {
+            "type": "TSTypeReference",
+            "start":147,"end":148,"loc":{"start":{"line":5,"column":12,"index":147},"end":{"line":5,"column":13,"index":148}},
+            "typeName": {
+              "type": "Identifier",
+              "start":147,"end":148,"loc":{"start":{"line":5,"column":12,"index":147},"end":{"line":5,"column":13,"index":148},"identifierName":"T"},
+              "name": "T"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " x === (1 as number);",
+            "start":111,"end":134,"loc":{"start":{"line":4,"column":19,"index":111},"end":{"line":4,"column":42,"index":134}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":150,"end":168,"loc":{"start":{"line":6,"column":0,"index":150},"end":{"line":6,"column":18,"index":168}},
+        "expression": {
+          "type": "LogicalExpression",
+          "start":150,"end":167,"loc":{"start":{"line":6,"column":0,"index":150},"end":{"line":6,"column":17,"index":167}},
+          "left": {
+            "type": "TSAsExpression",
+            "start":150,"end":162,"loc":{"start":{"line":6,"column":0,"index":150},"end":{"line":6,"column":12,"index":162}},
+            "expression": {
+              "type": "Identifier",
+              "start":150,"end":151,"loc":{"start":{"line":6,"column":0,"index":150},"end":{"line":6,"column":1,"index":151},"identifierName":"x"},
+              "name": "x"
+            },
+            "typeAnnotation": {
+              "type": "TSBooleanKeyword",
+              "start":155,"end":162,"loc":{"start":{"line":6,"column":5,"index":155},"end":{"line":6,"column":12,"index":162}}
+            }
+          },
+          "operator": "??",
+          "right": {
+            "type": "Identifier",
+            "start":166,"end":167,"loc":{"start":{"line":6,"column":16,"index":166},"end":{"line":6,"column":17,"index":167},"identifierName":"y"},
+            "name": "y"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " (x as boolean) ?? y;",
+            "start":169,"end":192,"loc":{"start":{"line":6,"column":19,"index":169},"end":{"line":6,"column":42,"index":192}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " (x < y) as boolean;",
+      "start":26,"end":48,"loc":{"start":{"line":2,"column":18,"index":26},"end":{"line":2,"column":40,"index":48}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " (x as boolean) <= y;",
+      "start":68,"end":91,"loc":{"start":{"line":3,"column":19,"index":68},"end":{"line":3,"column":42,"index":91}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " x === (1 as number);",
+      "start":111,"end":134,"loc":{"start":{"line":4,"column":19,"index":111},"end":{"line":4,"column":42,"index":134}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " (x as boolean) ?? y;",
+      "start":169,"end":192,"loc":{"start":{"line":6,"column":19,"index":169},"end":{"line":6,"column":42,"index":192}}
+    }
+  ]
+}

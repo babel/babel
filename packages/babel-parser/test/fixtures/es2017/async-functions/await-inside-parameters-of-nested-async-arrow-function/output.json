@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":52}},
+  "errors": [
+    "SyntaxError: 'await' is not allowed in async function parameters. (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":52}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":52}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":20,"end":52,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":3,"column":1,"index":52}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":24,"end":50,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":28,"index":50}},
+              "expression": {
+                "type": "ArrowFunctionExpression",
+                "start":24,"end":49,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":27,"index":49}},
+                "id": null,
+                "generator": false,
+                "async": true,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "start":31,"end":42,"loc":{"start":{"line":2,"column":9,"index":31},"end":{"line":2,"column":20,"index":42}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":31,"end":32,"loc":{"start":{"line":2,"column":9,"index":31},"end":{"line":2,"column":10,"index":32},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "right": {
+                      "type": "AwaitExpression",
+                      "start":35,"end":42,"loc":{"start":{"line":2,"column":13,"index":35},"end":{"line":2,"column":20,"index":42}},
+                      "argument": {
+                        "type": "NumericLiteral",
+                        "start":41,"end":42,"loc":{"start":{"line":2,"column":19,"index":41},"end":{"line":2,"column":20,"index":42}},
+                        "extra": {
+                          "rawValue": 2,
+                          "raw": "2"
+                        },
+                        "value": 2
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":47,"end":49,"loc":{"start":{"line":2,"column":25,"index":47},"end":{"line":2,"column":27,"index":49}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

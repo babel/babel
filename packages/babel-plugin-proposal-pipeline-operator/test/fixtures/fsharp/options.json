@@ -1,0 +1,6 @@
+{
+  "plugins": [["proposal-pipeline-operator", { "proposal": "fsharp" }]],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

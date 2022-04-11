@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+  "errors": [
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (1:1)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "NumericLiteral",
+              "start":1,"end":3,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":3,"index":3}},
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
+            },
+            {
+              "type": "NumericLiteral",
+              "start":5,"end":7,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":7,"index":7}},
+              "extra": {
+                "rawValue": 20,
+                "raw": "20"
+              },
+              "value": 20
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "00"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

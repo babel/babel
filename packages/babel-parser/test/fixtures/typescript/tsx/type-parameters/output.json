@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":12,"end":29,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":29,"index":29}},
+          "typeAnnotation": {
+            "type": "TSFunctionType",
+            "start":14,"end":29,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":29,"index":29}},
+            "typeParameters": {
+              "type": "TSTypeParameterDeclaration",
+              "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17}},
+              "params": [
+                {
+                  "type": "TSTypeParameter",
+                  "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16}},
+                  "name": {
+                    "type": "Identifier",
+                    "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "params": [],
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":20,"end":29,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":29,"index":29}},
+              "typeAnnotation": {
+                "type": "TSNumberKeyword",
+                "start":23,"end":29,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":29,"index":29}}
+              }
+            }
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":30,"end":32,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":32,"index":32}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

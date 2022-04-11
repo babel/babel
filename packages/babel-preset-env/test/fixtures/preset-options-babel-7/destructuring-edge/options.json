@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["edge >= 15"]
+        },
+        "modules": false
+      }
+    ]
+  ]
+}

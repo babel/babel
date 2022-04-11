@@ -1,0 +1,149 @@
+{
+  "type": "File",
+  "start":0,"end":136,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":136}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":136,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":136}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":36,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":36,"index":36}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":12,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":12,"index":12},"identifierName":"socket"},
+              "name": "socket"
+            },
+            "init": {
+              "type": "CallExpression",
+              "start":15,"end":36,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":36,"index":36}},
+              "callee": {
+                "type": "Identifier",
+                "start":15,"end":27,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":27,"index":27},"identifierName":"socketClient"},
+                "name": "socketClient"
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "start":28,"end":35,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":35,"index":35},"identifierName":"address"},
+                  "name": "address"
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "const",
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": " istanbul ignore next ",
+            "start":37,"end":63,"loc":{"start":{"line":2,"column":0,"index":37},"end":{"line":2,"column":26,"index":63}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":64,"end":136,"loc":{"start":{"line":3,"column":0,"index":64},"end":{"line":5,"column":2,"index":136}},
+        "expression": {
+          "type": "CallExpression",
+          "start":64,"end":136,"loc":{"start":{"line":3,"column":0,"index":64},"end":{"line":5,"column":2,"index":136}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":64,"end":73,"loc":{"start":{"line":3,"column":0,"index":64},"end":{"line":3,"column":9,"index":73}},
+            "object": {
+              "type": "Identifier",
+              "start":64,"end":70,"loc":{"start":{"line":3,"column":0,"index":64},"end":{"line":3,"column":6,"index":70},"identifierName":"socket"},
+              "name": "socket"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":71,"end":73,"loc":{"start":{"line":3,"column":7,"index":71},"end":{"line":3,"column":9,"index":73},"identifierName":"on"},
+              "name": "on"
+            }
+          },
+          "arguments": [
+            {
+              "type": "StringLiteral",
+              "start":74,"end":83,"loc":{"start":{"line":3,"column":10,"index":74},"end":{"line":3,"column":19,"index":83}},
+              "extra": {
+                "rawValue": "connect",
+                "raw": "'connect'"
+              },
+              "value": "connect"
+            },
+            {
+              "type": "FunctionExpression",
+              "start":85,"end":135,"loc":{"start":{"line":3,"column":21,"index":85},"end":{"line":5,"column":1,"index":135}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":97,"end":135,"loc":{"start":{"line":3,"column":33,"index":97},"end":{"line":5,"column":1,"index":135}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":101,"end":133,"loc":{"start":{"line":4,"column":2,"index":101},"end":{"line":4,"column":34,"index":133}},
+                    "expression": {
+                      "type": "CallExpression",
+                      "start":101,"end":133,"loc":{"start":{"line":4,"column":2,"index":101},"end":{"line":4,"column":34,"index":133}},
+                      "callee": {
+                        "type": "Identifier",
+                        "start":101,"end":106,"loc":{"start":{"line":4,"column":2,"index":101},"end":{"line":4,"column":7,"index":106},"identifierName":"debug"},
+                        "name": "debug"
+                      },
+                      "arguments": [
+                        {
+                          "type": "BinaryExpression",
+                          "start":107,"end":132,"loc":{"start":{"line":4,"column":8,"index":107},"end":{"line":4,"column":33,"index":132}},
+                          "left": {
+                            "type": "StringLiteral",
+                            "start":107,"end":122,"loc":{"start":{"line":4,"column":8,"index":107},"end":{"line":4,"column":23,"index":122}},
+                            "extra": {
+                              "rawValue": "Connected to ",
+                              "raw": "'Connected to '"
+                            },
+                            "value": "Connected to "
+                          },
+                          "operator": "+",
+                          "right": {
+                            "type": "Identifier",
+                            "start":125,"end":132,"loc":{"start":{"line":4,"column":26,"index":125},"end":{"line":4,"column":33,"index":132},"identifierName":"address"},
+                            "name": "address"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": " istanbul ignore next ",
+            "start":37,"end":63,"loc":{"start":{"line":2,"column":0,"index":37},"end":{"line":2,"column":26,"index":63}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " istanbul ignore next ",
+      "start":37,"end":63,"loc":{"start":{"line":2,"column":0,"index":37},"end":{"line":2,"column":26,"index":63}}
+    }
+  ]
+}

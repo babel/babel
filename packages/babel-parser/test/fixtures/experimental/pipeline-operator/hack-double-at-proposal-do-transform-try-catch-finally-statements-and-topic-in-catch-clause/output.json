@@ -1,0 +1,125 @@
+{
+  "type": "File",
+  "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":80}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":80}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":80}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":80}},
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"value"},
+            "name": "value"
+          },
+          "operator": "|>",
+          "right": {
+            "type": "DoExpression",
+            "start":9,"end":80,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":4,"column":1,"index":80}},
+            "async": false,
+            "body": {
+              "type": "BlockStatement",
+              "start":12,"end":80,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":4,"column":1,"index":80}},
+              "body": [
+                {
+                  "type": "TryStatement",
+                  "start":16,"end":78,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":3,"column":38,"index":78}},
+                  "block": {
+                    "type": "BlockStatement",
+                    "start":20,"end":39,"loc":{"start":{"line":2,"column":6,"index":20},"end":{"line":2,"column":25,"index":39}},
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start":22,"end":37,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":23,"index":37}},
+                        "expression": {
+                          "type": "CallExpression",
+                          "start":22,"end":36,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":22,"index":36}},
+                          "callee": {
+                            "type": "MemberExpression",
+                            "start":22,"end":32,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":18,"index":32}},
+                            "object": {
+                              "type": "Identifier",
+                              "start":22,"end":26,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":12,"index":26},"identifierName":"JSON"},
+                              "name": "JSON"
+                            },
+                            "computed": false,
+                            "property": {
+                              "type": "Identifier",
+                              "start":27,"end":32,"loc":{"start":{"line":2,"column":13,"index":27},"end":{"line":2,"column":18,"index":32},"identifierName":"parse"},
+                              "name": "parse"
+                            }
+                          },
+                          "arguments": [
+                            {
+                              "type": "TopicReference",
+                              "start":33,"end":35,"loc":{"start":{"line":2,"column":19,"index":33},"end":{"line":2,"column":21,"index":35}}
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "directives": []
+                  },
+                  "handler": {
+                    "type": "CatchClause",
+                    "start":42,"end":78,"loc":{"start":{"line":3,"column":2,"index":42},"end":{"line":3,"column":38,"index":78}},
+                    "param": {
+                      "type": "Identifier",
+                      "start":49,"end":54,"loc":{"start":{"line":3,"column":9,"index":49},"end":{"line":3,"column":14,"index":54},"identifierName":"error"},
+                      "name": "error"
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":56,"end":78,"loc":{"start":{"line":3,"column":16,"index":56},"end":{"line":3,"column":38,"index":78}},
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start":58,"end":76,"loc":{"start":{"line":3,"column":18,"index":58},"end":{"line":3,"column":36,"index":76}},
+                          "expression": {
+                            "type": "CallExpression",
+                            "start":58,"end":75,"loc":{"start":{"line":3,"column":18,"index":58},"end":{"line":3,"column":35,"index":75}},
+                            "callee": {
+                              "type": "MemberExpression",
+                              "start":58,"end":71,"loc":{"start":{"line":3,"column":18,"index":58},"end":{"line":3,"column":31,"index":71}},
+                              "object": {
+                                "type": "Identifier",
+                                "start":58,"end":65,"loc":{"start":{"line":3,"column":18,"index":58},"end":{"line":3,"column":25,"index":65},"identifierName":"console"},
+                                "name": "console"
+                              },
+                              "computed": false,
+                              "property": {
+                                "type": "Identifier",
+                                "start":66,"end":71,"loc":{"start":{"line":3,"column":26,"index":66},"end":{"line":3,"column":31,"index":71},"identifierName":"error"},
+                                "name": "error"
+                              }
+                            },
+                            "arguments": [
+                              {
+                                "type": "TopicReference",
+                                "start":72,"end":74,"loc":{"start":{"line":3,"column":32,"index":72},"end":{"line":3,"column":34,"index":74}}
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  },
+                  "finalizer": null
+                }
+              ],
+              "directives": []
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "type": "File",
+  "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":70}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":70}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":70}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":70,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":6,"column":1,"index":70}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"fun"},
+              "name": "fun"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":10,"end":70,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":6,"column":1,"index":70}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":16,"end":70,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":6,"column":1,"index":70}},
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start":57,"end":68,"loc":{"start":{"line":5,"column":4,"index":57},"end":{"line":5,"column":15,"index":68}},
+                    "argument": {
+                      "type": "NumericLiteral",
+                      "start":65,"end":66,"loc":{"start":{"line":5,"column":12,"index":65},"end":{"line":5,"column":13,"index":66}},
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1",
+                        "parenthesized": true,
+                        "parenStart": 64
+                      },
+                      "value": 1
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentLine",
+                        "value": " one",
+                        "start":22,"end":28,"loc":{"start":{"line":2,"column":4,"index":22},"end":{"line":2,"column":10,"index":28}}
+                      },
+                      {
+                        "type": "CommentLine",
+                        "value": " two",
+                        "start":33,"end":39,"loc":{"start":{"line":3,"column":4,"index":33},"end":{"line":3,"column":10,"index":39}}
+                      },
+                      {
+                        "type": "CommentLine",
+                        "value": " three",
+                        "start":44,"end":52,"loc":{"start":{"line":4,"column":4,"index":44},"end":{"line":4,"column":12,"index":52}}
+                      }
+                    ]
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " one",
+      "start":22,"end":28,"loc":{"start":{"line":2,"column":4,"index":22},"end":{"line":2,"column":10,"index":28}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " two",
+      "start":33,"end":39,"loc":{"start":{"line":3,"column":4,"index":33},"end":{"line":3,"column":10,"index":39}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " three",
+      "start":44,"end":52,"loc":{"start":{"line":4,"column":4,"index":44},"end":{"line":4,"column":12,"index":52}}
+    }
+  ]
+}

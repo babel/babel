@@ -1,0 +1,79 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+          "tag": {
+            "type": "Identifier",
+            "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9},"identifierName":"sampleTag"},
+            "name": "sampleTag"
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "start":9,"end":36,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":36,"index":36}},
+            "expressions": [
+              {
+                "type": "NumericLiteral",
+                "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              },
+              {
+                "type": "NumericLiteral",
+                "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            ],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "start":10,"end":14,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":14,"index":14}},
+                "value": {
+                  "raw": "left",
+                  "cooked": "left"
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "start":18,"end":26,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":26,"index":26}},
+                "value": {
+                  "raw": "\\u{\\u{0}",
+                  "cooked": null
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "start":30,"end":35,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":35,"index":35}},
+                "value": {
+                  "raw": "right",
+                  "cooked": "right"
+                },
+                "tail": true
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

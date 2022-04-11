@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":27,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":3,"column":1,"index":27}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":10,"end":27,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":27}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":14,"end":25,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":13,"index":25}},
+                  "method": false,
+                  "computed": true,
+                  "key": {
+                    "type": "CallExpression",
+                    "start":15,"end":20,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":8,"index":20}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":15,"end":18,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":6,"index":18},"identifierName":"bar"},
+                      "name": "bar"
+                    },
+                    "arguments": []
+                  },
+                  "shorthand": false,
+                  "value": {
+                    "type": "StringLiteral",
+                    "start":23,"end":25,"loc":{"start":{"line":2,"column":11,"index":23},"end":{"line":2,"column":13,"index":25}},
+                    "extra": {
+                      "rawValue": "",
+                      "raw": "\"\""
+                    },
+                    "value": ""
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

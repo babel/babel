@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":58}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":58}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":58}},
+        "discriminant": {
+          "type": "Identifier",
+          "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"a"},
+          "name": "a"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start":17,"end":39,"loc":{"start":{"line":2,"column":4,"index":17},"end":{"line":3,"column":14,"index":39}},
+            "consequent": [
+              {
+                "type": "BreakStatement",
+                "start":33,"end":39,"loc":{"start":{"line":3,"column":8,"index":33},"end":{"line":3,"column":14,"index":39}},
+                "label": null
+              }
+            ],
+            "test": {
+              "type": "NumericLiteral",
+              "start":22,"end":23,"loc":{"start":{"line":2,"column":9,"index":22},"end":{"line":2,"column":10,"index":23}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            },
+            "trailingComments": [
+              {
+                "type": "CommentLine",
+                "value": "no default",
+                "start":44,"end":56,"loc":{"start":{"line":4,"column":4,"index":44},"end":{"line":4,"column":16,"index":56}}
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "no default",
+      "start":44,"end":56,"loc":{"start":{"line":4,"column":4,"index":44},"end":{"line":4,"column":16,"index":56}}
+    }
+  ]
+}

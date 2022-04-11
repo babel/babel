@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":36,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":36,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+          "left": {
+            "type": "NumericLiteral",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "operator": "+",
+          "right": {
+            "type": "Identifier",
+            "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"let"},
+            "name": "let"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":44,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":36,"index":44}},
+        "expression": {
+          "type": "Identifier",
+          "start":8,"end":44,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":36,"index":44},"identifierName":"ɵResourceLoaderImpl_BaseFactory"},
+          "name": "ɵResourceLoaderImpl_BaseFactory"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

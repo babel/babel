@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-throw-expressions", "syntax-function-sent"]
+}

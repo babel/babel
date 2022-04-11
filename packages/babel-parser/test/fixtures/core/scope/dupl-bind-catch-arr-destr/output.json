@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":30}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared. (2:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":30}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":30}},
+        "block": {
+          "type": "BlockStatement",
+          "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":2,"column":1,"index":7}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":8,"end":30,"loc":{"start":{"line":2,"column":2,"index":8},"end":{"line":3,"column":1,"index":30}},
+          "param": {
+            "type": "ArrayPattern",
+            "start":15,"end":25,"loc":{"start":{"line":2,"column":9,"index":15},"end":{"line":2,"column":19,"index":25}},
+            "elements": [
+              {
+                "type": "Identifier",
+                "start":16,"end":19,"loc":{"start":{"line":2,"column":10,"index":16},"end":{"line":2,"column":13,"index":19},"identifierName":"foo"},
+                "name": "foo"
+              },
+              {
+                "type": "Identifier",
+                "start":21,"end":24,"loc":{"start":{"line":2,"column":15,"index":21},"end":{"line":2,"column":18,"index":24},"identifierName":"foo"},
+                "name": "foo"
+              }
+            ]
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":27,"end":30,"loc":{"start":{"line":2,"column":21,"index":27},"end":{"line":3,"column":1,"index":30}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  }
+}

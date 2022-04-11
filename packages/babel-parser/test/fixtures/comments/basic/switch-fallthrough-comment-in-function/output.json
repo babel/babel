@@ -1,0 +1,125 @@
+{
+  "type": "File",
+  "start":0,"end":141,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":141}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":141,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":141}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":141,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":141}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"bar"},
+          "name": "bar"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":13,"end":16,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":16,"index":16},"identifierName":"foo"},
+            "name": "foo"
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":18,"end":141,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":9,"column":1,"index":141}},
+          "body": [
+            {
+              "type": "SwitchStatement",
+              "start":24,"end":139,"loc":{"start":{"line":2,"column":4,"index":24},"end":{"line":8,"column":5,"index":139}},
+              "discriminant": {
+                "type": "Identifier",
+                "start":31,"end":34,"loc":{"start":{"line":2,"column":11,"index":31},"end":{"line":2,"column":14,"index":34},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "cases": [
+                {
+                  "type": "SwitchCase",
+                  "start":61,"end":68,"loc":{"start":{"line":4,"column":8,"index":61},"end":{"line":4,"column":15,"index":68}},
+                  "consequent": [],
+                  "test": {
+                    "type": "NumericLiteral",
+                    "start":66,"end":67,"loc":{"start":{"line":4,"column":13,"index":66},"end":{"line":4,"column":14,"index":67}},
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  },
+                  "trailingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " falls through",
+                      "start":81,"end":97,"loc":{"start":{"line":5,"column":12,"index":81},"end":{"line":5,"column":28,"index":97}}
+                    }
+                  ],
+                  "leadingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " foo",
+                      "start":46,"end":52,"loc":{"start":{"line":3,"column":8,"index":46},"end":{"line":3,"column":14,"index":52}}
+                    }
+                  ]
+                },
+                {
+                  "type": "SwitchCase",
+                  "start":106,"end":133,"loc":{"start":{"line":6,"column":8,"index":106},"end":{"line":7,"column":19,"index":133}},
+                  "consequent": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":126,"end":133,"loc":{"start":{"line":7,"column":12,"index":126},"end":{"line":7,"column":19,"index":133}},
+                      "expression": {
+                        "type": "CallExpression",
+                        "start":126,"end":132,"loc":{"start":{"line":7,"column":12,"index":126},"end":{"line":7,"column":18,"index":132}},
+                        "callee": {
+                          "type": "Identifier",
+                          "start":126,"end":130,"loc":{"start":{"line":7,"column":12,"index":126},"end":{"line":7,"column":16,"index":130},"identifierName":"doIt"},
+                          "name": "doIt"
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "test": {
+                    "type": "NumericLiteral",
+                    "start":111,"end":112,"loc":{"start":{"line":6,"column":13,"index":111},"end":{"line":6,"column":14,"index":112}},
+                    "extra": {
+                      "rawValue": 2,
+                      "raw": "2"
+                    },
+                    "value": 2
+                  },
+                  "leadingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " falls through",
+                      "start":81,"end":97,"loc":{"start":{"line":5,"column":12,"index":81},"end":{"line":5,"column":28,"index":97}}
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " foo",
+      "start":46,"end":52,"loc":{"start":{"line":3,"column":8,"index":46},"end":{"line":3,"column":14,"index":52}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " falls through",
+      "start":81,"end":97,"loc":{"start":{"line":5,"column":12,"index":81},"end":{"line":5,"column":28,"index":97}}
+    }
+  ]
+}

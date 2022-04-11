@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["proposal-class-properties", { "loose": true }],
+    ["proposal-optional-chaining", { "loose": true }]
+  ]
+}

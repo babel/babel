@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":64}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":64}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":64}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":19,"end":64,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":5,"column":1,"index":64}},
+          "body": [
+            {
+              "type": "TSModuleDeclaration",
+              "start":25,"end":62,"loc":{"start":{"line":2,"column":4,"index":25},"end":{"line":4,"column":5,"index":62}},
+              "global": true,
+              "id": {
+                "type": "Identifier",
+                "start":25,"end":31,"loc":{"start":{"line":2,"column":4,"index":25},"end":{"line":2,"column":10,"index":31},"identifierName":"global"},
+                "name": "global"
+              },
+              "body": {
+                "type": "TSModuleBlock",
+                "start":32,"end":62,"loc":{"start":{"line":2,"column":11,"index":32},"end":{"line":4,"column":5,"index":62}},
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "start":42,"end":56,"loc":{"start":{"line":3,"column":8,"index":42},"end":{"line":3,"column":22,"index":56}},
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "start":46,"end":55,"loc":{"start":{"line":3,"column":12,"index":46},"end":{"line":3,"column":21,"index":55}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":46,"end":55,"loc":{"start":{"line":3,"column":12,"index":46},"end":{"line":3,"column":21,"index":55},"identifierName":"x"},
+                          "name": "x",
+                          "typeAnnotation": {
+                            "type": "TSTypeAnnotation",
+                            "start":47,"end":55,"loc":{"start":{"line":3,"column":13,"index":47},"end":{"line":3,"column":21,"index":55}},
+                            "typeAnnotation": {
+                              "type": "TSNumberKeyword",
+                              "start":49,"end":55,"loc":{"start":{"line":3,"column":15,"index":49},"end":{"line":3,"column":21,"index":55}}
+                            }
+                          }
+                        },
+                        "init": null
+                      }
+                    ],
+                    "kind": "var"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": []
+  }
+}

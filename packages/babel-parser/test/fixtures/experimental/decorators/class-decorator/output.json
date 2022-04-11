@@ -1,0 +1,39 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":19}},
+        "decorators": [
+          {
+            "type": "Decorator",
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+            "expression": {
+              "type": "Identifier",
+              "start":1,"end":4,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":4,"index":4},"identifierName":"abc"},
+              "name": "abc"
+            }
+          }
+        ],
+        "id": {
+          "type": "Identifier",
+          "start":11,"end":14,"loc":{"start":{"line":2,"column":6,"index":11},"end":{"line":2,"column":9,"index":14},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":15,"end":19,"loc":{"start":{"line":2,"column":10,"index":15},"end":{"line":4,"column":1,"index":19}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

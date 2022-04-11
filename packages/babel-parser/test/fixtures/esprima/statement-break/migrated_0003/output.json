@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+        "body": {
+          "type": "WhileStatement",
+          "start":11,"end":44,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":44,"index":44}},
+          "test": {
+            "type": "BooleanLiteral",
+            "start":18,"end":22,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":22,"index":22}},
+            "value": true
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":24,"end":44,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":44,"index":44}},
+            "body": [
+              {
+                "type": "BreakStatement",
+                "start":26,"end":42,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":42,"index":42}},
+                "label": {
+                  "type": "Identifier",
+                  "start":32,"end":41,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":41,"index":41},"identifierName":"__proto__"},
+                  "name": "__proto__"
+                }
+              }
+            ],
+            "directives": []
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9},"identifierName":"__proto__"},
+          "name": "__proto__"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "invalid"
+      }
+    ],
+    "estree"
+  ],
+  "throws": "\"pipelineOperator\" requires \"proposal\" option whose value must be one of: \"minimal\", \"fsharp\", \"hack\", \"smart\"."
+}

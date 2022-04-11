@@ -1,0 +1,110 @@
+{
+  "type": "File",
+  "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":66}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":66}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":66}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":66,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":4,"column":1,"index":66}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":20,"end":45,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":27,"index":45}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":26,"end":44,"loc":{"start":{"line":2,"column":8,"index":26},"end":{"line":2,"column":26,"index":44}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":26,"end":27,"loc":{"start":{"line":2,"column":8,"index":26},"end":{"line":2,"column":9,"index":27},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "init": {
+                    "type": "TypeCastExpression",
+                    "start":31,"end":43,"loc":{"start":{"line":2,"column":13,"index":31},"end":{"line":2,"column":25,"index":43}},
+                    "expression": {
+                      "type": "YieldExpression",
+                      "start":31,"end":38,"loc":{"start":{"line":2,"column":13,"index":31},"end":{"line":2,"column":20,"index":38}},
+                      "delegate": false,
+                      "argument": {
+                        "type": "NumericLiteral",
+                        "start":37,"end":38,"loc":{"start":{"line":2,"column":19,"index":37},"end":{"line":2,"column":20,"index":38}},
+                        "extra": {
+                          "rawValue": 5,
+                          "raw": "5"
+                        },
+                        "value": 5
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "TypeAnnotation",
+                      "start":38,"end":43,"loc":{"start":{"line":2,"column":20,"index":38},"end":{"line":2,"column":25,"index":43}},
+                      "typeAnnotation": {
+                        "type": "AnyTypeAnnotation",
+                        "start":40,"end":43,"loc":{"start":{"line":2,"column":22,"index":40},"end":{"line":2,"column":25,"index":43}}
+                      }
+                    },
+                    "extra": {
+                      "parenthesized": true,
+                      "parenStart": 30
+                    }
+                  }
+                }
+              ],
+              "kind": "const"
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":48,"end":64,"loc":{"start":{"line":3,"column":2,"index":48},"end":{"line":3,"column":18,"index":64}},
+              "expression": {
+                "type": "ConditionalExpression",
+                "start":48,"end":63,"loc":{"start":{"line":3,"column":2,"index":48},"end":{"line":3,"column":17,"index":63}},
+                "test": {
+                  "type": "Identifier",
+                  "start":48,"end":49,"loc":{"start":{"line":3,"column":2,"index":48},"end":{"line":3,"column":3,"index":49},"identifierName":"x"},
+                  "name": "x"
+                },
+                "consequent": {
+                  "type": "YieldExpression",
+                  "start":52,"end":59,"loc":{"start":{"line":3,"column":6,"index":52},"end":{"line":3,"column":13,"index":59}},
+                  "delegate": false,
+                  "argument": {
+                    "type": "NumericLiteral",
+                    "start":58,"end":59,"loc":{"start":{"line":3,"column":12,"index":58},"end":{"line":3,"column":13,"index":59}},
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  }
+                },
+                "alternate": {
+                  "type": "Identifier",
+                  "start":62,"end":63,"loc":{"start":{"line":3,"column":16,"index":62},"end":{"line":3,"column":17,"index":63},"identifierName":"x"},
+                  "name": "x"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

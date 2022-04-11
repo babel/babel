@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+  "errors": [
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start":1,"end":4,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":4,"index":4}},
+            "elements": [
+              {
+                "type": "Identifier",
+                "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3},"identifierName":"a"},
+                "name": "a"
+              }
+            ],
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            }
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}},
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

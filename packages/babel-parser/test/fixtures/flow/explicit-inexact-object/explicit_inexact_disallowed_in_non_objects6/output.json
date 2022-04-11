@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":45}},
+  "errors": [
+    "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions. (3:2)",
+    "SyntaxError: Explicit inexact syntax must appear at the end of an inexact object. (3:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":45}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start":8,"end":45,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":5,"column":1,"index":45}},
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":2,"column":10,"index":18},"end":{"line":2,"column":11,"index":19},"identifierName":"G"},
+          "name": "G"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":20,"end":45,"loc":{"start":{"line":2,"column":12,"index":20},"end":{"line":5,"column":1,"index":45}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":31,"end":42,"loc":{"start":{"line":4,"column":2,"index":31},"end":{"line":4,"column":13,"index":42}},
+              "key": {
+                "type": "Identifier",
+                "start":31,"end":34,"loc":{"start":{"line":4,"column":2,"index":31},"end":{"line":4,"column":5,"index":34},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start":36,"end":42,"loc":{"start":{"line":4,"column":7,"index":36},"end":{"line":4,"column":13,"index":42}}
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": "@flow",
+            "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "@flow",
+      "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}}
+    }
+  ]
+}

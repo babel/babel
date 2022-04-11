@@ -1,0 +1,143 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":15,"index":39}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":15,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+        "expression": {
+          "type": "MemberExpression",
+          "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+          "object": {
+            "type": "OptionalMemberExpression",
+            "start":1,"end":5,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":5,"index":5}},
+            "object": {
+              "type": "Identifier",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"a"},
+              "name": "a"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"b"},
+              "name": "b"
+            },
+            "optional": true,
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            }
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"c"},
+            "name": "c"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":11,"end":22,"loc":{"start":{"line":3,"column":0,"index":11},"end":{"line":3,"column":11,"index":22}},
+        "expression": {
+          "type": "CallExpression",
+          "start":11,"end":21,"loc":{"start":{"line":3,"column":0,"index":11},"end":{"line":3,"column":10,"index":21}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":11,"end":19,"loc":{"start":{"line":3,"column":0,"index":11},"end":{"line":3,"column":8,"index":19}},
+            "object": {
+              "type": "OptionalMemberExpression",
+              "start":12,"end":16,"loc":{"start":{"line":3,"column":1,"index":12},"end":{"line":3,"column":5,"index":16}},
+              "object": {
+                "type": "Identifier",
+                "start":12,"end":13,"loc":{"start":{"line":3,"column":1,"index":12},"end":{"line":3,"column":2,"index":13},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":15,"end":16,"loc":{"start":{"line":3,"column":4,"index":15},"end":{"line":3,"column":5,"index":16},"identifierName":"b"},
+                "name": "b"
+              },
+              "optional": true,
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 11
+              }
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":18,"end":19,"loc":{"start":{"line":3,"column":7,"index":18},"end":{"line":3,"column":8,"index":19},"identifierName":"c"},
+              "name": "c"
+            }
+          },
+          "arguments": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":24,"end":39,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":15,"index":39}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":24,"end":38,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":14,"index":38}},
+          "object": {
+            "type": "OptionalMemberExpression",
+            "start":24,"end":35,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":11,"index":35}},
+            "object": {
+              "type": "OptionalMemberExpression",
+              "start":24,"end":33,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":9,"index":33}},
+              "object": {
+                "type": "OptionalMemberExpression",
+                "start":25,"end":29,"loc":{"start":{"line":5,"column":1,"index":25},"end":{"line":5,"column":5,"index":29}},
+                "object": {
+                  "type": "Identifier",
+                  "start":25,"end":26,"loc":{"start":{"line":5,"column":1,"index":25},"end":{"line":5,"column":2,"index":26},"identifierName":"a"},
+                  "name": "a"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":28,"end":29,"loc":{"start":{"line":5,"column":4,"index":28},"end":{"line":5,"column":5,"index":29},"identifierName":"b"},
+                  "name": "b"
+                },
+                "optional": true,
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 24
+                }
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":32,"end":33,"loc":{"start":{"line":5,"column":8,"index":32},"end":{"line":5,"column":9,"index":33},"identifierName":"c"},
+                "name": "c"
+              },
+              "optional": true
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":34,"end":35,"loc":{"start":{"line":5,"column":10,"index":34},"end":{"line":5,"column":11,"index":35},"identifierName":"d"},
+              "name": "d"
+            },
+            "optional": false
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":37,"end":38,"loc":{"start":{"line":5,"column":13,"index":37},"end":{"line":5,"column":14,"index":38},"identifierName":"e"},
+            "name": "e"
+          },
+          "optional": true
+        }
+      }
+    ],
+    "directives": []
+  }
+}

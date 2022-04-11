@@ -1,0 +1,10 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": ["chrome 48"]
+      }
+    ]
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 2,
+        "modules": false,
+        "exclude": ["transform-spread"]
+      }
+    ]
+  ]
+}

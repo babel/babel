@@ -1,0 +1,72 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { chrome < 94, firefox < 93, ie }
+  proposal-private-property-in-object { chrome < 91, firefox < 90, ie }
+  proposal-class-properties { chrome < 74, firefox < 90, ie }
+  proposal-private-methods { chrome < 84, firefox < 90, ie }
+  proposal-numeric-separator { chrome < 75, firefox < 70, ie }
+  proposal-logical-assignment-operators { chrome < 85, firefox < 79, ie }
+  proposal-nullish-coalescing-operator { chrome < 80, firefox < 72, ie }
+  proposal-optional-chaining { chrome < 91, firefox < 74, ie }
+  proposal-json-strings { chrome < 66, firefox < 62, ie }
+  proposal-optional-catch-binding { chrome < 66, firefox < 58, ie }
+  transform-parameters { firefox < 53, ie }
+  proposal-async-generator-functions { chrome < 63, firefox < 57, ie }
+  proposal-object-rest-spread { chrome < 60, firefox < 55, ie }
+  transform-dotall-regex { chrome < 62, firefox < 78, ie }
+  proposal-unicode-property-regex { chrome < 64, firefox < 78, ie }
+  transform-named-capturing-groups-regex { chrome < 64, firefox < 78, ie }
+  transform-async-to-generator { chrome < 55, firefox < 52, ie }
+  transform-exponentiation-operator { firefox < 52, ie }
+  transform-template-literals { ie }
+  transform-literals { firefox < 53, ie }
+  transform-function-name { firefox < 53, ie }
+  transform-arrow-functions { ie }
+  transform-classes { ie }
+  transform-object-super { ie }
+  transform-shorthand-properties { ie }
+  transform-duplicate-keys { ie }
+  transform-computed-properties { ie }
+  transform-for-of { firefox < 53, ie }
+  transform-sticky-regex { ie }
+  transform-unicode-escapes { firefox < 53, ie }
+  transform-unicode-regex { ie }
+  transform-spread { ie }
+  transform-destructuring { firefox < 53, ie }
+  transform-block-scoping { firefox < 51, ie }
+  transform-typeof-symbol { ie }
+  transform-new-target { ie }
+  transform-regenerator { firefox < 53, ie }
+  proposal-export-namespace-from { chrome < 72, firefox < 80, ie }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
+
+Using polyfills with `usage-global` method:
+regenerator: `DEBUG` option
+
+Using targets: {}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/usage-corejs2-none-2/input.js]
+Based on your code and targets, the corejs2 polyfill did not add any polyfill.
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/usage-corejs2-none-2/input.js]
+Based on your code and targets, the regenerator polyfill did not add any polyfill.

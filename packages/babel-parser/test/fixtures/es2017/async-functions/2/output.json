@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+  "errors": [
+    "SyntaxError: 'await*' has been removed from the async functions proposal. Use Promise.all() instead. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"bar"},
+          "name": "bar"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":40,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":3,"column":1,"index":40}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":25,"end":38,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":15,"index":38}},
+              "expression": {
+                "type": "AwaitExpression",
+                "start":25,"end":37,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":14,"index":37}},
+                "argument": {
+                  "type": "CallExpression",
+                  "start":32,"end":37,"loc":{"start":{"line":2,"column":9,"index":32},"end":{"line":2,"column":14,"index":37}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":32,"end":35,"loc":{"start":{"line":2,"column":9,"index":32},"end":{"line":2,"column":12,"index":35},"identifierName":"foo"},
+                    "name": "foo"
+                  },
+                  "arguments": []
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

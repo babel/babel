@@ -1,0 +1,54 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":7,"index":21}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'let'. (2:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":7,"index":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":21,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":7,"index":21}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":14,"end":21,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":7,"index":21}},
+          "left": {
+            "type": "Identifier",
+            "start":14,"end":17,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":3,"index":17},"identifierName":"let"},
+            "name": "let"
+          },
+          "operator": "+",
+          "right": {
+            "type": "NumericLiteral",
+            "start":20,"end":21,"loc":{"start":{"line":2,"column":6,"index":20},"end":{"line":2,"column":7,"index":21}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

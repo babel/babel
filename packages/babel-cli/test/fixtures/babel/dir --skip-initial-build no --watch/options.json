@@ -1,0 +1,3 @@
+{
+  "args": ["src", "--skip-initial-build", "--out-dir", "lib"]
+}

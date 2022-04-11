@@ -1,0 +1,100 @@
+{
+  "type": "File",
+  "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":2,"index":48}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":2,"index":48}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":2,"index":48}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":47,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":4,"column":1,"index":47}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "DoExpression",
+              "start":8,"end":47,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":4,"column":1,"index":47}},
+              "async": false,
+              "body": {
+                "type": "BlockStatement",
+                "start":11,"end":47,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":4,"column":1,"index":47}},
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "start":15,"end":29,"loc":{"start":{"line":2,"column":2,"index":15},"end":{"line":2,"column":16,"index":29}},
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "start":19,"end":28,"loc":{"start":{"line":2,"column":6,"index":19},"end":{"line":2,"column":15,"index":28}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":19,"end":22,"loc":{"start":{"line":2,"column":6,"index":19},"end":{"line":2,"column":9,"index":22},"identifierName":"tmp"},
+                          "name": "tmp"
+                        },
+                        "init": {
+                          "type": "CallExpression",
+                          "start":25,"end":28,"loc":{"start":{"line":2,"column":12,"index":25},"end":{"line":2,"column":15,"index":28}},
+                          "callee": {
+                            "type": "Identifier",
+                            "start":25,"end":26,"loc":{"start":{"line":2,"column":12,"index":25},"end":{"line":2,"column":13,"index":26},"identifierName":"f"},
+                            "name": "f"
+                          },
+                          "arguments": []
+                        }
+                      }
+                    ],
+                    "kind": "let"
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start":32,"end":45,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":15,"index":45}},
+                    "expression": {
+                      "type": "BinaryExpression",
+                      "start":32,"end":45,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":15,"index":45}},
+                      "left": {
+                        "type": "BinaryExpression",
+                        "start":32,"end":41,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":11,"index":41}},
+                        "left": {
+                          "type": "Identifier",
+                          "start":32,"end":35,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":5,"index":35},"identifierName":"tmp"},
+                          "name": "tmp"
+                        },
+                        "operator": "*",
+                        "right": {
+                          "type": "Identifier",
+                          "start":38,"end":41,"loc":{"start":{"line":3,"column":8,"index":38},"end":{"line":3,"column":11,"index":41},"identifierName":"tmp"},
+                          "name": "tmp"
+                        }
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "NumericLiteral",
+                        "start":44,"end":45,"loc":{"start":{"line":3,"column":14,"index":44},"end":{"line":3,"column":15,"index":45}},
+                        "extra": {
+                          "rawValue": 1,
+                          "raw": "1"
+                        },
+                        "value": 1
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":12,"index":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":12,"index":21}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":9,"end":21,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":12,"index":21}},
+        "expression": {
+          "type": "OptionalCallExpression",
+          "start":9,"end":20,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":11,"index":20}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":9,"end":12,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":3,"index":12}},
+            "object": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":1,"index":10},"identifierName":"o"},
+              "name": "o"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":11,"end":12,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":3,"index":12},"identifierName":"m"},
+              "name": "m"
+            }
+          },
+          "typeArguments": {
+            "type": "TypeParameterInstantiation",
+            "start":14,"end":17,"loc":{"start":{"line":2,"column":5,"index":14},"end":{"line":2,"column":8,"index":17}},
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start":15,"end":16,"loc":{"start":{"line":2,"column":6,"index":15},"end":{"line":2,"column":7,"index":16}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":15,"end":16,"loc":{"start":{"line":2,"column":6,"index":15},"end":{"line":2,"column":7,"index":16},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":18,"end":19,"loc":{"start":{"line":2,"column":9,"index":18},"end":{"line":2,"column":10,"index":19},"identifierName":"e"},
+              "name": "e"
+            }
+          ],
+          "optional": true
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "File",
+  "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}},
+          "operator": "!",
+          "prefix": true,
+          "argument": {
+            "type": "Identifier",
+            "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

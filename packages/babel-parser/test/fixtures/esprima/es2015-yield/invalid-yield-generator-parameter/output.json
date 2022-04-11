@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "errors": [
+    "SyntaxError: Can not use 'yield' as identifier inside a generator. (1:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"g"},
+          "name": "g"
+        },
+        "generator": true,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":12,"end":17,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":17,"index":17},"identifierName":"yield"},
+            "name": "yield"
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":18,"end":20,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":20,"index":20}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

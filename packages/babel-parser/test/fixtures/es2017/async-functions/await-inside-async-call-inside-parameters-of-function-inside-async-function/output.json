@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":56}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":56}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":56}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":56,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":56}},
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start":23,"end":54,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":33,"index":54}},
+              "id": {
+                "type": "Identifier",
+                "start":32,"end":33,"loc":{"start":{"line":2,"column":11,"index":32},"end":{"line":2,"column":12,"index":33},"identifierName":"g"},
+                "name": "g"
+              },
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "AssignmentPattern",
+                  "start":34,"end":50,"loc":{"start":{"line":2,"column":13,"index":34},"end":{"line":2,"column":29,"index":50}},
+                  "left": {
+                    "type": "Identifier",
+                    "start":34,"end":35,"loc":{"start":{"line":2,"column":13,"index":34},"end":{"line":2,"column":14,"index":35},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "right": {
+                    "type": "CallExpression",
+                    "start":38,"end":50,"loc":{"start":{"line":2,"column":17,"index":38},"end":{"line":2,"column":29,"index":50}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":38,"end":43,"loc":{"start":{"line":2,"column":17,"index":38},"end":{"line":2,"column":22,"index":43},"identifierName":"async"},
+                      "name": "async"
+                    },
+                    "arguments": [
+                      {
+                        "type": "Identifier",
+                        "start":44,"end":49,"loc":{"start":{"line":2,"column":23,"index":44},"end":{"line":2,"column":28,"index":49},"identifierName":"await"},
+                        "name": "await"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":52,"end":54,"loc":{"start":{"line":2,"column":31,"index":52},"end":{"line":2,"column":33,"index":54}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

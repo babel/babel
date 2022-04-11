@@ -1,0 +1,38 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":8,"index":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":8,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":8,"index":22}},
+        "body": [
+          {
+            "type": "ThrowStatement",
+            "start":2,"end":13,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":13,"index":13}},
+            "argument": {
+              "type": "Identifier",
+              "start":8,"end":13,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":13,"index":13},"identifierName":"error"},
+              "name": "error"
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "start":14,"end":20,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":6,"index":20}},
+            "expression": {
+              "type": "Identifier",
+              "start":14,"end":19,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":5,"index":19},"identifierName":"error"},
+              "name": "error"
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

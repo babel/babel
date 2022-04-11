@@ -1,0 +1,36 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { chrome < 94 }
+  proposal-private-property-in-object { chrome < 91 }
+  proposal-class-properties { chrome < 74 }
+  proposal-private-methods { chrome < 84 }
+  proposal-numeric-separator { chrome < 75 }
+  proposal-logical-assignment-operators { chrome < 85 }
+  proposal-nullish-coalescing-operator { chrome < 80 }
+  proposal-optional-chaining { chrome < 80 }
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-export-namespace-from { chrome < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "chrome": "71"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs2-chrome-71-1/input.js]
+The corejs2 polyfill added the following polyfills:
+  web.dom.iterable { "chrome":"71" }

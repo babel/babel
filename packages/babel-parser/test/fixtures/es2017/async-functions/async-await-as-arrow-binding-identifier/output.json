@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "errors": [
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (1:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":6,"end":11,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":11,"index":11},"identifierName":"await"},
+              "name": "await"
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":32,"index":42}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":32,"index":42}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":10,"end":42,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":32,"index":42}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":10,"end":41,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":31,"index":41}},
+          "test": {
+            "type": "BooleanLiteral",
+            "start":10,"end":14,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":4,"index":14}},
+            "value": true
+          },
+          "consequent": {
+            "type": "CallExpression",
+            "start":17,"end":34,"loc":{"start":{"line":3,"column":7,"index":17},"end":{"line":3,"column":24,"index":34}},
+            "callee": {
+              "type": "MemberExpression",
+              "start":17,"end":32,"loc":{"start":{"line":3,"column":7,"index":17},"end":{"line":3,"column":22,"index":32}},
+              "object": {
+                "type": "Identifier",
+                "start":17,"end":22,"loc":{"start":{"line":3,"column":7,"index":17},"end":{"line":3,"column":12,"index":22},"identifierName":"async"},
+                "name": "async"
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":23,"end":32,"loc":{"start":{"line":3,"column":13,"index":23},"end":{"line":3,"column":22,"index":32},"identifierName":"waterfall"},
+                "name": "waterfall"
+              }
+            },
+            "arguments": []
+          },
+          "alternate": {
+            "type": "NullLiteral",
+            "start":37,"end":41,"loc":{"start":{"line":3,"column":27,"index":37},"end":{"line":3,"column":31,"index":41}}
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+    }
+  ]
+}

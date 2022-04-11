@@ -1,0 +1,34 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'true'. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"true"},
+          "name": "true"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":19,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":19,"index":19}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

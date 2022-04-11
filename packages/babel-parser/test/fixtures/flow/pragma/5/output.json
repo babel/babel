@@ -1,0 +1,104 @@
+{
+  "type": "File",
+  "start":0,"end":74,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":10,"index":74}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":74,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":10,"index":74}},
+    "sourceType": "module",
+    "interpreter": {
+      "type": "InterpreterDirective",
+      "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+      "value": "/usr/bin/env node"
+    },
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":64,"end":74,"loc":{"start":{"line":5,"column":0,"index":64},"end":{"line":5,"column":10,"index":74}},
+        "expression": {
+          "type": "CallExpression",
+          "start":64,"end":73,"loc":{"start":{"line":5,"column":0,"index":64},"end":{"line":5,"column":9,"index":73}},
+          "callee": {
+            "type": "Identifier",
+            "start":64,"end":67,"loc":{"start":{"line":5,"column":0,"index":64},"end":{"line":5,"column":3,"index":67},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "typeArguments": {
+            "type": "TypeParameterInstantiation",
+            "start":67,"end":70,"loc":{"start":{"line":5,"column":3,"index":67},"end":{"line":5,"column":6,"index":70}},
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start":68,"end":69,"loc":{"start":{"line":5,"column":4,"index":68},"end":{"line":5,"column":5,"index":69}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":68,"end":69,"loc":{"start":{"line":5,"column":4,"index":68},"end":{"line":5,"column":5,"index":69},"identifierName":"x"},
+                  "name": "x"
+                }
+              }
+            ]
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":71,"end":72,"loc":{"start":{"line":5,"column":7,"index":71},"end":{"line":5,"column":8,"index":72},"identifierName":"y"},
+              "name": "y"
+            }
+          ]
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " arbitrary comment",
+            "start":34,"end":54,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":20,"index":54}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":55,"end":63,"loc":{"start":{"line":4,"column":0,"index":55},"end":{"line":4,"column":8,"index":63}}
+          }
+        ]
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":20,"end":33,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":2,"column":13,"index":33}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":20,"end":32,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":2,"column":12,"index":32}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "'use strict'",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " arbitrary comment",
+            "start":34,"end":54,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":20,"index":54}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":55,"end":63,"loc":{"start":{"line":4,"column":0,"index":55},"end":{"line":4,"column":8,"index":63}}
+          }
+        ]
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " arbitrary comment",
+      "start":34,"end":54,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":20,"index":54}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":55,"end":63,"loc":{"start":{"line":4,"column":0,"index":55},"end":{"line":4,"column":8,"index":63}}
+    }
+  ]
+}

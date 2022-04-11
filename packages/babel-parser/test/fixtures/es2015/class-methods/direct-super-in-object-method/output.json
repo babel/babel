@@ -1,0 +1,115 @@
+{
+  "type": "File",
+  "start":0,"end":87,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":3,"index":87}},
+  "errors": [
+    "SyntaxError: 'super' is only allowed in object methods and classes. (4:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":87,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":3,"index":87}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":87,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":3,"index":87}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":2,"index":86}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+            "object": {
+              "type": "Identifier",
+              "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6},"identifierName":"Object"},
+              "name": "Object"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":7,"end":13,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":13,"index":13},"identifierName":"create"},
+              "name": "create"
+            }
+          },
+          "arguments": [
+            {
+              "type": "ObjectExpression",
+              "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16}},
+              "properties": []
+            },
+            {
+              "type": "ObjectExpression",
+              "start":18,"end":85,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":7,"column":1,"index":85}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":22,"end":83,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":6,"column":3,"index":83}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":22,"end":25,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":5,"index":25},"identifierName":"foo"},
+                    "name": "foo"
+                  },
+                  "computed": false,
+                  "shorthand": false,
+                  "value": {
+                    "type": "ObjectExpression",
+                    "start":27,"end":83,"loc":{"start":{"line":2,"column":7,"index":27},"end":{"line":6,"column":3,"index":83}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":33,"end":79,"loc":{"start":{"line":3,"column":4,"index":33},"end":{"line":5,"column":5,"index":79}},
+                        "method": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start":33,"end":36,"loc":{"start":{"line":3,"column":4,"index":33},"end":{"line":3,"column":7,"index":36},"identifierName":"get"},
+                          "name": "get"
+                        },
+                        "computed": false,
+                        "shorthand": false,
+                        "value": {
+                          "type": "FunctionExpression",
+                          "start":38,"end":79,"loc":{"start":{"line":3,"column":9,"index":38},"end":{"line":5,"column":5,"index":79}},
+                          "id": null,
+                          "generator": false,
+                          "async": false,
+                          "params": [],
+                          "body": {
+                            "type": "BlockStatement",
+                            "start":48,"end":79,"loc":{"start":{"line":3,"column":19,"index":48},"end":{"line":5,"column":5,"index":79}},
+                            "body": [
+                              {
+                                "type": "ReturnStatement",
+                                "start":56,"end":73,"loc":{"start":{"line":4,"column":6,"index":56},"end":{"line":4,"column":23,"index":73}},
+                                "argument": {
+                                  "type": "MemberExpression",
+                                  "start":63,"end":72,"loc":{"start":{"line":4,"column":13,"index":63},"end":{"line":4,"column":22,"index":72}},
+                                  "object": {
+                                    "type": "Super",
+                                    "start":63,"end":68,"loc":{"start":{"line":4,"column":13,"index":63},"end":{"line":4,"column":18,"index":68}}
+                                  },
+                                  "computed": false,
+                                  "property": {
+                                    "type": "Identifier",
+                                    "start":69,"end":72,"loc":{"start":{"line":4,"column":19,"index":69},"end":{"line":4,"column":22,"index":72},"identifierName":"foo"},
+                                    "name": "foo"
+                                  }
+                                }
+                              }
+                            ],
+                            "directives": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

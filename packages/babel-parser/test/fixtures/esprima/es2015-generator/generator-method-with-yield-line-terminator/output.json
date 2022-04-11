@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":4,"index":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":4,"index":29}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":4,"index":29}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":28,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":4,"column":3,"index":28}},
+          "properties": [
+            {
+              "type": "ObjectMethod",
+              "start":3,"end":26,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":4,"column":1,"index":26}},
+              "method": true,
+              "key": {
+                "type": "Identifier",
+                "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":10,"end":26,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":26}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":15,"end":20,"loc":{"start":{"line":2,"column":2,"index":15},"end":{"line":2,"column":7,"index":20}},
+                    "expression": {
+                      "type": "YieldExpression",
+                      "start":15,"end":20,"loc":{"start":{"line":2,"column":2,"index":15},"end":{"line":2,"column":7,"index":20}},
+                      "delegate": false,
+                      "argument": null
+                    }
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start":23,"end":24,"loc":{"start":{"line":3,"column":2,"index":23},"end":{"line":3,"column":3,"index":24}},
+                    "expression": {
+                      "type": "NumericLiteral",
+                      "start":23,"end":24,"loc":{"start":{"line":3,"column":2,"index":23},"end":{"line":3,"column":3,"index":24}},
+                      "extra": {
+                        "rawValue": 3,
+                        "raw": "3"
+                      },
+                      "value": 3
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":53}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":53}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":53}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":53,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":3,"column":1,"index":53}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":20,"end":51,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":33,"index":51}},
+              "expression": {
+                "type": "YieldExpression",
+                "start":20,"end":51,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":33,"index":51}},
+                "delegate": false,
+                "argument": {
+                  "type": "CallExpression",
+                  "start":26,"end":51,"loc":{"start":{"line":2,"column":8,"index":26},"end":{"line":2,"column":33,"index":51}},
+                  "callee": {
+                    "type": "V8IntrinsicIdentifier",
+                    "start":26,"end":41,"loc":{"start":{"line":2,"column":8,"index":26},"end":{"line":2,"column":23,"index":41},"identifierName":"StringParseInt"},
+                    "name": "StringParseInt"
+                  },
+                  "arguments": [
+                    {
+                      "type": "StringLiteral",
+                      "start":42,"end":46,"loc":{"start":{"line":2,"column":24,"index":42},"end":{"line":2,"column":28,"index":46}},
+                      "extra": {
+                        "rawValue": "42",
+                        "raw": "\"42\""
+                      },
+                      "value": "42"
+                    },
+                    {
+                      "type": "NumericLiteral",
+                      "start":48,"end":50,"loc":{"start":{"line":2,"column":30,"index":48},"end":{"line":2,"column":32,"index":50}},
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

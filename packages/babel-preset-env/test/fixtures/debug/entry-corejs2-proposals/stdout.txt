@@ -1,0 +1,213 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "ie": "6"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { ie }
+  proposal-private-property-in-object { ie }
+  proposal-class-properties { ie }
+  proposal-private-methods { ie }
+  proposal-numeric-separator { ie }
+  proposal-logical-assignment-operators { ie }
+  proposal-nullish-coalescing-operator { ie }
+  proposal-optional-chaining { ie }
+  proposal-json-strings { ie }
+  proposal-optional-catch-binding { ie }
+  transform-parameters { ie }
+  proposal-async-generator-functions { ie }
+  proposal-object-rest-spread { ie }
+  transform-dotall-regex { ie }
+  proposal-unicode-property-regex { ie }
+  transform-named-capturing-groups-regex { ie }
+  transform-async-to-generator { ie }
+  transform-exponentiation-operator { ie }
+  transform-template-literals { ie }
+  transform-literals { ie }
+  transform-function-name { ie }
+  transform-arrow-functions { ie }
+  transform-block-scoped-functions { ie < 11 }
+  transform-classes { ie }
+  transform-object-super { ie }
+  transform-shorthand-properties { ie }
+  transform-duplicate-keys { ie }
+  transform-computed-properties { ie }
+  transform-for-of { ie }
+  transform-sticky-regex { ie }
+  transform-unicode-escapes { ie }
+  transform-unicode-regex { ie }
+  transform-spread { ie }
+  transform-destructuring { ie }
+  transform-block-scoping { ie }
+  transform-typeof-symbol { ie }
+  transform-new-target { ie }
+  transform-regenerator { ie }
+  transform-member-expression-literals { ie < 9 }
+  transform-property-literals { ie < 9 }
+  transform-reserved-words { ie < 9 }
+  proposal-export-namespace-from { ie }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "ie": "6"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-proposals/input.mjs]
+The corejs2 polyfill entry has been replaced with the following polyfills:
+  es6.array.copy-within { "ie":"6" }
+  es6.array.every { "ie":"6" }
+  es6.array.fill { "ie":"6" }
+  es6.array.filter { "ie":"6" }
+  es6.array.find { "ie":"6" }
+  es6.array.find-index { "ie":"6" }
+  es7.array.flat-map { "ie":"6" }
+  es6.array.for-each { "ie":"6" }
+  es6.array.from { "ie":"6" }
+  es7.array.includes { "ie":"6" }
+  es6.array.index-of { "ie":"6" }
+  es6.array.is-array { "ie":"6" }
+  es6.array.iterator { "ie":"6" }
+  es6.array.last-index-of { "ie":"6" }
+  es6.array.map { "ie":"6" }
+  es6.array.of { "ie":"6" }
+  es6.array.reduce { "ie":"6" }
+  es6.array.reduce-right { "ie":"6" }
+  es6.array.slice { "ie":"6" }
+  es6.array.some { "ie":"6" }
+  es6.array.sort { "ie":"6" }
+  es6.array.species { "ie":"6" }
+  es6.date.now { "ie":"6" }
+  es6.date.to-iso-string { "ie":"6" }
+  es6.date.to-json { "ie":"6" }
+  es6.date.to-primitive { "ie":"6" }
+  es6.date.to-string { "ie":"6" }
+  es6.function.bind { "ie":"6" }
+  es6.function.has-instance { "ie":"6" }
+  es6.function.name { "ie":"6" }
+  es6.map { "ie":"6" }
+  es6.math.acosh { "ie":"6" }
+  es6.math.asinh { "ie":"6" }
+  es6.math.atanh { "ie":"6" }
+  es6.math.cbrt { "ie":"6" }
+  es6.math.clz32 { "ie":"6" }
+  es6.math.cosh { "ie":"6" }
+  es6.math.expm1 { "ie":"6" }
+  es6.math.fround { "ie":"6" }
+  es6.math.hypot { "ie":"6" }
+  es6.math.imul { "ie":"6" }
+  es6.math.log1p { "ie":"6" }
+  es6.math.log10 { "ie":"6" }
+  es6.math.log2 { "ie":"6" }
+  es6.math.sign { "ie":"6" }
+  es6.math.sinh { "ie":"6" }
+  es6.math.tanh { "ie":"6" }
+  es6.math.trunc { "ie":"6" }
+  es6.number.constructor { "ie":"6" }
+  es6.number.epsilon { "ie":"6" }
+  es6.number.is-finite { "ie":"6" }
+  es6.number.is-integer { "ie":"6" }
+  es6.number.is-nan { "ie":"6" }
+  es6.number.is-safe-integer { "ie":"6" }
+  es6.number.max-safe-integer { "ie":"6" }
+  es6.number.min-safe-integer { "ie":"6" }
+  es6.number.parse-float { "ie":"6" }
+  es6.number.parse-int { "ie":"6" }
+  es6.object.assign { "ie":"6" }
+  es6.object.create { "ie":"6" }
+  es7.object.define-getter { "ie":"6" }
+  es7.object.define-setter { "ie":"6" }
+  es6.object.define-property { "ie":"6" }
+  es6.object.define-properties { "ie":"6" }
+  es7.object.entries { "ie":"6" }
+  es6.object.freeze { "ie":"6" }
+  es6.object.get-own-property-descriptor { "ie":"6" }
+  es7.object.get-own-property-descriptors { "ie":"6" }
+  es6.object.get-own-property-names { "ie":"6" }
+  es6.object.get-prototype-of { "ie":"6" }
+  es7.object.lookup-getter { "ie":"6" }
+  es7.object.lookup-setter { "ie":"6" }
+  es6.object.prevent-extensions { "ie":"6" }
+  es6.object.to-string { "ie":"6" }
+  es6.object.is { "ie":"6" }
+  es6.object.is-frozen { "ie":"6" }
+  es6.object.is-sealed { "ie":"6" }
+  es6.object.is-extensible { "ie":"6" }
+  es6.object.keys { "ie":"6" }
+  es6.object.seal { "ie":"6" }
+  es6.object.set-prototype-of { "ie":"6" }
+  es7.object.values { "ie":"6" }
+  es6.promise { "ie":"6" }
+  es7.promise.finally { "ie":"6" }
+  es6.reflect.apply { "ie":"6" }
+  es6.reflect.construct { "ie":"6" }
+  es6.reflect.define-property { "ie":"6" }
+  es6.reflect.delete-property { "ie":"6" }
+  es6.reflect.get { "ie":"6" }
+  es6.reflect.get-own-property-descriptor { "ie":"6" }
+  es6.reflect.get-prototype-of { "ie":"6" }
+  es6.reflect.has { "ie":"6" }
+  es6.reflect.is-extensible { "ie":"6" }
+  es6.reflect.own-keys { "ie":"6" }
+  es6.reflect.prevent-extensions { "ie":"6" }
+  es6.reflect.set { "ie":"6" }
+  es6.reflect.set-prototype-of { "ie":"6" }
+  es6.regexp.constructor { "ie":"6" }
+  es6.regexp.flags { "ie":"6" }
+  es6.regexp.match { "ie":"6" }
+  es6.regexp.replace { "ie":"6" }
+  es6.regexp.split { "ie":"6" }
+  es6.regexp.search { "ie":"6" }
+  es6.regexp.to-string { "ie":"6" }
+  es6.set { "ie":"6" }
+  es6.symbol { "ie":"6" }
+  es7.symbol.async-iterator { "ie":"6" }
+  es6.string.anchor { "ie":"6" }
+  es6.string.big { "ie":"6" }
+  es6.string.blink { "ie":"6" }
+  es6.string.bold { "ie":"6" }
+  es6.string.code-point-at { "ie":"6" }
+  es6.string.ends-with { "ie":"6" }
+  es6.string.fixed { "ie":"6" }
+  es6.string.fontcolor { "ie":"6" }
+  es6.string.fontsize { "ie":"6" }
+  es6.string.from-code-point { "ie":"6" }
+  es6.string.includes { "ie":"6" }
+  es6.string.italics { "ie":"6" }
+  es6.string.iterator { "ie":"6" }
+  es6.string.link { "ie":"6" }
+  es7.string.pad-start { "ie":"6" }
+  es7.string.pad-end { "ie":"6" }
+  es6.string.raw { "ie":"6" }
+  es6.string.repeat { "ie":"6" }
+  es6.string.small { "ie":"6" }
+  es6.string.starts-with { "ie":"6" }
+  es6.string.strike { "ie":"6" }
+  es6.string.sub { "ie":"6" }
+  es6.string.sup { "ie":"6" }
+  es6.string.trim { "ie":"6" }
+  es7.string.trim-left { "ie":"6" }
+  es7.string.trim-right { "ie":"6" }
+  es6.typed.array-buffer { "ie":"6" }
+  es6.typed.data-view { "ie":"6" }
+  es6.typed.int8-array { "ie":"6" }
+  es6.typed.uint8-array { "ie":"6" }
+  es6.typed.uint8-clamped-array { "ie":"6" }
+  es6.typed.int16-array { "ie":"6" }
+  es6.typed.uint16-array { "ie":"6" }
+  es6.typed.int32-array { "ie":"6" }
+  es6.typed.uint32-array { "ie":"6" }
+  es6.typed.float32-array { "ie":"6" }
+  es6.typed.float64-array { "ie":"6" }
+  es6.weak-map { "ie":"6" }
+  es6.weak-set { "ie":"6" }
+  web.timers { "ie":"6" }
+  web.immediate { "ie":"6" }
+  web.dom.iterable { "ie":"6" }

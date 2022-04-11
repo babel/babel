@@ -1,0 +1,3 @@
+{
+  "args": ["script.js", "--source-maps", "inline", "--out-file", "script2.js"]
+}

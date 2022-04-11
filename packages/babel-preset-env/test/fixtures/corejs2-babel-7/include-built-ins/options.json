@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "chrome": 55
+        },
+        "include": ["es6.map", "es6.set"],
+        "modules": false,
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ]
+  ]
+}

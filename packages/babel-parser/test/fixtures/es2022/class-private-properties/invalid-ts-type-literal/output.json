@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":28}},
+  "errors": [
+    "SyntaxError: Unexpected private name. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":28}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"I"},
+          "name": "I"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":12,"end":28,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":3,"column":1,"index":28}},
+          "body": [
+            {
+              "type": "TSPropertySignature",
+              "start":16,"end":26,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":12,"index":26}},
+              "key": {
+                "type": "PrivateName",
+                "start":16,"end":18,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":4,"index":18}},
+                "id": {
+                  "type": "Identifier",
+                  "start":17,"end":18,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":4,"index":18},"identifierName":"p"},
+                  "name": "p"
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":18,"end":26,"loc":{"start":{"line":2,"column":4,"index":18},"end":{"line":2,"column":12,"index":26}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":20,"end":26,"loc":{"start":{"line":2,"column":6,"index":20},"end":{"line":2,"column":12,"index":26}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

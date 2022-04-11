@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "errors": [
+    "SyntaxError: Invalid left-hand side in for-in statement. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForInStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "left": {
+          "type": "BinaryExpression",
+          "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10}},
+          "left": {
+            "type": "Identifier",
+            "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"i"},
+            "name": "i"
+          },
+          "operator": "+",
+          "right": {
+            "type": "NumericLiteral",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        },
+        "right": {
+          "type": "ObjectExpression",
+          "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16}},
+          "properties": []
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

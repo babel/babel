@@ -1,0 +1,104 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+          "tag": {
+            "type": "Identifier",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3},"identifierName":"raw"},
+            "name": "raw"
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "start":3,"end":44,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":44,"index":44}},
+            "expressions": [
+              {
+                "type": "TemplateLiteral",
+                "start":12,"end":42,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":42,"index":42}},
+                "expressions": [
+                  {
+                    "type": "BinaryExpression",
+                    "start":22,"end":35,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":35,"index":35}},
+                    "left": {
+                      "type": "TemplateLiteral",
+                      "start":22,"end":30,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":30,"index":30}},
+                      "expressions": [],
+                      "quasis": [
+                        {
+                          "type": "TemplateElement",
+                          "start":23,"end":29,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":29,"index":29}},
+                          "value": {
+                            "raw": "deeply",
+                            "cooked": "deeply"
+                          },
+                          "tail": true
+                        }
+                      ]
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "ObjectExpression",
+                      "start":33,"end":35,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":35,"index":35}},
+                      "properties": []
+                    }
+                  }
+                ],
+                "quasis": [
+                  {
+                    "type": "TemplateElement",
+                    "start":13,"end":20,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":20,"index":20}},
+                    "value": {
+                      "raw": "nested ",
+                      "cooked": "nested "
+                    },
+                    "tail": false
+                  },
+                  {
+                    "type": "TemplateElement",
+                    "start":36,"end":41,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":41,"index":41}},
+                    "value": {
+                      "raw": " blah",
+                      "cooked": " blah"
+                    },
+                    "tail": true
+                  }
+                ]
+              }
+            ],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10}},
+                "value": {
+                  "raw": "token ",
+                  "cooked": "token "
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "start":43,"end":43,"loc":{"start":{"line":1,"column":43,"index":43},"end":{"line":1,"column":43,"index":43}},
+                "value": {
+                  "raw": "",
+                  "cooked": ""
+                },
+                "tail": true
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

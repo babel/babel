@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "errors": [
+    "SyntaxError: Identifier 'f' has already been declared. (1:28)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "body": [
+          {
+            "type": "FunctionDeclaration",
+            "start":2,"end":18,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":18,"index":18}},
+            "id": {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"f"},
+              "name": "f"
+            },
+            "generator": true,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":16,"end":18,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":18,"index":18}},
+              "body": [],
+              "directives": []
+            }
+          },
+          {
+            "type": "FunctionDeclaration",
+            "start":19,"end":34,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":34,"index":34}},
+            "id": {
+              "type": "Identifier",
+              "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29},"identifierName":"f"},
+              "name": "f"
+            },
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":32,"end":34,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":34,"index":34}},
+              "body": [],
+              "directives": []
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

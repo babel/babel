@@ -1,0 +1,33 @@
+{
+  "type": "File",
+  "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "id": {
+          "type": "Placeholder",
+          "start":6,"end":12,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":12,"index":12}},
+          "name": {
+            "type": "Identifier",
+            "start":8,"end":10,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":10,"index":10},"identifierName":"ID"},
+            "name": "ID"
+          },
+          "expectedNode": "Identifier"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":13,"end":15,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":15,"index":15}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

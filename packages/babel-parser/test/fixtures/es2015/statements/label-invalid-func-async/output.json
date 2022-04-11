@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+  "errors": [
+    "SyntaxError: Async functions can only be declared at the top level or inside a block. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "body": {
+          "type": "FunctionDeclaration",
+          "start":5,"end":28,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":28,"index":28}},
+          "id": {
+            "type": "Identifier",
+            "start":20,"end":23,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":23,"index":23},"identifierName":"bar"},
+            "name": "bar"
+          },
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":26,"end":28,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":28,"index":28}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3},"identifierName":"foo"},
+          "name": "foo"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

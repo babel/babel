@@ -1,0 +1,1 @@
+export @decorator class Foo {}

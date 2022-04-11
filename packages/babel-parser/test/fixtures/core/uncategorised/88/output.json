@@ -1,0 +1,27 @@
+{
+  "type": "File",
+  "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+          "extra": {
+            "rawValue": "\\x61",
+            "raw": "\"\\x61\"",
+            "expressionValue": "a"
+          },
+          "value": "\\x61"
+        }
+      }
+    ]
+  }
+}

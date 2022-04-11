@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["ios >= 6"]
+        },
+        "modules": false
+      }
+    ]
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "type": "File",
+  "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":9}},
+  "errors": [
+    "SyntaxError: Illegal newline after throw. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":9}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ThrowStatement",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":9}},
+        "argument": {
+          "type": "NumericLiteral",
+          "start":6,"end":8,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":2,"column":2,"index":8}},
+          "extra": {
+            "rawValue": 10,
+            "raw": "10"
+          },
+          "value": 10
+        }
+      }
+    ],
+    "directives": []
+  }
+}

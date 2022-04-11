@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":23}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":23}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":23}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":23,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":23}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":14,"end":16,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":4,"index":16}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":14,"end":16,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":4,"index":16}},
+                "id": {
+                  "type": "Identifier",
+                  "start":15,"end":16,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":4,"index":16},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":19,"end":21,"loc":{"start":{"line":3,"column":2,"index":19},"end":{"line":3,"column":4,"index":21}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":19,"end":21,"loc":{"start":{"line":3,"column":2,"index":19},"end":{"line":3,"column":4,"index":21}},
+                "id": {
+                  "type": "Identifier",
+                  "start":20,"end":21,"loc":{"start":{"line":3,"column":3,"index":20},"end":{"line":3,"column":4,"index":21},"identifierName":"y"},
+                  "name": "y"
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

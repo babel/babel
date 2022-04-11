@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'yield'. (1:28)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":14,"end":37,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":37,"index":37}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "RestElement",
+            "start":25,"end":33,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":33,"index":33}},
+            "argument": {
+              "type": "Identifier",
+              "start":28,"end":33,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":33,"index":33},"identifierName":"yield"},
+              "name": "yield"
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":35,"end":37,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":37,"index":37}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

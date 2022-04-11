@@ -1,0 +1,167 @@
+{
+  "type": "File",
+  "start":0,"end":116,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":34,"index":116}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":116,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":34,"index":116}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":21,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":21,"index":21}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "MetaProperty",
+              "start":10,"end":21,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":21,"index":21}},
+              "meta": {
+                "type": "Identifier",
+                "start":10,"end":16,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":16,"index":16},"identifierName":"import"},
+                "name": "import"
+              },
+              "property": {
+                "type": "Identifier",
+                "start":17,"end":21,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":21,"index":21},"identifierName":"meta"},
+                "name": "meta"
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":23,"end":51,"loc":{"start":{"line":2,"column":0,"index":23},"end":{"line":2,"column":28,"index":51}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":29,"end":50,"loc":{"start":{"line":2,"column":6,"index":29},"end":{"line":2,"column":27,"index":50}},
+            "id": {
+              "type": "Identifier",
+              "start":29,"end":32,"loc":{"start":{"line":2,"column":6,"index":29},"end":{"line":2,"column":9,"index":32},"identifierName":"url"},
+              "name": "url"
+            },
+            "init": {
+              "type": "MemberExpression",
+              "start":35,"end":50,"loc":{"start":{"line":2,"column":12,"index":35},"end":{"line":2,"column":27,"index":50}},
+              "object": {
+                "type": "MetaProperty",
+                "start":35,"end":46,"loc":{"start":{"line":2,"column":12,"index":35},"end":{"line":2,"column":23,"index":46}},
+                "meta": {
+                  "type": "Identifier",
+                  "start":35,"end":41,"loc":{"start":{"line":2,"column":12,"index":35},"end":{"line":2,"column":18,"index":41},"identifierName":"import"},
+                  "name": "import"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start":42,"end":46,"loc":{"start":{"line":2,"column":19,"index":42},"end":{"line":2,"column":23,"index":46},"identifierName":"meta"},
+                  "name": "meta"
+                }
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":47,"end":50,"loc":{"start":{"line":2,"column":24,"index":47},"end":{"line":2,"column":27,"index":50},"identifierName":"url"},
+                "name": "url"
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":52,"end":64,"loc":{"start":{"line":3,"column":0,"index":52},"end":{"line":3,"column":12,"index":64}},
+        "expression": {
+          "type": "MetaProperty",
+          "start":52,"end":63,"loc":{"start":{"line":3,"column":0,"index":52},"end":{"line":3,"column":11,"index":63}},
+          "meta": {
+            "type": "Identifier",
+            "start":52,"end":58,"loc":{"start":{"line":3,"column":0,"index":52},"end":{"line":3,"column":6,"index":58},"identifierName":"import"},
+            "name": "import"
+          },
+          "property": {
+            "type": "Identifier",
+            "start":59,"end":63,"loc":{"start":{"line":3,"column":7,"index":59},"end":{"line":3,"column":11,"index":63},"identifierName":"meta"},
+            "name": "meta"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":65,"end":81,"loc":{"start":{"line":4,"column":0,"index":65},"end":{"line":4,"column":16,"index":81}},
+        "expression": {
+          "type": "MemberExpression",
+          "start":65,"end":80,"loc":{"start":{"line":4,"column":0,"index":65},"end":{"line":4,"column":15,"index":80}},
+          "object": {
+            "type": "MetaProperty",
+            "start":65,"end":76,"loc":{"start":{"line":4,"column":0,"index":65},"end":{"line":4,"column":11,"index":76}},
+            "meta": {
+              "type": "Identifier",
+              "start":65,"end":71,"loc":{"start":{"line":4,"column":0,"index":65},"end":{"line":4,"column":6,"index":71},"identifierName":"import"},
+              "name": "import"
+            },
+            "property": {
+              "type": "Identifier",
+              "start":72,"end":76,"loc":{"start":{"line":4,"column":7,"index":72},"end":{"line":4,"column":11,"index":76},"identifierName":"meta"},
+              "name": "meta"
+            }
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":77,"end":80,"loc":{"start":{"line":4,"column":12,"index":77},"end":{"line":4,"column":15,"index":80},"identifierName":"url"},
+            "name": "url"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":82,"end":116,"loc":{"start":{"line":5,"column":0,"index":82},"end":{"line":5,"column":34,"index":116}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":82,"end":115,"loc":{"start":{"line":5,"column":0,"index":82},"end":{"line":5,"column":33,"index":115}},
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "start":82,"end":108,"loc":{"start":{"line":5,"column":0,"index":82},"end":{"line":5,"column":26,"index":108}},
+            "object": {
+              "type": "MetaProperty",
+              "start":82,"end":93,"loc":{"start":{"line":5,"column":0,"index":82},"end":{"line":5,"column":11,"index":93}},
+              "meta": {
+                "type": "Identifier",
+                "start":82,"end":88,"loc":{"start":{"line":5,"column":0,"index":82},"end":{"line":5,"column":6,"index":88},"identifierName":"import"},
+                "name": "import"
+              },
+              "property": {
+                "type": "Identifier",
+                "start":89,"end":93,"loc":{"start":{"line":5,"column":7,"index":89},"end":{"line":5,"column":11,"index":93},"identifierName":"meta"},
+                "name": "meta"
+              }
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":94,"end":108,"loc":{"start":{"line":5,"column":12,"index":94},"end":{"line":5,"column":26,"index":108},"identifierName":"couldBeMutable"},
+              "name": "couldBeMutable"
+            }
+          },
+          "right": {
+            "type": "BooleanLiteral",
+            "start":111,"end":115,"loc":{"start":{"line":5,"column":29,"index":111},"end":{"line":5,"column":33,"index":115}},
+            "value": true
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "typescript"
+  ],
+  "throws": "Unexpected token, expected \"from\" (1:17)"
+}

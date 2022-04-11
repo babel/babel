@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":19,"index":33}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared. (2:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":19,"index":33}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12}},
+          "body": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}}
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":14,"end":32,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":18,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":26,"loc":{"start":{"line":2,"column":9,"index":23},"end":{"line":2,"column":12,"index":26},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":30,"end":32,"loc":{"start":{"line":2,"column":16,"index":30},"end":{"line":2,"column":18,"index":32}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":32,"end":33,"loc":{"start":{"line":2,"column":18,"index":32},"end":{"line":2,"column":19,"index":33}}
+      }
+    ],
+    "directives": []
+  }
+}

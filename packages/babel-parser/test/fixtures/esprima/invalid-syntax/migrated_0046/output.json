@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+  "errors": [
+    "SyntaxError: Invalid left-hand side in assignment expression. (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+          "operator": "=",
+          "left": {
+            "type": "CallExpression",
+            "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+            "callee": {
+              "type": "Identifier",
+              "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4},"identifierName":"func"},
+              "name": "func"
+            },
+            "arguments": []
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "extra": {
+              "rawValue": 4,
+              "raw": "4"
+            },
+            "value": 4
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

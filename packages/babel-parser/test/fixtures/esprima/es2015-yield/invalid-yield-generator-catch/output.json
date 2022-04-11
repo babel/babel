@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+  "errors": [
+    "SyntaxError: Can not use 'yield' as identifier inside a generator. (1:30)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"g"},
+          "name": "g"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":14,"end":41,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":41,"index":41}},
+          "body": [
+            {
+              "type": "TryStatement",
+              "start":16,"end":39,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":39,"index":39}},
+              "block": {
+                "type": "BlockStatement",
+                "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22}},
+                "body": [],
+                "directives": []
+              },
+              "handler": {
+                "type": "CatchClause",
+                "start":23,"end":39,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":39,"index":39}},
+                "param": {
+                  "type": "Identifier",
+                  "start":30,"end":35,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":35,"index":35},"identifierName":"yield"},
+                  "name": "yield"
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start":37,"end":39,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":39,"index":39}},
+                  "body": [],
+                  "directives": []
+                }
+              },
+              "finalizer": null
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

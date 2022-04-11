@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "errors": [
+    "SyntaxError: Argument name clash. (1:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "ArrayPattern",
+              "start":1,"end":13,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":13,"index":13}},
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3},"identifierName":"a"},
+                  "name": "a"
+                },
+                {
+                  "type": "ArrayPattern",
+                  "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}},
+                  "elements": [
+                    {
+                      "type": "Identifier",
+                      "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"b"},
+                      "name": "b"
+                    }
+                  ]
+                },
+                {
+                  "type": "RestElement",
+                  "start":8,"end":12,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":12,"index":12}},
+                  "argument": {
+                    "type": "Identifier",
+                    "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"b"},
+                    "name": "b"
+                  }
+                }
+              ]
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "@babel/traverse",
+  "version": "7.17.9",
+  "description": "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes",
+  "author": "The Babel Team (https://babel.dev/team)",
+  "homepage": "https://babel.dev/docs/en/next/babel-traverse",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20traverse%22+is%3Aopen",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-traverse"
+  },
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/code-frame": "workspace:^",
+    "@babel/generator": "workspace:^",
+    "@babel/helper-environment-visitor": "workspace:^",
+    "@babel/helper-function-name": "workspace:^",
+    "@babel/helper-hoist-variables": "workspace:^",
+    "@babel/helper-split-export-declaration": "workspace:^",
+    "@babel/parser": "workspace:^",
+    "@babel/types": "workspace:^",
+    "debug": "^4.1.0",
+    "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
+}

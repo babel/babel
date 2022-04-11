@@ -1,0 +1,3 @@
+{
+  "throws": "`export =` is not supported by @babel/plugin-transform-typescript\nPlease consider using `export <value>;`."
+}

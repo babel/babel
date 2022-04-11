@@ -1,0 +1,99 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":14,"end":44,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":44,"index":44}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":18,"end":44,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":44,"index":44}},
+            "id": {
+              "type": "Identifier",
+              "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":22,"end":44,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":44,"index":44}},
+              "properties": [
+                {
+                  "type": "ObjectMethod",
+                  "start":24,"end":35,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":35,"index":35}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29},"identifierName":"i"},
+                    "name": "i"
+                  },
+                  "computed": false,
+                  "kind": "set",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start":30,"end":31,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":31,"index":31},"identifierName":"x"},
+                      "name": "x"
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":33,"end":35,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":35,"index":35}},
+                    "body": [],
+                    "directives": []
+                  }
+                },
+                {
+                  "type": "ObjectProperty",
+                  "start":37,"end":42,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":42,"index":42}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":37,"end":38,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":38,"index":38},"identifierName":"i"},
+                    "name": "i"
+                  },
+                  "computed": false,
+                  "shorthand": false,
+                  "value": {
+                    "type": "NumericLiteral",
+                    "start":40,"end":42,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":42,"index":42}},
+                    "extra": {
+                      "rawValue": 42,
+                      "raw": "42"
+                    },
+                    "value": 42
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

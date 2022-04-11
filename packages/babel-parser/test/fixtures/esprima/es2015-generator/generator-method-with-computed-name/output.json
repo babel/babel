@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":51}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":51}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":51}},
+        "expression": {
+          "type": "FunctionExpression",
+          "start":1,"end":50,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":3,"column":1,"index":50}},
+          "id": null,
+          "generator": true,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":13,"end":50,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":3,"column":1,"index":50}},
+            "body": [
+              {
+                "type": "ReturnStatement",
+                "start":19,"end":48,"loc":{"start":{"line":2,"column":4,"index":19},"end":{"line":2,"column":33,"index":48}},
+                "argument": {
+                  "type": "ObjectExpression",
+                  "start":26,"end":48,"loc":{"start":{"line":2,"column":11,"index":26},"end":{"line":2,"column":33,"index":48}},
+                  "properties": [
+                    {
+                      "type": "ObjectMethod",
+                      "start":28,"end":46,"loc":{"start":{"line":2,"column":13,"index":28},"end":{"line":2,"column":31,"index":46}},
+                      "method": true,
+                      "computed": true,
+                      "key": {
+                        "type": "YieldExpression",
+                        "start":30,"end":40,"loc":{"start":{"line":2,"column":15,"index":30},"end":{"line":2,"column":25,"index":40}},
+                        "delegate": false,
+                        "argument": {
+                          "type": "Identifier",
+                          "start":36,"end":40,"loc":{"start":{"line":2,"column":21,"index":36},"end":{"line":2,"column":25,"index":40},"identifierName":"iter"},
+                          "name": "iter"
+                        }
+                      },
+                      "kind": "method",
+                      "id": null,
+                      "generator": true,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start":44,"end":46,"loc":{"start":{"line":2,"column":29,"index":44},"end":{"line":2,"column":31,"index":46}},
+                        "body": [],
+                        "directives": []
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "directives": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

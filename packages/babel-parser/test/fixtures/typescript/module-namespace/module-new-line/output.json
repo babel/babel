@@ -1,0 +1,65 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":2,"index":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":2,"index":28}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6},"identifierName":"module"},
+          "name": "module"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":7,"end":10,"loc":{"start":{"line":2,"column":0,"index":7},"end":{"line":2,"column":3,"index":10}},
+        "expression": {
+          "type": "Identifier",
+          "start":7,"end":10,"loc":{"start":{"line":2,"column":0,"index":7},"end":{"line":2,"column":3,"index":10},"identifierName":"Foo"},
+          "name": "Foo"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":11,"end":13,"loc":{"start":{"line":3,"column":0,"index":11},"end":{"line":3,"column":2,"index":13}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":15,"end":21,"loc":{"start":{"line":5,"column":0,"index":15},"end":{"line":5,"column":6,"index":21}},
+        "expression": {
+          "type": "Identifier",
+          "start":15,"end":21,"loc":{"start":{"line":5,"column":0,"index":15},"end":{"line":5,"column":6,"index":21},"identifierName":"module"},
+          "name": "module"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":22,"end":25,"loc":{"start":{"line":6,"column":0,"index":22},"end":{"line":6,"column":3,"index":25}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":22,"end":25,"loc":{"start":{"line":6,"column":0,"index":22},"end":{"line":6,"column":3,"index":25}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "'m'"
+          },
+          "value": "m"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":26,"end":28,"loc":{"start":{"line":7,"column":0,"index":26},"end":{"line":7,"column":2,"index":28}},
+        "body": [],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

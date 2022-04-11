@@ -1,0 +1,67 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":49,"index":49}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'protected'. (1:37)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":49,"index":49}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":49,"index":49}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14},"identifierName":"hello"},
+          "name": "hello"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":17,"end":49,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":49,"index":49}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":33,"end":47,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":47,"index":47}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":37,"end":46,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":46,"index":46}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":37,"end":46,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":46,"index":46},"identifierName":"protected"},
+                    "name": "protected"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":19,"end":32,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":32,"index":32}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":19,"end":31,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":31,"index":31}},
+                "extra": {
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\"",
+                  "expressionValue": "use strict"
+                },
+                "value": "use strict"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

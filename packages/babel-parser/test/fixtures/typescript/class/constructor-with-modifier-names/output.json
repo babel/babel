@@ -1,0 +1,111 @@
+{
+  "type": "File",
+  "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":91}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":91}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":91}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":91,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":91}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":14,"end":43,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":31,"index":43}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":14,"end":25,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":13,"index":25},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":26,"end":29,"loc":{"start":{"line":2,"column":14,"index":26},"end":{"line":2,"column":17,"index":29},"identifierName":"set"},
+                  "name": "set"
+                },
+                {
+                  "type": "Identifier",
+                  "start":31,"end":39,"loc":{"start":{"line":2,"column":19,"index":31},"end":{"line":2,"column":27,"index":39},"identifierName":"readonly"},
+                  "name": "readonly"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":41,"end":43,"loc":{"start":{"line":2,"column":29,"index":41},"end":{"line":2,"column":31,"index":43}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":46,"end":89,"loc":{"start":{"line":3,"column":2,"index":46},"end":{"line":3,"column":45,"index":89}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":46,"end":57,"loc":{"start":{"line":3,"column":2,"index":46},"end":{"line":3,"column":13,"index":57},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":58,"end":66,"loc":{"start":{"line":3,"column":14,"index":58},"end":{"line":3,"column":22,"index":66},"identifierName":"set"},
+                  "name": "set",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":61,"end":66,"loc":{"start":{"line":3,"column":17,"index":61},"end":{"line":3,"column":22,"index":66}},
+                    "typeAnnotation": {
+                      "type": "TSAnyKeyword",
+                      "start":63,"end":66,"loc":{"start":{"line":3,"column":19,"index":63},"end":{"line":3,"column":22,"index":66}}
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "start":68,"end":85,"loc":{"start":{"line":3,"column":24,"index":68},"end":{"line":3,"column":41,"index":85},"identifierName":"readonly"},
+                  "name": "readonly",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":76,"end":85,"loc":{"start":{"line":3,"column":32,"index":76},"end":{"line":3,"column":41,"index":85}},
+                    "typeAnnotation": {
+                      "type": "TSBooleanKeyword",
+                      "start":78,"end":85,"loc":{"start":{"line":3,"column":34,"index":78},"end":{"line":3,"column":41,"index":85}}
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":87,"end":89,"loc":{"start":{"line":3,"column":43,"index":87},"end":{"line":3,"column":45,"index":89}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

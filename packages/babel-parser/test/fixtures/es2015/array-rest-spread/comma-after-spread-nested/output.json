@@ -1,0 +1,54 @@
+{
+  "type": "File",
+  "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+  "errors": [
+    "SyntaxError: Unexpected trailing comma after rest element. (1:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+            "elements": [
+              {
+                "type": "ArrayPattern",
+                "start":1,"end":8,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":8,"index":8}},
+                "extra": {
+                  "trailingComma": 6
+                },
+                "elements": [
+                  {
+                    "type": "RestElement",
+                    "start":2,"end":6,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":6,"index":6}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"a"},
+                      "name": "a"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "type": "ArrayExpression",
+            "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14}},
+            "elements": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

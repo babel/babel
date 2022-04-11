@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":13,"index":27}},
+  "errors": [
+    "SyntaxError: Legacy octal literals are not allowed in strict mode. (2:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":13,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":14,"end":27,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":13,"index":27}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":20,"end":26,"loc":{"start":{"line":2,"column":6,"index":20},"end":{"line":2,"column":12,"index":26}},
+            "id": {
+              "type": "Identifier",
+              "start":20,"end":21,"loc":{"start":{"line":2,"column":6,"index":20},"end":{"line":2,"column":7,"index":21},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":24,"end":26,"loc":{"start":{"line":2,"column":10,"index":24},"end":{"line":2,"column":12,"index":26}},
+              "extra": {
+                "rawValue": 7,
+                "raw": "07"
+              },
+              "value": 7
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "'use strict'",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "type": "File",
+  "start":0,"end":71,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":71,"index":71}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":71,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":71,"index":71}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":71,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":71,"index":71}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":69,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":69,"index":69}},
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":3,"end":8,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":8,"index":8}},
+              "method": false,
+              "key": {
+                "type": "BigIntLiteral",
+                "start":3,"end":5,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":5,"index":5}},
+                "extra": {
+                  "rawValue": "0",
+                  "raw": "0n"
+                },
+                "value": "0"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            },
+            {
+              "type": "ObjectMethod",
+              "start":10,"end":17,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":17,"index":17}},
+              "method": true,
+              "key": {
+                "type": "BigIntLiteral",
+                "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12}},
+                "extra": {
+                  "rawValue": "1",
+                  "raw": "1n"
+                },
+                "value": "1"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ObjectMethod",
+              "start":19,"end":29,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":29,"index":29}},
+              "method": false,
+              "key": {
+                "type": "BigIntLiteral",
+                "start":23,"end":25,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":25,"index":25}},
+                "extra": {
+                  "rawValue": "2",
+                  "raw": "2n"
+                },
+                "value": "2"
+              },
+              "computed": false,
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":27,"end":29,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":29,"index":29}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ObjectMethod",
+              "start":31,"end":42,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":42,"index":42}},
+              "method": false,
+              "key": {
+                "type": "BigIntLiteral",
+                "start":35,"end":37,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":37,"index":37}},
+                "extra": {
+                  "rawValue": "3",
+                  "raw": "3n"
+                },
+                "value": "3"
+              },
+              "computed": false,
+              "kind": "set",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":38,"end":39,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":39,"index":39},"identifierName":"_"},
+                  "name": "_"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":40,"end":42,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":42,"index":42}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ObjectMethod",
+              "start":44,"end":57,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":57,"index":57}},
+              "method": true,
+              "key": {
+                "type": "BigIntLiteral",
+                "start":50,"end":52,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":52,"index":52}},
+                "extra": {
+                  "rawValue": "4",
+                  "raw": "4n"
+                },
+                "value": "4"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": true,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":55,"end":57,"loc":{"start":{"line":1,"column":55,"index":55},"end":{"line":1,"column":57,"index":57}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ObjectMethod",
+              "start":59,"end":67,"loc":{"start":{"line":1,"column":59,"index":59},"end":{"line":1,"column":67,"index":67}},
+              "method": true,
+              "key": {
+                "type": "BigIntLiteral",
+                "start":60,"end":62,"loc":{"start":{"line":1,"column":60,"index":60},"end":{"line":1,"column":62,"index":62}},
+                "extra": {
+                  "rawValue": "5",
+                  "raw": "5n"
+                },
+                "value": "5"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":65,"end":67,"loc":{"start":{"line":1,"column":65,"index":65},"end":{"line":1,"column":67,"index":67}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

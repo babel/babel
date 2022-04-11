@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'yield'. (1:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":27,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":27,"index":27}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":14,"end":27,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":27,"index":27}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20},"identifierName":"yield"},
+              "name": "yield"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":25,"end":27,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":27,"index":27}},
+            "extra": {
+              "rawValue": 42,
+              "raw": "42"
+            },
+            "value": 42
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

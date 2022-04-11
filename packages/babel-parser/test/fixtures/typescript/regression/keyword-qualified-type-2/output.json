@@ -1,0 +1,98 @@
+{
+  "type": "File",
+  "start":0,"end":176,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":24,"index":176}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":176,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":24,"index":176}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":122,"end":151,"loc":{"start":{"line":3,"column":0,"index":122},"end":{"line":3,"column":29,"index":151}},
+        "id": {
+          "type": "Identifier",
+          "start":132,"end":133,"loc":{"start":{"line":3,"column":10,"index":132},"end":{"line":3,"column":11,"index":133},"identifierName":"A"},
+          "name": "A"
+        },
+        "extends": [
+          {
+            "type": "TSExpressionWithTypeArguments",
+            "start":142,"end":148,"loc":{"start":{"line":3,"column":20,"index":142},"end":{"line":3,"column":26,"index":148}},
+            "expression": {
+              "type": "TSQualifiedName",
+              "start":142,"end":148,"loc":{"start":{"line":3,"column":20,"index":142},"end":{"line":3,"column":26,"index":148}},
+              "left": {
+                "type": "Identifier",
+                "start":142,"end":146,"loc":{"start":{"line":3,"column":20,"index":142},"end":{"line":3,"column":24,"index":146},"identifierName":"this"},
+                "name": "this"
+              },
+              "right": {
+                "type": "Identifier",
+                "start":147,"end":148,"loc":{"start":{"line":3,"column":25,"index":147},"end":{"line":3,"column":26,"index":148},"identifierName":"B"},
+                "name": "B"
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":149,"end":151,"loc":{"start":{"line":3,"column":27,"index":149},"end":{"line":3,"column":29,"index":151}},
+          "body": []
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " These are valid TypeScript syntax (the parser doesn't produce any error),",
+            "start":0,"end":76,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":76,"index":76}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " but they are always type-checking errors.",
+            "start":77,"end":121,"loc":{"start":{"line":2,"column":0,"index":77},"end":{"line":2,"column":44,"index":121}}
+          }
+        ]
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":152,"end":176,"loc":{"start":{"line":4,"column":0,"index":152},"end":{"line":4,"column":24,"index":176}},
+        "id": {
+          "type": "Identifier",
+          "start":157,"end":158,"loc":{"start":{"line":4,"column":5,"index":157},"end":{"line":4,"column":6,"index":158},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeAnnotation": {
+          "type": "TSTypeQuery",
+          "start":161,"end":175,"loc":{"start":{"line":4,"column":9,"index":161},"end":{"line":4,"column":23,"index":175}},
+          "exprName": {
+            "type": "TSQualifiedName",
+            "start":168,"end":175,"loc":{"start":{"line":4,"column":16,"index":168},"end":{"line":4,"column":23,"index":175}},
+            "left": {
+              "type": "Identifier",
+              "start":168,"end":171,"loc":{"start":{"line":4,"column":16,"index":168},"end":{"line":4,"column":19,"index":171},"identifierName":"var"},
+              "name": "var"
+            },
+            "right": {
+              "type": "Identifier",
+              "start":172,"end":175,"loc":{"start":{"line":4,"column":20,"index":172},"end":{"line":4,"column":23,"index":175},"identifierName":"bar"},
+              "name": "bar"
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " These are valid TypeScript syntax (the parser doesn't produce any error),",
+      "start":0,"end":76,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":76,"index":76}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " but they are always type-checking errors.",
+      "start":77,"end":121,"loc":{"start":{"line":2,"column":0,"index":77},"end":{"line":2,"column":44,"index":121}}
+    }
+  ]
+}

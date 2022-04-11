@@ -1,0 +1,12 @@
+{
+  "validateLogs": true,
+  "presets": [
+    ["env", {
+      "targets": { "node": 10 }
+    }]
+  ],
+  "plugins": [
+    ["proposal-class-properties", { "loose": true }],
+    ["proposal-private-methods", { "loose": true }]
+  ]
+}

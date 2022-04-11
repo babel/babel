@@ -1,0 +1,1 @@
+{"version":3,"sources":["stdin"],"names":[],"mappings":";;AAAA,GAAG,CAAC,GAAJ,CAAQ,UAAA,CAAC;AAAA,SAAI,CAAC,GAAG,CAAR;AAAA,CAAT","file":"test.js","sourcesContent":["arr.map(x => x * x);"]}

@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+  "errors": [
+    "SyntaxError: Illegal expression. Wrap left hand side or entire exponentiation in parentheses. (1:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+          "left": {
+            "type": "UnaryExpression",
+            "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}},
+            "operator": "-",
+            "prefix": true,
+            "argument": {
+              "type": "NumericLiteral",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2}},
+              "extra": {
+                "rawValue": 5,
+                "raw": "5"
+              },
+              "value": 5
+            }
+          },
+          "operator": "**",
+          "right": {
+            "type": "NumericLiteral",
+            "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+            "extra": {
+              "rawValue": 6,
+              "raw": "6"
+            },
+            "value": 6
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

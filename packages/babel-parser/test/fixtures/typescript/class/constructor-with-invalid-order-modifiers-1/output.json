@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":69}},
+  "errors": [
+    "SyntaxError: 'override' modifier must precede 'readonly' modifier. (2:23)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":69}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":69}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"D"},
+          "name": "D"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":69,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":3,"column":1,"index":69}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":22,"end":67,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":47,"index":67}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":33,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":13,"index":33},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":34,"end":63,"loc":{"start":{"line":2,"column":14,"index":34},"end":{"line":2,"column":43,"index":63}},
+                  "readonly": true,
+                  "override": true,
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":52,"end":63,"loc":{"start":{"line":2,"column":32,"index":52},"end":{"line":2,"column":43,"index":63},"identifierName":"foo"},
+                    "name": "foo",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":55,"end":63,"loc":{"start":{"line":2,"column":35,"index":55},"end":{"line":2,"column":43,"index":63}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":57,"end":63,"loc":{"start":{"line":2,"column":37,"index":57},"end":{"line":2,"column":43,"index":63}}
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":65,"end":67,"loc":{"start":{"line":2,"column":45,"index":65},"end":{"line":2,"column":47,"index":67}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

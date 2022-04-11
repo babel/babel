@@ -1,0 +1,38 @@
+[ignore]
+<PROJECT_ROOT>/build/.*
+<PROJECT_ROOT>/packages/.*/lib
+<PROJECT_ROOT>/packages/.*/test
+<PROJECT_ROOT>/codemods/.*/lib
+<PROJECT_ROOT>/codemods/.*/test
+<PROJECT_ROOT>/node_modules/module-deps/
+<PROJECT_ROOT>/node_modules/webpack-cli/
+<PROJECT_ROOT>/test/runtime-integration/
+
+[include]
+packages/*/src
+codemods/*/src
+
+[libs]
+lib/file.js
+lib/parser.js
+lib/third-party-libs.js.flow
+lib/preset-modules.js.flow
+lib/babel-polyfills.js.flow
+packages/babel-types/lib/index.js.flow
+lib/babel-packages.js.flow
+lib/package-json.js.flow
+
+[options]
+include_warnings=true
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment= \\(.\\|\n\\)*\\$FlowIssue
+suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
+suppress_type=$FlowFixMe
+suppress_type=$FlowSubtype
+esproposal.export_star_as=enable
+esproposal.optional_chaining=enable
+esproposal.nullish_coalescing=enable
+module.name_mapper='^@babel/\([a-zA-Z0-9_-]+\)$' -> '<PROJECT_ROOT>/packages/babel-\1/src/index'
+; Todo: can not make it works, 🤷‍♂️
+; module.name_mapper='^@babel/plugin-syntax-import-meta$' -> '<PROJECT_ROOT>/packages/babel-standalone/node_modules/@babel/plugin-syntax-import-meta/lib/index'
+module.ignore_non_literal_requires=true

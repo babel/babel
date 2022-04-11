@@ -1,0 +1,2 @@
+babel:
+  --skip-initial-build requires --watch

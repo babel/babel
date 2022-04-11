@@ -1,0 +1,32 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "test": {
+          "type": "Identifier",
+          "start":4,"end":8,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":8,"index":8},"identifierName":"cond"},
+          "name": "cond"
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start":10,"end":14,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":14,"index":14}},
+          "expression": {
+            "type": "Identifier",
+            "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"let"},
+            "name": "let"
+          }
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}

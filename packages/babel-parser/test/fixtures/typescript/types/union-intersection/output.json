@@ -1,0 +1,307 @@
+{
+  "type": "File",
+  "start":0,"end":301,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":17,"index":301}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":301,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":17,"index":301}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":36,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":36,"index":36}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":36,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":36,"index":36},"identifierName":"union"},
+              "name": "union",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":9,"end":36,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":36,"index":36}},
+                "typeAnnotation": {
+                  "type": "TSUnionType",
+                  "start":11,"end":36,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":36,"index":36}},
+                  "types": [
+                    {
+                      "type": "TSNumberKeyword",
+                      "start":11,"end":17,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":17,"index":17}}
+                    },
+                    {
+                      "type": "TSNullKeyword",
+                      "start":20,"end":24,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":24,"index":24}}
+                    },
+                    {
+                      "type": "TSUndefinedKeyword",
+                      "start":27,"end":36,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":36,"index":36}}
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":38,"end":72,"loc":{"start":{"line":2,"column":0,"index":38},"end":{"line":2,"column":34,"index":72}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":42,"end":71,"loc":{"start":{"line":2,"column":4,"index":42},"end":{"line":2,"column":33,"index":71}},
+            "id": {
+              "type": "Identifier",
+              "start":42,"end":71,"loc":{"start":{"line":2,"column":4,"index":42},"end":{"line":2,"column":33,"index":71},"identifierName":"intersection"},
+              "name": "intersection",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":54,"end":71,"loc":{"start":{"line":2,"column":16,"index":54},"end":{"line":2,"column":33,"index":71}},
+                "typeAnnotation": {
+                  "type": "TSIntersectionType",
+                  "start":56,"end":71,"loc":{"start":{"line":2,"column":18,"index":56},"end":{"line":2,"column":33,"index":71}},
+                  "types": [
+                    {
+                      "type": "TSNumberKeyword",
+                      "start":56,"end":62,"loc":{"start":{"line":2,"column":18,"index":56},"end":{"line":2,"column":24,"index":62}}
+                    },
+                    {
+                      "type": "TSStringKeyword",
+                      "start":65,"end":71,"loc":{"start":{"line":2,"column":27,"index":65},"end":{"line":2,"column":33,"index":71}}
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":73,"end":116,"loc":{"start":{"line":3,"column":0,"index":73},"end":{"line":3,"column":43,"index":116}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":77,"end":115,"loc":{"start":{"line":3,"column":4,"index":77},"end":{"line":3,"column":42,"index":115}},
+            "id": {
+              "type": "Identifier",
+              "start":77,"end":115,"loc":{"start":{"line":3,"column":4,"index":77},"end":{"line":3,"column":42,"index":115},"identifierName":"precedence1"},
+              "name": "precedence1",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":88,"end":115,"loc":{"start":{"line":3,"column":15,"index":88},"end":{"line":3,"column":42,"index":115}},
+                "typeAnnotation": {
+                  "type": "TSUnionType",
+                  "start":90,"end":115,"loc":{"start":{"line":3,"column":17,"index":90},"end":{"line":3,"column":42,"index":115}},
+                  "types": [
+                    {
+                      "type": "TSNumberKeyword",
+                      "start":90,"end":96,"loc":{"start":{"line":3,"column":17,"index":90},"end":{"line":3,"column":23,"index":96}}
+                    },
+                    {
+                      "type": "TSIntersectionType",
+                      "start":99,"end":115,"loc":{"start":{"line":3,"column":26,"index":99},"end":{"line":3,"column":42,"index":115}},
+                      "types": [
+                        {
+                          "type": "TSStringKeyword",
+                          "start":99,"end":105,"loc":{"start":{"line":3,"column":26,"index":99},"end":{"line":3,"column":32,"index":105}}
+                        },
+                        {
+                          "type": "TSBooleanKeyword",
+                          "start":108,"end":115,"loc":{"start":{"line":3,"column":35,"index":108},"end":{"line":3,"column":42,"index":115}}
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":117,"end":160,"loc":{"start":{"line":4,"column":0,"index":117},"end":{"line":4,"column":43,"index":160}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":121,"end":159,"loc":{"start":{"line":4,"column":4,"index":121},"end":{"line":4,"column":42,"index":159}},
+            "id": {
+              "type": "Identifier",
+              "start":121,"end":159,"loc":{"start":{"line":4,"column":4,"index":121},"end":{"line":4,"column":42,"index":159},"identifierName":"precedence2"},
+              "name": "precedence2",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":132,"end":159,"loc":{"start":{"line":4,"column":15,"index":132},"end":{"line":4,"column":42,"index":159}},
+                "typeAnnotation": {
+                  "type": "TSUnionType",
+                  "start":134,"end":159,"loc":{"start":{"line":4,"column":17,"index":134},"end":{"line":4,"column":42,"index":159}},
+                  "types": [
+                    {
+                      "type": "TSIntersectionType",
+                      "start":134,"end":149,"loc":{"start":{"line":4,"column":17,"index":134},"end":{"line":4,"column":32,"index":149}},
+                      "types": [
+                        {
+                          "type": "TSNumberKeyword",
+                          "start":134,"end":140,"loc":{"start":{"line":4,"column":17,"index":134},"end":{"line":4,"column":23,"index":140}}
+                        },
+                        {
+                          "type": "TSStringKeyword",
+                          "start":143,"end":149,"loc":{"start":{"line":4,"column":26,"index":143},"end":{"line":4,"column":32,"index":149}}
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TSBooleanKeyword",
+                      "start":152,"end":159,"loc":{"start":{"line":4,"column":35,"index":152},"end":{"line":4,"column":42,"index":159}}
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":162,"end":186,"loc":{"start":{"line":6,"column":0,"index":162},"end":{"line":6,"column":24,"index":186}},
+        "id": {
+          "type": "Identifier",
+          "start":167,"end":168,"loc":{"start":{"line":6,"column":5,"index":167},"end":{"line":6,"column":6,"index":168},"identifierName":"J"},
+          "name": "J"
+        },
+        "typeAnnotation": {
+          "type": "TSUnionType",
+          "start":171,"end":186,"loc":{"start":{"line":6,"column":9,"index":171},"end":{"line":6,"column":24,"index":186}},
+          "types": [
+            {
+              "type": "TSNumberKeyword",
+              "start":171,"end":177,"loc":{"start":{"line":6,"column":9,"index":171},"end":{"line":6,"column":15,"index":177}}
+            },
+            {
+              "type": "TSStringKeyword",
+              "start":180,"end":186,"loc":{"start":{"line":6,"column":18,"index":180},"end":{"line":6,"column":24,"index":186}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":187,"end":211,"loc":{"start":{"line":7,"column":0,"index":187},"end":{"line":7,"column":24,"index":211}},
+        "id": {
+          "type": "Identifier",
+          "start":192,"end":193,"loc":{"start":{"line":7,"column":5,"index":192},"end":{"line":7,"column":6,"index":193},"identifierName":"F"},
+          "name": "F"
+        },
+        "typeAnnotation": {
+          "type": "TSIntersectionType",
+          "start":196,"end":211,"loc":{"start":{"line":7,"column":9,"index":196},"end":{"line":7,"column":24,"index":211}},
+          "types": [
+            {
+              "type": "TSNumberKeyword",
+              "start":196,"end":202,"loc":{"start":{"line":7,"column":9,"index":196},"end":{"line":7,"column":15,"index":202}}
+            },
+            {
+              "type": "TSStringKeyword",
+              "start":205,"end":211,"loc":{"start":{"line":7,"column":18,"index":205},"end":{"line":7,"column":24,"index":211}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":212,"end":238,"loc":{"start":{"line":8,"column":0,"index":212},"end":{"line":8,"column":26,"index":238}},
+        "id": {
+          "type": "Identifier",
+          "start":217,"end":218,"loc":{"start":{"line":8,"column":5,"index":217},"end":{"line":8,"column":6,"index":218},"identifierName":"K"},
+          "name": "K"
+        },
+        "typeAnnotation": {
+          "type": "TSUnionType",
+          "start":221,"end":238,"loc":{"start":{"line":8,"column":9,"index":221},"end":{"line":8,"column":26,"index":238}},
+          "types": [
+            {
+              "type": "TSNumberKeyword",
+              "start":223,"end":229,"loc":{"start":{"line":8,"column":11,"index":223},"end":{"line":8,"column":17,"index":229}}
+            },
+            {
+              "type": "TSStringKeyword",
+              "start":232,"end":238,"loc":{"start":{"line":8,"column":20,"index":232},"end":{"line":8,"column":26,"index":238}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":239,"end":265,"loc":{"start":{"line":9,"column":0,"index":239},"end":{"line":9,"column":26,"index":265}},
+        "id": {
+          "type": "Identifier",
+          "start":244,"end":245,"loc":{"start":{"line":9,"column":5,"index":244},"end":{"line":9,"column":6,"index":245},"identifierName":"M"},
+          "name": "M"
+        },
+        "typeAnnotation": {
+          "type": "TSIntersectionType",
+          "start":248,"end":265,"loc":{"start":{"line":9,"column":9,"index":248},"end":{"line":9,"column":26,"index":265}},
+          "types": [
+            {
+              "type": "TSNumberKeyword",
+              "start":250,"end":256,"loc":{"start":{"line":9,"column":11,"index":250},"end":{"line":9,"column":17,"index":256}}
+            },
+            {
+              "type": "TSStringKeyword",
+              "start":259,"end":265,"loc":{"start":{"line":9,"column":20,"index":259},"end":{"line":9,"column":26,"index":265}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":266,"end":283,"loc":{"start":{"line":10,"column":0,"index":266},"end":{"line":10,"column":17,"index":283}},
+        "id": {
+          "type": "Identifier",
+          "start":271,"end":272,"loc":{"start":{"line":10,"column":5,"index":271},"end":{"line":10,"column":6,"index":272},"identifierName":"N"},
+          "name": "N"
+        },
+        "typeAnnotation": {
+          "type": "TSUnionType",
+          "start":275,"end":283,"loc":{"start":{"line":10,"column":9,"index":275},"end":{"line":10,"column":17,"index":283}},
+          "types": [
+            {
+              "type": "TSNumberKeyword",
+              "start":277,"end":283,"loc":{"start":{"line":10,"column":11,"index":277},"end":{"line":10,"column":17,"index":283}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":284,"end":301,"loc":{"start":{"line":11,"column":0,"index":284},"end":{"line":11,"column":17,"index":301}},
+        "id": {
+          "type": "Identifier",
+          "start":289,"end":290,"loc":{"start":{"line":11,"column":5,"index":289},"end":{"line":11,"column":6,"index":290},"identifierName":"O"},
+          "name": "O"
+        },
+        "typeAnnotation": {
+          "type": "TSIntersectionType",
+          "start":293,"end":301,"loc":{"start":{"line":11,"column":9,"index":293},"end":{"line":11,"column":17,"index":301}},
+          "types": [
+            {
+              "type": "TSStringKeyword",
+              "start":295,"end":301,"loc":{"start":{"line":11,"column":11,"index":295},"end":{"line":11,"column":17,"index":301}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

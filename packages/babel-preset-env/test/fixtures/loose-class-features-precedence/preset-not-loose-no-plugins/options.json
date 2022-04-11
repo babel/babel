@@ -1,0 +1,8 @@
+{
+  "validateLogs": true,
+  "presets": [
+    ["env", {
+      "targets": { "node": 10 }
+    }]
+  ]
+}

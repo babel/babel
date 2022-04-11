@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":29,"index":46}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":29,"index":46}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      },
+      {
+        "type": "TSDeclareFunction",
+        "start":17,"end":46,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":29,"index":46}},
+        "declare": true,
+        "id": {
+          "type": "Identifier",
+          "start":34,"end":37,"loc":{"start":{"line":3,"column":17,"index":34},"end":{"line":3,"column":20,"index":37},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":39,"end":45,"loc":{"start":{"line":3,"column":22,"index":39},"end":{"line":3,"column":28,"index":45}},
+          "typeAnnotation": {
+            "type": "TSVoidKeyword",
+            "start":41,"end":45,"loc":{"start":{"line":3,"column":24,"index":41},"end":{"line":3,"column":28,"index":45}}
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

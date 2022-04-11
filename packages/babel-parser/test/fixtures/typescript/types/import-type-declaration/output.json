@@ -1,0 +1,109 @@
+{
+  "type": "File",
+  "start":0,"end":99,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":36,"index":99}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":99,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":36,"index":99}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "importKind": "type",
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}},
+            "local": {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"T"},
+              "name": "T"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":19,"end":26,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":26,"index":26}},
+          "extra": {
+            "rawValue": "./mod",
+            "raw": "'./mod'"
+          },
+          "value": "./mod"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":28,"end":62,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":34,"index":62}},
+        "importKind": "type",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":42,"end":43,"loc":{"start":{"line":2,"column":14,"index":42},"end":{"line":2,"column":15,"index":43}},
+            "imported": {
+              "type": "Identifier",
+              "start":42,"end":43,"loc":{"start":{"line":2,"column":14,"index":42},"end":{"line":2,"column":15,"index":43},"identifierName":"A"},
+              "name": "A"
+            },
+            "importKind": "value",
+            "local": {
+              "type": "Identifier",
+              "start":42,"end":43,"loc":{"start":{"line":2,"column":14,"index":42},"end":{"line":2,"column":15,"index":43},"identifierName":"A"},
+              "name": "A"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start":45,"end":46,"loc":{"start":{"line":2,"column":17,"index":45},"end":{"line":2,"column":18,"index":46}},
+            "imported": {
+              "type": "Identifier",
+              "start":45,"end":46,"loc":{"start":{"line":2,"column":17,"index":45},"end":{"line":2,"column":18,"index":46},"identifierName":"B"},
+              "name": "B"
+            },
+            "importKind": "value",
+            "local": {
+              "type": "Identifier",
+              "start":45,"end":46,"loc":{"start":{"line":2,"column":17,"index":45},"end":{"line":2,"column":18,"index":46},"identifierName":"B"},
+              "name": "B"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":54,"end":61,"loc":{"start":{"line":2,"column":26,"index":54},"end":{"line":2,"column":33,"index":61}},
+          "extra": {
+            "rawValue": "./mod",
+            "raw": "'./mod'"
+          },
+          "value": "./mod"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":63,"end":99,"loc":{"start":{"line":3,"column":0,"index":63},"end":{"line":3,"column":36,"index":99}},
+        "importKind": "type",
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":75,"end":85,"loc":{"start":{"line":3,"column":12,"index":75},"end":{"line":3,"column":22,"index":85}},
+            "local": {
+              "type": "Identifier",
+              "start":80,"end":85,"loc":{"start":{"line":3,"column":17,"index":80},"end":{"line":3,"column":22,"index":85},"identifierName":"Types"},
+              "name": "Types"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":91,"end":98,"loc":{"start":{"line":3,"column":28,"index":91},"end":{"line":3,"column":35,"index":98}},
+          "extra": {
+            "rawValue": "./mod",
+            "raw": "'./mod'"
+          },
+          "value": "./mod"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

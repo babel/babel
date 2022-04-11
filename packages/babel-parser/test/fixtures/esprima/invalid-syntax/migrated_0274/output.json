@@ -1,0 +1,80 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":43,"index":43}},
+  "errors": [
+    "SyntaxError: Duplicate constructor in the same class. (1:25)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":43,"index":43}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":43,"index":43}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":43,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":43,"index":43}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":9,"end":24,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":24,"index":24}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":9,"end":20,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":20,"index":20},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":22,"end":24,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":24,"index":24}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":25,"end":42,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":42,"index":42}},
+              "static": false,
+              "key": {
+                "type": "StringLiteral",
+                "start":25,"end":38,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":38,"index":38}},
+                "extra": {
+                  "rawValue": "constructor",
+                  "raw": "\"constructor\""
+                },
+                "value": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":40,"end":42,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":42,"index":42}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-class-static-block"],
+  "minNodeVersion": "12.0.0"
+}

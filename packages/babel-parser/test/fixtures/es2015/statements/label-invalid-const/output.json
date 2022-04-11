@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "errors": [
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "body": {
+          "type": "VariableDeclaration",
+          "start":5,"end":22,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":22,"index":22}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":11,"end":21,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":21,"index":21}},
+              "id": {
+                "type": "Identifier",
+                "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "init": {
+                "type": "NullLiteral",
+                "start":17,"end":21,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":21,"index":21}}
+              }
+            }
+          ],
+          "kind": "const"
+        },
+        "label": {
+          "type": "Identifier",
+          "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3},"identifierName":"foo"},
+          "name": "foo"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

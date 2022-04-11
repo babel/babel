@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":55,"index":55}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:36)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":55,"index":55}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":55,"index":55}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14},"identifierName":"hello"},
+          "name": "hello"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":17,"end":55,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":55,"index":55}},
+          "body": [],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":19,"end":39,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":39,"index":39}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":19,"end":38,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":38,"index":38}},
+                "extra": {
+                  "rawValue": "octal directive\\1",
+                  "raw": "\"octal directive\\1\"",
+                  "expressionValue": "octal directive\u0001"
+                },
+                "value": "octal directive\\1"
+              }
+            },
+            {
+              "type": "Directive",
+              "start":40,"end":53,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":53,"index":53}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":40,"end":52,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":52,"index":52}},
+                "extra": {
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\"",
+                  "expressionValue": "use strict"
+                },
+                "value": "use strict"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

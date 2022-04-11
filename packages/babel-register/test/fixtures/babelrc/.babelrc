@@ -1,0 +1,6 @@
+{
+    "plugins": [
+        "@babel/transform-modules-commonjs",
+        "@babel/plugin-transform-arrow-functions"
+    ]
+}

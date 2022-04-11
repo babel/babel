@@ -1,0 +1,99 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":42,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":1,"index":42}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"s"},
+              "name": "s"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":10,"end":42,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":42}},
+              "properties": [
+                {
+                  "type": "ObjectMethod",
+                  "start":14,"end":39,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":27,"index":39}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":14,"end":20,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":8,"index":20},"identifierName":"delete"},
+                    "name": "delete"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "AssignmentPattern",
+                      "start":24,"end":35,"loc":{"start":{"line":2,"column":12,"index":24},"end":{"line":2,"column":23,"index":35}},
+                      "left": {
+                        "type": "Identifier",
+                        "start":24,"end":25,"loc":{"start":{"line":2,"column":12,"index":24},"end":{"line":2,"column":13,"index":25},"identifierName":"d"},
+                        "name": "d"
+                      },
+                      "right": {
+                        "type": "JSXElement",
+                        "start":28,"end":35,"loc":{"start":{"line":2,"column":16,"index":28},"end":{"line":2,"column":23,"index":35}},
+                        "openingElement": {
+                          "type": "JSXOpeningElement",
+                          "start":28,"end":35,"loc":{"start":{"line":2,"column":16,"index":28},"end":{"line":2,"column":23,"index":35}},
+                          "name": {
+                            "type": "JSXIdentifier",
+                            "start":29,"end":32,"loc":{"start":{"line":2,"column":17,"index":29},"end":{"line":2,"column":20,"index":32}},
+                            "name": "Foo"
+                          },
+                          "attributes": [],
+                          "selfClosing": true
+                        },
+                        "closingElement": null,
+                        "children": []
+                      }
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":37,"end":39,"loc":{"start":{"line":2,"column":25,"index":37},"end":{"line":2,"column":27,"index":39}},
+                    "body": [],
+                    "directives": []
+                  },
+                  "typeParameters": {
+                    "type": "TypeParameterDeclaration",
+                    "start":20,"end":23,"loc":{"start":{"line":2,"column":8,"index":20},"end":{"line":2,"column":11,"index":23}},
+                    "params": [
+                      {
+                        "type": "TypeParameter",
+                        "start":21,"end":22,"loc":{"start":{"line":2,"column":9,"index":21},"end":{"line":2,"column":10,"index":22}},
+                        "name": "T",
+                        "variance": null
+                      }
+                    ]
+                  }
+                }
+              ],
+              "extra": {
+                "trailingComma": 39
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

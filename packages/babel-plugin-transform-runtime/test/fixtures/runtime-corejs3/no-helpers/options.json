@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["transform-runtime", { "helpers": false, "corejs": 3 }],
+    "transform-classes"
+  ]
+}

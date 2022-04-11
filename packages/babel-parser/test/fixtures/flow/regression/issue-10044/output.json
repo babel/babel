@@ -1,0 +1,186 @@
+{
+  "type": "File",
+  "start":0,"end":140,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":34,"index":140}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":140,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":34,"index":140}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "id": {
+          "type": "Identifier",
+          "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16},"identifierName":"C1"},
+          "name": "C1"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":17,"end":19,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":19,"index":19}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "DeclareInterface",
+        "start":20,"end":43,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":2,"column":23,"index":43}},
+        "id": {
+          "type": "Identifier",
+          "start":38,"end":40,"loc":{"start":{"line":2,"column":18,"index":38},"end":{"line":2,"column":20,"index":40},"identifierName":"I1"},
+          "name": "I1"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":41,"end":43,"loc":{"start":{"line":2,"column":21,"index":41},"end":{"line":2,"column":23,"index":43}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "DeclareTypeAlias",
+        "start":44,"end":69,"loc":{"start":{"line":3,"column":0,"index":44},"end":{"line":3,"column":25,"index":69}},
+        "id": {
+          "type": "Identifier",
+          "start":57,"end":59,"loc":{"start":{"line":3,"column":13,"index":57},"end":{"line":3,"column":15,"index":59},"identifierName":"T1"},
+          "name": "T1"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "NumberTypeAnnotation",
+          "start":62,"end":68,"loc":{"start":{"line":3,"column":18,"index":62},"end":{"line":3,"column":24,"index":68}}
+        }
+      },
+      {
+        "type": "InterfaceDeclaration",
+        "start":71,"end":86,"loc":{"start":{"line":5,"column":0,"index":71},"end":{"line":5,"column":15,"index":86}},
+        "id": {
+          "type": "Identifier",
+          "start":81,"end":83,"loc":{"start":{"line":5,"column":10,"index":81},"end":{"line":5,"column":12,"index":83},"identifierName":"I2"},
+          "name": "I2"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":84,"end":86,"loc":{"start":{"line":5,"column":13,"index":84},"end":{"line":5,"column":15,"index":86}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":87,"end":104,"loc":{"start":{"line":6,"column":0,"index":87},"end":{"line":6,"column":17,"index":104}},
+        "id": {
+          "type": "Identifier",
+          "start":92,"end":94,"loc":{"start":{"line":6,"column":5,"index":92},"end":{"line":6,"column":7,"index":94},"identifierName":"T2"},
+          "name": "T2"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "NumberTypeAnnotation",
+          "start":97,"end":103,"loc":{"start":{"line":6,"column":10,"index":97},"end":{"line":6,"column":16,"index":103}}
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":106,"end":140,"loc":{"start":{"line":8,"column":0,"index":106},"end":{"line":8,"column":34,"index":140}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":120,"end":122,"loc":{"start":{"line":8,"column":14,"index":120},"end":{"line":8,"column":16,"index":122}},
+            "local": {
+              "type": "Identifier",
+              "start":120,"end":122,"loc":{"start":{"line":8,"column":14,"index":120},"end":{"line":8,"column":16,"index":122},"identifierName":"C1"},
+              "name": "C1"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":120,"end":122,"loc":{"start":{"line":8,"column":14,"index":120},"end":{"line":8,"column":16,"index":122},"identifierName":"C1"},
+              "name": "C1"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":124,"end":126,"loc":{"start":{"line":8,"column":18,"index":124},"end":{"line":8,"column":20,"index":126}},
+            "local": {
+              "type": "Identifier",
+              "start":124,"end":126,"loc":{"start":{"line":8,"column":18,"index":124},"end":{"line":8,"column":20,"index":126},"identifierName":"I1"},
+              "name": "I1"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":124,"end":126,"loc":{"start":{"line":8,"column":18,"index":124},"end":{"line":8,"column":20,"index":126},"identifierName":"I1"},
+              "name": "I1"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":128,"end":130,"loc":{"start":{"line":8,"column":22,"index":128},"end":{"line":8,"column":24,"index":130}},
+            "local": {
+              "type": "Identifier",
+              "start":128,"end":130,"loc":{"start":{"line":8,"column":22,"index":128},"end":{"line":8,"column":24,"index":130},"identifierName":"I2"},
+              "name": "I2"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":128,"end":130,"loc":{"start":{"line":8,"column":22,"index":128},"end":{"line":8,"column":24,"index":130},"identifierName":"I2"},
+              "name": "I2"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":132,"end":134,"loc":{"start":{"line":8,"column":26,"index":132},"end":{"line":8,"column":28,"index":134}},
+            "local": {
+              "type": "Identifier",
+              "start":132,"end":134,"loc":{"start":{"line":8,"column":26,"index":132},"end":{"line":8,"column":28,"index":134},"identifierName":"T1"},
+              "name": "T1"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":132,"end":134,"loc":{"start":{"line":8,"column":26,"index":132},"end":{"line":8,"column":28,"index":134},"identifierName":"T1"},
+              "name": "T1"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":136,"end":138,"loc":{"start":{"line":8,"column":30,"index":136},"end":{"line":8,"column":32,"index":138}},
+            "local": {
+              "type": "Identifier",
+              "start":136,"end":138,"loc":{"start":{"line":8,"column":30,"index":136},"end":{"line":8,"column":32,"index":138},"identifierName":"T2"},
+              "name": "T2"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":136,"end":138,"loc":{"start":{"line":8,"column":30,"index":136},"end":{"line":8,"column":32,"index":138},"identifierName":"T2"},
+              "name": "T2"
+            }
+          }
+        ],
+        "source": null,
+        "exportKind": "type",
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

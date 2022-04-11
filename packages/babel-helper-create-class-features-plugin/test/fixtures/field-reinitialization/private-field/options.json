@@ -1,0 +1,6 @@
+{
+  "presets": [["env", { "shippedProposals": true }]],
+  "targets": {
+    "chrome": "70"
+  }
+}

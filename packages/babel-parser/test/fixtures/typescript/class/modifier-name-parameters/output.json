@@ -1,0 +1,72 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'private'. (2:14)",
+    "SyntaxError: Unexpected reserved word 'public'. (2:23)",
+    "SyntaxError: Unexpected reserved word 'static'. (2:31)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":58,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":58}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":14,"end":56,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":3,"column":3,"index":56}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":14,"end":25,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":13,"index":25},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":26,"end":33,"loc":{"start":{"line":2,"column":14,"index":26},"end":{"line":2,"column":21,"index":33},"identifierName":"private"},
+                  "name": "private"
+                },
+                {
+                  "type": "Identifier",
+                  "start":35,"end":41,"loc":{"start":{"line":2,"column":23,"index":35},"end":{"line":2,"column":29,"index":41},"identifierName":"public"},
+                  "name": "public"
+                },
+                {
+                  "type": "Identifier",
+                  "start":43,"end":49,"loc":{"start":{"line":2,"column":31,"index":43},"end":{"line":2,"column":37,"index":49},"identifierName":"static"},
+                  "name": "static"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":51,"end":56,"loc":{"start":{"line":2,"column":39,"index":51},"end":{"line":3,"column":3,"index":56}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

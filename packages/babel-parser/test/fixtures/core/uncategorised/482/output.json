@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+  "errors": [
+    "SyntaxError: Binding 'eval' in strict mode. (1:41)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14},"identifierName":"hello"},
+          "name": "hello"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":17,"end":53,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":53,"index":53}},
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start":32,"end":51,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":51,"index":51}},
+              "id": {
+                "type": "Identifier",
+                "start":41,"end":45,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":45,"index":45},"identifierName":"eval"},
+                "name": "eval"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":48,"end":51,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":51,"index":51}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":18,"end":31,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":31,"index":31}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":18,"end":30,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":30,"index":30}},
+                "extra": {
+                  "rawValue": "use strict",
+                  "raw": "'use strict'",
+                  "expressionValue": "use strict"
+                },
+                "value": "use strict"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

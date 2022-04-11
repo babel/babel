@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":42,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":3,"column":1,"index":42}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":15,"end":40,"loc":{"start":{"line":2,"column":4,"index":15},"end":{"line":2,"column":29,"index":40}},
+              "key": {
+                "type": "Identifier",
+                "start":15,"end":18,"loc":{"start":{"line":2,"column":4,"index":15},"end":{"line":2,"column":7,"index":18},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":15,"end":40,"loc":{"start":{"line":2,"column":4,"index":15},"end":{"line":2,"column":29,"index":40}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "this": {
+                  "type": "FunctionTypeParam",
+                  "start":19,"end":32,"loc":{"start":{"line":2,"column":8,"index":19},"end":{"line":2,"column":21,"index":32}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start":26,"end":32,"loc":{"start":{"line":2,"column":15,"index":26},"end":{"line":2,"column":21,"index":32}}
+                  }
+                },
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":36,"end":40,"loc":{"start":{"line":2,"column":25,"index":36},"end":{"line":2,"column":29,"index":40}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

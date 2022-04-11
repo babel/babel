@@ -1,0 +1,92 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":56}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":56}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":56}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":11,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":11,"index":11},"identifierName":"Fails"},
+          "name": "Fails"
+        },
+        "superClass": {
+          "type": "ClassExpression",
+          "start":20,"end":35,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":35,"index":35}},
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":26,"end":35,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":35,"index":35}},
+            "body": [
+              {
+                "type": "ClassMethod",
+                "start":28,"end":33,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":33,"index":33}},
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29},"identifierName":"c"},
+                  "name": "c"
+                },
+                "computed": false,
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":31,"end":33,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":33,"index":33}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            ]
+          }
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":36,"end":56,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":3,"column":1,"index":56}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":40,"end":54,"loc":{"start":{"line":2,"column":2,"index":40},"end":{"line":2,"column":16,"index":54}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":40,"end":41,"loc":{"start":{"line":2,"column":2,"index":40},"end":{"line":2,"column":3,"index":41},"identifierName":"c"},
+                "name": "c"
+              },
+              "computed": false,
+              "value": {
+                "type": "CallExpression",
+                "start":44,"end":53,"loc":{"start":{"line":2,"column":6,"index":44},"end":{"line":2,"column":15,"index":53}},
+                "callee": {
+                  "type": "MemberExpression",
+                  "start":44,"end":51,"loc":{"start":{"line":2,"column":6,"index":44},"end":{"line":2,"column":13,"index":51}},
+                  "object": {
+                    "type": "Super",
+                    "start":44,"end":49,"loc":{"start":{"line":2,"column":6,"index":44},"end":{"line":2,"column":11,"index":49}}
+                  },
+                  "computed": false,
+                  "property": {
+                    "type": "Identifier",
+                    "start":50,"end":51,"loc":{"start":{"line":2,"column":12,"index":50},"end":{"line":2,"column":13,"index":51},"identifierName":"c"},
+                    "name": "c"
+                  }
+                },
+                "arguments": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

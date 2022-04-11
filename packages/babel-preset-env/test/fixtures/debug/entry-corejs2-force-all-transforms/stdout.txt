@@ -1,0 +1,80 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "55"
+}
+
+Using modules transform: false
+
+Using plugins:
+  proposal-class-static-block { chrome < 94 }
+  proposal-private-property-in-object { chrome < 91 }
+  proposal-class-properties { chrome < 74 }
+  proposal-private-methods { chrome < 84 }
+  proposal-numeric-separator { chrome < 75 }
+  proposal-logical-assignment-operators { chrome < 85 }
+  proposal-nullish-coalescing-operator { chrome < 80 }
+  proposal-optional-chaining { chrome < 80 }
+  proposal-json-strings { chrome < 66 }
+  proposal-optional-catch-binding { chrome < 66 }
+  transform-parameters { }
+  proposal-async-generator-functions { chrome < 63 }
+  proposal-object-rest-spread { chrome < 60 }
+  transform-dotall-regex { chrome < 62 }
+  proposal-unicode-property-regex { chrome < 64 }
+  transform-named-capturing-groups-regex { chrome < 64 }
+  transform-async-to-generator { }
+  transform-exponentiation-operator { }
+  transform-template-literals { }
+  transform-literals { }
+  transform-function-name { }
+  transform-arrow-functions { }
+  transform-block-scoped-functions { }
+  transform-classes { }
+  transform-object-super { }
+  transform-shorthand-properties { }
+  transform-duplicate-keys { }
+  transform-computed-properties { }
+  transform-for-of { }
+  transform-sticky-regex { }
+  transform-unicode-escapes { }
+  transform-unicode-regex { }
+  transform-spread { }
+  transform-destructuring { }
+  transform-block-scoping { }
+  transform-typeof-symbol { }
+  transform-new-target { }
+  transform-regenerator { }
+  transform-member-expression-literals { }
+  transform-property-literals { }
+  transform-reserved-words { }
+  proposal-export-namespace-from { chrome < 72 }
+  syntax-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "chrome": "55"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-force-all-transforms/input.mjs]
+The corejs2 polyfill entry has been replaced with the following polyfills:
+  es7.array.flat-map { "chrome":"55" }
+  es6.array.iterator { "chrome":"55" }
+  es6.array.sort { "chrome":"55" }
+  es7.object.define-getter { "chrome":"55" }
+  es7.object.define-setter { "chrome":"55" }
+  es7.object.lookup-getter { "chrome":"55" }
+  es7.object.lookup-setter { "chrome":"55" }
+  es6.object.to-string { "chrome":"55" }
+  es7.promise.finally { "chrome":"55" }
+  es7.symbol.async-iterator { "chrome":"55" }
+  es7.string.pad-start { "chrome":"55" }
+  es7.string.pad-end { "chrome":"55" }
+  es7.string.trim-left { "chrome":"55" }
+  es7.string.trim-right { "chrome":"55" }
+  web.timers { "chrome":"55" }
+  web.immediate { "chrome":"55" }
+  web.dom.iterable { "chrome":"55" }

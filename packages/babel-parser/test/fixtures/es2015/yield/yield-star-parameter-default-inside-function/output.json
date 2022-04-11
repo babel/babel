@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":11,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":11,"index":11},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "AssignmentPattern",
+            "start":12,"end":28,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":28,"index":28}},
+            "left": {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"x"},
+              "name": "x"
+            },
+            "right": {
+              "type": "BinaryExpression",
+              "start":16,"end":28,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":28,"index":28}},
+              "left": {
+                "type": "Identifier",
+                "start":16,"end":21,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":21,"index":21},"identifierName":"yield"},
+                "name": "yield"
+              },
+              "operator": "*",
+              "right": {
+                "type": "Identifier",
+                "start":23,"end":28,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":28,"index":28},"identifierName":"yield"},
+                "name": "yield"
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":30,"end":32,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":32,"index":32}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

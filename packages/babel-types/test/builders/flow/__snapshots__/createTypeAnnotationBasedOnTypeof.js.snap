@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof bigint is valid 1`] = `
+Object {
+  "type": "AnyTypeAnnotation",
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof function is valid 1`] = `
+Object {
+  "id": Object {
+    "name": "Function",
+    "type": "Identifier",
+  },
+  "type": "GenericTypeAnnotation",
+  "typeParameters": null,
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof number is valid 1`] = `
+Object {
+  "type": "NumberTypeAnnotation",
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof object is valid 1`] = `
+Object {
+  "id": Object {
+    "name": "Object",
+    "type": "Identifier",
+  },
+  "type": "GenericTypeAnnotation",
+  "typeParameters": null,
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof string is valid 1`] = `
+Object {
+  "type": "StringTypeAnnotation",
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof symbol is valid 1`] = `
+Object {
+  "id": Object {
+    "name": "Symbol",
+    "type": "Identifier",
+  },
+  "type": "GenericTypeAnnotation",
+  "typeParameters": null,
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof true is valid 1`] = `
+Object {
+  "type": "BooleanTypeAnnotation",
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof undefined is valid 1`] = `
+Object {
+  "type": "VoidTypeAnnotation",
+}
+`;

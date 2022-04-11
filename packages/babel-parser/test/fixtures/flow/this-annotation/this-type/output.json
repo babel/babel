@@ -1,0 +1,125 @@
+{
+  "type": "File",
+  "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":79}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":79}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "FunctionTypeAnnotation",
+          "start":9,"end":31,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":31,"index":31}},
+          "params": [
+            {
+              "type": "FunctionTypeParam",
+              "start":10,"end":15,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":15,"index":15}},
+              "name": null,
+              "optional": false,
+              "typeAnnotation": {
+                "type": "ThisTypeAnnotation",
+                "start":10,"end":14,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":14,"index":14}}
+              }
+            },
+            {
+              "type": "FunctionTypeParam",
+              "start":16,"end":22,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":22,"index":22}},
+              "name": null,
+              "optional": false,
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "start":16,"end":22,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":22,"index":22}}
+              }
+            }
+          ],
+          "rest": null,
+          "this": null,
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "start":27,"end":31,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":31,"index":31}}
+          },
+          "typeParameters": null
+        }
+      },
+      {
+        "type": "DeclareClass",
+        "start":34,"end":79,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":5,"column":1,"index":79}},
+        "id": {
+          "type": "Identifier",
+          "start":48,"end":49,"loc":{"start":{"line":3,"column":14,"index":48},"end":{"line":3,"column":15,"index":49},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":50,"end":79,"loc":{"start":{"line":3,"column":16,"index":50},"end":{"line":5,"column":1,"index":79}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":54,"end":76,"loc":{"start":{"line":4,"column":2,"index":54},"end":{"line":4,"column":24,"index":76}},
+              "key": {
+                "type": "Identifier",
+                "start":54,"end":56,"loc":{"start":{"line":4,"column":2,"index":54},"end":{"line":4,"column":4,"index":56},"identifierName":"fn"},
+                "name": "fn"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":54,"end":76,"loc":{"start":{"line":4,"column":2,"index":54},"end":{"line":4,"column":24,"index":76}},
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start":63,"end":69,"loc":{"start":{"line":4,"column":11,"index":63},"end":{"line":4,"column":17,"index":69}},
+                    "name": null,
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start":63,"end":69,"loc":{"start":{"line":4,"column":11,"index":63},"end":{"line":4,"column":17,"index":69}}
+                    }
+                  }
+                ],
+                "rest": null,
+                "typeParameters": null,
+                "this": {
+                  "type": "FunctionTypeParam",
+                  "start":57,"end":61,"loc":{"start":{"line":4,"column":5,"index":57},"end":{"line":4,"column":9,"index":61}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "ThisTypeAnnotation",
+                    "start":57,"end":61,"loc":{"start":{"line":4,"column":5,"index":57},"end":{"line":4,"column":9,"index":61}}
+                  }
+                },
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":72,"end":76,"loc":{"start":{"line":4,"column":20,"index":72},"end":{"line":4,"column":24,"index":76}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

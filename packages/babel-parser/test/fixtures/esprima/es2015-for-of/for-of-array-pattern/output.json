@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "await": false,
+        "left": {
+          "type": "ArrayPattern",
+          "start":5,"end":11,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":11,"index":11}},
+          "elements": [
+            {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"p"},
+              "name": "p"
+            },
+            {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"q"},
+              "name": "q"
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"r"},
+          "name": "r"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

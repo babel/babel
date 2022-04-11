@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":44}},
+        "body": [
+          {
+            "type": "ThrowStatement",
+            "start":2,"end":13,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":13,"index":13}},
+            "argument": {
+              "type": "Identifier",
+              "start":8,"end":13,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":13,"index":13},"identifierName":"error"},
+              "name": "error"
+            },
+            "trailingComments": [
+              {
+                "type": "CommentBlock",
+                "value": " Multiline\nComment ",
+                "start":13,"end":36,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":2,"column":10,"index":36}}
+              }
+            ]
+          },
+          {
+            "type": "ExpressionStatement",
+            "start":36,"end":42,"loc":{"start":{"line":2,"column":10,"index":36},"end":{"line":2,"column":16,"index":42}},
+            "expression": {
+              "type": "Identifier",
+              "start":36,"end":41,"loc":{"start":{"line":2,"column":10,"index":36},"end":{"line":2,"column":15,"index":41},"identifierName":"error"},
+              "name": "error"
+            },
+            "leadingComments": [
+              {
+                "type": "CommentBlock",
+                "value": " Multiline\nComment ",
+                "start":13,"end":36,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":2,"column":10,"index":36}}
+              }
+            ]
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " Multiline\nComment ",
+      "start":13,"end":36,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":2,"column":10,"index":36}}
+    }
+  ]
+}

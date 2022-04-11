@@ -1,0 +1,30 @@
+{
+  "type": "File",
+  "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":11,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":11,"index":11}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":11,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":11,"index":11},"identifierName":"℘℘"},
+              "name": "℘℘"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

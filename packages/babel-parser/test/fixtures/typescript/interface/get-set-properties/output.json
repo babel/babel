@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":55}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":55}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":55}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":14,"end":55,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":4,"column":1,"index":55}},
+          "body": [
+            {
+              "type": "TSPropertySignature",
+              "start":18,"end":34,"loc":{"start":{"line":2,"column":2,"index":18},"end":{"line":2,"column":18,"index":34}},
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":25,"loc":{"start":{"line":2,"column":6,"index":22},"end":{"line":2,"column":9,"index":25},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "get",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":25,"end":33,"loc":{"start":{"line":2,"column":9,"index":25},"end":{"line":2,"column":17,"index":33}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":27,"end":33,"loc":{"start":{"line":2,"column":11,"index":27},"end":{"line":2,"column":17,"index":33}}
+                }
+              }
+            },
+            {
+              "type": "TSPropertySignature",
+              "start":37,"end":53,"loc":{"start":{"line":3,"column":2,"index":37},"end":{"line":3,"column":18,"index":53}},
+              "key": {
+                "type": "Identifier",
+                "start":41,"end":44,"loc":{"start":{"line":3,"column":6,"index":41},"end":{"line":3,"column":9,"index":44},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "kind": "set",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":44,"end":52,"loc":{"start":{"line":3,"column":9,"index":44},"end":{"line":3,"column":17,"index":52}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":46,"end":52,"loc":{"start":{"line":3,"column":11,"index":46},"end":{"line":3,"column":17,"index":52}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

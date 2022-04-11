@@ -1,0 +1,130 @@
+{
+  "type": "File",
+  "start":0,"end":174,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":174}},
+  "errors": [
+    "SyntaxError: 'private' modifier must precede 'override' modifier. (2:11)",
+    "SyntaxError: 'private' modifier must precede 'readonly' modifier. (3:11)",
+    "SyntaxError: 'private' modifier must precede 'readonly' modifier. (4:11)",
+    "SyntaxError: 'override' modifier must precede 'readonly' modifier. (4:19)",
+    "SyntaxError: 'override' modifier must precede 'readonly' modifier. (5:19)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":174,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":174}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":174,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":174}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21},"identifierName":"Bar"},
+          "name": "Bar"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":22,"end":174,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":6,"column":1,"index":174}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":26,"end":55,"loc":{"start":{"line":2,"column":2,"index":26},"end":{"line":2,"column":31,"index":55}},
+              "override": true,
+              "accessibility": "private",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":43,"end":47,"loc":{"start":{"line":2,"column":19,"index":43},"end":{"line":2,"column":23,"index":47},"identifierName":"foo1"},
+                "name": "foo1"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":47,"end":55,"loc":{"start":{"line":2,"column":23,"index":47},"end":{"line":2,"column":31,"index":55}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":49,"end":55,"loc":{"start":{"line":2,"column":25,"index":49},"end":{"line":2,"column":31,"index":55}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":58,"end":88,"loc":{"start":{"line":3,"column":2,"index":58},"end":{"line":3,"column":32,"index":88}},
+              "readonly": true,
+              "accessibility": "private",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":75,"end":79,"loc":{"start":{"line":3,"column":19,"index":75},"end":{"line":3,"column":23,"index":79},"identifierName":"foo2"},
+                "name": "foo2"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":79,"end":87,"loc":{"start":{"line":3,"column":23,"index":79},"end":{"line":3,"column":31,"index":87}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":81,"end":87,"loc":{"start":{"line":3,"column":25,"index":81},"end":{"line":3,"column":31,"index":87}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":91,"end":130,"loc":{"start":{"line":4,"column":2,"index":91},"end":{"line":4,"column":41,"index":130}},
+              "readonly": true,
+              "accessibility": "private",
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":117,"end":121,"loc":{"start":{"line":4,"column":28,"index":117},"end":{"line":4,"column":32,"index":121},"identifierName":"foo3"},
+                "name": "foo3"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":121,"end":129,"loc":{"start":{"line":4,"column":32,"index":121},"end":{"line":4,"column":40,"index":129}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":123,"end":129,"loc":{"start":{"line":4,"column":34,"index":123},"end":{"line":4,"column":40,"index":129}}
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":133,"end":172,"loc":{"start":{"line":5,"column":2,"index":133},"end":{"line":5,"column":41,"index":172}},
+              "accessibility": "private",
+              "readonly": true,
+              "override": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":159,"end":163,"loc":{"start":{"line":5,"column":28,"index":159},"end":{"line":5,"column":32,"index":163},"identifierName":"foo4"},
+                "name": "foo4"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":163,"end":171,"loc":{"start":{"line":5,"column":32,"index":163},"end":{"line":5,"column":40,"index":171}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":165,"end":171,"loc":{"start":{"line":5,"column":34,"index":165},"end":{"line":5,"column":40,"index":171}}
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

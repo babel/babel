@@ -1,0 +1,3 @@
+Object.keys({});
+
+function * fn(){}

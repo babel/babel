@@ -1,0 +1,54 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "errors": [
+    "SyntaxError: 'for-in' loop variable declaration may not have an initializer. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForInStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "left": {
+          "type": "VariableDeclaration",
+          "start":5,"end":14,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":14,"index":14}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14}},
+              "id": {
+                "type": "Identifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+                "name": "a"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ],
+          "kind": "let"
+        },
+        "right": {
+          "type": "ObjectExpression",
+          "start":18,"end":20,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":20,"index":20}},
+          "properties": []
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

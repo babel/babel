@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+  "errors": [
+    "SyntaxError: Argument name clash. (1:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "Identifier",
+            "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"y"},
+            "name": "y"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

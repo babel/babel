@@ -1,0 +1,3 @@
+function x (...rest) {
+  arguments;
+}

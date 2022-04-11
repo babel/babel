@@ -1,0 +1,2 @@
+var globalThis = {};
+typeof globalThis;

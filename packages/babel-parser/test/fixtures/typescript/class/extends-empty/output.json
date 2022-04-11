@@ -1,0 +1,31 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":1,"index":25}},
+  "errors": [
+    "SyntaxError: 'extends' list cannot be empty. (1:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":1,"index":25}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":1,"index":25}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "extends": [],
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":22,"end":25,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":2,"column":1,"index":25}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

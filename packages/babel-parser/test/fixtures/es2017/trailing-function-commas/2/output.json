@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"log"},
+          "name": "log"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"n"},
+            "name": "n"
+          },
+          {
+            "type": "Identifier",
+            "start":16,"end":18,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":18,"index":18},"identifierName":"op"},
+            "name": "op"
+          },
+          {
+            "type": "Identifier",
+            "start":20,"end":23,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":23,"index":23},"identifierName":"val"},
+            "name": "val"
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":26,"end":29,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":29,"index":29}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

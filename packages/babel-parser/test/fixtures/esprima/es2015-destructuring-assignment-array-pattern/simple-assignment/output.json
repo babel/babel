@@ -1,0 +1,42 @@
+{
+  "type": "File",
+  "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
+            "elements": [
+              {
+                "type": "Identifier",
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"a"},
+                "name": "a"
+              }
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

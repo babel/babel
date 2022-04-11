@@ -1,0 +1,62 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":39}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":39}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":38,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":1,"index":38}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": {
+              "type": "FunctionExpression",
+              "start":10,"end":38,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":38}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":21,"end":38,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":3,"column":1,"index":38}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":25,"end":36,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":13,"index":36}},
+                    "expression": {
+                      "type": "MetaProperty",
+                      "start":25,"end":35,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":12,"index":35}},
+                      "meta": {
+                        "type": "Identifier",
+                        "start":25,"end":28,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":5,"index":28},"identifierName":"new"},
+                        "name": "new"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start":29,"end":35,"loc":{"start":{"line":2,"column":6,"index":29},"end":{"line":2,"column":12,"index":35},"identifierName":"target"},
+                        "name": "target"
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

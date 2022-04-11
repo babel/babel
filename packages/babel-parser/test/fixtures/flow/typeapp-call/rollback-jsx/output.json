@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":12,"index":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":12,"index":21}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":9,"end":21,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":12,"index":21}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":9,"end":20,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":11,"index":20}},
+          "left": {
+            "type": "BinaryExpression",
+            "start":9,"end":12,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":3,"index":12}},
+            "left": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":1,"index":10},"identifierName":"f"},
+              "name": "f"
+            },
+            "operator": "<",
+            "right": {
+              "type": "Identifier",
+              "start":11,"end":12,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":3,"index":12},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "operator": ">",
+          "right": {
+            "type": "JSXElement",
+            "start":13,"end":20,"loc":{"start":{"line":2,"column":4,"index":13},"end":{"line":2,"column":11,"index":20}},
+            "openingElement": {
+              "type": "JSXOpeningElement",
+              "start":13,"end":16,"loc":{"start":{"line":2,"column":4,"index":13},"end":{"line":2,"column":7,"index":16}},
+              "name": {
+                "type": "JSXIdentifier",
+                "start":14,"end":15,"loc":{"start":{"line":2,"column":5,"index":14},"end":{"line":2,"column":6,"index":15}},
+                "name": "U"
+              },
+              "attributes": [],
+              "selfClosing": false
+            },
+            "closingElement": {
+              "type": "JSXClosingElement",
+              "start":16,"end":20,"loc":{"start":{"line":2,"column":7,"index":16},"end":{"line":2,"column":11,"index":20}},
+              "name": {
+                "type": "JSXIdentifier",
+                "start":18,"end":19,"loc":{"start":{"line":2,"column":9,"index":18},"end":{"line":2,"column":10,"index":19}},
+                "name": "U"
+              }
+            },
+            "children": []
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+    }
+  ]
+}

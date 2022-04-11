@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "syntax-jsx",
+    "transform-react-constant-elements",
+    ["proposal-class-properties", { "loose": true }]
+  ]
+}

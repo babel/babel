@@ -1,0 +1,196 @@
+{
+  "type": "File",
+  "start":0,"end":168,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":30,"index":168}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":168,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":30,"index":168}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":56,"index":56}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "FunctionTypeAnnotation",
+          "start":9,"end":56,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":56,"index":56}},
+          "params": [
+            {
+              "type": "FunctionTypeParam",
+              "start":25,"end":35,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":35,"index":35}},
+              "name": {
+                "type": "Identifier",
+                "start":25,"end":26,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":26,"index":26},"identifierName":"a"},
+                "name": "a"
+              },
+              "optional": false,
+              "typeAnnotation": {
+                "type": "StringTypeAnnotation",
+                "start":29,"end":35,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":35,"index":35}}
+              }
+            },
+            {
+              "type": "FunctionTypeParam",
+              "start":37,"end":47,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":47,"index":47}},
+              "name": {
+                "type": "Identifier",
+                "start":37,"end":38,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":38,"index":38},"identifierName":"b"},
+                "name": "b"
+              },
+              "optional": false,
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "start":41,"end":47,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":47,"index":47}}
+              }
+            }
+          ],
+          "rest": null,
+          "this": {
+            "type": "FunctionTypeParam",
+            "start":10,"end":23,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":23,"index":23}},
+            "name": null,
+            "optional": false,
+            "typeAnnotation": {
+              "type": "NumberTypeAnnotation",
+              "start":17,"end":23,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":23,"index":23}}
+            }
+          },
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "start":52,"end":56,"loc":{"start":{"line":1,"column":52,"index":52},"end":{"line":1,"column":56,"index":56}}
+          },
+          "typeParameters": null
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":58,"end":102,"loc":{"start":{"line":3,"column":0,"index":58},"end":{"line":3,"column":44,"index":102}},
+        "id": {
+          "type": "Identifier",
+          "start":63,"end":64,"loc":{"start":{"line":3,"column":5,"index":63},"end":{"line":3,"column":6,"index":64},"identifierName":"U"},
+          "name": "U"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "FunctionTypeAnnotation",
+          "start":67,"end":102,"loc":{"start":{"line":3,"column":9,"index":67},"end":{"line":3,"column":44,"index":102}},
+          "params": [],
+          "rest": {
+            "type": "FunctionTypeParam",
+            "start":86,"end":93,"loc":{"start":{"line":3,"column":28,"index":86},"end":{"line":3,"column":35,"index":93}},
+            "name": {
+              "type": "Identifier",
+              "start":86,"end":87,"loc":{"start":{"line":3,"column":28,"index":86},"end":{"line":3,"column":29,"index":87},"identifierName":"c"},
+              "name": "c"
+            },
+            "optional": false,
+            "typeAnnotation": {
+              "type": "AnyTypeAnnotation",
+              "start":90,"end":93,"loc":{"start":{"line":3,"column":32,"index":90},"end":{"line":3,"column":35,"index":93}}
+            }
+          },
+          "this": {
+            "type": "FunctionTypeParam",
+            "start":68,"end":81,"loc":{"start":{"line":3,"column":10,"index":68},"end":{"line":3,"column":23,"index":81}},
+            "name": null,
+            "optional": false,
+            "typeAnnotation": {
+              "type": "NumberTypeAnnotation",
+              "start":75,"end":81,"loc":{"start":{"line":3,"column":17,"index":75},"end":{"line":3,"column":23,"index":81}}
+            }
+          },
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "start":98,"end":102,"loc":{"start":{"line":3,"column":40,"index":98},"end":{"line":3,"column":44,"index":102}}
+          },
+          "typeParameters": null
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":104,"end":136,"loc":{"start":{"line":5,"column":0,"index":104},"end":{"line":5,"column":32,"index":136}},
+        "id": {
+          "type": "Identifier",
+          "start":109,"end":110,"loc":{"start":{"line":5,"column":5,"index":109},"end":{"line":5,"column":6,"index":110},"identifierName":"V"},
+          "name": "V"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "FunctionTypeAnnotation",
+          "start":113,"end":136,"loc":{"start":{"line":5,"column":9,"index":113},"end":{"line":5,"column":32,"index":136}},
+          "params": [],
+          "rest": null,
+          "this": {
+            "type": "FunctionTypeParam",
+            "start":114,"end":127,"loc":{"start":{"line":5,"column":10,"index":114},"end":{"line":5,"column":23,"index":127}},
+            "name": null,
+            "optional": false,
+            "typeAnnotation": {
+              "type": "NumberTypeAnnotation",
+              "start":121,"end":127,"loc":{"start":{"line":5,"column":17,"index":121},"end":{"line":5,"column":23,"index":127}}
+            }
+          },
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "start":132,"end":136,"loc":{"start":{"line":5,"column":28,"index":132},"end":{"line":5,"column":32,"index":136}}
+          },
+          "typeParameters": null
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":138,"end":168,"loc":{"start":{"line":7,"column":0,"index":138},"end":{"line":7,"column":30,"index":168}},
+        "id": {
+          "type": "Identifier",
+          "start":143,"end":144,"loc":{"start":{"line":7,"column":5,"index":143},"end":{"line":7,"column":6,"index":144},"identifierName":"Q"},
+          "name": "Q"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "FunctionTypeAnnotation",
+          "start":147,"end":168,"loc":{"start":{"line":7,"column":9,"index":147},"end":{"line":7,"column":30,"index":168}},
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":147,"end":150,"loc":{"start":{"line":7,"column":9,"index":147},"end":{"line":7,"column":12,"index":150}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":148,"end":149,"loc":{"start":{"line":7,"column":10,"index":148},"end":{"line":7,"column":11,"index":149}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          },
+          "params": [],
+          "rest": null,
+          "this": {
+            "type": "FunctionTypeParam",
+            "start":151,"end":159,"loc":{"start":{"line":7,"column":13,"index":151},"end":{"line":7,"column":21,"index":159}},
+            "name": null,
+            "optional": false,
+            "typeAnnotation": {
+              "type": "GenericTypeAnnotation",
+              "start":158,"end":159,"loc":{"start":{"line":7,"column":20,"index":158},"end":{"line":7,"column":21,"index":159}},
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start":158,"end":159,"loc":{"start":{"line":7,"column":20,"index":158},"end":{"line":7,"column":21,"index":159},"identifierName":"T"},
+                "name": "T"
+              }
+            }
+          },
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "start":164,"end":168,"loc":{"start":{"line":7,"column":26,"index":164},"end":{"line":7,"column":30,"index":168}}
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

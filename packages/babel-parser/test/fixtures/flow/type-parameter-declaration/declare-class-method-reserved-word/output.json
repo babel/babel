@@ -1,0 +1,336 @@
+{
+  "type": "File",
+  "start":0,"end":206,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":2,"index":206}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":206,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":2,"index":206}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start":0,"end":205,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":1,"index":205}},
+        "id": {
+          "type": "Identifier",
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"X"},
+          "name": "X"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":16,"end":205,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":10,"column":1,"index":205}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":20,"end":37,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":19,"index":37}},
+              "key": {
+                "type": "Identifier",
+                "start":20,"end":26,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":8,"index":26},"identifierName":"foobar"},
+                "name": "foobar"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":20,"end":37,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":19,"index":37}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":26,"end":29,"loc":{"start":{"line":2,"column":8,"index":26},"end":{"line":2,"column":11,"index":29}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":27,"end":28,"loc":{"start":{"line":2,"column":9,"index":27},"end":{"line":2,"column":10,"index":28}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":33,"end":37,"loc":{"start":{"line":2,"column":15,"index":33},"end":{"line":2,"column":19,"index":37}}
+                }
+              },
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":41,"end":58,"loc":{"start":{"line":3,"column":2,"index":41},"end":{"line":3,"column":19,"index":58}},
+              "key": {
+                "type": "Identifier",
+                "start":41,"end":47,"loc":{"start":{"line":3,"column":2,"index":41},"end":{"line":3,"column":8,"index":47},"identifierName":"delete"},
+                "name": "delete"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":41,"end":58,"loc":{"start":{"line":3,"column":2,"index":41},"end":{"line":3,"column":19,"index":58}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":47,"end":50,"loc":{"start":{"line":3,"column":8,"index":47},"end":{"line":3,"column":11,"index":50}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":48,"end":49,"loc":{"start":{"line":3,"column":9,"index":48},"end":{"line":3,"column":10,"index":49}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":54,"end":58,"loc":{"start":{"line":3,"column":15,"index":54},"end":{"line":3,"column":19,"index":58}}
+                }
+              },
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":62,"end":78,"loc":{"start":{"line":4,"column":2,"index":62},"end":{"line":4,"column":18,"index":78}},
+              "key": {
+                "type": "Identifier",
+                "start":62,"end":67,"loc":{"start":{"line":4,"column":2,"index":62},"end":{"line":4,"column":7,"index":67},"identifierName":"yield"},
+                "name": "yield"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":62,"end":78,"loc":{"start":{"line":4,"column":2,"index":62},"end":{"line":4,"column":18,"index":78}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":67,"end":70,"loc":{"start":{"line":4,"column":7,"index":67},"end":{"line":4,"column":10,"index":70}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":68,"end":69,"loc":{"start":{"line":4,"column":8,"index":68},"end":{"line":4,"column":9,"index":69}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":74,"end":78,"loc":{"start":{"line":4,"column":14,"index":74},"end":{"line":4,"column":18,"index":78}}
+                }
+              },
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":82,"end":95,"loc":{"start":{"line":5,"column":2,"index":82},"end":{"line":5,"column":15,"index":95}},
+              "key": {
+                "type": "Identifier",
+                "start":82,"end":84,"loc":{"start":{"line":5,"column":2,"index":82},"end":{"line":5,"column":4,"index":84},"identifierName":"do"},
+                "name": "do"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":82,"end":95,"loc":{"start":{"line":5,"column":2,"index":82},"end":{"line":5,"column":15,"index":95}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":84,"end":87,"loc":{"start":{"line":5,"column":4,"index":84},"end":{"line":5,"column":7,"index":87}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":85,"end":86,"loc":{"start":{"line":5,"column":5,"index":85},"end":{"line":5,"column":6,"index":86}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":91,"end":95,"loc":{"start":{"line":5,"column":11,"index":91},"end":{"line":5,"column":15,"index":95}}
+                }
+              },
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":99,"end":123,"loc":{"start":{"line":6,"column":2,"index":99},"end":{"line":6,"column":26,"index":123}},
+              "key": {
+                "type": "Identifier",
+                "start":106,"end":112,"loc":{"start":{"line":6,"column":9,"index":106},"end":{"line":6,"column":15,"index":112},"identifierName":"foobar"},
+                "name": "foobar"
+              },
+              "static": true,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":99,"end":123,"loc":{"start":{"line":6,"column":2,"index":99},"end":{"line":6,"column":26,"index":123}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":112,"end":115,"loc":{"start":{"line":6,"column":15,"index":112},"end":{"line":6,"column":18,"index":115}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":113,"end":114,"loc":{"start":{"line":6,"column":16,"index":113},"end":{"line":6,"column":17,"index":114}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":119,"end":123,"loc":{"start":{"line":6,"column":22,"index":119},"end":{"line":6,"column":26,"index":123}}
+                }
+              },
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":127,"end":151,"loc":{"start":{"line":7,"column":2,"index":127},"end":{"line":7,"column":26,"index":151}},
+              "key": {
+                "type": "Identifier",
+                "start":134,"end":140,"loc":{"start":{"line":7,"column":9,"index":134},"end":{"line":7,"column":15,"index":140},"identifierName":"delete"},
+                "name": "delete"
+              },
+              "static": true,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":127,"end":151,"loc":{"start":{"line":7,"column":2,"index":127},"end":{"line":7,"column":26,"index":151}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":140,"end":143,"loc":{"start":{"line":7,"column":15,"index":140},"end":{"line":7,"column":18,"index":143}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":141,"end":142,"loc":{"start":{"line":7,"column":16,"index":141},"end":{"line":7,"column":17,"index":142}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":147,"end":151,"loc":{"start":{"line":7,"column":22,"index":147},"end":{"line":7,"column":26,"index":151}}
+                }
+              },
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":155,"end":178,"loc":{"start":{"line":8,"column":2,"index":155},"end":{"line":8,"column":25,"index":178}},
+              "key": {
+                "type": "Identifier",
+                "start":162,"end":167,"loc":{"start":{"line":8,"column":9,"index":162},"end":{"line":8,"column":14,"index":167},"identifierName":"yield"},
+                "name": "yield"
+              },
+              "static": true,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":155,"end":178,"loc":{"start":{"line":8,"column":2,"index":155},"end":{"line":8,"column":25,"index":178}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":167,"end":170,"loc":{"start":{"line":8,"column":14,"index":167},"end":{"line":8,"column":17,"index":170}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":168,"end":169,"loc":{"start":{"line":8,"column":15,"index":168},"end":{"line":8,"column":16,"index":169}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":174,"end":178,"loc":{"start":{"line":8,"column":21,"index":174},"end":{"line":8,"column":25,"index":178}}
+                }
+              },
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":182,"end":202,"loc":{"start":{"line":9,"column":2,"index":182},"end":{"line":9,"column":22,"index":202}},
+              "key": {
+                "type": "Identifier",
+                "start":189,"end":191,"loc":{"start":{"line":9,"column":9,"index":189},"end":{"line":9,"column":11,"index":191},"identifierName":"do"},
+                "name": "do"
+              },
+              "static": true,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":182,"end":202,"loc":{"start":{"line":9,"column":2,"index":182},"end":{"line":9,"column":22,"index":202}},
+                "params": [],
+                "rest": null,
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start":191,"end":194,"loc":{"start":{"line":9,"column":11,"index":191},"end":{"line":9,"column":14,"index":194}},
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start":192,"end":193,"loc":{"start":{"line":9,"column":12,"index":192},"end":{"line":9,"column":13,"index":193}},
+                      "name": "T",
+                      "variance": null
+                    }
+                  ]
+                },
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":198,"end":202,"loc":{"start":{"line":9,"column":18,"index":198},"end":{"line":9,"column":22,"index":202}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":205,"end":206,"loc":{"start":{"line":10,"column":1,"index":205},"end":{"line":10,"column":2,"index":206}}
+      }
+    ],
+    "directives": []
+  }
+}

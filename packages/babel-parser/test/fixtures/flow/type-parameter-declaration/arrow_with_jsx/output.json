@@ -1,0 +1,190 @@
+{
+  "type": "File",
+  "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":26,"index":78}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":26,"index":78}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "NumericLiteral",
+            "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12}},
+            "extra": {
+              "rawValue": 123,
+              "raw": "123"
+            },
+            "value": 123
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":28,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":14,"index":28}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":14,"end":27,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":13,"index":27}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":18,"end":19,"loc":{"start":{"line":2,"column":4,"index":18},"end":{"line":2,"column":5,"index":19},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":24,"end":27,"loc":{"start":{"line":2,"column":10,"index":24},"end":{"line":2,"column":13,"index":27}},
+            "extra": {
+              "rawValue": 123,
+              "raw": "123"
+            },
+            "value": 123
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":14,"end":17,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":3,"index":17}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":15,"end":16,"loc":{"start":{"line":2,"column":1,"index":15},"end":{"line":2,"column":2,"index":16}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":29,"end":51,"loc":{"start":{"line":3,"column":0,"index":29},"end":{"line":3,"column":22,"index":51}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":29,"end":50,"loc":{"start":{"line":3,"column":0,"index":29},"end":{"line":3,"column":21,"index":50}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":33,"end":42,"loc":{"start":{"line":3,"column":4,"index":33},"end":{"line":3,"column":13,"index":42},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":34,"end":42,"loc":{"start":{"line":3,"column":5,"index":34},"end":{"line":3,"column":13,"index":42}},
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":36,"end":42,"loc":{"start":{"line":3,"column":7,"index":36},"end":{"line":3,"column":13,"index":42}}
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":47,"end":50,"loc":{"start":{"line":3,"column":18,"index":47},"end":{"line":3,"column":21,"index":50}},
+            "extra": {
+              "rawValue": 123,
+              "raw": "123"
+            },
+            "value": 123
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":29,"end":32,"loc":{"start":{"line":3,"column":0,"index":29},"end":{"line":3,"column":3,"index":32}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":30,"end":31,"loc":{"start":{"line":3,"column":1,"index":30},"end":{"line":3,"column":2,"index":31}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":52,"end":78,"loc":{"start":{"line":4,"column":0,"index":52},"end":{"line":4,"column":26,"index":78}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":52,"end":77,"loc":{"start":{"line":4,"column":0,"index":52},"end":{"line":4,"column":25,"index":77}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":56,"end":65,"loc":{"start":{"line":4,"column":4,"index":56},"end":{"line":4,"column":13,"index":65},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":57,"end":65,"loc":{"start":{"line":4,"column":5,"index":57},"end":{"line":4,"column":13,"index":65}},
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":59,"end":65,"loc":{"start":{"line":4,"column":7,"index":59},"end":{"line":4,"column":13,"index":65}}
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":70,"end":77,"loc":{"start":{"line":4,"column":18,"index":70},"end":{"line":4,"column":25,"index":77}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":72,"end":75,"loc":{"start":{"line":4,"column":20,"index":72},"end":{"line":4,"column":23,"index":75}},
+                "expression": {
+                  "type": "NumericLiteral",
+                  "start":72,"end":75,"loc":{"start":{"line":4,"column":20,"index":72},"end":{"line":4,"column":23,"index":75}},
+                  "extra": {
+                    "rawValue": 123,
+                    "raw": "123"
+                  },
+                  "value": 123
+                }
+              }
+            ],
+            "directives": []
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":52,"end":55,"loc":{"start":{"line":4,"column":0,"index":52},"end":{"line":4,"column":3,"index":55}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":53,"end":54,"loc":{"start":{"line":4,"column":1,"index":53},"end":{"line":4,"column":2,"index":54}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

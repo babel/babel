@@ -1,0 +1,102 @@
+{
+  "type": "File",
+  "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":20,"index":48}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":20,"index":48}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":9,"end":27,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":18,"index":27}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":9,"end":26,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":17,"index":26}},
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":15,"end":18,"loc":{"start":{"line":2,"column":6,"index":15},"end":{"line":2,"column":9,"index":18}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":16,"end":17,"loc":{"start":{"line":2,"column":7,"index":16},"end":{"line":2,"column":8,"index":17}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          },
+          "params": [],
+          "id": null,
+          "generator": false,
+          "async": true,
+          "body": {
+            "type": "BlockStatement",
+            "start":24,"end":26,"loc":{"start":{"line":2,"column":15,"index":24},"end":{"line":2,"column":17,"index":26}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":28,"end":48,"loc":{"start":{"line":3,"column":0,"index":28},"end":{"line":3,"column":20,"index":48}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":28,"end":48,"loc":{"start":{"line":3,"column":0,"index":28},"end":{"line":3,"column":20,"index":48}},
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":34,"end":37,"loc":{"start":{"line":3,"column":6,"index":34},"end":{"line":3,"column":9,"index":37}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":35,"end":36,"loc":{"start":{"line":3,"column":7,"index":35},"end":{"line":3,"column":8,"index":36}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          },
+          "params": [],
+          "predicate": null,
+          "returnType": {
+            "type": "TypeAnnotation",
+            "start":39,"end":42,"loc":{"start":{"line":3,"column":11,"index":39},"end":{"line":3,"column":14,"index":42}},
+            "typeAnnotation": {
+              "type": "GenericTypeAnnotation",
+              "start":41,"end":42,"loc":{"start":{"line":3,"column":13,"index":41},"end":{"line":3,"column":14,"index":42}},
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start":41,"end":42,"loc":{"start":{"line":3,"column":13,"index":41},"end":{"line":3,"column":14,"index":42},"identifierName":"T"},
+                "name": "T"
+              }
+            }
+          },
+          "id": null,
+          "generator": false,
+          "async": true,
+          "body": {
+            "type": "BlockStatement",
+            "start":46,"end":48,"loc":{"start":{"line":3,"column":18,"index":46},"end":{"line":3,"column":20,"index":48}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+    }
+  ]
+}

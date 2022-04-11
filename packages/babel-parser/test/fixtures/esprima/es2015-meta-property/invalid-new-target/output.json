@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "errors": [
+    "SyntaxError: `new.target` can only be used in functions or class properties. (1:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":18,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":18,"index":18}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "MetaProperty",
+              "start":8,"end":18,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":18,"index":18}},
+              "meta": {
+                "type": "Identifier",
+                "start":8,"end":11,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":11,"index":11},"identifierName":"new"},
+                "name": "new"
+              },
+              "property": {
+                "type": "Identifier",
+                "start":12,"end":18,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":18,"index":18},"identifierName":"target"},
+                "name": "target"
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

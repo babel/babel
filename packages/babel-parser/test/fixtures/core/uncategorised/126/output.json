@@ -1,0 +1,90 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+        "expression": {
+          "type": "MemberExpression",
+          "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+          "object": {
+            "type": "CallExpression",
+            "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+            "callee": {
+              "type": "MemberExpression",
+              "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+              "object": {
+                "type": "CallExpression",
+                "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8},"identifierName":"universe"},
+                  "name": "universe"
+                },
+                "arguments": [
+                  {
+                    "type": "NumericLiteral",
+                    "start":9,"end":11,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":11,"index":11}},
+                    "extra": {
+                      "rawValue": 42,
+                      "raw": "42"
+                    },
+                    "value": 42
+                  }
+                ]
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":13,"end":21,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":21,"index":21},"identifierName":"galaxies"},
+                "name": "galaxies"
+              }
+            },
+            "arguments": [
+              {
+                "type": "NumericLiteral",
+                "start":22,"end":24,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":24,"index":24}},
+                "extra": {
+                  "rawValue": 14,
+                  "raw": "14"
+                },
+                "value": 14
+              },
+              {
+                "type": "NumericLiteral",
+                "start":26,"end":27,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":27,"index":27}},
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "3"
+                },
+                "value": 3
+              },
+              {
+                "type": "NumericLiteral",
+                "start":29,"end":31,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":31,"index":31}},
+                "extra": {
+                  "rawValue": 77,
+                  "raw": "77"
+                },
+                "value": 77
+              }
+            ]
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":33,"end":41,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":41,"index":41},"identifierName":"milkyway"},
+            "name": "milkyway"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

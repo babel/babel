@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":5}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":5}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":3,"end":5,"loc":{"start":{"line":2,"column":0,"index":3},"end":{"line":2,"column":2,"index":5}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":3,"end":5,"loc":{"start":{"line":2,"column":0,"index":3},"end":{"line":2,"column":2,"index":5}},
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
+          "value": 42
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": "",
+            "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "",
+      "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}}
+    }
+  ]
+}

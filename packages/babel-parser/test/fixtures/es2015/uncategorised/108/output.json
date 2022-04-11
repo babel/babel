@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":31,"index":31}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":31,"index":31}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":31,"index":31}},
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+              "id": {
+                "type": "Identifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
+                "name": "x"
+              },
+              "init": null
+            }
+          ],
+          "kind": "var"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":14,"end":18,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":18,"index":18},"identifierName":"list"},
+          "name": "list"
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start":20,"end":31,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":31,"index":31}},
+          "expression": {
+            "type": "CallExpression",
+            "start":20,"end":30,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":30,"index":30}},
+            "callee": {
+              "type": "Identifier",
+              "start":20,"end":27,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":27,"index":27},"identifierName":"process"},
+              "name": "process"
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29},"identifierName":"x"},
+                "name": "x"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

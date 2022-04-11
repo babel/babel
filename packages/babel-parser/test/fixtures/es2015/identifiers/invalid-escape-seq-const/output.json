@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":17,"index":40}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'const'. (1:4)",
+    "SyntaxError: Escape sequence in keyword const. (1:4)",
+    "SyntaxError: Escape sequence in keyword const. (3:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":17,"index":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":20,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":20,"index":20}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":14,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":14,"index":14},"identifierName":"const"},
+              "name": "const"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":17,"end":20,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":20,"index":20}},
+              "extra": {
+                "rawValue": 123,
+                "raw": "123"
+              },
+              "value": 123
+            }
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":23,"end":40,"loc":{"start":{"line":3,"column":0,"index":23},"end":{"line":3,"column":17,"index":40}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":34,"end":39,"loc":{"start":{"line":3,"column":11,"index":34},"end":{"line":3,"column":16,"index":39}},
+            "id": {
+              "type": "Identifier",
+              "start":34,"end":35,"loc":{"start":{"line":3,"column":11,"index":34},"end":{"line":3,"column":12,"index":35},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":38,"end":39,"loc":{"start":{"line":3,"column":15,"index":38},"end":{"line":3,"column":16,"index":39}},
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

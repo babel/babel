@@ -1,0 +1,174 @@
+{
+  "type": "File",
+  "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":2,"index":81}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":2,"index":81}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":2,"index":81}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":80,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":6,"column":1,"index":80}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":10,"end":80,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":6,"column":1,"index":80}},
+              "properties": [
+                {
+                  "type": "ObjectMethod",
+                  "start":14,"end":28,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":16,"index":28}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":14,"end":20,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":8,"index":20},"identifierName":"foobar"},
+                    "name": "foobar"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":26,"end":28,"loc":{"start":{"line":2,"column":14,"index":26},"end":{"line":2,"column":16,"index":28}},
+                    "body": [],
+                    "directives": []
+                  },
+                  "typeParameters": {
+                    "type": "TypeParameterDeclaration",
+                    "start":20,"end":23,"loc":{"start":{"line":2,"column":8,"index":20},"end":{"line":2,"column":11,"index":23}},
+                    "params": [
+                      {
+                        "type": "TypeParameter",
+                        "start":21,"end":22,"loc":{"start":{"line":2,"column":9,"index":21},"end":{"line":2,"column":10,"index":22}},
+                        "name": "T",
+                        "variance": null
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "ObjectMethod",
+                  "start":32,"end":46,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":16,"index":46}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":32,"end":38,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":8,"index":38},"identifierName":"delete"},
+                    "name": "delete"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":44,"end":46,"loc":{"start":{"line":3,"column":14,"index":44},"end":{"line":3,"column":16,"index":46}},
+                    "body": [],
+                    "directives": []
+                  },
+                  "typeParameters": {
+                    "type": "TypeParameterDeclaration",
+                    "start":38,"end":41,"loc":{"start":{"line":3,"column":8,"index":38},"end":{"line":3,"column":11,"index":41}},
+                    "params": [
+                      {
+                        "type": "TypeParameter",
+                        "start":39,"end":40,"loc":{"start":{"line":3,"column":9,"index":39},"end":{"line":3,"column":10,"index":40}},
+                        "name": "T",
+                        "variance": null
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "ObjectMethod",
+                  "start":50,"end":63,"loc":{"start":{"line":4,"column":2,"index":50},"end":{"line":4,"column":15,"index":63}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":50,"end":55,"loc":{"start":{"line":4,"column":2,"index":50},"end":{"line":4,"column":7,"index":55},"identifierName":"yield"},
+                    "name": "yield"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":61,"end":63,"loc":{"start":{"line":4,"column":13,"index":61},"end":{"line":4,"column":15,"index":63}},
+                    "body": [],
+                    "directives": []
+                  },
+                  "typeParameters": {
+                    "type": "TypeParameterDeclaration",
+                    "start":55,"end":58,"loc":{"start":{"line":4,"column":7,"index":55},"end":{"line":4,"column":10,"index":58}},
+                    "params": [
+                      {
+                        "type": "TypeParameter",
+                        "start":56,"end":57,"loc":{"start":{"line":4,"column":8,"index":56},"end":{"line":4,"column":9,"index":57}},
+                        "name": "T",
+                        "variance": null
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "ObjectMethod",
+                  "start":67,"end":77,"loc":{"start":{"line":5,"column":2,"index":67},"end":{"line":5,"column":12,"index":77}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":67,"end":69,"loc":{"start":{"line":5,"column":2,"index":67},"end":{"line":5,"column":4,"index":69},"identifierName":"do"},
+                    "name": "do"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":75,"end":77,"loc":{"start":{"line":5,"column":10,"index":75},"end":{"line":5,"column":12,"index":77}},
+                    "body": [],
+                    "directives": []
+                  },
+                  "typeParameters": {
+                    "type": "TypeParameterDeclaration",
+                    "start":69,"end":72,"loc":{"start":{"line":5,"column":4,"index":69},"end":{"line":5,"column":7,"index":72}},
+                    "params": [
+                      {
+                        "type": "TypeParameter",
+                        "start":70,"end":71,"loc":{"start":{"line":5,"column":5,"index":70},"end":{"line":5,"column":6,"index":71}},
+                        "name": "T",
+                        "variance": null
+                      }
+                    ]
+                  }
+                }
+              ],
+              "extra": {
+                "trailingComma": 77
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

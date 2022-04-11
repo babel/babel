@@ -1,0 +1,147 @@
+{
+  "type": "File",
+  "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":2,"index":113}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":2,"index":113}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":8,"end":26,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":18,"index":26}},
+        "id": {
+          "type": "Identifier",
+          "start":13,"end":14,"loc":{"start":{"line":2,"column":5,"index":13},"end":{"line":2,"column":6,"index":14},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":17,"end":25,"loc":{"start":{"line":2,"column":9,"index":17},"end":{"line":2,"column":17,"index":25}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": true
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": "@flow",
+            "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}}
+          }
+        ]
+      },
+      {
+        "type": "TypeAlias",
+        "start":27,"end":45,"loc":{"start":{"line":3,"column":0,"index":27},"end":{"line":3,"column":18,"index":45}},
+        "id": {
+          "type": "Identifier",
+          "start":32,"end":33,"loc":{"start":{"line":3,"column":5,"index":32},"end":{"line":3,"column":6,"index":33},"identifierName":"U"},
+          "name": "U"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":36,"end":44,"loc":{"start":{"line":3,"column":9,"index":36},"end":{"line":3,"column":17,"index":44}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": true
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":46,"end":79,"loc":{"start":{"line":4,"column":0,"index":46},"end":{"line":7,"column":2,"index":79}},
+        "id": {
+          "type": "Identifier",
+          "start":51,"end":52,"loc":{"start":{"line":4,"column":5,"index":51},"end":{"line":4,"column":6,"index":52},"identifierName":"V"},
+          "name": "V"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":55,"end":78,"loc":{"start":{"line":4,"column":9,"index":55},"end":{"line":7,"column":1,"index":78}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":59,"end":68,"loc":{"start":{"line":5,"column":2,"index":59},"end":{"line":5,"column":11,"index":68}},
+              "key": {
+                "type": "Identifier",
+                "start":59,"end":60,"loc":{"start":{"line":5,"column":2,"index":59},"end":{"line":5,"column":3,"index":60},"identifierName":"x"},
+                "name": "x"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start":62,"end":68,"loc":{"start":{"line":5,"column":5,"index":62},"end":{"line":5,"column":11,"index":68}}
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": true
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":80,"end":113,"loc":{"start":{"line":8,"column":0,"index":80},"end":{"line":11,"column":2,"index":113}},
+        "id": {
+          "type": "Identifier",
+          "start":85,"end":86,"loc":{"start":{"line":8,"column":5,"index":85},"end":{"line":8,"column":6,"index":86},"identifierName":"W"},
+          "name": "W"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":89,"end":112,"loc":{"start":{"line":8,"column":9,"index":89},"end":{"line":11,"column":1,"index":112}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":93,"end":102,"loc":{"start":{"line":9,"column":2,"index":93},"end":{"line":9,"column":11,"index":102}},
+              "key": {
+                "type": "Identifier",
+                "start":93,"end":94,"loc":{"start":{"line":9,"column":2,"index":93},"end":{"line":9,"column":3,"index":94},"identifierName":"x"},
+                "name": "x"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start":96,"end":102,"loc":{"start":{"line":9,"column":5,"index":96},"end":{"line":9,"column":11,"index":102}}
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": true
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "@flow",
+      "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}}
+    }
+  ]
+}

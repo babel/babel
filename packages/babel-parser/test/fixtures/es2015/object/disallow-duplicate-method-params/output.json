@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":22}},
+  "errors": [
+    "SyntaxError: Argument name clash. (2:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":22}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":21,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":3,"column":1,"index":21}},
+          "properties": [
+            {
+              "type": "ObjectMethod",
+              "start":7,"end":19,"loc":{"start":{"line":2,"column":4,"index":7},"end":{"line":2,"column":16,"index":19}},
+              "method": true,
+              "key": {
+                "type": "Identifier",
+                "start":7,"end":10,"loc":{"start":{"line":2,"column":4,"index":7},"end":{"line":2,"column":7,"index":10},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":11,"end":12,"loc":{"start":{"line":2,"column":8,"index":11},"end":{"line":2,"column":9,"index":12},"identifierName":"a"},
+                  "name": "a"
+                },
+                {
+                  "type": "Identifier",
+                  "start":14,"end":15,"loc":{"start":{"line":2,"column":11,"index":14},"end":{"line":2,"column":12,"index":15},"identifierName":"a"},
+                  "name": "a"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":17,"end":19,"loc":{"start":{"line":2,"column":14,"index":17},"end":{"line":2,"column":16,"index":19}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-dynamic-import", "transform-modules-amd"]
+}

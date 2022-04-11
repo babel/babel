@@ -1,0 +1,67 @@
+{
+  "type": "File",
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+            "object": {
+              "type": "MemberExpression",
+              "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+              "object": {
+                "type": "MemberExpression",
+                "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+                "object": {
+                  "type": "Identifier",
+                  "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"earth"},
+                  "name": "earth"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":6,"end":10,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":10,"index":10},"identifierName":"asia"},
+                  "name": "asia"
+                }
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":11,"end":20,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":20,"index":20},"identifierName":"Indonesia"},
+                "name": "Indonesia"
+              }
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":21,"end":39,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":39,"index":39},"identifierName":"prepareForElection"},
+              "name": "prepareForElection"
+            }
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":40,"end":44,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":44,"index":44}},
+              "extra": {
+                "rawValue": 2014,
+                "raw": "2014"
+              },
+              "value": 2014
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

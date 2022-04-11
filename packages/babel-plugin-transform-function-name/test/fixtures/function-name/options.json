@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-function-name",
+    "transform-classes",
+    ["proposal-decorators", { "legacy": true }]
+  ]
+}

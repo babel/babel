@@ -1,0 +1,2 @@
+# No-op .babelignore to stop babel from skipping these, which the root
+# .babelignore tells it to do.

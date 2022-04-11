@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["proposal-class-properties", { "loose": true }, "name 1"],
+    ["proposal-class-properties", { "loose": false }, "name 2"]
+  ]
+}

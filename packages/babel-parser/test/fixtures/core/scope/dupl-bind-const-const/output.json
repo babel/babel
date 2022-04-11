@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared. (1:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":11,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":11,"index":11}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":13,"end":18,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":18,"index":18}},
+            "id": {
+              "type": "Identifier",
+              "start":13,"end":16,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":16,"index":16},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}},
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "type": "File",
+  "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":34,"index":70}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":34,"index":70}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareInterface",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"I"},
+          "name": "I"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":20,"end":35,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":35,"index":35}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":22,"end":33,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":33,"index":33}},
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":25,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":25,"index":25},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "StringTypeAnnotation",
+                "start":27,"end":33,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":33,"index":33}}
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "DeclareInterface",
+        "start":36,"end":70,"loc":{"start":{"line":2,"column":0,"index":36},"end":{"line":2,"column":34,"index":70}},
+        "id": {
+          "type": "Identifier",
+          "start":54,"end":56,"loc":{"start":{"line":2,"column":18,"index":54},"end":{"line":2,"column":20,"index":56},"identifierName":"I2"},
+          "name": "I2"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start":56,"end":59,"loc":{"start":{"line":2,"column":20,"index":56},"end":{"line":2,"column":23,"index":59}},
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start":57,"end":58,"loc":{"start":{"line":2,"column":21,"index":57},"end":{"line":2,"column":22,"index":58}},
+              "name": "T",
+              "variance": null
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":60,"end":70,"loc":{"start":{"line":2,"column":24,"index":60},"end":{"line":2,"column":34,"index":70}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":62,"end":68,"loc":{"start":{"line":2,"column":26,"index":62},"end":{"line":2,"column":32,"index":68}},
+              "key": {
+                "type": "Identifier",
+                "start":62,"end":65,"loc":{"start":{"line":2,"column":26,"index":62},"end":{"line":2,"column":29,"index":65},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "GenericTypeAnnotation",
+                "start":67,"end":68,"loc":{"start":{"line":2,"column":31,"index":67},"end":{"line":2,"column":32,"index":68}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":67,"end":68,"loc":{"start":{"line":2,"column":31,"index":67},"end":{"line":2,"column":32,"index":68},"identifierName":"T"},
+                  "name": "T"
+                }
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

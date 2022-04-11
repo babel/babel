@@ -1,0 +1,48 @@
+{
+  "name": "@babel/preset-react",
+  "version": "7.16.7",
+  "description": "Babel preset for all React plugins.",
+  "author": "The Babel Team (https://babel.dev/team)",
+  "homepage": "https://babel.dev/docs/en/next/babel-preset-react",
+  "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20react%22+is%3Aopen",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-preset-react"
+  },
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^",
+    "@babel/plugin-transform-react-display-name": "workspace:^",
+    "@babel/plugin-transform-react-jsx": "workspace:^",
+    "@babel/plugin-transform-react-jsx-development": "workspace:^",
+    "@babel/plugin-transform-react-pure-annotations": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
+}

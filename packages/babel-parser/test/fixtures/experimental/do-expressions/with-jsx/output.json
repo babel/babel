@@ -1,0 +1,191 @@
+{
+  "type": "File",
+  "start":0,"end":223,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":16,"column":1,"index":223}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":223,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":16,"column":1,"index":223}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":223,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":16,"column":1,"index":223}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":223,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":16,"column":1,"index":223}},
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "start":19,"end":221,"loc":{"start":{"line":2,"column":2,"index":19},"end":{"line":15,"column":4,"index":221}},
+              "argument": {
+                "type": "JSXElement",
+                "start":32,"end":216,"loc":{"start":{"line":3,"column":4,"index":32},"end":{"line":14,"column":10,"index":216}},
+                "openingElement": {
+                  "type": "JSXOpeningElement",
+                  "start":32,"end":37,"loc":{"start":{"line":3,"column":4,"index":32},"end":{"line":3,"column":9,"index":37}},
+                  "name": {
+                    "type": "JSXIdentifier",
+                    "start":33,"end":36,"loc":{"start":{"line":3,"column":5,"index":33},"end":{"line":3,"column":8,"index":36}},
+                    "name": "nav"
+                  },
+                  "attributes": [],
+                  "selfClosing": false
+                },
+                "closingElement": {
+                  "type": "JSXClosingElement",
+                  "start":210,"end":216,"loc":{"start":{"line":14,"column":4,"index":210},"end":{"line":14,"column":10,"index":216}},
+                  "name": {
+                    "type": "JSXIdentifier",
+                    "start":212,"end":215,"loc":{"start":{"line":14,"column":6,"index":212},"end":{"line":14,"column":9,"index":215}},
+                    "name": "nav"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "JSXText",
+                    "start":37,"end":44,"loc":{"start":{"line":3,"column":9,"index":37},"end":{"line":4,"column":6,"index":44}},
+                    "extra": {
+                      "rawValue": "\n      ",
+                      "raw": "\n      "
+                    },
+                    "value": "\n      "
+                  },
+                  {
+                    "type": "JSXElement",
+                    "start":44,"end":52,"loc":{"start":{"line":4,"column":6,"index":44},"end":{"line":4,"column":14,"index":52}},
+                    "openingElement": {
+                      "type": "JSXOpeningElement",
+                      "start":44,"end":52,"loc":{"start":{"line":4,"column":6,"index":44},"end":{"line":4,"column":14,"index":52}},
+                      "name": {
+                        "type": "JSXIdentifier",
+                        "start":45,"end":49,"loc":{"start":{"line":4,"column":7,"index":45},"end":{"line":4,"column":11,"index":49}},
+                        "name": "Home"
+                      },
+                      "attributes": [],
+                      "selfClosing": true
+                    },
+                    "closingElement": null,
+                    "children": []
+                  },
+                  {
+                    "type": "JSXText",
+                    "start":52,"end":59,"loc":{"start":{"line":4,"column":14,"index":52},"end":{"line":5,"column":6,"index":59}},
+                    "extra": {
+                      "rawValue": "\n      ",
+                      "raw": "\n      "
+                    },
+                    "value": "\n      "
+                  },
+                  {
+                    "type": "JSXExpressionContainer",
+                    "start":59,"end":205,"loc":{"start":{"line":5,"column":6,"index":59},"end":{"line":13,"column":7,"index":205}},
+                    "expression": {
+                      "type": "DoExpression",
+                      "start":69,"end":197,"loc":{"start":{"line":6,"column":8,"index":69},"end":{"line":12,"column":9,"index":197}},
+                      "async": false,
+                      "body": {
+                        "type": "BlockStatement",
+                        "start":72,"end":197,"loc":{"start":{"line":6,"column":11,"index":72},"end":{"line":12,"column":9,"index":197}},
+                        "body": [
+                          {
+                            "type": "IfStatement",
+                            "start":84,"end":187,"loc":{"start":{"line":7,"column":10,"index":84},"end":{"line":11,"column":11,"index":187}},
+                            "test": {
+                              "type": "Identifier",
+                              "start":88,"end":96,"loc":{"start":{"line":7,"column":14,"index":88},"end":{"line":7,"column":22,"index":96},"identifierName":"loggedIn"},
+                              "name": "loggedIn"
+                            },
+                            "consequent": {
+                              "type": "BlockStatement",
+                              "start":98,"end":140,"loc":{"start":{"line":7,"column":24,"index":98},"end":{"line":9,"column":11,"index":140}},
+                              "body": [
+                                {
+                                  "type": "ExpressionStatement",
+                                  "start":112,"end":128,"loc":{"start":{"line":8,"column":12,"index":112},"end":{"line":8,"column":28,"index":128}},
+                                  "expression": {
+                                    "type": "JSXElement",
+                                    "start":112,"end":128,"loc":{"start":{"line":8,"column":12,"index":112},"end":{"line":8,"column":28,"index":128}},
+                                    "openingElement": {
+                                      "type": "JSXOpeningElement",
+                                      "start":112,"end":128,"loc":{"start":{"line":8,"column":12,"index":112},"end":{"line":8,"column":28,"index":128}},
+                                      "name": {
+                                        "type": "JSXIdentifier",
+                                        "start":113,"end":125,"loc":{"start":{"line":8,"column":13,"index":113},"end":{"line":8,"column":25,"index":125}},
+                                        "name": "LogoutButton"
+                                      },
+                                      "attributes": [],
+                                      "selfClosing": true
+                                    },
+                                    "closingElement": null,
+                                    "children": []
+                                  }
+                                }
+                              ],
+                              "directives": []
+                            },
+                            "alternate": {
+                              "type": "BlockStatement",
+                              "start":146,"end":187,"loc":{"start":{"line":9,"column":17,"index":146},"end":{"line":11,"column":11,"index":187}},
+                              "body": [
+                                {
+                                  "type": "ExpressionStatement",
+                                  "start":160,"end":175,"loc":{"start":{"line":10,"column":12,"index":160},"end":{"line":10,"column":27,"index":175}},
+                                  "expression": {
+                                    "type": "JSXElement",
+                                    "start":160,"end":175,"loc":{"start":{"line":10,"column":12,"index":160},"end":{"line":10,"column":27,"index":175}},
+                                    "openingElement": {
+                                      "type": "JSXOpeningElement",
+                                      "start":160,"end":175,"loc":{"start":{"line":10,"column":12,"index":160},"end":{"line":10,"column":27,"index":175}},
+                                      "name": {
+                                        "type": "JSXIdentifier",
+                                        "start":161,"end":172,"loc":{"start":{"line":10,"column":13,"index":161},"end":{"line":10,"column":24,"index":172}},
+                                        "name": "LoginButton"
+                                      },
+                                      "attributes": [],
+                                      "selfClosing": true
+                                    },
+                                    "closingElement": null,
+                                    "children": []
+                                  }
+                                }
+                              ],
+                              "directives": []
+                            }
+                          }
+                        ],
+                        "directives": []
+                      }
+                    }
+                  },
+                  {
+                    "type": "JSXText",
+                    "start":205,"end":210,"loc":{"start":{"line":13,"column":7,"index":205},"end":{"line":14,"column":4,"index":210}},
+                    "extra": {
+                      "rawValue": "\n    ",
+                      "raw": "\n    "
+                    },
+                    "value": "\n    "
+                  }
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 26
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

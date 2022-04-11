@@ -1,0 +1,33 @@
+{
+  "type": "File",
+  "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":5}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":5}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":5}},
+        "expression": {
+          "type": "TemplateLiteral",
+          "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":5}},
+          "expressions": [],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start":1,"end":4,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":4,"column":0,"index":4}},
+              "value": {
+                "raw": "\n\n\n",
+                "cooked": "\n\n\n"
+              },
+              "tail": true
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

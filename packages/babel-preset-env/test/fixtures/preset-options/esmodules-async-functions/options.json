@@ -1,0 +1,11 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": { "esmodules": true },
+        "modules": false
+      }
+    ]
+  ]
+}

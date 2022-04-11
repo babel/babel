@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":83,"index":101}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":83,"index":101}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":8,"index":17}},
+        "expression": {
+          "type": "TemplateLiteral",
+          "start":1,"end":15,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":2,"column":6,"index":15}},
+          "expressions": [],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start":2,"end":14,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":2,"column":5,"index":14}},
+              "value": {
+                "raw": "before after",
+                "cooked": "before after"
+              },
+              "tail": true
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": "      ^ That's a U+2028 LINE SEPARATOR UTF-16 char (between 'before' and 'after')",
+            "start":18,"end":101,"loc":{"start":{"line":3,"column":0,"index":18},"end":{"line":3,"column":83,"index":101}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "      ^ That's a U+2028 LINE SEPARATOR UTF-16 char (between 'before' and 'after')",
+      "start":18,"end":101,"loc":{"start":{"line":3,"column":0,"index":18},"end":{"line":3,"column":83,"index":101}}
+    }
+  ]
+}

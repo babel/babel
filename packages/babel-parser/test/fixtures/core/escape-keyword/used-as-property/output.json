@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":27,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":3,"column":1,"index":27}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":8,"end":27,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":1,"index":27}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":12,"end":25,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":15,"index":25}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":12,"end":22,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":12,"index":22},"identifierName":"break"},
+                    "name": "break"
+                  },
+                  "computed": false,
+                  "shorthand": false,
+                  "value": {
+                    "type": "NumericLiteral",
+                    "start":24,"end":25,"loc":{"start":{"line":2,"column":14,"index":24},"end":{"line":2,"column":15,"index":25}},
+                    "extra": {
+                      "rawValue": 2,
+                      "raw": "2"
+                    },
+                    "value": 2
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

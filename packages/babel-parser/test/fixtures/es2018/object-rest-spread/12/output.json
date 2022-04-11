@@ -1,0 +1,105 @@
+{
+  "type": "File",
+  "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":57}},
+  "errors": [
+    "SyntaxError: Identifier 'bar' has already been declared. (2:13)",
+    "SyntaxError: `bar` has already been exported. Exported identifiers must be unique. (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":57}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":7,"end":35,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":35,"index":35}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":13,"end":34,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":34,"index":34}},
+              "id": {
+                "type": "ObjectPattern",
+                "start":13,"end":28,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":28,"index":28}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+                    "key": {
+                      "type": "Identifier",
+                      "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "computed": false,
+                    "method": false,
+                    "shorthand": true,
+                    "value": {
+                      "type": "Identifier",
+                      "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "extra": {
+                      "shorthand": true
+                    }
+                  },
+                  {
+                    "type": "RestElement",
+                    "start":20,"end":26,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":26,"index":26}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":23,"end":26,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":26,"index":26},"identifierName":"bar"},
+                      "name": "bar"
+                    }
+                  }
+                ]
+              },
+              "init": {
+                "type": "Identifier",
+                "start":31,"end":34,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":34,"index":34},"identifierName":"baz"},
+                "name": "baz"
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":36,"end":57,"loc":{"start":{"line":2,"column":0,"index":36},"end":{"line":2,"column":21,"index":57}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":43,"end":57,"loc":{"start":{"line":2,"column":7,"index":43},"end":{"line":2,"column":21,"index":57}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":49,"end":56,"loc":{"start":{"line":2,"column":13,"index":49},"end":{"line":2,"column":20,"index":56}},
+              "id": {
+                "type": "Identifier",
+                "start":49,"end":52,"loc":{"start":{"line":2,"column":13,"index":49},"end":{"line":2,"column":16,"index":52},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":55,"end":56,"loc":{"start":{"line":2,"column":19,"index":55},"end":{"line":2,"column":20,"index":56}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

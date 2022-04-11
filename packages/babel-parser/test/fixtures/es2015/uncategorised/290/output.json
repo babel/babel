@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "errors": [
+    "SyntaxError: Invalid escape sequence in template. (1:23)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":27,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":27,"index":27}},
+        "expression": {
+          "type": "TemplateLiteral",
+          "start":14,"end":26,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":26,"index":26}},
+          "expressions": [
+            {
+              "type": "Identifier",
+              "start":17,"end":21,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":21,"index":21},"identifierName":"test"},
+              "name": "test"
+            }
+          ],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start":15,"end":15,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":15,"index":15}},
+              "value": {
+                "raw": "",
+                "cooked": ""
+              },
+              "tail": false
+            },
+            {
+              "type": "TemplateElement",
+              "start":22,"end":25,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":25,"index":25}},
+              "value": {
+                "raw": "\\02",
+                "cooked": null
+              },
+              "tail": true
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

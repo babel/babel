@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "ie": 9
+        },
+        "useBuiltIns": "entry",
+        "corejs": 3,
+        "modules": false
+      }
+    ]
+  ]
+}

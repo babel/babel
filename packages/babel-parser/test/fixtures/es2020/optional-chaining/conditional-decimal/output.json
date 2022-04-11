@@ -1,0 +1,75 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":24}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":24}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+          "test": {
+            "type": "BooleanLiteral",
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+            "value": true
+          },
+          "consequent": {
+            "type": "NumericLiteral",
+            "start":5,"end":7,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":7,"index":7}},
+            "extra": {
+              "rawValue": 0.3,
+              "raw": ".3"
+            },
+            "value": 0.3
+          },
+          "alternate": {
+            "type": "NumericLiteral",
+            "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":11,"end":24,"loc":{"start":{"line":3,"column":0,"index":11},"end":{"line":3,"column":13,"index":24}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":11,"end":24,"loc":{"start":{"line":3,"column":0,"index":11},"end":{"line":3,"column":13,"index":24}},
+          "test": {
+            "type": "BooleanLiteral",
+            "start":11,"end":15,"loc":{"start":{"line":3,"column":0,"index":11},"end":{"line":3,"column":4,"index":15}},
+            "value": true
+          },
+          "consequent": {
+            "type": "NumericLiteral",
+            "start":18,"end":20,"loc":{"start":{"line":3,"column":7,"index":18},"end":{"line":3,"column":9,"index":20}},
+            "extra": {
+              "rawValue": 0.3,
+              "raw": ".3"
+            },
+            "value": 0.3
+          },
+          "alternate": {
+            "type": "NumericLiteral",
+            "start":23,"end":24,"loc":{"start":{"line":3,"column":12,"index":23},"end":{"line":3,"column":13,"index":24}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "File",
+  "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [],
+    "innerComments": [
+      {
+        "type": "CommentBlock",
+        "value": "",
+        "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}}
+      },
+      {
+        "type": "CommentLine",
+        "value": " comment",
+        "start":5,"end":16,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":16,"index":16}}
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "",
+      "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " comment",
+      "start":5,"end":16,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":16,"index":16}}
+    }
+  ]
+}

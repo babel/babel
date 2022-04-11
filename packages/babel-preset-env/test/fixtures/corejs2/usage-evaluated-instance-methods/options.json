@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "useBuiltIns": "usage",
+        "targets": { "browsers": "ie 6" },
+        "corejs": 2,
+        "modules": false
+      }
+    ]
+  ]
+}

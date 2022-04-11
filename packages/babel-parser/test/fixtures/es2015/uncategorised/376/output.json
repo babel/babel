@@ -1,0 +1,34 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'enum'. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"enum"},
+          "name": "enum"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":18,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":18,"index":18}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

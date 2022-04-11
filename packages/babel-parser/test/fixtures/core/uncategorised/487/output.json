@@ -1,0 +1,81 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":62,"index":62}},
+  "errors": [
+    "SyntaxError: Binding 'arguments' in strict mode. (1:42)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":62,"index":62}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":62,"index":62}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14},"identifierName":"hello"},
+          "name": "hello"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":17,"end":62,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":62,"index":62}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":32,"end":60,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":60,"index":60}},
+              "expression": {
+                "type": "CallExpression",
+                "start":33,"end":59,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":59,"index":59}},
+                "callee": {
+                  "type": "FunctionExpression",
+                  "start":33,"end":57,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":57,"index":57}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":42,"end":51,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":51,"index":51},"identifierName":"arguments"},
+                    "name": "arguments"
+                  },
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":54,"end":57,"loc":{"start":{"line":1,"column":54,"index":54},"end":{"line":1,"column":57,"index":57}},
+                    "body": [],
+                    "directives": []
+                  }
+                },
+                "arguments": [],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 32
+                }
+              }
+            }
+          ],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":18,"end":31,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":31,"index":31}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":18,"end":30,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":30,"index":30}},
+                "extra": {
+                  "rawValue": "use strict",
+                  "raw": "'use strict'",
+                  "expressionValue": "use strict"
+                },
+                "value": "use strict"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

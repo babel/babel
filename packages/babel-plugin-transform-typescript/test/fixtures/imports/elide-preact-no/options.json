@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "transform-typescript",
+      { "jsxPragma": "h", "jsxPragmaFrag": "Fragment", "isTSX": true }
+    ]
+  ]
+}

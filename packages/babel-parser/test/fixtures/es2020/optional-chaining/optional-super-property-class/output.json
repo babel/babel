@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":50}},
+  "errors": [
+    "SyntaxError: 'super' can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]). (3:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":50}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":50}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":7,"end":50,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":5,"column":1,"index":50}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":13,"end":48,"loc":{"start":{"line":2,"column":4,"index":13},"end":{"line":4,"column":5,"index":48}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":13,"end":14,"loc":{"start":{"line":2,"column":4,"index":13},"end":{"line":2,"column":5,"index":14},"identifierName":"b"},
+                "name": "b"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":16,"end":48,"loc":{"start":{"line":2,"column":7,"index":16},"end":{"line":4,"column":5,"index":48}},
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start":26,"end":42,"loc":{"start":{"line":3,"column":8,"index":26},"end":{"line":3,"column":24,"index":42}},
+                    "argument": {
+                      "type": "OptionalMemberExpression",
+                      "start":33,"end":41,"loc":{"start":{"line":3,"column":15,"index":33},"end":{"line":3,"column":23,"index":41}},
+                      "object": {
+                        "type": "Super",
+                        "start":33,"end":38,"loc":{"start":{"line":3,"column":15,"index":33},"end":{"line":3,"column":20,"index":38}}
+                      },
+                      "computed": false,
+                      "property": {
+                        "type": "Identifier",
+                        "start":40,"end":41,"loc":{"start":{"line":3,"column":22,"index":40},"end":{"line":3,"column":23,"index":41},"identifierName":"b"},
+                        "name": "b"
+                      },
+                      "optional": true
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "proposal-class-properties",
+    "transform-classes",
+    "transform-block-scoping",
+    "transform-exponentiation-operator"
+  ]
+}

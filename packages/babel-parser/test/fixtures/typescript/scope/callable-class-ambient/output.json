@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":27,"index":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":27,"index":47}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "declare": true,
+        "id": {
+          "type": "Identifier",
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":16,"end":19,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":19,"index":19}},
+          "body": []
+        }
+      },
+      {
+        "type": "TSDeclareFunction",
+        "start":20,"end":47,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":2,"column":27,"index":47}},
+        "declare": true,
+        "id": {
+          "type": "Identifier",
+          "start":37,"end":38,"loc":{"start":{"line":2,"column":17,"index":37},"end":{"line":2,"column":18,"index":38},"identifierName":"C"},
+          "name": "C"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":40,"end":46,"loc":{"start":{"line":2,"column":20,"index":40},"end":{"line":2,"column":26,"index":46}},
+          "typeAnnotation": {
+            "type": "TSVoidKeyword",
+            "start":42,"end":46,"loc":{"start":{"line":2,"column":22,"index":42},"end":{"line":2,"column":26,"index":46}}
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":33}},
+  "errors": [
+    "SyntaxError: A 'set' accesor function argument must not be a rest parameter. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":33}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":33}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"B"},
+          "name": "B"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":33,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":3,"column":1,"index":33}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":13,"end":30,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":19,"index":30}},
+              "key": {
+                "type": "Identifier",
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":6,"index":17},"end":{"line":2,"column":7,"index":18},"identifierName":"a"},
+                "name": "a"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "set",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":13,"end":30,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":19,"index":30}},
+                "params": [],
+                "rest": {
+                  "type": "FunctionTypeParam",
+                  "start":22,"end":23,"loc":{"start":{"line":2,"column":11,"index":22},"end":{"line":2,"column":12,"index":23}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start":22,"end":23,"loc":{"start":{"line":2,"column":11,"index":22},"end":{"line":2,"column":12,"index":23}},
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "start":22,"end":23,"loc":{"start":{"line":2,"column":11,"index":22},"end":{"line":2,"column":12,"index":23},"identifierName":"w"},
+                      "name": "w"
+                    }
+                  }
+                },
+                "typeParameters": null,
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":26,"end":30,"loc":{"start":{"line":2,"column":15,"index":26},"end":{"line":2,"column":19,"index":30}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

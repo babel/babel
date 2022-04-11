@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'enum'. (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4},"identifierName":"enum"},
+            "name": "enum"
+          },
+          "right": {
+            "type": "CallExpression",
+            "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12}},
+            "callee": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "arguments": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

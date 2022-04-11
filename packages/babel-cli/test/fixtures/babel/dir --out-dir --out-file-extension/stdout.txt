@@ -1,0 +1,3 @@
+src/bar.mjs -> lib/bar.mjs
+src/foo.jsx -> lib/foo.mjs
+Successfully compiled 2 files with Babel (123ms).

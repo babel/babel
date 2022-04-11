@@ -1,0 +1,161 @@
+{
+  "type": "File",
+  "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":12,"index":65}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":12,"index":65}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"await"},
+          "name": "await"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":6,"end":7,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":2,"column":1,"index":7}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":6,"end":7,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":2,"column":1,"index":7}},
+          "extra": {
+            "rawValue": 0,
+            "raw": "0"
+          },
+          "value": 0
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":9,"end":18,"loc":{"start":{"line":4,"column":0,"index":9},"end":{"line":4,"column":9,"index":18}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":9,"end":18,"loc":{"start":{"line":4,"column":0,"index":9},"end":{"line":4,"column":9,"index":18}},
+          "left": {
+            "type": "Identifier",
+            "start":9,"end":14,"loc":{"start":{"line":4,"column":0,"index":9},"end":{"line":4,"column":5,"index":14},"identifierName":"await"},
+            "name": "await"
+          },
+          "operator": "+",
+          "right": {
+            "type": "NumericLiteral",
+            "start":17,"end":18,"loc":{"start":{"line":4,"column":8,"index":17},"end":{"line":4,"column":9,"index":18}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":19,"end":28,"loc":{"start":{"line":5,"column":0,"index":19},"end":{"line":5,"column":9,"index":28}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":19,"end":28,"loc":{"start":{"line":5,"column":0,"index":19},"end":{"line":5,"column":9,"index":28}},
+          "left": {
+            "type": "Identifier",
+            "start":19,"end":24,"loc":{"start":{"line":5,"column":0,"index":19},"end":{"line":5,"column":5,"index":24},"identifierName":"await"},
+            "name": "await"
+          },
+          "operator": "-",
+          "right": {
+            "type": "NumericLiteral",
+            "start":27,"end":28,"loc":{"start":{"line":5,"column":8,"index":27},"end":{"line":5,"column":9,"index":28}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":29,"end":40,"loc":{"start":{"line":6,"column":0,"index":29},"end":{"line":6,"column":11,"index":40}},
+        "expression": {
+          "type": "CallExpression",
+          "start":29,"end":40,"loc":{"start":{"line":6,"column":0,"index":29},"end":{"line":6,"column":11,"index":40}},
+          "callee": {
+            "type": "Identifier",
+            "start":29,"end":34,"loc":{"start":{"line":6,"column":0,"index":29},"end":{"line":6,"column":5,"index":34},"identifierName":"await"},
+            "name": "await"
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":37,"end":38,"loc":{"start":{"line":6,"column":8,"index":37},"end":{"line":6,"column":9,"index":38}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":41,"end":52,"loc":{"start":{"line":7,"column":0,"index":41},"end":{"line":7,"column":11,"index":52}},
+        "expression": {
+          "type": "MemberExpression",
+          "start":41,"end":52,"loc":{"start":{"line":7,"column":0,"index":41},"end":{"line":7,"column":11,"index":52}},
+          "object": {
+            "type": "Identifier",
+            "start":41,"end":46,"loc":{"start":{"line":7,"column":0,"index":41},"end":{"line":7,"column":5,"index":46},"identifierName":"await"},
+            "name": "await"
+          },
+          "computed": true,
+          "property": {
+            "type": "NumericLiteral",
+            "start":49,"end":50,"loc":{"start":{"line":7,"column":8,"index":49},"end":{"line":7,"column":9,"index":50}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":53,"end":65,"loc":{"start":{"line":8,"column":0,"index":53},"end":{"line":8,"column":12,"index":65}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":53,"end":65,"loc":{"start":{"line":8,"column":0,"index":53},"end":{"line":8,"column":12,"index":65}},
+          "left": {
+            "type": "BinaryExpression",
+            "start":53,"end":62,"loc":{"start":{"line":8,"column":0,"index":53},"end":{"line":8,"column":9,"index":62}},
+            "left": {
+              "type": "Identifier",
+              "start":53,"end":58,"loc":{"start":{"line":8,"column":0,"index":53},"end":{"line":8,"column":5,"index":58},"identifierName":"await"},
+              "name": "await"
+            },
+            "operator": "/",
+            "right": {
+              "type": "NumericLiteral",
+              "start":61,"end":62,"loc":{"start":{"line":8,"column":8,"index":61},"end":{"line":8,"column":9,"index":62}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          },
+          "operator": "/",
+          "right": {
+            "type": "Identifier",
+            "start":64,"end":65,"loc":{"start":{"line":8,"column":11,"index":64},"end":{"line":8,"column":12,"index":65},"identifierName":"u"},
+            "name": "u"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

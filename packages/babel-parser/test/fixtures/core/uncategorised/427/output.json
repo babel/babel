@@ -1,0 +1,39 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "errors": [
+    "SyntaxError: Multiple default clauses. (1:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "discriminant": {
+          "type": "Identifier",
+          "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"c"},
+          "name": "c"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start":13,"end":21,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":21,"index":21}},
+            "consequent": [],
+            "test": null
+          },
+          {
+            "type": "SwitchCase",
+            "start":22,"end":30,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":30,"index":30}},
+            "consequent": [],
+            "test": null
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

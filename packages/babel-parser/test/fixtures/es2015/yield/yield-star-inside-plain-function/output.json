@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "expression": {
+          "type": "FunctionExpression",
+          "start":1,"end":26,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":26,"index":26}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":13,"end":26,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":26,"index":26}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":15,"end":24,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":24,"index":24}},
+                "expression": {
+                  "type": "BinaryExpression",
+                  "start":15,"end":24,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":24,"index":24}},
+                  "left": {
+                    "type": "Identifier",
+                    "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20},"identifierName":"yield"},
+                    "name": "yield"
+                  },
+                  "operator": "*",
+                  "right": {
+                    "type": "NumericLiteral",
+                    "start":22,"end":24,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":24,"index":24}},
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10"
+                    },
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "directives": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

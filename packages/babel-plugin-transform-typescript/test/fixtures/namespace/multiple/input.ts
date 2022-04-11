@@ -1,0 +1,2 @@
+namespace N {}
+namespace N {}

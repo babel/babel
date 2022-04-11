@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "chrome": 61
+        },
+        "include": ["@babel/plugin-transform-classes"],
+        "modules": false
+      }
+    ]
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "minNodeVersion": "8.0.0",
+  "plugins": [
+    ["proposal-private-methods", { "loose": true }],
+    ["proposal-class-properties", { "loose": true }]
+  ],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

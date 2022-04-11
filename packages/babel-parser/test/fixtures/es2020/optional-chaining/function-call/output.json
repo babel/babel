@@ -1,0 +1,142 @@
+{
+  "type": "File",
+  "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":10,"index":64}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":10,"index":64}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "OptionalCallExpression",
+          "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4},"identifierName":"func"},
+            "name": "func"
+          },
+          "optional": true,
+          "arguments": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":10,"end":22,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":12,"index":22}},
+        "expression": {
+          "type": "OptionalCallExpression",
+          "start":10,"end":22,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":12,"index":22}},
+          "callee": {
+            "type": "Identifier",
+            "start":10,"end":14,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":4,"index":14},"identifierName":"func"},
+            "name": "func"
+          },
+          "optional": true,
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":17,"end":18,"loc":{"start":{"line":3,"column":7,"index":17},"end":{"line":3,"column":8,"index":18},"identifierName":"a"},
+              "name": "a"
+            },
+            {
+              "type": "Identifier",
+              "start":20,"end":21,"loc":{"start":{"line":3,"column":10,"index":20},"end":{"line":3,"column":11,"index":21},"identifierName":"b"},
+              "name": "b"
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":24,"end":35,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":11,"index":35}},
+        "expression": {
+          "type": "OptionalCallExpression",
+          "start":24,"end":35,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":11,"index":35}},
+          "callee": {
+            "type": "OptionalMemberExpression",
+            "start":24,"end":31,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":7,"index":31}},
+            "object": {
+              "type": "Identifier",
+              "start":24,"end":25,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":1,"index":25},"identifierName":"a"},
+              "name": "a"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":27,"end":31,"loc":{"start":{"line":5,"column":3,"index":27},"end":{"line":5,"column":7,"index":31},"identifierName":"func"},
+              "name": "func"
+            },
+            "optional": true
+          },
+          "optional": true,
+          "arguments": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":37,"end":52,"loc":{"start":{"line":7,"column":0,"index":37},"end":{"line":7,"column":15,"index":52}},
+        "expression": {
+          "type": "OptionalCallExpression",
+          "start":37,"end":52,"loc":{"start":{"line":7,"column":0,"index":37},"end":{"line":7,"column":15,"index":52}},
+          "callee": {
+            "type": "OptionalMemberExpression",
+            "start":37,"end":44,"loc":{"start":{"line":7,"column":0,"index":37},"end":{"line":7,"column":7,"index":44}},
+            "object": {
+              "type": "Identifier",
+              "start":37,"end":38,"loc":{"start":{"line":7,"column":0,"index":37},"end":{"line":7,"column":1,"index":38},"identifierName":"a"},
+              "name": "a"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":40,"end":44,"loc":{"start":{"line":7,"column":3,"index":40},"end":{"line":7,"column":7,"index":44},"identifierName":"func"},
+              "name": "func"
+            },
+            "optional": true
+          },
+          "optional": true,
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":47,"end":48,"loc":{"start":{"line":7,"column":10,"index":47},"end":{"line":7,"column":11,"index":48},"identifierName":"a"},
+              "name": "a"
+            },
+            {
+              "type": "Identifier",
+              "start":50,"end":51,"loc":{"start":{"line":7,"column":13,"index":50},"end":{"line":7,"column":14,"index":51},"identifierName":"b"},
+              "name": "b"
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":54,"end":64,"loc":{"start":{"line":9,"column":0,"index":54},"end":{"line":9,"column":10,"index":64}},
+        "expression": {
+          "type": "OptionalCallExpression",
+          "start":54,"end":64,"loc":{"start":{"line":9,"column":0,"index":54},"end":{"line":9,"column":10,"index":64}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":54,"end":60,"loc":{"start":{"line":9,"column":0,"index":54},"end":{"line":9,"column":6,"index":60}},
+            "object": {
+              "type": "Identifier",
+              "start":54,"end":55,"loc":{"start":{"line":9,"column":0,"index":54},"end":{"line":9,"column":1,"index":55},"identifierName":"a"},
+              "name": "a"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":56,"end":60,"loc":{"start":{"line":9,"column":2,"index":56},"end":{"line":9,"column":6,"index":60},"identifierName":"func"},
+              "name": "func"
+            }
+          },
+          "optional": true,
+          "arguments": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

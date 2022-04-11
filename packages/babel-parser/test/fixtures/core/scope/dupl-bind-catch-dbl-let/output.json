@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared. (1:35)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "TryStatement",
+        "start":9,"end":30,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":30,"index":30}},
+        "block": {
+          "type": "BlockStatement",
+          "start":13,"end":15,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":15,"index":15}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":16,"end":30,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":30,"index":30}},
+          "param": {
+            "type": "Identifier",
+            "start":23,"end":26,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":26,"index":26},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":28,"end":30,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":30,"index":30}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":31,"end":39,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":39,"index":39}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":35,"end":38,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":38,"index":38}},
+            "id": {
+              "type": "Identifier",
+              "start":35,"end":38,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":38,"index":38},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

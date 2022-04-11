@@ -1,0 +1,32 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "expression": {
+          "type": "MemberExpression",
+          "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+          "object": {
+            "type": "Identifier",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8},"identifierName":"universe"},
+            "name": "universe"
+          },
+          "computed": true,
+          "property": {
+            "type": "Identifier",
+            "start":9,"end":19,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":19,"index":19},"identifierName":"galaxyName"},
+            "name": "galaxyName"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

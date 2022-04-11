@@ -1,0 +1,190 @@
+{
+  "type": "File",
+  "start":0,"end":155,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":155}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":155,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":155}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":12,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":12,"index":12}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":12,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":12,"index":12},"identifierName":"yieldSet"},
+              "name": "yieldSet"
+            },
+            "init": null
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15}},
+            "id": {
+              "type": "Identifier",
+              "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"C"},
+              "name": "C"
+            },
+            "init": null
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":17,"end":21,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":21,"index":21}},
+            "id": {
+              "type": "Identifier",
+              "start":17,"end":21,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":21,"index":21},"identifierName":"iter"},
+              "name": "iter"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":23,"end":155,"loc":{"start":{"line":2,"column":0,"index":23},"end":{"line":9,"column":1,"index":155}},
+        "id": {
+          "type": "Identifier",
+          "start":33,"end":34,"loc":{"start":{"line":2,"column":10,"index":33},"end":{"line":2,"column":11,"index":34},"identifierName":"g"},
+          "name": "g"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":37,"end":155,"loc":{"start":{"line":2,"column":14,"index":37},"end":{"line":9,"column":1,"index":155}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":41,"end":142,"loc":{"start":{"line":3,"column":2,"index":41},"end":{"line":6,"column":3,"index":142}},
+              "id": {
+                "type": "Identifier",
+                "start":47,"end":49,"loc":{"start":{"line":3,"column":8,"index":47},"end":{"line":3,"column":10,"index":49},"identifierName":"C_"},
+                "name": "C_"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":50,"end":142,"loc":{"start":{"line":3,"column":11,"index":50},"end":{"line":6,"column":3,"index":142}},
+                "body": [
+                  {
+                    "type": "ClassMethod",
+                    "start":56,"end":93,"loc":{"start":{"line":4,"column":4,"index":56},"end":{"line":4,"column":41,"index":93}},
+                    "static": false,
+                    "key": {
+                      "type": "YieldExpression",
+                      "start":61,"end":66,"loc":{"start":{"line":4,"column":9,"index":61},"end":{"line":4,"column":14,"index":66}},
+                      "delegate": false,
+                      "argument": null
+                    },
+                    "computed": true,
+                    "kind": "get",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":70,"end":93,"loc":{"start":{"line":4,"column":18,"index":70},"end":{"line":4,"column":41,"index":93}},
+                      "body": [
+                        {
+                          "type": "ReturnStatement",
+                          "start":72,"end":91,"loc":{"start":{"line":4,"column":20,"index":72},"end":{"line":4,"column":39,"index":91}},
+                          "argument": {
+                            "type": "StringLiteral",
+                            "start":79,"end":90,"loc":{"start":{"line":4,"column":27,"index":79},"end":{"line":4,"column":38,"index":90}},
+                            "extra": {
+                              "rawValue": "get yield",
+                              "raw": "'get yield'"
+                            },
+                            "value": "get yield"
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassMethod",
+                    "start":98,"end":138,"loc":{"start":{"line":5,"column":4,"index":98},"end":{"line":5,"column":44,"index":138}},
+                    "static": false,
+                    "key": {
+                      "type": "YieldExpression",
+                      "start":103,"end":108,"loc":{"start":{"line":5,"column":9,"index":103},"end":{"line":5,"column":14,"index":108}},
+                      "delegate": false,
+                      "argument": null
+                    },
+                    "computed": true,
+                    "kind": "set",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [
+                      {
+                        "type": "Identifier",
+                        "start":110,"end":115,"loc":{"start":{"line":5,"column":16,"index":110},"end":{"line":5,"column":21,"index":115},"identifierName":"param"},
+                        "name": "param"
+                      }
+                    ],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":117,"end":138,"loc":{"start":{"line":5,"column":23,"index":117},"end":{"line":5,"column":44,"index":138}},
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start":119,"end":136,"loc":{"start":{"line":5,"column":25,"index":119},"end":{"line":5,"column":42,"index":136}},
+                          "expression": {
+                            "type": "AssignmentExpression",
+                            "start":119,"end":135,"loc":{"start":{"line":5,"column":25,"index":119},"end":{"line":5,"column":41,"index":135}},
+                            "operator": "=",
+                            "left": {
+                              "type": "Identifier",
+                              "start":119,"end":127,"loc":{"start":{"line":5,"column":25,"index":119},"end":{"line":5,"column":33,"index":127},"identifierName":"yieldSet"},
+                              "name": "yieldSet"
+                            },
+                            "right": {
+                              "type": "Identifier",
+                              "start":130,"end":135,"loc":{"start":{"line":5,"column":36,"index":130},"end":{"line":5,"column":41,"index":135},"identifierName":"param"},
+                              "name": "param"
+                            }
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":146,"end":153,"loc":{"start":{"line":8,"column":2,"index":146},"end":{"line":8,"column":9,"index":153}},
+              "expression": {
+                "type": "AssignmentExpression",
+                "start":146,"end":152,"loc":{"start":{"line":8,"column":2,"index":146},"end":{"line":8,"column":8,"index":152}},
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start":146,"end":147,"loc":{"start":{"line":8,"column":2,"index":146},"end":{"line":8,"column":3,"index":147},"identifierName":"C"},
+                  "name": "C"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start":150,"end":152,"loc":{"start":{"line":8,"column":6,"index":150},"end":{"line":8,"column":8,"index":152},"identifierName":"C_"},
+                  "name": "C_"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

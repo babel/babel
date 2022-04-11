@@ -1,0 +1,13 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    [
+      "transform-modules-amd",
+      {
+        "loose": true,
+        "moduleIds": true,
+        "moduleId": "my custom module name"
+      }
+    ]
+  ]
+}

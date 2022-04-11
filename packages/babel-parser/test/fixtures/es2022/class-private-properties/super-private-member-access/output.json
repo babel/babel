@@ -1,0 +1,96 @@
+{
+  "type": "File",
+  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":59}},
+  "errors": [
+    "SyntaxError: Private fields can't be accessed on super. (5:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":59}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":59}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":59,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":7,"column":1,"index":59}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":22,"end":25,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":5,"index":25}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":22,"end":24,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":4,"index":24}},
+                "id": {
+                  "type": "Identifier",
+                  "start":23,"end":24,"loc":{"start":{"line":2,"column":3,"index":23},"end":{"line":2,"column":4,"index":24},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassMethod",
+              "start":29,"end":57,"loc":{"start":{"line":4,"column":2,"index":29},"end":{"line":6,"column":3,"index":57}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":29,"end":35,"loc":{"start":{"line":4,"column":2,"index":29},"end":{"line":4,"column":8,"index":35},"identifierName":"method"},
+                "name": "method"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":38,"end":57,"loc":{"start":{"line":4,"column":11,"index":38},"end":{"line":6,"column":3,"index":57}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":44,"end":53,"loc":{"start":{"line":5,"column":4,"index":44},"end":{"line":5,"column":13,"index":53}},
+                    "expression": {
+                      "type": "MemberExpression",
+                      "start":44,"end":52,"loc":{"start":{"line":5,"column":4,"index":44},"end":{"line":5,"column":12,"index":52}},
+                      "object": {
+                        "type": "Super",
+                        "start":44,"end":49,"loc":{"start":{"line":5,"column":4,"index":44},"end":{"line":5,"column":9,"index":49}}
+                      },
+                      "computed": false,
+                      "property": {
+                        "type": "PrivateName",
+                        "start":50,"end":52,"loc":{"start":{"line":5,"column":10,"index":50},"end":{"line":5,"column":12,"index":52}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":51,"end":52,"loc":{"start":{"line":5,"column":11,"index":51},"end":{"line":5,"column":12,"index":52},"identifierName":"x"},
+                          "name": "x"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

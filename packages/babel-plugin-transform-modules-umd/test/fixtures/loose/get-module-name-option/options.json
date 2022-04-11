@@ -1,0 +1,13 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    [
+      "transform-modules-umd",
+      {
+        "loose": true,
+        "moduleIds": true,
+        "moduleId": "my custom module name"
+      }
+    ]
+  ]
+}

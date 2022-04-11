@@ -1,0 +1,32 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12},"identifierName":"ⅣⅡ"},
+            "name": "ⅣⅡ"
+          },
+          "right": {
+            "type": "ArrayExpression",
+            "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+            "elements": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

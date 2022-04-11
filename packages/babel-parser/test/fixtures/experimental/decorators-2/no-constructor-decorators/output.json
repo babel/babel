@@ -1,0 +1,65 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":38}},
+  "errors": [
+    "SyntaxError: Decorators can't be used with a constructor. Did you mean '@dec class { ... }'? (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":38}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":38}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":38,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":38}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":14,"end":36,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":3,"column":17,"index":36}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":14,"end":18,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":6,"index":18}},
+                  "expression": {
+                    "type": "Identifier",
+                    "start":15,"end":18,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":6,"index":18},"identifierName":"abc"},
+                    "name": "abc"
+                  }
+                }
+              ],
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":21,"end":32,"loc":{"start":{"line":3,"column":2,"index":21},"end":{"line":3,"column":13,"index":32},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":34,"end":36,"loc":{"start":{"line":3,"column":15,"index":34},"end":{"line":3,"column":17,"index":36}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

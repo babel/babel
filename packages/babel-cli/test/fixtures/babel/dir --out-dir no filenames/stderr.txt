@@ -1,0 +1,2 @@
+babel:
+  --out-dir requires filenames

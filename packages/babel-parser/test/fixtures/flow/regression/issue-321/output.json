@@ -1,0 +1,199 @@
+{
+  "type": "File",
+  "start":0,"end":118,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":60,"index":118}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":118,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":60,"index":118}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":57,"index":57}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":56,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":56,"index":56}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":37,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":37,"index":37},"identifierName":"fn"},
+              "name": "fn",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":8,"end":37,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":37,"index":37}},
+                "typeAnnotation": {
+                  "type": "FunctionTypeAnnotation",
+                  "start":10,"end":37,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":37,"index":37}},
+                  "params": [
+                    {
+                      "type": "FunctionTypeParam",
+                      "start":12,"end":19,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":19,"index":19}},
+                      "name": null,
+                      "optional": false,
+                      "typeAnnotation": {
+                        "type": "GenericTypeAnnotation",
+                        "start":12,"end":18,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":18,"index":18}},
+                        "typeParameters": null,
+                        "id": {
+                          "type": "Identifier",
+                          "start":12,"end":18,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":18,"index":18},"identifierName":"Object"},
+                          "name": "Object"
+                        }
+                      }
+                    },
+                    {
+                      "type": "FunctionTypeParam",
+                      "start":20,"end":27,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":27,"index":27}},
+                      "name": null,
+                      "optional": false,
+                      "typeAnnotation": {
+                        "type": "NullableTypeAnnotation",
+                        "start":20,"end":27,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":27,"index":27}},
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "start":21,"end":27,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":27,"index":27}},
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "start":21,"end":27,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":27,"index":27},"identifierName":"Object"},
+                            "name": "Object"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "rest": null,
+                  "this": null,
+                  "returnType": {
+                    "type": "VoidTypeAnnotation",
+                    "start":33,"end":37,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":37,"index":37}}
+                  },
+                  "typeParameters": null
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":40,"end":56,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":56,"index":56}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":42,"end":44,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":44,"index":44},"identifierName":"o1"},
+                  "name": "o1"
+                },
+                {
+                  "type": "Identifier",
+                  "start":46,"end":48,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":48,"index":48},"identifierName":"o2"},
+                  "name": "o2"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start":54,"end":56,"loc":{"start":{"line":1,"column":54,"index":54},"end":{"line":1,"column":56,"index":56},"identifierName":"o1"},
+                "name": "o1"
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":58,"end":118,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":60,"index":118}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":64,"end":117,"loc":{"start":{"line":2,"column":6,"index":64},"end":{"line":2,"column":59,"index":117}},
+            "id": {
+              "type": "Identifier",
+              "start":64,"end":97,"loc":{"start":{"line":2,"column":6,"index":64},"end":{"line":2,"column":39,"index":97},"identifierName":"fn2"},
+              "name": "fn2",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":67,"end":97,"loc":{"start":{"line":2,"column":9,"index":67},"end":{"line":2,"column":39,"index":97}},
+                "typeAnnotation": {
+                  "type": "FunctionTypeAnnotation",
+                  "start":69,"end":97,"loc":{"start":{"line":2,"column":11,"index":69},"end":{"line":2,"column":39,"index":97}},
+                  "params": [
+                    {
+                      "type": "FunctionTypeParam",
+                      "start":71,"end":78,"loc":{"start":{"line":2,"column":13,"index":71},"end":{"line":2,"column":20,"index":78}},
+                      "name": null,
+                      "optional": false,
+                      "typeAnnotation": {
+                        "type": "GenericTypeAnnotation",
+                        "start":71,"end":77,"loc":{"start":{"line":2,"column":13,"index":71},"end":{"line":2,"column":19,"index":77}},
+                        "typeParameters": null,
+                        "id": {
+                          "type": "Identifier",
+                          "start":71,"end":77,"loc":{"start":{"line":2,"column":13,"index":71},"end":{"line":2,"column":19,"index":77},"identifierName":"Object"},
+                          "name": "Object"
+                        }
+                      }
+                    },
+                    {
+                      "type": "FunctionTypeParam",
+                      "start":79,"end":86,"loc":{"start":{"line":2,"column":21,"index":79},"end":{"line":2,"column":28,"index":86}},
+                      "name": null,
+                      "optional": false,
+                      "typeAnnotation": {
+                        "type": "NullableTypeAnnotation",
+                        "start":79,"end":86,"loc":{"start":{"line":2,"column":21,"index":79},"end":{"line":2,"column":28,"index":86}},
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "start":80,"end":86,"loc":{"start":{"line":2,"column":22,"index":80},"end":{"line":2,"column":28,"index":86}},
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "start":80,"end":86,"loc":{"start":{"line":2,"column":22,"index":80},"end":{"line":2,"column":28,"index":86},"identifierName":"Object"},
+                            "name": "Object"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "rest": null,
+                  "this": null,
+                  "returnType": {
+                    "type": "VoidTypeAnnotation",
+                    "start":93,"end":97,"loc":{"start":{"line":2,"column":35,"index":93},"end":{"line":2,"column":39,"index":97}}
+                  },
+                  "typeParameters": null
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":100,"end":117,"loc":{"start":{"line":2,"column":42,"index":100},"end":{"line":2,"column":59,"index":117}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":102,"end":104,"loc":{"start":{"line":2,"column":44,"index":102},"end":{"line":2,"column":46,"index":104},"identifierName":"o1"},
+                  "name": "o1"
+                },
+                {
+                  "type": "Identifier",
+                  "start":106,"end":108,"loc":{"start":{"line":2,"column":48,"index":106},"end":{"line":2,"column":50,"index":108},"identifierName":"o2"},
+                  "name": "o2"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start":115,"end":117,"loc":{"start":{"line":2,"column":57,"index":115},"end":{"line":2,"column":59,"index":117},"identifierName":"o1"},
+                "name": "o1"
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

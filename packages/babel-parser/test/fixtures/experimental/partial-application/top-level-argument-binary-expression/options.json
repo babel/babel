@@ -1,0 +1,4 @@
+{
+  "plugins": ["partialApplication"],
+  "throws": "Unexpected token (1:0)"
+}

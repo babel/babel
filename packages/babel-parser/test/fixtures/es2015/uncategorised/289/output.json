@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "errors": [
+    "SyntaxError: Binding 'eval' in strict mode. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":30,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":30,"index":30}},
+          "properties": [
+            {
+              "type": "ObjectMethod",
+              "start":3,"end":28,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":28,"index":28}},
+              "method": true,
+              "key": {
+                "type": "Identifier",
+                "start":3,"end":4,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":4,"index":4},"identifierName":"t"},
+                "name": "t"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":5,"end":9,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":9,"index":9},"identifierName":"eval"},
+                  "name": "eval"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":11,"end":28,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":28,"index":28}},
+                "body": [],
+                "directives": [
+                  {
+                    "type": "Directive",
+                    "start":13,"end":26,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":26,"index":26}},
+                    "value": {
+                      "type": "DirectiveLiteral",
+                      "start":13,"end":25,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":25,"index":25}},
+                      "extra": {
+                        "rawValue": "use strict",
+                        "raw": "\"use strict\"",
+                        "expressionValue": "use strict"
+                      },
+                      "value": "use strict"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

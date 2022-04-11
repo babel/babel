@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":56,"index":56}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":56,"index":56}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareExportDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":56,"index":56}},
+        "declaration": {
+          "type": "DeclareFunction",
+          "start":23,"end":56,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":56,"index":56}},
+          "id": {
+            "type": "Identifier",
+            "start":32,"end":55,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":55,"index":55},"identifierName":"bar"},
+            "name": "bar",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":35,"end":55,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":55,"index":55}},
+              "typeAnnotation": {
+                "type": "FunctionTypeAnnotation",
+                "start":35,"end":55,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":55,"index":55}},
+                "typeParameters": null,
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start":36,"end":46,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":46,"index":46}},
+                    "name": {
+                      "type": "Identifier",
+                      "start":36,"end":38,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":38,"index":38},"identifierName":"p1"},
+                      "name": "p1"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start":40,"end":46,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":46,"index":46}}
+                    }
+                  }
+                ],
+                "rest": null,
+                "this": null,
+                "returnType": {
+                  "type": "StringTypeAnnotation",
+                  "start":49,"end":55,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":55,"index":55}}
+                }
+              }
+            }
+          },
+          "predicate": null
+        },
+        "default": true
+      }
+    ],
+    "directives": []
+  }
+}

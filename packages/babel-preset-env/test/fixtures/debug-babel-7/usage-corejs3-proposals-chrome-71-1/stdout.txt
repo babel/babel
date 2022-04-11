@@ -1,0 +1,50 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { chrome < 94 }
+  proposal-private-property-in-object { chrome < 91 }
+  proposal-class-properties { chrome < 74 }
+  proposal-private-methods { chrome < 84 }
+  proposal-numeric-separator { chrome < 75 }
+  proposal-logical-assignment-operators { chrome < 85 }
+  proposal-nullish-coalescing-operator { chrome < 80 }
+  proposal-optional-chaining { chrome < 91 }
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-export-namespace-from { chrome < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs3: `DEBUG` option
+
+Using targets: {
+  "chrome": "71"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/usage-corejs3-proposals-chrome-71-1/input.js]
+The corejs3 polyfill added the following polyfills:
+  esnext.map.delete-all { "chrome":"71" }
+  esnext.map.every { "chrome":"71" }
+  esnext.map.filter { "chrome":"71" }
+  esnext.map.find { "chrome":"71" }
+  esnext.map.find-key { "chrome":"71" }
+  esnext.map.includes { "chrome":"71" }
+  esnext.map.key-of { "chrome":"71" }
+  esnext.map.map-keys { "chrome":"71" }
+  esnext.map.map-values { "chrome":"71" }
+  esnext.map.merge { "chrome":"71" }
+  esnext.map.reduce { "chrome":"71" }
+  esnext.map.some { "chrome":"71" }
+  esnext.map.update { "chrome":"71" }
+  esnext.observable { "chrome":"71" }
+  esnext.symbol.observable { "chrome":"71" }

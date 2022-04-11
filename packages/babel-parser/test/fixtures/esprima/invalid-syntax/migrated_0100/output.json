@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+  "errors": [
+    "SyntaxError: Binding 'eval' in strict mode. (1:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":26,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":26,"index":26}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":14,"end":26,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":26,"index":26}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":15,"end":19,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":19,"index":19},"identifierName":"eval"},
+              "name": "eval"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":24,"end":26,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":26,"index":26}},
+            "extra": {
+              "rawValue": 42,
+              "raw": "42"
+            },
+            "value": 42
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

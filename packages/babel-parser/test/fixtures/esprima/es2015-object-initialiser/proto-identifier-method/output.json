@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":36,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":36,"index":36}},
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":3,"end":18,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":18,"index":18}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":3,"end":12,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":12,"index":12},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "NullLiteral",
+                "start":14,"end":18,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":18,"index":18}}
+              }
+            },
+            {
+              "type": "ObjectMethod",
+              "start":20,"end":33,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":33,"index":33}},
+              "method": true,
+              "key": {
+                "type": "Identifier",
+                "start":20,"end":29,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":29,"index":29},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":31,"end":33,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":33,"index":33}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "extra": {
+            "trailingComma": 33,
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

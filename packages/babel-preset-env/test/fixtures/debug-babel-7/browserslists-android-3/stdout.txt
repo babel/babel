@@ -1,0 +1,56 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "android": "3"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { android }
+  proposal-private-property-in-object { android }
+  proposal-class-properties { android }
+  proposal-private-methods { android }
+  proposal-numeric-separator { android }
+  proposal-logical-assignment-operators { android }
+  proposal-nullish-coalescing-operator { android }
+  proposal-optional-chaining { android }
+  proposal-json-strings { android }
+  proposal-optional-catch-binding { android }
+  transform-parameters { android }
+  proposal-async-generator-functions { android }
+  proposal-object-rest-spread { android }
+  transform-dotall-regex { android }
+  proposal-unicode-property-regex { android }
+  transform-named-capturing-groups-regex { android }
+  transform-async-to-generator { android }
+  transform-exponentiation-operator { android }
+  transform-template-literals { android }
+  transform-literals { android }
+  transform-function-name { android }
+  transform-arrow-functions { android }
+  transform-block-scoped-functions { android }
+  transform-classes { android }
+  transform-object-super { android }
+  transform-shorthand-properties { android }
+  transform-duplicate-keys { android }
+  transform-computed-properties { android }
+  transform-for-of { android }
+  transform-sticky-regex { android }
+  transform-unicode-escapes { android }
+  transform-unicode-regex { android }
+  transform-spread { android }
+  transform-destructuring { android }
+  transform-block-scoping { android }
+  transform-typeof-symbol { android }
+  transform-new-target { android }
+  transform-regenerator { android }
+  transform-member-expression-literals { android < 4 }
+  transform-property-literals { android < 4 }
+  transform-reserved-words { android < 4.4 }
+  proposal-export-namespace-from { android < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

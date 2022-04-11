@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+  "errors": [
+    "SyntaxError: Can not use 'yield' as identifier inside a generator. (1:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+          "operator": "+",
+          "prefix": true,
+          "argument": {
+            "type": "FunctionExpression",
+            "start":1,"end":21,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":21,"index":21}},
+            "id": {
+              "type": "Identifier",
+              "start":11,"end":16,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":16,"index":16},"identifierName":"yield"},
+              "name": "yield"
+            },
+            "generator": true,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":19,"end":21,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":21,"index":21}},
+              "body": [],
+              "directives": []
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

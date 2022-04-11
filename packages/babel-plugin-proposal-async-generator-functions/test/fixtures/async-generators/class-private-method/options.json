@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-private-methods", "proposal-async-generator-functions"]
+}

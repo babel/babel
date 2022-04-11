@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":60}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":60}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":60}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":60,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":5,"column":1,"index":60}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":24,"end":58,"loc":{"start":{"line":2,"column":4,"index":24},"end":{"line":4,"column":5,"index":58}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":24,"end":25,"loc":{"start":{"line":2,"column":4,"index":24},"end":{"line":2,"column":5,"index":25},"identifierName":"X"},
+                "name": "X"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":28,"end":58,"loc":{"start":{"line":2,"column":8,"index":28},"end":{"line":4,"column":5,"index":58}},
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start":38,"end":52,"loc":{"start":{"line":3,"column":8,"index":38},"end":{"line":3,"column":22,"index":52}},
+                    "argument": {
+                      "type": "MemberExpression",
+                      "start":45,"end":52,"loc":{"start":{"line":3,"column":15,"index":45},"end":{"line":3,"column":22,"index":52}},
+                      "object": {
+                        "type": "Super",
+                        "start":45,"end":50,"loc":{"start":{"line":3,"column":15,"index":45},"end":{"line":3,"column":20,"index":50}}
+                      },
+                      "computed": false,
+                      "property": {
+                        "type": "Identifier",
+                        "start":51,"end":52,"loc":{"start":{"line":3,"column":21,"index":51},"end":{"line":3,"column":22,"index":52},"identifierName":"y"},
+                        "name": "y"
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

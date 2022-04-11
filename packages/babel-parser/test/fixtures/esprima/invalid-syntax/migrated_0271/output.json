@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "errors": [
+    "SyntaxError: Classes may not have static property named prototype. (1:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":32,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":32,"index":32}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":9,"end":31,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":31,"index":31}},
+              "static": true,
+              "key": {
+                "type": "StringLiteral",
+                "start":16,"end":27,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":27,"index":27}},
+                "extra": {
+                  "rawValue": "prototype",
+                  "raw": "\"prototype\""
+                },
+                "value": "prototype"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":29,"end":31,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":31,"index":31}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

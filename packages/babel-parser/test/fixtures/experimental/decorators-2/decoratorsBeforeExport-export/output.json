@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":19,"index":30}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":19,"index":30}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":11,"end":30,"loc":{"start":{"line":2,"column":0,"index":11},"end":{"line":2,"column":19,"index":30}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":19,"index":30}},
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+              "expression": {
+                "type": "Identifier",
+                "start":1,"end":10,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":10,"index":10},"identifierName":"decorator"},
+                "name": "decorator"
+              }
+            }
+          ],
+          "id": {
+            "type": "Identifier",
+            "start":24,"end":27,"loc":{"start":{"line":2,"column":13,"index":24},"end":{"line":2,"column":16,"index":27},"identifierName":"Foo"},
+            "name": "Foo"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":28,"end":30,"loc":{"start":{"line":2,"column":17,"index":28},"end":{"line":2,"column":19,"index":30}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

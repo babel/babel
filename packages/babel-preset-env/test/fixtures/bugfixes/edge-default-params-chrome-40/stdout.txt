@@ -1,0 +1,50 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "40"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { chrome < 94 }
+  proposal-private-property-in-object { chrome < 91 }
+  proposal-class-properties { chrome < 74 }
+  proposal-private-methods { chrome < 84 }
+  proposal-numeric-separator { chrome < 75 }
+  proposal-logical-assignment-operators { chrome < 85 }
+  proposal-nullish-coalescing-operator { chrome < 80 }
+  proposal-optional-chaining { chrome < 80 }
+  proposal-json-strings { chrome < 66 }
+  proposal-optional-catch-binding { chrome < 66 }
+  transform-parameters { chrome < 49 }
+  proposal-async-generator-functions { chrome < 63 }
+  proposal-object-rest-spread { chrome < 60 }
+  transform-dotall-regex { chrome < 62 }
+  proposal-unicode-property-regex { chrome < 64 }
+  transform-named-capturing-groups-regex { chrome < 64 }
+  transform-async-to-generator { chrome < 55 }
+  transform-exponentiation-operator { chrome < 52 }
+  transform-template-literals { chrome < 41 }
+  transform-literals { chrome < 44 }
+  transform-function-name { chrome < 51 }
+  transform-block-scoped-functions { chrome < 41 }
+  transform-classes { chrome < 46 }
+  transform-object-super { chrome < 46 }
+  transform-shorthand-properties { chrome < 43 }
+  transform-duplicate-keys { chrome < 42 }
+  transform-computed-properties { chrome < 44 }
+  transform-for-of { chrome < 51 }
+  transform-sticky-regex { chrome < 49 }
+  transform-unicode-escapes { chrome < 44 }
+  transform-unicode-regex { chrome < 50 }
+  transform-spread { chrome < 46 }
+  transform-block-scoping { chrome < 49 }
+  transform-new-target { chrome < 46 }
+  transform-regenerator { chrome < 50 }
+  proposal-export-namespace-from { chrome < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

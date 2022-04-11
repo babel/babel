@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+  "errors": [
+    "SyntaxError: In strict mode code, functions can only be declared at top level or inside a block. (1:35)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":53,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":53,"index":53}},
+          "body": [
+            {
+              "type": "LabeledStatement",
+              "start":30,"end":52,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":52,"index":52}},
+              "body": {
+                "type": "FunctionDeclaration",
+                "start":35,"end":52,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":52,"index":52}},
+                "id": {
+                  "type": "Identifier",
+                  "start":44,"end":47,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":47,"index":47},"identifierName":"baz"},
+                  "name": "baz"
+                },
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":50,"end":52,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":52,"index":52}},
+                  "body": [],
+                  "directives": []
+                }
+              },
+              "label": {
+                "type": "Identifier",
+                "start":30,"end":33,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":33,"index":33},"identifierName":"bar"},
+                "name": "bar"
+              }
+            }
+          ],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":16,"end":29,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":29,"index":29}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":16,"end":28,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":28,"index":28}},
+                "extra": {
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\"",
+                  "expressionValue": "use strict"
+                },
+                "value": "use strict"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

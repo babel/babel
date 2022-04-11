@@ -1,0 +1,42 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+            "elements": [
+              {
+                "type": "Identifier",
+                "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"x"},
+                "name": "x",
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 1
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "Identifier",
+            "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"t"},
+            "name": "t"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

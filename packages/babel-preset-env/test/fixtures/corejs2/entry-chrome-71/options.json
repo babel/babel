@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "chrome": "71"
+        },
+        "modules": false,
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ]
+  ]
+}

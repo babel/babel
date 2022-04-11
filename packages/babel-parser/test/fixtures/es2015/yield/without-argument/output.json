@@ -1,0 +1,146 @@
+{
+  "type": "File",
+  "start":0,"end":93,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":93}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":93,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":93}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":93,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":93}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":14,"end":93,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":8,"column":1,"index":93}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":18,"end":26,"loc":{"start":{"line":2,"column":2,"index":18},"end":{"line":2,"column":10,"index":26}},
+              "expression": {
+                "type": "YieldExpression",
+                "start":19,"end":24,"loc":{"start":{"line":2,"column":3,"index":19},"end":{"line":2,"column":8,"index":24}},
+                "delegate": false,
+                "argument": null,
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 18
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":29,"end":37,"loc":{"start":{"line":3,"column":2,"index":29},"end":{"line":3,"column":10,"index":37}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":29,"end":36,"loc":{"start":{"line":3,"column":2,"index":29},"end":{"line":3,"column":9,"index":36}},
+                "elements": [
+                  {
+                    "type": "YieldExpression",
+                    "start":30,"end":35,"loc":{"start":{"line":3,"column":3,"index":30},"end":{"line":3,"column":8,"index":35}},
+                    "delegate": false,
+                    "argument": null
+                  }
+                ]
+              }
+            },
+            {
+              "type": "BlockStatement",
+              "start":40,"end":49,"loc":{"start":{"line":4,"column":2,"index":40},"end":{"line":4,"column":11,"index":49}},
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start":42,"end":47,"loc":{"start":{"line":4,"column":4,"index":42},"end":{"line":4,"column":9,"index":47}},
+                  "expression": {
+                    "type": "YieldExpression",
+                    "start":42,"end":47,"loc":{"start":{"line":4,"column":4,"index":42},"end":{"line":4,"column":9,"index":47}},
+                    "delegate": false,
+                    "argument": null
+                  }
+                }
+              ],
+              "directives": []
+            },
+            {
+              "type": "EmptyStatement",
+              "start":49,"end":50,"loc":{"start":{"line":4,"column":11,"index":49},"end":{"line":4,"column":12,"index":50}}
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":53,"end":59,"loc":{"start":{"line":5,"column":2,"index":53},"end":{"line":5,"column":8,"index":59}},
+              "expression": {
+                "type": "YieldExpression",
+                "start":53,"end":58,"loc":{"start":{"line":5,"column":2,"index":53},"end":{"line":5,"column":7,"index":58}},
+                "delegate": false,
+                "argument": null
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":62,"end":79,"loc":{"start":{"line":6,"column":2,"index":62},"end":{"line":6,"column":19,"index":79}},
+              "expression": {
+                "type": "ConditionalExpression",
+                "start":62,"end":78,"loc":{"start":{"line":6,"column":2,"index":62},"end":{"line":6,"column":18,"index":78}},
+                "test": {
+                  "type": "BooleanLiteral",
+                  "start":62,"end":66,"loc":{"start":{"line":6,"column":2,"index":62},"end":{"line":6,"column":6,"index":66}},
+                  "value": true
+                },
+                "consequent": {
+                  "type": "YieldExpression",
+                  "start":69,"end":74,"loc":{"start":{"line":6,"column":9,"index":69},"end":{"line":6,"column":14,"index":74}},
+                  "delegate": false,
+                  "argument": null
+                },
+                "alternate": {
+                  "type": "NumericLiteral",
+                  "start":77,"end":78,"loc":{"start":{"line":6,"column":17,"index":77},"end":{"line":6,"column":18,"index":78}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":82,"end":91,"loc":{"start":{"line":7,"column":2,"index":82},"end":{"line":7,"column":11,"index":91}},
+              "expression": {
+                "type": "SequenceExpression",
+                "start":82,"end":90,"loc":{"start":{"line":7,"column":2,"index":82},"end":{"line":7,"column":10,"index":90}},
+                "expressions": [
+                  {
+                    "type": "YieldExpression",
+                    "start":82,"end":87,"loc":{"start":{"line":7,"column":2,"index":82},"end":{"line":7,"column":7,"index":87}},
+                    "delegate": false,
+                    "argument": null
+                  },
+                  {
+                    "type": "NumericLiteral",
+                    "start":89,"end":90,"loc":{"start":{"line":7,"column":9,"index":89},"end":{"line":7,"column":10,"index":90}},
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  }
+                ]
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

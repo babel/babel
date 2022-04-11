@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+        "body": {
+          "type": "WhileStatement",
+          "start":6,"end":40,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":1,"index":40}},
+          "test": {
+            "type": "NumericLiteral",
+            "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":16,"end":40,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":3,"column":1,"index":40}},
+            "body": [
+              {
+                "type": "ContinueStatement",
+                "start":20,"end":38,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":2,"column":20,"index":38}},
+                "label": {
+                  "type": "Placeholder",
+                  "start":29,"end":37,"loc":{"start":{"line":2,"column":11,"index":29},"end":{"line":2,"column":19,"index":37}},
+                  "name": {
+                    "type": "Identifier",
+                    "start":31,"end":35,"loc":{"start":{"line":2,"column":13,"index":31},"end":{"line":2,"column":17,"index":35},"identifierName":"LOOP"},
+                    "name": "LOOP"
+                  },
+                  "expectedNode": "Identifier"
+                }
+              }
+            ],
+            "directives": []
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4},"identifierName":"loop"},
+          "name": "loop"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

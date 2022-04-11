@@ -1,0 +1,115 @@
+{
+  "type": "File",
+  "start":0,"end":83,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":83}},
+  "errors": [
+    "SyntaxError: A parameter property may not be declared using a binding pattern. (2:16)",
+    "SyntaxError: A parameter property may not be declared using a binding pattern. (5:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":83,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":83}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":41}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":41,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":1,"index":41}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":14,"end":39,"loc":{"start":{"line":2,"column":4,"index":14},"end":{"line":2,"column":29,"index":39}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":14,"end":25,"loc":{"start":{"line":2,"column":4,"index":14},"end":{"line":2,"column":15,"index":25},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":26,"end":35,"loc":{"start":{"line":2,"column":16,"index":26},"end":{"line":2,"column":25,"index":35}},
+                  "accessibility": "public",
+                  "parameter": {
+                    "type": "ArrayPattern",
+                    "start":33,"end":35,"loc":{"start":{"line":2,"column":23,"index":33},"end":{"line":2,"column":25,"index":35}},
+                    "elements": []
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":37,"end":39,"loc":{"start":{"line":2,"column":27,"index":37},"end":{"line":2,"column":29,"index":39}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":42,"end":83,"loc":{"start":{"line":4,"column":0,"index":42},"end":{"line":6,"column":1,"index":83}},
+        "id": {
+          "type": "Identifier",
+          "start":48,"end":49,"loc":{"start":{"line":4,"column":6,"index":48},"end":{"line":4,"column":7,"index":49},"identifierName":"D"},
+          "name": "D"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":50,"end":83,"loc":{"start":{"line":4,"column":8,"index":50},"end":{"line":6,"column":1,"index":83}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":56,"end":81,"loc":{"start":{"line":5,"column":4,"index":56},"end":{"line":5,"column":29,"index":81}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":56,"end":67,"loc":{"start":{"line":5,"column":4,"index":56},"end":{"line":5,"column":15,"index":67},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":68,"end":77,"loc":{"start":{"line":5,"column":16,"index":68},"end":{"line":5,"column":25,"index":77}},
+                  "accessibility": "public",
+                  "parameter": {
+                    "type": "ObjectPattern",
+                    "start":75,"end":77,"loc":{"start":{"line":5,"column":23,"index":75},"end":{"line":5,"column":25,"index":77}},
+                    "properties": []
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":79,"end":81,"loc":{"start":{"line":5,"column":27,"index":79},"end":{"line":5,"column":29,"index":81}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "args": ["--relative", "--no-babelrc"],
+  "stderrContains": true
+}

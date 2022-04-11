@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    [
+      "transform-react-jsx",
+      {
+        "runtime": "automatic"
+      }
+    ]
+  ]
+}

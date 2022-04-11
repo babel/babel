@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+        "block": {
+          "type": "Placeholder",
+          "start":4,"end":11,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":11,"index":11}},
+          "name": {
+            "type": "Identifier",
+            "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"TRY"},
+            "name": "TRY"
+          },
+          "expectedNode": "BlockStatement"
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":12,"end":27,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":27,"index":27}},
+          "param": null,
+          "body": {
+            "type": "Placeholder",
+            "start":18,"end":27,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":27,"index":27}},
+            "name": {
+              "type": "Identifier",
+              "start":20,"end":25,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":25,"index":25},"identifierName":"CATCH"},
+              "name": "CATCH"
+            },
+            "expectedNode": "BlockStatement"
+          }
+        },
+        "finalizer": {
+          "type": "Placeholder",
+          "start":36,"end":47,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":47,"index":47}},
+          "name": {
+            "type": "Identifier",
+            "start":38,"end":45,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":45,"index":45},"identifierName":"FINALLY"},
+            "name": "FINALLY"
+          },
+          "expectedNode": "BlockStatement"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":2,"end":12,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":12,"index":12}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":6,"end":12,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":12,"index":12}},
+                "id": {
+                  "type": "Identifier",
+                  "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+                  "name": "x"
+                },
+                "init": {
+                  "type": "NumericLiteral",
+                  "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12}},
+                  "extra": {
+                    "rawValue": 42,
+                    "raw": "42"
+                  },
+                  "value": 42
+                }
+              }
+            ],
+            "kind": "let"
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

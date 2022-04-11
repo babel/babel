@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+        "await": false,
+        "left": {
+          "type": "Identifier",
+          "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"x"},
+          "name": "x"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"list"},
+          "name": "list"
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start":15,"end":26,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":26,"index":26}},
+          "expression": {
+            "type": "CallExpression",
+            "start":15,"end":25,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":25,"index":25}},
+            "callee": {
+              "type": "Identifier",
+              "start":15,"end":22,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":22,"index":22},"identifierName":"process"},
+              "name": "process"
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24},"identifierName":"x"},
+                "name": "x"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

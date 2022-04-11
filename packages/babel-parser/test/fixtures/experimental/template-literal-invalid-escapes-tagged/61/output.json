@@ -1,0 +1,42 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+          "tag": {
+            "type": "Identifier",
+            "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9},"identifierName":"sampleTag"},
+            "name": "sampleTag"
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "start":9,"end":19,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":19,"index":19}},
+            "expressions": [],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "start":10,"end":18,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":18,"index":18}},
+                "value": {
+                  "raw": "\\u{\\u{0}",
+                  "cooked": null
+                },
+                "tail": true
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

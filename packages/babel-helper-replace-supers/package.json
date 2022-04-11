@@ -1,0 +1,39 @@
+{
+  "name": "@babel/helper-replace-supers",
+  "version": "7.16.7",
+  "description": "Helper function to replace supers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-replace-supers"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-replace-supers",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/helper-environment-visitor": "workspace:^",
+    "@babel/helper-member-expression-to-functions": "workspace:^",
+    "@babel/helper-optimise-call-expression": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+          "operator": "=",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+            "expression": {
+              "type": "TSTypeAssertion",
+              "start":1,"end":10,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":10,"index":10}},
+              "typeAnnotation": {
+                "type": "TSNumberKeyword",
+                "start":2,"end":8,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":8,"index":8}}
+              },
+              "expression": {
+                "type": "Identifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
+                "name": "x"
+              }
+            }
+          },
+          "right": {
+            "type": "NullLiteral",
+            "start":14,"end":18,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":18,"index":18}}
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

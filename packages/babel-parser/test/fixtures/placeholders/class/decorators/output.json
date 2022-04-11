@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":10,"index":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":10,"index":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":10,"index":21}},
+        "decorators": [
+          {
+            "type": "Decorator",
+            "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+            "expression": {
+              "type": "Placeholder",
+              "start":2,"end":9,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":9,"index":9}},
+              "name": {
+                "type": "Identifier",
+                "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"FOO"},
+                "name": "FOO"
+              },
+              "expectedNode": "Expression",
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 1
+              }
+            }
+          }
+        ],
+        "id": {
+          "type": "Identifier",
+          "start":17,"end":18,"loc":{"start":{"line":2,"column":6,"index":17},"end":{"line":2,"column":7,"index":18},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":19,"end":21,"loc":{"start":{"line":2,"column":8,"index":19},"end":{"line":2,"column":10,"index":21}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "errors": [
+    "SyntaxError: import.meta may appear only with 'sourceType: \"module\"' (1:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":21,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":21,"index":21}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "MetaProperty",
+              "start":10,"end":21,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":21,"index":21}},
+              "meta": {
+                "type": "Identifier",
+                "start":10,"end":16,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":16,"index":16},"identifierName":"import"},
+                "name": "import"
+              },
+              "property": {
+                "type": "Identifier",
+                "start":17,"end":21,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":21,"index":21},"identifierName":"meta"},
+                "name": "meta"
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

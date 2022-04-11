@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":44}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":44}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":43,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":1,"index":43}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"map"},
+              "name": "map"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":12,"end":43,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":3,"column":1,"index":43}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":16,"end":41,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":27,"index":41}},
+                  "method": false,
+                  "computed": true,
+                  "key": {
+                    "type": "BinaryExpression",
+                    "start":17,"end":26,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":12,"index":26}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":17,"end":20,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":6,"index":20},"identifierName":"age"},
+                      "name": "age"
+                    },
+                    "operator": "<=",
+                    "right": {
+                      "type": "NumericLiteral",
+                      "start":24,"end":26,"loc":{"start":{"line":2,"column":10,"index":24},"end":{"line":2,"column":12,"index":26}},
+                      "extra": {
+                        "rawValue": 17,
+                        "raw": "17"
+                      },
+                      "value": 17
+                    }
+                  },
+                  "shorthand": false,
+                  "value": {
+                    "type": "StringLiteral",
+                    "start":30,"end":41,"loc":{"start":{"line":2,"column":16,"index":30},"end":{"line":2,"column":27,"index":41}},
+                    "extra": {
+                      "rawValue": "Too young",
+                      "raw": "'Too young'"
+                    },
+                    "value": "Too young"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

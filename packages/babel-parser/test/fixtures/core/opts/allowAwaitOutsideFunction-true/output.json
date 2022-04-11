@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+        "await": true,
+        "left": {
+          "type": "VariableDeclaration",
+          "start":11,"end":18,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":18,"index":18}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}},
+              "id": {
+                "type": "Identifier",
+                "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18},"identifierName":"i"},
+                "name": "i"
+              },
+              "init": null
+            }
+          ],
+          "kind": "const"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":22,"end":29,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":29,"index":29},"identifierName":"imports"},
+          "name": "imports"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":31,"end":33,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":33,"index":33}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

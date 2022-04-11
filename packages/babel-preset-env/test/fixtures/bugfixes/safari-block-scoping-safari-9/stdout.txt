@@ -1,0 +1,45 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "safari": "9"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { safari }
+  proposal-private-property-in-object { safari < 15 }
+  proposal-class-properties { safari < 14.1 }
+  proposal-private-methods { safari < 15 }
+  proposal-numeric-separator { safari < 13 }
+  proposal-logical-assignment-operators { safari < 14 }
+  proposal-nullish-coalescing-operator { safari < 13.1 }
+  proposal-optional-chaining { safari < 13.1 }
+  proposal-json-strings { safari < 12 }
+  proposal-optional-catch-binding { safari < 11.1 }
+  transform-parameters { safari < 10 }
+  proposal-async-generator-functions { safari < 12 }
+  proposal-object-rest-spread { safari < 11.1 }
+  transform-dotall-regex { safari < 11.1 }
+  proposal-unicode-property-regex { safari < 11.1 }
+  transform-named-capturing-groups-regex { safari < 11.1 }
+  transform-async-to-generator { safari < 10.1 }
+  transform-exponentiation-operator { safari < 10.1 }
+  transform-function-name { safari < 10 }
+  transform-block-scoped-functions { safari < 10 }
+  transform-classes { safari < 10 }
+  transform-object-super { safari < 10 }
+  transform-sticky-regex { safari < 10 }
+  transform-unicode-regex { safari < 12 }
+  transform-spread { safari < 10 }
+  transform-destructuring { safari < 10 }
+  transform-block-scoping { safari < 10 }
+  transform-new-target { safari < 10 }
+  transform-regenerator { safari < 10 }
+  proposal-export-namespace-from { safari }
+  bugfix/transform-tagged-template-caching { safari < 13 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

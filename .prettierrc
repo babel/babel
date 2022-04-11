@@ -1,0 +1,32 @@
+{
+  "arrowParens": "avoid",
+  "trailingComma": "es5",
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "tabWidth": 2,
+  "printWidth": 80,
+  "overrides": [{
+    "files": [
+      "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts,cjs}"
+    ],
+    "excludeFiles": ["**/packages/babel-helpers/src/helpers/**/*.js"],
+    "options": {
+      "trailingComma": "all"
+    }
+  }, {
+    "files": "**/packages/babel-helpers/src/helpers/**/*.js",
+    "options": {
+      "trailingComma": "es5"
+    }
+  }, {
+    "files": [
+      "**/{codemods,eslint,packages}/*/test/fixtures/**/*.{js,ts}"
+    ],
+    "options": {
+      "trailingComma": "es5"
+    }
+  }]
+}

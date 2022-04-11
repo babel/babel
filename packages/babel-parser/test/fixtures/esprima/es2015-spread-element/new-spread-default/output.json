@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "expression": {
+          "type": "NewExpression",
+          "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+          "callee": {
+            "type": "Identifier",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"f"},
+            "name": "f"
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"g"},
+              "name": "g"
+            },
+            {
+              "type": "SpreadElement",
+              "start":9,"end":17,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":17,"index":17}},
+              "argument": {
+                "type": "AssignmentExpression",
+                "start":12,"end":17,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":17,"index":17}},
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"h"},
+                  "name": "h"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"i"},
+                  "name": "i"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

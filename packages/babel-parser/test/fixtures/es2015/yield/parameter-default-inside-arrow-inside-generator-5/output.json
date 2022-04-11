@@ -1,0 +1,85 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+  "errors": [
+    "SyntaxError: Yield expression is not allowed in formal parameters. (2:8)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (2:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":47,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":3,"column":1,"index":47}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":19,"end":45,"loc":{"start":{"line":2,"column":2,"index":19},"end":{"line":2,"column":28,"index":45}},
+              "expression": {
+                "type": "ArrowFunctionExpression",
+                "start":19,"end":44,"loc":{"start":{"line":2,"column":2,"index":19},"end":{"line":2,"column":27,"index":44}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "start":20,"end":37,"loc":{"start":{"line":2,"column":3,"index":20},"end":{"line":2,"column":20,"index":37}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":20,"end":21,"loc":{"start":{"line":2,"column":3,"index":20},"end":{"line":2,"column":4,"index":21},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "right": {
+                      "type": "ArrowFunctionExpression",
+                      "start":24,"end":37,"loc":{"start":{"line":2,"column":7,"index":24},"end":{"line":2,"column":20,"index":37}},
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "YieldExpression",
+                          "start":25,"end":30,"loc":{"start":{"line":2,"column":8,"index":25},"end":{"line":2,"column":13,"index":30}},
+                          "delegate": false,
+                          "argument": null
+                        }
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start":35,"end":37,"loc":{"start":{"line":2,"column":18,"index":35},"end":{"line":2,"column":20,"index":37}},
+                        "body": [],
+                        "directives": []
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":42,"end":44,"loc":{"start":{"line":2,"column":25,"index":42},"end":{"line":2,"column":27,"index":44}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

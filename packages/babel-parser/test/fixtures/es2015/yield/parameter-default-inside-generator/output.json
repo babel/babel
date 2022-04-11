@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+  "errors": [
+    "SyntaxError: Yield expression is not allowed in formal parameters. (1:17)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": true,
+        "async": false,
+        "params": [
+          {
+            "type": "AssignmentPattern",
+            "start":13,"end":22,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":22,"index":22}},
+            "left": {
+              "type": "Identifier",
+              "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"x"},
+              "name": "x"
+            },
+            "right": {
+              "type": "YieldExpression",
+              "start":17,"end":22,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":22,"index":22}},
+              "delegate": false,
+              "argument": null
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":24,"end":26,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":26,"index":26}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

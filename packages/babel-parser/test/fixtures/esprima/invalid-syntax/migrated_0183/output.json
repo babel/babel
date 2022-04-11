@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":43,"index":43}},
+  "errors": [
+    "SyntaxError: Deleting local variable in strict mode. (1:29)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":43,"index":43}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":43,"index":43}},
+        "expression": {
+          "type": "CallExpression",
+          "start":1,"end":42,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":42,"index":42}},
+          "callee": {
+            "type": "FunctionExpression",
+            "start":1,"end":40,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":40,"index":40}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":13,"end":40,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":40,"index":40}},
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start":29,"end":38,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":38,"index":38}},
+                  "expression": {
+                    "type": "UnaryExpression",
+                    "start":29,"end":37,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":37,"index":37}},
+                    "operator": "delete",
+                    "prefix": true,
+                    "argument": {
+                      "type": "Identifier",
+                      "start":36,"end":37,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":37,"index":37},"identifierName":"i"},
+                      "name": "i"
+                    }
+                  }
+                }
+              ],
+              "directives": [
+                {
+                  "type": "Directive",
+                  "start":15,"end":28,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":28,"index":28}},
+                  "value": {
+                    "type": "DirectiveLiteral",
+                    "start":15,"end":27,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":27,"index":27}},
+                    "extra": {
+                      "rawValue": "use strict",
+                      "raw": "'use strict'",
+                      "expressionValue": "use strict"
+                    },
+                    "value": "use strict"
+                  }
+                }
+              ]
+            }
+          },
+          "arguments": [],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

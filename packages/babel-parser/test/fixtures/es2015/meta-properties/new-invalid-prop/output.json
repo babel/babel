@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":27}},
+  "errors": [
+    "SyntaxError: The only valid meta property for new is new.target. (2:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":27}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":13,"end":27,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":3,"column":1,"index":27}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":17,"end":25,"loc":{"start":{"line":2,"column":2,"index":17},"end":{"line":2,"column":10,"index":25}},
+              "expression": {
+                "type": "MetaProperty",
+                "start":17,"end":25,"loc":{"start":{"line":2,"column":2,"index":17},"end":{"line":2,"column":10,"index":25}},
+                "meta": {
+                  "type": "Identifier",
+                  "start":17,"end":20,"loc":{"start":{"line":2,"column":2,"index":17},"end":{"line":2,"column":5,"index":20},"identifierName":"new"},
+                  "name": "new"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start":21,"end":25,"loc":{"start":{"line":2,"column":6,"index":21},"end":{"line":2,"column":10,"index":25},"identifierName":"prop"},
+                  "name": "prop"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

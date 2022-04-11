@@ -1,0 +1,38 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+          "operator": "void",
+          "prefix": true,
+          "argument": {
+            "type": "ClassExpression",
+            "start":5,"end":19,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":19,"index":19}},
+            "id": null,
+            "body": {
+              "type": "Placeholder",
+              "start":11,"end":19,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":19,"index":19}},
+              "name": {
+                "type": "Identifier",
+                "start":13,"end":17,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":17,"index":17},"identifierName":"BODY"},
+                "name": "BODY"
+              },
+              "expectedNode": "ClassBody"
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

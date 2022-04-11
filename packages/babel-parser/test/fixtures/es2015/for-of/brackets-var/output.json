@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start":5,"end":12,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":12,"index":12}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12}},
+              "id": {
+                "type": "ObjectPattern",
+                "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
+                    "key": {
+                      "type": "Identifier",
+                      "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"a"},
+                      "name": "a"
+                    },
+                    "computed": false,
+                    "method": false,
+                    "shorthand": true,
+                    "value": {
+                      "type": "Identifier",
+                      "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"a"},
+                      "name": "a"
+                    },
+                    "extra": {
+                      "shorthand": true
+                    }
+                  }
+                ]
+              },
+              "init": null
+            }
+          ],
+          "kind": "var"
+        },
+        "right": {
+          "type": "RegExpLiteral",
+          "start":16,"end":19,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":19,"index":19}},
+          "extra": {
+            "raw": "/b/"
+          },
+          "pattern": "b",
+          "flags": ""
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":23,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":23,"index":23}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

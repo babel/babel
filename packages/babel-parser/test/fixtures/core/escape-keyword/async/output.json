@@ -1,0 +1,31 @@
+{
+  "type": "File",
+  "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "expression": {
+          "type": "CallExpression",
+          "start":1,"end":14,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":14,"index":14}},
+          "callee": {
+            "type": "Identifier",
+            "start":1,"end":11,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":11,"index":11},"identifierName":"async"},
+            "name": "async"
+          },
+          "arguments": [],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

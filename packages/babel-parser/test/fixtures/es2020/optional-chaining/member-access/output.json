@@ -1,0 +1,94 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":12,"index":37}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":12,"index":37}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+          "object": {
+            "type": "Identifier",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":5,"end":8,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":8,"index":8},"identifierName":"bar"},
+            "name": "bar"
+          },
+          "optional": true
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":10,"end":23,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":13,"index":23}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":10,"end":23,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":13,"index":23}},
+          "object": {
+            "type": "OptionalMemberExpression",
+            "start":10,"end":18,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":8,"index":18}},
+            "object": {
+              "type": "Identifier",
+              "start":10,"end":13,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":3,"index":13},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":15,"end":18,"loc":{"start":{"line":3,"column":5,"index":15},"end":{"line":3,"column":8,"index":18},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "optional": true
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":20,"end":23,"loc":{"start":{"line":3,"column":10,"index":20},"end":{"line":3,"column":13,"index":23},"identifierName":"baz"},
+            "name": "baz"
+          },
+          "optional": true
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":25,"end":37,"loc":{"start":{"line":5,"column":0,"index":25},"end":{"line":5,"column":12,"index":37}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":25,"end":37,"loc":{"start":{"line":5,"column":0,"index":25},"end":{"line":5,"column":12,"index":37}},
+          "object": {
+            "type": "MemberExpression",
+            "start":25,"end":32,"loc":{"start":{"line":5,"column":0,"index":25},"end":{"line":5,"column":7,"index":32}},
+            "object": {
+              "type": "Identifier",
+              "start":25,"end":28,"loc":{"start":{"line":5,"column":0,"index":25},"end":{"line":5,"column":3,"index":28},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":29,"end":32,"loc":{"start":{"line":5,"column":4,"index":29},"end":{"line":5,"column":7,"index":32},"identifierName":"bar"},
+              "name": "bar"
+            }
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":34,"end":37,"loc":{"start":{"line":5,"column":9,"index":34},"end":{"line":5,"column":12,"index":37},"identifierName":"baz"},
+            "name": "baz"
+          },
+          "optional": true
+        }
+      }
+    ],
+    "directives": []
+  }
+}

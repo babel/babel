@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":17,"index":23}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":17,"index":23}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"async"},
+          "name": "async"
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":6,"end":23,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":2,"column":17,"index":23}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":18,"loc":{"start":{"line":2,"column":9,"index":15},"end":{"line":2,"column":12,"index":18},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":23,"loc":{"start":{"line":2,"column":15,"index":21},"end":{"line":2,"column":17,"index":23}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

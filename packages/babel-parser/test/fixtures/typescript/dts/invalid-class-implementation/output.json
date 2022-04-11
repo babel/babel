@@ -1,0 +1,42 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "errors": [
+    "SyntaxError: An implementation cannot be declared in ambient contexts. (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":14,"end":19,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":19,"index":19}},
+          "typeAnnotation": {
+            "type": "TSAnyKeyword",
+            "start":16,"end":19,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":19,"index":19}}
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

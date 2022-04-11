@@ -1,0 +1,67 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":40}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "ClassExpression",
+            "start":12,"end":40,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":3,"column":1,"index":40}},
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":18,"end":40,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":3,"column":1,"index":40}},
+              "body": [
+                {
+                  "type": "ClassMethod",
+                  "start":22,"end":38,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":18,"index":38}},
+                  "static": false,
+                  "computed": true,
+                  "key": {
+                    "type": "AwaitExpression",
+                    "start":23,"end":31,"loc":{"start":{"line":2,"column":3,"index":23},"end":{"line":2,"column":11,"index":31}},
+                    "argument": {
+                      "type": "NumericLiteral",
+                      "start":29,"end":31,"loc":{"start":{"line":2,"column":9,"index":29},"end":{"line":2,"column":11,"index":31}},
+                      "extra": {
+                        "rawValue": 42,
+                        "raw": "42"
+                      },
+                      "value": 42
+                    }
+                  },
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":35,"end":38,"loc":{"start":{"line":2,"column":15,"index":35},"end":{"line":2,"column":18,"index":38}},
+                    "body": [],
+                    "directives": []
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

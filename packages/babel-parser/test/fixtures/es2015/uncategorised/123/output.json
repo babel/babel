@@ -1,0 +1,91 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+  "errors": [
+    "SyntaxError: `super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (1:40)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":51,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":51,"index":51}},
+        "expression": {
+          "type": "ClassExpression",
+          "start":15,"end":50,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":50,"index":50}},
+          "id": {
+            "type": "Identifier",
+            "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22},"identifierName":"A"},
+            "name": "A"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":23,"end":50,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":50,"index":50}},
+            "body": [
+              {
+                "type": "ClassMethod",
+                "start":24,"end":49,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":49,"index":49}},
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":24,"end":35,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":35,"index":35},"identifierName":"constructor"},
+                  "name": "constructor"
+                },
+                "computed": false,
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":38,"end":49,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":49,"index":49}},
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":40,"end":47,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":47,"index":47}},
+                      "expression": {
+                        "type": "CallExpression",
+                        "start":40,"end":47,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":47,"index":47}},
+                        "callee": {
+                          "type": "Super",
+                          "start":40,"end":45,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":45,"index":45}}
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            ]
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

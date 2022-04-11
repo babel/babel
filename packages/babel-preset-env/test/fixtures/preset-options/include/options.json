@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "chrome": 61
+        },
+        "include": ["transform-classes"],
+        "modules": false
+      }
+    ]
+  ]
+}

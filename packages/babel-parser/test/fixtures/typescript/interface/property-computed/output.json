@@ -1,0 +1,85 @@
+{
+  "type": "File",
+  "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":78}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":78}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":78}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"I"},
+          "name": "I"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":12,"end":78,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":4,"column":1,"index":78}},
+          "body": [
+            {
+              "type": "TSPropertySignature",
+              "start":18,"end":44,"loc":{"start":{"line":2,"column":4,"index":18},"end":{"line":2,"column":30,"index":44}},
+              "computed": true,
+              "key": {
+                "type": "MemberExpression",
+                "start":19,"end":34,"loc":{"start":{"line":2,"column":5,"index":19},"end":{"line":2,"column":20,"index":34}},
+                "object": {
+                  "type": "Identifier",
+                  "start":19,"end":25,"loc":{"start":{"line":2,"column":5,"index":19},"end":{"line":2,"column":11,"index":25},"identifierName":"Symbol"},
+                  "name": "Symbol"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":26,"end":34,"loc":{"start":{"line":2,"column":12,"index":26},"end":{"line":2,"column":20,"index":34},"identifierName":"iterator"},
+                  "name": "iterator"
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":35,"end":43,"loc":{"start":{"line":2,"column":21,"index":35},"end":{"line":2,"column":29,"index":43}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":37,"end":43,"loc":{"start":{"line":2,"column":23,"index":37},"end":{"line":2,"column":29,"index":43}}
+                }
+              }
+            },
+            {
+              "type": "TSPropertySignature",
+              "start":49,"end":76,"loc":{"start":{"line":3,"column":4,"index":49},"end":{"line":3,"column":31,"index":76}},
+              "computed": true,
+              "key": {
+                "type": "MemberExpression",
+                "start":50,"end":65,"loc":{"start":{"line":3,"column":5,"index":50},"end":{"line":3,"column":20,"index":65}},
+                "object": {
+                  "type": "Identifier",
+                  "start":50,"end":56,"loc":{"start":{"line":3,"column":5,"index":50},"end":{"line":3,"column":11,"index":56},"identifierName":"Symbol"},
+                  "name": "Symbol"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":57,"end":65,"loc":{"start":{"line":3,"column":12,"index":57},"end":{"line":3,"column":20,"index":65},"identifierName":"iterator"},
+                  "name": "iterator"
+                }
+              },
+              "optional": true,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":67,"end":75,"loc":{"start":{"line":3,"column":22,"index":67},"end":{"line":3,"column":30,"index":75}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":69,"end":75,"loc":{"start":{"line":3,"column":24,"index":69},"end":{"line":3,"column":30,"index":75}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

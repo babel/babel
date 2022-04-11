@@ -1,0 +1,1 @@
+--out-file-extension cannot be used with --keep-file-extension

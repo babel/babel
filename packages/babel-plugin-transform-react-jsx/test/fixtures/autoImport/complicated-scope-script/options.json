@@ -1,0 +1,4 @@
+{
+  "plugins": [["transform-react-jsx", { "runtime": "automatic" }]],
+  "sourceType": "script"
+}

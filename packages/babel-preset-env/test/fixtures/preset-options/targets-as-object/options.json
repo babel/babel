@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "chrome": "55"
+        },
+        "modules": false
+      }
+    ]
+  ]
+}

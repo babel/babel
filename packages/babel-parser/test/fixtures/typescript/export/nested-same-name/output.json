@@ -1,0 +1,99 @@
+{
+  "type": "File",
+  "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":66}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":66}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "exportKind": "value",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":7,"end":19,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":19,"index":19}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":13,"end":18,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":18,"index":18}},
+              "id": {
+                "type": "Identifier",
+                "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"x"},
+                "name": "x"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":20,"end":66,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":4,"column":1,"index":66}},
+        "exportKind": "value",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "TSModuleDeclaration",
+          "start":27,"end":66,"loc":{"start":{"line":2,"column":7,"index":27},"end":{"line":4,"column":1,"index":66}},
+          "id": {
+            "type": "Identifier",
+            "start":37,"end":38,"loc":{"start":{"line":2,"column":17,"index":37},"end":{"line":2,"column":18,"index":38},"identifierName":"N"},
+            "name": "N"
+          },
+          "body": {
+            "type": "TSModuleBlock",
+            "start":39,"end":66,"loc":{"start":{"line":2,"column":19,"index":39},"end":{"line":4,"column":1,"index":66}},
+            "body": [
+              {
+                "type": "ExportNamedDeclaration",
+                "start":45,"end":64,"loc":{"start":{"line":3,"column":4,"index":45},"end":{"line":3,"column":23,"index":64}},
+                "exportKind": "value",
+                "specifiers": [],
+                "source": null,
+                "declaration": {
+                  "type": "VariableDeclaration",
+                  "start":52,"end":64,"loc":{"start":{"line":3,"column":11,"index":52},"end":{"line":3,"column":23,"index":64}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":58,"end":63,"loc":{"start":{"line":3,"column":17,"index":58},"end":{"line":3,"column":22,"index":63}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":58,"end":59,"loc":{"start":{"line":3,"column":17,"index":58},"end":{"line":3,"column":18,"index":59},"identifierName":"x"},
+                        "name": "x"
+                      },
+                      "init": {
+                        "type": "NumericLiteral",
+                        "start":62,"end":63,"loc":{"start":{"line":3,"column":21,"index":62},"end":{"line":3,"column":22,"index":63}},
+                        "extra": {
+                          "rawValue": 1,
+                          "raw": "1"
+                        },
+                        "value": 1
+                      }
+                    }
+                  ],
+                  "kind": "const"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "type": "File",
+  "start":0,"end":98,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":82,"index":98}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":98,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":82,"index":98}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":7,"index":15}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":14}},
+          "extra": {
+            "rawValue": "before after",
+            "raw": "\"before after\"",
+            "expressionValue": "before after"
+          },
+          "value": "before after"
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": "     ^ That's a U+2028 LINE SEPARATOR UTF-16 char (between 'before' and 'after')",
+            "start":16,"end":98,"loc":{"start":{"line":3,"column":0,"index":16},"end":{"line":3,"column":82,"index":98}}
+          }
+        ]
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "     ^ That's a U+2028 LINE SEPARATOR UTF-16 char (between 'before' and 'after')",
+      "start":16,"end":98,"loc":{"start":{"line":3,"column":0,"index":16},"end":{"line":3,"column":82,"index":98}}
+    }
+  ]
+}

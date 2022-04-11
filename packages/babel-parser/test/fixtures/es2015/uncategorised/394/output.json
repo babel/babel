@@ -1,0 +1,123 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":14,"index":43}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":14,"index":43}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":7,"end":16,"loc":{"start":{"line":2,"column":0,"index":7},"end":{"line":2,"column":9,"index":16}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":7,"end":15,"loc":{"start":{"line":2,"column":0,"index":7},"end":{"line":2,"column":8,"index":15}},
+          "operator": "=",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "start":7,"end":10,"loc":{"start":{"line":2,"column":0,"index":7},"end":{"line":2,"column":3,"index":10}},
+            "expression": {
+              "type": "Identifier",
+              "start":8,"end":9,"loc":{"start":{"line":2,"column":1,"index":8},"end":{"line":2,"column":2,"index":9},"identifierName":"a"},
+              "name": "a"
+            }
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "start":13,"end":15,"loc":{"start":{"line":2,"column":6,"index":13},"end":{"line":2,"column":8,"index":15}},
+            "properties": []
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":17,"end":28,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":11,"index":28}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":17,"end":27,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":10,"index":27}},
+          "operator": "=",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "start":17,"end":22,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":5,"index":22}},
+            "expression": {
+              "type": "MemberExpression",
+              "start":18,"end":21,"loc":{"start":{"line":3,"column":1,"index":18},"end":{"line":3,"column":4,"index":21}},
+              "object": {
+                "type": "Identifier",
+                "start":18,"end":19,"loc":{"start":{"line":3,"column":1,"index":18},"end":{"line":3,"column":2,"index":19},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":20,"end":21,"loc":{"start":{"line":3,"column":3,"index":20},"end":{"line":3,"column":4,"index":21},"identifierName":"b"},
+                "name": "b"
+              }
+            }
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "start":25,"end":27,"loc":{"start":{"line":3,"column":8,"index":25},"end":{"line":3,"column":10,"index":27}},
+            "properties": []
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":29,"end":43,"loc":{"start":{"line":4,"column":0,"index":29},"end":{"line":4,"column":14,"index":43}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":29,"end":42,"loc":{"start":{"line":4,"column":0,"index":29},"end":{"line":4,"column":13,"index":42}},
+          "operator": "=",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "start":29,"end":37,"loc":{"start":{"line":4,"column":0,"index":29},"end":{"line":4,"column":8,"index":37}},
+            "expression": {
+              "type": "MemberExpression",
+              "start":30,"end":36,"loc":{"start":{"line":4,"column":1,"index":30},"end":{"line":4,"column":7,"index":36}},
+              "object": {
+                "type": "Identifier",
+                "start":30,"end":31,"loc":{"start":{"line":4,"column":1,"index":30},"end":{"line":4,"column":2,"index":31},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": true,
+              "property": {
+                "type": "StringLiteral",
+                "start":32,"end":35,"loc":{"start":{"line":4,"column":3,"index":32},"end":{"line":4,"column":6,"index":35}},
+                "extra": {
+                  "rawValue": "c",
+                  "raw": "'c'"
+                },
+                "value": "c"
+              }
+            }
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "start":40,"end":42,"loc":{"start":{"line":4,"column":11,"index":40},"end":{"line":4,"column":13,"index":42}},
+            "properties": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

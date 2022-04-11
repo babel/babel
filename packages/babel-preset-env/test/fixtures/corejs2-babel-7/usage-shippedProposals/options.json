@@ -1,0 +1,14 @@
+{
+  "sourceType": "module",
+  "presets": [
+    [
+      "env",
+      {
+        "shippedProposals": true,
+        "targets": { "browsers": "ie 6" },
+        "useBuiltIns": "usage",
+        "corejs": 2
+      }
+    ]
+  ]
+}

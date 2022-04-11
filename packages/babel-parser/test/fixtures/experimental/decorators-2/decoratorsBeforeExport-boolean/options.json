@@ -1,0 +1,4 @@
+{
+  "plugins": [["decorators", { "decoratorsBeforeExport": "yes" }]],
+  "throws": "'decoratorsBeforeExport' must be a boolean."
+}

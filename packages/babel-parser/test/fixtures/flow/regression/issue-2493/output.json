@@ -1,0 +1,138 @@
+{
+  "type": "File",
+  "start":0,"end":102,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":8,"index":102}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":102,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":8,"index":102}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":92,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":92}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":91,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":3,"column":1,"index":91}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":9,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":9,"index":9},"identifierName":"hello"},
+              "name": "hello"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":12,"end":91,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":3,"column":1,"index":91}},
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start":41,"end":49,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":49,"index":49}},
+                "typeAnnotation": {
+                  "type": "StringTypeAnnotation",
+                  "start":43,"end":49,"loc":{"start":{"line":1,"column":43,"index":43},"end":{"line":1,"column":49,"index":49}}
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "AssignmentPattern",
+                  "start":13,"end":39,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":39,"index":39}},
+                  "left": {
+                    "type": "Identifier",
+                    "start":13,"end":28,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":28,"index":28},"identifierName":"greeting"},
+                    "name": "greeting",
+                    "typeAnnotation": {
+                      "type": "TypeAnnotation",
+                      "start":21,"end":28,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":28,"index":28}},
+                      "typeAnnotation": {
+                        "type": "StringTypeAnnotation",
+                        "start":22,"end":28,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":28,"index":28}}
+                      }
+                    }
+                  },
+                  "right": {
+                    "type": "StringLiteral",
+                    "start":31,"end":39,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":39,"index":39}},
+                    "extra": {
+                      "rawValue": " world",
+                      "raw": "' world'"
+                    },
+                    "value": " world"
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":53,"end":91,"loc":{"start":{"line":1,"column":53,"index":53},"end":{"line":3,"column":1,"index":91}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":57,"end":89,"loc":{"start":{"line":2,"column":2,"index":57},"end":{"line":2,"column":34,"index":89}},
+                    "expression": {
+                      "type": "CallExpression",
+                      "start":57,"end":88,"loc":{"start":{"line":2,"column":2,"index":57},"end":{"line":2,"column":33,"index":88}},
+                      "callee": {
+                        "type": "MemberExpression",
+                        "start":57,"end":68,"loc":{"start":{"line":2,"column":2,"index":57},"end":{"line":2,"column":13,"index":68}},
+                        "object": {
+                          "type": "Identifier",
+                          "start":57,"end":64,"loc":{"start":{"line":2,"column":2,"index":57},"end":{"line":2,"column":9,"index":64},"identifierName":"console"},
+                          "name": "console"
+                        },
+                        "computed": false,
+                        "property": {
+                          "type": "Identifier",
+                          "start":65,"end":68,"loc":{"start":{"line":2,"column":10,"index":65},"end":{"line":2,"column":13,"index":68},"identifierName":"log"},
+                          "name": "log"
+                        }
+                      },
+                      "arguments": [
+                        {
+                          "type": "BinaryExpression",
+                          "start":69,"end":87,"loc":{"start":{"line":2,"column":14,"index":69},"end":{"line":2,"column":32,"index":87}},
+                          "left": {
+                            "type": "StringLiteral",
+                            "start":69,"end":76,"loc":{"start":{"line":2,"column":14,"index":69},"end":{"line":2,"column":21,"index":76}},
+                            "extra": {
+                              "rawValue": "hello",
+                              "raw": "'hello'"
+                            },
+                            "value": "hello"
+                          },
+                          "operator": "+",
+                          "right": {
+                            "type": "Identifier",
+                            "start":79,"end":87,"loc":{"start":{"line":2,"column":24,"index":79},"end":{"line":2,"column":32,"index":87},"identifierName":"greeting"},
+                            "name": "greeting"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":94,"end":102,"loc":{"start":{"line":5,"column":0,"index":94},"end":{"line":5,"column":8,"index":102}},
+        "expression": {
+          "type": "CallExpression",
+          "start":94,"end":101,"loc":{"start":{"line":5,"column":0,"index":94},"end":{"line":5,"column":7,"index":101}},
+          "callee": {
+            "type": "Identifier",
+            "start":94,"end":99,"loc":{"start":{"line":5,"column":0,"index":94},"end":{"line":5,"column":5,"index":99},"identifierName":"hello"},
+            "name": "hello"
+          },
+          "arguments": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

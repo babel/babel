@@ -1,0 +1,42 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":5,"index":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":5,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":1,"index":13}},
+        "test": {
+          "type": "BooleanLiteral",
+          "start":4,"end":8,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":8,"index":8}},
+          "value": true
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":2,"column":1,"index":13}},
+          "body": [],
+          "directives": []
+        },
+        "alternate": null
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":15,"end":20,"loc":{"start":{"line":4,"column":0,"index":15},"end":{"line":4,"column":5,"index":20}},
+        "expression": {
+          "type": "RegExpLiteral",
+          "start":15,"end":20,"loc":{"start":{"line":4,"column":0,"index":15},"end":{"line":4,"column":5,"index":20}},
+          "extra": {
+            "raw": "/foo/"
+          },
+          "pattern": "foo",
+          "flags": ""
+        }
+      }
+    ],
+    "directives": []
+  }
+}

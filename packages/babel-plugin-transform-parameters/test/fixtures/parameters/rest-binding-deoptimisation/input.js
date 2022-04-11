@@ -1,0 +1,1 @@
+const deepAssign = (...args) => args = [];

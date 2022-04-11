@@ -1,0 +1,4 @@
+{
+  "throws": "Namespace not marked type-only declare. Non-declarative namespaces are only supported experimentally in Babel. To enable and review caveats see: https://babeljs.io/docs/en/babel-plugin-transform-typescript",
+  "plugins": [["transform-typescript", { "allowNamespaces": false }]]
+}

@@ -1,0 +1,93 @@
+{
+  "type": "File",
+  "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":70}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":70}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":70}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17},"identifierName":"af"},
+          "name": "af"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":70,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":3,"column":1,"index":70}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":25,"end":68,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":45,"index":68}},
+              "expression": {
+                "type": "BinaryExpression",
+                "start":25,"end":68,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":45,"index":68}},
+                "left": {
+                  "type": "Identifier",
+                  "start":25,"end":30,"loc":{"start":{"line":2,"column":2,"index":25},"end":{"line":2,"column":7,"index":30},"identifierName":"value"},
+                  "name": "value"
+                },
+                "operator": "|>",
+                "right": {
+                  "type": "DoExpression",
+                  "start":34,"end":68,"loc":{"start":{"line":2,"column":11,"index":34},"end":{"line":2,"column":45,"index":68}},
+                  "async": false,
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":37,"end":68,"loc":{"start":{"line":2,"column":14,"index":37},"end":{"line":2,"column":45,"index":68}},
+                    "body": [
+                      {
+                        "type": "ForOfStatement",
+                        "start":39,"end":66,"loc":{"start":{"line":2,"column":16,"index":39},"end":{"line":2,"column":43,"index":66}},
+                        "await": true,
+                        "left": {
+                          "type": "VariableDeclaration",
+                          "start":50,"end":57,"loc":{"start":{"line":2,"column":27,"index":50},"end":{"line":2,"column":34,"index":57}},
+                          "declarations": [
+                            {
+                              "type": "VariableDeclarator",
+                              "start":56,"end":57,"loc":{"start":{"line":2,"column":33,"index":56},"end":{"line":2,"column":34,"index":57}},
+                              "id": {
+                                "type": "Identifier",
+                                "start":56,"end":57,"loc":{"start":{"line":2,"column":33,"index":56},"end":{"line":2,"column":34,"index":57},"identifierName":"e"},
+                                "name": "e"
+                              },
+                              "init": null
+                            }
+                          ],
+                          "kind": "const"
+                        },
+                        "right": {
+                          "type": "TopicReference",
+                          "start":61,"end":62,"loc":{"start":{"line":2,"column":38,"index":61},"end":{"line":2,"column":39,"index":62}}
+                        },
+                        "body": {
+                          "type": "ExpressionStatement",
+                          "start":64,"end":66,"loc":{"start":{"line":2,"column":41,"index":64},"end":{"line":2,"column":43,"index":66}},
+                          "expression": {
+                            "type": "Identifier",
+                            "start":64,"end":65,"loc":{"start":{"line":2,"column":41,"index":64},"end":{"line":2,"column":42,"index":65},"identifierName":"e"},
+                            "name": "e"
+                          }
+                        }
+                      }
+                    ],
+                    "directives": []
+                  }
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

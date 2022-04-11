@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "safari": "10"
+        }
+      }
+    ]
+  ]
+}

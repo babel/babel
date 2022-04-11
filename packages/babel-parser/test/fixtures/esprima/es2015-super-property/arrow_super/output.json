@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":69}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":69}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":69}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":69,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":5,"column":1,"index":69}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":24,"end":67,"loc":{"start":{"line":2,"column":4,"index":24},"end":{"line":4,"column":5,"index":67}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":24,"end":35,"loc":{"start":{"line":2,"column":4,"index":24},"end":{"line":2,"column":15,"index":35},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":38,"end":67,"loc":{"start":{"line":2,"column":18,"index":38},"end":{"line":4,"column":5,"index":67}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":48,"end":61,"loc":{"start":{"line":3,"column":8,"index":48},"end":{"line":3,"column":21,"index":61}},
+                    "expression": {
+                      "type": "ArrowFunctionExpression",
+                      "start":48,"end":61,"loc":{"start":{"line":3,"column":8,"index":48},"end":{"line":3,"column":21,"index":61}},
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "CallExpression",
+                        "start":54,"end":61,"loc":{"start":{"line":3,"column":14,"index":54},"end":{"line":3,"column":21,"index":61}},
+                        "callee": {
+                          "type": "Super",
+                          "start":54,"end":59,"loc":{"start":{"line":3,"column":14,"index":54},"end":{"line":3,"column":19,"index":59}}
+                        },
+                        "arguments": []
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

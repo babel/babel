@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+  "errors": [
+    "SyntaxError: A 'get' accesor must not have any formal parameters. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"B"},
+          "name": "B"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":37,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":3,"column":1,"index":37}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":13,"end":34,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":23,"index":34}},
+              "key": {
+                "type": "Identifier",
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":6,"index":17},"end":{"line":2,"column":7,"index":18},"identifierName":"a"},
+                "name": "a"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "get",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":13,"end":34,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":23,"index":34}},
+                "params": [],
+                "rest": {
+                  "type": "FunctionTypeParam",
+                  "start":22,"end":25,"loc":{"start":{"line":2,"column":11,"index":22},"end":{"line":2,"column":14,"index":25}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start":22,"end":25,"loc":{"start":{"line":2,"column":11,"index":22},"end":{"line":2,"column":14,"index":25}},
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "start":22,"end":25,"loc":{"start":{"line":2,"column":11,"index":22},"end":{"line":2,"column":14,"index":25},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                },
+                "typeParameters": null,
+                "this": null,
+                "returnType": {
+                  "type": "NumberTypeAnnotation",
+                  "start":28,"end":34,"loc":{"start":{"line":2,"column":17,"index":28},"end":{"line":2,"column":23,"index":34}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

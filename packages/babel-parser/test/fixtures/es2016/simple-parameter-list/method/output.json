@@ -1,0 +1,90 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":56}},
+  "errors": [
+    "SyntaxError: Illegal 'use strict' directive in function with non-simple parameter list. (2:3)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":56}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":56}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":55,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":5,"column":1,"index":55}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"obj"},
+              "name": "obj"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":10,"end":55,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":5,"column":1,"index":55}},
+              "properties": [
+                {
+                  "type": "ObjectMethod",
+                  "start":14,"end":53,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":4,"column":3,"index":53}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":14,"end":15,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":3,"index":15},"identifierName":"a"},
+                    "name": "a"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "AssignmentPattern",
+                      "start":16,"end":28,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":2,"column":16,"index":28}},
+                      "left": {
+                        "type": "Identifier",
+                        "start":16,"end":23,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":2,"column":11,"index":23},"identifierName":"options"},
+                        "name": "options"
+                      },
+                      "right": {
+                        "type": "ObjectExpression",
+                        "start":26,"end":28,"loc":{"start":{"line":2,"column":14,"index":26},"end":{"line":2,"column":16,"index":28}},
+                        "properties": []
+                      }
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":30,"end":53,"loc":{"start":{"line":2,"column":18,"index":30},"end":{"line":4,"column":3,"index":53}},
+                    "body": [],
+                    "directives": [
+                      {
+                        "type": "Directive",
+                        "start":36,"end":49,"loc":{"start":{"line":3,"column":4,"index":36},"end":{"line":3,"column":17,"index":49}},
+                        "value": {
+                          "type": "DirectiveLiteral",
+                          "start":36,"end":48,"loc":{"start":{"line":3,"column":4,"index":36},"end":{"line":3,"column":16,"index":48}},
+                          "extra": {
+                            "rawValue": "use strict",
+                            "raw": "\"use strict\"",
+                            "expressionValue": "use strict"
+                          },
+                          "value": "use strict"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

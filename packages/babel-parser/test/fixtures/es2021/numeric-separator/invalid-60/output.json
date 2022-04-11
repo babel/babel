@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+  "errors": [
+    "SyntaxError: A numeric separator is only allowed between two digits. (1:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "SequenceExpression",
+          "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+          "expressions": [
+            {
+              "type": "NumericLiteral",
+              "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+              "extra": {
+                "rawValue": 111,
+                "raw": "1_1.1e_1"
+              },
+              "value": 111
+            },
+            {
+              "type": "NumericLiteral",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+  "errors": [
+    "SyntaxError: Unsyntactic continue. (1:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+        "discriminant": {
+          "type": "Identifier",
+          "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"x"},
+          "name": "x"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start":13,"end":31,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":31,"index":31}},
+            "consequent": [
+              {
+                "type": "ContinueStatement",
+                "start":22,"end":31,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":31,"index":31}},
+                "label": null
+              }
+            ],
+            "test": null
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

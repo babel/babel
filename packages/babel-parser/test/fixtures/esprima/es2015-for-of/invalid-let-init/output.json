@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+  "errors": [
+    "SyntaxError: 'for-of' loop variable declaration may not have an initializer. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start":5,"end":14,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":14,"index":14}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14}},
+              "id": {
+                "type": "Identifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
+                "name": "x"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ],
+          "kind": "let"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"y"},
+          "name": "y"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":20,"end":21,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":21,"index":21}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

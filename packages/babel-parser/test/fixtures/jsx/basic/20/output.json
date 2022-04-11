@@ -1,0 +1,165 @@
+{
+  "type": "File",
+  "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":52,"index":52}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":52,"index":52}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":52,"index":52}},
+        "expression": {
+          "type": "JSXElement",
+          "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":52,"index":52}},
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":31,"index":31}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2}},
+              "name": "A"
+            },
+            "attributes": [
+              {
+                "type": "JSXAttribute",
+                "start":3,"end":16,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":16,"index":16}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":3,"end":5,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":5,"index":5}},
+                  "name": "aa"
+                },
+                "value": {
+                  "type": "JSXExpressionContainer",
+                  "start":6,"end":16,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":16,"index":16}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":7,"end":15,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":15,"index":15}},
+                    "object": {
+                      "type": "MemberExpression",
+                      "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12}},
+                      "object": {
+                        "type": "Identifier",
+                        "start":7,"end":9,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":9,"index":9},"identifierName":"aa"},
+                        "name": "aa"
+                      },
+                      "computed": false,
+                      "property": {
+                        "type": "Identifier",
+                        "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12},"identifierName":"bb"},
+                        "name": "bb"
+                      }
+                    },
+                    "computed": false,
+                    "property": {
+                      "type": "Identifier",
+                      "start":13,"end":15,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":15,"index":15},"identifierName":"cc"},
+                      "name": "cc"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "JSXAttribute",
+                "start":17,"end":30,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":30,"index":30}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":17,"end":19,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":19,"index":19}},
+                  "name": "bb"
+                },
+                "value": {
+                  "type": "JSXExpressionContainer",
+                  "start":20,"end":30,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":30,"index":30}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":21,"end":29,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":29,"index":29}},
+                    "object": {
+                      "type": "MemberExpression",
+                      "start":21,"end":26,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":26,"index":26}},
+                      "object": {
+                        "type": "Identifier",
+                        "start":21,"end":23,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":23,"index":23},"identifierName":"bb"},
+                        "name": "bb"
+                      },
+                      "computed": false,
+                      "property": {
+                        "type": "Identifier",
+                        "start":24,"end":26,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":26,"index":26},"identifierName":"cc"},
+                        "name": "cc"
+                      }
+                    },
+                    "computed": false,
+                    "property": {
+                      "type": "Identifier",
+                      "start":27,"end":29,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":29,"index":29},"identifierName":"dd"},
+                      "name": "dd"
+                    }
+                  }
+                }
+              }
+            ],
+            "selfClosing": false
+          },
+          "closingElement": {
+            "type": "JSXClosingElement",
+            "start":48,"end":52,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":52,"index":52}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":50,"end":51,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":51,"index":51}},
+              "name": "A"
+            }
+          },
+          "children": [
+            {
+              "type": "JSXElement",
+              "start":31,"end":48,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":48,"index":48}},
+              "openingElement": {
+                "type": "JSXOpeningElement",
+                "start":31,"end":36,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":36,"index":36}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":32,"end":35,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":35,"index":35}},
+                  "name": "div"
+                },
+                "attributes": [],
+                "selfClosing": false
+              },
+              "closingElement": {
+                "type": "JSXClosingElement",
+                "start":42,"end":48,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":48,"index":48}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":44,"end":47,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":47,"index":47}},
+                  "name": "div"
+                }
+              },
+              "children": [
+                {
+                  "type": "JSXExpressionContainer",
+                  "start":36,"end":42,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":42,"index":42}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":37,"end":41,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":41,"index":41}},
+                    "object": {
+                      "type": "Identifier",
+                      "start":37,"end":39,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":39,"index":39},"identifierName":"aa"},
+                      "name": "aa"
+                    },
+                    "computed": false,
+                    "property": {
+                      "type": "Identifier",
+                      "start":40,"end":41,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":41,"index":41},"identifierName":"b"},
+                      "name": "b"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

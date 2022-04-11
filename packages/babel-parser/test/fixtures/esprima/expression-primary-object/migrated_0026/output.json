@@ -1,0 +1,54 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1},"identifierName":"x"},
+            "name": "x"
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "start":4,"end":20,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":20,"index":20}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":6,"end":18,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":18,"index":18}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":6,"end":15,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":15,"index":15},"identifierName":"__proto__"},
+                  "name": "__proto__"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "NumericLiteral",
+                  "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}},
+                  "extra": {
+                    "rawValue": 2,
+                    "raw": "2"
+                  },
+                  "value": 2
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

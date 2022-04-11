@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'static'. (1:23)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":14,"end":35,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":35,"index":35}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":29,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":29,"index":29},"identifierName":"static"},
+          "name": "static"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":32,"end":35,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":35,"index":35}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

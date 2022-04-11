@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":17,"end":19,"loc":{"start":{"line":2,"column":0,"index":17},"end":{"line":2,"column":2,"index":19}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":17,"end":19,"loc":{"start":{"line":2,"column":0,"index":17},"end":{"line":2,"column":2,"index":19}},
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
+          "value": 42
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Hello, world!",
+            "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Hello, world!",
+      "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}}
+    }
+  ]
+}

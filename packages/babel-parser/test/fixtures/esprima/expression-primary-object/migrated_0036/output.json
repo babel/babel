@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":35,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":35,"index":35}},
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":2,"end":17,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":17,"index":17}},
+              "method": false,
+              "computed": true,
+              "key": {
+                "type": "StringLiteral",
+                "start":3,"end":14,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":14,"index":14}},
+                "extra": {
+                  "rawValue": "__proto__",
+                  "raw": "\"__proto__\""
+                },
+                "value": "__proto__"
+              },
+              "shorthand": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            },
+            {
+              "type": "ObjectProperty",
+              "start":19,"end":34,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":34,"index":34}},
+              "method": false,
+              "computed": true,
+              "key": {
+                "type": "StringLiteral",
+                "start":20,"end":31,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":31,"index":31}},
+                "extra": {
+                  "rawValue": "__proto__",
+                  "raw": "\"__proto__\""
+                },
+                "value": "__proto__"
+              },
+              "shorthand": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":33,"end":34,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":34,"index":34}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

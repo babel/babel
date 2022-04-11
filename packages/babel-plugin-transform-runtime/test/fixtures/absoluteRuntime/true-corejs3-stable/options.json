@@ -1,0 +1,13 @@
+{
+  "externalHelpers": true,
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "absoluteRuntime": true,
+        "corejs": { "version": 3, "proposals": false }
+      }
+    ]
+  ]
+}

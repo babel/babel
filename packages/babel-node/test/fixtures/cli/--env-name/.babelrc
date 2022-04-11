@@ -1,0 +1,7 @@
+{
+  "env": {
+    "env-name-test": {
+      "plugins": ["./logPlugin.js"]
+    }
+  }
+}

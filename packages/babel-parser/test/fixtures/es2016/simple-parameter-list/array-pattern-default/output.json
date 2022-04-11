@@ -1,0 +1,75 @@
+{
+  "type": "File",
+  "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":57}},
+  "errors": [
+    "SyntaxError: Illegal 'use strict' directive in function with non-simple parameter list. (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":57}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":57}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+          "name": "a"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "AssignmentPattern",
+            "start":11,"end":36,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":36,"index":36}},
+            "left": {
+              "type": "ArrayPattern",
+              "start":11,"end":31,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":31,"index":31}},
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "start":13,"end":20,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":20,"index":20},"identifierName":"option1"},
+                  "name": "option1"
+                },
+                {
+                  "type": "Identifier",
+                  "start":22,"end":29,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":29,"index":29},"identifierName":"option2"},
+                  "name": "option2"
+                }
+              ]
+            },
+            "right": {
+              "type": "ArrayExpression",
+              "start":34,"end":36,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":36,"index":36}},
+              "elements": []
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":38,"end":57,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":3,"column":1,"index":57}},
+          "body": [],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":42,"end":55,"loc":{"start":{"line":2,"column":2,"index":42},"end":{"line":2,"column":15,"index":55}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":42,"end":54,"loc":{"start":{"line":2,"column":2,"index":42},"end":{"line":2,"column":14,"index":54}},
+                "extra": {
+                  "rawValue": "use strict",
+                  "raw": "\"use strict\"",
+                  "expressionValue": "use strict"
+                },
+                "value": "use strict"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

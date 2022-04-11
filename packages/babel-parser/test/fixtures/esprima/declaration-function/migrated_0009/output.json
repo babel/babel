@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":28,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":28,"index":28}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":6,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":6,"index":6},"identifierName":"hi"},
+              "name": "hi"
+            },
+            "init": {
+              "type": "FunctionExpression",
+              "start":9,"end":28,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":28,"index":28}},
+              "id": {
+                "type": "Identifier",
+                "start":18,"end":22,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":22,"index":22},"identifierName":"eval"},
+                "name": "eval"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":25,"end":28,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":28,"index":28}},
+                "body": [],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

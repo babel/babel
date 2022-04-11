@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "left": {
+            "type": "StringLiteral",
+            "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+            "extra": {
+              "rawValue": "use strict",
+              "raw": "\"use strict\""
+            },
+            "value": "use strict"
+          },
+          "operator": "+",
+          "right": {
+            "type": "NumericLiteral",
+            "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+            "extra": {
+              "rawValue": 42,
+              "raw": "42"
+            },
+            "value": 42
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

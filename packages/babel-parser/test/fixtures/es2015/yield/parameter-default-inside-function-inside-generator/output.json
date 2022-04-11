@@ -1,0 +1,65 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":47,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":3,"column":1,"index":47}},
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start":19,"end":45,"loc":{"start":{"line":2,"column":2,"index":19},"end":{"line":2,"column":28,"index":45}},
+              "id": {
+                "type": "Identifier",
+                "start":28,"end":31,"loc":{"start":{"line":2,"column":11,"index":28},"end":{"line":2,"column":14,"index":31},"identifierName":"fn2"},
+                "name": "fn2"
+              },
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "AssignmentPattern",
+                  "start":32,"end":41,"loc":{"start":{"line":2,"column":15,"index":32},"end":{"line":2,"column":24,"index":41}},
+                  "left": {
+                    "type": "Identifier",
+                    "start":32,"end":33,"loc":{"start":{"line":2,"column":15,"index":32},"end":{"line":2,"column":16,"index":33},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "right": {
+                    "type": "Identifier",
+                    "start":36,"end":41,"loc":{"start":{"line":2,"column":19,"index":36},"end":{"line":2,"column":24,"index":41},"identifierName":"yield"},
+                    "name": "yield"
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":43,"end":45,"loc":{"start":{"line":2,"column":26,"index":43},"end":{"line":2,"column":28,"index":45}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

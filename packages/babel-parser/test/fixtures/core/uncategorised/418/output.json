@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+  "errors": [
+    "SyntaxError: Invalid left-hand side in for-in statement. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForInStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "left": {
+          "type": "UnaryExpression",
+          "start":5,"end":7,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":7,"index":7}},
+          "operator": "+",
+          "prefix": true,
+          "argument": {
+            "type": "Identifier",
+            "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"i"},
+            "name": "i"
+          }
+        },
+        "right": {
+          "type": "ObjectExpression",
+          "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13}},
+          "properties": []
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

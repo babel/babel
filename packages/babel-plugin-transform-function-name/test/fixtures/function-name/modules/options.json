@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-function-name",
+    "transform-modules-commonjs",
+    "transform-classes",
+    ["proposal-decorators", { "legacy": true }]
+  ]
+}

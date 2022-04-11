@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+  "errors": [
+    "SyntaxError: Invalid escape sequence in template. (1:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+        "expression": {
+          "type": "TemplateLiteral",
+          "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+          "expressions": [
+            {
+              "type": "NumericLiteral",
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          ],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start":1,"end":5,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":5,"index":5}},
+              "value": {
+                "raw": "left",
+                "cooked": "left"
+              },
+              "tail": false
+            },
+            {
+              "type": "TemplateElement",
+              "start":9,"end":15,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":15,"index":15}},
+              "value": {
+                "raw": "\\u000g",
+                "cooked": null
+              },
+              "tail": true
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

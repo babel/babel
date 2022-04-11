@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":18,"end":23,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":23,"index":23}},
+        "expression": {
+          "type": "RegExpLiteral",
+          "start":18,"end":23,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":23,"index":23}},
+          "extra": {
+            "raw": "/42/i"
+          },
+          "pattern": "42",
+          "flags": "i"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

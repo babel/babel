@@ -1,0 +1,87 @@
+{
+  "type": "File",
+  "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":35,"index":66}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":35,"index":66}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":30,"index":30}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":29,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":29,"index":29}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":17,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":17,"index":17},"identifierName":"testVarible"},
+              "name": "testVarible"
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":20,"end":29,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":29,"index":29}},
+              "extra": {
+                "rawValue": "test.js",
+                "raw": "'test.js'"
+              },
+              "value": "test.js"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":31,"end":66,"loc":{"start":{"line":2,"column":0,"index":31},"end":{"line":2,"column":35,"index":66}},
+        "expression": {
+          "type": "CallExpression",
+          "start":31,"end":65,"loc":{"start":{"line":2,"column":0,"index":31},"end":{"line":2,"column":34,"index":65}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":31,"end":55,"loc":{"start":{"line":2,"column":0,"index":31},"end":{"line":2,"column":24,"index":55}},
+            "object": {
+              "type": "CallExpression",
+              "start":31,"end":50,"loc":{"start":{"line":2,"column":0,"index":31},"end":{"line":2,"column":19,"index":50}},
+              "callee": {
+                "type": "Import",
+                "start":31,"end":37,"loc":{"start":{"line":2,"column":0,"index":31},"end":{"line":2,"column":6,"index":37}}
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "start":38,"end":49,"loc":{"start":{"line":2,"column":7,"index":38},"end":{"line":2,"column":18,"index":49},"identifierName":"testVarible"},
+                  "name": "testVarible"
+                }
+              ]
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":51,"end":55,"loc":{"start":{"line":2,"column":20,"index":51},"end":{"line":2,"column":24,"index":55},"identifierName":"then"},
+              "name": "then"
+            }
+          },
+          "arguments": [
+            {
+              "type": "ArrowFunctionExpression",
+              "start":56,"end":64,"loc":{"start":{"line":2,"column":25,"index":56},"end":{"line":2,"column":33,"index":64}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":62,"end":64,"loc":{"start":{"line":2,"column":31,"index":62},"end":{"line":2,"column":33,"index":64}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

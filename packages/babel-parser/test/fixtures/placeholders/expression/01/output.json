@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+          "left": {
+            "type": "Placeholder",
+            "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+            "name": {
+              "type": "Identifier",
+              "start":2,"end":5,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":5,"index":5},"identifierName":"FOO"},
+              "name": "FOO"
+            },
+            "expectedNode": "Expression"
+          },
+          "operator": "+",
+          "right": {
+            "type": "CallExpression",
+            "start":10,"end":26,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":26,"index":26}},
+            "callee": {
+              "type": "Placeholder",
+              "start":10,"end":17,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":17,"index":17}},
+              "name": {
+                "type": "Identifier",
+                "start":12,"end":15,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":15,"index":15},"identifierName":"BAR"},
+                "name": "BAR"
+              },
+              "expectedNode": "Expression"
+            },
+            "arguments": [
+              {
+                "type": "Placeholder",
+                "start":18,"end":25,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":25,"index":25}},
+                "name": {
+                  "type": "Identifier",
+                  "start":20,"end":23,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":23,"index":23},"identifierName":"BAZ"},
+                  "name": "BAZ"
+                },
+                "expectedNode": "Expression"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

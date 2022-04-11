@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["typescript", "jsx"],
+  "BABEL_8_BREAKING": true
+}

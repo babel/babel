@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+  "errors": [
+    "SyntaxError: Binding 'eval' in strict mode. (1:48)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14},"identifierName":"hello"},
+          "name": "hello"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":17,"end":58,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":58,"index":58}},
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start":33,"end":56,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":56,"index":56}},
+              "id": {
+                "type": "Identifier",
+                "start":42,"end":47,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":47,"index":47},"identifierName":"inner"},
+                "name": "inner"
+              },
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":48,"end":52,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":52,"index":52},"identifierName":"eval"},
+                  "name": "eval"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":54,"end":56,"loc":{"start":{"line":1,"column":54,"index":54},"end":{"line":1,"column":56,"index":56}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":19,"end":32,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":32,"index":32}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":19,"end":31,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":31,"index":31}},
+                "extra": {
+                  "rawValue": "use strict",
+                  "raw": "'use strict'",
+                  "expressionValue": "use strict"
+                },
+                "value": "use strict"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

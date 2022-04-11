@@ -1,0 +1,82 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":38,"index":47}},
+  "errors": [
+    "SyntaxError: Unexpected reserved type interface. (2:21)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":38,"index":47}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":9,"end":47,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":38,"index":47}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":15,"end":46,"loc":{"start":{"line":2,"column":6,"index":15},"end":{"line":2,"column":37,"index":46}},
+            "id": {
+              "type": "Identifier",
+              "start":15,"end":39,"loc":{"start":{"line":2,"column":6,"index":15},"end":{"line":2,"column":30,"index":39},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":16,"end":39,"loc":{"start":{"line":2,"column":7,"index":16},"end":{"line":2,"column":30,"index":39}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":18,"end":39,"loc":{"start":{"line":2,"column":9,"index":18},"end":{"line":2,"column":30,"index":39}},
+                  "argument": {
+                    "type": "GenericTypeAnnotation",
+                    "start":25,"end":39,"loc":{"start":{"line":2,"column":16,"index":25},"end":{"line":2,"column":30,"index":39}},
+                    "typeParameters": null,
+                    "id": {
+                      "type": "QualifiedTypeIdentifier",
+                      "start":25,"end":39,"loc":{"start":{"line":2,"column":16,"index":25},"end":{"line":2,"column":30,"index":39}},
+                      "qualification": {
+                        "type": "Identifier",
+                        "start":25,"end":29,"loc":{"start":{"line":2,"column":16,"index":25},"end":{"line":2,"column":20,"index":29},"identifierName":"type"},
+                        "name": "type"
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start":30,"end":39,"loc":{"start":{"line":2,"column":21,"index":30},"end":{"line":2,"column":30,"index":39},"identifierName":"interface"},
+                        "name": "interface"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":42,"end":46,"loc":{"start":{"line":2,"column":33,"index":42},"end":{"line":2,"column":37,"index":46}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}}
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "type": "File",
+  "start":0,"end":96,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":19,"index":96}},
+  "errors": [
+    "SyntaxError: Single type parameter T should have a trailing comma. Example usage: <T,>. (2:3)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":96,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":19,"index":96}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":57,"end":75,"loc":{"start":{"line":2,"column":0,"index":57},"end":{"line":2,"column":18,"index":75}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":57,"end":74,"loc":{"start":{"line":2,"column":0,"index":57},"end":{"line":2,"column":17,"index":74}},
+          "returnType": {
+            "type": "TSTypeAnnotation",
+            "start":66,"end":69,"loc":{"start":{"line":2,"column":9,"index":66},"end":{"line":2,"column":12,"index":69}},
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start":68,"end":69,"loc":{"start":{"line":2,"column":11,"index":68},"end":{"line":2,"column":12,"index":69}},
+              "typeName": {
+                "type": "Identifier",
+                "start":68,"end":69,"loc":{"start":{"line":2,"column":11,"index":68},"end":{"line":2,"column":12,"index":69},"identifierName":"T"},
+                "name": "T"
+              }
+            }
+          },
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":61,"end":65,"loc":{"start":{"line":2,"column":4,"index":61},"end":{"line":2,"column":8,"index":65},"identifierName":"a"},
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":62,"end":65,"loc":{"start":{"line":2,"column":5,"index":62},"end":{"line":2,"column":8,"index":65}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":64,"end":65,"loc":{"start":{"line":2,"column":7,"index":64},"end":{"line":2,"column":8,"index":65}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":64,"end":65,"loc":{"start":{"line":2,"column":7,"index":64},"end":{"line":2,"column":8,"index":65},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "Identifier",
+            "start":73,"end":74,"loc":{"start":{"line":2,"column":16,"index":73},"end":{"line":2,"column":17,"index":74},"identifierName":"a"},
+            "name": "a"
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":57,"end":60,"loc":{"start":{"line":2,"column":0,"index":57},"end":{"line":2,"column":3,"index":60}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":58,"end":59,"loc":{"start":{"line":2,"column":1,"index":58},"end":{"line":2,"column":2,"index":59}},
+                "name": {
+                  "type": "Identifier",
+                  "start":58,"end":59,"loc":{"start":{"line":2,"column":1,"index":58},"end":{"line":2,"column":2,"index":59},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Generics without trailing comma are disallowed in JSX",
+            "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":56,"index":56}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":77,"end":96,"loc":{"start":{"line":4,"column":0,"index":77},"end":{"line":4,"column":19,"index":96}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":77,"end":95,"loc":{"start":{"line":4,"column":0,"index":77},"end":{"line":4,"column":18,"index":95}},
+          "returnType": {
+            "type": "TSTypeAnnotation",
+            "start":87,"end":90,"loc":{"start":{"line":4,"column":10,"index":87},"end":{"line":4,"column":13,"index":90}},
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start":89,"end":90,"loc":{"start":{"line":4,"column":12,"index":89},"end":{"line":4,"column":13,"index":90}},
+              "typeName": {
+                "type": "Identifier",
+                "start":89,"end":90,"loc":{"start":{"line":4,"column":12,"index":89},"end":{"line":4,"column":13,"index":90},"identifierName":"T"},
+                "name": "T"
+              }
+            }
+          },
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":82,"end":86,"loc":{"start":{"line":4,"column":5,"index":82},"end":{"line":4,"column":9,"index":86},"identifierName":"a"},
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":83,"end":86,"loc":{"start":{"line":4,"column":6,"index":83},"end":{"line":4,"column":9,"index":86}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":85,"end":86,"loc":{"start":{"line":4,"column":8,"index":85},"end":{"line":4,"column":9,"index":86}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":85,"end":86,"loc":{"start":{"line":4,"column":8,"index":85},"end":{"line":4,"column":9,"index":86},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "Identifier",
+            "start":94,"end":95,"loc":{"start":{"line":4,"column":17,"index":94},"end":{"line":4,"column":18,"index":95},"identifierName":"a"},
+            "name": "a"
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":77,"end":81,"loc":{"start":{"line":4,"column":0,"index":77},"end":{"line":4,"column":4,"index":81}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":78,"end":79,"loc":{"start":{"line":4,"column":1,"index":78},"end":{"line":4,"column":2,"index":79}},
+                "name": {
+                  "type": "Identifier",
+                  "start":78,"end":79,"loc":{"start":{"line":4,"column":1,"index":78},"end":{"line":4,"column":2,"index":79},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ],
+            "extra": {
+              "trailingComma": 79
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Generics without trailing comma are disallowed in JSX",
+      "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":56,"index":56}}
+    }
+  ]
+}

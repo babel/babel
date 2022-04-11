@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "Unexpected token, expected \"as\" (1:9)"
+}

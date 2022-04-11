@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":29,"index":48}},
+  "errors": [
+    "SyntaxError: Only one default export allowed per module. (2:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":29,"index":48}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "declaration": {
+          "type": "ObjectExpression",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+          "properties": []
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":19,"end":47,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":28,"index":47}},
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start":34,"end":47,"loc":{"start":{"line":2,"column":15,"index":34},"end":{"line":2,"column":28,"index":47}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":45,"end":47,"loc":{"start":{"line":2,"column":26,"index":45},"end":{"line":2,"column":28,"index":47}},
+            "body": [],
+            "directives": []
+          }
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":47,"end":48,"loc":{"start":{"line":2,"column":28,"index":47},"end":{"line":2,"column":29,"index":48}}
+      }
+    ],
+    "directives": []
+  }
+}

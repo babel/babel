@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "useBuiltIns": "entry",
+        "targets": { "browsers": "ie 6" },
+        "corejs": 3,
+        "exclude": ["transform-regenerator"]
+      }
+    ]
+  ]
+}

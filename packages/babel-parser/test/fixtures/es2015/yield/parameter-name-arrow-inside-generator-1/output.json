@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":35}},
+  "errors": [
+    "SyntaxError: Yield expression is not allowed in formal parameters. (2:3)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (2:3)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":35}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":35}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":15,"end":35,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":3,"column":1,"index":35}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":19,"end":33,"loc":{"start":{"line":2,"column":2,"index":19},"end":{"line":2,"column":16,"index":33}},
+              "expression": {
+                "type": "ArrowFunctionExpression",
+                "start":19,"end":32,"loc":{"start":{"line":2,"column":2,"index":19},"end":{"line":2,"column":15,"index":32}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "YieldExpression",
+                    "start":20,"end":25,"loc":{"start":{"line":2,"column":3,"index":20},"end":{"line":2,"column":8,"index":25}},
+                    "delegate": false,
+                    "argument": null
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":30,"end":32,"loc":{"start":{"line":2,"column":13,"index":30},"end":{"line":2,"column":15,"index":32}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

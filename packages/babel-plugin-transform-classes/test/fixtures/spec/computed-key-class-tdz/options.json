@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-classes"],
+  "minNodeVersion": "10.0.0"
+}

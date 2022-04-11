@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["flow"],
+  "throws": "Unexpected token (1:14)"
+}

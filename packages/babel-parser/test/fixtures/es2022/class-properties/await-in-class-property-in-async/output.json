@@ -1,0 +1,92 @@
+{
+  "type": "File",
+  "start":0,"end":96,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":96}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":96,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":96}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":96,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":96}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":96,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":96}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":12,"end":96,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":6,"column":1,"index":96}},
+            "body": [
+              {
+                "type": "ClassDeclaration",
+                "start":16,"end":94,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":5,"column":3,"index":94}},
+                "id": {
+                  "type": "Identifier",
+                  "start":22,"end":23,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":9,"index":23},"identifierName":"C"},
+                  "name": "C"
+                },
+                "superClass": null,
+                "body": {
+                  "type": "ClassBody",
+                  "start":24,"end":94,"loc":{"start":{"line":2,"column":10,"index":24},"end":{"line":5,"column":3,"index":94}},
+                  "body": [
+                    {
+                      "type": "ClassProperty",
+                      "start":75,"end":90,"loc":{"start":{"line":4,"column":4,"index":75},"end":{"line":4,"column":19,"index":90}},
+                      "static": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":75,"end":76,"loc":{"start":{"line":4,"column":4,"index":75},"end":{"line":4,"column":5,"index":76},"identifierName":"p"},
+                        "name": "p"
+                      },
+                      "computed": false,
+                      "value": {
+                        "type": "BinaryExpression",
+                        "start":79,"end":89,"loc":{"start":{"line":4,"column":8,"index":79},"end":{"line":4,"column":18,"index":89}},
+                        "left": {
+                          "type": "Identifier",
+                          "start":79,"end":84,"loc":{"start":{"line":4,"column":8,"index":79},"end":{"line":4,"column":13,"index":84},"identifierName":"await"},
+                          "name": "await"
+                        },
+                        "operator": "+",
+                        "right": {
+                          "type": "NumericLiteral",
+                          "start":87,"end":89,"loc":{"start":{"line":4,"column":16,"index":87},"end":{"line":4,"column":18,"index":89}},
+                          "extra": {
+                            "rawValue": 42,
+                            "raw": "42"
+                          },
+                          "value": 42
+                        }
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentLine",
+                          "value": " here await is an identifier reference",
+                          "start":30,"end":70,"loc":{"start":{"line":3,"column":4,"index":30},"end":{"line":3,"column":44,"index":70}}
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " here await is an identifier reference",
+      "start":30,"end":70,"loc":{"start":{"line":3,"column":4,"index":30},"end":{"line":3,"column":44,"index":70}}
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "File",
+  "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+        "expression": {
+          "type": "UpdateExpression",
+          "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+          "operator": "++",
+          "prefix": true,
+          "argument": {
+            "type": "Identifier",
+            "start":2,"end":6,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":6,"index":6},"identifierName":"eval"},
+            "name": "eval"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

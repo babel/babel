@@ -1,0 +1,44 @@
+{
+  "name": "@babel/helper-transform-fixture-test-runner",
+  "version": "7.17.9",
+  "description": "Transform test runner for @babel/helper-fixtures module",
+  "author": "The Babel Team (https://babel.dev/team)",
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-transform-fixture-test-runner",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-transform-fixture-test-runner"
+  },
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/code-frame": "workspace:^",
+    "@babel/core": "workspace:^",
+    "@babel/helper-check-duplicate-nodes": "workspace:^",
+    "@babel/helper-fixtures": "workspace:^",
+    "@jridgewell/trace-mapping": "^0.3.4",
+    "quick-lru": "5.1.0",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  }
+}

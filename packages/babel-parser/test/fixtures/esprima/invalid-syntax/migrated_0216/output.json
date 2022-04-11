@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+          "extra": {
+            "rawValue": "\\1",
+            "raw": "\"\\1\"",
+            "expressionValue": "\u0001"
+          },
+          "value": "\\1"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":6,"end":19,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":19,"index":19}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":6,"end":18,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":18,"index":18}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "'use strict'",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

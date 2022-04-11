@@ -1,0 +1,32 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "expression": {
+          "type": "NewExpression",
+          "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+          "callee": {
+            "type": "V8IntrinsicIdentifier",
+            "start":4,"end":15,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":15,"index":15},"identifierName":"DebugPrint"},
+            "name": "DebugPrint"
+          },
+          "arguments": [
+            {
+              "type": "NullLiteral",
+              "start":16,"end":20,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":20,"index":20}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

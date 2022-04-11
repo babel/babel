@@ -1,0 +1,46 @@
+{
+  "name": "@babel/eslint-plugin",
+  "version": "7.17.7",
+  "description": "Companion rules for @babel/eslint-parser",
+  "main": "./lib/index.cjs",
+  "type": "commonjs",
+  "exports": {
+    ".": "./lib/index.cjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "eslint/babel-eslint-plugin"
+  },
+  "keywords": [
+    "babel",
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "babel-eslint"
+  ],
+  "author": "The Babel Team (https://babel.dev/team)",
+  "license": "MIT",
+  "engines": {
+    "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
+  "homepage": "https://babel.dev/",
+  "peerDependencies": {
+    "@babel/eslint-parser": ">=7.11.0",
+    "eslint": ">=7.5.0"
+  },
+  "dependencies": {
+    "eslint-rule-composer": "^0.3.0"
+  },
+  "devDependencies": {
+    "clone-deep": "^4.0.1",
+    "eslint": "^7.27.0"
+  }
+}

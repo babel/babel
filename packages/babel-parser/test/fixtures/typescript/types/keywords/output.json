@@ -1,0 +1,313 @@
+{
+  "type": "File",
+  "start":0,"end":184,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":14,"index":184}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":184,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":14,"index":184}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":12,"end":28,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":16,"index":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":16,"end":27,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":2,"column":15,"index":27}},
+            "id": {
+              "type": "Identifier",
+              "start":16,"end":27,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":2,"column":15,"index":27},"identifierName":"un"},
+              "name": "un",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":18,"end":27,"loc":{"start":{"line":2,"column":6,"index":18},"end":{"line":2,"column":15,"index":27}},
+                "typeAnnotation": {
+                  "type": "TSUnknownKeyword",
+                  "start":20,"end":27,"loc":{"start":{"line":2,"column":8,"index":20},"end":{"line":2,"column":15,"index":27}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":29,"end":44,"loc":{"start":{"line":3,"column":0,"index":29},"end":{"line":3,"column":15,"index":44}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":33,"end":43,"loc":{"start":{"line":3,"column":4,"index":33},"end":{"line":3,"column":14,"index":43}},
+            "id": {
+              "type": "Identifier",
+              "start":33,"end":43,"loc":{"start":{"line":3,"column":4,"index":33},"end":{"line":3,"column":14,"index":43},"identifierName":"b"},
+              "name": "b",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":34,"end":43,"loc":{"start":{"line":3,"column":5,"index":34},"end":{"line":3,"column":14,"index":43}},
+                "typeAnnotation": {
+                  "type": "TSBooleanKeyword",
+                  "start":36,"end":43,"loc":{"start":{"line":3,"column":7,"index":36},"end":{"line":3,"column":14,"index":43}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":45,"end":59,"loc":{"start":{"line":4,"column":0,"index":45},"end":{"line":4,"column":14,"index":59}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":49,"end":58,"loc":{"start":{"line":4,"column":4,"index":49},"end":{"line":4,"column":13,"index":58}},
+            "id": {
+              "type": "Identifier",
+              "start":49,"end":58,"loc":{"start":{"line":4,"column":4,"index":49},"end":{"line":4,"column":13,"index":58},"identifierName":"ne"},
+              "name": "ne",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":51,"end":58,"loc":{"start":{"line":4,"column":6,"index":51},"end":{"line":4,"column":13,"index":58}},
+                "typeAnnotation": {
+                  "type": "TSNeverKeyword",
+                  "start":53,"end":58,"loc":{"start":{"line":4,"column":8,"index":53},"end":{"line":4,"column":13,"index":58}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":60,"end":74,"loc":{"start":{"line":5,"column":0,"index":60},"end":{"line":5,"column":14,"index":74}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":64,"end":73,"loc":{"start":{"line":5,"column":4,"index":64},"end":{"line":5,"column":13,"index":73}},
+            "id": {
+              "type": "Identifier",
+              "start":64,"end":73,"loc":{"start":{"line":5,"column":4,"index":64},"end":{"line":5,"column":13,"index":73},"identifierName":"nul"},
+              "name": "nul",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":67,"end":73,"loc":{"start":{"line":5,"column":7,"index":67},"end":{"line":5,"column":13,"index":73}},
+                "typeAnnotation": {
+                  "type": "TSNullKeyword",
+                  "start":69,"end":73,"loc":{"start":{"line":5,"column":9,"index":69},"end":{"line":5,"column":13,"index":73}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":75,"end":91,"loc":{"start":{"line":6,"column":0,"index":75},"end":{"line":6,"column":16,"index":91}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":79,"end":90,"loc":{"start":{"line":6,"column":4,"index":79},"end":{"line":6,"column":15,"index":90}},
+            "id": {
+              "type": "Identifier",
+              "start":79,"end":90,"loc":{"start":{"line":6,"column":4,"index":79},"end":{"line":6,"column":15,"index":90},"identifierName":"num"},
+              "name": "num",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":82,"end":90,"loc":{"start":{"line":6,"column":7,"index":82},"end":{"line":6,"column":15,"index":90}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":84,"end":90,"loc":{"start":{"line":6,"column":9,"index":84},"end":{"line":6,"column":15,"index":90}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":92,"end":106,"loc":{"start":{"line":7,"column":0,"index":92},"end":{"line":7,"column":14,"index":106}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":96,"end":105,"loc":{"start":{"line":7,"column":4,"index":96},"end":{"line":7,"column":13,"index":105}},
+            "id": {
+              "type": "Identifier",
+              "start":96,"end":105,"loc":{"start":{"line":7,"column":4,"index":96},"end":{"line":7,"column":13,"index":105},"identifierName":"o"},
+              "name": "o",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":97,"end":105,"loc":{"start":{"line":7,"column":5,"index":97},"end":{"line":7,"column":13,"index":105}},
+                "typeAnnotation": {
+                  "type": "TSObjectKeyword",
+                  "start":99,"end":105,"loc":{"start":{"line":7,"column":7,"index":99},"end":{"line":7,"column":13,"index":105}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":107,"end":122,"loc":{"start":{"line":8,"column":0,"index":107},"end":{"line":8,"column":15,"index":122}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":111,"end":121,"loc":{"start":{"line":8,"column":4,"index":111},"end":{"line":8,"column":14,"index":121}},
+            "id": {
+              "type": "Identifier",
+              "start":111,"end":121,"loc":{"start":{"line":8,"column":4,"index":111},"end":{"line":8,"column":14,"index":121},"identifierName":"st"},
+              "name": "st",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":113,"end":121,"loc":{"start":{"line":8,"column":6,"index":113},"end":{"line":8,"column":14,"index":121}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":115,"end":121,"loc":{"start":{"line":8,"column":8,"index":115},"end":{"line":8,"column":14,"index":121}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":123,"end":138,"loc":{"start":{"line":9,"column":0,"index":123},"end":{"line":9,"column":15,"index":138}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":127,"end":137,"loc":{"start":{"line":9,"column":4,"index":127},"end":{"line":9,"column":14,"index":137}},
+            "id": {
+              "type": "Identifier",
+              "start":127,"end":137,"loc":{"start":{"line":9,"column":4,"index":127},"end":{"line":9,"column":14,"index":137},"identifierName":"sy"},
+              "name": "sy",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":129,"end":137,"loc":{"start":{"line":9,"column":6,"index":129},"end":{"line":9,"column":14,"index":137}},
+                "typeAnnotation": {
+                  "type": "TSSymbolKeyword",
+                  "start":131,"end":137,"loc":{"start":{"line":9,"column":8,"index":131},"end":{"line":9,"column":14,"index":137}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":139,"end":156,"loc":{"start":{"line":10,"column":0,"index":139},"end":{"line":10,"column":17,"index":156}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":143,"end":155,"loc":{"start":{"line":10,"column":4,"index":143},"end":{"line":10,"column":16,"index":155}},
+            "id": {
+              "type": "Identifier",
+              "start":143,"end":155,"loc":{"start":{"line":10,"column":4,"index":143},"end":{"line":10,"column":16,"index":155},"identifierName":"u"},
+              "name": "u",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":144,"end":155,"loc":{"start":{"line":10,"column":5,"index":144},"end":{"line":10,"column":16,"index":155}},
+                "typeAnnotation": {
+                  "type": "TSUndefinedKeyword",
+                  "start":146,"end":155,"loc":{"start":{"line":10,"column":7,"index":146},"end":{"line":10,"column":16,"index":155}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":157,"end":169,"loc":{"start":{"line":11,"column":0,"index":157},"end":{"line":11,"column":12,"index":169}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":161,"end":168,"loc":{"start":{"line":11,"column":4,"index":161},"end":{"line":11,"column":11,"index":168}},
+            "id": {
+              "type": "Identifier",
+              "start":161,"end":168,"loc":{"start":{"line":11,"column":4,"index":161},"end":{"line":11,"column":11,"index":168},"identifierName":"v"},
+              "name": "v",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":162,"end":168,"loc":{"start":{"line":11,"column":5,"index":162},"end":{"line":11,"column":11,"index":168}},
+                "typeAnnotation": {
+                  "type": "TSVoidKeyword",
+                  "start":164,"end":168,"loc":{"start":{"line":11,"column":7,"index":164},"end":{"line":11,"column":11,"index":168}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":170,"end":184,"loc":{"start":{"line":12,"column":0,"index":170},"end":{"line":12,"column":14,"index":184}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":174,"end":183,"loc":{"start":{"line":12,"column":4,"index":174},"end":{"line":12,"column":13,"index":183}},
+            "id": {
+              "type": "Identifier",
+              "start":174,"end":183,"loc":{"start":{"line":12,"column":4,"index":174},"end":{"line":12,"column":13,"index":183},"identifierName":"n"},
+              "name": "n",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":175,"end":183,"loc":{"start":{"line":12,"column":5,"index":175},"end":{"line":12,"column":13,"index":183}},
+                "typeAnnotation": {
+                  "type": "TSBigIntKeyword",
+                  "start":177,"end":183,"loc":{"start":{"line":12,"column":7,"index":177},"end":{"line":12,"column":13,"index":183}}
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

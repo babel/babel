@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":36}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (2:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "specifiers": [],
+        "source": {
+          "type": "StringLiteral",
+          "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "assertions": []
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":13,"end":19,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":6,"index":19}},
+        "expression": {
+          "type": "Identifier",
+          "start":13,"end":19,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":6,"index":19},"identifierName":"assert"},
+          "name": "assert"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":20,"end":36,"loc":{"start":{"line":2,"column":7,"index":20},"end":{"line":2,"column":23,"index":36}},
+        "body": [
+          {
+            "type": "LabeledStatement",
+            "start":22,"end":34,"loc":{"start":{"line":2,"column":9,"index":22},"end":{"line":2,"column":21,"index":34}},
+            "body": {
+              "type": "ExpressionStatement",
+              "start":28,"end":34,"loc":{"start":{"line":2,"column":15,"index":28},"end":{"line":2,"column":21,"index":34}},
+              "expression": {
+                "type": "StringLiteral",
+                "start":28,"end":34,"loc":{"start":{"line":2,"column":15,"index":28},"end":{"line":2,"column":21,"index":34}},
+                "extra": {
+                  "rawValue": "json",
+                  "raw": "\"json\""
+                },
+                "value": "json"
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start":22,"end":26,"loc":{"start":{"line":2,"column":9,"index":22},"end":{"line":2,"column":13,"index":26},"identifierName":"type"},
+              "name": "type"
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

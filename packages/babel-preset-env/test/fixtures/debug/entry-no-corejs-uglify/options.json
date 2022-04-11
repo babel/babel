@@ -1,0 +1,19 @@
+{
+  "BABEL_8_BREAKING": false,
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "chrome": 55,
+          "uglify": true
+        },
+        "useBuiltIns": "entry",
+        "modules": false
+      }
+    ]
+  ]
+}

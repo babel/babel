@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "errors": [
+    "SyntaxError: Can not use 'yield' as identifier inside a generator. (1:18)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "expression": {
+          "type": "FunctionExpression",
+          "start":1,"end":26,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":26,"index":26}},
+          "id": null,
+          "generator": true,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "RestElement",
+              "start":15,"end":23,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":23,"index":23}},
+              "argument": {
+                "type": "Identifier",
+                "start":18,"end":23,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":23,"index":23},"identifierName":"yield"},
+                "name": "yield"
+              }
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":24,"end":26,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":26,"index":26}},
+            "body": [],
+            "directives": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

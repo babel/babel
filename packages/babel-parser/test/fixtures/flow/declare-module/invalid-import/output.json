@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":42,"index":42}},
+  "errors": [
+    "SyntaxError: Imports within a `declare module` body must always be `import type` or `import typeof`. (1:21)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":42,"index":42}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":42,"index":42}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+          "extra": {
+            "rawValue": "M",
+            "raw": "\"M\""
+          },
+          "value": "M"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":42,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":42,"index":42}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":21,"end":40,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":40,"index":40}},
+              "specifiers": [
+                {
+                  "type": "ImportDefaultSpecifier",
+                  "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ],
+              "importKind": "value",
+              "source": {
+                "type": "StringLiteral",
+                "start":35,"end":39,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":39,"index":39}},
+                "extra": {
+                  "rawValue": "TM",
+                  "raw": "\"TM\""
+                },
+                "value": "TM"
+              }
+            }
+          ]
+        },
+        "kind": "CommonJS"
+      }
+    ],
+    "directives": []
+  }
+}

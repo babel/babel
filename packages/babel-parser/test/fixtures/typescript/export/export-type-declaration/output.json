@@ -1,0 +1,124 @@
+{
+  "type": "File",
+  "start":0,"end":107,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":29,"index":107}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":107,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":29,"index":107}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "exportKind": "type",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "TSTypeAliasDeclaration",
+          "start":7,"end":18,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":18,"index":18}},
+          "id": {
+            "type": "Identifier",
+            "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"A"},
+            "name": "A"
+          },
+          "typeAnnotation": {
+            "type": "TSLiteralType",
+            "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17}},
+            "literal": {
+              "type": "NumericLiteral",
+              "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17}},
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
+            }
+          }
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":19,"end":40,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":21,"index":40}},
+        "exportKind": "type",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "TSInterfaceDeclaration",
+          "start":26,"end":40,"loc":{"start":{"line":2,"column":7,"index":26},"end":{"line":2,"column":21,"index":40}},
+          "id": {
+            "type": "Identifier",
+            "start":36,"end":37,"loc":{"start":{"line":2,"column":17,"index":36},"end":{"line":2,"column":18,"index":37},"identifierName":"B"},
+            "name": "B"
+          },
+          "body": {
+            "type": "TSInterfaceBody",
+            "start":38,"end":40,"loc":{"start":{"line":2,"column":19,"index":38},"end":{"line":2,"column":21,"index":40}},
+            "body": []
+          }
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":41,"end":77,"loc":{"start":{"line":3,"column":0,"index":41},"end":{"line":3,"column":36,"index":77}},
+        "exportKind": "type",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "TSDeclareFunction",
+          "start":48,"end":77,"loc":{"start":{"line":3,"column":7,"index":48},"end":{"line":3,"column":36,"index":77}},
+          "id": {
+            "type": "Identifier",
+            "start":65,"end":66,"loc":{"start":{"line":3,"column":24,"index":65},"end":{"line":3,"column":25,"index":66},"identifierName":"a"},
+            "name": "a"
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "returnType": {
+            "type": "TSTypeAnnotation",
+            "start":68,"end":76,"loc":{"start":{"line":3,"column":27,"index":68},"end":{"line":3,"column":35,"index":76}},
+            "typeAnnotation": {
+              "type": "TSStringKeyword",
+              "start":70,"end":76,"loc":{"start":{"line":3,"column":29,"index":70},"end":{"line":3,"column":35,"index":76}}
+            }
+          },
+          "declare": true
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":78,"end":107,"loc":{"start":{"line":4,"column":0,"index":78},"end":{"line":4,"column":29,"index":107}},
+        "exportKind": "type",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":85,"end":107,"loc":{"start":{"line":4,"column":7,"index":85},"end":{"line":4,"column":29,"index":107}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":97,"end":106,"loc":{"start":{"line":4,"column":19,"index":97},"end":{"line":4,"column":28,"index":106}},
+              "id": {
+                "type": "Identifier",
+                "start":97,"end":106,"loc":{"start":{"line":4,"column":19,"index":97},"end":{"line":4,"column":28,"index":106},"identifierName":"b"},
+                "name": "b",
+                "typeAnnotation": {
+                  "type": "TSTypeAnnotation",
+                  "start":98,"end":106,"loc":{"start":{"line":4,"column":20,"index":98},"end":{"line":4,"column":28,"index":106}},
+                  "typeAnnotation": {
+                    "type": "TSStringKeyword",
+                    "start":100,"end":106,"loc":{"start":{"line":4,"column":22,"index":100},"end":{"line":4,"column":28,"index":106}}
+                  }
+                }
+              },
+              "init": null
+            }
+          ],
+          "kind": "var",
+          "declare": true
+        }
+      }
+    ],
+    "directives": []
+  }
+}

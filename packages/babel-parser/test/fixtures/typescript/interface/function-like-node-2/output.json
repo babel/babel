@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":8,"index":8},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "typeAnnotation": {
+          "type": "TSFunctionType",
+          "start":11,"end":26,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":26,"index":26}},
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}},
+                "name": {
+                  "type": "Identifier",
+                  "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          },
+          "params": [],
+          "returnType": {
+            "type": "TSTypeAnnotation",
+            "start":17,"end":26,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":26,"index":26}},
+            "typeAnnotation": {
+              "type": "TSNumberKeyword",
+              "start":20,"end":26,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":26,"index":26}}
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

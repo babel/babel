@@ -1,0 +1,1 @@
+add(...numbers, foo, bar);

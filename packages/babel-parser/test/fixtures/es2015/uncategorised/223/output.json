@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "errors": [
+    "SyntaxError: Object pattern can't contain getter or setter. (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":1,"end":19,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":19,"index":19}},
+          "operator": "=",
+          "left": {
+            "type": "ObjectPattern",
+            "start":1,"end":15,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":15,"index":15}},
+            "properties": [
+              {
+                "type": "ObjectMethod",
+                "start":3,"end":13,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":13,"index":13}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"x"},
+                  "name": "x"
+                },
+                "computed": false,
+                "kind": "get",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,58 @@
+name: E2E tests (breaking)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  e2e-publish:
+    name: Publish to local Verdaccio registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Use Node.js latest
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Publish
+        run: ./scripts/integration-tests/publish-local.sh
+        env:
+          BABEL_8_BREAKING: true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+
+  e2e-tests:
+    name: Test
+    needs: e2e-publish
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - babel
+          - create-react-app
+          - vue-cli
+          - jest
+          - react-native
+          - prettier
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Use Node.js latest
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
+      - uses: actions/download-artifact@v3
+        with:
+          name: verdaccio-workspace
+          path: /tmp/verdaccio-workspace
+      - name: Test
+        run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
+        env:
+          BABEL_8_BREAKING: true

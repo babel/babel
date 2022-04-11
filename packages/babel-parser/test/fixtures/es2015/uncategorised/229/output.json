@@ -1,0 +1,33 @@
+{
+  "type": "File",
+  "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'super'. (1:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":9,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":9,"index":9}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":9,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":9,"index":9},"identifierName":"super"},
+              "name": "super"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

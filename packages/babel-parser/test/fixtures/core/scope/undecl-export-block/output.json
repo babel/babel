@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":18,"index":46}},
+  "errors": [
+    "SyntaxError: Export 'encrypt' is not defined. (4:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":18,"index":46}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":27}},
+        "body": [
+          {
+            "type": "FunctionDeclaration",
+            "start":4,"end":25,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":23,"index":25}},
+            "id": {
+              "type": "Identifier",
+              "start":13,"end":20,"loc":{"start":{"line":2,"column":11,"index":13},"end":{"line":2,"column":18,"index":20},"identifierName":"encrypt"},
+              "name": "encrypt"
+            },
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":23,"end":25,"loc":{"start":{"line":2,"column":21,"index":23},"end":{"line":2,"column":23,"index":25}},
+              "body": [],
+              "directives": []
+            }
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":28,"end":46,"loc":{"start":{"line":4,"column":0,"index":28},"end":{"line":4,"column":18,"index":46}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":37,"end":44,"loc":{"start":{"line":4,"column":9,"index":37},"end":{"line":4,"column":16,"index":44}},
+            "local": {
+              "type": "Identifier",
+              "start":37,"end":44,"loc":{"start":{"line":4,"column":9,"index":37},"end":{"line":4,"column":16,"index":44},"identifierName":"encrypt"},
+              "name": "encrypt"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":37,"end":44,"loc":{"start":{"line":4,"column":9,"index":37},"end":{"line":4,"column":16,"index":44},"identifierName":"encrypt"},
+              "name": "encrypt"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

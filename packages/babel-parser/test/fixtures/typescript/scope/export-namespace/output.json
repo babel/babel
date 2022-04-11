@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"N"},
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":16,"end":29,"loc":{"start":{"line":3,"column":0,"index":16},"end":{"line":3,"column":13,"index":29}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":25,"end":26,"loc":{"start":{"line":3,"column":9,"index":25},"end":{"line":3,"column":10,"index":26}},
+            "local": {
+              "type": "Identifier",
+              "start":25,"end":26,"loc":{"start":{"line":3,"column":9,"index":25},"end":{"line":3,"column":10,"index":26},"identifierName":"N"},
+              "name": "N"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":25,"end":26,"loc":{"start":{"line":3,"column":9,"index":25},"end":{"line":3,"column":10,"index":26},"identifierName":"N"},
+              "name": "N"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}
