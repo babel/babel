@@ -72,7 +72,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     noInterop?;
     lazy?;
     esNamespaceOnly?;
-    filename: string;
+    filename: string | undefined;
     constantReexports?;
     enumerableModuleMeta?;
     noIncompleteNsImportDetection?: boolean;

@@ -89,7 +89,11 @@ export function validateImportInteropOption(
   return importInterop;
 }
 
-function resolveImportInterop(importInterop, source, filename: string) {
+function resolveImportInterop(
+  importInterop,
+  source,
+  filename: string | undefined,
+) {
   if (typeof importInterop === "function") {
     return validateImportInteropOption(importInterop(source, filename));
   }
