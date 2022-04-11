@@ -1,6 +1,7 @@
 import * as babel from "@babel/core";
 import transformCommonjs from "../lib/index.js";
 import externalHelpers from "@babel/plugin-external-helpers";
+import path from "path";
 
 it("'importInterop' accepts a function", function () {
   const code = `
@@ -13,14 +14,17 @@ it("'importInterop' accepts a function", function () {
     c();
   `;
 
-  const importInterop = source => {
+  const importInterop = jest.fn(source => {
     if (source === "a") return "babel";
     else if (source === "b") return "node";
     else if (source === "c") return "none";
-  };
+  });
+
+  const filename = "path/to/fake-filename.js";
 
   const output = babel.transformSync(code, {
     configFile: false,
+    filename,
     ast: false,
     plugins: [
       [externalHelpers, { helperVersion: "7.100.0" }],
@@ -43,4 +47,9 @@ it("'importInterop' accepts a function", function () {
 
     (0, _c.default)();"
   `);
+
+  const resolvedFilename = path.resolve(filename);
+  expect(importInterop).toHaveBeenCalledWith("a", resolvedFilename);
+  expect(importInterop).toHaveBeenCalledWith("b", resolvedFilename);
+  expect(importInterop).toHaveBeenCalledWith("c", resolvedFilename);
 });

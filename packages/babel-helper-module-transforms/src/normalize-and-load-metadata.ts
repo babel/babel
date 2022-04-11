@@ -89,9 +89,9 @@ export function validateImportInteropOption(
   return importInterop;
 }
 
-function resolveImportInterop(importInterop, source) {
+function resolveImportInterop(importInterop, source, filename: string) {
   if (typeof importInterop === "function") {
-    return validateImportInteropOption(importInterop(source));
+    return validateImportInteropOption(importInterop(source, filename));
   }
   return importInterop;
 }
@@ -108,6 +108,7 @@ export default function normalizeModuleAndLoadMetadata(
     initializeReexports = false,
     lazy = false,
     esNamespaceOnly = false,
+    filename,
   },
 ): ModuleMetadata {
   if (!exportName) {
@@ -136,6 +137,7 @@ export default function normalizeModuleAndLoadMetadata(
     const resolvedInterop = resolveImportInterop(
       importInterop,
       metadata.source,
+      filename,
     );
 
     if (resolvedInterop === "none") {
