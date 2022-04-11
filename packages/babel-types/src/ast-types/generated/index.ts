@@ -1680,7 +1680,7 @@ export interface TSDeclareMethod extends BaseNode {
 export interface TSQualifiedName extends BaseNode {
   type: "TSQualifiedName";
   left: TSEntityName;
-  right: Identifier;
+  right: Identifier | PrivateName;
 }
 
 export interface TSCallSignatureDeclaration extends BaseNode {

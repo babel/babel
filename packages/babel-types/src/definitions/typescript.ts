@@ -88,7 +88,7 @@ defineType("TSQualifiedName", {
   visitor: ["left", "right"],
   fields: {
     left: validateType("TSEntityName"),
-    right: validateType("Identifier"),
+    right: validateType(["Identifier", "PrivateName"]),
   },
 });
 

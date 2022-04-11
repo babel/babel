@@ -1125,7 +1125,7 @@ export function tsDeclareMethod(
 export { tsDeclareMethod as tSDeclareMethod };
 export function tsQualifiedName(
   left: t.TSEntityName,
-  right: t.Identifier,
+  right: t.Identifier | t.PrivateName,
 ): t.TSQualifiedName {
   return builder.apply("TSQualifiedName", arguments);
 }

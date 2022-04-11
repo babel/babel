@@ -568,12 +568,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSImportType");
     }
 
-    tsParseEntityName(allowReservedWords: boolean = true): N.TsEntityName {
+    tsParseEntityName(
+      allowReservedWords: boolean = true,
+      allowPrivateIdentifiers: boolean = false,
+    ): N.TsEntityName {
       let entity: N.TsEntityName = this.parseIdentifier(allowReservedWords);
       while (this.eat(tt.dot)) {
         const node: N.TsQualifiedName = this.startNodeAtNode(entity);
         node.left = entity;
-        node.right = this.parseIdentifier(allowReservedWords);
+        if (allowPrivateIdentifiers && this.match(tt.privateName)) {
+          node.right = this.parsePrivateName();
+        } else {
+          node.right = this.parseIdentifier(allowReservedWords);
+        }
         entity = this.finishNode(node, "TSQualifiedName");
       }
       return entity;
@@ -609,7 +616,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt._import)) {
         node.exprName = this.tsParseImportType();
       } else {
-        node.exprName = this.tsParseEntityName();
+        node.exprName = this.tsParseEntityName(true, true);
       }
       return this.finishNode(node, "TSTypeQuery");
     }

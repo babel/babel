@@ -1256,7 +1256,7 @@ export type TSDeclareMethod = BodilessFunctionOrMethodBase &
 export type TsQualifiedName = NodeBase & {
   type: "TSQualifiedName",
   left: TsEntityName,
-  right: Identifier,
+  right: Identifier | PrivateName,
 };
 
 export type TsEntityName = Identifier | TsQualifiedName;
