@@ -9,9 +9,6 @@ class C {
 
 }
 
-const c = new C();
-const a: typeof c.#a = '';
-
 class Container {
   #data = "hello!";
 

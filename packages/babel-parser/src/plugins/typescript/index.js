@@ -577,6 +577,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const node: N.TsQualifiedName = this.startNodeAtNode(entity);
         node.left = entity;
         if (allowPrivateIdentifiers && this.match(tt.privateName)) {
+          this.classScope.usePrivateName(this.state.value, this.state.startLoc);
           node.right = this.parsePrivateName();
         } else {
           node.right = this.parseIdentifier(allowReservedWords);
