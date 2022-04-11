@@ -3,16 +3,20 @@ var log = [];
 function push(x, y = x) { log.push(x); return y; }
 
 class C {
-  static #x;
-  static #y;
+  static get a() { push(1) }
+  static get b() { push(6) }
+  static get c() { push(10) }
+  static get d() { push(13) }
+  static get #x() { push(3) };
+  static get #y() { return push(8, C) };
   static {
-    var [{ [push(0)]: a = push(1), #x: {
-      [push(3)]: b = push(4),
-      #y: y = push(5),
-      [push(6)]: c = push(7)
-    } = push(2, C), [push(8)]: d = push(9) }, e = push(10)] = [C];
+    var [{ [push(0, "a")]: a = push(2), #x: {
+      [push(5, "b")]: b = push(7),
+      #y: y = push(-1),
+      [push(9, "c")]: c = push(11)
+    } = push(4, C), [push(12, "d")]: d = push(14) }, e = push(15)] = [C];
   }
 }
 
-var nums = Array.from({ length: 11 }, (_, i) => i);
+var nums = Array.from({ length: 16 }, (_, i) => i);
 expect(log).toStrictEqual(nums);

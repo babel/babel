@@ -430,6 +430,7 @@ export function* transformPrivateKeyDestructuring(
             // in RHS. Otherwise we have to pause the iterable and interleave
             // the expressions.
             // See also https://gist.github.com/nicolo-ribaudo/f8ac7916f89450f2ead77d99855b2098
+            // and ordering/array-pattern-side-effect-iterable test
             const leftElements = left.elements;
             const leftElementsAfterIndex = leftElements.splice(index);
             const { elements, transformed } = buildAssignmentsFromPatternList(
