@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Floating-point numbers require a valid exponent after the 'e'. (1:0)",
+    "Identifier directly after number. (1:2)"
+  ],
+  "type": "File"
+}

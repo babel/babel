@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "`declare export interface` is not supported. Use `export interface` instead. (1:15)"
+  ],
+  "type": "File"
+}

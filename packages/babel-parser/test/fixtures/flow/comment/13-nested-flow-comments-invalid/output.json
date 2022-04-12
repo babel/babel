@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "Cannot have a flow comment inside another flow comment. (1:0)"
+  ],
+  "type": "File"
+}

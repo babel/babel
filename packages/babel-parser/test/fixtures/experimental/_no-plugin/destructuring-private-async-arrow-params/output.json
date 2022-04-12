@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "This experimental syntax requires enabling the parser plugin: \"destructuringPrivate\". (3:16)"
+  ],
+  "type": "File"
+}

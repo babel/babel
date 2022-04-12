@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Missing semicolon. (1:1)",
+    "A class name is required. (1:7)"
+  ],
+  "type": "File"
+}

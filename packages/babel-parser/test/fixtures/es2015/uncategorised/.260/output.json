@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Unexpected reserved word 'yield'. (1:30)",
+    "Unexpected token, expected \",\" (1:36)"
+  ],
+  "type": "File"
+}

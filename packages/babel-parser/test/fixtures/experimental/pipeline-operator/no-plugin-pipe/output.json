@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "This experimental syntax requires enabling the parser plugin: \"pipelineOperator\". (1:2)"
+  ],
+  "type": "File"
+}

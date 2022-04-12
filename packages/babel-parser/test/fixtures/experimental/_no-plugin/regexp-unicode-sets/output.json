@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "This experimental syntax requires enabling the parser plugin: \"regexpUnicodeSets\". (1:4)"
+  ],
+  "type": "File"
+}

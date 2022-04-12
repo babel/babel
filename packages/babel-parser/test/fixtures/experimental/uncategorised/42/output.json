@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "Decorators must be attached to a class element. (1:18)"
+  ],
+  "type": "File"
+}

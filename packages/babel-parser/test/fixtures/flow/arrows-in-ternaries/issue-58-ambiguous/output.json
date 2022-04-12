@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate. (4:4)",
+    "Unexpected token, expected \":\" (4:27)"
+  ],
+  "type": "File"
+}

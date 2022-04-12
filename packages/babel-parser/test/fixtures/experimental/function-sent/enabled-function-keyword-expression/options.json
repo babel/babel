@@ -1,4 +1,5 @@
 {
-  "plugins": ["functionSent"],
-  "throws": "Unexpected token, expected \",\" (2:19)"
+  "plugins": [
+    "functionSent"
+  ]
 }

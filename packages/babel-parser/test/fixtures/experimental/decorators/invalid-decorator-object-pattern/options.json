@@ -1,4 +1,7 @@
 {
-  "plugins": [["decorators-legacy"]],
-  "throws": "Unexpected token (1:6)"
+  "plugins": [
+    [
+      "decorators-legacy"
+    ]
+  ]
 }

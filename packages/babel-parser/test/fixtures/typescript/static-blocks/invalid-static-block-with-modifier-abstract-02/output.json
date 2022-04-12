@@ -1,0 +1,8 @@
+{
+  "errors": [
+    "'static' modifier cannot be used with 'abstract' modifier. (2:9)",
+    "Abstract methods can only appear within an abstract class. (2:2)",
+    "Unexpected token (2:18)"
+  ],
+  "type": "File"
+}

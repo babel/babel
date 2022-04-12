@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Bad character escape sequence. (1:3)",
+    "Unterminated string constant. (1:0)"
+  ],
+  "type": "File"
+}

@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "This experimental syntax requires enabling the parser plugin: \"functionSent\". (2:12)"
+  ],
+  "type": "File"
+}

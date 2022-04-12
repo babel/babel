@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "A 'get' accesor must not have any formal parameters. (1:10)"
+  ],
+  "type": "File"
+}

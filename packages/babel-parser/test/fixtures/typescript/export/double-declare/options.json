@@ -2,6 +2,5 @@
   "sourceType": "module",
   "plugins": [
     "typescript"
-  ],
-  "throws": "'export declare' must be followed by an ambient declaration. (1:15)"
+  ]
 }

@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "A decorated export must export a class declaration. (2:0)"
+  ],
+  "type": "File"
+}

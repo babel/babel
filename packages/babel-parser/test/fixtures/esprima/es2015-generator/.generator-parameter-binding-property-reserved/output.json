@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "Can not use 'yield' as identifier inside a generator. (1:12)"
+  ],
+  "type": "File"
+}

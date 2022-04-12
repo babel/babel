@@ -1,0 +1,8 @@
+{
+  "errors": [
+    "Missing initializer in destructuring declaration. (1:6)",
+    "Missing semicolon. (1:6)",
+    "Unexpected token (1:8)"
+  ],
+  "type": "File"
+}

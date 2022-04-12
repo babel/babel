@@ -93,6 +93,13 @@ function runParseTest(parse, test, onlyCompareErrors) {
   }
 
   const actual = parseWithRecovery(parse, source, filename, options);
+
+  // When errorRecovery is true we can't trust the structure of the
+  // AST (other than the attached errors), so only compare errors.
+  onlyCompareErrors =
+    onlyCompareErrors ||
+    (actual.ast && actual.ast.errors && actual.ast.errors.length > 0);
+
   const difference = new Difference(
     adjust,
     onlyCompareErrors ? toJustErrors(expected) : expected,
@@ -198,6 +205,12 @@ function parseWithRecovery(parse, source, filename, options) {
 
     return { threw: false, ast };
   } catch (error) {
+    // Syntax errors should never be thrown via parse when `errorRecovery` is `true`
+    // so rethrow all SyntaxErrors.
+    if (error instanceof SyntaxError) {
+      throw error;
+    }
+
     return {
       threw: toContextualSyntaxError(error, source, filename, options),
       ast: false,

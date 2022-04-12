@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "Binding should be performed on object property. (1:2)"
+  ],
+  "type": "File"
+}

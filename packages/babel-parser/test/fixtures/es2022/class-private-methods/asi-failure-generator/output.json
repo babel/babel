@@ -1,0 +1,8 @@
+{
+  "errors": [
+    "Private names are only allowed in property accesses (`obj.#m`) or in `in` expressions (`#m in obj`). (3:3)",
+    "Missing semicolon. (3:5)",
+    "Unexpected token (3:6)"
+  ],
+  "type": "File"
+}

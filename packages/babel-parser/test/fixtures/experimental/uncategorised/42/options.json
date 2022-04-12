@@ -1,6 +1,5 @@
 {
   "plugins": [
     "decorators-legacy"
-  ],
-  "throws": "Decorators must be attached to a class element. (1:18)"
+  ]
 }
