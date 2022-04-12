@@ -11,9 +11,14 @@ class Range {
     /* 2 */
 
     /* 3 */
-    
-    _set.has(range);
-    _set.has(range);
+
+    _set.has(range)
+
+    ;
+
+    _set.has(range)
+
+    ;
   }
 
 }

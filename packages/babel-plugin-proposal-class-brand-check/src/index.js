@@ -85,7 +85,6 @@ export default declare(api => {
             }
           }
         });
-        console.log(333, setID.name);
         const memberExpression = t.memberExpression(
           t.identifier(setID.name),
           t.identifier("has"),
@@ -94,7 +93,7 @@ export default declare(api => {
         const callExpression = t.callExpression(memberExpression, [
           instanceItem,
         ]);
-        path.parent.argument = callExpression;
+        path.replaceWith(callExpression);
       },
     },
   };
