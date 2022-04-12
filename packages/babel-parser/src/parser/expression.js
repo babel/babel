@@ -1843,6 +1843,21 @@ export default class ExpressionParser extends LValParser {
   // argument list.
   // https://tc39.es/ecma262/#prod-NewExpression
   parseNew(node: N.Expression): N.NewExpression {
+    this.parseNewCallee(node);
+
+    if (this.eat(tt.parenL)) {
+      const args = this.parseExprList(tt.parenR);
+      this.toReferencedList(args);
+      // $FlowFixMe (parseExprList should be all non-null in this case)
+      node.arguments = args;
+    } else {
+      node.arguments = [];
+    }
+
+    return this.finishNode(node, "NewExpression");
+  }
+
+  parseNewCallee(node: N.NewExpression): void {
     node.callee = this.parseNoCallExpr();
     if (node.callee.type === "Import") {
       this.raise(Errors.ImportCallNotNewExpression, { at: node.callee });
@@ -1854,20 +1869,6 @@ export default class ExpressionParser extends LValParser {
       this.raise(Errors.OptionalChainingNoNew, {
         at: this.state.startLoc,
       });
-    }
-
-    this.parseNewArguments(node);
-    return this.finishNode(node, "NewExpression");
-  }
-
-  parseNewArguments(node: N.NewExpression): void {
-    if (this.eat(tt.parenL)) {
-      const args = this.parseExprList(tt.parenR);
-      this.toReferencedList(args);
-      // $FlowFixMe (parseExprList should be all non-null in this case)
-      node.arguments = args;
-    } else {
-      node.arguments = [];
     }
   }
 

@@ -3192,7 +3192,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    parseNewArguments(node: N.NewExpression): void {
+    parseNewCallee(node: N.NewExpression): void {
+      super.parseNewCallee(node);
+
       let targs = null;
       if (this.shouldParseTypes() && this.match(tt.lt)) {
         targs = this.tryParse(() =>
@@ -3200,8 +3202,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ).node;
       }
       node.typeArguments = targs;
-
-      super.parseNewArguments(node);
     }
 
     parseAsyncArrowWithTypeParameters(
