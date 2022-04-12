@@ -48,6 +48,7 @@ import {
   isVariableDeclarator,
   isWhileStatement,
   isYieldExpression,
+  isTSExpressionWithTypeArguments,
 } from "@babel/types";
 import type * as t from "@babel/types";
 const PRECEDENCE = {
@@ -217,6 +218,18 @@ export { TSUnionType as TSIntersectionType };
 
 export function TSInferType(node: any, parent: any): boolean {
   return isTSArrayType(parent) || isTSOptionalType(parent);
+}
+
+export function TSExpressionWithTypeArguments(
+  node: t.TSExpressionWithTypeArguments,
+  parent: t.Node,
+) {
+  return (
+    (isCallExpression(parent) ||
+      isNewExpression(parent) ||
+      isTSExpressionWithTypeArguments(parent)) &&
+    !!parent.typeParameters
+  );
 }
 
 export function BinaryExpression(node: any, parent: any): boolean {
