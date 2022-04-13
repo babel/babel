@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Unexpected token `>`. Did you mean `&gt;` or `{'>'}`? (1:7)",
+    "Unterminated JSX contents. (1:3)"
+  ],
+  "type": "File"
+}
