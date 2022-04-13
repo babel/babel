@@ -258,7 +258,7 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
    * @param {*} node The string literal that contains the import path
    */
   function adjustImportPath(node) {
-    const helpersPath = path.join(runtimeName, "helpers");
+    const helpersPath = path.posix.join(runtimeName, "helpers");
     const helper = node.value.startsWith(helpersPath)
       ? path.basename(node.value)
       : node.value;
