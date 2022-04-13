@@ -98,7 +98,6 @@ jobs:
 
   build-windows:
     name: Build Babel Artifacts On Windows
-    needs: prepare-yarn-cache
     runs-on: windows-latest
     # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
     # env:
