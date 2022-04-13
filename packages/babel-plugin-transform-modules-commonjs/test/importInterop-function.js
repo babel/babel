@@ -3,53 +3,82 @@ import transformCommonjs from "../lib/index.js";
 import externalHelpers from "@babel/plugin-external-helpers";
 import path from "path";
 
-it("'importInterop' accepts a function", function () {
-  const code = `
-    import a from "a";
-    import b from "b";
-    import c from "c";
+describe("'importInterop'", () => {
+  function transform(code, importInterop, filename) {
+    return babel.transformSync(code, {
+      configFile: false,
+      filename,
+      ast: false,
+      plugins: [
+        [externalHelpers, { helperVersion: "7.100.0" }],
+        [transformCommonjs, { importInterop }],
+      ],
+    }).code;
+  }
 
-    a();
-    b();
-    c();
-  `;
+  it("'importInterop' accepts a function", () => {
+    const code = `
+      import a from "a";
+      import b from "b";
+      import c from "c";
 
-  const importInterop = jest.fn(source => {
-    if (source === "a") return "babel";
-    else if (source === "b") return "node";
-    else if (source === "c") return "none";
+      a();
+      b();
+      c();
+    `;
+
+    const importInterop = source => {
+      if (source === "a") return "babel";
+      else if (source === "b") return "node";
+      else if (source === "c") return "none";
+    };
+
+    expect(transform(code, importInterop)).toMatchInlineSnapshot(`
+      "\\"use strict\\";
+
+      var _a = babelHelpers.interopRequireDefault(require(\\"a\\"));
+
+      var _b = require(\\"b\\");
+
+      var _c = require(\\"c\\");
+
+      (0, _a.default)();
+
+      _b();
+
+      (0, _c.default)();"
+    `);
   });
 
-  const filename = "path/to/fake-filename.js";
+  it("gets called with the filename if present", () => {
+    const code = `
+      import a from "a";
+      import b from "b";
+    `;
 
-  const output = babel.transformSync(code, {
-    configFile: false,
-    filename,
-    ast: false,
-    plugins: [
-      [externalHelpers, { helperVersion: "7.100.0" }],
-      [transformCommonjs, { importInterop }],
-    ],
-  }).code;
+    const importInterop = jest.fn(() => "babel");
 
-  expect(output).toMatchInlineSnapshot(`
-    "\\"use strict\\";
+    const filename = "path/to/fake-filename.js";
 
-    var _a = babelHelpers.interopRequireDefault(require(\\"a\\"));
+    transform(code, importInterop, filename);
 
-    var _b = require(\\"b\\");
+    expect(importInterop).toHaveBeenCalledTimes(2);
+    expect(importInterop).toHaveBeenCalledWith("a", path.resolve(filename));
+    expect(importInterop).toHaveBeenCalledWith("b", path.resolve(filename));
+  });
 
-    var _c = require(\\"c\\");
+  it("gets called with undefined if the filename is not present", () => {
+    const code = `
+      import a from "a";
+      import b from "b";
+    `;
 
-    (0, _a.default)();
+    const importInterop = jest.fn(() => "babel");
 
-    _b();
+    transform(code, importInterop);
 
-    (0, _c.default)();"
-  `);
-
-  const resolvedFilename = path.resolve(filename);
-  expect(importInterop).toHaveBeenCalledWith("a", resolvedFilename);
-  expect(importInterop).toHaveBeenCalledWith("b", resolvedFilename);
-  expect(importInterop).toHaveBeenCalledWith("c", resolvedFilename);
+    expect(importInterop).toHaveBeenCalledTimes(2);
+    expect(importInterop).toHaveBeenCalledWith("a", undefined);
+    expect(importInterop).toHaveBeenCalledWith("b", undefined);
+  });
 });
