@@ -297,6 +297,15 @@ function buildRollup(packages, targetBrowsers) {
           input,
           external,
           onwarn(warning, warn) {
+            function normalizePath(str) {
+              return typeof str == "string"
+                ? str.split(path.sep).join(path.posix.sep)
+                : str;
+            }
+
+            warning.importer = normalizePath(warning.importer);
+            warning.exporter = normalizePath(warning.exporter);
+
             if (warning.code === "CIRCULAR_DEPENDENCY") return;
             if (warning.code === "UNUSED_EXTERNAL_IMPORT") {
               warn(warning);
