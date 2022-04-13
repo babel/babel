@@ -118,7 +118,7 @@ export default declare((api, options) => {
               allowTopLevelThis,
               importInterop,
               noInterop,
-              filename: this.opts.filename,
+              filename: this.file.opts.filename,
             },
           );
 

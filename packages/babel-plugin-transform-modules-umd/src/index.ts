@@ -160,7 +160,7 @@ export default declare((api, options) => {
               allowTopLevelThis,
               noInterop,
               importInterop,
-              filename: this.opts.filename,
+              filename: this.file.opts.filename,
             },
           );
 
