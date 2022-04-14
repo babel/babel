@@ -560,7 +560,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt.dot)) {
         // In this instance, the entity name will actually itself be a
         // qualifier, so allow it to be a reserved word as well.
-        node.qualifier = this.tsParseEntityName();
+        node.qualifier = this.tsParseEntityName(true, true);
       }
       if (this.match(tt.lt)) {
         node.typeParameters = this.tsParseTypeArguments();
