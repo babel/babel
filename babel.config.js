@@ -742,7 +742,7 @@ function pluginAddImportExtension() {
 }
 
 const tokenTypesMapping = new Map();
-const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.js";
+const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
 
 function pluginBabelParserTokenType({
   types: { isIdentifier, numericLiteral },
@@ -777,7 +777,7 @@ function pluginBabelParserTokenType({
     }),
     {
       configFile: false,
-      parserOpts: { attachComments: false, plugins: ["flow"] },
+      parserOpts: { attachComments: false, plugins: ["typescript"] },
     }
   );
 
