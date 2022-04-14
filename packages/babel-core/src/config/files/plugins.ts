@@ -141,7 +141,7 @@ async function tryImportMetaResolve(
   }
 }
 
-function resolveStandardizedNameForRequrie(
+function resolveStandardizedNameForRequire(
   type: "plugin" | "preset",
   name: string,
   dirname: string,
@@ -174,18 +174,18 @@ const resolveStandardizedName: Gensync<
   (type: "plugin" | "preset", name: string, dirname?: string) => string
 > = gensync({
   sync(type, name, dirname = process.cwd()) {
-    return resolveStandardizedNameForRequrie(type, name, dirname);
+    return resolveStandardizedNameForRequire(type, name, dirname);
   },
   async async(type, name, dirname = process.cwd()) {
     if (!supportsESM) {
-      return resolveStandardizedNameForRequrie(type, name, dirname);
+      return resolveStandardizedNameForRequire(type, name, dirname);
     }
 
     try {
       return await resolveStandardizedNameForImport(type, name, dirname);
     } catch (e) {
       try {
-        return resolveStandardizedNameForRequrie(type, name, dirname);
+        return resolveStandardizedNameForRequire(type, name, dirname);
       } catch (e2) {
         if (e.type === "MODULE_NOT_FOUND") throw e;
         if (e2.type === "MODULE_NOT_FOUND") throw e2;
@@ -218,7 +218,7 @@ function* requireModule(type: string, name: string): Handler<unknown> {
       name,
       `You appear to be using a native ECMAScript module ${type}, ` +
         "which is only supported when running Babel asynchronously.",
-      // For backward compatiblity, we need to support malformed presets
+      // For backward compatibility, we need to support malformed presets
       // defined as separate named exports rather than a single default
       // export.
       // See packages/babel-core/test/fixtures/option-manager/presets/es2015_named.js
