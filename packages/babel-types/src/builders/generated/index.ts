@@ -938,7 +938,6 @@ export function jsxElement(
     | t.JSXElement
     | t.JSXFragment
   >,
-  selfClosing?: boolean | null,
 ): t.JSXElement {
   return builder.apply("JSXElement", arguments);
 }
