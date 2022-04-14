@@ -297,14 +297,7 @@ function buildRollup(packages, targetBrowsers) {
           input,
           external,
           onwarn(warning, warn) {
-            function normalizePath(str) {
-              return typeof str == "string"
-                ? str.split(path.sep).join(path.posix.sep)
-                : str;
-            }
-
-            warning.importer = normalizePath(warning.importer);
-            warning.exporter = normalizePath(warning.exporter);
+            const osifyPath = str => str.split("/").join(path.sep);
 
             if (warning.code === "CIRCULAR_DEPENDENCY") return;
             if (warning.code === "UNUSED_EXTERNAL_IMPORT") {
@@ -317,14 +310,15 @@ function buildRollup(packages, targetBrowsers) {
             // We can safely ignore this warning, and let Rollup replace it with undefined.
             if (
               warning.code === "MISSING_EXPORT" &&
-              warning.exporter === "packages/babel-core/src/index.ts" &&
+              warning.exporter ===
+                osifyPath("packages/babel-core/src/index.ts") &&
               warning.missing === "default" &&
               [
                 "@babel/helper-define-polyfill-provider",
                 "babel-plugin-polyfill-corejs2",
                 "babel-plugin-polyfill-corejs3",
                 "babel-plugin-polyfill-regenerator",
-              ].some(pkg => warning.importer.includes(pkg))
+              ].some(pkg => warning.importer.includes(osifyPath(pkg)))
             ) {
               return;
             }
