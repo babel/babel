@@ -893,10 +893,11 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
-  parseClassOrClassHasInstanceExpression(
+  parseClassOrClassHasInstanceExpression<T: N.Class>(
+    node: T,
     isStatement: boolean,
   ): N.Class | N.ClassHasInstanceExpression {
-    const node = this.startNode();
+    // const node = this.startNode();
     this.next();
     if (this.eat(tt.dot)) {
       if (this.isContextual(tt._hasInstance)) {
@@ -918,7 +919,12 @@ export default class ExpressionParser extends LValParser {
     this.next(); // eat `(`
     const node = this.startNodeAt(startPos, startLoc);
     const argus = this.parseCallExpressionArguments(tt.parenR);
-    node.instance = argus.length ? argus[0] : null;
+    if (argus.length !== 1) {
+      this.raise(Errors.InvalidArguments, { at: startLoc });
+    }
+
+    node.instance = argus[0];
+
     this.state.stop = true;
 
     return this.finishNode(node, "ClassHasInstanceExpression");
@@ -1193,7 +1199,9 @@ export default class ExpressionParser extends LValParser {
         this.parseDecorators();
       // fall through
       case tt._class:
-        return this.parseClassOrClassHasInstanceExpression(false);
+        node = this.startNode();
+        this.takeDecorators(node);
+        return this.parseClassOrClassHasInstanceExpression(node, false);
 
       case tt._new:
         return this.parseNewOrNewTarget();

@@ -1,15 +1,16 @@
 // import parse from "@babel/parser";
-expect(() => {
-    const source = `
-        class Foo {
-            equals(foo){
-                class.h\x61sInstance(foo)
-            }
-        }
-    `
-    // parse.parse(source)
+// 优先解决 argument的问题
+// expect(() => {
+//     const source = `
+//         class Foo {
+//             equals(foo){
+//                 class.h\x61sInstance(foo)
+//             }
+//         }
+//     `
+//     // parse.parse(source)
     
-})
+// })
 
 // expect(() => {
 //     class Foo {
@@ -19,22 +20,36 @@ expect(() => {
 //     }
 // }).toThrow(/unexpect token/);
   
-
-// expect(() => {
-//     class Foo {
-//         equals(foo){
-//             class.hasInstance();
+// describe('arguments', () => {
+//     it('throws', () => {
+//         const source = `
+//             class Foo {
+//                 equals(foo){
+//                     class.hasInstance();
+//                 }
+//             }
+//         `
+//         const exec = () => {
+//             parse.parse(source);
 //         }
-//     }
-// }).toThrow(/unexpect token/);
+//         expect(exec).toThrow();
+//     })
+// })
 
+expect(() => {
+    class Foo {
+        equals(){
+            class.hasInstance();
+        }
+    }
+}).toThrow();
 // expect(() => {
 //     class Foo {
 //         equals(foo){
 //             class.hasInstance(foo, bar);
 //         }
 //     }
-// }).toThrow(/unexpect token/);
+// }).toThrow();
 
 // expect(() => {
 //     class Foo {

@@ -1363,7 +1363,9 @@ export default class StatementParser extends ExpressionParser {
     isStatement: /* T === ClassDeclaration */ boolean,
     optionalId?: boolean,
   ): T {
-    if (this.eat(tt._class)) {
+    if (isStatement) {
+      // console.log(isStatement,this.state.value)
+      this.next();
       this.takeDecorators(node);
     }
 

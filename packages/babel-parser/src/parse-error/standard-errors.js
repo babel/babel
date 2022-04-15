@@ -132,6 +132,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   IncompatibleRegExpUVFlags: _(
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   ),
+  InvalidArguments: _("Invalid Arguments."),
   InvalidBigIntLiteral: _("Invalid BigIntLiteral."),
   InvalidCodePoint: _("Code point out of bounds."),
   InvalidCoverInitializedName: _("Invalid shorthand property initializer."),
