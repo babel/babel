@@ -6,7 +6,7 @@ export default declare(api => {
   return {
     name: "proposal-class-brand-check",
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("brand-check");
+      parserOpts.plugins.push("classBrandCheck");
     },
     visitor: {
       ClassHasInstanceExpression(path) {

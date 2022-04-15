@@ -897,7 +897,6 @@ export default class ExpressionParser extends LValParser {
     node: T,
     isStatement: boolean,
   ): N.Class | N.ClassHasInstanceExpression {
-    // const node = this.startNode();
     this.next();
     if (this.eat(tt.dot)) {
       if (this.isContextual(tt._hasInstance)) {
