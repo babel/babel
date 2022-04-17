@@ -14,7 +14,7 @@ function _f() {
         let {
           x,
           y: [z]
-        } = _step.value;
+        } = yield _step.value;
         g(x, z);
       }
     } catch (err) {

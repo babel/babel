@@ -17,6 +17,5 @@ return async function () {
   let value;
   for await (value of iterable);
 
-  expect(value).toBeInstanceOf(Promise);
-  await expect(value).resolves.toBe(1);
+  expect(value).toBe(1);
 }();

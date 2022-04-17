@@ -33,7 +33,9 @@ export default function (path, { getAsyncIterator }) {
   const { node, scope, parent } = path;
 
   const stepKey = scope.generateUidIdentifier("step");
-  const stepValue = t.memberExpression(stepKey, t.identifier("value"));
+  const stepValue = t.awaitExpression(
+    t.memberExpression(stepKey, t.identifier("value")),
+  );
   const left = node.left;
   let declar;
 

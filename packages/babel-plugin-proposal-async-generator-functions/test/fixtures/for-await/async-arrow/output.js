@@ -7,7 +7,7 @@ babelHelpers.asyncToGenerator(function* () {
 
   try {
     for (var _iterator = babelHelpers.asyncIterator(y), _step; _iteratorAbruptCompletion = !(_step = yield _iterator.next()).done; _iteratorAbruptCompletion = false) {
-      let x = _step.value;
+      let x = yield _step.value;
       f(x);
     }
   } catch (err) {

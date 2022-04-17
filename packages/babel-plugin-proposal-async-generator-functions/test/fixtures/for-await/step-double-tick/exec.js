@@ -21,6 +21,8 @@ return Promise.all([
     promise = new Promise((r) => (resolve = r));
 
     await null;
+    await null;
+
     resolve({ value: 1, done: false });
     promise = new Promise((r) => (resolve = r));
 

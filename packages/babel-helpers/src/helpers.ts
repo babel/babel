@@ -126,11 +126,18 @@ helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
   export default function _asyncGeneratorDelegate(inner, awaitWrap) {
     var iter = {}, waiting = false;
 
-    function pump(key, value) {
-      waiting = true;
-      value = new Promise(function (resolve) { resolve(inner[key](value)); });
-      return { done: false, value: awaitWrap(value) };
-    };
+    function pump(key, arg) {
+      var step = inner[key](arg);
+      if (step instanceof Promise) {
+        waiting = true;
+        return { done: false, value: awaitWrap(step.then(function(step) { return step.value instanceof Promise ? step.value.then((value) => { return { value: value, done: step.done }; }) : step })) };
+      } else if (step.value instanceof Promise) {
+        waiting = true;
+        return { done: false, value: awaitWrap(step.value.then(function(value) { return { value: value, done: step.done }; })) };
+      } else {
+        return step;
+      }
+    }
 
     iter[typeof Symbol !== "undefined" && Symbol.iterator || "@@iterator"] = function () { return this; };
 

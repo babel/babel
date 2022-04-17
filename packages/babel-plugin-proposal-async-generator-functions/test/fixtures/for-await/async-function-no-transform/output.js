@@ -6,7 +6,7 @@ async function foo() {
 
   try {
     for (var _iterator = babelHelpers.asyncIterator(y), _step; _iteratorAbruptCompletion = !(_step = await _iterator.next()).done; _iteratorAbruptCompletion = false) {
-      const x = _step.value;
+      const x = await _step.value;
     }
   } catch (err) {
     _didIteratorError = true;

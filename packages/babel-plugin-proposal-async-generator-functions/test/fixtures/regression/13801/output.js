@@ -1,6 +1,4 @@
-function _asyncIterator(iterable) { var method, async, sync, retry = 2; for ("undefined" != typeof Symbol && (async = Symbol.asyncIterator, sync = Symbol.iterator); retry--;) { if (async && null != (method = iterable[async])) return method.call(iterable); if (sync && null != (method = iterable[sync])) return new AsyncFromSyncIterator(method.call(iterable)); async = "@@asyncIterator", sync = "@@iterator"; } throw new TypeError("Object is not async iterable"); }
-
-function AsyncFromSyncIterator(s) { function AsyncFromSyncIteratorContinuation(r) { if (Object(r) !== r) return Promise.reject(new TypeError(r + " is not an object.")); var done = r.done; return Promise.resolve(r.value).then(function (value) { return { value: value, done: done }; }); } return AsyncFromSyncIterator = function (s) { this.s = s, this.n = s.next; }, AsyncFromSyncIterator.prototype = { s: null, n: null, next: function () { return AsyncFromSyncIteratorContinuation(this.n.apply(this.s, arguments)); }, return: function (value) { var ret = this.s.return; return void 0 === ret ? Promise.resolve({ value: value, done: !0 }) : AsyncFromSyncIteratorContinuation(ret.apply(this.s, arguments)); }, throw: function (value) { var thr = this.s.return; return void 0 === thr ? Promise.reject(value) : AsyncFromSyncIteratorContinuation(thr.apply(this.s, arguments)); } }, new AsyncFromSyncIterator(s); }
+function _asyncIterator(iterable) { var method, async, sync, retry = 2; for ("undefined" != typeof Symbol && (async = Symbol.asyncIterator, sync = Symbol.iterator); retry--;) { if (async && null != (method = iterable[async])) return method.call(iterable); if (sync && null != (method = iterable[sync])) return method.call(iterable); async = "@@asyncIterator", sync = "@@iterator"; } throw new TypeError("Object is not async iterable"); }
 
 function main() {
   var one;
@@ -25,62 +23,66 @@ function main() {
 
               case 6:
                 if (!(_iteratorAbruptCompletion = !(_step = _context.sent).done)) {
-                  _context.next = 12;
+                  _context.next = 14;
                   break;
                 }
 
-                string = _step.value;
+                _context.next = 9;
+                return regeneratorRuntime.awrap(_step.value);
+
+              case 9:
+                string = _context.sent;
                 // for await: required for babel to crash
                 console.log(string);
 
-              case 9:
+              case 11:
                 _iteratorAbruptCompletion = false;
                 _context.next = 4;
                 break;
 
-              case 12:
-                _context.next = 18;
+              case 14:
+                _context.next = 20;
                 break;
 
-              case 14:
-                _context.prev = 14;
+              case 16:
+                _context.prev = 16;
                 _context.t0 = _context["catch"](2);
                 _didIteratorError = true;
                 _iteratorError = _context.t0;
 
-              case 18:
-                _context.prev = 18;
-                _context.prev = 19;
+              case 20:
+                _context.prev = 20;
+                _context.prev = 21;
 
                 if (!(_iteratorAbruptCompletion && _iterator.return != null)) {
-                  _context.next = 23;
+                  _context.next = 25;
                   break;
                 }
 
-                _context.next = 23;
+                _context.next = 25;
                 return regeneratorRuntime.awrap(_iterator.return());
 
-              case 23:
-                _context.prev = 23;
+              case 25:
+                _context.prev = 25;
 
                 if (!_didIteratorError) {
-                  _context.next = 26;
+                  _context.next = 28;
                   break;
                 }
 
                 throw _iteratorError;
 
-              case 26:
-                return _context.finish(23);
-
-              case 27:
-                return _context.finish(18);
-
               case 28:
+                return _context.finish(25);
+
+              case 29:
+                return _context.finish(20);
+
+              case 30:
               case "end":
                 return _context.stop();
             }
-          }, null, null, [[2, 14, 18, 28], [19,, 23, 27]], Promise);
+          }, null, null, [[2, 16, 20, 30], [21,, 25, 29]], Promise);
         };
 
         one = 1; // array destructuring: required for babel to crash
