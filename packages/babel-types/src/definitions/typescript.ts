@@ -449,6 +449,15 @@ defineType("TSTypeAliasDeclaration", {
   },
 });
 
+defineType("TSInstantiationExpression", {
+  aliases: ["Expression"],
+  visitor: ["expression", "typeParameters"],
+  fields: {
+    expression: validateType("Expression"),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+  },
+});
+
 defineType("TSAsExpression", {
   aliases: ["Expression", "LVal", "PatternLike"],
   visitor: ["expression", "typeAnnotation"],

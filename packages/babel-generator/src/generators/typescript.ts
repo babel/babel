@@ -514,6 +514,14 @@ export function TSTypeAssertion(this: Printer, node: t.TSTypeAssertion) {
   this.print(expression, node);
 }
 
+export function TSInstantiationExpression(
+  this: Printer,
+  node: t.TSInstantiationExpression,
+) {
+  this.print(node.expression, node);
+  this.print(node.typeParameters, node);
+}
+
 export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   const { declare, const: isConst, id, members } = node;
   if (declare) {

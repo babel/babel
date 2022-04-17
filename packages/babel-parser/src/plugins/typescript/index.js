@@ -1562,7 +1562,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
-        this.tsParseExpressionWithTypeArguments.bind(this),
+        () => {
+          const node: N.TsExpressionWithTypeArguments = this.startNode();
+          node.expression = this.tsParseEntityName();
+          if (this.match(tt.lt)) {
+            node.typeParameters = this.tsParseTypeArguments();
+          }
+
+          return this.finishNode(node, "TSExpressionWithTypeArguments");
+        },
       );
 
       if (!delimitedList.length) {
@@ -1573,16 +1581,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return delimitedList;
-    }
-
-    tsParseExpressionWithTypeArguments(): N.TsExpressionWithTypeArguments {
-      const node: N.TsExpressionWithTypeArguments = this.startNode();
-      node.expression = this.tsParseEntityName();
-      if (this.match(tt.lt)) {
-        node.typeParameters = this.tsParseTypeArguments();
-      }
-
-      return this.finishNode(node, "TSExpressionWithTypeArguments");
     }
 
     tsParseInterfaceDeclaration(
@@ -2351,13 +2349,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             throw this.unexpected();
           }
 
-          const node: N.TsExpressionWithTypeArguments = this.startNodeAt(
+          const node: N.TSInstantiationExpression = this.startNodeAt(
             startPos,
             startLoc,
           );
           node.expression = base;
           node.typeParameters = typeArguments;
-          return this.finishNode(node, "TSExpressionWithTypeArguments");
+          return this.finishNode(node, "TSInstantiationExpression");
         });
 
         if (missingParenErrorLoc) {
@@ -2375,7 +2373,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       const { callee } = node;
       if (
-        callee.type === "TSExpressionWithTypeArguments" &&
+        callee.type === "TSInstantiationExpression" &&
         !callee.extra?.parenthesized
       ) {
         node.typeParameters = callee.typeParameters;

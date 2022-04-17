@@ -34,6 +34,7 @@ import {
   isSwitchStatement,
   isTSArrayType,
   isTSAsExpression,
+  isTSInstantiationExpression,
   isTSIntersectionType,
   isTSNonNullExpression,
   isTSOptionalType,
@@ -48,7 +49,6 @@ import {
   isVariableDeclarator,
   isWhileStatement,
   isYieldExpression,
-  isTSExpressionWithTypeArguments,
 } from "@babel/types";
 import type * as t from "@babel/types";
 const PRECEDENCE = {
@@ -220,15 +220,15 @@ export function TSInferType(node: any, parent: any): boolean {
   return isTSArrayType(parent) || isTSOptionalType(parent);
 }
 
-export function TSExpressionWithTypeArguments(
-  node: t.TSExpressionWithTypeArguments,
+export function TSInstantiationExpression(
+  node: t.TSInstantiationExpression,
   parent: t.Node,
 ) {
   return (
     (isCallExpression(parent) ||
       isOptionalCallExpression(parent) ||
       isNewExpression(parent) ||
-      isTSExpressionWithTypeArguments(parent)) &&
+      isTSInstantiationExpression(parent)) &&
     !!parent.typeParameters
   );
 }

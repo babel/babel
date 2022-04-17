@@ -2298,6 +2298,13 @@ export function tsTypeAliasDeclaration(
   });
 }
 export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
+export function tsInstantiationExpression(
+  expression: t.Expression,
+  typeParameters?: t.TSTypeParameterInstantiation | null,
+): t.TSInstantiationExpression {
+  return builder.apply("TSInstantiationExpression", arguments);
+}
+export { tsInstantiationExpression as tSInstantiationExpression };
 export function tsAsExpression(
   expression: t.Expression,
   typeAnnotation: t.TSType,

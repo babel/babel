@@ -329,6 +329,9 @@ export interface NodePathValidators {
   isTSIndexSignature(opts?: object): this is NodePath<t.TSIndexSignature>;
   isTSIndexedAccessType(opts?: object): this is NodePath<t.TSIndexedAccessType>;
   isTSInferType(opts?: object): this is NodePath<t.TSInferType>;
+  isTSInstantiationExpression(
+    opts?: object,
+  ): this is NodePath<t.TSInstantiationExpression>;
   isTSInterfaceBody(opts?: object): this is NodePath<t.TSInterfaceBody>;
   isTSInterfaceDeclaration(
     opts?: object,

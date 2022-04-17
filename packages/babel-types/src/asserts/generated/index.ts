@@ -1400,6 +1400,12 @@ export function assertTSTypeAliasDeclaration(
 ): asserts node is t.TSTypeAliasDeclaration {
   assert("TSTypeAliasDeclaration", node, opts);
 }
+export function assertTSInstantiationExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.TSInstantiationExpression {
+  assert("TSInstantiationExpression", node, opts);
+}
 export function assertTSAsExpression(
   node: object | null | undefined,
   opts?: object | null,

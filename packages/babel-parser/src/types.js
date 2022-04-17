@@ -1632,6 +1632,12 @@ export type TsNonNullExpression = NodeBase & {
   expression: Expression,
 };
 
+export type TsInstantiationExpression = NodeBase & {
+  type: "TSInstantiationExpression",
+  expression: Expression,
+  typeParameters: TsTypeParameterInstantiation,
+};
+
 // ================
 // Babel placeholders %%foo%%
 // ================
