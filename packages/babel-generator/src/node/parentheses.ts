@@ -226,6 +226,7 @@ export function TSExpressionWithTypeArguments(
 ) {
   return (
     (isCallExpression(parent) ||
+      isOptionalCallExpression(parent) ||
       isNewExpression(parent) ||
       isTSExpressionWithTypeArguments(parent)) &&
     !!parent.typeParameters
