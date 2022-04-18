@@ -229,8 +229,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): T {
       const type = isStatement ? "ClassDeclaration" : "ClassExpression";
 
-      this.next();
-      this.takeDecorators(node);
+      if (this.eat(tt._class)) {
+        this.takeDecorators(node);
+      }
+
       const oldStrict = this.state.strict;
 
       const placeholder = this.parsePlaceholder("Identifier");
