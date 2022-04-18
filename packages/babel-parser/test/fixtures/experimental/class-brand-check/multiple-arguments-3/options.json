@@ -1,0 +1,5 @@
+{
+    "throws": "SyntaxError: Invalid Arguments. (3:36)",
+    "plugins": ["classBrandCheck"]
+  }
+  

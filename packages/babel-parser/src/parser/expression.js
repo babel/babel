@@ -903,8 +903,8 @@ export default class ExpressionParser extends LValParser {
         this.expectPlugin("classBrandCheck");
         return this.parseClassHasInstanceExpression(
           node,
-          this.startPos,
-          this.startLoc,
+          this.state.startPos,
+          this.state.startLoc,
         );
       } else {
         throw this.raise(Errors.UnexpectedToken, { at: node });
@@ -919,10 +919,11 @@ export default class ExpressionParser extends LValParser {
     this.next(); // eat `(`
     const node = this.startNodeAt(startPos, startLoc);
     const argus = this.parseCallExpressionArguments(tt.parenR);
-    if (argus.length !== 1) {
-      this.raise(Errors.InvalidArguments, { at: startLoc });
+    if (argus.length !== 1 || (argus[0] && argus[0].type === "SpreadElement")) {
+      throw this.raise(Errors.InvalidArguments, {
+        at: this.state.lastTokStartLoc,
+      });
     }
-
     node.instance = argus[0];
 
     this.state.stop = true;
