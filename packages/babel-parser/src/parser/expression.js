@@ -900,6 +900,7 @@ export default class ExpressionParser extends LValParser {
     this.next();
     if (this.eat(tt.dot)) {
       if (this.isContextual(tt._hasInstance)) {
+        this.expectPlugin("classBrandCheck");
         return this.parseClassHasInstanceExpression(
           node,
           this.startPos,
