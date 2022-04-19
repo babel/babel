@@ -183,7 +183,10 @@ export default class ExpressionParser extends LValParser {
       }
       return expr;
     } catch (error) {
-      if (!this.options.errorRecovery || !(error instanceof SyntaxError)) {
+      if (
+        this.options.errorRecovery !== "always" ||
+        !(error instanceof SyntaxError)
+      ) {
         throw error;
       }
 

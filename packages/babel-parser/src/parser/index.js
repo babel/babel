@@ -43,7 +43,10 @@ export default class Parser extends StatementParser {
       this.parseTopLevel(file, program);
       this.finishNode(file, "File");
     } catch (parseError) {
-      if (!this.options.errorRecovery || !(parseError instanceof SyntaxError)) {
+      if (
+        this.options.errorRecovery !== "always" ||
+        !(parseError instanceof SyntaxError)
+      ) {
         throw parseError;
       }
 
