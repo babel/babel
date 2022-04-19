@@ -916,7 +916,7 @@ export default class ExpressionParser extends LValParser {
 
   parseClassHasInstanceExpression(base, startPos, startLoc) {
     this.next(); // eat `hasinstance`
-    this.next(); // eat `(`
+    this.expect(tt.parenL);
     const node = this.startNodeAt(startPos, startLoc);
     const argus = this.parseCallExpressionArguments(tt.parenR);
     if (argus.length !== 1 || (argus[0] && argus[0].type === "SpreadElement")) {
