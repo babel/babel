@@ -1473,6 +1473,7 @@ export interface JSXElement extends BaseNode {
   children: Array<
     JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment
   >;
+  selfClosing?: boolean | null;
 }
 
 export interface JSXEmptyExpression extends BaseNode {
