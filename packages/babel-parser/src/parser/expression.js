@@ -926,8 +926,6 @@ export default class ExpressionParser extends LValParser {
     }
     node.instance = argus[0];
 
-    this.state.stop = true;
-
     return this.finishNode(node, "ClassHasInstanceExpression");
   }
 
