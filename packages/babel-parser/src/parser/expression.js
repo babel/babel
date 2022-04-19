@@ -919,12 +919,12 @@ export default class ExpressionParser extends LValParser {
     this.expect(tt.parenL);
     const node = this.startNodeAt(startPos, startLoc);
     const args = this.parseCallExpressionArguments(tt.parenR);
-    if (argus.length !== 1 || (argus[0] && argus[0].type === "SpreadElement")) {
-      throw this.raise(Errors.InvalidArguments, {
+    if (args.length !== 1 || args[0].type === "SpreadElement") {
+      throw this.raise(Errors.InvalidHasinstanceParameter, {
         at: this.state.lastTokStartLoc,
       });
     }
-    node.instance = argus[0];
+    node.instance = args[0];
 
     return this.finishNode(node, "ClassHasInstanceExpression");
   }

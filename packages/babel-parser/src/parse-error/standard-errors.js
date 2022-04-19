@@ -132,7 +132,6 @@ export default (_: typeof toParseErrorCredentials) => ({
   IncompatibleRegExpUVFlags: _(
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   ),
-  InvalidArguments: _("Invalid Arguments."),
   InvalidBigIntLiteral: _("Invalid BigIntLiteral."),
   InvalidCodePoint: _("Code point out of bounds."),
   InvalidCoverInitializedName: _("Invalid shorthand property initializer."),
@@ -144,6 +143,9 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidEscapeSequenceTemplate: _("Invalid escape sequence in template."),
   InvalidEscapedReservedWord: _<{| reservedWord: string |}>(
     ({ reservedWord }) => `Escape sequence in keyword ${reservedWord}.`,
+  ),
+  InvalidHasinstanceParameter: _(
+    "'hasInstance' expression must have exactly one parameter.",
   ),
   InvalidIdentifier: _<{| identifierName: string |}>(
     ({ identifierName }) => `Invalid identifier ${identifierName}.`,

@@ -1,5 +1,5 @@
 {
-    "throws": "SyntaxError: Invalid Arguments. (3:32)",
+    "throws": "SyntaxError: 'hasInstance' expression must have exactly one parameter. (3:32)",
     "plugins": ["classBrandCheck"]
   }
   
