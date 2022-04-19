@@ -918,7 +918,7 @@ export default class ExpressionParser extends LValParser {
     this.next(); // eat `hasinstance`
     this.expect(tt.parenL);
     const node = this.startNodeAt(startPos, startLoc);
-    const argus = this.parseCallExpressionArguments(tt.parenR);
+    const args = this.parseCallExpressionArguments(tt.parenR);
     if (argus.length !== 1 || (argus[0] && argus[0].type === "SpreadElement")) {
       throw this.raise(Errors.InvalidArguments, {
         at: this.state.lastTokStartLoc,
