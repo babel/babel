@@ -2,25 +2,25 @@
 
 Using targets:
 {
-  "android": "94",
-  "chrome": "91",
-  "edge": "92",
-  "firefox": "78",
+  "android": "99",
+  "chrome": "97",
+  "edge": "98",
+  "firefox": "91",
   "ios": "12.2",
-  "opera": "78",
-  "safari": "13.1",
-  "samsung": "14"
+  "opera": "82",
+  "safari": "14.1",
+  "samsung": "15"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { chrome < 94, edge < 94, firefox < 93, ios, opera < 80, safari, samsung }
-  proposal-private-property-in-object { firefox < 90, ios < 15, safari < 15, samsung }
-  proposal-class-properties { firefox < 90, ios < 15, safari < 14.1 }
-  proposal-private-methods { firefox < 90, ios < 15, safari < 15 }
+  proposal-class-static-block { firefox < 93, ios, safari, samsung }
+  proposal-private-property-in-object { ios < 15, safari < 15, samsung }
+  proposal-class-properties { ios < 15 }
+  proposal-private-methods { ios < 15, safari < 15 }
   proposal-numeric-separator { ios < 13 }
-  proposal-logical-assignment-operators { firefox < 79, ios < 14, safari < 14 }
+  proposal-logical-assignment-operators { ios < 14 }
   proposal-nullish-coalescing-operator { ios < 13.4 }
   proposal-optional-chaining { ios < 13.4, samsung }
   syntax-json-strings
@@ -29,7 +29,7 @@ Using plugins:
   syntax-async-generators
   syntax-object-rest-spread
   transform-template-literals { ios < 13 }
-  proposal-export-namespace-from { firefox < 80, ios, safari }
+  proposal-export-namespace-from { ios, safari }
   transform-modules-commonjs
   proposal-dynamic-import
 
