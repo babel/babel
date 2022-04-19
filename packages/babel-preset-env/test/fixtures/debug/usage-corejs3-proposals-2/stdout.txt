@@ -62,14 +62,14 @@ Using polyfills with `usage-global` method:
 regenerator: `DEBUG` option
 
 Using targets: {
-  "android": "94",
-  "chrome": "91",
-  "edge": "92",
-  "firefox": "78",
+  "android": "99",
+  "chrome": "97",
+  "edge": "98",
+  "firefox": "91",
   "ios": "12.2",
-  "opera": "78",
-  "safari": "13.1",
-  "samsung": "14"
+  "opera": "82",
+  "safari": "14.1",
+  "samsung": "15"
 }
 
 Using polyfills with `usage-global` method:
