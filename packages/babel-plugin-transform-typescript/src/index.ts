@@ -585,7 +585,7 @@ export default declare((api, opts: Options) => {
         path.replaceWith(node);
       },
 
-      "TSNonNullExpression|TSExpressionWithTypeArguments"(
+      "TSNonNullExpression|TSInstantiationExpression"(
         path: NodePath<t.TSNonNullExpression | t.TSExpressionWithTypeArguments>,
       ) {
         path.replaceWith(path.node.expression);
