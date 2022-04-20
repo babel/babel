@@ -42,7 +42,9 @@ defineType("JSXClosingElement", {
 });
 
 defineType("JSXElement", {
-  builder: ["openingElement", "closingElement", "children", "selfClosing"],
+  builder: process.env.BABEL_8_BREAKING
+    ? ["openingElement", "closingElement", "children"]
+    : ["openingElement", "closingElement", "children", "selfClosing"],
   visitor: ["openingElement", "children", "closingElement"],
   aliases: ["Immutable", "Expression"],
   fields: {
@@ -67,10 +69,14 @@ defineType("JSXElement", {
         ),
       ),
     },
-    selfClosing: {
-      validate: assertValueType("boolean"),
-      optional: true,
-    },
+    ...(process.env.BABEL_8_BREAKING
+      ? {}
+      : {
+          selfClosing: {
+            validate: assertValueType("boolean"),
+            optional: true,
+          },
+        }),
   },
 });
 
