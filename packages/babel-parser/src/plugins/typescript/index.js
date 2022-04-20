@@ -1271,6 +1271,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expectContextual(tt._infer);
       const typeParameter = this.startNode();
       typeParameter.name = this.tsParseTypeParameterName();
+      typeParameter.constraint = this.tsEatThenParseType(tt._extends);
       node.typeParameter = this.finishNode(typeParameter, "TSTypeParameter");
       return this.finishNode(node, "TSInferType");
     }
