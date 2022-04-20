@@ -70,6 +70,7 @@ exportDeclarationsInAmbientNamespaces.ts
 exportDeclarationsInAmbientNamespaces2.ts
 exportDefaultAsyncFunction2.ts
 exportEqualsOfModule.ts
+exportInterfaceClassAndValue.ts
 exportSameNameFuncVar.ts
 exportSpecifierAndExportedMemberDeclaration.ts
 exportSpecifierAndLocalMemberDeclaration.ts
@@ -89,6 +90,7 @@ implementsClauseAlreadySeen.ts
 importAndVariableDeclarationConflict1.ts
 importAndVariableDeclarationConflict3.ts
 importAndVariableDeclarationConflict4.ts
+importAssertionNonstring.ts
 importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
 importedModuleClassNameClash.ts
@@ -101,6 +103,7 @@ indexerSignatureWithRestParam.ts
 interfaceMayNotBeExtendedWitACall.ts
 interfaceNaming1.ts # We correctly identify this error, but we can't bring it in without bringing a bunch of other tests too.
 interfaceWithImplements1.ts
+jsxAttributeMissingInitializer.tsx
 jsxAttributeWithoutExpressionReact.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts

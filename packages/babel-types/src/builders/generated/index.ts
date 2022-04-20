@@ -2300,9 +2300,13 @@ export function tsTypeAliasDeclaration(
 export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
 export function tsInstantiationExpression(
   expression: t.Expression,
-  typeParameters?: t.TSTypeParameterInstantiation | null,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
 ): t.TSInstantiationExpression {
-  return builder.apply("TSInstantiationExpression", arguments);
+  return validateNode<t.TSInstantiationExpression>({
+    type: "TSInstantiationExpression",
+    expression,
+    typeParameters,
+  });
 }
 export { tsInstantiationExpression as tSInstantiationExpression };
 export function tsAsExpression(
