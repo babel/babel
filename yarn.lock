@@ -267,7 +267,7 @@ __metadata:
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
     "@mdn/browser-compat-data": ^4.0.10
-    core-js-compat: ^3.22.0
+    core-js-compat: ^3.22.1
     electron-to-chromium: ^1.4.113
   languageName: unknown
   linkType: soft
@@ -1071,7 +1071,7 @@ __metadata:
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     commander: ^4.0.1
-    core-js: ^3.20.2
+    core-js: ^3.22.1
     fs-readdir-recursive: ^1.0.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     node-environment-flags: ^1.0.5
@@ -2703,7 +2703,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-create-regexp-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    core-js: ^3.20.2
+    core-js: ^3.22.1
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -3430,7 +3430,7 @@ __metadata:
     babel-plugin-polyfill-corejs2: ^0.3.0
     babel-plugin-polyfill-corejs3: ^0.5.0
     babel-plugin-polyfill-regenerator: ^0.3.0
-    core-js-compat: ^3.22.0
+    core-js-compat: ^3.22.1
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -3545,7 +3545,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2"
   dependencies:
-    core-js: ^2.6.5
+    core-js: ^3.22.1
     regenerator-runtime: ^0.13.4
   languageName: unknown
   linkType: soft
@@ -7011,13 +7011,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.22.0":
-  version: 3.22.0
-  resolution: "core-js-compat@npm:3.22.0"
+"core-js-compat@npm:3.22.1":
+  version: 3.22.1
+  resolution: "core-js-compat@npm:3.22.1"
   dependencies:
     browserslist: ^4.20.2
     semver: 7.0.0
-  checksum: ad204cfbe203803d2d86f7bb95f60525b1f9e3701b92d68d08e575932a5d8ea2ec31e121350a328a4035d8f0ef8793392efd74b1fede2702c26c80865b49597c
+  checksum: 2f9f885ea006fed7717279e36e644734aea722f0d8e06e272636c030eb2efcf1bab1471fa82e8ef89a39d60e0257a3f24573a014c334dc5b6f2085da90221c98
   languageName: node
   linkType: hard
 
@@ -7028,17 +7028,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^2.6.5":
-  version: 2.6.11
-  resolution: "core-js@npm:2.6.11"
-  checksum: 6944011e7aa2d86dae6c42fbb15c94bf20b7499c4f5ebd5e5d11bdde7101d3724788afacc8ab93fbacb2c881d634ef9ee783e1cf724cfbaaf501e882abda957f
-  languageName: node
-  linkType: hard
-
-"core-js@npm:^3.20.2":
-  version: 3.20.2
-  resolution: "core-js@npm:3.20.2"
-  checksum: dc055a5a79f2e3c2e060b4fb8a3e228fa0de16464bff3c6605646183139eebaa68c390ec6d9c3acc5677f333df510b977ee3f1d5992e6c36b1f200e35f5ed8ca
+"core-js@npm:^3.22.1":
+  version: 3.22.1
+  resolution: "core-js@npm:3.22.1"
+  checksum: 04f5e97b069e8d9137cd72151d8f4e6b0e51e338c1e9fa04da1a582695bb5b789abf96b0b2bb3d716c63ca68c0e67eea6680d8ee0a206e93e97ebba8aaf40e9c
   languageName: node
   linkType: hard
 
