@@ -4084,17 +4084,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.0":
-  version: 0.3.4
-  resolution: "@jridgewell/trace-mapping@npm:0.3.4"
-  dependencies:
-    "@jridgewell/resolve-uri": ^3.0.3
-    "@jridgewell/sourcemap-codec": ^1.4.10
-  checksum: ab8bce84bbbc8c34f3ba8325ed926f8f2d3098983c10442a80c55764c4eb6e47d5b92d8ff20a0dd868c3e76a3535651fd8a0138182c290dbfc8396195685c37b
-  languageName: node
-  linkType: hard
-
-"@jridgewell/trace-mapping@npm:^0.3.8":
+"@jridgewell/trace-mapping@npm:^0.3.0, @jridgewell/trace-mapping@npm:^0.3.8":
   version: 0.3.8
   resolution: "@jridgewell/trace-mapping@npm:0.3.8"
   dependencies:
