@@ -202,7 +202,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    "@jridgewell/trace-mapping": ^0.3.4
+    "@jridgewell/trace-mapping": ^0.3.8
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
     chokidar: ^3.4.0
     commander: ^4.0.1
@@ -212,7 +212,6 @@ __metadata:
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     rimraf: ^3.0.0
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
-    source-map: ^0.5.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
@@ -335,7 +334,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/trace-mapping": ^0.3.4
+    "@jridgewell/trace-mapping": ^0.3.8
     "@types/convert-source-map": ^1.5.1
     "@types/debug": ^4.1.0
     "@types/resolve": ^1.3.2
@@ -457,7 +456,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/trace-mapping": ^0.3.4
+    "@jridgewell/trace-mapping": ^0.3.8
     "@types/jsesc": ^2.5.0
     "@types/source-map": ^0.5.0
     charcodes: ^0.2.0
@@ -957,7 +956,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    "@jridgewell/trace-mapping": ^0.3.4
+    "@jridgewell/trace-mapping": ^0.3.8
     "@types/jest": ^27.4.1
     quick-lru: 5.1.0
     regenerator-runtime: ^0.13.7
@@ -4085,13 +4084,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.0, @jridgewell/trace-mapping@npm:^0.3.4":
+"@jridgewell/trace-mapping@npm:^0.3.0":
   version: 0.3.4
   resolution: "@jridgewell/trace-mapping@npm:0.3.4"
   dependencies:
     "@jridgewell/resolve-uri": ^3.0.3
     "@jridgewell/sourcemap-codec": ^1.4.10
   checksum: ab8bce84bbbc8c34f3ba8325ed926f8f2d3098983c10442a80c55764c4eb6e47d5b92d8ff20a0dd868c3e76a3535651fd8a0138182c290dbfc8396195685c37b
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:^0.3.8":
+  version: 0.3.8
+  resolution: "@jridgewell/trace-mapping@npm:0.3.8"
+  dependencies:
+    "@jridgewell/resolve-uri": ^3.0.3
+    "@jridgewell/sourcemap-codec": ^1.4.10
+  checksum: 4b46f28c785133773de521677983186dfe7ed80872bee57b73624527e345954139ea45dfb7551a5f04de1773dc9501b896554a8f1c9e1c44ab2146a3c66b6fda
   languageName: node
   linkType: hard
 
