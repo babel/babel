@@ -96,6 +96,32 @@ jobs:
             packages/babel-standalone/*.js
             !**/node_modules/**
 
+  build-windows:
+    name: Build Babel Artifacts On Windows
+    runs-on: windows-latest
+    # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
+    # env:
+    #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Use Node.js latest
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Build babel artifacts
+        shell: bash
+        run: |
+          BABEL_ENV=test-legacy make -j build-standalone-ci
+        env:
+          BABEL_8_BREAKING: false
+          STRIP_BABEL_8_FLAG: true
+      - name: Ensure cwd does not contain uncommitted changes
+        shell: bash
+        run: |
+          ./scripts/assert-dir-git-clean.sh
+
   lint:
     name: Lint
     needs: build
