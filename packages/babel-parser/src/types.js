@@ -1476,7 +1476,7 @@ export type TsConditionalType = TsTypeBase & {
 
 export type TsInferType = TsTypeBase & {
   type: "TSInferType",
-  typeParameter: TypeParameter,
+  typeParameter: TsTypeParameter,
 };
 
 export type TsParenthesizedType = TsTypeBase & {
