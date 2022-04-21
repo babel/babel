@@ -1,6 +1,5 @@
 import convertSourceMap from "convert-source-map";
-import { TraceMap, eachMapping } from "@jridgewell/trace-mapping";
-import sourceMap from "source-map";
+import { AnyMap, encodedMap } from "@jridgewell/trace-mapping";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -19,13 +18,7 @@ export default async function ({
   babelOptions,
 }: CmdOptions): Promise<void> {
   function buildResult(fileResults: Array<any>): CompilationOutput {
-    const map = new sourceMap.SourceMapGenerator({
-      file:
-        cliOptions.sourceMapTarget ||
-        path.basename(cliOptions.outFile || "") ||
-        "stdout",
-      sourceRoot: babelOptions.sourceRoot,
-    });
+    const mapSections = [];
 
     let code = "";
     let offset = 0;
@@ -33,37 +26,27 @@ export default async function ({
     for (const result of fileResults) {
       if (!result) continue;
 
+      mapSections.push({
+        offset: { line: offset, column: 0 },
+        map: result.map || emptyMap(),
+      });
+
       code += result.code + "\n";
-
-      if (result.map) {
-        const consumer = new TraceMap(result.map);
-
-        eachMapping(consumer, mapping => {
-          map.addMapping({
-            generated: {
-              line: mapping.generatedLine + offset,
-              column: mapping.generatedColumn,
-            },
-            source: mapping.source,
-            original:
-              mapping.source == null
-                ? null
-                : {
-                    line: mapping.originalLine,
-                    column: mapping.originalColumn,
-                  },
-          });
-        });
-
-        const { resolvedSources, sourcesContent } = consumer;
-        sourcesContent?.forEach((content, i) => {
-          if (content === null) return;
-          map.setSourceContent(resolvedSources[i], content);
-        });
-
-        offset = code.split("\n").length - 1;
-      }
+      offset += countNewlines(result.code) + 1;
     }
+
+    const map = new AnyMap({
+      version: 3,
+      file:
+        cliOptions.sourceMapTarget ||
+        path.basename(cliOptions.outFile || "") ||
+        "stdout",
+      sections: mapSections,
+    });
+    // For some reason, the spec doesn't allow sourceRoot when constructing a
+    // sectioned sorucemap. But AllMap returns a regular sourcemap, we can
+    // freely add to with a sourceRoot.
+    map.sourceRoot = babelOptions.sourceRoot;
 
     // add the inline sourcemap comment if we've either explicitly asked for inline source
     // maps, or we've requested them without any output file
@@ -71,12 +54,28 @@ export default async function ({
       babelOptions.sourceMaps === "inline" ||
       (!cliOptions.outFile && babelOptions.sourceMaps)
     ) {
-      code += "\n" + convertSourceMap.fromObject(map).toComment();
+      code += "\n" + convertSourceMap.fromObject(encodedMap(map)).toComment();
     }
 
     return {
       map: map,
       code: code,
+    };
+  }
+  function countNewlines(code: string): number {
+    let count = 0;
+    let index = -1;
+    while ((index = code.indexOf("\n", index + 1)) !== -1) {
+      count++;
+    }
+    return count;
+  }
+  function emptyMap() {
+    return {
+      version: 3,
+      names: [],
+      sources: [],
+      mappings: [],
     };
   }
 
@@ -90,7 +89,7 @@ export default async function ({
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
         const mapLoc = cliOptions.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
-        fs.writeFileSync(mapLoc, JSON.stringify(result.map));
+        fs.writeFileSync(mapLoc, JSON.stringify(encodedMap(result.map)));
       }
 
       fs.writeFileSync(cliOptions.outFile, result.code);
