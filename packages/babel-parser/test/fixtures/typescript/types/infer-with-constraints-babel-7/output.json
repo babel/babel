@@ -22,11 +22,7 @@
             {
               "type": "TSTypeParameter",
               "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}},
-              "name": {
-                "type": "Identifier",
-                "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -52,11 +48,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":30,"end":46,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":46,"index":46}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":30,"end":31,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":31,"index":31},"identifierName":"U"},
-                    "name": "U"
-                  },
+                  "name": "U",
                   "constraint": {
                     "type": "TSNumberKeyword",
                     "start":40,"end":46,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":46,"index":46}}
@@ -110,11 +102,7 @@
             {
               "type": "TSTypeParameter",
               "start":83,"end":84,"loc":{"start":{"line":2,"column":8,"index":83},"end":{"line":2,"column":9,"index":84}},
-              "name": {
-                "type": "Identifier",
-                "start":83,"end":84,"loc":{"start":{"line":2,"column":8,"index":83},"end":{"line":2,"column":9,"index":84},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -140,11 +128,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":105,"end":121,"loc":{"start":{"line":2,"column":30,"index":105},"end":{"line":2,"column":46,"index":121}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":105,"end":106,"loc":{"start":{"line":2,"column":30,"index":105},"end":{"line":2,"column":31,"index":106},"identifierName":"U"},
-                    "name": "U"
-                  },
+                  "name": "U",
                   "constraint": {
                     "type": "TSNumberKeyword",
                     "start":115,"end":121,"loc":{"start":{"line":2,"column":40,"index":115},"end":{"line":2,"column":46,"index":121}}
@@ -157,11 +141,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":129,"end":145,"loc":{"start":{"line":2,"column":54,"index":129},"end":{"line":2,"column":70,"index":145}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":129,"end":130,"loc":{"start":{"line":2,"column":54,"index":129},"end":{"line":2,"column":55,"index":130},"identifierName":"U"},
-                    "name": "U"
-                  },
+                  "name": "U",
                   "constraint": {
                     "type": "TSNumberKeyword",
                     "start":139,"end":145,"loc":{"start":{"line":2,"column":64,"index":139},"end":{"line":2,"column":70,"index":145}}
@@ -215,11 +195,7 @@
             {
               "type": "TSTypeParameter",
               "start":182,"end":183,"loc":{"start":{"line":3,"column":8,"index":182},"end":{"line":3,"column":9,"index":183}},
-              "name": {
-                "type": "Identifier",
-                "start":182,"end":183,"loc":{"start":{"line":3,"column":8,"index":182},"end":{"line":3,"column":9,"index":183},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -245,11 +221,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":204,"end":220,"loc":{"start":{"line":3,"column":30,"index":204},"end":{"line":3,"column":46,"index":220}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":204,"end":205,"loc":{"start":{"line":3,"column":30,"index":204},"end":{"line":3,"column":31,"index":205},"identifierName":"U"},
-                    "name": "U"
-                  },
+                  "name": "U",
                   "constraint": {
                     "type": "TSNumberKeyword",
                     "start":214,"end":220,"loc":{"start":{"line":3,"column":40,"index":214},"end":{"line":3,"column":46,"index":220}}
@@ -262,11 +234,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":228,"end":229,"loc":{"start":{"line":3,"column":54,"index":228},"end":{"line":3,"column":55,"index":229}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":228,"end":229,"loc":{"start":{"line":3,"column":54,"index":228},"end":{"line":3,"column":55,"index":229},"identifierName":"U"},
-                    "name": "U"
-                  }
+                  "name": "U"
                 }
               }
             ]
@@ -316,11 +284,7 @@
             {
               "type": "TSTypeParameter",
               "start":266,"end":267,"loc":{"start":{"line":4,"column":8,"index":266},"end":{"line":4,"column":9,"index":267}},
-              "name": {
-                "type": "Identifier",
-                "start":266,"end":267,"loc":{"start":{"line":4,"column":8,"index":266},"end":{"line":4,"column":9,"index":267},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -346,11 +310,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":288,"end":289,"loc":{"start":{"line":4,"column":30,"index":288},"end":{"line":4,"column":31,"index":289}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":288,"end":289,"loc":{"start":{"line":4,"column":30,"index":288},"end":{"line":4,"column":31,"index":289},"identifierName":"U"},
-                    "name": "U"
-                  }
+                  "name": "U"
                 }
               },
               {
@@ -359,11 +319,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":297,"end":313,"loc":{"start":{"line":4,"column":39,"index":297},"end":{"line":4,"column":55,"index":313}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":297,"end":298,"loc":{"start":{"line":4,"column":39,"index":297},"end":{"line":4,"column":40,"index":298},"identifierName":"U"},
-                    "name": "U"
-                  },
+                  "name": "U",
                   "constraint": {
                     "type": "TSNumberKeyword",
                     "start":307,"end":313,"loc":{"start":{"line":4,"column":49,"index":307},"end":{"line":4,"column":55,"index":313}}
@@ -417,11 +373,7 @@
             {
               "type": "TSTypeParameter",
               "start":350,"end":351,"loc":{"start":{"line":5,"column":8,"index":350},"end":{"line":5,"column":9,"index":351}},
-              "name": {
-                "type": "Identifier",
-                "start":350,"end":351,"loc":{"start":{"line":5,"column":8,"index":350},"end":{"line":5,"column":9,"index":351},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -447,11 +399,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":372,"end":388,"loc":{"start":{"line":5,"column":30,"index":372},"end":{"line":5,"column":46,"index":388}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":372,"end":373,"loc":{"start":{"line":5,"column":30,"index":372},"end":{"line":5,"column":31,"index":373},"identifierName":"U"},
-                    "name": "U"
-                  },
+                  "name": "U",
                   "constraint": {
                     "type": "TSStringKeyword",
                     "start":382,"end":388,"loc":{"start":{"line":5,"column":40,"index":382},"end":{"line":5,"column":46,"index":388}}
@@ -464,11 +412,7 @@
                 "typeParameter": {
                   "type": "TSTypeParameter",
                   "start":396,"end":412,"loc":{"start":{"line":5,"column":54,"index":396},"end":{"line":5,"column":70,"index":412}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":396,"end":397,"loc":{"start":{"line":5,"column":54,"index":396},"end":{"line":5,"column":55,"index":397},"identifierName":"U"},
-                    "name": "U"
-                  },
+                  "name": "U",
                   "constraint": {
                     "type": "TSNumberKeyword",
                     "start":406,"end":412,"loc":{"start":{"line":5,"column":64,"index":406},"end":{"line":5,"column":70,"index":412}}
