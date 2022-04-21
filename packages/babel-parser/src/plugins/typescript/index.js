@@ -2294,11 +2294,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           const typeArguments = this.tsParseTypeArgumentsInExpression();
-          if (!typeArguments) this.unexpected();
+          if (!typeArguments) throw this.unexpected();
 
           if (isOptionalCall && !this.match(tt.parenL)) {
             missingParenErrorLoc = this.state.curPosition();
-            this.unexpected();
+            throw this.unexpected();
           }
 
           if (tokenIsTemplate(this.state.type)) {
@@ -2349,7 +2349,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             throw this.unexpected();
           }
 
-          const node: N.TSInstantiationExpression = this.startNodeAt(
+          const node: N.TsInstantiationExpression = this.startNodeAt(
             startPos,
             startLoc,
           );

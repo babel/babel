@@ -1842,7 +1842,7 @@ export default class ExpressionParser extends LValParser {
   // argument to parseSubscripts to prevent it from consuming the
   // argument list.
   // https://tc39.es/ecma262/#prod-NewExpression
-  parseNew(node: N.Expression): N.NewExpression {
+  parseNew(node: N.NewExpression): N.NewExpression {
     this.parseNewCallee(node);
 
     if (this.eat(tt.parenL)) {
