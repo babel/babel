@@ -612,6 +612,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         node.exprName = this.tsParseEntityName();
       }
+      if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
+        node.typeParameters = this.tsParseTypeParameters();
+      }
       return this.finishNode(node, "TSTypeQuery");
     }
 

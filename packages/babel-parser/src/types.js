@@ -1417,6 +1417,7 @@ export type TsTypePredicate = TsTypeBase & {
 export type TsTypeQuery = TsTypeBase & {
   type: "TSTypeQuery",
   exprName: TsEntityName | TsImportType,
+  typeParameters?: TsTypeParameterInstantiation,
 };
 
 export type TsTypeLiteral = TsTypeBase & {
