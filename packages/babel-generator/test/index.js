@@ -438,12 +438,9 @@ describe("programmatic generation", function () {
   });
 
   it("flow object indentation", function () {
-    const objectStatement = t.objectTypeAnnotation(
-      [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
-      null,
-      null,
-      null,
-    );
+    const objectStatement = t.objectTypeAnnotation([
+      t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation()),
+    ]);
 
     const output = generate(objectStatement).code;
     expect(output).toBe(`{
@@ -454,9 +451,9 @@ describe("programmatic generation", function () {
   it("flow object exact", function () {
     const objectStatement = t.objectTypeAnnotation(
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
-      null,
-      null,
-      null,
+      undefined,
+      undefined,
+      undefined,
       true,
     );
 
@@ -476,7 +473,6 @@ describe("programmatic generation", function () {
           t.numberTypeAnnotation(),
         ),
       ],
-      null,
     );
 
     const output = generate(objectStatement).code;
