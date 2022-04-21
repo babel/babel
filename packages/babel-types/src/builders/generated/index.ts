@@ -2098,6 +2098,7 @@ export function tsTypePredicate(
 export { tsTypePredicate as tSTypePredicate };
 export function tsTypeQuery(
   exprName: t.TSEntityName | t.TSImportType,
+  typeParameters?: t.TSTypeParameterInstantiation | null,
 ): t.TSTypeQuery {
   return validateNode<t.TSTypeQuery>({
     type: "TSTypeQuery",

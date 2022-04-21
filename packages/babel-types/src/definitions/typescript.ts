@@ -238,9 +238,10 @@ defineType("TSTypePredicate", {
 
 defineType("TSTypeQuery", {
   aliases: ["TSType"],
-  visitor: ["exprName"],
+  visitor: ["exprName", "typeParameters"],
   fields: {
     exprName: validateType(["TSEntityName", "TSImportType"]),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 

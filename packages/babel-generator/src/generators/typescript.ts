@@ -265,6 +265,10 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
   this.word("typeof");
   this.space();
   this.print(node.exprName);
+
+  if (node.typeParameters) {
+    this.print(node.typeParameters, node);
+  }
 }
 
 export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
