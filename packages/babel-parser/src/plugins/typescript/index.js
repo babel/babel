@@ -1517,12 +1517,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Need to set `state.inType` so that we don't parse JSX in a type context.
       assert(this.state.inType);
       const type = this.tsParseNonConditionalType();
-      if (this.hasPrecedingLineBreak() || !this.eat(tt._extends)) {
+
+      const constraintForInfer =
+        type.type === "TSInferType" && type.typeParameter.constraint;
+      const inParsingConditionalType =
+        constraintForInfer && this.state.type === tt.question;
+
+      if (
+        !inParsingConditionalType &&
+        (this.hasPrecedingLineBreak() || !this.eat(tt._extends))
+      ) {
         return type;
       }
       const node: N.TsConditionalType = this.startNodeAtNode(type);
       node.checkType = type;
-      node.extendsType = this.tsParseNonConditionalType();
+
+      node.extendsType = inParsingConditionalType
+        ? ((constraintForInfer: any): N.TsType)
+        : this.tsParseNonConditionalType();
+      if (inParsingConditionalType) {
+        ((type: any): N.TsInferType).typeParameter.constraint = undefined;
+      }
+
       this.expect(tt.question);
       node.trueType = this.tsParseType();
       this.expect(tt.colon);
