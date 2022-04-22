@@ -482,6 +482,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-ast-match@workspace:packages/babel-helper-ast-match":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-ast-match@workspace:packages/babel-helper-ast-match"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/types": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@babel/helper-builder-binary-assignment-operator-visitor@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/helper-builder-binary-assignment-operator-visitor@npm:7.16.7"

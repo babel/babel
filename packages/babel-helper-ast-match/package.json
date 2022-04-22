@@ -1,0 +1,33 @@
+{
+  "name": "@babel/helper-ast-match",
+  "version": "7.17.9",
+  "author": "The Babel Team (https://babel.dev/team)",
+  "license": "MIT",
+  "description": "Helper functions for comparing babel AST ndoes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-ast-match"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "babel",
+    "babel-plugin"
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "dependencies": {
+    "@babel/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^"
+  }
+}
