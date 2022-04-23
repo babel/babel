@@ -4,6 +4,10 @@ import {
   cloneNode,
   expressionStatement,
   identifier,
+  isImportDeclaration,
+  isImportSpecifier,
+  isImportDefaultSpecifier,
+  isImportNamespaceSpecifier,
   importDeclaration,
   importDefaultSpecifier,
   importNamespaceSpecifier,
@@ -19,17 +23,20 @@ import {
  * output a new require/import statement list.
  */
 export default class ImportBuilder {
+  _body = null;
   _statements = [];
+  _statement = null;
   _resultName = null;
 
   _scope = null;
   _hub = null;
   private _importedSource: any;
 
-  constructor(importedSource, scope, hub) {
+  constructor(importedSource, { scope, hub, body }) {
+    this._importedSource = importedSource;
     this._scope = scope;
     this._hub = hub;
-    this._importedSource = importedSource;
+    this._body = body;
   }
 
   done() {
@@ -40,65 +47,128 @@ export default class ImportBuilder {
   }
 
   import() {
-    this._statements.push(
-      importDeclaration([], stringLiteral(this._importedSource)),
+    const source = this._importedSource;
+    const existingStatement = this._body.find(
+      decl => isImportDeclaration(decl) && decl.source?.value === source,
     );
+
+    if (existingStatement) {
+      this._statement = existingStatement;
+    } else {
+      this._statement = importDeclaration([], stringLiteral(source));
+      this._statements.push(this._statement);
+    }
     return this;
   }
 
   require() {
-    this._statements.push(
-      expressionStatement(
-        callExpression(identifier("require"), [
-          stringLiteral(this._importedSource),
-        ]),
-      ),
+    this._statement = expressionStatement(
+      callExpression(identifier("require"), [
+        stringLiteral(this._importedSource),
+      ]),
     );
+    this._statements.push(this._statement);
     return this;
   }
 
   namespace(name = "namespace") {
-    const local = this._scope.generateUidIdentifier(name);
+    const statement = this._statement;
+    const { type, specifiers } = statement;
 
-    const statement = this._statements[this._statements.length - 1];
-    assert(statement.type === "ImportDeclaration");
-    assert(statement.specifiers.length === 0);
-    statement.specifiers = [importNamespaceSpecifier(local)];
+    assert(type === "ImportDeclaration");
+
+    const existingSpecifier = specifiers.find(isImportNamespaceSpecifier);
+    const local = existingSpecifier
+      ? existingSpecifier.local
+      : this._scope.generateUidIdentifier(name);
+
+    if (specifiers.length > Number(!!existingSpecifier)) {
+      // There's no such syntax as `import * as ns, { name } from ''`
+      // If there were any specifiers other than a namespace, derive them from the namespace
+      for (const specifier of specifiers) {
+        if (specifier !== existingSpecifier) {
+          this._resultName = cloneNode(local);
+          this.var(specifier.local.name);
+        }
+      }
+    }
+
+    specifiers.length = 0;
+    specifiers.push(existingSpecifier || importNamespaceSpecifier(local));
+
     this._resultName = cloneNode(local);
-    return this;
-  }
-  default(name) {
-    name = this._scope.generateUidIdentifier(name);
-    const statement = this._statements[this._statements.length - 1];
-    assert(statement.type === "ImportDeclaration");
-    assert(statement.specifiers.length === 0);
-    statement.specifiers = [importDefaultSpecifier(name)];
-    this._resultName = cloneNode(name);
-    return this;
-  }
-  named(name, importName) {
-    if (importName === "default") return this.default(name);
 
-    name = this._scope.generateUidIdentifier(name);
-    const statement = this._statements[this._statements.length - 1];
-    assert(statement.type === "ImportDeclaration");
-    assert(statement.specifiers.length === 0);
-    statement.specifiers = [importSpecifier(name, identifier(importName))];
-    this._resultName = cloneNode(name);
+    return this;
+  }
+
+  default(name) {
+    const statement = this._statement;
+    const { type, specifiers } = statement;
+
+    assert(type === "ImportDeclaration");
+
+    const nsSpecifier = specifiers.find(isImportNamespaceSpecifier);
+    if (nsSpecifier) {
+      this._resultName = cloneNode(nsSpecifier.local);
+      this.var(name);
+      this.prop("default");
+    } else {
+      let local;
+      const existingSpecifier = specifiers.find(isImportDefaultSpecifier);
+      if (existingSpecifier) {
+        ({ local } = existingSpecifier);
+      } else {
+        local = this._scope.generateUidIdentifier(name);
+        specifiers.unshift(importDefaultSpecifier(local));
+      }
+
+      this._resultName = cloneNode(local);
+    }
+    return this;
+  }
+
+  named(name, importedName) {
+    if (importedName === "default") return this.default(name);
+
+    const statement = this._statement;
+    const { type, specifiers } = statement;
+
+    assert(type === "ImportDeclaration");
+
+    const nsSpecifier = specifiers.find(isImportNamespaceSpecifier);
+    if (nsSpecifier) {
+      this._resultName = cloneNode(nsSpecifier.local);
+      this.var(name);
+      this.prop(importedName);
+    } else {
+      let local;
+      const existingSpecifier = specifiers.find(
+        spec => isImportSpecifier(spec) && spec.local.name === name,
+      );
+      if (existingSpecifier) {
+        ({ local } = existingSpecifier);
+      } else {
+        local = this._scope.generateUidIdentifier(name);
+        specifiers.push(importSpecifier(local, identifier(importedName)));
+      }
+
+      this._resultName = cloneNode(local);
+    }
     return this;
   }
 
   var(name) {
     name = this._scope.generateUidIdentifier(name);
-    let statement = this._statements[this._statements.length - 1];
+    let statement = this._statement;
     if (statement.type !== "ExpressionStatement") {
       assert(this._resultName);
       statement = expressionStatement(this._resultName);
       this._statements.push(statement);
     }
-    this._statements[this._statements.length - 1] = variableDeclaration("var", [
+    this._statement = variableDeclaration("var", [
       variableDeclarator(name, statement.expression),
     ]);
+    this._statements[this._statements.length - 1] = this._statement;
     this._resultName = cloneNode(name);
     return this;
   }
@@ -106,12 +176,13 @@ export default class ImportBuilder {
   defaultInterop() {
     return this._interop(this._hub.addHelper("interopRequireDefault"));
   }
+
   wildcardInterop() {
     return this._interop(this._hub.addHelper("interopRequireWildcard"));
   }
 
   _interop(callee) {
-    const statement = this._statements[this._statements.length - 1];
+    const statement = this._statement;
     if (statement.type === "ExpressionStatement") {
       statement.expression = callExpression(callee, [statement.expression]);
     } else if (statement.type === "VariableDeclaration") {
@@ -126,7 +197,7 @@ export default class ImportBuilder {
   }
 
   prop(name) {
-    const statement = this._statements[this._statements.length - 1];
+    const statement = this._statement;
     if (statement.type === "ExpressionStatement") {
       statement.expression = memberExpression(
         statement.expression,

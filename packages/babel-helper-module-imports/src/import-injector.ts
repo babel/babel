@@ -1,5 +1,9 @@
 import assert from "assert";
-import { numericLiteral, sequenceExpression } from "@babel/types";
+import {
+  numericLiteral,
+  sequenceExpression,
+  isImportDeclaration,
+} from "@babel/types";
 import type * as t from "@babel/types";
 import type { NodePath, Scope, HubInterface } from "@babel/traverse";
 
@@ -228,11 +232,11 @@ export default class ImportInjector {
       throw new Error(`"importPosition": "after" is only supported in modules`);
     }
 
-    const builder = new ImportBuilder(
-      importedSource,
-      this._programScope,
-      this._hub,
-    );
+    const builder = new ImportBuilder(importedSource, {
+      scope: this._programScope,
+      hub: this._hub,
+      body: this._programPath.node.body,
+    });
 
     if (importedType === "es6") {
       if (!isModuleForNode && !isModuleForBabel) {
@@ -425,6 +429,9 @@ export default class ImportInjector {
   _insertStatements(statements, importPosition = "before", blockHoist = 3) {
     const body = this._programPath.get("body");
 
+    const importDeclarations = statements.filter(n => isImportDeclaration(n));
+    const otherDeclarations = statements.filter(n => !isImportDeclaration(n));
+
     if (importPosition === "after") {
       for (let i = body.length - 1; i >= 0; i--) {
         if (body[i].isImportDeclaration()) {
@@ -437,18 +444,30 @@ export default class ImportInjector {
         node._blockHoist = blockHoist;
       });
 
-      const targetPath = body.find(p => {
+      const topPathIdx = body.findIndex(p => {
         // @ts-expect-error todo(flow->ts): avoid mutations
         const val = p.node._blockHoist;
         return Number.isFinite(val) && val < 4;
       });
 
-      if (targetPath) {
-        targetPath.insertBefore(statements);
+      if (topPathIdx >= 0) {
+        body[topPathIdx].insertBefore(importDeclarations);
+
+        const topBelowImportsIdx = body.findIndex((p, i) => {
+          return i >= topPathIdx && !p.isImportDeclaration();
+        });
+
+        if (topBelowImportsIdx >= 0) {
+          body[topBelowImportsIdx].insertBefore(otherDeclarations);
+        } else {
+          this._programPath.pushContainer("body", otherDeclarations);
+        }
+
         return;
       }
     }
 
-    this._programPath.unshiftContainer("body", statements);
+    this._programPath.unshiftContainer("body", otherDeclarations);
+    this._programPath.unshiftContainer("body", importDeclarations);
   }
 }

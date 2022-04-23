@@ -18,7 +18,7 @@ function test(sourceType, opts, initializer, inputCode, expectedCode) {
     inputCode = "";
   }
 
-  const result = babel.transform(inputCode, {
+  const result = babel.transformSync(inputCode, {
     cwd,
     sourceType,
     filename: "example" + (sourceType === "module" ? ".mjs" : ".js"),
@@ -39,7 +39,7 @@ function test(sourceType, opts, initializer, inputCode, expectedCode) {
             Program(path) {
               const manager = new ImportInjector(path, opts);
 
-              const ref = initializer(manager);
+              const ref = initializer(manager, t);
               if (ref) path.pushContainer("body", t.expressionStatement(ref));
             },
           },
@@ -55,10 +55,21 @@ function test(sourceType, opts, initializer, inputCode, expectedCode) {
 const testScript = test.bind(undefined, "script");
 const testModule = test.bind(undefined, "module");
 
+const addNamespace = opts => m => m.addNamespace("source", opts);
+const addDefault = opts => m => m.addDefault("source", opts);
+const addNamed = opts => m => m.addNamed("read", "source", opts);
+const addSideEffect = opts => m => m.addSideEffect("source", opts);
+const addMultiple = opts => (m, t) => {
+  const refs = [];
+  refs.push(m.addSideEffect("source", opts));
+  refs.push(m.addNamespace("source", { nameHint: "ns", ...opts }));
+  refs.push(m.addDefault("source", opts));
+  refs.push(m.addNamed("read", "source", opts));
+  return t.arrayExpression(refs);
+};
+
 describe("@babel/helper-module-imports", () => {
   describe("namespace import", () => {
-    const addNamespace = opts => m => m.addNamespace("source", opts);
-
     describe("loading an ES6 module", () => {
       const importedType = "es6";
 
@@ -256,8 +267,6 @@ describe("@babel/helper-module-imports", () => {
   });
 
   describe("default imports", () => {
-    const addDefault = opts => m => m.addDefault("source", opts);
-
     describe("loading an ES6 module", () => {
       const importedType = "es6";
 
@@ -609,8 +618,6 @@ describe("@babel/helper-module-imports", () => {
   });
 
   describe("named imports", () => {
-    const addNamed = opts => m => m.addNamed("read", "source", opts);
-
     describe("loading an ES6 module", () => {
       const importedType = "es6";
 
@@ -939,8 +946,6 @@ describe("@babel/helper-module-imports", () => {
   });
 
   describe("side-effectful imports", () => {
-    const addSideEffect = opts => m => m.addSideEffect("source", opts);
-
     describe("loading an ES6 module", () => {
       const importedType = "es6";
 
@@ -1107,6 +1112,255 @@ describe("@babel/helper-module-imports", () => {
             addSideEffect(),
             `
               require("source");
+            `,
+          );
+        });
+      });
+    });
+  });
+
+  describe("multiple imports", () => {
+    describe("loading an ES6 module", () => {
+      const importedType = "es6";
+
+      describe("using Node's interop", () => {
+        const importingInterop = "node";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedType },
+            addMultiple(),
+            `
+              import * as _ns from "source";
+              var _read = _ns.read;
+              var _default = _ns.default;
+              [, _ns, _default, _read];
+            `,
+          );
+        });
+      });
+
+      describe("using Babel's interop", () => {
+        const importingInterop = "babel";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedType },
+            addMultiple(),
+            `
+              import * as _ns from "source";
+              var _read = _ns.read;
+              var _default = _ns.default;
+              [, _ns, _default, _read];
+            `,
+          );
+        });
+      });
+    });
+
+    describe("loading CommonJS with 'uncompiled'", () => {
+      const importedInterop = "uncompiled";
+
+      describe("using Node's interop", () => {
+        const importingInterop = "node";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedInterop },
+            addMultiple(),
+            `
+              import _ns from "source";
+              [, _ns, _ns, _ns.read];
+            `,
+          );
+        });
+      });
+
+      describe("using Babel's interop", () => {
+        const importingInterop = "babel";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedInterop },
+            addMultiple(),
+            `
+              import _ns, { read as _read } from "source";
+              [, _ns, _ns, _read];
+            `,
+          );
+        });
+      });
+
+      describe("using a CommonJS loader", () => {
+        it("should import", () => {
+          testScript(
+            { importedInterop },
+            addMultiple(),
+            `
+              var _read = require("source").read;
+              var _default = require("source");
+              var _ns = require("source");
+              require("source");
+              [, _ns, _default, _read];
+            `,
+          );
+        });
+      });
+    });
+
+    describe("loading CommonJS with 'compiled'", () => {
+      const importedInterop = "compiled";
+
+      describe("using Node's interop", () => {
+        const importingInterop = "node";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedInterop },
+            addMultiple(),
+            `
+              import _ns from "source";
+              [, _ns, _ns.default, _ns.read];
+            `,
+          );
+        });
+
+        it("should import with a force-disabled context", () => {
+          testModule(
+            { importingInterop, importedInterop, ensureNoContext: true },
+            addMultiple(),
+            `
+              import _ns from "source";
+              [, _ns, (0, _ns.default), (0, _ns.read)];
+            `,
+          );
+        });
+      });
+
+      describe("using Babel's interop", () => {
+        const importingInterop = "babel";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedInterop },
+            addMultiple(),
+            `
+              import * as _ns from "source";
+              var _read = _ns.read;
+              var _default = _ns.default;
+              [, _ns, _default, _read];
+            `,
+          );
+        });
+      });
+
+      describe("using a CommonJS loader", () => {
+        it("should import", () => {
+          testScript(
+            { importedInterop },
+            addMultiple(),
+            `
+              var _read = require("source").read;
+              var _default = require("source").default;
+              var _ns = require("source");
+              require("source");
+              [, _ns, _default, _read];
+            `,
+          );
+        });
+
+        it("should import with force-enabled liveness", () => {
+          testScript(
+            { importedInterop, ensureLiveReference: true },
+            addMultiple(),
+            `
+              var _source2 = require("source");
+              var _source = require("source");
+              var _ns = require("source");
+              require("source");
+              [, _ns, _source.default, _source2.read];
+
+            `,
+          );
+        });
+      });
+    });
+
+    describe("loading CommonJS with 'babel'", () => {
+      const importedInterop = "babel";
+
+      describe("using Node's interop", () => {
+        const importingInterop = "node";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedInterop },
+            addMultiple(),
+            `
+              import _source$es6Default from "source";
+              var _source = babelHelpers.interopRequireDefault(_source$es6Default).default;
+              var _ns = babelHelpers.interopRequireWildcard(_source$es6Default);
+              [, _ns, _source, _source$es6Default.read];
+            `,
+          );
+        });
+
+        it("should import with force-enabled liveness", () => {
+          testModule(
+            { importingInterop, importedInterop, ensureLiveReference: true },
+            addMultiple(),
+            `
+              import _source$es6Default from "source";
+              var _source = babelHelpers.interopRequireDefault(_source$es6Default);
+              var _ns = babelHelpers.interopRequireWildcard(_source$es6Default);
+              [, _ns, _source.default, _source$es6Default.read];
+            `,
+          );
+        });
+      });
+
+      describe("using Babel's interop", () => {
+        const importingInterop = "babel";
+
+        it("should import", () => {
+          testModule(
+            { importingInterop, importedInterop },
+            addMultiple(),
+            `
+              import * as _ns from "source";
+              var _read = _ns.read;
+              var _default = _ns.default;
+              [, _ns, _default, _read];
+            `,
+          );
+        });
+      });
+
+      describe("using a CommonJS loader", () => {
+        it("should import", () => {
+          testScript(
+            { importedInterop },
+            addMultiple(),
+            `
+              var _read = require("source").read;
+              var _default = babelHelpers.interopRequireDefault(require("source")).default;
+              var _ns = babelHelpers.interopRequireWildcard(require("source"));
+              require("source");
+              [, _ns, _default, _read];
+            `,
+          );
+        });
+
+        it("should import with force-enabled liveness", () => {
+          testScript(
+            { importedInterop, ensureLiveReference: true },
+            addMultiple(),
+            `
+              var _source2 = require("source");
+              var _source = babelHelpers.interopRequireDefault(require("source"));
+              var _ns = babelHelpers.interopRequireWildcard(require("source"));
+              require("source");
+              [, _ns, _source.default, _source2.read];
             `,
           );
         });
