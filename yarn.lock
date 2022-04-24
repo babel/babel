@@ -5950,7 +5950,7 @@ __metadata:
     prettier: 2.5.0
     rollup: ^2.70.2
     rollup-plugin-dts: ^2.0.0
-    rollup-plugin-polyfill-node: ^0.7.0
+    rollup-plugin-polyfill-node: ^0.9.0
     rollup-plugin-terser: ^7.0.2
     semver: ^6.3.0
     test262-stream: ^1.4.0
@@ -13668,12 +13668,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup-plugin-polyfill-node@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "rollup-plugin-polyfill-node@npm:0.7.0"
+"rollup-plugin-polyfill-node@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "rollup-plugin-polyfill-node@npm:0.9.0"
   dependencies:
     "@rollup/plugin-inject": ^4.0.0
-  checksum: 579029a104cd5a8e2593db720cb15023e3e6d0f90c969db68baca54174a99aee297b46639f69b44cc6833ceedb95047ba146e3eec3a8b832b77e226e86d18a8f
+  peerDependencies:
+    rollup: ^1.20.0 || ^2.0.0
+  checksum: a7531a850cf5c8a8d8705aacdad449c14f25368d98cf1f06f22b5f300fde45ac9b1eda533d61e7377366b3ce4ade2075b2deb7c55b9f823d9e609d1d6c23d925
   languageName: node
   linkType: hard
 
