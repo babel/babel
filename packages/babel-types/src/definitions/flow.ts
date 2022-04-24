@@ -272,9 +272,21 @@ defineType("ObjectTypeAnnotation", {
     properties: validate(
       arrayOfType(["ObjectTypeProperty", "ObjectTypeSpreadProperty"]),
     ),
-    indexers: validateOptional(arrayOfType("ObjectTypeIndexer")),
-    callProperties: validateOptional(arrayOfType("ObjectTypeCallProperty")),
-    internalSlots: validateOptional(arrayOfType("ObjectTypeInternalSlot")),
+    indexers: {
+      validate: arrayOfType("ObjectTypeIndexer"),
+      optional: process.env.BABEL_8_BREAKING ? false : true,
+      default: process.env.BABEL_8_BREAKING ? [] : undefined,
+    },
+    callProperties: {
+      validate: arrayOfType("ObjectTypeCallProperty"),
+      optional: process.env.BABEL_8_BREAKING ? false : true,
+      default: process.env.BABEL_8_BREAKING ? [] : undefined,
+    },
+    internalSlots: {
+      validate: arrayOfType("ObjectTypeInternalSlot"),
+      optional: process.env.BABEL_8_BREAKING ? false : true,
+      default: process.env.BABEL_8_BREAKING ? [] : undefined,
+    },
     exact: {
       validate: assertValueType("boolean"),
       default: false,
