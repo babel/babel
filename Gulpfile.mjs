@@ -12,12 +12,11 @@ import { rollup } from "rollup";
 import { babel as rollupBabel } from "@rollup/plugin-babel";
 import rollupCommonJs from "@rollup/plugin-commonjs";
 import rollupJson from "@rollup/plugin-json";
-import rollupNodePolyfills from "rollup-plugin-node-polyfills";
+import rollupPolyfillNode from "rollup-plugin-polyfill-node";
 import rollupNodeResolve from "@rollup/plugin-node-resolve";
 import rollupReplace from "@rollup/plugin-replace";
 import { terser as rollupTerser } from "rollup-plugin-terser";
-import _rollupDts from "rollup-plugin-dts";
-const { default: rollupDts } = _rollupDts;
+import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
 import glob from "glob";
 import { resolve as importMetaResolve } from "import-meta-resolve";
@@ -297,8 +296,6 @@ function buildRollup(packages, targetBrowsers) {
           input,
           external,
           onwarn(warning, warn) {
-            const osifyPath = str => str.split("/").join(path.sep);
-
             if (warning.code === "CIRCULAR_DEPENDENCY") return;
             if (warning.code === "UNUSED_EXTERNAL_IMPORT") {
               warn(warning);
@@ -310,15 +307,14 @@ function buildRollup(packages, targetBrowsers) {
             // We can safely ignore this warning, and let Rollup replace it with undefined.
             if (
               warning.code === "MISSING_EXPORT" &&
-              warning.exporter ===
-                osifyPath("packages/babel-core/src/index.ts") &&
+              warning.exporter === "packages/babel-core/src/index.ts" &&
               warning.missing === "default" &&
               [
                 "@babel/helper-define-polyfill-provider",
                 "babel-plugin-polyfill-corejs2",
                 "babel-plugin-polyfill-corejs3",
                 "babel-plugin-polyfill-regenerator",
-              ].some(pkg => warning.importer.includes(osifyPath(pkg)))
+              ].some(pkg => warning.importer.includes(pkg))
             ) {
               return;
             }
@@ -348,8 +344,6 @@ function buildRollup(packages, targetBrowsers) {
                 // Rollup doesn't read export maps, so it loads the cjs fallback
                 "packages/babel-compat-data/*.js",
                 "packages/*/src/**/*.cjs",
-                // See the comment in this file for the reason to include it
-                "packages/babel-standalone/src/dynamic-require-entrypoint.cjs",
               ],
               dynamicRequireTargets: [
                 // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
@@ -361,7 +355,7 @@ function buildRollup(packages, targetBrowsers) {
                 ) + "/**/*.js",
               ],
               // Never delegate to the native require()
-              ignoreDynamicRequires: true,
+              ignoreDynamicRequires: false,
               // Align with the Node.js behavior
               defaultIsModuleExports: true,
             }),
@@ -382,7 +376,7 @@ function buildRollup(packages, targetBrowsers) {
             }),
             rollupJson(),
             targetBrowsers &&
-              rollupNodePolyfills({
+              rollupPolyfillNode({
                 sourceMap: sourcemap,
                 include: "**/*.{js,cjs,ts}",
               }),
