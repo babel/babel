@@ -60,10 +60,10 @@
                 "start":26,"end":51,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":51,"index":51}},
                 "checkType": {
                   "type": "TSInferType",
-                  "start":26,"end":43,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":43,"index":43}},
+                  "start":26,"end":33,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":33,"index":33}},
                   "typeParameter": {
                     "type": "TSTypeParameter",
-                    "start":32,"end":43,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":43,"index":43}},
+                    "start":32,"end":33,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":33,"index":33}},
                     "name": {
                       "type": "Identifier",
                       "start":32,"end":33,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":33,"index":33},"identifierName":"U"},
