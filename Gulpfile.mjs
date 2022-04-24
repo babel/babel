@@ -356,7 +356,7 @@ function buildRollup(packages, targetBrowsers) {
                 ) + "/**/*.js",
               ],
               // Never delegate to the native require()
-              ignoreDynamicRequires: true,
+              ignoreDynamicRequires: false,
               // Align with the Node.js behavior
               defaultIsModuleExports: true,
             }),
