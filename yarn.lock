@@ -5954,7 +5954,7 @@ __metadata:
     husky: ^7.0.4
     import-meta-resolve: ^1.1.1
     jest: ^27.4.0
-    jest-light-runner: ^0.1.0
+    jest-light-runner: ^0.1.3
     jest-worker: ^27.4.0
     lint-staged: ^9.2.0
     mergeiterator: ^1.4.4
@@ -10638,9 +10638,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-light-runner@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "jest-light-runner@npm:0.1.0"
+"jest-light-runner@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "jest-light-runner@npm:0.1.3"
   dependencies:
     expect: ^27.5.1
     jest-circus: ^27.5.1
@@ -10651,7 +10651,7 @@ fsevents@^1.2.7:
     supports-color: ^9.2.1
   peerDependencies:
     jest: ^27.0.0
-  checksum: b5381d1d1123230cc8491e2639f0c512c0033cdbff9e27108f46e339a33fb8392abd22666d991301c88d505f4579faad1422c853cf46825b8de149f1d56b0014
+  checksum: 63436c7d2f73d3df0636cb689213eb09789b5677266747e8fc0eeebfef6fc8f4f7f4e138a962c621e6ab80fea8f0fd827e77c2fa50d499aa4fc1ffdc347f00d0
   languageName: node
   linkType: hard
 
