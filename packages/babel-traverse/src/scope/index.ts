@@ -53,6 +53,8 @@ import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 import type { Visitor } from "../types";
 
+type IDGenerator = (i?: number, name?: string) => string;
+
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: t.Node, parts: any[]) {
   switch (node?.type) {
@@ -460,8 +462,11 @@ export default class Scope {
    * Generate a unique identifier and add it to the current scope.
    */
 
-  generateDeclaredUidIdentifier(name?: string) {
-    const id = this.generateUidIdentifier(name);
+  generateDeclaredUidIdentifier(
+    name?: string,
+    generator: IDGenerator = this._generateUid,
+  ) {
+    const id = this.generateUidIdentifier(name, generator);
     this.push({ id });
     return cloneNode(id);
   }
@@ -470,15 +475,21 @@ export default class Scope {
    * Generate a unique identifier.
    */
 
-  generateUidIdentifier(name?: string) {
-    return identifier(this.generateUid(name));
+  generateUidIdentifier(
+    name?: string,
+    generator: IDGenerator = this._generateUid,
+  ) {
+    return identifier(this.generateUid(name, generator));
   }
 
   /**
    * Generate a unique `_id1` binding.
    */
 
-  generateUid(name: string = "temp"): string {
+  generateUid(
+    name: string = "temp",
+    generator: IDGenerator = this._generateUid,
+  ): string {
     name = toIdentifier(name)
       .replace(/^_+/, "")
       .replace(/[0-9]+$/g, "");
@@ -486,7 +497,7 @@ export default class Scope {
     let uid;
     let i = 1;
     do {
-      uid = this._generateUid(name, i);
+      uid = generator(i, name);
       i++;
     } while (
       this.hasLabel(uid) ||
@@ -506,10 +517,8 @@ export default class Scope {
    * Generate an `_id1`.
    */
 
-  _generateUid(name, i) {
-    let id = name;
-    if (i > 1) id += i;
-    return `_${id}`;
+  _generateUid(i: number, name: string) {
+    return i > 1 ? `_${name}${i}` : `_${name}`;
   }
 
   generateUidBasedOnNode(node: t.Node, defaultName?: string) {
