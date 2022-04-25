@@ -160,8 +160,8 @@ jobs:
       - name: Install
         run: |
           yarn install
-      - name: Downgrade Jest for node <= 8
-        if: matrix.node-version == '6' || matrix.node-version == '8'
+      - name: Downgrade Jest for node <= 10
+        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         run: |
           yarn remove jest
           yarn add --dev jest@24
