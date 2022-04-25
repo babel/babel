@@ -61,7 +61,7 @@
     "gulp-plumber": "^1.2.1",
     "husky": "^7.0.4",
     "import-meta-resolve": "^1.1.1",
-    "jest": "^27.4.0",
+    "jest": "^28.0.3",
     "jest-light-runner": "^0.2.1",
     "jest-worker": "^27.4.0",
     "lint-staged": "^9.2.0",
