@@ -419,6 +419,8 @@ expect.extend({
     const pass = actual === code;
     return {
       pass,
+      actual,
+      expected: code,
       message: () => {
         const diffString = this.utils.diff(code, actual, {
           expand: false,

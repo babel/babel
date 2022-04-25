@@ -27,16 +27,18 @@ export default class ImportBuilder {
   _statements = [];
   _statement = null;
   _resultName = null;
+  _plainUids = false;
 
   _scope = null;
   _hub = null;
   private _importedSource: any;
 
-  constructor(importedSource, { scope, hub, body }) {
+  constructor(importedSource, { scope, hub, body, plainUids }) {
     this._importedSource = importedSource;
     this._scope = scope;
     this._hub = hub;
     this._body = body;
+    this._plainUids = plainUids;
   }
 
   done() {
@@ -44,6 +46,15 @@ export default class ImportBuilder {
       statements: this._statements,
       resultName: this._resultName,
     };
+  }
+
+  generateIdentifier(name, generated) {
+    return this._scope.generateUidIdentifier(
+      name,
+      !generated && this._plainUids
+        ? i => (i > 1 ? `${name}_${i}` : name)
+        : undefined,
+    );
   }
 
   import() {
@@ -71,7 +82,7 @@ export default class ImportBuilder {
     return this;
   }
 
-  namespace(name = "namespace") {
+  namespace(name = "namespace", generated = true) {
     const statement = this._statement;
     const { type, specifiers } = statement;
 
@@ -80,7 +91,7 @@ export default class ImportBuilder {
     const existingSpecifier = specifiers.find(isImportNamespaceSpecifier);
     const local = existingSpecifier
       ? existingSpecifier.local
-      : this._scope.generateUidIdentifier(name);
+      : this.generateIdentifier(name, generated);
 
     if (specifiers.length > Number(!!existingSpecifier)) {
       // There's no such syntax as `import * as ns, { name } from ''`
@@ -101,7 +112,7 @@ export default class ImportBuilder {
     return this;
   }
 
-  default(name) {
+  default(name, generated = true) {
     const statement = this._statement;
     const { type, specifiers } = statement;
 
@@ -118,7 +129,7 @@ export default class ImportBuilder {
       if (existingSpecifier) {
         ({ local } = existingSpecifier);
       } else {
-        local = this._scope.generateUidIdentifier(name);
+        local = this.generateIdentifier(name, generated);
         specifiers.unshift(importDefaultSpecifier(local));
       }
 
@@ -148,7 +159,7 @@ export default class ImportBuilder {
       if (existingSpecifier) {
         ({ local } = existingSpecifier);
       } else {
-        local = this._scope.generateUidIdentifier(name);
+        local = this.generateIdentifier(name, false);
         specifiers.push(importSpecifier(local, identifier(importedName)));
       }
 
@@ -158,7 +169,7 @@ export default class ImportBuilder {
   }
 
   var(name) {
-    name = this._scope.generateUidIdentifier(name);
+    name = this.generateIdentifier(name, true);
     let statement = this._statement;
     if (statement.type !== "ExpressionStatement") {
       assert(this._resultName);

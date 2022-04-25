@@ -10,6 +10,10 @@ import type { NodePath, Scope, HubInterface } from "@babel/traverse";
 import ImportBuilder from "./import-builder";
 import isModule from "./is-module";
 
+function when(condition, obj) {
+  return condition ? obj : {};
+}
+
 export type ImportOptions = {
   /**
    * The module being referenced.
@@ -96,6 +100,10 @@ export type ImportOptions = {
    * reliably pick the location _after_ require() calls but _before_ other code in CJS.
    */
   importPosition: "before" | "after";
+  /**
+   * Define whether specifier local names should be prefixed with _
+   */
+  plainUids: boolean;
 
   nameHint?;
   blockHoist?;
@@ -123,7 +131,7 @@ export default class ImportInjector {
   /**
    * The default options to use with this instance when imports are added.
    */
-  _defaultOpts: ImportOptions = {
+  _opts: ImportOptions = {
     importedSource: null,
     importedType: "commonjs",
     importedInterop: "babel",
@@ -131,6 +139,7 @@ export default class ImportInjector {
     ensureLiveReference: false,
     ensureNoContext: false,
     importPosition: "before",
+    plainUids: false,
   };
 
   constructor(path: NodePath, importedSource?, opts?) {
@@ -140,68 +149,48 @@ export default class ImportInjector {
     this._programScope = programPath.scope;
     this._hub = programPath.hub;
 
-    this._defaultOpts = this._applyDefaults(importedSource, opts, true);
+    this._opts = this._mergeOpts(importedSource, opts, true);
   }
 
-  addDefault(importedSourceIn, opts) {
-    return this.addNamed("default", importedSourceIn, opts);
+  addDefault(importedSource, opts) {
+    return this.addNamed("default", importedSource, opts);
   }
 
-  addNamed(importName, importedSourceIn, opts) {
-    assert(typeof importName === "string");
-
-    return this._generateImport(
-      this._applyDefaults(importedSourceIn, opts),
-      importName,
-    );
+  addNamed(importedName, importedSource, opts) {
+    assert(typeof importedName === "string");
+    // prettier-ignore
+    return this._generateImport(this._mergeOpts(importedSource, opts), importedName);
   }
 
-  addNamespace(importedSourceIn, opts) {
-    return this._generateImport(
-      this._applyDefaults(importedSourceIn, opts),
-      null,
-    );
+  addNamespace(importedSource, opts) {
+    return this._generateImport(this._mergeOpts(importedSource, opts), null);
   }
 
-  addSideEffect(importedSourceIn, opts) {
-    return this._generateImport(
-      this._applyDefaults(importedSourceIn, opts),
-      false,
-    );
+  addSideEffect(importedSource, opts) {
+    return this._generateImport(this._mergeOpts(importedSource, opts), false);
   }
 
-  _applyDefaults(importedSource, opts, isInit = false) {
-    const optsList = [];
-    if (typeof importedSource === "string") {
-      optsList.push({ importedSource });
-      optsList.push(opts);
-    } else {
+  _mergeOpts(importedSource, opts, isInit = false) {
+    // Everything that calls _mergeOpts is actually overloaded...
+    if (importedSource !== undefined && typeof importedSource !== "string") {
       assert(!opts, "Unexpected secondary arguments.");
-
-      optsList.push(importedSource);
+      opts = importedSource;
+      importedSource = undefined;
     }
 
-    const newOpts: ImportOptions = {
-      ...this._defaultOpts,
+    return {
+      ...this._opts,
+      ...opts,
+      ...when(importedSource !== undefined, { importedSource }),
+      // nameHint and blockHoist must be defined per-import not per-builder
+      ...when(isInit, { nameHint: undefined, blockHoist: undefined }),
     };
-    for (const opts of optsList) {
-      if (!opts) continue;
-      Object.keys(newOpts).forEach(key => {
-        if (opts[key] !== undefined) newOpts[key] = opts[key];
-      });
-
-      if (!isInit) {
-        if (opts.nameHint !== undefined) newOpts.nameHint = opts.nameHint;
-        if (opts.blockHoist !== undefined) newOpts.blockHoist = opts.blockHoist;
-      }
-    }
-    return newOpts;
   }
 
-  _generateImport(opts, importName) {
-    const isDefault = importName === "default";
-    const isNamed = !!importName && !isDefault;
-    const isNamespace = importName === null;
+  _generateImport(opts, importedName) {
+    const isDefault = importedName === "default";
+    const isNamed = !!importedName && !isDefault;
+    const isNamespace = importedName === null;
 
     const {
       importedSource,
@@ -212,6 +201,7 @@ export default class ImportInjector {
       ensureNoContext,
       nameHint,
       importPosition,
+      plainUids,
 
       // Not meant for public usage. Allows code that absolutely must control
       // ordering to set a specific hoist value on the import nodes.
@@ -222,7 +212,7 @@ export default class ImportInjector {
     // Provide a hint for generateUidIdentifier for the local variable name
     // to use for the import, if the code will generate a simple assignment
     // to a variable.
-    let name = nameHint || importName;
+    let name = nameHint || importedName;
 
     const isMod = isModule(this._programPath);
     const isModuleForNode = isMod && importingInterop === "node";
@@ -236,6 +226,7 @@ export default class ImportInjector {
       scope: this._programScope,
       hub: this._hub,
       body: this._programPath.node.body,
+      plainUids,
     });
 
     if (importedType === "es6") {
@@ -248,9 +239,9 @@ export default class ImportInjector {
       // import { named } from ''; named
       builder.import();
       if (isNamespace) {
-        builder.namespace(nameHint || importedSource);
+        builder.namespace(nameHint || importedSource, !!nameHint);
       } else if (isDefault || isNamed) {
-        builder.named(name, importName);
+        builder.named(name, importedName);
       }
     } else if (importedType !== "commonjs") {
       throw new Error(`Unexpected interopType "${importedType}"`);
@@ -280,10 +271,10 @@ export default class ImportInjector {
               .default(es6Default)
               .var(name)
               .defaultInterop()
-              .prop(importName);
+              .prop(importedName);
           }
         } else if (isNamed) {
-          builder.default(es6Default).read(importName);
+          builder.default(es6Default).read(importedName);
         }
       } else if (isModuleForBabel) {
         // import * as namespace from ''; namespace
@@ -291,9 +282,9 @@ export default class ImportInjector {
         // import { named } from ''; named
         builder.import();
         if (isNamespace) {
-          builder.namespace(name || importedSource);
+          builder.namespace(name || importedSource, !!importedSource);
         } else if (isDefault || isNamed) {
-          builder.named(name, importName);
+          builder.named(name, importedName);
         }
       } else {
         // var namespace = interopRequireWildcard(require(''));
@@ -305,15 +296,15 @@ export default class ImportInjector {
         } else if ((isDefault || isNamed) && ensureLiveReference) {
           if (isDefault) {
             name = name !== "default" ? name : importedSource;
-            builder.var(name).read(importName);
+            builder.var(name).read(importedName);
             builder.defaultInterop();
           } else {
-            builder.var(importedSource).read(importName);
+            builder.var(importedSource).read(importedName);
           }
         } else if (isDefault) {
-          builder.var(name).defaultInterop().prop(importName);
+          builder.var(name).defaultInterop().prop(importedName);
         } else if (isNamed) {
-          builder.var(name).prop(importName);
+          builder.var(name).prop(importedName);
         }
       }
     } else if (importedInterop === "compiled") {
@@ -324,7 +315,7 @@ export default class ImportInjector {
 
         builder.import();
         if (isNamespace) {
-          builder.default(name || importedSource);
+          builder.default(name || importedSource, !!name);
         } else if (isDefault || isNamed) {
           builder.default(importedSource).read(name);
         }
@@ -337,9 +328,9 @@ export default class ImportInjector {
 
         builder.import();
         if (isNamespace) {
-          builder.namespace(name || importedSource);
+          builder.namespace(name || importedSource, !!name);
         } else if (isDefault || isNamed) {
-          builder.named(name, importName);
+          builder.named(name, importedName);
         }
       } else {
         // var namespace = require(''); namespace
@@ -353,7 +344,7 @@ export default class ImportInjector {
           if (ensureLiveReference) {
             builder.var(importedSource).read(name);
           } else {
-            builder.prop(importName).var(name);
+            builder.prop(importedName).var(name);
           }
         }
       }
@@ -368,9 +359,9 @@ export default class ImportInjector {
         // import namespace from ''; namespace.named
         builder.import();
         if (isNamespace) {
-          builder.default(name || importedSource);
+          builder.default(name || importedSource, !!name);
         } else if (isDefault) {
-          builder.default(name);
+          builder.default(name, true);
         } else if (isNamed) {
           builder.default(importedSource).read(name);
         }
@@ -384,11 +375,11 @@ export default class ImportInjector {
 
         builder.import();
         if (isNamespace) {
-          builder.default(name || importedSource);
+          builder.default(name || importedSource, !!name);
         } else if (isDefault) {
-          builder.default(name);
+          builder.default(name, true);
         } else if (isNamed) {
-          builder.named(name, importName);
+          builder.named(name, importedName);
         }
       } else {
         // var namespace = require(''); namespace
@@ -404,7 +395,7 @@ export default class ImportInjector {
           if (ensureLiveReference) {
             builder.var(importedSource).read(name);
           } else {
-            builder.var(name).prop(importName);
+            builder.var(name).prop(importedName);
           }
         }
       }
