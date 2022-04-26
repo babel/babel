@@ -5,6 +5,7 @@
     "transform-parameters",
     "transform-block-scoping",
     "proposal-object-rest-spread",
-    "transform-regenerator"
+    "transform-regenerator",
+    "../../../res/checkScopeInfo.js"
   ]
 }

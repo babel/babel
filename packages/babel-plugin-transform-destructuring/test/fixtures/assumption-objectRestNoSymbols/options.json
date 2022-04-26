@@ -1,5 +1,5 @@
 {
-  "plugins": ["transform-destructuring"],
+  "plugins": ["transform-destructuring", "../../../res/checkScopeInfo.js"],
   "assumptions": {
     "objectRestNoSymbols": true
   }

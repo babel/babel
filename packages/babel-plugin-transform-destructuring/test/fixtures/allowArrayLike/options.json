@@ -1,0 +1,3 @@
+{
+  "plugins": ["relative/path/to/checkScopeInfo.js"]
+}
