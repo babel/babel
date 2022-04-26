@@ -9,7 +9,7 @@ import type {
   SimpleType,
 } from "../caching";
 
-import type { CallerMetadata } from "../validation/options";
+import type { AssumptionName, CallerMetadata } from "../validation/options";
 
 import * as Context from "../cache-contexts";
 
@@ -24,7 +24,7 @@ type CallerFactory = (
   extractor: (callerMetadata: CallerMetadata | void) => unknown,
 ) => SimpleType;
 type TargetsFunction = () => Targets;
-type AssumptionFunction = (name: string) => boolean | void;
+type AssumptionFunction = (name: AssumptionName) => boolean;
 
 export type ConfigAPI = {
   version: string;

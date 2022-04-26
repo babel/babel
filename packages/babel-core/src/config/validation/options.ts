@@ -254,7 +254,7 @@ type EnvPath = Readonly<{
 
 export type NestingPath = RootPath | OverridesPath | EnvPath;
 
-export const assumptionsNames = new Set<string>([
+const knownAssumptions = [
   "arrayLikeIsIterable",
   "constantReexports",
   "constantSuper",
@@ -276,7 +276,9 @@ export const assumptionsNames = new Set<string>([
   "setSpreadProperties",
   "skipForOfIteratorClosing",
   "superIsCallableConstructor",
-]);
+] as const;
+export type AssumptionName = typeof knownAssumptions[number];
+export const assumptionsNames = new Set(knownAssumptions);
 
 function getSource(loc: NestingPath): OptionsSource {
   return loc.type === "root" ? loc.source : getSource(loc.parent);
