@@ -83,7 +83,7 @@ export default declare((api, options) => {
             t.expressionStatement(t.assignmentExpression("=", left, temp)),
           );
 
-          path.scope.crawl();
+          scope.crawl();
           return;
         }
 
@@ -117,7 +117,7 @@ export default declare((api, options) => {
         const block = node.body;
         // @ts-expect-error: ensureBlock ensures that node.body is a BlockStatement
         block.body = nodes.concat(block.body);
-        path.scope.crawl();
+        scope.crawl();
       },
 
       CatchClause({ node, scope }) {
@@ -142,6 +142,7 @@ export default declare((api, options) => {
         destructuring.init(pattern, ref);
 
         node.body.body = nodes.concat(node.body.body);
+        scope.crawl();
       },
 
       AssignmentExpression(path, state) {
