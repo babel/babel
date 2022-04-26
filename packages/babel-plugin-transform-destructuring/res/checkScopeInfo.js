@@ -7,11 +7,12 @@ module.exports = () => {
           // so that this plugin is always called after the transform-destructuring plugin
           programPath.traverse({
             VariableDeclarator(path) {
-              const b = path.scope.getBinding(path.get("id").node.name);
-              if (!b) {
-                throw new Error(
-                  `No original binding for ${path.get("id").node.name}`
-                );
+              const names = Object.keys(path.getBindingIdentifiers());
+              for (const name of names) {
+                const b = path.scope.getBinding(name);
+                if (!b) {
+                  throw new Error(`No binding for ${name}`);
+                }
               }
             },
           });
