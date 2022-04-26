@@ -637,6 +637,7 @@ export function convertVariableDeclaration(
   } else {
     path.replaceWithMultiple(nodesOut);
   }
+  path.scope.crawl();
 }
 
 export function convertAssignmentExpression(

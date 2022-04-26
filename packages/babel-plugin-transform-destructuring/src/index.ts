@@ -54,6 +54,7 @@ export default declare((api, options) => {
         // top-level statement.
         path.replaceWith(declaration.node);
         path.insertAfter(t.exportNamedDeclaration(null, specifiers));
+        path.scope.crawl();
       },
 
       ForXStatement(path) {
