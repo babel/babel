@@ -46,14 +46,24 @@ export default function generateCode(
     throw new Error("More than one plugin attempted to override codegen.");
   }
 
-  let { code: outputCode, map: outputMap } = result;
+  // Decoded maps are faster to merge, so we attempt to get use the decodedMap
+  // first. But to preserve backwards compat with older Generator, we'll fall
+  // back to the encoded map.
+  let { code: outputCode, decodedMap: outputMap = result.map } = result;
 
-  if (outputMap && inputMap) {
-    outputMap = mergeSourceMap(
-      inputMap.toObject(),
-      outputMap,
-      generatorOpts.sourceFileName,
-    );
+  if (outputMap) {
+    if (inputMap) {
+      // mergeSourceMap returns an encoded map
+      outputMap = mergeSourceMap(
+        inputMap.toObject(),
+        outputMap,
+        generatorOpts.sourceFileName,
+      );
+    } else {
+      // We cannot output a decoded map, so retrieve the encoded form. Because
+      // the decoded form is free, it's fine to prioritize decoded first.
+      outputMap = result.map;
+    }
   }
 
   if (opts.sourceMaps === "inline" || opts.sourceMaps === "both") {

@@ -2,6 +2,19 @@ import type SourceMap from "./source-map";
 import type * as t from "@babel/types";
 import * as charcodes from "charcodes";
 
+import type {
+  EncodedSourceMap,
+  DecodedSourceMap,
+  Mapping,
+} from "@jridgewell/gen-mapping";
+
+type Result = {
+  code: string;
+  map: EncodedSourceMap | undefined | null;
+  decodedMap: DecodedSourceMap | undefined | null;
+  rawMappings: Mapping[] | null;
+};
+
 const SPACES_RE = /^[ \t]+$/;
 export default class Buffer {
   constructor(map?: SourceMap | null) {
@@ -38,32 +51,32 @@ export default class Buffer {
    * Get the final string output from the buffer, along with the sourcemap if one exists.
    */
 
-  get() {
+  get(): Result {
     this._flush();
 
     const map = this._map;
-    const result = {
+    const result: Result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
       code: this._buf.trimRight(),
-      map: null,
-      rawMappings: map?.getRawMappings(),
-    };
+      // Decoded sourcemap is free to generate.
+      decodedMap: map?.getDecoded(),
 
-    if (map) {
-      // The `.map` property is lazy to allow callers to use the raw mappings
-      // without any overhead
-      Object.defineProperty(result, "map", {
-        configurable: true,
-        enumerable: true,
-        get() {
-          return (this.map = map.get());
-        },
-        set(value) {
-          Object.defineProperty(this, "map", { value, writable: true });
-        },
-      });
-    }
+      // Encoding the sourcemap is moderately CPU expensive.
+      get map() {
+        return (result.map = map?.get());
+      },
+      set map(value) {
+        Object.defineProperty(result, "map", { value, writable: true });
+      },
+      // Retrieving the raw mappings is very memory intensive.
+      get rawMappings() {
+        return (result.rawMappings = map?.getRawMappings());
+      },
+      set rawMappings(value) {
+        Object.defineProperty(result, "rawMappings", { value, writable: true });
+      },
+    };
 
     return result;
   }
@@ -158,8 +171,7 @@ export default class Buffer {
     force?: boolean,
   ): void {
     this._map?.mark(
-      this._position.line,
-      this._position.column,
+      this._position,
       line,
       column,
       identifierName,

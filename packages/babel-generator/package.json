@@ -20,15 +20,14 @@
   ],
   "dependencies": {
     "@babel/types": "workspace:^",
-    "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1",
-    "source-map": "^0.5.0"
+    "@jridgewell/gen-mapping": "^0.0.0",
+    "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
   },
   "devDependencies": {
     "@babel/helper-fixtures": "workspace:^",
     "@babel/parser": "workspace:^",
     "@jridgewell/trace-mapping": "^0.3.8",
     "@types/jsesc": "^2.5.0",
-    "@types/source-map": "^0.5.0",
     "charcodes": "^0.2.0"
   },
   "engines": {
