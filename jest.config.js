@@ -38,7 +38,6 @@ module.exports = {
     ...(isPublishBundle ? ["\\.skip-bundled\\.js$"] : []),
   ],
   testEnvironment: "node",
-  setupFilesAfterEnv: ["<rootDir>/test/testSetupFile.js"],
   transformIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
