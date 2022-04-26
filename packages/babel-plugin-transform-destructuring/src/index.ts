@@ -83,6 +83,7 @@ export default declare((api, options) => {
             t.expressionStatement(t.assignmentExpression("=", left, temp)),
           );
 
+          path.scope.crawl();
           return;
         }
 
@@ -116,6 +117,7 @@ export default declare((api, options) => {
         const block = node.body;
         // @ts-expect-error: ensureBlock ensures that node.body is a BlockStatement
         block.body = nodes.concat(block.body);
+        path.scope.crawl();
       },
 
       CatchClause({ node, scope }) {

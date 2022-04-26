@@ -51,26 +51,20 @@ describe("regression-14438", function () {
       });
     });
 
-    it("transforms the ast", function () {
-      expect(transformed.ast).toBeTruthy();
-    });
-
-    it("has correct scope information for fixture before transform", function () {
-      traverse(originalAst, {
-        Identifier(path) {
-          const b = path.scope.getBinding(path.node.name);
-          expect(b).toBeTruthy();
-        },
-      });
-    });
-
-    it("has correct scope information for fixture after transform", function () {
-      traverse(transformed.ast, {
-        Identifier(path) {
-          const b = path.scope.getBinding(path.node.name);
-          expect(b).toBeTruthy();
-        },
-      });
+    it("has correct scope information after transform", function () {
+      if (transformed.ast) {
+        // exclude transformation failures: they're tested by the other cases
+        traverse(transformed.ast, {
+          VariableDeclarator(path) {
+            const b = path.scope.getBinding(path.get("id").node.name);
+            if (!b) {
+              throw new Error(
+                `No original binding for ${path.get("id").node.name}`,
+              );
+            }
+          },
+        });
+      }
     });
   });
 });
