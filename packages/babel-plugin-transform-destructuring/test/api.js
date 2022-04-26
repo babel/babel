@@ -54,6 +54,7 @@ describe("regression-14438", function () {
     it("has correct scope information after transform", function () {
       if (transformed.ast) {
         // exclude transformation failures: they're tested by the other cases
+        traverse.cache.clear();
         traverse(transformed.ast, {
           VariableDeclarator(path) {
             const b = path.scope.getBinding(path.get("id").node.name);
