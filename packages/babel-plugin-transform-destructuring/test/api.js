@@ -21,39 +21,56 @@ const files = await new Promise((resolve, reject) => {
 });
 
 describe("regression-14438", function () {
-  it.each(files)("has correct scope information for fixture %s", async file => {
-    const src = await fs.readFile(file, "utf-8");
+  describe.each(files)("fixture: %s", file => {
+    let src, originalAst, transformed;
 
-    const originalAst = parse(src, {
-      allowImportExportEverywhere: true,
-      allowAwaitOutsideFunction: true,
-      allowReturnOutsideFunction: true,
-      allowSuperOutsideMethod: true,
-      allowUndeclaredExports: true,
-      errorRecovery: true,
-      attachComment: false,
-      createParenthesizedExpressions: true,
-    });
+    beforeEach(async () => {
+      src = await fs.readFile(file, "utf-8");
 
-    const res = transformFromAstSync(originalAst, src, {
-      plugins: [
-        [
-          "@babel/plugin-transform-destructuring",
-          { useBuiltIns: true, loose: true },
+      originalAst = parse(src, {
+        allowImportExportEverywhere: true,
+        allowAwaitOutsideFunction: true,
+        allowReturnOutsideFunction: true,
+        allowSuperOutsideMethod: true,
+        allowUndeclaredExports: true,
+        errorRecovery: true,
+        attachComment: false,
+        createParenthesizedExpressions: true,
+      });
+
+      transformed = transformFromAstSync(originalAst, src, {
+        plugins: [
+          [
+            "@babel/plugin-transform-destructuring",
+            { useBuiltIns: true, loose: true },
+          ],
         ],
-      ],
-      configFile: false,
-      ast: true,
-      code: true,
+        configFile: false,
+        ast: true,
+        code: true,
+      });
     });
 
-    expect(res.ast).toBeTruthy();
+    it("transforms the ast", function () {
+      expect(transformed.ast).toBeTruthy();
+    });
 
-    traverse(res.ast, {
-      Identifier(path) {
-        const b = path.scope.getBinding(path.node.name);
-        expect(b).toBeTruthy();
-      },
+    it("has correct scope information for fixture before transform", function () {
+      traverse(originalAst, {
+        Identifier(path) {
+          const b = path.scope.getBinding(path.node.name);
+          expect(b).toBeTruthy();
+        },
+      });
+    });
+
+    it("has correct scope information for fixture after transform", function () {
+      traverse(transformed.ast, {
+        Identifier(path) {
+          const b = path.scope.getBinding(path.node.name);
+          expect(b).toBeTruthy();
+        },
+      });
     });
   });
 });
