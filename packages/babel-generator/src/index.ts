@@ -3,6 +3,7 @@ import Printer from "./printer";
 import type * as t from "@babel/types";
 
 import type { Format } from "./printer";
+import type { DecodedSourceMap, Mapping } from "@jridgewell/gen-mapping";
 
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
@@ -225,6 +226,8 @@ export interface GeneratorResult {
     mappings: string;
     file: string;
   } | null;
+  decodedMap: DecodedSourceMap | undefined;
+  rawMappings: Mapping[] | undefined;
 }
 
 /**

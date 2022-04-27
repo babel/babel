@@ -2,21 +2,6 @@ import type SourceMap from "./source-map";
 import type * as t from "@babel/types";
 import * as charcodes from "charcodes";
 
-import type {
-  EncodedSourceMap,
-  DecodedSourceMap,
-  Mapping,
-} from "@jridgewell/gen-mapping";
-
-type Mutable<T> = { -readonly [P in keyof T]: T[P] };
-
-type Result = {
-  code: string;
-  map: Mutable<EncodedSourceMap> | undefined | null;
-  decodedMap: DecodedSourceMap | undefined | null;
-  rawMappings: Mapping[] | null;
-};
-
 const SPACES_RE = /^[ \t]+$/;
 export default class Buffer {
   constructor(map?: SourceMap | null) {
@@ -53,11 +38,11 @@ export default class Buffer {
    * Get the final string output from the buffer, along with the sourcemap if one exists.
    */
 
-  get(): Result {
+  get() {
     this._flush();
 
     const map = this._map;
-    const result: Result = {
+    const result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
       code: this._buf.trimRight(),
@@ -66,7 +51,7 @@ export default class Buffer {
 
       // Encoding the sourcemap is moderately CPU expensive.
       get map() {
-        return (result.map = map?.get());
+        return (result.map = map ? map.get() : null);
       },
       set map(value) {
         Object.defineProperty(result, "map", { value, writable: true });
