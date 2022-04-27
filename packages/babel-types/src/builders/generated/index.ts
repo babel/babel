@@ -42,7 +42,8 @@ export function binaryExpression(
     | ">"
     | "<"
     | ">="
-    | "<=",
+    | "<="
+    | "|>",
   left: t.Expression | t.PrivateName,
   right: t.Expression,
 ): t.BinaryExpression {

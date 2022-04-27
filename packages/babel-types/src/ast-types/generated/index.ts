@@ -334,7 +334,8 @@ export interface BinaryExpression extends BaseNode {
     | ">"
     | "<"
     | ">="
-    | "<=";
+    | "<="
+    | "|>";
   left: Expression | PrivateName;
   right: Expression;
 }
