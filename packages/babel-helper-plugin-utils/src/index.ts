@@ -34,11 +34,10 @@ export function declare<S = {}, Option = {}, API = PluginAPI>(
   };
 }
 
-export function declarePreset<Option = {}, API = PresetAPI>(
-  builder: (api: API, options: Option, dirname: string) => PresetObject,
-): (api: API, options: Option, dirname: string) => PresetObject {
-  return declare(builder as any) as any;
-}
+export const declarePreset = declare as
+  <Option = {}, API = PresetAPI>(
+    builder: (api: API, options: Option, dirname: string) => PresetObject,
+  ): (api: API, options: Option, dirname: string) => PresetObject;
 
 const apiPolyfills = {
   // Not supported by Babel 7 and early versions of Babel 7 beta.
