@@ -125,10 +125,17 @@ export default declare(api => {
           );
         } else {
           sequenceParts.push(
-            t.assignmentExpression("=", t.cloneNode(functionLVal), node.callee),
+            t.assignmentExpression(
+              "=",
+              t.cloneNode(functionLVal),
+              // @ts-expect-error V8 intrinsics will not support partial application
+              node.callee,
+            ),
             ...argsInitializers,
             t.functionExpression(
-              t.cloneNode(node.callee),
+              t.isIdentifier(node.callee)
+                ? t.cloneNode(node.callee)
+                : path.scope.generateUidIdentifierBasedOnNode(node.callee),
               placeholdersParams,
               t.blockStatement(
                 [
