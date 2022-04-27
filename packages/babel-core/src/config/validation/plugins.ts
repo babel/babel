@@ -13,7 +13,7 @@ import type {
 } from "./option-assertions";
 import type { ParserOptions } from "@babel/parser";
 import type { Visitor } from "@babel/traverse";
-import PluginPass from "../../transformation/plugin-pass";
+import type PluginPass from "../../transformation/plugin-pass";
 import type { ValidatedOptions } from "./options";
 
 // Note: The casts here are just meant to be static assertions to make sure
