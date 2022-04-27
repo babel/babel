@@ -30,7 +30,7 @@ export default declare((api, { loose = false }: Options) => {
         } else if (scope.path.isPattern()) {
           // Replace `function (a, x = a.b ?? c) {}` to `function (a, x = (() => a.b ?? c)() ){}`
           // so the temporary variable can be injected in correct scope
-          path.replaceWith(template.ast`(() => ${path.node})()` as t.Statement);
+          path.replaceWith(template.statement.ast`(() => ${path.node})()`);
           // The injected nullish expression will be queued and eventually transformed when visited
           return;
         } else {
