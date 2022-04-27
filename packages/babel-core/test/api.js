@@ -798,7 +798,7 @@ describe("api", function () {
               "Support for the experimental syntax 'pipelineOperator' isn't currently enabled (1:3):",
             );
             expect(err.message).toMatch(
-              "Add @babel/plugin-proposal-pipeline-operator (https://git.io/vb4SU) to the " +
+              "Add @babel/plugin-proposal-pipeline-operator (https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-pipeline-operator) to the " +
                 "'plugins' section of your Babel config to enable transformation.",
             );
             resolve();
@@ -817,7 +817,7 @@ describe("api", function () {
               "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
             );
             expect(err.message).toMatch(
-              "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
+              "Add @babel/plugin-proposal-do-expressions (https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-do-expressions) to the " +
                 "'plugins' section of your Babel config to enable transformation.",
             );
             resolve();
