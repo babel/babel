@@ -31,7 +31,7 @@ export default class SourceMap {
   private _lastSourceColumn = 0;
 
   constructor(
-    opts: { sourceFileName: string; sourceRoot?: string },
+    opts: { sourceFileName?: string; sourceRoot?: string },
     code: string | { [sourceFileName: string]: string },
   ) {
     const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));

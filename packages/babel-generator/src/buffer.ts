@@ -8,9 +8,11 @@ import type {
   Mapping,
 } from "@jridgewell/gen-mapping";
 
+type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+
 type Result = {
   code: string;
-  map: EncodedSourceMap | undefined | null;
+  map: Mutable<EncodedSourceMap> | undefined | null;
   decodedMap: DecodedSourceMap | undefined | null;
   rawMappings: Mapping[] | null;
 };
