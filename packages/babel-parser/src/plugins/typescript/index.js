@@ -613,7 +613,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.exprName = this.tsParseEntityName();
       }
       if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
-        node.typeParameters = this.tsParseTypeParameters();
+        node.typeParameters = this.tsParseTypeArguments();
       }
       return this.finishNode(node, "TSTypeQuery");
     }
