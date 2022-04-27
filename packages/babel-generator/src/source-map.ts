@@ -34,7 +34,7 @@ export default class SourceMap {
     opts: { sourceFileName: string; sourceRoot?: string },
     code: string | { [sourceFileName: string]: string },
   ) {
-    const map = (this._map = new GenMapping(undefined, opts.sourceRoot));
+    const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));
     this._sourceFileName = opts.sourceFileName?.replace(/\\/g, "/");
     this._rawMappings = undefined;
 
