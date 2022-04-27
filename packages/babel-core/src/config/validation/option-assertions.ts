@@ -20,6 +20,7 @@ import type {
   CallerMetadata,
   RootMode,
   TargetsListOrObject,
+  AssumptionName,
 } from "./options";
 
 import { assumptionsNames } from "./options";
@@ -462,7 +463,7 @@ export function assertAssumptions(
 
   for (const name of Object.keys(value)) {
     const subLoc = access(loc, name);
-    if (!assumptionsNames.has(name)) {
+    if (!assumptionsNames.has(name as AssumptionName)) {
       throw new Error(`${msg(subLoc)} is not a supported assumption.`);
     }
     if (typeof value[name] !== "boolean") {
