@@ -6,14 +6,14 @@ import type {
   PresetObject,
 } from "@babel/core";
 
-export function declare<S = {}, Option = {}, API = PluginAPI>(
+export function declare<S = {}, Option = {}>(
   builder: (
-    api: API,
+    api: PluginAPI,
     options: Option,
     dirname: string,
   ) => PluginObject<S & PluginPass>,
 ): (
-  api: API,
+  api: PluginAPI,
   options: Option,
   dirname: string,
 ) => PluginObject<S & PluginPass> {
@@ -34,10 +34,9 @@ export function declare<S = {}, Option = {}, API = PluginAPI>(
   };
 }
 
-export const declarePreset = declare as
-  <Option = {}, API = PresetAPI>(
-    builder: (api: API, options: Option, dirname: string) => PresetObject,
-  ): (api: API, options: Option, dirname: string) => PresetObject;
+export const declarePreset = declare as <Option = {}>(
+  builder: (api: PresetAPI, options: Option, dirname: string) => PresetObject,
+) => (api: PresetAPI, options: Option, dirname: string) => PresetObject;
 
 const apiPolyfills = {
   // Not supported by Babel 7 and early versions of Babel 7 beta.
