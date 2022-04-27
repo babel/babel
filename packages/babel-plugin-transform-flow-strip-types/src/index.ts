@@ -145,7 +145,9 @@ export default declare((api, opts) => {
           }
         }
 
-        node.predicate = null;
+        if (!t.isMethod(node)) {
+          node.predicate = null;
+        }
       },
 
       TypeCastExpression(path) {

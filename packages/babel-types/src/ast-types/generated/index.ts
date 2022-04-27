@@ -444,6 +444,7 @@ export interface FunctionDeclaration extends BaseNode {
   generator?: boolean;
   async?: boolean;
   declare?: boolean | null;
+  predicate?: DeclaredPredicate | InferredPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
     | TypeParameterDeclaration
@@ -459,6 +460,7 @@ export interface FunctionExpression extends BaseNode {
   body: BlockStatement;
   generator?: boolean;
   async?: boolean;
+  predicate?: DeclaredPredicate | InferredPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
     | TypeParameterDeclaration
@@ -722,6 +724,7 @@ export interface ArrowFunctionExpression extends BaseNode {
   async?: boolean;
   expression: boolean;
   generator?: boolean;
+  predicate?: DeclaredPredicate | InferredPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
     | TypeParameterDeclaration

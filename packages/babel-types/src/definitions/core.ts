@@ -407,6 +407,10 @@ defineType("FunctionDeclaration", {
     body: {
       validate: assertNodeType("BlockStatement"),
     },
+    predicate: {
+      validate: assertNodeType("DeclaredPredicate", "InferredPredicate"),
+      optional: true,
+    },
   },
   aliases: [
     "Scopable",
@@ -449,6 +453,10 @@ defineType("FunctionExpression", {
     },
     body: {
       validate: assertNodeType("BlockStatement"),
+    },
+    predicate: {
+      validate: assertNodeType("DeclaredPredicate", "InferredPredicate"),
+      optional: true,
     },
   },
 });
@@ -1246,6 +1254,10 @@ defineType("ArrowFunctionExpression", {
     },
     body: {
       validate: assertNodeType("BlockStatement", "Expression"),
+    },
+    predicate: {
+      validate: assertNodeType("DeclaredPredicate", "InferredPredicate"),
+      optional: true,
     },
   },
 });
