@@ -3281,7 +3281,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+    isValidLVal(
+      type: string,
+      isUnparenthesizedInAssign: boolean,
+      binding: BindingTypes,
+    ) {
       return (
         getOwn(
           {
@@ -3291,17 +3295,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             TSTypeCastExpression: true,
             TSParameterProperty: "parameter",
             TSNonNullExpression: "expression",
-            TSAsExpression: (binding !== BIND_NONE || isParenthesized) && [
-              "expression",
-              true,
-            ],
-            TSTypeAssertion: (binding !== BIND_NONE || isParenthesized) && [
-              "expression",
-              true,
-            ],
+            TSAsExpression: (binding !== BIND_NONE ||
+              !isUnparenthesizedInAssign) && ["expression", true],
+            TSTypeAssertion: (binding !== BIND_NONE ||
+              !isUnparenthesizedInAssign) && ["expression", true],
           },
           type,
-        ) || super.isValidLVal(type, isParenthesized, binding)
+        ) || super.isValidLVal(type, isUnparenthesizedInAssign, binding)
       );
     }
 
@@ -3421,9 +3421,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             break;
           case "TSAsExpression":
           case "TSTypeAssertion":
-            if (!this.state.maybeInArrowParameters) {
-              exprList[i] = this.typeCastToParameter(expr);
-            } else {
+            if (this.state.maybeInArrowParameters) {
               this.raise(TSErrors.UnexpectedTypeCastInParameter, {
                 at: expr,
               });

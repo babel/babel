@@ -19,9 +19,13 @@
             "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
             "elements": [
               {
-                "type": "Identifier",
-                "start":1,"end":12,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":12,"index":12},"identifierName":"a"},
-                "name": "a",
+                "type": "TSAsExpression",
+                "start":1,"end":12,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":12,"index":12}},
+                "expression": {
+                  "type": "Identifier",
+                  "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"a"},
+                  "name": "a"
+                },
                 "typeAnnotation": {
                   "type": "TSNumberKeyword",
                   "start":6,"end":12,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":12,"index":12}}
@@ -58,12 +62,16 @@
             "start":22,"end":33,"loc":{"start":{"line":2,"column":0,"index":22},"end":{"line":2,"column":11,"index":33}},
             "elements": [
               {
-                "type": "Identifier",
-                "start":31,"end":30,"loc":{"start":{"line":2,"column":9,"index":31},"end":{"line":2,"column":8,"index":30},"identifierName":"a"},
-                "name": "a",
+                "type": "TSTypeAssertion",
+                "start":23,"end":32,"loc":{"start":{"line":2,"column":1,"index":23},"end":{"line":2,"column":10,"index":32}},
                 "typeAnnotation": {
                   "type": "TSNumberKeyword",
                   "start":24,"end":30,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":8,"index":30}}
+                },
+                "expression": {
+                  "type": "Identifier",
+                  "start":31,"end":32,"loc":{"start":{"line":2,"column":9,"index":31},"end":{"line":2,"column":10,"index":32},"identifierName":"a"},
+                  "name": "a"
                 }
               }
             ]

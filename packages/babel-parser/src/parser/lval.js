@@ -513,8 +513,9 @@ export default class LValParser extends NodeUtils {
    * `[key: string, parenthesized: false]`.
    *
    * @param {NodeType} type A Node `type` string
-   * @param {boolean} isParenthesized
-   *        Whether the node in question is parenthesized.
+   * @param {boolean} isUnparenthesizedInAssign
+   *        Whether the node in question is unparenthesized and it's parent
+   *        is either an assignment pattern or an assignment expression.
    * @param {BindingTypes} binding
    *        The binding operation that is being considered for this potential
    *        LVal.
@@ -525,8 +526,13 @@ export default class LValParser extends NodeUtils {
    *          A `[string, boolean]` tuple if we need to check this child and
    *          treat is as parenthesized.
    */
-  // eslint-disable-next-line no-unused-vars
-  isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+  isValidLVal(
+    type: string,
+    // eslint-disable-next-line no-unused-vars
+    isUnparenthesizedInAssign: boolean,
+    // eslint-disable-next-line no-unused-vars
+    binding: BindingTypes,
+  ) {
     return getOwn(
       {
         AssignmentPattern: "left",
@@ -625,7 +631,8 @@ export default class LValParser extends NodeUtils {
 
     const validity = this.isValidLVal(
       expression.type,
-      hasParenthesizedAncestor || expression.extra?.parenthesized,
+      !(hasParenthesizedAncestor || expression.extra?.parenthesized) &&
+        ancestor.type === "AssignmentExpression",
       binding,
     );
 
