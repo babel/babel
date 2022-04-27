@@ -83,27 +83,23 @@ export default declare(api => {
         scope.push({ id: functionLVal });
 
         if (node.callee.type === "MemberExpression") {
-          const receiverLVal = path.scope.generateUidIdentifierBasedOnNode(
-            node.callee.object,
-          );
+          const { object: receiver, property } = node.callee;
+          const receiverLVal =
+            path.scope.generateUidIdentifierBasedOnNode(receiver);
           scope.push({ id: receiverLVal });
+
           sequenceParts.push(
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(receiverLVal),
-              node.callee.object,
-            ),
+            t.assignmentExpression("=", t.cloneNode(receiverLVal), receiver),
             t.assignmentExpression(
               "=",
               t.cloneNode(functionLVal),
-              t.memberExpression(
-                t.cloneNode(receiverLVal),
-                node.callee.property,
-              ),
+              t.memberExpression(t.cloneNode(receiverLVal), property),
             ),
             ...argsInitializers,
             t.functionExpression(
-              t.cloneNode(node.callee.property),
+              t.isIdentifier(property)
+                ? t.cloneNode(property)
+                : path.scope.generateUidIdentifierBasedOnNode(property),
               placeholdersParams,
               t.blockStatement(
                 [
