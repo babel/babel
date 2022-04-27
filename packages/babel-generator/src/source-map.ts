@@ -14,9 +14,28 @@ import type {
 } from "@jridgewell/gen-mapping";
 
 /**
+ * The old source-map library has a particular field order, and babel consumers
+ * may have tests written that depend on that ordering.
+ */
+function legacyPropOrder(map: DecodedSourceMap): DecodedSourceMap;
+function legacyPropOrder(map: EncodedSourceMap): EncodedSourceMap;
+function legacyPropOrder(
+  map: DecodedSourceMap | EncodedSourceMap,
+): DecodedSourceMap | EncodedSourceMap {
+  return {
+    version: map.version,
+    sources: map.sources,
+    names: map.names,
+    mappings: map.mappings as any,
+    file: map.file,
+    sourceRoot: map.sourceRoot,
+    sourcesContent: map.sourcesContent,
+  };
+}
+
+/**
  * Build a sourcemap.
  */
-
 export default class SourceMap {
   private _map: GenMapping;
   private _rawMappings: Mapping[] | undefined;
@@ -55,11 +74,13 @@ export default class SourceMap {
    * Get the sourcemap.
    */
   get(): EncodedSourceMap {
-    return encodedMap(this._map);
+    const map = encodedMap(this._map);
+    return !process.env.BABEL_8_BREAKING ? legacyPropOrder(map) : map;
   }
 
   getDecoded(): DecodedSourceMap {
-    return decodedMap(this._map);
+    const map = decodedMap(this._map);
+    return !process.env.BABEL_8_BREAKING ? legacyPropOrder(map) : map;
   }
 
   getRawMappings(): Mapping[] {
