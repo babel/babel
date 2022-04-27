@@ -62,11 +62,11 @@ export default function (path, { getAsyncIterator }) {
 
   // remove async function wrapper
   // @ts-expect-error todo(flow->ts) improve type annotation for buildForAwait
-  template = template.body.body;
+  template = template.body.body as t.Statement[];
 
   const isLabeledParent = t.isLabeledStatement(parent);
-  const tryBody = template[3].block.body;
-  const loop = tryBody[0];
+  const tryBody = (template[3] as t.TryStatement).block.body;
+  const loop = tryBody[0] as t.ForStatement;
 
   if (isLabeledParent) {
     tryBody[0] = t.labeledStatement(parent.label, loop);

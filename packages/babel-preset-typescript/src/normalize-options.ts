@@ -1,7 +1,19 @@
 import { OptionValidator } from "@babel/helper-validator-option";
 const v = new OptionValidator("@babel/preset-typescript");
 
-export default function normalizeOptions(options = {} as any) {
+export interface Options {
+  allExtensions?: boolean;
+  allowDeclareFields?: boolean;
+  allowNamespaces?: boolean;
+  disallowAmbiguousJSXLike?: boolean;
+  isTSX?: boolean;
+  jsxPragma?: string;
+  jsxPragmaFrag?: string;
+  onlyRemoveTypeImports?: boolean;
+  optimizeConstEnums?: boolean;
+}
+
+export default function normalizeOptions(options: Options = {}) {
   let { allowNamespaces = true, jsxPragma, onlyRemoveTypeImports } = options;
 
   const TopLevelOptions = {

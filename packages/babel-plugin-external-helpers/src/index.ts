@@ -1,7 +1,12 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
-export default declare((api, options) => {
+export interface Options {
+  helperVersion?: string;
+  whitelist?: false | string[];
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { helperVersion = "7.0.0-beta.0", whitelist = false } = options;

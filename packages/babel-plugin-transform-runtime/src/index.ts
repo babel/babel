@@ -18,7 +18,16 @@ function supportsStaticESM(caller) {
   return !!caller?.supportsStaticESM;
 }
 
-export default declare((api, options, dirname) => {
+export interface Options {
+  absoluteRuntime?: boolean;
+  corejs?: string | number | { version: string | number; proposals?: boolean };
+  helpers?: boolean;
+  regenerator?: boolean;
+  useESModules?: boolean | "auto";
+  version?: string;
+}
+
+export default declare((api, options: Options, dirname) => {
   api.assertVersion(7);
 
   const {
@@ -99,7 +108,7 @@ export default declare((api, options, dirname) => {
   }
 
   if (has(options, "useBuiltIns")) {
-    if (options.useBuiltIns) {
+    if (options["useBuiltIns"]) {
       throw new Error(
         "The 'useBuiltIns' option has been removed. The @babel/runtime " +
           "module now uses builtins by default.",
@@ -113,7 +122,7 @@ export default declare((api, options, dirname) => {
   }
 
   if (has(options, "polyfill")) {
-    if (options.polyfill === false) {
+    if (options["polyfill"] === false) {
       throw new Error(
         "The 'polyfill' option has been removed. The @babel/runtime " +
           "module now skips polyfilling by default.",

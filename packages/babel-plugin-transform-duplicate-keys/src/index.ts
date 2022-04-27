@@ -19,7 +19,7 @@ export default declare(api => {
         const { node } = path;
         const plainProps = node.properties.filter(
           prop => !t.isSpreadElement(prop) && !prop.computed,
-        );
+        ) as (t.ObjectMethod | t.ObjectProperty)[];
 
         // A property is a duplicate key if:
         // * the property is a data property, and is preceded by a data,
@@ -36,6 +36,7 @@ export default declare(api => {
         for (const prop of plainProps) {
           const name = getName(prop.key);
           let isDuplicate = false;
+          // @ts-ignore prop.kind is not defined in ObjectProperty
           switch (prop.kind) {
             case "get":
               if (alreadySeenData[name] || alreadySeenGetters[name]) {

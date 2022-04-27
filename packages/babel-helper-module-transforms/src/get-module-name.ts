@@ -4,7 +4,7 @@ type RootOptions = {
   sourceRoot?: string;
 };
 
-type PluginOptions = {
+export type PluginOptions = {
   moduleId?: string;
   moduleIds?: boolean;
   getModuleId?: (moduleName: string) => string | null | undefined;

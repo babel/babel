@@ -11,6 +11,7 @@ import {
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
+import type { PluginOptions } from "@babel/helper-module-transforms";
 
 const buildWrapper = template(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
@@ -35,7 +36,22 @@ function injectWrapper(path, wrapper) {
   amdFactory.pushContainer("body", body);
 }
 
-export default declare((api, options) => {
+export interface Options extends PluginOptions {
+  allowTopLevelThis?: boolean;
+  importInterop?: "babel" | "node";
+  loose?: boolean;
+  noInterop?: boolean;
+  strict?: boolean;
+  strictMode?: boolean;
+}
+
+export interface State {
+  requireId?: t.Identifier;
+  resolveId?: t.Identifier;
+  rejectId?: t.Identifier;
+}
+
+export default declare<State>((api, options: Options) => {
   api.assertVersion(7);
 
   const { allowTopLevelThis, strict, strictMode, importInterop, noInterop } =

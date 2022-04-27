@@ -1,6 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { transform } from "@babel/plugin-proposal-optional-chaining";
 import { shouldTransform } from "./util";
+import type { NodePath } from "@babel/traverse";
+import type * as t from "@babel/types";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -12,7 +14,9 @@ export default declare(api => {
     name: "bugfix-v8-spread-parameters-in-optional-chaining",
 
     visitor: {
-      "OptionalCallExpression|OptionalMemberExpression"(path) {
+      "OptionalCallExpression|OptionalMemberExpression"(
+        path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
+      ) {
         if (shouldTransform(path)) {
           transform(path, { noDocumentAll, pureGetters });
         }

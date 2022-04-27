@@ -6,7 +6,11 @@ import {
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
 
-export default declare((api, options) => {
+export interface Options {
+  loose?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   return createClassFeaturePlugin({

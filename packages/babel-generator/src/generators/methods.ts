@@ -146,7 +146,6 @@ function hasTypesOrComments(
   return !!(
     node.typeParameters ||
     node.returnType ||
-    // @ts-expect-error
     node.predicate ||
     param.typeAnnotation ||
     param.optional ||

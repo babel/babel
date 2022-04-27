@@ -1,8 +1,13 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { transform } from "./transform";
+import type { NodePath } from "@babel/traverse";
+import type * as t from "@babel/types";
 
-export default declare((api, options) => {
+export interface Options {
+  loose?: boolean;
+}
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { loose = false } = options;
@@ -14,7 +19,9 @@ export default declare((api, options) => {
     inherits: syntaxOptionalChaining.default,
 
     visitor: {
-      "OptionalCallExpression|OptionalMemberExpression"(path) {
+      "OptionalCallExpression|OptionalMemberExpression"(
+        path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
+      ) {
         transform(path, { noDocumentAll, pureGetters });
       },
     },

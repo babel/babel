@@ -5,7 +5,12 @@ import type { NodePath, Scope } from "@babel/traverse";
 
 type ListElement = t.SpreadElement | t.Expression;
 
-export default declare((api, options) => {
+export interface Options {
+  allowArrayLike?: boolean;
+  loose?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const iterableIsArray = api.assumption("iterableIsArray") ?? options.loose;
@@ -84,12 +89,12 @@ export default declare((api, options) => {
     name: "transform-spread",
 
     visitor: {
-      ArrayExpression(path: NodePath<t.ArrayExpression>): void {
+      ArrayExpression(path): void {
         const { node, scope } = path;
         const elements = node.elements;
         if (!hasSpread(elements)) return;
 
-        const nodes = build(elements, scope, this);
+        const nodes = build(elements, scope, this.file);
         let first = nodes[0];
 
         // If there is only one element in the ArrayExpression and
@@ -123,7 +128,7 @@ export default declare((api, options) => {
           ),
         );
       },
-      CallExpression(path: NodePath<t.CallExpression>): void {
+      CallExpression(path): void {
         const { node, scope } = path;
 
         const args = node.arguments as Array<ListElement>;
@@ -150,7 +155,7 @@ export default declare((api, options) => {
         ) {
           nodes = [(args[0] as t.SpreadElement).argument];
         } else {
-          nodes = build(args, scope, this);
+          nodes = build(args, scope, this.file);
         }
 
         const first = nodes.shift();
@@ -189,11 +194,15 @@ export default declare((api, options) => {
         node.arguments.unshift(t.cloneNode(contextLiteral));
       },
 
-      NewExpression(path: NodePath<t.NewExpression>): void {
+      NewExpression(path): void {
         const { node, scope } = path;
         if (!hasSpread(node.arguments)) return;
 
-        const nodes = build(node.arguments as Array<ListElement>, scope, this);
+        const nodes = build(
+          node.arguments as Array<ListElement>,
+          scope,
+          this.file,
+        );
 
         const first = nodes.shift();
 

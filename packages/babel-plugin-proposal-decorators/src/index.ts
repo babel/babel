@@ -8,8 +8,9 @@ import {
 } from "@babel/helper-create-class-features-plugin";
 import legacyVisitor from "./transformer-legacy";
 import transformer2021_12 from "./transformer-2021-12";
+import type { Options } from "@babel/plugin-syntax-decorators";
 
-export default declare((api, options) => {
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   // Options are validated in @babel/plugin-syntax-decorators

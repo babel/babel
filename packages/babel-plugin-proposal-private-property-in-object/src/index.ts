@@ -6,9 +6,16 @@ import {
   injectInitialization as injectConstructorInit,
 } from "@babel/helper-create-class-features-plugin";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
+import type * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
-export default declare(({ assertVersion, types: t, template }, { loose }) => {
-  assertVersion(7);
+export interface Options {
+  loose?: boolean;
+}
+export default declare((api, opt: Options) => {
+  api.assertVersion(7);
+  const { types: t, template } = api;
+  const { loose } = opt;
 
   // NOTE: When using the class fields or private methods plugins,
   // they will also take care of '#priv in obj' checks when visiting
@@ -107,10 +114,12 @@ export default declare(({ assertVersion, types: t, template }, { loose }) => {
             .find(({ node }) => t.isPrivate(node) && node.key.id.name === name);
 
           return !!privateElement;
-        });
+        }) as NodePath<t.Class>;
 
         if (outerClass.parentPath.scope.path.isPattern()) {
-          outerClass.replaceWith(template.ast`(() => ${outerClass.node})()`);
+          outerClass.replaceWith(
+            template.ast`(() => ${outerClass.node})()` as t.Statement,
+          );
           // The injected class will be queued and eventually transformed when visited
           return;
         }

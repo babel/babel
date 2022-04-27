@@ -2,7 +2,12 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import { types as t } from "@babel/core";
 
-export default declare((api, opts) => {
+export interface Options {
+  requireDirective?: boolean;
+  allowDeclareFields?: boolean;
+}
+
+export default declare((api, opts: Options) => {
   api.assertVersion(7);
 
   const FLOW_DIRECTIVE = /(@flow(\s+(strict(-local)?|weak))?|@noflow)/;
@@ -58,6 +63,7 @@ export default declare((api, opts) => {
 
         let typeCount = 0;
 
+        // @ts-ignore importKind is only in importSpecifier
         path.node.specifiers.forEach(({ importKind }) => {
           if (importKind === "type" || importKind === "typeof") {
             typeCount++;
@@ -125,7 +131,11 @@ export default declare((api, opts) => {
 
       AssignmentPattern({ node }) {
         if (skipStrip) return;
-        node.left.optional = false;
+        // @ts-expect-error optional is not in ObjectPattern
+        if (node.left.optional) {
+          // @ts-expect-error optional is not in ObjectPattern
+          node.left.optional = false;
+        }
       },
 
       Function({ node }) {
@@ -138,10 +148,15 @@ export default declare((api, opts) => {
           node.params.shift();
         }
         for (let i = 0; i < node.params.length; i++) {
-          const param = node.params[i];
-          param.optional = false;
+          let param = node.params[i];
           if (param.type === "AssignmentPattern") {
-            param.left.optional = false;
+            // @ts-ignore
+            param = param.left;
+          }
+          // @ts-expect-error optional is not in ObjectPattern
+          if (param.optional) {
+            // @ts-expect-error optional is not in ObjectPattern
+            param.optional = false;
           }
         }
 
@@ -154,6 +169,7 @@ export default declare((api, opts) => {
         if (skipStrip) return;
         let { node } = path;
         do {
+          // @ts-ignore node is a search pointer
           node = node.expression;
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);

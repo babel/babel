@@ -1,6 +1,10 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-export default declare((api, options) => {
+export interface Options {
+  syntaxType: "hash" | "bar";
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   return {

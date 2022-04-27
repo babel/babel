@@ -1,11 +1,16 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
-const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
+const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"] as const;
+const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"] as const;
 const documentationURL =
   "https://babeljs.io/docs/en/babel-plugin-proposal-pipeline-operator";
 
-export default declare((api, { proposal, topicToken }) => {
+export interface Options {
+  proposal: typeof PIPELINE_PROPOSALS[number];
+  topicToken?: typeof TOPIC_TOKENS[number];
+}
+
+export default declare((api, { proposal, topicToken }: Options) => {
   api.assertVersion(7);
 
   if (typeof proposal !== "string" || !PIPELINE_PROPOSALS.includes(proposal)) {

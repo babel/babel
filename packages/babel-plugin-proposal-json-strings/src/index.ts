@@ -1,5 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
+import type * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -19,11 +21,13 @@ export default declare(api => {
     inherits: syntaxJsonStrings.default,
 
     visitor: {
-      "DirectiveLiteral|StringLiteral"({ node }) {
+      "DirectiveLiteral|StringLiteral"({
+        node,
+      }: NodePath<t.DirectiveLiteral | t.StringLiteral>) {
         const { extra } = node;
         if (!extra?.raw) return;
 
-        extra.raw = extra.raw.replace(regex, replace);
+        extra.raw = (extra.raw as string).replace(regex, replace);
       },
     },
   };

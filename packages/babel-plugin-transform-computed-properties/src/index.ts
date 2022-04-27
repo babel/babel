@@ -1,7 +1,11 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
 
-export default declare((api, options) => {
+export interface Options {
+  loose?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const setComputedProperties =
@@ -124,6 +128,7 @@ export default declare((api, options) => {
           const { node, parent, scope } = path;
           let hasComputed = false;
           for (const prop of node.properties) {
+            // @ts-ignore SpreadElement must not have computed property
             hasComputed = prop.computed === true;
             if (hasComputed) break;
           }
@@ -137,6 +142,7 @@ export default declare((api, options) => {
           let foundComputed = false;
 
           for (const prop of node.properties) {
+            // @ts-ignore SpreadElement must not have computed property
             if (prop.computed) {
               foundComputed = true;
             }

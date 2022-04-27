@@ -3,7 +3,13 @@ import { template, types as t } from "@babel/core";
 
 import transformWithoutHelper from "./no-helper-implementation";
 
-export default declare((api, options) => {
+export interface Options {
+  allowArrayLike?: boolean;
+  assumeArray?: boolean;
+  loose?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   {
@@ -59,13 +65,14 @@ export default declare((api, options) => {
             return;
           }
           const i = scope.generateUidIdentifier("i");
-          let array = scope.maybeGenerateMemoised(right, true);
+          let array: t.Identifier | t.ThisExpression =
+            scope.maybeGenerateMemoised(right, true);
 
           const inits = [t.variableDeclarator(i, t.numericLiteral(0))];
           if (array) {
             inits.push(t.variableDeclarator(array, right));
           } else {
-            array = right;
+            array = right as t.Identifier | t.ThisExpression;
           }
 
           const item = t.memberExpression(
@@ -230,7 +237,7 @@ export default declare((api, options) => {
         // ensure that it's a block so we can take all its statements
         path.ensureBlock();
 
-        node.body.body.unshift(declar);
+        (node.body as t.BlockStatement).body.unshift(declar);
 
         const nodes = builder.build({
           CREATE_ITERATOR_HELPER: state.addHelper(builder.helper),

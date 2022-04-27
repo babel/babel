@@ -1,9 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t, template } from "@babel/core";
-import type { PluginPass } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath } from "@babel/traverse";
+import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
 import transpileConstEnum from "./const-enum";
 import type { NodePathConstEnum } from "./const-enum";
@@ -55,7 +55,7 @@ function isGlobalType(path: NodePath, name: string) {
 function registerGlobalType(programNode: t.Program, name: string) {
   GLOBAL_TYPES.get(programNode).add(name);
 }
-export interface Options {
+export interface Options extends SyntaxOptions {
   /** @default true */
   allowNamespaces?: boolean;
   /** @default "React.createElement" */
@@ -66,12 +66,6 @@ export interface Options {
   optimizeConstEnums?: boolean;
   allowDeclareFields?: boolean;
 }
-type ConfigAPI = { assertVersion: (range: string | number) => void };
-interface Plugin {
-  name: string;
-  visitor: Visitor<PluginPass>;
-  inherits: typeof syntaxTypeScript;
-}
 type ExtraNodeProps = {
   declare?: unknown;
   accessibility?: unknown;
@@ -79,7 +73,7 @@ type ExtraNodeProps = {
   optional?: unknown;
   override?: unknown;
 };
-export default declare((api: ConfigAPI, opts: Options): Plugin => {
+export default declare((api, opts: Options) => {
   api.assertVersion(7);
 
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;

@@ -4,6 +4,7 @@ import minimalVisitor from "./minimalVisitor";
 import hackVisitor from "./hackVisitor";
 import fsharpVisitor from "./fsharpVisitor";
 import smartVisitor from "./smartVisitor";
+import type { Options } from "@babel/plugin-syntax-pipeline-operator";
 
 const visitorsPerProposal = {
   minimal: minimalVisitor,
@@ -12,7 +13,7 @@ const visitorsPerProposal = {
   smart: smartVisitor,
 };
 
-export default declare((api, options) => {
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { proposal } = options;

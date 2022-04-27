@@ -10,10 +10,24 @@ import {
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
+import type { PluginOptions } from "@babel/helper-module-transforms";
 
 import { createDynamicImportTransform } from "babel-plugin-dynamic-import-node/utils";
 
-export default declare((api, options) => {
+export interface Options extends PluginOptions {
+  allowCommonJSExports?: boolean;
+  allowTopLevelThis?: boolean;
+  importInterop?: "babel" | "node";
+  lazy?: boolean | string[] | ((string) => boolean);
+  loose?: boolean;
+  mjsStrictNamespace?: boolean;
+  noInterop?: boolean;
+  strict?: boolean;
+  strictMode?: boolean;
+  strictNamespace?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const transformImportCall = createDynamicImportTransform(api);

@@ -7,7 +7,6 @@ import {
 } from "@babel/helper-create-class-features-plugin";
 
 import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
 /**
  * Generate a uid that is not in `denyList`
  *
@@ -43,7 +42,7 @@ export default declare(({ types: t, template, assertVersion }) => {
       // Run on ClassBody and not on class so that if @babel/helper-create-class-features-plugin
       // is enabled it can generte optimized output without passing from the intermediate
       // private fields representation.
-      ClassBody(classBody: NodePath<t.ClassBody>) {
+      ClassBody(classBody) {
         const { scope } = classBody;
         const privateNames = new Set<string>();
         const body = classBody.get("body");

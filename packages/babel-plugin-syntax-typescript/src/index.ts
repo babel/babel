@@ -15,7 +15,12 @@ function removePlugin(plugins, name) {
   }
 }
 
-export default declare((api, { isTSX, disallowAmbiguousJSXLike }) => {
+export interface Options {
+  disallowAmbiguousJSXLike?: boolean;
+  isTSX?: boolean;
+}
+
+export default declare((api, { isTSX, disallowAmbiguousJSXLike }: Options) => {
   api.assertVersion(7);
 
   return {

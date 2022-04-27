@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -27,7 +28,13 @@ export default declare(api => {
               return true;
             }
             return false;
-          });
+          }) as NodePath<
+            | t.FunctionDeclaration
+            | t.FunctionExpression
+            | t.Class
+            | t.ClassMethod
+            | t.ClassPrivateMethod
+          >;
 
           if (!func) {
             throw path.buildCodeFrameError(
@@ -36,12 +43,11 @@ export default declare(api => {
           }
 
           const { node } = func;
+          if (t.isMethod(node)) {
+            path.replaceWith(scope.buildUndefinedNode());
+            return;
+          }
           if (!node.id) {
-            if (func.isMethod()) {
-              path.replaceWith(scope.buildUndefinedNode());
-              return;
-            }
-
             node.id = scope.generateUidIdentifier("target");
           }
 

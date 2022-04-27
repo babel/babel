@@ -9,6 +9,7 @@ export default declare(api => {
     visitor: {
       NumericLiteral({ node }) {
         // number octal like 0b10 or 0o70
+        // @ts-ignore Add node.extra typings
         if (node.extra && /^0[ob]/i.test(node.extra.raw)) {
           node.extra = undefined;
         }
@@ -16,6 +17,7 @@ export default declare(api => {
 
       StringLiteral({ node }) {
         // unicode escape
+        // @ts-ignore Add node.extra typings
         if (node.extra && /\\[u]/gi.test(node.extra.raw)) {
           node.extra = undefined;
         }

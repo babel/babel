@@ -1,7 +1,11 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
 
-export default declare((api, options) => {
+export interface Options {
+  loose?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const ignoreToPrimitiveHint =
@@ -93,6 +97,7 @@ export default declare((api, options) => {
                 ${tmp} = ${this.addHelper(helperName)}(${helperArgs})
               )
             `,
+            //@ts-ignore Fixme: quasi.expressions may contain TSAnyKeyword
             ...quasi.expressions,
           ]),
         );

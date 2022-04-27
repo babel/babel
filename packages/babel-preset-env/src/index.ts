@@ -29,11 +29,11 @@ import getTargets, {
 } from "@babel/helper-compilation-targets";
 import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
-import { declare } from "@babel/helper-plugin-utils";
+import { declarePreset } from "@babel/helper-plugin-utils";
 
 type ModuleTransformationsType =
   typeof import("./module-transformations").default;
-import type { BuiltInsOption, ModuleOption } from "./types";
+import type { BuiltInsOption, ModuleOption, Options } from "./types";
 
 // TODO: Remove in Babel 8
 export function isPluginRequired(targets: Targets, support: Targets) {
@@ -271,7 +271,7 @@ function supportsTopLevelAwait(caller) {
   return !!caller?.supportsTopLevelAwait;
 }
 
-export default declare((api, opts) => {
+export default declarePreset((api, opts: Options) => {
   api.assertVersion(7);
 
   const babelTargets = api.targets();
@@ -360,7 +360,8 @@ option \`forceAllTransforms: true\` instead.
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller?.(supportsDynamicImport),
     shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
-    shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
+    shouldParseTopLevelAwait:
+      !api.caller || (api.caller(supportsTopLevelAwait) as boolean),
   });
 
   const pluginNames = filterItems(

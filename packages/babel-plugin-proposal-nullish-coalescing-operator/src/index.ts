@@ -2,7 +2,11 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 import { types as t, template } from "@babel/core";
 
-export default declare((api, { loose = false }) => {
+export interface Options {
+  loose?: boolean;
+}
+
+export default declare((api, { loose = false }: Options) => {
   api.assertVersion(7);
   const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
 
@@ -26,7 +30,7 @@ export default declare((api, { loose = false }) => {
         } else if (scope.path.isPattern()) {
           // Replace `function (a, x = a.b ?? c) {}` to `function (a, x = (() => a.b ?? c)() ){}`
           // so the temporary variable can be injected in correct scope
-          path.replaceWith(template.ast`(() => ${path.node})()`);
+          path.replaceWith(template.ast`(() => ${path.node})()` as t.Statement);
           // The injected nullish expression will be queued and eventually transformed when visited
           return;
         } else {

@@ -3,7 +3,16 @@ import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import { addNamed } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-export default declare((api, options) => {
+export interface Options {
+  method?: string;
+  module?: string;
+}
+
+export interface State {
+  methodWrapper?: t.Identifier | t.SequenceExpression;
+}
+
+export default declare<State>((api, options: Options) => {
   api.assertVersion(7);
 
   const { method, module } = options;

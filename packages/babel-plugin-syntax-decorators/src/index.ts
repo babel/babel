@@ -1,6 +1,12 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-export default declare((api, options) => {
+export interface Options {
+  legacy?: boolean;
+  version?: "legacy" | "2018-09" | "2021-12";
+  decoratorsBeforeExport?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const {

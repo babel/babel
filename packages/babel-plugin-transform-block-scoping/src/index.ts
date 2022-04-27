@@ -7,7 +7,12 @@ import type { File } from "@babel/core";
 
 const DONE = new WeakSet();
 
-export default declare((api, opts) => {
+export interface Options {
+  tdz?: boolean;
+  throwIfClosureRequired?: boolean;
+}
+
+export default declare((api, opts: Options) => {
   api.assertVersion(7);
 
   const { throwIfClosureRequired = false, tdz: tdzEnabled = false } = opts;

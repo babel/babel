@@ -1,7 +1,18 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t, template } from "@babel/core";
+import type { Visitor, Scope } from "@babel/traverse";
 
-export default declare((api, options) => {
+export interface Options {
+  allowMutablePropsOnTags?: null | string[];
+}
+
+interface VisitorState {
+  isImmutable: boolean;
+  mutablePropsAllowed: boolean;
+  jsxScope: Scope;
+  targetScope: Scope;
+}
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { allowMutablePropsOnTags } = options;
@@ -41,7 +52,7 @@ export default declare((api, options) => {
     return scope;
   }
 
-  const immutabilityVisitor = {
+  const immutabilityVisitor: Visitor<VisitorState> = {
     enter(path, state) {
       const stop = () => {
         state.isImmutable = false;
@@ -114,7 +125,7 @@ export default declare((api, options) => {
     },
   };
 
-  const targetScopeVisitor = {
+  const targetScopeVisitor: Visitor<VisitorState> = {
     ReferencedIdentifier(path, state) {
       const { node } = path;
       let { scope } = path;
@@ -171,6 +182,7 @@ export default declare((api, options) => {
           }
 
           const elementName = lastSegment.name;
+          // @ts-expect-error Fixme: allowMutablePropsOnTags should handle JSXNamespacedName
           mutablePropsAllowed = allowMutablePropsOnTags.includes(elementName);
         }
 
@@ -181,12 +193,13 @@ export default declare((api, options) => {
         let jsxScope;
         let current = path;
         while (!jsxScope && current.parentPath.isJSX()) {
+          // @ts-ignore current is a search pointer
           current = current.parentPath;
           jsxScope = HOISTED.get(current.node);
         }
         jsxScope ??= getHoistingScope(path.scope);
 
-        const visitorState = {
+        const visitorState: VisitorState = {
           isImmutable: true,
           mutablePropsAllowed,
           jsxScope,

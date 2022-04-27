@@ -1,10 +1,13 @@
 import { types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
+import type { PluginPass } from "@babel/core";
 
-const topicReferenceVisitor: Visitor<{
+interface State {
   topicReferences: NodePath<t.TopicReference>[];
   sideEffectsBeforeFirstTopicReference: boolean;
-}> = {
+}
+
+const topicReferenceVisitor: Visitor<State> = {
   exit(path, state) {
     if (path.isTopicReference()) {
       state.topicReferences.push(path);
@@ -79,10 +82,15 @@ export default {
       // Replace the pipe expression itself with an assignment expression.
       path.replaceWith(
         t.sequenceExpression([
-          t.assignmentExpression("=", t.cloneNode(topicVariable), node.left),
+          t.assignmentExpression(
+            "=",
+            t.cloneNode(topicVariable),
+            // @ts-ignore node.left must not be a PrivateName when operator is |>
+            node.left,
+          ),
           node.right,
         ]),
       );
     },
   },
-};
+} as Visitor<PluginPass>;

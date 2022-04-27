@@ -34,6 +34,7 @@ import type {
 import type { NodePath } from "@babel/traverse";
 
 export { default as getModuleName } from "./get-module-name";
+export type { PluginOptions } from "./get-module-name";
 
 export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
