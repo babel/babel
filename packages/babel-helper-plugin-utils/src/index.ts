@@ -6,17 +6,17 @@ import type {
   PresetObject,
 } from "@babel/core";
 
-export function declare<S = {}, Option = {}>(
+export function declare<State = {}, Option = {}>(
   builder: (
     api: PluginAPI,
     options: Option,
     dirname: string,
-  ) => PluginObject<S & PluginPass>,
+  ) => PluginObject<State & PluginPass>,
 ): (
   api: PluginAPI,
   options: Option,
   dirname: string,
-) => PluginObject<S & PluginPass> {
+) => PluginObject<State & PluginPass> {
   // @ts-ignore
   return (api, options: Option, dirname: string) => {
     let clonedApi;
