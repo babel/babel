@@ -62,6 +62,10 @@ node -e "
 # so it will fail with older versions. We can disable it.
 (cd packages/babel-plugin-transform-modules-systemjs/test/fixtures/regression/; mv issue-12329 .issue-12329)
 
+# https://github.com/babel/babel/pull/14124 - This test is fixed in Babel 7.17;
+# Todo(Babel 8): enable this test
+rm packages/babel-standalone/test/built-into-es5.js
+
 # Update deps, build and test
 rm yarn.lock
 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
