@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "SequenceExpression",
+          "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+          "expressions": [
+            {
+              "type": "NumericLiteral",
+              "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            },
+            {
+              "type": "AssignmentExpression",
+              "start":3,"end":16,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":16,"index":16}},
+              "operator": "=",
+              "left": {
+                "type": "ObjectPattern",
+                "start":3,"end":11,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":11,"index":11}},
+                "properties": [
+                  {
+                    "type": "RestElement",
+                    "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10}},
+                    "argument": {
+                      "type": "ParenthesizedExpression",
+                      "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}},
+                      "expression": {
+                        "type": "Identifier",
+                        "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"a"},
+                        "name": "a"
+                      }
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "type": "ObjectExpression",
+                "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16}},
+                "properties": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
