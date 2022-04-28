@@ -93,6 +93,9 @@ export default class LValParser extends NodeUtils {
    * @param {boolean} [isLHS=false] Whether we are parsing a LeftHandSideExpression.
    *                                If isLHS is `true`, the following cases are allowed: `[(a)] = [0]`, `[(a.b)] = [0]`
    *                                If isLHS is `false`, we are in an arrow function parameters list.
+   * @param {boolean} [isInObjectPattern=false] `true` if the parent is an object pattern or a rest element
+   *                                of an object pattern. It's necessary because ...'s argument follows
+   *                                different rules in array and object patterns.
    * @memberof LValParser
    */
   toAssignable(
@@ -508,7 +511,7 @@ export default class LValParser extends NodeUtils {
    *
    * @param {NodeType} type A Node `type` string
    * @param {boolean} isUnparenthesizedInAssign
-   *        Whether the node in question is unparenthesized and it's parent
+   *        Whether the node in question is unparenthesized and its parent
    *        is either an assignment pattern or an assignment expression.
    * @param {BindingTypes} binding
    *        The binding operation that is being considered for this potential
