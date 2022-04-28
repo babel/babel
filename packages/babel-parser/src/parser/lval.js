@@ -206,7 +206,6 @@ export default class LValParser extends NodeUtils {
       // We don't know how to deal with this node. It will
       // be reported by a later call to checkLVal
     }
-    return node;
   }
 
   toAssignableObjectExpressionProp(
@@ -234,7 +233,7 @@ export default class LValParser extends NodeUtils {
     exprList: Expression[],
     trailingCommaLoc?: ?Position,
     isLHS: boolean,
-  ): $ReadOnlyArray<Pattern> {
+  ): void {
     let end = exprList.length;
     if (end) {
       const last = exprList[end - 1];
@@ -259,7 +258,6 @@ export default class LValParser extends NodeUtils {
         }
       }
     }
-    return exprList;
   }
 
   isAssignable(node: Node, isBinding?: boolean): boolean {

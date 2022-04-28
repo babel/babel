@@ -1,6 +1,6 @@
 // @flow
 
-import { Errors } from "../parse-error";
+import { Errors, type ParseErrorConstructor } from "../parse-error";
 import { Position } from "./location";
 import type { Node } from "../types";
 import Tokenizer from "../tokenizer";
@@ -86,13 +86,13 @@ type ArrowHeadParsingDeclarationError =
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors: Map<number, [ArrowHeadParsingDeclarationError, Position]> =
+  declarationErrors: Map<number, [ParseErrorConstructor<{||}>, Position]> =
     new Map();
   constructor(type: 1 | 2) {
     super(type);
   }
-  recordDeclarationError<T: ArrowHeadParsingDeclarationError>(
-    ParsingErrorClass: T,
+  recordDeclarationError(
+    ParsingErrorClass: ParseErrorConstructor<{||}>,
     { at }: { at: Position },
   ) {
     const index = at.index;
@@ -174,13 +174,13 @@ export default class ExpressionScopeHandler {
    * For example, in `( x = ( [(a) = []] = [] ) ) => {}`, we should not record `(a)` in `( x = ... ) =>`
    * arrow scope because when we finish parsing `( [(a) = []] = [] )`, it is an unambiguous assignment
    * expression and can not be cast to pattern
-   * @param {ParseErrorConstructor<ErrorDetails>} error
+   * @param {ParseErrorConstructor<{||}>} error
    * @param {Node} payload.at
    * @returns {void}
    * @memberof ExpressionScopeHandler
    */
-  recordArrowParemeterBindingError<ErrorDetails>(
-    error: ParseErrorConstructor<ErrorDetails>,
+  recordArrowParemeterBindingError(
+    error: ParseErrorConstructor<{||}>,
     { at: node }: { at: Node },
   ): void {
     const { stack } = this;

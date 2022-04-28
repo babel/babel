@@ -3291,7 +3291,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkToRestConversion(node: Node, allowPattern: boolean): void {
+    checkToRestConversion(node: N.Node, allowPattern: boolean): void {
       switch (node.type) {
         case "TSAsExpression":
         case "TSTypeAssertion":
@@ -3433,14 +3433,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    toAssignableList(exprList: N.Expression[]): $ReadOnlyArray<N.Pattern> {
+    toAssignableList(exprList: N.Expression[]): void {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (expr?.type === "TSTypeCastExpression") {
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return super.toAssignableList(...arguments);
+      super.toAssignableList(...arguments);
     }
 
     typeCastToParameter(node: N.TsTypeCastExpression): N.Node {
