@@ -157,9 +157,11 @@ export default class ExpressionScopeHandler {
   }
 
   /**
-   * Record parenthesized identifier errors
+   * Record errors that must be thrown if the current pattern ends up being an arrow
+   * function parameter. This is used to record parenthesized identifiers, and to record
+   * "a as T" and "<T> a" type assertions when parsing typescript.
    *
-   * A parenthesized identifier in LHS can be ambiguous because the assignment
+   * A parenthesized identifier (or type assertion) in LHS can be ambiguous because the assignment
    * can be transformed to an assignable later, but not vice versa:
    * For example, in `([(a) = []] = []) => {}`, we think `(a) = []` is an LHS in `[(a) = []]`,
    * an LHS within `[(a) = []] = []`. However the LHS chain is then transformed by toAssignable,
@@ -172,23 +174,23 @@ export default class ExpressionScopeHandler {
    * For example, in `( x = ( [(a) = []] = [] ) ) => {}`, we should not record `(a)` in `( x = ... ) =>`
    * arrow scope because when we finish parsing `( [(a) = []] = [] )`, it is an unambiguous assignment
    * expression and can not be cast to pattern
-   * @param {number} pos
-   * @param {ErrorTemplate} template
+   * @param {ParseErrorConstructor<ErrorDetails>} error
+   * @param {Node} payload.at
    * @returns {void}
    * @memberof ExpressionScopeHandler
    */
-  recordParenthesizedIdentifierError({ at: node }: { at: Node }): void {
+  recordArrowParemeterBindingError<ErrorDetails>(
+    error: ParseErrorConstructor<ErrorDetails>,
+    { at: node }: { at: Node },
+  ): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];
     const origin = { at: node.loc.start };
     if (scope.isCertainlyParameterDeclaration()) {
-      this.parser.raise(Errors.InvalidParenthesizedAssignment, origin);
+      this.parser.raise(error, origin);
     } else if (scope.canBeArrowParameterDeclaration()) {
       /*:: invariant(scope instanceof ArrowHeadParsingScope) */
-      scope.recordDeclarationError(
-        Errors.InvalidParenthesizedAssignment,
-        origin,
-      );
+      scope.recordDeclarationError(error, origin);
     } else {
       return;
     }

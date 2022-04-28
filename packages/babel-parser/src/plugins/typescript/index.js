@@ -3258,6 +3258,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
+          if (isLHS) {
+            this.expressionScope.recordArrowParemeterBindingError(
+              TSErrors.UnexpectedTypeCastInParameter,
+              { at: node },
+            );
+          } else {
+            this.raise(TSErrors.UnexpectedTypeCastInParameter, { at: node });
+          }
           this.toAssignable(node.expression, isLHS);
           break;
         case "AssignmentExpression":
@@ -3280,6 +3288,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
         default:
           super.toAssignable(node, isLHS);
+      }
+    }
+
+    checkToRestConversion(node: Node, allowPattern: boolean): void {
+      switch (node.type) {
+        case "TSAsExpression":
+        case "TSTypeAssertion":
+        case "TSNonNullExpression":
+          this.checkToRestConversion(node.expression, false);
+          break;
+        default:
+          super.checkToRestConversion(node, allowPattern);
       }
     }
 
@@ -3416,19 +3436,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     toAssignableList(exprList: N.Expression[]): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (!expr) continue;
-        switch (expr.type) {
-          case "TSTypeCastExpression":
-            exprList[i] = this.typeCastToParameter(expr);
-            break;
-          case "TSAsExpression":
-          case "TSTypeAssertion":
-            if (this.state.maybeInArrowParameters) {
-              this.raise(TSErrors.UnexpectedTypeCastInParameter, {
-                at: expr,
-              });
-            }
-            break;
+        if (expr?.type === "TSTypeCastExpression") {
+          exprList[i] = this.typeCastToParameter(expr);
         }
       }
       return super.toAssignableList(...arguments);
