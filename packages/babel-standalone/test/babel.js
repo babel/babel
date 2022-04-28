@@ -265,7 +265,7 @@ import { parse as acornParse } from "acorn";
 
     it("should be built into ES5", () => {
       const babelStandloneSource = fs.readFileSync(
-        new URL("../babel.js", import.meta.url),
+        require.resolve("../babel.js"),
         { encoding: "utf8" },
       );
 
