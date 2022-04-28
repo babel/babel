@@ -456,12 +456,11 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
+    "@jridgewell/gen-mapping": ^0.1.0
     "@jridgewell/trace-mapping": ^0.3.8
     "@types/jsesc": ^2.5.0
-    "@types/source-map": ^0.5.0
     charcodes: ^0.2.0
     jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
-    source-map: ^0.5.0
   languageName: unknown
   linkType: soft
 
@@ -4070,10 +4069,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/gen-mapping@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@jridgewell/gen-mapping@npm:0.1.0"
+  dependencies:
+    "@jridgewell/set-array": 1.0.0
+    "@jridgewell/sourcemap-codec": ^1.4.10
+  checksum: 8611de5acbea55fa84bcde0d6f803e006560f7a8ce618ba427e20a76913d18308fc14d5cfb324e30d0051556a96527fbc4e64cf65d68f121170776243387dcce
+  languageName: node
+  linkType: hard
+
 "@jridgewell/resolve-uri@npm:^3.0.3":
   version: 3.0.3
   resolution: "@jridgewell/resolve-uri@npm:3.0.3"
   checksum: ec9053d53cc2f86d9560b6e457b1597db876cd2e96efc919c7ced9fc6b0186c8c23a58488150770557270f04d8ea7edd642efab3cb405e653285822ef840fbce
+  languageName: node
+  linkType: hard
+
+"@jridgewell/set-array@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@jridgewell/set-array@npm:1.0.0"
+  checksum: 35dd48a205099839fa8b9e9b7138d382d1f33457404c4e96c95ad1cd9aea99904737b351d4dea8b21fa17b50fcd0dc2fdbf4c04fc4bcd3c1a42d079217261444
   languageName: node
   linkType: hard
 
@@ -4502,13 +4518,6 @@ __metadata:
   version: 7.3.4
   resolution: "@types/semver@npm:7.3.4"
   checksum: 577dc7f607fbf46cf185f61ba726e4cfecea41c4b17e55069e70a64b6cd92658f8286aa075a607303455658e87ed045d3d14c32a513c0eff381d64aecd7b72a7
-  languageName: node
-  linkType: hard
-
-"@types/source-map@npm:^0.5.0":
-  version: 0.5.2
-  resolution: "@types/source-map@npm:0.5.2"
-  checksum: e7ff6a13f396fbed6ec9181d6801fee0e466ede4b0e7f00662cd7aca34f0f30d22a7bf00e01a901b374f025a2d7857e19eee29a9dcf6c59af5168bcfc06aa66d
   languageName: node
   linkType: hard
 

@@ -3,6 +3,7 @@ import Printer from "./printer";
 import type * as t from "@babel/types";
 
 import type { Format } from "./printer";
+import type { DecodedSourceMap, Mapping } from "@jridgewell/gen-mapping";
 
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
@@ -10,7 +11,15 @@ import type { Format } from "./printer";
  */
 
 class Generator extends Printer {
-  constructor(ast: t.Node, opts: { sourceMaps?: boolean } = {}, code) {
+  constructor(
+    ast: t.Node,
+    opts: {
+      sourceFileName?: string;
+      sourceMaps?: boolean;
+      sourceRoot?: string;
+    } = {},
+    code,
+  ) {
     const format = normalizeOptions(code, opts);
     const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
     super(format, map);
@@ -217,6 +226,8 @@ export interface GeneratorResult {
     mappings: string;
     file: string;
   } | null;
+  decodedMap: DecodedSourceMap | undefined;
+  rawMappings: Mapping[] | undefined;
 }
 
 /**

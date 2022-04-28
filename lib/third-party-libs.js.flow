@@ -51,41 +51,6 @@ declare module "semver" {
   }
 }
 
-declare module "source-map" {
-  declare export type SourceMap = {
-    version: 3,
-    file: ?string,
-    sourceRoot: ?string,
-    sources: [?string],
-    sourcesContent: [?string],
-    names: [?string],
-    mappings: string,
-  };
-
-  declare module.exports: {
-    SourceMapGenerator: typeof SourceMapGenerator,
-  }
-
-  declare class SourceMapGenerator {
-    constructor(?{
-      file?: string | null,
-      sourceRoot?: string | null,
-      skipValidation?: boolean | null,
-    }): this;
-
-    addMapping({
-      generated: {
-        line: number,
-        column: number,
-      }
-    }): void;
-
-    setSourceContent(string, string): void;
-
-    toJSON(): SourceMap;
-  }
-}
-
 declare module "convert-source-map" {
   import type { SourceMap, SourceMapGenerator } from "source-map";
 

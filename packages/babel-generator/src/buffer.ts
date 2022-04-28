@@ -46,24 +46,24 @@ export default class Buffer {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
       code: this._buf.trimRight(),
-      map: null,
-      rawMappings: map?.getRawMappings(),
-    };
+      // Decoded sourcemap is free to generate.
+      decodedMap: map?.getDecoded(),
 
-    if (map) {
-      // The `.map` property is lazy to allow callers to use the raw mappings
-      // without any overhead
-      Object.defineProperty(result, "map", {
-        configurable: true,
-        enumerable: true,
-        get() {
-          return (this.map = map.get());
-        },
-        set(value) {
-          Object.defineProperty(this, "map", { value, writable: true });
-        },
-      });
-    }
+      // Encoding the sourcemap is moderately CPU expensive.
+      get map() {
+        return (result.map = map ? map.get() : null);
+      },
+      set map(value) {
+        Object.defineProperty(result, "map", { value, writable: true });
+      },
+      // Retrieving the raw mappings is very memory intensive.
+      get rawMappings() {
+        return (result.rawMappings = map?.getRawMappings());
+      },
+      set rawMappings(value) {
+        Object.defineProperty(result, "rawMappings", { value, writable: true });
+      },
+    };
 
     return result;
   }
@@ -158,8 +158,7 @@ export default class Buffer {
     force?: boolean,
   ): void {
     this._map?.mark(
-      this._position.line,
-      this._position.column,
+      this._position,
       line,
       column,
       identifierName,

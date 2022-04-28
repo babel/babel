@@ -121,8 +121,13 @@ const assertTest = function (stdout, stderr, opts, cwd) {
           expect(actual).toBe(expected || "");
         }
       } catch (e) {
-        e.message += "\n at " + filename;
-        throw e;
+        if (!process.env.OVERWRITE) {
+          e.message += "\n at " + filename;
+          throw e;
+        }
+        const expectedLoc = path.join(opts.testLoc, "out-files", filename);
+        console.log(`Updated test file: ${expectedLoc}`);
+        fs.writeFileSync(expectedLoc, actualFiles[filename]);
       }
     });
 
@@ -267,6 +272,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         }
       });
 
+      opts.testLoc = testLoc;
       opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
       opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
 
