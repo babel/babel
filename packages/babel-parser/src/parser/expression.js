@@ -303,7 +303,8 @@ export default class ExpressionParser extends LValParser {
       node.operator = operator;
 
       if (this.match(tt.eq)) {
-        node.left = this.toAssignable(left, /* isLHS */ true);
+        this.toAssignable(left, /* isLHS */ true);
+        node.left = left;
 
         if (
           refExpressionErrors.doubleProtoLoc != null &&
@@ -2425,7 +2426,8 @@ export default class ExpressionParser extends LValParser {
     params: N.Expression[],
     trailingCommaLoc: ?Position,
   ): void {
-    node.params = this.toAssignableList(params, trailingCommaLoc, false);
+    this.toAssignableList(params, trailingCommaLoc, false);
+    node.params = params;
   }
 
   parseFunctionBodyAndFinish(

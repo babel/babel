@@ -90,13 +90,12 @@ export default class LValParser extends NodeUtils {
    When this one is updated, please check if also that one needs to be updated.
 
    * @param {Node} node The expression atom
-   * @param {boolean} [isLHS=false] Whether we are parsing a LeftHandSideExpression. If isLHS is `true`, the following cases are allowed:
-                                    `[(a)] = [0]`, `[(a.b)] = [0]`
-
-   * @returns {Node} The converted assignable pattern
+   * @param {boolean} [isLHS=false] Whether we are parsing a LeftHandSideExpression.
+   *                                If isLHS is `true`, the following cases are allowed: `[(a)] = [0]`, `[(a.b)] = [0]`
+   *                                If isLHS is `false`, we are in an arrow function parameters list.
    * @memberof LValParser
    */
-  toAssignable(node: Node, isLHS: boolean = false): Node {
+  toAssignable(node: Node, isLHS: boolean = false): void {
     let parenthesized = undefined;
     if (node.type === "ParenthesizedExpression" || node.extra?.parenthesized) {
       parenthesized = unwrapParenthesizedExpression(node);

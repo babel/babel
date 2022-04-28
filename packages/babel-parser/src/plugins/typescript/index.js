@@ -3250,34 +3250,36 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): void {
       switch (node.type) {
-        case "TSTypeCastExpression":
-          return super.toAssignable(this.typeCastToParameter(node), isLHS);
-        case "TSParameterProperty":
-          return super.toAssignable(node, isLHS);
         case "ParenthesizedExpression":
-          return this.toAssignableParenthesizedExpression(node, isLHS);
+          this.toAssignableParenthesizedExpression(node, isLHS);
+          break;
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
-          node.expression = this.toAssignable(node.expression, isLHS);
-          return node;
+          this.toAssignable(node.expression, isLHS);
+          break;
+        case "AssignmentExpression":
+          if (!isLHS && node.left.type === "TSTypeCastExpression") {
+            node.left = this.typeCastToParameter(node.left);
+          }
+        /* fall through */
         default:
-          return super.toAssignable(node, isLHS);
+          super.toAssignable(node, isLHS);
       }
     }
 
-    toAssignableParenthesizedExpression(node: N.Node, isLHS: boolean) {
+    toAssignableParenthesizedExpression(node: N.Node, isLHS: boolean): void {
       switch (node.expression.type) {
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
         case "ParenthesizedExpression":
-          node.expression = this.toAssignable(node.expression, isLHS);
-          return node;
+          this.toAssignable(node.expression, isLHS);
+          break;
         default:
-          return super.toAssignable(node, isLHS);
+          super.toAssignable(node, isLHS);
       }
     }
 
