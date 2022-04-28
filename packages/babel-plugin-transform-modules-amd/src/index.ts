@@ -45,11 +45,11 @@ export interface Options extends PluginOptions {
   strictMode?: boolean;
 }
 
-export interface State {
+type State = {
   requireId?: t.Identifier;
   resolveId?: t.Identifier;
   rejectId?: t.Identifier;
-}
+};
 
 export default declare<State>((api, options: Options) => {
   api.assertVersion(7);

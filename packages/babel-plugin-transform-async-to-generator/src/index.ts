@@ -8,9 +8,9 @@ export interface Options {
   module?: string;
 }
 
-export interface State {
+type State = {
   methodWrapper?: t.Identifier | t.SequenceExpression;
-}
+};
 
 export default declare<State>((api, options: Options) => {
   api.assertVersion(7);

@@ -2,10 +2,10 @@ import { types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
 import type { PluginPass } from "@babel/core";
 
-interface State {
+type State = {
   topicReferences: NodePath<t.TopicReference>[];
   sideEffectsBeforeFirstTopicReference: boolean;
-}
+};
 
 const topicReferenceVisitor: Visitor<State> = {
   exit(path, state) {

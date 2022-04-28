@@ -30,9 +30,9 @@ export interface Options extends SyntaxOptions {
   importPolyfill?: boolean;
 }
 
-export interface State {
+type State = {
   programPath: NodePath<t.Program>;
-}
+};
 
 export default declare<State>((api, options: Options) => {
   api.assertVersion(7);
