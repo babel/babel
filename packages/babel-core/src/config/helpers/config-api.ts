@@ -24,7 +24,7 @@ type CallerFactory = (
   extractor: (callerMetadata: CallerMetadata | void) => unknown,
 ) => SimpleType;
 type TargetsFunction = () => Targets;
-type AssumptionFunction = (name: AssumptionName) => boolean;
+type AssumptionFunction = (name: AssumptionName) => boolean | void;
 
 export type ConfigAPI = {
   version: string;

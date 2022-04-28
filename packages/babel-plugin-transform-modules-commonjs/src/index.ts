@@ -49,14 +49,14 @@ export default declare((api, options: Options) => {
     lazy = false,
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
+    loose = false,
   } = options;
 
-  const constantReexports =
-    api.assumption("constantReexports") ?? options.loose;
-  const enumerableModuleMeta =
-    api.assumption("enumerableModuleMeta") ?? options.loose;
-  const noIncompleteNsImportDetection =
-    api.assumption("noIncompleteNsImportDetection") ?? false;
+  const constantReexports = api.assumption("constantReexports") ?? loose;
+  const enumerableModuleMeta = api.assumption("enumerableModuleMeta") ?? loose;
+  const noIncompleteNsImportDetection = (api.assumption(
+    "noIncompleteNsImportDetection",
+  ) ?? false) as boolean;
 
   if (
     typeof lazy !== "boolean" &&

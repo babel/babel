@@ -11,8 +11,8 @@ export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { loose = false } = options;
-  const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
-  const pureGetters = api.assumption("pureGetters") ?? loose;
+  const noDocumentAll = (api.assumption("noDocumentAll") ?? loose) as boolean;
+  const pureGetters = (api.assumption("pureGetters") ?? loose) as boolean;
 
   return {
     name: "proposal-optional-chaining",

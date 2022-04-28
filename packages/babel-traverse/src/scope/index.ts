@@ -640,7 +640,11 @@ export default class Scope {
   }
 
   // TODO: (Babel 8) Split i in two parameters, and use an object of flags
-  toArray(node: t.Node, i?: number | boolean, arrayLikeIsIterable?: boolean) {
+  toArray(
+    node: t.Node,
+    i?: number | boolean,
+    arrayLikeIsIterable?: boolean | void,
+  ) {
     if (isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding?.constant && binding.path.isGenericType("Array")) {

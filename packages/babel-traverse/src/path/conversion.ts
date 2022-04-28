@@ -143,6 +143,10 @@ export function arrowFunctionToExpression(
     specCompliant = false,
     // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
     noNewArrows = !specCompliant,
+  }: {
+    allowInsertArrow?: boolean | void;
+    specCompliant?: boolean | void;
+    noNewArrows?: boolean | void;
   } = {},
 ) {
   if (!this.isArrowFunctionExpression()) {
@@ -217,8 +221,8 @@ const getSuperCallsVisitor = mergeVisitors<{
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
   // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
-  noNewArrows = true,
-  allowInsertArrow = true,
+  noNewArrows: boolean | void = true,
+  allowInsertArrow: boolean | void = true,
 ): { thisBinding: string; fnPath: NodePath<t.Function> } {
   let arrowParent;
   let thisEnvFn = fnPath.findParent(p => {

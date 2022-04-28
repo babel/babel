@@ -185,7 +185,7 @@ export function wrapInterop(
 export function buildNamespaceInitStatements(
   metadata: ModuleMetadata,
   sourceMetadata: SourceModuleMetadata,
-  constantReexports: boolean = false,
+  constantReexports: boolean | void = false,
 ) {
   const statements = [];
 

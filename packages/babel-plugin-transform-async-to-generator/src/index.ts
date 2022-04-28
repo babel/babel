@@ -16,8 +16,9 @@ export default declare<State>((api, options: Options) => {
   api.assertVersion(7);
 
   const { method, module } = options;
-  const noNewArrows = api.assumption("noNewArrows");
-  const ignoreFunctionLength = api.assumption("ignoreFunctionLength");
+  const noNewArrows = (api.assumption("noNewArrows") ?? false) as boolean;
+  const ignoreFunctionLength = (api.assumption("ignoreFunctionLength") ??
+    false) as boolean;
 
   if (method && module) {
     return {
