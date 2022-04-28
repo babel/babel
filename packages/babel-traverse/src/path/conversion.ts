@@ -146,7 +146,7 @@ export function arrowFunctionToExpression(
   }: {
     allowInsertArrow?: boolean | void;
     specCompliant?: boolean | void;
-    noNewArrows?: boolean | void;
+    noNewArrows?: boolean;
   } = {},
 ) {
   if (!this.isArrowFunctionExpression()) {

@@ -7,7 +7,8 @@ export interface Options {
 export default declare((api, options: Options) => {
   api.assertVersion(7);
 
-  const noNewArrows = api.assumption("noNewArrows") ?? !options.spec;
+  const noNewArrows = (api.assumption("noNewArrows") ??
+    !options.spec) as boolean;
 
   return {
     name: "transform-arrow-functions",

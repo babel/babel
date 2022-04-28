@@ -16,7 +16,8 @@ export default declare<State>((api, options: Options) => {
   api.assertVersion(7);
 
   const { method, module } = options;
-  const noNewArrows = (api.assumption("noNewArrows") ?? false) as boolean;
+  // Todo(BABEL 8): Consider default it to false
+  const noNewArrows = (api.assumption("noNewArrows") ?? true) as boolean;
   const ignoreFunctionLength = (api.assumption("ignoreFunctionLength") ??
     false) as boolean;
 
