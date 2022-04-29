@@ -354,11 +354,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.isAssignable(node, isBinding);
     }
 
-    toAssignable(
-      node: N.Node,
-      isLHS: boolean = false,
-      isInObjectPattern?: boolean,
-    ): void {
+    toAssignable(node: N.Node, isLHS: boolean = false): void {
       if (node != null && this.isObjectProperty(node)) {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
@@ -367,9 +363,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             key.loc.start,
           );
         }
-        this.toAssignable(value, isLHS, isInObjectPattern);
+        this.toAssignable(value, isLHS);
       } else {
-        super.toAssignable(node, isLHS, isInObjectPattern);
+        super.toAssignable(node, isLHS);
       }
     }
 

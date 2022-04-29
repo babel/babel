@@ -3250,18 +3250,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignable(
-      node: N.Node,
-      isLHS: boolean = false,
-      isInObjectPattern?: boolean,
-    ): void {
+    toAssignable(node: N.Node, isLHS: boolean = false): void {
       switch (node.type) {
         case "ParenthesizedExpression":
-          this.toAssignableParenthesizedExpression(
-            node,
-            isLHS,
-            isInObjectPattern,
-          );
+          this.toAssignableParenthesizedExpression(node, isLHS);
           break;
         case "TSAsExpression":
         case "TSNonNullExpression":
@@ -3274,7 +3266,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           } else {
             this.raise(TSErrors.UnexpectedTypeCastInParameter, { at: node });
           }
-          this.toAssignable(node.expression, isLHS, isInObjectPattern);
+          this.toAssignable(node.expression, isLHS);
           break;
         case "AssignmentExpression":
           if (!isLHS && node.left.type === "TSTypeCastExpression") {
@@ -3282,24 +3274,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         /* fall through */
         default:
-          super.toAssignable(node, isLHS, isInObjectPattern);
+          super.toAssignable(node, isLHS);
       }
     }
 
-    toAssignableParenthesizedExpression(
-      node: N.Node,
-      isLHS: boolean,
-      isInObjectPattern?: boolean,
-    ): void {
+    toAssignableParenthesizedExpression(node: N.Node, isLHS: boolean): void {
       switch (node.expression.type) {
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
         case "ParenthesizedExpression":
-          this.toAssignable(node.expression, isLHS, isInObjectPattern);
+          this.toAssignable(node.expression, isLHS);
           break;
         default:
-          super.toAssignable(node, isLHS, isInObjectPattern);
+          super.toAssignable(node, isLHS);
       }
     }
 

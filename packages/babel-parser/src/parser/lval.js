@@ -93,16 +93,9 @@ export default class LValParser extends NodeUtils {
    * @param {boolean} [isLHS=false] Whether we are parsing a LeftHandSideExpression.
    *                                If isLHS is `true`, the following cases are allowed: `[(a)] = [0]`, `[(a.b)] = [0]`
    *                                If isLHS is `false`, we are in an arrow function parameters list.
-   * @param {boolean} [isInObjectPattern=false] `true` if the parent is an object pattern or a rest element
-   *                                of an object pattern. It's necessary because ...'s argument follows
-   *                                different rules in array and object patterns.
    * @memberof LValParser
    */
-  toAssignable(
-    node: Node,
-    isLHS: boolean = false,
-    isInObjectPattern: boolean = false,
-  ): void {
+  toAssignable(node: Node, isLHS: boolean = false): void {
     let parenthesized = undefined;
     if (node.type === "ParenthesizedExpression" || node.extra?.parenthesized) {
       parenthesized = unwrapParenthesizedExpression(node);
@@ -171,11 +164,10 @@ export default class LValParser extends NodeUtils {
       }
 
       case "SpreadElement": {
-        node.type = "RestElement";
-        const arg = node.argument;
-        this.checkToRestConversion(arg, /* allowPattern */ !isInObjectPattern);
-        this.toAssignable(arg, isLHS, isInObjectPattern);
-        break;
+        throw new Error(
+          "Internal @babel/parser error (this is a bug, please report it)." +
+            " SpreadElement should be converted by .toAssignable's caller.",
+        );
       }
 
       case "ArrayExpression":
@@ -220,10 +212,17 @@ export default class LValParser extends NodeUtils {
           : Errors.PatternHasMethod,
         { at: prop.key },
       );
-    } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raise(Errors.RestTrailingComma, { at: prop });
+    } else if (prop.type === "SpreadElement") {
+      prop.type = "RestElement";
+      const arg = prop.argument;
+      this.checkToRestConversion(arg, /* allowPattern */ false);
+      this.toAssignable(arg, isLHS);
+
+      if (!isLast) {
+        this.raise(Errors.RestTrailingComma, { at: prop });
+      }
     } else {
-      this.toAssignable(prop, isLHS, /* isInObjectPattern */ true);
+      this.toAssignable(prop, isLHS);
     }
   }
 
@@ -234,27 +233,26 @@ export default class LValParser extends NodeUtils {
     trailingCommaLoc?: ?Position,
     isLHS: boolean,
   ): void {
-    let end = exprList.length;
-    if (end) {
-      const last = exprList[end - 1];
-      if (last?.type === "RestElement") {
-        --end;
-      } else if (last?.type === "SpreadElement") {
-        this.toAssignable(last, isLHS, /* isInObjectPattern */ false);
+    const end = exprList.length - 1;
 
-        if (trailingCommaLoc) {
-          this.raise(Errors.RestTrailingComma, { at: trailingCommaLoc });
-        }
-
-        --end;
-      }
-    }
-    for (let i = 0; i < end; i++) {
+    for (let i = 0; i <= end; i++) {
       const elt = exprList[i];
-      if (elt) {
-        this.toAssignable(elt, isLHS, /* isInObjectPattern */ false);
-        if (elt.type === "RestElement") {
+      if (!elt) continue;
+
+      if (elt.type === "SpreadElement") {
+        elt.type = "RestElement";
+        const arg = elt.argument;
+        this.checkToRestConversion(arg, /* allowPattern */ true);
+        this.toAssignable(arg, isLHS);
+      } else {
+        this.toAssignable(elt, isLHS);
+      }
+
+      if (elt.type === "RestElement") {
+        if (i < end) {
           this.raise(Errors.RestTrailingComma, { at: elt });
+        } else if (trailingCommaLoc) {
+          this.raise(Errors.RestTrailingComma, { at: trailingCommaLoc });
         }
       }
     }
