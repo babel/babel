@@ -82,7 +82,7 @@ export default class SourceMap {
     const generatedLine = generated.line;
 
     // Adding an empty mapping at the start of a generated line just clutters the map.
-    if (this._lastGenLine !== generatedLine && line === null) return;
+    if (this._lastGenLine !== generatedLine && line == null) return;
 
     // If this mapping points to the same source location as the last one, we can ignore it since
     // the previous one covers it.
