@@ -66,6 +66,9 @@ defineType("AssignmentExpression", {
             "MemberExpression",
             "ArrayPattern",
             "ObjectPattern",
+            "TSAsExpresion",
+            "TSTypeAssertion",
+            "TSNonNullExpression",
           ),
     },
     right: {
@@ -319,6 +322,9 @@ defineType("ForInStatement", {
             "MemberExpression",
             "ArrayPattern",
             "ObjectPattern",
+            "TSAsExpresion",
+            "TSTypeAssertion",
+            "TSNonNullExpression",
           ),
     },
     right: {
@@ -914,6 +920,9 @@ defineType("RestElement", {
             "ArrayPattern",
             "ObjectPattern",
             "MemberExpression",
+            "TSAsExpresion",
+            "TSTypeAssertion",
+            "TSNonNullExpression",
           ),
     },
     // For Flow
@@ -1191,6 +1200,9 @@ defineType("AssignmentPattern", {
         "ObjectPattern",
         "ArrayPattern",
         "MemberExpression",
+        "TSAsExpression",
+        "TSTypeAssertion",
+        "TSNonNullExpression",
       ),
     },
     right: {
@@ -1595,6 +1607,9 @@ defineType("ForOfStatement", {
           "MemberExpression",
           "ArrayPattern",
           "ObjectPattern",
+          "TSAsExpresion",
+          "TSTypeAssertion",
+          "TSNonNullExpression",
         );
 
         return function (node, key, val) {
