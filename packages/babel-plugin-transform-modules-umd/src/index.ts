@@ -10,7 +10,9 @@ import {
   wrapInterop,
   getModuleName,
 } from "@babel/helper-module-transforms";
+import type { PluginOptions } from "@babel/helper-module-transforms";
 import { types as t, template } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
@@ -38,7 +40,18 @@ const buildWrapper = template(`
   })
 `);
 
-export default declare((api, options) => {
+export interface Options extends PluginOptions {
+  allowTopLevelThis?: boolean;
+  exactGlobals?: boolean;
+  globals?: Record<string, string>;
+  importInterop?: "babel" | "node";
+  loose?: boolean;
+  noInterop?: boolean;
+  strict?: boolean;
+  strictMode?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const {
@@ -239,11 +252,11 @@ export default declare((api, options) => {
                 this.filename || "unknown",
                 moduleName,
               ),
-            }),
-          ])[0];
-          const umdFactory = umdWrapper
-            .get("expression.arguments")[1]
-            .get("body");
+            }) as t.Statement,
+          ])[0] as NodePath<t.ExpressionStatement>;
+          const umdFactory = (
+            umdWrapper.get("expression.arguments")[1] as NodePath<t.Function>
+          ).get("body");
           umdFactory.pushContainer("directives", directives);
           umdFactory.pushContainer("body", body);
         },

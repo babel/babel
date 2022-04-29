@@ -6,7 +6,7 @@ export default declare(api => {
   return {
     name: "syntax-destructuring-private",
 
-    manipulateOptions(_: any, parserOpts: { plugins: string[] }) {
+    manipulateOptions(_, parserOpts) {
       parserOpts.plugins.push("destructuringPrivate");
     },
   };

@@ -182,7 +182,7 @@ export interface DecoratorsPluginOptions {
 
 export interface PipelineOperatorPluginOptions {
   proposal: "minimal" | "fsharp" | "hack" | "smart";
-  topicToken?: "%" | "#" | "@@" | "^^";
+  topicToken?: "%" | "#" | "@@" | "^^" | "^";
 }
 
 export interface RecordAndTuplePluginOptions {
@@ -191,6 +191,7 @@ export interface RecordAndTuplePluginOptions {
 
 export interface FlowPluginOptions {
   all?: boolean;
+  enums?: boolean;
 }
 
 export interface TypeScriptPluginOptions {

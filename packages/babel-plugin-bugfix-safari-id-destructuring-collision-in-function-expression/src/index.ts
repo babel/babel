@@ -1,6 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { PluginPass } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
 import { shouldTransform } from "./util";
 
 export default declare(api => {
@@ -20,6 +18,6 @@ export default declare(api => {
           scope.rename(name, newParamName);
         }
       },
-    } as Visitor<PluginPass>,
+    },
   };
 });

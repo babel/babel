@@ -3,6 +3,7 @@ import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
+import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
 import type { NodePath } from "@babel/traverse";
 
@@ -154,7 +155,12 @@ function constructExportCall(
   return statements;
 }
 
-export default declare((api, options) => {
+export interface Options extends PluginOptions {
+  allowTopLevelThis?: boolean;
+  systemGlobal?: string;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { systemGlobal = "System", allowTopLevelThis = false } = options;

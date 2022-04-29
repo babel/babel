@@ -8,8 +8,8 @@ export default declare(api => {
     return t.isLiteral(t.toComputedKey(node, node.key), { value: "__proto__" });
   }
 
-  function isProtoAssignmentExpression(node) {
-    const left = node.left;
+  function isProtoAssignmentExpression(node): node is t.MemberExpression {
+    const left = node;
     return (
       t.isMemberExpression(left) &&
       // @ts-expect-error todo(flow->ts): property can be t.PrivateName
@@ -28,7 +28,7 @@ export default declare(api => {
 
     visitor: {
       AssignmentExpression(path, file) {
-        if (!isProtoAssignmentExpression(path.node)) return;
+        if (!isProtoAssignmentExpression(path.node.left)) return;
 
         const nodes = [];
         const left = path.node.left.object;
@@ -55,14 +55,9 @@ export default declare(api => {
         const expr = path.node.expression;
         if (!t.isAssignmentExpression(expr, { operator: "=" })) return;
 
-        if (isProtoAssignmentExpression(expr)) {
+        if (isProtoAssignmentExpression(expr.left)) {
           path.replaceWith(
-            buildDefaultsCallExpression(
-              expr,
-              // todo(flow->ts) isProtoAssignmentExpression actually checks that
-              (expr.left as t.MemberExpression).object,
-              file,
-            ),
+            buildDefaultsCallExpression(expr, expr.left.object, file),
           );
         }
       },
@@ -75,6 +70,7 @@ export default declare(api => {
         for (let i = 0; i < properties.length; i++) {
           const prop = properties[i];
           if (isProtoKey(prop)) {
+            // @ts-expect-error Fixme: we should also handle ObjectMethod with __proto__ key
             proto = prop.value;
             properties.splice(i, 1);
             break;

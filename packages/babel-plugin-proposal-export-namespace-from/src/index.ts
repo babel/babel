@@ -28,6 +28,7 @@ export default declare(api => {
         const specifier = specifiers.shift();
         const { exported } = specifier;
         const uid = scope.generateUidIdentifier(
+          // @ts-ignore Identifier ?? StringLiteral
           exported.name ?? exported.value,
         );
 

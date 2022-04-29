@@ -2,7 +2,11 @@
 import { createRegExpFeaturePlugin } from "@babel/helper-create-regexp-features-plugin";
 import { declare } from "@babel/helper-plugin-utils";
 
-export default declare((api, options) => {
+export interface Options {
+  useUnicodeFlag?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { useUnicodeFlag = true } = options;

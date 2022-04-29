@@ -19,6 +19,7 @@ export default declare(api => {
                 null,
                 [],
                 t.blockStatement([
+                  // @ts-ignore fixme: t.toStatement may return false
                   t.toStatement(node),
                   t.returnStatement(t.cloneNode(node.id)),
                 ]),

@@ -1,20 +1,24 @@
-export function declare<
-  Args extends
-    | [any]
-    | [any, any?]
-    | [any, any?, any?]
-    | [any, any]
-    | [any, any, any?]
-    | [any, any, any],
-  Builder extends (...args: Args) => any,
->(
-  builder: Builder,
-  // todo(flow->ts) maybe add stricter type for returned function
-  // reason any is there to not expose exact implementation details in type
-  // example of issue with this packages/babel-preset-typescript/src/index.ts
-): Builder extends (...args: infer A) => any ? (...args: A) => any : never {
+import type {
+  PluginAPI,
+  PluginObject,
+  PluginPass,
+  PresetAPI,
+  PresetObject,
+} from "@babel/core";
+
+export function declare<State = {}, Option = {}>(
+  builder: (
+    api: PluginAPI,
+    options: Option,
+    dirname: string,
+  ) => PluginObject<State & PluginPass>,
+): (
+  api: PluginAPI,
+  options: Option,
+  dirname: string,
+) => PluginObject<State & PluginPass> {
   // @ts-ignore
-  return (api, options, dirname) => {
+  return (api, options: Option, dirname: string) => {
     let clonedApi;
 
     for (const name of Object.keys(apiPolyfills)) {
@@ -29,6 +33,10 @@ export function declare<
     return builder(clonedApi ?? api, options || {}, dirname);
   };
 }
+
+export const declarePreset = declare as <Option = {}>(
+  builder: (api: PresetAPI, options: Option, dirname: string) => PresetObject,
+) => (api: PresetAPI, options: Option, dirname: string) => PresetObject;
 
 const apiPolyfills = {
   // Not supported by Babel 7 and early versions of Babel 7 beta.

@@ -28,6 +28,8 @@ import {
 } from "./option-assertions";
 import type { ValidatorSet, Validator, OptionPath } from "./option-assertions";
 import type { UnloadedDescriptor } from "../config-descriptors";
+import type { ParserOptions } from "@babel/parser";
+import type { GeneratorOptions } from "@babel/generator";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: assertString as Validator<ValidatedOptions["cwd"]>,
@@ -181,9 +183,9 @@ export type ValidatedOptions = {
   sourceFileName?: string;
   sourceRoot?: string;
   // Deprecate top level parserOpts
-  parserOpts?: {};
+  parserOpts?: ParserOptions;
   // Deprecate top level generatorOpts
-  generatorOpts?: {};
+  generatorOpts?: GeneratorOptions;
 };
 
 export type NormalizedOptions = {
@@ -254,7 +256,7 @@ type EnvPath = Readonly<{
 
 export type NestingPath = RootPath | OverridesPath | EnvPath;
 
-export const assumptionsNames = new Set<string>([
+const knownAssumptions = [
   "arrayLikeIsIterable",
   "constantReexports",
   "constantSuper",
@@ -276,7 +278,9 @@ export const assumptionsNames = new Set<string>([
   "setSpreadProperties",
   "skipForOfIteratorClosing",
   "superIsCallableConstructor",
-]);
+] as const;
+export type AssumptionName = typeof knownAssumptions[number];
+export const assumptionsNames = new Set(knownAssumptions);
 
 function getSource(loc: NestingPath): OptionsSource {
   return loc.type === "root" ? loc.source : getSource(loc.parent);

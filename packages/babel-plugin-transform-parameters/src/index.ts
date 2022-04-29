@@ -3,12 +3,17 @@ import convertFunctionParams from "./params";
 import convertFunctionRest from "./rest";
 export { convertFunctionParams };
 
-export default declare((api, options) => {
+export interface Options {
+  loose?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const ignoreFunctionLength =
     api.assumption("ignoreFunctionLength") ?? options.loose;
-  const noNewArrows = api.assumption("noNewArrows");
+  // Todo(BABEL 8): Consider default it to false
+  const noNewArrows = (api.assumption("noNewArrows") ?? true) as boolean;
 
   return {
     name: "transform-parameters",

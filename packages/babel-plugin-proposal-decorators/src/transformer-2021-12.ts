@@ -4,6 +4,8 @@ import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
+import type { PluginAPI, PluginObject } from "@babel/core";
+import type { Options } from "..";
 
 type ClassDecoratableElement =
   | t.ClassMethod
@@ -999,7 +1001,10 @@ function transformClass(
   return path;
 }
 
-export default function ({ assertVersion, assumption }, { loose }) {
+export default function (
+  { assertVersion, assumption }: PluginAPI,
+  { loose }: Options,
+): PluginObject {
   assertVersion("^7.16.0");
 
   const VISITED = new WeakSet<NodePath>();
@@ -1010,7 +1015,9 @@ export default function ({ assertVersion, assumption }, { loose }) {
     inherits: syntaxDecorators,
 
     visitor: {
-      "ExportNamedDeclaration|ExportDefaultDeclaration"(path) {
+      "ExportNamedDeclaration|ExportDefaultDeclaration"(
+        path: NodePath<t.ExportNamedDeclaration | t.ExportDefaultDeclaration>,
+      ) {
         const { declaration } = path.node;
         if (
           declaration?.type === "ClassDeclaration" &&
@@ -1022,7 +1029,7 @@ export default function ({ assertVersion, assumption }, { loose }) {
         }
       },
 
-      Class(path: NodePath<t.Class>, state: any) {
+      Class(path, state) {
         if (VISITED.has(path)) return;
 
         const newPath = transformClass(path, state, constantSuper);

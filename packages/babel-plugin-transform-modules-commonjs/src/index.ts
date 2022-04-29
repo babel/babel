@@ -10,10 +10,24 @@ import {
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
+import type { PluginOptions } from "@babel/helper-module-transforms";
 
 import { createDynamicImportTransform } from "babel-plugin-dynamic-import-node/utils";
 
-export default declare((api, options) => {
+export interface Options extends PluginOptions {
+  allowCommonJSExports?: boolean;
+  allowTopLevelThis?: boolean;
+  importInterop?: "babel" | "node";
+  lazy?: boolean | string[] | ((string) => boolean);
+  loose?: boolean;
+  mjsStrictNamespace?: boolean;
+  noInterop?: boolean;
+  strict?: boolean;
+  strictMode?: boolean;
+  strictNamespace?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const transformImportCall = createDynamicImportTransform(api);
@@ -35,14 +49,14 @@ export default declare((api, options) => {
     lazy = false,
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
+    loose = false,
   } = options;
 
-  const constantReexports =
-    api.assumption("constantReexports") ?? options.loose;
-  const enumerableModuleMeta =
-    api.assumption("enumerableModuleMeta") ?? options.loose;
-  const noIncompleteNsImportDetection =
-    api.assumption("noIncompleteNsImportDetection") ?? false;
+  const constantReexports = api.assumption("constantReexports") ?? loose;
+  const enumerableModuleMeta = api.assumption("enumerableModuleMeta") ?? loose;
+  const noIncompleteNsImportDetection = (api.assumption(
+    "noIncompleteNsImportDetection",
+  ) ?? false) as boolean;
 
   if (
     typeof lazy !== "boolean" &&

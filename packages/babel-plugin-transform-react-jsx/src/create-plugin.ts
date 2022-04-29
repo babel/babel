@@ -39,8 +39,19 @@ const get = (pass: PluginPass, name: string) =>
 const set = (pass: PluginPass, name: string, v: any) =>
   pass.set(`@babel/plugin-react-jsx/${name}`, v);
 
+export interface Options {
+  filter?: (node: t.Node, pass: PluginPass) => boolean;
+  importSource?: string;
+  pragma?: string;
+  pragmaFrag?: string;
+  pure?: string;
+  runtime?: "automatic" | "classic";
+  throwIfNamespace?: boolean;
+  useBuiltIns: boolean;
+  useSpread?: boolean;
+}
 export default function createPlugin({ name, development }) {
-  return declare((api, options) => {
+  return declare((api, options: Options) => {
     const {
       pure: PURE_ANNOTATION,
 

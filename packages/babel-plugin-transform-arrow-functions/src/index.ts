@@ -1,17 +1,20 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
 
-export default declare((api, options) => {
+export interface Options {
+  spec?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
-  const noNewArrows = api.assumption("noNewArrows") ?? !options.spec;
+  const noNewArrows = (api.assumption("noNewArrows") ??
+    !options.spec) as boolean;
 
   return {
     name: "transform-arrow-functions",
 
     visitor: {
-      ArrowFunctionExpression(path: NodePath<t.ArrowFunctionExpression>) {
+      ArrowFunctionExpression(path) {
         // In some conversion cases, it may have already been converted to a function while this callback
         // was queued up.
         if (!path.isArrowFunctionExpression()) return;

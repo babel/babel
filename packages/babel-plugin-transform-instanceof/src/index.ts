@@ -24,7 +24,13 @@ export default declare(api => {
           if (isUnderHelper) {
             return;
           } else {
-            path.replaceWith(t.callExpression(helper, [node.left, node.right]));
+            path.replaceWith(
+              t.callExpression(helper, [
+                // @ts-ignore node.left can be PrivateName only when node.operator is "in"
+                node.left,
+                node.right,
+              ]),
+            );
           }
         }
       },

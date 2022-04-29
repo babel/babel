@@ -1,5 +1,5 @@
 import { types as t } from "@babel/core";
-import type { File } from "@babel/core";
+import type { File, PluginAPI, PluginObject } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
@@ -14,7 +14,6 @@ import { buildDecoratedClass, hasDecorators } from "./decorators";
 import { injectInitialization, extractComputedKeys } from "./misc";
 import { enableFeature, FEATURES, isLoose, shouldTransform } from "./features";
 import { assertFieldTransformed } from "./typescript";
-import type { ParserOptions } from "@babel/parser";
 
 export { FEATURES, enableFeature, injectInitialization };
 
@@ -33,11 +32,9 @@ interface Options {
   name: string;
   feature: number;
   loose?: boolean;
-  inherits?: (api: any, options: any) => any;
-  // same as PluginObject.manipulateOptions
-  manipulateOptions?: (options: unknown, parserOpts: ParserOptions) => void;
-  // TODO(flow->ts): change to babel api
-  api?: { assumption: (key?: string) => boolean | undefined };
+  inherits?: PluginObject["inherits"];
+  manipulateOptions?: PluginObject["manipulateOptions"];
+  api?: PluginAPI;
 }
 
 export function createClassFeaturePlugin({
@@ -45,7 +42,7 @@ export function createClassFeaturePlugin({
   feature,
   loose,
   manipulateOptions,
-  // TODO(Babel 8): Remove the default value
+  // @ts-ignore TODO(Babel 8): Remove the default value
   api = { assumption: () => void 0 },
   inherits,
 }: Options) {
@@ -188,7 +185,7 @@ export function createClassFeaturePlugin({
         const privateNamesMap = buildPrivateNamesMap(props);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
-          privateFieldsAsProperties ?? loose,
+          (privateFieldsAsProperties ?? loose) as boolean,
           state,
         );
 
@@ -227,9 +224,9 @@ export function createClassFeaturePlugin({
               props,
               privateNamesMap,
               state,
-              setPublicClassFields ?? loose,
-              privateFieldsAsProperties ?? loose,
-              constantSuper ?? loose,
+              (setPublicClassFields ?? loose) as boolean,
+              (privateFieldsAsProperties ?? loose) as boolean,
+              (constantSuper ?? loose) as boolean,
               innerBinding,
             ));
         }

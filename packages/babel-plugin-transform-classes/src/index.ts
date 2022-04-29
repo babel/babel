@@ -15,16 +15,22 @@ const builtinClasses = new Set([
   ...getBuiltinClasses("browser"),
 ]);
 
-export default declare((api, options) => {
+export interface Options {
+  loose?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
-  const { loose } = options;
+  const { loose = false } = options;
 
-  const setClassMethods = api.assumption("setClassMethods") ?? options.loose;
-  const constantSuper = api.assumption("constantSuper") ?? options.loose;
-  const superIsCallableConstructor =
-    api.assumption("superIsCallableConstructor") ?? options.loose;
-  const noClassCalls = api.assumption("noClassCalls") ?? options.loose;
+  const setClassMethods = (api.assumption("setClassMethods") ??
+    loose) as boolean;
+  const constantSuper = (api.assumption("constantSuper") ?? loose) as boolean;
+  const superIsCallableConstructor = (api.assumption(
+    "superIsCallableConstructor",
+  ) ?? loose) as boolean;
+  const noClassCalls = (api.assumption("noClassCalls") ?? loose) as boolean;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();

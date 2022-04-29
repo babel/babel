@@ -5,8 +5,6 @@ import {
   convertVariableDeclaration,
   convertAssignmentExpression,
 } from "./util";
-import type { PluginPass } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
 
 /**
  * Test if a VariableDeclaration's declarations contains any Patterns.
@@ -21,16 +19,26 @@ function variableDeclarationHasPattern(node: t.VariableDeclaration) {
   return false;
 }
 
-export default declare((api, options) => {
+export interface Options {
+  allowArrayLike?: boolean;
+  loose?: boolean;
+  useBuiltIns?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   const { useBuiltIns = false } = options;
 
-  const iterableIsArray = api.assumption("iterableIsArray") ?? options.loose;
-  const arrayLikeIsIterable =
-    options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
-  const objectRestNoSymbols =
-    api.assumption("objectRestNoSymbols") ?? options.loose;
+  const iterableIsArray = (api.assumption("iterableIsArray") ??
+    options.loose ??
+    false) as boolean;
+  const arrayLikeIsIterable = (options.allowArrayLike ??
+    api.assumption("arrayLikeIsIterable") ??
+    false) as boolean;
+  const objectRestNoSymbols = (api.assumption("objectRestNoSymbols") ??
+    options.loose ??
+    false) as boolean;
 
   return {
     name: "transform-destructuring",
@@ -167,6 +175,6 @@ export default declare((api, options) => {
           useBuiltIns,
         );
       },
-    } as Visitor<PluginPass>,
+    },
   };
 });

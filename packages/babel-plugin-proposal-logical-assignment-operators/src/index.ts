@@ -18,20 +18,24 @@ export default declare(api => {
           return;
         }
 
-        const lhs = t.cloneNode(left);
+        const lhs = t.cloneNode(left) as t.Identifier | t.MemberExpression;
         if (t.isMemberExpression(left)) {
           const { object, property, computed } = left;
           const memo = scope.maybeGenerateMemoised(object);
           if (memo) {
             left.object = memo;
-            lhs.object = t.assignmentExpression("=", t.cloneNode(memo), object);
+            (lhs as t.MemberExpression).object = t.assignmentExpression(
+              "=",
+              t.cloneNode(memo),
+              object,
+            );
           }
 
           if (computed) {
             const memo = scope.maybeGenerateMemoised(property);
             if (memo) {
               left.property = memo;
-              lhs.property = t.assignmentExpression(
+              (lhs as t.MemberExpression).property = t.assignmentExpression(
                 "=",
                 t.cloneNode(memo),
                 // @ts-expect-error todo(flow->ts): property can be t.PrivateName
@@ -43,6 +47,7 @@ export default declare(api => {
 
         path.replaceWith(
           t.logicalExpression(
+            // @ts-ignore operatorTrunc has been tested by t.LOGICAL_OPERATORS
             operatorTrunc,
             lhs,
             t.assignmentExpression("=", left, right),

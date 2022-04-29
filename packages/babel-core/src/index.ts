@@ -29,6 +29,13 @@ export {
   loadOptionsAsync,
 } from "./config";
 
+export type {
+  PluginAPI,
+  PluginObject,
+  PresetAPI,
+  PresetObject,
+} from "./config";
+
 export { transform, transformSync, transformAsync } from "./transform";
 export {
   transformFile,

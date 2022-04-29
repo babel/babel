@@ -2,12 +2,14 @@ import { declare } from "@babel/helper-plugin-utils";
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import { types as t } from "@babel/core";
+import type { PluginPass } from "@babel/core";
+import type { Visitor } from "@babel/traverse";
 import rewriteForAwait from "./for-await";
 
 export default declare(api => {
   api.assertVersion(7);
 
-  const yieldStarVisitor = {
+  const yieldStarVisitor: Visitor<PluginPass> = {
     Function(path) {
       path.skip();
     },
@@ -22,7 +24,7 @@ export default declare(api => {
     },
   };
 
-  const forAwaitVisitor = {
+  const forAwaitVisitor: Visitor<PluginPass> = {
     Function(path) {
       path.skip();
     },
@@ -36,7 +38,7 @@ export default declare(api => {
       });
 
       const { declar, loop } = build;
-      const block = loop.body;
+      const block = loop.body as t.BlockStatement;
 
       // ensure that it's a block so we can take all its statements
       path.ensureBlock();
@@ -47,7 +49,7 @@ export default declare(api => {
       }
 
       // push the rest of the original loop body onto our new body
-      block.body.push(...node.body.body);
+      block.body.push(...(node.body as t.BlockStatement).body);
 
       t.inherits(loop, node);
       t.inherits(loop.body, node.body);
@@ -60,7 +62,7 @@ export default declare(api => {
     },
   };
 
-  const visitor = {
+  const visitor: Visitor<PluginPass> = {
     Function(path, state) {
       if (!path.node.async) return;
 

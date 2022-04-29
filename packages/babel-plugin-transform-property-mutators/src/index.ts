@@ -11,25 +11,25 @@ export default declare(api => {
     visitor: {
       ObjectExpression(path, file) {
         const { node } = path;
-        let hasAny = false;
-        for (const prop of node.properties) {
-          if (prop.kind === "get" || prop.kind === "set") {
-            hasAny = true;
-            break;
+        let mutatorMap;
+        const newProperties = node.properties.filter(function (prop) {
+          if (t.isObjectMethod(prop)) {
+            if (prop.kind === "get" || prop.kind === "set") {
+              mutatorMap ??= {};
+              if (!prop.computed) {
+                defineMap.push(mutatorMap, prop, null, file);
+                return false;
+              }
+            }
           }
-        }
-        if (!hasAny) return;
-
-        const mutatorMap = {};
-
-        node.properties = node.properties.filter(function (prop) {
-          if (!prop.computed && (prop.kind === "get" || prop.kind === "set")) {
-            defineMap.push(mutatorMap, prop, null, file);
-            return false;
-          } else {
-            return true;
-          }
+          return true;
         });
+
+        if (mutatorMap === undefined) {
+          return;
+        }
+
+        node.properties = newProperties;
 
         path.replaceWith(
           t.callExpression(

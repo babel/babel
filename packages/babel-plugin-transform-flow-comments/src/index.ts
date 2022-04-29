@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import { types as t } from "@babel/core";
 import generateCode from "@babel/generator";
+import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -111,7 +112,11 @@ export default declare(api => {
           attachComment({
             ofPath: path.get("typeAnnotation"),
             toPath: path,
-            optional: node.optional || node.typeAnnotation.optional,
+            optional:
+              node.optional ||
+              // @ts-expect-error Fixme: optional is not in t.TypeAnnotation,
+              // maybe we can remove it
+              node.typeAnnotation.optional,
           });
           if (node.optional) {
             node.optional = false;
@@ -128,7 +133,9 @@ export default declare(api => {
       AssignmentPattern: {
         exit({ node }) {
           const { left } = node;
+          // @ts-ignore optional is not in ObjectPattern
           if (left.optional) {
+            // @ts-ignore optional is not in ObjectPattern
             left.optional = false;
           }
         },
@@ -142,6 +149,7 @@ export default declare(api => {
           attachComment({
             ofPath: path.get("typeParameters"),
             toPath: path.get("id"),
+            // @ts-ignore Fixme: optional is not in t.TypeParameterDeclaration
             optional: node.typeParameters.optional,
           });
         }
@@ -150,6 +158,7 @@ export default declare(api => {
             ofPath: path.get("returnType"),
             toPath: path.get("body"),
             where: "leading",
+            // @ts-ignore Fixme: optional is not in t.TypeAnnotation
             optional: node.returnType.typeAnnotation.optional,
           });
         }
@@ -164,6 +173,7 @@ export default declare(api => {
           attachComment({
             ofPath: path.get("typeAnnotation"),
             toPath: path.get("key"),
+            // @ts-ignore Fixme: optional is not in t.TypeAnnotation
             optional: node.typeAnnotation.optional,
           });
         }
@@ -186,12 +196,16 @@ export default declare(api => {
           return;
         }
 
-        const typeSpecifiers = node.specifiers.filter(specifier =>
-          isTypeImport(specifier.importKind),
+        const typeSpecifiers = node.specifiers.filter(
+          specifier =>
+            specifier.type === "ImportSpecifier" &&
+            isTypeImport(specifier.importKind),
         );
 
         const nonTypeSpecifiers = node.specifiers.filter(
-          specifier => !isTypeImport(specifier.importKind),
+          specifier =>
+            specifier.type !== "ImportSpecifier" ||
+            !isTypeImport(specifier.importKind),
         );
         node.specifiers = nonTypeSpecifiers;
 
@@ -213,7 +227,11 @@ export default declare(api => {
           attachComment({
             ofPath: path.get("typeAnnotation"),
             toPath: path,
-            optional: node.optional || node.typeAnnotation.optional,
+            optional:
+              // @ts-ignore optional is not in ObjectPattern
+              node.optional ||
+              // @ts-ignore Fixme: optional is not in t.TypeAnnotation
+              node.typeAnnotation.optional,
           });
         }
       },
@@ -228,6 +246,7 @@ export default declare(api => {
         if (node.typeParameters) {
           const typeParameters = path.get("typeParameters");
           comments.push(
+            // @ts-ignore optional is not in TypeParameterDeclaration
             generateComment(typeParameters, node.typeParameters.optional),
           );
           const trailingComments = node.typeParameters.trailingComments;
@@ -247,10 +266,13 @@ export default declare(api => {
           }
 
           if (node.superTypeParameters) {
-            const superTypeParameters = path.get("superTypeParameters");
+            const superTypeParameters = path.get(
+              "superTypeParameters",
+            ) as NodePath<t.TypeParameterInstantiation>;
             comments.push(
               generateComment(
                 superTypeParameters,
+                // @ts-ignore optional is not in TypeParameterInstantiation
                 superTypeParameters.node.optional,
               ),
             );

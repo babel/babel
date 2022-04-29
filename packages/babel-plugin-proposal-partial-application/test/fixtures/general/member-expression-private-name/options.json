@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-partial-application"],
+  "minNodeVersion": "12.11.0"
+}

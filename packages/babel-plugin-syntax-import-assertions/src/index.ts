@@ -7,7 +7,7 @@ export default declare(api => {
     name: "syntax-import-assertions",
 
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push(["importAssertions"]);
+      parserOpts.plugins.push("importAssertions");
     },
   };
 });

@@ -34,6 +34,7 @@ import type {
 import type { NodePath } from "@babel/traverse";
 
 export { default as getModuleName } from "./get-module-name";
+export type { PluginOptions } from "./get-module-name";
 
 export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
@@ -184,7 +185,7 @@ export function wrapInterop(
 export function buildNamespaceInitStatements(
   metadata: ModuleMetadata,
   sourceMetadata: SourceModuleMetadata,
-  constantReexports: boolean = false,
+  constantReexports: boolean | void = false,
 ) {
   const statements = [];
 

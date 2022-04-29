@@ -3,6 +3,7 @@ import { featuresKey, FEATURES, enableFeature, runtimeKey } from "./features";
 import { generateRegexpuOptions, canSkipRegexpu, transformFlags } from "./util";
 
 import { types as t } from "@babel/core";
+import type { PluginObject } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 declare const PACKAGE_JSON: { name: string; version: string };
@@ -20,8 +21,8 @@ export function createRegExpFeaturePlugin({
   name,
   feature,
   options = {} as any,
-  manipulateOptions = (() => {}) as (opts: any, parserOpts: any) => void,
-}) {
+  manipulateOptions = (() => {}) as PluginObject["manipulateOptions"],
+}): PluginObject {
   return {
     name,
 

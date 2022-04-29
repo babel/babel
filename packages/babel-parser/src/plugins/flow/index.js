@@ -353,7 +353,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    flowParsePredicate(): N.FlowType {
+    flowParsePredicate(): N.FlowPredicate {
       const node = this.startNode();
       const moduloLoc = this.state.startLoc;
       this.next(); // eat `%`
