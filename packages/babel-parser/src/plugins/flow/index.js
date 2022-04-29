@@ -2370,7 +2370,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         node.left = this.typeCastToParameter(node.left);
       }
-      super.toAssignable(node, isLHS);
+      super.toAssignable(...arguments);
     }
 
     // turn type casts that we found in function parameter head into type annotated params

@@ -357,7 +357,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     toAssignable(
       node: N.Node,
       isLHS: boolean = false,
-      isInObjectPattern: boolean = false,
+      isInObjectPattern?: boolean,
     ): void {
       if (node != null && this.isObjectProperty(node)) {
         const { key, value } = node;
