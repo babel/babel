@@ -20,6 +20,27 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.10 (2022-04-29)
+
+#### :bug: Bug Fix
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`
+  * [#14479](https://github.com/babel/babel/pull/14479) [cli] Avoid `SourceMapGenerator` for simple map concatenation ([@jridgewell](https://github.com/jridgewell))
+
+#### :nail_care: Polish
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-fixtures`, `babel-helper-transform-fixture-test-runner`
+  * [#14506](https://github.com/babel/babel/pull/14506) Do not add sourcemap markings for indentation ([@jridgewell](https://github.com/jridgewell))
+* `babel-plugin-proposal-pipeline-operator`, `babel-traverse`
+  * [#14424](https://github.com/babel/babel/pull/14424) Update detection of pure nodes (`Scope#isPure`) ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-core`
+  * [#14493](https://github.com/babel/babel/pull/14493) Remove git.io shortlinks from repo ([@Andoryuuta](https://github.com/Andoryuuta))
+* Other
+  * [#14462](https://github.com/babel/babel/pull/14462) fix: build standalone on windows ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :running_woman: Performance
+* `babel-cli`, `babel-core`, `babel-generator`
+  * [#14497](https://github.com/babel/babel/pull/14497) Switch to `@jridgewell/gen-mapping` for sourcemap generation ([@jridgewell](https://github.com/jridgewell))
 ## v7.17.9 (2022-04-06)
 
 #### :bug: Bug Fix
