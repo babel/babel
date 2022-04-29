@@ -1,10 +1,10 @@
 import {
   GenMapping,
-  addMapping,
+  maybeAddMapping,
   setSourceContent,
   allMappings,
-  encodedMap,
-  decodedMap,
+  toEncodedMap,
+  toDecodedMap,
 } from "@jridgewell/gen-mapping";
 
 import type {
@@ -55,11 +55,11 @@ export default class SourceMap {
    * Get the sourcemap.
    */
   get(): EncodedSourceMap {
-    return encodedMap(this._map);
+    return toEncodedMap(this._map);
   }
 
   getDecoded(): DecodedSourceMap {
-    return decodedMap(this._map);
+    return toDecodedMap(this._map);
   }
 
   getRawMappings(): Mapping[] {
@@ -77,30 +77,10 @@ export default class SourceMap {
     column: number,
     identifierName?: string | null,
     filename?: string | null,
-    force?: boolean,
   ) {
-    const generatedLine = generated.line;
-
-    // Adding an empty mapping at the start of a generated line just clutters the map.
-    if (this._lastGenLine !== generatedLine && line == null) return;
-
-    // If this mapping points to the same source location as the last one, we can ignore it since
-    // the previous one covers it.
-    if (
-      !force &&
-      this._lastGenLine === generatedLine &&
-      this._lastSourceLine === line &&
-      this._lastSourceColumn === column
-    ) {
-      return;
-    }
-
     this._rawMappings = undefined;
-    this._lastGenLine = generatedLine;
-    this._lastSourceLine = line;
-    this._lastSourceColumn = column;
 
-    addMapping(this._map, {
+    maybeAddMapping(this._map, {
       name: identifierName,
       generated,
       source:

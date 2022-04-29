@@ -7,9 +7,13 @@ const supportsESMAndJestLightRunner = semver.satisfies(
   "^12.22 || ^13.7 || >=14.17"
 );
 const isPublishBundle = process.env.IS_PUBLISH;
+const debug = process.env.TEST_DEBUG;
 
 module.exports = {
-  runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
+  runner:
+    supportsESMAndJestLightRunner && !debug
+      ? "jest-light-runner"
+      : "jest-runner",
 
   collectCoverageFrom: [
     "packages/*/src/**/*.{js,mjs,ts}",
