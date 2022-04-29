@@ -79,29 +79,40 @@ const assertTest = function (stdout, stderr, opts, cwd) {
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
-  if (opts.stderr) {
-    if (opts.stderrContains) {
-      expect(stderr).toContain(expectStderr);
-    } else {
-      expect(stderr).toBe(expectStderr);
+  try {
+    if (opts.stderr) {
+      if (opts.stderrContains) {
+        expect(stderr).toContain(expectStderr);
+      } else {
+        expect(stderr).toBe(expectStderr);
+      }
+    } else if (stderr) {
+      throw new Error("stderr:\n" + stderr);
     }
-  } else if (stderr) {
-    throw new Error("stderr:\n" + stderr);
+  } catch (e) {
+    if (!process.env.OVERWRITE) throw e;
+    console.log(`Updated test file: ${opts.stderrPath}`);
+    outputFileSync(opts.stderrPath, stderr + "\n");
   }
 
   const expectStdout = opts.stdout.trim();
   stdout = stdout.trim();
   stdout = stdout.replace(/\\/g, "/");
 
-  if (opts.stdout) {
-    if (opts.stdoutContains) {
-      expect(stdout).toContain(expectStdout);
-    } else {
-      fs.writeFileSync(opts.stdoutPath, stdout + "\n");
-      expect(stdout).toBe(expectStdout);
+  try {
+    if (opts.stdout) {
+      if (opts.stdoutContains) {
+        expect(stdout).toContain(expectStdout);
+      } else {
+        expect(stdout).toBe(expectStdout);
+      }
+    } else if (stdout) {
+      throw new Error("stdout:\n" + stdout);
     }
-  } else if (stdout) {
-    throw new Error("stdout:\n" + stdout);
+  } catch (e) {
+    if (!process.env.OVERWRITE) throw e;
+    console.log(`Updated test file: ${opts.stdoutPath}`);
+    outputFileSync(opts.stdoutPath, stdout + "\n");
   }
 
   if (opts.outFiles) {
@@ -127,7 +138,7 @@ const assertTest = function (stdout, stderr, opts, cwd) {
         }
         const expectedLoc = path.join(opts.testLoc, "out-files", filename);
         console.log(`Updated test file: ${expectedLoc}`);
-        fs.writeFileSync(expectedLoc, actualFiles[filename]);
+        outputFileSync(expectedLoc, actualFiles[filename]);
       }
     });
 

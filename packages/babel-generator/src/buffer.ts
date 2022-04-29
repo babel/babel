@@ -2,6 +2,34 @@ import type SourceMap from "./source-map";
 import type * as t from "@babel/types";
 import * as charcodes from "charcodes";
 
+type Pos = {
+  line: number;
+  column: number;
+};
+type Loc = {
+  start?: Pos;
+  end?: Pos;
+  identifierName?: string;
+  filename?: string;
+};
+type SourcePos = {
+  identifierName: string | undefined;
+  line: number | undefined;
+  column: number | undefined;
+  filename: string | undefined;
+  force: boolean;
+};
+
+function SourcePos(): SourcePos {
+  return {
+    identifierName: undefined,
+    line: undefined,
+    column: undefined,
+    filename: undefined,
+    force: false,
+  };
+}
+
 const SPACES_RE = /^[ \t]+$/;
 export default class Buffer {
   constructor(map?: SourceMap | null) {
@@ -9,30 +37,16 @@ export default class Buffer {
   }
 
   _map: SourceMap = null;
-  _buf: string = "";
-  _last: number = 0;
-  _queue: Array<
-    [
-      str: string,
-      line: number,
-      column: number,
-      identifierName: string | null,
-      filename: string | null | undefined,
-      force: boolean | undefined,
-    ]
-  > = [];
+  _buf = "";
+  _last = 0;
+  _queue: Parameters<Buffer["_append"]>[] = [];
 
-  _position: any = {
+  _position = {
     line: 1,
     column: 0,
   };
-  _sourcePosition: any = {
-    identifierName: null,
-    line: null,
-    column: null,
-    filename: null,
-  };
-  _disallowedPop: any | null = null;
+  _sourcePosition = SourcePos();
+  _disallowedPop: SourcePos | null = null;
 
   /**
    * Get the final string output from the buffer, along with the sourcemap if one exists.
@@ -82,7 +96,6 @@ export default class Buffer {
   /**
    * Add a string to the buffer than can be reverted.
    */
-
   queue(str: string): void {
     // Drop trailing spaces when a newline is inserted.
     if (str === "\n") {
@@ -96,15 +109,22 @@ export default class Buffer {
     this._queue.unshift([str, line, column, identifierName, filename, force]);
   }
 
+  /**
+   * Same as queue, but this indentation will never have a sourcmap marker.
+   */
+  queueIndentation(str: string): void {
+    this._queue.unshift([
+      str,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      false,
+    ]);
+  }
+
   _flush(): void {
-    let item: [
-      string,
-      number,
-      number,
-      string | null | undefined,
-      string | null | undefined,
-      boolean | undefined,
-    ];
+    let item: Parameters<Buffer["_append"]>;
     while ((item = this._queue.pop())) {
       this._append(...item);
     }
@@ -114,9 +134,9 @@ export default class Buffer {
     str: string,
     line: number,
     column: number,
-    identifierName?: string | null,
-    filename?: string | null,
-    force?: boolean,
+    identifierName: string | undefined,
+    filename: string | undefined,
+    force: boolean,
   ): void {
     this._buf += str;
     this._last = str.charCodeAt(str.length - 1);
@@ -323,22 +343,21 @@ export default class Buffer {
   _disallowPop(prop: string, loc: t.SourceLocation) {
     if (prop && !loc) return;
 
-    this._disallowedPop = this._normalizePosition(prop, loc);
+    this._disallowedPop = this._normalizePosition(
+      prop,
+      loc,
+      SourcePos(),
+      false,
+    );
   }
 
-  _normalizePosition(prop: string, loc: any, targetObj?: any, force?: boolean) {
+  _normalizePosition(
+    prop: string,
+    loc: Loc | undefined | null,
+    targetObj: SourcePos,
+    force: boolean,
+  ) {
     const pos = loc ? loc[prop] : null;
-
-    if (targetObj === undefined) {
-      // Initialize with fields so that the object doesn't change shape.
-      targetObj = {
-        identifierName: null,
-        line: null,
-        column: null,
-        filename: null,
-        force: false,
-      };
-    }
 
     const origLine = targetObj.line;
     const origColumn = targetObj.column;

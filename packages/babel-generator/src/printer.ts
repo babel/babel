@@ -273,7 +273,7 @@ class Printer {
       this.endsWith(charCodes.lineFeed) &&
       str.charCodeAt(0) !== charCodes.lineFeed
     ) {
-      this._buf.queue(this._getIndent());
+      this._buf.queueIndentation(this._getIndent());
     }
   }
 

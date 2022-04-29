@@ -54,8 +54,7 @@ describe("generation", function () {
         version: 3,
         sources: ["a.js", "b.js"],
         mappings:
-          // eslint-disable-next-line max-len
-          "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;AAAEC,EAAAA,OAAO,CAACC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,EAAE,CAAC,OAAD,CAAF",
+          "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;EAAEC,OAAO,CAACC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,EAAE,CAAC,OAAD,CAAF",
         names: ["hi", "msg", "console", "log"],
         sourcesContent: [
           "function hi (msg) { console.log(msg); }\n",
@@ -102,12 +101,6 @@ describe("generation", function () {
           generated: { line: 1, column: 17 },
           source: "a.js",
           original: { line: 1, column: 18 },
-        },
-        {
-          name: "console",
-          generated: { line: 2, column: 0 },
-          source: "a.js",
-          original: { line: 1, column: 20 },
         },
         {
           name: "console",
@@ -219,7 +212,7 @@ describe("generation", function () {
         version: 3,
         sources: ["inline"],
         names: ["foo", "bar"],
-        mappings: "AAAA,SAASA,IAAT,GAAe;AAAEC,EAAAA,IAAG;AAAG",
+        mappings: "AAAA,SAASA,IAAT,GAAe;EAAEC,IAAG;AAAG",
         sourcesContent: ["function foo() { bar; }\n"],
       },
       "sourcemap was incorrectly generated",
@@ -250,12 +243,6 @@ describe("generation", function () {
           generated: { line: 1, column: 16 },
           source: "inline",
           original: { line: 1, column: 15 },
-        },
-        {
-          name: "bar",
-          generated: { line: 2, column: 0 },
-          source: "inline",
-          original: { line: 1, column: 17 },
         },
         {
           name: "bar",
@@ -867,7 +854,16 @@ suites.forEach(function (testSuite) {
               const result = run();
 
               if (options.sourceMaps) {
-                expect(result.map).toEqual(task.sourceMap);
+                try {
+                  expect(result.map).toEqual(task.sourceMap);
+                } catch (e) {
+                  if (!process.env.OVERWRITE || !task.sourceMapFile) throw e;
+                  console.log(`Updated test file: ${task.sourceMapFile.loc}`);
+                  fs.writeFileSync(
+                    task.sourceMapFile.loc,
+                    JSON.stringify(result.map, null, 2),
+                  );
+                }
               }
 
               if (

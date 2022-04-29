@@ -1,5 +1,6 @@
 {
-  "mappings": "AAAC;;ACCD,SAASA,GAAT,CAAaC,GAAb,EAAwB;AACpB,QAAM,IAAIC,KAAJ,CAAU,cAAV,CAAN;AACH",
+  "version": 3,
+  "mappings": "AAAC;;ACCD,SAASA,GAAT,CAAaC,GAAb,EAAwB;EACpB,MAAM,IAAIC,KAAJ,CAAU,cAAV,CAAN;AACH",
   "names": [
     "foo",
     "bar",
@@ -12,6 +13,5 @@
   "sourcesContent": [
     "<bar />",
     "foo(1);\nfunction foo(bar: number): never {\n    throw new Error('Intentional.');\n}"
-  ],
-  "version": 3
+  ]
 }

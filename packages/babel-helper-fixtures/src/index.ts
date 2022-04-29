@@ -29,6 +29,7 @@ type Test = {
   // todo(flow->ts): improve types here
   sourceMappings;
   sourceMap;
+  sourceMapFile: TestFile;
 };
 
 type Suite = {
@@ -165,6 +166,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
     },
     sourceMappings: undefined,
     sourceMap: undefined,
+    sourceMapFile: undefined,
     inputSourceMap: undefined,
   };
 
@@ -225,6 +227,11 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   const sourceMapLoc = taskDir + "/source-map.json";
   if (fs.existsSync(sourceMapLoc)) {
     test.sourceMap = JSON.parse(readFile(sourceMapLoc));
+    test.sourceMapFile = {
+      loc: sourceMapLoc,
+      code: test.sourceMap,
+      filename: "",
+    };
   }
 
   const inputMapLoc = taskDir + "/input-source-map.json";

@@ -341,7 +341,17 @@ function run(task) {
   }
 
   if (task.sourceMap) {
-    expect(result.map).toEqual(task.sourceMap);
+    try {
+      expect(result.map).toEqual(task.sourceMap);
+    } catch (e) {
+      if (!process.env.OVERWRITE || !task.sourceMapFile) throw e;
+
+      console.log(`Updated test file: ${task.sourceMapFile.loc}`);
+      fs.writeFileSync(
+        task.sourceMapFile.loc,
+        JSON.stringify(result.map, null, 2),
+      );
+    }
   }
 
   if (task.sourceMappings) {
