@@ -4870,6 +4870,9 @@ export function isPatternLike(
     "AssignmentPattern" === nodeType ||
     "ArrayPattern" === nodeType ||
     "ObjectPattern" === nodeType ||
+    "TSAsExpression" === nodeType ||
+    "TSTypeAssertion" === nodeType ||
+    "TSNonNullExpression" === nodeType ||
     (nodeType === "Placeholder" &&
       ("Pattern" === (node as t.Placeholder).expectedNode ||
         "Identifier" === (node as t.Placeholder).expectedNode))
@@ -4898,6 +4901,9 @@ export function isLVal(
     "ArrayPattern" === nodeType ||
     "ObjectPattern" === nodeType ||
     "TSParameterProperty" === nodeType ||
+    "TSAsExpression" === nodeType ||
+    "TSTypeAssertion" === nodeType ||
+    "TSNonNullExpression" === nodeType ||
     (nodeType === "Placeholder" &&
       ("Pattern" === (node as t.Placeholder).expectedNode ||
         "Identifier" === (node as t.Placeholder).expectedNode))
