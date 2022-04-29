@@ -20,6 +20,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.11 (2022-04-29)
+
+#### :bug: Bug Fix
+* `babel-runtime-corejs2`
+  * [#14509](https://github.com/babel/babel/pull/14509) fix: `@babel/runtime-corejs2` should depend on core-js 2 ([@JLHwung](https://github.com/JLHwung))
 ## v7.17.10 (2022-04-29)
 
 #### :bug: Bug Fix
