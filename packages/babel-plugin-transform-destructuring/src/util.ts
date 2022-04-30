@@ -101,11 +101,7 @@ export class DestructuringTransformer {
   }
 
   buildVariableAssignment(
-    id:
-      | t.Identifier
-      | t.MemberExpression
-      | t.RestElement
-      | t.TSParameterProperty,
+    id: t.AssignmentExpression["left"],
     init: t.Expression,
   ) {
     let op = this.operator;
@@ -238,7 +234,6 @@ export class DestructuringTransformer {
       this.objectRestNoSymbols,
       this.useBuiltIns,
     );
-    // @ts-expect-error: The argument of a RestElement in ObjectPattern must not be an ArrayPattern
     this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
   }
 
