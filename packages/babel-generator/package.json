@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "@babel/types": "workspace:^",
-    "@jridgewell/gen-mapping": "^0.1.0",
+    "@jridgewell/gen-mapping": "^0.3.0",
     "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
   },
   "devDependencies": {

@@ -1,7 +1,13 @@
 {
-  "mappings": "AAAC",
+  "version": 3,
+  "mappings": "AAAC,KCAD",
   "names": [],
-  "sources": ["test.js"],
-  "sourcesContent": ["<bar />"],
-  "version": 3
+  "sources": [
+    "test.js",
+    "input.tsx"
+  ],
+  "sourcesContent": [
+    "<bar />",
+    "foo(1);\nfunction foo(bar: number): never {\n    throw new Error('Intentional.');\n}"
+  ]
 }
