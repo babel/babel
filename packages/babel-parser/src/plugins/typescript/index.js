@@ -3250,38 +3250,64 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): void {
       switch (node.type) {
-        case "TSTypeCastExpression":
-          return super.toAssignable(this.typeCastToParameter(node), isLHS);
-        case "TSParameterProperty":
-          return super.toAssignable(node, isLHS);
         case "ParenthesizedExpression":
-          return this.toAssignableParenthesizedExpression(node, isLHS);
+          this.toAssignableParenthesizedExpression(node, isLHS);
+          break;
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
-          node.expression = this.toAssignable(node.expression, isLHS);
-          return node;
+          if (isLHS) {
+            this.expressionScope.recordArrowParemeterBindingError(
+              TSErrors.UnexpectedTypeCastInParameter,
+              { at: node },
+            );
+          } else {
+            this.raise(TSErrors.UnexpectedTypeCastInParameter, { at: node });
+          }
+          this.toAssignable(node.expression, isLHS);
+          break;
+        case "AssignmentExpression":
+          if (!isLHS && node.left.type === "TSTypeCastExpression") {
+            node.left = this.typeCastToParameter(node.left);
+          }
+        /* fall through */
         default:
-          return super.toAssignable(node, isLHS);
+          super.toAssignable(node, isLHS);
       }
     }
 
-    toAssignableParenthesizedExpression(node: N.Node, isLHS: boolean) {
+    toAssignableParenthesizedExpression(node: N.Node, isLHS: boolean): void {
       switch (node.expression.type) {
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
         case "ParenthesizedExpression":
-          node.expression = this.toAssignable(node.expression, isLHS);
-          return node;
+          this.toAssignable(node.expression, isLHS);
+          break;
         default:
-          return super.toAssignable(node, isLHS);
+          super.toAssignable(node, isLHS);
       }
     }
 
-    isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+    checkToRestConversion(node: N.Node, allowPattern: boolean): void {
+      switch (node.type) {
+        case "TSAsExpression":
+        case "TSTypeAssertion":
+        case "TSNonNullExpression":
+          this.checkToRestConversion(node.expression, false);
+          break;
+        default:
+          super.checkToRestConversion(node, allowPattern);
+      }
+    }
+
+    isValidLVal(
+      type: string,
+      isUnparenthesizedInAssign: boolean,
+      binding: BindingTypes,
+    ) {
       return (
         getOwn(
           {
@@ -3291,17 +3317,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             TSTypeCastExpression: true,
             TSParameterProperty: "parameter",
             TSNonNullExpression: "expression",
-            TSAsExpression: (binding !== BIND_NONE || isParenthesized) && [
-              "expression",
-              true,
-            ],
-            TSTypeAssertion: (binding !== BIND_NONE || isParenthesized) && [
-              "expression",
-              true,
-            ],
+            TSAsExpression: (binding !== BIND_NONE ||
+              !isUnparenthesizedInAssign) && ["expression", true],
+            TSTypeAssertion: (binding !== BIND_NONE ||
+              !isUnparenthesizedInAssign) && ["expression", true],
           },
           type,
-        ) || super.isValidLVal(type, isParenthesized, binding)
+        ) || super.isValidLVal(type, isUnparenthesizedInAssign, binding)
       );
     }
 
@@ -3411,27 +3433,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    toAssignableList(exprList: N.Expression[]): $ReadOnlyArray<N.Pattern> {
+    toAssignableList(exprList: N.Expression[]): void {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (!expr) continue;
-        switch (expr.type) {
-          case "TSTypeCastExpression":
-            exprList[i] = this.typeCastToParameter(expr);
-            break;
-          case "TSAsExpression":
-          case "TSTypeAssertion":
-            if (!this.state.maybeInArrowParameters) {
-              exprList[i] = this.typeCastToParameter(expr);
-            } else {
-              this.raise(TSErrors.UnexpectedTypeCastInParameter, {
-                at: expr,
-              });
-            }
-            break;
+        if (expr?.type === "TSTypeCastExpression") {
+          exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return super.toAssignableList(...arguments);
+      super.toAssignableList(...arguments);
     }
 
     typeCastToParameter(node: N.TsTypeCastExpression): N.Node {

@@ -354,7 +354,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.isAssignable(node, isBinding);
     }
 
-    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): void {
       if (node != null && this.isObjectProperty(node)) {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
@@ -364,19 +364,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
         }
         this.toAssignable(value, isLHS);
-        return node;
+      } else {
+        super.toAssignable(node, isLHS);
       }
-
-      return super.toAssignable(node, isLHS);
     }
 
-    toAssignableObjectExpressionProp(prop: N.Node, ...args) {
+    toAssignableObjectExpressionProp(prop: N.Node) {
       if (prop.kind === "get" || prop.kind === "set") {
         this.raise(Errors.PatternHasAccessor, { at: prop.key });
       } else if (prop.method) {
         this.raise(Errors.PatternHasMethod, { at: prop.key });
       } else {
-        super.toAssignableObjectExpressionProp(prop, ...args);
+        super.toAssignableObjectExpressionProp(...arguments);
       }
     }
 

@@ -66,6 +66,9 @@ defineType("AssignmentExpression", {
             "MemberExpression",
             "ArrayPattern",
             "ObjectPattern",
+            "TSAsExpression",
+            "TSTypeAssertion",
+            "TSNonNullExpression",
           ),
     },
     right: {
@@ -319,6 +322,9 @@ defineType("ForInStatement", {
             "MemberExpression",
             "ArrayPattern",
             "ObjectPattern",
+            "TSAsExpression",
+            "TSTypeAssertion",
+            "TSNonNullExpression",
           ),
     },
     right: {
@@ -887,7 +893,13 @@ defineType("ObjectProperty", {
   visitor: ["key", "value", "decorators"],
   aliases: ["UserWhitespacable", "Property", "ObjectMember"],
   validate: (function () {
-    const pattern = assertNodeType("Identifier", "Pattern");
+    const pattern = assertNodeType(
+      "Identifier",
+      "Pattern",
+      "TSAsExpression",
+      "TSNonNullExpression",
+      "TSTypeAssertion",
+    );
     const expression = assertNodeType("Expression");
 
     return function (parent, key, node) {
@@ -914,6 +926,9 @@ defineType("RestElement", {
             "ArrayPattern",
             "ObjectPattern",
             "MemberExpression",
+            "TSAsExpression",
+            "TSTypeAssertion",
+            "TSNonNullExpression",
           ),
     },
     // For Flow
@@ -1191,6 +1206,9 @@ defineType("AssignmentPattern", {
         "ObjectPattern",
         "ArrayPattern",
         "MemberExpression",
+        "TSAsExpression",
+        "TSTypeAssertion",
+        "TSNonNullExpression",
       ),
     },
     right: {
@@ -1595,6 +1613,9 @@ defineType("ForOfStatement", {
           "MemberExpression",
           "ArrayPattern",
           "ObjectPattern",
+          "TSAsExpression",
+          "TSTypeAssertion",
+          "TSNonNullExpression",
         );
 
         return function (node, key, val) {

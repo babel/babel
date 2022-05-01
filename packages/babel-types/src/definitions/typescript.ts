@@ -450,7 +450,7 @@ defineType("TSTypeAliasDeclaration", {
 });
 
 defineType("TSAsExpression", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "LVal", "PatternLike"],
   visitor: ["expression", "typeAnnotation"],
   fields: {
     expression: validateType("Expression"),
@@ -459,7 +459,7 @@ defineType("TSAsExpression", {
 });
 
 defineType("TSTypeAssertion", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "LVal", "PatternLike"],
   visitor: ["typeAnnotation", "expression"],
   fields: {
     typeAnnotation: validateType("TSType"),
@@ -542,7 +542,7 @@ defineType("TSExternalModuleReference", {
 });
 
 defineType("TSNonNullExpression", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "LVal", "PatternLike"],
   visitor: ["expression"],
   fields: {
     expression: validateType("Expression"),

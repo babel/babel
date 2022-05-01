@@ -2362,12 +2362,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
-      if (node.type === "TypeCastExpression") {
-        return super.toAssignable(this.typeCastToParameter(node), isLHS);
-      } else {
-        return super.toAssignable(node, isLHS);
+    toAssignable(node: N.Node, isLHS: boolean = false): void {
+      if (
+        !isLHS &&
+        node.type === "AssignmentExpression" &&
+        node.left.type === "TypeCastExpression"
+      ) {
+        node.left = this.typeCastToParameter(node.left);
       }
+      super.toAssignable(...arguments);
     }
 
     // turn type casts that we found in function parameter head into type annotated params
@@ -2375,14 +2378,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       exprList: N.Expression[],
       trailingCommaLoc?: ?Position,
       isLHS: boolean,
-    ): $ReadOnlyArray<N.Pattern> {
+    ): void {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (expr?.type === "TypeCastExpression") {
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return super.toAssignableList(exprList, trailingCommaLoc, isLHS);
+      super.toAssignableList(exprList, trailingCommaLoc, isLHS);
     }
 
     // this is a list of nodes, from something like a call expression, we need to filter the

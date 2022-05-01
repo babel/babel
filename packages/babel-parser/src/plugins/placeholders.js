@@ -140,16 +140,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type === "Placeholder" || super.isValidLVal(type, ...rest);
     }
 
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node): void {
       if (
         node &&
         node.type === "Placeholder" &&
         node.expectedNode === "Expression"
       ) {
         node.expectedNode = "Pattern";
-        return node;
+      } else {
+        super.toAssignable(...arguments);
       }
-      return super.toAssignable(...arguments);
     }
 
     /* ============================================================ *

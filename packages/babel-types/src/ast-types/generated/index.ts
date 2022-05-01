@@ -703,7 +703,14 @@ export interface WithStatement extends BaseNode {
 
 export interface AssignmentPattern extends BaseNode {
   type: "AssignmentPattern";
-  left: Identifier | ObjectPattern | ArrayPattern | MemberExpression;
+  left:
+    | Identifier
+    | ObjectPattern
+    | ArrayPattern
+    | MemberExpression
+    | TSAsExpression
+    | TSTypeAssertion
+    | TSNonNullExpression;
   right: Expression;
   decorators?: Array<Decorator> | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -2346,7 +2353,10 @@ export type PatternLike =
   | RestElement
   | AssignmentPattern
   | ArrayPattern
-  | ObjectPattern;
+  | ObjectPattern
+  | TSAsExpression
+  | TSTypeAssertion
+  | TSNonNullExpression;
 export type LVal =
   | Identifier
   | MemberExpression
@@ -2354,7 +2364,10 @@ export type LVal =
   | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
-  | TSParameterProperty;
+  | TSParameterProperty
+  | TSAsExpression
+  | TSTypeAssertion
+  | TSNonNullExpression;
 export type TSEntityName = Identifier | TSQualifiedName;
 export type Literal =
   | StringLiteral

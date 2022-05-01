@@ -322,7 +322,14 @@ export function withStatement(
   return builder.apply("WithStatement", arguments);
 }
 export function assignmentPattern(
-  left: t.Identifier | t.ObjectPattern | t.ArrayPattern | t.MemberExpression,
+  left:
+    | t.Identifier
+    | t.ObjectPattern
+    | t.ArrayPattern
+    | t.MemberExpression
+    | t.TSAsExpression
+    | t.TSTypeAssertion
+    | t.TSNonNullExpression,
   right: t.Expression,
 ): t.AssignmentPattern {
   return builder.apply("AssignmentPattern", arguments);

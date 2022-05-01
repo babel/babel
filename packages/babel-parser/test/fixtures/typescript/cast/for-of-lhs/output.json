@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":38}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":38}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "await": false,
+        "left": {
+          "type": "TSAsExpression",
+          "start":5,"end":11,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":11,"index":11}},
+          "expression": {
+            "type": "Identifier",
+            "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"a"},
+            "name": "a"
+          },
+          "typeAnnotation": {
+            "type": "TSTypeReference",
+            "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
+            "typeName": {
+              "type": "Identifier",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"T"},
+              "name": "T"
+            }
+          }
+        },
+        "right": {
+          "type": "ArrayExpression",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+          "elements": []
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19}}
+        }
+      },
+      {
+        "type": "ForOfStatement",
+        "start":20,"end":38,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":2,"column":18,"index":38}},
+        "await": false,
+        "left": {
+          "type": "TSTypeAssertion",
+          "start":25,"end":30,"loc":{"start":{"line":2,"column":5,"index":25},"end":{"line":2,"column":10,"index":30}},
+          "typeAnnotation": {
+            "type": "TSTypeReference",
+            "start":26,"end":27,"loc":{"start":{"line":2,"column":6,"index":26},"end":{"line":2,"column":7,"index":27}},
+            "typeName": {
+              "type": "Identifier",
+              "start":26,"end":27,"loc":{"start":{"line":2,"column":6,"index":26},"end":{"line":2,"column":7,"index":27},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "expression": {
+            "type": "Identifier",
+            "start":29,"end":30,"loc":{"start":{"line":2,"column":9,"index":29},"end":{"line":2,"column":10,"index":30},"identifierName":"a"},
+            "name": "a"
+          }
+        },
+        "right": {
+          "type": "ArrayExpression",
+          "start":34,"end":36,"loc":{"start":{"line":2,"column":14,"index":34},"end":{"line":2,"column":16,"index":36}},
+          "elements": []
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":37,"end":38,"loc":{"start":{"line":2,"column":17,"index":37},"end":{"line":2,"column":18,"index":38}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}
