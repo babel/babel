@@ -13,6 +13,7 @@ import {
   type TokenType,
   tokenIsTemplate,
   tokenCanStartExpression,
+  tokenIsBinaryOperator,
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
@@ -62,6 +63,12 @@ function assert(x: boolean): void {
   if (!x) {
     throw new Error("Assert fail");
   }
+}
+
+function tsTokenCanStartExpression(token: number) {
+  // tsc consiers binary operators as "can start expression" tokens:
+  // https://github.com/microsoft/TypeScript/blob/eca1b4/src/compiler/parser.ts#L4260-L4266
+  return tokenCanStartExpression(token) || tokenIsBinaryOperator(token);
 }
 
 type ParsingContext =
@@ -2344,7 +2351,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // is not valid TS code (https://github.com/microsoft/TypeScript/issues/48654)
           // However, it should correctly parse anything that is correctly parsed by TS.
           if (
-            tokenCanStartExpression(this.state.type) &&
+            tsTokenCanStartExpression(this.state.type) &&
             this.state.type !== tt.parenL
           ) {
             // Bail out. We have something like a<b>c, which is not an expression with
