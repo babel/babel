@@ -893,7 +893,13 @@ defineType("ObjectProperty", {
   visitor: ["key", "value", "decorators"],
   aliases: ["UserWhitespacable", "Property", "ObjectMember"],
   validate: (function () {
-    const pattern = assertNodeType("Identifier", "Pattern");
+    const pattern = assertNodeType(
+      "Identifier",
+      "Pattern",
+      "TSAsExpression",
+      "TSNonNullExpression",
+      "TSTypeAssertion",
+    );
     const expression = assertNodeType("Expression");
 
     return function (parent, key, node) {
