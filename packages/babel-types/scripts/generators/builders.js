@@ -118,10 +118,11 @@ import type * as t from "../..";
   Object.keys(definitions.DEPRECATED_KEYS).forEach(type => {
     const newType = definitions.DEPRECATED_KEYS[type];
     const formatedBuilderName = formatBuilderName(type);
+    const formatedNewBuilderName = formatBuilderName(newType);
     output += `/** @deprecated */
 function ${type}(${generateBuilderArgs(newType).join(", ")}): t.${type} {
   console.trace("The node type ${type} has been renamed to ${newType}");
-  return builder.apply("${type}", arguments);
+  return ${formatedNewBuilderName}(...args);
 }
 export { ${type} as ${formatedBuilderName} };\n`;
     // This is needed for backwards compatibility.

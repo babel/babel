@@ -1499,19 +1499,19 @@ function NumberLiteral(value: number): t.NumberLiteral {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return builder.apply("NumberLiteral", arguments);
+  return numericLiteral(...args);
 }
 export { NumberLiteral as numberLiteral };
 /** @deprecated */
 function RegexLiteral(pattern: string, flags?: string): t.RegexLiteral {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return builder.apply("RegexLiteral", arguments);
+  return regExpLiteral(...args);
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
 function RestProperty(argument: t.LVal): t.RestProperty {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return builder.apply("RestProperty", arguments);
+  return restElement(...args);
 }
 export { RestProperty as restProperty };
 /** @deprecated */
@@ -1519,6 +1519,6 @@ function SpreadProperty(argument: t.Expression): t.SpreadProperty {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return builder.apply("SpreadProperty", arguments);
+  return spreadElement(...args);
 }
 export { SpreadProperty as spreadProperty };
