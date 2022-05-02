@@ -133,7 +133,7 @@ import type * as t from "../..";
     }function ${formatedBuilderNameLocal}(${defArgs.join(
       ", "
     )}) {\n  const node = {\n${objectFields
-      .map(([k, v]) => `    ${k}: ${v},`)
+      .map(([k, v]) => (k === v ? `    ${k},` : `    ${k}: ${v},`))
       .join(
         "\n"
       )}  } as t.${type};\n  validateNode(node);\n  return node;\n}\n`;
