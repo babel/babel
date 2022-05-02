@@ -104,7 +104,13 @@ export function buildVariableDeclarationFromParams(
 }
 
 interface Transformed {
-  left: t.Identifier | t.Pattern | t.MemberExpression;
+  left:
+    | t.Identifier
+    | t.Pattern
+    | t.MemberExpression
+    | t.TSAsExpression
+    | t.TSTypeAssertion
+    | t.TSNonNullExpression;
   right: t.Expression;
 }
 
@@ -257,12 +263,16 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   });
 }
 
+// t.LVal without t.RestElement
 type LHS =
   | t.Identifier
   | t.MemberExpression
   | t.ArrayPattern
   | t.ObjectPattern
-  | t.AssignmentPattern;
+  | t.AssignmentPattern
+  | t.TSAsExpression
+  | t.TSTypeAssertion
+  | t.TSNonNullExpression;
 
 type ExcludingKey = {
   key: t.ObjectProperty["key"];
