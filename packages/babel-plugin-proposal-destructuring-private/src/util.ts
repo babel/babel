@@ -104,13 +104,7 @@ export function buildVariableDeclarationFromParams(
 }
 
 interface Transformed {
-  left:
-    | t.Identifier
-    | t.Pattern
-    | t.MemberExpression
-    | t.TSAsExpression
-    | t.TSTypeAssertion
-    | t.TSNonNullExpression;
+  left: Exclude<LHS, t.AssignmentPattern>;
   right: t.Expression;
 }
 
@@ -263,16 +257,7 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   });
 }
 
-// t.LVal without t.RestElement
-type LHS =
-  | t.Identifier
-  | t.MemberExpression
-  | t.ArrayPattern
-  | t.ObjectPattern
-  | t.AssignmentPattern
-  | t.TSAsExpression
-  | t.TSTypeAssertion
-  | t.TSNonNullExpression;
+type LHS = Exclude<t.LVal, t.RestElement | t.TSParameterProperty>;
 
 type ExcludingKey = {
   key: t.ObjectProperty["key"];
@@ -356,7 +341,12 @@ export function* transformPrivateKeyDestructuring(
           ),
         };
       } else {
-        yield { left, right };
+        yield {
+          left:
+            // An assignment pattern will not be pushed to the stack
+            left as Transformed["left"],
+          right,
+        };
       }
     } else {
       // now we need to split according to the indexPath;
