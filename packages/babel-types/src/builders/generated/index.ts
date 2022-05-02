@@ -2969,19 +2969,19 @@ function NumberLiteral(value: number): t.NumberLiteral {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return numericLiteral(...args);
+  return numericLiteral(value) as unknown as t.NumberLiteral;
 }
 export { NumberLiteral as numberLiteral };
 /** @deprecated */
 function RegexLiteral(pattern: string, flags: string = ""): t.RegexLiteral {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return regExpLiteral(...args);
+  return regExpLiteral(pattern, flags) as unknown as t.RegexLiteral;
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
 function RestProperty(argument: t.LVal): t.RestProperty {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return restElement(...args);
+  return restElement(argument) as unknown as t.RestProperty;
 }
 export { RestProperty as restProperty };
 /** @deprecated */
@@ -2989,6 +2989,6 @@ function SpreadProperty(argument: t.Expression): t.SpreadProperty {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return spreadElement(...args);
+  return spreadElement(argument) as unknown as t.SpreadProperty;
 }
 export { SpreadProperty as spreadProperty };

@@ -159,7 +159,9 @@ import type * as t from "../..";
     output += `/** @deprecated */
 function ${type}(${generateBuilderArgs(newType).join(", ")}): t.${type} {
   console.trace("The node type ${type} has been renamed to ${newType}");
-  return ${formatedNewBuilderName}(...args);
+  return ${formatedNewBuilderName}(${t.BUILDER_KEYS[newType].join(
+      ", "
+    )}) as unknown as t.${type};
 }
 export { ${type} as ${formatedBuilderName} };\n`;
     // This is needed for backwards compatibility.
