@@ -92,9 +92,6 @@ function generateLowercaseBuilders() {
  */
 import validateNode from "../validateNode";
 import type * as t from "../..";
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 `;
 
   const reservedNames = new Set(["super", "import"]);
@@ -123,7 +120,7 @@ import type * as t from "../..";
       if (builderNames.includes(fieldName)) {
         const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
         objectFields.push([fieldName, bindingIdentifierName]);
-      } else {
+      } else if (!field.optional) {
         objectFields.push([fieldName, defaultExpression()]);
       }
     });
@@ -132,11 +129,9 @@ import type * as t from "../..";
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
     }function ${formatedBuilderNameLocal}(${defArgs.join(
       ", "
-    )}) {\n  const node = {\n${objectFields
+    )}) {\n  const node: t.${type} = {\n${objectFields
       .map(([k, v]) => (k === v ? `    ${k},` : `    ${k}: ${v},`))
-      .join(
-        "\n"
-      )}  } as t.${type};\n  validateNode(node);\n  return node;\n}\n`;
+      .join("\n")}  };\n  validateNode(node);\n  return node;\n}\n`;
 
     if (formatedBuilderNameLocal !== formatedBuilderName) {
       output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
