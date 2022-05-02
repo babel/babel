@@ -11,29 +11,21 @@ import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring"
 
 import type { PluginPass } from "@babel/core";
 import type { Visitor } from "@babel/traverse";
-import { types as t } from "@babel/core";
 
-const {
-  assignmentExpression,
-  assignmentPattern,
-  cloneNode,
-  expressionStatement,
-  isExpressionStatement,
-  isIdentifier,
-  isSequenceExpression,
-  sequenceExpression,
-  variableDeclaration,
-  variableDeclarator,
-} = t;
-
-export default declare(function ({
-  assertVersion,
-  assumption,
-}: {
-  assumption: (string) => boolean;
-  assertVersion: (string) => void;
-}) {
+export default declare(function ({ assertVersion, assumption, types: t }) {
   assertVersion("^7.17.0");
+  const {
+    assignmentExpression,
+    assignmentPattern,
+    cloneNode,
+    expressionStatement,
+    isExpressionStatement,
+    isIdentifier,
+    isSequenceExpression,
+    sequenceExpression,
+    variableDeclaration,
+    variableDeclarator,
+  } = t;
 
   const ignoreFunctionLength = assumption("ignoreFunctionLength");
   const objectRestNoSymbols = assumption("objectRestNoSymbols");
