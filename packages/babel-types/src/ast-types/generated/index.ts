@@ -1253,9 +1253,9 @@ export interface NumberTypeAnnotation extends BaseNode {
 export interface ObjectTypeAnnotation extends BaseNode {
   type: "ObjectTypeAnnotation";
   properties: Array<ObjectTypeProperty | ObjectTypeSpreadProperty>;
-  indexers?: Array<ObjectTypeIndexer> | null;
-  callProperties?: Array<ObjectTypeCallProperty> | null;
-  internalSlots?: Array<ObjectTypeInternalSlot> | null;
+  indexers?: Array<ObjectTypeIndexer>;
+  callProperties?: Array<ObjectTypeCallProperty>;
+  internalSlots?: Array<ObjectTypeInternalSlot>;
   exact: boolean;
   inexact?: boolean | null;
 }

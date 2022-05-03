@@ -1387,9 +1387,9 @@ export function numberTypeAnnotation() {
 }
 export function objectTypeAnnotation(
   properties: Array<t.ObjectTypeProperty | t.ObjectTypeSpreadProperty>,
-  indexers: Array<t.ObjectTypeIndexer> | null = null,
-  callProperties: Array<t.ObjectTypeCallProperty> | null = null,
-  internalSlots: Array<t.ObjectTypeInternalSlot> | null = null,
+  indexers: Array<t.ObjectTypeIndexer> = [],
+  callProperties: Array<t.ObjectTypeCallProperty> = [],
+  internalSlots: Array<t.ObjectTypeInternalSlot> = [],
   exact: boolean = false,
 ) {
   const node: t.ObjectTypeAnnotation = {
