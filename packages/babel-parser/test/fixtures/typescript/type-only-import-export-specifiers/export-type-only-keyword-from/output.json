@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16}},
+            "local": {
+              "type": "Identifier",
+              "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16},"identifierName":"if"},
+              "name": "if"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16},"identifierName":"if"},
+              "name": "if"
+            },
+            "exportKind": "type"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":24,"end":35,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":35,"index":35}},
+          "extra": {
+            "rawValue": "./mode.js",
+            "raw": "\"./mode.js\""
+          },
+          "value": "./mode.js"
+        },
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}
