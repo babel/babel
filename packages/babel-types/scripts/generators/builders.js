@@ -28,6 +28,10 @@ function sortFieldNames(fields, type) {
   });
 }
 
+function defaultExpression(field) {
+  return Array.isArray(field.default) ? "[]" : JSON.stringify(field.default);
+}
+
 function generateBuilderArgs(type) {
   const fields = t.NODE_FIELDS[type];
   const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
@@ -52,27 +56,22 @@ function generateBuilderArgs(type) {
 
     if (builderNames.includes(fieldName)) {
       const field = definitions.NODE_FIELDS[type][fieldName];
-
-      const def =
-        field.default !== undefined
-          ? Array.isArray(field.default)
-            ? "[]"
-            : JSON.stringify(field.default)
-          : undefined;
+      const def = defaultExpression(field);
       const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
+      let arg;
       if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
-        args.push(
-          `${bindingIdentifierName}${
-            isNullable(field) && !def ? "?:" : ":"
-          } ${typeAnnotation}${def ? `= ${def}` : ""}`
-        );
+        arg = `${bindingIdentifierName}${
+          isNullable(field) && !def ? "?:" : ":"
+        } ${typeAnnotation}`;
       } else {
-        args.push(
-          `${bindingIdentifierName}: ${typeAnnotation}${
-            isNullable(field) ? " | undefined" : ""
-          }`
-        );
+        arg = `${bindingIdentifierName}: ${typeAnnotation}${
+          isNullable(field) ? " | undefined" : ""
+        }`;
       }
+      if (def !== "null" || isNullable(field)) {
+        arg += `= ${def}`;
+      }
+      args.push(arg);
     }
   });
 
@@ -111,17 +110,13 @@ import type * as t from "../..";
     fieldNames.forEach(fieldName => {
       const field = definitions.NODE_FIELDS[type][fieldName];
 
-      function defaultExpression() {
-        return Array.isArray(field.default)
-          ? "[]"
-          : JSON.stringify(field.default);
-      }
+      const def = defaultExpression(field);
 
       if (builderNames.includes(fieldName)) {
         const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
         objectFields.push([fieldName, bindingIdentifierName]);
       } else if (!field.optional) {
-        objectFields.push([fieldName, defaultExpression()]);
+        objectFields.push([fieldName, def]);
       }
     });
 
