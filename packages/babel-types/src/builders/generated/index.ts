@@ -166,7 +166,6 @@ export function debuggerStatement() {
   const node: t.DebuggerStatement = {
     type: "DebuggerStatement",
   };
-  validateNode(node);
   return node;
 }
 export function doWhileStatement(test: t.Expression, body: t.Statement) {
@@ -182,7 +181,6 @@ export function emptyStatement() {
   const node: t.EmptyStatement = {
     type: "EmptyStatement",
   };
-  validateNode(node);
   return node;
 }
 export function expressionStatement(expression: t.Expression) {
@@ -324,7 +322,6 @@ export function nullLiteral() {
   const node: t.NullLiteral = {
     type: "NullLiteral",
   };
-  validateNode(node);
   return node;
 }
 export function booleanLiteral(value: boolean) {
@@ -515,7 +512,6 @@ export function thisExpression() {
   const node: t.ThisExpression = {
     type: "ThisExpression",
   };
-  validateNode(node);
   return node;
 }
 export function throwStatement(argument: t.Expression) {
@@ -868,7 +864,6 @@ function _super() {
   const node: t.Super = {
     type: "Super",
   };
-  validateNode(node);
   return node;
 }
 export { _super as super };
@@ -932,7 +927,6 @@ function _import() {
   const node: t.Import = {
     type: "Import",
   };
-  validateNode(node);
   return node;
 }
 export { _import as import };
@@ -1085,7 +1079,6 @@ export function anyTypeAnnotation() {
   const node: t.AnyTypeAnnotation = {
     type: "AnyTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function arrayTypeAnnotation(elementType: t.FlowType) {
@@ -1100,7 +1093,6 @@ export function booleanTypeAnnotation() {
   const node: t.BooleanTypeAnnotation = {
     type: "BooleanTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function booleanLiteralTypeAnnotation(value: boolean) {
@@ -1115,7 +1107,6 @@ export function nullLiteralTypeAnnotation() {
   const node: t.NullLiteralTypeAnnotation = {
     type: "NullLiteralTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function classImplements(
@@ -1264,7 +1255,6 @@ export function existsTypeAnnotation() {
   const node: t.ExistsTypeAnnotation = {
     type: "ExistsTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function functionTypeAnnotation(
@@ -1311,7 +1301,6 @@ export function inferredPredicate() {
   const node: t.InferredPredicate = {
     type: "InferredPredicate",
   };
-  validateNode(node);
   return node;
 }
 export function interfaceExtends(
@@ -1366,14 +1355,12 @@ export function mixedTypeAnnotation() {
   const node: t.MixedTypeAnnotation = {
     type: "MixedTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function emptyTypeAnnotation() {
   const node: t.EmptyTypeAnnotation = {
     type: "EmptyTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function nullableTypeAnnotation(typeAnnotation: t.FlowType) {
@@ -1396,7 +1383,6 @@ export function numberTypeAnnotation() {
   const node: t.NumberTypeAnnotation = {
     type: "NumberTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function objectTypeAnnotation(
@@ -1528,21 +1514,18 @@ export function stringTypeAnnotation() {
   const node: t.StringTypeAnnotation = {
     type: "StringTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function symbolTypeAnnotation() {
   const node: t.SymbolTypeAnnotation = {
     type: "SymbolTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function thisTypeAnnotation() {
   const node: t.ThisTypeAnnotation = {
     type: "ThisTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function tupleTypeAnnotation(types: Array<t.FlowType>) {
@@ -1646,7 +1629,6 @@ export function voidTypeAnnotation() {
   const node: t.VoidTypeAnnotation = {
     type: "VoidTypeAnnotation",
   };
-  validateNode(node);
   return node;
 }
 export function enumDeclaration(
@@ -1822,7 +1804,6 @@ export function jsxEmptyExpression() {
   const node: t.JSXEmptyExpression = {
     type: "JSXEmptyExpression",
   };
-  validateNode(node);
   return node;
 }
 export { jsxEmptyExpression as jSXEmptyExpression };
@@ -1939,7 +1920,6 @@ export function jsxOpeningFragment() {
   const node: t.JSXOpeningFragment = {
     type: "JSXOpeningFragment",
   };
-  validateNode(node);
   return node;
 }
 export { jsxOpeningFragment as jSXOpeningFragment };
@@ -1947,7 +1927,6 @@ export function jsxClosingFragment() {
   const node: t.JSXClosingFragment = {
     type: "JSXClosingFragment",
   };
-  validateNode(node);
   return node;
 }
 export { jsxClosingFragment as jSXClosingFragment };
@@ -1955,7 +1934,6 @@ export function noop() {
   const node: t.Noop = {
     type: "Noop",
   };
-  validateNode(node);
   return node;
 }
 export function placeholder(
@@ -1990,7 +1968,6 @@ export function argumentPlaceholder() {
   const node: t.ArgumentPlaceholder = {
     type: "ArgumentPlaceholder",
   };
-  validateNode(node);
   return node;
 }
 export function bindExpression(object: t.Expression, callee: t.Expression) {
@@ -2079,7 +2056,6 @@ export function topicReference() {
   const node: t.TopicReference = {
     type: "TopicReference",
   };
-  validateNode(node);
   return node;
 }
 export function pipelineTopicExpression(expression: t.Expression) {
@@ -2102,7 +2078,6 @@ export function pipelinePrimaryTopicReference() {
   const node: t.PipelinePrimaryTopicReference = {
     type: "PipelinePrimaryTopicReference",
   };
-  validateNode(node);
   return node;
 }
 export function tsParameterProperty(
@@ -2253,7 +2228,6 @@ export function tsAnyKeyword() {
   const node: t.TSAnyKeyword = {
     type: "TSAnyKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsAnyKeyword as tSAnyKeyword };
@@ -2261,7 +2235,6 @@ export function tsBooleanKeyword() {
   const node: t.TSBooleanKeyword = {
     type: "TSBooleanKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsBooleanKeyword as tSBooleanKeyword };
@@ -2269,7 +2242,6 @@ export function tsBigIntKeyword() {
   const node: t.TSBigIntKeyword = {
     type: "TSBigIntKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsBigIntKeyword as tSBigIntKeyword };
@@ -2277,7 +2249,6 @@ export function tsIntrinsicKeyword() {
   const node: t.TSIntrinsicKeyword = {
     type: "TSIntrinsicKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsIntrinsicKeyword as tSIntrinsicKeyword };
@@ -2285,7 +2256,6 @@ export function tsNeverKeyword() {
   const node: t.TSNeverKeyword = {
     type: "TSNeverKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsNeverKeyword as tSNeverKeyword };
@@ -2293,7 +2263,6 @@ export function tsNullKeyword() {
   const node: t.TSNullKeyword = {
     type: "TSNullKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsNullKeyword as tSNullKeyword };
@@ -2301,7 +2270,6 @@ export function tsNumberKeyword() {
   const node: t.TSNumberKeyword = {
     type: "TSNumberKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsNumberKeyword as tSNumberKeyword };
@@ -2309,7 +2277,6 @@ export function tsObjectKeyword() {
   const node: t.TSObjectKeyword = {
     type: "TSObjectKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsObjectKeyword as tSObjectKeyword };
@@ -2317,7 +2284,6 @@ export function tsStringKeyword() {
   const node: t.TSStringKeyword = {
     type: "TSStringKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsStringKeyword as tSStringKeyword };
@@ -2325,7 +2291,6 @@ export function tsSymbolKeyword() {
   const node: t.TSSymbolKeyword = {
     type: "TSSymbolKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsSymbolKeyword as tSSymbolKeyword };
@@ -2333,7 +2298,6 @@ export function tsUndefinedKeyword() {
   const node: t.TSUndefinedKeyword = {
     type: "TSUndefinedKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsUndefinedKeyword as tSUndefinedKeyword };
@@ -2341,7 +2305,6 @@ export function tsUnknownKeyword() {
   const node: t.TSUnknownKeyword = {
     type: "TSUnknownKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsUnknownKeyword as tSUnknownKeyword };
@@ -2349,7 +2312,6 @@ export function tsVoidKeyword() {
   const node: t.TSVoidKeyword = {
     type: "TSVoidKeyword",
   };
-  validateNode(node);
   return node;
 }
 export { tsVoidKeyword as tSVoidKeyword };
@@ -2357,7 +2319,6 @@ export function tsThisType() {
   const node: t.TSThisType = {
     type: "TSThisType",
   };
-  validateNode(node);
   return node;
 }
 export { tsThisType as tSThisType };

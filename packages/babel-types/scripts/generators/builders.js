@@ -126,7 +126,12 @@ import type * as t from "../..";
       ", "
     )}) {\n  const node: t.${type} = {\n${objectFields
       .map(([k, v]) => (k === v ? `    ${k},` : `    ${k}: ${v},`))
-      .join("\n")}  };\n  validateNode(node);\n  return node;\n}\n`;
+      .join("\n")}  };`;
+
+    if (builderNames.length > 0) {
+      output += `\n  validateNode(node);`;
+    }
+    output += `\n  return node;\n}\n`;
 
     if (formatedBuilderNameLocal !== formatedBuilderName) {
       output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
