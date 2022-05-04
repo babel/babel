@@ -82,6 +82,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
           variableDeclaration("let", [variableDeclarator(node.param, ref)]),
         );
       node.param = cloneNode(ref);
+      scope.crawl();
       // the pattern will be handled by VariableDeclaration visitor.
     },
     ForXStatement(path) {
