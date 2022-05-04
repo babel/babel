@@ -66,7 +66,7 @@ function assert(x: boolean): void {
 }
 
 function tsTokenCanStartExpression(token: TokenType) {
-  // tsc consiers binary operators as "can start expression" tokens:
+  // tsc considers binary operators as "can start expression" tokens:
   // https://github.com/microsoft/TypeScript/blob/eca1b4/src/compiler/parser.ts#L4260-L4266
   return tokenCanStartExpression(token) || tokenIsBinaryOperator(token);
 }
