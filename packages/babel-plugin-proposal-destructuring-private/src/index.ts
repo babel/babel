@@ -43,7 +43,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       convertFunctionParams(path, ignoreFunctionLength, () => false, false);
       // invariant: path.body is always a BlockStatement after `convertFunctionParams`
       const { node, scope } = path;
-      const params = node.params;
+      const { params } = node;
       const firstAssignmentPatternIndex = ignoreFunctionLength
         ? -1
         : params.findIndex(param => param.type === "AssignmentPattern");
