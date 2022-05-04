@@ -614,24 +614,12 @@ export function convertVariableDeclaration(
     }
   }
 
-  // Need to unmark the current binding to this var as a param, or other hoists
-  // could be placed above this ref.
-  // https://github.com/babel/babel/issues/4516
-  for (const nodeOut of nodesOut) {
-    if (!nodeOut.declarations) continue;
-    for (const declaration of nodeOut.declarations) {
-      const { name } = declaration.id;
-      if (scope.bindings[name]) {
-        scope.bindings[name].kind = nodeOut.kind;
-      }
-    }
-  }
-
   if (nodesOut.length === 1) {
     path.replaceWith(nodesOut[0]);
   } else {
     path.replaceWithMultiple(nodesOut);
   }
+  scope.crawl();
 }
 
 export function convertAssignmentExpression(
@@ -682,5 +670,5 @@ export function convertAssignmentExpression(
   }
 
   path.replaceWithMultiple(nodes);
-  path.scope.crawl();
+  scope.crawl();
 }

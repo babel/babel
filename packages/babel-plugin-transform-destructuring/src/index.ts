@@ -62,6 +62,7 @@ export default declare((api, options: Options) => {
         // top-level statement.
         path.replaceWith(declaration.node);
         path.insertAfter(t.exportNamedDeclaration(null, specifiers));
+        path.scope.crawl();
       },
 
       ForXStatement(path) {
@@ -90,6 +91,7 @@ export default declare((api, options: Options) => {
             t.expressionStatement(t.assignmentExpression("=", left, temp)),
           );
 
+          scope.crawl();
           return;
         }
 
@@ -123,6 +125,7 @@ export default declare((api, options: Options) => {
         const block = node.body;
         // @ts-expect-error: ensureBlock ensures that node.body is a BlockStatement
         block.body = nodes.concat(block.body);
+        scope.crawl();
       },
 
       CatchClause({ node, scope }) {
@@ -147,6 +150,7 @@ export default declare((api, options: Options) => {
         destructuring.init(pattern, ref);
 
         node.body.body = nodes.concat(node.body.body);
+        scope.crawl();
       },
 
       AssignmentExpression(path, state) {
