@@ -152,7 +152,7 @@ function buildAssignmentsFromPatternList(
 
 /**
  * A DFS simplified pattern traverser. It skips computed property keys and assignment pattern
- * initializers. The following-type path will be delegate to the visitor:
+ * initializers. The following nodes will be delegated to the visitor:
  * - ArrayPattern
  * - ArrayPattern elements
  * - AssignmentPattern
@@ -204,8 +204,11 @@ export function* traversePattern(
         }
         break;
       case "TSParameterProperty":
+      case "TSAsExpression":
+      case "TSTypeAssertion":
+      case "TSNonNullExpression":
         throw new Error(
-          `TypeScript parameter properties must first be transformed by ` +
+          `TypeScript features must first be transformed by ` +
             `@babel/plugin-transform-typescript.\n` +
             `If you have already enabled that plugin (or '@babel/preset-typescript'), make sure ` +
             `that it runs before @babel/plugin-proposal-destructuring-private.`,
@@ -217,13 +220,14 @@ export function* traversePattern(
 }
 
 export function hasPrivateKeys(pattern: t.LVal) {
-  return (
-    traversePattern(pattern, function* (node) {
-      if (isObjectProperty(node) && isPrivateName(node.key)) {
-        yield;
-      }
-    }).next().done === false
-  );
+  let result = false;
+  traversePattern(pattern, function* (node) {
+    if (isObjectProperty(node) && isPrivateName(node.key)) {
+      result = true;
+      yield;
+    }
+  }).next();
+  return result;
 }
 
 export function hasPrivateClassElement(node: t.ClassBody): boolean {
@@ -248,11 +252,11 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   const indexPath = [];
   yield* traversePattern(pattern, function* (node, index, depth) {
     indexPath[depth] = index;
-    if (isObjectProperty(node)) {
-      const propertyKey = node.key;
-      if (isPrivateName(propertyKey)) {
-        yield indexPath.slice(1, depth + 1);
-      }
+    if (isObjectProperty(node) && isPrivateName(node.key)) {
+      // The indexPath[0, depth] contains the path from root pattern to the object property
+      // with private key. The indexPath may have more than depth + 1 elements because we
+      // don't shrink the indexPath when the traverser returns to parent nodes.
+      yield indexPath.slice(1, depth + 1);
     }
   });
 }
@@ -351,12 +355,12 @@ export function* transformPrivateKeyDestructuring(
     } else {
       // now we need to split according to the indexPath;
       const indexPath = searchPrivateKey.value;
-      let index;
-      let isFirst = true;
-      while (
-        (index = indexPath.shift()) !== undefined ||
-        left.type === "AssignmentPattern"
+      for (
+        let indexPathIndex = 0;
+        indexPathIndex < indexPath.length || left.type === "AssignmentPattern";
+        indexPathIndex++
       ) {
+        const index = indexPath[indexPathIndex];
         const isRightSafeToReuse =
           // If we should preserve completion and the right is the rootRight, then the
           // right is NOT safe to reuse because we will insert a new memoising statement
@@ -388,9 +392,10 @@ export function* transformPrivateKeyDestructuring(
               // for properties after `index`, push them to stack so we can process them later
               // inherit the restExcludingKeys on the stack if we are at
               // the first level, otherwise initialize a new restExcludingKeys
-              const nextRestExcludingKeys = isFirst
-                ? restExcludingKeys
-                : initRestExcludingKeys(left);
+              const nextRestExcludingKeys =
+                indexPathIndex === 0
+                  ? restExcludingKeys
+                  : initRestExcludingKeys(left);
               growRestExcludingKeys(
                 nextRestExcludingKeys,
                 // @ts-expect-error properties[0, index] must not contain rest element
@@ -453,7 +458,6 @@ export function* transformPrivateKeyDestructuring(
           default:
             break;
         }
-        isFirst = false;
       }
       stack.push({
         left,
