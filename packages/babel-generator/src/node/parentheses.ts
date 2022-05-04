@@ -17,6 +17,7 @@ import {
   isForInStatement,
   isForOfStatement,
   isForStatement,
+  isFunctionExpression,
   isIfStatement,
   isIndexedAccessType,
   isIntersectionTypeAnnotation,
@@ -344,6 +345,16 @@ export function Identifier(
   parent: t.Node,
   printStack: Array<t.Node>,
 ): boolean {
+  // 13.15.2 AssignmentExpression RS: Evaluation
+  // (fn) = function () {};
+  if (
+    node.extra?.parenthesized &&
+    isAssignmentExpression(parent, { left: node }) &&
+    isFunctionExpression(parent.right) &&
+    parent.right.id == null
+  ) {
+    return true;
+  }
   // Non-strict code allows the identifier `let`, but it cannot occur as-is in
   // certain contexts to avoid ambiguity with contextual keyword `let`.
   if (node.name === "let") {
