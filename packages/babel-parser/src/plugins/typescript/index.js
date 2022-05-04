@@ -3696,9 +3696,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
         // { type something ...? }
         hasTypeSpecifier = true;
-        leftOfAs = isImport
-          ? this.parseIdentifier()
-          : this.parseModuleExportName();
+        if (isImport) {
+          leftOfAs = this.parseIdentifier(true);
+          if (!this.isContextual(tt._as)) {
+            this.checkReservedWord(
+              leftOfAs.name,
+              leftOfAs.loc.start,
+              true,
+              true,
+            );
+          }
+        } else {
+          leftOfAs = this.parseModuleExportName();
+        }
       }
       if (hasTypeSpecifier && isInTypeOnlyImportExport) {
         this.raise(
