@@ -356,11 +356,12 @@ export function* transformPrivateKeyDestructuring(
       // now we need to split according to the indexPath;
       const indexPath = searchPrivateKey.value;
       for (
-        let indexPathIndex = 0;
-        indexPathIndex < indexPath.length || left.type === "AssignmentPattern";
+        let indexPathIndex = 0, index;
+        (indexPathIndex < indexPath.length &&
+          (index = indexPath[indexPathIndex]) !== undefined) ||
+        left.type === "AssignmentPattern";
         indexPathIndex++
       ) {
-        const index = indexPath[indexPathIndex];
         const isRightSafeToReuse =
           // If we should preserve completion and the right is the rootRight, then the
           // right is NOT safe to reuse because we will insert a new memoising statement
