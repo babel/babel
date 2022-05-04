@@ -152,11 +152,9 @@ import type * as t from "../..";
     const formatedBuilderName = formatBuilderName(type);
     const formatedNewBuilderName = formatBuilderName(newType);
     output += `/** @deprecated */
-function ${type}(${generateBuilderArgs(newType).join(", ")}): t.${type} {
+function ${type}(${generateBuilderArgs(newType).join(", ")}) {
   console.trace("The node type ${type} has been renamed to ${newType}");
-  return ${formatedNewBuilderName}(${t.BUILDER_KEYS[newType].join(
-      ", "
-    )}) as unknown as t.${type};
+  return ${formatedNewBuilderName}(${t.BUILDER_KEYS[newType].join(", ")});
 }
 export { ${type} as ${formatedBuilderName} };\n`;
     // This is needed for backwards compatibility.

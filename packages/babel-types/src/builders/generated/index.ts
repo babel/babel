@@ -2791,30 +2791,30 @@ export function tsTypeParameter(
 }
 export { tsTypeParameter as tSTypeParameter };
 /** @deprecated */
-function NumberLiteral(value: number): t.NumberLiteral {
+function NumberLiteral(value: number) {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return numericLiteral(value) as unknown as t.NumberLiteral;
+  return numericLiteral(value);
 }
 export { NumberLiteral as numberLiteral };
 /** @deprecated */
-function RegexLiteral(pattern: string, flags: string = ""): t.RegexLiteral {
+function RegexLiteral(pattern: string, flags: string = "") {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return regExpLiteral(pattern, flags) as unknown as t.RegexLiteral;
+  return regExpLiteral(pattern, flags);
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
-function RestProperty(argument: t.LVal): t.RestProperty {
+function RestProperty(argument: t.LVal) {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return restElement(argument) as unknown as t.RestProperty;
+  return restElement(argument);
 }
 export { RestProperty as restProperty };
 /** @deprecated */
-function SpreadProperty(argument: t.Expression): t.SpreadProperty {
+function SpreadProperty(argument: t.Expression) {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return spreadElement(argument) as unknown as t.SpreadProperty;
+  return spreadElement(argument);
 }
 export { SpreadProperty as spreadProperty };
