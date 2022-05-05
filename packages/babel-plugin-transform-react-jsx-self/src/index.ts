@@ -14,6 +14,7 @@
  */
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
+import type { Visitor, NodePath } from "@babel/traverse";
 
 const TRACE_ID = "__self";
 
@@ -23,14 +24,15 @@ const TRACE_ID = "__self";
  *
  * Derived from `Scope#getFunctionParent`
  */
-function getThisFunctionParent(path) {
+function getThisFunctionParent(
+  path: NodePath<t.JSXOpeningElement>,
+): NodePath<Exclude<t.FunctionParent, t.ArrowFunctionExpression>> | null {
   let scope = path.scope;
   do {
-    if (
-      scope.path.isFunctionParent() &&
-      !scope.path.isArrowFunctionExpression()
-    ) {
-      return scope.path;
+    const { path } = scope;
+    if (path.isFunctionParent() && !path.isArrowFunctionExpression()) {
+      // @ts-expect-error TS does not exlucde ArrowFunctionExpression from FunctionParent
+      return path;
     }
   } while ((scope = scope.parent));
   return null;
@@ -39,14 +41,14 @@ function getThisFunctionParent(path) {
 /**
  * Returns whether the class has specified a superclass.
  */
-function isDerivedClass(classPath) {
+function isDerivedClass(classPath: NodePath<t.Class>) {
   return classPath.node.superClass !== null;
 }
 
 /**
  * Returns whether `this` is allowed at given path.
  */
-function isThisAllowed(path) {
+function isThisAllowed(path: NodePath<t.JSXOpeningElement>) {
   // This specifically skips arrow functions as they do not rewrite `this`.
   const parentMethodOrFunction = getThisFunctionParent(path);
   if (parentMethodOrFunction === null) {
@@ -63,13 +65,15 @@ function isThisAllowed(path) {
     return true;
   }
   // Now we are in a constructor. If it is a derived class, we do not reference `this`.
-  return !isDerivedClass(parentMethodOrFunction.parentPath.parentPath);
+  return !isDerivedClass(
+    parentMethodOrFunction.parentPath.parentPath as NodePath<t.Class>,
+  );
 }
 
 export default declare(api => {
   api.assertVersion(7);
 
-  const visitor = {
+  const visitor: Visitor = {
     JSXOpeningElement(path) {
       if (!isThisAllowed(path)) {
         return;
