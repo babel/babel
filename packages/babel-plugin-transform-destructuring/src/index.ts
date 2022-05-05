@@ -128,10 +128,6 @@ export default declare((api, options: Options) => {
         destructuring.init(pattern, key);
 
         unshiftForXStatementBody(path, nodes);
-
-        const block = node.body;
-        // @ts-expect-error: ensureBlock ensures that node.body is a BlockStatement
-        block.body = nodes.concat(block.body);
         scope.crawl();
       },
 
