@@ -1,16 +1,17 @@
 import { declare } from "@babel/helper-plugin-utils";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 // Mapping of React top-level methods that are pure.
 // This plugin adds a /*#__PURE__#/ annotation to calls to these methods,
 // so that terser and other minifiers can safely remove them during dead
 // code elimination.
 // See https://reactjs.org/docs/react-api.html
-const PURE_CALLS = new Map([
+const PURE_CALLS: [string, Set<string>][] = [
   [
     "react",
-    [
+    new Set([
       "cloneElement",
       "createContext",
       "createElement",
@@ -20,10 +21,10 @@ const PURE_CALLS = new Map([
       "isValidElement",
       "memo",
       "lazy",
-    ],
+    ]),
   ],
-  ["react-dom", ["createPortal"]],
-]);
+  ["react-dom", new Set(["createPortal"])],
+];
 
 export default declare(api => {
   api.assertVersion(7);
@@ -40,14 +41,14 @@ export default declare(api => {
   };
 });
 
-function isReactCall(path) {
+function isReactCall(path: NodePath<t.CallExpression>) {
   // If the callee is not a member expression, then check if it matches
   // a named import, e.g. `import {forwardRef} from 'react'`.
-  if (!t.isMemberExpression(path.node.callee)) {
-    const callee = path.get("callee");
+  const calleePath = path.get("callee");
+  if (!calleePath.isMemberExpression()) {
     for (const [module, methods] of PURE_CALLS) {
       for (const method of methods) {
-        if (callee.referencesImport(module, method)) {
+        if (calleePath.referencesImport(module, method)) {
           return true;
         }
       }
@@ -60,19 +61,17 @@ function isReactCall(path) {
   // a default import (`import React from 'react'`) or namespace
   // import (`import * as React from 'react'), and check if the
   // property matches one of the pure methods.
-  for (const [module, methods] of PURE_CALLS) {
-    const object = path.get("callee.object");
-    if (
-      object.referencesImport(module, "default") ||
-      object.referencesImport(module, "*")
-    ) {
-      for (const method of methods) {
-        if (t.isIdentifier(path.node.callee.property, { name: method })) {
-          return true;
-        }
+  const object = calleePath.get("object");
+  const callee = calleePath.node;
+  if (!callee.computed && t.isIdentifier(callee.property)) {
+    const propertyName = callee.property.name;
+    for (const [module, methods] of PURE_CALLS) {
+      if (
+        object.referencesImport(module, "default") ||
+        object.referencesImport(module, "*")
+      ) {
+        return methods.has(propertyName);
       }
-
-      return false;
     }
   }
 
