@@ -1,4 +1,7 @@
 var f, g, h;
 (f) = function () {};
+(f) = class {};
 g = function () {};
-(h) = function noParen() {}
+g = class {};
+(h) = function noParen() {};
+(h) = class noParen {}

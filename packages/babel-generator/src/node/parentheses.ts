@@ -350,7 +350,7 @@ export function Identifier(
   if (
     node.extra?.parenthesized &&
     isAssignmentExpression(parent, { left: node }) &&
-    isFunctionExpression(parent.right) &&
+    (isFunctionExpression(parent.right) || isClassExpression(parent.right)) &&
     parent.right.id == null
   ) {
     return true;
