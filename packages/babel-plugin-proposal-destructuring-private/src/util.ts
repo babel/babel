@@ -3,8 +3,8 @@ import type { Scope } from "@babel/traverse";
 import { types } from "@babel/core";
 import type { File } from "@babel/core";
 import { buildObjectExcludingKeys } from "@babel/plugin-transform-destructuring";
-import { assignmentExpression, ObjectProperty } from "@babel/types";
 const {
+  assignmentExpression,
   binaryExpression,
   conditionalExpression,
   cloneNode,
@@ -49,12 +49,12 @@ function initRestExcludingKeys(pattern: t.LVal): ExcludingKey[] | null {
  * memoising the computed non-static keys.
  *
  * @param {ExcludingKey[]} excludingKeys
- * @param {ObjectProperty[]} properties An array of object properties that should be excluded by rest element transform
+ * @param {t.ObjectProperty[]} properties An array of object properties that should be excluded by rest element transform
  * @param {Scope} scope Where should we register the memoised id
  */
 function growRestExcludingKeys(
   excludingKeys: ExcludingKey[],
-  properties: ObjectProperty[],
+  properties: t.ObjectProperty[],
   scope: Scope,
 ) {
   if (excludingKeys === null) return;
@@ -224,6 +224,7 @@ export function hasPrivateKeys(pattern: t.LVal) {
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {
       result = true;
+      // stop the traversal
       yield;
     }
   }).next();
@@ -324,7 +325,7 @@ export function* transformPrivateKeyDestructuring(
     if (searchPrivateKey.done) {
       if (restExcludingKeys?.length > 0) {
         // optimize out the rest element because `objectWithoutProperties`
-        // always return a new object
+        // returns a new object
         // `{ ...z } = babelHelpers.objectWithoutProperties(m, ["x"])`
         // to
         // `z = babelHelpers.objectWithoutProperties(m, ["x"])`
