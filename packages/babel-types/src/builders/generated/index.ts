@@ -11,8 +11,7 @@ export function arrayExpression(
     type: "ArrayExpression",
     elements,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function assignmentExpression(
   operator: string,
@@ -25,8 +24,7 @@ export function assignmentExpression(
     left,
     right,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function binaryExpression(
   operator:
@@ -62,32 +60,28 @@ export function binaryExpression(
     left,
     right,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function interpreterDirective(value: string) {
   const node: t.InterpreterDirective = {
     type: "InterpreterDirective",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function directive(value: t.DirectiveLiteral) {
   const node: t.Directive = {
     type: "Directive",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function directiveLiteral(value: string) {
   const node: t.DirectiveLiteral = {
     type: "DirectiveLiteral",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function blockStatement(
   body: Array<t.Statement>,
@@ -98,16 +92,14 @@ export function blockStatement(
     body,
     directives,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function breakStatement(label: t.Identifier | null = null) {
   const node: t.BreakStatement = {
     type: "BreakStatement",
     label,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function callExpression(
   callee: t.Expression | t.V8IntrinsicIdentifier,
@@ -120,8 +112,7 @@ export function callExpression(
     callee,
     arguments: _arguments,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function catchClause(
   param:
@@ -137,8 +128,7 @@ export function catchClause(
     param,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function conditionalExpression(
   test: t.Expression,
@@ -151,16 +141,14 @@ export function conditionalExpression(
     consequent,
     alternate,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function continueStatement(label: t.Identifier | null = null) {
   const node: t.ContinueStatement = {
     type: "ContinueStatement",
     label,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function debuggerStatement() {
   const node: t.DebuggerStatement = {
@@ -174,8 +162,7 @@ export function doWhileStatement(test: t.Expression, body: t.Statement) {
     test,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function emptyStatement() {
   const node: t.EmptyStatement = {
@@ -188,8 +175,7 @@ export function expressionStatement(expression: t.Expression) {
     type: "ExpressionStatement",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function file(
   program: t.Program,
@@ -202,8 +188,7 @@ export function file(
     comments,
     tokens,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function forInStatement(
   left: t.VariableDeclaration | t.LVal,
@@ -216,8 +201,7 @@ export function forInStatement(
     right,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function forStatement(
   init: t.VariableDeclaration | t.Expression | null | undefined = null,
@@ -232,8 +216,7 @@ export function forStatement(
     update,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function functionDeclaration(
   id: t.Identifier | null | undefined = null,
@@ -250,8 +233,7 @@ export function functionDeclaration(
     generator,
     async,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function functionExpression(
   id: t.Identifier | null | undefined = null,
@@ -268,16 +250,14 @@ export function functionExpression(
     generator,
     async,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function identifier(name: string) {
   const node: t.Identifier = {
     type: "Identifier",
     name,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function ifStatement(
   test: t.Expression,
@@ -290,8 +270,7 @@ export function ifStatement(
     consequent,
     alternate,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function labeledStatement(label: t.Identifier, body: t.Statement) {
   const node: t.LabeledStatement = {
@@ -299,24 +278,21 @@ export function labeledStatement(label: t.Identifier, body: t.Statement) {
     label,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function stringLiteral(value: string) {
   const node: t.StringLiteral = {
     type: "StringLiteral",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function numericLiteral(value: number) {
   const node: t.NumericLiteral = {
     type: "NumericLiteral",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function nullLiteral() {
   const node: t.NullLiteral = {
@@ -329,8 +305,7 @@ export function booleanLiteral(value: boolean) {
     type: "BooleanLiteral",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function regExpLiteral(pattern: string, flags: string = "") {
   const node: t.RegExpLiteral = {
@@ -338,8 +313,7 @@ export function regExpLiteral(pattern: string, flags: string = "") {
     pattern,
     flags,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function logicalExpression(
   operator: "||" | "&&" | "??",
@@ -352,8 +326,7 @@ export function logicalExpression(
     left,
     right,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function memberExpression(
   object: t.Expression,
@@ -368,8 +341,7 @@ export function memberExpression(
     computed,
     optional,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function newExpression(
   callee: t.Expression | t.V8IntrinsicIdentifier,
@@ -382,8 +354,7 @@ export function newExpression(
     callee,
     arguments: _arguments,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function program(
   body: Array<t.Statement>,
@@ -399,8 +370,7 @@ export function program(
     interpreter,
     sourceFile: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectExpression(
   properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadElement>,
@@ -409,8 +379,7 @@ export function objectExpression(
     type: "ObjectExpression",
     properties,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectMethod(
   kind: "method" | "get" | "set" | undefined = "method",
@@ -431,8 +400,7 @@ export function objectMethod(
     generator,
     async,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectProperty(
   key: t.Expression | t.Identifier | t.StringLiteral | t.NumericLiteral,
@@ -449,40 +417,35 @@ export function objectProperty(
     shorthand,
     decorators,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function restElement(argument: t.LVal) {
   const node: t.RestElement = {
     type: "RestElement",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function returnStatement(argument: t.Expression | null = null) {
   const node: t.ReturnStatement = {
     type: "ReturnStatement",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function sequenceExpression(expressions: Array<t.Expression>) {
   const node: t.SequenceExpression = {
     type: "SequenceExpression",
     expressions,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function parenthesizedExpression(expression: t.Expression) {
   const node: t.ParenthesizedExpression = {
     type: "ParenthesizedExpression",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function switchCase(
   test: t.Expression | null | undefined = null,
@@ -493,8 +456,7 @@ export function switchCase(
     test,
     consequent,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function switchStatement(
   discriminant: t.Expression,
@@ -505,8 +467,7 @@ export function switchStatement(
     discriminant,
     cases,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function thisExpression() {
   const node: t.ThisExpression = {
@@ -519,8 +480,7 @@ export function throwStatement(argument: t.Expression) {
     type: "ThrowStatement",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function tryStatement(
   block: t.BlockStatement,
@@ -533,8 +493,7 @@ export function tryStatement(
     handler,
     finalizer,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function unaryExpression(
   operator: "void" | "throw" | "delete" | "!" | "+" | "-" | "~" | "typeof",
@@ -547,8 +506,7 @@ export function unaryExpression(
     argument,
     prefix,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function updateExpression(
   operator: "++" | "--",
@@ -561,8 +519,7 @@ export function updateExpression(
     argument,
     prefix,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function variableDeclaration(
   kind: "var" | "let" | "const",
@@ -573,8 +530,7 @@ export function variableDeclaration(
     kind,
     declarations,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function variableDeclarator(
   id: t.LVal,
@@ -585,8 +541,7 @@ export function variableDeclarator(
     id,
     init,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function whileStatement(test: t.Expression, body: t.Statement) {
   const node: t.WhileStatement = {
@@ -594,8 +549,7 @@ export function whileStatement(test: t.Expression, body: t.Statement) {
     test,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function withStatement(object: t.Expression, body: t.Statement) {
   const node: t.WithStatement = {
@@ -603,8 +557,7 @@ export function withStatement(object: t.Expression, body: t.Statement) {
     object,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function assignmentPattern(
   left:
@@ -622,16 +575,14 @@ export function assignmentPattern(
     left,
     right,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function arrayPattern(elements: Array<null | t.PatternLike>) {
   const node: t.ArrayPattern = {
     type: "ArrayPattern",
     elements,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function arrowFunctionExpression(
   params: Array<t.Identifier | t.Pattern | t.RestElement>,
@@ -645,8 +596,7 @@ export function arrowFunctionExpression(
     async,
     expression: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classBody(
   body: Array<
@@ -664,8 +614,7 @@ export function classBody(
     type: "ClassBody",
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classExpression(
   id: t.Identifier | null | undefined = null,
@@ -680,8 +629,7 @@ export function classExpression(
     body,
     decorators,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classDeclaration(
   id: t.Identifier,
@@ -696,16 +644,14 @@ export function classDeclaration(
     body,
     decorators,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function exportAllDeclaration(source: t.StringLiteral) {
   const node: t.ExportAllDeclaration = {
     type: "ExportAllDeclaration",
     source,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function exportDefaultDeclaration(
   declaration:
@@ -718,8 +664,7 @@ export function exportDefaultDeclaration(
     type: "ExportDefaultDeclaration",
     declaration,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function exportNamedDeclaration(
   declaration: t.Declaration | null = null,
@@ -734,8 +679,7 @@ export function exportNamedDeclaration(
     specifiers,
     source,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function exportSpecifier(
   local: t.Identifier,
@@ -746,8 +690,7 @@ export function exportSpecifier(
     local,
     exported,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function forOfStatement(
   left: t.VariableDeclaration | t.LVal,
@@ -762,8 +705,7 @@ export function forOfStatement(
     body,
     await: _await,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function importDeclaration(
   specifiers: Array<
@@ -776,24 +718,21 @@ export function importDeclaration(
     specifiers,
     source,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function importDefaultSpecifier(local: t.Identifier) {
   const node: t.ImportDefaultSpecifier = {
     type: "ImportDefaultSpecifier",
     local,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function importNamespaceSpecifier(local: t.Identifier) {
   const node: t.ImportNamespaceSpecifier = {
     type: "ImportNamespaceSpecifier",
     local,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function importSpecifier(
   local: t.Identifier,
@@ -804,8 +743,7 @@ export function importSpecifier(
     local,
     imported,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function metaProperty(meta: t.Identifier, property: t.Identifier) {
   const node: t.MetaProperty = {
@@ -813,8 +751,7 @@ export function metaProperty(meta: t.Identifier, property: t.Identifier) {
     meta,
     property,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classMethod(
   kind: "get" | "set" | "method" | "constructor" | undefined = "method",
@@ -839,8 +776,7 @@ export function classMethod(
     generator,
     async,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectPattern(
   properties: Array<t.RestElement | t.ObjectProperty>,
@@ -849,16 +785,14 @@ export function objectPattern(
     type: "ObjectPattern",
     properties,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function spreadElement(argument: t.Expression) {
   const node: t.SpreadElement = {
     type: "SpreadElement",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 function _super() {
   const node: t.Super = {
@@ -876,8 +810,7 @@ export function taggedTemplateExpression(
     tag,
     quasi,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function templateElement(
   value: { raw: string; cooked?: string },
@@ -888,8 +821,7 @@ export function templateElement(
     value,
     tail,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function templateLiteral(
   quasis: Array<t.TemplateElement>,
@@ -900,8 +832,7 @@ export function templateLiteral(
     quasis,
     expressions,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function yieldExpression(
   argument: t.Expression | null = null,
@@ -912,16 +843,14 @@ export function yieldExpression(
     argument,
     delegate,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function awaitExpression(argument: t.Expression) {
   const node: t.AwaitExpression = {
     type: "AwaitExpression",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 function _import() {
   const node: t.Import = {
@@ -935,16 +864,14 @@ export function bigIntLiteral(value: string) {
     type: "BigIntLiteral",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function exportNamespaceSpecifier(exported: t.Identifier) {
   const node: t.ExportNamespaceSpecifier = {
     type: "ExportNamespaceSpecifier",
     exported,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function optionalMemberExpression(
   object: t.Expression,
@@ -959,8 +886,7 @@ export function optionalMemberExpression(
     computed,
     optional,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function optionalCallExpression(
   callee: t.Expression,
@@ -975,8 +901,7 @@ export function optionalCallExpression(
     arguments: _arguments,
     optional,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classProperty(
   key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
@@ -995,8 +920,7 @@ export function classProperty(
     computed,
     static: _static,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classAccessorProperty(
   key:
@@ -1020,8 +944,7 @@ export function classAccessorProperty(
     computed,
     static: _static,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classPrivateProperty(
   key: t.PrivateName,
@@ -1036,8 +959,7 @@ export function classPrivateProperty(
     decorators,
     static: _static,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function classPrivateMethod(
   kind: "get" | "set" | "method" | "constructor" | undefined = "method",
@@ -1056,24 +978,21 @@ export function classPrivateMethod(
     body,
     static: _static,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function privateName(id: t.Identifier) {
   const node: t.PrivateName = {
     type: "PrivateName",
     id,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function staticBlock(body: Array<t.Statement>) {
   const node: t.StaticBlock = {
     type: "StaticBlock",
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function anyTypeAnnotation() {
   const node: t.AnyTypeAnnotation = {
@@ -1086,8 +1005,7 @@ export function arrayTypeAnnotation(elementType: t.FlowType) {
     type: "ArrayTypeAnnotation",
     elementType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function booleanTypeAnnotation() {
   const node: t.BooleanTypeAnnotation = {
@@ -1100,8 +1018,7 @@ export function booleanLiteralTypeAnnotation(value: boolean) {
     type: "BooleanLiteralTypeAnnotation",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function nullLiteralTypeAnnotation() {
   const node: t.NullLiteralTypeAnnotation = {
@@ -1118,8 +1035,7 @@ export function classImplements(
     id,
     typeParameters,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareClass(
   id: t.Identifier,
@@ -1134,16 +1050,14 @@ export function declareClass(
     extends: _extends,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareFunction(id: t.Identifier) {
   const node: t.DeclareFunction = {
     type: "DeclareFunction",
     id,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareInterface(
   id: t.Identifier,
@@ -1158,8 +1072,7 @@ export function declareInterface(
     extends: _extends,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareModule(
   id: t.Identifier | t.StringLiteral,
@@ -1172,16 +1085,14 @@ export function declareModule(
     body,
     kind,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareModuleExports(typeAnnotation: t.TypeAnnotation) {
   const node: t.DeclareModuleExports = {
     type: "DeclareModuleExports",
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareTypeAlias(
   id: t.Identifier,
@@ -1194,8 +1105,7 @@ export function declareTypeAlias(
     typeParameters,
     right,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareOpaqueType(
   id: t.Identifier,
@@ -1208,16 +1118,14 @@ export function declareOpaqueType(
     typeParameters,
     supertype,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareVariable(id: t.Identifier) {
   const node: t.DeclareVariable = {
     type: "DeclareVariable",
     id,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareExportDeclaration(
   declaration: t.Flow | null = null,
@@ -1232,24 +1140,21 @@ export function declareExportDeclaration(
     specifiers,
     source,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declareExportAllDeclaration(source: t.StringLiteral) {
   const node: t.DeclareExportAllDeclaration = {
     type: "DeclareExportAllDeclaration",
     source,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function declaredPredicate(value: t.Flow) {
   const node: t.DeclaredPredicate = {
     type: "DeclaredPredicate",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function existsTypeAnnotation() {
   const node: t.ExistsTypeAnnotation = {
@@ -1270,8 +1175,7 @@ export function functionTypeAnnotation(
     rest,
     returnType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function functionTypeParam(
   name: t.Identifier | null | undefined = null,
@@ -1282,8 +1186,7 @@ export function functionTypeParam(
     name,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function genericTypeAnnotation(
   id: t.Identifier | t.QualifiedTypeIdentifier,
@@ -1294,8 +1197,7 @@ export function genericTypeAnnotation(
     id,
     typeParameters,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function inferredPredicate() {
   const node: t.InferredPredicate = {
@@ -1312,8 +1214,7 @@ export function interfaceExtends(
     id,
     typeParameters,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function interfaceDeclaration(
   id: t.Identifier,
@@ -1328,8 +1229,7 @@ export function interfaceDeclaration(
     extends: _extends,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function interfaceTypeAnnotation(
   _extends: Array<t.InterfaceExtends> | null | undefined = null,
@@ -1340,16 +1240,14 @@ export function interfaceTypeAnnotation(
     extends: _extends,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function intersectionTypeAnnotation(types: Array<t.FlowType>) {
   const node: t.IntersectionTypeAnnotation = {
     type: "IntersectionTypeAnnotation",
     types,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function mixedTypeAnnotation() {
   const node: t.MixedTypeAnnotation = {
@@ -1368,16 +1266,14 @@ export function nullableTypeAnnotation(typeAnnotation: t.FlowType) {
     type: "NullableTypeAnnotation",
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function numberLiteralTypeAnnotation(value: number) {
   const node: t.NumberLiteralTypeAnnotation = {
     type: "NumberLiteralTypeAnnotation",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function numberTypeAnnotation() {
   const node: t.NumberTypeAnnotation = {
@@ -1400,8 +1296,7 @@ export function objectTypeAnnotation(
     internalSlots,
     exact,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectTypeInternalSlot(
   id: t.Identifier,
@@ -1418,8 +1313,7 @@ export function objectTypeInternalSlot(
     static: _static,
     method,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectTypeCallProperty(value: t.FlowType) {
   const node: t.ObjectTypeCallProperty = {
@@ -1427,8 +1321,7 @@ export function objectTypeCallProperty(value: t.FlowType) {
     value,
     static: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectTypeIndexer(
   id: t.Identifier | null | undefined = null,
@@ -1444,8 +1337,7 @@ export function objectTypeIndexer(
     variance,
     static: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectTypeProperty(
   key: t.Identifier | t.StringLiteral,
@@ -1463,16 +1355,14 @@ export function objectTypeProperty(
     proto: null,
     static: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function objectTypeSpreadProperty(argument: t.FlowType) {
   const node: t.ObjectTypeSpreadProperty = {
     type: "ObjectTypeSpreadProperty",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function opaqueType(
   id: t.Identifier,
@@ -1487,8 +1377,7 @@ export function opaqueType(
     supertype,
     impltype,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function qualifiedTypeIdentifier(
   id: t.Identifier,
@@ -1499,16 +1388,14 @@ export function qualifiedTypeIdentifier(
     id,
     qualification,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function stringLiteralTypeAnnotation(value: string) {
   const node: t.StringLiteralTypeAnnotation = {
     type: "StringLiteralTypeAnnotation",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function stringTypeAnnotation() {
   const node: t.StringTypeAnnotation = {
@@ -1533,16 +1420,14 @@ export function tupleTypeAnnotation(types: Array<t.FlowType>) {
     type: "TupleTypeAnnotation",
     types,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function typeofTypeAnnotation(argument: t.FlowType) {
   const node: t.TypeofTypeAnnotation = {
     type: "TypeofTypeAnnotation",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function typeAlias(
   id: t.Identifier,
@@ -1555,16 +1440,14 @@ export function typeAlias(
     typeParameters,
     right,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function typeAnnotation(typeAnnotation: t.FlowType) {
   const node: t.TypeAnnotation = {
     type: "TypeAnnotation",
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function typeCastExpression(
   expression: t.Expression,
@@ -1575,8 +1458,7 @@ export function typeCastExpression(
     expression,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function typeParameter(
   bound: t.TypeAnnotation | null = null,
@@ -1590,40 +1472,35 @@ export function typeParameter(
     variance,
     name: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function typeParameterDeclaration(params: Array<t.TypeParameter>) {
   const node: t.TypeParameterDeclaration = {
     type: "TypeParameterDeclaration",
     params,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function typeParameterInstantiation(params: Array<t.FlowType>) {
   const node: t.TypeParameterInstantiation = {
     type: "TypeParameterInstantiation",
     params,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function unionTypeAnnotation(types: Array<t.FlowType>) {
   const node: t.UnionTypeAnnotation = {
     type: "UnionTypeAnnotation",
     types,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function variance(kind: "minus" | "plus") {
   const node: t.Variance = {
     type: "Variance",
     kind,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function voidTypeAnnotation() {
   const node: t.VoidTypeAnnotation = {
@@ -1644,8 +1521,7 @@ export function enumDeclaration(
     id,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumBooleanBody(members: Array<t.EnumBooleanMember>) {
   const node: t.EnumBooleanBody = {
@@ -1654,8 +1530,7 @@ export function enumBooleanBody(members: Array<t.EnumBooleanMember>) {
     explicitType: null,
     hasUnknownMembers: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumNumberBody(members: Array<t.EnumNumberMember>) {
   const node: t.EnumNumberBody = {
@@ -1664,8 +1539,7 @@ export function enumNumberBody(members: Array<t.EnumNumberMember>) {
     explicitType: null,
     hasUnknownMembers: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumStringBody(
   members: Array<t.EnumStringMember | t.EnumDefaultedMember>,
@@ -1676,8 +1550,7 @@ export function enumStringBody(
     explicitType: null,
     hasUnknownMembers: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumSymbolBody(members: Array<t.EnumDefaultedMember>) {
   const node: t.EnumSymbolBody = {
@@ -1685,8 +1558,7 @@ export function enumSymbolBody(members: Array<t.EnumDefaultedMember>) {
     members,
     hasUnknownMembers: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumBooleanMember(id: t.Identifier) {
   const node: t.EnumBooleanMember = {
@@ -1694,8 +1566,7 @@ export function enumBooleanMember(id: t.Identifier) {
     id,
     init: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumNumberMember(id: t.Identifier, init: t.NumericLiteral) {
   const node: t.EnumNumberMember = {
@@ -1703,8 +1574,7 @@ export function enumNumberMember(id: t.Identifier, init: t.NumericLiteral) {
     id,
     init,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumStringMember(id: t.Identifier, init: t.StringLiteral) {
   const node: t.EnumStringMember = {
@@ -1712,16 +1582,14 @@ export function enumStringMember(id: t.Identifier, init: t.StringLiteral) {
     id,
     init,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function enumDefaultedMember(id: t.Identifier) {
   const node: t.EnumDefaultedMember = {
     type: "EnumDefaultedMember",
     id,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function indexedAccessType(
   objectType: t.FlowType,
@@ -1732,8 +1600,7 @@ export function indexedAccessType(
     objectType,
     indexType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function optionalIndexedAccessType(
   objectType: t.FlowType,
@@ -1745,8 +1612,7 @@ export function optionalIndexedAccessType(
     indexType,
     optional: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function jsxAttribute(
   name: t.JSXIdentifier | t.JSXNamespacedName,
@@ -1762,8 +1628,7 @@ export function jsxAttribute(
     name,
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxAttribute as jSXAttribute };
 export function jsxClosingElement(
@@ -1773,8 +1638,7 @@ export function jsxClosingElement(
     type: "JSXClosingElement",
     name,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxClosingElement as jSXClosingElement };
 export function jsxElement(
@@ -1796,8 +1660,7 @@ export function jsxElement(
     children,
     selfClosing,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxElement as jSXElement };
 export function jsxEmptyExpression() {
@@ -1814,8 +1677,7 @@ export function jsxExpressionContainer(
     type: "JSXExpressionContainer",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxExpressionContainer as jSXExpressionContainer };
 export function jsxSpreadChild(expression: t.Expression) {
@@ -1823,8 +1685,7 @@ export function jsxSpreadChild(expression: t.Expression) {
     type: "JSXSpreadChild",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxSpreadChild as jSXSpreadChild };
 export function jsxIdentifier(name: string) {
@@ -1832,8 +1693,7 @@ export function jsxIdentifier(name: string) {
     type: "JSXIdentifier",
     name,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxIdentifier as jSXIdentifier };
 export function jsxMemberExpression(
@@ -1845,8 +1705,7 @@ export function jsxMemberExpression(
     object,
     property,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxMemberExpression as jSXMemberExpression };
 export function jsxNamespacedName(
@@ -1858,8 +1717,7 @@ export function jsxNamespacedName(
     namespace,
     name,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxNamespacedName as jSXNamespacedName };
 export function jsxOpeningElement(
@@ -1873,8 +1731,7 @@ export function jsxOpeningElement(
     attributes,
     selfClosing,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxOpeningElement as jSXOpeningElement };
 export function jsxSpreadAttribute(argument: t.Expression) {
@@ -1882,8 +1739,7 @@ export function jsxSpreadAttribute(argument: t.Expression) {
     type: "JSXSpreadAttribute",
     argument,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxSpreadAttribute as jSXSpreadAttribute };
 export function jsxText(value: string) {
@@ -1891,8 +1747,7 @@ export function jsxText(value: string) {
     type: "JSXText",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxText as jSXText };
 export function jsxFragment(
@@ -1912,8 +1767,7 @@ export function jsxFragment(
     closingFragment,
     children,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { jsxFragment as jSXFragment };
 export function jsxOpeningFragment() {
@@ -1953,16 +1807,14 @@ export function placeholder(
     expectedNode,
     name,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function v8IntrinsicIdentifier(name: string) {
   const node: t.V8IntrinsicIdentifier = {
     type: "V8IntrinsicIdentifier",
     name,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function argumentPlaceholder() {
   const node: t.ArgumentPlaceholder = {
@@ -1976,8 +1828,7 @@ export function bindExpression(object: t.Expression, callee: t.Expression) {
     object,
     callee,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function importAttribute(
   key: t.Identifier | t.StringLiteral,
@@ -1988,16 +1839,14 @@ export function importAttribute(
     key,
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function decorator(expression: t.Expression) {
   const node: t.Decorator = {
     type: "Decorator",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function doExpression(body: t.BlockStatement, async: boolean = false) {
   const node: t.DoExpression = {
@@ -2005,16 +1854,14 @@ export function doExpression(body: t.BlockStatement, async: boolean = false) {
     body,
     async,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function exportDefaultSpecifier(exported: t.Identifier) {
   const node: t.ExportDefaultSpecifier = {
     type: "ExportDefaultSpecifier",
     exported,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function recordExpression(
   properties: Array<t.ObjectProperty | t.SpreadElement>,
@@ -2023,8 +1870,7 @@ export function recordExpression(
     type: "RecordExpression",
     properties,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function tupleExpression(
   elements: Array<t.Expression | t.SpreadElement> = [],
@@ -2033,24 +1879,21 @@ export function tupleExpression(
     type: "TupleExpression",
     elements,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function decimalLiteral(value: string) {
   const node: t.DecimalLiteral = {
     type: "DecimalLiteral",
     value,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function moduleExpression(body: t.Program) {
   const node: t.ModuleExpression = {
     type: "ModuleExpression",
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function topicReference() {
   const node: t.TopicReference = {
@@ -2063,16 +1906,14 @@ export function pipelineTopicExpression(expression: t.Expression) {
     type: "PipelineTopicExpression",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function pipelineBareFunction(callee: t.Expression) {
   const node: t.PipelineBareFunction = {
     type: "PipelineBareFunction",
     callee,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export function pipelinePrimaryTopicReference() {
   const node: t.PipelinePrimaryTopicReference = {
@@ -2087,8 +1928,7 @@ export function tsParameterProperty(
     type: "TSParameterProperty",
     parameter,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsParameterProperty as tSParameterProperty };
 export function tsDeclareFunction(
@@ -2108,8 +1948,7 @@ export function tsDeclareFunction(
     params,
     returnType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsDeclareFunction as tSDeclareFunction };
 export function tsDeclareMethod(
@@ -2133,8 +1972,7 @@ export function tsDeclareMethod(
     params,
     returnType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsDeclareMethod as tSDeclareMethod };
 export function tsQualifiedName(left: t.TSEntityName, right: t.Identifier) {
@@ -2143,8 +1981,7 @@ export function tsQualifiedName(left: t.TSEntityName, right: t.Identifier) {
     left,
     right,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsQualifiedName as tSQualifiedName };
 export function tsCallSignatureDeclaration(
@@ -2158,8 +1995,7 @@ export function tsCallSignatureDeclaration(
     parameters,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsCallSignatureDeclaration as tSCallSignatureDeclaration };
 export function tsConstructSignatureDeclaration(
@@ -2173,8 +2009,7 @@ export function tsConstructSignatureDeclaration(
     parameters,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsConstructSignatureDeclaration as tSConstructSignatureDeclaration };
 export function tsPropertySignature(
@@ -2189,8 +2024,7 @@ export function tsPropertySignature(
     initializer,
     kind: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsPropertySignature as tSPropertySignature };
 export function tsMethodSignature(
@@ -2207,8 +2041,7 @@ export function tsMethodSignature(
     typeAnnotation,
     kind: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsMethodSignature as tSMethodSignature };
 export function tsIndexSignature(
@@ -2220,8 +2053,7 @@ export function tsIndexSignature(
     parameters,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsIndexSignature as tSIndexSignature };
 export function tsAnyKeyword() {
@@ -2333,8 +2165,7 @@ export function tsFunctionType(
     parameters,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsFunctionType as tSFunctionType };
 export function tsConstructorType(
@@ -2348,8 +2179,7 @@ export function tsConstructorType(
     parameters,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsConstructorType as tSConstructorType };
 export function tsTypeReference(
@@ -2361,8 +2191,7 @@ export function tsTypeReference(
     typeName,
     typeParameters,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeReference as tSTypeReference };
 export function tsTypePredicate(
@@ -2376,8 +2205,7 @@ export function tsTypePredicate(
     typeAnnotation,
     asserts,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypePredicate as tSTypePredicate };
 export function tsTypeQuery(exprName: t.TSEntityName | t.TSImportType) {
@@ -2385,8 +2213,7 @@ export function tsTypeQuery(exprName: t.TSEntityName | t.TSImportType) {
     type: "TSTypeQuery",
     exprName,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeQuery as tSTypeQuery };
 export function tsTypeLiteral(members: Array<t.TSTypeElement>) {
@@ -2394,8 +2221,7 @@ export function tsTypeLiteral(members: Array<t.TSTypeElement>) {
     type: "TSTypeLiteral",
     members,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeLiteral as tSTypeLiteral };
 export function tsArrayType(elementType: t.TSType) {
@@ -2403,8 +2229,7 @@ export function tsArrayType(elementType: t.TSType) {
     type: "TSArrayType",
     elementType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsArrayType as tSArrayType };
 export function tsTupleType(
@@ -2414,8 +2239,7 @@ export function tsTupleType(
     type: "TSTupleType",
     elementTypes,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTupleType as tSTupleType };
 export function tsOptionalType(typeAnnotation: t.TSType) {
@@ -2423,8 +2247,7 @@ export function tsOptionalType(typeAnnotation: t.TSType) {
     type: "TSOptionalType",
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsOptionalType as tSOptionalType };
 export function tsRestType(typeAnnotation: t.TSType) {
@@ -2432,8 +2255,7 @@ export function tsRestType(typeAnnotation: t.TSType) {
     type: "TSRestType",
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsRestType as tSRestType };
 export function tsNamedTupleMember(
@@ -2447,8 +2269,7 @@ export function tsNamedTupleMember(
     elementType,
     optional,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsNamedTupleMember as tSNamedTupleMember };
 export function tsUnionType(types: Array<t.TSType>) {
@@ -2456,8 +2277,7 @@ export function tsUnionType(types: Array<t.TSType>) {
     type: "TSUnionType",
     types,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsUnionType as tSUnionType };
 export function tsIntersectionType(types: Array<t.TSType>) {
@@ -2465,8 +2285,7 @@ export function tsIntersectionType(types: Array<t.TSType>) {
     type: "TSIntersectionType",
     types,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsIntersectionType as tSIntersectionType };
 export function tsConditionalType(
@@ -2482,8 +2301,7 @@ export function tsConditionalType(
     trueType,
     falseType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsConditionalType as tSConditionalType };
 export function tsInferType(typeParameter: t.TSTypeParameter) {
@@ -2491,8 +2309,7 @@ export function tsInferType(typeParameter: t.TSTypeParameter) {
     type: "TSInferType",
     typeParameter,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsInferType as tSInferType };
 export function tsParenthesizedType(typeAnnotation: t.TSType) {
@@ -2500,8 +2317,7 @@ export function tsParenthesizedType(typeAnnotation: t.TSType) {
     type: "TSParenthesizedType",
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsParenthesizedType as tSParenthesizedType };
 export function tsTypeOperator(typeAnnotation: t.TSType) {
@@ -2510,8 +2326,7 @@ export function tsTypeOperator(typeAnnotation: t.TSType) {
     typeAnnotation,
     operator: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeOperator as tSTypeOperator };
 export function tsIndexedAccessType(objectType: t.TSType, indexType: t.TSType) {
@@ -2520,8 +2335,7 @@ export function tsIndexedAccessType(objectType: t.TSType, indexType: t.TSType) {
     objectType,
     indexType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsIndexedAccessType as tSIndexedAccessType };
 export function tsMappedType(
@@ -2535,8 +2349,7 @@ export function tsMappedType(
     typeAnnotation,
     nameType,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsMappedType as tSMappedType };
 export function tsLiteralType(
@@ -2551,8 +2364,7 @@ export function tsLiteralType(
     type: "TSLiteralType",
     literal,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsLiteralType as tSLiteralType };
 export function tsExpressionWithTypeArguments(
@@ -2564,8 +2376,7 @@ export function tsExpressionWithTypeArguments(
     expression,
     typeParameters,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsExpressionWithTypeArguments as tSExpressionWithTypeArguments };
 export function tsInterfaceDeclaration(
@@ -2581,8 +2392,7 @@ export function tsInterfaceDeclaration(
     extends: _extends,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsInterfaceDeclaration as tSInterfaceDeclaration };
 export function tsInterfaceBody(body: Array<t.TSTypeElement>) {
@@ -2590,8 +2400,7 @@ export function tsInterfaceBody(body: Array<t.TSTypeElement>) {
     type: "TSInterfaceBody",
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsInterfaceBody as tSInterfaceBody };
 export function tsTypeAliasDeclaration(
@@ -2605,8 +2414,7 @@ export function tsTypeAliasDeclaration(
     typeParameters,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
 export function tsAsExpression(
@@ -2618,8 +2426,7 @@ export function tsAsExpression(
     expression,
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsAsExpression as tSAsExpression };
 export function tsTypeAssertion(
@@ -2631,8 +2438,7 @@ export function tsTypeAssertion(
     typeAnnotation,
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeAssertion as tSTypeAssertion };
 export function tsEnumDeclaration(
@@ -2644,8 +2450,7 @@ export function tsEnumDeclaration(
     id,
     members,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsEnumDeclaration as tSEnumDeclaration };
 export function tsEnumMember(
@@ -2657,8 +2462,7 @@ export function tsEnumMember(
     id,
     initializer,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsEnumMember as tSEnumMember };
 export function tsModuleDeclaration(
@@ -2670,8 +2474,7 @@ export function tsModuleDeclaration(
     id,
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsModuleDeclaration as tSModuleDeclaration };
 export function tsModuleBlock(body: Array<t.Statement>) {
@@ -2679,8 +2482,7 @@ export function tsModuleBlock(body: Array<t.Statement>) {
     type: "TSModuleBlock",
     body,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsModuleBlock as tSModuleBlock };
 export function tsImportType(
@@ -2694,8 +2496,7 @@ export function tsImportType(
     qualifier,
     typeParameters,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsImportType as tSImportType };
 export function tsImportEqualsDeclaration(
@@ -2708,8 +2509,7 @@ export function tsImportEqualsDeclaration(
     moduleReference,
     isExport: null,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsImportEqualsDeclaration as tSImportEqualsDeclaration };
 export function tsExternalModuleReference(expression: t.StringLiteral) {
@@ -2717,8 +2517,7 @@ export function tsExternalModuleReference(expression: t.StringLiteral) {
     type: "TSExternalModuleReference",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsExternalModuleReference as tSExternalModuleReference };
 export function tsNonNullExpression(expression: t.Expression) {
@@ -2726,8 +2525,7 @@ export function tsNonNullExpression(expression: t.Expression) {
     type: "TSNonNullExpression",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsNonNullExpression as tSNonNullExpression };
 export function tsExportAssignment(expression: t.Expression) {
@@ -2735,8 +2533,7 @@ export function tsExportAssignment(expression: t.Expression) {
     type: "TSExportAssignment",
     expression,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsExportAssignment as tSExportAssignment };
 export function tsNamespaceExportDeclaration(id: t.Identifier) {
@@ -2744,8 +2541,7 @@ export function tsNamespaceExportDeclaration(id: t.Identifier) {
     type: "TSNamespaceExportDeclaration",
     id,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsNamespaceExportDeclaration as tSNamespaceExportDeclaration };
 export function tsTypeAnnotation(typeAnnotation: t.TSType) {
@@ -2753,8 +2549,7 @@ export function tsTypeAnnotation(typeAnnotation: t.TSType) {
     type: "TSTypeAnnotation",
     typeAnnotation,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeAnnotation as tSTypeAnnotation };
 export function tsTypeParameterInstantiation(params: Array<t.TSType>) {
@@ -2762,8 +2557,7 @@ export function tsTypeParameterInstantiation(params: Array<t.TSType>) {
     type: "TSTypeParameterInstantiation",
     params,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeParameterInstantiation as tSTypeParameterInstantiation };
 export function tsTypeParameterDeclaration(params: Array<t.TSTypeParameter>) {
@@ -2771,8 +2565,7 @@ export function tsTypeParameterDeclaration(params: Array<t.TSTypeParameter>) {
     type: "TSTypeParameterDeclaration",
     params,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeParameterDeclaration as tSTypeParameterDeclaration };
 export function tsTypeParameter(
@@ -2786,8 +2579,7 @@ export function tsTypeParameter(
     default: _default,
     name,
   };
-  validateNode(node);
-  return node;
+  return validateNode(node);
 }
 export { tsTypeParameter as tSTypeParameter };
 /** @deprecated */

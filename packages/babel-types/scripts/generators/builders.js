@@ -124,9 +124,11 @@ import type * as t from "../..";
       .join("\n")}  };`;
 
     if (builderNames.length > 0) {
-      output += `\n  validateNode(node);`;
+      output += `\n  return validateNode(node);`;
+    } else {
+      output += `\n  return node;`;
     }
-    output += `\n  return node;\n}\n`;
+    output += `\n}\n`;
 
     if (formatedBuilderNameLocal !== formatedBuilderName) {
       output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
