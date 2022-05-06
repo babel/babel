@@ -28,10 +28,6 @@ function sortFieldNames(fields, type) {
   });
 }
 
-function defaultExpression(field) {
-  return Array.isArray(field.default) ? "[]" : JSON.stringify(field.default);
-}
-
 function generateBuilderArgs(type) {
   const fields = t.NODE_FIELDS[type];
   const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
@@ -56,7 +52,7 @@ function generateBuilderArgs(type) {
 
     if (builderNames.includes(fieldName)) {
       const field = definitions.NODE_FIELDS[type][fieldName];
-      const def = defaultExpression(field);
+      const def = JSON.stringify(field.default);
       const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
       let arg;
       if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
@@ -110,8 +106,7 @@ import type * as t from "../..";
     fieldNames.forEach(fieldName => {
       const field = definitions.NODE_FIELDS[type][fieldName];
 
-      const def = defaultExpression(field);
-
+      const def = JSON.stringify(field.default);
       if (builderNames.includes(fieldName)) {
         const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
         objectFields.push([fieldName, bindingIdentifierName]);
