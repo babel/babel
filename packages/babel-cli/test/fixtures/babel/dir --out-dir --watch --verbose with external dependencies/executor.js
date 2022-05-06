@@ -25,10 +25,13 @@ const run = (async function* () {
     );
   } else {
     let secondLog = yield;
-    [firstLog, secondLog] = [firstLog, secondLog].sort();
-    assert.match(firstLog, /src[\\/]index.js -> lib[\\/]index.js/);
-    assert.match(secondLog, /src[\\/]main.js -> lib[\\/]main.js/);
-    assert.match(yield, /Successfully compiled 2 files with Babel \(\d+ms\)\./);
+    [firstLog, secondLog, thirdLog] = [firstLog, yield, yield].sort();
+    assert.match(
+      firstLog,
+      /Successfully compiled 2 files with Babel \(\d+ms\)\./
+    );
+    assert.match(secondLog, /src[\\/]index.js -> lib[\\/]index.js/);
+    assert.match(thirdLog, /src[\\/]main.js -> lib[\\/]main.js/);
   }
 
   logFile("lib/index.js");
