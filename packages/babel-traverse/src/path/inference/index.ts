@@ -24,11 +24,14 @@ import type * as t from "@babel/types";
  */
 
 export function getTypeAnnotation(this: NodePath): t.FlowType {
-  if (this.typeAnnotation) return this.typeAnnotation;
-
-  let type = this._getTypeAnnotation() || anyTypeAnnotation();
+  let type = this.getData("typeAnnotation");
+  if (type != null) {
+    return type;
+  }
+  type = this._getTypeAnnotation() || anyTypeAnnotation();
   if (isTypeAnnotation(type)) type = type.typeAnnotation;
-  return (this.typeAnnotation = type);
+  this.setData("typeAnnotation", type);
+  return type;
 }
 
 // Used to avoid infinite recursion in cases like
@@ -65,7 +68,9 @@ export function _getTypeAnnotation(this: NodePath): any {
     }
   }
 
+  // @ts-ignore
   if (node.typeAnnotation) {
+    // @ts-ignore
     return node.typeAnnotation;
   }
 
