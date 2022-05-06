@@ -79,8 +79,8 @@ type SharedState = {
   isDerivedConstructor: boolean;
   isStatic: boolean;
   isPrivateMethod: boolean;
-  getObjectRef: Function;
-  getSuperRef: Function;
+  getObjectRef: () => t.Node;
+  getSuperRef: () => t.Node;
   // we dont need boundGet here, but memberExpressionToFunctions handler needs it.
   boundGet: HandlerState["get"];
 };
