@@ -299,12 +299,14 @@ export function _verifyNodeList(
 }
 
 export function unshiftContainer<Nodes extends t.Node | t.Node[]>(
+  this: NodePath,
   listKey: string,
   nodes: Nodes,
 ): NodePath[] {
   // todo: NodePaths<Nodes>
   this._assertUnremoved();
 
+  // @ts-expect-error fixme
   nodes = this._verifyNodeList(nodes);
 
   // get the first path and insert our nodes before it, if it doesn't exist then it

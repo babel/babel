@@ -720,7 +720,7 @@ type GeneratorFunctions = typeof generatorFunctions;
 interface Printer extends GeneratorFunctions {}
 export default Printer;
 
-function commaSeparator() {
+function commaSeparator(this: Printer) {
   this.token(",");
   this.space();
 }

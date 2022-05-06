@@ -468,6 +468,7 @@ function getBindingIdentifiers(
 ): Record<string, t.Identifier[] | t.Identifier>;
 
 function getBindingIdentifiers(
+  this: NodePath,
   duplicates?: boolean,
 ): Record<string, t.Identifier[] | t.Identifier> {
   return _getBindingIdentifiers(this.node, duplicates);
@@ -486,6 +487,7 @@ function getOuterBindingIdentifiers(
 ): Record<string, t.Identifier[] | t.Identifier>;
 
 function getOuterBindingIdentifiers(
+  this: NodePath,
   duplicates?: boolean,
 ): Record<string, t.Identifier[] | t.Identifier> {
   return _getOuterBindingIdentifiers(this.node, duplicates);

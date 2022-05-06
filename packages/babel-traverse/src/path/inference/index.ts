@@ -23,7 +23,7 @@ import type * as t from "@babel/types";
  * Infer the type of the current `NodePath`.
  */
 
-export function getTypeAnnotation(): t.FlowType {
+export function getTypeAnnotation(this: NodePath): t.FlowType {
   if (this.typeAnnotation) return this.typeAnnotation;
 
   let type = this._getTypeAnnotation() || anyTypeAnnotation();
@@ -40,7 +40,7 @@ const typeAnnotationInferringNodes = new WeakSet();
  * todo: split up this method
  */
 
-export function _getTypeAnnotation(): any {
+export function _getTypeAnnotation(this: NodePath): any {
   const node = this.node;
 
   if (!node) {
@@ -90,7 +90,11 @@ export function _getTypeAnnotation(): any {
   }
 }
 
-export function isBaseType(baseName: string, soft?: boolean): boolean {
+export function isBaseType(
+  this: NodePath,
+  baseName: string,
+  soft?: boolean,
+): boolean {
   return _isBaseType(baseName, this.getTypeAnnotation(), soft);
 }
 
@@ -118,7 +122,7 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
   }
 }
 
-export function couldBeBaseType(name: string): boolean {
+export function couldBeBaseType(this: NodePath, name: string): boolean {
   const type = this.getTypeAnnotation();
   if (isAnyTypeAnnotation(type)) return true;
 
@@ -134,7 +138,10 @@ export function couldBeBaseType(name: string): boolean {
   }
 }
 
-export function baseTypeStrictlyMatches(rightArg: NodePath): boolean {
+export function baseTypeStrictlyMatches(
+  this: NodePath,
+  rightArg: NodePath,
+): boolean {
   const left = this.getTypeAnnotation();
   const right = rightArg.getTypeAnnotation();
 
@@ -144,7 +151,7 @@ export function baseTypeStrictlyMatches(rightArg: NodePath): boolean {
   return false;
 }
 
-export function isGenericType(genericName: string): boolean {
+export function isGenericType(this: NodePath, genericName: string): boolean {
   const type = this.getTypeAnnotation();
   return (
     isGenericTypeAnnotation(type) &&

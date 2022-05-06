@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import wrapFunction from "@babel/helper-wrap-function";
 import { types as t } from "@babel/core";
+import type { Visitor } from "@babel/traverse";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -14,7 +15,7 @@ export default declare(api => {
     t.isAssignmentExpression(node) &&
     t.isIdentifier(node.left, { name: sentId });
 
-  const yieldVisitor = {
+  const yieldVisitor: Visitor<{ sentId: string }> = {
     Function(path) {
       path.skip();
     },

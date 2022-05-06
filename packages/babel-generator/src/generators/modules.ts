@@ -119,7 +119,7 @@ export function ExportDefaultDeclaration(
   ExportDeclaration.apply(this, arguments);
 }
 
-function ExportDeclaration(node: any) {
+function ExportDeclaration(this: Printer, node: any) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);

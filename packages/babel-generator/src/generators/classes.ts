@@ -199,7 +199,7 @@ export function _classMethodHead(this: Printer, node) {
   this._methodHead(node);
 }
 
-export function StaticBlock(node: t.StaticBlock) {
+export function StaticBlock(this: Printer, node: t.StaticBlock) {
   this.word("static");
   this.space();
   this.token("{");

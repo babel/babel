@@ -75,7 +75,7 @@ export function JSXElement(this: Printer, node: t.JSXElement) {
   this.print(node.closingElement, node);
 }
 
-function spaceSeparator() {
+function spaceSeparator(this: Printer) {
   this.space();
 }
 

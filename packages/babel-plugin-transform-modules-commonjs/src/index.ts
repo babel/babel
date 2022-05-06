@@ -11,6 +11,7 @@ import {
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
+import type { Visitor, Scope } from "@babel/traverse";
 
 import { createDynamicImportTransform } from "babel-plugin-dynamic-import-node/utils";
 
@@ -82,7 +83,7 @@ export default declare((api, options: Options) => {
     })()
   `;
 
-  const moduleExportsVisitor = {
+  const moduleExportsVisitor: Visitor<{ scope: Scope }> = {
     ReferencedIdentifier(path) {
       const localName = path.node.name;
       if (localName !== "module" && localName !== "exports") return;
@@ -106,6 +107,7 @@ export default declare((api, options: Options) => {
 
     UpdateExpression(path) {
       const arg = path.get("argument");
+      if (!arg.isIdentifier()) return;
       const localName = arg.node.name;
       if (localName !== "module" && localName !== "exports") return;
 
@@ -127,7 +129,7 @@ export default declare((api, options: Options) => {
     AssignmentExpression(path) {
       const left = path.get("left");
       if (left.isIdentifier()) {
-        const localName = path.node.name;
+        const localName = left.node.name;
         if (localName !== "module" && localName !== "exports") return;
 
         const localBinding = path.scope.getBinding(localName);

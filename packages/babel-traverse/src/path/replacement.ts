@@ -38,10 +38,10 @@ import hoistVariables from "@babel/helper-hoist-variables";
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple<Nodes extends Array<t.Node>>(
-  nodes: Nodes,
+export function replaceWithMultiple(
+  this: NodePath,
+  nodes: t.Node[],
 ): NodePath[] {
-  // todo NodePaths
   this.resync();
 
   nodes = this._verifyNodeList(nodes);

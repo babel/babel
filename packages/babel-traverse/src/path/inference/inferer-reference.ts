@@ -12,7 +12,7 @@ import {
 import type * as t from "@babel/types";
 import type Binding from "../../scope/binding";
 
-export default function (node: any) {
+export default function (this: NodePath, node: any) {
   if (!this.isReferenced()) return;
 
   // check if a binding exists of this value and if so then return a union type of all

@@ -208,7 +208,7 @@ export function TSNullKeyword(this: Printer) {
 export function TSNeverKeyword(this: Printer) {
   this.word("never");
 }
-export function TSIntrinsicKeyword() {
+export function TSIntrinsicKeyword(this: Printer) {
   this.word("intrinsic");
 }
 

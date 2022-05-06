@@ -90,7 +90,7 @@ export function WhileStatement(this: Printer, node: t.WhileStatement) {
 }
 
 const buildForXStatement = function (op) {
-  return function (node: any) {
+  return function (this: Printer, node: any) {
     this.word("for");
     this.space();
     if (op === "of" && node.await) {
@@ -125,7 +125,7 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function (node: any) {
+  return function (this: Printer, node: any) {
     this.word(prefix);
 
     const label = node[key];
@@ -232,7 +232,7 @@ export function DebuggerStatement(this: Printer) {
   this.semicolon();
 }
 
-function variableDeclarationIndent() {
+function variableDeclarationIndent(this: Printer) {
   // "let " or "var " indentation.
   this.token(",");
   this.newline();
@@ -241,7 +241,7 @@ function variableDeclarationIndent() {
   }
 }
 
-function constDeclarationIndent() {
+function constDeclarationIndent(this: Printer) {
   // "const " indentation.
   this.token(",");
   this.newline();
