@@ -5,6 +5,7 @@ import {
   isAwaitExpression,
   isBinary,
   isBinaryExpression,
+  isUpdateExpression,
   isCallExpression,
   isClassDeclaration,
   isClassExpression,
@@ -414,6 +415,7 @@ function isFirstInContext(
     if (
       (hasPostfixPart(node, parent) && !isNewExpression(parent)) ||
       (isSequenceExpression(parent) && parent.expressions[0] === node) ||
+      (isUpdateExpression(parent) && !parent.prefix) ||
       isConditional(parent, { test: node }) ||
       isBinary(parent, { left: node }) ||
       isAssignmentExpression(parent, { left: node })
