@@ -24,7 +24,6 @@ const run = (async function* () {
       /Successfully compiled 2 files with Babel \(\d+ms\)\./
     );
   } else {
-    let secondLog = yield;
     [firstLog, secondLog, thirdLog] = [firstLog, yield, yield].sort();
     assert.match(
       firstLog,
