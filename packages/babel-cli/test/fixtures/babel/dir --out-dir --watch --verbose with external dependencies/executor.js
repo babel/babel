@@ -73,6 +73,12 @@ function logFile(file) {
 }
 
 setTimeout(() => {
+  // when the watcher takes longer than 2s to setup
+  // write file again in 10 seconds
+  fs.writeFileSync("./file.txt", "Updated!");
+}, 10000);
+
+setTimeout(() => {
   console.error("EXECUTOR TIMEOUT");
   process.exit(1);
 }, 20000);
