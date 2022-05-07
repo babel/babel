@@ -193,7 +193,7 @@ const require = createRequire(import.meta.url);
           presets: ["env"],
         }).code;
 
-        expect(output).toMatch("regeneratorRuntime.mark(fn)");
+        expect(output).toMatch("regeneratorRuntime().mark(fn)");
       });
     });
 
