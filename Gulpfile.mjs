@@ -145,7 +145,14 @@ function generateTraverseHelpers(helperKind) {
   );
 }
 
-function generateRuntimeHelpers() {
+async function generateRuntimeHelpers() {
+  await generateHelpers(
+    `./packages/babel-helpers/scripts/generate-regenerator-runtime.js`,
+    `./packages/babel-helpers/src/helpers`,
+    "regeneratorRuntime.js",
+    "@babel/helpers -> regeneratorRuntime"
+  );
+
   return generateHelpers(
     `./packages/babel-helpers/scripts/generate-helpers.js`,
     `./packages/babel-helpers/src/`,
@@ -574,15 +581,12 @@ gulp.task(
   "build",
   gulp.series(
     "build-vendor",
-    gulp.parallel("build-rollup", "build-babel", "generate-runtime-helpers"),
-    gulp.parallel(
-      "generate-standalone",
-      gulp.series(
-        "generate-type-helpers",
-        // rebuild @babel/types since type-helpers may be changed
-        "build-babel"
-      )
-    )
+    gulp.parallel("build-rollup", "build-babel"),
+    gulp.parallel("generate-type-helpers", "generate-runtime-helpers"),
+    // rebuild @babel/types and @babel/helpers since
+    // type-helpers and generated helpers may be changed
+    "build-babel",
+    "generate-standalone"
   )
 );
 

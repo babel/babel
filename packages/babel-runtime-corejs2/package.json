@@ -54,6 +54,15 @@
       "./helpers/objectSpread2.js"
     ],
     "./helpers/esm/objectSpread2": "./helpers/esm/objectSpread2.js",
+    "./helpers/regeneratorRuntime": [
+      {
+        "node": "./helpers/regeneratorRuntime.js",
+        "import": "./helpers/esm/regeneratorRuntime.js",
+        "default": "./helpers/regeneratorRuntime.js"
+      },
+      "./helpers/regeneratorRuntime.js"
+    ],
+    "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",

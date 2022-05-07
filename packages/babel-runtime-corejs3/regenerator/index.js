@@ -1,1 +1,1 @@
-module.exports = require("regenerator-runtime");
+module.exports = require("../helpers/regeneratorRuntime")();
