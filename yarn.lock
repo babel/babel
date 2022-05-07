@@ -2980,6 +2980,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
     regenerator-transform: ^0.15.0
   peerDependencies:
     "@babel/core": ^7.0.0-0

@@ -347,6 +347,7 @@ function buildRollup(packages, targetBrowsers) {
               include: [
                 /node_modules/,
                 "packages/babel-runtime/regenerator/**",
+                "packages/babel-runtime/helpers/*.js",
                 "packages/babel-preset-env/data/*.js",
                 // Rollup doesn't read export maps, so it loads the cjs fallback
                 "packages/babel-compat-data/*.js",
@@ -372,6 +373,7 @@ function buildRollup(packages, targetBrowsers) {
               babelHelpers: "bundled",
               extends: "./babel.config.js",
               extensions: [".ts", ".js", ".mjs", ".cjs"],
+              ignore: ["packages/babel-runtime/helpers/*.js"],
             }),
             rollupNodeResolve({
               extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
