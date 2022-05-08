@@ -5,8 +5,12 @@ function test() {
 }
 
 function _test() {
-  _test = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+  _test = _asyncToGenerator( /*#__PURE__*/function () {
+    return regeneratorRuntime;
+  }().mark(function _callee() {
+    return function () {
+      return regeneratorRuntime;
+    }().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -27,8 +31,12 @@ function main() {
 }
 
 function _main() {
-  _main = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+  _main = _asyncToGenerator( /*#__PURE__*/function () {
+    return regeneratorRuntime;
+  }().mark(function _callee2() {
+    return function () {
+      return regeneratorRuntime;
+    }().wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
