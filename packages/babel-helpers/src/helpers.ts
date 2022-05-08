@@ -363,8 +363,8 @@ helpers.inheritsLoose = helper("7.0.0-beta.0")`
 // need a bind because https://github.com/babel/babel/issues/14527
 helpers.getPrototypeOf = helper("7.0.0-beta.0")`
   export default function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf.bind()
-      ? Object.getPrototypeOf
+    _getPrototypeOf = Object.setPrototypeOf
+      ? Object.getPrototypeOf.bind()
       : function _getPrototypeOf(o) {
           return o.__proto__ || Object.getPrototypeOf(o);
         };
@@ -374,10 +374,12 @@ helpers.getPrototypeOf = helper("7.0.0-beta.0")`
 
 helpers.setPrototypeOf = helper("7.0.0-beta.0")`
   export default function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf.bind() || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
+    _setPrototypeOf = Object.setPrototypeOf
+      ? Object.setPrototypeOf.bind()
+      : function _setPrototypeOf(o, p) {
+          o.__proto__ = p;
+          return o;
+        };
     return _setPrototypeOf(o, p);
   }
 `;
