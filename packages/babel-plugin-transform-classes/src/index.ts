@@ -7,7 +7,7 @@ import globals from "globals";
 import transformClass from "./transformClass";
 import type { Visitor, NodePath } from "@babel/traverse";
 
-const getBuiltinClasses = category =>
+const getBuiltinClasses = (category: string) =>
   Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
 
 const builtinClasses = new Set([
@@ -33,7 +33,7 @@ export default declare((api, options: Options) => {
   const noClassCalls = (api.assumption("noClassCalls") ?? loose) as boolean;
 
   // todo: investigate traversal requeueing
-  const VISITED = Symbol();
+  const VISITED = new WeakSet();
 
   return {
     name: "transform-classes",
@@ -58,7 +58,7 @@ export default declare((api, options: Options) => {
 
       ClassExpression(path, state) {
         const { node } = path;
-        if (node[VISITED]) return;
+        if (VISITED.has(node)) return;
 
         const inferred = nameFunction(path);
         if (inferred && inferred !== node) {
@@ -66,7 +66,7 @@ export default declare((api, options: Options) => {
           return;
         }
 
-        node[VISITED] = true;
+        VISITED.add(node);
 
         path.replaceWith(
           transformClass(path, state.file, builtinClasses, loose, {

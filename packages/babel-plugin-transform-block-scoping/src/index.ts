@@ -257,16 +257,16 @@ const hoistVarDeclarationsVisitor: Visitor<BlockScoping> = {
   },
 };
 
-interface LoopVisitorState {
+type LoopVisitorState = {
   inSwitchCase: boolean;
   hasBreakContinue: boolean;
   innerLabels: any[];
   hasReturn: boolean;
   ignoreLabeless: boolean;
-  LOOP_IGNORE: symbol;
+  loopIgnored: WeakSet<t.Node>;
   isLoop: boolean;
   map: any;
-}
+};
 
 const loopLabelVisitor: Visitor<LoopVisitorState> = {
   LabeledStatement({ node }, state) {
@@ -332,7 +332,7 @@ const loopVisitor: Visitor<LoopVisitorState> = {
     state,
   ) {
     const { node, scope } = path;
-    if (node[this.LOOP_IGNORE]) return;
+    if (state.loopIgnored.has(node)) return;
 
     let replace;
     let loopText = loopNodeTo(node);
@@ -376,7 +376,7 @@ const loopVisitor: Visitor<LoopVisitorState> = {
 
     if (replace) {
       replace = t.returnStatement(replace);
-      replace[this.LOOP_IGNORE] = true;
+      state.loopIgnored.add(replace);
       path.skip();
       path.replaceWith(t.inherits(replace, node));
     }
@@ -934,7 +934,7 @@ class BlockScoping {
       hasReturn: false,
       isLoop: !!this.loop,
       map: {},
-      LOOP_IGNORE: Symbol(),
+      loopIgnored: new WeakSet(),
     };
 
     this.blockPath.traverse(loopLabelVisitor, state);
