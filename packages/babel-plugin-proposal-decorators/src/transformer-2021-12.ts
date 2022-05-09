@@ -4,7 +4,7 @@ import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
-import type { PluginAPI, PluginObject } from "@babel/core";
+import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import type { Options } from "..";
 
 type ClassDecoratableElement =
@@ -482,7 +482,7 @@ function maybeSequenceExpression(exprs: t.Expression[]) {
 
 function transformClass(
   path: NodePath<t.ClassExpression | t.ClassDeclaration>,
-  state: any,
+  state: PluginPass,
   constantSuper: boolean,
 ): NodePath {
   const body = path.get("body.body");

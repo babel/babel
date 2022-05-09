@@ -2,22 +2,27 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import builder from "../builder";
+import validateNode from "../validateNode";
 import type * as t from "../..";
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export function arrayExpression(
-  elements?: Array<null | t.Expression | t.SpreadElement>,
+  elements: Array<null | t.Expression | t.SpreadElement> = [],
 ): t.ArrayExpression {
-  return builder.apply("ArrayExpression", arguments);
+  return validateNode<t.ArrayExpression>({
+    type: "ArrayExpression",
+    elements,
+  });
 }
 export function assignmentExpression(
   operator: string,
   left: t.LVal,
   right: t.Expression,
 ): t.AssignmentExpression {
-  return builder.apply("AssignmentExpression", arguments);
+  return validateNode<t.AssignmentExpression>({
+    type: "AssignmentExpression",
+    operator,
+    left,
+    right,
+  });
 }
 export function binaryExpression(
   operator:
@@ -47,25 +52,48 @@ export function binaryExpression(
   left: t.Expression | t.PrivateName,
   right: t.Expression,
 ): t.BinaryExpression {
-  return builder.apply("BinaryExpression", arguments);
+  return validateNode<t.BinaryExpression>({
+    type: "BinaryExpression",
+    operator,
+    left,
+    right,
+  });
 }
 export function interpreterDirective(value: string): t.InterpreterDirective {
-  return builder.apply("InterpreterDirective", arguments);
+  return validateNode<t.InterpreterDirective>({
+    type: "InterpreterDirective",
+    value,
+  });
 }
 export function directive(value: t.DirectiveLiteral): t.Directive {
-  return builder.apply("Directive", arguments);
+  return validateNode<t.Directive>({
+    type: "Directive",
+    value,
+  });
 }
 export function directiveLiteral(value: string): t.DirectiveLiteral {
-  return builder.apply("DirectiveLiteral", arguments);
+  return validateNode<t.DirectiveLiteral>({
+    type: "DirectiveLiteral",
+    value,
+  });
 }
 export function blockStatement(
   body: Array<t.Statement>,
-  directives?: Array<t.Directive>,
+  directives: Array<t.Directive> = [],
 ): t.BlockStatement {
-  return builder.apply("BlockStatement", arguments);
+  return validateNode<t.BlockStatement>({
+    type: "BlockStatement",
+    body,
+    directives,
+  });
 }
-export function breakStatement(label?: t.Identifier | null): t.BreakStatement {
-  return builder.apply("BreakStatement", arguments);
+export function breakStatement(
+  label: t.Identifier | null = null,
+): t.BreakStatement {
+  return validateNode<t.BreakStatement>({
+    type: "BreakStatement",
+    label,
+  });
 }
 export function callExpression(
   callee: t.Expression | t.V8IntrinsicIdentifier,
@@ -73,131 +101,231 @@ export function callExpression(
     t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
   >,
 ): t.CallExpression {
-  return builder.apply("CallExpression", arguments);
+  return validateNode<t.CallExpression>({
+    type: "CallExpression",
+    callee,
+    arguments: _arguments,
+  });
 }
 export function catchClause(
-  param: t.Identifier | t.ArrayPattern | t.ObjectPattern | null | undefined,
+  param:
+    | t.Identifier
+    | t.ArrayPattern
+    | t.ObjectPattern
+    | null
+    | undefined = null,
   body: t.BlockStatement,
 ): t.CatchClause {
-  return builder.apply("CatchClause", arguments);
+  return validateNode<t.CatchClause>({
+    type: "CatchClause",
+    param,
+    body,
+  });
 }
 export function conditionalExpression(
   test: t.Expression,
   consequent: t.Expression,
   alternate: t.Expression,
 ): t.ConditionalExpression {
-  return builder.apply("ConditionalExpression", arguments);
+  return validateNode<t.ConditionalExpression>({
+    type: "ConditionalExpression",
+    test,
+    consequent,
+    alternate,
+  });
 }
 export function continueStatement(
-  label?: t.Identifier | null,
+  label: t.Identifier | null = null,
 ): t.ContinueStatement {
-  return builder.apply("ContinueStatement", arguments);
+  return validateNode<t.ContinueStatement>({
+    type: "ContinueStatement",
+    label,
+  });
 }
 export function debuggerStatement(): t.DebuggerStatement {
-  return builder.apply("DebuggerStatement", arguments);
+  return {
+    type: "DebuggerStatement",
+  };
 }
 export function doWhileStatement(
   test: t.Expression,
   body: t.Statement,
 ): t.DoWhileStatement {
-  return builder.apply("DoWhileStatement", arguments);
+  return validateNode<t.DoWhileStatement>({
+    type: "DoWhileStatement",
+    test,
+    body,
+  });
 }
 export function emptyStatement(): t.EmptyStatement {
-  return builder.apply("EmptyStatement", arguments);
+  return {
+    type: "EmptyStatement",
+  };
 }
 export function expressionStatement(
   expression: t.Expression,
 ): t.ExpressionStatement {
-  return builder.apply("ExpressionStatement", arguments);
+  return validateNode<t.ExpressionStatement>({
+    type: "ExpressionStatement",
+    expression,
+  });
 }
 export function file(
   program: t.Program,
-  comments?: Array<t.CommentBlock | t.CommentLine> | null,
-  tokens?: Array<any> | null,
+  comments: Array<t.CommentBlock | t.CommentLine> | null = null,
+  tokens: Array<any> | null = null,
 ): t.File {
-  return builder.apply("File", arguments);
+  return validateNode<t.File>({
+    type: "File",
+    program,
+    comments,
+    tokens,
+  });
 }
 export function forInStatement(
   left: t.VariableDeclaration | t.LVal,
   right: t.Expression,
   body: t.Statement,
 ): t.ForInStatement {
-  return builder.apply("ForInStatement", arguments);
+  return validateNode<t.ForInStatement>({
+    type: "ForInStatement",
+    left,
+    right,
+    body,
+  });
 }
 export function forStatement(
-  init: t.VariableDeclaration | t.Expression | null | undefined,
-  test: t.Expression | null | undefined,
-  update: t.Expression | null | undefined,
+  init: t.VariableDeclaration | t.Expression | null | undefined = null,
+  test: t.Expression | null | undefined = null,
+  update: t.Expression | null | undefined = null,
   body: t.Statement,
 ): t.ForStatement {
-  return builder.apply("ForStatement", arguments);
+  return validateNode<t.ForStatement>({
+    type: "ForStatement",
+    init,
+    test,
+    update,
+    body,
+  });
 }
 export function functionDeclaration(
-  id: t.Identifier | null | undefined,
+  id: t.Identifier | null | undefined = null,
   params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement,
-  generator?: boolean,
-  async?: boolean,
+  generator: boolean = false,
+  async: boolean = false,
 ): t.FunctionDeclaration {
-  return builder.apply("FunctionDeclaration", arguments);
+  return validateNode<t.FunctionDeclaration>({
+    type: "FunctionDeclaration",
+    id,
+    params,
+    body,
+    generator,
+    async,
+  });
 }
 export function functionExpression(
-  id: t.Identifier | null | undefined,
+  id: t.Identifier | null | undefined = null,
   params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement,
-  generator?: boolean,
-  async?: boolean,
+  generator: boolean = false,
+  async: boolean = false,
 ): t.FunctionExpression {
-  return builder.apply("FunctionExpression", arguments);
+  return validateNode<t.FunctionExpression>({
+    type: "FunctionExpression",
+    id,
+    params,
+    body,
+    generator,
+    async,
+  });
 }
 export function identifier(name: string): t.Identifier {
-  return builder.apply("Identifier", arguments);
+  return validateNode<t.Identifier>({
+    type: "Identifier",
+    name,
+  });
 }
 export function ifStatement(
   test: t.Expression,
   consequent: t.Statement,
-  alternate?: t.Statement | null,
+  alternate: t.Statement | null = null,
 ): t.IfStatement {
-  return builder.apply("IfStatement", arguments);
+  return validateNode<t.IfStatement>({
+    type: "IfStatement",
+    test,
+    consequent,
+    alternate,
+  });
 }
 export function labeledStatement(
   label: t.Identifier,
   body: t.Statement,
 ): t.LabeledStatement {
-  return builder.apply("LabeledStatement", arguments);
+  return validateNode<t.LabeledStatement>({
+    type: "LabeledStatement",
+    label,
+    body,
+  });
 }
 export function stringLiteral(value: string): t.StringLiteral {
-  return builder.apply("StringLiteral", arguments);
+  return validateNode<t.StringLiteral>({
+    type: "StringLiteral",
+    value,
+  });
 }
 export function numericLiteral(value: number): t.NumericLiteral {
-  return builder.apply("NumericLiteral", arguments);
+  return validateNode<t.NumericLiteral>({
+    type: "NumericLiteral",
+    value,
+  });
 }
 export function nullLiteral(): t.NullLiteral {
-  return builder.apply("NullLiteral", arguments);
+  return {
+    type: "NullLiteral",
+  };
 }
 export function booleanLiteral(value: boolean): t.BooleanLiteral {
-  return builder.apply("BooleanLiteral", arguments);
+  return validateNode<t.BooleanLiteral>({
+    type: "BooleanLiteral",
+    value,
+  });
 }
 export function regExpLiteral(
   pattern: string,
-  flags?: string,
+  flags: string = "",
 ): t.RegExpLiteral {
-  return builder.apply("RegExpLiteral", arguments);
+  return validateNode<t.RegExpLiteral>({
+    type: "RegExpLiteral",
+    pattern,
+    flags,
+  });
 }
 export function logicalExpression(
   operator: "||" | "&&" | "??",
   left: t.Expression,
   right: t.Expression,
 ): t.LogicalExpression {
-  return builder.apply("LogicalExpression", arguments);
+  return validateNode<t.LogicalExpression>({
+    type: "LogicalExpression",
+    operator,
+    left,
+    right,
+  });
 }
 export function memberExpression(
   object: t.Expression,
   property: t.Expression | t.Identifier | t.PrivateName,
-  computed?: boolean,
-  optional?: true | false | null,
+  computed: boolean = false,
+  optional: true | false | null = null,
 ): t.MemberExpression {
-  return builder.apply("MemberExpression", arguments);
+  return validateNode<t.MemberExpression>({
+    type: "MemberExpression",
+    object,
+    property,
+    computed,
+    optional,
+  });
 }
 export function newExpression(
   callee: t.Expression | t.V8IntrinsicIdentifier,
@@ -205,121 +333,207 @@ export function newExpression(
     t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
   >,
 ): t.NewExpression {
-  return builder.apply("NewExpression", arguments);
+  return validateNode<t.NewExpression>({
+    type: "NewExpression",
+    callee,
+    arguments: _arguments,
+  });
 }
 export function program(
   body: Array<t.Statement>,
-  directives?: Array<t.Directive>,
-  sourceType?: "script" | "module",
-  interpreter?: t.InterpreterDirective | null,
+  directives: Array<t.Directive> = [],
+  sourceType: "script" | "module" = "script",
+  interpreter: t.InterpreterDirective | null = null,
 ): t.Program {
-  return builder.apply("Program", arguments);
+  return validateNode<t.Program>({
+    type: "Program",
+    body,
+    directives,
+    sourceType,
+    interpreter,
+    sourceFile: null,
+  });
 }
 export function objectExpression(
   properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadElement>,
 ): t.ObjectExpression {
-  return builder.apply("ObjectExpression", arguments);
+  return validateNode<t.ObjectExpression>({
+    type: "ObjectExpression",
+    properties,
+  });
 }
 export function objectMethod(
-  kind: "method" | "get" | "set" | undefined,
+  kind: "method" | "get" | "set" | undefined = "method",
   key: t.Expression | t.Identifier | t.StringLiteral | t.NumericLiteral,
   params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement,
-  computed?: boolean,
-  generator?: boolean,
-  async?: boolean,
+  computed: boolean = false,
+  generator: boolean = false,
+  async: boolean = false,
 ): t.ObjectMethod {
-  return builder.apply("ObjectMethod", arguments);
+  return validateNode<t.ObjectMethod>({
+    type: "ObjectMethod",
+    kind,
+    key,
+    params,
+    body,
+    computed,
+    generator,
+    async,
+  });
 }
 export function objectProperty(
   key: t.Expression | t.Identifier | t.StringLiteral | t.NumericLiteral,
   value: t.Expression | t.PatternLike,
-  computed?: boolean,
-  shorthand?: boolean,
-  decorators?: Array<t.Decorator> | null,
+  computed: boolean = false,
+  shorthand: boolean = false,
+  decorators: Array<t.Decorator> | null = null,
 ): t.ObjectProperty {
-  return builder.apply("ObjectProperty", arguments);
+  return validateNode<t.ObjectProperty>({
+    type: "ObjectProperty",
+    key,
+    value,
+    computed,
+    shorthand,
+    decorators,
+  });
 }
 export function restElement(argument: t.LVal): t.RestElement {
-  return builder.apply("RestElement", arguments);
+  return validateNode<t.RestElement>({
+    type: "RestElement",
+    argument,
+  });
 }
 export function returnStatement(
-  argument?: t.Expression | null,
+  argument: t.Expression | null = null,
 ): t.ReturnStatement {
-  return builder.apply("ReturnStatement", arguments);
+  return validateNode<t.ReturnStatement>({
+    type: "ReturnStatement",
+    argument,
+  });
 }
 export function sequenceExpression(
   expressions: Array<t.Expression>,
 ): t.SequenceExpression {
-  return builder.apply("SequenceExpression", arguments);
+  return validateNode<t.SequenceExpression>({
+    type: "SequenceExpression",
+    expressions,
+  });
 }
 export function parenthesizedExpression(
   expression: t.Expression,
 ): t.ParenthesizedExpression {
-  return builder.apply("ParenthesizedExpression", arguments);
+  return validateNode<t.ParenthesizedExpression>({
+    type: "ParenthesizedExpression",
+    expression,
+  });
 }
 export function switchCase(
-  test: t.Expression | null | undefined,
+  test: t.Expression | null | undefined = null,
   consequent: Array<t.Statement>,
 ): t.SwitchCase {
-  return builder.apply("SwitchCase", arguments);
+  return validateNode<t.SwitchCase>({
+    type: "SwitchCase",
+    test,
+    consequent,
+  });
 }
 export function switchStatement(
   discriminant: t.Expression,
   cases: Array<t.SwitchCase>,
 ): t.SwitchStatement {
-  return builder.apply("SwitchStatement", arguments);
+  return validateNode<t.SwitchStatement>({
+    type: "SwitchStatement",
+    discriminant,
+    cases,
+  });
 }
 export function thisExpression(): t.ThisExpression {
-  return builder.apply("ThisExpression", arguments);
+  return {
+    type: "ThisExpression",
+  };
 }
 export function throwStatement(argument: t.Expression): t.ThrowStatement {
-  return builder.apply("ThrowStatement", arguments);
+  return validateNode<t.ThrowStatement>({
+    type: "ThrowStatement",
+    argument,
+  });
 }
 export function tryStatement(
   block: t.BlockStatement,
-  handler?: t.CatchClause | null,
-  finalizer?: t.BlockStatement | null,
+  handler: t.CatchClause | null = null,
+  finalizer: t.BlockStatement | null = null,
 ): t.TryStatement {
-  return builder.apply("TryStatement", arguments);
+  return validateNode<t.TryStatement>({
+    type: "TryStatement",
+    block,
+    handler,
+    finalizer,
+  });
 }
 export function unaryExpression(
   operator: "void" | "throw" | "delete" | "!" | "+" | "-" | "~" | "typeof",
   argument: t.Expression,
-  prefix?: boolean,
+  prefix: boolean = true,
 ): t.UnaryExpression {
-  return builder.apply("UnaryExpression", arguments);
+  return validateNode<t.UnaryExpression>({
+    type: "UnaryExpression",
+    operator,
+    argument,
+    prefix,
+  });
 }
 export function updateExpression(
   operator: "++" | "--",
   argument: t.Expression,
-  prefix?: boolean,
+  prefix: boolean = false,
 ): t.UpdateExpression {
-  return builder.apply("UpdateExpression", arguments);
+  return validateNode<t.UpdateExpression>({
+    type: "UpdateExpression",
+    operator,
+    argument,
+    prefix,
+  });
 }
 export function variableDeclaration(
   kind: "var" | "let" | "const",
   declarations: Array<t.VariableDeclarator>,
 ): t.VariableDeclaration {
-  return builder.apply("VariableDeclaration", arguments);
+  return validateNode<t.VariableDeclaration>({
+    type: "VariableDeclaration",
+    kind,
+    declarations,
+  });
 }
 export function variableDeclarator(
   id: t.LVal,
-  init?: t.Expression | null,
+  init: t.Expression | null = null,
 ): t.VariableDeclarator {
-  return builder.apply("VariableDeclarator", arguments);
+  return validateNode<t.VariableDeclarator>({
+    type: "VariableDeclarator",
+    id,
+    init,
+  });
 }
 export function whileStatement(
   test: t.Expression,
   body: t.Statement,
 ): t.WhileStatement {
-  return builder.apply("WhileStatement", arguments);
+  return validateNode<t.WhileStatement>({
+    type: "WhileStatement",
+    test,
+    body,
+  });
 }
 export function withStatement(
   object: t.Expression,
   body: t.Statement,
 ): t.WithStatement {
-  return builder.apply("WithStatement", arguments);
+  return validateNode<t.WithStatement>({
+    type: "WithStatement",
+    object,
+    body,
+  });
 }
 export function assignmentPattern(
   left:
@@ -332,19 +546,32 @@ export function assignmentPattern(
     | t.TSNonNullExpression,
   right: t.Expression,
 ): t.AssignmentPattern {
-  return builder.apply("AssignmentPattern", arguments);
+  return validateNode<t.AssignmentPattern>({
+    type: "AssignmentPattern",
+    left,
+    right,
+  });
 }
 export function arrayPattern(
   elements: Array<null | t.PatternLike>,
 ): t.ArrayPattern {
-  return builder.apply("ArrayPattern", arguments);
+  return validateNode<t.ArrayPattern>({
+    type: "ArrayPattern",
+    elements,
+  });
 }
 export function arrowFunctionExpression(
   params: Array<t.Identifier | t.Pattern | t.RestElement>,
   body: t.BlockStatement | t.Expression,
-  async?: boolean,
+  async: boolean = false,
 ): t.ArrowFunctionExpression {
-  return builder.apply("ArrowFunctionExpression", arguments);
+  return validateNode<t.ArrowFunctionExpression>({
+    type: "ArrowFunctionExpression",
+    params,
+    body,
+    async,
+    expression: null,
+  });
 }
 export function classBody(
   body: Array<
@@ -358,28 +585,46 @@ export function classBody(
     | t.StaticBlock
   >,
 ): t.ClassBody {
-  return builder.apply("ClassBody", arguments);
+  return validateNode<t.ClassBody>({
+    type: "ClassBody",
+    body,
+  });
 }
 export function classExpression(
-  id: t.Identifier | null | undefined,
-  superClass: t.Expression | null | undefined,
+  id: t.Identifier | null | undefined = null,
+  superClass: t.Expression | null | undefined = null,
   body: t.ClassBody,
-  decorators?: Array<t.Decorator> | null,
+  decorators: Array<t.Decorator> | null = null,
 ): t.ClassExpression {
-  return builder.apply("ClassExpression", arguments);
+  return validateNode<t.ClassExpression>({
+    type: "ClassExpression",
+    id,
+    superClass,
+    body,
+    decorators,
+  });
 }
 export function classDeclaration(
   id: t.Identifier,
-  superClass: t.Expression | null | undefined,
+  superClass: t.Expression | null | undefined = null,
   body: t.ClassBody,
-  decorators?: Array<t.Decorator> | null,
+  decorators: Array<t.Decorator> | null = null,
 ): t.ClassDeclaration {
-  return builder.apply("ClassDeclaration", arguments);
+  return validateNode<t.ClassDeclaration>({
+    type: "ClassDeclaration",
+    id,
+    superClass,
+    body,
+    decorators,
+  });
 }
 export function exportAllDeclaration(
   source: t.StringLiteral,
 ): t.ExportAllDeclaration {
-  return builder.apply("ExportAllDeclaration", arguments);
+  return validateNode<t.ExportAllDeclaration>({
+    type: "ExportAllDeclaration",
+    source,
+  });
 }
 export function exportDefaultDeclaration(
   declaration:
@@ -388,30 +633,48 @@ export function exportDefaultDeclaration(
     | t.ClassDeclaration
     | t.Expression,
 ): t.ExportDefaultDeclaration {
-  return builder.apply("ExportDefaultDeclaration", arguments);
+  return validateNode<t.ExportDefaultDeclaration>({
+    type: "ExportDefaultDeclaration",
+    declaration,
+  });
 }
 export function exportNamedDeclaration(
-  declaration?: t.Declaration | null,
-  specifiers?: Array<
+  declaration: t.Declaration | null = null,
+  specifiers: Array<
     t.ExportSpecifier | t.ExportDefaultSpecifier | t.ExportNamespaceSpecifier
-  >,
-  source?: t.StringLiteral | null,
+  > = [],
+  source: t.StringLiteral | null = null,
 ): t.ExportNamedDeclaration {
-  return builder.apply("ExportNamedDeclaration", arguments);
+  return validateNode<t.ExportNamedDeclaration>({
+    type: "ExportNamedDeclaration",
+    declaration,
+    specifiers,
+    source,
+  });
 }
 export function exportSpecifier(
   local: t.Identifier,
   exported: t.Identifier | t.StringLiteral,
 ): t.ExportSpecifier {
-  return builder.apply("ExportSpecifier", arguments);
+  return validateNode<t.ExportSpecifier>({
+    type: "ExportSpecifier",
+    local,
+    exported,
+  });
 }
 export function forOfStatement(
   left: t.VariableDeclaration | t.LVal,
   right: t.Expression,
   body: t.Statement,
-  _await?: boolean,
+  _await: boolean = false,
 ): t.ForOfStatement {
-  return builder.apply("ForOfStatement", arguments);
+  return validateNode<t.ForOfStatement>({
+    type: "ForOfStatement",
+    left,
+    right,
+    body,
+    await: _await,
+  });
 }
 export function importDeclaration(
   specifiers: Array<
@@ -419,102 +682,171 @@ export function importDeclaration(
   >,
   source: t.StringLiteral,
 ): t.ImportDeclaration {
-  return builder.apply("ImportDeclaration", arguments);
+  return validateNode<t.ImportDeclaration>({
+    type: "ImportDeclaration",
+    specifiers,
+    source,
+  });
 }
 export function importDefaultSpecifier(
   local: t.Identifier,
 ): t.ImportDefaultSpecifier {
-  return builder.apply("ImportDefaultSpecifier", arguments);
+  return validateNode<t.ImportDefaultSpecifier>({
+    type: "ImportDefaultSpecifier",
+    local,
+  });
 }
 export function importNamespaceSpecifier(
   local: t.Identifier,
 ): t.ImportNamespaceSpecifier {
-  return builder.apply("ImportNamespaceSpecifier", arguments);
+  return validateNode<t.ImportNamespaceSpecifier>({
+    type: "ImportNamespaceSpecifier",
+    local,
+  });
 }
 export function importSpecifier(
   local: t.Identifier,
   imported: t.Identifier | t.StringLiteral,
 ): t.ImportSpecifier {
-  return builder.apply("ImportSpecifier", arguments);
+  return validateNode<t.ImportSpecifier>({
+    type: "ImportSpecifier",
+    local,
+    imported,
+  });
 }
 export function metaProperty(
   meta: t.Identifier,
   property: t.Identifier,
 ): t.MetaProperty {
-  return builder.apply("MetaProperty", arguments);
+  return validateNode<t.MetaProperty>({
+    type: "MetaProperty",
+    meta,
+    property,
+  });
 }
 export function classMethod(
-  kind: "get" | "set" | "method" | "constructor" | undefined,
+  kind: "get" | "set" | "method" | "constructor" | undefined = "method",
   key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
   params: Array<
     t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
   >,
   body: t.BlockStatement,
-  computed?: boolean,
-  _static?: boolean,
-  generator?: boolean,
-  async?: boolean,
+  computed: boolean = false,
+  _static: boolean = false,
+  generator: boolean = false,
+  async: boolean = false,
 ): t.ClassMethod {
-  return builder.apply("ClassMethod", arguments);
+  return validateNode<t.ClassMethod>({
+    type: "ClassMethod",
+    kind,
+    key,
+    params,
+    body,
+    computed,
+    static: _static,
+    generator,
+    async,
+  });
 }
 export function objectPattern(
   properties: Array<t.RestElement | t.ObjectProperty>,
 ): t.ObjectPattern {
-  return builder.apply("ObjectPattern", arguments);
+  return validateNode<t.ObjectPattern>({
+    type: "ObjectPattern",
+    properties,
+  });
 }
 export function spreadElement(argument: t.Expression): t.SpreadElement {
-  return builder.apply("SpreadElement", arguments);
+  return validateNode<t.SpreadElement>({
+    type: "SpreadElement",
+    argument,
+  });
 }
 function _super(): t.Super {
-  return builder.apply("Super", arguments);
+  return {
+    type: "Super",
+  };
 }
 export { _super as super };
 export function taggedTemplateExpression(
   tag: t.Expression,
   quasi: t.TemplateLiteral,
 ): t.TaggedTemplateExpression {
-  return builder.apply("TaggedTemplateExpression", arguments);
+  return validateNode<t.TaggedTemplateExpression>({
+    type: "TaggedTemplateExpression",
+    tag,
+    quasi,
+  });
 }
 export function templateElement(
   value: { raw: string; cooked?: string },
-  tail?: boolean,
+  tail: boolean = false,
 ): t.TemplateElement {
-  return builder.apply("TemplateElement", arguments);
+  return validateNode<t.TemplateElement>({
+    type: "TemplateElement",
+    value,
+    tail,
+  });
 }
 export function templateLiteral(
   quasis: Array<t.TemplateElement>,
   expressions: Array<t.Expression | t.TSType>,
 ): t.TemplateLiteral {
-  return builder.apply("TemplateLiteral", arguments);
+  return validateNode<t.TemplateLiteral>({
+    type: "TemplateLiteral",
+    quasis,
+    expressions,
+  });
 }
 export function yieldExpression(
-  argument?: t.Expression | null,
-  delegate?: boolean,
+  argument: t.Expression | null = null,
+  delegate: boolean = false,
 ): t.YieldExpression {
-  return builder.apply("YieldExpression", arguments);
+  return validateNode<t.YieldExpression>({
+    type: "YieldExpression",
+    argument,
+    delegate,
+  });
 }
 export function awaitExpression(argument: t.Expression): t.AwaitExpression {
-  return builder.apply("AwaitExpression", arguments);
+  return validateNode<t.AwaitExpression>({
+    type: "AwaitExpression",
+    argument,
+  });
 }
 function _import(): t.Import {
-  return builder.apply("Import", arguments);
+  return {
+    type: "Import",
+  };
 }
 export { _import as import };
 export function bigIntLiteral(value: string): t.BigIntLiteral {
-  return builder.apply("BigIntLiteral", arguments);
+  return validateNode<t.BigIntLiteral>({
+    type: "BigIntLiteral",
+    value,
+  });
 }
 export function exportNamespaceSpecifier(
   exported: t.Identifier,
 ): t.ExportNamespaceSpecifier {
-  return builder.apply("ExportNamespaceSpecifier", arguments);
+  return validateNode<t.ExportNamespaceSpecifier>({
+    type: "ExportNamespaceSpecifier",
+    exported,
+  });
 }
 export function optionalMemberExpression(
   object: t.Expression,
   property: t.Expression | t.Identifier,
-  computed: boolean | undefined,
+  computed: boolean | undefined = false,
   optional: boolean,
 ): t.OptionalMemberExpression {
-  return builder.apply("OptionalMemberExpression", arguments);
+  return validateNode<t.OptionalMemberExpression>({
+    type: "OptionalMemberExpression",
+    object,
+    property,
+    computed,
+    optional,
+  });
 }
 export function optionalCallExpression(
   callee: t.Expression,
@@ -523,17 +855,30 @@ export function optionalCallExpression(
   >,
   optional: boolean,
 ): t.OptionalCallExpression {
-  return builder.apply("OptionalCallExpression", arguments);
+  return validateNode<t.OptionalCallExpression>({
+    type: "OptionalCallExpression",
+    callee,
+    arguments: _arguments,
+    optional,
+  });
 }
 export function classProperty(
   key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
-  value?: t.Expression | null,
-  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
-  decorators?: Array<t.Decorator> | null,
-  computed?: boolean,
-  _static?: boolean,
+  value: t.Expression | null = null,
+  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null = null,
+  decorators: Array<t.Decorator> | null = null,
+  computed: boolean = false,
+  _static: boolean = false,
 ): t.ClassProperty {
-  return builder.apply("ClassProperty", arguments);
+  return validateNode<t.ClassProperty>({
+    type: "ClassProperty",
+    key,
+    value,
+    typeAnnotation,
+    decorators,
+    computed,
+    static: _static,
+  });
 }
 export function classAccessorProperty(
   key:
@@ -542,205 +887,351 @@ export function classAccessorProperty(
     | t.NumericLiteral
     | t.Expression
     | t.PrivateName,
-  value?: t.Expression | null,
-  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
-  decorators?: Array<t.Decorator> | null,
-  computed?: boolean,
-  _static?: boolean,
+  value: t.Expression | null = null,
+  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null = null,
+  decorators: Array<t.Decorator> | null = null,
+  computed: boolean = false,
+  _static: boolean = false,
 ): t.ClassAccessorProperty {
-  return builder.apply("ClassAccessorProperty", arguments);
+  return validateNode<t.ClassAccessorProperty>({
+    type: "ClassAccessorProperty",
+    key,
+    value,
+    typeAnnotation,
+    decorators,
+    computed,
+    static: _static,
+  });
 }
 export function classPrivateProperty(
   key: t.PrivateName,
-  value: t.Expression | null | undefined,
-  decorators: Array<t.Decorator> | null | undefined,
+  value: t.Expression | null | undefined = null,
+  decorators: Array<t.Decorator> | null | undefined = null,
   _static: any,
 ): t.ClassPrivateProperty {
-  return builder.apply("ClassPrivateProperty", arguments);
+  return validateNode<t.ClassPrivateProperty>({
+    type: "ClassPrivateProperty",
+    key,
+    value,
+    decorators,
+    static: _static,
+  });
 }
 export function classPrivateMethod(
-  kind: "get" | "set" | "method" | "constructor" | undefined,
+  kind: "get" | "set" | "method" | "constructor" | undefined = "method",
   key: t.PrivateName,
   params: Array<
     t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
   >,
   body: t.BlockStatement,
-  _static?: boolean,
+  _static: boolean = false,
 ): t.ClassPrivateMethod {
-  return builder.apply("ClassPrivateMethod", arguments);
+  return validateNode<t.ClassPrivateMethod>({
+    type: "ClassPrivateMethod",
+    kind,
+    key,
+    params,
+    body,
+    static: _static,
+  });
 }
 export function privateName(id: t.Identifier): t.PrivateName {
-  return builder.apply("PrivateName", arguments);
+  return validateNode<t.PrivateName>({
+    type: "PrivateName",
+    id,
+  });
 }
 export function staticBlock(body: Array<t.Statement>): t.StaticBlock {
-  return builder.apply("StaticBlock", arguments);
+  return validateNode<t.StaticBlock>({
+    type: "StaticBlock",
+    body,
+  });
 }
 export function anyTypeAnnotation(): t.AnyTypeAnnotation {
-  return builder.apply("AnyTypeAnnotation", arguments);
+  return {
+    type: "AnyTypeAnnotation",
+  };
 }
 export function arrayTypeAnnotation(
   elementType: t.FlowType,
 ): t.ArrayTypeAnnotation {
-  return builder.apply("ArrayTypeAnnotation", arguments);
+  return validateNode<t.ArrayTypeAnnotation>({
+    type: "ArrayTypeAnnotation",
+    elementType,
+  });
 }
 export function booleanTypeAnnotation(): t.BooleanTypeAnnotation {
-  return builder.apply("BooleanTypeAnnotation", arguments);
+  return {
+    type: "BooleanTypeAnnotation",
+  };
 }
 export function booleanLiteralTypeAnnotation(
   value: boolean,
 ): t.BooleanLiteralTypeAnnotation {
-  return builder.apply("BooleanLiteralTypeAnnotation", arguments);
+  return validateNode<t.BooleanLiteralTypeAnnotation>({
+    type: "BooleanLiteralTypeAnnotation",
+    value,
+  });
 }
 export function nullLiteralTypeAnnotation(): t.NullLiteralTypeAnnotation {
-  return builder.apply("NullLiteralTypeAnnotation", arguments);
+  return {
+    type: "NullLiteralTypeAnnotation",
+  };
 }
 export function classImplements(
   id: t.Identifier,
-  typeParameters?: t.TypeParameterInstantiation | null,
+  typeParameters: t.TypeParameterInstantiation | null = null,
 ): t.ClassImplements {
-  return builder.apply("ClassImplements", arguments);
+  return validateNode<t.ClassImplements>({
+    type: "ClassImplements",
+    id,
+    typeParameters,
+  });
 }
 export function declareClass(
   id: t.Identifier,
-  typeParameters: t.TypeParameterDeclaration | null | undefined,
-  _extends: Array<t.InterfaceExtends> | null | undefined,
+  typeParameters: t.TypeParameterDeclaration | null | undefined = null,
+  _extends: Array<t.InterfaceExtends> | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.DeclareClass {
-  return builder.apply("DeclareClass", arguments);
+  return validateNode<t.DeclareClass>({
+    type: "DeclareClass",
+    id,
+    typeParameters,
+    extends: _extends,
+    body,
+  });
 }
 export function declareFunction(id: t.Identifier): t.DeclareFunction {
-  return builder.apply("DeclareFunction", arguments);
+  return validateNode<t.DeclareFunction>({
+    type: "DeclareFunction",
+    id,
+  });
 }
 export function declareInterface(
   id: t.Identifier,
-  typeParameters: t.TypeParameterDeclaration | null | undefined,
-  _extends: Array<t.InterfaceExtends> | null | undefined,
+  typeParameters: t.TypeParameterDeclaration | null | undefined = null,
+  _extends: Array<t.InterfaceExtends> | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.DeclareInterface {
-  return builder.apply("DeclareInterface", arguments);
+  return validateNode<t.DeclareInterface>({
+    type: "DeclareInterface",
+    id,
+    typeParameters,
+    extends: _extends,
+    body,
+  });
 }
 export function declareModule(
   id: t.Identifier | t.StringLiteral,
   body: t.BlockStatement,
-  kind?: "CommonJS" | "ES" | null,
+  kind: "CommonJS" | "ES" | null = null,
 ): t.DeclareModule {
-  return builder.apply("DeclareModule", arguments);
+  return validateNode<t.DeclareModule>({
+    type: "DeclareModule",
+    id,
+    body,
+    kind,
+  });
 }
 export function declareModuleExports(
   typeAnnotation: t.TypeAnnotation,
 ): t.DeclareModuleExports {
-  return builder.apply("DeclareModuleExports", arguments);
+  return validateNode<t.DeclareModuleExports>({
+    type: "DeclareModuleExports",
+    typeAnnotation,
+  });
 }
 export function declareTypeAlias(
   id: t.Identifier,
-  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  typeParameters: t.TypeParameterDeclaration | null | undefined = null,
   right: t.FlowType,
 ): t.DeclareTypeAlias {
-  return builder.apply("DeclareTypeAlias", arguments);
+  return validateNode<t.DeclareTypeAlias>({
+    type: "DeclareTypeAlias",
+    id,
+    typeParameters,
+    right,
+  });
 }
 export function declareOpaqueType(
   id: t.Identifier,
-  typeParameters?: t.TypeParameterDeclaration | null,
-  supertype?: t.FlowType | null,
+  typeParameters: t.TypeParameterDeclaration | null = null,
+  supertype: t.FlowType | null = null,
 ): t.DeclareOpaqueType {
-  return builder.apply("DeclareOpaqueType", arguments);
+  return validateNode<t.DeclareOpaqueType>({
+    type: "DeclareOpaqueType",
+    id,
+    typeParameters,
+    supertype,
+  });
 }
 export function declareVariable(id: t.Identifier): t.DeclareVariable {
-  return builder.apply("DeclareVariable", arguments);
+  return validateNode<t.DeclareVariable>({
+    type: "DeclareVariable",
+    id,
+  });
 }
 export function declareExportDeclaration(
-  declaration?: t.Flow | null,
-  specifiers?: Array<t.ExportSpecifier | t.ExportNamespaceSpecifier> | null,
-  source?: t.StringLiteral | null,
+  declaration: t.Flow | null = null,
+  specifiers: Array<
+    t.ExportSpecifier | t.ExportNamespaceSpecifier
+  > | null = null,
+  source: t.StringLiteral | null = null,
 ): t.DeclareExportDeclaration {
-  return builder.apply("DeclareExportDeclaration", arguments);
+  return validateNode<t.DeclareExportDeclaration>({
+    type: "DeclareExportDeclaration",
+    declaration,
+    specifiers,
+    source,
+  });
 }
 export function declareExportAllDeclaration(
   source: t.StringLiteral,
 ): t.DeclareExportAllDeclaration {
-  return builder.apply("DeclareExportAllDeclaration", arguments);
+  return validateNode<t.DeclareExportAllDeclaration>({
+    type: "DeclareExportAllDeclaration",
+    source,
+  });
 }
 export function declaredPredicate(value: t.Flow): t.DeclaredPredicate {
-  return builder.apply("DeclaredPredicate", arguments);
+  return validateNode<t.DeclaredPredicate>({
+    type: "DeclaredPredicate",
+    value,
+  });
 }
 export function existsTypeAnnotation(): t.ExistsTypeAnnotation {
-  return builder.apply("ExistsTypeAnnotation", arguments);
+  return {
+    type: "ExistsTypeAnnotation",
+  };
 }
 export function functionTypeAnnotation(
-  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  typeParameters: t.TypeParameterDeclaration | null | undefined = null,
   params: Array<t.FunctionTypeParam>,
-  rest: t.FunctionTypeParam | null | undefined,
+  rest: t.FunctionTypeParam | null | undefined = null,
   returnType: t.FlowType,
 ): t.FunctionTypeAnnotation {
-  return builder.apply("FunctionTypeAnnotation", arguments);
+  return validateNode<t.FunctionTypeAnnotation>({
+    type: "FunctionTypeAnnotation",
+    typeParameters,
+    params,
+    rest,
+    returnType,
+  });
 }
 export function functionTypeParam(
-  name: t.Identifier | null | undefined,
+  name: t.Identifier | null | undefined = null,
   typeAnnotation: t.FlowType,
 ): t.FunctionTypeParam {
-  return builder.apply("FunctionTypeParam", arguments);
+  return validateNode<t.FunctionTypeParam>({
+    type: "FunctionTypeParam",
+    name,
+    typeAnnotation,
+  });
 }
 export function genericTypeAnnotation(
   id: t.Identifier | t.QualifiedTypeIdentifier,
-  typeParameters?: t.TypeParameterInstantiation | null,
+  typeParameters: t.TypeParameterInstantiation | null = null,
 ): t.GenericTypeAnnotation {
-  return builder.apply("GenericTypeAnnotation", arguments);
+  return validateNode<t.GenericTypeAnnotation>({
+    type: "GenericTypeAnnotation",
+    id,
+    typeParameters,
+  });
 }
 export function inferredPredicate(): t.InferredPredicate {
-  return builder.apply("InferredPredicate", arguments);
+  return {
+    type: "InferredPredicate",
+  };
 }
 export function interfaceExtends(
   id: t.Identifier | t.QualifiedTypeIdentifier,
-  typeParameters?: t.TypeParameterInstantiation | null,
+  typeParameters: t.TypeParameterInstantiation | null = null,
 ): t.InterfaceExtends {
-  return builder.apply("InterfaceExtends", arguments);
+  return validateNode<t.InterfaceExtends>({
+    type: "InterfaceExtends",
+    id,
+    typeParameters,
+  });
 }
 export function interfaceDeclaration(
   id: t.Identifier,
-  typeParameters: t.TypeParameterDeclaration | null | undefined,
-  _extends: Array<t.InterfaceExtends> | null | undefined,
+  typeParameters: t.TypeParameterDeclaration | null | undefined = null,
+  _extends: Array<t.InterfaceExtends> | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.InterfaceDeclaration {
-  return builder.apply("InterfaceDeclaration", arguments);
+  return validateNode<t.InterfaceDeclaration>({
+    type: "InterfaceDeclaration",
+    id,
+    typeParameters,
+    extends: _extends,
+    body,
+  });
 }
 export function interfaceTypeAnnotation(
-  _extends: Array<t.InterfaceExtends> | null | undefined,
+  _extends: Array<t.InterfaceExtends> | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.InterfaceTypeAnnotation {
-  return builder.apply("InterfaceTypeAnnotation", arguments);
+  return validateNode<t.InterfaceTypeAnnotation>({
+    type: "InterfaceTypeAnnotation",
+    extends: _extends,
+    body,
+  });
 }
 export function intersectionTypeAnnotation(
   types: Array<t.FlowType>,
 ): t.IntersectionTypeAnnotation {
-  return builder.apply("IntersectionTypeAnnotation", arguments);
+  return validateNode<t.IntersectionTypeAnnotation>({
+    type: "IntersectionTypeAnnotation",
+    types,
+  });
 }
 export function mixedTypeAnnotation(): t.MixedTypeAnnotation {
-  return builder.apply("MixedTypeAnnotation", arguments);
+  return {
+    type: "MixedTypeAnnotation",
+  };
 }
 export function emptyTypeAnnotation(): t.EmptyTypeAnnotation {
-  return builder.apply("EmptyTypeAnnotation", arguments);
+  return {
+    type: "EmptyTypeAnnotation",
+  };
 }
 export function nullableTypeAnnotation(
   typeAnnotation: t.FlowType,
 ): t.NullableTypeAnnotation {
-  return builder.apply("NullableTypeAnnotation", arguments);
+  return validateNode<t.NullableTypeAnnotation>({
+    type: "NullableTypeAnnotation",
+    typeAnnotation,
+  });
 }
 export function numberLiteralTypeAnnotation(
   value: number,
 ): t.NumberLiteralTypeAnnotation {
-  return builder.apply("NumberLiteralTypeAnnotation", arguments);
+  return validateNode<t.NumberLiteralTypeAnnotation>({
+    type: "NumberLiteralTypeAnnotation",
+    value,
+  });
 }
 export function numberTypeAnnotation(): t.NumberTypeAnnotation {
-  return builder.apply("NumberTypeAnnotation", arguments);
+  return {
+    type: "NumberTypeAnnotation",
+  };
 }
 export function objectTypeAnnotation(
   properties: Array<t.ObjectTypeProperty | t.ObjectTypeSpreadProperty>,
-  indexers?: Array<t.ObjectTypeIndexer> | null,
-  callProperties?: Array<t.ObjectTypeCallProperty> | null,
-  internalSlots?: Array<t.ObjectTypeInternalSlot> | null,
-  exact?: boolean,
+  indexers: Array<t.ObjectTypeIndexer> = [],
+  callProperties: Array<t.ObjectTypeCallProperty> = [],
+  internalSlots: Array<t.ObjectTypeInternalSlot> = [],
+  exact: boolean = false,
 ): t.ObjectTypeAnnotation {
-  return builder.apply("ObjectTypeAnnotation", arguments);
+  return validateNode<t.ObjectTypeAnnotation>({
+    type: "ObjectTypeAnnotation",
+    properties,
+    indexers,
+    callProperties,
+    internalSlots,
+    exact,
+  });
 }
 export function objectTypeInternalSlot(
   id: t.Identifier,
@@ -749,114 +1240,202 @@ export function objectTypeInternalSlot(
   _static: boolean,
   method: boolean,
 ): t.ObjectTypeInternalSlot {
-  return builder.apply("ObjectTypeInternalSlot", arguments);
+  return validateNode<t.ObjectTypeInternalSlot>({
+    type: "ObjectTypeInternalSlot",
+    id,
+    value,
+    optional,
+    static: _static,
+    method,
+  });
 }
 export function objectTypeCallProperty(
   value: t.FlowType,
 ): t.ObjectTypeCallProperty {
-  return builder.apply("ObjectTypeCallProperty", arguments);
+  return validateNode<t.ObjectTypeCallProperty>({
+    type: "ObjectTypeCallProperty",
+    value,
+    static: null,
+  });
 }
 export function objectTypeIndexer(
-  id: t.Identifier | null | undefined,
+  id: t.Identifier | null | undefined = null,
   key: t.FlowType,
   value: t.FlowType,
-  variance?: t.Variance | null,
+  variance: t.Variance | null = null,
 ): t.ObjectTypeIndexer {
-  return builder.apply("ObjectTypeIndexer", arguments);
+  return validateNode<t.ObjectTypeIndexer>({
+    type: "ObjectTypeIndexer",
+    id,
+    key,
+    value,
+    variance,
+    static: null,
+  });
 }
 export function objectTypeProperty(
   key: t.Identifier | t.StringLiteral,
   value: t.FlowType,
-  variance?: t.Variance | null,
+  variance: t.Variance | null = null,
 ): t.ObjectTypeProperty {
-  return builder.apply("ObjectTypeProperty", arguments);
+  return validateNode<t.ObjectTypeProperty>({
+    type: "ObjectTypeProperty",
+    key,
+    value,
+    variance,
+    kind: null,
+    method: null,
+    optional: null,
+    proto: null,
+    static: null,
+  });
 }
 export function objectTypeSpreadProperty(
   argument: t.FlowType,
 ): t.ObjectTypeSpreadProperty {
-  return builder.apply("ObjectTypeSpreadProperty", arguments);
+  return validateNode<t.ObjectTypeSpreadProperty>({
+    type: "ObjectTypeSpreadProperty",
+    argument,
+  });
 }
 export function opaqueType(
   id: t.Identifier,
-  typeParameters: t.TypeParameterDeclaration | null | undefined,
-  supertype: t.FlowType | null | undefined,
+  typeParameters: t.TypeParameterDeclaration | null | undefined = null,
+  supertype: t.FlowType | null | undefined = null,
   impltype: t.FlowType,
 ): t.OpaqueType {
-  return builder.apply("OpaqueType", arguments);
+  return validateNode<t.OpaqueType>({
+    type: "OpaqueType",
+    id,
+    typeParameters,
+    supertype,
+    impltype,
+  });
 }
 export function qualifiedTypeIdentifier(
   id: t.Identifier,
   qualification: t.Identifier | t.QualifiedTypeIdentifier,
 ): t.QualifiedTypeIdentifier {
-  return builder.apply("QualifiedTypeIdentifier", arguments);
+  return validateNode<t.QualifiedTypeIdentifier>({
+    type: "QualifiedTypeIdentifier",
+    id,
+    qualification,
+  });
 }
 export function stringLiteralTypeAnnotation(
   value: string,
 ): t.StringLiteralTypeAnnotation {
-  return builder.apply("StringLiteralTypeAnnotation", arguments);
+  return validateNode<t.StringLiteralTypeAnnotation>({
+    type: "StringLiteralTypeAnnotation",
+    value,
+  });
 }
 export function stringTypeAnnotation(): t.StringTypeAnnotation {
-  return builder.apply("StringTypeAnnotation", arguments);
+  return {
+    type: "StringTypeAnnotation",
+  };
 }
 export function symbolTypeAnnotation(): t.SymbolTypeAnnotation {
-  return builder.apply("SymbolTypeAnnotation", arguments);
+  return {
+    type: "SymbolTypeAnnotation",
+  };
 }
 export function thisTypeAnnotation(): t.ThisTypeAnnotation {
-  return builder.apply("ThisTypeAnnotation", arguments);
+  return {
+    type: "ThisTypeAnnotation",
+  };
 }
 export function tupleTypeAnnotation(
   types: Array<t.FlowType>,
 ): t.TupleTypeAnnotation {
-  return builder.apply("TupleTypeAnnotation", arguments);
+  return validateNode<t.TupleTypeAnnotation>({
+    type: "TupleTypeAnnotation",
+    types,
+  });
 }
 export function typeofTypeAnnotation(
   argument: t.FlowType,
 ): t.TypeofTypeAnnotation {
-  return builder.apply("TypeofTypeAnnotation", arguments);
+  return validateNode<t.TypeofTypeAnnotation>({
+    type: "TypeofTypeAnnotation",
+    argument,
+  });
 }
 export function typeAlias(
   id: t.Identifier,
-  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  typeParameters: t.TypeParameterDeclaration | null | undefined = null,
   right: t.FlowType,
 ): t.TypeAlias {
-  return builder.apply("TypeAlias", arguments);
+  return validateNode<t.TypeAlias>({
+    type: "TypeAlias",
+    id,
+    typeParameters,
+    right,
+  });
 }
 export function typeAnnotation(typeAnnotation: t.FlowType): t.TypeAnnotation {
-  return builder.apply("TypeAnnotation", arguments);
+  return validateNode<t.TypeAnnotation>({
+    type: "TypeAnnotation",
+    typeAnnotation,
+  });
 }
 export function typeCastExpression(
   expression: t.Expression,
   typeAnnotation: t.TypeAnnotation,
 ): t.TypeCastExpression {
-  return builder.apply("TypeCastExpression", arguments);
+  return validateNode<t.TypeCastExpression>({
+    type: "TypeCastExpression",
+    expression,
+    typeAnnotation,
+  });
 }
 export function typeParameter(
-  bound?: t.TypeAnnotation | null,
-  _default?: t.FlowType | null,
-  variance?: t.Variance | null,
+  bound: t.TypeAnnotation | null = null,
+  _default: t.FlowType | null = null,
+  variance: t.Variance | null = null,
 ): t.TypeParameter {
-  return builder.apply("TypeParameter", arguments);
+  return validateNode<t.TypeParameter>({
+    type: "TypeParameter",
+    bound,
+    default: _default,
+    variance,
+    name: null,
+  });
 }
 export function typeParameterDeclaration(
   params: Array<t.TypeParameter>,
 ): t.TypeParameterDeclaration {
-  return builder.apply("TypeParameterDeclaration", arguments);
+  return validateNode<t.TypeParameterDeclaration>({
+    type: "TypeParameterDeclaration",
+    params,
+  });
 }
 export function typeParameterInstantiation(
   params: Array<t.FlowType>,
 ): t.TypeParameterInstantiation {
-  return builder.apply("TypeParameterInstantiation", arguments);
+  return validateNode<t.TypeParameterInstantiation>({
+    type: "TypeParameterInstantiation",
+    params,
+  });
 }
 export function unionTypeAnnotation(
   types: Array<t.FlowType>,
 ): t.UnionTypeAnnotation {
-  return builder.apply("UnionTypeAnnotation", arguments);
+  return validateNode<t.UnionTypeAnnotation>({
+    type: "UnionTypeAnnotation",
+    types,
+  });
 }
 export function variance(kind: "minus" | "plus"): t.Variance {
-  return builder.apply("Variance", arguments);
+  return validateNode<t.Variance>({
+    type: "Variance",
+    kind,
+  });
 }
 export function voidTypeAnnotation(): t.VoidTypeAnnotation {
-  return builder.apply("VoidTypeAnnotation", arguments);
+  return {
+    type: "VoidTypeAnnotation",
+  };
 }
 export function enumDeclaration(
   id: t.Identifier,
@@ -866,79 +1445,133 @@ export function enumDeclaration(
     | t.EnumStringBody
     | t.EnumSymbolBody,
 ): t.EnumDeclaration {
-  return builder.apply("EnumDeclaration", arguments);
+  return validateNode<t.EnumDeclaration>({
+    type: "EnumDeclaration",
+    id,
+    body,
+  });
 }
 export function enumBooleanBody(
   members: Array<t.EnumBooleanMember>,
 ): t.EnumBooleanBody {
-  return builder.apply("EnumBooleanBody", arguments);
+  return validateNode<t.EnumBooleanBody>({
+    type: "EnumBooleanBody",
+    members,
+    explicitType: null,
+    hasUnknownMembers: null,
+  });
 }
 export function enumNumberBody(
   members: Array<t.EnumNumberMember>,
 ): t.EnumNumberBody {
-  return builder.apply("EnumNumberBody", arguments);
+  return validateNode<t.EnumNumberBody>({
+    type: "EnumNumberBody",
+    members,
+    explicitType: null,
+    hasUnknownMembers: null,
+  });
 }
 export function enumStringBody(
   members: Array<t.EnumStringMember | t.EnumDefaultedMember>,
 ): t.EnumStringBody {
-  return builder.apply("EnumStringBody", arguments);
+  return validateNode<t.EnumStringBody>({
+    type: "EnumStringBody",
+    members,
+    explicitType: null,
+    hasUnknownMembers: null,
+  });
 }
 export function enumSymbolBody(
   members: Array<t.EnumDefaultedMember>,
 ): t.EnumSymbolBody {
-  return builder.apply("EnumSymbolBody", arguments);
+  return validateNode<t.EnumSymbolBody>({
+    type: "EnumSymbolBody",
+    members,
+    hasUnknownMembers: null,
+  });
 }
 export function enumBooleanMember(id: t.Identifier): t.EnumBooleanMember {
-  return builder.apply("EnumBooleanMember", arguments);
+  return validateNode<t.EnumBooleanMember>({
+    type: "EnumBooleanMember",
+    id,
+    init: null,
+  });
 }
 export function enumNumberMember(
   id: t.Identifier,
   init: t.NumericLiteral,
 ): t.EnumNumberMember {
-  return builder.apply("EnumNumberMember", arguments);
+  return validateNode<t.EnumNumberMember>({
+    type: "EnumNumberMember",
+    id,
+    init,
+  });
 }
 export function enumStringMember(
   id: t.Identifier,
   init: t.StringLiteral,
 ): t.EnumStringMember {
-  return builder.apply("EnumStringMember", arguments);
+  return validateNode<t.EnumStringMember>({
+    type: "EnumStringMember",
+    id,
+    init,
+  });
 }
 export function enumDefaultedMember(id: t.Identifier): t.EnumDefaultedMember {
-  return builder.apply("EnumDefaultedMember", arguments);
+  return validateNode<t.EnumDefaultedMember>({
+    type: "EnumDefaultedMember",
+    id,
+  });
 }
 export function indexedAccessType(
   objectType: t.FlowType,
   indexType: t.FlowType,
 ): t.IndexedAccessType {
-  return builder.apply("IndexedAccessType", arguments);
+  return validateNode<t.IndexedAccessType>({
+    type: "IndexedAccessType",
+    objectType,
+    indexType,
+  });
 }
 export function optionalIndexedAccessType(
   objectType: t.FlowType,
   indexType: t.FlowType,
 ): t.OptionalIndexedAccessType {
-  return builder.apply("OptionalIndexedAccessType", arguments);
+  return validateNode<t.OptionalIndexedAccessType>({
+    type: "OptionalIndexedAccessType",
+    objectType,
+    indexType,
+    optional: null,
+  });
 }
 export function jsxAttribute(
   name: t.JSXIdentifier | t.JSXNamespacedName,
-  value?:
+  value:
     | t.JSXElement
     | t.JSXFragment
     | t.StringLiteral
     | t.JSXExpressionContainer
-    | null,
+    | null = null,
 ): t.JSXAttribute {
-  return builder.apply("JSXAttribute", arguments);
+  return validateNode<t.JSXAttribute>({
+    type: "JSXAttribute",
+    name,
+    value,
+  });
 }
 export { jsxAttribute as jSXAttribute };
 export function jsxClosingElement(
   name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
 ): t.JSXClosingElement {
-  return builder.apply("JSXClosingElement", arguments);
+  return validateNode<t.JSXClosingElement>({
+    type: "JSXClosingElement",
+    name,
+  });
 }
 export { jsxClosingElement as jSXClosingElement };
 export function jsxElement(
   openingElement: t.JSXOpeningElement,
-  closingElement: t.JSXClosingElement | null | undefined,
+  closingElement: t.JSXClosingElement | null | undefined = null,
   children: Array<
     | t.JSXText
     | t.JSXExpressionContainer
@@ -946,59 +1579,95 @@ export function jsxElement(
     | t.JSXElement
     | t.JSXFragment
   >,
-  selfClosing?: boolean | null,
+  selfClosing: boolean | null = null,
 ): t.JSXElement {
-  return builder.apply("JSXElement", arguments);
+  return validateNode<t.JSXElement>({
+    type: "JSXElement",
+    openingElement,
+    closingElement,
+    children,
+    selfClosing,
+  });
 }
 export { jsxElement as jSXElement };
 export function jsxEmptyExpression(): t.JSXEmptyExpression {
-  return builder.apply("JSXEmptyExpression", arguments);
+  return {
+    type: "JSXEmptyExpression",
+  };
 }
 export { jsxEmptyExpression as jSXEmptyExpression };
 export function jsxExpressionContainer(
   expression: t.Expression | t.JSXEmptyExpression,
 ): t.JSXExpressionContainer {
-  return builder.apply("JSXExpressionContainer", arguments);
+  return validateNode<t.JSXExpressionContainer>({
+    type: "JSXExpressionContainer",
+    expression,
+  });
 }
 export { jsxExpressionContainer as jSXExpressionContainer };
 export function jsxSpreadChild(expression: t.Expression): t.JSXSpreadChild {
-  return builder.apply("JSXSpreadChild", arguments);
+  return validateNode<t.JSXSpreadChild>({
+    type: "JSXSpreadChild",
+    expression,
+  });
 }
 export { jsxSpreadChild as jSXSpreadChild };
 export function jsxIdentifier(name: string): t.JSXIdentifier {
-  return builder.apply("JSXIdentifier", arguments);
+  return validateNode<t.JSXIdentifier>({
+    type: "JSXIdentifier",
+    name,
+  });
 }
 export { jsxIdentifier as jSXIdentifier };
 export function jsxMemberExpression(
   object: t.JSXMemberExpression | t.JSXIdentifier,
   property: t.JSXIdentifier,
 ): t.JSXMemberExpression {
-  return builder.apply("JSXMemberExpression", arguments);
+  return validateNode<t.JSXMemberExpression>({
+    type: "JSXMemberExpression",
+    object,
+    property,
+  });
 }
 export { jsxMemberExpression as jSXMemberExpression };
 export function jsxNamespacedName(
   namespace: t.JSXIdentifier,
   name: t.JSXIdentifier,
 ): t.JSXNamespacedName {
-  return builder.apply("JSXNamespacedName", arguments);
+  return validateNode<t.JSXNamespacedName>({
+    type: "JSXNamespacedName",
+    namespace,
+    name,
+  });
 }
 export { jsxNamespacedName as jSXNamespacedName };
 export function jsxOpeningElement(
   name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
   attributes: Array<t.JSXAttribute | t.JSXSpreadAttribute>,
-  selfClosing?: boolean,
+  selfClosing: boolean = false,
 ): t.JSXOpeningElement {
-  return builder.apply("JSXOpeningElement", arguments);
+  return validateNode<t.JSXOpeningElement>({
+    type: "JSXOpeningElement",
+    name,
+    attributes,
+    selfClosing,
+  });
 }
 export { jsxOpeningElement as jSXOpeningElement };
 export function jsxSpreadAttribute(
   argument: t.Expression,
 ): t.JSXSpreadAttribute {
-  return builder.apply("JSXSpreadAttribute", arguments);
+  return validateNode<t.JSXSpreadAttribute>({
+    type: "JSXSpreadAttribute",
+    argument,
+  });
 }
 export { jsxSpreadAttribute as jSXSpreadAttribute };
 export function jsxText(value: string): t.JSXText {
-  return builder.apply("JSXText", arguments);
+  return validateNode<t.JSXText>({
+    type: "JSXText",
+    value,
+  });
 }
 export { jsxText as jSXText };
 export function jsxFragment(
@@ -1012,19 +1681,30 @@ export function jsxFragment(
     | t.JSXFragment
   >,
 ): t.JSXFragment {
-  return builder.apply("JSXFragment", arguments);
+  return validateNode<t.JSXFragment>({
+    type: "JSXFragment",
+    openingFragment,
+    closingFragment,
+    children,
+  });
 }
 export { jsxFragment as jSXFragment };
 export function jsxOpeningFragment(): t.JSXOpeningFragment {
-  return builder.apply("JSXOpeningFragment", arguments);
+  return {
+    type: "JSXOpeningFragment",
+  };
 }
 export { jsxOpeningFragment as jSXOpeningFragment };
 export function jsxClosingFragment(): t.JSXClosingFragment {
-  return builder.apply("JSXClosingFragment", arguments);
+  return {
+    type: "JSXClosingFragment",
+  };
 }
 export { jsxClosingFragment as jSXClosingFragment };
 export function noop(): t.Noop {
-  return builder.apply("Noop", arguments);
+  return {
+    type: "Noop",
+  };
 }
 export function placeholder(
   expectedNode:
@@ -1038,279 +1718,459 @@ export function placeholder(
     | "Pattern",
   name: t.Identifier,
 ): t.Placeholder {
-  return builder.apply("Placeholder", arguments);
+  return validateNode<t.Placeholder>({
+    type: "Placeholder",
+    expectedNode,
+    name,
+  });
 }
 export function v8IntrinsicIdentifier(name: string): t.V8IntrinsicIdentifier {
-  return builder.apply("V8IntrinsicIdentifier", arguments);
+  return validateNode<t.V8IntrinsicIdentifier>({
+    type: "V8IntrinsicIdentifier",
+    name,
+  });
 }
 export function argumentPlaceholder(): t.ArgumentPlaceholder {
-  return builder.apply("ArgumentPlaceholder", arguments);
+  return {
+    type: "ArgumentPlaceholder",
+  };
 }
 export function bindExpression(
   object: t.Expression,
   callee: t.Expression,
 ): t.BindExpression {
-  return builder.apply("BindExpression", arguments);
+  return validateNode<t.BindExpression>({
+    type: "BindExpression",
+    object,
+    callee,
+  });
 }
 export function importAttribute(
   key: t.Identifier | t.StringLiteral,
   value: t.StringLiteral,
 ): t.ImportAttribute {
-  return builder.apply("ImportAttribute", arguments);
+  return validateNode<t.ImportAttribute>({
+    type: "ImportAttribute",
+    key,
+    value,
+  });
 }
 export function decorator(expression: t.Expression): t.Decorator {
-  return builder.apply("Decorator", arguments);
+  return validateNode<t.Decorator>({
+    type: "Decorator",
+    expression,
+  });
 }
 export function doExpression(
   body: t.BlockStatement,
-  async?: boolean,
+  async: boolean = false,
 ): t.DoExpression {
-  return builder.apply("DoExpression", arguments);
+  return validateNode<t.DoExpression>({
+    type: "DoExpression",
+    body,
+    async,
+  });
 }
 export function exportDefaultSpecifier(
   exported: t.Identifier,
 ): t.ExportDefaultSpecifier {
-  return builder.apply("ExportDefaultSpecifier", arguments);
+  return validateNode<t.ExportDefaultSpecifier>({
+    type: "ExportDefaultSpecifier",
+    exported,
+  });
 }
 export function recordExpression(
   properties: Array<t.ObjectProperty | t.SpreadElement>,
 ): t.RecordExpression {
-  return builder.apply("RecordExpression", arguments);
+  return validateNode<t.RecordExpression>({
+    type: "RecordExpression",
+    properties,
+  });
 }
 export function tupleExpression(
-  elements?: Array<t.Expression | t.SpreadElement>,
+  elements: Array<t.Expression | t.SpreadElement> = [],
 ): t.TupleExpression {
-  return builder.apply("TupleExpression", arguments);
+  return validateNode<t.TupleExpression>({
+    type: "TupleExpression",
+    elements,
+  });
 }
 export function decimalLiteral(value: string): t.DecimalLiteral {
-  return builder.apply("DecimalLiteral", arguments);
+  return validateNode<t.DecimalLiteral>({
+    type: "DecimalLiteral",
+    value,
+  });
 }
 export function moduleExpression(body: t.Program): t.ModuleExpression {
-  return builder.apply("ModuleExpression", arguments);
+  return validateNode<t.ModuleExpression>({
+    type: "ModuleExpression",
+    body,
+  });
 }
 export function topicReference(): t.TopicReference {
-  return builder.apply("TopicReference", arguments);
+  return {
+    type: "TopicReference",
+  };
 }
 export function pipelineTopicExpression(
   expression: t.Expression,
 ): t.PipelineTopicExpression {
-  return builder.apply("PipelineTopicExpression", arguments);
+  return validateNode<t.PipelineTopicExpression>({
+    type: "PipelineTopicExpression",
+    expression,
+  });
 }
 export function pipelineBareFunction(
   callee: t.Expression,
 ): t.PipelineBareFunction {
-  return builder.apply("PipelineBareFunction", arguments);
+  return validateNode<t.PipelineBareFunction>({
+    type: "PipelineBareFunction",
+    callee,
+  });
 }
 export function pipelinePrimaryTopicReference(): t.PipelinePrimaryTopicReference {
-  return builder.apply("PipelinePrimaryTopicReference", arguments);
+  return {
+    type: "PipelinePrimaryTopicReference",
+  };
 }
 export function tsParameterProperty(
   parameter: t.Identifier | t.AssignmentPattern,
 ): t.TSParameterProperty {
-  return builder.apply("TSParameterProperty", arguments);
+  return validateNode<t.TSParameterProperty>({
+    type: "TSParameterProperty",
+    parameter,
+  });
 }
 export { tsParameterProperty as tSParameterProperty };
 export function tsDeclareFunction(
-  id: t.Identifier | null | undefined,
-  typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
+  id: t.Identifier | null | undefined = null,
+  typeParameters:
+    | t.TSTypeParameterDeclaration
+    | t.Noop
+    | null
+    | undefined = null,
   params: Array<t.Identifier | t.Pattern | t.RestElement>,
-  returnType?: t.TSTypeAnnotation | t.Noop | null,
+  returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareFunction {
-  return builder.apply("TSDeclareFunction", arguments);
+  return validateNode<t.TSDeclareFunction>({
+    type: "TSDeclareFunction",
+    id,
+    typeParameters,
+    params,
+    returnType,
+  });
 }
 export { tsDeclareFunction as tSDeclareFunction };
 export function tsDeclareMethod(
-  decorators: Array<t.Decorator> | null | undefined,
+  decorators: Array<t.Decorator> | null | undefined = null,
   key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
-  typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
+  typeParameters:
+    | t.TSTypeParameterDeclaration
+    | t.Noop
+    | null
+    | undefined = null,
   params: Array<
     t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
   >,
-  returnType?: t.TSTypeAnnotation | t.Noop | null,
+  returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareMethod {
-  return builder.apply("TSDeclareMethod", arguments);
+  return validateNode<t.TSDeclareMethod>({
+    type: "TSDeclareMethod",
+    decorators,
+    key,
+    typeParameters,
+    params,
+    returnType,
+  });
 }
 export { tsDeclareMethod as tSDeclareMethod };
 export function tsQualifiedName(
   left: t.TSEntityName,
   right: t.Identifier,
 ): t.TSQualifiedName {
-  return builder.apply("TSQualifiedName", arguments);
+  return validateNode<t.TSQualifiedName>({
+    type: "TSQualifiedName",
+    left,
+    right,
+  });
 }
 export { tsQualifiedName as tSQualifiedName };
 export function tsCallSignatureDeclaration(
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
   parameters: Array<t.Identifier | t.RestElement>,
-  typeAnnotation?: t.TSTypeAnnotation | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSCallSignatureDeclaration {
-  return builder.apply("TSCallSignatureDeclaration", arguments);
+  return validateNode<t.TSCallSignatureDeclaration>({
+    type: "TSCallSignatureDeclaration",
+    typeParameters,
+    parameters,
+    typeAnnotation,
+  });
 }
 export { tsCallSignatureDeclaration as tSCallSignatureDeclaration };
 export function tsConstructSignatureDeclaration(
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
   parameters: Array<t.Identifier | t.RestElement>,
-  typeAnnotation?: t.TSTypeAnnotation | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructSignatureDeclaration {
-  return builder.apply("TSConstructSignatureDeclaration", arguments);
+  return validateNode<t.TSConstructSignatureDeclaration>({
+    type: "TSConstructSignatureDeclaration",
+    typeParameters,
+    parameters,
+    typeAnnotation,
+  });
 }
 export { tsConstructSignatureDeclaration as tSConstructSignatureDeclaration };
 export function tsPropertySignature(
   key: t.Expression,
-  typeAnnotation?: t.TSTypeAnnotation | null,
-  initializer?: t.Expression | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
+  initializer: t.Expression | null = null,
 ): t.TSPropertySignature {
-  return builder.apply("TSPropertySignature", arguments);
+  return validateNode<t.TSPropertySignature>({
+    type: "TSPropertySignature",
+    key,
+    typeAnnotation,
+    initializer,
+    kind: null,
+  });
 }
 export { tsPropertySignature as tSPropertySignature };
 export function tsMethodSignature(
   key: t.Expression,
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
   parameters: Array<t.Identifier | t.RestElement>,
-  typeAnnotation?: t.TSTypeAnnotation | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSMethodSignature {
-  return builder.apply("TSMethodSignature", arguments);
+  return validateNode<t.TSMethodSignature>({
+    type: "TSMethodSignature",
+    key,
+    typeParameters,
+    parameters,
+    typeAnnotation,
+    kind: null,
+  });
 }
 export { tsMethodSignature as tSMethodSignature };
 export function tsIndexSignature(
   parameters: Array<t.Identifier>,
-  typeAnnotation?: t.TSTypeAnnotation | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSIndexSignature {
-  return builder.apply("TSIndexSignature", arguments);
+  return validateNode<t.TSIndexSignature>({
+    type: "TSIndexSignature",
+    parameters,
+    typeAnnotation,
+  });
 }
 export { tsIndexSignature as tSIndexSignature };
 export function tsAnyKeyword(): t.TSAnyKeyword {
-  return builder.apply("TSAnyKeyword", arguments);
+  return {
+    type: "TSAnyKeyword",
+  };
 }
 export { tsAnyKeyword as tSAnyKeyword };
 export function tsBooleanKeyword(): t.TSBooleanKeyword {
-  return builder.apply("TSBooleanKeyword", arguments);
+  return {
+    type: "TSBooleanKeyword",
+  };
 }
 export { tsBooleanKeyword as tSBooleanKeyword };
 export function tsBigIntKeyword(): t.TSBigIntKeyword {
-  return builder.apply("TSBigIntKeyword", arguments);
+  return {
+    type: "TSBigIntKeyword",
+  };
 }
 export { tsBigIntKeyword as tSBigIntKeyword };
 export function tsIntrinsicKeyword(): t.TSIntrinsicKeyword {
-  return builder.apply("TSIntrinsicKeyword", arguments);
+  return {
+    type: "TSIntrinsicKeyword",
+  };
 }
 export { tsIntrinsicKeyword as tSIntrinsicKeyword };
 export function tsNeverKeyword(): t.TSNeverKeyword {
-  return builder.apply("TSNeverKeyword", arguments);
+  return {
+    type: "TSNeverKeyword",
+  };
 }
 export { tsNeverKeyword as tSNeverKeyword };
 export function tsNullKeyword(): t.TSNullKeyword {
-  return builder.apply("TSNullKeyword", arguments);
+  return {
+    type: "TSNullKeyword",
+  };
 }
 export { tsNullKeyword as tSNullKeyword };
 export function tsNumberKeyword(): t.TSNumberKeyword {
-  return builder.apply("TSNumberKeyword", arguments);
+  return {
+    type: "TSNumberKeyword",
+  };
 }
 export { tsNumberKeyword as tSNumberKeyword };
 export function tsObjectKeyword(): t.TSObjectKeyword {
-  return builder.apply("TSObjectKeyword", arguments);
+  return {
+    type: "TSObjectKeyword",
+  };
 }
 export { tsObjectKeyword as tSObjectKeyword };
 export function tsStringKeyword(): t.TSStringKeyword {
-  return builder.apply("TSStringKeyword", arguments);
+  return {
+    type: "TSStringKeyword",
+  };
 }
 export { tsStringKeyword as tSStringKeyword };
 export function tsSymbolKeyword(): t.TSSymbolKeyword {
-  return builder.apply("TSSymbolKeyword", arguments);
+  return {
+    type: "TSSymbolKeyword",
+  };
 }
 export { tsSymbolKeyword as tSSymbolKeyword };
 export function tsUndefinedKeyword(): t.TSUndefinedKeyword {
-  return builder.apply("TSUndefinedKeyword", arguments);
+  return {
+    type: "TSUndefinedKeyword",
+  };
 }
 export { tsUndefinedKeyword as tSUndefinedKeyword };
 export function tsUnknownKeyword(): t.TSUnknownKeyword {
-  return builder.apply("TSUnknownKeyword", arguments);
+  return {
+    type: "TSUnknownKeyword",
+  };
 }
 export { tsUnknownKeyword as tSUnknownKeyword };
 export function tsVoidKeyword(): t.TSVoidKeyword {
-  return builder.apply("TSVoidKeyword", arguments);
+  return {
+    type: "TSVoidKeyword",
+  };
 }
 export { tsVoidKeyword as tSVoidKeyword };
 export function tsThisType(): t.TSThisType {
-  return builder.apply("TSThisType", arguments);
+  return {
+    type: "TSThisType",
+  };
 }
 export { tsThisType as tSThisType };
 export function tsFunctionType(
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
   parameters: Array<t.Identifier | t.RestElement>,
-  typeAnnotation?: t.TSTypeAnnotation | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSFunctionType {
-  return builder.apply("TSFunctionType", arguments);
+  return validateNode<t.TSFunctionType>({
+    type: "TSFunctionType",
+    typeParameters,
+    parameters,
+    typeAnnotation,
+  });
 }
 export { tsFunctionType as tSFunctionType };
 export function tsConstructorType(
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
   parameters: Array<t.Identifier | t.RestElement>,
-  typeAnnotation?: t.TSTypeAnnotation | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructorType {
-  return builder.apply("TSConstructorType", arguments);
+  return validateNode<t.TSConstructorType>({
+    type: "TSConstructorType",
+    typeParameters,
+    parameters,
+    typeAnnotation,
+  });
 }
 export { tsConstructorType as tSConstructorType };
 export function tsTypeReference(
   typeName: t.TSEntityName,
-  typeParameters?: t.TSTypeParameterInstantiation | null,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
 ): t.TSTypeReference {
-  return builder.apply("TSTypeReference", arguments);
+  return validateNode<t.TSTypeReference>({
+    type: "TSTypeReference",
+    typeName,
+    typeParameters,
+  });
 }
 export { tsTypeReference as tSTypeReference };
 export function tsTypePredicate(
   parameterName: t.Identifier | t.TSThisType,
-  typeAnnotation?: t.TSTypeAnnotation | null,
-  asserts?: boolean | null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
+  asserts: boolean | null = null,
 ): t.TSTypePredicate {
-  return builder.apply("TSTypePredicate", arguments);
+  return validateNode<t.TSTypePredicate>({
+    type: "TSTypePredicate",
+    parameterName,
+    typeAnnotation,
+    asserts,
+  });
 }
 export { tsTypePredicate as tSTypePredicate };
 export function tsTypeQuery(
   exprName: t.TSEntityName | t.TSImportType,
 ): t.TSTypeQuery {
-  return builder.apply("TSTypeQuery", arguments);
+  return validateNode<t.TSTypeQuery>({
+    type: "TSTypeQuery",
+    exprName,
+  });
 }
 export { tsTypeQuery as tSTypeQuery };
 export function tsTypeLiteral(
   members: Array<t.TSTypeElement>,
 ): t.TSTypeLiteral {
-  return builder.apply("TSTypeLiteral", arguments);
+  return validateNode<t.TSTypeLiteral>({
+    type: "TSTypeLiteral",
+    members,
+  });
 }
 export { tsTypeLiteral as tSTypeLiteral };
 export function tsArrayType(elementType: t.TSType): t.TSArrayType {
-  return builder.apply("TSArrayType", arguments);
+  return validateNode<t.TSArrayType>({
+    type: "TSArrayType",
+    elementType,
+  });
 }
 export { tsArrayType as tSArrayType };
 export function tsTupleType(
   elementTypes: Array<t.TSType | t.TSNamedTupleMember>,
 ): t.TSTupleType {
-  return builder.apply("TSTupleType", arguments);
+  return validateNode<t.TSTupleType>({
+    type: "TSTupleType",
+    elementTypes,
+  });
 }
 export { tsTupleType as tSTupleType };
 export function tsOptionalType(typeAnnotation: t.TSType): t.TSOptionalType {
-  return builder.apply("TSOptionalType", arguments);
+  return validateNode<t.TSOptionalType>({
+    type: "TSOptionalType",
+    typeAnnotation,
+  });
 }
 export { tsOptionalType as tSOptionalType };
 export function tsRestType(typeAnnotation: t.TSType): t.TSRestType {
-  return builder.apply("TSRestType", arguments);
+  return validateNode<t.TSRestType>({
+    type: "TSRestType",
+    typeAnnotation,
+  });
 }
 export { tsRestType as tSRestType };
 export function tsNamedTupleMember(
   label: t.Identifier,
   elementType: t.TSType,
-  optional?: boolean,
+  optional: boolean = false,
 ): t.TSNamedTupleMember {
-  return builder.apply("TSNamedTupleMember", arguments);
+  return validateNode<t.TSNamedTupleMember>({
+    type: "TSNamedTupleMember",
+    label,
+    elementType,
+    optional,
+  });
 }
 export { tsNamedTupleMember as tSNamedTupleMember };
 export function tsUnionType(types: Array<t.TSType>): t.TSUnionType {
-  return builder.apply("TSUnionType", arguments);
+  return validateNode<t.TSUnionType>({
+    type: "TSUnionType",
+    types,
+  });
 }
 export { tsUnionType as tSUnionType };
 export function tsIntersectionType(
   types: Array<t.TSType>,
 ): t.TSIntersectionType {
-  return builder.apply("TSIntersectionType", arguments);
+  return validateNode<t.TSIntersectionType>({
+    type: "TSIntersectionType",
+    types,
+  });
 }
 export { tsIntersectionType as tSIntersectionType };
 export function tsConditionalType(
@@ -1319,36 +2179,61 @@ export function tsConditionalType(
   trueType: t.TSType,
   falseType: t.TSType,
 ): t.TSConditionalType {
-  return builder.apply("TSConditionalType", arguments);
+  return validateNode<t.TSConditionalType>({
+    type: "TSConditionalType",
+    checkType,
+    extendsType,
+    trueType,
+    falseType,
+  });
 }
 export { tsConditionalType as tSConditionalType };
 export function tsInferType(typeParameter: t.TSTypeParameter): t.TSInferType {
-  return builder.apply("TSInferType", arguments);
+  return validateNode<t.TSInferType>({
+    type: "TSInferType",
+    typeParameter,
+  });
 }
 export { tsInferType as tSInferType };
 export function tsParenthesizedType(
   typeAnnotation: t.TSType,
 ): t.TSParenthesizedType {
-  return builder.apply("TSParenthesizedType", arguments);
+  return validateNode<t.TSParenthesizedType>({
+    type: "TSParenthesizedType",
+    typeAnnotation,
+  });
 }
 export { tsParenthesizedType as tSParenthesizedType };
 export function tsTypeOperator(typeAnnotation: t.TSType): t.TSTypeOperator {
-  return builder.apply("TSTypeOperator", arguments);
+  return validateNode<t.TSTypeOperator>({
+    type: "TSTypeOperator",
+    typeAnnotation,
+    operator: null,
+  });
 }
 export { tsTypeOperator as tSTypeOperator };
 export function tsIndexedAccessType(
   objectType: t.TSType,
   indexType: t.TSType,
 ): t.TSIndexedAccessType {
-  return builder.apply("TSIndexedAccessType", arguments);
+  return validateNode<t.TSIndexedAccessType>({
+    type: "TSIndexedAccessType",
+    objectType,
+    indexType,
+  });
 }
 export { tsIndexedAccessType as tSIndexedAccessType };
 export function tsMappedType(
   typeParameter: t.TSTypeParameter,
-  typeAnnotation?: t.TSType | null,
-  nameType?: t.TSType | null,
+  typeAnnotation: t.TSType | null = null,
+  nameType: t.TSType | null = null,
 ): t.TSMappedType {
-  return builder.apply("TSMappedType", arguments);
+  return validateNode<t.TSMappedType>({
+    type: "TSMappedType",
+    typeParameter,
+    typeAnnotation,
+    nameType,
+  });
 }
 export { tsMappedType as tSMappedType };
 export function tsLiteralType(
@@ -1359,166 +2244,246 @@ export function tsLiteralType(
     | t.BigIntLiteral
     | t.UnaryExpression,
 ): t.TSLiteralType {
-  return builder.apply("TSLiteralType", arguments);
+  return validateNode<t.TSLiteralType>({
+    type: "TSLiteralType",
+    literal,
+  });
 }
 export { tsLiteralType as tSLiteralType };
 export function tsExpressionWithTypeArguments(
   expression: t.TSEntityName,
-  typeParameters?: t.TSTypeParameterInstantiation | null,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
 ): t.TSExpressionWithTypeArguments {
-  return builder.apply("TSExpressionWithTypeArguments", arguments);
+  return validateNode<t.TSExpressionWithTypeArguments>({
+    type: "TSExpressionWithTypeArguments",
+    expression,
+    typeParameters,
+  });
 }
 export { tsExpressionWithTypeArguments as tSExpressionWithTypeArguments };
 export function tsInterfaceDeclaration(
   id: t.Identifier,
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
-  _extends: Array<t.TSExpressionWithTypeArguments> | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
+  _extends: Array<t.TSExpressionWithTypeArguments> | null | undefined = null,
   body: t.TSInterfaceBody,
 ): t.TSInterfaceDeclaration {
-  return builder.apply("TSInterfaceDeclaration", arguments);
+  return validateNode<t.TSInterfaceDeclaration>({
+    type: "TSInterfaceDeclaration",
+    id,
+    typeParameters,
+    extends: _extends,
+    body,
+  });
 }
 export { tsInterfaceDeclaration as tSInterfaceDeclaration };
 export function tsInterfaceBody(
   body: Array<t.TSTypeElement>,
 ): t.TSInterfaceBody {
-  return builder.apply("TSInterfaceBody", arguments);
+  return validateNode<t.TSInterfaceBody>({
+    type: "TSInterfaceBody",
+    body,
+  });
 }
 export { tsInterfaceBody as tSInterfaceBody };
 export function tsTypeAliasDeclaration(
   id: t.Identifier,
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
   typeAnnotation: t.TSType,
 ): t.TSTypeAliasDeclaration {
-  return builder.apply("TSTypeAliasDeclaration", arguments);
+  return validateNode<t.TSTypeAliasDeclaration>({
+    type: "TSTypeAliasDeclaration",
+    id,
+    typeParameters,
+    typeAnnotation,
+  });
 }
 export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
 export function tsAsExpression(
   expression: t.Expression,
   typeAnnotation: t.TSType,
 ): t.TSAsExpression {
-  return builder.apply("TSAsExpression", arguments);
+  return validateNode<t.TSAsExpression>({
+    type: "TSAsExpression",
+    expression,
+    typeAnnotation,
+  });
 }
 export { tsAsExpression as tSAsExpression };
 export function tsTypeAssertion(
   typeAnnotation: t.TSType,
   expression: t.Expression,
 ): t.TSTypeAssertion {
-  return builder.apply("TSTypeAssertion", arguments);
+  return validateNode<t.TSTypeAssertion>({
+    type: "TSTypeAssertion",
+    typeAnnotation,
+    expression,
+  });
 }
 export { tsTypeAssertion as tSTypeAssertion };
 export function tsEnumDeclaration(
   id: t.Identifier,
   members: Array<t.TSEnumMember>,
 ): t.TSEnumDeclaration {
-  return builder.apply("TSEnumDeclaration", arguments);
+  return validateNode<t.TSEnumDeclaration>({
+    type: "TSEnumDeclaration",
+    id,
+    members,
+  });
 }
 export { tsEnumDeclaration as tSEnumDeclaration };
 export function tsEnumMember(
   id: t.Identifier | t.StringLiteral,
-  initializer?: t.Expression | null,
+  initializer: t.Expression | null = null,
 ): t.TSEnumMember {
-  return builder.apply("TSEnumMember", arguments);
+  return validateNode<t.TSEnumMember>({
+    type: "TSEnumMember",
+    id,
+    initializer,
+  });
 }
 export { tsEnumMember as tSEnumMember };
 export function tsModuleDeclaration(
   id: t.Identifier | t.StringLiteral,
   body: t.TSModuleBlock | t.TSModuleDeclaration,
 ): t.TSModuleDeclaration {
-  return builder.apply("TSModuleDeclaration", arguments);
+  return validateNode<t.TSModuleDeclaration>({
+    type: "TSModuleDeclaration",
+    id,
+    body,
+  });
 }
 export { tsModuleDeclaration as tSModuleDeclaration };
 export function tsModuleBlock(body: Array<t.Statement>): t.TSModuleBlock {
-  return builder.apply("TSModuleBlock", arguments);
+  return validateNode<t.TSModuleBlock>({
+    type: "TSModuleBlock",
+    body,
+  });
 }
 export { tsModuleBlock as tSModuleBlock };
 export function tsImportType(
   argument: t.StringLiteral,
-  qualifier?: t.TSEntityName | null,
-  typeParameters?: t.TSTypeParameterInstantiation | null,
+  qualifier: t.TSEntityName | null = null,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
 ): t.TSImportType {
-  return builder.apply("TSImportType", arguments);
+  return validateNode<t.TSImportType>({
+    type: "TSImportType",
+    argument,
+    qualifier,
+    typeParameters,
+  });
 }
 export { tsImportType as tSImportType };
 export function tsImportEqualsDeclaration(
   id: t.Identifier,
   moduleReference: t.TSEntityName | t.TSExternalModuleReference,
 ): t.TSImportEqualsDeclaration {
-  return builder.apply("TSImportEqualsDeclaration", arguments);
+  return validateNode<t.TSImportEqualsDeclaration>({
+    type: "TSImportEqualsDeclaration",
+    id,
+    moduleReference,
+    isExport: null,
+  });
 }
 export { tsImportEqualsDeclaration as tSImportEqualsDeclaration };
 export function tsExternalModuleReference(
   expression: t.StringLiteral,
 ): t.TSExternalModuleReference {
-  return builder.apply("TSExternalModuleReference", arguments);
+  return validateNode<t.TSExternalModuleReference>({
+    type: "TSExternalModuleReference",
+    expression,
+  });
 }
 export { tsExternalModuleReference as tSExternalModuleReference };
 export function tsNonNullExpression(
   expression: t.Expression,
 ): t.TSNonNullExpression {
-  return builder.apply("TSNonNullExpression", arguments);
+  return validateNode<t.TSNonNullExpression>({
+    type: "TSNonNullExpression",
+    expression,
+  });
 }
 export { tsNonNullExpression as tSNonNullExpression };
 export function tsExportAssignment(
   expression: t.Expression,
 ): t.TSExportAssignment {
-  return builder.apply("TSExportAssignment", arguments);
+  return validateNode<t.TSExportAssignment>({
+    type: "TSExportAssignment",
+    expression,
+  });
 }
 export { tsExportAssignment as tSExportAssignment };
 export function tsNamespaceExportDeclaration(
   id: t.Identifier,
 ): t.TSNamespaceExportDeclaration {
-  return builder.apply("TSNamespaceExportDeclaration", arguments);
+  return validateNode<t.TSNamespaceExportDeclaration>({
+    type: "TSNamespaceExportDeclaration",
+    id,
+  });
 }
 export { tsNamespaceExportDeclaration as tSNamespaceExportDeclaration };
 export function tsTypeAnnotation(typeAnnotation: t.TSType): t.TSTypeAnnotation {
-  return builder.apply("TSTypeAnnotation", arguments);
+  return validateNode<t.TSTypeAnnotation>({
+    type: "TSTypeAnnotation",
+    typeAnnotation,
+  });
 }
 export { tsTypeAnnotation as tSTypeAnnotation };
 export function tsTypeParameterInstantiation(
   params: Array<t.TSType>,
 ): t.TSTypeParameterInstantiation {
-  return builder.apply("TSTypeParameterInstantiation", arguments);
+  return validateNode<t.TSTypeParameterInstantiation>({
+    type: "TSTypeParameterInstantiation",
+    params,
+  });
 }
 export { tsTypeParameterInstantiation as tSTypeParameterInstantiation };
 export function tsTypeParameterDeclaration(
   params: Array<t.TSTypeParameter>,
 ): t.TSTypeParameterDeclaration {
-  return builder.apply("TSTypeParameterDeclaration", arguments);
+  return validateNode<t.TSTypeParameterDeclaration>({
+    type: "TSTypeParameterDeclaration",
+    params,
+  });
 }
 export { tsTypeParameterDeclaration as tSTypeParameterDeclaration };
 export function tsTypeParameter(
-  constraint: t.TSType | null | undefined,
-  _default: t.TSType | null | undefined,
+  constraint: t.TSType | null | undefined = null,
+  _default: t.TSType | null | undefined = null,
   name: string,
 ): t.TSTypeParameter {
-  return builder.apply("TSTypeParameter", arguments);
+  return validateNode<t.TSTypeParameter>({
+    type: "TSTypeParameter",
+    constraint,
+    default: _default,
+    name,
+  });
 }
 export { tsTypeParameter as tSTypeParameter };
 /** @deprecated */
-function NumberLiteral(value: number): t.NumberLiteral {
+function NumberLiteral(value: number) {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return builder.apply("NumberLiteral", arguments);
+  return numericLiteral(value);
 }
 export { NumberLiteral as numberLiteral };
 /** @deprecated */
-function RegexLiteral(pattern: string, flags?: string): t.RegexLiteral {
+function RegexLiteral(pattern: string, flags: string = "") {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return builder.apply("RegexLiteral", arguments);
+  return regExpLiteral(pattern, flags);
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
-function RestProperty(argument: t.LVal): t.RestProperty {
+function RestProperty(argument: t.LVal) {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return builder.apply("RestProperty", arguments);
+  return restElement(argument);
 }
 export { RestProperty as restProperty };
 /** @deprecated */
-function SpreadProperty(argument: t.Expression): t.SpreadProperty {
+function SpreadProperty(argument: t.Expression) {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return builder.apply("SpreadProperty", arguments);
+  return spreadElement(argument);
 }
 export { SpreadProperty as spreadProperty };

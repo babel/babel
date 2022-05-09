@@ -32,7 +32,7 @@ describe("builders", function () {
           );
         }).toThrow(
           !process.env.BABEL_8_BREAKING
-            ? "Property name expected type of string but got null"
+            ? "Property name expected type of string but got undefined"
             : 'Property name of TSTypeParameter expected node to be of a type ["Identifier"] but instead got undefined',
         );
       });
