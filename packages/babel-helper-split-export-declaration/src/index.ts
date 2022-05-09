@@ -10,6 +10,8 @@ import {
 export default function splitExportDeclaration(exportDeclaration) {
   if (!exportDeclaration.isExportDeclaration()) {
     throw new Error("Only export declarations can be split.");
+  } else if (exportDeclaration.isExportAllDeclaration()) {
+    return;
   }
 
   // build specifiers that point back to this export declaration
