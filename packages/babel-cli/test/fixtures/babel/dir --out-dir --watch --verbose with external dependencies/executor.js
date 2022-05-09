@@ -64,4 +64,4 @@ function logFile(file) {
 setTimeout(() => {
   console.error("EXECUTOR TIMEOUT");
   process.exit(1);
-}, 20000);
+}, 5000);
