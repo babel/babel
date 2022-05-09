@@ -105,12 +105,11 @@ import type * as t from "../..";
     const objectFields = [["type", JSON.stringify(type)]];
     fieldNames.forEach(fieldName => {
       const field = definitions.NODE_FIELDS[type][fieldName];
-
-      const def = JSON.stringify(field.default);
       if (builderNames.includes(fieldName)) {
         const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
         objectFields.push([fieldName, bindingIdentifierName]);
       } else if (!field.optional) {
+        const def = JSON.stringify(field.default);
         objectFields.push([fieldName, def]);
       }
     });
