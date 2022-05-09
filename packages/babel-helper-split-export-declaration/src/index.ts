@@ -6,8 +6,14 @@ import {
   variableDeclaration,
   variableDeclarator,
 } from "@babel/types";
+import type * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
-export default function splitExportDeclaration(exportDeclaration) {
+export default function splitExportDeclaration(
+  exportDeclaration: NodePath<
+    t.ExportDefaultDeclaration | t.ExportNamedDeclaration
+  >,
+) {
   if (!exportDeclaration.isExportDeclaration()) {
     throw new Error("Only export declarations can be split.");
   } else if (exportDeclaration.isExportAllDeclaration()) {
@@ -15,18 +21,17 @@ export default function splitExportDeclaration(exportDeclaration) {
   }
 
   // build specifiers that point back to this export declaration
-  const isDefault = exportDeclaration.isExportDefaultDeclaration();
-  const declaration = exportDeclaration.get("declaration");
-  const isClassDeclaration = declaration.isClassDeclaration();
 
-  if (isDefault) {
+  if (exportDeclaration.isExportDefaultDeclaration()) {
+    const declaration = exportDeclaration.get("declaration");
     const standaloneDeclaration =
-      declaration.isFunctionDeclaration() || isClassDeclaration;
+      declaration.isFunctionDeclaration() || declaration.isClassDeclaration();
 
     const scope = declaration.isScope()
       ? declaration.scope.parent
       : declaration.scope;
 
+    // @ts-expect-error id is not defined in expressions other than function/class
     let id = declaration.node.id;
     let needBindingRegistration = false;
 
@@ -47,7 +52,11 @@ export default function splitExportDeclaration(exportDeclaration) {
     const updatedDeclaration = standaloneDeclaration
       ? declaration
       : variableDeclaration("var", [
-          variableDeclarator(cloneNode(id), declaration.node),
+          variableDeclarator(
+            cloneNode(id),
+            // @ts-expect-error When `standaloneDeclaration` is false, declaration must not be a Function/ClassDeclaration
+            declaration.node,
+          ),
         ]);
 
     const updatedExportDeclaration = exportNamedDeclaration(null, [
@@ -62,12 +71,14 @@ export default function splitExportDeclaration(exportDeclaration) {
     }
 
     return exportDeclaration;
-  }
-
-  if (exportDeclaration.get("specifiers").length > 0) {
+  } else if (
+    // @ts-expect-error TS can not narrow down to NodePath<t.ExportNamedDeclaration>
+    exportDeclaration.get("specifiers").length > 0
+  ) {
     throw new Error("It doesn't make sense to split exported specifiers.");
   }
 
+  const declaration = exportDeclaration.get("declaration");
   const bindingIdentifiers = declaration.getOuterBindingIdentifiers();
 
   const specifiers = Object.keys(bindingIdentifiers).map(name => {
