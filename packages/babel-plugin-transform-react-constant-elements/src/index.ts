@@ -197,7 +197,7 @@ export default declare((api, options: Options) => {
           current = current.parentPath;
           jsxScope = HOISTED.get(current.node);
         }
-        jsxScope ??= getHoistingScope(path.scope);
+        jsxScope ??= path.scope;
 
         const visitorState: VisitorState = {
           isImmutable: true,
@@ -212,7 +212,19 @@ export default declare((api, options: Options) => {
         HOISTED.set(path.node, targetScope);
 
         // Only hoist if it would give us an advantage.
-        if (targetScope === jsxScope) return;
+        for (let currentScope = jsxScope; ; ) {
+          if (targetScope === currentScope) return;
+          if (isHoistingScope(currentScope)) break;
+
+          currentScope = currentScope.parent;
+          if (!currentScope) {
+            throw new Error(
+              "Internal @babel/plugin-transform-react-constant-elements error: " +
+                "targetScope must be an ancestor of jsxScope. " +
+                "This is a Babel bug, please report it.",
+            );
+          }
+        }
 
         const id = path.scope.generateUidBasedOnNode(name);
         targetScope.push({ id: t.identifier(id) });
