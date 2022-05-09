@@ -17,22 +17,10 @@ const run = (async function* () {
   await new Promise(resolve => setTimeout(resolve, 2000));
   fs.writeFileSync("./file.txt", "Updated!");
 
-  // This test is flaky, sometimes `src/main.js` are not printed
-  let firstLog = yield;
-  if (firstLog.startsWith("Successfully")) {
-    assert.match(
-      firstLog,
-      /Successfully compiled 2 files with Babel \(\d+ms\)\./
-    );
-  } else {
-    [firstLog, secondLog, thirdLog] = [firstLog, yield, yield].sort();
-    assert.match(
-      firstLog,
-      /Successfully compiled 2 files with Babel \(\d+ms\)\./
-    );
-    assert.match(secondLog, /src[\\/]index.js -> lib[\\/]index.js/);
-    assert.match(thirdLog, /src[\\/]main.js -> lib[\\/]main.js/);
-  }
+  files = [yield, yield].sort();
+  assert.match(files[0], /src[\\/]index.js -> lib[\\/]index.js/);
+  assert.match(files[1], /src[\\/]main.js -> lib[\\/]main.js/);
+  assert.match(yield, /Successfully compiled 2 files with Babel \(\d+ms\)\./);
 
   logFile("lib/index.js");
   logFile("lib/main.js");
