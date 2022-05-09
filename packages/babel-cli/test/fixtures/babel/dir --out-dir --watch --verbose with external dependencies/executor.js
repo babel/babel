@@ -1,5 +1,6 @@
 const fs = require("fs");
 const assert = require("assert");
+const readline = require("readline");
 
 // For Node.js <= 10
 if (!assert.match) assert.match = (val, re) => assert(re.test(val));
@@ -41,9 +42,9 @@ run.next();
 
 const batchedStrings = [];
 let batchId = 0;
+const rl = readline.createInterface(process.stdin);
 
-process.stdin.on("data", async function listener(chunk) {
-  const str = String(chunk).trim();
+rl.on("line", async function listener(str) {
   if (!str) return;
 
   if (str.startsWith("src")) {
@@ -71,12 +72,6 @@ process.stdin.on("data", async function listener(chunk) {
 function logFile(file) {
   console.log("EXECUTOR", file, JSON.stringify(fs.readFileSync(file, "utf8")));
 }
-
-setTimeout(() => {
-  // when the watcher takes longer than 2s to setup
-  // write file again in 10 seconds
-  fs.writeFileSync("./file.txt", "Updated!");
-}, 10000);
 
 setTimeout(() => {
   console.error("EXECUTOR TIMEOUT");
