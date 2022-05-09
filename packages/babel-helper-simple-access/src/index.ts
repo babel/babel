@@ -20,7 +20,7 @@ type State = {
 };
 export default function simplifyAccess(
   path: NodePath,
-  bindingNames,
+  bindingNames: Set<string>,
   // TODO(Babel 8): Remove this
   includeUpdateExpression: boolean = true,
 ) {
