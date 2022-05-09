@@ -117,16 +117,16 @@ import type * as t from "../..";
 
     output += `${
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
-    }function ${formatedBuilderNameLocal}(${defArgs.join(
-      ", "
-    )}) {\n  const node: t.${type} = {\n${objectFields
+    }function ${formatedBuilderNameLocal}(${defArgs.join(", ")}): t.${type} {`;
+
+    const nodeObjectExpression = `{\n${objectFields
       .map(([k, v]) => (k === v ? `    ${k},` : `    ${k}: ${v},`))
-      .join("\n")}  };`;
+      .join("\n")}\n  }`;
 
     if (builderNames.length > 0) {
-      output += `\n  return validateNode(node);`;
+      output += `\n  return validateNode<t.${type}>(${nodeObjectExpression});`;
     } else {
-      output += `\n  return node;`;
+      output += `\n  return ${nodeObjectExpression};`;
     }
     output += `\n}\n`;
 
