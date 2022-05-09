@@ -1,5 +1,6 @@
 const fs = require("fs");
 const assert = require("assert");
+const readline = require("readline");
 
 // For Node.js <= 10
 if (!assert.match) assert.match = (val, re) => assert(re.test(val));
@@ -21,8 +22,9 @@ const run = (async function* () {
 
 run.next();
 
-process.stdin.on("data", async function listener(chunk) {
-  const str = String(chunk).trim();
+const rl = readline.createInterface(process.stdin);
+
+rl.on("line", async function listener(str) {
   if (!str) return;
 
   console.log(str);

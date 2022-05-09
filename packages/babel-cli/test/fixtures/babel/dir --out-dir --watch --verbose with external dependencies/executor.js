@@ -1,5 +1,6 @@
 const fs = require("fs");
 const assert = require("assert");
+const readline = require("readline");
 
 // For Node.js <= 10
 if (!assert.match) assert.match = (val, re) => assert(re.test(val));
@@ -29,9 +30,9 @@ run.next();
 
 const batchedStrings = [];
 let batchId = 0;
+const rl = readline.createInterface(process.stdin);
 
-process.stdin.on("data", async function listener(chunk) {
-  const str = String(chunk).trim();
+rl.on("line", async function listener(str) {
   if (!str) return;
 
   if (str.startsWith("src")) {
