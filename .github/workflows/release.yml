@@ -14,6 +14,9 @@ on:
         required: true
         default: patch
 
+permissions:
+  contents: read
+
 jobs:
   log-updates:
     name: Log packages to publish
@@ -32,6 +35,8 @@ jobs:
           fi;
 
   git-version:
+    permissions:
+      contents: write  # for Git to git push
     name: Create git tag and commit
     runs-on: ubuntu-latest
     needs: log-updates
@@ -135,6 +140,8 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
 
   github-push:
+    permissions:
+      contents: write  # for Git to git push
     name: Push release commit to "main"
     runs-on: ubuntu-latest
     needs: [npm-release, github-release, git-version]
