@@ -7,8 +7,13 @@ on:
   schedule:
     - cron: "0 0 * * 5"
 
+permissions:
+  contents: read
+
 jobs:
   createPullRequest:
+    permissions:
+      contents: write  # for Git to git push
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

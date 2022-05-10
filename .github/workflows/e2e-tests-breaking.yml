@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   e2e-publish:
     name: Publish to local Verdaccio registry

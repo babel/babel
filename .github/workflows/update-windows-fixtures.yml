@@ -7,8 +7,14 @@ on:
         description: Pull Request number
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   update-windows-fixtures:
+    permissions:
+      contents: read # to fetch code
+      pull-requests: read  # to get PR metadata
     runs-on: windows-latest
     steps:
       - name: Get Pull Request branch
