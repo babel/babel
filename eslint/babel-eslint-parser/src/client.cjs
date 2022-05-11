@@ -80,7 +80,7 @@ exports.WorkerClient = class WorkerClient extends Client {
           subChannel.port2,
         );
         if (resp) break;
-        Atomics.wait(this.#signal, 1, 0, 30);
+        Atomics.wait(this.#signal, 1, 0, 5);
       }
 
       const message = resp.message;
