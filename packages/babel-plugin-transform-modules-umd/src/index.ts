@@ -73,10 +73,10 @@ export default declare((api, options: Options) => {
    * Build the assignment statements that initialize the UMD global.
    */
   function buildBrowserInit(
-    browserGlobals,
-    exactGlobals,
-    filename,
-    moduleName,
+    browserGlobals: Record<string, string>,
+    exactGlobals: boolean,
+    filename: string,
+    moduleName: t.StringLiteral | void,
   ) {
     const moduleNameOrBasename = moduleName
       ? moduleName.value
@@ -121,17 +121,22 @@ export default declare((api, options: Options) => {
   /**
    * Build the member expression that reads from a global for a given source.
    */
-  function buildBrowserArg(browserGlobals, exactGlobals, source) {
-    let memberExpression;
+  function buildBrowserArg(
+    browserGlobals: Record<string, string>,
+    exactGlobals: boolean,
+    source: string,
+  ) {
+    let memberExpression: t.MemberExpression;
     if (exactGlobals) {
       const globalRef = browserGlobals[source];
       if (globalRef) {
         memberExpression = globalRef
           .split(".")
           .reduce(
-            (accum, curr) => t.memberExpression(accum, t.identifier(curr)),
+            (accum: t.Identifier | t.MemberExpression, curr) =>
+              t.memberExpression(accum, t.identifier(curr)),
             t.identifier("global"),
-          );
+          ) as t.MemberExpression;
       } else {
         memberExpression = t.memberExpression(
           t.identifier("global"),
@@ -159,9 +164,9 @@ export default declare((api, options: Options) => {
 
           const browserGlobals = globals || {};
 
-          let moduleName = getModuleName(this.file.opts, options);
-          // @ts-expect-error todo(flow->ts): do not reuse variables
-          if (moduleName) moduleName = t.stringLiteral(moduleName);
+          const moduleName = getModuleName(this.file.opts, options);
+          let moduleNameLiteral: void | t.StringLiteral;
+          if (moduleName) moduleNameLiteral = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
             path,
@@ -240,7 +245,8 @@ export default declare((api, options: Options) => {
           path.node.body = [];
           const umdWrapper = path.pushContainer("body", [
             buildWrapper({
-              MODULE_NAME: moduleName,
+              //todo: buildWrapper does not handle void moduleNameLiteral
+              MODULE_NAME: moduleNameLiteral,
 
               AMD_ARGUMENTS: t.arrayExpression(amdArgs),
               COMMONJS_ARGUMENTS: commonjsArgs,
@@ -251,7 +257,7 @@ export default declare((api, options: Options) => {
                 browserGlobals,
                 exactGlobals,
                 this.filename || "unknown",
-                moduleName,
+                moduleNameLiteral,
               ),
             }) as t.Statement,
           ])[0] as NodePath<t.ExpressionStatement>;
