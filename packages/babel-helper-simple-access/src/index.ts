@@ -134,7 +134,7 @@ const simpleAssignmentVisitor: Visitor<State> = {
         // (foo &&= bar) => (foo && foo = bar)
         path.replaceWith(
           logicalExpression(
-            // @ts-expect-error Guarded by
+            // @ts-expect-error Guarded by LOGICAL_OPERATORS.includes
             operator,
             path.node.left,
             assignmentExpression(
