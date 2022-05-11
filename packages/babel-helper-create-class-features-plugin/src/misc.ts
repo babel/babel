@@ -5,7 +5,7 @@ import environmentVisitor from "@babel/helper-environment-visitor";
 
 const findBareSupers = traverse.visitors.merge<NodePath<t.CallExpression>[]>([
   {
-    Super(path: NodePath<t.Super>) {
+    Super(path) {
       const { node, parentPath } = path;
       if (parentPath.isCallExpression({ callee: node })) {
         this.push(parentPath);
@@ -15,24 +15,29 @@ const findBareSupers = traverse.visitors.merge<NodePath<t.CallExpression>[]>([
   environmentVisitor,
 ]);
 
-const referenceVisitor = {
-  "TSTypeAnnotation|TypeAnnotation"(path: NodePath) {
+const referenceVisitor: Visitor<{ scope: Scope }> = {
+  "TSTypeAnnotation|TypeAnnotation"(
+    path: NodePath<t.TSTypeAnnotation | t.TypeAnnotation>,
+  ) {
     path.skip();
   },
 
-  ReferencedIdentifier(path: NodePath<t.Identifier>) {
-    if (this.scope.hasOwnBinding(path.node.name)) {
-      this.scope.rename(path.node.name);
+  ReferencedIdentifier(path: NodePath<t.Identifier>, { scope }) {
+    if (scope.hasOwnBinding(path.node.name)) {
+      scope.rename(path.node.name);
       path.skip();
     }
   },
 };
+
+type HandleClassTDZState = {
+  classBinding: Binding;
+  file: File;
+};
+
 function handleClassTDZ(
   path: NodePath<t.Identifier>,
-  state: {
-    classBinding: Binding;
-    file: File;
-  },
+  state: HandleClassTDZState,
 ) {
   if (
     state.classBinding &&
@@ -48,7 +53,7 @@ function handleClassTDZ(
   }
 }
 
-const classFieldDefinitionEvaluationTDZVisitor = {
+const classFieldDefinitionEvaluationTDZVisitor: Visitor<HandleClassTDZState> = {
   ReferencedIdentifier: handleClassTDZ,
 };
 
@@ -89,7 +94,7 @@ export function injectInitialization(
   }
 
   if (isDerived) {
-    const bareSupers = [];
+    const bareSupers: NodePath<t.CallExpression>[] = [];
     constructor.traverse(findBareSupers, bareSupers);
     let isFirst = true;
     for (const bareSuper of bareSupers) {
@@ -106,12 +111,11 @@ export function injectInitialization(
 }
 
 export function extractComputedKeys(
-  ref: t.Identifier,
   path: NodePath<t.Class>,
   computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[],
   file: File,
 ) {
-  const declarations: t.Statement[] = [];
+  const declarations: t.ExpressionStatement[] = [];
   const state = {
     classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
     file,

@@ -3,7 +3,7 @@ import type * as t from "@babel/types";
 type SourceMap = any;
 import type { Handler } from "gensync";
 
-import type { ResolvedConfig, PluginPasses } from "../config";
+import type { ResolvedConfig, Plugin, PluginPasses } from "../config";
 
 import PluginPass from "./plugin-pass";
 import loadBlockHoistPlugin from "./block-hoist-plugin";
@@ -79,7 +79,7 @@ export function* run(
 
 function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
   for (const pluginPairs of pluginPasses) {
-    const passPairs = [];
+    const passPairs: [Plugin, PluginPass][] = [];
     const passes = [];
     const visitors = [];
 
