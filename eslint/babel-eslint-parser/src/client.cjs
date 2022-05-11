@@ -60,7 +60,7 @@ exports.WorkerClient = class WorkerClient extends Client {
     { env: WorkerClient.#worker_threads.SHARE_ENV },
   );
 
-  #signal = new Int32Array(new SharedArrayBuffer(4));
+  #signal = new Int32Array(new SharedArrayBuffer(8));
 
   constructor() {
     super((action, payload) => {
@@ -73,10 +73,17 @@ exports.WorkerClient = class WorkerClient extends Client {
       );
 
       Atomics.wait(this.#signal, 0, 0);
-      const { message } = WorkerClient.#worker_threads.receiveMessageOnPort(
-        subChannel.port2,
-      );
 
+      let resp;
+      for (let i = 0; i < 100; i++) {
+        resp = WorkerClient.#worker_threads.receiveMessageOnPort(
+          subChannel.port2,
+        );
+        if (resp) break;
+        Atomics.wait(this.#signal, 1, 0, 30);
+      }
+
+      const message = resp.message;
       if (message.error) throw Object.assign(message.error, message.errorData);
       else return message.result;
     });
