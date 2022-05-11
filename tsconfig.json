@@ -576,6 +576,69 @@
       ],
       "@babel/plugin-codemod-optional-catch-binding": [
         "./codemods/babel-plugin-codemod-optional-catch-binding/src"
+      ],
+      "@babel/plugin-syntax-async-functions": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-async-generators": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-bigint": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-class-properties": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-class-static-block": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-dynamic-import": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-exponentiation-operator": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-export-extensions": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-export-namespace-from": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-import-meta": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-json-strings": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-logical-assignment-operators": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-module-string-names": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-nullish-coalescing-operator": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-numeric-separator": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-object-rest-spread": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-optional-catch-binding": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-optional-chaining": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-private-property-in-object": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-top-level-await": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-trailing-function-commas": [
+        "./lib/archived-libs.d.ts"
       ]
     }
   }
