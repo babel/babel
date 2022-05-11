@@ -93,7 +93,8 @@
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
-    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
+    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
+    "v8flags@^3.2.0": "patch:v8flags@npm:3.2.0#.yarn/patches/v8flags-npm-3.2.0-28770d6a95"
   },
   "engines": {
     "yarn": ">=1.4.0"

@@ -1065,7 +1065,7 @@ __metadata:
     node-environment-flags: ^1.0.5
     regenerator-runtime: ^0.13.4
     rimraf: ^3.0.0
-    v8flags: ^3.1.1
+    v8flags: ^3.2.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
   bin:
@@ -15191,12 +15191,21 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"v8flags@npm:^3.1.1, v8flags@npm:^3.2.0":
+"v8flags@npm:3.2.0":
   version: 3.2.0
   resolution: "v8flags@npm:3.2.0"
   dependencies:
     homedir-polyfill: ^1.0.1
   checksum: 193db08aa396d993da04d3d985450784aa0010f51613005d13ef97d7b2b9e1ba5aef04affa585037adece12de5ca532f6f5fc40288495eab55e2eebc201809d2
+  languageName: node
+  linkType: hard
+
+"v8flags@patch:v8flags@npm:3.2.0#.yarn/patches/v8flags-npm-3.2.0-28770d6a95::locator=babel%40workspace%3A.":
+  version: 3.2.0
+  resolution: "v8flags@patch:v8flags@npm%3A3.2.0#.yarn/patches/v8flags-npm-3.2.0-28770d6a95::version=3.2.0&hash=8b008d&locator=babel%40workspace%3A."
+  dependencies:
+    homedir-polyfill: ^1.0.1
+  checksum: 726db3174c73ea0a8c8229f3f6e69f0598861eba33c86195b63b78dea023e34842266ad660872dbf886629df4b02ecdd0be2bb67b57476791bd6e659249059d9
   languageName: node
   linkType: hard
 

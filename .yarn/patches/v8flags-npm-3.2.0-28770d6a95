@@ -1,0 +1,19 @@
+https://github.com/babel/babel/issues/14503
+
+diff --git a/index.js b/index.js
+index 0058c5af4c6a50c89029ee8a8764590e1055658d..4c74ee6305af188e65de06156344d5af7b537dec 100644
+--- a/index.js
++++ b/index.js
+@@ -14,9 +14,10 @@ var user = env.LOGNAME || env.USER || env.LNAME || env.USERNAME || '';
+ var exclusions = ['--help', '--completion_bash'];
+
+ // This number must be incremented whenever the generated cache file changes.
+-var CACHE_VERSION = 2;
++var CACHE_VERSION = 3;
+
+-var configfile = '.v8flags-' + CACHE_VERSION + '-' + process.versions.v8 + '.' + crypto.createHash('md5').update(user).digest('hex') + '.json';
++var configfile = '.v8flags-' + CACHE_VERSION + '-' + process.versions.v8 +
++  '.' + crypto.createHash('sha256').update(user).digest('hex') + '.json';
+
+ var failureMessage = [
+   'Unable to cache a config file for v8flags to your home directory',
