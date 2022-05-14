@@ -3,6 +3,7 @@ import type * as t from "..";
 import { isFile, isIdentifier } from "../validators/generated";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
+const commentsCache: Map<any, any> = new Map();
 
 // This function will never be called for comments, only for real nodes.
 function cloneIfNode(obj, deep, withoutLoc) {
@@ -32,6 +33,9 @@ export default function cloneNode<T extends t.Node>(
 ): T {
   if (!node) return node;
 
+  const isTop = !commentsCache.get("inCloning");
+  if (isTop) commentsCache.set("inCloning", true);
+
   const { type } = node;
   const newNode: any = { type: node.type };
 
@@ -49,6 +53,7 @@ export default function cloneNode<T extends t.Node>(
         : node.typeAnnotation;
     }
   } else if (!has(NODE_FIELDS, type)) {
+    if (isTop) commentsCache.clear();
     throw new Error(`Unknown node type: "${type}"`);
   } else {
     for (const field of Object.keys(NODE_FIELDS[type])) {
@@ -99,6 +104,8 @@ export default function cloneNode<T extends t.Node>(
     };
   }
 
+  if (isTop) commentsCache.clear();
+
   return newNode;
 }
 
@@ -110,10 +117,19 @@ function maybeCloneComments<T extends t.Comment>(
   if (!comments || !deep) {
     return comments;
   }
-  return comments.map(({ type, value, loc }) => {
+  return comments.map(comment => {
+    const cache = commentsCache.get(comment);
+    if (cache) return cache;
+
+    const { type, value, loc } = comment;
+
+    const ret = { type, value, loc } as T;
     if (withoutLoc) {
-      return { type, value, loc: null } as T;
+      ret.loc = null;
     }
-    return { type, value, loc } as T;
+
+    commentsCache.set(comment, ret);
+
+    return ret;
   });
 }
