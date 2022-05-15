@@ -89,10 +89,7 @@ if (process.env.BABEL_8_BREAKING) {
       return "uncolored";
     }
 
-    if (
-      token.type === "Invalid" &&
-      (token.value === "@" || token.value === "#")
-    ) {
+    if (token.type === "Invalid" && token.value === "@") {
       return "punctuator";
     }
 
