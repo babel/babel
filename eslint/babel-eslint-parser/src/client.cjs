@@ -72,18 +72,28 @@ exports.WorkerClient = class WorkerClient extends Client {
         [subChannel.port1],
       );
 
-      Atomics.wait(this.#signal, 0, 0);
+      let wakeReason = Atomics.wait(this.#signal, 0, 0);
 
-      let resp;
-      for (let i = 0; i < 100; i++) {
-        resp = WorkerClient.#worker_threads.receiveMessageOnPort(
+      let response;
+      let i = 0;
+      // Sometimes receiveMessageOnPort returns "undefined" instead of the
+      // actual response object. Try multiple times, with a timeout of 5ms
+      // on Atomic.wait starting from the second one.
+      do {
+        if (i > 0) wakeReason = Atomics.wait(this.#signal, 1, 0, 5);
+
+        response = WorkerClient.#worker_threads.receiveMessageOnPort(
           subChannel.port2,
         );
-        if (resp) break;
-        Atomics.wait(this.#signal, 1, 0, 5);
-      }
 
-      const message = resp.message;
+        if (i > 0 || !response) {
+          console.log(
+            `WORKER COMMUNICATION: i=${i}, wakeReason=${wakeReason}, hasResponse=${!!response}`,
+          );
+        }
+      } while (!response && i++ < 100);
+
+      const { message } = response;
       if (message.error) throw Object.assign(message.error, message.errorData);
       else return message.result;
     });
