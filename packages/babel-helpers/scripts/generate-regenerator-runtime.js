@@ -9,7 +9,7 @@ const [parse, generate] = await Promise.all([
 ]).catch(error =>
   Promise.reject(
     new Error(
-      "Before rnning generate-helpers.js you must compile @babel/parser, @babel/generator and @babel/types.",
+      "Before running generate-helpers.js you must compile @babel/parser, @babel/generator and @babel/types.",
       { cause: error }
     )
   )
@@ -32,10 +32,7 @@ const HEADER = `/* @minVersion ${MIN_VERSION} */
 /* eslint-disable */
 `;
 
-const COPYRIGHT =
-  `/*! Copyright (c) 2014-present, Facebook, Inc. --` +
-  ` This source code is licensed under the MIT license found at` +
-  ` https://github.com/facebook/regenerator/blob/main/LICENSE */`;
+const COPYRIGHT = `/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */`;
 
 export default function generateRegeneratorRuntimeHelper() {
   const ast = parse(REGENERATOR_RUNTIME_IN_FILE, { sourceType: "script" });

@@ -9,7 +9,7 @@
 export default function _regeneratorRuntime() {
   "use strict";
 
-  /*! Copyright (c) 2014-present, Facebook, Inc. -- This source code is licensed under the MIT license found at https://github.com/facebook/regenerator/blob/main/LICENSE */
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   _regeneratorRuntime = function () {
     return exports;
   };
