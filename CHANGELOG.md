@@ -20,6 +20,28 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.17.12 (2022-05-16)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-react-constant-elements`
+  * [#14536](https://github.com/babel/babel/pull/14536) Never hoist JSX elts referencing vars from the current scope ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#14524](https://github.com/babel/babel/pull/14524) fix: perserve parentheses of lhs id with rhs unamed fn ([@JLHwung](https://github.com/JLHwung))
+  * [#14532](https://github.com/babel/babel/pull/14532) Print necessary parentheses for functions in postfix expressions ([@xiawenqi](https://github.com/xiawenqi))
+* `babel-plugin-transform-destructuring`
+  * [#14494](https://github.com/babel/babel/pull/14494) Update scope info after destructuring transform ([@peey](https://github.com/peey))
+* `babel-parser`
+  * [#14522](https://github.com/babel/babel/pull/14522) fix: allow liberal named type-as imports ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-plugin-transform-destructuring`, `babel-types`
+  * [#14500](https://github.com/babel/babel/pull/14500) Fix parsing ts type casts and nested patterns in destructuring ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-plugin-proposal-decorators`, `babel-types`
+  * [#14519](https://github.com/babel/babel/pull/14519) @babel/types builder improvements ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#14490](https://github.com/babel/babel/pull/14490) Update to Jest 28 ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-generator`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-module-transforms`, `babel-helper-plugin-utils`, `babel-parser`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-external-helpers`, `babel-plugin-proposal-async-do-expressions`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-export-default-from`, `babel-plugin-proposal-export-namespace-from`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-json-strings`, `babel-plugin-proposal-logical-assignment-operators`, `babel-plugin-proposal-nullish-coalescing-operator`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-proposal-unicode-property-regex`, `babel-plugin-syntax-decorators`, `babel-plugin-syntax-destructuring-private`, `babel-plugin-syntax-flow`, `babel-plugin-syntax-import-assertions`, `babel-plugin-syntax-pipeline-operator`, `babel-plugin-syntax-record-and-tuple`, `babel-plugin-syntax-typescript`, `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-computed-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-duplicate-keys`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-for-of`, `babel-plugin-transform-instanceof`, `babel-plugin-transform-jscript`, `babel-plugin-transform-literals`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-plugin-transform-new-target`, `babel-plugin-transform-parameters`, `babel-plugin-transform-property-mutators`, `babel-plugin-transform-proto-to-assign`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-reserved-words`, `babel-plugin-transform-runtime`, `babel-plugin-transform-spread`, `babel-plugin-transform-template-literals`, `babel-plugin-transform-typeof-symbol`, `babel-plugin-transform-typescript`, `babel-preset-env`, `babel-preset-flow`, `babel-preset-react`, `babel-preset-typescript`, `babel-traverse`, `babel-types`
+  * [#14499](https://github.com/babel/babel/pull/14499) Provide plugin/preset typings from plugin-utils ([@JLHwung](https://github.com/JLHwung))
 ## v7.17.11 (2022-04-29)
 
 #### :bug: Bug Fix
