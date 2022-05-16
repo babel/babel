@@ -2,7 +2,9 @@
 // These mappings represent the syntax proposals that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
-const proposalPlugins = new Set();
+const proposalPlugins = new Set([
+  "syntax-import-assertions"
+]);
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = {

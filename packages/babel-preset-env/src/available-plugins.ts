@@ -5,6 +5,7 @@ import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
+import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
 import syntaxLogicalAssignmentOperators from "@babel/plugin-syntax-logical-assignment-operators";
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
@@ -104,6 +105,7 @@ export default {
   "syntax-class-static-block": () => syntaxClassStaticBlock,
   "syntax-dynamic-import": () => syntaxDynamicImport,
   "syntax-export-namespace-from": () => syntaxExportNamespaceFrom,
+  "syntax-import-assertions": () => syntaxImportAssertions,
   "syntax-json-strings": () => syntaxJsonStrings,
   "syntax-logical-assignment-operators": () => syntaxLogicalAssignmentOperators,
   "syntax-nullish-coalescing-operator": () => syntaxNullishCoalescingOperator,
