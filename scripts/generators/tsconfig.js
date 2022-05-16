@@ -1,7 +1,9 @@
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-import archivedSyntaxPkgs from "./archived-syntax-pkgs.json" assert { type: "json" };
+const archivedSyntaxPkgs = JSON.parse(
+  fs.readFileSync(new URL("./archived-syntax-pkgs.json", import.meta.url))
+);
 
 const root = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
