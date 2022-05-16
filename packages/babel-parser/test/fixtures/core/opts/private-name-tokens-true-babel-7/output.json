@@ -124,7 +124,7 @@
     {
       "type": {
         "label": "}",
-        "beforeExpr": true,
+        "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
