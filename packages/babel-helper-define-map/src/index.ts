@@ -17,8 +17,11 @@ import {
   toComputedKey,
   toKeyAlias,
 } from "@babel/types";
+import type { File } from "@babel/core";
+import type * as t from "@babel/types";
+import type { Scope } from "@babel/traverse";
 
-function toKind(node: any) {
+function toKind(node: t.Property | t.Method) {
   if (isClassMethod(node) || isObjectMethod(node)) {
     if (node.kind === "get" || node.kind === "set") {
       return node.kind;
@@ -30,12 +33,30 @@ function toKind(node: any) {
 
 const has = Function.prototype.call.bind(Object.prototype.hasOwnProperty);
 
-export function push(mutatorMap: any, node: any, kind: string, file, scope?) {
+type DefineMap = {
+  decorators: t.ArrayExpression;
+  _computed: boolean;
+  _inherits: t.Node[];
+  _key: t.Expression | t.PrivateName;
+  value?: t.Expression;
+  initializer?: t.Expression;
+  get?: t.Expression;
+  set?: t.Expression;
+  kind: "get" | "set" | "value" | "initializer";
+};
+
+export function push(
+  mutatorMap: any,
+  node: t.Property | t.Method,
+  kind: DefineMap["kind"],
+  file: File,
+  scope?: Scope,
+) {
   const alias = toKeyAlias(node);
 
   //
 
-  let map = {} as any;
+  let map = {} as DefineMap;
   if (has(mutatorMap, alias)) map = mutatorMap[alias];
   mutatorMap[alias] = map;
 
@@ -46,7 +67,10 @@ export function push(mutatorMap: any, node: any, kind: string, file, scope?) {
 
   map._key = node.key;
 
-  if (node.computed) {
+  if (
+    // @ts-expect-error computed is not in private property
+    node.computed
+  ) {
     map._computed = true;
   }
 
@@ -69,7 +93,7 @@ export function push(mutatorMap: any, node: any, kind: string, file, scope?) {
   }
 
   if (isProperty(node)) {
-    value = node.value;
+    value = node.value as t.Expression;
   } else if (isObjectMethod(node) || isClassMethod(node)) {
     value = functionExpression(
       null,
