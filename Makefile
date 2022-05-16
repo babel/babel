@@ -40,6 +40,7 @@ build-no-bundle: clean clean-lib
 
 generate-tsconfig:
 	$(NODE) scripts/generators/tsconfig.js
+	$(NODE) scripts/generators/archived-libs-typings.js
 
 generate-type-helpers:
 	$(YARN) gulp generate-type-helpers
