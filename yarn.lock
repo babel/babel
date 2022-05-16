@@ -1917,17 +1917,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-import-assertions@npm:^7.16.7":
-  version: 7.16.7
-  resolution: "@babel/plugin-syntax-import-assertions@npm:7.16.7"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.16.7
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 80148eea7ba24bf723b942ceec12a8c6166d38a7bcc4ad315bcc0c57b181f2fb47c0571557d3e6f8b8b683dec6eac32011a0d81586ab11ddc57ad49a7c1428e8
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-syntax-import-assertions@workspace:^, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions"
@@ -5897,7 +5886,6 @@ __metadata:
     "@babel/plugin-proposal-dynamic-import": ^7.16.7
     "@babel/plugin-proposal-export-namespace-from": ^7.16.7
     "@babel/plugin-proposal-object-rest-spread": ^7.16.7
-    "@babel/plugin-syntax-import-assertions": ^7.16.7
     "@babel/plugin-transform-modules-commonjs": ^7.16.8
     "@babel/plugin-transform-runtime": ^7.17.0
     "@babel/preset-env": ^7.16.11

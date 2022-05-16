@@ -169,8 +169,6 @@ module.exports = function (api) {
     ],
     plugins: [
       ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
-      // todo: remove this plugin when https://github.com/babel/babel/pull/14556 is merged
-      "@babel/plugin-syntax-import-assertions",
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? pluginImportMetaUrl : null,
