@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.17.10",
+  "version": "7.17.12",
   "description": "Babel compiler core.",
   "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
@@ -52,7 +52,7 @@
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.17.7",
+    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.17.12",
     "@babel/helpers": "workspace:^",
     "@babel/parser": "workspace:^",
     "@babel/template": "workspace:^",
