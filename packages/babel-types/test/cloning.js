@@ -153,7 +153,7 @@ describe("cloneNode", function () {
     expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(null);
   });
 
-  it("should same code after deep cloning", function () {
+  it("should generate same code after deep cloning", function () {
     let code = `//test1
     /*test2*/var/*test3*/ a = 1/*test4*/;//test5
     //test6
@@ -170,6 +170,6 @@ describe("cloneNode", function () {
     const newCode = new CodeGenerator(ast, { retainLines: true }).generate()
       .code;
 
-    expect(code).toBe(newCode);
+    expect(newCode).toBe(code);
   });
 });
