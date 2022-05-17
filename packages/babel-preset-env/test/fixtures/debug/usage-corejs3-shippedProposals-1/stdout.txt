@@ -50,6 +50,7 @@ Using plugins:
   proposal-export-namespace-from { chrome < 72, firefox < 80, ie }
   transform-modules-commonjs
   proposal-dynamic-import
+  syntax-import-assertions
 corejs3: `DEBUG` option
 
 Using targets: {

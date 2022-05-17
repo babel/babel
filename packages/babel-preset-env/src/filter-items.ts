@@ -4,6 +4,14 @@ import { minVersions } from "./available-plugins";
 // $FlowIgnore
 const has = Function.call.bind(Object.hasOwnProperty);
 
+export function addProposalSyntaxPlugins(
+  items: Set<string>,
+  proposalSyntaxPlugins: string[],
+) {
+  proposalSyntaxPlugins.forEach(plugin => {
+    items.add(plugin);
+  });
+}
 export function removeUnnecessaryItems(
   items: Set<string>,
   overlapping: { [name: string]: string[] },

@@ -23,5 +23,6 @@ Using plugins:
   transform-modules-commonjs
   proposal-dynamic-import
   proposal-export-namespace-from { }
+  syntax-import-assertions
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
