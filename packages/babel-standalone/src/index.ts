@@ -26,6 +26,7 @@ import presetEnv from "@babel/preset-env";
 import presetFlow from "@babel/preset-flow";
 import presetReact from "@babel/preset-react";
 import presetTypescript from "@babel/preset-typescript";
+import type { InputOptions } from "@babel/core";
 
 import { runScripts } from "./transformScriptTags";
 
@@ -40,7 +41,7 @@ const isArray =
  * Returns undefined if the preset or plugin is not available; passes through
  * name unmodified if it (or the first element of the pair) is not a string.
  */
-function loadBuiltin(builtinTable, name) {
+function loadBuiltin(builtinTable: Record<string, unknown>, name: any) {
   if (isArray(name) && typeof name[0] === "string") {
     if (Object.prototype.hasOwnProperty.call(builtinTable, name[0])) {
       return [builtinTable[name[0]]].concat(name.slice(1));
@@ -56,7 +57,7 @@ function loadBuiltin(builtinTable, name) {
 /**
  * Parses plugin names and presets from the specified options.
  */
-function processOptions(options) {
+function processOptions(options: InputOptions) {
   // Parse preset names
   const presets = (options.presets || []).map(presetName => {
     const preset = loadBuiltin(availablePresets, presetName);
@@ -100,15 +101,19 @@ function processOptions(options) {
   };
 }
 
-export function transform(code: string, options: any) {
+export function transform(code: string, options: InputOptions) {
   return babelTransform(code, processOptions(options));
 }
 
-export function transformFromAst(ast: any, code: string, options: any) {
+export function transformFromAst(
+  ast: any,
+  code: string,
+  options: InputOptions,
+) {
   return babelTransformFromAst(ast, code, processOptions(options));
 }
-export const availablePlugins = {};
-export const availablePresets = {};
+export const availablePlugins: typeof all = {};
+
 export const buildExternalHelpers = babelBuildExternalHelpers;
 /**
  * Registers a named plugin for use with Babel.
@@ -148,6 +153,7 @@ export function registerPreset(name: string, preset: any | Function): void {
       );
     }
   }
+  // @ts-expect-error mutating available presets
   availablePresets[name] = preset;
 }
 /**
@@ -170,7 +176,7 @@ registerPlugins(all);
 // All the presets we should bundle
 // Want to get rid of this list of allowed presets?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
-registerPresets({
+export const availablePresets = {
   env: presetEnv,
   es2015: preset2015,
   es2016: () => {
@@ -197,7 +203,7 @@ registerPresets({
   },
   typescript: presetTypescript,
   flow: presetFlow,
-});
+};
 
 // @ts-ignore VERSION is to be replaced by rollup
 export const version: string = VERSION;
@@ -216,7 +222,9 @@ if (typeof window !== "undefined" && window?.addEventListener) {
  * Transform <script> tags with "text/babel" type.
  * @param {Array} scriptTags specify script tags to transform, transform all in the <head> if not given
  */
-export function transformScriptTags(scriptTags?: Array<any>) {
+export function transformScriptTags(
+  scriptTags?: HTMLCollectionOf<HTMLScriptElement>,
+) {
   runScripts(transform, scriptTags);
 }
 
