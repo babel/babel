@@ -1,6 +1,9 @@
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+const archivedSyntaxPkgs = JSON.parse(
+  fs.readFileSync(new URL("./archived-syntax-pkgs.json", import.meta.url))
+);
 
 const root = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -38,9 +41,13 @@ fs.writeFileSync(
         extends: "./tsconfig.base.json",
         include: tsPkgs.map(({ relative }) => `${relative}/src/**/*.ts`),
         compilerOptions: {
-          paths: Object.fromEntries(
-            tsPkgs.map(({ name, relative }) => [name, [`${relative}/src`]])
-          ),
+          paths: Object.fromEntries([
+            ...tsPkgs.map(({ name, relative }) => [name, [`${relative}/src`]]),
+            ...archivedSyntaxPkgs.map(name => [
+              name,
+              ["./lib/archived-libs.d.ts"],
+            ]),
+          ]),
         },
       },
       null,
