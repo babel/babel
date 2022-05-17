@@ -412,13 +412,14 @@ helpers.isNativeReflectConstruct = helper("7.9.0")`
   }
 `;
 
+// need a bind because https://github.com/babel/babel/issues/14527
 helpers.construct = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
   import isNativeReflectConstruct from "isNativeReflectConstruct";
 
   export default function _construct(Parent, args, Class) {
     if (isNativeReflectConstruct()) {
-      _construct = Reflect.construct;
+      _construct = Reflect.construct.bind();
     } else {
       // NOTE: If Parent !== Class, the correct __proto__ is set *after*
       //       calling the constructor.
