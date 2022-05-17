@@ -212,6 +212,12 @@
       "@babel/helper-plugin-test-runner": [
         "./packages/babel-helper-plugin-test-runner/src"
       ],
+      "@babel/helper-plugin-test-runner/lib": [
+        "./packages/babel-helper-plugin-test-runner/src"
+      ],
+      "@babel/helper-plugin-test-runner/lib/index": [
+        "./packages/babel-helper-plugin-test-runner/src"
+      ],
       "@babel/helper-plugin-utils": [
         "./packages/babel-helper-plugin-utils/src"
       ],
@@ -496,6 +502,9 @@
       ],
       "@babel/plugin-transform-react-jsx": [
         "./packages/babel-plugin-transform-react-jsx/src"
+      ],
+      "@babel/plugin-transform-react-jsx/lib/development": [
+        "./packages/babel-plugin-transform-react-jsx/src/development.ts"
       ],
       "@babel/plugin-transform-react-jsx-compat": [
         "./packages/babel-plugin-transform-react-jsx-compat/src"

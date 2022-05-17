@@ -1,6 +1,11 @@
 import fs from "fs";
-const archivedSyntaxPkgs = JSON.parse(
-  fs.readFileSync(new URL("./archived-syntax-pkgs.json", import.meta.url))
+
+function importJSON(path) {
+  return JSON.parse(fs.readFileSync(path));
+}
+
+const archivedSyntaxPkgs = importJSON(
+  new URL("./archived-syntax-pkgs.json", import.meta.url)
 );
 
 const root = new URL("../../", import.meta.url);
@@ -11,9 +16,35 @@ function getTsPkgs(subRoot) {
     .filter(name => name.startsWith("babel-"))
     .map(name => {
       const relative = `./${subRoot}/${name}`;
+      const { exports = {} } = importJSON(
+        new URL(relative + "/package.json", root)
+      );
+      const subExports = Object.entries(exports).flatMap(
+        ([_export, exportPath]) => {
+          // The @babel/standalone has babel.js as exports, but we don't have src/babel.ts
+          if (name === "babel-standalone") {
+            return [["", "/src"]];
+          }
+          // [{esm, default}, "./lib/index.js"]
+          if (Array.isArray(exportPath)) {
+            exportPath = exportPath[1];
+          }
+          if (exportPath.startsWith("./lib") && exportPath.endsWith(".js")) {
+            // remove the leading `.` and trailing `.js`
+            const subExport = _export.slice(1).replace(/\.js$/, "");
+            const subExportPath = exportPath
+              .replace("./lib", "/src")
+              .replace(/\.js$/, ".ts")
+              .replace(/\/index\.ts$/, "");
+            return [[subExport, subExportPath]];
+          }
+          return [];
+        }
+      );
       return {
         name: name.replace(/^babel-/, "@babel/"),
         relative,
+        subExports,
       };
     })
     .filter(
@@ -39,7 +70,11 @@ fs.writeFileSync(
         include: tsPkgs.map(({ relative }) => `${relative}/src/**/*.ts`),
         compilerOptions: {
           paths: Object.fromEntries([
-            ...tsPkgs.map(({ name, relative }) => [name, [`${relative}/src`]]),
+            ...tsPkgs.flatMap(({ name, relative, subExports }) => {
+              return subExports.map(([subExport, subExportPath]) => {
+                return [name + subExport, [relative + subExportPath]];
+              });
+            }),
             ...archivedSyntaxPkgs.map(name => [
               name,
               ["./lib/archived-libs.d.ts"],
