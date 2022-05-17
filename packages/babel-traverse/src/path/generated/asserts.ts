@@ -518,6 +518,9 @@ export interface NodePathAssetions {
     opts?: object,
   ): asserts this is NodePath<t.TSIndexedAccessType>;
   assertTSInferType(opts?: object): asserts this is NodePath<t.TSInferType>;
+  assertTSInstantiationExpression(
+    opts?: object,
+  ): asserts this is NodePath<t.TSInstantiationExpression>;
   assertTSInterfaceBody(
     opts?: object,
   ): asserts this is NodePath<t.TSInterfaceBody>;

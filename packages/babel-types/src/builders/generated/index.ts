@@ -2098,10 +2098,12 @@ export function tsTypePredicate(
 export { tsTypePredicate as tSTypePredicate };
 export function tsTypeQuery(
   exprName: t.TSEntityName | t.TSImportType,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
 ): t.TSTypeQuery {
   return validateNode<t.TSTypeQuery>({
     type: "TSTypeQuery",
     exprName,
+    typeParameters,
   });
 }
 export { tsTypeQuery as tSTypeQuery };
@@ -2298,6 +2300,17 @@ export function tsTypeAliasDeclaration(
   });
 }
 export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
+export function tsInstantiationExpression(
+  expression: t.Expression,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
+): t.TSInstantiationExpression {
+  return validateNode<t.TSInstantiationExpression>({
+    type: "TSInstantiationExpression",
+    expression,
+    typeParameters,
+  });
+}
+export { tsInstantiationExpression as tSInstantiationExpression };
 export function tsAsExpression(
   expression: t.Expression,
   typeAnnotation: t.TSType,

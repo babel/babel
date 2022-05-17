@@ -3932,6 +3932,23 @@ export function isTSTypeAliasDeclaration(
 
   return false;
 }
+export function isTSInstantiationExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSInstantiationExpression {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "TSInstantiationExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSAsExpression(
   node: object | null | undefined,
   opts?: object | null,
@@ -4368,6 +4385,7 @@ export function isExpression(
     "PipelineTopicExpression" === nodeType ||
     "PipelineBareFunction" === nodeType ||
     "PipelinePrimaryTopicReference" === nodeType ||
+    "TSInstantiationExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||
@@ -5606,6 +5624,7 @@ export function isTypeScript(
     "TSInterfaceDeclaration" === nodeType ||
     "TSInterfaceBody" === nodeType ||
     "TSTypeAliasDeclaration" === nodeType ||
+    "TSInstantiationExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSEnumDeclaration" === nodeType ||

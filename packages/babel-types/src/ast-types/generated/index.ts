@@ -228,6 +228,7 @@ export type Node =
   | TSIndexSignature
   | TSIndexedAccessType
   | TSInferType
+  | TSInstantiationExpression
   | TSInterfaceBody
   | TSInterfaceDeclaration
   | TSIntersectionType
@@ -1825,6 +1826,7 @@ export interface TSTypePredicate extends BaseNode {
 export interface TSTypeQuery extends BaseNode {
   type: "TSTypeQuery";
   exprName: TSEntityName | TSImportType;
+  typeParameters?: TSTypeParameterInstantiation | null;
 }
 
 export interface TSTypeLiteral extends BaseNode {
@@ -1944,6 +1946,12 @@ export interface TSTypeAliasDeclaration extends BaseNode {
   typeParameters?: TSTypeParameterDeclaration | null;
   typeAnnotation: TSType;
   declare?: boolean | null;
+}
+
+export interface TSInstantiationExpression extends BaseNode {
+  type: "TSInstantiationExpression";
+  expression: Expression;
+  typeParameters?: TSTypeParameterInstantiation | null;
 }
 
 export interface TSAsExpression extends BaseNode {
@@ -2178,6 +2186,7 @@ export type Expression =
   | PipelineTopicExpression
   | PipelineBareFunction
   | PipelinePrimaryTopicReference
+  | TSInstantiationExpression
   | TSAsExpression
   | TSTypeAssertion
   | TSNonNullExpression;
@@ -2625,6 +2634,7 @@ export type TypeScript =
   | TSInterfaceDeclaration
   | TSInterfaceBody
   | TSTypeAliasDeclaration
+  | TSInstantiationExpression
   | TSAsExpression
   | TSTypeAssertion
   | TSEnumDeclaration

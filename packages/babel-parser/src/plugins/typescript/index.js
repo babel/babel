@@ -12,6 +12,8 @@ import {
   tt,
   type TokenType,
   tokenIsTemplate,
+  tokenCanStartExpression,
+  tokenIsBinaryOperator,
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
@@ -61,6 +63,12 @@ function assert(x: boolean): void {
   if (!x) {
     throw new Error("Assert fail");
   }
+}
+
+function tsTokenCanStartExpression(token: TokenType) {
+  // tsc considers binary operators as "can start expression" tokens:
+  // https://github.com/microsoft/TypeScript/blob/eca1b4/src/compiler/parser.ts#L4260-L4266
+  return tokenCanStartExpression(token) || tokenIsBinaryOperator(token);
 }
 
 type ParsingContext =
@@ -610,6 +618,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.exprName = this.tsParseImportType();
       } else {
         node.exprName = this.tsParseEntityName();
+      }
+      if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
+        node.typeParameters = this.tsParseTypeArguments();
       }
       return this.finishNode(node, "TSTypeQuery");
     }
@@ -1561,7 +1572,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
-        this.tsParseExpressionWithTypeArguments.bind(this),
+        () => {
+          const node: N.TsExpressionWithTypeArguments = this.startNode();
+          node.expression = this.tsParseEntityName();
+          if (this.match(tt.lt)) {
+            node.typeParameters = this.tsParseTypeArguments();
+          }
+
+          return this.finishNode(node, "TSExpressionWithTypeArguments");
+        },
       );
 
       if (!delimitedList.length) {
@@ -1572,16 +1591,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return delimitedList;
-    }
-
-    tsParseExpressionWithTypeArguments(): N.TsExpressionWithTypeArguments {
-      const node: N.TsExpressionWithTypeArguments = this.startNode();
-      node.expression = this.tsParseEntityName();
-      if (this.match(tt.lt)) {
-        node.typeParameters = this.tsParseTypeArguments();
-      }
-
-      return this.finishNode(node, "TSExpressionWithTypeArguments");
     }
 
     tsParseInterfaceDeclaration(
@@ -2294,48 +2303,69 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             }
           }
 
-          const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
-          node.callee = base;
-
           const typeArguments = this.tsParseTypeArgumentsInExpression();
+          if (!typeArguments) throw this.unexpected();
 
-          if (typeArguments) {
-            if (isOptionalCall && !this.match(tt.parenL)) {
-              missingParenErrorLoc = this.state.curPosition();
-              this.unexpected();
-            }
-
-            if (!noCalls && this.eat(tt.parenL)) {
-              // possibleAsync always false here, because we would have handled it above.
-              // $FlowIgnore (won't be any undefined arguments)
-              node.arguments = this.parseCallExpressionArguments(
-                tt.parenR,
-                /* possibleAsync */ false,
-              );
-
-              // Handles invalid case: `f<T>(a:b)`
-              this.tsCheckForInvalidTypeCasts(node.arguments);
-
-              node.typeParameters = typeArguments;
-              if (state.optionalChainMember) {
-                // $FlowIgnore
-                node.optional = isOptionalCall;
-              }
-
-              return this.finishCallExpression(node, state.optionalChainMember);
-            } else if (tokenIsTemplate(this.state.type)) {
-              const result = this.parseTaggedTemplateExpression(
-                base,
-                startPos,
-                startLoc,
-                state,
-              );
-              result.typeParameters = typeArguments;
-              return result;
-            }
+          if (isOptionalCall && !this.match(tt.parenL)) {
+            missingParenErrorLoc = this.state.curPosition();
+            throw this.unexpected();
           }
 
-          this.unexpected();
+          if (tokenIsTemplate(this.state.type)) {
+            const result = this.parseTaggedTemplateExpression(
+              base,
+              startPos,
+              startLoc,
+              state,
+            );
+            result.typeParameters = typeArguments;
+            return result;
+          }
+
+          if (!noCalls && this.eat(tt.parenL)) {
+            const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
+            node.callee = base;
+            // possibleAsync always false here, because we would have handled it above.
+            // $FlowIgnore (won't be any undefined arguments)
+            node.arguments = this.parseCallExpressionArguments(
+              tt.parenR,
+              /* possibleAsync */ false,
+            );
+
+            // Handles invalid case: `f<T>(a:b)`
+            this.tsCheckForInvalidTypeCasts(node.arguments);
+
+            node.typeParameters = typeArguments;
+            if (state.optionalChainMember) {
+              // $FlowIgnore
+              node.optional = isOptionalCall;
+            }
+
+            return this.finishCallExpression(node, state.optionalChainMember);
+          }
+
+          // TODO: This doesn't exactly match what TS does when it comes to ASI.
+          // For example,
+          //   a<b>
+          //   if (0);
+          // is not valid TS code (https://github.com/microsoft/TypeScript/issues/48654)
+          // However, it should correctly parse anything that is correctly parsed by TS.
+          if (
+            tsTokenCanStartExpression(this.state.type) &&
+            this.state.type !== tt.parenL
+          ) {
+            // Bail out. We have something like a<b>c, which is not an expression with
+            // type arguments but an (a < b) > c comparison.
+            throw this.unexpected();
+          }
+
+          const node: N.TsInstantiationExpression = this.startNodeAt(
+            startPos,
+            startLoc,
+          );
+          node.expression = base;
+          node.typeParameters = typeArguments;
+          return this.finishNode(node, "TSInstantiationExpression");
         });
 
         if (missingParenErrorLoc) {
@@ -2348,22 +2378,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseSubscript(base, startPos, startLoc, noCalls, state);
     }
 
-    parseNewArguments(node: N.NewExpression): void {
-      // tsTryParseAndCatch is expensive, so avoid if not necessary.
-      // 99% certain this is `new C<T>();`. But may be `new C < T;`, which is also legal.
-      // Also handles `new C<<T>`
-      if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
-        const typeParameters = this.tsTryParseAndCatch(() => {
-          const args = this.tsParseTypeArgumentsInExpression();
-          if (!this.match(tt.parenL)) this.unexpected();
-          return args;
-        });
-        if (typeParameters) {
-          node.typeParameters = typeParameters;
-        }
-      }
+    parseNewCallee(node: N.NewExpression): void {
+      super.parseNewCallee(node);
 
-      super.parseNewArguments(node);
+      const { callee } = node;
+      if (
+        callee.type === "TSInstantiationExpression" &&
+        !callee.extra?.parenthesized
+      ) {
+        node.typeParameters = callee.typeParameters;
+        node.callee = callee.expression;
+      }
     }
 
     parseExprOp(

@@ -94,6 +94,7 @@ export function NewExpression(
   this.print(node.typeParameters, node); // TS
 
   if (node.optional) {
+    // TODO: This can never happen
     this.token("?.");
   }
   this.token("(");

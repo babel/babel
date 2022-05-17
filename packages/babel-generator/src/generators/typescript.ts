@@ -265,6 +265,10 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
   this.word("typeof");
   this.space();
   this.print(node.exprName);
+
+  if (node.typeParameters) {
+    this.print(node.typeParameters, node);
+  }
 }
 
 export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
@@ -512,6 +516,14 @@ export function TSTypeAssertion(this: Printer, node: t.TSTypeAssertion) {
   this.token(">");
   this.space();
   this.print(expression, node);
+}
+
+export function TSInstantiationExpression(
+  this: Printer,
+  node: t.TSInstantiationExpression,
+) {
+  this.print(node.expression, node);
+  this.print(node.typeParameters, node);
 }
 
 export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {

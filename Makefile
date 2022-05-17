@@ -1,6 +1,6 @@
 FLOW_COMMIT = 92bbb5e9dacb8185aa73ea343954d0434b42c40b
 TEST262_COMMIT = 509363bcfd24b3476dc106eabc0ac856ed5eb51d
-TYPESCRIPT_COMMIT = b53073bf66571b4c99f0a93b8f76fb06b36d8991
+TYPESCRIPT_COMMIT = ce85d647ef88183c019588bcf398320ce29b625a
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -148,7 +148,7 @@ test-flow-update-allowlist:
 bootstrap-typescript:
 	rm -rf ./build/typescript
 	mkdir -p ./build
-	git clone --single-branch --shallow-since=2021-05-01 https://github.com/microsoft/TypeScript.git ./build/typescript
+	git clone --single-branch --shallow-since=2022-04-01 https://github.com/microsoft/TypeScript.git ./build/typescript
 	cd build/typescript && git checkout -q $(TYPESCRIPT_COMMIT)
 
 test-typescript:

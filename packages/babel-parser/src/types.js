@@ -1417,6 +1417,7 @@ export type TsTypePredicate = TsTypeBase & {
 export type TsTypeQuery = TsTypeBase & {
   type: "TSTypeQuery",
   exprName: TsEntityName | TsImportType,
+  typeParameters?: TsTypeParameterInstantiation,
 };
 
 export type TsTypeLiteral = TsTypeBase & {
@@ -1630,6 +1631,12 @@ export type TsTypeAssertion = TsTypeAssertionLikeBase & {
 export type TsNonNullExpression = NodeBase & {
   type: "TSNonNullExpression",
   expression: Expression,
+};
+
+export type TsInstantiationExpression = NodeBase & {
+  type: "TSInstantiationExpression",
+  expression: Expression,
+  typeParameters: TsTypeParameterInstantiation,
 };
 
 // ================

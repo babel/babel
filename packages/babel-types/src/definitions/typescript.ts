@@ -238,9 +238,10 @@ defineType("TSTypePredicate", {
 
 defineType("TSTypeQuery", {
   aliases: ["TSType"],
-  visitor: ["exprName"],
+  visitor: ["exprName", "typeParameters"],
   fields: {
     exprName: validateType(["TSEntityName", "TSImportType"]),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -446,6 +447,15 @@ defineType("TSTypeAliasDeclaration", {
     id: validateType("Identifier"),
     typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
     typeAnnotation: validateType("TSType"),
+  },
+});
+
+defineType("TSInstantiationExpression", {
+  aliases: ["Expression"],
+  visitor: ["expression", "typeParameters"],
+  fields: {
+    expression: validateType("Expression"),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 

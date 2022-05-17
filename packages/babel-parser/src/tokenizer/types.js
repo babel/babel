@@ -411,6 +411,10 @@ export function tokenOperatorPrecedence(token: TokenType): number {
   return tokenBinops[token];
 }
 
+export function tokenIsBinaryOperator(token: TokenType): boolean {
+  return tokenBinops[token] !== -1;
+}
+
 export function tokenIsRightAssociative(token: TokenType): boolean {
   return token === tt.exponent;
 }

@@ -34,6 +34,7 @@ import {
   isSwitchStatement,
   isTSArrayType,
   isTSAsExpression,
+  isTSInstantiationExpression,
   isTSIntersectionType,
   isTSNonNullExpression,
   isTSOptionalType,
@@ -217,6 +218,19 @@ export { TSUnionType as TSIntersectionType };
 
 export function TSInferType(node: any, parent: any): boolean {
   return isTSArrayType(parent) || isTSOptionalType(parent);
+}
+
+export function TSInstantiationExpression(
+  node: t.TSInstantiationExpression,
+  parent: t.Node,
+) {
+  return (
+    (isCallExpression(parent) ||
+      isOptionalCallExpression(parent) ||
+      isNewExpression(parent) ||
+      isTSInstantiationExpression(parent)) &&
+    !!parent.typeParameters
+  );
 }
 
 export function BinaryExpression(node: any, parent: any): boolean {

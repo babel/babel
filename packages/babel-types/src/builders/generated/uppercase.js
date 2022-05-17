@@ -240,6 +240,7 @@ export {
   tsInterfaceDeclaration as TSInterfaceDeclaration,
   tsInterfaceBody as TSInterfaceBody,
   tsTypeAliasDeclaration as TSTypeAliasDeclaration,
+  tsInstantiationExpression as TSInstantiationExpression,
   tsAsExpression as TSAsExpression,
   tsTypeAssertion as TSTypeAssertion,
   tsEnumDeclaration as TSEnumDeclaration,
