@@ -2098,11 +2098,12 @@ export function tsTypePredicate(
 export { tsTypePredicate as tSTypePredicate };
 export function tsTypeQuery(
   exprName: t.TSEntityName | t.TSImportType,
-  typeParameters?: t.TSTypeParameterInstantiation | null,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
 ): t.TSTypeQuery {
   return validateNode<t.TSTypeQuery>({
     type: "TSTypeQuery",
     exprName,
+    typeParameters,
   });
 }
 export { tsTypeQuery as tSTypeQuery };
