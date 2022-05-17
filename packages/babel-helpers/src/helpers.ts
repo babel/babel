@@ -289,9 +289,10 @@ helpers.defineProperty = helper("7.0.0-beta.0")`
   }
 `;
 
+// need a bind because https://github.com/babel/babel/issues/14527
 helpers.extends = helper("7.0.0-beta.0")`
   export default function _extends() {
-    _extends = Object.assign || function (target) {
+    _extends = Object.assign.bind() || function (target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i];
         for (var key in source) {
@@ -660,6 +661,7 @@ helpers.superPropBase = helper("7.0.0-beta.0")`
   }
 `;
 
+// need a bind because https://github.com/babel/babel/issues/14527
 // https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get
 //
 //  28.1.5 Reflect.get ( target, propertyKey [ , receiver ] )
@@ -669,7 +671,7 @@ helpers.get = helper("7.0.0-beta.0")`
 
   export default function _get() {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get = Reflect.get;
+      _get = Reflect.get.bind();
     } else {
       _get = function _get(target, property, receiver) {
         var base = superPropBase(target, property);
