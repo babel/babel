@@ -43,13 +43,14 @@ function takeDecorators(node: Decorable) {
 type AcceptedElement = Exclude<ClassElement, t.TSIndexSignature>;
 type SupportedElement = Exclude<
   AcceptedElement,
-  t.ClassPrivateMethod | t.ClassPrivateProperty | t.ClassAccessorProperty
+  | t.ClassPrivateMethod
+  | t.ClassPrivateProperty
+  | t.ClassAccessorProperty
+  | t.StaticBlock
 >;
 
 function getKey(node: SupportedElement) {
-  if (node.type === "StaticBlock") {
-    return;
-  } else if (node.computed) {
+  if (node.computed) {
     return node.key;
   } else if (t.isIdentifier(node.key)) {
     return t.stringLiteral(node.key.name);
@@ -83,6 +84,11 @@ function extractElementDescriptor(
       `Accessor properties are not supported in 2018-09 decorator transform, please specify { "version": "2021-12" } instead.`,
     );
   }
+  if (path.node.type === "StaticBlock") {
+    throw path.buildCodeFrameError(
+      `Static blocks are not supported in 2018-09 decorator transform, please specify { "version": "2021-12" } instead.`,
+    );
+  }
 
   const { node, scope } = path as NodePath<SupportedElement>;
 
@@ -97,10 +103,7 @@ function extractElementDescriptor(
   const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(t.isClassMethod(node) ? node.kind : "field")),
     prop("decorators", takeDecorators(node as Decorable)),
-    prop(
-      "static",
-      node.type !== "StaticBlock" && node.static && t.booleanLiteral(true),
-    ),
+    prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
   ].filter(Boolean);
 
