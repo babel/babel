@@ -134,6 +134,7 @@ export default declare<State>((api, options: Options) => {
               allowTopLevelThis,
               importInterop,
               noInterop,
+              filename: this.file.opts.filename,
             },
           );
 

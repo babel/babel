@@ -58,6 +58,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     importInterop = noInterop ? "none" : "babel",
     lazy,
     esNamespaceOnly,
+    filename,
 
     constantReexports = loose,
     enumerableModuleMeta = loose,
@@ -72,6 +73,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     noInterop?;
     lazy?;
     esNamespaceOnly?;
+    filename: string | undefined;
     constantReexports?;
     enumerableModuleMeta?;
     noIncompleteNsImportDetection?: boolean;
@@ -86,6 +88,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     initializeReexports: constantReexports,
     lazy,
     esNamespaceOnly,
+    filename,
   });
 
   if (!allowTopLevelThis) {

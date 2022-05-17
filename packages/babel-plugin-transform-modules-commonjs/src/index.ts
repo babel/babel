@@ -225,6 +225,7 @@ export default declare((api, options: Options) => {
                   ? mjsStrictNamespace
                   : strictNamespace,
               noIncompleteNsImportDetection,
+              filename: this.file.opts.filename,
             },
           );
 
