@@ -181,7 +181,7 @@ export function shouldTransform(path: NodePath<t.Class>, file: File): boolean {
   if (privateMethodPath && !hasFeature(file, FEATURES.privateMethods)) {
     throw privateMethodPath.buildCodeFrameError(
       "Class private methods are not enabled. " +
-        "Please add `@babel/plugin-proposal-private-method` to your configuration.",
+        "Please add `@babel/plugin-proposal-private-methods` to your configuration.",
     );
   }
 

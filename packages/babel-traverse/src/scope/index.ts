@@ -1019,7 +1019,9 @@ export default class Scope {
   }) {
     let path = this.path;
 
-    if (!path.isBlockStatement() && !path.isProgram()) {
+    if (path.isPattern()) {
+      path = this.getPatternParent().path;
+    } else if (!path.isBlockStatement() && !path.isProgram()) {
       path = this.getBlockParent().path;
     }
 
@@ -1094,6 +1096,23 @@ export default class Scope {
         return scope;
       }
     } while ((scope = scope.parent));
+    throw new Error(
+      "We couldn't find a BlockStatement, For, Switch, Function, Loop or Program...",
+    );
+  }
+
+  /**
+   * Walk up from a pattern scope (function param initializer) until we hit a non-pattern scope,
+   * then returns its block parent
+   * @returns An ancestry scope whose path is a block parent
+   */
+  getPatternParent() {
+    let scope: Scope = this;
+    do {
+      if (!scope.path.isPattern()) {
+        return scope.getBlockParent();
+      }
+    } while ((scope = scope.parent.parent));
     throw new Error(
       "We couldn't find a BlockStatement, For, Switch, Function, Loop or Program...",
     );

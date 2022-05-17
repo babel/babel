@@ -3,6 +3,27 @@ import type { File } from "@babel/core";
 import type { Scope, NodePath } from "@babel/traverse";
 import type { TraversalAncestors } from "@babel/types";
 
+export function unshiftForXStatementBody(
+  statementPath: NodePath<t.ForXStatement>,
+  newStatements: t.Statement[],
+) {
+  statementPath.ensureBlock();
+  const { scope, node } = statementPath;
+  const bodyScopeBindings = statementPath.get("body").scope.bindings;
+  const hasShadowedBlockScopedBindings = Object.keys(bodyScopeBindings).some(
+    name => scope.hasBinding(name),
+  );
+
+  if (hasShadowedBlockScopedBindings) {
+    // handle shadowed variables referenced in computed keys:
+    // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
+    node.body = t.blockStatement([...newStatements, node.body]);
+  } else {
+    // @ts-ignore statementPath.ensureBlock() has been called, node.body is always a BlockStatement
+    node.body.body.unshift(...newStatements);
+  }
+}
+
 /**
  * Test if an ArrayPattern's elements contain any RestElements.
  */
@@ -290,7 +311,10 @@ export class DestructuringTransformer {
         const key = prop.key;
         if (prop.computed && !this.scope.isPure(key)) {
           const name = this.scope.generateUidIdentifierBasedOnNode(key);
-          this.nodes.push(this.buildVariableDeclaration(name, key));
+          this.nodes.push(
+            //@ts-expect-error PrivateName has been handled by destructuring-private
+            this.buildVariableDeclaration(name, key),
+          );
           if (!copiedPattern) {
             copiedPattern = pattern = {
               ...pattern,
@@ -630,7 +654,7 @@ export function convertAssignmentExpression(
   objectRestNoSymbols: boolean,
   useBuiltIns: boolean,
 ) {
-  const { node, scope } = path;
+  const { node, scope, parentPath } = path;
 
   const nodes = [];
 
@@ -646,7 +670,11 @@ export function convertAssignmentExpression(
   });
 
   let ref: t.Identifier | void;
-  if (path.isCompletionRecord() || !path.parentPath.isExpressionStatement()) {
+  if (
+    (!parentPath.isExpressionStatement() &&
+      !parentPath.isSequenceExpression()) ||
+    path.isCompletionRecord()
+  ) {
     ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
     nodes.push(
@@ -661,7 +689,7 @@ export function convertAssignmentExpression(
   destructuring.init(node.left, ref || node.right);
 
   if (ref) {
-    if (path.parentPath.isArrowFunctionExpression()) {
+    if (parentPath.isArrowFunctionExpression()) {
       path.replaceWith(t.blockStatement([]));
       nodes.push(t.returnStatement(t.cloneNode(ref)));
     } else {

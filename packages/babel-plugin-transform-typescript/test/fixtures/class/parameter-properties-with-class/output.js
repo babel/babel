@@ -1,10 +1,6 @@
-let Person = /*#__PURE__*/function () {
+let Person = /*#__PURE__*/babelHelpers.createClass(function Person(name) {
   "use strict";
 
-  function Person(name) {
-    babelHelpers.classCallCheck(this, Person);
-    this.name = name;
-  }
-
-  return babelHelpers.createClass(Person);
-}();
+  babelHelpers.classCallCheck(this, Person);
+  this.name = name;
+});

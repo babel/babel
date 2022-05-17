@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "proposal-destructuring-private",
+    "proposal-class-static-block",
+    "proposal-class-properties",
+    "proposal-private-methods"
+  ],
+  "minNodeVersion": "8.0.0"
+}

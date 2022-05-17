@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "proposal-do-expressions",
+    "proposal-destructuring-private",
+    "proposal-class-static-block",
+    "proposal-class-properties",
+    "proposal-private-methods",
+    ["proposal-object-rest-spread", { "useBuiltIns": true }]
+  ]
+}

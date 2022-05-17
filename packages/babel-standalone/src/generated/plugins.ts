@@ -28,6 +28,7 @@ import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-genera
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
 import proposalClassStaticBlock from "@babel/plugin-proposal-class-static-block";
 import proposalDecorators from "@babel/plugin-proposal-decorators";
+import proposalDestructuringPrivate from "@babel/plugin-proposal-destructuring-private";
 import proposalDoExpressions from "@babel/plugin-proposal-do-expressions";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
@@ -124,6 +125,7 @@ export {
   proposalClassProperties,
   proposalClassStaticBlock,
   proposalDecorators,
+  proposalDestructuringPrivate,
   proposalDoExpressions,
   proposalDynamicImport,
   proposalExportDefaultFrom,
@@ -221,6 +223,7 @@ export const all: { [k: string]: any } = {
   "proposal-class-properties": proposalClassProperties,
   "proposal-class-static-block": proposalClassStaticBlock,
   "proposal-decorators": proposalDecorators,
+  "proposal-destructuring-private": proposalDestructuringPrivate,
   "proposal-do-expressions": proposalDoExpressions,
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-export-default-from": proposalExportDefaultFrom,

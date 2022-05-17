@@ -593,7 +593,14 @@ export interface ObjectMethod extends BaseNode {
 
 export interface ObjectProperty extends BaseNode {
   type: "ObjectProperty";
-  key: Expression | Identifier | StringLiteral | NumericLiteral;
+  key:
+    | Expression
+    | Identifier
+    | StringLiteral
+    | NumericLiteral
+    | BigIntLiteral
+    | DecimalLiteral
+    | PrivateName;
   value: Expression | PatternLike;
   computed: boolean;
   shorthand: boolean;

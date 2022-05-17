@@ -902,5 +902,30 @@ describe("scope", () => {
       `);
       expect(program.scope.hasOwnBinding("class")).toBe(true);
     });
+    it("registers the new binding outside function when the path is a param initializer", () => {
+      const program = getPath("(a = f()) => {}");
+      const assignmentPattern = program.get("body.0.expression.params.0");
+      assignmentPattern.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "var ref;
+
+        (a = f()) => {};"
+      `);
+      expect(program.scope.hasOwnBinding("ref")).toBe(true);
+    });
+    it("registers the new binding outside class method when the path is a param initializer", () => {
+      const program = getPath("class C { m(a = f()) {} }");
+      const assignmentPattern = program.get("body.0.body.body.0.params.0");
+      assignmentPattern.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "var ref;
+
+        class C {
+          m(a = f()) {}
+
+        }"
+      `);
+      expect(program.scope.hasOwnBinding("ref")).toBe(true);
+    });
   });
 });

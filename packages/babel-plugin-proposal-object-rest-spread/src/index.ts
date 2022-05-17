@@ -127,6 +127,7 @@ export default declare((api, opts: Options) => {
           ),
         );
       } else {
+        // @ts-expect-error private name has been handled by destructuring-private
         keys.push(t.cloneNode(prop.key));
         allLiteral = false;
       }
@@ -143,7 +144,8 @@ export default declare((api, opts: Options) => {
   ) {
     const impureComputedPropertyDeclarators: t.VariableDeclarator[] = [];
     for (const propPath of properties) {
-      const key = propPath.get("key");
+      // PrivateName is handled in destructuring-private plugin
+      const key = propPath.get("key") as NodePath<t.Expression>;
       if (propPath.node.computed && !key.isPure()) {
         const name = scope.generateUidBasedOnNode(key.node);
         const declarator = t.variableDeclarator(t.identifier(name), key.node);

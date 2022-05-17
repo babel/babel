@@ -1304,6 +1304,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-destructuring-private@workspace:^, @babel/plugin-proposal-destructuring-private@workspace:packages/babel-plugin-proposal-destructuring-private":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-destructuring-private@workspace:packages/babel-plugin-proposal-destructuring-private"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-destructuring-private": "workspace:^"
+    "@babel/plugin-transform-destructuring": "workspace:^"
+    "@babel/plugin-transform-parameters": "workspace:^"
+    "@babel/traverse": "workspace:^"
+    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.17.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-do-expressions@workspace:^, @babel/plugin-proposal-do-expressions@workspace:packages/babel-plugin-proposal-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-do-expressions@workspace:packages/babel-plugin-proposal-do-expressions"
@@ -3575,6 +3592,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": "workspace:^"
     "@babel/plugin-proposal-class-static-block": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"
+    "@babel/plugin-proposal-destructuring-private": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
     "@babel/plugin-proposal-dynamic-import": "workspace:^"
     "@babel/plugin-proposal-export-default-from": "workspace:^"

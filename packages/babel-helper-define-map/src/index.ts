@@ -121,7 +121,11 @@ export function toComputedObjectFromClass(obj: any) {
     const prop = obj.properties[i];
     const val = prop.value;
     val.properties.unshift(
-      objectProperty(identifier("key"), toComputedKey(prop)),
+      objectProperty(
+        identifier("key"),
+        // @ts-expect-error toComputedObjectFromClass is not used, maybe we can remove it
+        toComputedKey(prop),
+      ),
     );
     objExpr.elements.push(val);
   }
