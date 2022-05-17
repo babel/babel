@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Expected number in radix 16. (1:2)",
+    "Identifier directly after number. (1:2)"
+  ],
+  "type": "File"
+}

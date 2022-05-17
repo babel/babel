@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "This member cannot have an 'override' modifier because its containing class does not extend another class. (2:2)",
+    "Unexpected token (2:18)"
+  ],
+  "type": "File"
+}

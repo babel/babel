@@ -6,6 +6,7 @@ import type { PluginList } from "./plugin-utils";
 // the parser process. These options are recognized:
 
 export type SourceType = "script" | "module" | "unambiguous";
+export type ErrorRecoveryType = boolean | "always";
 
 export type Options = {
   sourceType: SourceType,
@@ -22,7 +23,7 @@ export type Options = {
   ranges: boolean,
   tokens: boolean,
   createParenthesizedExpressions: boolean,
-  errorRecovery: boolean,
+  errorRecovery: ErrorRecoveryType,
   attachComment: boolean,
 };
 
@@ -69,7 +70,13 @@ export const defaultOptions: Options = {
   // the parser sets extra.parenthesized on the expression nodes instead).
   createParenthesizedExpressions: false,
   // When enabled, errors are attached to the AST instead of being directly thrown.
-  // Some errors will still throw, because @babel/parser can't always recover.
+  // NOTE: it's not advisable to trust an AST when there are SyntaxErrors as some creative
+  // license was taken in order to recover from the error.
+  //
+  // When `false` errors are thrown.
+  // When `true` some errors will still throw, because @babel/parser can't always recover.
+  // When `"always"` errors will never throw and an AST will always be returns with errors
+  // attached to the AST.
   errorRecovery: false,
   // When enabled, comments will be attached to adjacent AST nodes as one of
   // `leadingComments`, `trailingComments` and `innerComments`. The comment attachment

@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "Unexpected token, expected \"type\" (1:22)"
+  ],
+  "type": "File"
+}

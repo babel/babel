@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "'super' can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]). (3:9)"
+  ],
+  "type": "File"
+}

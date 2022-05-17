@@ -1,5 +1,8 @@
 {
-  "plugins": [["importAssertions"]],
-  "sourceType": "module",
-  "throws": "Unexpected token (1:30)"
+  "plugins": [
+    [
+      "importAssertions"
+    ]
+  ],
+  "sourceType": "module"
 }

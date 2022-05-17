@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "'public' modifier must precede 'static' modifier. (2:9)",
+    "Unexpected token (2:16)"
+  ],
+  "type": "File"
+}

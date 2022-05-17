@@ -7,6 +7,5 @@
         "topicToken": "#"
       }
     ]
-  ],
-  "throws": "Unexpected digit after hash token. (1:5)"
+  ]
 }

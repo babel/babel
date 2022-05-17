@@ -1719,8 +1719,9 @@ export default class Tokenizer extends CommentsParser {
    * Otherwise, if passed a `Node`, raises the `ParseError` at the start
    * location of that `Node`.
    *
-   * If `errorRecovery` is `true`, the error is pushed to the errors array and
-   * returned. If `errorRecovery` is `false`, the error is instead thrown.
+   * If `errorRecovery` is `true` or `"always"`, the error is pushed to the
+   * errors array and returned. If `errorRecovery` is `false`, the error
+   * is instead thrown.
    *
    * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
    * @param {RaiseProperties<ErrorDetails>} raiseProperties

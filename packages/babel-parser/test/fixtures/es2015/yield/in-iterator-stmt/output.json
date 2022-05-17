@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Invalid left-hand side in for-in statement. (2:7)",
+    "Unexpected token, expected \")\" (2:21)"
+  ],
+  "type": "File"
+}

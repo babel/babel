@@ -36,9 +36,35 @@ export default class Parser extends StatementParser {
     this.enterInitialScopes();
     const file = this.startNode();
     const program = this.startNode();
-    this.nextToken();
     file.errors = null;
-    this.parseTopLevel(file, program);
+
+    try {
+      this.nextToken();
+      this.parseTopLevel(file, program);
+      this.finishNode(file, "File");
+    } catch (parseError) {
+      if (
+        this.options.errorRecovery !== "always" ||
+        !(parseError instanceof SyntaxError)
+      ) {
+        throw parseError;
+      }
+
+      // If no tokens have been parsed then `lastTokEndLoc` will never be set.
+      const fileEndLocation = this.state.lastTokEndLoc || this.state.endLoc;
+      this.finishNodeAt(file, "File", fileEndLocation);
+      // Replace the incomplete Program node with an empty program.
+      file.program = this.finishNodeAt(
+        this.startNodeAtNode(file),
+        "Program",
+        fileEndLocation,
+      );
+      file.program.sourceType = this.options.sourceType;
+      file.program.body = [];
+      file.program.directives = [];
+      file.program.interpreter = null;
+    }
+
     file.errors = this.state.errors;
     return file;
   }

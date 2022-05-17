@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "'private' modifier must precede 'static' modifier. (2:9)",
+    "Unexpected token (2:17)"
+  ],
+  "type": "File"
+}

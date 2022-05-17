@@ -193,15 +193,13 @@ export default class StatementParser extends ExpressionParser {
   // `program` argument.  If present, the statements will be appended
   // to its body instead of creating a new node.
 
-  parseTopLevel(file: N.File, program: N.Program): N.File {
+  parseTopLevel(file: N.File, program: N.Program) {
     file.program = this.parseProgram(program);
     file.comments = this.state.comments;
 
     if (this.options.tokens) {
       file.tokens = babel7CompatTokens(this.tokens, this.input);
     }
-
-    return this.finishNode(file, "File");
   }
 
   parseProgram(

@@ -2,6 +2,5 @@
   "plugins": [
     "decorators-legacy"
   ],
-  "throws": "A decorated export must export a class declaration. (2:0)",
   "sourceType": "module"
 }

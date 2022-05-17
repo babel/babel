@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "Missing semicolon. (1:1)",
+    "Unexpected token (1:2)"
+  ],
+  "type": "File"
+}

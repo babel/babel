@@ -1,4 +1,5 @@
 {
-  "plugins": ["v8intrinsic"],
-  "throws": "Unexpected token (1:0)"
+  "plugins": [
+    "v8intrinsic"
+  ]
 }

@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "Unexpected trailing comma after rest element. (1:8)"
+  ],
+  "type": "File"
+}

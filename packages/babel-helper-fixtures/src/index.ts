@@ -104,7 +104,12 @@ function pushTask(taskName, taskDir, suite, suiteName) {
     execLoc = taskDir + "/exec.js";
   }
 
+  const babel8Locations = process.env.BABEL_8_BREAKING
+    ? findFile(taskDir + "/output.babel8", true /* allowJSON */) ||
+      findFile(taskDir + "/output.babel8.extended", true)
+    : false;
   const expectLoc =
+    babel8Locations ||
     findFile(taskDir + "/output", true /* allowJSON */) ||
     findFile(`${taskDir}/output.extended`, true) ||
     taskDir + "/output.js";

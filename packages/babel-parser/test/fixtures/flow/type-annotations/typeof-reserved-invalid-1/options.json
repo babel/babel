@@ -1,5 +1,7 @@
 {
   "sourceType": "module",
-  "plugins": ["jsx", "flow"],
-  "throws": "Unexpected token, expected \"{\" (2:26)"
+  "plugins": [
+    "jsx",
+    "flow"
+  ]
 }

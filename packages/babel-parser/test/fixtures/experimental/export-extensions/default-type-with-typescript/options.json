@@ -1,5 +1,7 @@
 {
-  "plugins": ["exportDefaultFrom", "typescript"],
-  "sourceType": "module",
-  "throws": "Unexpected token, expected \"=\" (1:17)"
+  "plugins": [
+    "exportDefaultFrom",
+    "typescript"
+  ],
+  "sourceType": "module"
 }

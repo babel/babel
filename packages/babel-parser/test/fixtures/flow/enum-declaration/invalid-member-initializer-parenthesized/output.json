@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "The enum member initializer for `A` needs to be a literal (either a boolean, number, or string) in enum `E`. (2:6)"
+  ],
+  "type": "File"
+}

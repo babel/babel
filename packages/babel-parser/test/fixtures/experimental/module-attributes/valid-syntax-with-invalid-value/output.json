@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "The only accepted module attribute is `type`. (1:46)",
+    "Only string literals are allowed as module attribute values. (1:52)"
+  ],
+  "type": "File"
+}

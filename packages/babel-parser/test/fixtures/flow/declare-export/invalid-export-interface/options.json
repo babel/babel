@@ -3,6 +3,5 @@
   "plugins": [
     "jsx",
     "flow"
-  ],
-  "throws": "`declare export interface` is not supported. Use `export interface` instead. (1:15)"
+  ]
 }

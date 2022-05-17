@@ -1,0 +1,6 @@
+{
+  "errors": [
+    "`declare export type` is not supported. Use `export type` instead. (1:15)"
+  ],
+  "type": "File"
+}
