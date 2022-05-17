@@ -75,6 +75,7 @@ export default class State {
   hasFlowComment: boolean = false;
   isAmbientContext: boolean = false;
   inAbstractClass: boolean = false;
+  inDisallowConditionalTypesContext: boolean = false;
 
   // For the Hack-style pipelines plugin
   topicContext: TopicContextState = {

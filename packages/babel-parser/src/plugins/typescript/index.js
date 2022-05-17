@@ -1271,8 +1271,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expectContextual(tt._infer);
       const typeParameter = this.startNode();
       typeParameter.name = this.tsParseTypeParameterName();
+      typeParameter.constraint = this.tsTryParse(() =>
+        this.tsParseConstraintForInferType(),
+      );
       node.typeParameter = this.finishNode(typeParameter, "TSTypeParameter");
       return this.finishNode(node, "TSInferType");
+    }
+
+    tsParseConstraintForInferType() {
+      if (this.eat(tt._extends)) {
+        const constraint = this.tsInDisallowConditionalTypesContext(() =>
+          this.tsParseType(),
+        );
+        if (
+          this.state.inDisallowConditionalTypesContext ||
+          !this.match(tt.question)
+        ) {
+          return constraint;
+        }
+      }
     }
 
     tsParseTypeOperatorOrHigher(): N.TsType {
@@ -1282,7 +1299,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ? this.tsParseTypeOperator()
         : this.isContextual(tt._infer)
         ? this.tsParseInferType()
-        : this.tsParseArrayTypeOrHigher();
+        : this.tsInAllowConditionalTypesContext(() =>
+            this.tsParseArrayTypeOrHigher(),
+          );
     }
 
     tsParseUnionOrIntersectionType(
@@ -1516,16 +1535,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Need to set `state.inType` so that we don't parse JSX in a type context.
       assert(this.state.inType);
       const type = this.tsParseNonConditionalType();
-      if (this.hasPrecedingLineBreak() || !this.eat(tt._extends)) {
+
+      if (
+        this.state.inDisallowConditionalTypesContext ||
+        this.hasPrecedingLineBreak() ||
+        !this.eat(tt._extends)
+      ) {
         return type;
       }
       const node: N.TsConditionalType = this.startNodeAtNode(type);
       node.checkType = type;
-      node.extendsType = this.tsParseNonConditionalType();
+
+      node.extendsType = this.tsInDisallowConditionalTypesContext(() =>
+        this.tsParseNonConditionalType(),
+      );
+
       this.expect(tt.question);
-      node.trueType = this.tsParseType();
+      node.trueType = this.tsInAllowConditionalTypesContext(() =>
+        this.tsParseType(),
+      );
+
       this.expect(tt.colon);
-      node.falseType = this.tsParseType();
+      node.falseType = this.tsInAllowConditionalTypesContext(() =>
+        this.tsParseType(),
+      );
+
       return this.finishNode(node, "TSConditionalType");
     }
 
@@ -1665,6 +1699,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return cb();
       } finally {
         this.state.inType = oldInType;
+      }
+    }
+
+    tsInDisallowConditionalTypesContext<T>(cb: () => T): T {
+      const oldInDisallowConditionalTypesContext =
+        this.state.inDisallowConditionalTypesContext;
+      this.state.inDisallowConditionalTypesContext = true;
+      try {
+        return cb();
+      } finally {
+        this.state.inDisallowConditionalTypesContext =
+          oldInDisallowConditionalTypesContext;
+      }
+    }
+
+    tsInAllowConditionalTypesContext<T>(cb: () => T): T {
+      const oldInDisallowConditionalTypesContext =
+        this.state.inDisallowConditionalTypesContext;
+      this.state.inDisallowConditionalTypesContext = false;
+      try {
+        return cb();
+      } finally {
+        this.state.inDisallowConditionalTypesContext =
+          oldInDisallowConditionalTypesContext;
       }
     }
 
