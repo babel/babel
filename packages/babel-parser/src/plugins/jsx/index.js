@@ -353,6 +353,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.next(); // ellipsis
       node.expression = this.parseExpression();
       this.setContext(tc.j_oTag);
+      this.state.canStartJSXElement = true;
       this.expect(tt.braceR);
 
       return this.finishNode(node, "JSXSpreadChild");
@@ -383,6 +384,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.expression = expression;
       }
       this.setContext(previousContext);
+      this.state.canStartJSXElement = true;
       this.expect(tt.braceR);
 
       return this.finishNode(node, "JSXExpressionContainer");
@@ -398,6 +400,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.expect(tt.ellipsis);
         node.argument = this.parseMaybeAssignAllowIn();
         this.setContext(tc.j_oTag);
+        this.state.canStartJSXElement = true;
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }
@@ -413,8 +416,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startLoc: Position,
     ): N.JSXOpeningElement {
       const node = this.startNodeAt(startPos, startLoc);
-      if (this.match(tt.jsxTagEnd)) {
-        this.expect(tt.jsxTagEnd);
+      if (this.eat(tt.jsxTagEnd)) {
         return this.finishNode(node, "JSXOpeningFragment");
       }
       node.name = this.jsxParseElementName();
@@ -441,8 +443,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startLoc: Position,
     ): N.JSXClosingElement {
       const node = this.startNodeAt(startPos, startLoc);
-      if (this.match(tt.jsxTagEnd)) {
-        this.expect(tt.jsxTagEnd);
+      if (this.eat(tt.jsxTagEnd)) {
         return this.finishNode(node, "JSXClosingFragment");
       }
       node.name = this.jsxParseElementName();

@@ -142,7 +142,7 @@ export const tt: { [name: string]: TokenType } = {
   braceL: createToken("{", { beforeExpr, startsExpr }),
   braceBarL: createToken("{|", { beforeExpr, startsExpr }),
   braceHashL: createToken("#{", { beforeExpr, startsExpr }),
-  braceR: createToken("}", { beforeExpr }),
+  braceR: createToken("}"),
   braceBarR: createToken("|}"),
   parenL: createToken("(", { beforeExpr, startsExpr }),
   parenR: createToken(")"),
