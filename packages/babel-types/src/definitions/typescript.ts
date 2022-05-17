@@ -617,6 +617,14 @@ defineType("TSTypeParameter", {
         ? assertValueType("string")
         : assertNodeType("Identifier"),
     },
+    in: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    out: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
     constraint: {
       validate: assertNodeType("TSType"),
       optional: true,
