@@ -229,7 +229,7 @@ export default declare((api, options: Options, dirname) => {
         // so that plugins can handle that case properly.
         if (!file.availableHelper?.(name, runtimeVersion)) {
           if (name === "regeneratorRuntime") {
-            // For regeneratorRuntime, we cann fallback to the old behavior of
+            // For regeneratorRuntime, we can fallback to the old behavior of
             // relying on the regeneratorRuntime global. If the 'regenerator'
             // option is not disabled, babel-plugin-polyfill-regenerator will
             // then replace it with a @babel/helpers/regeneratorRuntime import.
