@@ -5,7 +5,7 @@ import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
 const buildTemplate = template.statement(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -160,21 +160,31 @@ export interface Options extends PluginOptions {
   systemGlobal?: string;
 }
 
-export default declare((api, options: Options) => {
+type ReassignmentVisitorState = {
+  scope: Scope;
+  exports: any;
+  buildCall: (name: string, value: t.Expression) => t.ExpressionStatement;
+};
+
+export default declare<PluginState>((api, options: Options) => {
   api.assertVersion(7);
 
   const { systemGlobal = "System", allowTopLevelThis = false } = options;
   const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 
-  const reassignmentVisitor = {
-    "AssignmentExpression|UpdateExpression"(path) {
+  const reassignmentVisitor: Visitor<ReassignmentVisitorState> = {
+    "AssignmentExpression|UpdateExpression"(
+      path: NodePath<t.AssignmentExpression | t.UpdateExpression>,
+    ) {
       if (path.node[IGNORE_REASSIGNMENT_SYMBOL]) return;
       path.node[IGNORE_REASSIGNMENT_SYMBOL] = true;
 
-      const arg = path.get(path.isAssignmentExpression() ? "left" : "argument");
+      const arg = path.isAssignmentExpression()
+        ? path.get("left")
+        : path.get("argument");
 
       if (arg.isObjectPattern() || arg.isArrayPattern()) {
-        const exprs = [path.node];
+        const exprs: t.SequenceExpression["expressions"] = [path.node];
         for (const name of Object.keys(arg.getBindingIdentifiers())) {
           if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
             return;
@@ -201,16 +211,25 @@ export default declare((api, options: Options) => {
       const exportedNames = this.exports[name];
       if (!exportedNames) return;
 
-      let node = path.node;
+      let node: t.Expression = path.node;
 
       // if it is a non-prefix update expression (x++ etc)
       // then we must replace with the expression (_export('x', x + 1), x++)
       // in order to ensure the same update expression value
-      const isPostUpdateExpression = path.isUpdateExpression({ prefix: false });
+      const isPostUpdateExpression = t.isUpdateExpression(node, {
+        prefix: false,
+      });
       if (isPostUpdateExpression) {
         node = t.binaryExpression(
+          // @ts-expect-error
           node.operator[0],
-          t.unaryExpression("+", t.cloneNode(node.argument)),
+          t.unaryExpression(
+            "+",
+            t.cloneNode(
+              // @ts-ignore node is UpdateExpression
+              node.argument,
+            ),
+          ),
           t.numericLiteral(1),
         );
       }

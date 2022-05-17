@@ -1,5 +1,5 @@
 import { types as t } from "@babel/core";
-import type { File, PluginAPI, PluginObject } from "@babel/core";
+import type { PluginAPI, PluginObject } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
@@ -45,7 +45,7 @@ export function createClassFeaturePlugin({
   // @ts-ignore TODO(Babel 8): Remove the default value
   api = { assumption: () => void 0 },
   inherits,
-}: Options) {
+}: Options): PluginObject {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
   const constantSuper = api.assumption("constantSuper");
@@ -81,23 +81,23 @@ export function createClassFeaturePlugin({
     manipulateOptions,
     inherits,
 
-    pre() {
-      enableFeature(this.file, feature, loose);
+    pre(file) {
+      enableFeature(file, feature, loose);
 
-      if (!this.file.get(versionKey) || this.file.get(versionKey) < version) {
-        this.file.set(versionKey, version);
+      if (!file.get(versionKey) || file.get(versionKey) < version) {
+        file.set(versionKey, version);
       }
     },
 
     visitor: {
-      Class(path: NodePath<t.Class>, state: File) {
-        if (this.file.get(versionKey) !== version) return;
+      Class(path, { file }) {
+        if (file.get(versionKey) !== version) return;
 
-        if (!shouldTransform(path, this.file)) return;
+        if (!shouldTransform(path, file)) return;
 
         if (path.isClassDeclaration()) assertFieldTransformed(path);
 
-        const loose = isLoose(this.file, feature);
+        const loose = isLoose(file, feature);
 
         let constructor: NodePath<t.ClassMethod>;
         const isDecorated = hasDecorators(path.node);
@@ -186,7 +186,7 @@ export function createClassFeaturePlugin({
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           (privateFieldsAsProperties ?? loose) as boolean,
-          state,
+          file,
         );
 
         transformPrivateNamesUsage(
@@ -198,7 +198,7 @@ export function createClassFeaturePlugin({
             noDocumentAll,
             innerBinding,
           },
-          state,
+          file,
         );
 
         let keysNodes: t.Statement[],
@@ -213,17 +213,17 @@ export function createClassFeaturePlugin({
             ref,
             path,
             elements,
-            this.file,
+            file,
           ));
         } else {
-          keysNodes = extractComputedKeys(ref, path, computedPaths, this.file);
+          keysNodes = extractComputedKeys(path, computedPaths, file);
           ({ staticNodes, pureStaticNodes, instanceNodes, wrapClass } =
             buildFieldsInitNodes(
               ref,
               path.node.superClass,
               props,
               privateNamesMap,
-              state,
+              file,
               (setPublicClassFields ?? loose) as boolean,
               (privateFieldsAsProperties ?? loose) as boolean,
               (constantSuper ?? loose) as boolean,
@@ -260,8 +260,8 @@ export function createClassFeaturePlugin({
         }
       },
 
-      ExportDefaultDeclaration(path: NodePath<t.ExportDefaultDeclaration>) {
-        if (this.file.get(versionKey) !== version) return;
+      ExportDefaultDeclaration(path, { file }) {
+        if (file.get(versionKey) !== version) return;
 
         const decl = path.get("declaration");
 

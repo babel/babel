@@ -850,17 +850,19 @@ function buildPrivateMethodDeclaration(
   );
 }
 
-const thisContextVisitor = traverse.visitors.merge<{
+type ReplaceThisState = {
   classRef: t.Identifier;
   needsClassRef: boolean;
-  innerBinding: t.Identifier;
-}>([
+  innerBinding: t.Identifier | null;
+};
+
+const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
     ThisExpression(path, state) {
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
     },
-    MetaProperty(path: NodePath<t.MetaProperty>) {
+    MetaProperty(path) {
       const meta = path.get("meta");
       const property = path.get("property");
       const { scope } = path;
@@ -877,8 +879,8 @@ const thisContextVisitor = traverse.visitors.merge<{
   environmentVisitor,
 ]);
 
-const innerReferencesVisitor = {
-  ReferencedIdentifier(path: NodePath<t.Identifier>, state) {
+const innerReferencesVisitor: Visitor<ReplaceThisState> = {
+  ReferencedIdentifier(path, state) {
     if (
       path.scope.bindingIdentifierEquals(path.node.name, state.innerBinding)
     ) {
@@ -895,9 +897,9 @@ function replaceThisContext(
   file: File,
   isStaticBlock: boolean,
   constantSuper: boolean,
-  innerBindingRef: t.Identifier,
+  innerBindingRef: t.Identifier | null,
 ) {
-  const state = {
+  const state: ReplaceThisState = {
     classRef: ref,
     needsClassRef: false,
     innerBinding: innerBindingRef,
@@ -922,7 +924,12 @@ function replaceThisContext(
     path.traverse(thisContextVisitor, state);
   }
 
-  if (state.classRef?.name && state.classRef.name !== innerBindingRef?.name) {
+  // todo: use innerBinding.referencePaths to avoid full traversal
+  if (
+    innerBindingRef != null &&
+    state.classRef?.name &&
+    state.classRef.name !== innerBindingRef?.name
+  ) {
     path.traverse(innerReferencesVisitor, state);
   }
 

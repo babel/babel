@@ -13,8 +13,8 @@ import type {
 } from "./option-assertions";
 import type { ParserOptions } from "@babel/parser";
 import type { Visitor } from "@babel/traverse";
-import type PluginPass from "../../transformation/plugin-pass";
 import type { ValidatedOptions } from "./options";
+import type { File, PluginPass } from "../../..";
 
 // Note: The casts here are just meant to be static assertions to make sure
 // that the assertion functions actually assert that the value's type matches
@@ -78,14 +78,14 @@ type VisitorHandler =
       exit?: Function;
     };
 
-export type PluginObject<S = PluginPass> = {
+export type PluginObject<S extends PluginPass = PluginPass> = {
   name?: string;
   manipulateOptions?: (
     options: ValidatedOptions,
     parserOpts: ParserOptions,
   ) => void;
-  pre?: Function;
-  post?: Function;
+  pre?: (this: S, file: File) => void;
+  post?: (this: S, file: File) => void;
   inherits?: Function;
   visitor?: Visitor<S>;
   parserOverride?: Function;

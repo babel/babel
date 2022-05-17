@@ -40,27 +40,38 @@ function takeDecorators(node: Decorable) {
   return result;
 }
 
-function getKey(node) {
+type AcceptedElement = Exclude<ClassElement, t.TSIndexSignature>;
+type SupportedElement = Exclude<
+  AcceptedElement,
+  | t.ClassPrivateMethod
+  | t.ClassPrivateProperty
+  | t.ClassAccessorProperty
+  | t.StaticBlock
+>;
+
+function getKey(node: SupportedElement) {
   if (node.computed) {
     return node.key;
   } else if (t.isIdentifier(node.key)) {
     return t.stringLiteral(node.key.name);
   } else {
-    return t.stringLiteral(String(node.key.value));
+    return t.stringLiteral(
+      String(
+        // A non-identifier non-computed key
+        (node.key as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+          .value,
+      ),
+    );
   }
 }
 
-// NOTE: This function can be easily bound as .bind(file, classRef, superRef)
-//       to make it easier to use it in a loop.
 function extractElementDescriptor(
-  this: File,
+  file: File,
   classRef: t.Identifier,
   superRef: t.Identifier,
-  path: ClassElementPath,
+  path: NodePath<AcceptedElement>,
 ) {
-  const { node, scope } = path;
   const isMethod = path.isClassMethod();
-
   if (path.isPrivate()) {
     throw path.buildCodeFrameError(
       `Private ${
@@ -68,23 +79,31 @@ function extractElementDescriptor(
       } in decorated classes are not supported yet.`,
     );
   }
+  if (path.node.type === "ClassAccessorProperty") {
+    throw path.buildCodeFrameError(
+      `Accessor properties are not supported in 2018-09 decorator transform, please specify { "version": "2021-12" } instead.`,
+    );
+  }
+  if (path.node.type === "StaticBlock") {
+    throw path.buildCodeFrameError(
+      `Static blocks are not supported in 2018-09 decorator transform, please specify { "version": "2021-12" } instead.`,
+    );
+  }
+
+  const { node, scope } = path as NodePath<SupportedElement>;
 
   new ReplaceSupers({
     methodPath: path,
     objectRef: classRef,
     superRef,
-    file: this,
+    file,
     refToPreserve: classRef,
   }).replace();
 
   const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(t.isClassMethod(node) ? node.kind : "field")),
     prop("decorators", takeDecorators(node as Decorable)),
-    prop(
-      "static",
-      // @ts-expect-error: TS doesn't infer that node is not a StaticBlock
-      !t.isStaticBlock?.(node) && node.static && t.booleanLiteral(true),
-    ),
+    prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
   ].filter(Boolean);
 
@@ -146,9 +165,20 @@ export function buildDecoratedClass(
   const classDecorators = takeDecorators(node);
   const definitions = t.arrayExpression(
     elements
-      // @ts-expect-error Ignore TypeScript's abstract methods (see #10514)
-      .filter(element => !element.node.abstract)
-      .map(extractElementDescriptor.bind(file, node.id, superId)),
+      .filter(
+        element =>
+          // @ts-expect-error Ignore TypeScript's abstract methods (see #10514)
+          !element.node.abstract && element.node.type !== "TSIndexSignature",
+      )
+      .map(path =>
+        extractElementDescriptor(
+          file,
+          node.id,
+          superId,
+          // @ts-expect-error TS can not exclude TSIndexSignature
+          path,
+        ),
+      ),
   );
 
   const wrapperCall = template.expression.ast`
