@@ -64,15 +64,16 @@ exports.WorkerClient = class WorkerClient extends Client {
 
   constructor() {
     super((action, payload) => {
-      this.#signal[0] = 0;
+      const signal = new Int32Array(new SharedArrayBuffer(8));
+
       const subChannel = new WorkerClient.#worker_threads.MessageChannel();
 
       this.#worker.postMessage(
-        { signal: this.#signal, port: subChannel.port1, action, payload },
+        { signal, port: subChannel.port1, action, payload },
         [subChannel.port1],
       );
 
-      let wakeReason = Atomics.wait(this.#signal, 0, 0);
+      let wakeReason = Atomics.wait(signal, 0, 0);
 
       let response;
       let i = 0;
@@ -80,7 +81,7 @@ exports.WorkerClient = class WorkerClient extends Client {
       // actual response object. Try multiple times, with a timeout of 5ms
       // on Atomic.wait starting from the second one.
       do {
-        if (i > 0) wakeReason = Atomics.wait(this.#signal, 1, 0, 5);
+        if (i > 0) wakeReason = Atomics.wait(signal, 1, 0, 5);
 
         response = WorkerClient.#worker_threads.receiveMessageOnPort(
           subChannel.port2,
