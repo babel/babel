@@ -87,11 +87,9 @@ exports.WorkerClient = class WorkerClient extends Client {
           subChannel.port2,
         );
 
-        if (i > 0 || !response) {
-          console.log(
-            `WORKER COMMUNICATION: i=${i}, wakeReason=${wakeReason}, hasResponse=${!!response}`,
-          );
-        }
+        console.log(
+          `WORKER COMMUNICATION: i=${i}, wakeReason=${wakeReason}, hasResponse=${!!response}`,
+        );
       } while (!response && i++ < 100);
 
       const { message } = response;
