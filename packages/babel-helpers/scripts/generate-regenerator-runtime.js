@@ -20,7 +20,7 @@ const REGENERATOR_RUNTIME_IN_FILE = fs.readFileSync(
   "utf8"
 );
 
-const MIN_VERSION = "7.17.9";
+const MIN_VERSION = "7.18.0";
 
 const HEADER = `/* @minVersion ${MIN_VERSION} */
 /*

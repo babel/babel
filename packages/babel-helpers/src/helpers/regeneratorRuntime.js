@@ -1,4 +1,4 @@
-/* @minVersion 7.17.9 */
+/* @minVersion 7.18.0 */
 /*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate, update the regenerator-runtime dependency of
