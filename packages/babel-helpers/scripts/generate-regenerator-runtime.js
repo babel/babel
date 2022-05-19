@@ -9,7 +9,7 @@ const [parse, generate] = await Promise.all([
 ]).catch(error =>
   Promise.reject(
     new Error(
-      "Before running generate-helpers.js you must compile @babel/parser, @babel/generator and @babel/types.",
+      "Before running generate-helpers.js you must compile @babel/parser and @babel/generator.",
       { cause: error }
     )
   )
@@ -43,10 +43,10 @@ export default function generateRegeneratorRuntimeHelper() {
   factoryFunction.params = [];
   factoryFunction.body.body.unshift(
     ...stmts(`
-    ${COPYRIGHT}
-    _regeneratorRuntime = function () { return exports; };
-    var exports = {};
-  `)
+      ${COPYRIGHT}
+      _regeneratorRuntime = function () { return exports; };
+      var exports = {};
+    `)
   );
 
   const { code } = generate({
