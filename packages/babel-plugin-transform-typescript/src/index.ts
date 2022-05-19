@@ -573,7 +573,12 @@ export default declare((api, opts: Options) => {
         path.replaceWith(node);
       },
 
-      "TSNonNullExpression|TSInstantiationExpression"(
+      [process.env.BABEL_8_BREAKING
+        ? "TSNonNullExpression|TSInstantiationExpression"
+        : // This has been introduced in Babel 7.18.0
+        t.tsInstantiationExpression
+        ? "TSNonNullExpression|TSInstantiationExpression"
+        : "TSNonNullExpression"](
         path: NodePath<t.TSNonNullExpression | t.TSExpressionWithTypeArguments>,
       ) {
         path.replaceWith(path.node.expression);
