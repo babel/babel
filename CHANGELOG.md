@@ -20,6 +20,37 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.0 (2022-05-19)
+
+#### :rocket: New Feature
+* `babel-preset-env`
+  * [#14556](https://github.com/babel/babel/pull/14556) feat: add import-assertions to shippedProposals ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-helper-define-map`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-syntax-destructuring-private`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-proto-to-assign`, `babel-plugin-transform-typescript`, `babel-standalone`, `babel-traverse`, `babel-types`
+  * [#14304](https://github.com/babel/babel/pull/14304) Transform destructuring private ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#14359](https://github.com/babel/babel/pull/14359) [ts 4.7] Support optional variance annotations ([@magic-akari](https://github.com/magic-akari))
+* `babel-generator`, `babel-parser`
+  * [#14476](https://github.com/babel/babel/pull/14476) [ts 4.7] Support `extends` constraints for `infer` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-typescript`, `babel-traverse`, `babel-types`
+  * [#14457](https://github.com/babel/babel/pull/14457) [ts] Add support for instantiation expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#14456](https://github.com/babel/babel/pull/14456) Pass filename to `importInterop` method ([@NickHeiner](https://github.com/NickHeiner))
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#14551](https://github.com/babel/babel/pull/14551) Do not create multiple copies of comments when cloning nodes ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#14557](https://github.com/babel/babel/pull/14557) Fix parsing of `<` after object literals with the `jsx` plugin ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-react-pure-annotations`
+  * [#14528](https://github.com/babel/babel/pull/14528) fix: do not mark computed `React[...]` methods as pure ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-core`, `babel-helper-transform-fixture-test-runner`, `babel-helpers`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`
+  * [#14538](https://github.com/babel/babel/pull/14538) Inline `regeneratorRuntime` as a normal helper ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-core`, `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-modules-systemjs`
+  * [#14530](https://github.com/babel/babel/pull/14530) improve helper-create-class-features typings ([@JLHwung](https://github.com/JLHwung))
 ## v7.17.12 (2022-05-16)
 
 #### :bug: Bug Fix
