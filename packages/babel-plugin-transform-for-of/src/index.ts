@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 import transformWithoutHelper from "./no-helper-implementation";
 
@@ -9,7 +10,11 @@ export interface Options {
   loose?: boolean;
 }
 
-function buildLoopBody(path, declar, newBody?) {
+function buildLoopBody(
+  path: NodePath<t.ForXStatement>,
+  declar: t.Statement,
+  newBody?: t.Statement | t.Expression,
+) {
   let block;
   const bodyPath = path.get("body");
   const body = newBody ?? bodyPath.node;
