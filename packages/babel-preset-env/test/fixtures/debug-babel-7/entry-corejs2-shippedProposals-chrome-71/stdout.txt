@@ -23,6 +23,7 @@ Using plugins:
   proposal-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
   proposal-dynamic-import
+  syntax-import-assertions
 corejs2: `DEBUG` option
 
 Using targets: {

@@ -2,10 +2,18 @@ import { lt } from "semver";
 import type { SemVer } from "semver";
 import { logPlugin } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import { removeUnnecessaryItems, removeUnsupportedItems } from "./filter-items";
+import {
+  addProposalSyntaxPlugins,
+  removeUnnecessaryItems,
+  removeUnsupportedItems,
+} from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
-import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import {
+  pluginSyntaxMap,
+  proposalPlugins,
+  proposalSyntaxPlugins,
+} from "../data/shipped-proposals";
 import {
   plugins as pluginsList,
   pluginsBugfixes as pluginsBugfixesList,
@@ -375,6 +383,9 @@ option \`forceAllTransforms: true\` instead.
   );
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
   removeUnsupportedItems(pluginNames, api.version);
+  if (shippedProposals) {
+    addProposalSyntaxPlugins(pluginNames, proposalSyntaxPlugins);
+  }
 
   const polyfillPlugins = getPolyfillPlugins({
     useBuiltIns,

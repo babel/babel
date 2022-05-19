@@ -52,6 +52,7 @@ Using plugins:
   proposal-export-namespace-from { ie }
   transform-modules-commonjs
   proposal-dynamic-import
+  syntax-import-assertions
 corejs3: `DEBUG` option
 
 Using targets: {

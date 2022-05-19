@@ -1,8 +1,14 @@
 /* eslint sort-keys: "error" */
-// These mappings represent the syntax proposals that have been
+// These mappings represent the transform plugins that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
 const proposalPlugins = new Set();
+
+// proposal syntax plugins enabled by the `shippedProposals` option.
+// Unlike proposalPlugins above, they are independent of compiler targets.
+const proposalSyntaxPlugins = [
+  "syntax-import-assertions"
+]
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = {
@@ -27,4 +33,4 @@ const pluginSyntaxEntries = Object.keys(pluginSyntaxObject).map(function (key) {
 
 const pluginSyntaxMap = new Map(pluginSyntaxEntries);
 
-module.exports = { pluginSyntaxMap, proposalPlugins };
+module.exports = { pluginSyntaxMap, proposalPlugins, proposalSyntaxPlugins };
