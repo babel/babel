@@ -36,7 +36,7 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j build-standalone-ci
 for i in {1..50}; do
   echo "RUN NUMBER $i"
-  BABEL_ENV=test yarn jest --maxWorkers=4 --ci eslint
+  BABEL_ENV=test yarn jest --maxWorkers=4 --ci
 done
 
 cleanup
