@@ -16,9 +16,12 @@ function getTsPkgs(subRoot) {
     .filter(name => name.startsWith("babel-"))
     .map(name => {
       const relative = `./${subRoot}/${name}`;
-      const { exports = {} } = importJSON(
-        new URL(relative + "/package.json", root)
-      );
+      const packageJSON = importJSON(new URL(relative + "/package.json", root));
+      // Babel 8 exports > Babel 7 exports > {}
+      const exports =
+        packageJSON.conditions?.BABEL_8_BREAKING[0]?.exports ??
+        packageJSON.exports ??
+        {};
       const subExports = Object.entries(exports).flatMap(
         ([_export, exportPath]) => {
           // The @babel/standalone has babel.js as exports, but we don't have src/babel.ts
@@ -28,6 +31,9 @@ function getTsPkgs(subRoot) {
           // [{esm, default}, "./lib/index.js"]
           if (Array.isArray(exportPath)) {
             exportPath = exportPath[1];
+          }
+          if (typeof exportPath === "object") {
+            exportPath = exportPath.default;
           }
           if (exportPath.startsWith("./lib") && exportPath.endsWith(".js")) {
             // remove the leading `.` and trailing `.js`
