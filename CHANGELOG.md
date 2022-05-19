@@ -20,6 +20,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.1 (2022-05-19)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#14566](https://github.com/babel/babel/pull/14566) Fix TypeScript plugin compat with `@babel/types` versions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-for-of`
+  * [#14564](https://github.com/babel/babel/pull/14564) fix: Duplicate declaration in transformed for...of ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.18.0 (2022-05-19)
 
 #### :rocket: New Feature
