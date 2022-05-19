@@ -167,7 +167,6 @@ export default declare((api, options: Options) => {
     }) as t.For;
 
     t.inherits(loop, node);
-    t.ensureBlock(loop);
 
     const iterationValue = t.memberExpression(
       t.cloneNode(right),
@@ -175,13 +174,22 @@ export default declare((api, options: Options) => {
       true,
     );
 
+    if (
+      t.isBlockStatement(loop.body) &&
+      Object.keys(path.getBindingIdentifiers()).some(id =>
+        path.get("body").scope.hasOwnBinding(id),
+      )
+    ) {
+      loop.body = t.blockStatement([loop.body]);
+    } else {
+      loop.body = t.toBlock(loop.body);
+    }
+
     const left = node.left;
     if (t.isVariableDeclaration(left)) {
       left.declarations[0].init = iterationValue;
-      // @ts-expect-error todo(flow->ts):
       loop.body.body.unshift(left);
     } else {
-      // @ts-expect-error todo(flow->ts):
       loop.body.body.unshift(
         t.expressionStatement(
           t.assignmentExpression("=", left, iterationValue),

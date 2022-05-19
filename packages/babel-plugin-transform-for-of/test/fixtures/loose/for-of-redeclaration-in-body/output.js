@@ -6,10 +6,10 @@ for (var _iterator = babelHelpers.createForOfIteratorHelperLoose(y), _step; !(_s
   }
 }
 
-for (var _iterator2 = babelHelpers.createForOfIteratorHelperLoose(y), _step2; !(_step2 = _iterator2()).done;) {
-  const x = _step2.value;
+for (var _i = 0, _arr = []; _i < _arr.length; _i++) {
+  let x = _arr[_i];
   {
-    const x = 1;
-    const y = 2;
+    let x = 1;
+    let y = 2;
   }
 }
