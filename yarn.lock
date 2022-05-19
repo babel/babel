@@ -948,7 +948,6 @@ __metadata:
     "@jridgewell/trace-mapping": ^0.3.8
     "@types/jest": ^27.4.1
     quick-lru: 5.1.0
-    regenerator-runtime: ^0.13.7
   languageName: unknown
   linkType: soft
 
@@ -1019,10 +1018,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helpers@workspace:packages/babel-helpers"
   dependencies:
+    "@babel/generator": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/parser": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
+    regenerator-runtime: ^0.13.9
     terser: ^5.9.0
   languageName: unknown
   linkType: soft
@@ -2994,6 +2996,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
     regenerator-transform: ^0.15.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -13145,10 +13148,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.4, regenerator-runtime@npm:^0.13.7":
-  version: 0.13.7
-  resolution: "regenerator-runtime@npm:0.13.7"
-  checksum: 52b66e6669152c0b1bccd95c8e11aabbfe67bb97bdf00e223bdf723b0f0052d4da5c02001d4c4bef576bdc5bcdc38a20496d1b5363b65c950c8434ed5071d9e0
+"regenerator-runtime@npm:^0.13.4, regenerator-runtime@npm:^0.13.9":
+  version: 0.13.9
+  resolution: "regenerator-runtime@npm:0.13.9"
+  checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
   languageName: node
   linkType: hard
 

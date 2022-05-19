@@ -20,7 +20,10 @@
     "@babel/types": "workspace:^"
   },
   "devDependencies": {
+    "@babel/generator": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/parser": "workspace:^",
+    "regenerator-runtime": "^0.13.9",
     "terser": "^5.9.0"
   },
   "engines": {

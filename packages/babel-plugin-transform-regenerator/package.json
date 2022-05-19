@@ -11,6 +11,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^",
     "regenerator-transform": "^0.15.0"
   },
   "license": "MIT",

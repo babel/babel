@@ -6,8 +6,8 @@ var Example = /*#__PURE__*/function () {
   var _proto = Example.prototype;
 
   _proto.test1 = /*#__PURE__*/function () {
-    var _test = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+    var _test = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+      return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -29,8 +29,8 @@ var Example = /*#__PURE__*/function () {
     return test1;
   }();
 
-  _proto.test2 = /*#__PURE__*/regeneratorRuntime.mark(function test2() {
-    return regeneratorRuntime.wrap(function test2$(_context2) {
+  _proto.test2 = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function test2() {
+    return babelHelpers.regeneratorRuntime().wrap(function test2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:

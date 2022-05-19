@@ -70,5 +70,4 @@ The corejs2 polyfill added the following polyfills:
   web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/usage-corejs2-2/input.js]
-The regenerator polyfill added the following polyfills:
-  regenerator-runtime
+Based on your code and targets, the regenerator polyfill did not add any polyfill.

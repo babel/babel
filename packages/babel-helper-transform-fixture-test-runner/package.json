@@ -20,8 +20,7 @@
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@jridgewell/trace-mapping": "^0.3.8",
-    "quick-lru": "5.1.0",
-    "regenerator-runtime": "^0.13.7"
+    "quick-lru": "5.1.0"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1"

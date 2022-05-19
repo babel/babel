@@ -55,15 +55,6 @@ function createContext() {
   const moduleCache = Object.create(null);
   contextModuleCache.set(context, moduleCache);
 
-  // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
-  // global creation in tests, which could cause things to bleed between tests.
-  runModuleInTestContext(
-    "regenerator-runtime",
-    fileURLToPath(import.meta.url),
-    context,
-    moduleCache,
-  );
-
   // Populate the "babelHelpers" global with Babel's helper utilities.
   runCacheableScriptInTestContext(
     path.join(

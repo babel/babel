@@ -1,7 +1,7 @@
 function test(fn) {
-  return /*#__PURE__*/babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+  return /*#__PURE__*/babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
     var _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:

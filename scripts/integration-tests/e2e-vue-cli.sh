@@ -35,6 +35,10 @@ if [[ "$(node --version)" == v17.* ]]; then
   export NODE_OPTIONS=--openssl-legacy-provider
 fi
 
+# vue-cli's tests expect us to import regenerator-runtime from "regenerator-runtime/runtime",
+# but we import it from @babel/runtime.
+sed -i 's%toMatch(`regenerator-runtime/runtime`)%toMatch(`@babel/runtime/helpers/regeneratorRuntime`)%' packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
+
 # Test
 CI=true yarn test -p babel,babel-preset-app
 
